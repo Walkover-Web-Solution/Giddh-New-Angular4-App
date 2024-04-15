@@ -577,7 +577,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public addNewUser(): void {
-        const isSuperAdmin = this.thirdStepForm.get('creatorSuperAdmin').value === 'false';
+        const isSuperAdmin = Boolean(this.thirdStepForm.get('creatorSuperAdmin').value) === false;
         let mappings = this.thirdStepForm.get('permissionRoles') as FormArray;
         let mappingForm = this.formBuilder.group({
             emailId: ['', Validators.pattern(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)], // Add email validation
@@ -1334,7 +1334,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public setOwnerPermission(event: any): void {
-        const isSuperAdmin = event?.value === 'true';
+        const isSuperAdmin = Boolean(event?.value) === true;
         this.thirdStepForm.get('creatorSuperAdmin').setValue(event?.value);
         const permissionRolesArray = this.thirdStepForm.get('permissionRoles') as FormArray;
         permissionRolesArray?.controls.forEach((permissionGroup: FormGroup) => {
