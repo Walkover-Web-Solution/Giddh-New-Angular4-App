@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
-import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, of as observableOf, take, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, last, of as observableOf, take, takeUntil } from "rxjs";
 import * as dayjs from "dayjs";
 import { GeneralService } from "../../services/general.service";
 import { OnboardingFormRequest } from "../../models/api-models/Common";
@@ -355,7 +355,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /**Hold barcode scan total time */
     public totalTime: number = 0;
     /** This will hold barcode value*/
-    public barcodeValue: string = "";
+    public barcodeValue: string = "aaaaaaaaaaa";
     /**Hold barcode last scanned key */
     public lastScannedKey: string = '';
     /* This will hold po unique name for preview */
@@ -516,6 +516,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.componentStore.accountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.updateAccountDataInForm(response);
+                this.getStockByBarcode();
             }
         });
 
@@ -614,7 +615,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 response?.entries?.forEach((entry: any, index: number) => {
                     if (entry.transactions[0]?.stock) {
                         this.stockUnits[index] = observableOf(entry.transactions[0]?.stock.unitRates);
-                        this.componentStore.getStockVariants({ q: entry.transactions[0]?.stock?.uniqueName, index: index });
+                        this.componentStore.getStockVariants({ q: entry.transactions[0]?.stock?.uniqueName, index: index, autoSelectVariant: true });
                     }
                     this.invoiceForm.get('entries')['controls'].push(this.getEntriesFormGroup(entry));
 
@@ -1325,7 +1326,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 transactionFormGroup.get('stock').get('uniqueName')?.patchValue(keysToUpdate.stockUniqueName);
 
                 if (event?.additional?.hasVariants) {
-                    this.componentStore.getStockVariants({ q: event?.additional?.stock?.uniqueName, index: entryIndex });
+                    this.componentStore.getStockVariants({ q: event?.additional?.stock?.uniqueName, index: entryIndex, autoSelectVariant: true });
                 } else {
                     let payload = {};
 
@@ -3150,7 +3151,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             let selectedOption = this.fieldFilteredOptions?.filter(option => option?.value === newPo[0]);
             let order = selectedOption[0];
             if (order && !this.selectedPoItems.includes(order?.value)) {
-                this.startLoader(true);
                 let getRequest = { companyUniqueName: this.activeCompany?.uniqueName, poUniqueName: order?.value };
                 this.purchaseOrderService.get(getRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response) {
@@ -3161,18 +3161,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                     this.linkedPoNumbers[order?.value]['items'] = response.body.entries;
                                     if (addRemove) {
                                         this.addPoItems(response.body.uniqueName, response.body.entries, 0);
-                                    } else {
-                                        this.startLoader(false);
                                     }
                                 } else {
-                                    this.startLoader(false);
                                     this.linkedPoNumbers[order?.value]['items'] = [];
                                 }
-                            } else {
-                                this.startLoader(false);
                             }
                         } else {
-                            this.startLoader(false);
                             this.toasterService.showSnackBar("error", response.message);
                         }
                     }
@@ -3196,11 +3190,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherComponent
      */
     public addPoItems(poUniqueName: string, entries: any, entryIndex: number): void {
-        this.startLoader(true);
-        let voucherEntries = this.getEntries();
         let entry = entries[entryIndex];
         let item = entry.transactions[0];
-        let blankItemIndex = voucherEntries?.findIndex(entry => !entry.transactions[0].account?.uniqueName);
+        let blankItemIndex = -1;
+
+        this.invoiceForm.get('entries')['controls']?.forEach((control: any, entryIndex: number) => {
+            if (!control.get('transactions.0.account.uniqueName')?.value) {
+                blankItemIndex = entryIndex;
+            }
+        });
 
         if (entry.totalQuantity && entry.usedQuantity && entry.transactions && item && item.stock) {
             if (this.existingPoEntries[entry.uniqueName]) {
@@ -3292,11 +3290,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             transactionFormGroup.get('account').get('name')?.patchValue(keysToUpdate.accountName);
             transactionFormGroup.get('account').get('uniqueName')?.patchValue(keysToUpdate.accountUniqueName);
-            transactionFormGroup.get('stock').get('name')?.patchValue(keysToUpdate.stockName);
-            transactionFormGroup.get('stock').get('uniqueName')?.patchValue(keysToUpdate.stockUniqueName);
+
+            if (keysToUpdate.stockName) {
+                transactionFormGroup.get('stock').get('name')?.patchValue(keysToUpdate.stockName);
+                transactionFormGroup.get('stock').get('uniqueName')?.patchValue(keysToUpdate.stockUniqueName);
+            }
 
             if (item?.additional?.hasVariants) {
-                this.componentStore.getStockVariants({ q: item?.additional?.stock?.uniqueName, index: lastIndex });
+                this.componentStore.getStockVariants({ q: item?.additional?.stock?.uniqueName, index: lastIndex, autoSelectVariant: false });
             } else {
                 let payload = {};
 
@@ -3306,41 +3307,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                 this.searchService.loadDetails(transactionFormGroup.get("account.uniqueName")?.value, payload).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response && response.status === "success") {
-                        if (response.body.stock) {
-                            transactionFormGroup.get('stock').get('skuCode')?.patchValue(response.body.stock.skuCode);
-                            transactionFormGroup.get('stock').get('skuCodeHeading')?.patchValue(response.body.stock.skuCodeHeading);
-                            transactionFormGroup.get('stock').get('quantity')?.patchValue(item.additional?.quantity);
-                            transactionFormGroup.get('stock').get('maxQuantity')?.patchValue(item.additional?.maxQuantity);
-                            transactionFormGroup.get('stock').get('rate.rateForAccount')?.patchValue(item.additional?.rate?.amountForAccount);
+                        this.prefillParticularDetails(lastIndex, response.body);
 
-                            this.stockUnits[response.entryIndex] = observableOf(response.body.stock.variant.unitRates);
-                        } else {
-                            transactionFormGroup.get('amount.amountForAccount')?.patchValue(item.amount?.amountForAccount);
-                            this.stockUnits[response.entryIndex] = observableOf([]);
-                        }
-
-                        const taxes = this.generalService.fetchTaxesOnPriority(
-                            response.body.stock?.taxes ?? [],
-                            response.body.stock?.groupTaxes ?? [],
-                            response.body.taxes ?? [],
-                            response.body.groupTaxes ?? []);
-
-                        const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
-                        taxesFormArray.clear();
-
-                        taxes?.forEach(tax => {
-                            taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
-                        });
-
-                        if (entries?.length === (entryIndex + 1)) {
-                            this.startLoader(false);
-                        } else {
+                        if (entries?.length !== (entryIndex + 1)) {
                             entryIndex++;
                             this.addPoItems(poUniqueName, entries, entryIndex);
                         }
                     } else {
                         this.toasterService.showSnackBar("error", response?.message);
-                        this.startLoader(false);
                     }
                 });
             }
@@ -3354,7 +3328,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public removePoItem(): void {
         if (this.selectedPoItems && this.selectedPoItems.length > 0) {
-            this.startLoader(true);
             setTimeout(() => {
                 let selectedPoItems = [];
                 this.selectedPoItems?.forEach(order => {
@@ -3423,8 +3396,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 });
 
                 this.selectedPoItems = selectedPoItems;
-
-                this.startLoader(false);
             }, 100);
         }
     }
@@ -3491,7 +3462,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const entryFormGroup = this.getEntryFormGroup(entryIndex);
         const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
 
+        this.activeEntryIndex = entryIndex;
+
+        transactionFormGroup.get('account.name')?.patchValue(response.name);
+        transactionFormGroup.get('account.uniqueName')?.patchValue(response.uniqueName);
+
         if (response.stock) {
+            transactionFormGroup.get('stock.name')?.patchValue(response.stock.name);
+            transactionFormGroup.get('stock.uniqueName')?.patchValue(response.stock.uniqueName);
+
             entryFormGroup.get('hsnNumber')?.patchValue(response.stock.hsnNumber);
             entryFormGroup.get('sacNumber')?.patchValue(response.stock.sacNumber);
             entryFormGroup.get('showCodeType')?.patchValue(response.stock.hsnNumber ? 'hsn' : 'sac');
@@ -3502,6 +3481,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             transactionFormGroup.get('stock.skuCodeHeading')?.patchValue(response.stock.skuCodeHeading);
             transactionFormGroup.get('stock.stockUnit.code')?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitCode);
             transactionFormGroup.get('stock.stockUnit.uniqueName')?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitUniqueName);
+
+            if (!transactionFormGroup.get('stock.variant.uniqueName')?.value) {
+                transactionFormGroup.get('stock.variant.name')?.patchValue(response.stock.variant?.name);
+                transactionFormGroup.get('stock.variant.uniqueName')?.patchValue(response.stock.variant?.uniqueName);
+            }
+
             transactionFormGroup.get('stock.variant.salesTaxInclusive')?.patchValue(response.stock.variant?.salesTaxInclusive);
             transactionFormGroup.get('stock.variant.purchaseTaxInclusive')?.patchValue(response.stock.variant?.purchaseTaxInclusive);
 
@@ -3563,6 +3548,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             transactionFormGroup.get('amount.amountForAccount').patchValue(amount);
             transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue((amount / transactionFormGroup.get('stock.quantity')?.value));
         }
+
+        this.checkIfEntriesHasStock();
     }
 
     /**
@@ -3651,8 +3638,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         let params = {
             barcode: this.barcodeValue,
             customerUniqueName: this.invoiceForm.controls['account'].get('uniqueName')?.value ?? "",
-            invoiceType: this.invoiceType,
-        }
+            invoiceType: this.invoiceForm.get('type')?.value
+        };
+
         this.commonService.getBarcodeScanData(this.barcodeValue, params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.barcodeValue = '';
@@ -3683,6 +3671,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
 
                     let activeEntryIndex = this.invoiceForm.get('entries')['controls']?.length - 1;
+                    if (response?.body?.stock) {
+                        this.componentStore.getStockVariants({ q: response?.body?.stock?.uniqueName, index: activeEntryIndex, autoSelectVariant: false });
+                    }
+
                     this.prefillParticularDetails(activeEntryIndex, response.body);
                 } else {
                     this.activeEntryIndex = isExistingEntry;

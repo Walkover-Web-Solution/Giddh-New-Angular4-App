@@ -28,7 +28,7 @@ export class OptionsScrollDirective implements OnDestroy {
                     setTimeout(() => {
                         this.removeScrollEventListener();
                         if (this.enableDynamicSearch) {
-                            this.autoComplete.panel.nativeElement.addEventListener(
+                            this.autoComplete?.panel?.nativeElement?.addEventListener(
                                 'scroll',
                                 this.onScroll.bind(this)
                             );

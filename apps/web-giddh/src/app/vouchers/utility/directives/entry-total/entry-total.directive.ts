@@ -1,8 +1,9 @@
-import { Directive, EventEmitter, Input, OnChanges, OnDestroy, Output } from "@angular/core";
+import { Directive, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from "@angular/core";
 import { Store, select } from "@ngrx/store";
 import { ReplaySubject, takeUntil } from "rxjs";
 import { AppState } from "../../../../store";
 import { giddhRoundOff } from "../../../../shared/helpers/helperFunctions";
+import { isEqual } from "apps/web-giddh/src/app/lodash-optimized";
 
 @Directive({
     selector: '[entryTotal]'
@@ -34,9 +35,11 @@ export class EntryTotalDirective implements OnChanges, OnDestroy {
      *
      * @memberof EntryAmountDirective
      */
-    public ngOnChanges(): void {
-        const amount = giddhRoundOff((Number(this.entry.transactions[0].amount?.amountForAccount) - Number(this.entry.totalDiscount)) + (Number(this.entry.totalTax) + Number(this.entry.otherTax?.amount)), this.balanceDecimalPlaces);
-        this.calculatedAmount.emit(amount);
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (!isEqual(changes?.entry?.currentValue, changes?.entry?.previousValue)) {
+            const amount = giddhRoundOff((Number(this.entry.transactions[0].amount?.amountForAccount) - Number(this.entry.totalDiscount)) + (Number(this.entry.totalTax) + Number(this.entry.otherTax?.amount)), this.balanceDecimalPlaces);
+            this.calculatedAmount.emit(amount);
+        }
     }
 
     /**

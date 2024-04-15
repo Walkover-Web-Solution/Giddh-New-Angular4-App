@@ -251,20 +251,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
-    readonly getStockVariants = this.effect((data: Observable<{ q: any, index: number }>) => {
+    readonly getStockVariants = this.effect((data: Observable<{ q: any, index: number, autoSelectVariant: boolean }>) => {
         return data.pipe(
             switchMap((req) => {
                 return this.ledgerService.loadStockVariants(req.q).pipe(
                     tapResponse(
                         (res: Array<IVariant>) => {
                             return this.patchState({
-                                stockVariants: { results: res?.map(res => { return { label: res.name, value: res.uniqueName } }) ?? [], entryIndex: req.index }
+                                stockVariants: { results: res?.map(res => { return { label: res.name, value: res.uniqueName } }) ?? [], entryIndex: req.index, autoSelectVariant: req.autoSelectVariant }
                             });
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({
-                                stockVariants: { results: [], entryIndex: req.index }
+                                stockVariants: { results: [], entryIndex: req.index, autoSelectVariant: req.autoSelectVariant }
                             });
                         }
                     ),
