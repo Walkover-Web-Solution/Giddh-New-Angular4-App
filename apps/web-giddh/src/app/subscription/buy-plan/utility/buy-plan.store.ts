@@ -24,7 +24,7 @@ export interface BuyPlanState {
 }
 
 export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
-    planListInProgress: null,
+    planListInProgress: true,
     planList: [],
     createPlanSuccess: false,
     createPlanResponse: null,

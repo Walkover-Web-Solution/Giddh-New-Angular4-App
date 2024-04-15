@@ -130,8 +130,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public finalPlanAmount: number = 0;
     /** True if new user logged in */
     public isNewUserLoggedIn: boolean = false;
-    /** True if api call in progress */
-    public isLoading: boolean = false;
     /** Razorpay instance */
     public razorpay: any;
     /** Holds subscription response */
@@ -301,7 +299,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     private initSubscriptionForm(): void {
         this.firstStepForm = this.formBuilder.group({
-            duration: ['YEARLY'],
+            duration: [''],
             planUniqueName: ['', Validators.required],
             promoCode: ['']
         });
@@ -721,7 +719,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
                 }
                 this.inputData = [];
+                let monthlyPlan = [];
+                let yearlyPlan = [];
                 response?.forEach(plan => {
+                    console.log(plan);
                     this.inputData.push(plan);
                 });
             } else {
@@ -846,7 +847,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public openCashfreeDialog(redirectLink: any): void {
         window.open(redirectLink, '_blank');
-        this.isLoading = true;
     }
 
     /**
