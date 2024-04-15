@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
-import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, last, of as observableOf, take, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, of as observableOf, take, takeUntil } from "rxjs";
 import * as dayjs from "dayjs";
 import { GeneralService } from "../../services/general.service";
 import { OnboardingFormRequest } from "../../models/api-models/Common";
@@ -355,7 +355,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /**Hold barcode scan total time */
     public totalTime: number = 0;
     /** This will hold barcode value*/
-    public barcodeValue: string = "aaaaaaaaaaa";
+    public barcodeValue: string = "";
     /**Hold barcode last scanned key */
     public lastScannedKey: string = '';
     /* This will hold po unique name for preview */
@@ -516,7 +516,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.componentStore.accountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.updateAccountDataInForm(response);
-                this.getStockByBarcode();
             }
         });
 
