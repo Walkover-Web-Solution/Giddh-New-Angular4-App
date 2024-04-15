@@ -22,7 +22,7 @@ import { PaymentAdvanceSearchComponent } from '../payment-advance-search/payment
 import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceBulkUpdateService } from '../../../services/invoice.bulkupdate.service';
 import { InvoiceService } from '../../../services/invoice.service';
-import * as saveAs from 'file-saver';
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'payment-report',
