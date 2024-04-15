@@ -1282,6 +1282,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.getAccountDetails(event?.value);
             this.activeEntryIndex = 0;
         }
+        this.openAccountDropdown = false;
 
         if (this.showPageLeaveConfirmation) {
             this.pageLeaveUtilityService.addBrowserConfirmationDialog();
@@ -2895,6 +2896,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entryFields.push({ key: 'date', value: this.universalDate });
         this.updateEntry(0, entryFields);
         this.updateDueDate();
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+
+        this.openAccountDropdown = true;
     }
 
     /**
