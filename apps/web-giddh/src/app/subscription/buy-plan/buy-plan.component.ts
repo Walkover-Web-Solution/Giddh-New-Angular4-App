@@ -191,6 +191,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
+            if (this.isNewUserLoggedIn) {
+                this.selectCountry({
+                    "label": "US - United States of America",
+                    "value": "US",
+                    "additional": {
+                        "value": "US",
+                        "label": "US - United States of America"
+                    }
+                })
+            }
         });
 
         window.addEventListener('message', event => {
@@ -680,7 +690,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public onSelectedTab(event: any): void {
         this.selectedStep = event?.selectedIndex;
-        if(this.selectedStep === 1){
+        if (this.selectedStep === 1) {
             this.initIntl();
         }
     }
@@ -719,7 +729,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public selectCountry(event: any): void {
         if (event?.value) {
-
+            if (this.isNewUserLoggedIn) {
+                this.componentStore.getAllPlans({ params: { countryCode: event?.value } });
+            }
             if (event?.value.toLowerCase() === 'in') {
                 this.finalPlanAmount = this.finalPlanAmount + this.finalPlanAmount * this.taxPercentage;
             } else {

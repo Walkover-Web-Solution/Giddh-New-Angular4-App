@@ -601,7 +601,11 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public removeUser(index: number): void {
         let mappings = this.thirdStepForm.get('permissionRoles') as FormArray;
-        mappings.removeAt(index);
+        if (index === 0) {
+            mappings.reset(); // Reset the control at index 0
+        } else {
+            mappings.removeAt(index);
+        }
     }
 
     /**
