@@ -163,6 +163,9 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
         if (value !== undefined && value !== null) {
             this.value = value;
             this.changeDetectionRef.detectChanges();
+        } else {
+            this.value = '';
+            this.changeDetectionRef.detectChanges();
         }
     }
 
