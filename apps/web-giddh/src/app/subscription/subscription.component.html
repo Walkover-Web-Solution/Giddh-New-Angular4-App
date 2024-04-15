@@ -312,22 +312,22 @@
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
             </form>
-            <div class="pagination-wrapper justify-content-end">
-                <mat-paginator
-                    (page)="handlePageChange($event)"
-                    [length]="subscriptionRequestParams.totalItems"
-                    [pageSize]="subscriptionRequestParams.count"
-                    [showFirstLastButtons]="true"
-                    [pageSizeOptions]="pageSizeOptions"
-                    [hidePageSize]="false"
-                    [pageIndex]="pageIndex"
-                    class="mt-15"
-                >
-                </mat-paginator>
-            </div>
         </section>
         <div class="no-data" *ngIf="!dataSource?.filteredData?.length && !(subscriptionListInProgress$ | async)">
             <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
+        </div>
+        <div class="pagination-wrapper justify-content-end" *ngIf="showData && !(subscriptionListInProgress$ | async)">
+            <mat-paginator
+                (page)="handlePageChange($event)"
+                [length]="subscriptionRequestParams.totalItems"
+                [pageSize]="subscriptionRequestParams.count"
+                [showFirstLastButtons]="true"
+                [pageSizeOptions]="pageSizeOptions"
+                [hidePageSize]="false"
+                [pageIndex]="pageIndex"
+                class="mt-15"
+            >
+            </mat-paginator>
         </div>
     </div>
 </ng-container>
