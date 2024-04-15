@@ -114,7 +114,7 @@
                                     </ng-container>
                                 </div>
                                 <!-- endregion -->
-                                <div *ngIf="(pendingPurchaseOrders$ | async)?.length > 0">
+                                <div *ngIf="(pendingPurchaseOrders$ | async)?.length > 0" class="col-12">
                                     <p>
                                         <small>{{ localeData?.pending_po }}</small>
                                     </p>
