@@ -210,10 +210,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public taxAsideMenuRef: MatDialogRef<any>;
     /** Hold aside menu state for product service  */
     public productServiceAsideMenuRef: MatDialogRef<any>;
-    /** Other tax dialog ref  */
+    /** Other tax dialog ref */
     public otherTaxAsideMenuRef: MatDialogRef<any>;
-    /** Bulk stock dialog ref  */
+    /** Bulk stock dialog ref */
     public bulkStockAsideMenuRef: MatDialogRef<any>;
+    /** Discount dialog ref */
+    public discountDialogRef: MatDialogRef<any>;
     /** Stores the current voucher form detail */
     public currentVoucherFormDetails: VoucherForm;
     /** RCM modal configuration */
@@ -1973,14 +1975,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public showCreateDiscountDialog(): void {
-        let discountDialogRef = this.dialog.open(CreateDiscountComponent, {
+        this.discountDialogRef = this.dialog.open(CreateDiscountComponent, {
             position: {
                 right: '0',
                 top: '0'
             }
         });
 
-        discountDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        this.discountDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
                 this.componentStore.getDiscountsList();
             }
@@ -2369,7 +2371,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public handleOutsideClick(event: any): void {
-        if ((typeof event?.target?.className === "string" && event?.target?.className?.indexOf("option") === -1 && event?.target?.className?.indexOf("cdk-overlay-backdrop") === -1) && event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") === -1 && !this.dialog.getDialogById(this.otherTaxAsideMenuRef?.id) && !this.dialog.getDialogById(this.bulkStockAsideMenuRef?.id) && !this.dialog.getDialogById(this.accountAsideMenuRef?.id) && !this.dialog.getDialogById(this.taxAsideMenuRef?.id) && !this.dialog.getDialogById(this.productServiceAsideMenuRef?.id)) {
+        if ((typeof event?.target?.className === "string" && event?.target?.className?.indexOf("option") === -1 && event?.target?.className?.indexOf("cdk-overlay-backdrop") === -1) && event?.currentTarget?.activeElement?.className?.indexOf("select-field-input") === -1 && !this.dialog.getDialogById(this.otherTaxAsideMenuRef?.id) && !this.dialog.getDialogById(this.bulkStockAsideMenuRef?.id) && !this.dialog.getDialogById(this.accountAsideMenuRef?.id) && !this.dialog.getDialogById(this.taxAsideMenuRef?.id) && !this.dialog.getDialogById(this.productServiceAsideMenuRef?.id) && !this.dialog.getDialogById(this.discountDialogRef?.id)) {
             this.activeEntryIndex = null;
         }
     }
@@ -2555,10 +2557,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private calculateVoucherTotals(): void {
-        const entries = this.getEntries();
-        this.voucherTotals = this.vouchersUtilityService.getVoucherTotals(entries, this.company.giddhBalanceDecimalPlaces, this.applyRoundOff, this.invoiceForm.get('exchangeRate')?.value);
-        this.invoiceForm.get('grandTotalMultiCurrency')?.patchValue(this.voucherTotals?.grandTotalMultiCurrency);
-        this.calculateBalanceDue();
+        setTimeout(() => {
+            const entries = this.getEntries();
+            this.voucherTotals = this.vouchersUtilityService.getVoucherTotals(entries, this.company.giddhBalanceDecimalPlaces, this.applyRoundOff, this.invoiceForm.get('exchangeRate')?.value);
+            this.invoiceForm.get('grandTotalMultiCurrency')?.patchValue(this.voucherTotals?.grandTotalMultiCurrency);
+            this.calculateBalanceDue();
+        }, 100);
     }
 
     /**
@@ -2864,10 +2868,29 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public resetVoucherForm(): void {
+        const exchangeRate = this.invoiceForm.get('exchangeRate')?.value;
         this.invoiceForm.reset();
+
+        this.voucherTotals = {
+            totalAmount: 0,
+            totalDiscount: 0,
+            totalTaxableValue: 0,
+            totalTaxWithoutCess: 0,
+            totalCess: 0,
+            grandTotal: 0,
+            grandTotalMultiCurrency: 0,
+            roundOff: 0,
+            tcsTotal: 0,
+            tdsTotal: 0,
+            balanceDue: 0
+        };
         this.hasStock = false;
+        
+        this.invoiceForm.get('type').patchValue(this.voucherType);
+        this.invoiceForm.get('exchangeRate').patchValue(exchangeRate);
         this.invoiceForm.get('date')?.patchValue(this.universalDate);
         this.isVoucherDateChanged = false;
+
         let entryFields = [];
         entryFields.push({ key: 'date', value: this.universalDate });
         this.updateEntry(0, entryFields);
