@@ -2899,6 +2899,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.updateDueDate();
         this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
 
+        this.searchAccount();
+
         this.openAccountDropdown = true;
     }
 
