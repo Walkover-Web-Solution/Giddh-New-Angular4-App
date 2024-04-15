@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 import { SearchType, TaxSupportedCountries, TaxType, VoucherTypeEnum } from "./vouchers.const";
-import { GeneralService } from "../../services/general.service";
 import { VoucherForm } from "../../models/api-models/Voucher";
 import { GIDDH_VOUCHER_FORM, PAGINATION_LIMIT } from "../../app.constant";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
@@ -10,14 +9,7 @@ import * as cleaner from 'fast-clean';
 
 @Injectable()
 export class VouchersUtilityService {
-
     public voucherTypes: any[] = [VoucherTypeEnum.cashCreditNote, VoucherTypeEnum.cash, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.cashBill];
-
-    constructor(
-        private generalService: GeneralService
-    ) {
-
-    }
 
     public showTaxTypeByCountry(countryCode: string, companyCountryCode: string): TaxType {
         if (companyCountryCode === countryCode) {
@@ -303,6 +295,10 @@ export class VouchersUtilityService {
 
             if (!entry.transactions[0]?.stock?.uniqueName) {
                 delete entry.transactions[0].stock;
+            }
+
+            if (entry.transactions[0].stock) {
+                delete entry.transactions[0].stock.maxQuantity;
             }
 
             delete entry.otherTax;

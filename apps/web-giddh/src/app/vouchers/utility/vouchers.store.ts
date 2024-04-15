@@ -43,6 +43,8 @@ export interface VoucherState {
     sendEmailIsSuccess: boolean;
     vouchersForAdjustment: any;
     voucherListForCreditDebitNote: any;
+    pendingPurchaseOrders: any[];
+    countryList: any[];
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -68,7 +70,9 @@ const DEFAULT_STATE: VoucherState = {
     sendEmailInProgress: null,
     sendEmailIsSuccess: null,
     vouchersForAdjustment: null,
-    voucherListForCreditDebitNote: null
+    voucherListForCreditDebitNote: null,
+    pendingPurchaseOrders: null,
+    countryList: null
 };
 
 @Injectable()
@@ -107,6 +111,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public sendEmailIsSuccess$ = this.select((state) => state.sendEmailIsSuccess);
     public vouchersForAdjustment$ = this.select((state) => state.vouchersForAdjustment);
     public voucherListForCreditDebitNote$ = this.select((state) => state.voucherListForCreditDebitNote);
+    public pendingPurchaseOrders$ = this.select((state) => state.pendingPurchaseOrders);
+    public countryList$ = this.select((state) => state.countryList);
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
@@ -610,6 +616,52 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 voucherListForCreditDebitNote: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getPendingPurchaseOrders = this.effect((data: Observable<{ request: any, payload: any}>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.getVendorPurchaseOrders(req.request, req.payload).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                pendingPurchaseOrders: res.body
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                pendingPurchaseOrders: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getCountryList = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.commonService.GetCountry(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                countryList: res?.body ?? {}
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                countryList: null
                             });
                         }
                     ),

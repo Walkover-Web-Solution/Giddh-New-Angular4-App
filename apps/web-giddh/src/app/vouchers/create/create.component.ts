@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -106,6 +106,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public vendorPurchaseOrders$: Observable<any> = this.componentStore.vendorPurchaseOrders$;
     /** Vendor purchase orders Observable */
     public linkedPoOrders$: Observable<any> = this.componentStore.linkedPoOrders$;
+    /** Pending purchase orders Observable */
+    public pendingPurchaseOrders$: Observable<any> = this.componentStore.pendingPurchaseOrders$;
     /** Account search request */
     public accountSearchRequest: any;
     /** Stock search request */
@@ -124,6 +126,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         baseCurrencySymbol: '',
         inputMaskFormat: '',
         taxType: '',
+        taxTypeLabel: '',
         isTcsTdsApplicable: false,
         isActive: false,
         branch: null,
@@ -341,6 +344,36 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public useCustomVoucherNumber: boolean = false;
     /** Stores the adjustments as a backup that are present on the current opened entry */
     public originalVoucherAdjustments: VoucherAdjustments;
+    /** True if barcode maching is typing */
+    public isBarcodeMachineTyping: boolean = false;
+    /**Hold barcode scan start time */
+    public startTime: number = 0;
+    /**Hold barcode scan end time */
+    public endTime: number = 0;
+    /**Hold barcode scan total time */
+    public totalTime: number = 0;
+    /** This will hold barcode value*/
+    public barcodeValue: string = "";
+    /**Hold barcode last scanned key */
+    public lastScannedKey: string = '';
+    /* This will hold po unique name for preview */
+    public purchaseOrderPreviewUniqueName: string = '';
+    /* This will hold po account unique name for preview */
+    public purchaseOrderPreviewAccountUniqueName: string = '';
+    /** List of EU countries */
+    public europeanCountryList: any[] = [];
+
+    /**
+     * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
+     * need to apply max characters limit on Notes/notes2/messsage2
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof VoucherComponent
+     */
+    public get shouldApplyMaxLengthOnNotes(): boolean {
+        return (this.invoiceType?.isSalesInvoice || this.invoiceType?.isProformaInvoice || this.invoiceType?.isEstimateInvoice);
+    }
 
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -355,6 +388,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public get showTaxColumn(): boolean {
+        if (this.company.countryName === 'United Kingdom' && this.europeanCountryList?.includes(this.account?.countryCode)) {
+            return true;
+        }
+
         let accountPartyType = '';
         this.account?.addresses?.forEach(address => {
             if (address.isDefault) {
@@ -417,6 +454,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public ngOnInit(): void {
         this.getVoucherVersion();
         this.initVoucherForm();
+        this.getCountryList();
         this.getDiscountsList();
         this.getCompanyBranches();
         this.getCompanyProfile();
@@ -523,81 +561,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         /** Particular details */
         this.componentStore.particularDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body) {
-                const entryFormGroup = this.getEntryFormGroup(response.entryIndex);
-                const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
-
-                if (response.body.stock) {
-                    entryFormGroup.get('hsnNumber')?.patchValue(response.body.stock.hsnNumber);
-                    entryFormGroup.get('sacNumber')?.patchValue(response.body.stock.sacNumber);
-                    entryFormGroup.get('showCodeType')?.patchValue(response.body.stock.hsnNumber ? 'hsn' : 'sac');
-
-                    let rate = Number((response.body.stock.variant?.unitRates[0].rate / this.invoiceForm.get('exchangeRate')?.value).toFixed(this.highPrecisionRate));
-                    transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue(rate);
-                    transactionFormGroup.get('stock.skuCode')?.patchValue(response.body.stock.skuCode);
-                    transactionFormGroup.get('stock.skuCodeHeading')?.patchValue(response.body.stock.skuCodeHeading);
-                    transactionFormGroup.get('stock.stockUnit.code')?.patchValue(response.body.stock.variant?.unitRates[0]?.stockUnitCode);
-                    transactionFormGroup.get('stock.stockUnit.uniqueName')?.patchValue(response.body.stock.variant?.unitRates[0]?.stockUnitUniqueName);
-                    transactionFormGroup.get('stock.variant.salesTaxInclusive')?.patchValue(response.body.stock.variant?.salesTaxInclusive);
-                    transactionFormGroup.get('stock.variant.purchaseTaxInclusive')?.patchValue(response.body.stock.variant?.purchaseTaxInclusive);
-
-                    if (response.body.stock.variant?.salesTaxInclusive || response.body.stock.variant?.purchaseTaxInclusive) {
-                        transactionFormGroup.get('amount.amountForAccount').patchValue(rate * transactionFormGroup.get('stock.quantity')?.value);
-                    }
-
-                    const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
-                    discountsFormArray.clear();
-                    response.body.stock.variant?.variantDiscount?.discounts?.forEach(selectedDiscount => {
-                        this.discountsList?.forEach(discount => {
-                            if (discount?.uniqueName === selectedDiscount?.discount?.uniqueName) {
-                                discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
-                            }
-                        });
-                    });
-
-                    this.stockUnits[response.entryIndex] = observableOf(response.body.stock.variant.unitRates);
-                } else {
-                    this.stockUnits[response.entryIndex] = observableOf([]);
-                }
-
-                const taxes = this.generalService.fetchTaxesOnPriority(
-                    response.body.stock?.taxes ?? [],
-                    response.body.stock?.groupTaxes ?? [],
-                    response.body.taxes ?? [],
-                    response.body.groupTaxes ?? []);
-
-                const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
-                taxesFormArray.clear();
-
-                const selectedTaxes = [];
-                let otherTax = null;
-                taxes?.forEach(selectedTax => {
-                    this.companyTaxes?.forEach(tax => {
-                        if (this.otherTaxTypes.includes(tax.taxType)) {
-                            otherTax = tax;
-                        } else {
-                            if (tax.uniqueName === selectedTax) {
-                                selectedTaxes.push(tax);
-                            }
-                        }
-                    });
-                });
-
-                selectedTaxes?.forEach(tax => {
-                    taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
-                });
-
-                if (otherTax) {
-                    const selectedOtherTax = this.companyTaxes?.filter(tax => tax.uniqueName === otherTax.uniqueName);
-                    otherTax['taxDetail'] = selectedOtherTax[0].taxDetail;
-                    otherTax['name'] = selectedOtherTax[0].name;
-                    this.getSelectedOtherTax(response.entryIndex, otherTax, otherTax.calculationMethod);
-                }
-
-                if (response.body.stock?.variant?.salesTaxInclusive || response.body.stock?.variant?.purchaseTaxInclusive) {
-                    const amount = this.vouchersUtilityService.calculateInclusiveRate(entryFormGroup?.value, this.companyTaxes, this.company.giddhBalanceDecimalPlaces);
-                    transactionFormGroup.get('amount.amountForAccount').patchValue(amount);
-                    transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue((amount / transactionFormGroup.get('stock.quantity')?.value));
-                }
+                this.prefillParticularDetails(response.entryIndex, response.body);
             }
         });
 
@@ -843,6 +807,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
     }
 
+    private getCountryList(): void {
+        this.componentStore.countryList$.pipe(takeUntil(this.destroyed$)).subscribe(countryList => {
+            if (!countryList) {
+                this.componentStore.getCountryList({ formName: '' });
+            } else {
+                this.europeanCountryList = countryList?.filter(country => country.europeanUnionCountry)?.map(country => { return country.alpha2CountryCode; });
+            }
+        });
+    }
+
     /**
      * Gets company discount list
      *
@@ -908,6 +882,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private showTaxTypeByCountry(countryCode: string): void {
         this.company.taxType = this.vouchersUtilityService.showTaxTypeByCountry(countryCode, this.activeCompany?.countryV2?.alpha2CountryCode);
         if (this.company.taxType) {
+            if (this.company.taxType === TaxType.GST) {
+                this.company.taxTypeLabel = this.commonLocaleData?.app_gstin;
+            } else if (this.company.taxType === TaxType.VAT) {
+                this.company.taxTypeLabel = this.commonLocaleData?.app_enter_vat;
+            } else if (this.company.taxType === TaxType.TRN) {
+                this.company.taxTypeLabel = this.commonLocaleData?.app_trn;
+            }
+
             this.getOnboardingForm(countryCode);
         }
     }
@@ -1237,6 +1219,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             let payload = { statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyConverted] };
             this.componentStore.getVendorPurchaseOrders({ request: request, payload: payload, commonLocaleData: this.commonLocaleData });
         }
+
+        if (this.invoiceType.isPurchaseOrder) {
+            let request = { companyUniqueName: this.activeCompany.uniqueName, accountUniqueName: accountUniqueName, page: 1, count: 10, sort: '', sortBy: '' };
+            let payload = { statuses: [PURCHASE_ORDER_STATUS.open, PURCHASE_ORDER_STATUS.partiallyConverted, PURCHASE_ORDER_STATUS.expired, PURCHASE_ORDER_STATUS.cancelled] };
+
+            if (request.companyUniqueName && accountUniqueName) {
+                this.componentStore.getPendingPurchaseOrders({ request: request, payload: payload });
+            }
+        }
     }
 
     /**
@@ -1288,6 +1279,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.invoiceForm.controls["account"].get("customerName")?.patchValue(event?.label);
             this.getAccountDetails(event?.value);
             this.activeEntryIndex = 0;
+        }
+
+        if (this.showPageLeaveConfirmation) {
+            this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+        } else {
+            this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
         }
     }
 
@@ -1724,10 +1721,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         item.additional.stock?.groupTaxes ?? [],
                         item.additional.taxes ?? [],
                         item.additional.groupTaxes ?? []);
-    
+
                     const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
                     taxesFormArray.clear();
-    
+
                     const selectedTaxes = [];
                     let otherTax = null;
                     taxes?.forEach(selectedTax => {
@@ -1741,18 +1738,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             }
                         });
                     });
-    
+
                     selectedTaxes?.forEach(tax => {
                         taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
                     });
-    
+
                     if (otherTax) {
                         const selectedOtherTax = this.companyTaxes?.filter(tax => tax.uniqueName === otherTax.uniqueName);
                         otherTax['taxDetail'] = selectedOtherTax[0].taxDetail;
                         otherTax['name'] = selectedOtherTax[0].name;
                         this.getSelectedOtherTax(index, otherTax, otherTax.calculationMethod);
                     }
-    
+
                     if (item.additional.stock?.variant?.salesTaxInclusive || item.additional.stock?.variant?.purchaseTaxInclusive) {
                         const amount = this.vouchersUtilityService.calculateInclusiveRate(entryFormGroup?.value, this.companyTaxes, this.company.giddhBalanceDecimalPlaces);
                         transactionFormGroup.get('amount.amountForAccount').patchValue(amount);
@@ -2268,8 +2265,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.getExchangeRate(this.account.baseCurrency, this.company.baseCurrency, this.invoiceForm.get('date')?.value);
         }
 
-        this.isVoucherDateChanged = true; 
-        this.getAllVouchersForAdjustment(); 
+        this.isVoucherDateChanged = true;
+        this.getAllVouchersForAdjustment();
         this.getVoucherListForCreditDebitNote();
         this.dateChangeType = "voucher";
 
@@ -2704,7 +2701,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
             }
 
-            if (!hasTaxes) {
+            if (this.showTaxColumn && !hasTaxes) {
                 return false;
             }
         }
@@ -3461,5 +3458,227 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public closeTaxModal(): void {
         this.store.dispatch(this.companyActions.getTax());
         this.taxAsideMenuRef.close();
+    }
+
+    private prefillParticularDetails(entryIndex: number, response: any): void {
+        const entryFormGroup = this.getEntryFormGroup(entryIndex);
+        const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+
+        if (response.stock) {
+            entryFormGroup.get('hsnNumber')?.patchValue(response.stock.hsnNumber);
+            entryFormGroup.get('sacNumber')?.patchValue(response.stock.sacNumber);
+            entryFormGroup.get('showCodeType')?.patchValue(response.stock.hsnNumber ? 'hsn' : 'sac');
+
+            let rate = Number((response.stock.variant?.unitRates[0].rate / this.invoiceForm.get('exchangeRate')?.value).toFixed(this.highPrecisionRate));
+            transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue(rate);
+            transactionFormGroup.get('stock.skuCode')?.patchValue(response.stock.skuCode);
+            transactionFormGroup.get('stock.skuCodeHeading')?.patchValue(response.stock.skuCodeHeading);
+            transactionFormGroup.get('stock.stockUnit.code')?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitCode);
+            transactionFormGroup.get('stock.stockUnit.uniqueName')?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitUniqueName);
+            transactionFormGroup.get('stock.variant.salesTaxInclusive')?.patchValue(response.stock.variant?.salesTaxInclusive);
+            transactionFormGroup.get('stock.variant.purchaseTaxInclusive')?.patchValue(response.stock.variant?.purchaseTaxInclusive);
+
+            if (response.stock.variant?.salesTaxInclusive || response.stock.variant?.purchaseTaxInclusive) {
+                transactionFormGroup.get('amount.amountForAccount').patchValue(rate * transactionFormGroup.get('stock.quantity')?.value);
+            }
+
+            const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
+            discountsFormArray.clear();
+            response.stock.variant?.variantDiscount?.discounts?.forEach(selectedDiscount => {
+                this.discountsList?.forEach(discount => {
+                    if (discount?.uniqueName === selectedDiscount?.discount?.uniqueName) {
+                        discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                    }
+                });
+            });
+
+            this.stockUnits[response.entryIndex] = observableOf(response.stock.variant.unitRates);
+        } else {
+            this.stockUnits[response.entryIndex] = observableOf([]);
+        }
+
+        const taxes = this.generalService.fetchTaxesOnPriority(
+            response.stock?.taxes ?? [],
+            response.stock?.groupTaxes ?? [],
+            response.taxes ?? [],
+            response.groupTaxes ?? []);
+
+        const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
+        taxesFormArray.clear();
+
+        const selectedTaxes = [];
+        let otherTax = null;
+        taxes?.forEach(selectedTax => {
+            this.companyTaxes?.forEach(tax => {
+                if (this.otherTaxTypes.includes(tax.taxType)) {
+                    otherTax = tax;
+                } else {
+                    if (tax.uniqueName === selectedTax) {
+                        selectedTaxes.push(tax);
+                    }
+                }
+            });
+        });
+
+        selectedTaxes?.forEach(tax => {
+            taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
+        });
+
+        if (otherTax) {
+            const selectedOtherTax = this.companyTaxes?.filter(tax => tax.uniqueName === otherTax.uniqueName);
+            otherTax['taxDetail'] = selectedOtherTax[0].taxDetail;
+            otherTax['name'] = selectedOtherTax[0].name;
+            this.getSelectedOtherTax(response.entryIndex, otherTax, otherTax.calculationMethod);
+        }
+
+        if (response.stock?.variant?.salesTaxInclusive || response.stock?.variant?.purchaseTaxInclusive) {
+            const amount = this.vouchersUtilityService.calculateInclusiveRate(entryFormGroup?.value, this.companyTaxes, this.company.giddhBalanceDecimalPlaces);
+            transactionFormGroup.get('amount.amountForAccount').patchValue(amount);
+            transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue((amount / transactionFormGroup.get('stock.quantity')?.value));
+        }
+    }
+
+    /**
+     * Set barcode machine typing to false if user clicked on dropdown
+     *
+     * @memberof VoucherComponent
+     */
+    public setUserManuallyClicked(): void {
+        this.isBarcodeMachineTyping = false;
+    }
+
+    // CMD + G functionality
+    @HostListener('document:keydown', ['$event'])
+    public handleKeyboardDownEvent(event: KeyboardEvent) {
+        this.startTime = event.timeStamp;
+    }
+
+    // detecting keyup event for barcode scan
+    @HostListener('document:keyup', ['$event'])
+    public handleKeyboardUpEvent(event: KeyboardEvent): void {
+        let uniqueName = this.detectBarcode(event);
+
+        if (event.timeStamp - this.startTime < 2) {
+            this.isBarcodeMachineTyping = true;
+        } else {
+            this.isBarcodeMachineTyping = false;
+        }
+
+        if (uniqueName && this.startTime) {
+            this.endTime = event.timeStamp;
+            const scanTime = this.endTime - this.startTime;
+            this.totalTime += scanTime;
+            if (scanTime < 8) {
+                this.isBarcodeMachineTyping = false;
+                this.getStockByBarcode();
+            }
+            this.startTime = null;
+            this.barcodeValue = '';
+        }
+
+        if (!this.isBarcodeMachineTyping) {
+            this.barcodeValue = "";
+        }
+
+        setTimeout(() => {
+            this.isBarcodeMachineTyping = false;
+            this.barcodeValue = "";
+        }, 1000);
+    }
+
+    /**
+     * Returns the string when barcode machine finishes typing the word
+     *
+     * @param {KeyboardEvent} event
+     * @returns {(string | null)}
+     * @memberof VoucherComponent
+     */
+    public detectBarcode(event: KeyboardEvent): string | null {
+        let ignoreKeyList = ['Shift', 'Meta', 'Backspace'];
+        const key = event.key;
+        if (key === 'Enter') {
+            if (this.barcodeValue.length) {
+                return this.barcodeValue;
+            } else {
+                return null;
+            }
+        } else {
+            if (!ignoreKeyList.includes(key)) {
+                this.barcodeValue += (this.lastScannedKey === 'Shift') ? key.toUpperCase() : key;
+            }
+            this.lastScannedKey = key;
+            return null;
+        }
+    }
+
+    /**
+     * Get stock details by barcode and create transaction for it
+     *
+     * @returns {void}
+     * @memberof VoucherComponent
+     */
+    public getStockByBarcode(): void {
+        if (!this.barcodeValue) {
+            return;
+        }
+        let params = {
+            barcode: this.barcodeValue,
+            customerUniqueName: this.invoiceForm.controls['account'].get('uniqueName')?.value ?? "",
+            invoiceType: this.invoiceType,
+        }
+        this.commonService.getBarcodeScanData(this.barcodeValue, params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.body && response.status === 'success') {
+                this.barcodeValue = '';
+                let stockObj = response.body?.stock;
+                let variantObj = stockObj?.variant;
+                let group = response.body?.parentGroups[1];
+                let accountUniqueName = response.body?.uniqueName;
+
+                if (!accountUniqueName) {
+                    this.toasterService.showSnackBar("warning", group + " " + this.localeData?.account_missing_in_stock);
+                    return;
+                }
+
+                let isExistingEntry = -1;
+                this.invoiceForm.get('entries')['controls']?.forEach((control: any, entryIndex: number) => {
+                    if (isExistingEntry === -1 && control.get('transactions.0.stock.variant.uniqueName')?.value === variantObj?.uniqueName) {
+                        control.get('transactions.0.quantity')?.patchValue(control.get('transactions.0.quantity')?.value + 1);
+                        isExistingEntry = entryIndex;
+                    }
+                });
+
+                if (isExistingEntry === -1) {
+                    let entryFormGroup = this.getEntryFormGroup(this.invoiceForm.get('entries')['controls']?.length - 1);
+                    let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+
+                    if (transactionFormGroup.get('account.uniqueName')?.value) {
+                        this.addNewLineEntry();
+                    }
+
+                    let activeEntryIndex = this.invoiceForm.get('entries')['controls']?.length - 1;
+                    this.prefillParticularDetails(activeEntryIndex, response.body);
+                } else {
+                    this.activeEntryIndex = isExistingEntry;
+                }
+            } else {
+                this.toasterService.showSnackBar("error", response.message);
+            }
+        });
+    }
+
+    /**
+     * This will open the purchase order preview popup
+     *
+     * @param {TemplateRef<any>} template
+     * @param {*} purchaseOrderUniqueName
+     * @memberof CreatePurchaseOrderComponent
+     */
+    public openPurchaseOrderPreviewPopup(template: TemplateRef<any>, purchaseOrderUniqueName: any, accountUniqueName: any): void {
+        this.purchaseOrderPreviewUniqueName = purchaseOrderUniqueName;
+        this.purchaseOrderPreviewAccountUniqueName = accountUniqueName;
+
+        this.dialog.open(template, {
+            width: '980px'
+        });
     }
 }

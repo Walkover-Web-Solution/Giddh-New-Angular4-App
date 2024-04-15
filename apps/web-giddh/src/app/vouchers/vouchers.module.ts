@@ -72,6 +72,7 @@ import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyTyp
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { ConfirmationModalModule } from "../theme/confirmation-modal/confirmation-modal.module";
 import { EntryOtherTaxModule } from "./utility/directives/entry-other-tax/entry-other-tax.module";
+import { PurchaseOrderPreviewModule } from "../shared/purchase-order-preview/purchase-order-preview.module";
 
 @NgModule({
     declarations: [
@@ -150,7 +151,8 @@ import { EntryOtherTaxModule } from "./utility/directives/entry-other-tax/entry-
         ReplacePipeModule,
         CurrencyModule,
         NgxMatSelectSearchModule,
-        ConfirmationModalModule
+        ConfirmationModalModule,
+        PurchaseOrderPreviewModule
     ],
     exports: [
 
