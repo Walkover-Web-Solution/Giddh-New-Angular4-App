@@ -21,7 +21,7 @@ import { ADVANCE_RECEIPT_REPORT_FILTERS, ReceiptAdvanceSearchModel } from '../..
 import { ReceiptAdvanceSearchComponent } from '../receipt-advance-search/receipt-advance-search.component';
 import { ActivatedRoute } from '@angular/router';
 import { InvoiceBulkUpdateService } from '../../../services/invoice.bulkupdate.service';
-import * as FileSaver from 'file-saver';
+import { saveAs } from 'file-saver';
 import { InvoiceService } from '../../../services/invoice.service';
 
 @Component({
@@ -909,7 +909,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                     });
                     let blob = this.generalService.base64ToBlob(response.body, 'application/xls', 512);
                     const fileName = `${isAllItemsSelected ? this.localeData?.all_receipts : this.localeData?.receipts}.xls`;
-                    return FileSaver.saveAs(blob, fileName);
+                    return saveAs(blob, fileName);
                 } else {
                     this.toastService.errorToast(response.message);
                 }
