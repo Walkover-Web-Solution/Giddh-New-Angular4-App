@@ -62,11 +62,6 @@
         </ul>
         <div
             class="h-100"
-            #root
-            (onReset)="initNavigator(navigation, root.children[0])"
-            [navigationWalker]="{ vertical: 'nav-vr-item' }"
-            #navigation="navigationWalker"
-            (ngInit)="onColAdd($event, navigation)"
         >
             <ng-container *ngIf="rows?.length">
                 <ul class="grp-list users-last-list">
@@ -75,7 +70,7 @@
                         [itemSize]="37"
                         [minBufferPx]="400"
                         [maxBufferPx]="800"
-                        (keydown)="handleKeyDown($event)"
+                        #cdkMenu
                     >
                         <li
                             *cdkVirtualFor="let row of rows; let j = index; trackBy: trackByFn"
@@ -86,7 +81,6 @@
                                 #focusElement
                                 href="javascript:void(0);"
                                 class="isAcc account-list"
-                                nav-vr-item
                                 id="acc_{{ row.label }}"
                                 tooltip="{{ row.label }}"
                                 placement="bottom"
