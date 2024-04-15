@@ -25,14 +25,13 @@
             </dropdown-field>
         </div>
     </div>
-    <br />
-    <giddh-page-loader *ngIf="isLoading || planListInProgress$ | async"></giddh-page-loader>
-    <div class="new-plan">
-        <h2 class="no-data" *ngIf="!(planListInProgress$ | async) && !inputData?.length">
+    <giddh-page-loader *ngIf="planListInProgress$ | async"></giddh-page-loader>
+    <div class="new-plan"  *ngIf="(!(planListInProgress$ | async)) && !inputData?.length">
+        <h2 class="no-data">
             {{ commonLocaleData?.app_no_data_found }}
         </h2>
     </div>
-    <div class="float-left w-100" *ngIf="!(planListInProgress$ | async) && inputData?.length">
+    <div class="float-left w-100">
         <div class="buy-plan-wrapper pd-15 w-100">
             <mat-stepper
                 linear
@@ -44,7 +43,7 @@
                 [disableRipple]="firstStepForm.invalid"
                 class="bg-transparent text-black"
             >
-                <ng-container *ngIf="!isLoading && inputData?.length">
+                <ng-container  *ngIf="!(planListInProgress$ | async) && inputData?.length" >
                     <mat-step [stepControl]="firstStepForm">
                         <form
                             name="firstStepForm"
@@ -79,6 +78,36 @@
                                                         }}</mat-button-toggle>
                                                         <mat-button-toggle value="YEARLY">{{
                                                             commonLocaleData?.app_duration?.yearly
+                                                        }}</mat-button-toggle>
+                                                    </mat-button-toggle-group>
+                                                </ng-container>
+                                                      <ng-container
+                                                    *ngIf="
+                                                        selectedPlan?.yearlyAmountAfterDiscount > 0
+                                                    "
+                                                >
+                                                    <mat-button-toggle-group
+                                                        aria-label="Font Style"
+                                                        (change)="toggleDuration($event)"
+                                                        formControlName="duration"
+                                                    >
+                                                        <mat-button-toggle value="YEARLY">{{
+                                                            commonLocaleData?.app_duration?.yearly
+                                                        }}</mat-button-toggle>
+                                                    </mat-button-toggle-group>
+                                                </ng-container>
+                                                      <ng-container
+                                                    *ngIf="
+                                                        selectedPlan?.monthlyAmountAfterDiscount > 0
+                                                    "
+                                                >
+                                                    <mat-button-toggle-group
+                                                        aria-label="Font Style"
+                                                        (change)="toggleDuration($event)"
+                                                        formControlName="duration"
+                                                    >
+                                                        <mat-button-toggle value="MONTHLY">{{
+                                                            commonLocaleData?.app_duration?.monthly
                                                         }}</mat-button-toggle>
                                                     </mat-button-toggle-group>
                                                 </ng-container>
