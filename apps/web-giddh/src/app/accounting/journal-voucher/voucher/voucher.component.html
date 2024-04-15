@@ -111,7 +111,6 @@
                                                     );
                                                     searchedAccountQuery.next($event);
                                                     selectedInputFieldIndex = i
-
                                                 "
                                                 (blur)="onAccountBlur($event)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
@@ -121,7 +120,11 @@
                                                     showLedgerAccountList = false;
                                                     changeTab('tab', 'account')
                                                 "
-                                                (keydown.Enter)="changeTab('enter', 'account')"
+                                                (keydown.Enter)="
+                                                    showLedgerAccountList
+                                                        ? event?.preventDefault()
+                                                        : changeTab('enter', 'account')
+                                                "
                                                 (keydown.Shift.Tab)="
                                                     showLedgerAccountList = false; changeTab('shift', 'account')
                                                 "

@@ -1139,8 +1139,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         element.type = (element.type === 'by') ? 'credit' : 'debit';
                     }
                 });
-                let accUniqueName: string = maxBy(data.transactions, (o: any) => o.amount).selectedAccount?.UniqueName;
-                let indexOfMaxAmountEntry = findIndex(data.transactions, (o: any) => o.selectedAccount?.UniqueName === accUniqueName);
+                let accUniqueName: string = maxBy(data.transactions, (o: any) => o.amount)?.selectedAccount?.UniqueName;
+                let indexOfMaxAmountEntry = findIndex(data.transactions, (o: any) => o?.selectedAccount?.UniqueName === accUniqueName);
                 if (voucherTypeControl.value === VOUCHERS.RECEIPT) {
                     if (this.receiptEntries && this.receiptEntries.length > 0) {
                         data.transactions.splice(0, 2);
@@ -1183,13 +1183,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             let isValid = false;
 
             isValid = byAccounts?.some(acc => {
-                const indexOfAccountParentGroups = acc.selectedAccount?.parentGroups?.findIndex(pg => ['bankaccounts', 'cash', 'loanandoverdraft'].includes(pg?.uniqueName));
+                const indexOfAccountParentGroups = acc?.selectedAccount?.parentGroups?.findIndex(pg => ['bankaccounts', 'cash', 'loanandoverdraft'].includes(pg?.uniqueName));
                 return indexOfAccountParentGroups !== -1;
             });
 
             if (!isValid) {
                 isValid = toAccounts?.some(acc => {
-                    const indexOfAccountParentGroups = acc.selectedAccount?.parentGroups?.findIndex(pg => ['bankaccounts', 'cash', 'loanandoverdraft'].includes(pg?.uniqueName));
+                    const indexOfAccountParentGroups = acc?.selectedAccount?.parentGroups?.findIndex(pg => ['bankaccounts', 'cash', 'loanandoverdraft'].includes(pg?.uniqueName));
                     return indexOfAccountParentGroups !== -1;
                 });
             }
@@ -1208,8 +1208,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public validateForSalesAndPurchaseEntry(data: any) {
-        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn.selectedAccount && trxn.selectedAccount?.parentGroups?.find((pg) => (pg?.uniqueName === 'revenuefromoperations' || pg?.uniqueName === 'currentassets' || pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'purchases' || pg?.uniqueName === 'directexpenses'))));
-        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn.selectedAccount && trxn.selectedAccount?.parentGroups?.find((pg) => (pg?.uniqueName === 'revenuefromoperations' || pg?.uniqueName === 'currentassets' || pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'purchases' || pg?.uniqueName === 'directexpenses'))));
+        const debitEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'by' && trxn?.selectedAccount && trxn.selectedAccount?.parentGroups?.find((pg) => (pg?.uniqueName === 'revenuefromoperations' || pg?.uniqueName === 'currentassets' || pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'purchases' || pg?.uniqueName === 'directexpenses'))));
+        const creditEntryWithCashOrBank = data.transactions.find((trxn) => (trxn.type === 'to' && trxn?.selectedAccount && trxn.selectedAccount?.parentGroups?.find((pg) => (pg?.uniqueName === 'revenuefromoperations' || pg?.uniqueName === 'currentassets' || pg?.uniqueName === 'currentliabilities' || pg?.uniqueName === 'purchases' || pg?.uniqueName === 'directexpenses'))));
 
         if (debitEntryWithCashOrBank && creditEntryWithCashOrBank) {
             return true;
@@ -1234,13 +1234,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
             if (data.voucherType === 'payment') {
                 isValid = byAccounts?.some(acc => {
-                    const indexOfAccountParentGroups = acc.selectedAccount?.parentGroups?.findIndex(pg => ['sundrydebtors', 'sundrycreditors', 'tdsreceivable'].includes(pg?.uniqueName));
+                    const indexOfAccountParentGroups = acc?.selectedAccount?.parentGroups?.findIndex(pg => ['sundrydebtors', 'sundrycreditors', 'tdsreceivable'].includes(pg?.uniqueName));
                     return indexOfAccountParentGroups !== -1;
                 });
 
                 if (!isValid) {
                     isValid = toAccounts?.some(acc => {
-                        const indexOfAccountParentGroups = acc.selectedAccount?.parentGroups?.findIndex(pg => ['cash', 'bankaccounts', 'loanandoverdraft', 'tdspayable'].includes(pg?.uniqueName));
+                        const indexOfAccountParentGroups = acc?.selectedAccount?.parentGroups?.findIndex(pg => ['cash', 'bankaccounts', 'loanandoverdraft', 'tdspayable'].includes(pg?.uniqueName));
                         return indexOfAccountParentGroups !== -1;
                     });
                 }
@@ -1248,13 +1248,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
             if (data.voucherType === 'receipt') {
                 isValid = byAccounts?.some(acc => {
-                    const indexOfAccountParentGroups = acc.selectedAccount?.parentGroups?.findIndex(pg => ['bankaccounts', 'cash', 'loanandoverdraft', 'tdsreceivable'].includes(pg?.uniqueName));
+                    const indexOfAccountParentGroups = acc?.selectedAccount?.parentGroups?.findIndex(pg => ['bankaccounts', 'cash', 'loanandoverdraft', 'tdsreceivable'].includes(pg?.uniqueName));
                     return indexOfAccountParentGroups !== -1;
                 });
 
                 if (!isValid) {
                     isValid = toAccounts?.some(acc => {
-                        const indexOfAccountParentGroups = acc.selectedAccount?.parentGroups?.findIndex(pg => ['tcspayable', 'sundrycreditors', 'sundrydebtors'].includes(pg?.uniqueName));
+                        const indexOfAccountParentGroups = acc?.selectedAccount?.parentGroups?.findIndex(pg => ['tcspayable', 'sundrycreditors', 'sundrydebtors'].includes(pg?.uniqueName));
                         return indexOfAccountParentGroups !== -1;
                     });
                 }
