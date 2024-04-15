@@ -21,7 +21,7 @@ import { ADVANCE_RECEIPT_REPORT_FILTERS, ReceiptAdvanceSearchModel } from '../..
 import { ReceiptAdvanceSearchComponent } from '../receipt-advance-search/receipt-advance-search.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceBulkUpdateService } from '../../../services/invoice.bulkupdate.service';
-import * as saveAs from 'file-saver';
+import { saveAs } from 'file-saver';
 import { InvoiceService } from '../../../services/invoice.service';
 
 @Component({
