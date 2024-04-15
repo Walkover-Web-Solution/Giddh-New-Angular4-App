@@ -417,7 +417,7 @@
                                 >
                                     <div class="col-5 country-space">
                                         <input-field
-                                            name="emailId{{ i }}"
+                                            [name]="'emailId' + i"
                                             [label]="localeData?.permission"
                                             [placeholder]="localeData?.permission_placeholder"
                                             [type]="'text'"
