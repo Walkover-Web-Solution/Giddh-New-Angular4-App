@@ -1,0 +1,48 @@
+<div class="dialog-asidepan">
+    <div class="dialog-header">
+        <span mat-dialog-title class="font-16">Create Discount</span>
+        <i mat-dialog-close class="icon-cross icon-font-16"></i>
+    </div>
+    <div mat-dialog-content class="create-discount-aside dialog-body">
+        <form autocomplete="off" novalidate name="createDiscountForm" [formGroup]="createDiscountForm">
+            <div class="row row-gap15 mt-2">
+                <div class="col-6">
+                    <span class="custom-mat-form-field">
+                        <mat-form-field appearance="outline" placeholder="Select Discount Type">
+                            <mat-label>Discount Type</mat-label>
+                            <mat-select formControlName="type">
+                                <mat-option [value]="'FIXED_VALUE'">As per value</mat-option>
+                                <mat-option [value]="'PERCENT'">As per percent</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </span>
+                </div>
+                <div class="col-6">
+                    <input-field [type]="'text'" [showError]="isFormSubmitted && !createDiscountForm.get('name')?.value"
+                        [name]="'discount-name'" formControlName="name" [placeholder]="'Enter name'" [label]="'Name'"></input-field>
+                </div>
+                <div class="col-6">
+                    <input-field [type]="'number'"
+                        [showError]="isFormSubmitted && !createDiscountForm.get('discountValue')?.value"
+                        [name]="'discountValue'" formControlName="discountValue" [placeholder]="'Enter value'"
+                        [label]="'Value'"></input-field>
+                </div>
+                <div class="col-6">
+                    <reactive-dropdown-field [label]="'Linked Accounts'" [placeholder]="'Select discount'"
+                        formControlName="accountUniqueName" [name]="'accountUniqueName'"
+                        [options]="discountsAccountList$ | async"
+                        [showError]="isFormSubmitted && !createDiscountForm.get('accountUniqueName')?.value"
+                        (onClear)="clearAccount()">
+                    </reactive-dropdown-field>
+                </div>
+            </div>
+        </form>
+        <div class="row mt-4">
+            <div class="col-12 d-flex column-gap1">
+                <button mat-stroked-button color="primary" (click)="saveDiscount()" [ladda]="createDiscountInProgress$ | async">Save</button>
+                <button mat-stroked-button color="primary" (click)="cancelDiscount()">Cancel</button>
+                <button mat-stroked-button color="primary" (click)="clearDiscount()">Clear</button>
+            </div>
+        </div>
+    </div>
+</div>
