@@ -6,8 +6,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IOption } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-options.interface';
 import { concat, includes, startsWith } from 'apps/web-giddh/src/app/lodash-optimized';
 import { IForceClear } from 'apps/web-giddh/src/app/models/api-models/Sales';
-import { AVAccountListComponent } from './virtual-list-menu.component';
-import { CdkVirtualScrollViewport, ScrollDispatcher } from '@angular/cdk/scrolling';
+import { ScrollDispatcher } from '@angular/cdk/scrolling';
 import { ReplaySubject, takeUntil } from 'rxjs';
 
 const FLATTEN_SEARCH_TERM = 'flatten';
@@ -60,7 +59,6 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
 
     @ViewChild('inputFilter', { static: false }) public inputFilter: ElementRef;
     @ViewChild('mainContainer', { static: true }) public mainContainer: ElementRef;
-    @ViewChild('menuEle', { static: true }) public menuEle: AVAccountListComponent;
     @ContentChild('optionTemplate') public optionTemplate: TemplateRef<any>;
     @ViewChild('dd', { static: true }) public ele: ElementRef;
     @Output() public onHide: EventEmitter<any[]> = new EventEmitter<any[]>();
@@ -287,62 +285,36 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         this.isOpen = true;
         // this.focusFilter();
         this.onShow.emit();
-        if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-            let item = this.rows.find(p => p?.value === (this._selectedValues?.length > 0 ? this._selectedValues[0] : (this.rows?.length > 0 ? this.rows[0]?.value : null)));
-            if (item !== null) {
-                this.menuEle.virtualScrollElm.scrollInto(item);
-            }
-        }
         this.cdRef.markForCheck();
     }
 
-    public keydownUp(event) {
+    public keydownUp(event): void {
+        const elements = this.eleRef?.nativeElement?.querySelectorAll('.list-item');
         let key = event.which;
         if (this.isOpen) {
             if (key === this.KEYS.ESC || key === this.KEYS.TAB || (key === this.KEYS.UP && event.altKey)) {
                 this.hide();
             } else if (key === this.KEYS.ENTER) {
-                // if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-                //     let item = this.menuEle.virtualScrollElm.getHighlightedOption();
-                //     if (item !== null) {
-                //         this.toggleSelected(item);
-                //     }
-                // }
-                // this.selectHighlightedOption();
+                const selectedElement = elements[this.selectedIndex];
+                const anchorElement = selectedElement.firstChild as HTMLElement;
+                anchorElement.click();
             } else if (key === this.KEYS.UP) {
-                // if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-                //     let item = this.menuEle.virtualScrollElm.getPreviousHilightledOption();
-                //     if (item !== null) {
-                //         // this.toggleSelected(item);
-                //         this.menuEle.virtualScrollElm.scrollInto(item);
-                //         this.menuEle.virtualScrollElm.startupLoop = true;
-                //         this.menuEle.virtualScrollElm.refresh();
-                //         event.preventDefault();
-                //     }
-                // }
-                // this.optionList.highlightPreviousOption();
-                // this.dropdown.moveHighlightedIntoView();
-                // if (!this.filterEnabled) {
-                //     event.preventDefault();
-                // }
+                event.preventDefault();
+                this.selectedIndex = Math.max(this.selectedIndex - 1, 0);
             } else if (key === this.KEYS.DOWN) {
-                // if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-                //     let item = this.menuEle.virtualScrollElm.getNextHilightledOption();
-                //     if (item !== null) {
-                //         // this.toggleSelected(item);
-                //         this.menuEle.virtualScrollElm.scrollInto(item);
-                //         this.menuEle.virtualScrollElm.startupLoop = true;
-                //         this.menuEle.virtualScrollElm.refresh();
-                //         event.preventDefault();
-                //     }
-            // }
-
-            //     this.optionList.highlightNextOption();
-            // this.dropdown.moveHighlightedIntoView();
-            // if (!this.filterEnabled) {
-            //     event.preventDefault();
-            // }
-        }
+                event.preventDefault();
+                this.selectedIndex = Math.min(this.selectedIndex + 1, this.rows.length - 1);
+            }
+            if (elements.length > 0) {
+                elements.forEach((element, index) => {
+                    if (index === this.selectedIndex) {
+                        element.classList.add('hilighted');
+                    } else {
+                        element.classList.remove('hilighted');
+                    }
+                });
+                elements[this.selectedIndex]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+            }
         }
         this.cdRef.detectChanges();
     }
@@ -367,14 +339,6 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
             if (this.selectedValues && this.selectedValues.length === 1) {
                 this.filter = this.selectedValues[0].label;
             } else {
-                // if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-                //     let item = this.menuEle.virtualScrollElm.getHighlightedOption();
-                //     if (item !== null) {
-                //         this.toggleSelected(item);
-                //     }
-                // } else {
-                //     this.clearFilter();
-                // }
                 this.clearFilter();
             }
             this.onHide.emit();
@@ -497,27 +461,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
      * @memberof AVShSelectComponent
      */
     public handleKeyDown(event: KeyboardEvent): void {
-        if (event.key === 'ArrowUp') {
-            event.preventDefault();
-            this.selectedIndex = Math.max(this.selectedIndex - 1, 0);
-        } else if (event.key === 'ArrowDown') {
-            event.preventDefault();
-            this.selectedIndex = Math.min(this.selectedIndex + 1, this.rows.length - 1);
-        } else {
-            this.typingEvent.emit(event?.key);
-        }
 
-        const elements = this.eleRef?.nativeElement?.querySelectorAll('.list-item');
-        if (elements.length > 0) {
-            elements.forEach((element, index) => {
-                if (index === this.selectedIndex) {
-                    element.classList.add('hilighted');
-                } else {
-                    element.classList.remove('hilighted');
-                }
-            });
-            elements[this.selectedIndex]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
-        }
     }
 
     /**
@@ -550,5 +494,4 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
 export function AVShSelectProvider(): any {
     return forwardRef(() => AVShSelectComponent);
 }
-
 
