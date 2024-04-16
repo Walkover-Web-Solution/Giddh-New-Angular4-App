@@ -16,6 +16,7 @@ import { SubscriptionsUser } from '../models/api-models/Subscriptions';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { CompanyListDialogComponent } from './company-list-dialog/company-list-dialog.component';
 import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.component';
+import { GeneralActions } from '../actions/general/general.actions';
 @Component({
     selector: 'subscription',
     templateUrl: './subscription.component.html',
@@ -81,12 +82,21 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public showStatus = false;
     /* True if duration show */
     public showMonthlyYearly = false;
+    /* True if show header */
+    public showData: boolean = true;
     /** Getter for show search element by type */
     public get shouldShowElement(): boolean {
-        const hasResponse = this.dataSource?.filteredData?.length > 0;
-        return (
-            hasResponse || this.inlineSearch || this.showClearFilter
+        const shouldShow = (
+            this.subscriptionListForm?.controls['companyName']?.value ||
+            this.subscriptionListForm?.controls['billingAccountName']?.value ||
+            this.subscriptionListForm?.controls['subscriberName']?.value ||
+            this.subscriptionListForm?.controls['countryName']?.value ||
+            this.subscriptionListForm?.controls['planName']?.value ||
+            this.subscriptionListForm?.controls['status']?.value ||
+            this.subscriptionListForm?.controls['duration']?.value
         );
+        this.showData = shouldShow;
+        return shouldShow;
     }
     /** Holds Store Cancel Subscription observable*/
     public cancelSubscription$ = this.componentStore.select(state => state.cancelSubscription);
@@ -110,9 +120,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private formBuilder: FormBuilder,
         private subscriptionsActions: SubscriptionsActions,
+        private generalActions: GeneralActions,
         private router: Router
     ) {
-
+        this.store.dispatch(this.generalActions.openSideMenu(true));
     }
 
     /**
@@ -131,11 +142,23 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             if (response) {
                 this.subscriptions = response?.body?.results;
                 this.dataSource = new MatTableDataSource<any>(response?.body?.results);
+                if (this.dataSource?.filteredData?.length || this.subscriptionListForm?.controls['companyName']?.value ||
+                    this.subscriptionListForm?.controls['billingAccountName']?.value ||
+                    this.subscriptionListForm?.controls['subscriberName']?.value ||
+                    this.subscriptionListForm?.controls['countryName']?.value ||
+                    this.subscriptionListForm?.controls['planName']?.value ||
+                    this.subscriptionListForm?.controls['status']?.value ||
+                    this.subscriptionListForm?.controls['duration']?.value) {
+                    this.showData = true;
+                }  else {
+                    this.showData = false;
+                }
                 this.dataSource.paginator = this.paginator;
                 this.subscriptionRequestParams.totalItems = response?.body?.totalItems;
             } else {
                 this.dataSource = new MatTableDataSource<any>([]);
                 this.subscriptions = [];
+                this.showData = false;
                 this.subscriptionRequestParams.totalItems = 0;
             }
         });

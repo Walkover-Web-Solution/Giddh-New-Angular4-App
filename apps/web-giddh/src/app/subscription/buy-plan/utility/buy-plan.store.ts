@@ -20,11 +20,11 @@ export interface BuyPlanState {
     applyPromoCodeInProgress: boolean;
     promoCodeResponse: any;
     updateSubscriptionPaymentInProgress: boolean;
-    updateSubscriptionPaymentIsSuccess: boolean;
+    updateSubscriptionPaymentIsSuccess: any;
 }
 
 export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
-    planListInProgress: null,
+    planListInProgress: true,
     planList: [],
     createPlanSuccess: false,
     createPlanResponse: null,
@@ -35,7 +35,7 @@ export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
     updatePlanSuccess: false,
     updatePlanInProgress: false,
     updateSubscriptionPaymentInProgress: false,
-    updateSubscriptionPaymentIsSuccess: false
+    updateSubscriptionPaymentIsSuccess: null
 };
 
 @Injectable()
@@ -73,7 +73,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                                 });
                             } else {
                                 if (res.message) {
-                                    this.toasterService.showSnackBar('success', res.message);
+                                    this.toasterService.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
                                     planList: [],
@@ -237,7 +237,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                                 this.toasterService.showSnackBar('success', 'Plan purchased successfully');
                                 return this.patchState({
                                     updateSubscriptionPaymentInProgress: false,
-                                    updateSubscriptionPaymentIsSuccess: true
+                                    updateSubscriptionPaymentIsSuccess: res?.body ?? null
                                 });
                             } else {
                                 if (res.message) {
@@ -245,7 +245,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                                 }
                                 return this.patchState({
                                     updateSubscriptionPaymentInProgress: false,
-                                    updateSubscriptionPaymentIsSuccess: false
+                                    updateSubscriptionPaymentIsSuccess: null
                                 });
                             }
                         },
@@ -254,7 +254,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
 
                             return this.patchState({
                                 updateSubscriptionPaymentInProgress: false,
-                                updateSubscriptionPaymentIsSuccess: false
+                                updateSubscriptionPaymentIsSuccess: null
                             });
                         }
                     ),

@@ -11,14 +11,27 @@
             {{ commonLocaleData?.app_back }}
         </button>
     </div>
-    <br />
-    <div class="float-left w-100">
-        <giddh-page-loader *ngIf="isLoading || planListInProgress$ | async"></giddh-page-loader>
-        <div class="new-plan">
-            <h2 class="no-data" *ngIf="!(planListInProgress$ | async) && !inputData?.length">
-                {{ commonLocaleData?.app_no_data_found }}
-            </h2>
+    <div class="form-group col-md-2" *ngIf="isNewUserLoggedIn">
+        <div class="width-100">
+            <dropdown-field
+                [name]="'country'"
+                [label]="commonLocaleData?.app_country"
+                [placeholder]="commonLocaleData?.app_select + ' ' + commonLocaleData?.app_country"
+                class="mb-3 d-block"
+                [options]="countrySource"
+                (selectedOption)="selectCountry($event)"
+                [defaultValue]="selectedCountry"
+            >
+            </dropdown-field>
         </div>
+    </div>
+    <giddh-page-loader *ngIf="planListInProgress$ | async"></giddh-page-loader>
+    <div class="new-plan" *ngIf="!(planListInProgress$ | async) && !inputData?.length">
+        <h2 class="no-data">
+            {{ commonLocaleData?.app_no_data_found }}
+        </h2>
+    </div>
+    <div class="float-left w-100">
         <div class="buy-plan-wrapper pd-15 w-100">
             <mat-stepper
                 linear
@@ -30,7 +43,8 @@
                 [disableRipple]="firstStepForm.invalid"
                 class="bg-transparent text-black"
             >
-                <ng-container *ngIf="!isLoading && inputData?.length">
+
+                <ng-container *ngIf="!(planListInProgress$ | async) && inputData?.length">
                     <mat-step [stepControl]="firstStepForm">
                         <form
                             name="firstStepForm"
@@ -54,10 +68,10 @@
                                                     (change)="toggleDuration($event)"
                                                     formControlName="duration"
                                                 >
-                                                    <mat-button-toggle value="MONTHLY">{{
+                                                    <mat-button-toggle *ngIf="monthlyPlans?.length" value="MONTHLY">{{
                                                         commonLocaleData?.app_duration?.monthly
                                                     }}</mat-button-toggle>
-                                                    <mat-button-toggle value="YEARLY">{{
+                                                    <mat-button-toggle *ngIf="yearlyPlans?.length" value="YEARLY">{{
                                                         commonLocaleData?.app_duration?.yearly
                                                     }}</mat-button-toggle>
                                                 </mat-button-toggle-group>
@@ -343,6 +357,7 @@
                                                         [showError]="
                                                             isFormSubmitted && !secondStepForm.get('billingName')?.value
                                                         "
+                                                        [autocomplete]="'off'"
                                                     >
                                                     </input-field>
                                                 </div>
@@ -356,6 +371,7 @@
                                                         [showError]="
                                                             isFormSubmitted && !secondStepForm.get('companyName')?.value
                                                         "
+                                                        [autocomplete]="'off'"
                                                     >
                                                     </input-field>
                                                 </div>
@@ -369,6 +385,7 @@
                                                         [showError]="
                                                             isFormSubmitted && !secondStepForm.get('email')?.value
                                                         "
+                                                        [autocomplete]="'off'"
                                                     >
                                                     </input-field>
                                                 </div>
@@ -379,6 +396,7 @@
                                                         [label]="localeData?.pincode"
                                                         formControlName="pincode"
                                                         [placeholder]="localeData?.pincode"
+                                                        [autocomplete]="'off'"
                                                     >
                                                     </input-field>
                                                 </div>
@@ -390,7 +408,7 @@
                                                             class="mat-form-field-border mat-form-field-height mobile-height bg-transparent border"
                                                             #initContact
                                                             aria-autocomplete="none"
-                                                            autocomplete="off"
+                                                            [autocomplete]="'off'"
                                                             (keypress)="
                                                                 intlClass?.onlyPhoneNumber($event);
                                                                 validateMobileField()
@@ -442,9 +460,13 @@
                                                                 !secondStepForm.get('taxNumber')?.value) ||
                                                             !isGstinValid
                                                         "
-                                                        [label]="formFields['taxName']?.label ?? commonLocaleData?.app_tax_number"
+                                                        [label]="
+                                                            formFields['taxName']?.label ??
+                                                            commonLocaleData?.app_tax_number
+                                                        "
                                                         [maxlength]="15"
                                                         (change)="validateGstNumber()"
+                                                        [autocomplete]="'off'"
                                                     >
                                                     </input-field>
                                                 </div>
@@ -489,6 +511,7 @@
                                                             matInput
                                                             [placeholder]="commonLocaleData?.app_address"
                                                             formControlName="address"
+                                                            [autocomplete]="'off'"
                                                         ></textarea>
                                                     </mat-form-field>
                                                 </div>

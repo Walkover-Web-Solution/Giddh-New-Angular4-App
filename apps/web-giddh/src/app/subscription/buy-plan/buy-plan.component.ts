@@ -130,12 +130,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public finalPlanAmount: number = 0;
     /** True if new user logged in */
     public isNewUserLoggedIn: boolean = false;
-    /** True if api call in progress */
-    public isLoading: boolean = false;
     /** Razorpay instance */
     public razorpay: any;
     /** Holds subscription response */
     private subscriptionResponse: any = {};
+    /** Holds Store Apply Promocode API response state as observable*/
+    public updateSubscriptionPaymentIsSuccess$ = this.componentStore.select(state => state.updateSubscriptionPaymentIsSuccess);
+    /** Holds filtered monthly plans */
+    public monthlyPlans: any[] = [];
+    /** Holds filtered yearly plans */
+    public yearlyPlans: any[] = [];
 
     constructor(
         public dialog: MatDialog,
@@ -189,8 +193,25 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.updateSubscriptionPaymentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.router.navigate(['/pages/new-company/' + response?.subscription?.subscriptionId]);
+            }
+        });
+
+
         this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
+            if (this.isNewUserLoggedIn) {
+                this.selectCountry({
+                    "label": "US - United States of America",
+                    "value": "US",
+                    "additional": {
+                        "value": "US",
+                        "label": "US - United States of America"
+                    }
+                })
+            }
         });
 
         window.addEventListener('message', event => {
@@ -241,26 +262,26 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 if (result) {
                     this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
                     if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                        this.finalPlanAmount = this.selectedPlan?.yearlyAmount;
+                        this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
                     } else {
-                        this.finalPlanAmount = this.selectedPlan?.monthlyAmount;
+                        this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
                     }
                     if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
                         this.finalPlanAmount = this.finalPlanAmount + (this.finalPlanAmount * this.taxPercentage);
                     } else {
                         if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                            this.finalPlanAmount = this.selectedPlan?.yearlyAmount;
+                            this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
                         } else {
-                            this.finalPlanAmount = this.selectedPlan?.monthlyAmount;
+                            this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
                         }
                     }
                 }
             });
         } else {
             if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                this.finalPlanAmount = this.selectedPlan?.yearlyAmount;
+                this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
             } else {
-                this.finalPlanAmount = this.selectedPlan?.monthlyAmount;
+                this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
             }
         }
     }
@@ -282,7 +303,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     private initSubscriptionForm(): void {
         this.firstStepForm = this.formBuilder.group({
-            duration: ['YEARLY'],
+            duration: [''],
             planUniqueName: ['', Validators.required],
             promoCode: ['']
         });
@@ -680,7 +701,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public onSelectedTab(event: any): void {
         this.selectedStep = event?.selectedIndex;
-        if(this.selectedStep === 1){
+        if (this.selectedStep === 1) {
             this.initIntl();
         }
     }
@@ -692,19 +713,32 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public getAllPlans(): void {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.inputData = [];
             if (response?.length) {
                 this.selectedPlan = response[1];
                 this.popularPlan = response[1];
+
                 this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan?.uniqueName);
+
+                response?.forEach(plan => {
+                    this.inputData.push(plan);
+                });
+
+                this.monthlyPlans = response?.filter(plan => plan?.monthlyAmountAfterDiscount > 0);
+                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmountAfterDiscount > 0);
+
+                if (this.yearlyPlans?.length) {
+                    this.firstStepForm.get('duration').setValue('YEARLY');
+                } else {
+                    this.firstStepForm.get('duration').setValue('MONTHLY');
+                }
+
                 if (this.firstStepForm.get('duration').value === 'YEARLY') {
                     this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
                 } else {
                     this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
                 }
-                this.inputData = [];
-                response?.forEach(plan => {
-                    this.inputData.push(plan);
-                });
+
             } else {
                 this.inputData = [];
             }
@@ -719,7 +753,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public selectCountry(event: any): void {
         if (event?.value) {
-
+            if (this.isNewUserLoggedIn) {
+                this.componentStore.getAllPlans({ params: { countryCode: event?.value } });
+            }
             if (event?.value.toLowerCase() === 'in') {
                 this.finalPlanAmount = this.finalPlanAmount + this.finalPlanAmount * this.taxPercentage;
             } else {
@@ -825,7 +861,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public openCashfreeDialog(redirectLink: any): void {
         window.open(redirectLink, '_blank');
-        this.isLoading = true;
     }
 
     /**
