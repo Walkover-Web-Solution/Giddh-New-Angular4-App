@@ -1276,7 +1276,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public selectAccount(event: any, isClear: boolean = false): void {
         if (isClear) {
-            this.resetVoucherForm();
+            if (this.invoiceForm.controls["account"].get("customerName")?.value || this.invoiceForm.controls["account"].get("uniqueName")?.value) {
+                this.resetVoucherForm();
+            }
         } else {
             this.invoiceForm.controls["account"].get("customerName")?.patchValue(event?.label);
             this.getAccountDetails(event?.value);
@@ -1305,7 +1307,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
 
             if (isClear) {
-
+                
             } else {
                 let keysToUpdate = {
                     accountName: event?.label,
@@ -1676,6 +1678,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 response?.forEach(item => {
                     if (item.additional?.stock) {
                         this.stockUnits[index] = observableOf(item.additional?.stock?.variant?.unitRates);
+
+                        if (item.additional?.variants) {
+                            this.stockVariants[index] = item.additional?.variants;
+                        }
                     }
 
                     let entry = {
@@ -2886,7 +2892,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             balanceDue: 0
         };
         this.hasStock = false;
-        
+
         this.invoiceForm.get('type').patchValue(this.voucherType);
         this.invoiceForm.get('exchangeRate').patchValue(exchangeRate);
         this.invoiceForm.get('date')?.patchValue(this.universalDate);

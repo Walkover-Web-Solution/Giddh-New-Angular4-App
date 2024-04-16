@@ -174,7 +174,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         if (item?.additional?.hasVariants) {
             this.componentStore.getStockVariants({ q: item?.additional?.stock?.uniqueName, index: index });
         } else {
-            this.loadDetails(item, requestObject);
+            this.loadDetails(item, requestObject, index);
         }
     }
 
@@ -185,7 +185,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      * @param {*} requestObject
      * @memberof AddBulkItemsComponent
      */
-    public loadDetails(item: SalesAddBulkStockItems, requestObject: any): void {
+    public loadDetails(item: SalesAddBulkStockItems, requestObject: any, index: number): void {
         this.searchService.loadDetails(item.additional?.uniqueName, requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && data.body) {
                 // Take taxes of parent group and stock's own taxes
@@ -205,6 +205,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                     stock: data.body.stock,
                     combinedUniqueName: data.body.stock?.variant ? `${item.uniqueName}#${data.body.stock.variant?.uniqueName}` : '',
                     skuCode: data.body.stock?.skuCode,
+                    variants: this.stockVariants[index]
                 };
 
                 const unitRates = data.body?.stock?.variant?.unitRates ?? [];
@@ -243,7 +244,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
             variantUniqueName: event.value,
             customerUniqueName: this.inputData.customerUniqueName
         };
-        this.loadDetails(selectedItem, requestObj);
+        this.loadDetails(selectedItem, requestObj, index);
     }
 
     /**
