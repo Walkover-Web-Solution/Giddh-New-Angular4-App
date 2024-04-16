@@ -453,6 +453,7 @@ export class ThermalService {
             let productName =
                 entry?.transactions[0]?.stock?.name ||
                 entry?.transactions[0]?.account?.name;
+            let variant = entry?.transactions[0]?.stock?.variant?.name;
             let quantity;
             if (defaultTemplate?.sections?.table?.data?.quantity?.display) {
                 if (entry?.transactions[0]?.stock?.quantity) {
@@ -498,31 +499,27 @@ export class ThermalService {
                 amount?.padStart(amountPadding);
 
             let itemLength = this.maxLength - itemDetails?.length;
-            let itemName = productName?.substr(0, itemLength);
+            let completeProductName = this.wrapStringByLength(productName, variant, itemLength);
+            let itemName = Array.isArray(completeProductName) ? completeProductName[0] : completeProductName;
 
             if (entry?.transactions[0]?.stock?.quantity) {
                 totalQty = totalQty + Number(quantity);
             }
 
-
             if (itemName?.length === 0) {
-                let productNameShow;
+                let productNameShow = "";
                 if (defaultTemplate?.sections?.table?.data?.item?.display) {
                     productNameShow = this.printerFormat.formatCenter(this.justifyText(productName)
                     )
-                } else {
-                    productNameShow = "";
                 }
                 items +=
                     productNameShow +
                     this.printerFormat.formatCenter(this.justifyText("", itemDetails)
                     );
             } else {
-                let itemNameShow;
+                let itemNameShow = "";
                 if (defaultTemplate?.sections?.table?.data?.item?.display) {
                     itemNameShow = itemName;
-                } else {
-                    itemNameShow = '';
                 }
 
                 const itemNameShowHide = itemNameShow?.length ? this.justifyText(itemNameShow, itemDetails) : this.justifyText(itemDetails);
@@ -534,6 +531,9 @@ export class ThermalService {
                     let lastIndex = productName.length - itemName.length;
                     for (let itemNameIndex = itemName?.length; itemNameIndex < lastIndex; itemNameIndex = itemNameIndex + 10) {
                         items += this.printerFormat.formatCenter(this.printerFormat.leftAlign + productName?.substr(itemNameIndex, 10));
+                    }
+                    for (let i = 1; i < completeProductName?.length; i++) {
+                        items += (this.printerFormat.leftAlign + completeProductName[i] + this.printerFormat.lineBreak);
                     }
                 }
             }
@@ -821,5 +821,46 @@ export class ThermalService {
             dash += " ";
         }
         return dash;
+    }
+
+    /**
+     * Trim String based on desired String Length and return array of trimed string
+     *
+     * @private
+     * @param {string} productName
+     * @param {string} vaiant
+     * @param {number} desiredStringLength
+     * @returns {*}
+     * @memberof ThermalService
+     */
+    private wrapStringByLength(productName: string, vaiant: string, desiredStringLength: number): any {
+        let trimmedStringArray: any = [];
+        let isProductTrimed: boolean = false;
+        let flag: number = 0;
+
+        if (productName?.length > desiredStringLength) {
+            let remianingString = productName;
+
+            while (remianingString?.length !== 0) {
+
+
+                let cutString = remianingString.substr(0, desiredStringLength);
+                remianingString = remianingString.substr(cutString.length);
+                isProductTrimed = remianingString.length === 0;
+
+                trimmedStringArray.push(cutString);
+
+                if (remianingString.length === 0 && isProductTrimed && flag === 0 && vaiant) {
+                    flag++;
+                    isProductTrimed = false;
+                    remianingString = '-' + vaiant;
+                }
+            }
+
+        } else {
+            return productName;
+        }
+
+        return trimmedStringArray;
     }
 }
