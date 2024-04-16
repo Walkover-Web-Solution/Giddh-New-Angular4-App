@@ -86,8 +86,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public timerOn: boolean = false;
     /** to track for OTP  */
     public isPayClicked: boolean = false;
-    /** selected bank URN number */
-    public selectedBankUrn: any;
+    /** selected bank Bank User Id */
+    public selectedBankUserId: any;
     /** Timer reference */
     public countDownTimerRef: any;
     /** Total available balance of selected account */
@@ -288,7 +288,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public sendOTP() {
         let request = {
             params: {
-                urn: this.mode.iciciCorporateDetails.URN
+                bankUserId: this.mode.iciciCorporateDetails.bankUserId
             }
         };
         this.companyService.getOTP(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
@@ -313,7 +313,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.timerOn = true
         this.startTimer(40);
         this.receivedOtp = null;
-        this.companyService.resendOtp(this.companyUniqueName, this.selectedBankUrn, this.paymentRequestId, this.selectedBankUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.companyService.resendOtp(this.companyUniqueName, this.selectedBankUserId, this.paymentRequestId, this.selectedBankUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
                 this.isPayClicked = true;
                 if (response.body && response.body.message) {
@@ -337,7 +337,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.isRequestInProcess = true;
         bankTransferConfirmOtpRequest.requestId = this.paymentRequestId;
         bankTransferConfirmOtpRequest.otp = this.receivedOtp;
-        this.companyService.bulkVendorPaymentConfirm(this.companyUniqueName, this.selectedBankUrn, this.selectedBankUniqueName, bankTransferConfirmOtpRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this.companyService.bulkVendorPaymentConfirm(this.companyUniqueName, this.selectedBankUserId, this.selectedBankUniqueName, bankTransferConfirmOtpRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && res.status === 'success') {
                 this.paymentSuccessfulMessage = res.body?.Message;
                 this.closePaymentModel(true);
@@ -388,7 +388,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public resetFormData(): void {
         this.selectedBankUniqueName = '';
         this.isBankSelectedForBulkPayment = false;
-        this.selectedBankUrn = '';
+        this.selectedBankUserId = '';
         this.selectedBankName = '';
         this.receivedOtp = '';
         this.isPayClicked = false;
@@ -428,7 +428,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.getTotalAmount();
 
         if(loadPayorList) {
-            this.selectedBankUrn = '';
+            this.selectedBankUserId = '';
             this.requestObjectToGetOTP.urn = '';
             this.getBankAccountPayorsList();
         }
@@ -442,7 +442,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
      */
     public selectPayor(event: IOption): void {
         if (event) {
-            this.selectedBankUrn = event.value;
+            this.selectedBankUserId = event.value;
             this.requestObjectToGetOTP.urn = event.value;
         }
     }
@@ -475,7 +475,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     }
 
     /**
-     * set Bank name for bydefault set bank name if only single bank integrated to prevent 'urn' displayed this was incorrect
+     * set Bank name for bydefault set bank name if only single bank integrated to prevent 'bank user id ' displayed this was incorrect
      *
      * @param {*} event Click event
      * @param {ShSelectComponent} selectBankEle Sh-select reference
@@ -607,7 +607,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public initializeNewForm(): void {
         this.addAccountBulkPaymentForm = this.formBuilder.group({
             bankName: [''],
-            urn: [''],
+            bankUserId: [''],
             totalAmount: [''],
             bankPaymentTransactions: this.formBuilder.array([
                 this.formBuilder.group({
@@ -695,7 +695,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             return;
         }
         this.isPayorRequired = false;
-        this.selectedBankUrn = '';
+        this.selectedBankUserId = '';
         this.requestObjectToGetOTP.urn = '';
         this.forceClear$ = of({ status: true });
         this.isPayorListInProgress = true;
@@ -704,7 +704,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 this.payorsList = [];
 
                 response?.body?.forEach(payor => {
-                    this.payorsList.push({label: payor?.user?.name, value: payor?.urn});
+                    this.payorsList.push({label: payor?.user?.name, value: payor?.bankUserId});
                 });
 
                 if(this.payorsList?.length === 1) {
