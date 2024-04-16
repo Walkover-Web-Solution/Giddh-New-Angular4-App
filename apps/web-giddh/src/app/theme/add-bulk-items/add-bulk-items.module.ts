@@ -9,6 +9,7 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { TranslateDirectiveModule } from "../translate/translate.directive.module";
 
 @NgModule({
     declarations: [
@@ -24,7 +25,8 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
         MatExpansionModule,
         MatTooltipModule,
         FormsModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        TranslateDirectiveModule
     ],
     exports: [
         AddBulkItemsComponent

@@ -23,6 +23,8 @@ export class TaxDropdownComponent implements OnChanges {
     @Input() public currency: any;
     /** Account currency */
     @Input() public date: any;
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /** Emitter for create new tax selected */
     @Output() public createNewTax: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Emitter for selected taxes */

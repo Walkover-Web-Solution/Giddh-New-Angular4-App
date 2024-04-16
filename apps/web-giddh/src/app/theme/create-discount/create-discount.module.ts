@@ -7,6 +7,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import { LaddaModule } from "angular2-ladda";
+import { TranslateDirectiveModule } from "../translate/translate.directive.module";
 
 @NgModule({
     declarations: [
@@ -20,7 +21,8 @@ import { LaddaModule } from "angular2-ladda";
         MatSelectModule,
         ReactiveFormsModule,
         FormsModule,
-        LaddaModule
+        LaddaModule,
+        TranslateDirectiveModule
     ],
     exports: [
         CreateDiscountComponent

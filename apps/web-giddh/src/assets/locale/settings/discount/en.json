@@ -1,5 +1,6 @@
 {
     "tab_heading": "Create Discount",
+    "discount_type": "Discount Type",
     "discount_type_placeholder": "Select Discount Type",
     "linked_accounts_label": "Linked Accounts",
     "linked_accounts_placeholder": "Select Discount",
@@ -8,5 +9,6 @@
         "as_per_value": "As per value",
         "as_per_percent": "As per percent"
     },
-    "delete_discount": "Do you really want to delete this discount?"
+    "delete_discount": "Do you really want to delete this discount?",
+    "discount_value_placeholder": "Enter value"
 }

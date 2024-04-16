@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { VoucherTypeEnum } from '../utility/vouchers.const';
 import { VoucherComponentStore } from '../utility/vouchers.store';
-import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
 
 @Component({
@@ -85,7 +85,7 @@ export class EmailSendDialogComponent implements OnInit, OnDestroy {
         if (event?.checked) {
             this.copyTypes.push(this.formBuilder.control(value));
         } else {
-            const index = this.copyTypes.controls.findIndex(x => x.value === value);
+            const index = this.copyTypes.controls.findIndex(copyType => copyType.value === value);
             if (index >= 0) {
                 this.copyTypes.removeAt(index);
             }

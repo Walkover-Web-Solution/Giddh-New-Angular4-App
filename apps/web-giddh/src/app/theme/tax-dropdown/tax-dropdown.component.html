@@ -6,14 +6,14 @@
             <div class="discount-checkbox-wrapper d-flex flex-column">
                 <ng-container *ngFor="let tax of taxForm.get('taxes')['controls']; let i = index" formArrayName="taxes">
                     <ng-container [formGroupName]="i">
-                        <span [matTooltip]="tax?.get('disableForDate')?.value ? 'Applicable date: ' + tax?.get('taxDetail')?.value?.date : ''" matTooltipPosition="above">
+                        <span [matTooltip]="tax?.get('disableForDate')?.value ? comcommonLocaleData?.app_applicable_date + ': ' + tax?.get('taxDetail')?.value?.date : ''" matTooltipPosition="above">
                             <mat-checkbox (change)="enableDisableTaxes()" formControlName="isChecked" type="checkbox" color="primary"><span class="font-15">{{ tax?.get('name')?.value }}</span></mat-checkbox>
                         </span>
                     </ng-container>
                 </ng-container>
             </div>
             <div class="create-new pt-2 mt-2 text-center cursor-pointer" (click)="createNew()">
-                <span class="text-blue">Create New</span>
+                <span class="text-blue">{{ commonLocaleData?.app_create_new }}</span>
             </div>
         </div>
     </mat-menu>
