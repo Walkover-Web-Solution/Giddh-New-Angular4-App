@@ -571,7 +571,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     /**
-     * This will be use for add new portal user
+     * This will be use for add new user
      *
      * @param {*} [user]
      * @memberof AddCompanyComponent
@@ -594,7 +594,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
     /**
-     * This will be use for remove portal user
+     * This will be use for remove  user
      *
      * @param {number} index
      * @memberof AddCompanyComponent
