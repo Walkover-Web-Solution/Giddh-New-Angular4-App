@@ -5,7 +5,6 @@ import { enableDebugTools } from '@angular/platform-browser';
 import { Environment } from './model';
 
 Error.stackTraceLimit = Infinity;
-// require('zone.js/dist/long-stack-trace-zone');
 
 export const environment: Environment = {
     production: false,
