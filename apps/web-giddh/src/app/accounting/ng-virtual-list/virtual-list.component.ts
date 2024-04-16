@@ -80,6 +80,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Hold selected index  */
     public selectedIndex: number = -1;
+    public loadMoreInProgress: boolean = false;
     /** Emits the typing event  */
     @Output() public typingEvent: EventEmitter<string> = new EventEmitter();
 
@@ -147,6 +148,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
 
     public updateRows(val: IOption[] = []) {
         this.rows = val;
+        this.loadMoreInProgress = false;
     }
 
     public filterByIOption(array: IOption[], term: string, action: string = 'default') {
@@ -372,7 +374,8 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
 
     public ngOnInit() {
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
-            if (event && event?.getDataLength() - event?.getRenderedRange().end < 20) {
+            if (event && event?.getDataLength() - event?.getRenderedRange().end < 20 && !this.loadMoreInProgress) {
+                this.loadMoreInProgress = true;
                 this.scrollEnd.emit()
             }
         });
