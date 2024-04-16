@@ -139,7 +139,6 @@ export class ListBranchTransferComponent implements OnInit {
     public translationLoaded: boolean = false;
     /* True if show header */
     public showData: boolean = true;
-    public hasAdvancedSearchResponse: boolean;
     /** Getter for show search element by type */
     public get shouldShowElement(): boolean {
         const shouldShow = (
