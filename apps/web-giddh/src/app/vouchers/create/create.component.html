@@ -1339,141 +1339,181 @@
                                         </div>
 
                                         <div class="col-4 px-0">
-                                            <div class="row text-right row-gap">
-                                                <div class="col-9">
-                                                    {{ commonLocaleData?.app_total_amount }}
-                                                </div>
-                                                <div class="col-3">
-                                                    <amount-field class="d-inline-block"
-                                                        [amount]="voucherTotals.totalAmount"
-                                                        [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
-                                                        [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
-                                                    </amount-field>
-                                                </div>
-                                                <div class="col-9">
-                                                    {{ commonLocaleData?.app_discount }}
-                                                </div>
-                                                <div class="col-3">
-                                                    <amount-field class="d-inline-block"
-                                                        [amount]="voucherTotals.totalDiscount"
-                                                        [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
-                                                        [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
-                                                    </amount-field>
-                                                </div>
-                                                <div class="col-9">
-                                                    {{ commonLocaleData?.app_taxable_value }}
-                                                </div>
-                                                <div class="col-3">
-                                                    <amount-field class="d-inline-block"
-                                                        [amount]="voucherTotals.totalTaxableValue"
-                                                        [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
-                                                        [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
-                                                    </amount-field>
-                                                </div>
-                                                <ng-container *ngIf="!account?.excludeTax">
-                                                    <div class="col-9">
-                                                        {{ commonLocaleData?.app_tax }}
-                                                    </div>
-                                                    <div class="col-3">
+                                            <table class="total-amount-wrapper w-100 text-right">
+                                                <tr>
+                                                    <td>
+                                                        {{ commonLocaleData?.app_total_amount }}
+                                                    </td>
+                                                    <td>
                                                         <amount-field class="d-inline-block"
-                                                            [amount]="voucherTotals.totalTaxWithoutCess"
+                                                            [amount]="voucherTotals.totalAmount"
                                                             [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
                                                             [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                         </amount-field>
-                                                    </div>
-                                                    <ng-container *ngIf="voucherTotals.totalCess">
-                                                        <div class="col-9">
-                                                            {{ commonLocaleData?.app_cess }}
-                                                        </div>
-                                                        <div class="col-3">
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        {{ commonLocaleData?.app_discount }}
+                                                    </td>
+                                                    <td>
+                                                        <amount-field class="d-inline-block"
+                                                            [amount]="voucherTotals.totalDiscount"
+                                                            [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                                            [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
+                                                        </amount-field>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        {{ commonLocaleData?.app_taxable_value }}
+                                                    </td>
+                                                    <td>
+                                                        <amount-field class="d-inline-block"
+                                                            [amount]="voucherTotals.totalTaxableValue"
+                                                            [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                                            [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
+                                                        </amount-field>
+                                                    </td>
+                                                </tr>
+                                                <ng-container *ngIf="!account?.excludeTax">
+                                                    <tr>
+                                                        <td>
+                                                            {{ commonLocaleData?.app_tax }}
+                                                        </td>
+                                                        <td>
                                                             <amount-field class="d-inline-block"
-                                                                [amount]="voucherTotals.totalCess"
+                                                                [amount]="voucherTotals.totalTaxWithoutCess"
                                                                 [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
                                                                 [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                             </amount-field>
-                                                        </div>
+                                                        </td>
+                                                    </tr>
+                                                    <ng-container *ngIf="voucherTotals.totalCess">
+                                                        <tr>
+                                                            <td>
+                                                                {{ commonLocaleData?.app_cess }}        
+                                                            </td>
+                                                            <td>
+                                                                <amount-field class="d-inline-block"
+                                                                    [amount]="voucherTotals.totalCess"
+                                                                    [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                                                    [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
+                                                                </amount-field>
+                                                            </td>
+                                                        </tr>
                                                     </ng-container>
                                                 </ng-container>
                                                 <ng-container *ngIf="voucherTotals.roundOff">
-                                                    <div class="col-9">
-                                                        {{ commonLocaleData?.app_round_off }}
-                                                    </div>
-                                                    <div class="col-3">
+                                                    <tr>
+                                                        <td>
+                                                            {{ commonLocaleData?.app_round_off }}
+                                                        </td>
+                                                        <td>
+                                                            <amount-field class="d-inline-block"
+                                                                [amount]="voucherTotals.roundOff"
+                                                                [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                                                [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
+                                                            </amount-field>
+                                                        </td>
+                                                    </tr>
+                                                </ng-container>
+                                                <tr>
+                                                    <td>
+                                                        {{ commonLocaleData?.app_total }}
+                                                    </td>
+                                                    <td>
                                                         <amount-field class="d-inline-block"
-                                                            [amount]="voucherTotals.roundOff"
+                                                            [amount]="voucherTotals.grandTotal"
                                                             [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
                                                             [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                                         </amount-field>
-                                                    </div>
-                                                </ng-container>
-                                                <div class="col-9">
-                                                    {{ commonLocaleData?.app_total }}
-                                                </div>
-                                                <div class="col-3">
-                                                    <amount-field class="d-inline-block"
-                                                        [amount]="voucherTotals.grandTotal"
-                                                        [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
-                                                        [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
-                                                    </amount-field>
-                                                </div>
+                                                    </td>
+                                                </tr>
                                                 <ng-container *ngIf="!invoiceType.isPurchaseOrder">
-                                                    <div class="col-9">
-                                                        {{ invoiceType.isProformaInvoice || invoiceType.isEstimateInvoice ? commonLocaleData?.app_total_amount : localeData?.balance_due }}
-                                                    </div>
-                                                    <div class="col-3">
-                                                        <amount-field class="d-inline-block"
-                                                            [amount]="voucherTotals.balanceDue"
-                                                            [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
-                                                            [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
-                                                        </amount-field>
-                                                    </div>
+                                                    <tr>
+                                                        <td>
+                                                            {{ invoiceType.isProformaInvoice || invoiceType.isEstimateInvoice ? commonLocaleData?.app_total_amount : localeData?.balance_due }}
+                                                        </td>
+                                                        <td>
+                                                            <amount-field class="d-inline-block"
+                                                                [amount]="voucherTotals.balanceDue"
+                                                                [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                                                [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
+                                                            </amount-field>
+                                                        </td>
+                                                    </tr>
                                                 </ng-container>
-
                                                 <ng-container *ngIf="isMultiCurrencyVoucher">
-                                                    <div class="col-9">
-                                                        {{ commonLocaleData?.app_total }} {{ company.baseCurrencySymbol }}
-                                                    </div>
-                                                    <div class="col-3">
-                                                        <text-field [id]="'grandTotalMultiCurrency'"
-                                                            #grandTotalMultiCurrency [type]="'text'" [cssClass]="
-                                                                'form-control mat-field-border'
-                                                            " [name]="'grandTotalMultiCurrency'"
-                                                            [prefix]="company?.baseCurrencySymbol"
-                                                            [mask]="company?.inputMaskFormat" [useMask]="true"
-                                                            [readonly]="isEinvoiceGenerated"
-                                                            formControlName="grandTotalMultiCurrency"
-                                                            (change)="updateExchangeRate($event)"></text-field>
-                                                    </div>
+                                                    <tr>
+                                                        <td>
+                                                            {{ commonLocaleData?.app_total }} {{ company.baseCurrencySymbol }}
+                                                        </td>
+                                                        <td>
+                                                            <text-field [id]="'grandTotalMultiCurrency'"
+                                                                #grandTotalMultiCurrency [type]="'text'" [cssClass]="
+                                                                    'form-control mat-field-border'
+                                                                " [name]="'grandTotalMultiCurrency'"
+                                                                [prefix]="company?.baseCurrencySymbol"
+                                                                [mask]="company?.inputMaskFormat" [useMask]="true"
+                                                                [readonly]="isEinvoiceGenerated"
+                                                                formControlName="grandTotalMultiCurrency"
+                                                                (change)="updateExchangeRate($event)">
+                                                            </text-field>
+                                                        </td>
+                                                    </tr>
                                                 </ng-container>
-
                                                 <ng-container *ngIf="voucherTotals.tcsTotal">
-                                                    <div class="col-9">
-                                                        {{ commonLocaleData?.app_tcs }}
-                                                    </div>
-                                                    <div class="col-3">
-                                                        <amount-field
+                                                    <tr>
+                                                        <td>
+                                                            {{ commonLocaleData?.app_tcs }}
+                                                        </td>
+                                                        <td>
+                                                            <amount-field
+                                                                [amount]="voucherTotals.tcsTotal"
+                                                                [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                                                [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
+                                                            </amount-field>
+                                                        </td>
+                                                    </tr>
+                                                </ng-container>
+                                                <ng-container *ngIf="voucherTotals.tcsTotal">
+                                                    <tr>
+                                                        <td>
+                                                            <div class="col-9">
+                                                                {{ commonLocaleData?.app_tcs }}
+                                                            </div>
+                                                            <div class="col-3">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <amount-field
                                                             [amount]="voucherTotals.tcsTotal"
                                                             [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
                                                             [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
-                                                        >
-                                                        </amount-field>
-                                                    </div>
+                                                            </amount-field>
+                                                        </td>
+                                                    </tr>
                                                 </ng-container>
-
                                                 <ng-container *ngIf="voucherTotals.tdsTotal">
-                                                    <div class="col-9">
-                                                        {{ commonLocaleData?.app_tds }}
-                                                    </div>
-                                                    <div class="col-3">
-                                                        <amount-field
-                                                            [amount]="voucherTotals.tdsTotal"
-                                                            [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
-                                                            [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
-                                                        >
-                                                        </amount-field>
-                                                    </div>
+                                                    <tr>
+                                                        <td>
+                                                            <div class="col-9">
+                                                                {{ commonLocaleData?.app_tds }}
+                                                            </div>
+                                                            <div class="col-3">
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <amount-field
+                                                                [amount]="voucherTotals.tdsTotal"
+                                                                [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                                                [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
+                                                            </amount-field>
+                                                        </td>
+                                                    </tr>
                                                 </ng-container>
-                                            </div>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
