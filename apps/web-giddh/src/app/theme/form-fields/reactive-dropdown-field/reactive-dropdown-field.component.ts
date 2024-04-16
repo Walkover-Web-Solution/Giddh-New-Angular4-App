@@ -212,6 +212,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             this.value = value;
         } else {
             this.value = '';
+            this.searchFormControl.next('');
         }
         this.onChange(value);
     }
