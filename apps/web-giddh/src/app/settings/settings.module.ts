@@ -28,7 +28,6 @@ import { PersonalInformationComponent } from './personal-information/personal-in
 import { AddressSettingsComponent } from './address-settings/address-settings.component';
 import { OtherSettingsComponent } from './other-settings/other-settings.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CreateAddressComponent } from './create-address/create-address.component';
 import { CreateBranchComponent } from './branch/create-branch/create-branch.component';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
@@ -59,6 +58,7 @@ import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.
 import { AccountNumberMaskModule } from '../shared/helpers/pipes/accountNumberMaskPipe/accountNumberMask.module';
 import { PortalWhiteLabelComponent } from './portal-white-label/portal-white-label.component';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
+import { CreateAddressModule } from '../shared/create-address/create-address.module';
 
 @NgModule({
     declarations: [
@@ -79,7 +79,6 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
         SettingTriggerComponent,
         WarehouseComponent,
         CreateWarehouseComponent,
-        CreateAddressComponent,
         PersonalInformationComponent,
         PortalWhiteLabelComponent,
         AddressSettingsComponent,
@@ -124,7 +123,8 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
         NgxPlaidLinkModule,
         AsideMenuAccountModule,
         AccountNumberMaskModule,
-        WatchVideoModule
+        WatchVideoModule,
+        CreateAddressModule
     ]
 })
 

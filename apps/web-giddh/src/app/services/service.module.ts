@@ -68,6 +68,8 @@ import { PageLeaveUtilityService } from "./page-leave-utility.service";
 import { LedgerService } from "./ledger.service";
 import { BulkVoucherExportService } from "./bulkvoucherexport.service";
 import { CustomFieldsService } from "./custom-fields.service";
+import { VoucherService } from "./voucher.service";
+import { VouchersUtilityService } from "../vouchers/utility/vouchers.utility.service";
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -149,7 +151,9 @@ export class ServiceModule {
                 DownloadsService,
                 ImportsService,
                 PageLeaveUtilityService,
-                LedgerService
+                LedgerService,
+                VoucherService,
+                VouchersUtilityService
             ]
         };
     }

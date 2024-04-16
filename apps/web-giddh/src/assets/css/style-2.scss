@@ -31,6 +31,11 @@ $custom-typography: mat-typography-config($font-family: var(--font-regular),
 @import "../css/global/custom-price.scss";
 @import "../css/global/inventory-adjustment.scss";
 @import "../css/global/global-variable.scss";
+@import "../css/global/vouchers.scss";
+@import "../css/global/tax-dropdown.scss";
+@import "../css/global/discount-dropdown.scss";
+@import "../css/global/dialog.scss";
+
 @import "../css/global/dialog.scss";
 @import "../css/global/add-bulk-entry.scss";
 @import "../css/global/global-variable.scss";
@@ -884,6 +889,13 @@ textarea {
 .gstr-button {
     margin-bottom: 0 !important;
     margin-right: 15px !important;
+}
+.gstin-field {
+    .error-box {
+        border: 0 !important;
+        border-bottom: 1px solid var(--color-danger) !important;
+        width: 100% !important;
+    }
 }
 .voucher-preview-edit {
     .flag-input {
@@ -2903,10 +2915,17 @@ modal-container.modal {
     color: var(--color-nero) !important;
     box-shadow: none;
     font-size: var(--font-size-15) !important;
+
+    .mat-mdc-select-placeholder, .mat-mdc-select-arrow{
+        color: var(--color-popup-list-input-text) !important;
+    }
+    .mat-mdc-select-arrow{
+        margin-left: 4px;
+    }
 }
 
 .form-control.mat-mdc-select-disabled {
-    background: var(--color-dark-fog) !important;
+    background: var(--color-primary-input-bar-background) !important;
 }
 
 .mat-select-value {
@@ -3637,6 +3656,10 @@ input[type="checkbox"]:checked:after {
 
 .icon-font-11 {
     font-size: 11px !important;
+}
+
+.icon-font-16 {
+    font-size: 16px !important;
 }
 
 .font-12 {
@@ -9767,6 +9790,10 @@ span#HW_badge_cont:nth-child(3) {
 /*flex css start*/
 .flex-column {
     flex-direction: column;
+    -ms-flex-direction: column;
+}
+.flex-wrap {
+    flex-wrap: wrap;
 }
 
 /*flex css start*/
@@ -14872,6 +14899,7 @@ voucher-component {
 .mdc-dialog {
     .mdc-dialog__content {
         padding: 0 !important;
+        color: var(--color-common-primary-text) !important;
     }
 }
 
@@ -14996,11 +15024,37 @@ aside-menu-product-service {
     font-weight: bold;
 }
 
+// common-dialog md width 
+.mat-dialog-md {
+    width: 700px;
+}
+
+// material-pagination
+.mat-mdc-paginator {
+    .mat-mdc-form-field {
+        .mat-mdc-select {
+            padding: 0 !important;
+        }
+    }
+}
+
 // outline-card
 .mat-mdc-card {
     &.outline-card {
         border: 1px solid var(--color-iron);
         box-shadow: none;
+    }
+} 
+// invoice preview list
+.invoice-preview-wrapper {
+    .mat-grid-wrapper {
+        .mat-list-wrap {
+            .mat-mdc-list {
+                .mat-mdc-list-item {
+                    height: 60px;
+                }
+            }
+        }
     }
 }
 
@@ -15038,6 +15092,32 @@ aside-menu-product-service {
                 font-size: var(--font-15);
             }
         }
+    }
+}
+.fw-bold {
+    font-weight: 600;
+}
+.preview-list {
+    .form-control {
+        padding-left: 30px !important;
+    }
+}
+
+.width-60{
+    width: 60px !important;
+}
+
+// This Class will use globllay for border like mat input field
+.mat-form-field-border{
+    &.mat-form-field-height{
+        height: 48px !important;
+    }
+
+    border-radius: 4px !important;
+    border: 1px solid var(--color-fields-border) !important;
+
+    &:hover{
+        border-color: var(--color-field-hover) !important;
     }
 }
 
