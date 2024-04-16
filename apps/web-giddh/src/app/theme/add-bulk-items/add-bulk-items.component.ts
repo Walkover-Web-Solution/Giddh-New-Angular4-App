@@ -28,6 +28,10 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     public addBulkForm: FormGroup;
     /** List of stock variants */
     public stockVariants: any[] = [];
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private vouchersUtilityService: VouchersUtilityService,
@@ -158,7 +162,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
             return i === index && (control.get('name').value === item.name);
         });
         if (isAlreadySelected) {
-            this.toaster.showSnackBar('error', 'Stock is already selected');
+            this.toaster.showSnackBar('error', this.localeData?.item_selected);
             return;
         }
 
@@ -230,7 +234,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         });
 
         if (isAlreadySelected) {
-            this.toaster.warningToast('Variant is already selected');
+            this.toaster.showSnackBar('error', this.localeData?.item_selected);
             return;
         }
 

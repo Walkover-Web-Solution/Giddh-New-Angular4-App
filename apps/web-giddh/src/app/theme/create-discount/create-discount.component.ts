@@ -23,6 +23,10 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
     public isFormSubmitted: boolean = false;
     /** Save discount state Observable */
     public createDiscountInProgress$: Observable<any> = this.componentStore.createDiscountInProgress$;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private componentStore: CreateDiscountComponentStore,

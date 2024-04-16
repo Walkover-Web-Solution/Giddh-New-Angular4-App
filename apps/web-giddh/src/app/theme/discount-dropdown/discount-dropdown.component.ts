@@ -16,6 +16,8 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public amount: any;
     /** Account currency */
     @Input() public currency: any;
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
     /** Emitter for create new discount */
     @Output() public createNewDiscount: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Emitter for selected discounts */

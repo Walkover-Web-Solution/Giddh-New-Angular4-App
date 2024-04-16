@@ -1002,6 +1002,7 @@
                                                                         [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'"
                                                                         [amount]="transaction.get('amount.amountForAccount')?.value"
                                                                         [discountsList]="discountsList$ | async"
+                                                                        [commonLocaleData]="commonLocaleData"
                                                                         [selectedDiscountsList]="entry.get('discounts')?.value"
                                                                         [currency]="account.baseCurrencySymbol"
                                                                         (createNewDiscount)="showCreateDiscountDialog()"
@@ -1045,6 +1046,7 @@
                                                                         [selectedTaxesList]="entry.get('taxes')?.value"
                                                                         [taxesList]="companyTaxes"
                                                                         [currency]="account.baseCurrencySymbol"
+                                                                        [commonLocaleData]="commonLocaleData"
                                                                         (createNewTax)="showCreateTaxDialog()"
                                                                         (selectedTaxes)="getSelectedTaxes(entryIndex, $event)"
                                                                         (totalTax)="updateTotalTax($event, entry)"></tax-dropdown>

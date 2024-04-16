@@ -1,5 +1,5 @@
 <div>
-    Address {{ addressNo }}
+    {{ commonLocaleData?.app_address }} {{ addressNo }}
     <p>{{ address.address ? address.address + ", " : "" }}{{
         address.state?.name }}</p>
     <p>{{ address.gstNumber ? (company.taxType === taxTypes.GST
