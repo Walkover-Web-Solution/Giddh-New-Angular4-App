@@ -26,7 +26,7 @@
         </div>
     </div>
     <giddh-page-loader *ngIf="planListInProgress$ | async"></giddh-page-loader>
-    <div class="new-plan"  *ngIf="(!(planListInProgress$ | async)) && !inputData?.length">
+    <div class="new-plan" *ngIf="!(planListInProgress$ | async) && !inputData?.length">
         <h2 class="no-data">
             {{ commonLocaleData?.app_no_data_found }}
         </h2>
@@ -43,7 +43,8 @@
                 [disableRipple]="firstStepForm.invalid"
                 class="bg-transparent text-black"
             >
-                <ng-container  *ngIf="!(planListInProgress$ | async) && inputData?.length" >
+
+                <ng-container *ngIf="!(planListInProgress$ | async) && inputData?.length">
                     <mat-step [stepControl]="firstStepForm">
                         <form
                             name="firstStepForm"
@@ -62,55 +63,18 @@
                                         Activate Via Key
                                     </button> -->
                                             <div class="custom-tab w-100">
-                                                <ng-container
-                                                    *ngIf="
-                                                        selectedPlan?.yearlyAmountAfterDiscount > 0 &&
-                                                        selectedPlan?.monthlyAmountAfterDiscount > 0
-                                                    "
+                                                <mat-button-toggle-group
+                                                    aria-label="Font Style"
+                                                    (change)="toggleDuration($event)"
+                                                    formControlName="duration"
                                                 >
-                                                    <mat-button-toggle-group
-                                                        aria-label="Font Style"
-                                                        (change)="toggleDuration($event)"
-                                                        formControlName="duration"
-                                                    >
-                                                        <mat-button-toggle value="MONTHLY">{{
-                                                            commonLocaleData?.app_duration?.monthly
-                                                        }}</mat-button-toggle>
-                                                        <mat-button-toggle value="YEARLY">{{
-                                                            commonLocaleData?.app_duration?.yearly
-                                                        }}</mat-button-toggle>
-                                                    </mat-button-toggle-group>
-                                                </ng-container>
-                                                      <ng-container
-                                                    *ngIf="
-                                                        selectedPlan?.yearlyAmountAfterDiscount > 0
-                                                    "
-                                                >
-                                                    <mat-button-toggle-group
-                                                        aria-label="Font Style"
-                                                        (change)="toggleDuration($event)"
-                                                        formControlName="duration"
-                                                    >
-                                                        <mat-button-toggle value="YEARLY">{{
-                                                            commonLocaleData?.app_duration?.yearly
-                                                        }}</mat-button-toggle>
-                                                    </mat-button-toggle-group>
-                                                </ng-container>
-                                                      <ng-container
-                                                    *ngIf="
-                                                        selectedPlan?.monthlyAmountAfterDiscount > 0
-                                                    "
-                                                >
-                                                    <mat-button-toggle-group
-                                                        aria-label="Font Style"
-                                                        (change)="toggleDuration($event)"
-                                                        formControlName="duration"
-                                                    >
-                                                        <mat-button-toggle value="MONTHLY">{{
-                                                            commonLocaleData?.app_duration?.monthly
-                                                        }}</mat-button-toggle>
-                                                    </mat-button-toggle-group>
-                                                </ng-container>
+                                                    <mat-button-toggle *ngIf="monthlyPlans?.length" value="MONTHLY">{{
+                                                        commonLocaleData?.app_duration?.monthly
+                                                    }}</mat-button-toggle>
+                                                    <mat-button-toggle *ngIf="yearlyPlans?.length" value="YEARLY">{{
+                                                        commonLocaleData?.app_duration?.yearly
+                                                    }}</mat-button-toggle>
+                                                </mat-button-toggle-group>
                                             </div>
                                         </div>
                                     </div>

@@ -136,6 +136,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     private subscriptionResponse: any = {};
     /** Holds Store Apply Promocode API response state as observable*/
     public updateSubscriptionPaymentIsSuccess$ = this.componentStore.select(state => state.updateSubscriptionPaymentIsSuccess);
+    /** Holds filtered monthly plans */
+    public monthlyPlans: any[] = [];
+    /** Holds filtered yearly plans */
+    public yearlyPlans: any[] = [];
 
     constructor(
         public dialog: MatDialog,
@@ -709,22 +713,32 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public getAllPlans(): void {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.inputData = [];
             if (response?.length) {
                 this.selectedPlan = response[1];
                 this.popularPlan = response[1];
+
                 this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan?.uniqueName);
+
+                response?.forEach(plan => {
+                    this.inputData.push(plan);
+                });
+
+                this.monthlyPlans = response?.filter(plan => plan?.monthlyAmountAfterDiscount > 0);
+                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmountAfterDiscount > 0);
+
+                if (this.yearlyPlans?.length) {
+                    this.firstStepForm.get('duration').setValue('YEARLY');
+                } else {
+                    this.firstStepForm.get('duration').setValue('MONTHLY');
+                }
+
                 if (this.firstStepForm.get('duration').value === 'YEARLY') {
                     this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
                 } else {
                     this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
                 }
-                this.inputData = [];
-                let monthlyPlan = [];
-                let yearlyPlan = [];
-                response?.forEach(plan => {
-                    console.log(plan);
-                    this.inputData.push(plan);
-                });
+
             } else {
                 this.inputData = [];
             }
