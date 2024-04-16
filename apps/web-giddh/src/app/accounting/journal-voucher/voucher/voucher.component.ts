@@ -1873,6 +1873,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         this.defaultAccountPaginationData.totalPages = this.accountsSearchResultsPaginationData.totalPages;
                     }
                 }
+                this.changeDetectionRef.detectChanges();
             });
         } else {
             this.inputForList = [...this.defaultAccountSuggestions];
@@ -1882,6 +1883,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             setTimeout(() => {
                 this.preventDefaultScrollApiCall = false;
             }, 500);
+            this.changeDetectionRef.detectChanges();
         }
     }
 
