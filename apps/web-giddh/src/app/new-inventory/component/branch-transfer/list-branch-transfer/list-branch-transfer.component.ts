@@ -137,19 +137,18 @@ export class ListBranchTransferComponent implements OnInit {
     public showReceiver = false;
     /** True if translations loaded */
     public translationLoaded: boolean = false;
-    /* True if show header */
-    public showData: boolean = true;
     /** Getter for show search element by type */
     public get shouldShowElement(): boolean {
-        const shouldShow = (
-            this.branchTransferForm?.controls['sender']?.value ||
+        return (
+            (this.branchTransferForm?.controls['sender']?.value ||
             this.branchTransferForm?.controls['receiver']?.value ||
             this.branchTransferForm?.controls['senderReceiver']?.value ||
             this.branchTransferForm?.controls['fromWarehouse']?.value ||
-            this.branchTransferForm?.controls['toWarehouse']?.value
+            this.branchTransferForm?.controls['toWarehouse']?.value) &&
+            (!this.branchTransferForm?.controls['voucherType']?.value ||
+            !this.branchTransferForm?.controls['amountOperator']?.value ||
+            !this.branchTransferForm?.controls['amount']?.value)
         );
-        this.showData = shouldShow;
-        return shouldShow;
     }
 
     constructor(
@@ -333,25 +332,9 @@ export class ListBranchTransferComponent implements OnInit {
                 this.branchTransferPaginationObject.totalItems = response.body.totalItems;
                 this.branchTransferPaginationObject.count = response.body.count;
                 this.branchTransferResponse = response.body?.items;
-                if(
-                    response.body?.items?.length ||
-                    (this.branchTransferForm?.get('sender')?.value ||
-                    this.branchTransferForm?.get('receiver')?.value ||
-                    this.branchTransferForm?.get('senderReceiver')?.value ||
-                    this.branchTransferForm?.get('fromWarehouse')?.value ||
-                    this.branchTransferForm?.controls['toWarehouse']?.value) &&
-                    (!this.branchTransferForm?.controls['voucherType']?.value ||
-                    !this.branchTransferForm?.controls['amountOperator']?.value ||
-                    !this.branchTransferForm?.controls['amount']?.value)
-                ) {
-                    this.showData = true;
-                } else {
-                    this.showData = false;
-                    }
             } else {
                 this.branchTransferResponse = [];
                 this.branchTransferPaginationObject.totalItems = 0;
-                this.showData = false;
             }
             this.changeDetection.detectChanges();
         });

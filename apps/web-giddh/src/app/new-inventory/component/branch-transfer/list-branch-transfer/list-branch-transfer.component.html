@@ -62,7 +62,7 @@
                 </form>
             </div>
         </div>
-        <section *ngIf="showData">
+        <section *ngIf="branchTransferResponse?.length || shouldShowElement">
             <form
                 class="table-responsive"
                 name="branchTransferForm"
