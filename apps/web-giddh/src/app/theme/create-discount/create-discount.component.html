@@ -38,6 +38,8 @@
                             formControlName="accountUniqueName" [name]="'accountUniqueName'"
                             [options]="discountsAccountList$ | async"
                             [showError]="isFormSubmitted && !createDiscountForm.get('accountUniqueName')?.value"
+                            [labelValue]="createDiscountForm.get('accountName')?.value"
+                            (selectedOption)="selectDiscount($event)"
                             (onClear)="clearAccount()">
                         </reactive-dropdown-field>
                     </div>

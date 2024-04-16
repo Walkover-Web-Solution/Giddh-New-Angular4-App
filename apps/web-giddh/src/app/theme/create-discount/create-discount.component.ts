@@ -59,10 +59,11 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
      */
     private initDiscountForm(): void {
         this.createDiscountForm = this.formBuilder.group({
-            type: ['', Validators.required],
+            type: ['PERCENT', Validators.required],
             name: ['', Validators.required],
             discountValue: ['', Validators.required],
             accountUniqueName: ['', Validators.required],
+            accountName: ['']
         });
     }
 
@@ -122,10 +123,11 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
      */
     public clearDiscount(): void {
         this.isFormSubmitted = false;
-        this.createDiscountForm.get('type')?.patchValue('');
+        this.createDiscountForm.get('type')?.patchValue('PERCENT');
         this.createDiscountForm.get('name')?.patchValue('');
         this.createDiscountForm.get('discountValue')?.patchValue('');
         this.createDiscountForm.get('accountUniqueName')?.patchValue('');
+        this.createDiscountForm.get('accountName')?.patchValue('');
     }
 
     /**
@@ -136,5 +138,15 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * Callback for select discount
+     *
+     * @param {*} event
+     * @memberof CreateDiscountComponent
+     */
+    public selectDiscount(event: any): void {
+        this.createDiscountForm.get('accountName')?.patchValue(event?.label);
     }
 }
