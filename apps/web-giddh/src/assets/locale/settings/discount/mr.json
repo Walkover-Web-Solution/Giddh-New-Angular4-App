@@ -1,6 +1,6 @@
 {
 	"tab_heading": "सूट तयार करा",
-    "discount_type": "Discount Type",
+    "discount_type": "सूट प्रकार",
 	"discount_type_placeholder": "सूट प्रकार निवडा",
 	"linked_accounts_label": "दुवा साधलेली खाती",
 	"linked_accounts_placeholder": "सूट निवडा",
@@ -10,5 +10,5 @@
 		"as_per_percent": "टक्केवारीनुसार"
 	},
 	"delete_discount": "आपण खरोखर ही सवलत हटवू इच्छिता?",
-    "discount_value_placeholder": "Enter value"
+    "discount_value_placeholder": "मूल्य प्रविष्ट करा"
 }
