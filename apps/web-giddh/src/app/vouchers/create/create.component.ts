@@ -364,6 +364,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public purchaseOrderPreviewAccountUniqueName: string = '';
     /** List of EU countries */
     public europeanCountryList: any[] = [];
+    /** Create new account */
+    public createNewAccount: boolean = true;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -707,6 +709,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.componentStore.linkedPoOrders$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.linkedPoNumbers = response;
+        });
+
+        this.invoiceForm.controls['deposit'].get("amountForAccount")?.valueChanges.pipe(
+            debounceTime(100),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(response => {
+            this.calculateBalanceDue();
         });
     }
 
@@ -1855,14 +1865,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /**
      * Toggle's account create/update dialog
      *
-     * @param {*} [event]
+     * @param {AccountType} accountType
+     * @param {boolean} [createNewAccount=true]
      * @memberof VoucherCreateComponent
      */
-    public toggleAccountAsidePane(accountType: AccountType, event?: any): void {
-        if (event) {
-            event.preventDefault();
-        }
-
+    public toggleAccountAsidePane(accountType: AccountType, createNewAccount: boolean = true): void {
+        this.createNewAccount = createNewAccount;
         if (accountType === this.accountType.customer) {
             this.getParentGroupForCreateAccount();
         } else {
@@ -3046,6 +3054,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.calculateAdjustedVoucherTotal(advanceReceiptsAdjustEvent.adjustVoucherData.adjustments)
         this.adjustPaymentBalanceDueData = this.getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment();
+        this.calculateBalanceDue();
         this.closeAdvanceReceiptModal();
     }
 
@@ -3511,9 +3520,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 });
             });
 
-            this.stockUnits[response.entryIndex] = observableOf(response.stock.variant.unitRates);
+            this.stockUnits[entryIndex] = observableOf(response.stock.variant.unitRates);
         } else {
-            this.stockUnits[response.entryIndex] = observableOf([]);
+            this.stockUnits[entryIndex] = observableOf([]);
         }
 
         const taxes = this.generalService.fetchTaxesOnPriority(
@@ -3547,7 +3556,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             const selectedOtherTax = this.companyTaxes?.filter(tax => tax.uniqueName === otherTax.uniqueName);
             otherTax['taxDetail'] = selectedOtherTax[0].taxDetail;
             otherTax['name'] = selectedOtherTax[0].name;
-            this.getSelectedOtherTax(response.entryIndex, otherTax, otherTax.calculationMethod);
+            this.getSelectedOtherTax(entryIndex, otherTax, otherTax.calculationMethod);
         }
 
         if (response.stock?.variant?.salesTaxInclusive || response.stock?.variant?.purchaseTaxInclusive) {

@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { ReplaySubject, takeUntil } from "rxjs";
+import { isEqual } from "../../lodash-optimized";
 
 @Component({
     selector: "discount-dropdown",
@@ -75,7 +76,7 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof DiscountDropdownComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if (changes?.selectedDiscountsList?.currentValue) {
+        if (changes?.selectedDiscountsList?.currentValue && !isEqual(changes?.selectedDiscountsList?.currentValue, changes?.selectedDiscountsList?.previousValue)) {
             const hasManualDiscount = this.selectedDiscountsList?.filter(selectedDiscount => !selectedDiscount?.uniqueName);
             if (hasManualDiscount?.length) {
                 if (hasManualDiscount[0].calculationMethod === 'FIX_AMOUNT') {

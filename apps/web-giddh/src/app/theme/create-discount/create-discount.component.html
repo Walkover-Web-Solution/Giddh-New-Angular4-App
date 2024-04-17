@@ -17,8 +17,8 @@
                             <mat-form-field appearance="outline">
                                 <mat-label>{{ localeData?.discount_type }}</mat-label>
                                 <mat-select formControlName="type">
-                                    <mat-option [value]="'FIXED_VALUE'">{{ localeData?.discount_types?.as_per_value }}</mat-option>
-                                    <mat-option [value]="'PERCENT'">{{ localeData?.discount_types?.as_per_percent }}</mat-option>
+                                    <mat-option [value]="'FIX_AMOUNT'">{{ localeData?.discount_types?.as_per_value }}</mat-option>
+                                    <mat-option [value]="'PERCENTAGE'">{{ localeData?.discount_types?.as_per_percent }}</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </span>
