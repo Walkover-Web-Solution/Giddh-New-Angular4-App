@@ -139,14 +139,13 @@ export class VatService {
     public saveAuthorizationCode(companyUniqueName: string, model: any): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + VAT_API.SAVE_AUTHORIZATION_CODE;
         url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
-        let utcTimeZone = this.generalService.getUtcTimeZone();
-        let args: any = { headers: {} };
-        args.headers['Gov-Client-Timezone'] = 'UTC' + utcTimeZone;
-        return this.http.post(url, model, { headers: args.headers }).pipe(
+        let userTimeZone = this.generalService.getUserTimeZone();
+        let header = this.generalService.getGovClientTimezoneHeader(userTimeZone);
+        return this.http.post(url, model, header).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e,args)));
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, header)));
     }
 
     /**
@@ -165,14 +164,13 @@ export class VatService {
         url = url?.replace(':status', encodeURIComponent(model?.status));
         url = url?.replace(':from', encodeURIComponent(model?.from));
         url = url?.replace(':to', encodeURIComponent(model?.to));
-        let utcTimeZone = this.generalService.getUtcTimeZone();
-        let args: any = { headers: {} };
-        args.headers['Gov-Client-Timezone'] = 'UTC' + utcTimeZone;
-        return this.http.get(url, {}, { headers: args.headers }).pipe(
+        let userTimeZone = this.generalService.getUserTimeZone();
+        let header = this.generalService.getGovClientTimezoneHeader(userTimeZone);
+        return this.http.get(url, {}, header).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, args)));
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, header)));
     }
 
     /**
@@ -191,14 +189,13 @@ export class VatService {
         url = url?.replace(':periodKey', encodeURIComponent(model?.periodKey));
         url = url?.replace(':from', encodeURIComponent(model?.from));
         url = url?.replace(':to', encodeURIComponent(model?.to));
-        let utcTimeZone = this.generalService.getUtcTimeZone();
-        let args: any = { headers: {} };
-        args.headers['Gov-Client-Timezone'] = 'UTC' + utcTimeZone;
-        return this.http.post(url, {}, { headers: args.headers }).pipe(
+        let userTimeZone = this.generalService.getUserTimeZone();
+        let header = this.generalService.getGovClientTimezoneHeader(userTimeZone);
+        return this.http.post(url, {}, { headers: header }).pipe(
             map((res) => {
                 let data: any = res;
                 return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e,args)));
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, header)));
     }
 
     /**
@@ -216,13 +213,12 @@ export class VatService {
         url = url?.replace(':periodKey', encodeURIComponent(model?.periodKey));
         url = url?.replace(':from', encodeURIComponent(model?.from));
         url = url?.replace(':to', encodeURIComponent(model?.to));
-        let utcTimeZone = this.generalService.getUtcTimeZone();
-        let args: any = { headers: {} };
-        args.headers['Gov-Client-Timezone'] = 'UTC' + utcTimeZone;
-        return this.http.get(url, {}, { headers: args.headers }).pipe(
+        let userTimeZone = this.generalService.getUserTimeZone();
+        let header = this.generalService.getGovClientTimezoneHeader(userTimeZone);
+        return this.http.get(url, {}, header).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e,args)));
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, header)));
     }
 }
