@@ -18,7 +18,7 @@ export class VatService {
     }
 
     /**
-     * This function will use for UK vat report 
+     * This function will use for UK vat report
      *
      * @param {VatReportRequest} request
      * @return {*}  {Observable<BaseResponse<any, any>>}
@@ -139,11 +139,13 @@ export class VatService {
     public saveAuthorizationCode(companyUniqueName: string, model: any): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + VAT_API.SAVE_AUTHORIZATION_CODE;
         url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
-        return this.http.post(url, model).pipe(
+        let userTimeZone = this.generalService.getUserTimeZone();
+        let header = this.generalService.getGovClientTimezoneHeader(userTimeZone);
+        return this.http.post(url, model, header).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, header)));
     }
 
     /**
@@ -162,11 +164,13 @@ export class VatService {
         url = url?.replace(':status', encodeURIComponent(model?.status));
         url = url?.replace(':from', encodeURIComponent(model?.from));
         url = url?.replace(':to', encodeURIComponent(model?.to));
-        return this.http.get(url).pipe(
+        let userTimeZone = this.generalService.getUserTimeZone();
+        let header = this.generalService.getGovClientTimezoneHeader(userTimeZone);
+        return this.http.get(url, {}, header).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, header)));
     }
 
     /**
@@ -185,11 +189,13 @@ export class VatService {
         url = url?.replace(':periodKey', encodeURIComponent(model?.periodKey));
         url = url?.replace(':from', encodeURIComponent(model?.from));
         url = url?.replace(':to', encodeURIComponent(model?.to));
-        return this.http.post(url, {}).pipe(
+        let userTimeZone = this.generalService.getUserTimeZone();
+        let header = this.generalService.getGovClientTimezoneHeader(userTimeZone);
+        return this.http.post(url, {}, header).pipe(
             map((res) => {
                 let data: any = res;
                 return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, header)));
     }
 
     /**
@@ -207,10 +213,12 @@ export class VatService {
         url = url?.replace(':periodKey', encodeURIComponent(model?.periodKey));
         url = url?.replace(':from', encodeURIComponent(model?.from));
         url = url?.replace(':to', encodeURIComponent(model?.to));
-        return this.http.get(url).pipe(
+        let userTimeZone = this.generalService.getUserTimeZone();
+        let header = this.generalService.getGovClientTimezoneHeader(userTimeZone);
+        return this.http.get(url, {}, header).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, header)));
     }
 }
