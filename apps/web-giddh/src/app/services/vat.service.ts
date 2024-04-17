@@ -191,7 +191,7 @@ export class VatService {
         url = url?.replace(':to', encodeURIComponent(model?.to));
         let userTimeZone = this.generalService.getUserTimeZone();
         let header = this.generalService.getGovClientTimezoneHeader(userTimeZone);
-        return this.http.post(url, {}, { headers: header }).pipe(
+        return this.http.post(url, {}, header).pipe(
             map((res) => {
                 let data: any = res;
                 return data;
