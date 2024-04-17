@@ -73,11 +73,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** Holds Store Plan list API success state as observable*/
     public planListInProgress$ = this.componentStore.select(state => state.planListInProgress);
     /** Holds Store Create Plan API in progress state as observable*/
-    public createPlanInProgress$ = this.componentStore.select(state => state.createPlanInProgress);
+    public createSubscriptionInProgress$ = this.componentStore.select(state => state.createSubscriptionInProgress);
     /** Holds Store Create Plan API succes state as observable*/
-    public createPlanSuccess$ = this.componentStore.select(state => state.createPlanSuccess);
+    public createSubscriptionSuccess$ = this.componentStore.select(state => state.createSubscriptionSuccess);
     /** Holds Store Create Plan API succes state as observable*/
-    public createPlanResponse$ = this.componentStore.select(state => state.createPlanResponse);
+    public createSubscriptionResponse$ = this.componentStore.select(state => state.createSubscriptionResponse);
     /** Holds Store Apply Promocode API in progress state as observable*/
     public applyPromoCodeInProgress$ = this.componentStore.select(state => state.applyPromoCodeInProgress);
     /** Holds Store Apply Promocode  API success state as observable*/
@@ -140,6 +140,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public monthlyPlans: any[] = [];
     /** Holds filtered yearly plans */
     public yearlyPlans: any[] = [];
+    /** Hold new user selected country */
+    public newUserSelectedCountry: string = '';
+    /** Hold subscription id */
+    public subscriptionId: string = '';
 
     constructor(
         public dialog: MatDialog,
@@ -181,7 +185,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.createPlanResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.createSubscriptionResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.responseSubscriptionId = response.subscriptionId;
                 if (response.duration === "YEARLY") {
@@ -195,7 +199,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.updateSubscriptionPaymentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.router.navigate(['/pages/new-company/' + response?.subscription?.subscriptionId]);
+                this.router.navigate(['/pages/new-company/' + (this.isNewUserLoggedIn ? this.subscriptionId : response?.subscription?.subscriptionId)]);
             }
         });
 
@@ -203,7 +207,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
             if (this.isNewUserLoggedIn) {
-                this.selectCountry({
+                this.newUserSelectCountry({
                     "label": "US - United States of America",
                     "value": "US",
                     "additional": {
@@ -715,7 +719,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.inputData = [];
             if (response?.length) {
-                this.selectedPlan = response[1];
+                this.selectedPlan = response?.length === 1 ? response[0] : response[1];
                 this.popularPlan = response[1];
 
                 this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan?.uniqueName);
@@ -745,6 +749,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
     }
 
+    public newUserSelectCountry(event: any): void {
+        if (this.isNewUserLoggedIn) {
+            this.componentStore.getAllPlans({ params: { countryCode: event?.value } });
+            this.newUserSelectedCountry = event.label;
+        }
+    }
+
     /**
      * This will use for select country
      *
@@ -753,9 +764,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public selectCountry(event: any): void {
         if (event?.value) {
-            if (this.isNewUserLoggedIn) {
-                this.componentStore.getAllPlans({ params: { countryCode: event?.value } });
-            }
+
             if (event?.value.toLowerCase() === 'in') {
                 this.finalPlanAmount = this.finalPlanAmount + this.finalPlanAmount * this.taxPercentage;
             } else {
@@ -930,8 +939,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public updateSubscriptionPayment(razorPayResponse: any): void {
+        let request;
         if (razorPayResponse) {
-            let request = {
+            request = {
                 subscriptionRequest: {
                     subscriptionId: this.subscriptionResponse?.subscriptionId
                 },
@@ -940,7 +950,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 amountPaid: this.subscriptionResponse?.dueAmount,
                 callNewPlanApi: true
             };
-            this.componentStore.updateSubscriptionPayment({ request: request });
+            if (this.isNewUserLoggedIn) {
+                this.subscriptionId = request?.subscriptionRequest?.subscriptionId;
+                request['razorpayOrderId'] = razorPayResponse?.razorpay_order_id;
+                this.componentStore.updateNewLoginSubscriptionPayment({ request: request });
+            } else {
+                this.componentStore.updateSubscriptionPayment({ request: request });
+            }
         }
     }
 }

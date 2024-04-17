@@ -366,4 +366,21 @@ export class SettingsProfileService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
+
+    /**
+     * This will be use for new update subscriptions payment
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsProfileService
+     */
+    public updateSubscriptionPayment(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.config.apiUrl + SETTINGS_PROFILE_API.SUBSCRIPTION_CHARGE?.replace(':subscriptionId', encodeURIComponent(model?.subscriptionRequest?.subscriptionId)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
 }

@@ -18,5 +18,6 @@ export const SETTINGS_PROFILE_API = {
     GET_DOMAIN_LIST: `${COMMON}/get-domain-list`,
     GET_DOMAIN_LIST_DATA: `${COMMON}/get-domain-list?domainUniqueName=:domainUniqueName`,
     PRIMARY_DELETE_DOMAIN_SET: `${COMMON}/domain/:domainUniqueName?operation=:operation`,
-    SHARE_PORTAL_DOMAIN: `${COMMON}/domain/:domainUniqueName/share`
+    SHARE_PORTAL_DOMAIN: `${COMMON}/domain/:domainUniqueName/share`,
+    SUBSCRIPTION_CHARGE: `v2/subscription/charge/:subscriptionId`
 };
