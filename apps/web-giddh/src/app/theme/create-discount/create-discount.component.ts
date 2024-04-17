@@ -59,7 +59,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
      */
     private initDiscountForm(): void {
         this.createDiscountForm = this.formBuilder.group({
-            type: ['PERCENT', Validators.required],
+            type: ['PERCENTAGE', Validators.required],
             name: ['', Validators.required],
             discountValue: ['', Validators.required],
             accountUniqueName: ['', Validators.required],
@@ -123,7 +123,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
      */
     public clearDiscount(): void {
         this.isFormSubmitted = false;
-        this.createDiscountForm.get('type')?.patchValue('PERCENT');
+        this.createDiscountForm.get('type')?.patchValue('PERCENTAGE');
         this.createDiscountForm.get('name')?.patchValue('');
         this.createDiscountForm.get('discountValue')?.patchValue('');
         this.createDiscountForm.get('accountUniqueName')?.patchValue('');

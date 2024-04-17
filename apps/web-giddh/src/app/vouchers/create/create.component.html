@@ -96,7 +96,7 @@
                                     <span
                                         *ngIf="!invoiceType.isCashInvoice && invoiceForm.controls['account'].get('uniqueName')?.value"
                                         class="vouchers-form-fields-detail cursor-pointer"
-                                        (click)="toggleAccountAsidePane(accountType.customer)">
+                                        (click)="toggleAccountAsidePane(accountType.customer, false)">
                                         {{ !invoiceType.isPurchaseOrder ? localeData?.customer_details :
                                         localeData?.vendor_details }}</span>
                                     <ng-container *ngIf="invoiceType.isSalesInvoice || invoiceType.isCreditNote">
@@ -1548,7 +1548,7 @@
 <ng-template #accountAsideMenu>
     <generic-aside-menu-account (closeAsideEvent)="accountAsideMenuRef.close()" [class]="'in'"
         [selectedGrpUniqueName]="accountParentGroup" [keyboardShortcut]="{ 'esc': !hasUnsavedChanges }"
-        [selectedAccountUniqueName]="accountParentGroup !== 'bankaccounts' ? invoiceForm.controls['account'].get('uniqueName')?.value : ''"
+        [selectedAccountUniqueName]="accountParentGroup !== 'bankaccounts' && !createNewAccount ? invoiceForm.controls['account'].get('uniqueName')?.value : ''"
         (onShortcutPress)="accountAsideMenuRef.close()" (addEvent)="addNewAccount($event)"
         (updateEvent)="updateAccount($event)">
     </generic-aside-menu-account>

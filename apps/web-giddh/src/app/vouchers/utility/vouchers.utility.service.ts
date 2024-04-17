@@ -78,7 +78,7 @@ export class VouchersUtilityService {
         } else if (searchType === SearchType.ITEM) {
             group = (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.cashBill || voucherType === VoucherTypeEnum.cashDebitNote || voucherType === VoucherTypeEnum.purchaseOrder) ?
                 'operatingcost, indirectexpenses, fixedassets' : 'otherincome, revenuefromoperations, fixedassets';
-            withStocks = !!query;
+            withStocks = true;
         } else if (searchType === SearchType.BANK) {
             group = 'bankaccounts, cash, loanandoverdraft';
         }
