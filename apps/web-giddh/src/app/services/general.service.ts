@@ -1712,7 +1712,7 @@ export class GeneralService {
     }
 
     /**
-     * This will return the system current utc time zone
+     * This will return the system current user time zone
      *
      * @return {*}
      * @memberof GeneralService
@@ -1723,7 +1723,7 @@ export class GeneralService {
     }
 
     /**
-     *This will be return governmenr client time zone header
+     *This will be return government client time zone header
      *
      * @param {*} timezone
      * @return {*}  {*}
