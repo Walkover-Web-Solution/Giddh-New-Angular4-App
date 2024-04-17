@@ -1717,8 +1717,21 @@ export class GeneralService {
      * @return {*}
      * @memberof GeneralService
      */
-    public getUtcTimeZone() {
+    public getUserTimeZone(): any {
         let offset = new Date().getTimezoneOffset(), o = Math.abs(offset);
         return (offset < 0 ? "+" : "-") + ("00" + Math.floor(o / 60)).slice(-2) + ":" + ("00" + (o % 60)).slice(-2);
+    }
+
+    /**
+     *This will be return governmenr client time zone header
+     *
+     * @param {*} timezone
+     * @return {*}  {*}
+     * @memberof GeneralService
+     */
+    public getGovClientTimezoneHeader(timezone: any): any {
+        let args: any = { headers: {} };
+        args.headers['Gov-Client-Timezone'] = 'UTC' + timezone;
+        return { headers: args.headers };
     }
 }
