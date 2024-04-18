@@ -1317,7 +1317,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
 
             if (isClear) {
-                
+
             } else {
                 let keysToUpdate = {
                     accountName: event?.label,
@@ -2355,12 +2355,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      *
      * @memberof VoucherCreateComponent
      */
-    public addNewLineEntry(): void {
+    public addNewLineEntry(setActiveIndex: boolean = true): void {
         this.invoiceForm.get('entries')['controls'].push(this.getEntriesFormGroup());
-        const entries = this.invoiceForm.get('entries') as FormArray;
-        setTimeout(() => {
-            this.activeEntryIndex = entries?.length - 1;
-        }, 10);
+        if (setActiveIndex) {
+            const entries = this.invoiceForm.get('entries') as FormArray;
+            setTimeout(() => {
+                this.activeEntryIndex = entries?.length - 1;
+            }, 10);
+        }
     }
 
     /**
@@ -2884,7 +2886,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public resetVoucherForm(): void {
         const exchangeRate = this.invoiceForm.get('exchangeRate')?.value;
+        const entriesFormArray = this.invoiceForm.get('entries') as FormArray;
+        entriesFormArray.clear();
         this.invoiceForm.reset();
+
+        this.addNewLineEntry(false);
 
         this.voucherTotals = {
             totalAmount: 0,
@@ -3715,5 +3721,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.dialog.open(template, {
             width: '980px'
         });
+    }
+
+    /**
+     * Updates hsn/sac value into each other
+     *
+     * @param {FormGroup} entryFormGroup
+     * @memberof VoucherCreateComponent
+     */
+    public onChangeHsnSacType(entryFormGroup: FormGroup): void {
+        if (entryFormGroup.get('showCodeType')?.value === "hsn") {
+            entryFormGroup.get('hsnNumber')?.patchValue(entryFormGroup.get('sacNumber')?.value);
+        } else {
+            entryFormGroup.get('sacNumber')?.patchValue(entryFormGroup.get('hsnNumber')?.value);
+        }
     }
 }

@@ -185,7 +185,7 @@
                                                         <mat-divider></mat-divider>
                                                     </ng-container>
                                                     <button mat-menu-item class="vouchers-add-new"
-                                                        (click)="toggleAccountAsidePane(accountType.customer)">{{
+                                                        (click)="toggleAccountAsidePane(accountType.customer, false)">{{
                                                         localeData?.add_new_address }}</button>
                                                 </div>
                                             </mat-menu>
@@ -263,7 +263,7 @@
                                                             <mat-divider></mat-divider>
                                                         </ng-container>
                                                         <button mat-menu-item class="vouchers-add-new"
-                                                            (click)="toggleAccountAsidePane(accountType.customer)">{{
+                                                            (click)="toggleAccountAsidePane(accountType.customer, false)">{{
                                                             localeData?.add_new_address }}</button>
                                                     </div>
                                                 </mat-menu>
@@ -590,7 +590,15 @@
                                                 <th [width]="hasStock ? '10%' : '10%'" [ngClass]="{ 'd-none' : !hasStock}">{{ commonLocaleData?.app_rate }}</th>
                                                 <th [width]="hasStock ? '10%' : '14%'">{{ commonLocaleData?.app_amount }}</th>
                                                 <th [width]="hasStock ? '9%' : '14%'">{{ commonLocaleData?.app_discount }}</th>
-                                                <th [width]="hasStock ? '10%' : '14%'" *ngIf="showTaxColumn">{{ commonLocaleData?.app_tax }}</th>
+                                                <th [width]="hasStock ? '10%' : '14%'" *ngIf="showTaxColumn">
+                                                    {{ commonLocaleData?.app_tax }}
+                                                    <span *ngIf="rcmCheckbox?.checked"
+                                                        >({{ commonLocaleData?.app_rcm }})<sup
+                                                            class="mandatory-asterisk"
+                                                            >*</sup
+                                                        ></span
+                                                    >
+                                                </th>
                                                 <th [width]="hasStock ? '16%' : '16%'">{{ commonLocaleData?.app_total }}</th>
                                             </tr>
                                         </thead>
@@ -790,6 +798,9 @@
                                                                             <mat-radio-group
                                                                                 formControlName="showCodeType"
                                                                                 name="transactionShowCodeType{{entryIndex}}"
+                                                                                (change)="
+                                                                                    onChangeHsnSacType(entry)
+                                                                                "
                                                                                 [disabled]="isEinvoiceGenerated">
                                                                                 <mat-radio-button color="primary"
                                                                                     value="hsn">{{ commonLocaleData?.app_hsn_code }}</mat-radio-button>
@@ -1022,7 +1033,7 @@
                                                     </td>
 
                                                     <!-- Tax -->
-                                                    <td [width]="hasStock ? '10%' : '14%'" class="item-tax" [ngClass]="{'error-box' : rcmCheckbox?.checked && !entry.get('taxes')?.value?.length}"
+                                                    <td [width]="hasStock ? '10%' : '14%'" class="item-tax" [ngClass]="{'error-box' : rcmCheckbox?.checked && !entry.get('taxes')?.value?.length && entry.get('requiredTax')?.value}"
                                                         *ngIf="showTaxColumn">
                                                         <ng-container
                                                             *ngFor="let transaction of entry.get('transactions')['controls']"
