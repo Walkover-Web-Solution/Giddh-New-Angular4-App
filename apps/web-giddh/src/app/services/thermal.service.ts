@@ -833,27 +833,27 @@ export class ThermalService {
      * @returns {*}
      * @memberof ThermalService
      */
-    private wrapStringByLength(productName: string, vaiant: string, desiredStringLength: number): any {
+    private wrapStringByLength(productName: string, variant: string, desiredStringLength: number): any {
         let trimmedStringArray: any = [];
-        let isProductTrimed: boolean = false;
+        let isProductTrimmed: boolean = false;
         let flag: number = 0;
 
         if (productName?.length > desiredStringLength) {
-            let remianingString = productName;
+            let remainingString = productName;
 
-            while (remianingString?.length !== 0) {
+            while (remainingString?.length !== 0) {
 
 
-                let cutString = remianingString.substr(0, desiredStringLength);
-                remianingString = remianingString.substr(cutString.length);
-                isProductTrimed = remianingString.length === 0;
+                let cutString = remainingString.substr(0, desiredStringLength);
+                remainingString = remainingString.substr(cutString.length);
+                isProductTrimmed = remainingString.length === 0;
 
                 trimmedStringArray.push(cutString);
 
-                if (remianingString.length === 0 && isProductTrimed && flag === 0 && vaiant) {
+                if (remainingString.length === 0 && isProductTrimmed && flag === 0 && variant) {
                     flag++;
-                    isProductTrimed = false;
-                    remianingString = '-' + vaiant;
+                    isProductTrimmed = false;
+                    remainingString = '-' + variant;
                 }
             }
 
