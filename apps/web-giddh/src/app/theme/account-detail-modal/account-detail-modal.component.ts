@@ -109,6 +109,7 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
                 this.changeDetectorRef.detectChanges();
             } else {
                 this._toaster.errorToast(response?.message);
+                this.isLoading = false;
             }
         });
     }
