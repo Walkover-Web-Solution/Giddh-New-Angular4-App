@@ -75,7 +75,7 @@ export class FileReturnComponent implements OnInit, OnDestroy {
         vatReportRequest.branchUniqueName = this.inputData.branchUniqueName;
 
         this.isLoading = true;
-        this.vatService.getUKVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this.vatService.getCountryWiseVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.isLoading = false;
             if (res.status === 'success' && res.body?.sections) {
                 this.vatReport = res.body?.sections;
