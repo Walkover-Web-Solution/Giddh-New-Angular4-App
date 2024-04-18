@@ -15,6 +15,7 @@ import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfac
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class GeneralService {
@@ -1710,8 +1711,7 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public getGovClientTimezoneHeader(timezone: any): any {
-        let args: any = { headers: {} };
-        args.headers['Gov-Client-Timezone'] = 'UTC' + timezone;
-        return { headers: args.headers };
+        const headers = new HttpHeaders().set('Gov-Client-Timezone', 'UTC' + timezone);
+        return { headers };
     }
 }
