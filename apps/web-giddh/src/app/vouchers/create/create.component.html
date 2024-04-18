@@ -1022,7 +1022,7 @@
                                                     </td>
 
                                                     <!-- Tax -->
-                                                    <td [width]="hasStock ? '10%' : '14%'" class="item-tax"
+                                                    <td [width]="hasStock ? '10%' : '14%'" class="item-tax" [ngClass]="{'error-box' : rcmCheckbox?.checked && !entry.get('taxes')?.value?.length}"
                                                         *ngIf="showTaxColumn">
                                                         <ng-container
                                                             *ngFor="let transaction of entry.get('transactions')['controls']"
@@ -1037,8 +1037,7 @@
                                                                         </amount-field>
                                                                     </div>
                                                                 </ng-container>
-                                                                <div
-                                                                    [class.error-box]="transaction.get('requiredTax')?.value">
+                                                                <div>
                                                                     <tax-dropdown
                                                                         [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'"
                                                                         [date]="invoiceForm.get('date')?.value"

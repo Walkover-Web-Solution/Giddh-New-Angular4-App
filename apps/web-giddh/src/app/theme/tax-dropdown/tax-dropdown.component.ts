@@ -64,11 +64,7 @@ export class TaxDropdownComponent implements OnChanges {
      * @memberof TaxDropdownComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if (changes?.selectedTaxesList?.currentValue && !isEqual(changes?.selectedTaxesList?.currentValue, changes?.selectedTaxesList?.previousValue)) {
-            this.addTaxesInForm();
-        }
-
-        if (changes?.taxesList?.currentValue) {
+        if ((changes?.selectedTaxesList?.currentValue && !isEqual(changes?.selectedTaxesList?.currentValue, changes?.selectedTaxesList?.previousValue)) || (changes?.taxesList?.currentValue && !isEqual(changes?.taxesList?.currentValue, changes?.taxesList?.previousValue))) {
             this.addTaxesInForm();
             this.enableDisableTaxes();
         }
@@ -88,7 +84,6 @@ export class TaxDropdownComponent implements OnChanges {
             tax.isChecked = isTaxSelected?.length > 0;
             taxes.push(this.getTaxFormGroup(tax));
         });
-        this.calculateTaxAmount();
     }
 
     /**
@@ -106,7 +101,7 @@ export class TaxDropdownComponent implements OnChanges {
             taxType: [tax?.taxType],
             taxDetail: [tax?.taxDetail?.length ? tax?.taxDetail[0] : null],
             isChecked: [tax?.isChecked ?? false],
-            disableForDate: [false],
+            disableForDate: [tax?.disableForDate ?? false],
             calculationMethod: ['OnTaxableAmount']
         });
     }
@@ -118,8 +113,11 @@ export class TaxDropdownComponent implements OnChanges {
      */
     public enableDisableTaxes(): void {
         const selectedTaxTypes = [];
-        const taxes = this.taxForm.get('taxes') as FormArray;
+        let taxes = this.taxForm.get('taxes') as FormArray;
         for (let i = 0; i <= taxes.length; i++) {
+            taxes.controls[i]?.enable();
+            taxes.controls[i]?.get('disableForDate')?.patchValue(false);
+
             if (taxes.controls[i]?.get('isChecked')?.value) {
                 selectedTaxTypes[taxes.controls[i]?.get('taxType')?.value] = taxes.controls[i]?.get('uniqueName')?.value;
             }
@@ -128,11 +126,10 @@ export class TaxDropdownComponent implements OnChanges {
         for (let i = 0; i <= taxes.length; i++) {
             if (selectedTaxTypes[taxes.controls[i]?.get('taxType')?.value] && selectedTaxTypes[taxes.controls[i]?.get('taxType')?.value] !== taxes.controls[i]?.get('uniqueName')?.value) {
                 taxes.controls[i]?.disable();
+                taxes.controls[i]?.get('disableForDate')?.patchValue(false);
             } else if (dayjs(taxes.controls[i]?.get('taxDetail')?.value?.date, GIDDH_DATE_FORMAT) > dayjs(this.date, GIDDH_DATE_FORMAT)) {
                 taxes.controls[i]?.get('disableForDate')?.patchValue(true);
                 taxes.controls[i]?.disable();
-            } else {
-                taxes.controls[i]?.enable();
             }
         }
 
