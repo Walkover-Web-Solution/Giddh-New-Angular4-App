@@ -512,7 +512,7 @@
                                                         ({{ commonLocaleData?.app_dated }}:
                                                         {{ option.additional?.voucherDate }})
                                                     </div>
-                                                    <div class="option-value-stock">
+                                                    <div class="option-value-stock font-12">
                                                         ({{ commonLocaleData?.app_amount }}:
                                                         {{ option.additional?.unadjustedAmount?.amountForAccount |
                                                         giddhCurrency }})
@@ -651,13 +651,16 @@
                                                                         (onClear)="selectStock($event, entryIndex, true)"
                                                                         (createOption)="toggleStockAsidePane()"
                                                                         [openDropdown]="entryIndex === activeEntryIndex && !transaction.get('account.uniqueName')?.value"
-                                                                        [showOptionDivider]="true">
+                                                                        [showOptionDivider]="true"
+                                                                        [showMatLabelWithLabledField]="false"
+                                                                        [showCaretIcon]="false"
+                                                                        [appearance]="'fill'">
                                                                         <ng-template #optionTemplate
                                                                             let-option="option">
                                                                             <ng-container
                                                                                 *ngIf="!option.additional?.stock">
                                                                                 <a href="javascript:;"
-                                                                                    class="flex-column">
+                                                                                    class="d-block py-2">
                                                                                     <div class="option-label pt-2">
                                                                                         {{ option?.label | titlecase }}
                                                                                     </div>
@@ -684,7 +687,7 @@
                                                                                         {{ option.additional?.uniqueName
                                                                                         }}
                                                                                     </div>
-                                                                                    <div class="option-value-stock">
+                                                                                    <div class="option-value-stock font-12">
                                                                                         {{ commonLocaleData?.app_stock
                                                                                         }}: {{
                                                                                         option.additional?.stock?.uniqueName
@@ -716,7 +719,10 @@
                                                                                 [name]="'transactionStockVariantUniqueName' + entryIndex"
                                                                                 [options]="stockVariants[entryIndex] | async"
                                                                                 (selectedOption)="selectVariant($event, entryIndex)"
-                                                                                (onClear)="selectVariant($event, entryIndex, true)">
+                                                                                (onClear)="selectVariant($event, entryIndex, true)"
+                                                                                [showMatLabelWithLabledField]="false"
+                                                                                [showCaretIcon]="false"
+                                                                                [appearance]="'fill'">
                                                                             </reactive-dropdown-field>
                                                                         </div>
                                                                     </ng-container>
@@ -780,13 +786,19 @@
                                                                 <div class="mt-2 font-12">
                                                                     <span>{{ entry.get('showCodeType')?.value ===
                                                                         'hsn' ? commonLocaleData?.app_hsn_code :
-                                                                        commonLocaleData?.app_sac_code }}: {{
-                                                                        entry.get('showCodeType')?.value === 'hsn' ?
-                                                                        entry.get('hsnNumber')?.value :
-                                                                        entry.get('sacNumber')?.value }}</span>
+                                                                        commonLocaleData?.app_sac_code }}:</span>
                                                                     <div class="mt-1"
                                                                         [hidden]="activeEntryIndex !== entryIndex">
-                                                                        Update <i class="icon-edit text-blue"
+                                                                        <span *ngIf="!(entry.get('hsnNumber')?.value || entry.get('sacNumber')?.value)">
+                                                                            {{ commonLocaleData?.app_update }}
+                                                                        </span>
+                                                                         
+                                                                        {{
+                                                                            entry.get('showCodeType')?.value === 'hsn' ?
+                                                                            entry.get('hsnNumber')?.value :
+                                                                            entry.get('sacNumber')?.value
+                                                                         }}
+                                                                        <i class="icon-edit text-blue"
                                                                             (click)="updateCurrentHsnSac(entry)"
                                                                             #menuTrigger="matMenuTrigger"
                                                                             [matMenuTriggerFor]="update"></i></div>
