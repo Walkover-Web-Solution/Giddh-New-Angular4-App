@@ -64,7 +64,7 @@ export class TaxDropdownComponent implements OnChanges {
      * @memberof TaxDropdownComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if ((changes?.selectedTaxesList?.currentValue && !isEqual(changes?.selectedTaxesList?.currentValue, changes?.selectedTaxesList?.previousValue)) || (changes?.taxesList?.currentValue && !isEqual(changes?.taxesList?.currentValue, changes?.taxesList?.previousValue))) {
+        if ((!isEqual(changes?.selectedTaxesList?.currentValue, changes?.selectedTaxesList?.previousValue)) || (!isEqual(changes?.taxesList?.currentValue, changes?.taxesList?.previousValue)) || (!isEqual(changes?.amount?.currentValue, changes?.amount?.previousValue))) {
             this.addTaxesInForm();
             this.enableDisableTaxes();
         }

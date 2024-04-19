@@ -36,7 +36,7 @@ export class EntryTotalDirective implements OnChanges, OnDestroy {
      * @memberof EntryAmountDirective
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if (!isEqual(changes?.entry?.currentValue, changes?.entry?.previousValue)) {
+        if (!isEqual(changes?.entry?.currentValue, changes?.entry?.previousValue) && changes?.entry?.currentValue?.calculateTotal) {
             const amount = giddhRoundOff((Number(this.entry.transactions[0].amount?.amountForAccount) - Number(this.entry.totalDiscount)) + (Number(this.entry.totalTax) + Number(this.entry.otherTax?.amount)), this.balanceDecimalPlaces);
             this.calculatedAmount.emit(amount);
         }

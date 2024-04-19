@@ -1316,9 +1316,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             const entryFormGroup = this.getEntryFormGroup(entryIndex);
             const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
 
-            if (isClear) {
-
-            } else {
+            if (!isClear) {
                 let keysToUpdate = {
                     accountName: event?.label,
                     accountUniqueName: event?.account?.uniqueName || event?.value,
@@ -1339,6 +1337,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 if (event?.additional?.hasVariants) {
                     this.componentStore.getStockVariants({ q: event?.additional?.stock?.uniqueName, index: entryIndex, autoSelectVariant: true });
                 } else {
+                    this.stockVariants[entryIndex] = observableOf([]);
+                    this.stockUnits[entryIndex] = observableOf([]);
                     let payload = {};
 
                     if (keysToUpdate.stockUniqueName) {
@@ -1570,6 +1570,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             totalTax: [''], // temp
             totalTaxWithoutCess: [''], //temp
             totalCess: [''], //temp
+            calculateTotal: [true], //temp
             otherTax: this.formBuilder.group({ //temp
                 name: [''],
                 amount: [''],
@@ -1734,6 +1735,26 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                     let entryFormGroup = this.getEntryFormGroup(index);
                     let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+
+                    const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
+                    discountsFormArray.clear();
+                    if (item.additional?.stock?.variant?.variantDiscount?.discounts) {
+                        item.additional?.stock?.variant?.variantDiscount?.discounts?.forEach(selectedDiscount => {
+                            this.discountsList?.forEach(discount => {
+                                if (discount?.uniqueName === selectedDiscount?.discount?.uniqueName) {
+                                    discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                                }
+                            });
+                        });
+                    } else {
+                        this.account.applicableDiscounts?.forEach(selectedDiscount => {
+                            this.discountsList?.forEach(discount => {
+                                if (discount?.uniqueName === selectedDiscount?.uniqueName) {
+                                    discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                                }
+                            });
+                        });
+                    }
 
                     const taxes = this.generalService.fetchTaxesOnPriority(
                         item.additional.stock?.taxes ?? [],
@@ -2374,6 +2395,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public deleteLineEntry(entryIndex: number): void {
         const entries = this.invoiceForm.get('entries') as FormArray;
         entries.removeAt(entryIndex);
+        this.stockVariants[entryIndex] = observableOf([]);
+        this.stockUnits[entryIndex] = observableOf([]);
         if (!entries?.length) {
             this.addNewLineEntry();
         }
@@ -2890,6 +2913,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entriesFormArray.clear();
         this.invoiceForm.reset();
 
+        this.account = {
+            countryName: '',
+            countryCode: '',
+            baseCurrency: '',
+            baseCurrencySymbol: '',
+            addresses: null,
+            otherApplicableTaxes: null,
+            applicableDiscounts: null,
+            applicableTaxes: null,
+            excludeTax: false
+        };
+
         this.addNewLineEntry(false);
 
         this.voucherTotals = {
@@ -3280,65 +3315,124 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             } else {
                 transactionFormGroup.get("date")?.patchValue(dayjs(entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
             }
-
-            transactionFormGroup.get("account.uniqueName")?.patchValue(item?.uniqueName);
+            
             entryFormGroup.get("description")?.patchValue(entry.description);
 
             const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
             discountsFormArray.clear();
-            entry.discounts?.forEach(discount => {
-                discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
-            });
+            if (entry.discounts?.length) {
+                entry.discounts?.forEach(discount => {
+                    discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                });
+            } else {
+                this.account.applicableDiscounts?.forEach(selectedDiscount => {
+                    this.discountsList?.forEach(discount => {
+                        if (discount?.uniqueName === selectedDiscount?.uniqueName) {
+                            discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                        }
+                    });
+                });
+            }
 
             const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
             taxesFormArray.clear();
-            entry.taxes?.forEach(tax => {
+
+            const selectedTaxes = [];
+            let otherTax = null;
+            entry?.taxes?.forEach(selectedTax => {
+                this.companyTaxes?.forEach(tax => {
+                    if (this.otherTaxTypes.includes(tax.taxType)) {
+                        otherTax = tax;
+                    } else {
+                        if (tax.uniqueName === selectedTax) {
+                            selectedTaxes.push(tax);
+                        }
+                    }
+                });
+            });
+
+            selectedTaxes?.forEach(tax => {
                 taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
             });
 
+            if (otherTax) {
+                const selectedOtherTax = this.companyTaxes?.filter(tax => tax.uniqueName === otherTax.uniqueName);
+                otherTax['taxDetail'] = selectedOtherTax[0].taxDetail;
+                otherTax['name'] = selectedOtherTax[0].name;
+                this.getSelectedOtherTax(entryIndex, otherTax, otherTax.calculationMethod);
+            }
+
             entryFormGroup.get("purchaseOrderItemMapping")?.patchValue({ uniqueName: poUniqueName, entryUniqueName: entry?.uniqueName });
 
-            let keysToUpdate = {
-                accountName: item?.label,
-                accountUniqueName: item?.account?.uniqueName,
-                stockName: "",
-                stockUniqueName: ""
-            };
+            this.activeEntryIndex = entryIndex;
 
-            if (item?.additional?.stock?.uniqueName) {
-                keysToUpdate.stockName = item?.additional?.stock?.name;
-                keysToUpdate.stockUniqueName = item?.additional?.stock?.uniqueName;
+            transactionFormGroup.get('account.name')?.patchValue(item.account?.name);
+            transactionFormGroup.get('account.uniqueName')?.patchValue(item.account?.uniqueName);
+            transactionFormGroup.get('amount.amountForAccount').patchValue(item.amount.amountForAccount);
+            entryFormGroup.get('hsnNumber')?.patchValue(item.hsnNumber);
+            entryFormGroup.get('sacNumber')?.patchValue(item.sacNumber);
+            entryFormGroup.get('showCodeType')?.patchValue(item.hsnNumber ? 'hsn' : 'sac');
+
+            if (item.stock) {
+                transactionFormGroup.get('stock.name')?.patchValue(item.stock.name);
+                transactionFormGroup.get('stock.uniqueName')?.patchValue(item.stock.uniqueName);
+                transactionFormGroup.get('stock.quantity')?.patchValue(item.stock.quantity);
+                transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue(item.stock.rate.amountForAccount);
+                transactionFormGroup.get('stock.skuCode')?.patchValue(item.stock.skuCode);
+                transactionFormGroup.get('stock.skuCodeHeading')?.patchValue(item.stock.skuCodeHeading);
+                transactionFormGroup.get('stock.stockUnit.code')?.patchValue(item.stock.stockUnit?.code);
+                transactionFormGroup.get('stock.stockUnit.uniqueName')?.patchValue(item.stock.stockUnit?.uniqueName);
+                transactionFormGroup.get('stock.variant.name')?.patchValue(item.stock.variant?.name);
+                transactionFormGroup.get('stock.variant.uniqueName')?.patchValue(item.stock.variant?.uniqueName);
+                transactionFormGroup.get('stock.variant.salesTaxInclusive')?.patchValue(false);
+                transactionFormGroup.get('stock.variant.purchaseTaxInclusive')?.patchValue(item.stock.taxInclusive);
+
+                const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
+                discountsFormArray.clear();
+                if (item.stock.variant?.variantDiscount?.discounts) {
+                    item.stock.variant?.variantDiscount?.discounts?.forEach(selectedDiscount => {
+                        this.discountsList?.forEach(discount => {
+                            if (discount?.uniqueName === selectedDiscount?.discount?.uniqueName) {
+                                discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                            }
+                        });
+                    });
+                } else {
+                    this.account.applicableDiscounts?.forEach(selectedDiscount => {
+                        this.discountsList?.forEach(discount => {
+                            if (discount?.uniqueName === selectedDiscount?.uniqueName) {
+                                discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                            }
+                        });
+                    });
+                }
+
+                this.stockUnits[entryIndex] = observableOf(item.stock.variant.unitRates);
+            } else {
+                this.stockVariants[entryIndex] = observableOf([]);
+                this.stockUnits[entryIndex] = observableOf([]);
+                
+                const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
+                discountsFormArray.clear();
+
+                this.account.applicableDiscounts?.forEach(selectedDiscount => {
+                    this.discountsList?.forEach(discount => {
+                        if (discount?.uniqueName === selectedDiscount?.uniqueName) {
+                            discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                        }
+                    });
+                });
             }
 
-            transactionFormGroup.get('account').get('name')?.patchValue(keysToUpdate.accountName);
-            transactionFormGroup.get('account').get('uniqueName')?.patchValue(keysToUpdate.accountUniqueName);
-
-            if (keysToUpdate.stockName) {
-                transactionFormGroup.get('stock').get('name')?.patchValue(keysToUpdate.stockName);
-                transactionFormGroup.get('stock').get('uniqueName')?.patchValue(keysToUpdate.stockUniqueName);
-            }
+            this.checkIfEntriesHasStock();
 
             if (item?.additional?.hasVariants) {
                 this.componentStore.getStockVariants({ q: item?.additional?.stock?.uniqueName, index: lastIndex, autoSelectVariant: false });
-            } else {
-                let payload = {};
+            }
 
-                if (keysToUpdate.stockUniqueName) {
-                    payload = { stockUniqueName: keysToUpdate.stockUniqueName, customerUniqueName: this.invoiceForm.get('account.uniqueName')?.value };
-                }
-
-                this.searchService.loadDetails(transactionFormGroup.get("account.uniqueName")?.value, payload).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    if (response && response.status === "success") {
-                        this.prefillParticularDetails(lastIndex, response.body);
-
-                        if (entries?.length !== (entryIndex + 1)) {
-                            entryIndex++;
-                            this.addPoItems(poUniqueName, entries, entryIndex);
-                        }
-                    } else {
-                        this.toasterService.showSnackBar("error", response?.message);
-                    }
-                });
+            if (entries?.length !== (entryIndex + 1)) {
+                entryIndex++;
+                this.addPoItems(poUniqueName, entries, entryIndex);
             }
         }
     }
@@ -3518,17 +3612,39 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
             discountsFormArray.clear();
-            response.stock.variant?.variantDiscount?.discounts?.forEach(selectedDiscount => {
+            if (response.stock.variant?.variantDiscount?.discounts) {
+                response.stock.variant?.variantDiscount?.discounts?.forEach(selectedDiscount => {
+                    this.discountsList?.forEach(discount => {
+                        if (discount?.uniqueName === selectedDiscount?.discount?.uniqueName) {
+                            discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                        }
+                    });
+                });
+            } else {
+                this.account.applicableDiscounts?.forEach(selectedDiscount => {
+                    this.discountsList?.forEach(discount => {
+                        if (discount?.uniqueName === selectedDiscount?.uniqueName) {
+                            discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                        }
+                    });
+                });
+            }
+
+            this.stockUnits[entryIndex] = observableOf(response.stock.variant.unitRates);
+        } else {
+            this.stockVariants[entryIndex] = observableOf([]);
+            this.stockUnits[entryIndex] = observableOf([]);
+            
+            const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
+            discountsFormArray.clear();
+
+            this.account.applicableDiscounts?.forEach(selectedDiscount => {
                 this.discountsList?.forEach(discount => {
-                    if (discount?.uniqueName === selectedDiscount?.discount?.uniqueName) {
+                    if (discount?.uniqueName === selectedDiscount?.uniqueName) {
                         discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
                     }
                 });
             });
-
-            this.stockUnits[entryIndex] = observableOf(response.stock.variant.unitRates);
-        } else {
-            this.stockUnits[entryIndex] = observableOf([]);
         }
 
         const taxes = this.generalService.fetchTaxesOnPriority(
@@ -3735,5 +3851,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             entryFormGroup.get('sacNumber')?.patchValue(entryFormGroup.get('hsnNumber')?.value);
         }
+    }
+
+    /**
+     * Does reverse calculation if entry total changes
+     *
+     * @param {FormGroup} entryFormGroup
+     * @memberof VoucherCreateComponent
+     */
+    public doReverseCalculation(entryFormGroup: FormGroup): void {
+        setTimeout(() => {
+            const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+            const amount = this.vouchersUtilityService.calculateInclusiveRate(entryFormGroup?.value, this.companyTaxes, this.company.giddhBalanceDecimalPlaces, Number(entryFormGroup.get('total.amountForAccount')?.value));
+            transactionFormGroup.get('amount.amountForAccount').patchValue(amount);
+            transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue((amount / transactionFormGroup.get('stock.quantity')?.value));
+        }, 10);
     }
 }

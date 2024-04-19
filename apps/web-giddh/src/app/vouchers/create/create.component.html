@@ -1094,6 +1094,9 @@
                                                                         entryTotal [entry]="entry?.value"
                                                                         name="transactionTotal{{entryIndex}}"
                                                                         formControlName="amountForAccount"
+                                                                        (focus)="entry.get('calculateTotal')?.patchValue(false)"
+                                                                        (blur)="entry.get('calculateTotal')?.patchValue(true)"
+                                                                        (input)="doReverseCalculation(entry)"
                                                                         (calculatedAmount)="updateEntryTotal(entry, $event)" />
                                                                 </div>
                                                                 <span class="font-14 text-gray mt-1 d-inline-block"
