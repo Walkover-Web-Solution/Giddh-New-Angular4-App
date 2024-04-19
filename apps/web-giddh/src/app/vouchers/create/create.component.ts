@@ -2869,7 +2869,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.voucherService.generateVoucher(invoiceForm.account.uniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.startLoader(false);
                 if (response?.status === "success") {
-                    this.resetVoucherForm();
+                    this.resetVoucherForm(false);
 
                     let message = (invoiceForm.number) ? `${this.localeData?.entry_created}: ${invoiceForm.number}` : this.commonLocaleData?.app_messages?.voucher_saved;
                     this.toasterService.showSnackBar("success", message);
@@ -2907,7 +2907,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      *
      * @memberof VoucherCreateComponent
      */
-    public resetVoucherForm(): void {
+    public resetVoucherForm(openAccountDropdown: boolean = true): void {
         const exchangeRate = this.invoiceForm.get('exchangeRate')?.value;
         const entriesFormArray = this.invoiceForm.get('entries') as FormArray;
         entriesFormArray.clear();
@@ -2955,7 +2955,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.searchAccount();
 
-        this.openAccountDropdown = true;
+        this.openAccountDropdown = openAccountDropdown;
     }
 
     /**
