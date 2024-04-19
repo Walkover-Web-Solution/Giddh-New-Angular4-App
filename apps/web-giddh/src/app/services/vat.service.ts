@@ -27,9 +27,9 @@ export class VatService {
     public getCountryWiseVatReport(request: VatReportRequest, countryCode: 'UK' | 'ZW' = 'UK'): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
-        const api = countryCode === 'UK' ? VAT_API.VIEW_REPORT : VAT_API.VIEW_ZW_REPORT;
+        const apiEndPoint = countryCode === 'UK' ? VAT_API.VIEW_REPORT : VAT_API.VIEW_ZW_REPORT;
 
-        let url = this.config.apiUrl + api;
+        let url = this.config.apiUrl + apiEndPoint;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         url = url?.replace(':from', request.from);
         url = url?.replace(':to', request.to);
@@ -76,9 +76,9 @@ export class VatService {
 
     public downloadVatReport(request: VatReportRequest, countryCode: 'UK' | 'ZW'): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        const api = countryCode === 'UK' ? VAT_API.DOWNLOAD_REPORT : VAT_API.DOWNLOAD_ZW_REPORT;
+        const apiEndPoint = countryCode === 'UK' ? VAT_API.DOWNLOAD_REPORT : VAT_API.DOWNLOAD_ZW_REPORT;
 
-        let url = this.config.apiUrl + api;
+        let url = this.config.apiUrl + apiEndPoint;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         url = url?.replace(':from', request.from);
         url = url?.replace(':to', request.to);
