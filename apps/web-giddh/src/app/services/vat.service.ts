@@ -24,14 +24,19 @@ export class VatService {
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof VatService
      */
-    public getUKVatReport(request: VatReportRequest): Observable<BaseResponse<any, any>> {
+    public getCountryWiseVatReport(request: VatReportRequest, countryCode: 'UK' | 'ZW' = 'UK'): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
-        let url = this.config.apiUrl + VAT_API.VIEW_REPORT;
+        const apiEndPoint = countryCode === 'UK' ? VAT_API.VIEW_REPORT : VAT_API.VIEW_ZW_REPORT;
+
+        let url = this.config.apiUrl + apiEndPoint;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         url = url?.replace(':from', request.from);
         url = url?.replace(':to', request.to);
         url = url?.replace(':taxNumber', request.taxNumber);
+        if(countryCode === 'ZW') {
+            url = url?.replace(':currencyCode', request.currencyCode);
+        }
         if (request.branchUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
@@ -69,10 +74,11 @@ export class VatService {
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
 
-    public downloadVatReport(request: VatReportRequest): Observable<BaseResponse<any, any>> {
+    public downloadVatReport(request: VatReportRequest, countryCode: 'UK' | 'ZW'): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+        const apiEndPoint = countryCode === 'UK' ? VAT_API.DOWNLOAD_REPORT : VAT_API.DOWNLOAD_ZW_REPORT;
 
-        let url = this.config.apiUrl + VAT_API.DOWNLOAD_REPORT;
+        let url = this.config.apiUrl + apiEndPoint;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         url = url?.replace(':from', request.from);
         url = url?.replace(':to', request.to);
@@ -80,6 +86,9 @@ export class VatService {
         if (request.branchUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
+        }
+        if(countryCode === 'ZW') {
+            url = url?.replace(':currencyCode', request.currencyCode);
         }
         return this.http.get(url).pipe(
             map((res) => {
