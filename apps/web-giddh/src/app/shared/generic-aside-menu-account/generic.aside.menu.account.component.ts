@@ -167,6 +167,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
         if ('selectedAccountUniqueName' in s) {
             let value = s.selectedAccountUniqueName;
             if (value.currentValue && value.currentValue !== value.previousValue) {
+                this.store.dispatch(this.accountsAction.resetActiveAccount());
                 this.store.dispatch(this.accountsAction.getAccountDetails(s.selectedAccountUniqueName.currentValue));
             }
         }
