@@ -183,6 +183,13 @@ export class VouchersUtilityService {
             });
         }
 
+        if (!defaultAddress?.state?.code && defaultAddress?.stateCode) {
+            defaultAddress.state = {
+                code: defaultAddress.stateCode,
+                name: defaultAddress.stateName
+            };
+        } 
+
         return { defaultAddress, defaultAddressIndex };
     }
 
@@ -376,5 +383,39 @@ export class VouchersUtilityService {
         });
 
         return giddhRoundOff(((entryTotal + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) / (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), balanceDecimalPlaces);
+    }
+
+    public formatPurchaseOrderRequest(invoiceForm: any): any {
+        if (invoiceForm.account?.billingAddress) {
+            invoiceForm.account.billingAddress.stateCode = invoiceForm.account.billingAddress.state?.code;
+            invoiceForm.account.billingAddress.stateName = invoiceForm.account.billingAddress.state?.name;
+        }
+
+        if (invoiceForm.account?.shippingAddress) {
+            invoiceForm.account.shippingAddress.stateCode = invoiceForm.account.shippingAddress.state?.code;
+            invoiceForm.account.shippingAddress.stateName = invoiceForm.account.shippingAddress.state?.name;
+        }
+
+        if (invoiceForm.company?.billingAddress) {
+            invoiceForm.company.billingAddress.stateCode = invoiceForm.company.billingAddress.state?.code;
+            invoiceForm.company.billingAddress.stateName = invoiceForm.company.billingAddress.state?.name;
+        }
+
+        if (invoiceForm.company?.shippingAddress) {
+            invoiceForm.company.shippingAddress.stateCode = invoiceForm.company.shippingAddress.state?.code;
+            invoiceForm.company.shippingAddress.stateName = invoiceForm.company.shippingAddress.state?.name;
+        }
+        
+        invoiceForm.account.billingDetails = invoiceForm.account.billingAddress;
+        invoiceForm.account.shippingDetails = invoiceForm.account.shippingDetails;
+        invoiceForm.company.billingDetails = invoiceForm.company.billingAddress;
+        invoiceForm.company.shippingDetails = invoiceForm.company.shippingDetails;
+
+        delete invoiceForm.account.billingAddress;
+        delete invoiceForm.account.shippingDetails;
+        delete invoiceForm.company.billingAddress;
+        delete invoiceForm.company.shippingDetails;
+
+        return invoiceForm;
     }
 }

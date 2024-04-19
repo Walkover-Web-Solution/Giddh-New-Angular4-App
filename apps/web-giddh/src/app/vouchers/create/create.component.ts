@@ -1421,6 +1421,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.fillBillingShippingAddress("account", "shippingAddress", defaultAddress, index);
         }
 
+        if (this.invoiceType.isPurchaseOrder) {
+            let companyDefaultAddress = this.vouchersUtilityService.getDefaultAddress(this.company?.branch);
+            defaultAddress = companyDefaultAddress.defaultAddress;
+            index = companyDefaultAddress.defaultAddressIndex;
+
+            if (defaultAddress) {
+                this.fillBillingShippingAddress("company", "billingAddress", defaultAddress, index);
+                this.fillBillingShippingAddress("company", "shippingAddress", defaultAddress, index);
+            }
+        }
+
         this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
         if (this.isMultiCurrencyVoucher) {
             this.getExchangeRate(this.account.baseCurrency, this.company.baseCurrency, this.invoiceForm.get('date')?.value);
@@ -2846,6 +2857,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 accountUniqueName: invoiceForm.account.uniqueName
             };
 
+            invoiceForm = this.vouchersUtilityService.formatPurchaseOrderRequest(invoiceForm);
+
             this.purchaseOrderService.create(getRequestObject, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.startLoader(false);
                 if (response && response.status === "success") {
@@ -2871,7 +2884,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.voucherService.generateVoucher(invoiceForm.account.uniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.startLoader(false);
                 if (response?.status === "success") {
-                    this.resetVoucherForm(false);
+                    if (callback) {
+                        this.resetVoucherForm(false);
+                    } else {
+                        this.resetVoucherForm();
+                    }
 
                     let message = (invoiceForm.number) ? `${this.localeData?.entry_created}: ${invoiceForm.number}` : this.commonLocaleData?.app_messages?.voucher_saved;
                     this.toasterService.showSnackBar("success", message);
