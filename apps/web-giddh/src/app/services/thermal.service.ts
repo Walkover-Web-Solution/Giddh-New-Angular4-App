@@ -527,13 +527,15 @@ export class ThermalService {
                 items += this.printerFormat.formatCenter(
                     itemNameShowHide
                 );
-                if (itemName?.length < productName?.length) {
+                if (itemName?.length <= productName?.length) {
                     let lastIndex = productName.length - itemName.length;
                     for (let itemNameIndex = itemName?.length; itemNameIndex < lastIndex; itemNameIndex = itemNameIndex + 10) {
                         items += this.printerFormat.formatCenter(this.printerFormat.leftAlign + productName?.substr(itemNameIndex, 10));
                     }
-                    for (let i = 1; i < completeProductName?.length; i++) {
-                        items += (this.printerFormat.leftAlign + completeProductName[i] + this.printerFormat.lineBreak);
+                    if(Array.isArray(completeProductName)) {
+                        for (let i = 1; i < completeProductName?.length; i++) {
+                            items += (this.printerFormat.leftAlign + completeProductName[i] + this.printerFormat.lineBreak);
+                        }
                     }
                 }
             }
@@ -835,32 +837,22 @@ export class ThermalService {
      */
     private wrapStringByLength(productName: string, variant: string, desiredStringLength: number): any {
         let trimmedStringArray: any = [];
-        let isProductTrimmed: boolean = false;
-        let flag: number = 0;
+        const productNameWithVariant = productName + (variant ? ` - ${variant}`: '');
 
-        if (productName?.length > desiredStringLength) {
-            let remainingString = productName;
+        if (productNameWithVariant?.length > desiredStringLength) {
+            let remainingString = productNameWithVariant;
 
             while (remainingString?.length !== 0) {
-
-
+                
                 let cutString = remainingString.substr(0, desiredStringLength);
                 remainingString = remainingString.substr(cutString.length);
-                isProductTrimmed = remainingString.length === 0;
 
                 trimmedStringArray.push(cutString);
 
-                if (remainingString.length === 0 && isProductTrimmed && flag === 0 && variant) {
-                    flag++;
-                    isProductTrimmed = false;
-                    remainingString = '-' + variant;
-                }
             }
 
-        } else {
-            return productName;
+            return trimmedStringArray;
         }
-
-        return trimmedStringArray;
+            return productNameWithVariant;
     }
 }
