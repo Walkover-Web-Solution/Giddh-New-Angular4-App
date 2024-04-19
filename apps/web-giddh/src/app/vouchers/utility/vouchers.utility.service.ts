@@ -348,8 +348,10 @@ export class VouchersUtilityService {
         return invoiceForm;
     }
 
-    public calculateInclusiveRate(entry: any, companyTaxes: any[], balanceDecimalPlaces: any): number {
-        let entryTotal = giddhRoundOff(Number(entry.transactions[0].stock?.quantity) * Number(entry.transactions[0].stock?.rate?.rateForAccount));
+    public calculateInclusiveRate(entry: any, companyTaxes: any[], balanceDecimalPlaces: any, entryTotal: number = null): number {
+        if (entryTotal === null) {
+            entryTotal = giddhRoundOff(Number(entry.transactions[0].stock?.quantity) * Number(entry.transactions[0].stock?.rate?.rateForAccount));
+        }
 
         // Calculate percentage discount total
         let percentageDiscountTotal = entry.discounts?.filter(activeDiscount => activeDiscount.discountType === 'PERCENTAGE' || activeDiscount.calculationMethod === 'PERCENTAGE')
