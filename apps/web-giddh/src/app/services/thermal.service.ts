@@ -450,10 +450,10 @@ export class ThermalService {
         }
         let totalQty: any = 0;
         for (let entry of request?.entries) {
-            let productName =
-                entry?.transactions[0]?.stock?.name ||
-                entry?.transactions[0]?.account?.name;
             let variant = entry?.transactions[0]?.stock?.variant?.name;
+            let productName =
+                ((entry?.transactions[0]?.stock?.name || variant ? `${entry?.transactions[0]?.stock?.name} - ${variant}`: '')) ||
+                entry?.transactions[0]?.account?.name;
             let quantity;
             if (defaultTemplate?.sections?.table?.data?.quantity?.display) {
                 if (entry?.transactions[0]?.stock?.quantity) {
@@ -499,7 +499,7 @@ export class ThermalService {
                 amount?.padStart(amountPadding);
 
             let itemLength = this.maxLength - itemDetails?.length;
-            let completeProductName = this.wrapStringByLength(productName, variant, itemLength);
+            let completeProductName = this.wrapStringByLength(productName, itemLength);
             let itemName = Array.isArray(completeProductName) ? completeProductName[0] : completeProductName;
 
             if (entry?.transactions[0]?.stock?.quantity) {
@@ -527,15 +527,9 @@ export class ThermalService {
                 items += this.printerFormat.formatCenter(
                     itemNameShowHide
                 );
-                if (itemName?.length <= productName?.length) {
-                    let lastIndex = productName.length - itemName.length;
-                    for (let itemNameIndex = itemName?.length; itemNameIndex < lastIndex; itemNameIndex = itemNameIndex + 10) {
-                        items += this.printerFormat.formatCenter(this.printerFormat.leftAlign + productName?.substr(itemNameIndex, 10));
-                    }
-                    if(Array.isArray(completeProductName)) {
-                        for (let i = 1; i < completeProductName?.length; i++) {
-                            items += (this.printerFormat.leftAlign + completeProductName[i] + this.printerFormat.lineBreak);
-                        }
+                if ((itemName?.length < productName?.length) && Array.isArray(completeProductName)) {
+                    for (let i = 1; i < completeProductName?.length; i++) {
+                        items += (this.printerFormat.leftAlign + completeProductName[i] + this.printerFormat.lineBreak);
                     }
                 }
             }
@@ -835,9 +829,8 @@ export class ThermalService {
      * @returns {*}
      * @memberof ThermalService
      */
-    private wrapStringByLength(productName: string, variant: string, desiredStringLength: number): any {
+    private wrapStringByLength(productNameWithVariant: string,desiredStringLength: number): any {
         let trimmedStringArray: any = [];
-        const productNameWithVariant = productName + (variant ? ` - ${variant}`: '');
 
         if (productNameWithVariant?.length > desiredStringLength) {
             let remainingString = productNameWithVariant;
