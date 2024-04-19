@@ -145,8 +145,8 @@ export class ListBranchTransferComponent implements OnInit {
             this.branchTransferForm?.controls['senderReceiver']?.value ||
             this.branchTransferForm?.controls['fromWarehouse']?.value ||
             this.branchTransferForm?.controls['toWarehouse']?.value) &&
-            (!this.branchTransferForm?.controls['voucherType']?.value ||
-            !this.branchTransferForm?.controls['amountOperator']?.value ||
+            (!this.branchTransferForm?.controls['voucherType']?.value &&
+            !this.branchTransferForm?.controls['amountOperator']?.value &&
             !this.branchTransferForm?.controls['amount']?.value)
         );
     }
