@@ -25,6 +25,7 @@ import { AuthService } from "../theme/ng-social-login-module/index";
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 import { HttpClient } from "@angular/common/http";
 import { AddCompanyComponentStore } from "./utility/add-company.store";
+import { userLoginStateEnum } from "../models/user-login-state";
 
 declare var initSendOTP: any;
 declare var window: any;
@@ -201,6 +202,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public isUserSuperAdmin: boolean = false;
     /** Hold permission role index */
     public permissionRoleIndex: number;
+    /** Hold session source observable*/
+    public session$: Observable<userLoginStateEnum>;
+    /** True if new user logged in */
+    public isNewUserLoggedIn: boolean = false;
 
 
     /** Returns true if form is dirty else false */
@@ -229,7 +234,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         private activateRoute: ActivatedRoute
     ) {
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
-
+        this.session$ = this.store.pipe(select(p => p.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
     }
 
     /**
@@ -250,6 +255,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             if (res) {
                 this.company.subscriptionRequest.subscriptionId = res?.subscriptionId;
             }
+        });
+
+        this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
         });
 
         /** Library to separate phone number and calling code */
@@ -971,9 +980,11 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             return;
         }
 
-        if (this.selectedStep === 2 && this.thirdStepForm.invalid) {
-            this.isFormSubmitted = true;
-            return;
+        if (this.isNewUserLoggedIn) {
+            if (this.selectedStep === 2 && this.thirdStepForm.invalid) {
+                this.isFormSubmitted = true;
+                return;
+            }
         }
 
         this.firstStepForm.controls['mobile'].setValue(this.showMobileField ? this.intl?.getNumber() : this.mobileNo);
@@ -987,6 +998,15 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.sendNewUserInfo();
             this.fireSocketCompanyCreateRequest();
         }
+    }
+
+    /**
+     * This will be use for step back
+     *
+     * @memberof AddCompanyComponent
+     */
+    public stepBack(): void {
+        this.changeDetection.detectChanges();
     }
 
 
@@ -1135,6 +1155,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isLoading = true;
         if (this.thirdStepForm.value.creatorSuperAdmin && !this.thirdStepForm.value.permissionRoles[0]?.emailId) {
             delete this.company.permission;
+        }
+        if (!this.isNewUserLoggedIn) {
+            delete this.company.permission;
+            delete this.company.creatorSuperAdmin;
         }
         this.companyService.CreateNewCompany(this.company).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
