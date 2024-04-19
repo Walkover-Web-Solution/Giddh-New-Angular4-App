@@ -1,7 +1,7 @@
 <ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
     <ng-container *ngIf="showLabel">
         <mat-form-field [appearance]="appearance" [ngClass]="{ 'mat-form-field-invalid': showError }">
-            <mat-label>{{ label ? label : placeholder }}</mat-label>
+            <mat-label *ngIf="showMatLabelWithLabledField">{{ label ? label : placeholder }}</mat-label>
             <input type="text" [ngClass]="cssClass" class="select-field-input" [placeholder]="placeholder" matInput
                 [readonly]="readonly" [matAutocomplete]="auto" [name]="name" [autocomplete]="autocomplete"
                 [required]="required" [attr.aria-expanded]="readonly ? false : true"
@@ -41,7 +41,7 @@
                     </a>
                 </span>
             </mat-autocomplete>
-            <div class="dropdown-bg" (click)="!readonly ? openDropdownPanel() : $event.stopPropagation()">
+            <div *ngIf="showCaretIcon" class="dropdown-bg" (click)="!readonly ? openDropdownPanel() : $event.stopPropagation()">
                 <span class="arrow-dropdown"></span>
             </div>
         </mat-form-field>
