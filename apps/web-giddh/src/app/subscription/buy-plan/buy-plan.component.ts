@@ -203,7 +203,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-
         this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
             if (this.isNewUserLoggedIn) {
@@ -214,7 +213,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                         "value": "US",
                         "label": "US - United States of America"
                     }
-                })
+                });
             }
         });
 
@@ -823,14 +822,21 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     name: this.subscriptionForm.value.secondStepForm.country.label,
                     code: this.subscriptionForm.value.secondStepForm.country.value
                 },
-                state: {
-                    name: this.subscriptionForm.value.secondStepForm.state.label,
-                    code: this.subscriptionForm.value.secondStepForm.state.value
-                },
                 address: this.subscriptionForm.value.secondStepForm.address
             },
             promoCode: this.subscriptionForm.value.firstStepForm.promoCode ? this.subscriptionForm.value.firstStepForm.promoCode : null,
             paymentProvider: this.subscriptionForm.value.firstStepForm.duration === "YEARLY" ? "RAZORPAY" : "CASHFREE"
+        }
+        if (this.subscriptionForm.value.secondStepForm.country.value === 'UK') {
+            request.billingAccount['county'] = {
+                name: this.subscriptionForm.value.secondStepForm.state.label,
+                code: this.subscriptionForm.value.secondStepForm.state.value
+            };
+        } else {
+            request.billingAccount['state'] = {
+                name: this.subscriptionForm.value.secondStepForm.state.label,
+                code: this.subscriptionForm.value.secondStepForm.state.value
+            };
         }
         if (this.changePlan) {
             this.componentStore.updateSubscription(request);
@@ -948,11 +954,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 paymentId: razorPayResponse.razorpay_payment_id,
                 razorpaySignature: razorPayResponse.razorpay_signature,
                 amountPaid: this.subscriptionResponse?.dueAmount,
-                callNewPlanApi: true
+                callNewPlanApi: true,
+                razorpayOrderId: razorPayResponse?.razorpay_order_id
             };
             if (this.isNewUserLoggedIn) {
                 this.subscriptionId = request?.subscriptionRequest?.subscriptionId;
-                request['razorpayOrderId'] = razorPayResponse?.razorpay_order_id;
                 this.componentStore.updateNewLoginSubscriptionPayment({ request: request });
             } else {
                 this.componentStore.updateSubscriptionPayment({ request: request });

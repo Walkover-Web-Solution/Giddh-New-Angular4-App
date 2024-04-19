@@ -580,12 +580,10 @@
                                                             [placeholder]="commonLocaleData?.app_select_region"
                                                             [options]="countyList"
                                                             [showError]="
-                                                                isFormSubmitted && !secondStepForm.get('county')?.value
+                                                                isFormSubmitted && !secondStepForm.get('state')?.value
                                                             "
-                                                            [defaultValue]="secondStepForm.get('county')?.value?.label"
-                                                            (selectedOption)="
-                                                                secondStepForm.get('county')?.patchValue($event)
-                                                            "
+                                                            [defaultValue]="selectedState"
+                                                            (selectedOption)="selectState($event)"
                                                         >
                                                         </dropdown-field>
                                                     </div>
