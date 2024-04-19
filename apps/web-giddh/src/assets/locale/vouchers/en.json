@@ -136,5 +136,7 @@
     "generate_cn": "Generate Credit Note",
     "generate_dn_update_account": "Generate Debit Note & Update A/c",
     "generate_dn": "Generate Debit Note",
-    "pending_po": "Pending Purchase order of selected vendor"
+    "pending_po": "Pending Purchase order of selected vendor",
+    "order_no": "Order #",
+    "order_no_placeholder": "Enter Order #"
 }

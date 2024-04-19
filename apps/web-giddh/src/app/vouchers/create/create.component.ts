@@ -2304,8 +2304,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.isVoucherDateChanged = true;
-        this.getAllVouchersForAdjustment();
-        this.getVoucherListForCreditDebitNote();
+        if (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote) {
+            this.getAllVouchersForAdjustment();
+            this.getVoucherListForCreditDebitNote();
+        }
         this.dateChangeType = "voucher";
 
         this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(this.localeData, this.commonLocaleData, true);
