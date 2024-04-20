@@ -451,9 +451,10 @@ export class ThermalService {
         let totalQty: any = 0;
         for (let entry of request?.entries) {
             let variant = entry?.transactions[0]?.stock?.variant?.name;
-            let productName =
-                ((entry?.transactions[0]?.stock?.name || variant ? `${entry?.transactions[0]?.stock?.name} - ${variant}`: '')) ||
-                entry?.transactions[0]?.account?.name;
+            let productName = entry?.transactions[0]?.stock?.name && variant 
+            ? `${entry?.transactions[0]?.stock?.name} - ${variant}`
+            : entry?.transactions[0]?.stock?.name ? entry?.transactions[0]?.stock?.name : entry?.transactions[0]?.account?.name;
+            
             let quantity;
             if (defaultTemplate?.sections?.table?.data?.quantity?.display) {
                 if (entry?.transactions[0]?.stock?.quantity) {
