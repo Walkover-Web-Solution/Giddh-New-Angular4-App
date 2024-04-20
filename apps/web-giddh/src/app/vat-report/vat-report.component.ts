@@ -83,6 +83,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public uaeDisplayedColumns: string[] = ['number', 'description', 'tooltip'];
     /** Hold uk main table and bottom table displayed columns */
     public ukDisplayedColumns: string[] = ['number', 'name', 'aed_amt'];
+    /** Hold Zimbabwe main table displayed columns */
+    public zwDisplayedColumns: string[] = ['number', 'name', 'mat-code', 'vos-amount', 'vos-decimal', 'ot-amount', 'ot-decimal'];
     /** True if active country is UK */
     public isUKCompany: boolean = false;
     /** True if active country is Zimbabwe */
