@@ -33,5 +33,9 @@
     "connected_to_hmrc": "Connected to HMRC",
     "select_year_label": "Select Year",
     "file_return_confirmation":"When you submit this VAT information you are making a legal declaration that the information is true and complete. A false declaration can result in prosecution.",
-    "tax_percentage": "Tax Percentage"
+    "tax_percentage": "Tax Percentage",
+    "for_office_use": "For Office use",
+    "mat_code": "Mat. Code",
+    "value_of_supply": "Value of Supply",
+    "output_tax": "Output Tax"
 }
