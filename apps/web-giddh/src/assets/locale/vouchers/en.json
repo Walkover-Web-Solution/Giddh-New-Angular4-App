@@ -1,6 +1,7 @@
 {
     "invoice_types": {
         "invoice": "Invoice",
+        "sales": "Sales",
         "credit_note": "Credit Note",
         "debit_note": "Debit Note",
         "purchase": "Bill",

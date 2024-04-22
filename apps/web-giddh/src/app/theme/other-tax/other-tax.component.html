@@ -13,7 +13,7 @@
                 <div class="row mt-2">
                     <div class="col-6">
                         <reactive-dropdown-field [label]="localeData?.select_tax" [placeholder]="localeData?.select_tax"
-                            formControlName="tax" [name]="'tax'" [options]="taxesList$ | async" [required]="true"
+                            [labelValue]="otherTaxForm.get('name')?.value" formControlName="tax" [name]="'tax'" [options]="taxesList$ | async" (onClear)="otherTaxForm.get('tax')?.patchValue(null)"
                             [showError]="isFormSubmitted && !otherTaxForm.get('tax')?.value"
                             (createOption)="createTaxDialog()" [createNewText]="commonLocaleData?.app_create_new">
                         </reactive-dropdown-field>

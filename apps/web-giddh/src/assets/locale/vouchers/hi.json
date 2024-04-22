@@ -1,6 +1,7 @@
 {
     "invoice_types": {
         "invoice": "चालान",
+        "sales": "बिक्री",
         "credit_note": "क्रेडिट नोट",
         "debit_note": "डेबिट नोट",
         "purchase": "खरीद",

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { Store } from "@ngrx/store";
-import { Observable, switchMap, catchError, EMPTY } from "rxjs";
+import { Observable, switchMap, catchError, EMPTY, of } from "rxjs";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { CustomTemplateResponse } from "../../models/api-models/Invoice";
 import { IDiscountList } from "../../models/api-models/SettingsDiscount";
@@ -625,7 +625,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
-    readonly getPendingPurchaseOrders = this.effect((data: Observable<{ request: any, payload: any}>) => {
+    readonly getPendingPurchaseOrders = this.effect((data: Observable<{ request: any, payload: any }>) => {
         return data.pipe(
             switchMap((req) => {
                 return this.voucherService.getVendorPurchaseOrders(req.request, req.payload).pipe(
@@ -667,6 +667,26 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     ),
                     catchError((err) => EMPTY)
                 );
+            })
+        );
+    });
+
+    readonly resetAll = this.effect((data: Observable<void>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    lastVouchers: null,
+                    stockVariants: null,
+                    accountDetails: null,
+                    vendorPurchaseOrders: null,
+                    linkedPoOrders: null,
+                    particularDetails: null,
+                    voucherDetails: null,
+                    vouchersForAdjustment: null,
+                    voucherListForCreditDebitNote: null,
+                    pendingPurchaseOrders: null
+                });
+                return of(null);
             })
         );
     });

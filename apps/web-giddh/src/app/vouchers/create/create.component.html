@@ -44,9 +44,8 @@
                                                 [autoFocus]="true" formControlName="customerName"></input-field>
                                         </div>
                                         <ng-container
-                                            *ngIf="(invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote) && invoiceForm.controls['account'].get('uniqueName')?.value">
-                                            <div class="vouchers-copy-sales mr-l3 cursor-pointer"
-                                                (click)="getPreviousVouchers()" [matMenuTriggerFor]="copyLastVouchers">
+                                            *ngIf="(invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote) && invoiceForm.controls['account'].get('uniqueName')?.value && (lastVouchersList$ | async)?.length">
+                                            <div class="vouchers-copy-sales mr-l3 cursor-pointer" [matMenuTriggerFor]="copyLastVouchers">
                                                 <i class="icon-copy-file"></i>
                                                 {{ voucherType | voucherCopyLink: localeData | titlecase }}
                                             </div>
@@ -56,14 +55,14 @@
                                                         <mat-spinner class="ml-auto mr-auto my-4"
                                                             [diameter]="30"></mat-spinner>
                                                     </ng-container>
-                                                    <ng-container *ngIf="(lastVouchersList$ | async)?.length">
+                                                    <ng-container>
                                                         <button mat-menu-item
                                                             *ngFor="let voucher of lastVouchersList$ | async"
                                                             (click)="copyInvoice(voucher)" class="line-height-initial">
                                                             <div class="pd">
                                                                 <div class="d-flex flex-column">
                                                                     <div class="d-flex justify-content-between">
-                                                                        <span>{{ voucher?.voucherNumber }}</span>
+                                                                        <span>{{ invoiceType.isProformaInvoice ? voucher?.proformaNumber : invoiceType.isEstimateInvoice ? voucher?.estimateNumber : voucher?.voucherNumber ? voucher?.voucherNumber : commonLocaleData?.app_not_available }}</span>
                                                                         <span>{{
                                                                             voucher?.grandTotal?.amountForAccount
                                                                             }}</span>
@@ -75,7 +74,7 @@
                                                         </button>
                                                     </ng-container>
                                                     <ng-container
-                                                        *ngIf="!(lastVouchersList$ | async)?.length && !getLastVouchersInProgress$ | async">
+                                                        *ngIf="!(lastVouchersList$ | async)?.length && !(getLastVouchersInProgress$ | async)">
                                                         {{ commonLocaleData?.app_no_result_found }}
                                                     </ng-container>
                                                 </div>
@@ -170,7 +169,7 @@
                                                     <ng-container
                                                         *ngFor="let address of account?.addresses; let i = index">
                                                         <button mat-menu-item
-                                                            (click)="fillBillingShippingAddress('account', 'billingAddress', address, i)">
+                                                            (click)="fillBillingShippingAddress('account', 'billingAddress', address, i); setBillingAddressToShippingAddress()">
                                                             <div
                                                                 class="d-flex justify-content-between align-items-center">
                                                                 <full-address [address]="address"
@@ -248,7 +247,7 @@
                                                         <ng-container
                                                             *ngFor="let address of account?.addresses; let i = index">
                                                             <button mat-menu-item
-                                                                (click)="fillBillingShippingAddress('account','shippingAddress', address, i)">
+                                                                (click)="fillBillingShippingAddress('account','shippingAddress', address, i); getActiveSameBillingAddress = false">
                                                                 <div
                                                                     class="d-flex justify-content-between align-items-center">
                                                                     <full-address [address]="address"
@@ -328,7 +327,7 @@
                                                         id="init-contact" [placeholder]="commonLocaleData?.app_mobile_number"
                                                         formControlName="mobileNumber" [ngClass]="{'invalid-input': (invoiceForm.controls['account'].get('mobileNumber')?.touched) &&
                                                                 !intlClass?.isRequiredValidNumber }" />
-                                                    <mat-error *ngIf="(invoiceForm.controls['account'].get('mobileNumber')?.touched) && !intlClass?.isRequiredValidNumber">{{ localeData?.invalid_mobile }}</mat-error>
+                                                    <mat-error *ngIf="invoiceForm.controls['account'].get('mobileNumber')?.value && (invoiceForm.controls['account'].get('mobileNumber')?.touched) && !intlClass?.isRequiredValidNumber">{{ localeData?.invalid_mobile }}</mat-error>
                                                 </div>
                                             </div>
                                         </ng-container>
@@ -748,7 +747,7 @@
                                                         </div>
 
                                                         <div class="d-flex justify-content-between">
-                                                            <div class="w-50">
+                                                            <div class="w-50" *ngIf="!invoiceType.isPurchaseOrder && !invoiceType.isEstimateInvoice && !invoiceType.isProformaInvoice">
                                                                 <div class="mt-2 font-12">
                                                                     <span>{{ localeData?.entry_date }}</span>
                                                                     <div class="mt-1"
@@ -953,6 +952,10 @@
                                                                                 [placeholder]="commonLocaleData?.app_rate"
                                                                                 [cssClass]="'form-control text-right'"
                                                                                 [type]="'text'"
+                                                                                [prefix]="account?.baseCurrencySymbol"
+                                                                                [mask]="company?.inputMaskFormat"
+                                                                                [useMask]="true"
+                                                                                decimalDigitsDirective
                                                                                 [name]="'transactionRate' + entryIndex"
                                                                                 formControlName="rateForAccount"></text-field>
                                                                             <span
@@ -988,7 +991,10 @@
                                                                             entryAmount
                                                                             [rate]="transaction.get('stock.uniqueName')?.value ? transaction.get('stock.rate.rateForAccount')?.value : transaction.get('amount.amountForAccount')?.value"
                                                                             [quantity]="transaction.get('stock.uniqueName')?.value ? transaction.get('stock.quantity')?.value : 1"
+                                                                            [prefix]="account?.baseCurrencySymbol"
+                                                                            [mask]="company?.inputMaskFormat"
                                                                             name="transactionAmount{{entryIndex}}"
+                                                                            decimalDigitsDirective
                                                                             formControlName="amountForAccount"
                                                                             (calculatedAmount)="updateTransactionAmount(transaction, $event)" />
                                                                     </div>
@@ -1106,6 +1112,9 @@
                                                                         entryTotal [entry]="entry?.value"
                                                                         name="transactionTotal{{entryIndex}}"
                                                                         formControlName="amountForAccount"
+                                                                        [prefix]="account?.baseCurrencySymbol"
+                                                                        [mask]="company?.inputMaskFormat"
+                                                                        decimalDigitsDirective
                                                                         (focus)="entry.get('calculateTotal')?.patchValue(false)"
                                                                         (blur)="entry.get('calculateTotal')?.patchValue(true)"
                                                                         (input)="doReverseCalculation(entry)"
@@ -1124,13 +1133,38 @@
                                                         <div class="d-flex align-items-center justify-content-end"
                                                             *ngIf="activeEntryIndex === entryIndex" entryOtherTax
                                                             [entry]="entry?.value"
+                                                            [appliedOtherTax]="entry.get('otherTax')?.value"
                                                             (calculatedAmount)="updateEntryOtherTax(entry, $event)"
                                                             formGroupName="otherTax">
-                                                            <mat-checkbox type="checkbox" color="primary"
-                                                                formControlName="isChecked"
-                                                                (change)="openOtherTaxDialog(entry, entryIndex)">
-                                                            </mat-checkbox>
-                                                            {{ localeData?.other_tax }}
+                                                            <ng-container *ngIf="!entry.get('otherTax.name')?.value">
+                                                                <mat-checkbox type="checkbox" color="primary"
+                                                                    formControlName="isChecked"
+                                                                    (change)="openOtherTaxDialog(entry, entryIndex)">
+                                                                </mat-checkbox>
+                                                                {{ localeData?.other_tax }}
+                                                            </ng-container>
+                                                            <ng-container *ngIf="entry.get('otherTax.name')?.value">
+                                                                <span class="mr-r05">
+                                                                    <a
+                                                                        href="javascript:void(0);"
+                                                                        aria-label="edit-icon"
+                                                                        *ngIf="!isEinvoiceGenerated"
+                                                                        (click)="
+                                                                            openOtherTaxDialog(
+                                                                                entry,
+                                                                                entryIndex
+                                                                            )
+                                                                        "
+                                                                    >
+                                                                        <img
+                                                                            src="{{
+                                                                                imgPath
+                                                                            }}edit-pencilicon.svg"
+                                                                            alt="edit icon"
+                                                                        />
+                                                                    </a>
+                                                                </span>
+                                                            </ng-container>
                                                         </div>
                                                         <div
                                                             [ngClass]="{ 'mb-4': entry.get('otherTax.name')?.value && isMultiCurrencyVoucher }">
@@ -1594,7 +1628,7 @@
 <!-- region print voucher popup -->
 <ng-template #printVoucherModal>
     <ng-container>
-        <print-voucher [voucherType]="'sales'" [localeData]="localeData" [commonLocaleData]="commonLocaleData"
+        <print-voucher [voucherType]="invoiceType" [localeData]="localeData" [commonLocaleData]="commonLocaleData"
             [selectedItem]="{
             voucherNumber: voucherDetails?.number,
             uniqueName: voucherDetails?.account?.uniqueName,
