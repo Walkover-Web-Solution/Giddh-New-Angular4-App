@@ -722,17 +722,19 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.inputData = [];
             if (response?.length) {
-                this.selectedPlan = response?.length === 1 ? response[0] : response[1];
-                this.popularPlan = response[1];
+                console.log(response);
+                let filteredPlans = response.filter(plan => plan?.monthlyAmountAfterDiscount > 0 || plan?.yearlyAmountAfterDiscount > 0);
+                this.selectedPlan = filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1];
+                this.popularPlan = filteredPlans[1];
 
                 this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan?.uniqueName);
 
-                response?.forEach(plan => {
+                filteredPlans?.forEach(plan => {
                     this.inputData.push(plan);
                 });
 
-                this.monthlyPlans = response?.filter(plan => plan?.monthlyAmountAfterDiscount > 0);
-                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmountAfterDiscount > 0);
+                this.monthlyPlans = filteredPlans?.filter(plan => plan?.monthlyAmountAfterDiscount > 0);
+                this.yearlyPlans = filteredPlans?.filter(plan => plan?.yearlyAmountAfterDiscount > 0);
 
                 if (this.yearlyPlans?.length) {
                     this.firstStepForm.get('duration').setValue('YEARLY');
