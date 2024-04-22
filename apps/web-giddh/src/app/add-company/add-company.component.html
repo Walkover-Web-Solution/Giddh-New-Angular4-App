@@ -285,11 +285,17 @@
                                 <dropdown-field
                                     [name]="'state'"
                                     [label]="
-                                        secondStepForm.controls['businessType']?.value === businessTypes.Registered
+                                        selectedCountryCode === 'EE'
+                                            ? secondStepForm.controls['businessType']?.value ===
+                                              businessTypes.Registered
+                                                ? localeData?.county + '*'
+                                                : localeData?.county
+                                            : secondStepForm.controls['businessType']?.value ===
+                                              businessTypes.Registered
                                             ? commonLocaleData?.app_state + '*'
                                             : commonLocaleData?.app_state
                                     "
-                                    [placeholder]="localeData?.select_state"
+                                    [placeholder]=" selectedCountryCode === 'EE' ? 'Select county':localeData?.select_county"
                                     [options]="states"
                                     [showError]="isFormSubmitted && secondStepForm.get('state')?.invalid"
                                     [readonly]="disabledState"
