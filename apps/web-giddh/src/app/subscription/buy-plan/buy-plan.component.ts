@@ -722,7 +722,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.inputData = [];
             if (response?.length) {
-                console.log(response);
                 let filteredPlans = response.filter(plan => plan?.monthlyAmountAfterDiscount > 0 || plan?.yearlyAmountAfterDiscount > 0);
                 this.selectedPlan = filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1];
                 this.popularPlan = filteredPlans[1];
