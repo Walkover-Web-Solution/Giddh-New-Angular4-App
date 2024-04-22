@@ -23,8 +23,8 @@
                                         <div class="vouchers-form-fields w-100" [keyboardShortcut]="'alt+c'"
                                             (onShortcutPress)="toggleAccountAsidePane(accountType.customer)">
                                             <reactive-dropdown-field *ngIf="!invoiceType.isCashInvoice"
-                                                [label]="invoiceType.isPurchaseOrder || invoiceType.isDebitNote ? localeData?.vendor_name : localeData?.customer_name"
-                                                [placeholder]="invoiceType.isPurchaseOrder || invoiceType.isDebitNote ? localeData?.select_vendor : localeData?.select_customer"
+                                                [label]="invoiceType.isPurchaseOrder || invoiceType.isPurchaseInvoice || invoiceType.isDebitNote ? localeData?.vendor_name : localeData?.customer_name"
+                                                [placeholder]="invoiceType.isPurchaseOrder || invoiceType.isPurchaseInvoice || invoiceType.isDebitNote ? localeData?.select_vendor : localeData?.select_customer"
                                                 formControlName="uniqueName" [name]="'account'"
                                                 [options]="voucherAccountResults$ | async" [showCreateNew]="true"
                                                 [enableDynamicSearch]="true" [isPaginationEnabled]="true"
@@ -880,6 +880,14 @@
                                                                 {{ entry.get('description')?.value }}
                                                             </div>
                                                         </ng-container>
+                                                        <ng-container *ngFor="let transaction of entry.get('transactions')['controls']" formArrayName="transactions">
+                                                            <div class="description-text" *ngIf="transaction.get('stock.customField1.key')?.value">
+                                                                {{ transaction.get('stock.customField1.key')?.value }}: {{ transaction.get('stock.customField1.value')?.value }}
+                                                            </div>
+                                                            <div class="description-text" *ngIf="transaction.get('stock.customField2.key')?.value">
+                                                                {{ transaction.get('stock.customField2.key')?.value }}: {{ transaction.get('stock.customField2.value')?.value }}
+                                                            </div>
+                                                        </ng-container>            
                                                     </td>
 
                                                     <ng-container
