@@ -7,8 +7,8 @@
         padding: 10px 8px 20px 8px;
         height: calc(100% - 36px);
 
-        .plan-title{
-            min-height: 48px;
+        .plan-title {
+            min-height: 72px;
         }
 
         h2,
@@ -16,6 +16,7 @@
             color: var(--color-common-primary-text);
             white-space: break-spaces;
         }
+
         p {
             s {
                 color: var(--color-gray);
@@ -23,10 +24,10 @@
         }
 
         .feature-txt {
-            height: 27px;
-            line-height: 18px;
+            min-height: 26px;
         }
     }
+
     .new-plan-wrapper {
         min-width: 220px;
     }
@@ -72,6 +73,7 @@
         box-shadow: none !important;
         border: 1px solid var(--color-iron);
     }
+
     .plan-table {
         .grid-list-div {
             display: inline-flex;
@@ -79,6 +81,7 @@
             height: 47px;
         }
     }
+
     .plan-table {
         .top-heading {
             min-height: 220px !important;
@@ -133,24 +136,27 @@
     .active-plan-td-bottom {
         border-bottom: 2px solid var(--color-primary-header-background) !important;
     }
+
     .summary-wrapper {
         width: 320px;
         flex-shrink: 0;
+
         h2 {
-            height: 38px;
+            height: 18px;
         }
+    }
+
+    .plan-summary-heading {
+        height: 38px !important;
     }
 
     .plan-summary {
         width: fit-content;
         margin: auto;
         column-gap: 20px;
+
         .plan-width {
             min-width: 500px;
-
-            h4 {
-                height: 38px;
-            }
         }
     }
 

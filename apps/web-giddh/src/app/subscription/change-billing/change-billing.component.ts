@@ -138,7 +138,7 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
      * @memberof ChangeBillingComponent
      */
     public ngAfterViewInit(): void {
-        setTimeout(()=> {
+        setTimeout(() => {
             this.initIntl();
         });
         this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
@@ -188,7 +188,7 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
         this.changeBillingForm.controls['companyName'].setValue(data.companyName);
         this.changeBillingForm.controls['email'].setValue(data.email);
         this.changeBillingForm.controls['pincode'].setValue(data.pincode);
-        if (data?.mobileNumber?.startsWith('+')){
+        if (data?.mobileNumber?.startsWith('+')) {
             this.changeBillingForm.controls['mobileNumber'].setValue(data.mobileNumber);
         } else {
             this.changeBillingForm.controls['mobileNumber'].setValue('+' + data.mobileNumber);
@@ -501,7 +501,6 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
         } else {
             mobileNumber = this.changeBillingForm.value.mobileNumber;
         }
-
         let request = {
             billingName: this.changeBillingForm.value.billingName,
             companyName: this.changeBillingForm.value.companyName,
@@ -513,11 +512,18 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
                 name: this.changeBillingForm.value.country.name,
                 code: this.changeBillingForm.value.country.code
             },
-            state: {
-                name: this.changeBillingForm.value.state.name,
-                code: this.changeBillingForm.value.state.code
-            },
             address: this.changeBillingForm.value.address
+        }
+        if (this.changeBillingForm.value.country.code === 'UK') {
+            request['county'] = {
+                name: this.changeBillingForm.value.state.name ? this.changeBillingForm.value.state.name : this.changeBillingForm.value.state.label,
+                code: this.changeBillingForm.value.state.code ? this.changeBillingForm.value.state.code : this.changeBillingForm.value.state.value
+            };
+        } else {
+            request['state'] = {
+                name: this.changeBillingForm.value.state.name ? this.changeBillingForm.value.state.name : this.changeBillingForm.value.state.label,
+                code: this.changeBillingForm.value.state.code ? this.changeBillingForm.value.state.code : this.changeBillingForm.value.state.value
+            };
         }
         this.componentStore.updateBillingDetails({ request: request, id: this.billingDetails.uniqueName });
     }

@@ -11,9 +11,9 @@ import { SettingsProfileService } from "../../../services/settings.profile.servi
 export interface BuyPlanState {
     planListInProgress: boolean;
     planList: any
-    createPlanSuccess: boolean;
-    createPlanResponse: any;
-    createPlanInProgress: boolean;
+    createSubscriptionSuccess: boolean;
+    createSubscriptionResponse: any;
+    createSubscriptionInProgress: boolean;
     updatePlanSuccess: boolean;
     updatePlanInProgress: boolean;
     applyPromoCodeSuccess: boolean;
@@ -26,9 +26,9 @@ export interface BuyPlanState {
 export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
     planListInProgress: true,
     planList: [],
-    createPlanSuccess: false,
-    createPlanResponse: null,
-    createPlanInProgress: false,
+    createSubscriptionSuccess: false,
+    createSubscriptionResponse: null,
+    createSubscriptionInProgress: false,
     applyPromoCodeSuccess: false,
     applyPromoCodeInProgress: false,
     promoCodeResponse: null,
@@ -103,25 +103,25 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
     readonly createSubscription = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
-                this.patchState({ createPlanInProgress: true });
+                this.patchState({ createSubscriptionInProgress: true });
                 return this.subscriptionService.createSubscription(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', 'Subscription created successfully');
                                 return this.patchState({
-                                    createPlanInProgress: false,
-                                    createPlanResponse: res?.body ?? null,
-                                    createPlanSuccess: true
+                                    createSubscriptionInProgress: false,
+                                    createSubscriptionResponse: res?.body ?? null,
+                                    createSubscriptionSuccess: true
                                 });
                             } else {
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
-                                    createPlanResponse: null,
-                                    createPlanInProgress: false,
-                                    createPlanSuccess: false
+                                    createSubscriptionResponse: null,
+                                    createSubscriptionInProgress: false,
+                                    createSubscriptionSuccess: false
                                 });
                             }
                         },
@@ -129,7 +129,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
 
                             return this.patchState({
-                                createPlanInProgress: false
+                                createSubscriptionInProgress: false
                             });
                         }
                     ),
@@ -231,6 +231,44 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
             switchMap((req) => {
                 this.patchState({ updateSubscriptionPaymentInProgress: true });
                 return this.settingsProfileService.PatchProfile(req.request).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                this.toasterService.showSnackBar('success', 'Plan purchased successfully');
+                                return this.patchState({
+                                    updateSubscriptionPaymentInProgress: false,
+                                    updateSubscriptionPaymentIsSuccess: res?.body ?? null
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    updateSubscriptionPaymentInProgress: false,
+                                    updateSubscriptionPaymentIsSuccess: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
+
+                            return this.patchState({
+                                updateSubscriptionPaymentInProgress: false,
+                                updateSubscriptionPaymentIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly updateNewLoginSubscriptionPayment = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ updateSubscriptionPaymentInProgress: true });
+                return this.settingsProfileService.updateSubscriptionPayment(req.request).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {

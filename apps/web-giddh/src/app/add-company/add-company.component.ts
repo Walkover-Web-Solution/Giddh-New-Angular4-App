@@ -25,6 +25,7 @@ import { AuthService } from "../theme/ng-social-login-module/index";
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 import { HttpClient } from "@angular/common/http";
 import { AddCompanyComponentStore } from "./utility/add-company.store";
+import { userLoginStateEnum } from "../models/user-login-state";
 
 declare var initSendOTP: any;
 declare var window: any;
@@ -196,11 +197,19 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Holds Store permission roles API response state as observable*/
     public permissionRoles$ = this.componentStore.select(state => state.permissionRoles);
     /** List of permission  roles */
-    public permissionRoles: any[] = [];
+    public permissionRoles: any[] = [
+        { label: 'View', value: 'view' },
+        { label: 'Super Admin', value: 'super_admin' },
+        { label: 'Admin', value: 'admin' }
+    ];
     /** True if user is super admin */
     public isUserSuperAdmin: boolean = false;
     /** Hold permission role index */
     public permissionRoleIndex: number;
+    /** Hold session source observable*/
+    public session$: Observable<userLoginStateEnum>;
+    /** True if new user logged in */
+    public isNewUserLoggedIn: boolean = false;
 
 
     /** Returns true if form is dirty else false */
@@ -229,7 +238,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         private activateRoute: ActivatedRoute
     ) {
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
-
+        this.session$ = this.store.pipe(select(p => p.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
     }
 
     /**
@@ -243,13 +252,15 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.getCountry();
         this.getStates();
         this.getCurrency();
-        this.getRoles();
-        this.getPermissionRoles();
 
         this.activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.company.subscriptionRequest.subscriptionId = res?.subscriptionId;
             }
+        });
+
+        this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
         });
 
         /** Library to separate phone number and calling code */
@@ -971,9 +982,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             return;
         }
 
-        if (this.selectedStep === 2 && this.thirdStepForm.invalid) {
-            this.isFormSubmitted = true;
-            return;
+        if (this.isNewUserLoggedIn && this.selectedStep === 2 && this.thirdStepForm.invalid) {
+                this.isFormSubmitted = true;
+                return;
         }
 
         this.firstStepForm.controls['mobile'].setValue(this.showMobileField ? this.intl?.getNumber() : this.mobileNo);
@@ -1134,6 +1145,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.isLoading = true;
         if (this.thirdStepForm.value.creatorSuperAdmin && !this.thirdStepForm.value.permissionRoles[0]?.emailId) {
             delete this.company.permission;
+        }
+        if (!this.isNewUserLoggedIn) {
+            delete this.company.permission;
+            delete this.company.creatorSuperAdmin;
         }
         this.companyService.CreateNewCompany(this.company).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {

@@ -32,6 +32,7 @@ export interface SubscriptionsUser {
     startedAt: string;
     companyTotalTransactions?: any;
     planDetails: PlanDetails;
+    duration: any;
     additionalCharges?: any;
     createdAt: string;
     status: string;
@@ -46,7 +47,7 @@ export class PlanDetails {
     createdAt: string;
     ratePerExtraTransaction: number;
     isCommonPlan: boolean;
-    duration: number;
+    duration: any;
     companiesLimit: number;
     durationUnit: string;
     uniqueName: string;
