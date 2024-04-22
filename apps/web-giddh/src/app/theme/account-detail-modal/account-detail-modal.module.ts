@@ -6,15 +6,17 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { TranslateDirectiveModule } from '../translate/translate.directive.module';
 import { AsideMenuAccountModule } from '../../shared/aside-menu-account/aside.menu.account.module';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { GiddhPageLoaderModule } from '../../shared/giddh-page-loader/giddh-page-loader.module';
 
 @NgModule({
     imports: [
-        CommonModule, 
-        FormsModule, 
-        ModalModule.forRoot(), 
-        TranslateDirectiveModule, 
+        CommonModule,
+        FormsModule,
+        ModalModule.forRoot(),
+        TranslateDirectiveModule,
         AsideMenuAccountModule,
-        ClickOutsideModule
+        ClickOutsideModule,
+        GiddhPageLoaderModule
     ],
     exports: [AccountDetailModalComponent],
     declarations: [AccountDetailModalComponent],
