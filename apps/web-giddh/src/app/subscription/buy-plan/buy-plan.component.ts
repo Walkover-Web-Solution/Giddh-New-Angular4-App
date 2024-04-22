@@ -144,6 +144,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public newUserSelectedCountry: string = '';
     /** Hold subscription id */
     public subscriptionId: string = '';
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -189,6 +191,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             if (response) {
                 this.responseSubscriptionId = response.subscriptionId;
                 if (response.duration === "YEARLY") {
+                    this.isLoading = true;
                     this.subscriptionResponse = response;
                     this.initializePayment(response);
                 } else {
@@ -199,7 +202,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.updateSubscriptionPaymentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.router.navigate(['/pages/new-company/' + (this.isNewUserLoggedIn ? this.subscriptionId : response?.subscription?.subscriptionId)]);
+                this.isLoading = false;
+                this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
             }
         });
 
@@ -957,12 +961,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 callNewPlanApi: true,
                 razorpayOrderId: razorPayResponse?.razorpay_order_id
             };
-            if (this.isNewUserLoggedIn) {
-                this.subscriptionId = request?.subscriptionRequest?.subscriptionId;
-                this.componentStore.updateNewLoginSubscriptionPayment({ request: request });
-            } else {
-                this.componentStore.updateSubscriptionPayment({ request: request });
-            }
+            this.subscriptionId = request?.subscriptionRequest?.subscriptionId;
+            this.componentStore.updateNewLoginSubscriptionPayment({ request: request });
         }
     }
 }
