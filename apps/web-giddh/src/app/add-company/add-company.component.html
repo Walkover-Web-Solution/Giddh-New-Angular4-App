@@ -384,22 +384,22 @@
                                 </button>
                             </div>
                         </ng-container>
-                         <ng-container *ngIf="!isNewUserLoggedIn">
-                        <div class="d-flex column-gap15 mt-3">
-                            <button mat-stroked-button matStepperPrevious (click)="stepBack()">
-                                {{ commonLocaleData?.app_back }}
-                            </button>
-                            <button mat-stroked-button color="primary" (click)="onSubmit()">
-                                {{ commonLocaleData?.app_submit }}
-                            </button>
-                            <button
-                                *ngIf="companiesList?.length === 0"
-                                mat-stroked-button
-                                (click)="openLogoutConfirmationDialog()"
-                            >
-                                {{ commonLocaleData?.app_cancel }}
-                            </button>
-                        </div>
+                        <ng-container *ngIf="!isNewUserLoggedIn">
+                            <div class="d-flex column-gap15 mt-3">
+                                <button mat-stroked-button matStepperPrevious>
+                                    {{ commonLocaleData?.app_back }}
+                                </button>
+                                <button mat-stroked-button color="primary" (click)="onSubmit()">
+                                    {{ commonLocaleData?.app_submit }}
+                                </button>
+                                <button
+                                    *ngIf="companiesList?.length === 0"
+                                    mat-stroked-button
+                                    (click)="openLogoutConfirmationDialog()"
+                                >
+                                    {{ commonLocaleData?.app_cancel }}
+                                </button>
+                            </div>
                         </ng-container>
                     </form>
                 </mat-step>
@@ -504,7 +504,7 @@
                                 </div>
                             </div>
                             <div class="d-flex column-gap15 mt-3">
-                                <button mat-stroked-button matStepperPrevious (click)="stepBack()">
+                                <button mat-stroked-button matStepperPrevious >
                                     {{ commonLocaleData?.app_back }}
                                 </button>
                                 <button mat-stroked-button color="primary" (click)="onSubmit()">

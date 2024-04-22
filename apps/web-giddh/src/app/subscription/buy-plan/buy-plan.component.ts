@@ -752,6 +752,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * This will be use for new user select country
+     *
+     * @param {*} event
+     * @memberof BuyPlanComponent
+     */
     public newUserSelectCountry(event: any): void {
         if (this.isNewUserLoggedIn) {
             this.componentStore.getAllPlans({ params: { countryCode: event?.value } });
