@@ -85,7 +85,12 @@
                                 <span id="init-contact-proforma-error-msg" class="d-none"></span>
                             </div>
                             <div class="col-6 mobile-no-action-buttons" *ngIf="showMobileField">
-                                <button mat-stroked-button (click)="reVerifyNumber()" *ngIf="isMobileNumberVerified || showOtpField" class="btn-min-width">
+                                <button
+                                    mat-stroked-button
+                                    (click)="reVerifyNumber()"
+                                    *ngIf="isMobileNumberVerified || showOtpField"
+                                    class="btn-min-width"
+                                >
                                     {{ localeData?.change }}
                                 </button>
 
@@ -272,11 +277,17 @@
                                 <dropdown-field
                                     [name]="'state'"
                                     [label]="
-                                        secondStepForm.controls['businessType']?.value === businessTypes.Registered
+                                        selectedCountryCode === 'EE'
+                                            ? secondStepForm.controls['businessType']?.value ===
+                                              businessTypes.Registered
+                                                ? localeData?.county + '*'
+                                                : localeData?.county
+                                            : secondStepForm.controls['businessType']?.value ===
+                                              businessTypes.Registered
                                             ? commonLocaleData?.app_state + '*'
                                             : commonLocaleData?.app_state
                                     "
-                                    [placeholder]="localeData?.select_state"
+                                    [placeholder]=" selectedCountryCode === 'EE' ? localeData?.select_county:localeData?.select_state"
                                     [options]="states"
                                     [showError]="isFormSubmitted && secondStepForm.get('state')?.invalid"
                                     [readonly]="disabledState"
