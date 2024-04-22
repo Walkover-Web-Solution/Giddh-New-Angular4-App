@@ -81,5 +81,7 @@
     "permission":"Give Permission to",
     "permission_placeholder":"'Unique Name/Email ID",
     "roles":"Roles",
-    "add_user": "Add User"
+    "add_user": "Add User",
+    "county":"County",
+    "select_county":"Select County"
 }
