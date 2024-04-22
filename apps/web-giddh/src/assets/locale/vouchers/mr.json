@@ -139,5 +139,7 @@
     "generate_dn": "डेबिट नोट तयार करा",
     "pending_po": "निवडलेल्या विक्रेत्याच्या प्रलंबित खरेदी ऑर्डर",
     "order_no": "ऑर्डर #",
-    "order_no_placeholder": "ऑर्डर प्रविष्ट करा #"
+    "order_no_placeholder": "ऑर्डर प्रविष्ट करा #",
+    "expected_delivery": "अपेक्षित वितरण",
+    "vendor_name": "विक्रेता नाव"
 }

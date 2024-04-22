@@ -139,5 +139,7 @@
     "generate_dn": "Generate Debit Note",
     "pending_po": "Pending Purchase order of selected vendor",
     "order_no": "Order #",
-    "order_no_placeholder": "Enter Order #"
+    "order_no_placeholder": "Enter Order #",
+    "expected_delivery": "Expected Delivery",
+    "vendor_name": "Vendor Name"
 }
