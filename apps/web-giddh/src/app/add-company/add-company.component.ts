@@ -137,6 +137,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public isGstinValid: boolean = false;
     /** Hold selected country */
     public selectedCountry: string = '';
+    /** Hold selected country code*/
+    public selectedCountryCode: string = '';
     /** Hold selected state */
     public selectedState: string = '';
     /** Hold selected state */
@@ -808,6 +810,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public selectCountry(event: any): void {
         if (event?.value) {
             this.selectedCountry = event.label;
+            this.selectedCountryCode = event.value;
             this.secondStepForm.get('gstin')?.setValue('');
             this.secondStepForm.get('state')?.setValue('');
             this.selectedState = "";
