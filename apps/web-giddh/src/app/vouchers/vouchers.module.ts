@@ -73,6 +73,8 @@ import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { ConfirmationModalModule } from "../theme/confirmation-modal/confirmation-modal.module";
 import { EntryOtherTaxModule } from "./utility/directives/entry-other-tax/entry-other-tax.module";
 import { PurchaseOrderPreviewModule } from "../shared/purchase-order-preview/purchase-order-preview.module";
+import { DecimalDigitsModule } from "../shared/helpers/directives/decimalDigits/decimalDigits.module";
+import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
 
 @NgModule({
     declarations: [
@@ -152,7 +154,9 @@ import { PurchaseOrderPreviewModule } from "../shared/purchase-order-preview/pur
         CurrencyModule,
         NgxMatSelectSearchModule,
         ConfirmationModalModule,
-        PurchaseOrderPreviewModule
+        PurchaseOrderPreviewModule,
+        DecimalDigitsModule,
+        NgxMaskModule
     ],
     exports: [
 

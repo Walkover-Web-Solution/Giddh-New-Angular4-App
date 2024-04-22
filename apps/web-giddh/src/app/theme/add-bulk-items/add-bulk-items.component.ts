@@ -197,7 +197,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                 // directly assign additional property
                 item.additional = {
                     ...item.additional,
-                    label: item.name,
+                    label: item.additional?.name,
                     value: item?.uniqueName,
                     taxes: taxes,
                     currency: data.body.currency,

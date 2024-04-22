@@ -116,7 +116,7 @@ export class VouchersUtilityService {
                 break;
 
             case VoucherTypeEnum.sales:
-                voucherName = localeData?.invoice_types?.invoice;
+                voucherName = localeData?.invoice_types?.sales;
                 break;
 
             case VoucherTypeEnum.creditNote:
@@ -160,7 +160,7 @@ export class VouchersUtilityService {
     }
 
     public getParentGroupForAccountCreate(voucherType: string): string {
-        if (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.cashBill || voucherType === VoucherTypeEnum.cashDebitNote) {
+        if (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.purchaseOrder || voucherType === VoucherTypeEnum.cashBill || voucherType === VoucherTypeEnum.cashDebitNote) {
             return 'sundrycreditors';
         } else {
             return 'sundrydebtors';

@@ -20,7 +20,7 @@ export class PrintVoucherComponent implements OnInit {
     /** Emit the cancel dialog event */
     @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Hold voucher type */
-    @Input() public voucherType: VoucherTypeEnum = VoucherTypeEnum.sales;
+    @Input() public voucherType: any;
     /** Hold selected item from voucher */
     @Input() public selectedItem: { voucherNumber: string, uniqueName: string, blob?: Blob, voucherUniqueName?: string };
     /* This will hold local JSON data */
@@ -68,9 +68,7 @@ export class PrintVoucherComponent implements OnInit {
      */
     public printVoucher(): void {
         if (this.pdfContainer) {
-            if (this.pdfContainer) {
-                this.componentStore.printVoucher(this.pdfContainer);
-            }
+            this.componentStore.printVoucher(this.pdfContainer);
         }
     }
 
@@ -84,9 +82,9 @@ export class PrintVoucherComponent implements OnInit {
         this.setLoadingState(true);
         this.isVoucherDownloadError = false;
 
-        if (![VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma].includes(this.voucherType)) {
+        if (!this.voucherType.isEstimateInvoice && !this.voucherType.isProformaInvoice) {
             this.downloadVoucherType1();
-        } else if (this.voucherType === 'sales') {
+        } else if (this.voucherType.isSalesInvoice) {
             this.downloadVoucherType2();
         } else {
             this.downloadVoucherType3(fileType);
@@ -178,13 +176,17 @@ export class PrintVoucherComponent implements OnInit {
         request.fileType = fileType;
         request.accountUniqueName = this.selectedItem?.uniqueName;
 
-        if (this.voucherType === VoucherTypeEnum.generateProforma) {
+        let voucherType = "";
+
+        if (this.voucherType.isProformaInvoice) {
+            voucherType = VoucherTypeEnum.generateProforma;
             request.proformaNumber = this.selectedItem?.voucherNumber;
         } else {
+            voucherType = VoucherTypeEnum.generateEstimate;
             request.estimateNumber = this.selectedItem?.voucherNumber;
         }
 
-        this.proformaService.download(request, this.voucherType).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+        this.proformaService.download(request, voucherType).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result && result.status === 'success') {
                 let blob: Blob = this.generalService.base64ToBlob(result.body, 'application/pdf', 512);
                 const file = new Blob([blob], { type: 'application/pdf' });

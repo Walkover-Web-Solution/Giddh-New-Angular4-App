@@ -56,7 +56,7 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.store.dispatch(this.settingsTaxesAction.CreateTaxResponse(null));
-        this.initOtherTaxForm();
+        this.initOtherTaxForm(this.inputData?.appliedOtherTax);
         this.getCompanyTaxes();
     }
 
@@ -66,10 +66,11 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
      * @private
      * @memberof OtherTaxComponent
      */
-    private initOtherTaxForm(): void {
+    private initOtherTaxForm(appliedOtherTax?: any): void {
         this.otherTaxForm = this.formBuilder.group({
-            tax: ['', Validators.required],
-            calculationMethod: ['OnTaxableAmount', Validators.required],
+            tax: [appliedOtherTax],
+            name: [appliedOtherTax?.name],
+            calculationMethod: [appliedOtherTax?.calculationMethod || 'OnTaxableAmount', Validators.required],
             entryIndex: [this.inputData?.entryIndex]
         });
     }
