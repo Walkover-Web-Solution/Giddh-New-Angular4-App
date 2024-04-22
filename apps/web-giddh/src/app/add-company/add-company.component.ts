@@ -199,7 +199,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     /** List of permission  roles */
     public permissionRoles: any[] = [
         { label: 'View', value: 'view' },
-        { label: 'Super Admin', value:'super_admin'},
+        { label: 'Super Admin', value: 'super_admin' },
         { label: 'Admin', value: 'admin' }
     ];
     /** True if user is super admin */
@@ -982,11 +982,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             return;
         }
 
-        if (this.isNewUserLoggedIn) {
-            if (this.selectedStep === 2 && this.thirdStepForm.invalid) {
+        if (this.isNewUserLoggedIn && this.selectedStep === 2 && this.thirdStepForm.invalid) {
                 this.isFormSubmitted = true;
                 return;
-            }
         }
 
         this.firstStepForm.controls['mobile'].setValue(this.showMobileField ? this.intl?.getNumber() : this.mobileNo);
@@ -1000,15 +998,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.sendNewUserInfo();
             this.fireSocketCompanyCreateRequest();
         }
-    }
-
-    /**
-     * This will be use for step back
-     *
-     * @memberof AddCompanyComponent
-     */
-    public stepBack(): void {
-        this.changeDetection.detectChanges();
     }
 
 

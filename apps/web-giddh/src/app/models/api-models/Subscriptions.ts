@@ -32,7 +32,7 @@ export interface SubscriptionsUser {
     startedAt: string;
     companyTotalTransactions?: any;
     planDetails: PlanDetails;
-    duration: string;
+    duration: any;
     additionalCharges?: any;
     createdAt: string;
     status: string;
