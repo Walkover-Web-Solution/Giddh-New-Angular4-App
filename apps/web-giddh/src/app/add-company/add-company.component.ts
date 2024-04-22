@@ -197,7 +197,11 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Holds Store permission roles API response state as observable*/
     public permissionRoles$ = this.componentStore.select(state => state.permissionRoles);
     /** List of permission  roles */
-    public permissionRoles: any[] = [];
+    public permissionRoles: any[] = [
+        { label: 'View', value: 'view' },
+        { label: 'Super Admin', value:'super_admin'},
+        { label: 'Admin', value: 'admin' }
+    ];
     /** True if user is super admin */
     public isUserSuperAdmin: boolean = false;
     /** Hold permission role index */
@@ -248,8 +252,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.getCountry();
         this.getStates();
         this.getCurrency();
-        this.getRoles();
-        this.getPermissionRoles();
 
         this.activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {

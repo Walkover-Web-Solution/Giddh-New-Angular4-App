@@ -512,11 +512,18 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
                 name: this.changeBillingForm.value.country.name,
                 code: this.changeBillingForm.value.country.code
             },
-            state: {
+            address: this.changeBillingForm.value.address
+        }
+        if (this.changeBillingForm.value.country.code === 'UK') {
+            request['county'] = {
                 name: this.changeBillingForm.value.state.name ? this.changeBillingForm.value.state.name : this.changeBillingForm.value.state.label,
                 code: this.changeBillingForm.value.state.code ? this.changeBillingForm.value.state.code : this.changeBillingForm.value.state.value
-            },
-            address: this.changeBillingForm.value.address
+            };
+        } else {
+            request['state'] = {
+                name: this.changeBillingForm.value.state.name ? this.changeBillingForm.value.state.name : this.changeBillingForm.value.state.label,
+                code: this.changeBillingForm.value.state.code ? this.changeBillingForm.value.state.code : this.changeBillingForm.value.state.value
+            };
         }
         this.componentStore.updateBillingDetails({ request: request, id: this.billingDetails.uniqueName });
     }
