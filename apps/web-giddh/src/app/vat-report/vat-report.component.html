@@ -53,7 +53,7 @@
                                                 [options]="vatReportCurrencyList"
                                                 (selectedOption)="onCurrencyChange($event)"
                                                 [placeholder]="commonLocaleData?.app_select"
-                                                [defaultValue]="vatReportCurrencyList[0]?.label"
+                                                [defaultValue]="vatReportCurrencyCode"
                                                 [required]="true"></dropdown-field>
                                         </div>
                                         <div *ngIf="taxNumber && (isZimbabweCompany || isKenyaCompany)"
@@ -292,259 +292,175 @@
                         <ng-container *ngIf="isZimbabweCompany && !isLoading">
                             <div *ngFor="let report of vatReport; let i = index" class="pd-l15 pd-r15">
                                 <div class="white-box" *ngIf="i < 2">
-                                    <div class="zimbabwe-report d-flex justify-content-between align-items-center">
-                                        <table width="100%" class="text-center">
-                                            <tr>
-                                                <td width="50%" rowspan="2" class="text-left">
-                                                    <strong class="table-heading">
-                                                        {{ report.section }}
-                                                    </strong>
-                                                </td>
-                                                <td width="10%">
-                                                    <p class="inner-table-heading">
-                                                        {{ 'For Office use' }}
-                                                    </p>
-                                                </td>
-                                                <td colspan="2" width="20%">
-                                                    <p class="inner-table-heading">
-                                                        {{ 'Value of Supply' }}
-                                                    </p>
-                                                </td>
-                                                <td colspan="2" width="20%">
-                                                    <p class="inner-table-heading">
-                                                        {{ 'Output Tax' }}
-                                                    </p>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <p class="inner-table-heading">
-                                                        {{ 'Mat. Code' }}
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="inner-table-heading">
-                                                        {{ 'Dollars' }}
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="inner-table-heading">
-                                                        {{ 'Cents' }}
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="inner-table-heading">
-                                                        {{ 'Dollars' }}
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="inner-table-heading">
-                                                        {{ 'Cents' }}
-                                                    </p>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
+                                    <p class="table-heading">{{ report.section }}</p>
                                     <div class="table-responsive">
                                         <table mat-table [dataSource]="report.sections"
-                                            class="table basic mr-t2 on-mobile-view vat-report-table">
-                                            <ng-container matColumnDef="number">
-                                                <th width="10%" colspan="2" mat-header-cell *matHeaderCellDef>Box</th>
-                                                <td mat-cell *matCellDef="let element">
-                                                    {{ localeData?.box }} {{ element.order }}
-                                                </td>
-                                            </ng-container>
+                                            class="table basic mr-t2 on-mobile-view vat-report-table zimbabwe-vat-report-table">
                                             <ng-container matColumnDef="name">
-                                                <th width="50%" colspan="2" mat-header-cell *matHeaderCellDef>
-                                                    <strong class="table-heading">
-                                                        {{ report.section }}
-                                                    </strong>
-                                                </th>
-                                                <td mat-cell *matCellDef="let element">{{ element.description }}</td>
+                                                <th class="d-none" mat-header-cell *matHeaderCellDef></th>
+                                                <td mat-cell *matCellDef="let element" >
+                                                    <span>{{ element.description }}</span>
+                                                </td>
+                                                <td mat-footer-cell *matFooterCellDef>
+                                                    <ng-container *ngIf="i === 0">
+                                                        {{ vatReport[i]?.sections[vatReport[i]?.sections?.length -
+                                                        1]?.description }}
+                                                    </ng-container>
+                                                    <ng-container *ngIf="i === 1">
+                                                        {{ vatReport[i]?.sections[vatReport[i]?.sections?.length -
+                                                        1]?.description }}
+                                                    </ng-container>
+                                                </td>
                                             </ng-container>
                                             <ng-container matColumnDef="mat-code">
                                                 <th width="10%" mat-header-cell *matHeaderCellDef>
-                                                    <p class="inner-table-heading">
-                                                        {{ 'Mat. Code' }}
+                                                    <p class="inner-table-heading text-center">
+                                                        {{ localeData?.mat_code }}
                                                     </p>
                                                 </th>
-                                                <td width="10%" mat-cell *matCellDef="let element" class="text-right">
+                                                <td width="10%" mat-cell *matCellDef="let element" class="text-center">
                                                     <span class="pr-1">{{ element.toolTip }}</span>
                                                     <strong>
-                                                        {{ report?.currency?.symbol + ((element.totalAmount?.amount +
-                                                        (0.0 + element.totalAmount?.decimal)) | giddhCurrency) }}
+                                                        {{ element?.matCode }}
                                                     </strong>
+                                                </td>
+                                                <td mat-footer-cell *matFooterCellDef colspan="3" class="text-right"> 
+                                                    <span *ngIf="i === 0">
+                                                        [A]
+                                                    </span>
+                                                    <span *ngIf="i === 1">
+                                                        [B]
+                                                    </span>
                                                 </td>
                                             </ng-container>
                                             <ng-container matColumnDef="vos-amount">
                                                 <th mat-header-cell *matHeaderCellDef>
-                                                    <p class="inner-table-heading">
-                                                        {{ 'Dollars' }}
+                                                    <p class="inner-table-heading text-right">
+                                                        {{ vatReportCurrencyMap[0] }}
                                                     </p>
                                                 </th>
-                                                <td mat-cell *matCellDef="let element">
-                                                    {{ localeData?.box }} {{ element.order }}
+                                                <td mat-cell *matCellDef="let element" class="text-right">
+                                                    {{ vatReportCurrencySymbol + element.valueOfSupply?.amount }}
                                                 </td>
+                                                <td mat-footer-cell *matFooterCellDef class="d-none"></td>
                                             </ng-container>
                                             <ng-container matColumnDef="vos-decimal">
                                                 <th mat-header-cell *matHeaderCellDef>
-                                                    <p class="inner-table-heading">
-                                                        {{ 'Cents' }}
+                                                    <p class="inner-table-heading text-right">
+                                                        {{ vatReportCurrencyMap[1] }}
                                                     </p>
                                                 </th>
-                                                <td mat-cell *matCellDef="let element">
-                                                    {{ localeData?.box }} {{ element.order }}
+                                                <td mat-cell *matCellDef="let element" class="text-right">
+                                                    {{ vatReportCurrencySymbol + element.valueOfSupply?.decimal }}
                                                 </td>
+                                                <td mat-footer-cell *matFooterCellDef class="d-none"></td>
                                             </ng-container>
                                             <ng-container matColumnDef="ot-amount">
                                                 <th mat-header-cell *matHeaderCellDef>
-                                                    <p class="inner-table-heading">
-                                                        {{ 'Dollars' }}
+                                                    <p class="inner-table-heading text-right">
+                                                        {{ vatReportCurrencyMap[0] }}
                                                     </p>
                                                 </th>
-                                                <td mat-cell *matCellDef="let element">
-                                                    {{ localeData?.box }} {{ element.order }}
+                                                <td mat-cell *matCellDef="let element" class="text-right">
+                                                    {{ vatReportCurrencySymbol + element?.outputTax?.amount }}
+                                                </td>
+                                                <td mat-footer-cell *matFooterCellDef class="text-right"> 
+                                                    <ng-container *ngIf="i === 0">
+                                                        {{ vatReportCurrencySymbol +  vatReport[i]?.sections[vatReport[i]?.sections?.length -
+                                                        1]?.totalAmount?.amount }}
+                                                    </ng-container>
+                                                    <ng-container *ngIf="i === 1">
+                                                        {{ vatReportCurrencySymbol +  vatReport[i]?.sections[vatReport[i]?.sections?.length -
+                                                        1]?.totalAmount?.amount }}
+                                                    </ng-container>
                                                 </td>
                                             </ng-container>
                                             <ng-container matColumnDef="ot-decimal">
                                                 <th mat-header-cell *matHeaderCellDef>
-                                                    <p class="inner-table-heading">
-                                                        {{ 'Cents' }}
+                                                    <p class="inner-table-heading text-right">
+                                                        {{ vatReportCurrencyMap[1] }}
                                                     </p>
                                                 </th>
-                                                <td mat-cell *matCellDef="let element">
-                                                    {{ localeData?.box }} {{ element.order }}
+                                                <td mat-cell *matCellDef="let element" class="text-right">
+                                                    {{ vatReportCurrencySymbol +  element?.outputTax?.decimal }}
+                                                </td>
+                                                <td mat-footer-cell *matFooterCellDef class="text-right">
+                                                    <ng-container *ngIf="i === 0">
+                                                        {{ vatReportCurrencySymbol +  vatReport[i]?.sections[vatReport[i]?.sections?.length -
+                                                        1]?.totalAmount?.decimal }}
+                                                    </ng-container>
+                                                    <ng-container *ngIf="i === 1">
+                                                        {{ vatReportCurrencySymbol +  vatReport[i]?.sections[vatReport[i]?.sections?.length -
+                                                        1]?.totalAmount?.decimal }}
+                                                    </ng-container>
                                                 </td>
                                             </ng-container>
 
-                                             <!-- Header row 1-->
+                                            <!-- Header row 2-->
+                                            <ng-container matColumnDef="section">
+                                                <th width="50%" mat-header-cell *matHeaderCellDef rowspan="2"></th>
+                                            </ng-container>
+                                            <!-- Header row 3-->
                                             <ng-container matColumnDef="office-use">
-                                                <th mat-header-cell *matHeaderCellDef> For Office use </th>
+                                                <th mat-header-cell *matHeaderCellDef> {{ localeData?.for_office_use }} </th>
                                             </ng-container>
-                                              <!-- Header row 2-->
-                                              <ng-container matColumnDef="value-of-supply">
-                                                <th mat-header-cell *matHeaderCellDef [attr.colspan]="2"> Value of Supply </th>
+                                            <!-- Header row 4-->
+                                            <ng-container matColumnDef="value-of-supply">
+                                                <th mat-header-cell *matHeaderCellDef [attr.colspan]="2"> {{ localeData?.value_of_supply }} </th>
                                             </ng-container>
-                                              <!-- Header row 3-->
-                                              <ng-container matColumnDef="output-tax">
-                                                <th mat-header-cell *matHeaderCellDef [attr.colspan]="2"> Output Tax </th>
+                                            <!-- Header row 5-->
+                                            <ng-container matColumnDef="output-tax">
+                                                <th mat-header-cell *matHeaderCellDef [attr.colspan]="2">{{ localeData?.output_tax }}</th>
                                             </ng-container>
-                                            
-                                            <tr mat-header-row *matHeaderRowDef="['office-use', 'value-of-supply', 'output-tax']"></tr>
+
+                                            <tr mat-header-row *matHeaderRowDef="zwDisplayedHeaderColumns"></tr>
                                             <tr mat-header-row *matHeaderRowDef="zwDisplayedColumns"></tr>
                                             <tr mat-row *matRowDef="let row; columns: zwDisplayedColumns"></tr>
+                                            <tr mat-footer-row *matFooterRowDef="zwDisplayedColumns"></tr>
                                         </table>
                                     </div>
                                 </div>
-                                <div class="white-box" *ngIf="i == 2 && false">
-                                    <div class="zimbabwe-report d-flex justify-content-between align-items-center">
-                                        <table width="100%" class="text-center">
-                                            <tr>
-                                                <td width="50%" rowspan="2" class="text-left">
-                                                    <strong class="table-heading">
-                                                        {{ report.section }}
-                                                    </strong>
-                                                </td>
-                                                <td width="10%">
-                                                    <p class="inner-table-heading">
-                                                        {{ 'For Office use' }}
-                                                    </p>
-                                                </td>
-                                                <td colspan="2" width="20%">
-                                                    <p class="inner-table-heading">
-                                                        {{ 'Value of Supply' }}
-                                                    </p>
-                                                </td>
-                                                <td colspan="2" width="20%">
-                                                    <p class="inner-table-heading">
-                                                        {{ 'Output Tax' }}
-                                                    </p>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <p class="inner-table-heading">
-                                                        {{ 'Mat. Code' }}
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="inner-table-heading">
-                                                        {{ 'Dollars' }}
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="inner-table-heading">
-                                                        {{ 'Cents' }}
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="inner-table-heading">
-                                                        {{ 'Dollars' }}
-                                                    </p>
-                                                </td>
-                                                <td>
-                                                    <p class="inner-table-heading">
-                                                        {{ 'Cents' }}
-                                                    </p>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </div>
+                                <div class="white-box" *ngIf="i == 2">
+                                    <p class="table-heading">{{ report.section }}</p>
                                     <div class="table-responsive">
-                                        <table mat-table [dataSource]="report.sections" class="
-                                                table-hide-title table
-                                                basic
-                                                table-border-bottom
-                                                mr-t2
-                                                on-mobile-view
-                                                table-border-top
-                                            ">
-                                            <ng-container matColumnDef="number">
-                                                <th mat-header-cell *matHeaderCellDef></th>
-                                                <td mat-cell *matCellDef="let element">
-                                                    {{ localeData?.box }} {{ element.order }}
-                                                </td>
-                                            </ng-container>
+                                        <table mat-table [dataSource]="report.sections"
+                                            class="table basic mr-t2 on-mobile-view vat-report-table zimbabwe-vat-report-table">
                                             <ng-container matColumnDef="name">
                                                 <th mat-header-cell *matHeaderCellDef></th>
-                                                <td mat-cell *matCellDef="let element">{{ element.description }}</td>
+                                                <td mat-cell *matCellDef="let element">
+                                                    <span
+                                                        [ngClass]="{'font-weight-bold': showTotalOutputTaxIn.includes(element?.order)}">{{
+                                                        element.description }}</span>
+                                                </td>
+                                                <td mat-footer-cell *matFooterCellDef>
+                                                    {{ vatReport[i]?.sections[vatReport[i]?.sections?.length -
+                                                    1]?.description }}
+                                                </td>
                                             </ng-container>
-                                            <ng-container matColumnDef="mat-code">
-                                                <th mat-header-cell *matHeaderCellDef></th>
+                                            <ng-container matColumnDef="amount">
+                                                <th mat-header-cell *matHeaderCellDef class="text-right">{{ vatReportCurrencyMap[0] }}</th>
                                                 <td mat-cell *matCellDef="let element" class="text-right">
-                                                    <span class="pr-1">{{ element.toolTip }}</span>
-                                                    <strong>
-                                                        {{ report?.currency?.symbol + ((element.totalAmount?.amount +
-                                                        (0.0 + element.totalAmount?.decimal)) | giddhCurrency) }}
-                                                    </strong>
+                                                    {{ vatReportCurrencySymbol +  element?.totalAmount?.amount }}
+                                                </td>
+                                                <td mat-footer-cell *matFooterCellDef class="text-right"> 
+                                                    {{ vatReportCurrencySymbol + vatReport[i]?.sections[vatReport[i]?.sections?.length -
+                                                        1]?.totalAmount?.amount }}
                                                 </td>
                                             </ng-container>
-                                            <ng-container matColumnDef="vos-amount">
-                                                <th mat-header-cell *matHeaderCellDef></th>
-                                                <td mat-cell *matCellDef="let element">
-                                                    {{ localeData?.box }} {{ element.order }}
+                                            <ng-container matColumnDef="decimal">
+                                                <th mat-header-cell *matHeaderCellDef class="text-right">{{ vatReportCurrencyMap[1] }}</th>
+                                                <td mat-cell *matCellDef="let element" class="text-right">
+                                                    {{ vatReportCurrencySymbol + element?.totalAmount?.decimal }}
+                                                </td>
+                                                <td mat-footer-cell *matFooterCellDef class="text-right"> 
+                                                    {{ vatReportCurrencySymbol + vatReport[i]?.sections[vatReport[i]?.sections?.length -
+                                                        1]?.totalAmount?.decimal }}
                                                 </td>
                                             </ng-container>
-                                            <ng-container matColumnDef="vos-decimal">
-                                                <th mat-header-cell *matHeaderCellDef></th>
-                                                <td mat-cell *matCellDef="let element">
-                                                    {{ localeData?.box }} {{ element.order }}
-                                                </td>
-                                            </ng-container>
-                                            <ng-container matColumnDef="ot-amount">
-                                                <th mat-header-cell *matHeaderCellDef></th>
-                                                <td mat-cell *matCellDef="let element">
-                                                    {{ localeData?.box }} {{ element.order }}
-                                                </td>
-                                            </ng-container>
-                                            <ng-container matColumnDef="ot-decimal">
-                                                <th mat-header-cell *matHeaderCellDef></th>
-                                                <td mat-cell *matCellDef="let element">
-                                                    {{ localeData?.box }} {{ element.order }}
-                                                </td>
-                                            </ng-container>
-                                            <tr mat-header-row *matHeaderRowDef="zwDisplayedColumns"></tr>
-                                            <tr mat-row *matRowDef="let row; columns: zwDisplayedColumns"></tr>
+
+                                            <tr mat-header-row *matHeaderRowDef="['name', 'amount', 'decimal']"></tr>
+                                            <tr mat-row *matRowDef="let row; columns: ['name', 'amount', 'decimal']"></tr>
+                                            <tr mat-footer-row *matFooterRowDef="['name', 'amount', 'decimal']"></tr>
                                         </table>
                                     </div>
                                 </div>
