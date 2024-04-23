@@ -356,7 +356,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /**Hold barcode scan total time */
     public totalTime: number = 0;
     /** This will hold barcode value*/
-    public barcodeValue: string = "456";
+    public barcodeValue: string = "";
     /**Hold barcode last scanned key */
     public lastScannedKey: string = '';
     /* This will hold po unique name for preview */
@@ -560,7 +560,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.componentStore.stockVariants$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.stockVariants[response.entryIndex] = observableOf(response.results);
-                this.selectVariant(response.results[0], response.entryIndex);
+
+                if (response.autoSelectVariant) {
+                    this.selectVariant(response.results[0], response.entryIndex);
+                } else {
+                    let entryFormGroup = this.getEntryFormGroup(response.entryIndex);
+                    let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+                    if (!transactionFormGroup.get('stock.variant.name')?.value) {
+                        const selectedVariant = response.results?.filter(variant => variant.value === transactionFormGroup.get('stock.variant.uniqueName')?.value);
+                        if (selectedVariant?.length) {
+                            transactionFormGroup.get('stock.variant.name')?.patchValue(selectedVariant[0].label);
+                        }
+                    }
+                }
             }
         });
 
@@ -1319,24 +1331,25 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public selectStock(event: any, entryIndex: number, isClear: boolean = false): void {
-        if (event || isClear) {
+        if (event && !isClear) {
             const entryFormGroup = this.getEntryFormGroup(entryIndex);
             const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
 
-            if (!isClear) {
-                transactionFormGroup.get('account.name')?.patchValue(event?.label);
-                transactionFormGroup.get('account.uniqueName')?.patchValue(event?.account?.uniqueName || event?.value);
+            transactionFormGroup.get('account.name')?.patchValue(event?.label);
+            transactionFormGroup.get('account.uniqueName')?.patchValue(event?.account?.uniqueName || event?.value);
 
-                if (event?.additional?.stock?.uniqueName) {
-                    transactionFormGroup.get('stock.name')?.patchValue(event?.additional?.stock?.name);
-                    transactionFormGroup.get('stock.uniqueName')?.patchValue(event?.additional?.stock?.uniqueName);
-                }
+            if (event?.additional?.stock?.uniqueName) {
+                transactionFormGroup.get('stock.name')?.patchValue(event?.additional?.stock?.name);
+                transactionFormGroup.get('stock.uniqueName')?.patchValue(event?.additional?.stock?.uniqueName);
+            }
 
-                if (event?.additional?.hasVariants) {
-                    this.componentStore.getStockVariants({ q: event?.additional?.stock?.uniqueName, index: entryIndex, autoSelectVariant: true });
-                } else {
-                    this.stockVariants[entryIndex] = observableOf([]);
-                    this.stockUnits[entryIndex] = observableOf([]);
+            if (event?.additional?.hasVariants) {
+                this.componentStore.getStockVariants({ q: event?.additional?.stock?.uniqueName, index: entryIndex, autoSelectVariant: true });
+            } else {
+                this.stockVariants[entryIndex] = observableOf([]);
+                this.stockUnits[entryIndex] = observableOf([]);
+
+                if (transactionFormGroup.get('stock.variant.getParticular')?.value) {
                     let payload = {};
 
                     if (event?.additional?.stock?.uniqueName) {
@@ -1344,6 +1357,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
 
                     this.componentStore.getParticularDetails({ accountUniqueName: transactionFormGroup.get("account.uniqueName")?.value, payload: payload, entryIndex: entryIndex });
+                } else {
+                    transactionFormGroup.get('stock.variant.getParticular')?.patchValue(true);
                 }
             }
 
@@ -1360,18 +1375,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public selectVariant(event: any, entryIndex: number, isClear: boolean = false): void {
-        if (event || isClear) {
-            if (isClear) {
+        if (event && !isClear) {
+            const entryFormGroup = this.getEntryFormGroup(entryIndex);
+            const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+            const transactionStockVariantFormGroup = transactionFormGroup.get('stock').get('variant');
 
-            } else {
-                const entryFormGroup = this.getEntryFormGroup(entryIndex);
-                const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
-                const transactionStockVariantFormGroup = transactionFormGroup.get('stock').get('variant');
+            transactionStockVariantFormGroup.get('name')?.patchValue(event?.label);
+            transactionStockVariantFormGroup.get('uniqueName')?.patchValue(event?.value);
 
-                transactionStockVariantFormGroup.get('name')?.patchValue(event?.label);
-                transactionStockVariantFormGroup.get('uniqueName')?.patchValue(event?.value);
-
+            if (transactionFormGroup.get('stock.variant.getParticular')?.value) {
                 this.componentStore.getParticularDetails({ accountUniqueName: transactionFormGroup.get("account.uniqueName")?.value, payload: { variantUniqueName: event?.value, customerUniqueName: this.invoiceForm.get('account.uniqueName')?.value }, entryIndex: entryIndex });
+            } else {
+                transactionFormGroup.get('stock.variant.getParticular')?.patchValue(true);
             }
         }
     }
@@ -1438,8 +1453,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.invoiceForm.controls["account"].get("attentionTo").setValue(accountData?.attentionTo);
         this.invoiceForm.controls["account"].get("email").setValue(accountData?.email);
         this.invoiceForm.controls["account"].get("mobileNumber").setValue(accountData?.mobileNo);
-
-        this.getStockByBarcode();
     }
 
     /**
@@ -1625,7 +1638,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             name: [entryData ? entryData?.transactions[0]?.stock?.variant?.name : ''],
                             uniqueName: [entryData ? entryData?.transactions[0]?.stock?.variant?.uniqueName : ''],
                             salesTaxInclusive: [entryData ? entryData?.transactions[0]?.stock?.variant?.salesTaxInclusive : false],
-                            purchaseTaxInclusive: [entryData ? entryData?.transactions[0]?.stock?.variant?.purchaseTaxInclusive : false]
+                            purchaseTaxInclusive: [entryData ? entryData?.transactions[0]?.stock?.variant?.purchaseTaxInclusive : false],
+                            getParticular: [true]
                         }),
                         skuCodeHeading: [entryData ? entryData?.transactions[0]?.stock?.skuCodeHeading : ''],
                         skuCode: [entryData ? entryData?.transactions[0]?.stock?.sku : ''],
@@ -3648,7 +3662,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
                 transactionFormGroup.get('stock.customField1.value')?.patchValue(response?.stock?.customField1Value);
             }
-            
+
             if (response?.stock?.customField2Value) {
                 if (response?.stock?.customField2Heading) {
                     transactionFormGroup.get('stock.customField2.key')?.patchValue(response?.stock?.customField2Heading);
@@ -3853,17 +3867,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.commonService.getBarcodeScanData(this.barcodeValue, params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.barcodeValue = '';
-                let group = response.body?.parentGroups[1];
-                let accountUniqueName = response.body?.uniqueName;
 
-                if (!accountUniqueName) {
-                    this.toasterService.showSnackBar("warning", group + " " + this.localeData?.account_missing_in_stock);
+                if (!response.body?.uniqueName) {
+                    this.toasterService.showSnackBar("warning", response.body?.parentGroups[1] + " " + this.localeData?.account_missing_in_stock);
                     return;
                 }
 
                 let isExistingEntry = -1;
                 this.invoiceForm.get('entries')['controls']?.forEach((control: any, entryIndex: number) => {
-                    if (isExistingEntry === -1 && control.get('transactions.0.stock.variant.uniqueName')?.value === response.body?.stock?.uniqueName) {
+                    if (isExistingEntry === -1 && control.get('transactions.0.stock.variant.uniqueName')?.value === response.body?.stock?.variant?.uniqueName) {
                         isExistingEntry = entryIndex;
                     }
                 });
@@ -3881,6 +3893,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.componentStore.getStockVariants({ q: response?.body?.stock?.uniqueName, index: activeEntryIndex, autoSelectVariant: false });
                     }
 
+                    entryFormGroup = this.getEntryFormGroup(activeEntryIndex);
+                    transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+
+                    transactionFormGroup.get('stock.variant.getParticular')?.patchValue(false);
+
                     this.prefillParticularDetails(activeEntryIndex, response.body);
                 } else {
                     this.activeEntryIndex = isExistingEntry;
@@ -3888,6 +3905,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     let entryFormGroup = this.getEntryFormGroup(this.activeEntryIndex);
                     let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
                     transactionFormGroup.get('stock.quantity')?.patchValue(transactionFormGroup.get('stock.quantity')?.value + 1);
+                    transactionFormGroup.get('stock.variant.getParticular')?.patchValue(true);
                 }
             } else {
                 this.toasterService.showSnackBar("error", response.message);
