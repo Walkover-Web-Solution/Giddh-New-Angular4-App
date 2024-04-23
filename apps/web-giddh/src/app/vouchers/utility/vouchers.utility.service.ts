@@ -28,9 +28,9 @@ export class VouchersUtilityService {
     public getVoucherType(voucherType: string, accountUniqueName: string = '', isLastInvoiceCopied: boolean = false): any {
         let isSalesInvoice = voucherType === VoucherTypeEnum.sales;
         let isCashInvoice = this.voucherTypes.includes(voucherType);
-        let isCreditNote = voucherType === VoucherTypeEnum.creditNote;
-        let isDebitNote = voucherType === VoucherTypeEnum.debitNote;
-        let isPurchaseInvoice = voucherType === VoucherTypeEnum.purchase;
+        let isCreditNote = voucherType === VoucherTypeEnum.creditNote || voucherType === VoucherTypeEnum.cashCreditNote;
+        let isDebitNote = voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.cashDebitNote;
+        let isPurchaseInvoice = voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.cashBill;
         let isProformaInvoice = voucherType === VoucherTypeEnum.proforma || voucherType === VoucherTypeEnum.generateProforma;
         let isEstimateInvoice = voucherType === VoucherTypeEnum.estimate || voucherType === VoucherTypeEnum.generateEstimate;
         let isPurchaseOrder = voucherType === VoucherTypeEnum.purchaseOrder;
@@ -47,7 +47,7 @@ export class VouchersUtilityService {
     }
 
     public parseVoucherType(voucherType: string): string {
-        return voucherType = !(voucherType === VoucherTypeEnum.purchaseOrder) ? voucherType.toString().replace("-", " ") : VoucherTypeEnum.purchaseOrder;
+        return voucherType = voucherType !== VoucherTypeEnum.purchaseOrder ? voucherType.toString().replace(/-/g, " ") : VoucherTypeEnum.purchaseOrder;
     }
 
     public createQueryString(url: string, model: any): string {
