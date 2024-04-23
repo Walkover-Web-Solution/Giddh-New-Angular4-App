@@ -356,7 +356,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /**Hold barcode scan total time */
     public totalTime: number = 0;
     /** This will hold barcode value*/
-    public barcodeValue: string = "";
+    public barcodeValue: string = "456";
     /**Hold barcode last scanned key */
     public lastScannedKey: string = '';
     /* This will hold po unique name for preview */
@@ -1438,6 +1438,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.invoiceForm.controls["account"].get("attentionTo").setValue(accountData?.attentionTo);
         this.invoiceForm.controls["account"].get("email").setValue(accountData?.email);
         this.invoiceForm.controls["account"].get("mobileNumber").setValue(accountData?.mobileNo);
+
+        this.getStockByBarcode();
     }
 
     /**
@@ -3845,14 +3847,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         let params = {
             barcode: this.barcodeValue,
             customerUniqueName: this.invoiceForm.controls['account'].get('uniqueName')?.value ?? "",
-            invoiceType: this.invoiceForm.get('type')?.value
+            invoiceType: this.invoiceType.isPurchaseOrder ? "purchase" : this.invoiceForm.get('type')?.value
         };
 
         this.commonService.getBarcodeScanData(this.barcodeValue, params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 this.barcodeValue = '';
-                let stockObj = response.body?.stock;
-                let variantObj = stockObj?.variant;
                 let group = response.body?.parentGroups[1];
                 let accountUniqueName = response.body?.uniqueName;
 
@@ -3863,7 +3863,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                 let isExistingEntry = -1;
                 this.invoiceForm.get('entries')['controls']?.forEach((control: any, entryIndex: number) => {
-                    if (isExistingEntry === -1 && control.get('transactions.0.stock.variant.uniqueName')?.value === variantObj?.uniqueName) {
+                    if (isExistingEntry === -1 && control.get('transactions.0.stock.variant.uniqueName')?.value === response.body?.stock?.uniqueName) {
                         isExistingEntry = entryIndex;
                     }
                 });

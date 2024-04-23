@@ -204,9 +204,8 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
                 }
             }
         }
-        if (this.isUpdateMode) {
-            this.calculateBalanceDue();
-        }
+
+        this.calculateBalanceDue();
 
         this.componentStore.company$.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
             if (obj && obj.taxes) {
