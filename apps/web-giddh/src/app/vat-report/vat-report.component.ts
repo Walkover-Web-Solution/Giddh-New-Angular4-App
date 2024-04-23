@@ -83,6 +83,14 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public uaeDisplayedColumns: string[] = ['number', 'description', 'tooltip'];
     /** Hold uk main table and bottom table displayed columns */
     public ukDisplayedColumns: string[] = ['number', 'name', 'aed_amt'];
+    /** Hold Zimbabwe main table displayed columns */
+    public zwDisplayedColumns: string[] = ['name', 'mat-code', 'vos-amount', 'vos-decimal', 'ot-amount', 'ot-decimal'];
+    /** Hold Zimbabwe table header row displayed columns */
+    public zwDisplayedHeaderColumns = ['section','office-use', 'value-of-supply', 'output-tax'];
+    /** Hold Zimbabwe table displayed columns for last section */
+    public zwDisplayedColumnsForLastSection: string[] =  ['name', 'amount', 'decimal'];
+    /** Holds Section Number which  show Total Output Tax Row */
+    public showTotalOutputTaxIn: number[] = [9,19,20,21,22,23];
     /** True if active country is UK */
     public isUKCompany: boolean = false;
     /** True if active country is Zimbabwe */
@@ -123,7 +131,11 @@ export class VatReportComponent implements OnInit, OnDestroy {
         { label: 'EUR', value: 'EUR', additional: { symbol: '€' } }
     ];
     /** Holds Current Currency Code for Zimbabwe report */
-    public vatReportCurrency: 'BWP' | 'USD' | 'GBP' | 'INR' | 'EUR' = this.vatReportCurrencyList[0].value;
+    public vatReportCurrencyCode: 'BWP' | 'USD' | 'GBP' | 'INR' | 'EUR' = this.vatReportCurrencyList[0].value;
+    /** Holds Current Currency Symbol for Zimbabwe report */
+    public vatReportCurrencySymbol: string = this.vatReportCurrencyList[0].additional.symbol;
+    /** Holds Current Currency Map Amount Decimal currency wise for Zimbabwe report */
+    public vatReportCurrencyMap: string[];
 
     constructor(
         private gstReconcileService: GstReconcileService,
@@ -255,7 +267,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
             vatReportRequest.branchUniqueName = this.currentBranch?.uniqueName;
 
             if (this.activeCompany?.countryV2?.alpha2CountryCode === 'ZW') {
-                vatReportRequest.currencyCode = this.vatReportCurrency;
+                vatReportRequest.currencyCode = this.vatReportCurrencyCode;
                 countryCode = 'ZW';
             } else {
                 countryCode = 'UK';
@@ -278,8 +290,14 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 this.vatService.getCountryWiseVatReport(vatReportRequest, countryCode).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (res) {
                         this.isLoading = false;
-                        if (res.status === 'success') {
+                        if (res && res?.status === 'success' && res?.body) {
                             this.vatReport = res.body?.sections;
+                            if(this.activeCompany?.countryV2?.alpha2CountryCode === 'ZW') {
+                                this.vatReportCurrencyCode = res.body?.currency?.code;
+                                this.vatReportCurrencySymbol = this.vatReportCurrencyList.filter( item => item.label === res.body?.currency?.code).map(item => item.additional.symbol).join();
+                                this.vatReportCurrencyMap = res.body?.currencyMap;
+                            }
+                            
                             this.cdRef.detectChanges();
                         } else {
                             this.toasty.errorToast(res.message);
@@ -299,7 +317,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         vatReportRequest.branchUniqueName = this.currentBranch?.uniqueName;
 
         if (this.activeCompany?.countryV2?.alpha2CountryCode === 'ZW') {
-            vatReportRequest.currencyCode = this.vatReportCurrency;
+            vatReportRequest.currencyCode = this.vatReportCurrencyCode;
             countryCode = 'ZW';
         } else {
             countryCode = 'UK';
@@ -516,7 +534,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
      */
     public onCurrencyChange(event: any): void {
         if (event) {
-            this.vatReportCurrency = event?.value;
+            this.vatReportCurrencyCode = event.value;
             this.getVatReport();
         }
     }
