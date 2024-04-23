@@ -281,6 +281,24 @@
                                                     </div>
                                                 </ng-container>
                                             </div>
+                                                      <div class="grid-list-div list-grid">
+                                                <div class="grid-title-left">
+                                                    <span class="inner-name mat-table-sticky">
+                                                        <span>Companies Allowed} </span>
+                                                    </span>
+                                                </div>
+                                                <ng-container *ngFor="let plan of inputData">
+                                                    <div
+                                                        class="grid-title-list list-grid-title plan-row-height"
+                                                        [ngClass]="{
+                                                            'active-plan-td':
+                                                                selectedPlan?.uniqueName === plan?.uniqueName
+                                                        }"
+                                                    >
+                                                        <span>{{ plan?.companiesLimit }}</span>
+                                                    </div>
+                                                </ng-container>
+                                            </div>
                                             <div class="grid-list-div list-grid">
                                                 <div class="grid-title-left">
                                                     <span class="inner-name mat-table-sticky">
