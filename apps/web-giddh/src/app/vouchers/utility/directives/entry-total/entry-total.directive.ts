@@ -11,6 +11,8 @@ import { isEqual } from "apps/web-giddh/src/app/lodash-optimized";
 export class EntryTotalDirective implements OnChanges, OnDestroy {
     /** Entry */
     @Input() public entry: any;
+    /** True if need to exclude tax */
+    @Input() public excludeTax: boolean;
     /** Callback to emit calculated amount */
     @Output() public calculatedAmount: EventEmitter<any> = new EventEmitter<any>();
     /** Default decimal places */
@@ -36,8 +38,14 @@ export class EntryTotalDirective implements OnChanges, OnDestroy {
      * @memberof EntryAmountDirective
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if (!isEqual(changes?.entry?.currentValue, changes?.entry?.previousValue) && changes?.entry?.currentValue?.calculateTotal) {
-            const amount = giddhRoundOff((Number(this.entry.transactions[0].amount?.amountForAccount) - Number(this.entry.totalDiscount)) + (Number(this.entry.totalTax) + Number(this.entry.otherTax?.amount)), this.balanceDecimalPlaces);
+        if ((!isEqual(changes?.entry?.currentValue, changes?.entry?.previousValue) || !isEqual(changes?.excludeTax?.currentValue, changes?.excludeTax?.previousValue)) && changes?.entry?.currentValue?.calculateTotal) {
+            let amount = 0;
+            
+            if (this.excludeTax) {
+                amount = giddhRoundOff((Number(this.entry.transactions[0].amount?.amountForAccount) - Number(this.entry.totalDiscount)), this.balanceDecimalPlaces);
+            } else {
+                amount = giddhRoundOff((Number(this.entry.transactions[0].amount?.amountForAccount) - Number(this.entry.totalDiscount)) + (Number(this.entry.totalTax) + Number(this.entry.otherTax?.amount)), this.balanceDecimalPlaces);
+            }
             this.calculatedAmount.emit(amount);
         }
     }

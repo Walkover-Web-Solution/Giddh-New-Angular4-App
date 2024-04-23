@@ -3064,7 +3064,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      *
      * @memberof VoucherCreateComponent
      */
-    public setBillingAddressToShippingAddress(): void {
+    public copyAccountBillingAddressToShippingAddress(): void {
         if (this.getActiveSameBillingAddress) {
             const billingAddress = this.invoiceForm.get('account.billingAddress').value;
             this.invoiceForm.get('account.shippingAddress').patchValue(billingAddress);
