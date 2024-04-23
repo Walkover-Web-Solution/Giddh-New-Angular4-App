@@ -3136,7 +3136,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.calculateAdjustedVoucherTotal(this.originalVoucherAdjustments?.adjustments);
             }
             this.dialog.open(this.adjustmentModal, {
-                width: '650px'
+                width: '800px'
             });
         } else {
             this.isAdjustAmount = false;
