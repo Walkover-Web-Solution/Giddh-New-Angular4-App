@@ -44,7 +44,10 @@
                                         <dropdown-field [label]="commonLocaleData?.app_trn" [options]="taxes"
                                             (selectedOption)="getVatReport($event)"
                                             [placeholder]="commonLocaleData?.select_trn"
-                                            [defaultValue]="taxes[0]?.label" [required]="true"></dropdown-field>
+                                            [defaultValue]="taxes[0]?.label"
+                                            [required]="true"
+                                            >
+                                        </dropdown-field>
                                     </div>
 
                                     <div class="ml-auto d-flex justify-content-center column-gap1 align-items-center">
@@ -298,13 +301,11 @@
                                                 <th class="d-none" mat-header-cell *matHeaderCellDef></th>
                                                 <td mat-cell *matCellDef="let element" [attr.colspan]="(i === 1 && element?.order === 9) ? 6 : 1"
                                                     [ngClass]="{'bg-grey font-weight-bold':(i === 0 && element?.order === 8) || (i === 1 && element?.order === 9)}">
-                                                    <span>{{ element.description }}</span>
+                                                    <span>{{ element?.description }}</span>
                                                 </td>
-                                                <td mat-footer-cell *matFooterCellDef>
-                                                   
+                                                <td mat-footer-cell *matFooterCellDef class="font-weight-bold">
                                                         {{ vatReport[i]?.sections[vatReport[i]?.sections?.length -
                                                         1]?.description }}
-                                                    
                                                 </td>
                                             </ng-container>
                                             <ng-container matColumnDef="mat-code">
@@ -322,7 +323,7 @@
                                                         {{ element?.value }}
                                                     </ng-container>
                                                 </td>
-                                                <td mat-footer-cell *matFooterCellDef colspan="3" class="text-right">
+                                                <td mat-footer-cell *matFooterCellDef colspan="3" class="text-right font-weight-bold">
                                                     <span *ngIf="i === 0">
                                                         &#40;A&#41;
                                                     </span>
@@ -339,7 +340,7 @@
                                                 </th>
                                                 <td mat-cell *matCellDef="let element" class="text-right"
                                                     [ngClass]="{'d-none': (i === 0 && element?.order === 8) || (i === 1 && element?.order === 9)}">
-                                                    {{ vatReportCurrencySymbol + element.valueOfSupply?.amount }}
+                                                    {{ vatReportCurrencySymbol + element?.valueOfSupply?.amount }}
                                                 </td>
                                                 <td mat-footer-cell *matFooterCellDef class="d-none"></td>
                                             </ng-container>
@@ -351,7 +352,7 @@
                                                 </th>
                                                 <td mat-cell *matCellDef="let element" class="text-right"
                                                     [ngClass]="{'d-none': (i === 0 && element?.order === 8) || (i === 1 && element?.order === 9)}">
-                                                    {{ vatReportCurrencySymbol + element.valueOfSupply?.decimal }}
+                                                    {{ vatReportCurrencySymbol + element?.valueOfSupply?.decimal }}
                                                 </td>
                                                 <td mat-footer-cell *matFooterCellDef class="d-none"></td>
                                             </ng-container>
@@ -365,7 +366,7 @@
                                                     [ngClass]="{'d-none': (i === 0 && element?.order === 8) || (i === 1 && element?.order === 9)}">
                                                     {{ vatReportCurrencySymbol + element?.outputTax?.amount }}
                                                 </td>
-                                                <td mat-footer-cell *matFooterCellDef class="text-right">
+                                                <td mat-footer-cell *matFooterCellDef class="text-right font-weight-bold">
                                                     <ng-container *ngIf="i === 0">
                                                         {{ vatReportCurrencySymbol + vatReport[i]?.sections[vatReport[i]?.sections?.length -
                                                         1]?.totalAmount?.amount }}
@@ -386,7 +387,7 @@
                                                     [ngClass]="{'d-none': (i === 0 && element?.order === 8) || (i === 1 && element?.order === 9)}">
                                                     {{ vatReportCurrencySymbol + element?.outputTax?.decimal }}
                                                 </td>
-                                                <td mat-footer-cell *matFooterCellDef class="text-right">
+                                                <td mat-footer-cell *matFooterCellDef class="text-right font-weight-bold">
                                                     <ng-container *ngIf="i === 0">
                                                         {{ vatReportCurrencySymbol + vatReport[i]?.sections[vatReport[i]?.sections?.length -
                                                         1]?.totalAmount?.decimal }}
@@ -434,10 +435,10 @@
                                             <ng-container matColumnDef="name">
                                                 <th mat-header-cell *matHeaderCellDef></th>
                                                 <td mat-cell *matCellDef="let element">
-                                                    <span [ngClass]="{'font-weight-bold': showTotalOutputTaxIn.includes(element?.order)}">{{
+                                                    <span [ngClass]="{'font-weight-bold': showTotalOutputTaxIn?.includes(element?.order)}">{{
                                                         element.description }}</span>
                                                 </td>
-                                                <td mat-footer-cell *matFooterCellDef>
+                                                <td mat-footer-cell *matFooterCellDef class="font-weight-bold">
                                                     {{ vatReport[i]?.sections[vatReport[i]?.sections?.length -
                                                     1]?.description }}
                                                 </td>
@@ -447,7 +448,7 @@
                                                 <td mat-cell *matCellDef="let element" class="text-right">
                                                     {{ vatReportCurrencySymbol + element?.totalAmount?.amount }}
                                                 </td>
-                                                <td mat-footer-cell *matFooterCellDef class="text-right">
+                                                <td mat-footer-cell *matFooterCellDef class="font-weight-bold text-right">
                                                     {{ vatReportCurrencySymbol + vatReport[i]?.sections[vatReport[i]?.sections?.length -
                                                     1]?.totalAmount?.amount }}
                                                 </td>
@@ -457,7 +458,7 @@
                                                 <td mat-cell *matCellDef="let element" class="text-right">
                                                     {{ vatReportCurrencySymbol + element?.totalAmount?.decimal }}
                                                 </td>
-                                                <td mat-footer-cell *matFooterCellDef class="text-right">
+                                                <td mat-footer-cell *matFooterCellDef class="font-weight-bold text-right">
                                                     {{ vatReportCurrencySymbol + vatReport[i]?.sections[vatReport[i]?.sections?.length -
                                                     1]?.totalAmount?.decimal }}
                                                 </td>
