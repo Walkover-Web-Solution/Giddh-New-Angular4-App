@@ -533,7 +533,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
      * @memberof VatReportComponent
      */
     public onCurrencyChange(event: any): void {
-        if (event?.value) {
+        if (event) {
             this.vatReportCurrencyCode = event.value;
             this.getVatReport();
         }
