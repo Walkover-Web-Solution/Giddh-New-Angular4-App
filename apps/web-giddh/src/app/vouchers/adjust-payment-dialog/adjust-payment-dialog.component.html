@@ -16,7 +16,7 @@
                     {{ localeData?.adjusted_amount_error }}
                 </span>
                 <div class="row mb-2" *ngIf="isModal">
-                    <div class="col-6 mr-t05">
+                    <div class="col-6 mr-t15">
                         <div class="form-group">
                             <input-field
                                 [id]="'customerName'"
@@ -144,7 +144,7 @@
                             let last = last
                         "
                     >
-                        <div class="row voucher-form pb-1 align-items-stretch mb-1">
+                        <div class="row voucher-form pb-1 align-items-start mb-1">
                             <div class="col-5">
                                 <div class="form-group mb-0">
                                     <div class="select-error select-caret relative">
@@ -203,7 +203,7 @@
                                 </div>
                             </div>
                             <div class="col-5">
-                                <div class="form-group mb-0">
+                                <div class="form-group mb-0 text-right">
                                     <text-field
                                         [readonly]="
                                             shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null
@@ -227,6 +227,7 @@
                                         class="company-currency"
                                     >
                                         <amount-field
+                                            class="d-inline-block"
                                             [amount]="entry.adjustmentAmount.amountForCompany"
                                             [currencySymbol]="baseCurrencySymbol"
                                             [currencyCode]="companyCurrency"
@@ -247,7 +248,7 @@
                                     href="javascript:void(0)"
                                     aria-label="delete icon"
                                     (click)="deleteAdjustVoucherRow(entryIdx)"
-                                    class="icon-font-22 text-black d-inline-block"
+                                    class="icon-font-22 text-black d-inline-block pt-2"
                                     ><i class="icon-trash"></i
                                 ></a>
                             </div>
@@ -276,12 +277,14 @@
                             <p>{{ commonLocaleData?.app_note }}:</p>
                             <p>{{ localeData?.adjustment_note }}</p>
                         </div>
-                        <div class="mt-2" *ngIf="isModal">
+                        <div class="d-flex justify-content-end column-gap1 mt-2" *ngIf="isModal">
+                            <button mat-stroked-button (click)="onClear(true)">
+                                {{ commonLocaleData?.app_reset }}
+                            </button>
                             <button
                                 mat-stroked-button
                                 color="primary"
                                 *ngIf="!isUpdateMode"
-                                class="mr-r1"
                                 [disabled]="isInvalidForm"
                                 (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)"
                             >
@@ -291,14 +294,10 @@
                                 mat-stroked-button
                                 color="primary"
                                 *ngIf="isUpdateMode"
-                                class="mr-r1"
                                 [disabled]="isInvalidForm"
                                 (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)"
                             >
                                 {{ commonLocaleData?.app_update }}
-                            </button>
-                            <button mat-stroked-button (click)="onClear(true)">
-                                {{ commonLocaleData?.app_reset }}
                             </button>
                         </div>
                     </div>
