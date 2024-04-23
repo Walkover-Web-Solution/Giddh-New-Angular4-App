@@ -60,6 +60,7 @@
         "view_subscription":"View Subscription",
         "invoice_count": "Invoice Count",
         "bill_count": "Bill Count",
+        "bill": "Bill",
         "usage": "Usage",
         "company_count": "Company Count",
         "transaction_count": "Transaction Count",
