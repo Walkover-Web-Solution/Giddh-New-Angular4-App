@@ -1,17 +1,38 @@
 .vat-report {
     .vat-report-table {
-        tr {
-            th,td {
-                border:  1px solid var(--color-table-primary-content-bar-border) !important;
+        &.mat-mdc-table {
+            &.zimbabwe-vat-report-table {
+                tr {
+                    height: 44px !important;
 
-                &[colspan="2"]{
-                    text-align: center;
+                    th {
+                        padding: 5px 10px !important;
+                    }
+
+                    th,td {
+                        border:  1px solid var(--color-table-primary-content-bar-border) !important;
+        
+                        &[colspan="2"]{
+                            text-align: center;
+                        }
+                        &.d-none {
+                            display: none !important;
+                        }
+                        &.bg-grey {
+                            background-color: var(--color-wild-sand) !important;
+                        }
+                    }
                 }
-                &.d-none {
-                    display: none !important;
+                tbody {
+                    tr {
+                        &:last-child {
+                            display: none !important;
+                        }
+                    }
                 }
             }
         }
+        
         tfoot {
             background-color: var(--color-wild-sand);
             tr {
@@ -25,21 +46,6 @@
         max-width: calc(1360px + 30px);
         margin-left: auto;
         margin-right: auto;
-    }
-    .zimbabwe-vat-report-table {
-        tr{
-            height: 44px !important;
-            th {
-                padding: 5px 10px !important;
-            }
-        }
-        tbody {
-            tr {
-                &:last-child {
-                    display: none !important;
-                }
-            }
-        }
     }
 }
 .table-hide-title {
