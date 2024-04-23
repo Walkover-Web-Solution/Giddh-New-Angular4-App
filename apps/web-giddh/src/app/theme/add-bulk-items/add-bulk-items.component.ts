@@ -226,28 +226,30 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      * This will be use for variant change
      *
      * @param {SalesAddBulkStockItems} item
-     * @param {*} event
+     * @param {*} variant
      * @return {*}  {void}
      * @memberof AddBulkItemsComponent
      */
-    public variantChanged(item: SalesAddBulkStockItems, event: any, index: number): void {
-        let selectedItem = cloneDeep(item);
-        selectedItem.variant = { name: event.label, uniqueName: event.value };
+    public variantChanged(item: SalesAddBulkStockItems, variant: any, index: number): void {
         const dataArray = this.addBulkForm.get('data') as FormArray;
-        const isAlreadySelected = dataArray.controls.some((control: any, i: number) => {
-            return i === index && control.get('variantName').value === event.label;
-        });
-
-        if (isAlreadySelected) {
-            this.toaster.showSnackBar('error', this.localeData?.item_selected);
+        const isAlreadySelected = dataArray?.value?.filter(data => data?.variantUniqueName === variant.value);
+ 
+        if (isAlreadySelected?.length || this.itemsInProcess[item.uniqueName]) {
+            this.toaster.showSnackBar('warning', this.localeData?.item_selected);
             return;
         }
 
+        this.itemsInProcess[variant.value] = true;
+
         const requestObj = {
             stockUniqueName: item.additional?.stock?.uniqueName ?? '',
-            variantUniqueName: event.value,
+            variantUniqueName: variant.value,
             customerUniqueName: this.inputData.customerUniqueName
         };
+
+        let selectedItem = cloneDeep(item);
+        selectedItem.variant = { name: variant.label, uniqueName: variant.value };
+
         this.loadDetails(selectedItem, requestObj, index);
     }
 
