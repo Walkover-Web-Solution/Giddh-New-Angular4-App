@@ -87,6 +87,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public zwDisplayedColumns: string[] = ['name', 'mat-code', 'vos-amount', 'vos-decimal', 'ot-amount', 'ot-decimal'];
     /** Hold Zimbabwe table header row displayed columns */
     public zwDisplayedHeaderColumns = ['section','office-use', 'value-of-supply', 'output-tax'];
+    /** Hold Zimbabwe table displayed columns for last section */
+    public zwDisplayedColumnsForLastSection: string[] =  ['name', 'amount', 'decimal'];
     /** Holds Section Number which  show Total Output Tax Row */
     public showTotalOutputTaxIn: number[] = [9,19,20,21,22,23];
     /** True if active country is UK */
