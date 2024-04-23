@@ -103,7 +103,6 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this._invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
             this.customTemplate = cloneDeep(template);
-
             this.setFontAndFontSize();
 
             let op = {
@@ -387,6 +386,21 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
                 });
             }
         }
+    }
+
+    /**
+     * This will be use for on change field visibility
+     *
+     * @param {string} fieldName
+     * @param {string} value
+     * @memberof DesignFiltersContainerComponent
+     */
+    public onChangeFieldVisibility(fieldName: string, value: string): void {
+        let template = cloneDeep(this.customTemplate);
+        if (fieldName) {
+            template[fieldName] = value;
+        }
+        this._invoiceUiDataService.setCustomTemplate(template);
     }
 
     /**
