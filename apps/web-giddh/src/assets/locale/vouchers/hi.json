@@ -133,6 +133,7 @@
     "generate_sales_update_account": "बिक्री उत्पन्न करें एवं खाता अद्यतन करें",
     "generate_sales": "बिक्री उत्पन्न करें",
     "generate_cash": "नकद उत्पन्न करें",
+    "generate_cash_bill": "नकद बिल जनरेट करें",
     "generate_cn_update_account": "क्रेडिट नोट जेनरेट करें और खाता अपडेट करें",
     "generate_cn": "क्रेडिट नोट जनरेट करें",
     "generate_dn_update_account": "डेबिट नोट जेनरेट करें और खाता अपडेट करें",

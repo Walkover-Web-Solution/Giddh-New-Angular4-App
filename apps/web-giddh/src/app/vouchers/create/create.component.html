@@ -29,7 +29,7 @@
                                                 [options]="voucherAccountResults$ | async" [showCreateNew]="true"
                                                 [enableDynamicSearch]="true" [isPaginationEnabled]="true"
                                                 [openDropdown]="openAccountDropdown"
-                                                [createNewText]="!invoiceType.isPurchaseOrder && !invoiceType.isDebitNote ? localeData?.add_customer : localeData?.add_vendor"
+                                                [createNewText]="!invoiceType.isPurchaseOrder && !invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote ? localeData?.add_customer : localeData?.add_vendor"
                                                 [labelValue]="invoiceForm.controls['account'].get('customerName')?.value"
                                                 [showKeyboardCommand]="commonLocaleData?.app_alt_c"
                                                 (scrollEnd)="handleSearchAccountScrollEnd()"
@@ -39,8 +39,8 @@
                                                 (createOption)="toggleAccountAsidePane(accountType.customer)">
                                             </reactive-dropdown-field>
                                             <input-field *ngIf="invoiceType.isCashInvoice" [name]="'account'"
-                                                [label]="localeData?.customer_name"
-                                                [placeholder]="localeData?.enter_customer_name" [type]="'text'"
+                                                [label]="invoiceType.isPurchaseOrder || invoiceType.isPurchaseInvoice || invoiceType.isDebitNote ? localeData?.vendor_name : localeData?.customer_name"
+                                                [placeholder]="invoiceType.isPurchaseOrder || invoiceType.isPurchaseInvoice || invoiceType.isDebitNote ? localeData?.vendor_name : localeData?.enter_vendor_name" [type]="'text'"
                                                 [autoFocus]="true" formControlName="customerName"></input-field>
                                         </div>
                                         <ng-container
@@ -98,16 +98,21 @@
                                         (click)="toggleAccountAsidePane(accountType.customer, false)">
                                         {{ !invoiceType.isPurchaseOrder ? localeData?.customer_details :
                                         localeData?.vendor_details }}</span>
-                                    <ng-container *ngIf="invoiceType.isSalesInvoice || invoiceType.isCreditNote">
+                                    <ng-container *ngIf="!invoiceType.isCashInvoice && (invoiceType.isSalesInvoice || invoiceType.isCreditNote)">
                                         <img src="{{ imgPath }}new/search_customer.svg" height="70" class="mb-3"
                                             *ngIf="!invoiceForm.controls['account'].get('customerName')?.value" />
                                     </ng-container>
-                                    <ng-container *ngIf="invoiceType.isPurchaseInvoice || invoiceType.isDebitNote || invoiceType.isPurchaseOrder">
+                                    <ng-container *ngIf="!invoiceType.isCashInvoice && (invoiceType.isPurchaseInvoice || invoiceType.isDebitNote || invoiceType.isPurchaseOrder)">
                                         <img src="{{ imgPath }}new/search-vendor.svg" height="70" class="mb-3"
                                             *ngIf="!invoiceForm.controls['account'].get('customerName')?.value" />
                                     </ng-container>
-                                    <ng-container *ngIf="invoiceType.isCashInvoice">
+                                    <ng-container *ngIf="invoiceType.isCashInvoice && !invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote">
                                         <img src="{{ imgPath }}new/search-customer-cash-invoice.svg" height="70"
+                                            class="mb-3"
+                                            *ngIf="!invoiceForm.controls['account'].get('customerName')?.value" />
+                                    </ng-container>
+                                    <ng-container *ngIf="invoiceType.isCashInvoice && (invoiceType.isPurchaseInvoice || invoiceType.isDebitNote)">
+                                        <img src="{{ imgPath }}search-vendor-cash-invoice.svg" height="70"
                                             class="mb-3"
                                             *ngIf="!invoiceForm.controls['account'].get('customerName')?.value" />
                                     </ng-container>
@@ -344,7 +349,7 @@
 
                                 <!-- Row 2 for Deliver To Only show in Cash Invoice -->
                                 <div class="row pd-b1"
-                                    *ngIf="invoiceType.isPurchaseOrder || invoiceType.isPurchaseInvoice"
+                                    *ngIf="invoiceType.isPurchaseOrder || (invoiceType.isPurchaseInvoice && !invoiceType.isCashInvoice)"
                                     formGroupName="account">
                                     <div class="col-12 mr-t15">
                                         <span class="billing-deliver-label">{{ localeData?.deliver_to }}</span>
@@ -1216,7 +1221,7 @@
                                             <div class="container px-0">
                                                 <div class="row">
                                                     <div class="col-12"
-                                                        *ngIf="!invoiceType.isPurchaseOrder && ((currentVoucherFormDetails?.depositAllowed && !invoiceType.isCashInvoice) || ((invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote) && vouchersForAdjustment?.length))">
+                                                        *ngIf="!invoiceType.isPurchaseOrder && (currentVoucherFormDetails?.depositAllowed || ((invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote) && vouchersForAdjustment?.length))">
                                                         <mat-card>
                                                             <mat-card-header>
                                                                 <mat-card-title>
@@ -1227,7 +1232,7 @@
                                                                 <div class="container px-0" formGroupName="deposit">
                                                                     <div class="row align-items-center">
                                                                         <ng-container
-                                                                            *ngIf="currentVoucherFormDetails?.depositAllowed && !invoiceType.isCashInvoice">
+                                                                            *ngIf="currentVoucherFormDetails?.depositAllowed">
                                                                             <div class="col">
                                                                                 <reactive-dropdown-field
                                                                                     [label]="commonLocaleData?.app_account"
@@ -1241,7 +1246,7 @@
                                                                                     formControlName="accountUniqueName">
                                                                                 </reactive-dropdown-field>
                                                                             </div>
-                                                                            <div class="col">
+                                                                            <div class="col" *ngIf="!invoiceType.isCashInvoice">
                                                                                 <input-field [name]="'amountForAccount'"
                                                                                     [label]="commonLocaleData?.app_amount"
                                                                                     [placeholder]="localeData?.enter_deposit_amount"
@@ -1591,12 +1596,13 @@
                                     <button mat-stroked-button color="primary" *ngIf="invoiceType.isEstimateInvoice" (click)="generateVoucher()">{{ commonLocaleData?.app_create }}</button>
                                     <button mat-stroked-button color="primary" *ngIf="invoiceType.isProformaInvoice" (click)="generateVoucher()">{{ commonLocaleData?.app_create }}</button>
                                     <button mat-stroked-button color="primary" *ngIf="invoiceType.isSalesInvoice" (click)="generateVoucher()">{{ localeData?.generate_sales }}</button>
-                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isCashInvoice" (click)="generateVoucher()">{{ localeData?.generate_cash }}</button>
-                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isCreditNote" (click)="updateAccountAndGenerateVoucher()">{{ localeData?.generate_cn_update_account }}</button>
+                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isCashInvoice && !invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote" (click)="generateVoucher()">{{ localeData?.generate_cash }}</button>
+                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isCashInvoice && invoiceType.isPurchaseInvoice" (click)="generateVoucher()">{{ localeData?.generate_cash_bill }}</button>
+                                    <button mat-stroked-button color="primary" *ngIf="!invoiceType.isCashInvoice && invoiceType.isCreditNote" (click)="updateAccountAndGenerateVoucher()">{{ localeData?.generate_cn_update_account }}</button>
                                     <button mat-stroked-button color="primary" *ngIf="invoiceType.isCreditNote" (click)="generateVoucher()">{{ localeData?.generate_cn }}</button>
-                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isDebitNote" (click)="updateAccountAndGenerateVoucher()">{{ localeData?.generate_dn_update_account }}</button>
+                                    <button mat-stroked-button color="primary" *ngIf="!invoiceType.isCashInvoice && invoiceType.isDebitNote" (click)="updateAccountAndGenerateVoucher()">{{ localeData?.generate_dn_update_account }}</button>
                                     <button mat-stroked-button color="primary" *ngIf="invoiceType.isDebitNote" (click)="generateVoucher()">{{ localeData?.generate_dn }}</button>
-                                    <button mat-stroked-button color="primary" *ngIf="invoiceType.isPurchaseInvoice || invoiceType.isPurchaseOrder" (click)="generateVoucher()">{{ commonLocaleData?.app_save }}</button>
+                                    <button mat-stroked-button color="primary" *ngIf="!invoiceType.isCashInvoice && (invoiceType.isPurchaseInvoice || invoiceType.isPurchaseOrder)" (click)="generateVoucher()">{{ commonLocaleData?.app_save }}</button>
                                     <button mat-stroked-button [matMenuTriggerFor]="moreOptions" class="vouchers-more-option-btn" *ngIf="invoiceType.isSalesInvoice || invoiceType.isEstimateInvoice || invoiceType.isProformaInvoice"><i class="caret"></i></button>
                                     <mat-menu #moreOptions="matMenu">
                                         <button mat-menu-item (click)="createSendVoucher()">{{ localeData?.create_send }}</button>

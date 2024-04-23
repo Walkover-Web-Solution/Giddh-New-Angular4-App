@@ -32,6 +32,8 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** List of items in process to add */
+    public itemsInProcess: any[] = [];
 
     constructor(
         private vouchersUtilityService: VouchersUtilityService,
@@ -158,11 +160,10 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      */
     public addItem(item: SalesAddBulkStockItems, index: number): void {
         const dataArray = this.addBulkForm.get('data') as FormArray;
-        const isAlreadySelected = dataArray.controls.some((control: any, i: number) => {
-            return i === index && (control.get('name').value === item.name);
-        });
-        if (isAlreadySelected) {
-            this.toaster.showSnackBar('error', this.localeData?.item_selected);
+        const isAlreadySelected = dataArray?.value?.filter(data => data?.additional?.value === item.uniqueName);
+
+        if (isAlreadySelected?.length || this.itemsInProcess[item.uniqueName]) {
+            this.toaster.showSnackBar('warning', this.localeData?.item_selected);
             return;
         }
 
@@ -174,6 +175,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         if (item?.additional?.hasVariants) {
             this.componentStore.getStockVariants({ q: item?.additional?.stock?.uniqueName, index: index });
         } else {
+            this.itemsInProcess[item.uniqueName] = true;
             this.loadDetails(item, requestObject, index);
         }
     }
@@ -214,6 +216,8 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
 
                 let itemFormGroup = this.getStockFormGroup(item);
                 this.getDataControls.push(itemFormGroup);
+
+                this.itemsInProcess[item.uniqueName] = false;
             }
         });
     }

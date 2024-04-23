@@ -2828,7 +2828,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         invoiceForm = this.vouchersUtilityService.formatVoucherObject(invoiceForm);
 
-        if (!this.currentVoucherFormDetails?.depositAllowed || this.invoiceType.isCashInvoice) {
+        if (!this.currentVoucherFormDetails?.depositAllowed || (this.invoiceType.isCashInvoice && !this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCreditNote && !this.invoiceType.isDebitNote)) {
             delete invoiceForm.deposit;
         }
 
@@ -2928,10 +2928,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             });
         } else {
             if (this.invoiceType.isCashInvoice) {
-                invoiceForm.type = "sales";
+                invoiceForm.type = this.invoiceType.isPurchaseInvoice ? "purchase" : this.invoiceType.isCreditNote ? "credit note" : this.invoiceType.isDebitNote ? "debit note" : "sales";
 
                 invoiceForm.entries = invoiceForm.entries?.map(entry => {
-                    entry.voucherType = "sales";
+                    entry.voucherType = invoiceForm.type;
                     return entry;
                 });
             }
