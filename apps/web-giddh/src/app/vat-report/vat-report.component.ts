@@ -290,12 +290,12 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 this.vatService.getCountryWiseVatReport(vatReportRequest, countryCode).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (res) {
                         this.isLoading = false;
-                        if (res.status === 'success') {
+                        if (res && res?.status === 'success' && res?.body) {
                             this.vatReport = res.body?.sections;
                             if(this.activeCompany?.countryV2?.alpha2CountryCode === 'ZW') {
-                                this.vatReportCurrencyCode = res?.body?.currency?.code;
-                                this.vatReportCurrencySymbol = this.vatReportCurrencyList.filter( item => item.label === res?.body?.currency?.code).map(item => item.additional.symbol).join();
-                                this.vatReportCurrencyMap = res?.body?.currencyMap;
+                                this.vatReportCurrencyCode = res.body?.currency?.code;
+                                this.vatReportCurrencySymbol = this.vatReportCurrencyList.filter( item => item.label === res.body?.currency?.code).map(item => item.additional.symbol).join();
+                                this.vatReportCurrencyMap = res.body?.currencyMap;
                             }
                             
                             this.cdRef.detectChanges();
@@ -533,8 +533,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
      * @memberof VatReportComponent
      */
     public onCurrencyChange(event: any): void {
-        if (event) {
-            this.vatReportCurrencyCode = event?.value;
+        if (event?.value) {
+            this.vatReportCurrencyCode = event.value;
             this.getVatReport();
         }
     }
