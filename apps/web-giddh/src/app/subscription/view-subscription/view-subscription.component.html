@@ -69,9 +69,9 @@
                     </div>
                     <div class="view-subscription">
                         <div class="d-flex justify-content-between my-3">
-                            <p class="strong mb-1 font-16">{{ viewSubscriptionData?.planDetails?.name }}</p>
+                            <p class="strong mb-1 font-16">{{ viewSubscriptionData?.planName }}</p>
                             <span class="font-24">
-                                {{ viewSubscriptionData?.planDetails?.amount }}
+                                {{ viewSubscriptionData?.amount }}
                             </span>
                         </div>
                         <h4 class="strong border-bottom pb-3 font-16 mr-t2">Total</h4>
@@ -79,7 +79,7 @@
                             <div>
                                 <p class="light-gray mb-1 font-12">{{ commonLocaleData?.app_company }}</p>
                                 <span class="font-24">
-                                    {{ viewSubscriptionData?.totalCompanies }}
+                                    {{ viewSubscriptionData?.totalCompaniesAllowed }}
                                 </span>
                             </div>
                             <div>
@@ -101,19 +101,19 @@
                             <div>
                                 <p class="light-gray mb-1 font-12">{{ commonLocaleData?.app_company }}</p>
                                 <span class="font-24">
-                                    {{ viewSubscriptionData?.totalCompanies }}
+                                    {{ viewSubscriptionData?.usageCompanyCount }}
                                 </span>
                             </div>
                             <div>
                                 <p class="light-gray mb-1 font-12">{{ commonLocaleData?.app_invoice }}</p>
                                 <span class="font-24">
-                                    {{ viewSubscriptionData?.totalInvoices }}
+                                    {{ viewSubscriptionData?.usageInvoiceCount }}
                                 </span>
                             </div>
                             <div class="view-right d-flex align-items-end">
                                 <p class="light-gray mb-1 font-12">{{ localeData?.bill }}</p>
                                 <span class="font-24">
-                                    {{ viewSubscriptionData?.totalBills }}
+                                    {{ viewSubscriptionData?.usageBillCount }}
                                 </span>
                             </div>
                         </div>
