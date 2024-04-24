@@ -44,7 +44,7 @@ export class EntryTotalDirective implements OnChanges, OnDestroy {
             if (this.excludeTax) {
                 amount = giddhRoundOff((Number(this.entry.transactions[0].amount?.amountForAccount) - Number(this.entry.totalDiscount)), this.balanceDecimalPlaces);
             } else {
-                amount = giddhRoundOff((Number(this.entry.transactions[0].amount?.amountForAccount) - Number(this.entry.totalDiscount)) + (Number(this.entry.totalTax) + Number(this.entry.otherTax?.amount)), this.balanceDecimalPlaces);
+                amount = giddhRoundOff((Number(this.entry.transactions[0].amount?.amountForAccount) - Number(this.entry.totalDiscount)) + (Number(this.entry.totalTax)), this.balanceDecimalPlaces);
             }
             this.calculatedAmount.emit(amount);
         }

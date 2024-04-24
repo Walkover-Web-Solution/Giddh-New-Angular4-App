@@ -153,6 +153,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Onboarding form fields */
     public formFields: any[] = [];
     /** Holds company tax list  */
+    public allCompanyTaxes: TaxResponse[] = [];
+    /** Holds company tax list  */
     public companyTaxes: TaxResponse[] = [];
     /** Holds company discounts */
     public discountsList: any[] = [];
@@ -672,8 +674,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.getSelectedTaxes(index, normalTaxes);
                         }
 
+                        if (!otherTax && this.account?.otherApplicableTaxes?.length) {
+                            this.allCompanyTaxes?.forEach(tax => {
+                                if (this.account?.otherApplicableTaxes[0]?.uniqueName === tax?.uniqueName && this.otherTaxTypes.includes(tax.taxType)) {
+                                    otherTax = tax;
+                                }
+                            });
+                        }
+
                         if (otherTax) {
-                            const selectedOtherTax = this.companyTaxes?.filter(tax => tax.uniqueName === otherTax.uniqueName);
+                            const selectedOtherTax = this.allCompanyTaxes?.filter(tax => tax.uniqueName === otherTax.uniqueName);
                             otherTax['taxDetail'] = selectedOtherTax[0].taxDetail;
                             otherTax['name'] = selectedOtherTax[0].name;
                             this.getSelectedOtherTax(index, otherTax, otherTax.calculationMethod);
@@ -1005,6 +1015,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (!response) {
                 this.store.dispatch(this.companyActions.getTax());
             } else {
+                this.allCompanyTaxes = response;
                 this.companyTaxes = response?.filter(tax => !this.otherTaxTypes.includes(tax.taxType));
             }
         });
@@ -1856,11 +1867,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     const selectedTaxes = [];
                     let otherTax = null;
                     taxes?.forEach(selectedTax => {
-                        this.companyTaxes?.forEach(tax => {
-                            if (this.otherTaxTypes.includes(tax.taxType)) {
-                                otherTax = tax;
-                            } else {
-                                if (tax.uniqueName === selectedTax) {
+                        this.allCompanyTaxes?.forEach(tax => {
+                            if (tax.uniqueName === selectedTax) {
+                                if (this.otherTaxTypes.includes(tax.taxType)) {
+                                    otherTax = tax;
+                                } else {
                                     selectedTaxes.push(tax);
                                 }
                             }
@@ -1871,8 +1882,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
                     });
 
+                    if (!otherTax && this.account?.otherApplicableTaxes?.length) {
+                        this.allCompanyTaxes?.forEach(tax => {
+                            if (this.account?.otherApplicableTaxes[0]?.uniqueName === tax?.uniqueName && this.otherTaxTypes.includes(tax.taxType)) {
+                                otherTax = tax;
+                            }
+                        });
+                    }
+
                     if (otherTax) {
-                        const selectedOtherTax = this.companyTaxes?.filter(tax => tax.uniqueName === otherTax.uniqueName);
+                        const selectedOtherTax = this.allCompanyTaxes?.filter(tax => tax.uniqueName === otherTax.uniqueName);
                         otherTax['taxDetail'] = selectedOtherTax[0].taxDetail;
                         otherTax['name'] = selectedOtherTax[0].name;
                         this.getSelectedOtherTax(index, otherTax, otherTax.calculationMethod);
@@ -3549,11 +3568,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             const selectedTaxes = [];
             let otherTax = null;
             entry?.taxes?.forEach(selectedTax => {
-                this.companyTaxes?.forEach(tax => {
-                    if (this.otherTaxTypes.includes(tax.taxType)) {
-                        otherTax = tax;
-                    } else {
-                        if (tax.uniqueName === selectedTax?.uniqueName) {
+                this.allCompanyTaxes?.forEach(tax => {
+                    if (tax.uniqueName === selectedTax?.uniqueName) {
+                        if (this.otherTaxTypes.includes(tax.taxType)) {
+                            otherTax = tax;
+                        } else {
                             selectedTaxes.push(tax);
                         }
                     }
@@ -3564,8 +3583,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
             });
 
+            if (!otherTax && this.account?.otherApplicableTaxes?.length) {
+                this.allCompanyTaxes?.forEach(tax => {
+                    if (this.account?.otherApplicableTaxes[0]?.uniqueName === tax?.uniqueName && this.otherTaxTypes.includes(tax.taxType)) {
+                        otherTax = tax;
+                    }
+                });
+            }
+
             if (otherTax) {
-                const selectedOtherTax = this.companyTaxes?.filter(tax => tax.uniqueName === otherTax.uniqueName);
+                const selectedOtherTax = this.allCompanyTaxes?.filter(tax => tax.uniqueName === otherTax.uniqueName);
                 otherTax['taxDetail'] = selectedOtherTax[0].taxDetail;
                 otherTax['name'] = selectedOtherTax[0].name;
                 this.getSelectedOtherTax(entryIndex, otherTax, otherTax.calculationMethod);
@@ -3897,11 +3924,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const selectedTaxes = [];
         let otherTax = null;
         taxes?.forEach(selectedTax => {
-            this.companyTaxes?.forEach(tax => {
-                if (this.otherTaxTypes.includes(tax.taxType)) {
-                    otherTax = tax;
-                } else {
-                    if (tax.uniqueName === selectedTax) {
+            this.allCompanyTaxes?.forEach(tax => {
+                if (tax.uniqueName === selectedTax) {
+                    if (this.otherTaxTypes.includes(tax.taxType)) {
+                        otherTax = tax;
+                    } else {
                         selectedTaxes.push(tax);
                     }
                 }
@@ -3912,8 +3939,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
         });
 
+        if (!otherTax && this.account?.otherApplicableTaxes?.length) {
+            this.allCompanyTaxes?.forEach(tax => {
+                if (this.account?.otherApplicableTaxes[0]?.uniqueName === tax?.uniqueName && this.otherTaxTypes.includes(tax.taxType)) {
+                    otherTax = tax;
+                }
+            });
+        }
+
         if (otherTax) {
-            const selectedOtherTax = this.companyTaxes?.filter(tax => tax.uniqueName === otherTax.uniqueName);
+            const selectedOtherTax = this.allCompanyTaxes?.filter(tax => tax.uniqueName === otherTax.uniqueName);
             otherTax['taxDetail'] = selectedOtherTax[0].taxDetail;
             otherTax['name'] = selectedOtherTax[0].name;
             this.getSelectedOtherTax(entryIndex, otherTax, otherTax.calculationMethod);
