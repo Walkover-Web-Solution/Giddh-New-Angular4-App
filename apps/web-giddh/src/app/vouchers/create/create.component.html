@@ -1203,7 +1203,7 @@
                                                                     [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'">
                                                                     <input matInput [placeholder]="commonLocaleData?.app_total"
                                                                         class="form-control text-right pr-0" type="text"
-                                                                        entryTotal [entry]="entry?.value" [excludeTax]="account?.excludeTax"
+                                                                        entryTotal [entry]="entry?.value" [excludeTax]="account?.excludeTax || invoiceForm.get('isRcmEntry')?.value"
                                                                         name="transactionTotal{{entryIndex}}"
                                                                         formControlName="amountForAccount"
                                                                         [prefix]="account?.baseCurrencySymbol"
