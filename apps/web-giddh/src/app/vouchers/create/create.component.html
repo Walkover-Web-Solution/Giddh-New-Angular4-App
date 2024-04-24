@@ -750,7 +750,7 @@
                                                                 </ng-container>
                                                             </ng-container>
                                                         </div>
-                                                        <div class="d-flex" [ngClass]="{'justify-content-between': (!invoiceType.isPurchaseOrder && !invoiceType.isEstimateInvoice && !invoiceType.isProformaInvoice),'justify-content-start': (invoiceType.isPurchaseOrder || invoiceType.isEstimateInvoice || invoiceType.isProformaInvoice)}">
+                                                        <div class="d-flex" [ngClass]="{'justify-content-between': (!invoiceType.isPurchaseOrder && !invoiceType.isEstimateInvoice && !invoiceType.isProformaInvoice)}">
                                                             <div class="w-50" *ngIf="!invoiceType.isPurchaseOrder && !invoiceType.isEstimateInvoice && !invoiceType.isProformaInvoice">
                                                                 <div class="mt-2 font-12">
                                                                     <span>{{ localeData?.entry_date }}</span>
