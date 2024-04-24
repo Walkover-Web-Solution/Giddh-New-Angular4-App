@@ -96,8 +96,8 @@
                                         *ngIf="!invoiceType.isCashInvoice && invoiceForm.controls['account'].get('uniqueName')?.value"
                                         class="vouchers-form-fields-detail cursor-pointer"
                                         (click)="toggleAccountAsidePane(accountType.customer, false)">
-                                        {{ !invoiceType.isPurchaseOrder ? localeData?.customer_details :
-                                        localeData?.vendor_details }}</span>
+                                        {{ !invoiceType.isPurchaseOrder ? localeData?.edit_customer :
+                                        localeData?.edit_vendor }}</span>
                                     <ng-container *ngIf="!invoiceType.isCashInvoice && (invoiceType.isSalesInvoice || invoiceType.isCreditNote)">
                                         <img src="{{ imgPath }}new/search_customer.svg" height="70" class="mb-3"
                                             *ngIf="!invoiceForm.controls['account'].get('customerName')?.value" />
