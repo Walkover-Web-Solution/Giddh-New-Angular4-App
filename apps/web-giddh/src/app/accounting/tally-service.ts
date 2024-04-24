@@ -293,7 +293,7 @@ export class TallyModuleService {
                         accounts = this.taxAccounts?.value;
                     }
                     break;
-                case 'Sales':
+                case 'sales':
                     if (this.bankAccounts?.value) {
                         accounts = this.bankAccounts.value.concat(this.cashAccounts?.value).concat(this.expenseAccounts?.value).concat(this.salesAccounts?.value);
                     } else if (this.cashAccounts?.value) {
@@ -506,6 +506,7 @@ export class TallyModuleService {
      * @memberof TallyModuleService
      */
     public getGroupByVoucher(voucherType: string, selectedTransactionType?: string): any {
+        console.log(voucherType, selectedTransactionType);
         if (voucherType.toLowerCase() === VOUCHERS.CONTRA) {
             return {
                 group: encodeURIComponent('bankaccounts, cash, loanandoverdraft'),
@@ -529,7 +530,15 @@ export class TallyModuleService {
                 group: encodeURIComponent('shareholdersfunds, noncurrentliabilities, currentliabilities,fixedassets,noncurrentassets,currentassets,revenuefromoperations,otherincome,operatingcost,indirectexpenses'),
                 exceptGroups: encodeURIComponent('')
             };
-        } else {
+        } else if (voucherType.toLowerCase() === VOUCHERS.SALES) {
+            return {
+                group: selectedTransactionType?.toLowerCase() === 'to' ?
+                    encodeURIComponent('revenuefromoperations, otherincome, fixedassets') :
+                    encodeURIComponent('bankaccounts, cash, loanandoverdraft,sundrycreditors,sundrydebtors '),
+                exceptGroups: encodeURIComponent('')
+            };
+        }
+        else {
             return {
                 group: '',
                 exceptGroups: ''

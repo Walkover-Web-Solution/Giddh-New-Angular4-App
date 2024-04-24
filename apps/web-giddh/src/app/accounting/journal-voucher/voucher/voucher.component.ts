@@ -325,6 +325,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         // Receipt allows cash/bank/sundry debtors/sundry creditors so selecting default category as currentassets
                         this.categoryOfAccounts = 'currentassets';
                         break;
+                    case VOUCHERS.SALES:
+                        // Receipt allows cash/bank/sundry debtors/sundry creditors so selecting default category as currentassets
+                        this.categoryOfAccounts = 'currentassets';
+                        break;
                     default:
                         // TODO: Add other category cases as they are developed
                         break;
@@ -940,19 +944,20 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             .map((control: AbstractControl) => Number(control.get('amount').value))
             .reduce((acc: number, amount: number) => acc + amount, 0);
 
-
+        console.log(indx, lastIndx, transactionObj.get('selectedAccount.name').value);
 
         if (indx === lastIndx && transactionObj.get('selectedAccount.name').value) {
             const voucherTypeControl = this.journalVoucherForm.get('voucherType');
-
             // Setting the value of voucherType FormControl to currentVoucher
             voucherTypeControl.setValue(this.currentVoucher);
-
+            console.log(this.totalCreditAmount, this.totalDebitAmount, voucherTypeControl.value);
             if (this.totalCreditAmount < this.totalDebitAmount || (this.totalCreditAmount === 0 && this.totalDebitAmount === 0)) {
                 if (voucherTypeControl.value !== VOUCHERS.RECEIPT) {
                     this.newEntryObj('to');
                 } else if (voucherTypeControl.value !== VOUCHERS.PAYMENT) {
                     this.newEntryObj('by');
+                } else if (voucherTypeControl.value !== VOUCHERS.SALES) {
+                    this.newEntryObj('to');
                 } else {
                     if ((this.journalVoucherForm.get('transactions') as FormArray).length === 1) {
                         this.newEntryObj('by');
@@ -1319,6 +1324,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
                 case VOUCHERS.PAYMENT:
                     firstTransaction.patchValue({ type: 'by' });
+                    break;
+                case VOUCHERS.SALES:
+                    firstTransaction.patchValue({ type: 'to' });
                     break;
 
                 default:

@@ -71,15 +71,16 @@ export const PAGE_SHORTCUT_MAPPING = [
             gridType: 'voucher'
         }
     },
+    {
+        keyCode: 119, // 'F8',
+        key: FUNCTIONAL_KEYS.F8,
+        inputForFn: {
+            page: 'Sales',
+            uniqueName: 'purchases',
+            gridType: 'voucher'
+        }
+    },
     //{
-    //     keyCode: 119, // 'F8',
-    //     key: FUNCTIONAL_KEYS.F8,
-    //     inputForFn: {
-    //         page: 'Sales',
-    //         uniqueName: 'purchases',
-    //         gridType: 'voucher'
-    //     }
-    // }, {
     //     keyCode: 119, // 'F8',
     //     key: FUNCTIONAL_KEYS.F8,
     //     altKey: true,
