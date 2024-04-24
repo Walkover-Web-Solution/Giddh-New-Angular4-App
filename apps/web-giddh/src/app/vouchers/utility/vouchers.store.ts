@@ -258,13 +258,13 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     tapResponse(
                         (res: Array<IVariant>) => {
                             return this.patchState({
-                                stockVariants: { results: res?.map(res => { return { label: res.name, value: res.uniqueName } }) ?? [], entryIndex: req.index, autoSelectVariant: req.autoSelectVariant }
+                                stockVariants: { results: res?.map(res => { return { label: res.name, value: res.uniqueName } }) ?? [], entryIndex: req.index, autoSelectVariant: req.autoSelectVariant, stockUniqueName: req.q }
                             });
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({
-                                stockVariants: { results: [], entryIndex: req.index, autoSelectVariant: req.autoSelectVariant }
+                                stockVariants: { results: [], entryIndex: req.index, autoSelectVariant: req.autoSelectVariant, stockUniqueName: req.q }
                             });
                         }
                     ),
