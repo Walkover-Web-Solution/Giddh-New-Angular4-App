@@ -38,7 +38,7 @@ export class EntryTotalDirective implements OnChanges, OnDestroy {
      * @memberof EntryAmountDirective
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if ((!isEqual(changes?.entry?.currentValue, changes?.entry?.previousValue) || !isEqual(changes?.excludeTax?.currentValue, changes?.excludeTax?.previousValue)) && changes?.entry?.currentValue?.calculateTotal) {
+        if ((!isEqual(changes?.entry?.currentValue, changes?.entry?.previousValue) || !isEqual(changes?.excludeTax?.currentValue, changes?.excludeTax?.previousValue)) && this.entry?.calculateTotal) {
             let amount = 0;
             
             if (this.excludeTax) {

@@ -1679,12 +1679,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         skuCode: [entryData ? entryData?.transactions[0]?.stock?.sku : ''],
                         uniqueName: [entryData ? entryData?.transactions[0]?.stock?.uniqueName : ''],
                         customField1: this.formBuilder.group({
-                            key: [entryData ? entryData?.transactions[0]?.stock?.customField1?.key : ''],
-                            value: [entryData ? entryData?.transactions[0]?.stock?.customField1?.value : '']
+                            key: [entryData?.transactions[0]?.stock?.customField1?.value ? entryData?.transactions[0]?.stock?.customField1?.key : ''],
+                            value: [entryData?.transactions[0]?.stock?.customField1?.value ? entryData?.transactions[0]?.stock?.customField1?.value : '']
                         }),
                         customField2: this.formBuilder.group({
-                            key: [entryData ? entryData?.transactions[0]?.stock?.customField2?.key : ''],
-                            value: [entryData ? entryData?.transactions[0]?.stock?.customField2?.value : '']
+                            key: [entryData?.transactions[0]?.stock?.customField2?.value ? entryData?.transactions[0]?.stock?.customField2?.key : ''],
+                            value: [entryData?.transactions[0]?.stock?.customField2?.value ? entryData?.transactions[0]?.stock?.customField2?.value : '']
                         })
                     })
                 })
