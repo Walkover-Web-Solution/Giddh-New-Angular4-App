@@ -287,7 +287,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public advanceReceiptAdjustmentData: VoucherAdjustments;
     /** Show advance receipts adjust */
     public showAdvanceReceiptAdjust: boolean = false;
+    /** True if adjustment is done */
     public isAdjustAmount = false;
+    /** Holds adjustment data */
     public adjustPaymentData: AdjustAdvancePaymentModal = {
         customerName: '',
         customerUniquename: '',
@@ -422,7 +424,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
     };
     /** True if we need to same billing to shipping address */
-    public getActiveSameBillingAddress: boolean = true;
+    public copyAccountBillingInShippingAddress: boolean = true;
+    /** True if we need to same billing to shipping address */
+    public copyCompanyBillingInShippingAddress: boolean = true;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -559,19 +563,25 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         /** Stock Variants */
         this.componentStore.stockVariants$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.stockVariants[response.entryIndex] = observableOf(response.results);
-
                 if (response.autoSelectVariant) {
+                    this.stockVariants[response.entryIndex] = observableOf(response.results);
                     this.selectVariant(response.results[0], response.entryIndex);
                 } else {
-                    let entryFormGroup = this.getEntryFormGroup(response.entryIndex);
-                    let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
-                    if (!transactionFormGroup.get('stock.variant.name')?.value) {
-                        const selectedVariant = response.results?.filter(variant => variant.value === transactionFormGroup.get('stock.variant.uniqueName')?.value);
-                        if (selectedVariant?.length) {
-                            transactionFormGroup.get('stock.variant.name')?.patchValue(selectedVariant[0].label);
+                    this.invoiceForm.get('entries')['controls']?.forEach((control, entryIndex) => {
+                        let entryFormGroup = this.getEntryFormGroup(response.entryIndex);
+                        let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+
+                        if (transactionFormGroup.get('stock.uniqueName')?.value === response.stockUniqueName) {
+                            this.stockVariants[entryIndex] = observableOf(response.results);
+
+                            if (!transactionFormGroup.get('stock.variant.name')?.value) {
+                                const selectedVariant = response.results?.filter(variant => variant.value === transactionFormGroup.get('stock.variant.uniqueName')?.value);
+                                if (selectedVariant?.length) {
+                                    transactionFormGroup.get('stock.variant.name')?.patchValue(selectedVariant[0].label);
+                                }
+                            }
                         }
-                    }
+                    });
                 }
             }
         });
@@ -876,9 +886,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.company.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                 this.showTaxTypeByCountry(this.company.countryCode);
 
-                if (this.invoiceType.isCashInvoice) {
-                    this.getCountryData(this.company.countryCode);
-                }
+                this.getCountryData(this.company.countryCode);
             }
         });
     }
@@ -1467,20 +1475,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.invoiceForm.controls[entityType].get(addressType).get("address").patchValue([address?.address]);
         this.invoiceForm.controls[entityType].get(addressType).get("pincode").patchValue(address?.pincode);
         this.invoiceForm.controls[entityType].get(addressType).get("taxNumber").patchValue(address?.gstNumber);
-        this.invoiceForm.controls[entityType].get(addressType).get("state").get("name").patchValue(address?.state?.name);
-        this.invoiceForm.controls[entityType].get(addressType).get("state").get("code").patchValue(address?.state?.code);
-    }
-
-    /**
-     * Translation complete callback
-     *
-     * @param {*} event
-     * @memberof VoucherCreateComponent
-     */
-    public translationComplete(event: any): void {
-        if (event) {
-
-        }
+        this.invoiceForm.controls[entityType].get(addressType).get("state").get("name").patchValue(entityType === 'company' ? address?.stateName : address?.state?.name);
+        this.invoiceForm.controls[entityType].get(addressType).get("state").get("code").patchValue(entityType === 'company' ? address?.stateCode : address?.state?.code);
     }
 
     /**
@@ -2078,22 +2074,23 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public copyBillingInShipping(entityType: string, event: any): void {
+        if (entityType === 'company') {
+            this.copyCompanyBillingInShippingAddress = event?.checked;
+        } else {
+            this.copyAccountBillingInShippingAddress = event?.checked;
+        }
+
         if (event?.checked) {
-            this.getActiveSameBillingAddress = true;
             let defaultAddress = {
-                index: this.invoiceForm.controls['account'].get("billingAddress").get("index")?.value || 0,
-                address: this.invoiceForm.controls['account'].get("billingAddress").get("address")?.value,
-                pincode: this.invoiceForm.controls['account'].get("billingAddress").get("pincode")?.value,
-                gstNumber: this.invoiceForm.controls['account'].get("billingAddress").get("taxNumber")?.value,
-                state: { name: this.invoiceForm.controls['account'].get("billingAddress").get("state").get("name")?.value, code: this.invoiceForm.controls['account'].get("billingAddress").get("state").get("code")?.value }
+                index: this.invoiceForm.controls[entityType].get("billingAddress").get("index")?.value || 0,
+                address: this.invoiceForm.controls[entityType].get("billingAddress").get("address")?.value,
+                pincode: this.invoiceForm.controls[entityType].get("billingAddress").get("pincode")?.value,
+                gstNumber: this.invoiceForm.controls[entityType].get("billingAddress").get("taxNumber")?.value,
+                state: { name: this.invoiceForm.controls[entityType].get("billingAddress").get("state").get("name")?.value, code: this.invoiceForm.controls[entityType].get("billingAddress").get("state").get("code")?.value }
             };
             this.fillBillingShippingAddress(entityType, "shippingAddress", defaultAddress, defaultAddress.index);
-        } else {
-            this.getActiveSameBillingAddress = false;
         }
     }
-
-
 
     /**
      * Callback for state
@@ -2102,8 +2099,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {*} event
      * @memberof VoucherCreateComponent
      */
-    public selectState(addressType: string, event: any): void {
-        this.invoiceForm.controls['account'].get(addressType).get("state").get("name").patchValue(event?.label);
+    public selectState(entity: string, addressType: string, event: any): void {
+        this.invoiceForm.controls[entity].get(addressType).get("state").get("name").patchValue(event?.label);
     }
 
     /**
@@ -3039,6 +3036,21 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         };
         this.hasStock = false;
 
+        this.isAdjustAmount = false;
+        this.adjustPaymentData = {
+            customerName: '',
+            customerUniquename: '',
+            voucherDate: '',
+            balanceDue: 0,
+            dueDate: '',
+            grandTotal: 0,
+            gstTaxesTotal: 0,
+            subTotal: 0,
+            totalTaxableValue: 0,
+            totalAdjustedAmount: 0,
+            convertedTotalAdjustedAmount: 0
+        };
+
         this.invoiceForm.get('type').patchValue(this.voucherType);
         this.invoiceForm.get('exchangeRate').patchValue(exchangeRate);
         this.invoiceForm.get('date')?.patchValue(this.universalDate);
@@ -3060,14 +3072,26 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * This will be use for set billing address to shipping address
+     * This will be used to set account billing address to shipping address
      *
      * @memberof VoucherCreateComponent
      */
     public copyAccountBillingAddressToShippingAddress(): void {
-        if (this.getActiveSameBillingAddress) {
+        if (this.copyAccountBillingInShippingAddress) {
             const billingAddress = this.invoiceForm.get('account.billingAddress').value;
             this.invoiceForm.get('account.shippingAddress').patchValue(billingAddress);
+        }
+    }
+
+    /**
+     * This will be used to set company billing address to shipping address
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public copyCompanyBillingAddressToShippingAddress(): void {
+        if (this.copyCompanyBillingInShippingAddress) {
+            const billingAddress = this.invoiceForm.get('company.billingAddress').value;
+            this.invoiceForm.get('company.shippingAddress').patchValue(billingAddress);
         }
     }
 
@@ -3476,15 +3500,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             if (item.stock) {
                 transactionFormGroup.get('stock.name')?.patchValue(item.stock.name);
-                transactionFormGroup.get('stock.uniqueName')?.patchValue(item.stock.uniqueName);
+                transactionFormGroup.get('stock.uniqueName')?.patchValue(item.additional?.stock?.uniqueName);
                 transactionFormGroup.get('stock.quantity')?.patchValue(item.stock.quantity);
                 transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue(item.stock.rate.amountForAccount);
                 transactionFormGroup.get('stock.skuCode')?.patchValue(item.stock.sku);
                 transactionFormGroup.get('stock.skuCodeHeading')?.patchValue(item.stock.skuCodeHeading);
                 transactionFormGroup.get('stock.stockUnit.code')?.patchValue(item.stock.stockUnit?.code);
                 transactionFormGroup.get('stock.stockUnit.uniqueName')?.patchValue(item.stock.stockUnit?.uniqueName);
-                transactionFormGroup.get('stock.variant.name')?.patchValue(item.stock.variant?.name);
-                transactionFormGroup.get('stock.variant.uniqueName')?.patchValue(item.stock.variant?.uniqueName);
+                transactionFormGroup.get('stock.variant.getParticular')?.patchValue(false);
+                transactionFormGroup.get('stock.variant.name')?.patchValue(item.additional?.variant?.name);
+                transactionFormGroup.get('stock.variant.uniqueName')?.patchValue(item.additional?.variant?.uniqueName);
                 transactionFormGroup.get('stock.variant.salesTaxInclusive')?.patchValue(false);
                 transactionFormGroup.get('stock.variant.purchaseTaxInclusive')?.patchValue(item.stock.taxInclusive);
 
