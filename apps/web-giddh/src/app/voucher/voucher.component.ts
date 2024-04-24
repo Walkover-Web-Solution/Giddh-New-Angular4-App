@@ -4800,32 +4800,42 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         if (this.showVATNo) {
             if (data?.account) {
-                delete data.account?.billingDetails?.state;
-                delete data.account?.billingDetails?.stateCode;
-                delete data.account?.billingDetails?.stateName;
+                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW'){
+                    delete data.account?.billingDetails?.state;
+                    delete data.account?.billingDetails?.stateCode;
+                    delete data.account?.billingDetails?.stateName;
+                }
                 delete data.account?.billingDetails?.gstNumber;
 
-                delete data.account?.shippingDetails?.state;
-                delete data.account?.shippingDetails?.stateCode;
-                delete data.account?.shippingDetails?.stateName;
+                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW'){
+                    delete data.account?.shippingDetails?.state;
+                    delete data.account?.shippingDetails?.stateCode;
+                    delete data.account?.shippingDetails?.stateName;
+                }
                 delete data.account?.shippingDetails?.gstNumber;
             }
             if (data?.accountDetails) {
-                delete data.accountDetails?.billingDetails?.state;
-                delete data.accountDetails?.billingDetails?.stateCode;
-                delete data.accountDetails?.billingDetails?.stateName;
+                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW'){
+                    delete data.accountDetails?.billingDetails?.state;
+                    delete data.accountDetails?.billingDetails?.stateCode;
+                    delete data.accountDetails?.billingDetails?.stateName;
+                }
                 delete data.accountDetails?.billingDetails?.gstNumber;
 
-                delete data.accountDetails?.shippingDetails?.state;
-                delete data.accountDetails?.shippingDetails?.stateCode;
-                delete data.accountDetails?.shippingDetails?.stateName;
+                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW'){
+                    delete data.accountDetails?.shippingDetails?.state;
+                    delete data.accountDetails?.shippingDetails?.stateCode;
+                    delete data.accountDetails?.shippingDetails?.stateName;
+                }
                 delete data.accountDetails?.shippingDetails?.gstNumber;
             }
 
             if (data?.company) {
-                delete data.company?.billingDetails?.state;
-                delete data.company?.billingDetails?.stateCode;
-                delete data.company?.billingDetails?.stateName;
+                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW'){
+                    delete data.company?.billingDetails?.state;
+                    delete data.company?.billingDetails?.stateCode;
+                    delete data.company?.billingDetails?.stateName;
+                }
                 delete data.company?.billingDetails?.gstNumber;
 
                 delete data.company?.shippingDetails?.state;
@@ -4834,14 +4844,18 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 delete data.company?.shippingDetails?.gstNumber;
             }
             if (data?.companyDetails) {
-                delete data.companyDetails?.billingDetails?.state;
-                delete data.companyDetails?.billingDetails?.stateCode;
-                delete data.companyDetails?.billingDetails?.stateName;
+                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW'){
+                    delete data.companyDetails?.billingDetails?.state;
+                    delete data.companyDetails?.billingDetails?.stateCode;
+                    delete data.companyDetails?.billingDetails?.stateName;
+                }
                 delete data.companyDetails?.billingDetails?.gstNumber;
 
-                delete data.companyDetails?.shippingDetails?.state;
-                delete data.companyDetails?.shippingDetails?.stateCode;
-                delete data.companyDetails?.shippingDetails?.stateName;
+                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW'){
+                    delete data.companyDetails?.shippingDetails?.state;
+                    delete data.companyDetails?.shippingDetails?.stateCode;
+                    delete data.companyDetails?.shippingDetails?.stateName;
+                }
                 delete data.companyDetails?.shippingDetails?.gstNumber;
             }
         }

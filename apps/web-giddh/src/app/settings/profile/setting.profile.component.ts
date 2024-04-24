@@ -1283,7 +1283,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                             if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                                 this.taxType = this.commonLocaleData?.app_trn;
                                 this.localeData.company_address_list = this.localeData.company_trn_list;
-                                this.localeData.add_address = this.localeData.add_trn;
+                                if(activeCompany.countryV2?.alpha2CountryCode === 'ZW') {
+                                    this.localeData.add_address = this.localeData.add_vat;
+                                } else {
+                                    this.localeData.add_address = this.localeData.add_trn;
+                                }
                                 this.localeData.address_list = this.localeData.trn_list;
                                 this.localeData.create_address = this.localeData.create_trn;
                                 this.localeData.update_address = this.localeData.update_trn;
