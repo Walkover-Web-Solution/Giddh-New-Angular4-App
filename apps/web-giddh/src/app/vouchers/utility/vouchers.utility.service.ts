@@ -232,10 +232,10 @@ export class VouchersUtilityService {
             voucherTotals.totalCess += (Number(entry.totalCess));
             voucherTotals.grandTotal += (Number(entry.total?.amountForAccount));
 
-            if (entry.otherTaxType === 'tcs') {
-                voucherTotals.tcsTotal += entry.otherTaxSum;
-            } else if (entry.otherTaxType === 'tds') {
-                voucherTotals.tdsTotal += entry.otherTaxSum;
+            if (entry.otherTax?.type === 'tcs') {
+                voucherTotals.tcsTotal += entry.otherTax?.amount;
+            } else if (entry.otherTax?.type === 'tds') {
+                voucherTotals.tdsTotal += entry.otherTax?.amount;
             }
         });
 

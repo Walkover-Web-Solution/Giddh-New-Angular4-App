@@ -860,6 +860,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
                     this.useCustomVoucherNumber = settings?.purchaseBillSettings?.useCustomPONumber;
                 }
+
+                this.invoiceForm.get('roundOffApplicable')?.patchValue(this.applyRoundOff);
+
                 this.updateDueDate();
             }
         });
@@ -3108,6 +3111,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.invoiceForm.get('type').patchValue(this.voucherType);
         this.invoiceForm.get('exchangeRate').patchValue(exchangeRate);
         this.invoiceForm.get('date')?.patchValue(this.universalDate);
+        this.invoiceForm.get('roundOffApplicable')?.patchValue(this.applyRoundOff);
         this.isVoucherDateChanged = false;
 
         let entryFields = [];
