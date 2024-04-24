@@ -1040,7 +1040,7 @@
                                                                                 }}
                                                                             </div>
                                                                         </ng-container>
-                                                                        <div>
+                                                                        <div class="wrap-td-data">
                                                                             <text-field
                                                                                 *ngIf="activeEntryIndex === entryIndex"
                                                                                 [placeholder]="commonLocaleData?.app_rate"
@@ -1092,7 +1092,7 @@
                                                                             formControlName="amountForAccount"
                                                                             (calculatedAmount)="updateTransactionAmount(transaction, $event)" />
                                                                     </div>
-                                                                    <span class="font-14 text-gray mt-1 d-inline-block"
+                                                                    <span class="font-14 text-gray mt-1 d-inline-block wrap-td-data"
                                                                         *ngIf="isMultiCurrencyVoucher">
                                                                         <amount-field
                                                                             [amount]="transaction.get('amount.amountForAccount')?.value * invoiceForm.get('exchangeRate')?.value"
@@ -1131,7 +1131,7 @@
                                                                         (createNewDiscount)="showCreateDiscountDialog()"
                                                                         (selectedDiscounts)="getSelectedDiscounts(entryIndex, $event)"
                                                                         (totalDiscount)="updateTotalDiscount($event, entry)"></discount-dropdown>
-                                                                    <span class="font-14 text-gray mt-1 d-inline-block"
+                                                                    <span class="font-14 text-gray mt-1 d-inline-block wrap-td-data"
                                                                         *ngIf="isMultiCurrencyVoucher">
                                                                         <amount-field
                                                                             [amount]="entry.get('totalDiscount')?.value * invoiceForm.get('exchangeRate')?.value"
@@ -1172,7 +1172,7 @@
                                                                         (createNewTax)="showCreateTaxDialog()"
                                                                         (selectedTaxes)="getSelectedTaxes(entryIndex, $event)"
                                                                         (totalTax)="updateTotalTax($event, entry)"></tax-dropdown>
-                                                                    <span class="font-14 text-gray mt-1 d-inline-block"
+                                                                    <span class="font-14 text-gray mt-1 d-inline-block wrap-td-data"
                                                                         *ngIf="isMultiCurrencyVoucher">
                                                                         <amount-field
                                                                             [amount]="entry.get('totalTax')?.value * invoiceForm.get('exchangeRate')?.value"
@@ -1198,11 +1198,11 @@
                                                                     </amount-field>
                                                                 </div>
                                                             </ng-container>
-                                                            <div>
+                                                            <div class="wrap-td-data">
                                                                 <div class="text-field-container"
                                                                     [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'">
                                                                     <input matInput [placeholder]="commonLocaleData?.app_total"
-                                                                        class="form-control text-right" type="text"
+                                                                        class="form-control text-right pr-0" type="text"
                                                                         entryTotal [entry]="entry?.value" [excludeTax]="account?.excludeTax"
                                                                         name="transactionTotal{{entryIndex}}"
                                                                         formControlName="amountForAccount"
@@ -1224,7 +1224,7 @@
                                                                 </span>
                                                             </div>
                                                         </ng-container>
-                                                        <div class="d-flex align-items-center justify-content-end"
+                                                        <div class="d-flex align-items-center justify-content-end wrap-td-data"
                                                             *ngIf="activeEntryIndex === entryIndex" entryOtherTax
                                                             [entry]="entry?.value"
                                                             [appliedOtherTax]="entry.get('otherTax')?.value"
@@ -1237,39 +1237,41 @@
                                                                 </mat-checkbox>
                                                                 {{ localeData?.other_tax }}
                                                             </ng-container>
-                                                            <ng-container *ngIf="entry.get('otherTax.name')?.value">
-                                                                <span class="mr-r05">
-                                                                    <a
-                                                                        href="javascript:void(0);"
-                                                                        aria-label="edit-icon"
-                                                                        *ngIf="!isEinvoiceGenerated"
-                                                                        (click)="
-                                                                            openOtherTaxDialog(
-                                                                                entry,
-                                                                                entryIndex
-                                                                            )
-                                                                        "
-                                                                    >
-                                                                        <img
-                                                                            src="{{
-                                                                                imgPath
-                                                                            }}edit-pencilicon.svg"
-                                                                            alt="edit icon"
-                                                                        />
-                                                                    </a>
-                                                                </span>
-                                                            </ng-container>
                                                         </div>
-                                                        <div
+                                                        <div class="wrap-td-data"
                                                             [ngClass]="{ 'mb-4': entry.get('otherTax.name')?.value && isMultiCurrencyVoucher }">
-                                                            <ng-container *ngIf="entry.get('otherTax.name')?.value">
-                                                                {{ entry.get('otherTax.name')?.value }} :
-                                                                <amount-field
-                                                                    [amount]="entry.get('otherTax.amount')?.value"
-                                                                    [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
-                                                                    [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
-                                                                </amount-field>
-                                                            </ng-container>
+                                                            <div class="d-flex justify-content-end column-gap5">
+                                                                <ng-container *ngIf="entry.get('otherTax.name')?.value && (activeEntryIndex === entryIndex)">
+                                                                    <span>
+                                                                        <a
+                                                                            href="javascript:;"
+                                                                            aria-label="edit-icon"
+                                                                            *ngIf="!isEinvoiceGenerated"
+                                                                            (click)="
+                                                                                openOtherTaxDialog(
+                                                                                    entry,
+                                                                                    entryIndex
+                                                                                )
+                                                                            "
+                                                                        >
+                                                                            <img
+                                                                                src="{{
+                                                                                    imgPath
+                                                                                }}edit-pencilicon.svg"
+                                                                                alt="edit icon"
+                                                                            />
+                                                                        </a>
+                                                                    </span>
+                                                                </ng-container>
+                                                                <ng-container *ngIf="entry.get('otherTax.name')?.value">
+                                                                    <span>{{ entry.get('otherTax.name')?.value }} :</span>
+                                                                    <amount-field
+                                                                        [amount]="entry.get('otherTax.amount')?.value"
+                                                                        [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
+                                                                        [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
+                                                                    </amount-field>
+                                                                </ng-container>
+                                                            </div>
                                                             <div class="font-14 text-gray mt-1"
                                                                 *ngIf="entry.get('otherTax.name')?.value && isMultiCurrencyVoucher">
                                                                 <amount-field
