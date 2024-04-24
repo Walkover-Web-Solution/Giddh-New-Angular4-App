@@ -35,6 +35,7 @@ export interface VoucherState {
     briefAccounts: any[];
     accountDetails: any;
     countryData: any;
+    accountCountryData: any;
     vendorPurchaseOrders: any[];
     linkedPoOrders: any[];
     particularDetails: any;
@@ -63,6 +64,7 @@ const DEFAULT_STATE: VoucherState = {
     briefAccounts: null,
     accountDetails: null,
     countryData: null,
+    accountCountryData: null,
     vendorPurchaseOrders: null,
     linkedPoOrders: null,
     particularDetails: null,
@@ -103,6 +105,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public briefAccounts$ = this.select((state) => state.briefAccounts);
     public accountDetails$ = this.select((state) => state.accountDetails);
     public countryData$ = this.select((state) => state.countryData);
+    public accountCountryData$ = this.select((state) => state.accountCountryData);
     public vendorPurchaseOrders$ = this.select((state) => state.vendorPurchaseOrders);
     public linkedPoOrders$ = this.select((state) => state.linkedPoOrders);
     public particularDetails$ = this.select((state) => state.particularDetails);
@@ -406,6 +409,29 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 countryData: {}
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getAccountCountryStates = this.effect((data: Observable<string>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.commonService.getCountryStates(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                accountCountryData: res?.body ?? {}
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                accountCountryData: {}
                             });
                         }
                     ),

@@ -157,16 +157,16 @@
                                         </div>
                                         <div class="col-6" formGroupName="billingAddress">
                                             <label for="billingAddress" class="billing-label"
-                                                [ngClass]="{ 'p-0' : invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled }">
+                                                [ngClass]="{ 'p-0' : invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice }">
                                                 <span>{{ localeData?.billing_address }}</span>
-                                                <span *ngIf="!invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled">
+                                                <span *ngIf="!invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled && !invoiceType.isCashInvoice">
                                                     &#40;{{ commonLocaleData?.app_address }}
                                                     {{
                                                     invoiceForm.controls['account'].get("billingAddress").get("index")?.value
                                                     + 1 }}&#41;
                                                 </span>
                                             </label>
-                                            <i *ngIf="!invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled" [matMenuTriggerFor]="billingAddress"
+                                            <i *ngIf="!invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled && !invoiceType.isCashInvoice" [matMenuTriggerFor]="billingAddress"
                                                 class="icon-edit text-blue pl-2 font-12">
                                             </i>
                                             <mat-menu #billingAddress="matMenu">
@@ -193,7 +193,7 @@
                                                         localeData?.add_new_address }}</button>
                                                 </div>
                                             </mat-menu>
-                                            <div class="vouchers-address-form" *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled">
+                                            <div class="vouchers-address-form" *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                                 <div class="address-field">
                                                     <textarea rows="2" matInput
                                                         (keyup)="copyAccountBillingAddressToShippingAddress()" class="w-100"
@@ -230,20 +230,20 @@
                                         <!-- Shipping Address -->
                                         <div class="col-6" formGroupName="shippingAddress">
                                             <mat-checkbox type="checkbox" color="primary" [checked]="copyAccountBillingInShippingAddress"
-                                                *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled"
+                                                *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice"
                                                 (change)="copyBillingInShipping('account',$event)">
                                                 {{ localeData?.shipping_billing_same }}
                                             </mat-checkbox>
-                                            <ng-container *ngIf="!invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled">
+                                            <ng-container *ngIf="!invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled && !invoiceType.isCashInvoice">
                                                 <label for="billingAddress" class="billing-label">
                                                     <span>{{ localeData?.shipping_address }}</span>
-                                                    <span *ngIf="!invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled">
+                                                    <span *ngIf="!invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled && !invoiceType.isCashInvoice">
                                                         &#40;{{ commonLocaleData?.app_address }}
                                                         {{
                                                         invoiceForm.controls['account'].get("shippingAddress").get("index")?.value
                                                         + 1 }}&#41;
                                                     </span>
-                                                </label> <i *ngIf="!invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled"
+                                                </label> <i *ngIf="!invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled && !invoiceType.isCashInvoice"
                                                     [matMenuTriggerFor]="shippingAddress"
                                                     class="icon-edit text-blue pl-2 font-12"></i>
 
@@ -274,7 +274,7 @@
                                             </ng-container>
 
                                             <div class="vouchers-address-form form-disabled"
-                                                *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled">
+                                                *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                                 <div class="address-field">
                                                     <textarea rows="2" matInput class="w-100" name="shippingAddress"
                                                         formControlName="address"></textarea>
@@ -358,16 +358,16 @@
                                     <!-- Billing Address -->
                                     <div class="col-6" formGroupName="billingAddress">
                                         <label for="billingAddress" class="billing-label"
-                                            [ngClass]="{ 'p-0' : invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled }">
+                                            [ngClass]="{ 'p-0' : invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice }">
                                             <span>{{ localeData?.billing_address }}</span>
-                                            <span *ngIf="!invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled">
+                                            <span *ngIf="!invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled && !invoiceType.isCashInvoice">
                                                 &#40;{{ commonLocaleData?.app_address }}
                                                 {{
                                                 invoiceForm.controls['company'].get("billingAddress").get("index")?.value
                                                 + 1 }}&#41;
                                             </span>
                                         </label>
-                                        <i *ngIf="!invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled" [matMenuTriggerFor]="companyBillingAddress"
+                                        <i *ngIf="!invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled && !invoiceType.isCashInvoice" [matMenuTriggerFor]="companyBillingAddress"
                                             class="icon-edit text-blue pl-2 font-12">
                                         </i>
                                         <mat-menu #companyBillingAddress="matMenu">
@@ -391,7 +391,7 @@
                                                 </ng-container>
                                             </div>
                                         </mat-menu>
-                                        <div class="vouchers-address-form" *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled">
+                                        <div class="vouchers-address-form" *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                             <div class="address-field">
                                                 <textarea rows="2" matInput
                                                     (keyup)="copyCompanyBillingAddressToShippingAddress()" class="w-100"
@@ -404,7 +404,7 @@
                                                 <reactive-dropdown-field [cssClass]="'border-0'"
                                                     formControlName="code" [name]="'companyBillingStateCode'"
                                                     [label]="commonLocaleData?.app_state" [placeholder]="commonLocaleData?.app_select"
-                                                    [options]="accountStateList$ | async"
+                                                    [options]="companyStateList$ | async"
                                                     [labelValue]="invoiceForm.controls['company'].get('billingAddress').get('state').get('name')?.value"
                                                     [appearance]="'fill'" [showLabel]="false"
                                                     (selectedOption)="selectState('company', 'billingAddress', $event); copyCompanyBillingAddressToShippingAddress()"></reactive-dropdown-field>
@@ -427,20 +427,20 @@
                                     <!-- Shipping Address -->
                                     <div class="col-6" formGroupName="shippingAddress">
                                         <mat-checkbox type="checkbox" color="primary" [checked]="copyCompanyBillingInShippingAddress"
-                                            *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled"
+                                            *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice"
                                             (change)="copyBillingInShipping('company',$event)">
                                             {{ localeData?.shipping_billing_same }}
                                         </mat-checkbox>
-                                        <ng-container *ngIf="!invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled">
+                                        <ng-container *ngIf="!invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled && !invoiceType.isCashInvoice">
                                             <label for="billingAddress" class="billing-label">
                                                 <span>{{ localeData?.shipping_address }}</span>
-                                                <span *ngIf="!invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled">
+                                                <span *ngIf="!invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled && !invoiceType.isCashInvoice">
                                                     &#40;{{ commonLocaleData?.app_address }}
                                                     {{
                                                     invoiceForm.controls['company'].get("shippingAddress").get("index")?.value
                                                     + 1 }}&#41;
                                                 </span>
-                                            </label> <i *ngIf="!invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled"
+                                            </label> <i *ngIf="!invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled && !invoiceType.isCashInvoice"
                                                 [matMenuTriggerFor]="companyShippingAddress"
                                                 class="icon-edit text-blue pl-2 font-12"></i>
 
@@ -468,7 +468,7 @@
                                         </ng-container>
 
                                         <div class="vouchers-address-form form-disabled"
-                                            *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled">
+                                            *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                             <div class="address-field">
                                                 <textarea rows="2" matInput class="w-100" name="companyShippingAddress"
                                                     formControlName="address"></textarea>
@@ -480,7 +480,7 @@
                                                 <reactive-dropdown-field [cssClass]="'border-0'"
                                                     formControlName="code" [name]="'companyShippingStateCode'"
                                                     [label]="commonLocaleData?.app_state" [placeholder]="commonLocaleData?.app_select"
-                                                    [options]="accountStateList$ | async"
+                                                    [options]="companyStateList$ | async"
                                                     [labelValue]="invoiceForm.controls['company'].get('shippingAddress').get('state').get('name')?.value"
                                                     [appearance]="'fill'" [showLabel]="false"
                                                     (selectedOption)="selectState('company', 'shippingAddress', $event)"></reactive-dropdown-field>
@@ -581,7 +581,7 @@
                                             [label]="commonLocaleData?.app_select_voucher"
                                             [placeholder]="commonLocaleData?.app_select_voucher"
                                             [options]="vouchersListForCreditDebitNote$ | async"
-                                            (selectedOption)="creditNoteInvoiceSelected($event)"
+                                            (selectedOption)="creditDebitNoteInvoiceSelected($event)"
                                             [enableDynamicSearch]="true" (dynamicSearchedQuery)="
                                                 searchReferenceVoucher = $event;
                                                 resetVoucherListForCreditDebitNote();
@@ -1703,7 +1703,7 @@
 
 <ng-template #accountAsideMenu>
     <generic-aside-menu-account (closeAsideEvent)="accountAsideMenuRef.close()" [class]="'in'"
-        [selectedGrpUniqueName]="accountParentGroup" [keyboardShortcut]="{ 'esc': !hasUnsavedChanges }"
+        [selectedGrpUniqueName]="accountParentGroup === 'bankaccounts' ? '' : accountParentGroup" [allGroups]="accountParentGroup === 'bankaccounts' ? true : false" [keyboardShortcut]="{ 'esc': !hasUnsavedChanges }"
         [selectedAccountUniqueName]="accountParentGroup !== 'bankaccounts' && !createNewAccount ? invoiceForm.controls['account'].get('uniqueName')?.value : ''"
         (onShortcutPress)="accountAsideMenuRef.close()" (addEvent)="addNewAccount($event)"
         (updateEvent)="updateAccount($event)">
