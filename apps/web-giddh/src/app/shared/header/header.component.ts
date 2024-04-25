@@ -1048,6 +1048,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public sideBarStateChange(event: boolean) {
         this.isGoToBranch = false;
+        this.store.dispatch(this._generalActions.openSideMenu(event));
         if (this.sideMenu) {
             this.sideMenu.isopen = event;
         }
