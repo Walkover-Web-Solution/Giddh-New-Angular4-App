@@ -1200,7 +1200,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public getPartyTypes() {
         this.store.pipe(select(s => s.common.partyTypes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                this.partyTypeSource = res;
+                switch (this.activeCompany?.countryV2?.alpha2CountryCode) {
+                    case 'ZW': this.partyTypeSource = res.filter(item => (item.label === 'GOVERNMENT ENTITY') || (item.label === 'NOT APPLICABLE'));
+                        break;
+                    default: this.partyTypeSource = res;
+                }
             } else {
                 this.store.dispatch(this.commonActions.GetPartyType());
             }
