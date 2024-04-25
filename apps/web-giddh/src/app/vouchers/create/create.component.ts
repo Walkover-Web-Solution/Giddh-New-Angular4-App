@@ -4004,10 +4004,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.barcodeValue = '';
         }
 
-        if (!this.isBarcodeMachineTyping) {
-            this.barcodeValue = "";
-        }
-
         setTimeout(() => {
             this.isBarcodeMachineTyping = false;
             this.barcodeValue = "";
@@ -4026,6 +4022,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const key = event.key;
         if (key === 'Enter') {
             if (this.barcodeValue.length) {
+                this.isBarcodeMachineTyping = true;
                 return this.barcodeValue;
             } else {
                 return null;
