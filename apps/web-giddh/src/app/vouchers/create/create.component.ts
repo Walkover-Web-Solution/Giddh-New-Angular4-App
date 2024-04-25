@@ -1935,11 +1935,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         this.otherTaxAsideMenuRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if (response?.tax) {
-                this.getSelectedOtherTax(response.entryIndex, response.tax, response.calculationMethod);
-            } else {
-                const entryFormGroup = this.getEntryFormGroup(entryIndex);
-                entryFormGroup.get('otherTax').reset();
+            if (response) {
+                if (response?.tax) {
+                    this.getSelectedOtherTax(response.entryIndex, response.tax, response.calculationMethod);
+                } else {
+                    const entryFormGroup = this.getEntryFormGroup(entryIndex);
+                    entryFormGroup.get('otherTax').reset();
+                }
             }
         });
     }
@@ -1975,6 +1977,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             entryFormGroup.get('otherTax.type').patchValue('tds');
         }
 
+        entryFormGroup.get('otherTax.isChecked')?.patchValue(true);
         entryFormGroup.get('otherTax.name').patchValue(tax?.name);
         entryFormGroup.get('otherTax.uniqueName').patchValue(tax?.uniqueName);
         entryFormGroup.get('otherTax.taxValue').patchValue(tax?.taxDetail[0]?.taxValue);
@@ -3981,7 +3984,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     // detecting keyup event for barcode scan
     @HostListener('document:keyup', ['$event'])
     public handleKeyboardUpEvent(event: KeyboardEvent): void {
-        let uniqueName = this.detectBarcode(event);
+        const barcodeValue = this.detectBarcode(event);
 
         if (event.timeStamp - this.startTime < 2) {
             this.isBarcodeMachineTyping = true;
@@ -3989,7 +3992,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.isBarcodeMachineTyping = false;
         }
 
-        if (uniqueName && this.startTime) {
+        if (barcodeValue && this.startTime) {
             this.endTime = event.timeStamp;
             const scanTime = this.endTime - this.startTime;
             this.totalTime += scanTime;
