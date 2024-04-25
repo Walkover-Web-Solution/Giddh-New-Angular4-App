@@ -1197,6 +1197,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         });
     }
 
+    /**
+     * Get Party Type List
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
     public getPartyTypes() {
         this.store.pipe(select(s => s.common.partyTypes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {

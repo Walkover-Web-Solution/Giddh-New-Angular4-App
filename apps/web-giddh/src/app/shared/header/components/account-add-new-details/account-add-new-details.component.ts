@@ -1050,7 +1050,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
     }
-
+    
+    /**
+     * Get Party Type List
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
     public getPartyTypes() {
         this.store.pipe(select(s => s.common.partyTypes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
