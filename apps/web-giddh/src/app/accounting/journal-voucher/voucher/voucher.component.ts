@@ -45,6 +45,7 @@ import { SearchService } from '../../../services/search.service';
 import { VOUCHERS } from '../../constants/accounting.constant';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialog } from '@angular/material/dialog';
+import { SettingsDiscountService } from '../../../services/settings.discount.service';
 
 const CustomShortcode = [
     { code: 'F9', route: 'purchase' }
@@ -263,6 +264,24 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public activeRowType: string = null;
     /** Active row for current fields*/
     public selectedInputFieldIndex: number = null;
+    /** True if it is sales entry*/
+    public salesEntry: boolean = false;
+    /** True if it is open from custom sidebar*/
+    public showDiscountSidebar: boolean = false;
+    /** List of discounts */
+    public discountsList: any[] = [];
+    /** Keys. **/
+    private KEYS: any = {
+        BACKSPACE: 8,
+        TAB: 9,
+        ENTER: 13,
+        ESC: 27,
+        SPACE: 32,
+        UP: 38,
+        DOWN: 40
+    };
+    /** Hold selected index  */
+    public selectedIndex: number = 0;
 
     constructor(
         private _ledgerActions: LedgerActions,
@@ -272,12 +291,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         private router: Router,
         private tallyModuleService: TallyModuleService,
         private formBuilder: UntypedFormBuilder,
+        private settingsDiscountService: SettingsDiscountService,
         public bsConfig: BsDatepickerConfig,
         private salesAction: SalesActions,
         private searchService: SearchService,
         private changeDetectionRef: ChangeDetectorRef,
         private elRef: ElementRef,
         public dialog: MatDialog,
+        private eleRef: ElementRef,
         private generalService: GeneralService) {
         this.initJournalVoucherForm();
         this.universalDate$ = this.store.pipe(select(sessionStore => sessionStore.session.applicationDate), takeUntil(this.destroyed$));
@@ -338,6 +359,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     this.activeRowIndex = 0;
                     this.activeRowType = "account";
                     this.showLedgerAccountList = false;
+                    this.showDiscountSidebar = false;
                     voucherTypeControl.setValue(this.currentVoucher);
                     this.resetEntriesIfVoucherChanged();
                     setTimeout(() => {
@@ -418,6 +440,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
 
         this.refreshEntry();
+        this.getDiscounts();
 
         this.createStockSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(yesOrNo => {
             if (yesOrNo) {
@@ -447,6 +470,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.searchedAccountQuery.pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((event: any) => {
             if (event?.code === 'Enter') {
                 return;
+            } else if (event?.target?.value === 'ð') {
+                this.showDiscountSidebar = true;
+                return;
             } else {
                 this.searchAccount(event, event.target?.value);
             }
@@ -461,12 +487,25 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     @HostListener('window:keydown', ['$event'])
     handleKeyDown(event: KeyboardEvent) {
+        console.log(event);
         if (event.key === 'F6') {
             event.preventDefault(); // Prevent default F6 behavior
             this.customFunctionForF6();
         } else if (event.key === 'F7') {
             event.preventDefault(); // Prevent default F7 behavior
             this.customFunctionForF7();
+        } else if (event.key === 'ð') {
+            this.customFunctionForDiscountSidebar();
+        } else if (event.key === 'Escape') {
+            if (this.showDiscountSidebar) {
+                this.showDiscountSidebar = false;
+            }
+            if (this.showLedgerAccountList) {
+                this.showLedgerAccountList = false;
+            }
+        }
+        if (this.showDiscountSidebar) {
+            this.keydownUp(event);
         }
     }
 
@@ -490,6 +529,31 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         // Define your custom functionality for F7 key here
         const voucherTypeControl = this.journalVoucherForm.get('voucherType');
         voucherTypeControl.setValue(VOUCHERS.JOURNAL);
+    }
+
+    /**
+    *This will be use for call custom keys functionality for windows
+    *
+    * @memberof AccountAsVoucherComponent
+    */
+    public customFunctionForDiscountSidebar(): void {
+        this.showDiscountSidebar = true;
+        this.showLedgerAccountList = false;
+    }
+
+    private getDiscounts(): void {
+        this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                this.discountsList = response?.body.map(item => {
+                    return {
+                        label: item?.name,
+                        value: item?.uniqueName,
+                        additional: item
+                    }
+                });
+            }
+        });
+
     }
 
     /**
@@ -528,6 +592,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             total: [null],
             discounts: [[]],
             inventory: [null],
+            isAppliedDiscount: [false],
+            isAppliedTax: [false],
             selectedAccount: this.formBuilder.group({
                 name: [null],
                 UniqueName: [null],
@@ -565,7 +631,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {string} [byOrTo='to']
      * @memberof AccountAsVoucherComponent
      */
-    public newEntryObj(byOrTo = 'to'): void {
+    public newEntryObj(byOrTo?: string): void {
         const newTransactionFormGroup = this.initTransactionFormGroup();
         newTransactionFormGroup.patchValue({
             amount: null,
@@ -626,6 +692,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.isSelectedRow = type;
         this.selectedIdx = index;
         this.showLedgerAccountList = false;
+        this.showDiscountSidebar = false;
         setTimeout(() => {
             transaction?.get('selectedAccount.name')?.patchValue("");
         }, 100);
@@ -699,6 +766,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         if (event.type === 'blur') {
             this.showLedgerAccountList = false;
+            this.showDiscountSidebar = false;
             this.showStockList = false;
         }
         this.showAccountList.emit(false);
@@ -713,6 +781,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public onDateFieldFocus(): void {
         setTimeout(() => {
             this.showLedgerAccountList = false;
+            this.showDiscountSidebar = false;
             this.showStockList = false;
             this.activeRowIndex = null;
             this.activeRowType = null;
@@ -770,16 +839,26 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {*} acc
      * @memberof AccountAsVoucherComponent
      */
-    public setAccount(acc: any): void {
+    public setAccount(acc: any, event?: any): void {
         this.searchService.loadDetails(acc?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             let transactionsFormArray;
             let transactionAtIndex;
             let transaction;
             if ((response?.body?.currency?.code || this.activeCompany?.baseCurrency) === this.activeCompany?.baseCurrency) {
                 let openChequePopup = false;
+                console.log(acc);
+                let parentGroups = ['revenuefromoperations, otherincome, fixedassets'];
                 if (acc && acc.parentGroups.find((pg) => pg?.uniqueName === 'bankaccounts')) {
                     openChequePopup = true;
                     this.openChequeDetailForm();
+                } else {
+                    acc.parentGroups?.forEach(group => {
+                        if (parentGroups?.includes(group?.uniqueName)) {
+                            this.salesEntry = true;
+                        } else {
+                            this.salesEntry = true;
+                        }
+                    });
                 }
                 let idx = this.selectedIdx;
                 transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
@@ -944,26 +1023,38 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             .map((control: AbstractControl) => Number(control.get('amount').value))
             .reduce((acc: number, amount: number) => acc + amount, 0);
 
-        console.log(indx, lastIndx, transactionObj.get('selectedAccount.name').value);
-
         if (indx === lastIndx && transactionObj.get('selectedAccount.name').value) {
             const voucherTypeControl = this.journalVoucherForm.get('voucherType');
             // Setting the value of voucherType FormControl to currentVoucher
             voucherTypeControl.setValue(this.currentVoucher);
-            console.log(this.totalCreditAmount, this.totalDebitAmount, voucherTypeControl.value);
-            if (this.totalCreditAmount < this.totalDebitAmount || (this.totalCreditAmount === 0 && this.totalDebitAmount === 0)) {
-                if (voucherTypeControl.value !== VOUCHERS.RECEIPT) {
-                    this.newEntryObj('to');
-                } else if (voucherTypeControl.value !== VOUCHERS.PAYMENT) {
-                    this.newEntryObj('by');
-                } else if (voucherTypeControl.value !== VOUCHERS.SALES) {
-                    this.newEntryObj('to');
-                } else {
-                    if ((this.journalVoucherForm.get('transactions') as FormArray).length === 1) {
-                        this.newEntryObj('by');
-                    }
-                }
-            } else if (this.totalDebitAmount < this.totalCreditAmount || (this.totalCreditAmount === 0 && this.totalDebitAmount === 0)) {
+            let voucherType = cloneDeep(VOUCHERS);
+            this.checkVoucherTypeNewEntries(this.currentVoucher, voucherType);
+        }
+    }
+
+    public checkVoucherTypeNewEntries(currentVoucher: any, voucherType: any): void {
+        if (this.totalCreditAmount < this.totalDebitAmount || (this.totalCreditAmount === 0 && this.totalDebitAmount === 0)) {
+            if (currentVoucher === voucherType.RECEIPT) {
+                this.newEntryObj('by');
+            } else if (currentVoucher === voucherType.PAYMENT) {
+                this.newEntryObj('to');
+            } else if (currentVoucher === voucherType.SALES) {
+                this.newEntryObj('by');
+            } else if (currentVoucher === voucherType.CONTRA) {
+                this.newEntryObj('to');
+            } else if (currentVoucher === voucherType.JOURNAL) {
+                this.newEntryObj('to');
+            }
+        } else if (this.totalDebitAmount < this.totalCreditAmount || (this.totalCreditAmount === 0 && this.totalDebitAmount === 0)) {
+            if (currentVoucher === voucherType.RECEIPT) {
+                this.newEntryObj('to');
+            } else if (currentVoucher === voucherType.PAYMENT) {
+                this.newEntryObj('by');
+            } else if (currentVoucher === voucherType.SALES) {
+                this.newEntryObj('to');
+            } else if (currentVoucher === voucherType.CONTRA) {
+                this.newEntryObj('by');
+            } else if (currentVoucher === voucherType.JOURNAL) {
                 this.newEntryObj('by');
             }
         }
@@ -988,14 +1079,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public openConfirmBox(submitButton: HTMLButtonElement): void {
         this.showLedgerAccountList = false;
+        this.showDiscountSidebar = false;
         this.showStockList = false;
         const transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
         const totalDebitAmount = transactionsFormArray.controls.reduce((acc: number, control: AbstractControl) => {
-            return control.get('type').value === 'by' ? acc + Number(control.get('amount').value) : acc;
+            return control.get('type').value?.toLowerCase() === 'by' ? acc + Number(control.get('amount').value) : acc;
         }, 0);
 
         const totalCreditAmount = transactionsFormArray.controls.reduce((acc: number, control: AbstractControl) => {
-            return control.get('type').value === 'to' ? acc + Number(control.get('amount').value) : acc;
+            return control.get('type').value?.toLowerCase() === 'to' ? acc + Number(control.get('amount').value) : acc;
         }, 0);
         if (totalDebitAmount === totalCreditAmount) {
             this.showConfirmationBox = true;
@@ -1007,8 +1099,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             setTimeout(() => {
                 submitButton?.focus();
             }, 300);
-        }
-        else {
+        } else {
             this._toaster.errorToast(this.localeData?.credit_debit_equal_error, this.commonLocaleData?.app_error);
             this.activeRowIndex = null;
             this.activeRowType = null;
@@ -1308,7 +1399,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.dateEntered();
 
         // Add new entry object
-        this.newEntryObj();
+        this.checkVoucherTypeNewEntries(this.currentVoucher, cloneDeep(VOUCHERS));
 
         // Set type based on current voucher
         setTimeout(() => {
@@ -1545,7 +1636,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
         // this.activeParticularAccountIndex = null;
         if (this.selectedField === 'account') {
-            this.setAccount(event.additional);
+            this.setAccount(event.additional, event);
         }
 
         this.changeDetectionRef.detectChanges();
@@ -1644,7 +1735,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         if (!idx) {
             // If the deleted row was the first row, add a new entry object and set its type to 'by'
-            this.newEntryObj();
+            this.checkVoucherTypeNewEntries(this.currentVoucher, cloneDeep(VOUCHERS));
             const firstTransaction = transactionsFormArray.at(0) as FormGroup;
             firstTransaction.patchValue({ type: 'by' });
         }
@@ -1722,6 +1813,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             document.querySelector('body').classList.add('fixed');
         } else {
             this.showLedgerAccountList = false;
+            this.showDiscountSidebar = false;
             document.querySelector('body').classList.remove('fixed');
         }
     }
@@ -2027,6 +2119,143 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             document.getElementById(`transactionAccount_` + this.selectedInputFieldIndex).focus();
         }
     }
+
+        /**
+     * Keydown handler event
+     *
+     * @param {*} event
+     * @memberof AccountAsVoucherComponent
+     */
+    public keydownUp(event): void {
+        const elements = this.eleRef?.nativeElement?.querySelectorAll('.list-item');
+        let key = event.which;
+        if (this.showDiscountSidebar) {
+            if (key === this.KEYS.ESC || key === this.KEYS.TAB || (key === this.KEYS.UP && event.altKey)) {
+                this.showDiscountSidebar = false;
+            } else if (key === this.KEYS.ENTER) {
+                const selectedElement = elements[this.selectedIndex];
+                const anchorElement = selectedElement.firstChild as HTMLElement;
+                anchorElement.click();
+            } else if (key === this.KEYS.UP) {
+                event.preventDefault();
+                this.selectedIndex = Math.max(this.selectedIndex - 1, 0);
+            } else if (key === this.KEYS.DOWN) {
+                event.preventDefault();
+                this.selectedIndex = Math.min(this.selectedIndex + 1, this.discountsList.length - 1);
+            }
+            if (elements.length > 0) {
+                elements.forEach((element, index) => {
+                    if (index === this.selectedIndex) {
+                        element.classList.add('hilighted');
+                    } else {
+                        element.classList.remove('hilighted');
+                    }
+                });
+                elements[this.selectedIndex]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+            }
+        }
+        this.changeDetectionRef.detectChanges();
+    }
+
+    public toggleDiscountSelected(discount: any) {
+        if (discount) {
+            this.showDiscountSidebar = false;
+            console.log(discount);
+            let idx = this.selectedIdx;
+            let transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
+            let transactionAtIndex = transactionsFormArray.at(idx) as FormGroup;
+            transactionAtIndex?.patchValue({
+                amount: this.calculateDiffAmount(transactionAtIndex.get('type')?.value?.toLowerCase()),
+                particular: discount?.additional?.uniqueName,
+                currentBalance: '',
+                isAppliedDiscount: true,
+                selectedAccount: {
+                    name: discount?.additional?.name + ' (' + discount?.additional?.discountType + ' )',
+                    UniqueName: discount?.additional?.uniqueName,
+                    groupUniqueName: '',
+                    account: discount?.additional?.name + ' (' + discount?.additional?.discountType + ' )',
+                    type: '',
+                    parentGroup: ''
+                }
+            });
+            this.groupUniqueName = '';
+            this.selectAccUnqName = discount?.additional?.uniqueName;
+            this.changeTab('enter', 'type', true);
+            this.calculateAmount(Number(transactionAtIndex.get('amount').value), transactionAtIndex, idx);
+        }
+    }
+    //     this.searchService.loadDetails(acc?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+
+    //         if ((response?.body?.currency?.code || this.activeCompany?.baseCurrency) === this.activeCompany?.baseCurrency) {
+    //             let openChequePopup = false;
+    //             console.log(acc);
+    //             let parentGroups = ['revenuefromoperations, otherincome, fixedassets'];
+    //             if (acc && acc.parentGroups.find((pg) => pg?.uniqueName === 'bankaccounts')) {
+    //                 openChequePopup = true;
+    //                 this.openChequeDetailForm();
+    //             } else {
+    //                 acc.parentGroups?.forEach(group => {
+    //                     if (parentGroups?.includes(group?.uniqueName)) {
+    //                         this.salesEntry = true;
+    //                     } else {
+    //                         this.salesEntry = true;
+    //                     }
+    //                 });
+    //             }
+    //             let idx = this.selectedIdx;
+    //             transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
+    //             transactionAtIndex = transactionsFormArray.at(idx) as FormGroup;
+
+
+    //             if (acc) {
+    //                 const formattedCurrentDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+    //                 this.tallyModuleService.getCurrentBalance(this.currentCompanyUniqueName, acc?.uniqueName, formattedCurrentDate, formattedCurrentDate).subscribe((data) => {
+    //                     if (data && data.body) {
+    //                         this.setAccountCurrentBalance(data.body, idx);
+    //                     }
+    //                 }, () => { });
+
+    //                 let accModel = {
+    //                     name: acc.name,
+    //                     UniqueName: acc?.uniqueName,
+    //                     groupUniqueName: acc.parentGroups[acc.parentGroups?.length - 1]?.uniqueName,
+    //                     account: acc.name,
+    //                 };
+
+    //                 // Update transaction form group with received data
+    //                 transactionAtIndex?.patchValue({
+    //                     amount: this.calculateDiffAmount(transactionAtIndex.get('type')?.value?.toLowerCase()),
+    //                     particular: accModel?.UniqueName,
+    //                     currentBalance: '',
+    //                     selectedAccount: {
+    //                         name: accModel.name,
+    //                         UniqueName: accModel.UniqueName,
+    //                         groupUniqueName: accModel.groupUniqueName,
+    //                         account: accModel.account,
+    //                         type: '',
+    //                         parentGroup: response?.body?.parentGroups
+    //                     }
+    //                 });
+    //                 // Check and push to inventory
+    //                 if (acc) {
+    //                     this.groupUniqueName = accModel?.groupUniqueName;
+    //                     this.selectAccUnqName = acc?.uniqueName;
+
+    //                     // let len = transactionAtIndex.get('inventory').value ? transactionAtIndex.get('inventory').value.length : 0;
+    //                     // if (!len || (transactionAtIndex.get('inventory').value && transactionAtIndex.get('inventory').value[len - 1].stock?.uniqueName)) {
+    //                     //     transactionAtIndex.get('inventory').value.push(this.initInventory());
+    //                     // }
+    //                 }
+    //                 this.changeTab('enter', 'account', true);
+    //                 this.calculateAmount(Number(transactionAtIndex.get('amount').value), transactionAtIndex, idx);
+
+    //             } else {
+    //                 this.deleteRow(idx);
+    //             }
+    //         }
+    //     });
+    // }
+
 
 
     /**

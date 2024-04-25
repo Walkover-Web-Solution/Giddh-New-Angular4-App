@@ -71,7 +71,7 @@
                                                 [id]="'transactionType_' + i"
                                                 [type]="'text'"
                                                 [cssClass]="'form-control text-capitalize byTo'"
-                                                [readonly]="i === 0 && !isFirstRowDeleted"
+                                                [readonly]="i === 0 && !isFirstRowDeleted || transaction?.get('isDiscountApplied')?.value"
                                                 formControlName="type"
                                                 (input)="selectRow(true, i, transaction)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
@@ -94,6 +94,7 @@
                                         >
                                             <text-field
                                                 [autoFocus]="activeRowIndex === i && activeRowType === 'account'"
+                                                [readonly]="transaction?.get('isDiscountApplied')?.value"
                                                 [autocomplete]="'off'"
                                                 [id]="'transactionAccount_' + i"
                                                 [type]="'text'"
@@ -139,6 +140,7 @@
                                             }"
                                         >
                                             <text-field
+                                                [readonly]="transaction?.get('isDiscountApplied')?.value"
                                                 [id]="'transactionAmount_' + i"
                                                 (keydown.Tab)="changeTab('tab', 'amount')"
                                                 (keydown.Shift.Tab)="changeTab('shift', 'amount')"
@@ -171,6 +173,7 @@
                                             }"
                                         >
                                             <text-field
+                                              [readonly]="transaction?.get('isDiscountApplied')?.value"
                                                 *ngIf="transaction.get('type')?.value?.toLowerCase() === 'to'"
                                                 [autoFocus]="activeRowIndex === i && activeRowType === 'amount'"
                                                 [autocomplete]="'off'"
@@ -324,6 +327,54 @@
             [notFoundMsg]="commonLocaleData?.app_no_result_found"
             [notFoundLinkText]="commonLocaleData?.app_create_new"
         ></accounting-virtual-list>
+    </div>
+    <div class="sidebar-list form-control" [hidden]="!showDiscountSidebar">
+        <div class="bd-rb d-flex justify-content-between align-items-center discount-sidebar-section">
+            <h3 class="primary-color">Discount List</h3>
+            <i class="fa fa-close pdR-5 cp" (click)="showDiscountSidebar = false"></i>
+        </div>
+        <div [style.width]="width" class="h-100">
+            <div #dd class="menu" *ngIf="showDiscountSidebar" class="h-100">
+                <div class="h-100">
+                    <ul *ngIf="rows?.discountsList === 0" class="grp-list group-list-no-found users-last-list">
+                        <li>
+                            <a href="javascript:void(0)"> {{ notFoundMsg }}</a>
+                        </li>
+                    </ul>
+                    <ng-container *ngIf="discountsList?.length">
+                        <ul class="grp-list users-last-list">
+                            <cdk-virtual-scroll-viewport
+                                class="virtual-group-list overflow-x-hidden"
+                                [itemSize]="37"
+                                [minBufferPx]="400"
+                                [maxBufferPx]="800"
+                                #cdkMenu
+                            >
+                            <li
+                            *cdkVirtualFor="let discount of discountsList; let j = index; trackBy: trackByFn"
+                            class="list-item sidebarTooltip text-overflow-ellipsis"
+                            [ngClass]="{ 'hilighted': j === selectedIndex }"
+                            >
+                                    <a
+                                        #focusElement
+                                        href="javascript:void(0);"
+                                        class="isAcc account-list"
+                                        id="acc_{{ discount.label }}"
+                                        tooltip="{{ discount.label }}"
+                                        placement="bottom"
+                                        (click)="toggleDiscountSelected(discount)"
+                                        (keydown.enter)="toggleDiscountSelected(discount)"
+                                        cdkFocusInitial
+                                    >
+                                        {{ discount?.label }}
+                                    </a>
+                                </li>
+                            </cdk-virtual-scroll-viewport>
+                        </ul>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
