@@ -274,10 +274,10 @@ export class VouchersUtilityService {
 
     public cleanVoucherObject(invoiceForm: any): any {
         delete invoiceForm.deposit.currencySymbol;
-        delete invoiceForm.account.billingAddress.index;
-        delete invoiceForm.account.shippingAddress.index;
-        delete invoiceForm.company.billingAddress.index;
-        delete invoiceForm.company.shippingAddress.index;
+        delete invoiceForm.account.billingDetails.index;
+        delete invoiceForm.account.shippingDetails.index;
+        delete invoiceForm.company.billingDetails.index;
+        delete invoiceForm.company.shippingDetails.index;
 
         invoiceForm?.entries?.forEach(entry => {
             delete entry.showCodeType;
@@ -385,36 +385,38 @@ export class VouchersUtilityService {
         return giddhRoundOff(((entryTotal + fixedDiscountTotal + 0.01 * fixedDiscountTotal * Number(taxTotal)) / (1 - 0.01 * percentageDiscountTotal + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscountTotal * Number(taxTotal))), balanceDecimalPlaces);
     }
 
-    public formatPurchaseOrderRequest(invoiceForm: any): any {
-        if (invoiceForm.account?.billingAddress) {
-            invoiceForm.account.billingAddress.stateCode = invoiceForm.account.billingAddress.state?.code;
-            invoiceForm.account.billingAddress.stateName = invoiceForm.account.billingAddress.state?.name;
+    public copyAccountStateToCounty(invoiceForm: any): any {
+        if (invoiceForm.account.billingDetails.state?.code) {
+            invoiceForm.account.billingDetails.county = {
+                name: invoiceForm.account.billingDetails.state?.name,
+                code: invoiceForm.account.billingDetails.state?.code
+            };
         }
 
-        if (invoiceForm.account?.shippingAddress) {
-            invoiceForm.account.shippingAddress.stateCode = invoiceForm.account.shippingAddress.state?.code;
-            invoiceForm.account.shippingAddress.stateName = invoiceForm.account.shippingAddress.state?.name;
+        if (invoiceForm.account.shippingDetails.state?.code) {
+            invoiceForm.account.shippingDetails.county = {
+                name: invoiceForm.account.shippingDetails.state?.name,
+                code: invoiceForm.account.shippingDetails.state?.code
+            };
         }
 
-        if (invoiceForm.company?.billingAddress) {
-            invoiceForm.company.billingAddress.stateCode = invoiceForm.company.billingAddress.state?.code;
-            invoiceForm.company.billingAddress.stateName = invoiceForm.company.billingAddress.state?.name;
+        return invoiceForm;
+    }
+
+    public copyCompanyStateToCounty(invoiceForm: any): any {
+        if (invoiceForm.company.billingDetails.state?.code) {
+            invoiceForm.company.billingDetails.county = {
+                name: invoiceForm.company.billingDetails.state?.name,
+                code: invoiceForm.company.billingDetails.state?.code
+            };
         }
 
-        if (invoiceForm.company?.shippingAddress) {
-            invoiceForm.company.shippingAddress.stateCode = invoiceForm.company.shippingAddress.state?.code;
-            invoiceForm.company.shippingAddress.stateName = invoiceForm.company.shippingAddress.state?.name;
+        if (invoiceForm.company.shippingDetails.state?.code) {
+            invoiceForm.company.shippingDetails.county = {
+                name: invoiceForm.company.shippingDetails.state?.name,
+                code: invoiceForm.company.shippingDetails.state?.code
+            };
         }
-        
-        invoiceForm.account.billingDetails = invoiceForm.account.billingAddress;
-        invoiceForm.account.shippingDetails = invoiceForm.account.shippingDetails;
-        invoiceForm.company.billingDetails = invoiceForm.company.billingAddress;
-        invoiceForm.company.shippingDetails = invoiceForm.company.shippingDetails;
-
-        delete invoiceForm.account.billingAddress;
-        delete invoiceForm.account.shippingDetails;
-        delete invoiceForm.company.billingAddress;
-        delete invoiceForm.company.shippingDetails;
 
         return invoiceForm;
     }

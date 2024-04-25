@@ -79,6 +79,11 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
                 this.componentStore.getDiscountsAccountList();
             } else {
                 this.discountsAccountList$ = observableOf(discountsAccountList);
+
+                if (discountsAccountList?.length === 1) {
+                    this.createDiscountForm.get('accountName')?.patchValue(discountsAccountList[0]?.label);
+                    this.createDiscountForm.get('accountUniqueName')?.patchValue(discountsAccountList[0]?.value);
+                }
             }
         });
     }

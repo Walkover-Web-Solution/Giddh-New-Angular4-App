@@ -416,15 +416,37 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
     }
 
+    /**
+     * True if it's UK company
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    public get isUkCompany(): boolean {
+        return this.company.countryName === 'United Kingdom';
+    }
+
+    /**
+     * True if it's UK account
+     *
+     * @readonly
+     * @type {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    public get isUkAccount(): boolean {
+        return this.account.countryName === 'United Kingdom';
+    }
+
     /** Tax validations */
     public taxNumberValidations: any = {
         account: {
-            billingAddress: null,
-            shippingAddress: null
+            billingDetails: null,
+            shippingDetails: null
         },
         company: {
-            billingAddress: null,
-            shippingAddress: null
+            billingDetails: null,
+            shippingDetails: null
         }
     };
     /** True if we need to same billing to shipping address */
@@ -477,6 +499,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
+                this.openAccountDropdown = false;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 if (this.voucherApiVersion !== 2) {
                     this.router.navigate(["/pages/proforma-invoice/invoice/" + this.voucherType]);
@@ -484,7 +507,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                 /** Open account dropdown on create */
                 if (!params?.uniqueName) {
-                    this.openAccountDropdown = true;
+                    setTimeout(() => {
+                        this.openAccountDropdown = true;
+                    }, 200);
                 } else {
                     this.invoiceForm.get('uniqueName').patchValue(params?.uniqueName);
                 }
@@ -496,11 +521,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.getInvoiceSettings();
                 this.getCreatedTemplates();
                 this.getOnboardingFormData();
-                this.getBriefAccounts();
                 this.searchStock();
 
                 if (this.invoiceType.isCashInvoice) {
                     this.invoiceForm.get('account.uniqueName')?.patchValue("cash");
+                    this.componentStore.getBriefAccounts({ currency: this.company.baseCurrency, group: BriedAccountsGroup });
+                } else {
+                    this.invoiceForm.get('account.uniqueName')?.patchValue(null);
                 }
                 this.invoiceForm.get('type').patchValue(this.voucherType);
             }
@@ -534,14 +561,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         /** Company Country states */
         this.componentStore.countryData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.companyStateList$ = observableOf(response?.stateList?.map(res => { return { label: res.name, value: res.code } }));
+                const list = response?.stateList ? response?.stateList : response?.countyList;
+                this.companyStateList$ = observableOf(list?.map(res => { return { label: res.name, value: res.code } }));
             }
         });
 
         /** Account Country states */
         this.componentStore.accountCountryData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.accountStateList$ = observableOf(response?.stateList?.map(res => { return { label: res.name, value: res.code } }));
+                const list = response?.stateList ? response?.stateList : response?.countyList;
+                this.accountStateList$ = observableOf(list?.map(res => { return { label: res.name, value: res.code } }));
             }
         });
 
@@ -553,7 +582,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         /** New account details */
         this.componentStore.newAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.createUpdateAccountCallback(response);
+                this.createUpdateAccountCallback(response, true);
             }
         });
 
@@ -605,39 +634,39 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         /** Account billing address tax number observable */
-        this.invoiceForm.controls['account'].get("billingAddress").get("taxNumber")?.valueChanges.pipe(
+        this.invoiceForm.controls['account'].get("billingDetails").get("taxNumber")?.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            this.checkGstNumValidation(searchedText, "account", "billingAddress");
+            this.checkGstNumValidation(searchedText, "account", "billingDetails");
         });
 
         /** Account shipping address tax number observable */
-        this.invoiceForm.controls['account'].get("shippingAddress").get("taxNumber")?.valueChanges.pipe(
+        this.invoiceForm.controls['account'].get("shippingDetails").get("taxNumber")?.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            this.checkGstNumValidation(searchedText, "account", "shippingAddress");
+            this.checkGstNumValidation(searchedText, "account", "shippingDetails");
         });
 
         /** Company billing address tax number observable */
-        this.invoiceForm.controls['company'].get("billingAddress").get("taxNumber")?.valueChanges.pipe(
+        this.invoiceForm.controls['company'].get("billingDetails").get("taxNumber")?.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            this.checkGstNumValidation(searchedText, "company", "billingAddress");
+            this.checkGstNumValidation(searchedText, "company", "billingDetails");
         });
 
         /** Company shipping address tax number observable */
-        this.invoiceForm.controls['company'].get("shippingAddress").get("taxNumber")?.valueChanges.pipe(
+        this.invoiceForm.controls['company'].get("shippingDetails").get("taxNumber")?.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            this.checkGstNumValidation(searchedText, "company", "shippingAddress");
+            this.checkGstNumValidation(searchedText, "company", "shippingDetails");
         });
 
         /** Voucher details */
@@ -767,6 +796,48 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             takeUntil(this.destroyed$),
         ).subscribe(response => {
             this.calculateBalanceDue();
+        });
+
+        this.componentStore.lastVouchers$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                const lastVouchers: LastInvoices[] = [];
+                if (!this.invoiceType.isProformaInvoice && !this.invoiceType.isEstimateInvoice) {
+                    if (response) {
+                        response = response as ReciptResponse;
+                        response?.items?.forEach(item => {
+                            lastVouchers.push({
+                                voucherNumber: item.voucherNumber,
+                                date: item.voucherDate,
+                                grandTotal: item.grandTotal,
+                                account: { name: item.account?.name, uniqueName: item.account?.uniqueName },
+                                uniqueName: item?.uniqueName
+                            });
+                        });
+                    }
+                } else {
+                    if (response) {
+                        response = response as ProformaResponse;
+                        if (response?.items?.length) {
+                            response.items.forEach(item => {
+                                lastVouchers.push({
+                                    voucherNumber: this.invoiceType.isProformaInvoice ? item.proformaNumber : item.estimateNumber,
+                                    date: item.voucherDate,
+                                    grandTotal: item.grandTotal,
+                                    account: { name: item.customerName, uniqueName: item.customerUniqueName },
+                                    uniqueName: item?.uniqueName
+                                });
+                            });
+                        }
+                    }
+                }
+                this.lastVouchersList$ = observableOf([...lastVouchers]);
+            }
+        });
+
+        this.componentStore.briefAccounts$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.briefAccounts$ = observableOf(response);
+            }
         });
     }
 
@@ -928,6 +999,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.showTaxTypeByCountry(this.company.countryCode);
 
                 this.getCountryData(this.company.countryCode);
+
+                if (this.invoiceType.isCashInvoice) {
+                    this.componentStore.getAccountCountryStates(this.company.countryCode);
+                }
             }
         });
     }
@@ -1061,51 +1136,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     // Find the HO branch
                     this.company.branch = response.find(branch => !branch.parentBranch);
                 }
-            }
-        });
-    }
-
-    /**
-     * Gets list of last 5 vouchers
-     *
-     * @memberof VoucherCreateComponent
-     */
-    public getPreviousVouchers(): void {
-        this.componentStore.lastVouchers$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                const lastVouchers: LastInvoices[] = [];
-                if (!this.invoiceType.isProformaInvoice && !this.invoiceType.isEstimateInvoice) {
-                    if (response) {
-                        response = response as ReciptResponse;
-                        response?.items?.forEach(item => {
-                            lastVouchers.push({
-                                voucherNumber: item.voucherNumber,
-                                date: item.voucherDate,
-                                grandTotal: item.grandTotal,
-                                account: { name: item.account?.name, uniqueName: item.account?.uniqueName },
-                                uniqueName: item?.uniqueName
-                            });
-                        });
-                    }
-                } else {
-                    if (response) {
-                        response = response as ProformaResponse;
-                        if (response?.items?.length) {
-                            response.items.forEach(item => {
-                                lastVouchers.push({
-                                    voucherNumber: this.invoiceType.isProformaInvoice ? item.proformaNumber : item.estimateNumber,
-                                    date: item.voucherDate,
-                                    grandTotal: item.grandTotal,
-                                    account: { name: item.customerName, uniqueName: item.customerUniqueName },
-                                    uniqueName: item?.uniqueName
-                                });
-                            });
-                        }
-                    }
-                }
-                this.lastVouchersList$ = observableOf([...lastVouchers]);
-            } else {
-                this.fetchPreviousVouchers();
             }
         });
     }
@@ -1270,22 +1300,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Gets bank accounts
-     *
-     * @private
-     * @memberof VoucherCreateComponent
-     */
-    private getBriefAccounts(): void {
-        this.componentStore.briefAccounts$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (!response) {
-                this.componentStore.getBriefAccounts({ group: BriedAccountsGroup });
-            } else {
-                this.briefAccounts$ = observableOf(response);
-            }
-        });
-    }
-
-    /**
      * Calls api to get account data
      *
      * @private
@@ -1296,7 +1310,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.componentStore.getAccountDetails(accountUniqueName);
 
         if (!this.invoiceType.isCashInvoice && (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice || this.invoiceType.isCreditNote || this.invoiceType.isDebitNote)) {
-            this.getPreviousVouchers();
+            this.fetchPreviousVouchers();
             this.getAllVouchersForAdjustment();
             this.getVoucherListForCreditDebitNote();
         }
@@ -1387,6 +1401,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public selectStock(event: any, entryIndex: number, isClear: boolean = false): void {
+        if (this.isBarcodeMachineTyping) {
+            this.deleteLineEntry(entryIndex);
+            return;
+        }
+
         if (event && !isClear) {
             const entryFormGroup = this.getEntryFormGroup(entryIndex);
             const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
@@ -1470,6 +1489,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             });
         }
 
+        if (this.account?.baseCurrency !== accountData.currency) {
+            this.componentStore.getBriefAccounts({ currency: accountData?.baseCurrency + ', ' + this.company.baseCurrency, group: BriedAccountsGroup });
+        }
+
         this.account = {
             countryName: accountData.country?.countryName,
             countryCode: accountData.country?.countryCode,
@@ -1490,8 +1513,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         index = accountDefaultAddress.defaultAddressIndex;
 
         if (defaultAddress) {
-            this.fillBillingShippingAddress("account", "billingAddress", defaultAddress, index);
-            this.fillBillingShippingAddress("account", "shippingAddress", defaultAddress, index);
+            this.fillBillingShippingAddress("account", "billingDetails", defaultAddress, index);
+            this.fillBillingShippingAddress("account", "shippingDetails", defaultAddress, index);
         }
 
         if (this.invoiceType.isPurchaseOrder) {
@@ -1500,8 +1523,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             index = companyDefaultAddress.defaultAddressIndex;
 
             if (defaultAddress) {
-                this.fillBillingShippingAddress("company", "billingAddress", defaultAddress, index);
-                this.fillBillingShippingAddress("company", "shippingAddress", defaultAddress, index);
+                this.fillBillingShippingAddress("company", "billingDetails", defaultAddress, index);
+                this.fillBillingShippingAddress("company", "shippingDetails", defaultAddress, index);
             }
         }
 
@@ -1545,12 +1568,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 attentionTo: [''],
                 mobileNumber: [''],
                 email: ['', Validators.email],
-                billingAddress: this.getAddressFormGroup(),
-                shippingAddress: this.getAddressFormGroup()
+                billingDetails: this.getAddressFormGroup(),
+                shippingDetails: this.getAddressFormGroup()
             }),
             company: this.formBuilder.group({
-                billingAddress: this.getAddressFormGroup(),
-                shippingAddress: this.getAddressFormGroup()
+                billingDetails: this.getAddressFormGroup(),
+                shippingDetails: this.getAddressFormGroup()
             }),
             date: ['', Validators.required],
             dueDate: ['', Validators.required],
@@ -1959,6 +1982,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
         let taxableValue = 0;
 
+        if (!calculationMethod) {
+            calculationMethod = SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount;
+        }
+
         if (['tcsrc', 'tcspay'].includes(tax?.taxType)) {
             if (calculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
                 taxableValue = Number(transactionFormGroup.get('amount.amountForAccount')?.value) - entryFormGroup.get('totalDiscount')?.value;
@@ -2024,7 +2051,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
 
             if (this.accountParentGroup === "bankaccounts") {
-                this.componentStore.getBriefAccounts({ group: BriedAccountsGroup });
+                this.componentStore.getBriefAccounts({ currency: this.account?.baseCurrency + ', ' + this.company.baseCurrency, group: BriedAccountsGroup });
             }
         });
     }
@@ -2095,11 +2122,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {*} response
      * @memberof VoucherCreateComponent
      */
-    private createUpdateAccountCallback(response: any): void {
+    private createUpdateAccountCallback(response: any, fetchStates: boolean = false): void {
         this.searchAccount();
         this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response?.uniqueName);
         this.invoiceForm.controls["account"].get("customerName")?.patchValue(response?.name);
-        this.updateAccountDataInForm(response);
+        this.updateAccountDataInForm(response, fetchStates);
         this.accountAsideMenuRef?.close();
     }
 
@@ -2153,13 +2180,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         if (event?.checked) {
             let defaultAddress = {
-                index: this.invoiceForm.controls[entityType].get("billingAddress").get("index")?.value || 0,
-                address: this.invoiceForm.controls[entityType].get("billingAddress").get("address")?.value,
-                pincode: this.invoiceForm.controls[entityType].get("billingAddress").get("pincode")?.value,
-                gstNumber: this.invoiceForm.controls[entityType].get("billingAddress").get("taxNumber")?.value,
-                state: { name: this.invoiceForm.controls[entityType].get("billingAddress").get("state").get("name")?.value, code: this.invoiceForm.controls[entityType].get("billingAddress").get("state").get("code")?.value }
+                index: this.invoiceForm.controls[entityType].get("billingDetails").get("index")?.value || 0,
+                address: this.invoiceForm.controls[entityType].get("billingDetails").get("address")?.value,
+                pincode: this.invoiceForm.controls[entityType].get("billingDetails").get("pincode")?.value,
+                gstNumber: this.invoiceForm.controls[entityType].get("billingDetails").get("taxNumber")?.value,
+                state: { name: this.invoiceForm.controls[entityType].get("billingDetails").get("state").get("name")?.value, code: this.invoiceForm.controls[entityType].get("billingDetails").get("state").get("code")?.value }
             };
-            this.fillBillingShippingAddress(entityType, "shippingAddress", defaultAddress, defaultAddress.index);
+            this.fillBillingShippingAddress(entityType, "shippingDetails", defaultAddress, defaultAddress.index);
         }
     }
 
@@ -2821,7 +2848,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private isFormValid(invoiceForm: any): boolean {
-        if (this.taxNumberValidations.account.billingAddress !== null || this.taxNumberValidations.account.shippingAddress !== null || this.taxNumberValidations.company.billingAddress !== null || this.taxNumberValidations.company.shippingAddress !== null) {
+        if (this.taxNumberValidations.account.billingDetails !== null || this.taxNumberValidations.account.shippingDetails !== null || this.taxNumberValidations.company.billingDetails !== null || this.taxNumberValidations.company.shippingDetails !== null) {
             return false;
         }
 
@@ -2964,6 +2991,34 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             invoiceForm = this.adjustmentUtilityService.getAdjustmentObjectVoucherModule(invoiceForm);
         }
 
+        if (this.isUkCompany) {
+            invoiceForm = this.vouchersUtilityService.copyCompanyStateToCounty(invoiceForm);
+        }
+
+        if (this.isUkAccount) {
+            invoiceForm = this.vouchersUtilityService.copyAccountStateToCounty(invoiceForm);
+        }
+
+        if (!this.invoiceType.isPurchaseOrder) {
+            if (this.isUkAccount) {
+                if (invoiceForm.account?.billingDetails) {
+                    delete invoiceForm.account.billingDetails.state;
+                }
+                if (invoiceForm.account?.shippingDetails) {
+                    delete invoiceForm.account.shippingDetails.state;
+                }
+            }
+
+            if (this.isUkCompany) {
+                if (invoiceForm.company?.billingDetails) {
+                    delete invoiceForm.company.billingDetails.state;
+                }
+                if (invoiceForm.company?.shippingDetails) {
+                    delete invoiceForm.company.shippingDetails.state;
+                }
+            }
+        }
+
         if (this.invoiceType.isPurchaseOrder) {
             invoiceForm.type = VoucherTypeEnum.purchase;
 
@@ -2972,7 +3027,35 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 accountUniqueName: invoiceForm.account.uniqueName
             };
 
-            invoiceForm = this.vouchersUtilityService.formatPurchaseOrderRequest(invoiceForm);
+            if (!this.isUkAccount) {
+                if (invoiceForm.account?.billingDetails?.state?.code) {
+                    invoiceForm.account.billingDetails.stateCode = invoiceForm.account.billingDetails.state?.code;
+                    invoiceForm.account.billingDetails.stateName = invoiceForm.account.billingDetails.state?.name;
+                }
+
+                if (invoiceForm.account?.shippingDetails?.state?.code) {
+                    invoiceForm.account.shippingDetails.stateCode = invoiceForm.account.shippingDetails.state?.code;
+                    invoiceForm.account.shippingDetails.stateName = invoiceForm.account.shippingDetails.state?.name;
+                }
+            } else {
+                delete invoiceForm.account.billingDetails.state;
+                delete invoiceForm.account.shippingDetails.state;
+            }
+
+            if (!this.isUkCompany) {
+                if (invoiceForm.company?.billingDetails?.state?.code) {
+                    invoiceForm.company.billingDetails.stateCode = invoiceForm.company.billingDetails.state?.code;
+                    invoiceForm.company.billingDetails.stateName = invoiceForm.company.billingDetails.state?.name;
+                }
+
+                if (invoiceForm.company?.shippingDetails?.state?.code) {
+                    invoiceForm.company.shippingDetails.stateCode = invoiceForm.company.shippingDetails.state?.code;
+                    invoiceForm.company.shippingDetails.stateName = invoiceForm.company.shippingDetails.state?.name;
+                }
+            } else {
+                delete invoiceForm.company.billingDetails.state;
+                delete invoiceForm.company.shippingDetails.state;
+            }
 
             this.purchaseOrderService.create(getRequestObject, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.startLoader(false);
@@ -3158,8 +3241,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public copyAccountBillingAddressToShippingAddress(): void {
         if (this.copyAccountBillingInShippingAddress) {
-            const billingAddress = this.invoiceForm.get('account.billingAddress').value;
-            this.invoiceForm.get('account.shippingAddress').patchValue(billingAddress);
+            const billingDetails = this.invoiceForm.get('account.billingDetails').value;
+            this.invoiceForm.get('account.shippingDetails').patchValue(billingDetails);
         }
     }
 
@@ -3170,8 +3253,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public copyCompanyBillingAddressToShippingAddress(): void {
         if (this.copyCompanyBillingInShippingAddress) {
-            const billingAddress = this.invoiceForm.get('company.billingAddress').value;
-            this.invoiceForm.get('company.shippingAddress').patchValue(billingAddress);
+            const billingDetails = this.invoiceForm.get('company.billingDetails').value;
+            this.invoiceForm.get('company.shippingDetails').patchValue(billingDetails);
         }
     }
 
@@ -3988,8 +4071,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         if (event.timeStamp - this.startTime < 2) {
             this.isBarcodeMachineTyping = true;
-        } else {
-            this.isBarcodeMachineTyping = false;
         }
 
         if (barcodeValue && this.startTime) {
@@ -4022,14 +4103,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const key = event.key;
         if (key === 'Enter') {
             if (this.barcodeValue.length) {
-                this.isBarcodeMachineTyping = true;
                 return this.barcodeValue;
             } else {
                 return null;
             }
         } else {
             if (!ignoreKeyList.includes(key)) {
-                this.barcodeValue += (this.lastScannedKey === 'Shift') ? key.toUpperCase() : key;
+                this.barcodeValue += (this.lastScannedKey === 'Shift') ? key?.toUpperCase() : key;
             }
             this.lastScannedKey = key;
             return null;
