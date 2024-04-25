@@ -8,6 +8,7 @@ import { VatReportRequest, VatReportResponse, VatReportTransactionsRequest } fro
 import { GiddhErrorHandler } from "./catchManager/catchmanger";
 import { HttpWrapperService } from "./http-wrapper.service";
 import { Observable } from "rxjs";
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable()
 export class VatService {
@@ -139,7 +140,14 @@ export class VatService {
     public saveAuthorizationCode(companyUniqueName: string, model: any): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + VAT_API.SAVE_AUTHORIZATION_CODE;
         url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+<<<<<<< Updated upstream
         return this.http.post(url, model).pipe(
+=======
+        let userTimeZone = this.generalService.getUserTimeZone();
+        let header = this.generalService.getGovClientTimezoneHeader(userTimeZone);
+
+        return this.http.post(url, model, header).pipe(
+>>>>>>> Stashed changes
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
@@ -162,7 +170,30 @@ export class VatService {
         url = url?.replace(':status', encodeURIComponent(model?.status));
         url = url?.replace(':from', encodeURIComponent(model?.from));
         url = url?.replace(':to', encodeURIComponent(model?.to));
+<<<<<<< Updated upstream
         return this.http.get(url).pipe(
+=======
+        let userTimeZone = this.generalService.getUserTimeZone();
+        let header = this.generalService.getGovClientTimezoneHeader(userTimeZone);
+        let osName = this.generalService.getOsConfiguration();
+        let osVersion = this.generalService.getOSVersion();
+        let osFamily = this.generalService.getOSFamily();
+        let deviceManufacture = this.generalService.getDeviceManufacture();
+        let deviceModel = this.generalService.getDeviceModel();
+        let deviceTimestamp = this.generalService.getTimesStamp();
+        let clientIp = this.generalService.getClientIp();
+        let args: any = { headers: {} };
+        args.headers['os'] = osName;
+        args.headers['os-family'] = osFamily;
+        args.headers['os-version'] = osVersion;
+        args.headers['device-manufacture'] = deviceManufacture;
+        args.headers['device-model'] = deviceModel;
+        args.headers['mac-address'] = osName;
+        args.headers['timestamp'] = deviceTimestamp;
+        args.headers['client-ip'] = clientIp;
+        args.headers = new HttpHeaders(args.headers);
+        return this.http.get(url, { headers: args.headers }).pipe(
+>>>>>>> Stashed changes
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;

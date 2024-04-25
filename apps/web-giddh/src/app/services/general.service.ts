@@ -1710,4 +1710,174 @@ export class GeneralService {
 
         return plaidSupportedCountryList.includes(countryName.toUpperCase());
     }
+<<<<<<< Updated upstream
+=======
+
+    /**
+     * This will return the system current user time zone
+     *
+     * @return {*}
+     * @memberof GeneralService
+     */
+    public getUserTimeZone(): any {
+        let offset = new Date().getTimezoneOffset(), o = Math.abs(offset);
+        return (offset < 0 ? "+" : "-") + ("00" + Math.floor(o / 60)).slice(-2) + ":" + ("00" + (o % 60)).slice(-2);
+    }
+
+    /**
+     *This will be return government client time zone header
+     *
+     * @param {*} timezone
+     * @return {*}  {*}
+     * @memberof GeneralService
+     */
+    public getGovClientTimezoneHeader(timezone: any): any {
+        const headers = new HttpHeaders().set('Gov-Client-Timezone', 'UTC' + timezone);
+        return { headers };
+    }
+
+    public getOsConfiguration() {
+        const userAgent = window.navigator.userAgent;
+        console.log(userAgent);
+        let osName;
+        if (userAgent.indexOf("Win") != -1) {
+            osName = "Windows";
+        } else if (userAgent.indexOf("Mac") != -1) {
+            osName = "Macintosh";
+        } else if (userAgent.indexOf("Linux") != -1) {
+            osName = "Linux";
+        } else if (userAgent.indexOf("Android") != -1) {
+            osName = "Android";
+        } else if (userAgent.indexOf("iOS") != -1) {
+            osName = "iOS";
+        } else {
+            osName = "Unknown";
+        }
+        return osName;
+    }
+
+    public getDeviceManufacture() {
+        const userAgent = window.navigator.userAgent;
+        let deviceManufacture = 'Unknown';
+
+        // Example of inferring device manufacturer based on user agent string
+        if (userAgent.indexOf('iPhone') !== -1 || userAgent.indexOf('iPad') !== -1) {
+            deviceManufacture = 'Apple';
+        } else if (userAgent.indexOf('Android') !== -1) {
+            deviceManufacture = 'Samsung'; // Assuming Samsung for Android, could be any Android device manufacturer
+        } // Add additional checks for other common devices if needed
+
+        return deviceManufacture;
+    }
+
+    public getTimesStamp() {
+        const timestamp = new Date().toISOString();
+        return timestamp;
+    }
+
+    public getClientIp() {
+
+    }
+
+    public getDeviceModel() {
+        const userAgent = window.navigator.userAgent;
+        let deviceModel = 'Unknown';
+
+        // Example of inferring device model based on user agent string
+        if (userAgent.indexOf('iPhone') !== -1) {
+            // Extracting iPhone model from user agent string (Example: "iPhone12,1")
+            const match = userAgent.match(/iPhone([\d,_]+)/);
+            if (match && match.length > 1) {
+                deviceModel = match[1].replace(/_/g, '.'); // Replacing underscores with dots
+            }
+        } else if (userAgent.indexOf('iPad') !== -1) {
+            // Extracting iPad model from user agent string (Example: "iPad11,1")
+            const match = userAgent.match(/iPad([\d,_]+)/);
+            if (match && match.length > 1) {
+                deviceModel = match[1].replace(/_/g, '.'); // Replacing underscores with dots
+            }
+        } else if (userAgent.indexOf('Android') !== -1) {
+            // Example of assuming device model for Android devices
+            deviceModel = 'Unknown'; // This might vary significantly
+        } // Add additional checks for other common devices if needed
+
+        return deviceModel;
+    }
+
+    public getOSFamily() {
+        const userAgent = window.navigator.userAgent;
+        let osFamily = 'Unknown';
+
+        if (userAgent.indexOf('Windows') !== -1) {
+            osFamily = 'Windows';
+        } else if (userAgent.indexOf('Macintosh') !== -1) {
+            osFamily = 'Macintosh';
+        } else if (userAgent.indexOf('Linux') !== -1) {
+            osFamily = 'Linux';
+        } else if (userAgent.indexOf('Android') !== -1) {
+            osFamily = 'Android';
+        } else if (userAgent.indexOf('iPhone') !== -1 || userAgent.indexOf('iPad') !== -1) {
+            osFamily = 'iOS';
+        } // Add additional checks for other OS families if needed
+
+        return osFamily;
+    }
+
+    public getOSVersion() {
+        const userAgent = window.navigator.userAgent;
+        let osVersion = 'Unknown';
+
+        if (userAgent.indexOf('Windows NT') !== -1) {
+            osVersion = this.extractWindowsVersion(userAgent);
+        } else if (userAgent.indexOf('Mac OS X') !== -1) {
+            osVersion = this.extractMacOSVersion(userAgent);
+        } else if (userAgent.indexOf('Android') !== -1) {
+            osVersion = this.extractAndroidVersion(userAgent);
+        } else if (userAgent.indexOf('iPhone') !== -1 || userAgent.indexOf('iPad') !== -1) {
+            osVersion = this.extractiOSVersion(userAgent);
+        } // Add additional checks for Linux, etc. if needed
+
+        return osVersion;
+    }
+
+    extractWindowsVersion(userAgent: string): string {
+        // Example: "Windows NT 10.0"
+        const startIndex = userAgent.indexOf('Windows NT');
+        if (startIndex !== -1) {
+            return userAgent.substring(startIndex + 11, userAgent.indexOf(';', startIndex));
+        } else {
+            return 'Unknown';
+        }
+    }
+
+    extractMacOSVersion(userAgent: string): string {
+        // Example: "Mac OS X 10_15_7"
+        const startIndex = userAgent.indexOf('Mac OS X');
+        if (startIndex !== -1) {
+            return userAgent.substring(startIndex + 9, userAgent.indexOf(')', startIndex)).replace(/_/g, '.');
+        } else {
+            return 'Unknown';
+        }
+    }
+
+    extractAndroidVersion(userAgent: string): string {
+        // Example: "Android 10"
+        const startIndex = userAgent.indexOf('Android');
+        if (startIndex !== -1) {
+            return userAgent.substring(startIndex + 8, userAgent.indexOf(';', startIndex));
+        } else {
+            return 'Unknown';
+        }
+    }
+
+    extractiOSVersion(userAgent: string): string {
+        // Example: "iPhone OS 14_4"
+        const startIndex = userAgent.indexOf('iPhone OS');
+        if (startIndex !== -1) {
+            return userAgent.substring(startIndex + 10, userAgent.indexOf(';', startIndex)).replace(/_/g, '.');
+        } else {
+            return 'Unknown';
+        }
+    }
+>>>>>>> Stashed changes
 }
