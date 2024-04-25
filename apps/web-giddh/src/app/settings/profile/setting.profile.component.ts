@@ -1231,9 +1231,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
                 this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                     if (activeCompany) {
-                        if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
+                        if (activeCompany.countryV2?.alpha2CountryCode === 'ZW') {
+                            this.taxType = this.commonLocaleData?.app_vat;
+                        } else if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                             this.taxType = this.commonLocaleData?.app_trn;
-                        } else {
+                        }
+                        else {
                             this.taxType = this.commonLocaleData?.app_gstin;
                         }
                         if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode) || activeCompany.countryV2?.alpha2CountryCode === 'IN') {
