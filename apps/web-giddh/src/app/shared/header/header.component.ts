@@ -543,7 +543,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isIpadScreen = result?.breakpoints['(max-width: 768px)'];
         });
 
-        //this.sideBarStateChange(true);
         this.store.pipe(select(state => state.general.openSideMenu), takeUntil(this.destroyed$)).subscribe(response => {
             this.sideBarStateChange(response);
 
@@ -645,6 +644,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             .subscribe((state: BreakpointState) => {
                 this.isLargeWindow = state.matches;
                 this.adjustNavigationBar();
+                if(state.matches){
+                    this.expandSidebar(true);
+                } else {
+                    this.collapseSidebar(true);
+                }
             });
 
         this.isAddAndManageOpenedFromOutside$.subscribe(s => {
@@ -1059,7 +1063,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public sideBarStateChange(event: boolean) {
         this.isGoToBranch = false;
-        this.store.dispatch(this._generalActions.openSideMenu(event));
         if (this.sideMenu) {
             this.sideMenu.isopen = event;
         }
