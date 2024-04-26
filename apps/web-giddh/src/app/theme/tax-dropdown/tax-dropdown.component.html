@@ -1,0 +1,20 @@
+<div class="multi-select">
+    <input type="text" class="form-control text-right total-tax-amount" [matMenuTriggerFor]="taxControlMenu" [placeholder]="currency + '0'"
+        readonly [value]="currency + totalTaxAmount">
+    <mat-menu #taxControlMenu="matMenu">
+        <div class="d-flex flex-column px-3 pt-2 discount-wrapper" (click)="$event.stopPropagation()" [formGroup]="taxForm">
+            <div class="discount-checkbox-wrapper d-flex flex-column">
+                <ng-container *ngFor="let tax of taxForm.get('taxes')['controls']; let i = index" formArrayName="taxes">
+                    <ng-container [formGroupName]="i">
+                        <span [matTooltip]="tax?.get('disableForDate')?.value ? comcommonLocaleData?.app_applicable_date + ': ' + tax?.get('taxDetail')?.value?.date : ''" matTooltipPosition="above">
+                            <mat-checkbox (change)="enableDisableTaxes()" formControlName="isChecked" type="checkbox" color="primary"><span class="font-15">{{ tax?.get('name')?.value }}</span></mat-checkbox>
+                        </span>
+                    </ng-container>
+                </ng-container>
+            </div>
+            <div class="create-new pt-2 mt-2 text-center cursor-pointer" (click)="createNew()">
+                <span class="text-blue">{{ commonLocaleData?.app_create_new }}</span>
+            </div>
+        </div>
+    </mat-menu>
+</div>

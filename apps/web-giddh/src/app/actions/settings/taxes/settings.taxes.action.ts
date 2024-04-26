@@ -28,10 +28,12 @@ export class SettingsTaxesActions {
             ofType(SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data?.status === 'error') {
-                    this.toasty.errorToast(data.message, data.code);
-                } else {
-                    this.toasty.successToast(this.localeService.translate("app_messages.tax_created"));
+                if (data) {
+                    if (data?.status === 'error') {
+                        this.toasty.errorToast(data.message, data.code);
+                    } else {
+                        this.toasty.successToast(this.localeService.translate("app_messages.tax_created"));
+                    }
                 }
                 return { type: 'EmptyAction' };
             })));
