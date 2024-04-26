@@ -505,12 +505,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.router.navigate(["/pages/proforma-invoice/invoice/" + this.voucherType]);
                 }
 
+                this.resetVoucherForm();
+
                 /** Open account dropdown on create */
                 if (!params?.uniqueName) {
-                    setTimeout(() => {
-                        this.openAccountDropdown = true;
-                    }, 200);
-                } else {
                     this.invoiceForm.get('uniqueName').patchValue(params?.uniqueName);
                 }
 
@@ -3231,7 +3229,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.searchAccount();
 
-        this.openAccountDropdown = openAccountDropdown;
+        setTimeout(() => {
+            this.openAccountDropdown = openAccountDropdown;
+        }, 200);
     }
 
     /**
