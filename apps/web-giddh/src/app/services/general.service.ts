@@ -16,6 +16,7 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { HttpClient } from '@angular/common/http';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class GeneralService {
@@ -1917,6 +1918,16 @@ export class GeneralService {
     }
 
     /**
+    * Generates a UUID (Universally Unique Identifier).
+    *
+    * @returns {string} The generated UUID.
+    * @memberof GeneralService
+    */
+    public generateUUID(): string {
+        return uuidv4();
+    }
+
+    /**
      * This will be use for get user agent
      *
      * @param {*} clientIp
@@ -1930,6 +1941,7 @@ export class GeneralService {
         let deviceManufacture = this.getDeviceManufacture();
         let deviceModel = this.getDeviceModel();
         let deviceTimestamp = this.getTimesStamp();
+        let macAddress = this.generateUUID();
         let ip = clientIp;
         let args: any = { headers: {} };
         args.headers['os'] = osName;
@@ -1937,7 +1949,7 @@ export class GeneralService {
         args.headers['os-version'] = osVersion;
         args.headers['device-manufacturer'] = deviceManufacture;
         args.headers['device-model'] = deviceModel;
-        args.headers['mac-address'] = osName;
+        args.headers['mac-address'] = macAddress;
         args.headers['timestamp'] = deviceTimestamp;
         args.headers['client-ip'] = ip;
         return args.headers
