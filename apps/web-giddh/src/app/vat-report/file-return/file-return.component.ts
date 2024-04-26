@@ -62,7 +62,7 @@ export class FileReturnComponent implements OnInit, OnDestroy {
 
         this.generalService.getClientIp().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.ipAddress) {
-                this.clientIp = response?.ipAddress;
+                this.clientIp = response.ipAddress;
             }
         });
 

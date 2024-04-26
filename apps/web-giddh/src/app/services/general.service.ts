@@ -1720,19 +1720,19 @@ export class GeneralService {
      * @returns {string} The name of the operating system.
      * @memberof GeneralService
      */
-    public getOsConfiguration() {
+    public getOsConfiguration(): string {
         const userAgent = window.navigator.userAgent;
         let osName;
 
-        if (userAgent.indexOf("Win") != -1) {
+        if (userAgent.indexOf("Win") !== -1) {
             osName = "Windows";
-        } else if (userAgent.indexOf("Mac") != -1) {
+        } else if (userAgent.indexOf("Mac") !== -1) {
             osName = "Macintosh";
-        } else if (userAgent.indexOf("Linux") != -1) {
+        } else if (userAgent.indexOf("Linux") !== -1) {
             osName = "Linux";
-        } else if (userAgent.indexOf("Android") != -1) {
+        } else if (userAgent.indexOf("Android") !== -1) {
             osName = "Android";
-        } else if (userAgent.indexOf("iOS") != -1) {
+        } else if (userAgent.indexOf("iOS") !== -1) {
             osName = "iOS";
         } else {
             osName = "Unknown";
@@ -1747,7 +1747,7 @@ export class GeneralService {
      * @returns {string} The device manufacturer.
      * @memberof GeneralService
      */
-    public getDeviceManufacture() {
+    public getDeviceManufacture(): string {
         const userAgent = window.navigator.userAgent;
         let deviceManufacture = 'Unknown';
 
@@ -1766,7 +1766,7 @@ export class GeneralService {
      * @returns {string} The current timestamp.
      * @memberof GeneralService
      */
-    public getTimesStamp() {
+    public getTimesStamp(): any {
         const timestamp = new Date().toISOString();
         return timestamp;
     }
@@ -1777,7 +1777,7 @@ export class GeneralService {
      * @returns {string} The device model.
      * @memberof GeneralService
      */
-    public getDeviceModel() {
+    public getDeviceModel(): string {
         const userAgent = window.navigator.userAgent;
         let deviceModel = 'Unknown';
 
@@ -1807,7 +1807,7 @@ export class GeneralService {
      * @returns {string} The operating system family.
      * @memberof GeneralService
      */
-    public getOSFamily() {
+    public getOSFamily(): string {
         const userAgent = window.navigator.userAgent;
         let osFamily = 'Unknown';
 
@@ -1832,7 +1832,7 @@ export class GeneralService {
      * @returns {string} The operating system version.
      * @memberof GeneralService
      */
-    public getOSVersion() {
+    public getOSVersion(): string {
         const userAgent = window.navigator.userAgent;
         let osVersion = 'Unknown';
 
@@ -1934,7 +1934,7 @@ export class GeneralService {
      * @return {*}
      * @memberof GeneralService
      */
-    public getUserAgentData(clientIp: any) {
+    public getUserAgentData(clientIp: any): any {
         let osName = this.getOsConfiguration();
         let osVersion = this.getOSVersion();
         let osFamily = this.getOSFamily();
@@ -1960,7 +1960,7 @@ export class GeneralService {
      *
      * @memberof GeneralService
      */
-    public getClientIp() {
+    public getClientIp(): any {
         return this.http.get<any>(MOBILE_NUMBER_SELF_URL);
     }
 }

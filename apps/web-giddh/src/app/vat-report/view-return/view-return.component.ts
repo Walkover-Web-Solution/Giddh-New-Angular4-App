@@ -56,7 +56,7 @@ export class ViewReturnComponent implements OnInit {
     public ngOnInit(): void {
         this.generalService.getClientIp().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.ipAddress) {
-                this.clientIp = response?.ipAddress;
+                this.clientIp = response.ipAddress;
             }
         });
         this.viewVatReturn();
