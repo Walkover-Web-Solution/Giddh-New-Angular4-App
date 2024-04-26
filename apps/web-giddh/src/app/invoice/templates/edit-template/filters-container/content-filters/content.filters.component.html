@@ -91,16 +91,16 @@
                             (customTemplate?.templateType === 'gst_template_a' ||
                                 customTemplate?.templateType === 'gst_template_e') &&
                             showGstComposition &&
-                            customTemplate.sections['header'].data['showIrnNumber']
+                            customTemplate.sections['header'].data['showEInvoiceDetails']
                         "
                     >
                         <input
                             type="checkbox"
                             name="irnCheckbox"
-                            [(ngModel)]="customTemplate.sections['header'].data['showIrnNumber'].display"
+                            [(ngModel)]="customTemplate.sections['header'].data['showEInvoiceDetails'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         />
-                        Show IRN number
+                        Show IRN and Ack number of E-Invoice
                     </div>
                     <div
                         *ngIf="
@@ -167,7 +167,7 @@
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             checked
                         />
-                        GSTIN
+                        {{ customTemplate.sections["header"].data["gstin"].label }}
                     </div>
                     <div
                         class="form-group clearfix custom-field"
@@ -550,7 +550,13 @@
                         Mobile Number
                     </div>
                 </div>
-                <div class="clearfix" *ngIf="customTemplate?.templateType !== 'gst_template_d'">
+                <div
+                    class="clearfix"
+                    *ngIf="
+                        customTemplate?.templateType !== 'gst_template_d' &&
+                        customTemplate?.templateType !== 'thermal_template'
+                    "
+                >
                     <h3>Billing Details</h3>
                     <div *ngIf="fieldsAndVisibility.header.billingAddress" class="form-group">
                         <input
@@ -1087,7 +1093,7 @@
                                     type="text"
                                     hasFocus
                                     #item="hasFocus"
-                                    [maxlength]="customTemplate.templateType === 'thermal_template' ? 8 : 12"
+                                    [maxlength]="12"
                                     [class.error-box]="contentForm?.controls['it1']?.errors?.maxlength"
                                     class="form-control"
                                     name="it1"
@@ -1100,9 +1106,7 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
-                                        customTemplate.templateType === "thermal_template"
-                                            ? 8 - customTemplate.sections["table"].data["item"].label?.length
-                                            : 12 - customTemplate.sections["table"].data["item"].label?.length
+                                        12 - customTemplate.sections["table"].data["item"].label?.length
                                     }}</span>
                                 </ng-container>
                             </td>
@@ -1274,7 +1278,7 @@
                                     type="text"
                                     hasFocus
                                     #rate="hasFocus"
-                                    [maxlength]="customTemplate.templateType === 'thermal_template' ? 9 : 10"
+                                    [maxlength]="10"
                                     [class.error-box]="contentForm?.controls['rt1']?.errors?.maxlength"
                                     class="form-control"
                                     name="rt1"
@@ -1287,9 +1291,7 @@
                                 >
                                     <span class="max-character-label">Characters left:&nbsp;</span
                                     ><span class="max-character-value">{{
-                                        customTemplate.templateType === "thermal_template"
-                                            ? 9 - customTemplate.sections["table"].data["rate"].label?.length
-                                            : 10 - customTemplate.sections["table"].data["rate"].label?.length
+                                        10 - customTemplate.sections["table"].data["rate"].label?.length
                                     }}</span>
                                 </ng-container>
                             </td>
@@ -1297,7 +1299,7 @@
                         <tr
                             *ngIf="
                                 customTemplate.sections['table'].data['amountBeforeDiscount'] &&
-                                        voucherApiVersion === 2 &&
+                                voucherApiVersion === 2 &&
                                 customTemplate.templateType !== 'thermal_template'
                             "
                         >
@@ -2022,26 +2024,6 @@
                             }}</span>
                         </div>
                     </div>
-                    <div *ngIf="customTemplate.templateType === 'thermal_template'" class="form-group">
-                        <input
-                            type="checkbox"
-                            name="totalDueCheckbox"
-                            [(ngModel)]="customTemplate.sections['footer'].data['totalDue'].display"
-                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                            checked
-                        />
-                        Invoice Total
-                        <div class="ml-3">
-                            <ng-container
-                                *ngIf="totalDue?.isFocused || contentForm?.controls['totalDue']?.errors?.maxlength"
-                            >
-                                <span class="max-character-label">Characters left:&nbsp;</span
-                                ><span class="max-character-value">{{
-                                    15 - customTemplate.sections["footer"].data["totalDue"].label?.length
-                                }}</span>
-                            </ng-container>
-                        </div>
-                    </div>
                     <div
                         *ngIf="
                             fieldsAndVisibility.table.discount && customTemplate?.templateType === 'thermal_template'
@@ -2116,7 +2098,8 @@
                             fieldsAndVisibility.footer.totalInWords &&
                             customTemplate?.templateType !== 'gst_template_b' &&
                             customTemplate?.templateType !== 'gst_template_d' &&
-                            customTemplate?.templateType !== 'gst_template_e'
+                            customTemplate?.templateType !== 'gst_template_e' && 
+                            customTemplate?.templateType !== 'thermal_template' 
                         "
                         class="form-group"
                     >
@@ -2127,6 +2110,21 @@
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                         />
                         Invoice Total(in words)
+                    </div>
+                                        <div
+                        *ngIf="
+                            fieldsAndVisibility.footer.totalInWords &&
+                            customTemplate?.templateType === 'thermal_template' 
+                        "
+                        class="form-group"
+                    >
+                        <input
+                            type="checkbox"
+                            name="itiw"
+                            [(ngModel)]="customTemplate.sections['footer'].data['totalInWords'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                        />
+                        Invoice Total
                     </div>
                     <div
                         class="form-group"
@@ -2356,10 +2354,7 @@
                     </div>
                     <div
                         *ngIf="
-                            customTemplate?.type === 'invoice' &&
-                            (customTemplate?.templateType === 'gst_template_a' ||
-                                customTemplate?.templateType === 'gst_template_e') &&
-                            customTemplate.sections['footer'].data['textUnderSlogan']
+                            customTemplate?.templateType !== 'thermal_template' && customTemplate.sections['footer'].data['textUnderSlogan']
                         "
                         class="clearfix mr-t1 form-group"
                     >

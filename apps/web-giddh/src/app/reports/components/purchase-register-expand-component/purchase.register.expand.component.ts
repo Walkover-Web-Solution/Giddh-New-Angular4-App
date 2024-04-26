@@ -108,6 +108,8 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     public modalRef: BsModalRef;
     /** Hold initial params data */
     private params: any = { from: '', to: '' };
+    /**True if API called on single time */
+    public isDefaultLoaded: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -158,6 +160,12 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 }
             });
 
+        this.isGetPurchaseDetailsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(success => {
+            if (success) {
+                this.isDefaultLoaded = true;
+            }
+        });
+
         this.activeRoute.queryParams.pipe(take(1)).subscribe((params) => {
             if (params.from && params.to) {
                 this.from = params.from;
@@ -167,18 +175,23 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 this.getDetailedPurchaseRequestFilter.branchUniqueName = params.branchUniqueName;
                 this.params = params;
                 this.setDataPickerDateRange();
+                this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
             }
         });
 
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {
-            if (dateObj) {
+            if (dateObj && this.isDefaultLoaded) {
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                this.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                this.getDetailedPurchaseRequestFilter.from = this.from;
+                this.getDetailedPurchaseRequestFilter.to = this.to;
+                this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
             }
         });
 
-        this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
         this.purchaseRegisteDetailedResponse$
             .pipe(takeUntil(this.destroyed$))
             .subscribe((res: PurchaseRegisteDetailedResponse) => {

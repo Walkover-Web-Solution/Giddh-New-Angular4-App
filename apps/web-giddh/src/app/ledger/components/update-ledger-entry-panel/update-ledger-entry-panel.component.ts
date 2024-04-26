@@ -14,7 +14,7 @@ import {
     ViewChild
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { Configuration, SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType } from 'apps/web-giddh/src/app/app.constant';
+import { SubVoucher, RATE_FIELD_PRECISION, SearchResultText, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { saveAs } from 'file-saver';
 import * as dayjs from 'dayjs';
@@ -34,7 +34,6 @@ import { IForceClear, SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { AccountService } from '../../../services/account.service';
-import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { GeneralService } from '../../../services/general.service';
 import { LedgerService } from '../../../services/ledger.service';
 import { ToasterService } from '../../../services/toaster.service';
@@ -105,6 +104,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     @Input() public activeCompany: any;
     @Input() public searchResultsPaginationPage: any;
     @Input() public searchResultsPaginationTotalPages: any;
+    @Input() public generateEInvoice: boolean = null;
     /** Holds side of entry (dr/cr) */
     @Input() public entrySide: string;
     /** fileinput element ref for clear value after remove attachment **/
@@ -223,14 +223,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     /** Stores the search results pagination details */
     public searchResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
         query: ''
     };
     /** Stores the default search results pagination details (required only for passing
      * default search pagination details to Update ledger component) */
     public defaultResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
         query: ''
     };
 
@@ -285,6 +285,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public selectedStockVariant: IVariant = { name: '', uniqueName: '' };
     /** Stores the stock uniquename */
     private selectedStockUniquenName: string;
+    /** True if ledger account belongs to sundry debtor/creditor */
+    private isSundryDebtorCreditor: boolean = false;
+    /** account other applicable discount list which contains account's discount else immediate group's discount(inherited) */
+    public accountOtherApplicableDiscount: any[] = [];
+    /** False if there is no data in account search */
+    public isAccountSearchData: boolean = true;
 
     constructor(
         private accountService: AccountService,
@@ -329,9 +335,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
         if (this.searchResultsPaginationPage) {
             this.searchResultsPaginationData.page = this.searchResultsPaginationPage;
-        }
-        if (this.searchResultsPaginationTotalPages) {
-            this.searchResultsPaginationData.totalPages = this.searchResultsPaginationTotalPages;
         }
 
         if (this.generalService.voucherApiVersion === 2) {
@@ -525,6 +528,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             }
         }
+
+        if (changes['generateEInvoice'] && this.vm?.selectedLedger) {
+            this.vm.selectedLedger.generateEInvoice = changes['generateEInvoice']?.currentValue;
+            this.saveLedgerTransaction();
+        }
     }
 
     public addBlankTrx(type: string = 'DEBIT', txn: ILedgerTransactionItem, event: Event) {
@@ -594,7 +602,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
                 this.vm.showNewEntryPanel = incomeExpenseEntryLength === 1;
             }
-
             return;
         } else {
             if (!txn.isUpdated) {
@@ -630,6 +637,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     if (e.additional.stock) {
                         requestObject = {
                             stockUniqueName: e.additional.stock?.uniqueName,
+                            customerUniqueName: this.isSundryDebtorCreditor ? this.activeAccount?.uniqueName : this.baseAccountDetails.particular.uniqueName,
                             ...(isVariantChanged ? { variantUniqueName: this.selectedStockVariant?.uniqueName } : {})
                         };
                     }
@@ -1455,7 +1463,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      * @memberof UpdateLedgerEntryPanelComponent
      */
     public handleScrollEnd(): void {
-        if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
+        if (this.searchResultsPaginationData.page) {
             this.onSearchQueryChanged(
                 this.searchResultsPaginationData.query,
                 this.searchResultsPaginationData.page + 1,
@@ -1471,7 +1479,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         }) || [];
                         this.defaultSuggestions = this.defaultSuggestions.concat(...results);
                         this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
-                        this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
                     }
                 });
         }
@@ -1498,36 +1505,42 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 q: encodeURIComponent(query),
                 page,
                 withStocks,
-                accountUniqueName: encodeURIComponent(accountUniqueName)
+                accountUniqueName: encodeURIComponent(accountUniqueName),
+                count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT
             }
-            this.searchService.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                if (data && data.body && data.body.results) {
-                    const searchResults = data.body.results.map(result => {
-                        return {
-                            value: result.stock ? `${result?.uniqueName}#${result?.stock?.uniqueName}` : result?.uniqueName,
-                            label: result.stock ? `${result?.name} (${result?.stock?.name})` : result?.name,
-                            additional: result
+            if (this.isAccountSearchData) {
+                this.searchService.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                    if (!data?.body?.results?.length || (data?.body?.results?.length && ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT !== data?.body?.count)) {
+                        this.isAccountSearchData = false;
+                    }
+
+                    if (data && data.body && data.body.results) {
+                        const searchResults = data.body.results.map(result => {
+                            return {
+                                value: result.stock ? `${result?.uniqueName}#${result?.stock?.uniqueName}` : result?.uniqueName,
+                                label: result.stock ? `${result?.name} (${result?.stock?.name})` : result?.name,
+                                additional: result
+                            }
+                        }) || [];
+                        this.noResultsFoundLabel = SearchResultText.NotFound;
+                        if (page === 1) {
+                            this.searchResults = searchResults;
+                        } else {
+                            this.searchResults = [
+                                ...this.searchResults,
+                                ...searchResults
+                            ];
                         }
-                    }) || [];
-                    this.noResultsFoundLabel = SearchResultText.NotFound;
-                    if (page === 1) {
-                        this.searchResults = uniqBy(searchResults, 'value');
-                    } else {
-                        const uniqueResults = uniqBy([...this.searchResults,
-                        ...searchResults], 'value');
-                        this.searchResults = uniqueResults;
+                        this.searchResultsPaginationData.page = data.body.page;
+                        if (successCallback) {
+                            successCallback(data.body.results);
+                        } else {
+                            this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
+                        }
+                        this.changeDetectorRef.detectChanges();
                     }
-                    this.searchResultsPaginationData.page = data.body.page;
-                    this.searchResultsPaginationData.totalPages = data.body.totalPages;
-                    if (successCallback) {
-                        successCallback(data.body.results);
-                    } else {
-                        this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
-                        this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
-                    }
-                    this.changeDetectorRef.detectChanges();
-                }
-            });
+                });
+            }
         } else {
             this.searchResults = [...this.defaultSuggestions];
             this.changeDetectorRef.detectChanges();
@@ -1543,7 +1556,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.searchResults = [...this.defaultSuggestions];
         this.searchResultsPaginationData = {
             page: 0,
-            totalPages: 0,
+            count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
             query: ''
         };
         this.noResultsFoundLabel = SearchResultText.NewSearch;
@@ -1953,7 +1966,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 }
             }) || [];
             this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
-            this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
             this.searchResults = [...this.defaultSuggestions];
             this.noResultsFoundLabel = SearchResultText.NotFound;
         });
@@ -2062,6 +2074,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             return;
         }
 
+        if (resp[1]?.body?.parentGroups?.length && ["sundrycreditors", "sundrydebtors"].includes(resp[1]?.body?.parentGroups[1]?.uniqueName)) {
+            this.isSundryDebtorCreditor = true;
+        } else {
+            this.isSundryDebtorCreditor = false;
+        }
+
         if (this.voucherApiVersion === 2) {
             resp[0] = this.adjustmentUtilityService.getVoucherAdjustmentObject(resp[0], this.vm.selectedLedger.voucherGeneratedType);
         }
@@ -2123,6 +2141,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.activeAccount) {
             if (this.activeAccount.currency && this.vm.isMultiCurrencyAvailable) {
                 this.baseCurrency = this.activeAccount.currency;
+            }
+
+            this.accountOtherApplicableDiscount = [];
+
+            if (this.activeAccount.applicableDiscounts && this.activeAccount.applicableDiscounts.length) {
+                this.accountOtherApplicableDiscount = this.activeAccount.applicableDiscounts;
+            } else if (this.activeAccount.inheritedDiscounts && this.activeAccount.inheritedDiscounts.length && (!this.accountOtherApplicableDiscount || !this.accountOtherApplicableDiscount?.length)) {
+                this.accountOtherApplicableDiscount.push(...this.activeAccount.inheritedDiscounts[0].applicableDiscounts);
             }
         }
 
@@ -2571,6 +2597,35 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     rate = Number((rate / this.vm.selectedLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
                     stockName = defaultUnit.name;
                     stockUniqueName = stockDetails?.uniqueName;
+
+                    const matchedUnit = txn.selectedAccount.stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
+                    if (matchedUnit?.length && txn.selectedAccount.stock.variant?.variantDiscount?.discounts?.length) {
+                        rate = Number((matchedUnit[0].rate / this.vm.selectedLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+
+                        this.vm.discountArray = this.vm.discountArray?.map((item, index) => { if (index > 0) { item.isActive = false; } return item; });
+
+                        txn.selectedAccount.stock.variant?.variantDiscount?.discounts?.forEach(variantDiscount => {
+                            this.vm.discountArray = this.vm.discountArray?.map(item => {
+                                if (variantDiscount?.discount?.uniqueName === item?.discountUniqueName) {
+                                    item.isActive = true;
+                                }
+                                return item;
+                            });
+                        });
+                    } else {
+                        this.vm.discountArray = this.vm.discountArray?.map((item, index) => { if (index > 0) { item.isActive = false; } return item; });
+
+                        if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
+                            this.accountOtherApplicableDiscount.forEach(element => {
+                                this.vm.discountArray = this.vm.discountArray?.map(item => {
+                                    if (element?.uniqueName === item?.discountUniqueName) {
+                                        item.isActive = true;
+                                    }
+                                    return item;
+                                });
+                            });
+                        }
+                    }
                 }
 
                 if (stockName && stockUniqueName) {
@@ -2579,6 +2634,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                             name: stockName,
                             uniqueName: stockUniqueName,
                         },
+                        variant: { name: txn.selectedAccount.stock.variant?.name, uniqueName: txn.selectedAccount.stock.variant?.uniqueName, variantDiscount: txn.selectedAccount.stock.variant?.variantDiscount },
                         quantity: 1,
                         unit: {
                             stockUnitCode: unitCode,

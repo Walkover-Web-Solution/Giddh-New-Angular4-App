@@ -334,7 +334,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         logoSize: 'small/medium/large',
         logoUniqueName: null,
         copyFrom: null,
-        templateColor: '#f63407',
+        templateColor: '#AB1F00',
         tableColor: '#fff6f4',
         templateType: 'gst_template_h',
         name: 'Template H',
@@ -614,7 +614,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             uniqueName: 'system_admin',
             mobileNo: '99-99999999990'
         },
-        primaryColor: '#f63407',
+        primaryColor: '#AB1F00',
         secondaryColor: '#fff6f4',
         font: 'open sans',
         topMargin: 10,
@@ -625,7 +625,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         logoSize: 'small/medium/large',
         logoUniqueName: null,
         copyFrom: null,
-        templateColor: '#f63407',
+        templateColor: '#AB1F00',
         tableColor: '#fff6f4',
         templateType: 'gst_template_i',
         name: 'Template I',
@@ -802,7 +802,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
             if (data.templateType?.toLowerCase() !== 'gst_template_a' && data.templateType?.toLowerCase() !== 'gst_template_e' && data.templateType?.toLowerCase() !== 'thermal_template') {
                 delete data?.sections?.header?.data?.showCompanyAddress;
                 delete data?.sections?.header?.data?.showQrCode;
-                delete data?.sections?.header?.data?.showIrnNumber;
+                delete data?.sections?.header?.data?.showEInvoiceDetails;
                 delete data?.sections?.table?.data?.showDescriptionInRows;
                 delete data?.sections?.footer?.data?.showNotesAtLastPage;
                 delete data?.sections?.footer?.data?.showMessage2;

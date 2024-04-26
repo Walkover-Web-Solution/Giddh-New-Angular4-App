@@ -221,6 +221,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.showBankDetail = false;
             this.isDebtorCreditor = false;
         }
+
+        if (this.activeGroupUniqueName === 'bankaccounts') {
+            this.isDebtorCreditor = false;
+        }
+
         if (this.activeGroupUniqueName === 'sundrycreditors') {
             this.showBankDetail = true;
         }

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--*ngIf="templateId == 'thermal_template'"-->
-<html id="thermal_template">
+<html id="thermal_template" lang="en">
     <head>
         <title></title>
     </head>
@@ -72,14 +72,6 @@
                                         <p *ngIf="fieldsAndVisibility.header.customerName?.display">Customer Name</p>
                                         <p *ngIf="fieldsAndVisibility.header.billingAddress?.display">
                                             <strong>Walkover Web Solutions Pvt</strong>
-                                        </p>
-                                        <p class="gst-cust" *ngIf="fieldsAndVisibility.header.billingGstin?.display">
-                                            {{
-                                                fieldsAndVisibility.header.billingGstin?.label?.length > 0
-                                                    ? fieldsAndVisibility.header.billingGstin?.label
-                                                    : "GSTIN"
-                                            }}
-                                            2344ACM9769L1Z0
                                         </p>
                                     </td>
                                     <td class="invdate">
@@ -186,7 +178,7 @@
                         <tbody>
                             <tr>
                                 <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">
-                                    <span *ngIf="fieldsAndVisibility.table.item?.display">Stock Name Edition 1 </span>
+                                    <span *ngIf="fieldsAndVisibility.table.item?.display">Stock Name Edition 1 - Variant 1</span>
                                 </td>
                                 <td *ngIf="fieldsAndVisibility.table.quantity?.display">2,000</td>
                                 <td *ngIf="fieldsAndVisibility.table.rate?.display">
@@ -198,7 +190,7 @@
                             </tr>
                             <tr>
                                 <td *ngIf="fieldsAndVisibility.table.item?.display" class="text-left">
-                                    <span *ngIf="fieldsAndVisibility.table.item?.display">Stock Name Edition 2 </span>
+                                    <span *ngIf="fieldsAndVisibility.table.item?.display">Stock Name Edition 2 - Variant 1</span>
                                 </td>
                                 <td *ngIf="fieldsAndVisibility.table.quantity?.display">10</td>
                                 <td *ngIf="fieldsAndVisibility.table.rate?.display">
@@ -256,27 +248,28 @@
                                 <td>90,000.00</td>
                             </tr>
                             <tr *ngIf="fieldsAndVisibility.footer.taxBifurcation?.display">
-                                <td class="text-left tax-gst">
-                                    GST9% <span class="right-tax-amount"> 45,000.00 </span>
-                                </td>
                                 <td></td>
+                                <td></td>
+                                <td>GST9%</td>
+                                <td>45,000.00</td>
                             </tr>
                             <tr *ngIf="fieldsAndVisibility.footer.taxBifurcation?.display">
-                                <td class="text-left tax-gst">
-                                    GST12% <span class="right-tax-amount">45,000.00</span>
-                                </td>
                                 <td></td>
+                                <td></td>
+                                <td class="text-right tax-gst">
+                                    GST12% 
+                                </td>
+                                <td>45,000.00</td>
                             </tr>
                             <tr
                                 *ngIf="
-                                    fieldsAndVisibility.footer.totalDue?.display &&
-                                    fieldsAndVisibility.footer.totalInWords?.display
+                                   fieldsAndVisibility.footer.totalInWords?.display
                                 "
                             >
                                 <td></td>
                                 <td></td>
-                                <td>Invoice Total (INR)</td>
-                                <td>10,05,000.00</td>
+                                <td>Invoice Total(INR)</td>
+                                <td>5,90,250.00</td>
                             </tr>
                         </table>
                         <div
@@ -286,8 +279,7 @@
                         >
                             <p
                                 *ngIf="
-                                    fieldsAndVisibility.footer.totalInWords?.display &&
-                                    fieldsAndVisibility.footer.totalDue?.display
+                                    fieldsAndVisibility.footer.totalInWords?.display 
                                 "
                             >
                                 Five Lakh Ninty Thousand Two Hundred Fifty Only
@@ -315,13 +307,13 @@
                             <div class="thermal-footer">
                                 <div class="accc left-footer">
                                     <div *ngIf="fieldsAndVisibility.footer.thanks?.display">
-                                        <h4
+                                        <h2
                                             *ngIf="fieldsAndVisibility.footer.thanks?.label"
                                             [innerHTML]="fieldsAndVisibility.footer.thanks?.label"
-                                        ></h4>
-                                        <h4 *ngIf="!fieldsAndVisibility.footer.thanks?.label">
+                                        ></h2>
+                                        <h2 *ngIf="!fieldsAndVisibility.footer.thanks?.label">
                                             Thank You for your business.
-                                        </h4>
+                                        </h2>
                                     </div>
                                 </div>
                                 <div class="right-footer">

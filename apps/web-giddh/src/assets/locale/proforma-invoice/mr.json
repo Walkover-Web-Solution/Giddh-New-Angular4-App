@@ -1,10 +1,10 @@
 {
     "invoice_types": {
-        "sales": "विक्री",
+        "invoice": "चालान",
         "credit_note": "क्रेडिट टीप",
         "debit_note": "डेबिट टीप",
         "purchase": "खरेदी",
-        "cash": "रोख",
+        "cash_invoice": "रोख चलन",
         "proforma": "प्रोफार्मा",
         "estimate": "अंदाज",
         "cash_bill": "रोख बिल",
@@ -15,8 +15,8 @@
     "balance_due": "शिल्लक बाकी",
     "copy_previous_invoices": "मागील [INVOICE_TYPE] पावत्या कॉपी करा",
     "copy_previous_dr_cr": "मागील [INVOICE_TYPE] कॉपी करा",
-    "customer_details": "ग्राहक तपशील",
-    "vendor_details": "विक्रेता तपशील",
+    "customer_details": "ग्राहक संपादित करा",
+    "vendor_details": "विक्रेता संपादित करा",
     "billing_address": "बिलाचा पत्ता",
     "shipping_address": "शिपिंग पत्ता",
     "change": "बदला",
@@ -52,7 +52,7 @@
     "drag_drop_file": "फाइल ड्रॅग / ड्रॉप करा किंवा येथे क्लिक करा",
     "deposit": "ठेवी",
     "adjust_amount": "रक्कम समायोजित करा",
-    "product_service_description": "उत्पादन / सेवा वर्णन",
+    "product_service": "उत्पादन / सेवा",
     "qty": "प्रमाण",
     "generate_invoice": "उत्पन्न करा [INVOICE_TYPE]",
     "update_invoice": "अद्यतनित करा [INVOICE_TYPE]",
@@ -115,5 +115,6 @@
     "account": "खाते",
     "select_variant": "प्रकार निवडा",
     "variant": "प्रकार",
-    "account_missing_in_stock": "खाते स्टॉकशी जोडलेले नाही"
+    "account_missing_in_stock": "खाते स्टॉकशी जोडलेले नाही",
+    "add_new_address": "+ नवीन पत्ता जोडा"
 }

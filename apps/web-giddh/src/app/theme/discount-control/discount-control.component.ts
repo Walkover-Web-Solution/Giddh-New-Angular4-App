@@ -22,7 +22,8 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public ledgerAmount: number = 0;
     @Input() public totalAmount: number = 0;
     @Input() public showHeaderText: boolean = true;
-    @Output() public discountTotalUpdated: EventEmitter<{ discount: any, isActive: boolean }> = new EventEmitter();
+    /* This will emit discount total updated */
+    @Output() public discountTotalUpdated: EventEmitter<{ discount: any, isActive: boolean, discountType?: any, isFirstChange?: boolean }> = new EventEmitter();
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
     @Input() public discountSum: number;
     @Input() public maskInput: string;
@@ -30,8 +31,10 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public suffixInput: string;
     public discountFromPer: boolean = true;
     public discountFromVal: boolean = true;
-    public discountPercentageModal: number = 0;
-    public discountFixedValueModal: number = 0;
+    /* This will hold discount percentage value */
+    @Input() public discountPercentageModal: number = 0;
+    /* This will hold discount fixed value */
+    @Input() public discountFixedValueModal: number = 0;
     @ViewChild('disInptEle', { static: true }) public disInptEle: ElementRef;
 
     @Input() public discountMenu: boolean;
@@ -39,7 +42,6 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public commonLocaleData: any = {};
     /** Mask format for decimal number and comma separation  */
     public inputMaskFormat: string = '';
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** List of discounts */
     @Input() public discountsList: any[] = [];
@@ -90,16 +92,22 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
     public ngOnChanges(changes: SimpleChanges): void {
         if ('discountAccountsDetails' in changes && changes.discountAccountsDetails.currentValue !== changes.discountAccountsDetails.previousValue) {
             this.prepareDiscountList();
-
             if (this.defaultDiscount && this.defaultDiscount.discountType === 'FIX_AMOUNT') {
                 this.discountFixedValueModal = this.defaultDiscount.amount;
             } else {
                 this.discountPercentageModal = (this.defaultDiscount) ? this.defaultDiscount.amount : 0;
             }
-
             if ('totalAmount' in changes && changes.totalAmount.currentValue !== changes.totalAmount.previousValue) {
                 this.change();
             }
+        }
+        if ('discountFixedValueModal' in changes && changes.discountFixedValueModal.currentValue && changes.discountFixedValueModal.currentValue !== changes.discountFixedValueModal.previousValue) {
+            this.discountFixedValueModal = changes.discountFixedValueModal.currentValue;
+            this.assignDiscount('FIX_AMOUNT', changes.discountFixedValueModal.currentValue, changes.discountFixedValueModal.firstChange, true);
+        }
+        if ('discountPercentageModal' in changes && changes.discountPercentageModal.currentValue && changes.discountPercentageModal.currentValue !== changes.discountPercentageModal.previousValue) {
+            this.discountPercentageModal = changes.discountPercentageModal.currentValue;
+            this.assignDiscount('PERCENTAGE', changes.discountPercentageModal.currentValue, changes.discountPercentageModal.firstChange, true);
         }
     }
 
@@ -139,14 +147,26 @@ export class DiscountControlComponent implements OnInit, OnDestroy, OnChanges {
         });
     }
 
+    /**
+     * This will be use for discount from input
+     *
+     * @param {('FIX_AMOUNT' | 'PERCENTAGE')} type
+     * @param {*} event
+     * @return {*}
+     * @memberof DiscountControlComponent
+     */
     public discountFromInput(type: 'FIX_AMOUNT' | 'PERCENTAGE', event: any) {
-        this.defaultDiscount.amount = parseFloat(String(event.target?.value)?.replace(/[,'\s]/g, ''));
-        this.defaultDiscount.discountValue = parseFloat(String(event.target?.value)?.replace(/[,'\s]/g, ''));
+        this.assignDiscount(type, event.target?.value, false, true);
+    }
+
+    public assignDiscount(type: any, value: any, isFirstChange: boolean = false, isActive?: boolean): void {
+        this.defaultDiscount.amount = parseFloat(String(value)?.replace(/[,'\s]/g, ''));
+        this.defaultDiscount.discountValue = parseFloat(String(value)?.replace(/[,'\s]/g, ''));
         this.defaultDiscount.discountType = type;
 
-        this.change();
+        this.discountTotalUpdated.emit({ discount: this.defaultDiscount.amount, isActive: isActive, discountType: type, isFirstChange: isFirstChange });
 
-        if (!event.target?.value) {
+        if (!value) {
             this.discountFromVal = true;
             this.discountFromPer = true;
             return;

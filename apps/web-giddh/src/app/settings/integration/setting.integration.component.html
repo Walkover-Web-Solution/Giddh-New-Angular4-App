@@ -87,6 +87,7 @@
                         <button
                             mat-stroked-button
                             color="warn"
+                            aria-label="remove account"
                             *ngIf="isGmailIntegrated$ | async"
                             class="btn mr-l2"
                             (click)="removegmailintegration.toggle()"
@@ -120,7 +121,7 @@
                                 ></input-field>
                             </div>
                             <div class="form-group col-md-2 col-lg-3 empty-label pd-l05">
-                                <button mat-stroked-button color="primary" type="submit" [disabled]="emailform.invalid">
+                                <button aria-label="save" mat-stroked-button color="primary" type="submit" [disabled]="emailform.invalid">
                                     {{ commonLocaleData?.app_save }}
                                 </button>
                             </div>
@@ -218,6 +219,7 @@
                                                     [(ngModel)]="razorPayObj.autoCapturePayment"
                                                     name="autoCapturePayment"
                                                     color="primary"
+                                                    aria-label="payment"
                                                 >
                                                 </mat-slide-toggle>
                                                 <label class="mat-autocapture-payment">{{
@@ -230,6 +232,7 @@
                                     <div class="row">
                                         <div class="col-sm-12 form-group">
                                             <button
+                                                aria-label="save"
                                                 *ngIf="!updateRazor"
                                                 class="btn btn-success"
                                                 [disabled]="razorPayform.invalid"
@@ -238,6 +241,7 @@
                                                 {{ commonLocaleData?.app_save }}
                                             </button>
                                             <button
+                                                aria-label="update"
                                                 *ngIf="updateRazor"
                                                 class="btn btn-success"
                                                 [disabled]="razorPayform.invalid"
@@ -246,6 +250,7 @@
                                                 {{ commonLocaleData?.app_update }}
                                             </button>
                                             <button
+                                                aria-label="delete"
                                                 *ngIf="updateRazor"
                                                 class="btn btn-danger"
                                                 (click)="deleteRazorPayDetails()"
@@ -324,6 +329,7 @@
                                     <div class="row">
                                         <div class="col-sm-12 form-group">
                                             <button
+                                                aria-label="save"
                                                 *ngIf="!updatePaypal"
                                                 class="btn btn-success"
                                                 [disabled]="paypalForm.invalid"
@@ -332,6 +338,7 @@
                                                 {{ commonLocaleData?.app_save }}
                                             </button>
                                             <button
+                                                aria-label="update"
                                                 *ngIf="updatePaypal"
                                                 class="btn btn-success"
                                                 [disabled]="paypalForm.invalid"
@@ -340,6 +347,7 @@
                                                 {{ commonLocaleData?.app_update }}
                                             </button>
                                             <button
+                                                aria-label="delete"
                                                 *ngIf="updatePaypal"
                                                 class="btn btn-danger"
                                                 (click)="deletePaypalDetails()"
@@ -373,9 +381,9 @@
                 </div>
             </mat-tab>
 
-            <mat-tab [label]="localeData?.payment?.tab_heading" *ngIf="!isIciciBankSupportedCountry">
+            <mat-tab [label]="localeData?.payment?.tab_heading" *ngIf="iciciAllowedCompanies.includes(activeCompany?.uniqueName) || isPlaidSupportedCountry">
                 <div class="clearfix box mat-tab-bottom-spacing">
-                    <!-- <ng-container *ngIf="isIciciBankSupportedCountry">
+                    <ng-container *ngIf="isIciciBankSupportedCountry">
                         <ng-template>
                             <span class="icon-payment"></span> {{ localeData?.payment?.tab_heading }}
                         </ng-template>
@@ -416,10 +424,10 @@
                                 </p>
                             </div>
                         </div>
-                    </ng-container> -->
-                    <ng-container *ngIf="!isIciciBankSupportedCountry">
+                    </ng-container>
+                    <ng-container *ngIf="isPlaidSupportedCountry">
                         <div class="form-group">
-                            <button mat-stroked-button class="mr-r2" color="primary" (click)="getPlaidLinkToken()">
+                            <button aria-label="connect bank" mat-stroked-button class="mr-r2" color="primary" (click)="getPlaidLinkToken()">
                                 {{ localeData?.payment?.connect_bank }}
                             </button>
                         </div>
@@ -474,7 +482,8 @@
                                             (click)="openEditAccountModal(bankAccount)"
                                         ></a>
                                         <ng-container *ngIf="bankAccount.reLoginRequired">
-                                            <button
+                                            <button 
+                                                aria-label="dots"
                                                 mat-icon-button
                                                 [matMenuTriggerFor]="menu"
                                                 class="company-name bank-menu"
@@ -482,7 +491,7 @@
                                                 <span class="icon-dots-three-vertical"></span>
                                             </button>
                                             <mat-menu #menu="matMenu">
-                                                <button mat-menu-item (click)="getPlaidLinkToken(bankAccount?.itemId)">
+                                                <button aria-label="renew bank connection" mat-menu-item (click)="getPlaidLinkToken(bankAccount?.itemId)">
                                                     <span>{{ commonLocaleData?.app_renew_bank_connection }}</span>
                                                 </button>
                                             </mat-menu>
@@ -609,6 +618,7 @@
                                             </div>
                                         </div>
                                         <button
+                                            aria-label="users"
                                             type="button"
                                             mat-stroked-button
                                             color="primary"

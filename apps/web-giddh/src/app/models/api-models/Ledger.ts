@@ -131,6 +131,7 @@ export class LedgerResponse {
     public voucherUniqueName?: string;
     public referenceVoucher?: ReferenceVoucher;
     public gainLoss?: number;
+    public generateEInvoice?: boolean = null;
 }
 
 /** Model adjusted amounts for invoices */
@@ -432,4 +433,6 @@ export interface IUnpaidInvoiceListResponse {
     size: number;
 }
 
-export interface IVariant extends IParticular {}
+export interface IVariant extends IParticular {
+    variantDiscount?: any;
+}

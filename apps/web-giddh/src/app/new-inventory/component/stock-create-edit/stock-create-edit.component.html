@@ -21,6 +21,7 @@
                             class="btn-position-left mr-0"
                             mat-stroked-button
                             color="primary"
+                            aria-label="back btn"
                         >
                             <i class="icon-left back-left"></i>
                             {{ commonLocaleData?.app_back }}
@@ -163,6 +164,7 @@
                                                 </mat-select>
                                             </mat-form-field>
                                             <button
+                                                aria-label="move btn"
                                                 *ngIf="queryParams?.stockUniqueName && stockGroups?.length > 1"
                                                 mat-stroked-button
                                                 color="primary"
@@ -330,6 +332,7 @@
                                                                                 ></dropdown-field>
                                                                             </div>
                                                                             <button
+                                                                                aria-label="delete icon"
                                                                                 mat-icon-button
                                                                                 role="button"
                                                                                 class="icon-remove"
@@ -529,6 +532,7 @@
                                                                                     </dropdown-field>
                                                                                 </div>
                                                                                 <button
+                                                                                    aria-label="delete icon"
                                                                                     mat-icon-button
                                                                                     role="button"
                                                                                     class="icon-remove"
@@ -726,6 +730,7 @@
                                                                                     </dropdown-field>
                                                                                 </div>
                                                                                 <button
+                                                                                    aria-label="delete icon"
                                                                                     mat-icon-button
                                                                                     role="button"
                                                                                     class="icon-remove"
@@ -844,6 +849,7 @@
                                                                         <div class="col-lg-2">
                                                                             <div class="delete-btn-wrapper">
                                                                                 <button
+                                                                                    aria-label="delete icon"
                                                                                     mat-icon-button
                                                                                     class="chip-close-btn"
                                                                                     (click)="deleteVariantOption(i)"
@@ -904,6 +910,7 @@
                                                                                 "
                                                                             >
                                                                                 <button
+                                                                                    aria-label="delete icon"
                                                                                     mat-icon-button
                                                                                     class="chip-close-btn"
                                                                                     (click)="deleteOptionValue(i, j)"
@@ -915,6 +922,7 @@
                                                                     </div>
                                                                     <div class="done-btn my-3">
                                                                         <button
+                                                                            aria-label="done"
                                                                             mat-stroked-button
                                                                             (click)="updateOptionValues(option, i)"
                                                                         >
@@ -936,6 +944,7 @@
                                                                                             src="{{
                                                                                                 imgPath
                                                                                             }}drag-dots-com.svg"
+                                                                                            alt="drag img"
                                                                                         />
                                                                                     </div>
                                                                                     <div>
@@ -943,7 +952,8 @@
                                                                                             option.name
                                                                                         }}</strong>
                                                                                         <mat-chip-listbox
-                                                                                            [aria-label]="option.name"
+                                                                                            aria-label="variant chip list"
+                                                                                            role="listbox"
                                                                                         >
                                                                                             <ng-container
                                                                                                 *ngFor="
@@ -966,6 +976,7 @@
                                                                             <div>
                                                                                 <div class="edit-btn mt-1">
                                                                                     <button
+                                                                                        aria-label="edit icon"
                                                                                         mat-stroked-button
                                                                                         (click)="
                                                                                             option.isEdit = true;
@@ -1646,6 +1657,7 @@
                                                                             color="primary"
                                                                             name="variantArchive{{ i }}"
                                                                             [(ngModel)]="variant.archive"
+                                                                            aria-label="archive toggle"
                                                                         >
                                                                         </mat-slide-toggle>
                                                                     </td>
@@ -1660,7 +1672,7 @@
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.manufacturing">
                                     <div class="pd-l15 pt-3 mr-b5" *ngIf="!queryParams?.stockUniqueName">
-                                        <button mat-stroked-button color="primary" (click)="createStock(true)">
+                                        <button aria-label="recipe btn" mat-stroked-button color="primary" (click)="createStock(true)">
                                             {{ localeData?.save_stock_for_recipe }}
                                         </button>
                                     </div>
@@ -2151,6 +2163,7 @@
                                                                     <label class="d-block"> &nbsp; </label>
                                                                     <span>
                                                                         <button
+                                                                            aria-label="add icon"
                                                                             mat-icon-button
                                                                             role="button"
                                                                             class="icon-font-22 text-primary"
@@ -2198,6 +2211,7 @@
                                                                 <div class="d-none-mobile">
                                                                     <label class="d-block"> &nbsp; </label>
                                                                     <button
+                                                                        aria-label="add icon"
                                                                         mat-icon-button
                                                                         role="button"
                                                                         class="icon-font-22 text-primary"
@@ -2261,7 +2275,7 @@
                                                         <div
                                                             class="cursor-pointer add-expense d-flex justify-content-center align-items-center"
                                                         >
-                                                            <button mat-icon-button role="button" type="button">
+                                                            <button aria-label="add icon" mat-icon-button role="button" type="button">
                                                                 <span class="icon-font-22 text-primary pd-l05 pd-r05"
                                                                     >+</span
                                                                 >
@@ -2398,7 +2412,7 @@
                                     <tbody>
                                         <tr>
                                             <td width="3%">
-                                                <img src="{{ imgPath }}add-image.svg" width="60" height="60" />
+                                                <img src="{{ imgPath }}add-image.svg" width="60" height="60" alt="add img" />
                                             </td>
                                             <td width="20%">
                                                 <input-field
@@ -2427,6 +2441,7 @@
                                                 0.00
 
                                                 <button
+                                                    aria-label="delete icon"
                                                     class="delete-tb-tr-icon"
                                                     mat-icon-button
                                                     color="warn"
@@ -2439,7 +2454,7 @@
                                         </tr>
                                         <tr>
                                             <td width="3%">
-                                                <img src="{{ imgPath }}add-image.svg" width="60" height="60" />
+                                                <img src="{{ imgPath }}add-image.svg" width="60" height="60" alt="add img" />
                                             </td>
                                             <td width="20%">
                                                 <input-field
@@ -2468,6 +2483,7 @@
                                                 0.00
 
                                                 <button
+                                                    aria-label="delete icon"
                                                     class="delete-tb-tr-icon"
                                                     mat-icon-button
                                                     color="warn"
@@ -2482,7 +2498,7 @@
                                 </table>
                             </div>
                             <p class="add-new-line font-15 my-3">
-                                <button mat-button class="text-primary">+ Add New Line</button>
+                                <button aria-label="add line" mat-button class="text-primary">+ Add New Line</button>
                             </p>
 
                             <div class="sales-purchase-details bg-light">
@@ -2554,6 +2570,7 @@
                                                                     </input-field>
                                                                 </div>
                                                                 <button
+                                                                    aria-label="delete icon"
                                                                     mat-icon-button
                                                                     class="icon-remove"
                                                                     role="button"
@@ -2580,6 +2597,7 @@
                                                                     </input-field>
                                                                 </div>
                                                                 <button
+                                                                    aria-label="add icon"
                                                                     mat-icon-button
                                                                     class="icon-button-add"
                                                                     role="button"
@@ -2659,6 +2677,7 @@
                                                                     </input-field>
                                                                 </div>
                                                                 <button
+                                                                    aria-label="delete icon"
                                                                     mat-icon-button
                                                                     class="icon-remove"
                                                                     role="button"
@@ -2686,6 +2705,7 @@
                                                                     </input-field>
                                                                 </div>
                                                                 <button
+                                                                    aria-label="add icon"
                                                                     mat-icon-button
                                                                     class="icon-button-add"
                                                                     role="button"
@@ -2881,7 +2901,7 @@
                                                                     [placeholder]="localeData?.select_unit"
                                                                 >
                                                                 </sh-select>
-                                                                <button mat-icon-button role="button" type="button">
+                                                                <button aria-label="add icon" mat-icon-button role="button" type="button">
                                                                     <i class="icon-plus pd cp"></i>
                                                                 </button>
                                                             </div>
@@ -2955,6 +2975,7 @@
                                                                         </input-field>
                                                                     </div>
                                                                     <button
+                                                                        aria-label="add icon"
                                                                         mat-icon-button
                                                                         class="icon-button-add"
                                                                         role="button"
@@ -2980,6 +3001,7 @@
                                                                         </input-field>
                                                                     </div>
                                                                     <button
+                                                                        aria-label="cross icon"
                                                                         mat-icon-button
                                                                         class="icon-remove"
                                                                         role="button"
@@ -3565,6 +3587,7 @@
                                                                     <label class="d-block"> &nbsp; </label>
                                                                     <span>
                                                                         <button
+                                                                            aria-label="add icon"
                                                                             mat-icon-button
                                                                             class="icon-font-22 text-primary"
                                                                         >
@@ -3609,6 +3632,7 @@
                                                                 <div class="d-none-mobile">
                                                                     <label class="d-block"> &nbsp; </label>
                                                                     <button
+                                                                        aria-label="add icon"
                                                                         mat-icon-button
                                                                         class="icon-font-22 text-primary"
                                                                     >
@@ -3669,7 +3693,7 @@
                                                         <div
                                                             class="cursor-pointer add-expense d-flex justify-content-center align-items-center"
                                                         >
-                                                            <button mat-icon-button class="icon-font-22 text-primary">
+                                                            <button aria-label="add icon" mat-icon-button class="icon-font-22 text-primary">
                                                                 +
                                                             </button>
                                                         </div>
@@ -4615,6 +4639,7 @@
                             <div class="bulk-create-head mr-b15 d-flex">
                                 <div>
                                     <button
+                                        aria-label="option icon"
                                         mat-icon-button
                                         class="btn bulk-creation-filter-btn"
                                         [matMenuTriggerFor]="menu"
@@ -4622,43 +4647,43 @@
                                         <i class="icon-options"></i>
                                     </button>
                                     <mat-menu #menu="matMenu">
-                                        <button mat-menu-item>
+                                        <button mat-menu-item aria-label="low stock">
                                             <mat-checkbox color="primary" id="low-stock-alert">
                                                 Low Stock Alert</mat-checkbox
                                             >
                                         </button>
-                                        <button mat-menu-item>
+                                        <button mat-menu-item aria-label="opening quantity">
                                             <mat-checkbox color="primary" id="check-opening-qty">{{
                                                 localeData?.opening_quantity
                                             }}</mat-checkbox>
                                         </button>
-                                        <button mat-menu-item>
+                                        <button mat-menu-item aria-label="opening amount">
                                             <mat-checkbox color="primary" id="check-opening-amount"
                                                 >Opening Amount
                                             </mat-checkbox>
                                         </button>
-                                        <button mat-menu-item>
+                                        <button mat-menu-item aria-label="purchase information">
                                             <mat-checkbox color="primary" id="check-purchase-info"
                                                 >Purchase Information
                                             </mat-checkbox>
                                         </button>
-                                        <button mat-menu-item>
+                                        <button mat-menu-item aria-label="sales information">
                                             <mat-checkbox color="primary" id="check-sales-info"
                                                 >Sales Information
                                             </mat-checkbox>
                                         </button>
-                                        <button mat-menu-item>
+                                        <button mat-menu-item aria-label="hsn sac code">
                                             <mat-checkbox color="primary" id="check-hsn-sac-code">
                                                 HSN/SAC Code</mat-checkbox
                                             >
                                         </button>
-                                        <button mat-menu-item>
+                                        <button mat-menu-item aria-label="sku code">
                                             <mat-checkbox color="primary" id="check-sku-code"> SKU Code</mat-checkbox>
                                         </button>
-                                        <button mat-menu-item>
+                                        <button mat-menu-item aria-label="barcode">
                                             <mat-checkbox color="primary" id="check-bar-code"> Barcode</mat-checkbox>
                                         </button>
-                                        <button mat-menu-item>
+                                        <button mat-menu-item aria-label="expiry date">
                                             <mat-checkbox color="primary" id="check-expiry-date">
                                                 Expiry Date</mat-checkbox
                                             >
@@ -4799,7 +4824,7 @@
                                 </table>
                             </div>
                             <div class="add-new-rows my-3">
-                                <button mat-icon-button role="button" type="button">
+                                <button mat-icon-button role="button" type="button" aria-label="add icon">
                                     <i class="icon-plus text-primary"></i>
                                 </button>
                                 <span class="d-flex align-items-center">
@@ -4816,6 +4841,7 @@
         <div class="inner-content-footer">
             <div class="button-group d-flex column-gap15">
                 <button
+                    aria-label="create"
                     *ngIf="!queryParams?.stockUniqueName"
                     mat-stroked-button
                     color="primary"
@@ -4824,6 +4850,7 @@
                     {{ commonLocaleData?.app_create }}
                 </button>
                 <button
+                    aria-label="clear"
                     *ngIf="!queryParams?.stockUniqueName"
                     mat-stroked-button
                     color="warn"
@@ -4832,6 +4859,7 @@
                     {{ commonLocaleData?.app_clear }}
                 </button>
                 <button
+                    aria-label="update"
                     *ngIf="queryParams?.stockUniqueName"
                     mat-stroked-button
                     color="primary"
@@ -4842,6 +4870,7 @@
                     {{ commonLocaleData?.app_update }}
                 </button>
                 <button
+                    aria-label="close icon"
                     *ngIf="queryParams?.stockUniqueName && !activeGroup?.uniqueName"
                     mat-stroked-button
                     class="min-width-100"
@@ -4850,6 +4879,7 @@
                     {{ commonLocaleData?.app_close }}
                 </button>
                 <button
+                    aria-label="delete icon"
                     *ngIf="queryParams?.stockUniqueName"
                     mat-stroked-button
                     color="warn"

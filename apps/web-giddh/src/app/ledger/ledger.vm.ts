@@ -418,6 +418,7 @@ export class BlankLedgerVM {
     public index?: number;
     public mergePB?: boolean;
     public referenceVoucher?: ReferenceVoucher;
+    public generateEInvoice?: boolean;
 }
 
 export class IInvoiceLinkingRequest {
@@ -472,6 +473,7 @@ export class TransactionVM {
     public showOtherTax: boolean = false;
     public stockUniqueName?: string;
     public oppositeAccountUniqueName?: string;
+    public isMrpDiscountApplied?: boolean;
 }
 
 export interface IInventory {

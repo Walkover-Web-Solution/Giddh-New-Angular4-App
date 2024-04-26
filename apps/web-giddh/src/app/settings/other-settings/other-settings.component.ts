@@ -51,7 +51,8 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         nameAlias: '',
         balanceDisplayFormat: '',
         taxType: '',
-        manageInventory: false
+        manageInventory: false,
+        withPay: false
     };
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
@@ -73,6 +74,10 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public inventoryType: IOption[] = [];
     /** This holds the active theme */
     public activeTheme: string = "";
+    /** List of available themes */
+    public exportTypes: IOption[] = [];
+    /** Holds export type */
+    public exportType: string = '';
 
     constructor(private commonActions: CommonActions, private generalService: GeneralService, private store: Store<AppState>, private toasterService: ToasterService) { }
 
@@ -131,6 +136,15 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         const currencySystem = currencyNumberSystems.find(numberSystem => numberSystem?.value === changes?.profileData?.currentValue?.balanceDisplayFormat);
         if (currencySystem) {
             this.numberSystem = currencySystem.name;
+        }
+
+        this.exportTypes = [
+            { label: this.localeData?.with_pay, value: 'yes' },
+            { label: this.localeData?.without_pay, value: 'no' }
+        ];
+
+        if (typeof changes?.profileData?.currentValue?.withPay === "boolean") {
+            this.exportType = (changes?.profileData?.currentValue?.withPay) ? 'yes' : 'no';
         }
     }
 
@@ -203,5 +217,16 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public setActiveTheme(event?: any): void {
         this.store.dispatch(this.commonActions.setActiveTheme({ label: event?.label, value: event?.value }));
+    }
+
+    /**
+     * Saves export type
+     *
+     * @memberof OtherSettingsComponent
+     */
+    public setExportType(event?: any): void {
+        this.exportType = event?.value;
+        this.updatedData['withPay'] = event?.value === 'yes' ? true : false;
+        this.saveProfileSubject.next(true);
     }
 }

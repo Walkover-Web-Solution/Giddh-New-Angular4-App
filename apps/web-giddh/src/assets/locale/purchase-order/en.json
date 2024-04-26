@@ -30,7 +30,7 @@
     "edit_po": "Edit Purchase Order",
     "select_vendor": "Select Vendor",
     "add_vendor": "Add Vendor",
-    "vendor_details": "Vendor Details",
+    "vendor_details": "Edit Vendor",
     "pending_po": "Pending Purchase order of selected vendor",
     "deliver_from": "Deliver From",
     "billing_address": "Billing Address",

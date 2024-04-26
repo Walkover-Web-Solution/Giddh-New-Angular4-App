@@ -89,6 +89,7 @@
                             [disabled]="selectAll || previewedFile?.type === 'unsupported'"
                             [matTooltip]="commonLocaleData?.app_preview"
                             [matTooltipPosition]="'above'"
+                            aria-label="icon search"
                             ><i class="icon-search"></i
                         ></a>
                         <a
@@ -96,12 +97,14 @@
                             (click)="openPreview()"
                             [matTooltip]="commonLocaleData?.app_preview"
                             [matTooltipPosition]="'above'"
+                            aria-label="icon search"
                             ><i class="icon-search"></i
                         ></a>
                         <a
                             *ngIf="previewedFile?.type === 'unsupported'"
                             [matTooltip]="commonLocaleData?.app_preview"
                             [matTooltipPosition]="'above'"
+                            aria-label="icon search"
                             ><i class="icon-search"></i
                         ></a>
                     </span>
@@ -110,6 +113,7 @@
                             (click)="downloadFiles()"
                             [matTooltip]="commonLocaleData?.app_download"
                             [matTooltipPosition]="'above'"
+                            aria-label="icon file"
                             ><i class="icon-file"></i
                         ></a>
                     </span>
@@ -118,6 +122,7 @@
                             (click)="printFiles()"
                             [matTooltip]="commonLocaleData?.app_print"
                             [matTooltipPosition]="'above'"
+                            aria-label="icon print"
                         >
                             <i class="fa fa-print"></i>
                         </a>
@@ -126,6 +131,7 @@
                 <div class="display-area">
                     <img *ngIf="previewedFile?.type === 'image'" [src]="previewedFile?.src" />
                     <iframe
+                        title="myFrame"
                         *ngIf="previewedFile?.type === 'pdf'"
                         #pdfContainer
                         width="100%"

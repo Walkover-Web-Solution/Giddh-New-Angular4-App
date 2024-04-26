@@ -5,11 +5,11 @@
 
     <!-- region gstr1 -->
     <div class="list-style row" *ngIf="selectedGst === GstReport.Gstr1">
-        <div class="wrap-GSTR-1-title col-lg-8 col-sm-8 col-12 xs-mb-1">
-            <a href="javascript:void(0);" [routerLink]="['/gstfiling']" class="ember-view">
-                <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" />
+        <div class="wrap-GSTR-1-title col-lg-4 col-sm-8 col-12 xs-mb-1">
+            <a href="javascript:void(0);" [routerLink]="['/gstfiling']" aria-label="back img"  class="ember-view">
+                <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" alt="back img"  />
             </a>
-            <img src="{{ imgPath }}cart.svg" class="icon gstr-icon text-middle" />
+            <img src="{{ imgPath }}cart.svg" class="icon gstr-icon text-middle" alt="cart img"  />
 
             <div class="text-middle nav-top">
                 <div class="text-middle head head-font-weight">
@@ -27,16 +27,7 @@
                             id="button-nested"
                             dropdownToggle
                             type="button"
-                            class="
-                                dropdown
-                                clearfix
-                                list-title
-                                filter-by
-                                return-sel
-                                font-large
-                                dropdown-toggle
-                                pull-left
-                            "
+                            class="dropdown clearfix list-title filter-by return-sel font-large dropdown-toggle pull-left"
                             aria-controls="dropdown-nested"
                         >
                             <ng-container>
@@ -46,13 +37,18 @@
                         </button>
                         <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
                             <li role="menuitem">
-                                <a class="dropdown-item" href="javascript:void(0)">
+                                <a class="dropdown-item" href="javascript:void(0);" aria-label="datepicker">
                                     <bs-datepicker-inline
                                         name="fromDate"
                                         (click)="$event.stopPropagation()"
                                         (bsValueChange)="periodChanged($event); monthWise.hide()"
-                                        [bsConfig]="{ startView: 'month', dateInputFormat: 'MM/YYYY', adaptivePosition: true, minMode:'month' }"
-                                        [ngModelOptions]="{standalone: true}"
+                                        [bsConfig]="{
+                                            startView: 'month',
+                                            dateInputFormat: 'MM/YYYY',
+                                            adaptivePosition: true,
+                                            minMode: 'month'
+                                        }"
+                                        [ngModelOptions]="{ standalone: true }"
                                     >
                                     </bs-datepicker-inline>
                                 </a>
@@ -69,11 +65,11 @@
                         >
                     </div>
                 </div>
-                <div class="font-xs text-muted text-middle normal">{{ localeData?.outward_supplies_details }}</div>
+                <div class="font-xs text-middle normal">{{ localeData?.outward_supplies_details }}</div>
             </div>
         </div>
 
-        <div class="col-lg-4 col-sm-4 col-12">
+        <div class="col-lg-8 col-sm-4 col-12">
             <ul class="list-inline list-middle download-drop-down">
                 <li>
                     <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'GSTR1'"></watch-video>
@@ -81,12 +77,12 @@
                 <li>
                     <button
                         type="button"
-                        class="btn btn-sky-blue mr-0 mb-2"
+                        class="btn btn-sky-blue mr-0 error-button gstr-button"
                         (click)="onDownloadSheetGSTR('error')"
                     >
                         {{ localeData?.filing?.errors }}
                     </button>
-                    <button type="button" class="btn btn-sky-blue mr-0 mb-2 mr-l2" (click)="pushToPortalModal?.show()">
+                    <button type="button" class="btn btn-sky-blue mr-0 gstr-button" (click)="pushToPortalModal?.show()">
                         {{ localeData?.filing?.push_to_portal }}
                     </button>
                 </li>
@@ -94,7 +90,14 @@
                 <li>
                     <div *ngIf="showTaxPro && isCompany && showGstFiling">
                         <button
-                            class="btn btn-primary authenticate-btn mr-l2 pull-right mr-0 mb-2"
+                            class="btn btn-primary pull-right"
+                            [disabled]="!gstAuthenticated"
+                            (click)="pullFromGstIn($event)"
+                        >
+                            {{ localeData?.filing?.pull_from_gstn }}
+                        </button>
+                        <button
+                            class="btn btn-primary authenticate-btn pull-right"
                             [ngClass]="{ 'btn-success': gstAuthenticated }"
                             (click)="toggleSettingAsidePane($event, 'TAXPRO')"
                         >
@@ -111,10 +114,10 @@
 
     <!-- region gstr2 -->
     <div class="list-style" *ngIf="selectedGst === GstReport.Gstr2">
-        <a href="javascript:void(0);" id="ember1210" class="ember-view" [routerLink]="['/gstfiling']">
-            <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" />
+        <a href="javascript:void(0);" aria-label="back img"  id="ember1210" class="ember-view" [routerLink]="['/gstfiling']">
+            <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" alt="back img"  />
         </a>
-        <img src="{{ imgPath }}bag.svg" class="icon gstr-icon text-middle" />
+        <img src="{{ imgPath }}bag.svg" class="icon gstr-icon text-middle" alt="back img"  />
 
         <div class="text-middle nav-top">
             <div class="text-middle head-font-weight">
@@ -140,20 +143,25 @@
                         </ng-container>
                         <span class="caret"></span>
                     </button>
-                            <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
-                            <li role="menuitem">
-                                <a class="dropdown-item" href="javascript:void(0)">
-                                    <bs-datepicker-inline
-                                        name="fromDate"
-                                        (click)="$event.stopPropagation()"
-                                        (bsValueChange)="periodChanged($event); monthWise.hide()"
-                                        [bsConfig]="{ startView: 'month', dateInputFormat: 'MM/YYYY', adaptivePosition: true, minMode:'month' }"
-                                        [ngModelOptions]="{standalone: true}"
-                                    >
-                                    </bs-datepicker-inline>
-                                </a>
-                            </li>
-                        </ul>
+                    <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
+                        <li role="menuitem">
+                            <a class="dropdown-item" href="javascript:void(0);" aria-label="datepicker" >
+                                <bs-datepicker-inline
+                                    name="fromDate"
+                                    (click)="$event.stopPropagation()"
+                                    (bsValueChange)="periodChanged($event); monthWise.hide()"
+                                    [bsConfig]="{
+                                        startView: 'month',
+                                        dateInputFormat: 'MM/YYYY',
+                                        adaptivePosition: true,
+                                        minMode: 'month'
+                                    }"
+                                    [ngModelOptions]="{ standalone: true }"
+                                >
+                                </bs-datepicker-inline>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
                 <div class="datepicker-header" *ngIf="!showDate">
                     <ng-container *ngIf="isMonthSelected">
@@ -165,7 +173,7 @@
                     >
                 </div>
             </div>
-            <div class="font-xs text-muted text-middle normal">{{ localeData?.inward_supplies_details }}</div>
+            <div class="font-xs text-middle normal">{{ localeData?.inward_supplies_details }}</div>
         </div>
 
         <div class="pull-right btn-wrapper-filling-header">
@@ -185,12 +193,12 @@
                     aria-labelledby="button-triggers-manual"
                 >
                     <li role="menuitem">
-                        <a class="dropdown-item" href="javascript:void(0)" (click)="onDownloadSheetGSTR('main')">{{
+                        <a class="dropdown-item" href="javascript:void(0);" aria-label="download"  (click)="onDownloadSheetGSTR('main')">{{
                             localeData?.filing?.download_sheet
                         }}</a>
                     </li>
                     <li role="menuitem">
-                        <a class="dropdown-item" href="javascript:void(0)" (click)="onDownloadSheetGSTR('error')">{{
+                        <a class="dropdown-item" href="javascript:void(0);" aria-label="download" (click)="onDownloadSheetGSTR('error')">{{
                             localeData?.filing?.download_error_sheet
                         }}</a>
                     </li>
@@ -209,7 +217,7 @@
                 class="btn btn-primary pull-right"
                 [disabled]="!gstAuthenticated"
                 (click)="pullFromGstIn($event)"
-                *ngIf="showTaxPro && showGstFiling"
+                *ngIf="showTaxPro && isCompany && showGstFiling"
             >
                 {{ localeData?.filing?.pull_from_gstn }}
             </button>

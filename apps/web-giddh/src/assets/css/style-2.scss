@@ -32,6 +32,15 @@ $custom-typography: mat-typography-config(
 @import "../css/global/voucher.scss";
 @import "../css/global/tabs.scss";
 @import "../css/global/table.scss";
+@import "../css/global/custom-price.scss";
+@import "../css/global/vouchers.scss";
+@import "../css/global/tax-dropdown.scss";
+@import "../css/global/discount-dropdown.scss";
+@import "../css/global/dialog.scss";
+
+@import "../css/global/dialog.scss";
+@import "../css/global/add-bulk-entry.scss";
+@import "../css/global/global-variable.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -71,7 +80,7 @@ textarea {
 }
 
 .basic > thead > tr > th {
-    color: var(--color-table-secondary-heading) !important;
+    color: var(--color-link) !important;
     border-right: 1px solid var(--color-table-primary-content-bar-border);
     padding: 15px 11px !important;
     font-weight: 400;
@@ -325,7 +334,6 @@ textarea {
     .exchange-rate-original {
         display: inline-block;
         width: 80px;
-        height: 26px !important;
         text-align: center;
         border-radius: 5px;
     }
@@ -347,6 +355,10 @@ textarea {
 
 .text-align-right {
     text-align: right;
+}
+
+.text-primary {
+    color: var(--color-giddh-blue) !important;
 }
 
 .invoice-date-due-date {
@@ -839,12 +851,129 @@ textarea {
         border: none !important;
     }
 }
-
+.gstr-button {
+    margin-bottom: 0 !important;
+    margin-right: 15px !important;
+}
 .collection-integration {
     .mat-mdc-tab-body-wrapper {
         min-height: 500px;
     }
 }
+.gstin-field {
+    .error-box {
+        border: 0 !important;
+        border-bottom: 1px solid var(--color-danger) !important;
+        width: 100% !important;
+    }
+}
+.voucher-preview-edit {
+    .flag-input {
+        .mdc-floating-label {
+            padding-left: 40px !important;
+            &.mdc-floating-label--float-above {
+                padding-left: 0px !important;
+            }
+        }
+    }
+}
+
+.align-items-baseline {
+    align-items: baseline;
+}
+
+.custom-discount-menu {
+    min-width: 260px !important;
+    max-width: 260px !important;
+    max-height: 340px;
+    padding: 15px;
+    right: 0;
+
+    ul {
+        .discount-list {
+            max-height: 164px !important;
+        }
+    }
+}
+
+.journal-voucher {
+    .particular-account {
+        .form-control {
+            &:focus {
+                border: 1px solid var(--color-secondary-input-bar-border) !important;
+            }
+        }
+    }
+
+        .entry-date-container {
+            float: right;
+             width: 42%;
+
+        .mdc-text-field {
+                padding: 0px !important;
+            }
+        }
+
+    .amount1 {
+        .form-control {
+            &:focus {
+                border: 1px solid var(--color-secondary-input-bar-border) !important;
+            }
+        }
+    }
+
+        .amount2 {
+            .form-control {
+                &:focus {
+                    border: 1px solid var(--color-secondary-input-bar-border) !important;
+                }
+            }
+        }
+
+    .voucher-type {
+        .form-control {
+            &:focus {
+                border: 1px solid var(--color-secondary-input-bar-border) !important;
+            }
+        }
+    }
+
+        .custom-textarea {
+            .form-control {
+                &:focus {
+                    border: 1px solid var(--color-secondary-input-bar-border) !important;
+                }
+            }
+        }
+
+    .form-control {
+        background-color: transparent !important;
+        border: none !important
+    }
+
+    .particular-account {
+        .text-field-container {
+            width: 30%;
+            margin-left: 10px;
+        }
+    }
+
+    .form-control[disabled],
+    .form-control[readonly],
+    fieldset[disabled] .form-control {
+        background-color: transparent !important;
+    }
+
+    .custom-entry-date {
+        .form-control {
+            height: 23px;
+            border: none;
+            background-color: transparent !important;
+        }
+    }
+}
+
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -909,7 +1038,7 @@ textarea {
 .mat-calendar-body-cell {
     &.mat-calendar-body-active {
         .mat-calendar-body-selected {
-            color: var(--color-white) !important;
+            color: var(--color-list) !important;
             background-color: var(--color-primary-header-background);
         }
     }
@@ -957,7 +1086,7 @@ aside-create-unit,
 aside-create-group {
     position: fixed;
     left: auto;
-    top: 0;
+    top: var(--top-distance);
     right: 0;
     bottom: 0;
     width: 100%;
@@ -1362,7 +1491,7 @@ body {
 }
 
 .middle {
-    vertical-align: middle;
+    vertical-align: middle !important;
 }
 
 .modal-footer {
@@ -1597,21 +1726,12 @@ input {
     border-bottom: 5px solid transparent;
 }
 
-#content-wrapper {
-    .account-wrapper {
-        .from-or-to-acc[type="text"],
-        .form-control.debit-credit[type="text"] {
-            border: 1px solid var(--color-secondary-input-bar-border) !important;
-        }
-    }
-}
-
 .on-setting-page.setting-sidebar-open {
     .settings-profile-tabs {
         .profile-tab-container {
             .account-aside-menu-state {
                 .aside-pane {
-                    #close {
+                    #closedialog {
                         top: 18px;
                     }
                 }
@@ -2202,7 +2322,7 @@ ul.sub-list {
         line-height: 15px;
 
         small {
-            color: var(--color-gray);
+            color: var(--color-gray-dark);
         }
     }
 }
@@ -2691,10 +2811,17 @@ modal-container.modal {
     color: var(--color-nero) !important;
     box-shadow: none;
     font-size: var(--font-size-15) !important;
+
+    .mat-mdc-select-placeholder, .mat-mdc-select-arrow{
+        color: var(--color-popup-list-input-text) !important;
+    }
+    .mat-mdc-select-arrow{
+        margin-left: 4px;
+    }
 }
 
 .form-control.mat-mdc-select-disabled {
-    background: var(--color-dark-fog) !important;
+    background: var(--color-primary-input-bar-background) !important;
 }
 
 .mat-select-value {
@@ -3196,7 +3323,7 @@ input[type="checkbox"]:checked:after {
 
 .btn-success {
     background: var(--color-nonary-button-background) !important;
-    color: var(--color-nonary-button-text) !important;
+    color: var(--color-white-tertiary) !important;
     border: 1px solid var(--color-nonary-button-background) !important;
 }
 
@@ -3251,6 +3378,7 @@ input[type="checkbox"]:checked:after {
     color: var(--color-danger) !important;
     border-color: var(--color-iron) !important;
     outline: none !important;
+    box-shadow: none !important;
 }
 
 .btn-danger:disabled,
@@ -3265,7 +3393,7 @@ input[type="checkbox"]:checked:after {
 
 .btn-cancel {
     background: var(--color-dark-fog);
-    color: var(--color-octonary-button-text);
+    color: var(--color-common-primary-text);
     border-color: var(--color-dark-fog);
 }
 
@@ -3425,6 +3553,10 @@ input[type="checkbox"]:checked:after {
     font-size: 11px !important;
 }
 
+.icon-font-16 {
+    font-size: 16px !important;
+}
+
 .font-12 {
     font-size: var(--font-size-12) !important;
 }
@@ -3442,7 +3574,7 @@ input[type="checkbox"]:checked:after {
 }
 
 .icon-font-22 {
-    font-size: 22px;
+    font-size: 22px !important;
 }
 
 .font-24 {
@@ -3979,7 +4111,7 @@ a.btn.btn-xs.btn-link.pull-right {
 #tax-control-multi-select.multi-select input.form-control[readonly] {
     background-image: var(--color-caret-image) !important;
     background-color: var(--color-white) !important;
-    background-position: 95% !important;
+    background-position: 97% !important;
 
     &.field-disabled {
         background-color: var(--color-primary-input-bar-background) !important;
@@ -4115,6 +4247,10 @@ a.btn.btn-xs.btn-link.pull-right {
     display: flex;
     align-items: center;
     border-color: var(--color-primary-popup-list-header-bottom-border);
+
+    .icon-cross{
+        color: var(--color-toast-primary-text);
+    }
 }
 
 .modal-body,
@@ -4168,8 +4304,22 @@ a.btn.btn-xs.btn-link.pull-right {
     cursor: pointer;
 }
 
-.ledger-panel .bd-rb {
-    border-bottom: 1px solid var(--color-iron);
+.ledger-panel {
+    .bd-rb {
+        border-bottom: 1px solid var(--color-iron);
+    }
+    .more-details {
+        .cheq {
+            table {
+                tr {
+                    td {
+                        width: 180px;
+                        padding-right: 10px;
+                    }
+                }
+            }
+        }
+    }
 }
 
 .pop-panel .ui-select-toggle {
@@ -4304,21 +4454,39 @@ select.form-control {
     background-color: var(--color-master-page-left-sidebar-secondary-background);
 }
 
-.grp-list li,
-.new-btn-ul li {
+.grp-list .master-list,
+.new-btn-ul .new-btn {
     list-style: none;
 }
 
-.grp-list li a,
-.new-btn-ul li a {
+.grp-list .master-list a,
+.new-btn-ul .new-btn a {
     padding: 4px 15px !important;
     display: block;
     font-size: var(--font-size-15);
     font-weight: 500;
-    color: var(--color-master-page-sidebar-primary-group);
+    color: var(--color-common-primary-text);
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+}
+
+.grp-list,
+.new-btn-u {
+    li {
+        list-style: none;
+
+        a {
+            padding: 4px 15px !important;
+            display: block;
+            font-size: var(--font-size-15);
+            font-weight: 500;
+            color: var(--color-master-page-sidebar-primary-group);
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    }
 }
 
 .grp-col {
@@ -4435,7 +4603,7 @@ label {
     margin-left: 255px;
 }
 
-.col-wrapper:nth-child(1) li a {
+.col-wrapper:nth-child(1) .master-list a {
     text-transform: uppercase;
     padding: 8px 15px !important;
 }
@@ -4444,7 +4612,7 @@ label {
     background: var(--color-dark-fog) !important;
 }
 
-.col-wrapper:last-child ul li a.isParent {
+.col-wrapper:last-child .grp-list .master-list a.isParent {
     background: none;
 }
 
@@ -4890,7 +5058,7 @@ label {
     position: relative;
 }
 
-.col-wrapper:nth-child(1) ul li a.btn-add {
+.col-wrapper:nth-child(1) .grp-list .master-list a.btn-add {
     display: none !important;
 }
 
@@ -6430,7 +6598,6 @@ typeahead-container .dropdown-menu li.active > a > a:hover {
     padding-top: 0px;
     padding-left: 0px;
     padding-right: 0px;
-    border-bottom: 1px solid var(--color-wild-sand);
     padding-bottom: 0;
     border-radius: 0;
     margin-right: 0;
@@ -7335,7 +7502,7 @@ perfect-scrollbar > .ps > .ps-overlay {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
-    border-top: 1px solid var(--color-dark-fog);
+    border-top: none;
     color: var(--color-gst-primary-table-text);
 }
 
@@ -7393,11 +7560,6 @@ perfect-scrollbar > .ps > .ps-overlay {
 
 .tax-engine .sub-filter-nav-band > ul > li.active > a .count {
     color: var(--color-abbey);
-}
-
-.tax-engine .table-striped > tbody > tr:nth-child(odd) > td,
-.tax-engine .table-striped > tbody > tr:nth-child(odd) > th {
-    background-color: var(--color-gst-primary-table-background);
 }
 
 .tax-engine .table-striped > tbody > tr:nth-child(even) > td,
@@ -7488,7 +7650,7 @@ app-header {
 }
 
 .text-danger {
-    color: var(--color-danger);
+    color: var(--color-danger) !important;
 }
 
 #ngb-typeahead-1 {
@@ -7587,6 +7749,12 @@ app-header {
 .ledger-book .right-col-new .entry-modal {
     width: 165%;
     left: -65%;
+
+    @media screen and (max-width: 1140px) {
+        left: -113%;
+        width: 80vw;
+        z-index: 991;
+    }
 }
 
 .ledger-book .left-col-new .entry-modal {
@@ -7603,17 +7771,17 @@ app-header {
     display: block;
     position: fixed;
     left: -41px;
-    top: 0;
+    top: var(--top-distance);
     z-index: 5;
     border: 0;
     border-radius: 0;
 }
 
-.account-aside-menu-state #close {
+.account-aside-menu-state #closedialog {
     display: block;
     position: fixed;
     right: 472px;
-    top: 0;
+    top: var(--top-distance);
     z-index: 5;
     border: 0;
     border-radius: 0;
@@ -8501,7 +8669,7 @@ button.ladda-button .ladda-label {
     transition: none !important;
 }
 
-.account-aside-menu-state #close {
+.account-aside-menu-state #closedialog {
     display: block;
     position: absolute;
     right: 10px;
@@ -9271,6 +9439,23 @@ span#HW_badge_cont:nth-child(3) {
     display: none;
 }
 
+ul{
+    &.universal-date{
+        li{
+            &:hover {
+                .icon-circle {
+                    background-color: var(--color-white-tertiary) !important;
+
+                    i[class^='icon-'],
+                    i[class*=' icon-'] {
+                        color: var(--color-giddh-blue) !important;
+                    }
+                }
+            }
+        }
+    }
+}
+
 /*notofication css end*/
 .setting-data,
 .setting-sidebar-open .white-row {
@@ -9452,6 +9637,10 @@ span#HW_badge_cont:nth-child(3) {
 /*flex css start*/
 .flex-column {
     flex-direction: column;
+    -ms-flex-direction: column;
+}
+.flex-wrap {
+    flex-wrap: wrap;
 }
 
 /*flex css start*/
@@ -10715,7 +10904,7 @@ body.update-scroll-hidden {
                     a {
                         min-width: 110px;
                         font-family: var(--font-regular);
-                        color: var(--color-nav-tabs-anchor) !important;
+                        color: var(--color-common-primary-text) !important;
                         padding-top: 5px !important;
                         padding-left: 20px !important;
                         height: 30px;
@@ -11482,7 +11671,7 @@ inventory-master {
         width: 100%;
         height: 100%;
         background-color: var(--color-gray);
-        top: 0;
+        top: var(--top-distance);
         z-index: 4;
     }
 
@@ -12093,7 +12282,7 @@ inventory-master {
     .custom-tabs .nav.nav-tabs {
         position: fixed;
         width: 100%;
-        top: 90px;
+        top: calc(var(--top-distance) + 90px);
     }
 
     .ledg-head.entry-popup .custom-tabs .nav.nav-tabs {
@@ -12143,7 +12332,7 @@ inventory-master {
 
     .ledg-head .custom-tabs .nav.nav-tabs {
         left: 0;
-        top: 95px;
+        top: calc(var(--top-distance) + 95px);
         padding-top: 0 !important;
         position: fixed;
     }
@@ -12292,7 +12481,7 @@ inventory-master {
 
     ngx-daterangepicker-material {
         position: fixed;
-        top: 0 !important;
+        top: var(--top-distance) !important;
         left: 0 !important;
         z-index: 999;
         width: 100%;
@@ -12304,7 +12493,7 @@ inventory-master {
         position: fixed;
         width: 100%;
         left: 0;
-        top: 0;
+        top: var(--top-distance);
         margin: 0;
     }
 
@@ -12609,7 +12798,7 @@ inventory-master {
 
 @media only screen and (min-width: 1280px) {
     .multi-select input.form-control {
-        padding-right: 18px !important;
+        padding-right: 20px !important;
     }
 }
 
@@ -12713,7 +12902,7 @@ inventory-master {
         padding-top: 0;
     }
 
-    .col-wrapper:nth-child(1) li a {
+    .col-wrapper:nth-child(1) .master-list a {
         text-transform: uppercase;
         padding: 4px 15px !important;
     }
@@ -12772,8 +12961,8 @@ inventory-master {
         overflow-y: auto !important;
     }
 
-    .grp-list li a,
-    .new-btn-ul li a {
+    .grp-list .master-list a,
+    .new-btn-ul .new-btn a {
         display: initial;
     }
 
@@ -14427,6 +14616,7 @@ voucher-component {
 .mdc-dialog {
     .mdc-dialog__content {
         padding: 0 !important;
+        color: var(--color-common-primary-text) !important;
     }
 }
 
@@ -14455,7 +14645,7 @@ activity-compare-json {
 .mat-form-field-invalid .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
 .mat-form-field-invalid .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
 .mat-form-field-invalid .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
-    border-color: var(--color-red) !important;
+    border-color: var(--color-red-border) !important;
 }
 .mat-mdc-dialog-content {
     max-height: 70vh !important;
@@ -14541,4 +14731,155 @@ aside-menu-product-service {
             text-decoration: underline;
         }
     }
+}
+
+// common-dialog md width 
+.mat-dialog-md {
+    width: 700px;
+}
+
+// material-pagination
+.mat-mdc-paginator {
+    .mat-mdc-form-field {
+        .mat-mdc-select {
+            padding: 0 !important;
+        }
+    }
+}
+
+// outline-card
+.mat-mdc-card {
+    &.outline-card {
+        border: 1px solid var(--color-iron);
+        box-shadow: none;
+    }
+} 
+// invoice preview list
+.invoice-preview-wrapper {
+    .mat-grid-wrapper {
+        .mat-list-wrap {
+            .mat-mdc-list {
+                .mat-mdc-list-item {
+                    height: 60px;
+                }
+            }
+        }
+    }
+}
+
+
+//  Material checkbox color
+.mat-mdc-checkbox {
+    .mdc-form-field{
+       .mdc-checkbox{
+           .mdc-checkbox__background{
+               border-color: var(--color-common-primary-text) !important;
+           }
+       }
+    }
+}
+.text-underline {
+    text-decoration: underline;
+    &:hover{
+        text-decoration: underline;
+    }
+}
+
+// show voucher message
+.depreciation-message {
+    .message-wrapper {
+        background-color: var(--color-danger);
+        color: var(--color-toast-primary-text);
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 999;
+        p{
+            font-size: var(--font-size-16);
+        }
+        a {
+            color: var(--color-toast-primary-text);
+        }
+    }
+}
+@media screen and (max-width: 1099px) {
+    .depreciation-message {
+        .message-wrapper {
+            p{
+                font-size: var(--font-15);
+            }
+        }
+    }
+}
+.fw-bold {
+    font-weight: 600;
+}
+.preview-list {
+    .form-control {
+        padding-left: 30px !important;
+    }
+}
+
+.width-60{
+    width: 60px !important;
+}
+
+// This Class will use globllay for border like mat input field
+.mat-form-field-border{
+    &.mat-form-field-height{
+        height: 48px !important;
+    }
+
+    border-radius: 4px !important;
+    border: 1px solid var(--color-fields-border) !important;
+
+    &:hover{
+        border-color: var(--color-field-hover) !important;
+    }
+}
+
+// Ledger Create Panel text color
+.new-ledger-panel{
+    color: var(--color-default-button) !important;
+
+    label, strong {
+        color: var(--color-default-button) !important;
+    }
+    .mat-expansion-panel {
+        .mat-expansion-panel-header {
+            .mat-expansion-panel-header-title{
+                color: var(--color-default-button) !important;
+             }
+        }
+    }
+}
+
+// hsn description
+.tax-engine {
+    .description-overlap {
+        width: 175px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+}
+
+// datepicker label
+.date-label {
+    label {
+        position: absolute;
+        z-index: -1;
+    }
+}
+
+.opacity-hidden {
+    opacity: 0;
+}
+.text-black {
+    color: var(--color-common-primary-text);
+}
+
+// color link light-dark theme
+.color-link {
+    color: var(--color-link) !important;
 }

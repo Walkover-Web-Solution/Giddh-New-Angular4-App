@@ -9,6 +9,7 @@
         <ng-container *ngIf="localeData?.page_heading && commonLocaleData?.app_ac">
             <div class="btn-group ledger-ellipse" *ngIf="isMobileScreen">
                 <button
+                    aria-label="threedots"
                     mat-button
                     id="button-basic"
                     [matMenuTriggerFor]="menu"
@@ -18,8 +19,9 @@
                     <i class="icon-dots-three-vertical"></i>
                 </button>
                 <mat-menu #menu="matMenu">
-                    <button mat-menu-item>
+                    <button aria-label="share" mat-menu-item>
                         <a
+                            aria-label="share"
                             class="dropdown-item p-0"
                             id="share-ledger"
                             href="javascript:void(0)"
@@ -27,10 +29,11 @@
                             >{{ localeData?.share_ledger }}</a
                         >
                     </button>
-                    <button mat-menu-item disabled>
+                    <button aria-label="export" mat-menu-item disabled>
                         <a
                             class="dropdown-item p-0"
                             id="export-ledger-mobile-view"
+                            aria-label="export"
                             href="javascript:void(0)"
                             (click)="showExportLedgerModal()"
                             >{{ commonLocaleData?.app_export }}</a
@@ -88,6 +91,7 @@
                                     </div>
                                     <div class="d-flex mr-l15 column-gap1">
                                         <button
+                                            aria-label="delete"
                                             mat-stroked-button
                                             color="warn"
                                             [disabled]="
@@ -104,6 +108,7 @@
                                         </button>
 
                                         <button
+                                            aria-label="generate"
                                             mat-stroked-button
                                             [disabled]="
                                                 currentOrganizationType === 'COMPANY' &&
@@ -120,6 +125,7 @@
                                         </button>
                                     </div>
                                     <button
+                                        aria-label="attachfile"
                                         mat-stroked-button
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
@@ -162,6 +168,7 @@
                                                 (keyup)="search(searchText)"
                                             />
                                             <button
+                                                aria-label="search"
                                                 *ngIf="searchText"
                                                 matSuffix
                                                 mat-icon-button
@@ -174,6 +181,7 @@
                                         </mat-form-field>
                                     </span>
                                     <a
+                                        aria-label="clear"
                                         class="cp mr-l1 clear-filter-btn"
                                         *ngIf="(searchText || isAdvanceSearchImplemented) && isMobileScreen"
                                         href="javascript:;"
@@ -193,7 +201,11 @@
                                     container="body"
                                     *ngIf="isMobileScreen"
                                 >
-                                    <img (click)="showGiddhDatepicker($event)" src="{{ imgPath }}calender-icon.svg" />
+                                    <img
+                                        (click)="showGiddhDatepicker($event)"
+                                        src="{{ imgPath }}calender-icon.svg"
+                                        alt="calender-icon"
+                                    />
                                 </div>
                                 <span class="input-wrapper ipad-view-datepicker" (click)="showGiddhDatepicker($event)">
                                     <mat-form-field appearance="fill" class="w-100">
@@ -208,6 +220,7 @@
                                     </mat-form-field>
                                 </span>
                                 <button
+                                    aria-label="filter"
                                     id="advance-filter"
                                     mat-stroked-button
                                     (click)="onOpenAdvanceSearch()"
@@ -220,6 +233,7 @@
                                     <span class="icon-advance-filter"></span>
                                 </button>
                                 <button
+                                    aria-label="clear"
                                     class="cp clear-filter-btn"
                                     id="clear-filter"
                                     *ngIf="isAdvanceSearchImplemented && !isMobileScreen"
@@ -236,6 +250,7 @@
                                     *ngIf="checkedTrxWhileHovering?.length > 0 && !isMobileScreen"
                                 >
                                     <button
+                                        aria-label="delete"
                                         mat-stroked-button
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
@@ -251,6 +266,7 @@
                                     </button>
 
                                     <button
+                                        aria-label="generate"
                                         mat-stroked-button
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
@@ -266,6 +282,7 @@
                                     </button>
 
                                     <button
+                                        aria-label="file"
                                         mat-stroked-button
                                         [disabled]="
                                             currentOrganizationType === 'COMPANY' && currentCompanyBranches?.length > 2
@@ -313,7 +330,7 @@
                                     >
                                         <ng-template #optionTemplate let-option="option">
                                             <ng-container>
-                                                <a href="javascript:void(0)" class="list-item d-flex">
+                                                <a href="javascript:void(0)" class="list-item d-flex" aria-label="list">
                                                     <span class="entity-icon">
                                                         <i
                                                             class="icon-branch-icon pull-right"
@@ -353,7 +370,10 @@
                                 (click)="showGiddhDatepicker($event)"
                             >
                                 <span class="input-wrapper">
-                                    <mat-form-field appearance="fill" class="w-100 custom-input-field share-input-width">
+                                    <mat-form-field
+                                        appearance="fill"
+                                        class="w-100 custom-input-field share-input-width"
+                                    >
                                         <input
                                             matInput
                                             id="giddh-datepicker"
@@ -395,7 +415,11 @@
                                         >
                                             <ng-template #optionTemplate let-option="option">
                                                 <ng-container>
-                                                    <a href="javascript:void(0)" class="list-item d-flex">
+                                                    <a
+                                                        href="javascript:void(0)"
+                                                        class="list-item d-flex"
+                                                        aria-label="list"
+                                                    >
                                                         <span class="entity-icon">
                                                             <i
                                                                 class="icon-branch-icon pull-right"
@@ -428,6 +452,7 @@
                                     <span class="mr-r15 d-inline-block font-15">{{ baseCurrencyDetails?.code }}</span>
                                     <div class="toggle d-inline-block currency-toggler" data-key="disabled">
                                         <mat-slide-toggle
+                                            aria-label="currency"
                                             color="primary"
                                             [(ngModel)]="currencyTogglerModel"
                                             (change)="toggleCurrency($event)"
@@ -440,6 +465,7 @@
 
                                 <div class="d-flex">
                                     <a
+                                        aria-label="show"
                                         mat-button
                                         href="javascript:void(0)"
                                         id="upload"
@@ -452,6 +478,7 @@
                                         <i class="icon-upload lh-0"></i>
                                     </a>
                                     <a
+                                        aria-label="share"
                                         mat-button
                                         href="javascript:void(0)"
                                         id="share"
@@ -464,6 +491,7 @@
                                         <i class="icon-ledger-path lh-0"></i>
                                     </a>
                                     <a
+                                        aria-label="show"
                                         mat-button
                                         class="icomoon-ico d-flex align-items-center"
                                         id="export-ledger"
@@ -476,6 +504,7 @@
                                         <i class="icon-ledger-union-5 lh-0"></i>
                                     </a>
                                     <a
+                                        aria-label="delete"
                                         mat-button
                                         class="icomoon-ico d-flex align-items-center"
                                         id="delete-bank-transaction"
@@ -484,12 +513,19 @@
                                         [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showBulkDeleteBankTransactionsConfirmationModal()"
-                                        *ngIf="entryUniqueNamesForBulkAction?.length > 0"
+                                        *ngIf="entryUniqueNamesForBulkAction?.length > 0 || selectedDebitTransactionIds?.size > 0 || selectedCreditTransactionIds?.size > 0"
                                     >
                                         <i class="icon-trash lh-0"></i>
                                     </a>
                                     <a
-                                        *ngIf="voucherApiVersion === 2 && enableAutopaid && (currentOrganizationType !== 'COMPANY' || (currentCompanyBranches?.length <= 2) || isBranchTransactionSelected)"
+                                        aria-label="autopaid"
+                                        *ngIf="
+                                            voucherApiVersion === 2 &&
+                                            enableAutopaid &&
+                                            (currentOrganizationType !== 'COMPANY' ||
+                                                currentCompanyBranches?.length <= 2 ||
+                                                isBranchTransactionSelected)
+                                        "
                                         mat-button
                                         class="icomoon-ico d-flex align-items-center"
                                         id="autopaid"
@@ -499,17 +535,46 @@
                                         matTooltipClass="tooltip-black"
                                         (click)="showAutopaidModal()"
                                     >
-                                        <img class="autopaid-icon" src="{{ imgPath }}autopaid.svg" />
+                                        <img
+                                            class="autopaid-icon"
+                                            src="{{ imgPath }}autopaid.svg"
+                                            alt="autopaid-icon"
+                                        />
                                     </a>
-                                    <span class="bank-menu" *ngIf="lc.bankTransactionsDebitData?.length || lc.bankTransactionsCreditData?.length || bankAccount?.reLoginRequired">
-                                        <button mat-icon-button [matMenuTriggerFor]="menu" class="company-name">
+                                    <span
+                                        class="bank-menu"
+                                        *ngIf="
+                                            lc.bankTransactionsDebitData?.length ||
+                                            lc.bankTransactionsCreditData?.length ||
+                                            bankAccount?.reLoginRequired
+                                        "
+                                    >
+                                        <button
+                                            mat-icon-button
+                                            [matMenuTriggerFor]="menu"
+                                            class="company-name"
+                                            aria-label="name"
+                                        >
                                             <span class="icon-dots-three-vertical"></span>
                                         </button>
                                         <mat-menu #menu="matMenu">
-                                            <button mat-menu-item (click)="getPlaidLinkToken(bankAccount?.itemId)" *ngIf="bankAccount?.reLoginRequired">
+                                            <button
+                                                aria-label="bank"
+                                                mat-menu-item
+                                                (click)="getPlaidLinkToken(bankAccount?.itemId)"
+                                                *ngIf="bankAccount?.reLoginRequired"
+                                            >
                                                 <span>{{ commonLocaleData?.app_renew_bank_connection }}</span>
                                             </button>
-                                            <button mat-menu-item (click)="getBankTransactions()" *ngIf="lc.bankTransactionsDebitData?.length || lc.bankTransactionsCreditData?.length">
+                                            <button
+                                                aria-label="transactions"
+                                                mat-menu-item
+                                                (click)="getBankTransactions()"
+                                                *ngIf="
+                                                    lc.bankTransactionsDebitData?.length ||
+                                                    lc.bankTransactionsCreditData?.length
+                                                "
+                                            >
                                                 <span>{{ localeData?.reload_bank_transactions }}</span>
                                             </button>
                                         </mat-menu>
@@ -525,6 +590,7 @@
                         <span class="mr-r15 d-inline-block font-15">{{ baseCurrencyDetails?.code }}</span>
                         <div class="toggle d-inline-block currency-toggler" data-key="disabled">
                             <mat-slide-toggle
+                                aria-label="currency"
                                 color="primary"
                                 [(ngModel)]="currencyTogglerModel"
                                 (change)="toggleCurrency($event)"
@@ -537,6 +603,7 @@
                         <ul class="nav nav-tabs pt-0">
                             <li [ngClass]="{ 'active': visibleTransactionTypeMobile === 'all' }">
                                 <a
+                                    aria-label="all"
                                     href="javascript:void(0)"
                                     id="ledger-all-tab"
                                     (click)="toggleMobileTransactionType('all')"
@@ -545,6 +612,7 @@
                             </li>
                             <li role="presentation" [ngClass]="{ 'active': visibleTransactionTypeMobile === 'debit' }">
                                 <a
+                                    aria-label="debit"
                                     href="javascript:void(0)"
                                     id="ledger-debit-tab"
                                     (click)="toggleMobileTransactionType('debit')"
@@ -553,6 +621,7 @@
                             </li>
                             <li role="presentation" [ngClass]="{ 'active': visibleTransactionTypeMobile === 'credit' }">
                                 <a
+                                    aria-label="credit"
                                     href="javascript:void(0)"
                                     id="ledger-credit-tab"
                                     (click)="toggleMobileTransactionType('credit')"
@@ -570,7 +639,7 @@
                         </h1>
                         <section id="eledgerwrap" class="mr-t2" [hidden]="!lc.showEledger || isBankTransactionLoading">
                             <div class="alert alert-danger ledger-book fade in position-relative pd-r15">
-                                <button mat-button type="button" class="mat-close">
+                                <button mat-button type="button" class="mat-close" aria-label="close">
                                     <span class="font-12 font-weight-normal" (click)="hideEledgerWrap()">{{
                                         commonLocaleData?.app_close
                                     }}</span>
@@ -587,11 +656,11 @@
                                         <mat-grid-list cols="2" rowHeight="37px">
                                             <mat-grid-tile>
                                                 {{ commonLocaleData?.app_debit }}
-                                                <span class="pull-right text-gray">{{ localeData?.dr }}</span>
+                                                <span class="pull-right">{{ localeData?.dr }}</span>
                                             </mat-grid-tile>
                                             <mat-grid-tile>
                                                 {{ commonLocaleData?.app_credit }}
-                                                <span class="pull-right text-gray">{{ localeData?.cr }}</span>
+                                                <span class="pull-right">{{ localeData?.cr }}</span>
                                             </mat-grid-tile>
                                         </mat-grid-list>
                                     </div>
@@ -612,6 +681,29 @@
                                                     {{ commonLocaleData?.app_amount }}
                                                 </mat-grid-tile>
                                             </mat-grid-list>
+                                            <mat-grid-list cols="4" rowHeight="50px" class="ledger-row">
+                                                <mat-grid-tile colspan="1">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        id="select-all-entries-dr"
+                                                        [checked]="
+                                                            selectedDebitTransactionIds?.size ===
+                                                            lc.bankTransactionsDebitData?.length
+                                                        "
+                                                        [indeterminate]="
+                                                            selectedDebitTransactionIds?.size > 0 &&
+                                                            selectedDebitTransactionIds?.size <
+                                                                lc.bankTransactionsDebitData?.length
+                                                        "
+                                                        *ngIf="selectedDebitTransactionIds?.size > 0"
+                                                        (change)="selectAllBankEntries($event, 'debit')"
+                                                    ></mat-checkbox>
+                                                </mat-grid-tile>
+                                                <mat-grid-tile colspan="2">&nbsp;</mat-grid-tile>
+                                                <mat-grid-tile class="no-right-border" colspan="1"
+                                                    >&nbsp;</mat-grid-tile
+                                                >
+                                            </mat-grid-list>
                                             <mat-grid-list id="ledger-transaction-left-list" cols="4" rowHeight="50px">
                                                 <ng-container
                                                     *ngFor="
@@ -629,18 +721,36 @@
                                                                 'compound-entry':
                                                                     txn.id === lc.selectedBankTxnUniqueName
                                                             }"
+                                                            (mouseover)="bankEntryHovered(txn.id)"
+                                                            (mouseout)="selectedBankTrxWhileHovering = ''"
                                                         >
                                                             <mat-grid-tile colspan="1">
                                                                 <div class="d-flex align-items-center column-gap5">
-                                                                    <span class="checkbox-span ">
+                                                                    <span class="checkbox-span">
                                                                         <mat-checkbox
                                                                             color="primary"
                                                                             [id]="
                                                                                 'transaction-mapped-select-entry-dr-' +
                                                                                 i
                                                                             "
+                                                                            [checked]="
+                                                                                selectedDebitTransactionIds?.has(txn?.id)
+                                                                            "
+                                                                            [ngClass]="{
+                                                                                'd-none':
+                                                                                    selectedBankTrxWhileHovering !==
+                                                                                        txn.id &&
+                                                                                    !selectedDebitTransactionIds.has(
+                                                                                        txn?.id
+                                                                                    )
+                                                                            }"
                                                                             (change)="
-                                                                                selectEntryForBulkAction($event, item)
+                                                                                selectEntryForBulkAction(
+                                                                                    $event,
+                                                                                    item,
+                                                                                    txn.id,
+                                                                                    'debit'
+                                                                                )
                                                                             "
                                                                             [disabled]="
                                                                                 currentOrganizationType === 'COMPANY' &&
@@ -720,6 +830,7 @@
                                                                         [isPaginationEnabled]="true"
                                                                         (scrollEnd)="handleScrollEnd()"
                                                                         (dynamicSearchedQuery)="
+                                                                            isAccountSearchData = true;
                                                                             onSearchQueryChanged($event)
                                                                         "
                                                                         [notFoundMsg]="noResultsFoundLabel"
@@ -760,6 +871,7 @@
                                                                                 *ngIf="!option.additional?.stock"
                                                                             >
                                                                                 <a
+                                                                                    aria-label="label"
                                                                                     href="javascript:void(0)"
                                                                                     class="list-item"
                                                                                 >
@@ -778,6 +890,7 @@
                                                                                 *ngIf="option.additional?.stock"
                                                                             >
                                                                                 <a
+                                                                                    aria-label="label"
                                                                                     href="javascript:void(0)"
                                                                                     class="list-item"
                                                                                 >
@@ -891,7 +1004,9 @@
                                                                     "
                                                                     [selectedAccountDetails]="selectedAccountDetails"
                                                                     [(isTotalChanged)]="isTotalChanged"
-                                                                    [autoGenerateVoucherFromEntry]="autoGenerateVoucherFromEntryStatus"
+                                                                    [autoGenerateVoucherFromEntry]="
+                                                                        autoGenerateVoucherFromEntryStatus
+                                                                    "
                                                                 >
                                                                 </new-ledger-entry-panel>
                                                             </div>
@@ -916,6 +1031,29 @@
                                                     {{ commonLocaleData?.app_amount }}
                                                 </mat-grid-tile>
                                             </mat-grid-list>
+                                            <mat-grid-list cols="4" rowHeight="50px" class="ledger-row">
+                                                <mat-grid-tile colspan="1">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        id="select-all-entries-dr"
+                                                        [checked]="
+                                                            selectedCreditTransactionIds?.size ===
+                                                            lc.bankTransactionsCreditData?.length
+                                                        "
+                                                        [indeterminate]="
+                                                            selectedCreditTransactionIds?.size > 0 &&
+                                                            selectedCreditTransactionIds?.size <
+                                                                lc.bankTransactionsCreditData?.length
+                                                        "
+                                                        *ngIf="selectedCreditTransactionIds?.size > 0"
+                                                        (change)="selectAllBankEntries($event, 'credit')"
+                                                    ></mat-checkbox>
+                                                </mat-grid-tile>
+                                                <mat-grid-tile colspan="2">&nbsp;</mat-grid-tile>
+                                                <mat-grid-tile class="no-right-border" colspan="1"
+                                                    >&nbsp;</mat-grid-tile
+                                                >
+                                            </mat-grid-list>
                                             <mat-grid-list id="ledger-transaction-right-list" cols="4" rowHeight="50px">
                                                 <ng-container
                                                     *ngFor="
@@ -933,19 +1071,38 @@
                                                                 'compound-entry':
                                                                     txn.id === lc.selectedBankTxnUniqueName
                                                             }"
+                                                            (mouseover)="bankEntryHovered(txn.id)"
+                                                            (mouseout)="selectedBankTrxWhileHovering = ''"
                                                         >
                                                             <mat-grid-tile colspan="1">
                                                                 <div class="d-flex align-items-center column-gap5">
-                                                                    <span class="checkbox-span ">
+                                                                    <span class="checkbox-span">
                                                                         <mat-checkbox
                                                                             color="primary"
                                                                             [id]="
                                                                                 'transaction-mapped-select-entry-cr-' +
                                                                                 i
                                                                             "
-                                                                            [(ngModel)]="txn.isChecked"
+                                                                            [checked]="
+                                                                                selectedCreditTransactionIds?.has(
+                                                                                    txn?.id
+                                                                                )
+                                                                            "
+                                                                            [ngClass]="{
+                                                                                'd-none':
+                                                                                    selectedBankTrxWhileHovering !==
+                                                                                        txn.id &&
+                                                                                    !selectedCreditTransactionIds?.has(
+                                                                                        txn?.id
+                                                                                    )
+                                                                            }"
                                                                             (change)="
-                                                                                selectEntryForBulkAction($event, item)
+                                                                                selectEntryForBulkAction(
+                                                                                    $event,
+                                                                                    item,
+                                                                                    txn.id,
+                                                                                    'credit'
+                                                                                )
                                                                             "
                                                                             [disabled]="
                                                                                 currentOrganizationType === 'COMPANY' &&
@@ -1029,6 +1186,7 @@
                                                                         [isPaginationEnabled]="true"
                                                                         (scrollEnd)="handleScrollEnd()"
                                                                         (dynamicSearchedQuery)="
+                                                                            isAccountSearchData = true;
                                                                             onSearchQueryChanged($event)
                                                                         "
                                                                         [notFoundMsg]="noResultsFoundLabel"
@@ -1062,6 +1220,7 @@
                                                                                 *ngIf="!option.additional?.stock"
                                                                             >
                                                                                 <a
+                                                                                    aria-label="uniquename"
                                                                                     href="javascript:void(0)"
                                                                                     class="list-item"
                                                                                 >
@@ -1080,6 +1239,7 @@
                                                                                 *ngIf="option.additional?.stock"
                                                                             >
                                                                                 <a
+                                                                                    aria-label="item"
                                                                                     href="javascript:void(0)"
                                                                                     class="list-item"
                                                                                 >
@@ -1188,7 +1348,9 @@
                                                                     "
                                                                     [selectedAccountDetails]="selectedAccountDetails"
                                                                     [(isTotalChanged)]="isTotalChanged"
-                                                                    [autoGenerateVoucherFromEntry]="autoGenerateVoucherFromEntryStatus"
+                                                                    [autoGenerateVoucherFromEntry]="
+                                                                        autoGenerateVoucherFromEntryStatus
+                                                                    "
                                                                 >
                                                                 </new-ledger-entry-panel>
                                                             </div>
@@ -1283,7 +1445,7 @@
                             class="hidden-xs sticky-header pr-0 no-right-border"
                         >
                             <b class="blue-heading font-15"> {{ lc.ledgerUnderStandingObj.text.dr }}</b>
-                            <span class="dr-cr-category font-15 pull-right text-gray">{{ localeData?.dr }}</span>
+                            <span class="dr-cr-category font-15 pull-right">{{ localeData?.dr }}</span>
                         </mat-grid-tile>
                         <mat-grid-tile
                             [ngClass]="
@@ -1295,7 +1457,7 @@
                             class="hidden-xs sticky-header pl-0 no-right-border"
                         >
                             <b class="blue-heading font-15"> {{ lc.ledgerUnderStandingObj.text.cr }}</b>
-                            <span class="dr-cr-category font-15 pull-right text-gray">{{ localeData?.cr }}</span>
+                            <span class="dr-cr-category font-15 pull-right">{{ localeData?.cr }}</span>
                         </mat-grid-tile>
                     </mat-grid-list>
                     <!-- endregion -->
@@ -1755,7 +1917,9 @@
                                                             #shDebit
                                                             [isPaginationEnabled]="true"
                                                             (scrollEnd)="handleScrollEnd()"
-                                                            (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                                            (dynamicSearchedQuery)="
+                                                                isAccountSearchData = true; onSearchQueryChanged($event)
+                                                            "
                                                             [enableDynamicSearch]="true"
                                                             [notFoundMsg]="noResultsFoundLabel"
                                                             [options]="searchResults"
@@ -1782,7 +1946,11 @@
                                                         >
                                                             <ng-template #optionTemplate let-option="option">
                                                                 <ng-container *ngIf="!option.additional?.stock">
-                                                                    <a href="javascript:void(0)" class="list-item">
+                                                                    <a
+                                                                        href="javascript:void(0)"
+                                                                        class="list-item"
+                                                                        aria-label="list"
+                                                                    >
                                                                         <div class="item">{{ option?.label }}</div>
                                                                         <div class="item-unique">
                                                                             {{ option.additional?.uniqueName }}
@@ -1790,7 +1958,11 @@
                                                                     </a>
                                                                 </ng-container>
                                                                 <ng-container *ngIf="option.additional?.stock">
-                                                                    <a href="javascript:void(0)" class="list-item">
+                                                                    <a
+                                                                        href="javascript:void(0)"
+                                                                        class="list-item"
+                                                                        aria-label="list"
+                                                                    >
                                                                         <div class="item">{{ option?.label }}</div>
                                                                         <div class="item-unique">
                                                                             {{ option.additional?.uniqueName }}
@@ -1804,6 +1976,8 @@
                                                             </ng-template>
                                                             <ng-template #notFoundLinkTemplate>
                                                                 <a
+                                                                    href="javascript:void(0)"
+                                                                    aria-label="option"
                                                                     [ngClass]="{ 'active': keydownClassAdded }"
                                                                     class="notfound-option"
                                                                     [keyboardShortcut]="'alt+c'"
@@ -1842,7 +2016,8 @@
                                                         [(ngModel)]="txn.total"
                                                         *ngIf="
                                                             txn?.selectedAccount?.stock?.variant?.salesTaxInclusive ||
-                                                            txn?.selectedAccount?.stock?.variant?.purchaseTaxInclusive ||
+                                                            txn?.selectedAccount?.stock?.variant
+                                                                ?.purchaseTaxInclusive ||
                                                             txn?.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
                                                         "
                                                         (input)="isTotalChanged = true; handleAmountInput(txn, true)"
@@ -2181,7 +2356,9 @@
                                                     class="new-entry-date"
                                                     [attr.data-title]="commonLocaleData?.app_date"
                                                 >
-                                                    <div class="d-flex align-items-center column-gap5 custom-input-field pd-t1">
+                                                    <div
+                                                        class="d-flex align-items-center column-gap5 custom-input-field pd-t1"
+                                                    >
                                                         <span class="ledger-checkbox pull-left"> </span>
                                                         <giddh-datepicker
                                                             class="custom-input-field"
@@ -2214,7 +2391,9 @@
                                                             tabindex="-1"
                                                             [isPaginationEnabled]="true"
                                                             (scrollEnd)="handleScrollEnd()"
-                                                            (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                                            (dynamicSearchedQuery)="
+                                                                isAccountSearchData = true; onSearchQueryChanged($event)
+                                                            "
                                                             [enableDynamicSearch]="true"
                                                             [notFoundMsg]="noResultsFoundLabel"
                                                             #select
@@ -2239,7 +2418,11 @@
                                                         >
                                                             <ng-template #optionTemplate let-option="option">
                                                                 <ng-container *ngIf="!option.additional?.stock">
-                                                                    <a href="javascript:void(0)" class="list-item">
+                                                                    <a
+                                                                        href="javascript:void(0)"
+                                                                        class="list-item"
+                                                                        aria-label="item"
+                                                                    >
                                                                         <div class="item">{{ option?.label }}</div>
                                                                         <div class="item-unique">
                                                                             {{ option.additional?.uniqueName }}
@@ -2247,7 +2430,11 @@
                                                                     </a>
                                                                 </ng-container>
                                                                 <ng-container *ngIf="option.additional?.stock">
-                                                                    <a href="javascript:void(0)" class="list-item">
+                                                                    <a
+                                                                        href="javascript:void(0)"
+                                                                        class="list-item"
+                                                                        aria-label="option"
+                                                                    >
                                                                         <div class="item">{{ option?.label }}</div>
                                                                         <div class="item-unique">
                                                                             {{ option.additional?.uniqueName }}
@@ -2261,6 +2448,8 @@
                                                             </ng-template>
                                                             <ng-template #notFoundLinkTemplate>
                                                                 <a
+                                                                    href="javascript:void(0)"
+                                                                    aria-label="keydown"
                                                                     [ngClass]="{ 'active': keydownClassAdded }"
                                                                     class="notfound-option"
                                                                     [keyboardShortcut]="'alt+c'"
@@ -2299,7 +2488,8 @@
                                                         [(ngModel)]="txn.total"
                                                         *ngIf="
                                                             txn?.selectedAccount?.stock?.variant?.salesTaxInclusive ||
-                                                            txn?.selectedAccount?.stock?.variant?.purchaseTaxInclusive ||
+                                                            txn?.selectedAccount?.stock?.variant
+                                                                ?.purchaseTaxInclusive ||
                                                             txn?.selectedAccount?.stock?.variant?.fixedAssetTaxInclusive
                                                         "
                                                         (input)="isTotalChanged = true; handleAmountInput(txn, true)"
@@ -2528,6 +2718,7 @@
                 <div>
                     <div class="text-right mr-t1 mr-b1" [hidden]="!isBankOrCashAccount">
                         <button
+                            aria-label="back"
                             mat-stroked-button
                             color="primary"
                             [hidden]="!closingBalanceBeforeReconcile || showLoader"
@@ -2572,6 +2763,7 @@
                             </div>
                         </div>
                         <button
+                            aria-label="reconciliation"
                             mat-button
                             [hidden]="closingBalanceBeforeReconcile || showLoader"
                             class="btn btn-primary btn-sm mr-0"
@@ -2632,7 +2824,7 @@
                             <div class="col-sm-3 col-xs-12 stat-block">
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.opening_balance }}</h1>
-                                    <h3 class="digit-blue d-flex">
+                                    <h2 class="digit-blue d-flex">
                                         <amount-field
                                             [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
                                             [currencySymbol]="ledgerTxnBalance?.currencySymbol"
@@ -2647,9 +2839,9 @@
                                                     : localeData?.cr
                                                 : ""
                                         }}
-                                    </h3>
+                                    </h2>
 
-                                    <h3
+                                    <h2
                                         class="digit-blue font-12 sub-total d-inline-flex"
                                         *ngIf="isLedgerAccountAllowsMultiCurrency"
                                     >
@@ -2667,7 +2859,7 @@
                                                     : localeData?.cr
                                                 : ""
                                         }}
-                                    </h3>
+                                    </h2>
                                 </div>
                             </div>
                             <div class="col-sm-3 col-xs-12 stat-block">
@@ -2678,7 +2870,7 @@
                                             class="d-flex flex-column justify-content-between"
                                             *ngIf="ledgerTxnBalance?.creditTotal > ledgerTxnBalance?.debitTotal"
                                         >
-                                            <h3 class="digit-blue d-flex">
+                                            <h2 class="digit-blue d-flex">
                                                 <amount-field
                                                     [amount]="
                                                         ledgerTxnBalance?.creditTotal - ledgerTxnBalance?.debitTotal
@@ -2696,8 +2888,8 @@
                                                     &nbsp;
                                                     <span class="text-capitalize">{{ commonLocaleData?.app_cr }}</span>
                                                 </ng-container>
-                                            </h3>
-                                            <h3
+                                            </h2>
+                                            <h2
                                                 class="digit-blue sub-total font-12 d-flex"
                                                 *ngIf="isLedgerAccountAllowsMultiCurrency"
                                             >
@@ -2720,7 +2912,7 @@
                                                     &nbsp;
                                                     <span class="text-capitalize">{{ commonLocaleData?.app_cr }}</span>
                                                 </ng-container>
-                                            </h3>
+                                            </h2>
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-between">
@@ -2826,7 +3018,7 @@
                                 <div class="ledger-state-box">
                                     <h1>{{ localeData?.closing_balance }}</h1>
                                     <div class="d-flex flex-column justify-content-between">
-                                        <h3 class="digit-blue d-inline-flex">
+                                        <h2 class="digit-blue d-inline-flex">
                                             <span
                                                 class="d-flex"
                                                 [matTooltip]="
@@ -2850,8 +3042,8 @@
                                                         : ""
                                                 }}
                                             </span>
-                                        </h3>
-                                        <h3
+                                        </h2>
+                                        <h2
                                             class="digit-blue font-12 d-flex"
                                             *ngIf="isLedgerAccountAllowsMultiCurrency"
                                         >
@@ -2879,7 +3071,7 @@
                                                         : ""
                                                 }}
                                             </span>
-                                        </h3>
+                                        </h2>
                                     </div>
                                 </div>
                             </div>
@@ -2893,7 +3085,12 @@
             <!-- modal sections -->
             <div *ngIf="isShowLedgerColumnarReportTable">
                 <div class="back-btn text-right pr-1 mt-1 mr-b1">
-                    <button mat-stroked-button class="bdr" (click)="isShowLedgerColumnarReportTable = false">
+                    <button
+                        aria-label="back"
+                        mat-stroked-button
+                        class="bdr"
+                        (click)="isShowLedgerColumnarReportTable = false"
+                    >
                         {{ commonLocaleData?.app_back }}
                     </button>
                 </div>
@@ -2936,6 +3133,7 @@
                     [searchResultsPaginationTotalPages]="defaultResultsPaginationData.totalPages"
                     [activeCompany]="activeCompany"
                     [entrySide]="entrySide"
+                    [generateEInvoice]="generateEInvoice"
                     (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane($event)"
                     (closeUpdateLedgerModal)="hideUpdateLedgerModal()"
                     (showQuickAccountModalFromUpdateLedger)="toggleAsidePane()"

@@ -10,7 +10,7 @@ import { Observable, ReplaySubject } from 'rxjs';
     :host {
       position: fixed;
       left: auto;
-      top: 0;
+      top: var(--top-distance);
       right: 0;
       bottom: 0;
       width: 100%;
@@ -26,7 +26,7 @@ import { Observable, ReplaySubject } from 'rxjs';
       display: block;
       position: fixed;
       left: -41px;
-      top: 0;
+      top: var(--top-distance);
       z-index: 5;
       border: 0;
       border-radius: 0;

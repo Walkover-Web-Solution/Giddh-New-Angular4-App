@@ -4,7 +4,7 @@
     width: 100%;
     height: 100%;
     background-color: var(--color-white);
-    top: 170px;
+    top: calc(var(--top-distance) + 170px);
     bottom: 0;
     left: 240px;
     z-index: -1;
@@ -24,7 +24,7 @@
 .invoice-modal-content {
     padding: 0;
     position: fixed;
-    top: 57px;
+    top: calc(var(--top-distance) + 57px);
     width: 100%;
     background-color: var(--color-white);
     margin: 0 0;

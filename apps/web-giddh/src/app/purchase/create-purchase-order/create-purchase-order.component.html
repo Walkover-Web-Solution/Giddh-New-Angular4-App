@@ -52,7 +52,9 @@
                                                     [doNotReset]="true"
                                                     [isPaginationEnabled]="true"
                                                     (scrollEnd)="handleScrollEnd('vendor')"
-                                                    (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'vendor')"
+                                                    (dynamicSearchedQuery)="  isAccountSearchData = true;
+                                                        onSearchQueryChanged($event, 1, 'vendor')
+                                                    "
                                                     [notFoundMsg]="noResultsFoundLabel"
                                                     [enableDynamicSearch]="true"
                                                     [fixedValue]="purchaseOrder.account.name"
@@ -69,6 +71,7 @@
                                                     <ng-template #optionTemplate let-option="option">
                                                         <a
                                                             href="javascript:void(0)"
+                                                            aria-label="label"
                                                             class="list-item flex-column border-none"
                                                         >
                                                             <div class="item">{{ option.label }}</div>
@@ -79,14 +82,8 @@
                                                     <ng-template #notFoundLinkTemplate>
                                                         <a
                                                             href="javascript:void(0)"
-                                                            class="
-                                                                list-item
-                                                                pd-l05 pd-r05
-                                                                d-flex
-                                                                justify-content-between
-                                                                w-100
-                                                                border-none
-                                                            "
+                                                            aria-label="found text"
+                                                            class="list-item pd-l05 pd-r05 d-flex justify-content-between w-100 border-none"
                                                             [keyboardShortcut]="'alt+c'"
                                                         >
                                                             <div class="item">{{ vendorNotFoundText }}</div>
@@ -100,7 +97,7 @@
                                                     *ngIf="purchaseOrder.voucherDetails.customerName"
                                                 >
                                                     <span class="cp aqua-color" *ngIf="!isUpdateMode">
-                                                        <a href="javascript:void(0)" (click)="getVendorDetails()">{{
+                                                        <a href="javascript:void(0)" aria-label="vendor details" (click)="getVendorDetails()">{{
                                                             localeData?.vendor_details
                                                         }}</a>
                                                     </span>
@@ -113,6 +110,7 @@
                                                     <p class="font-15">
                                                         <a
                                                             href="javascript:;"
+                                                            aria-label="number"
                                                             (click)="
                                                                 openPurchaseOrderPreviewPopup(
                                                                     purchaseOrderPreviewModal,
@@ -161,6 +159,8 @@
                                                                         *ngIf="accountAddressList?.length > 1"
                                                                     >
                                                                         <a
+                                                                            href="javascript:void(0);"
+                                                                            aria-label="change"
                                                                             dropdownToggle
                                                                             type="button"
                                                                             class="dropdown-toggle"
@@ -168,11 +168,7 @@
                                                                         >
                                                                         <ul
                                                                             *dropdownMenu
-                                                                            class="
-                                                                                dropdown-menu
-                                                                                change-address-dropdown
-                                                                                dropdown-menu-right
-                                                                            "
+                                                                            class="dropdown-menu change-address-dropdown dropdown-menu-right"
                                                                             role="menu"
                                                                         >
                                                                             <li
@@ -182,6 +178,8 @@
                                                                                 "
                                                                             >
                                                                                 <a
+                                                                                    href="javascript:void(0);"
+                                                                                    aria-label="address"
                                                                                     class="dropdown-item"
                                                                                     (click)="
                                                                                         selectAddress(
@@ -400,17 +398,15 @@
                                                                     >
                                                                         <a
                                                                             dropdownToggle
+                                                                            href="javascript:void(0);"
+                                                                            aria-label="change"
                                                                             type="button"
                                                                             class="dropdown-toggle"
                                                                             >{{ localeData?.change }}</a
                                                                         >
                                                                         <ul
                                                                             *dropdownMenu
-                                                                            class="
-                                                                                dropdown-menu
-                                                                                change-address-dropdown
-                                                                                dropdown-menu-right
-                                                                            "
+                                                                            class="dropdown-menu change-address-dropdown dropdown-menu-right"
                                                                             role="menu"
                                                                         >
                                                                             <li
@@ -420,6 +416,8 @@
                                                                                 "
                                                                             >
                                                                                 <a
+                                                                                    href="javascript:void(0);"
+                                                                                    aria-label="address"
                                                                                     class="dropdown-item"
                                                                                     (click)="
                                                                                         selectAddress(
@@ -478,10 +476,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <div
-                                                                            class="
-                                                                                col-sm-12 col-md-6
-                                                                                select-border-bottom
-                                                                            "
+                                                                            class="col-sm-12 col-md-6 select-border-bottom"
                                                                             #vendorShippingState
                                                                             *ngIf="statesSource?.length"
                                                                         >
@@ -510,10 +505,7 @@
                                                                             </sales-sh-select>
                                                                         </div>
                                                                         <div
-                                                                            class="
-                                                                                col-sm-12 col-md-6
-                                                                                select-border-bottom
-                                                                            "
+                                                                            class="col-sm-12 col-md-6 select-border-bottom"
                                                                             #vendorShippingState
                                                                             *ngIf="regionsSource?.length"
                                                                         >
@@ -659,7 +651,7 @@
                             <!-- region customer dropdown -->
                             <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12 select-customer-name">
                                 <section class="form-inline">
-                                    <div class="wrap-billing-address w-100 clearfix ">
+                                    <div class="wrap-billing-address w-100 clearfix">
                                         <div class="row">
                                             <!-- region billing address -->
                                             <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
@@ -677,6 +669,8 @@
                                                                 *ngIf="companyAddressList?.length > 1"
                                                             >
                                                                 <a
+                                                                    href="javascript:void(0);"
+                                                                    aria-label="change"
                                                                     dropdownToggle
                                                                     type="button"
                                                                     class="dropdown-toggle"
@@ -684,10 +678,7 @@
                                                                 >
                                                                 <ul
                                                                     *dropdownMenu
-                                                                    class="
-                                                                        dropdown-menu dropdown-menu-right
-                                                                        change-address-dropdown
-                                                                    "
+                                                                    class="dropdown-menu dropdown-menu-right change-address-dropdown"
                                                                     role="menu"
                                                                 >
                                                                     <li
@@ -695,6 +686,8 @@
                                                                         *ngFor="let address of companyAddressList"
                                                                     >
                                                                         <a
+                                                                            href="javascript:void(0);"
+                                                                            aria-label="address"
                                                                             class="dropdown-item"
                                                                             (click)="
                                                                                 selectAddress(
@@ -927,6 +920,8 @@
                                                                 "
                                                             >
                                                                 <a
+                                                                    href="javascript:void(0);"
+                                                                    aria-label="change"
                                                                     dropdownToggle
                                                                     type="button"
                                                                     class="dropdown-toggle"
@@ -934,11 +929,7 @@
                                                                 >
                                                                 <ul
                                                                     *dropdownMenu
-                                                                    class="
-                                                                        dropdown-menu
-                                                                        change-address-dropdown
-                                                                        dropdown-menu-right
-                                                                    "
+                                                                    class="dropdown-menu change-address-dropdown dropdown-menu-right"
                                                                     role="menu"
                                                                 >
                                                                     <li
@@ -946,6 +937,8 @@
                                                                         *ngFor="let address of companyAddressList"
                                                                     >
                                                                         <a
+                                                                            href="javascript:void(0);"
+                                                                            aria-label="address"
                                                                             class="dropdown-item"
                                                                             (click)="
                                                                                 selectAddress(
@@ -1170,12 +1163,7 @@
                             </div>
                             <!-- region customer dropdown -->
                             <div
-                                class="
-                                    select-customer-name
-                                    order-expected-delivery
-                                    d-flex
-                                    col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12
-                                "
+                                class="select-customer-name order-expected-delivery d-flex col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12"
                             >
                                 <!-- region if not cashinvoice show customer dropdown -->
 
@@ -1272,7 +1260,7 @@
             </div>
         </div>
         <ng-container *ngIf="!purchaseOrder.account?.uniqueName">
-            <img src="assets/images/new/search-vendor.svg" class="img-responsive search-arrow-image" />
+            <img src="assets/images/new/search-vendor.svg" class="img-responsive search-arrow-image" alt="search vendor" />
         </ng-container>
         <section
             *ngIf="!isMobileScreen"
@@ -1310,6 +1298,7 @@
                             autoSaveIcon = !autoSaveIcon;
                             newExchangeRate = originalExchangeRate
                         "
+                        alt="edit"
                     />
                     <img
                         src="assets/images/autosave.svg"
@@ -1324,6 +1313,7 @@
                             calculateGrandTotal()
                         "
                         *ngIf="autoSaveIcon"
+                        alt="edit"
                     />
                 </span>
             </div>
@@ -1334,6 +1324,7 @@
                     src="assets/images/switch-icon.svg"
                     alt="switch-icon"
                     (click)="switchCurrencyImg(false)"
+                    alt="edit"
                 />
                 <span class="right-currency">
                     <span class="currency-digits" *ngIf="!showCurrencyValue">
@@ -1355,12 +1346,14 @@
                         src="assets/images/edit-pencilicon.svg"
                         class="edit-pencil"
                         (click)="saveCancelExcRate(false)"
+                        alt="edit"
                     />
                     <img
                         src="assets/images/autosave.svg"
                         class="edit-pencil"
                         (click)="saveCancelExcRate(true)"
                         *ngIf="autoSaveIcon"
+                        alt="edit"
                     />
                 </span>
             </div>
@@ -1441,7 +1434,7 @@
                                                         : transaction.sacNumber
                                                 }}
                                                 <span class="edit-icon cp">
-                                                    <img src="assets/images/edit-pencilicon.svg" />
+                                                    <img src="assets/images/edit-pencilicon.svg" alt="edit" />
                                                 </span>
                                             </span>
                                         </div>
@@ -1700,12 +1693,17 @@
                                         #selectAccount
                                         [(ngModel)]="transaction.fakeAccForSelect2"
                                         name="transaction.fakeAccForSelect2_{{ entryIdx }}"
-                                        (selected)="onSelectSalesAccount($event, transaction, entry, false, entryIdx)"
+                                        (selected)="
+                                            entry['initiallyCall'] = undefined;
+                                            onSelectSalesAccount($event, transaction, entry, false, entryIdx)
+                                        "
                                         [placeholder]="localeData?.select_acc"
                                         [notFoundLink]="true"
                                         [isPaginationEnabled]="true"
                                         (scrollEnd)="handleScrollEnd('item')"
-                                        (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'item')"
+                                        (dynamicSearchedQuery)="isAccountSearchData = true;
+                                            onSearchQueryChanged($event, 1, 'item')
+                                        "
                                         (onHide)="noResultsFoundLabel = localeData?.search_acc"
                                         [notFoundMsg]="noResultsFoundLabel"
                                         [enableDynamicSearch]="true"
@@ -1723,7 +1721,7 @@
                                     >
                                         <ng-template #optionTemplate let-option="option">
                                             <ng-container *ngIf="!option.additional?.stock">
-                                                <a href="javascript:void(0)" class="list-item flex-column">
+                                                <a href="javascript:void(0);" aria-label="uniqueName" class="list-item flex-column">
                                                     <div class="item">{{ option.label }}</div>
                                                     <div class="item-unique">
                                                         {{ option.additional?.uniqueName }}
@@ -1731,7 +1729,7 @@
                                                 </a>
                                             </ng-container>
                                             <ng-container *ngIf="option.additional?.stock">
-                                                <a href="javascript:void(0)" class="list-item flex-column">
+                                                <a href="javascript:void(0);" aria-label="uniqueName" class="list-item flex-column">
                                                     <div class="item">{{ option.label }}</div>
                                                     <div class="item-unique">
                                                         {{ option.additional?.uniqueName }}
@@ -1822,7 +1820,7 @@
                                                             >{{ commonLocaleData?.app_update }}
                                                         </span>
                                                         <span class="edit-icon cp">
-                                                            <img src="assets/images/edit-pencilicon.svg" />
+                                                            <img src="assets/images/edit-pencilicon.svg" alt="edit" />
                                                         </span>
                                                     </span>
                                                 </div>
@@ -2005,10 +2003,14 @@
                                         [discountMenu]="false"
                                         [discountsList]="discountsList"
                                         [discountAccountsDetails]="entry.discounts"
+                                        [discountPercentageModal]="entry.discountPercentageModal"
+                                        [discountFixedValueModal]="entry.discountFixedValueModal"
                                         [discountSum]="entry.discountSum"
                                         [showHeaderText]="false"
                                         (hideOtherPopups)="closeTaxControlPopup()"
-                                        (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
+                                        (discountTotalUpdated)="
+                                            calculateWhenTrxAltered(entry, transaction, false, $event)
+                                        "
                                         [maskInput]="inputMaskFormat"
                                         [prefixInput]="purchaseOrder.accountDetails.currencySymbol"
                                         [suffixInput]="selectedSuffixForCurrency"
@@ -2106,9 +2108,10 @@
                                                 <span class="mr-r05">
                                                     <a
                                                         href="javascript:;"
+                                                        aria-label="image"
                                                         (click)="toggleOtherTaxesAsidePane(true, entryIdx)"
                                                     >
-                                                        <img src="assets/images/edit-pencilicon.svg" />
+                                                        <img src="assets/images/edit-pencilicon.svg" alt="edit-icon" />
                                                     </a>
                                                 </span>
                                                 <input
@@ -2171,7 +2174,7 @@
                 <div class="p-1 aqua-color add-line-bulk-item">
                     <a href="javascript:void 0" (click)="addBlankRow(null)">{{ localeData?.add_new_line }}</a>
                     <span class="font-15"> | </span>
-                    <a (click)="addBulkItems()" href="javascript:;">{{ localeData?.add_bulk_entries }}</a>
+                    <a (click)="addBulkItems()" href="javascript:;" aria-label="bulk entries">{{ localeData?.add_bulk_entries }}</a>
                 </div>
                 <!-- endregion -->
                 <tfoot>
@@ -2764,7 +2767,7 @@
                             </div>
                         </div>
                         <div class="edit-card" (click)="setActiveIndex(entryIdx); $event.stopPropagation()">
-                            <img src="assets/images/edit-pencilicon.svg" />
+                            <img src="assets/images/edit-pencilicon.svg" alt="edit" />
                         </div>
                         <div
                             class="del-card"
@@ -2790,6 +2793,7 @@
                                                     #selectAccount
                                                     name="transaction.fakeAccForSelect2_{{ entryIdx }}"
                                                     (selected)="
+                                                        entry['initiallyCall'] = undefined;
                                                         onSelectSalesAccount(
                                                             $event,
                                                             transaction,
@@ -2808,7 +2812,7 @@
                                                 >
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
-                                                            <a href="javascript:void(0)" class="list-item flex-column">
+                                                            <a href="javascript:void(0)" aria-label="uniqueName" class="list-item flex-column">
                                                                 <div class="item">{{ option.label }}</div>
                                                                 <div class="item-unique">
                                                                     {{ option.additional?.uniqueName }}
@@ -2816,7 +2820,7 @@
                                                             </a>
                                                         </ng-container>
                                                         <ng-container *ngIf="option.additional?.stock">
-                                                            <a href="javascript:void(0)" class="list-item flex-column">
+                                                            <a href="javascript:void(0)" aria-label="uniqueName" class="list-item flex-column">
                                                                 <div class="item">{{ option.label }}</div>
                                                                 <div class="item-unique">
                                                                     {{ option.additional?.uniqueName }}
@@ -2887,7 +2891,7 @@
                                                                         >{{ commonLocaleData?.app_update }}
                                                                     </span>
                                                                     <span class="edit-icon cp">
-                                                                        <img src="assets/images/edit-pencilicon.svg" />
+                                                                        <img src="assets/images/edit-pencilicon.svg" alt="edit" />
                                                                     </span>
                                                                 </span>
                                                             </div>
@@ -3000,7 +3004,7 @@
                                                     name="transaction.stockUnit_{{ entryIdx }}"
                                                     [(ngModel)]="transaction.stockUnit"
                                                     (ngModelChange)="
-                                                        onChangeUnit(transaction, $event);
+                                                        onChangeUnit(entry, transaction, $event);
                                                         handlePriceCalculationOnUnitChange(entry, transaction)
                                                     "
                                                 >
@@ -3106,10 +3110,14 @@
                                                 [discountMenu]="false"
                                                 [discountsList]="discountsList"
                                                 [discountAccountsDetails]="entry.discounts"
+                                                [discountPercentageModal]="entry.discountPercentageModal"
+                                                [discountFixedValueModal]="entry.discountFixedValueModal"
                                                 [discountSum]="entry.discountSum"
                                                 [showHeaderText]="false"
                                                 (hideOtherPopups)="closeTaxControlPopup()"
-                                                (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
+                                                (discountTotalUpdated)="
+                                                    calculateWhenTrxAltered(entry, transaction, false, $event)
+                                                "
                                                 [maskInput]="inputMaskFormat"
                                                 [prefixInput]="purchaseOrder.accountDetails.currencySymbol"
                                                 [suffixInput]="selectedSuffixForCurrency"
@@ -3214,9 +3222,10 @@
                                                         <span class="mr-r05">
                                                             <a
                                                                 href="javascript:;"
+                                                                aria-label="image"
                                                                 (click)="toggleOtherTaxesAsidePane(true, entryIdx)"
                                                             >
-                                                                <img src="assets/images/edit-pencilicon.svg" />
+                                                                <img src="assets/images/edit-pencilicon.svg" alt="edit icon" />
                                                             </a>
                                                         </span>
 
@@ -3301,7 +3310,7 @@
                             <div class="row">
                                 <div class="form-group col-xs-4">
                                     <giddh-datepicker
-                                         [cssClass]="'mat-field-border bdr form-control'"
+                                        [cssClass]="'mat-field-border bdr form-control'"
                                         #shippingDate="ngModel"
                                         [placeholder]="localeData?.ship_date"
                                         name="shippingDate"
@@ -3636,6 +3645,7 @@
     <!-- region bulk items -->
     <ng-template #bulkItemsModal>
         <voucher-add-bulk-items-component
+            [accountUniqueName]="purchaseOrder.accountDetails.uniqueName"
             [invoiceType]="invoiceType"
             (saveItemsEvent)="addBulkStockItems($event)"
             (closeEvent)="cancelBulkItemsModal()"

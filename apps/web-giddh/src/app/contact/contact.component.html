@@ -42,6 +42,7 @@
                                                 *ngIf="activeTab == 'customer'"
                                                 class="mr-0"
                                                 (click)="openAddAndManage('customer')"
+                                                aria-label="new customer"
                                             >
                                                 {{ localeData?.new_customer }}
                                             </button>
@@ -51,6 +52,7 @@
                                                 *ngIf="activeTab == 'vendor'"
                                                 class="mr-0"
                                                 (click)="openAddAndManage('vendor')"
+                                                aria-label="new vendor"
                                             >
                                                 {{ localeData?.new_vendor }}
                                             </button>
@@ -77,7 +79,11 @@
                                             >
                                                 <ng-template #optionTemplate let-option="option">
                                                     <ng-container>
-                                                        <a href="javascript:void(0)" class="list-item d-flex">
+                                                        <a
+                                                            href="javascript:void(0);"
+                                                            aria-label="branch company"
+                                                            class="list-item d-flex"
+                                                        >
                                                             <span class="entity-icon">
                                                                 <i
                                                                     class="icon-branch-icon pull-right"
@@ -130,7 +136,12 @@
                                     class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
                                     *ngIf="showClearFilter"
                                 >
-                                    <button mat-stroked-button class="mr-0" (click)="resetAdvanceSearch()">
+                                    <button
+                                        mat-stroked-button
+                                        class="mr-0"
+                                        (click)="resetAdvanceSearch()"
+                                        aria-label="filter"
+                                    >
                                         <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                                     </button>
                                 </div>
@@ -141,6 +152,7 @@
                                         class="desktop-button-filter"
                                         *ngIf="selectedCheckedContacts?.length > 0"
                                         (click)="clearSelectedContacts()"
+                                        aria-label="clear"
                                     >
                                         <span class="icon-cross icon-font-14"></span>
                                         {{ commonLocaleData?.app_clear_selected }}
@@ -177,6 +189,7 @@
                                                 class="btn-filter mobile-button-filter"
                                                 *ngIf="selectedAccountsList?.length > 0"
                                                 (click)="clearSelectedContacts()"
+                                                aria-label="clear"
                                             >
                                                 <span class="icon-cross"></span>
 
@@ -238,6 +251,7 @@
                                         class="pos-abs arrow-icon"
                                         [matMenuTriggerFor]="downloadCsvEmail"
                                         id="button-basic"
+                                        aria-label="customer"
                                     >
                                         <span class="icon-arrow-down"></span>
                                     </button>
@@ -249,13 +263,14 @@
                                         >
                                             {{ commonLocaleData?.app_email }}
                                         </button> -->
-                                        <button mat-menu-item (click)="downloadCSV()">
+                                        <button mat-menu-item (click)="downloadCSV()" aria-label="download csv">
                                             {{ commonLocaleData?.app_download_csv }}
                                         </button>
                                         <button
                                             mat-menu-item
                                             *ngIf="selectedAccountsList?.length > 0 && activeTab === 'vendor'"
                                             (click)="openBulkPaymentModal()"
+                                            aria-label="bulk payment"
                                         >
                                             {{ localeData?.bulk_payment }}
                                         </button>
@@ -398,6 +413,7 @@
                     data-dismiss="modal"
                     [attr.aria-label]="commonLocaleData?.app_close"
                     (click)="closeAllDialogs()"
+                    aria-label="cross"
                 >
                     ×
                 </button>
@@ -437,6 +453,7 @@
                         color="primary"
                         class="btn-sm pull-right mr-l1 send-email"
                         (click)="send('sundrycreditors')"
+                        aria-label="set"
                     >
                         {{ messageBody.btn.set }}
                     </button>
@@ -456,6 +473,7 @@
                     class="close-btn-in-mat-model"
                     [attr.aria-label]="commonLocaleData?.app_close"
                     (click)="closeAllDialogs()"
+                    aria-label="cross"
                 >
                     ×
                 </button>
@@ -498,6 +516,7 @@
                         color="primary"
                         class="btn-sm pull-right mr-l1 send-email"
                         (click)="send('sundrydebtors')"
+                        aria-label="set"
                     >
                         {{ messageBody.btn.set }}
                     </button>
@@ -553,7 +572,7 @@
                             #searchCustomerContainer
                             (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
                         >
-                            <div class="d-flex select-all-checkbox-wrapper ">
+                            <div class="d-flex select-all-checkbox-wrapper">
                                 <mat-checkbox
                                     class="pos-abs"
                                     color="primary"
@@ -591,7 +610,7 @@
                             [attr.data-title]="localeData?.customer"
                         >
                             <div class="customer-name-filed cursor-pointer pd-r2" (dblclick)="trigger?.openMenu()">
-                                <div class="select-single-checkbox-wrapper ">
+                                <div class="select-single-checkbox-wrapper">
                                     <mat-checkbox
                                         color="primary"
                                         class="mr-2 checkbox-left-side-in-table"
@@ -610,6 +629,7 @@
                                     class="table-menu-first-td"
                                     [matMenuTriggerFor]="editModelBasic"
                                     #trigger="matMenuTrigger"
+                                    aria-label="dots"
                                 >
                                     <span class="icon-dots-three-vertical"></span>
                                 </button>
@@ -629,6 +649,7 @@
                                                 mat-icon-button
                                                 class="account-detail-padding"
                                                 (click)="updateCustomerAcc('customer', account)"
+                                                aria-label="img"
                                             >
                                                 <img src="{{ imgPath }}path.svg" />
                                             </button>
@@ -644,10 +665,16 @@
                                         *ngIf="!isMobileScreen"
                                         class="menu-table-item"
                                         (click)="performActions(1, account)"
+                                        aria-label="ledger"
                                     >
                                         {{ commonLocaleData?.app_goto_ledger }}
                                     </button>
-                                    <button mat-menu-item class="menu-table-item" (click)="performActions(2, account)">
+                                    <button
+                                        mat-menu-item
+                                        class="menu-table-item"
+                                        (click)="performActions(2, account)"
+                                        aria-label="generate invoice"
+                                    >
                                         {{ commonLocaleData?.app_generate_invoice }}
                                     </button>
                                     <!-- <button
@@ -853,7 +880,7 @@
                         >
                             <ng-container *ngIf="updateCommentIdx != idx">
                                 {{ account.comment }}
-                                <span [class.text-gray]="!account.comment" *ngIf="!account.comment">{{
+                                <span [class.text-black]="!account.comment" *ngIf="!account.comment">{{
                                     localeData?.add_comment
                                 }}</span>
                             </ng-container>
@@ -892,7 +919,7 @@
                             #searchCustomerContainer
                             (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
                         >
-                            <div class="d-flex select-all-checkbox-wrapper ">
+                            <div class="d-flex select-all-checkbox-wrapper">
                                 <mat-checkbox
                                     class="pos-abs"
                                     color="primary"
@@ -931,7 +958,7 @@
                             [attr.data-title]="commonLocaleData?.app_vendor_name"
                         >
                             <div class="vendor-name-field cursor-pointer pd-r2" (dblclick)="trigger?.openMenu()">
-                                <div class="select-single-checkbox-wrapper ">
+                                <div class="select-single-checkbox-wrapper">
                                     <mat-checkbox
                                         [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
                                         type="checkbox"
@@ -949,6 +976,7 @@
                                     class="table-menu-first-td"
                                     [matMenuTriggerFor]="dropdownBasic2"
                                     #trigger="matMenuTrigger"
+                                    aria-label="dot vertical"
                                 >
                                     <span class="icon-dots-three-vertical"></span>
                                 </button>
@@ -968,6 +996,7 @@
                                                 mat-icon-button
                                                 class="account-detail-padding"
                                                 (click)="updateCustomerAcc('vendor', account)"
+                                                aria-label="img"
                                             >
                                                 <img src="{{ imgPath }}path.svg" />
                                             </button>
@@ -983,10 +1012,16 @@
                                         *ngIf="!isMobileScreen"
                                         class="menu-table-item"
                                         (click)="performActions(1, account)"
+                                        aria-label="ledger"
                                     >
                                         {{ commonLocaleData?.app_goto_ledger }}
                                     </button>
-                                    <button mat-menu-item class="menu-table-item" (click)="performActions(2, account)">
+                                    <button
+                                        mat-menu-item
+                                        class="menu-table-item"
+                                        (click)="performActions(2, account)"
+                                        aria-label="record bill"
+                                    >
                                         {{ commonLocaleData?.app_record_bill }}
                                     </button>
                                     <!-- <button
@@ -1013,6 +1048,7 @@
                                                 data-dismiss="modal"
                                                 [attr.aria-label]="commonLocaleData?.app_close"
                                                 (click)="closeAllDialogs()"
+                                                aria-label="cross"
                                             >
                                                 ×
                                             </button>
@@ -1058,6 +1094,7 @@
                                                     color="primary"
                                                     class="btn-sm pull-right mr-l1"
                                                     (click)="send('sundrycreditors')"
+                                                    aria-label="set"
                                                 >
                                                     {{ messageBody.btn.set }}
                                                 </button>
@@ -1309,6 +1346,7 @@
                                     mat-stroked-button
                                     *ngIf="isGetAllIntegratedBankInProgress"
                                     class="btn-small min-width-150 contact-ipad-responsive"
+                                    aria-label="loading"
                                 >
                                     {{ commonLocaleData?.app_loading }}
                                 </button>
@@ -1317,6 +1355,7 @@
                                     *ngIf="!isGetAllIntegratedBankInProgress && isIciciAccountPendingForApproval"
                                     class="btn-small min-width-150 pending-approval-button contact-ipad-responsive"
                                     (click)="showIntegrationProcess()"
+                                    aria-label="pending approval"
                                 >
                                     {{ localeData?.pending_approval }}
                                 </button>
@@ -1325,8 +1364,13 @@
                                     *ngIf="!isICICIIntegrated && !isGetAllIntegratedBankInProgress"
                                     class="btn-small min-width-150 contact-ipad-responsive"
                                     [routerLink]="['/pages/settings/integration/payment']"
+                                    aria-label="bank"
                                 >
-                                    {{ localeData?.connect_icici_bank }}
+                                    {{
+                                        isPlaidSupportedCountry
+                                            ? localeData?.connect_bank
+                                            : localeData?.connect_icici_bank
+                                    }}
                                 </button>
                             </div>
                             <ng-container
@@ -1343,6 +1387,7 @@
                                         *ngIf="account?.bankPaymentDetails && account?.country?.code === 'IN'"
                                         class="btn-small min-width-150 contact-ipad-responsive"
                                         (click)="openBulkPaymentModal(account)"
+                                        aria-label="pay now"
                                     >
                                         {{ commonLocaleData?.app_pay_now }}
                                     </button>
@@ -1351,6 +1396,7 @@
                                         *ngIf="!account?.bankPaymentDetails"
                                         class="btn-small min-width-150 contact-ipad-responsive"
                                         (click)="updateCustomerAcc('vendor', account)"
+                                        aria-label="bank details"
                                     >
                                         {{ commonLocaleData?.app_add_bank_details }}
                                     </button>
@@ -1436,6 +1482,7 @@
                         *ngIf="activeTab == 'customer'"
                         class="mr-0"
                         (click)="openAddAndManage('customer')"
+                        aria-label="new customer"
                     >
                         {{ localeData?.new_customer }}
                     </button>
@@ -1445,6 +1492,7 @@
                         *ngIf="activeTab == 'vendor'"
                         class="mr-0"
                         (click)="openAddAndManage('vendor')"
+                        aria-label="new vendor"
                     >
                         {{ localeData?.new_vendor }}
                     </button>
@@ -1525,7 +1573,12 @@
         let-formControl="formControl"
     >
         <div class="align-items-center d-flex" [hidden]="show">
-            <button mat-icon-button (click)="toggleSearch(fieldName)" class="customer-vendor-name-search-icon">
+            <button
+                mat-icon-button
+                aria-label="search"
+                (click)="toggleSearch(fieldName)"
+                class="customer-vendor-name-search-icon"
+            >
                 <span class="icon-search"></span>
             </button>
             <span> {{ title }}</span>

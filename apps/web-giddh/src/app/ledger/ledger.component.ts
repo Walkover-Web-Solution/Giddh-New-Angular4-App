@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestro
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
-import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS } from 'apps/web-giddh/src/app/app.constant';
+import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS } from 'apps/web-giddh/src/app/app.constant';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT_MM_DD_YYYY } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { ShSelectComponent } from 'apps/web-giddh/src/app/theme/ng-virtual-select/sh-select.component';
 import * as dayjs from 'dayjs';
@@ -193,15 +193,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     /** Stores the search results pagination details */
     public searchResultsPaginationData = {
         page: 0,
-        totalPages: 0,
+        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
         query: ''
     };
     /** Stores the default search results pagination details (required only for passing
      * default search pagination details to Update ledger component) */
     public defaultResultsPaginationData = {
         page: 0,
-        totalPages: 0,
-        query: ''
+        count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT,
+        query: '',
     };
     /** No results found label for dynamic search */
     public noResultsFoundLabel = SearchResultText.NewSearch;
@@ -288,6 +288,23 @@ export class LedgerComponent implements OnInit, OnDestroy {
         reLoginRequired: false,
         itemId: ''
     };
+    /** True if ledger account belongs to sundry debtor/creditor */
+    private isSundryDebtorCreditor: boolean = false;
+    /** True if need to generate einvoice in case of update ledger entry */
+    public generateEInvoice: boolean = null;
+    /** Holds response of bulk generate popup */
+    private isCombined: boolean = null;
+    /** Duplicate copy of entry unique names for bulk action variable */
+    public entryUniqueNamesForBulkActionDuplicateCopy: string[] = [];
+    /** False if there is no data in account search */
+    public isAccountSearchData: boolean = true;
+    /** Set of selected debit transaction IDs.*/
+    public selectedDebitTransactionIds = new Set<string>();
+    /**  Set of selected credit transaction IDs.*/
+    public selectedCreditTransactionIds = new Set<string>();
+    /** String representing the selected bank transaction while hovering. */
+    public selectedBankTrxWhileHovering: string;
+
 
     constructor(
         private store: Store<AppState>,
@@ -404,6 +421,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             txn.particular = undefined;
             return;
         }
+
         txn.isStock = Boolean(e.additional?.stock);
         txn.stockUniqueName = e.additional?.stock?.uniqueName;
         txn.oppositeAccountUniqueName = e.additional?.uniqueName;
@@ -439,8 +457,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.lc.activeAccount$.pipe(takeUntil(this.destroyed$)).subscribe(ledgerAccount => {
                 if (ledgerAccount?.parentGroups?.length && ["sundrycreditors", "sundrydebtors"].includes(ledgerAccount?.parentGroups[1]?.uniqueName)) {
                     this.enableAutopaid = true;
+                    this.isSundryDebtorCreditor = true;
                 } else {
                     this.enableAutopaid = false;
+                    this.isSundryDebtorCreditor = false;
                 }
             });
         } else {
@@ -726,6 +746,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.isLedgerCreateSuccess$.subscribe(s => {
             if (s) {
+                this.generateEInvoice = null;
                 this.toaster.showSnackBar("success", this.localeData?.entry_created, this.commonLocaleData?.app_success);
                 this.lc.showNewLedgerPanel = false;
                 this.lc.showBankLedgerPanel = false;
@@ -771,6 +792,35 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.store.pipe(select(state => state.ledger.showBulkGenerateVoucherConfirmation), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.message) {
+                this.store.dispatch(this.ledgerActions.setBulkGenerateConfirm(null));
+
+                let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                    data: {
+                        title: this.commonLocaleData?.app_confirm,
+                        body: response?.message,
+                        ok: this.commonLocaleData?.app_yes,
+                        cancel: this.commonLocaleData?.app_no,
+                        permanentlyDeleteMessage: ' ',
+                    },
+                    role: 'alertdialog',
+                    ariaLabel: 'confirmation'
+                });
+
+                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    if (typeof response === "boolean") {
+                        this.entryUniqueNamesForBulkAction = cloneDeep(this.entryUniqueNamesForBulkActionDuplicateCopy);
+                        if (response) {
+                            this.onSelectInvoiceGenerateOption(this.isCombined, true);
+                        } else {
+                            this.onSelectInvoiceGenerateOption(this.isCombined, false);
+                        }
+                    }
+                });
+            }
+        });
+
         this.store.pipe(select(s => s.company && s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
         });
@@ -788,8 +838,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         body: response?.message,
                         ok: this.commonLocaleData?.app_yes,
                         cancel: this.commonLocaleData?.app_no,
-                        permanentlyDeleteMessage: ' '
-                    }
+                        permanentlyDeleteMessage: ' ',
+                    },
+                    role: 'alertdialog',
+                    ariaLabel: 'confirmation'
                 });
 
                 dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -797,6 +849,34 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.confirmMergeEntry();
                     } else {
                         this.cancelMergeEntry();
+                    }
+                });
+            } else if (response?.status === "einvoice-confirm") {
+                let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                    data: {
+                        title: this.commonLocaleData?.app_confirm,
+                        body: response?.message,
+                        ok: this.commonLocaleData?.app_yes,
+                        cancel: this.commonLocaleData?.app_no,
+                        permanentlyDeleteMessage: ' ',
+                    },
+                    role: 'alertdialog',
+                    ariaLabel: 'confirmation'
+                });
+
+                dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                    if (response) {
+                        if (this.updateLedgerModalDialogRef && this.dialog.getDialogById(this.updateLedgerModalDialogRef.id)) {
+                            this.generateEInvoice = true;
+                        } else {
+                            this.confirmEInvoiceEntry(true);
+                        }
+                    } else {
+                        if (this.updateLedgerModalDialogRef && this.dialog.getDialogById(this.updateLedgerModalDialogRef.id)) {
+                            this.generateEInvoice = false;
+                        } else {
+                            this.confirmEInvoiceEntry(false);
+                        }
                     }
                 });
             }
@@ -974,6 +1054,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.lc.currentBlankTxn.showDropdown = false;
         }
         this.selectedTrxWhileHovering = '';
+        this.selectedBankTrxWhileHovering = '';
         this.lc.showBankLedgerPanel = false;
         this.needToReCalculate.next(false);
         this.lc.currentBlankTxn = null;
@@ -1068,6 +1149,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public getTransactionData() {
         this.closingBalanceBeforeReconcile = null;
+        this.generateEInvoice = null;
         if (this.trxRequest?.accountUniqueName) {
             this.store.dispatch(this.ledgerActions.GetLedgerBalance(this.trxRequest));
             this.store.dispatch(this.ledgerActions.GetTransactions(this.trxRequest));
@@ -1262,7 +1344,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public handleScrollEnd(): void {
-        if (this.searchResultsPaginationData.page < this.searchResultsPaginationData.totalPages) {
+        if (this.searchResultsPaginationData.page) {
             this.onSearchQueryChanged(
                 this.searchResultsPaginationData.query,
                 this.searchResultsPaginationData.page + 1,
@@ -1278,7 +1360,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         }) || [];
                         this.defaultSuggestions = this.defaultSuggestions.concat(...results);
                         this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
-                        this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
                     }
                 });
         }
@@ -1294,8 +1375,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 accountUniqueName: this.lc.accountUnq,
                 advanceSearchRequest: this.advanceSearchRequest,
                 from: this.shareLedgerDates?.from,
-                to: this.shareLedgerDates?.to
-            }
+                to: this.shareLedgerDates?.to,
+            },
+            role: 'alertdialog',
+            ariaLabel: 'share'
         });
     }
 
@@ -1318,8 +1401,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
             width: '630px',
             data: {
                 accountUniqueName: this.lc.accountUnq,
-                advanceSearchRequest: this.advanceSearchRequest
-            }
+                advanceSearchRequest: this.advanceSearchRequest,
+            },
+            role: 'alertdialog',
+            ariaLabel: 'export'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -1478,7 +1563,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public loadUpdateLedgerComponent() {
         this.updateLedgerModalDialogRef = this.dialog.open(this.updateLedgerModal, {
             width: '70%',
-            height: '650px'
+            height: '650px',
+            role: 'alertdialog',
+            ariaLabel: 'update'
         });
 
         this.updateLedgerModalDialogRef.afterClosed().pipe(take(1)).subscribe(() => {
@@ -1497,6 +1584,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public onSearchQueryChanged(query: string, page: number = 1, withStocks: boolean = true, successCallback?: Function): void {
+
         this.searchResultsPaginationData.query = query;
         if (!this.preventDefaultScrollApiCall &&
             (query || (this.defaultSuggestions && this.defaultSuggestions.length === 0) || successCallback)) {
@@ -1510,41 +1598,44 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 q: encodeURIComponent(query),
                 page,
                 withStocks,
-                stockAccountUniqueName: encodeURIComponent(accountUniqueName) || undefined
+                stockAccountUniqueName: encodeURIComponent(accountUniqueName) || undefined,
+                count: ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT
             }
-            this.searchService.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                if (data && data.body && data.body.results) {
-                    const searchResults = data.body.results.map(result => {
-                        return {
-                            value: result.stock ? `${result?.uniqueName}#${result?.stock?.uniqueName}` : result?.uniqueName,
-                            label: result.stock ? `${result?.name} (${result?.stock?.name})` : result?.name,
-                            additional: result
+            if (this.isAccountSearchData) {
+                this.searchService.searchAccount(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                    if (!data?.body?.results?.length || (data?.body?.results?.length && ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT !== data?.body?.count)) {
+                        this.isAccountSearchData = false;
+                    }
+                    if (data && data.body && data.body.results) {
+                        const searchResults = data.body.results.map(result => {
+                            return {
+                                value: result.stock ? `${result?.uniqueName}#${result?.stock?.uniqueName}` : result?.uniqueName,
+                                label: result.stock ? `${result?.name} (${result?.stock?.name})` : result?.name,
+                                additional: result
+                            }
+                        }) || [];
+                        this.noResultsFoundLabel = SearchResultText.NotFound;
+                        if (page === 1) {
+                            this.searchResults = searchResults;
+                        } else {
+                            this.searchResults = [
+                                ...this.searchResults,
+                                ...searchResults
+                            ];
                         }
-                    }) || [];
-                    this.noResultsFoundLabel = SearchResultText.NotFound;
-                    if (page === 1) {
-                        this.searchResults = searchResults;
-                    } else {
-                        this.searchResults = [
-                            ...this.searchResults,
-                            ...searchResults
-                        ];
+                        this.searchResultsPaginationData.page = data.body.page;
+                        if (successCallback) {
+                            successCallback(data.body.results);
+                        } else {
+                            this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
+                        }
+                        this.cdRf.detectChanges();
                     }
-                    this.searchResultsPaginationData.page = data.body.page;
-                    this.searchResultsPaginationData.totalPages = data.body.totalPages;
-                    if (successCallback) {
-                        successCallback(data.body.results);
-                    } else {
-                        this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
-                        this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
-                    }
-                    this.cdRf.detectChanges();
-                }
-            });
+                });
+            }
         } else {
             this.searchResults = [...this.defaultSuggestions];
             this.searchResultsPaginationData.page = this.defaultResultsPaginationData.page;
-            this.searchResultsPaginationData.totalPages = this.defaultResultsPaginationData.totalPages;
             this.preventDefaultScrollApiCall = true;
             setTimeout(() => {
                 this.preventDefaultScrollApiCall = false;
@@ -1562,7 +1653,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.searchResults = [...this.defaultSuggestions];
         this.searchResultsPaginationData = {
             page: 0,
-            totalPages: 0,
+            count: 0,
             query: ''
         };
         this.noResultsFoundLabel = SearchResultText.NewSearch;
@@ -1584,7 +1675,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
 
         this.advanceSearchDialogRef = this.dialog.open(this.advanceSearchModal, {
-            width: '980px'
+            width: '980px',
+            role: 'alertdialog',
+            ariaLabel: 'advance'
         });
     }
 
@@ -1679,13 +1772,66 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.ledgerActions.SelectDeSelectAllEntries(type, ev?.checked));
     }
 
-    public selectEntryForBulkAction(ev: any, entryUniqueName: string) {
-        if (entryUniqueName) {
-            if (ev?.checked) {
-                this.entryUniqueNamesForBulkAction.push(entryUniqueName);
+    /**
+     * This will be use for select all bank entries
+     *
+     * @param {*} ev
+     * @param {('debit' | 'credit' | 'all')} type
+     * @memberof LedgerComponent
+     */
+    public selectAllBankEntries(event: any, type: 'debit' | 'credit' | 'all'): void {
+        if (event?.checked) {
+            if (type === 'debit') {
+                this.lc.bankTransactionsDebitData.forEach(response => {
+                    this.selectedDebitTransactionIds.add(response.transactions[0]?.id);
+                });
             } else {
-                let itemIndx = this.entryUniqueNamesForBulkAction?.findIndex((item) => item === entryUniqueName);
-                this.entryUniqueNamesForBulkAction?.splice(itemIndx, 1);
+                this.lc.bankTransactionsCreditData.forEach(response => {
+                    this.selectedCreditTransactionIds.add(response.transactions[0]?.id);
+                });
+            }
+        } else {
+            if (type === 'debit') {
+                this.selectedDebitTransactionIds.clear();
+            } else {
+                this.selectedCreditTransactionIds.clear();
+            }
+        }
+    }
+
+    /**
+     * This will be use for bank entry hovered
+     *
+     * @param {string} selectedBankTxnUniqueName
+     * @memberof LedgerComponent
+     */
+    public bankEntryHovered(selectedBankTxnUniqueName: string): void {
+        this.selectedBankTrxWhileHovering = selectedBankTxnUniqueName;
+    }
+
+    /**
+     * This will be use for selecting bank entry
+     *
+     * @param {*} ev
+     * @param {string} entryUniqueName
+     * @param {*} id
+     * @param {string} type
+     * @memberof LedgerComponent
+     */
+    public selectEntryForBulkAction(event: any, entryUniqueName: string, id: any, type: string): void {
+        if (entryUniqueName) {
+            if (event?.checked) {
+                if (type === 'credit') {
+                    this.selectedCreditTransactionIds.add(id);
+                } else if (type === 'debit') {
+                    this.selectedDebitTransactionIds.add(id);
+                }
+            } else {
+                if (type === 'credit') {
+                    this.selectedCreditTransactionIds.delete(id);
+                } else if (type === 'debit') {
+                    this.selectedDebitTransactionIds.delete(id);
+                }
             }
         }
     }
@@ -1693,6 +1839,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public entryHovered(uniqueName: string) {
         this.selectedTrxWhileHovering = uniqueName;
     }
+
 
     public entrySelected(ev: any, uniqueName: string, type: string) {
         const totalLength = (type === 'debit') ? this.ledgerTransactions.debitTransactions?.length :
@@ -1752,7 +1899,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 cancel: this.commonLocaleData?.app_no,
                 permanentlyDeleteMessage: this.localeData?.delete_entries_content
             },
-            width: '650px'
+            width: '650px',
+            role: 'alertdialog',
+            ariaLabel: 'confirmation'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -1777,7 +1926,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 body: this.localeData?.select_voucher_generate,
                 button1Text: this.commonLocaleData?.app_generate_multiple,
                 button2Text: this.commonLocaleData?.app_generate_compound
-            }
+            },
+            role: 'alertdialog',
+            ariaLabel: 'bulk'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -1816,12 +1967,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
-    public onSelectInvoiceGenerateOption(isCombined: boolean) {
+    public onSelectInvoiceGenerateOption(isCombined: boolean, generateEInvoice?: boolean) {
+        this.isCombined = isCombined;
         this.entryUniqueNamesForBulkAction = _.uniq(this.entryUniqueNamesForBulkAction);
+        this.entryUniqueNamesForBulkActionDuplicateCopy = cloneDeep(this.entryUniqueNamesForBulkAction);
         if (this.voucherApiVersion === 2) {
-            this.store.dispatch(this.ledgerActions.GenerateBulkLedgerInvoice({ combined: isCombined }, { entryUniqueNames: _.cloneDeep(this.entryUniqueNamesForBulkAction) }, 'ledger'));
+            this.store.dispatch(this.ledgerActions.GenerateBulkLedgerInvoice({ combined: isCombined }, { entryUniqueNames: _.cloneDeep(this.entryUniqueNamesForBulkAction), generateEInvoice: generateEInvoice }, 'ledger'));
         } else {
-            this.store.dispatch(this.ledgerActions.GenerateBulkLedgerInvoice({ combined: isCombined }, [{ accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction) }], 'ledger'));
+            this.store.dispatch(this.ledgerActions.GenerateBulkLedgerInvoice({ combined: isCombined }, [{ accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction), generateEInvoice: generateEInvoice }], 'ledger'));
         }
     }
 
@@ -1846,7 +1999,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 top: '0',
             },
             width: '760px',
-            disableClose: true
+            disableClose: true,
+            role: 'alertdialog',
+            ariaLabel: 'aside'
         });
 
         this.ledgerAsidePaneModal.afterClosed().pipe(take(1)).subscribe(response => {
@@ -1870,7 +2025,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 maxWidth: '760px',
                 width: '100%',
                 height: '100vh',
-                maxHeight: '100vh'
+                maxHeight: '100vh',
+                role: 'alertdialog',
+                ariaLabel: 'aside'
             });
             this.cdRf.detectChanges();
         } else {
@@ -2259,7 +2416,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
             }) || [];
             this.defaultResultsPaginationData.page = this.searchResultsPaginationData.page;
-            this.defaultResultsPaginationData.totalPages = this.searchResultsPaginationData.totalPages;
             this.searchResults = [...this.defaultSuggestions];
             this.noResultsFoundLabel = SearchResultText.NotFound;
         });
@@ -2292,7 +2448,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 accountUniqueName: this.lc.accountUnq,
                 localeData: this.localeData,
                 commonLocaleData: this.commonLocaleData
-            }
+            },
+            role: 'alertdialog',
+            ariaLabel: 'import'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -2418,7 +2576,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 body: this.localeData?.delete_bank_transactions_title,
                 ok: this.commonLocaleData?.app_yes,
                 cancel: this.commonLocaleData?.app_no
-            }
+            },
+            role: 'alertdialog',
+            ariaLabel: 'confirmation'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -2434,11 +2594,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public deleteBankTransactions(): void {
-        let transactionIds = this.entryUniqueNamesForBulkAction.map((transaction: any) => transaction?.transactionId);
-        let params = { transactionIds: transactionIds };
+        let params = { transactionIds: [...this.selectedCreditTransactionIds, ...this.selectedDebitTransactionIds] };
         this.ledgerService.deleteBankTransactions(this.trxRequest.accountUniqueName, params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.getBankTransactions();
+                this.selectedCreditTransactionIds.clear();
+                this.selectedDebitTransactionIds.clear();
                 this.toaster.showSnackBar("success", response?.body);
             } else {
                 this.toaster.showSnackBar("error", response?.message);
@@ -2528,6 +2689,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * This will confirm E-Invoice voucher generation
+     *
+     * @memberof LedgerComponent
+     */
+    public confirmEInvoiceEntry(generateEInvoice: boolean): void {
+        this.lc.blankLedger.generateEInvoice = generateEInvoice;
+        this.saveBlankTransaction();
+    }
+
+    /**
      * Download files (voucher/attachment)
      *
      * @param {*} transaction
@@ -2573,7 +2744,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.selectedItem = transaction;
         let dialogRef = this.dialog.open(templateRef, {
             width: '70%',
-            height: '790px'
+            height: '790px',
+            role: 'alertdialog',
+            ariaLabel: 'template'
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -2642,7 +2815,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (event.additional?.stock) {
             requestObject = {
                 stockUniqueName: event.additional.stock?.uniqueName,
-                oppositeAccountUniqueName: event.additional?.uniqueName,
+                oppositeAccountUniqueName: event.additional.uniqueName,
+                customerUniqueName: this.isSundryDebtorCreditor ? this.lc.activeAccount?.uniqueName : event.additional.uniqueName,
                 variantUniqueName
             };
         }
@@ -2701,6 +2875,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 let stockUniqueName = '';
                 let stockUnitUniqueName = '';
 
+                txn.isMrpDiscountApplied = false;
+
                 //#region unit rates logic
                 if (txn?.selectedAccount?.stock) {
                     const defaultUnitRates = this.generalService.voucherApiVersion === 1 ? txn.selectedAccount?.stock?.unitRates : txn.selectedAccount?.stock?.variant?.unitRates;
@@ -2717,6 +2893,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     stockUniqueName = txn.selectedAccount.stock?.uniqueName;
                     unitCode = defaultUnit.code;
                     stockUnitUniqueName = defaultUnitRates[0].stockUnitUniqueName;
+
+                    const hasMrpDiscount = txn.selectedAccount.stock.variant?.unitRates?.filter(variantDiscount => variantDiscount?.stockUnitUniqueName === stockUnitUniqueName);
+                    if (hasMrpDiscount?.length) {
+                        rate = Number((hasMrpDiscount[0].rate / this.lc.blankLedger?.exchangeRate).toFixed(RATE_FIELD_PRECISION));
+                    }
                 }
                 if (stockName && stockUniqueName) {
                     txn.inventory = {
@@ -2724,7 +2905,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             name: stockName,
                             uniqueName: stockUniqueName,
                         },
-                        variant: { uniqueName: txn.selectedAccount.stock.variant?.uniqueName },
+                        variant: { uniqueName: txn.selectedAccount.stock.variant?.uniqueName, variantDiscount: txn.selectedAccount.stock.variant?.variantDiscount },
                         quantity: 1,
                         unit: {
                             stockUnitCode: unitCode,
@@ -2768,6 +2949,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof SettingIntegrationComponent
      */
     public getPlaidLinkToken(itemId?: any): void {
-        this.store.dispatch(this.commonAction.reAuthPlaid({itemId: itemId, reauth: true}));
+        this.store.dispatch(this.commonAction.reAuthPlaid({ itemId: itemId, reauth: true }));
     }
 }

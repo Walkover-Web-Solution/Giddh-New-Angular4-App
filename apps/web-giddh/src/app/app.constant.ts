@@ -1,5 +1,6 @@
 import * as dayjs from 'dayjs';
 import * as quarterOfYear from 'dayjs/plugin/quarterOfYear' // load on demand
+import { ajax } from 'rxjs/ajax';
 dayjs.extend(quarterOfYear) // use plugin
 
 export const Configuration = {
@@ -71,6 +72,8 @@ export enum OnBoardingType {
 export const PAGINATION_LIMIT = 50;
 /** API default count limit */
 export const API_COUNT_LIMIT = 20;
+/** Vouchers pagination limit  */
+export const ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT = 200;
 
 /** SubVoucher type */
 export enum SubVoucher {
@@ -245,6 +248,10 @@ export const HIGH_RATE_FIELD_PRECISION = 16;
 
 /** Regex to remove trailing zeros from a string representation of number */
 export const REMOVE_TRAILING_ZERO_REGEX = /^([\d,' ]*)$|^([\d,' ]*)\.0*$|^([\d,' ]+\.[0-9]*?)0*$/;
+
+/** Regex for mobile number */
+export const PHONE_NUMBER_REGEX = /^[0-9-+()\/\\ ]+$/;
+
 
 /** Type of voucher that is adjusted */
 export enum AdjustedVoucherType {
@@ -530,18 +537,94 @@ export enum BootstrapToggleSwitch {
     Off = 'gray',
     Size = 'mini'
 }
-
-export const MOBILE_NUMBER_UTIL_URL = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js';
-export const MOBILE_NUMBER_SELF_URL = 'https://api.db-ip.com/v2/free/self';
+export const MOBILE_NUMBER_SELF_URL = `https://api.db-ip.com/v2/free/self`;
 export const MOBILE_NUMBER_IP_ADDRESS_URL = 'http://ip-api.com/json/';
 export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
-export const OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
 
+export const MOBILE_NUMBER_UTIL_URL = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js';
+export const INTL_INPUT_OPTION = {
+    nationalMode: true,
+    utilsScript: MOBILE_NUMBER_UTIL_URL,
+    autoHideDialCode: false,
+    separateDialCode: false,
+    initialCountry: 'auto',
+    geoIpLookup: (success: any, failure: any) => {
+        let countryCode = 'in';
+        const fetchIPApi = ajax({
+            url: MOBILE_NUMBER_SELF_URL,
+            method: 'GET',
+        });
+
+        fetchIPApi.subscribe({
+            next: (res: any) => {
+                if (res?.response?.ipAddress) {
+                    const fetchCountryByIpApi = ajax({
+                        url: MOBILE_NUMBER_IP_ADDRESS_URL + res.response.ipAddress,
+                        method: 'GET',
+                    });
+
+                    fetchCountryByIpApi.subscribe({
+                        next: (fetchCountryByIpApiRes: any) => {
+                            if (fetchCountryByIpApiRes?.response?.countryCode) {
+                                return success(fetchCountryByIpApiRes.response.countryCode);
+                            } else {
+                                return success(countryCode);
+                            }
+                        },
+                        error: (fetchCountryByIpApiErr) => {
+                            const fetchCountryByIpInfoApi = ajax({
+                                url: MOBILE_NUMBER_ADDRESS_JSON_URL +`${res.response.ipAddress}/json`,
+                                method: 'GET',
+                            });
+
+                            fetchCountryByIpInfoApi.subscribe({
+                                next: (fetchCountryByIpInfoApiRes: any) => {
+                                    if (fetchCountryByIpInfoApiRes?.response?.country) {
+                                        return success(fetchCountryByIpInfoApiRes.response.country);
+                                    } else {
+                                        return success(countryCode);
+                                    }
+                                },
+                                error: (fetchCountryByIpInfoApiErr) => {
+                                    return success(countryCode);
+                                },
+                            });
+                        },
+                    });
+                } else {
+                    return success(countryCode);
+                }
+            },
+            error: (err) => {
+                return success(countryCode);
+            },
+        });
+    },
+};
+
+
+export const OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
 export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1.amazonaws.com/sample-file-';
-
 export const OTP_WIDGET_ID_NEW = '33686b716134333831313239';
 export const OTP_WIDGET_TOKEN_NEW = '205968TmXguUAwoD633af103P1';
 export enum BROADCAST_CHANNELS {
     REAUTH_PLAID_SUCCESS = 'REAUTH_PLAID_SUCCESS'
-}
+};
+export const QZ_CERTIFICATE = "https://giddh-plugin-resources.s3.ap-south-1.amazonaws.com/digital-certificate.txt";
+export const QZ_PEM = "https://giddh-plugin-resources.s3.ap-south-1.amazonaws.com/private-key.pem";
+export enum QZ_FILES {
+    MacOS = 'https://giddh-plugin-resources.s3.ap-south-1.amazonaws.com/qz-tray.pkg',
+    Windows = 'https://giddh-plugin-resources.s3.ap-south-1.amazonaws.com/qz-tray.exe'
+};
+export enum SUPPORTED_OPERATING_SYSTEMS {
+    MacOS = 'MacOS',
+    Windows = 'Windows'
+};
+
+export const ICICI_ALLOWED_COMPANIES = [
+    'mitti2in16805084405400lx4s8',
+    'walkovin164863366504908yve0',
+    'iciciiin16929619553650svnjv',
+    'aaaain16192663354510ja2o4'
+];

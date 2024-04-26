@@ -5,13 +5,27 @@ import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { GeneralActions } from '../actions/general/general.actions';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+
 
 @Component({
     selector: 'onboarding-component',
     templateUrl: './onboarding.component.html',
-    styleUrls: ['./onboarding.component.scss']
+    styleUrls: ['./onboarding.component.scss'],
+    animations: [
+        trigger("slideInOut", [
+            state("in", style({
+                transform: "translate3d(0, 0, 0)",
+            })),
+            state("out", style({
+                transform: "translate3d(100%, 0, 0)",
+            })),
+            transition("in => out", animate("400ms ease-in-out")),
+            transition("out => in", animate("400ms ease-in-out")),
+        ]),
+    ],
 })
 
 export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -25,6 +39,16 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Account update modal state */
+    public accountAsideMenuState: string = "out";
+    /** Account group unique name */
+    public selectedGroupForCreateAcc: string = "";
+    /** Holds account details */
+    public accountDetails: any;
+    /** Observable for create account success*/
+    private createAccountIsSuccess$: Observable<boolean>;
+    /** Holds true if current company country is plaid supported country */
+    public isPlaidSupportedCountry: boolean;
 
     constructor(
         private _router: Router, private _generalService: GeneralService,
@@ -32,7 +56,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         private settingsProfileActions: SettingsProfileActions,
         private generalActions: GeneralActions
     ) {
-
+        this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
@@ -41,6 +65,15 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.companyCountry = res.country;
+                this.isPlaidSupportedCountry = this._generalService.checkCompanySupportPlaid(res.country);
+            }
+        });
+
+        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                if (this.accountAsideMenuState === "in") {
+                    this.toggleAccountAsidePane();
+                }
             }
         });
 
@@ -51,10 +84,38 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         this._generalService.IAmLoaded.next(true);
     }
 
+    /**
+    * Toggle's fixed class in body
+    *
+    * @memberof OnboardingComponent
+    */
+    public toggleBodyClass() {
+        if (this.accountAsideMenuState === "in") {
+            document.querySelector("body").classList.add("fixed");
+        } else {
+            document.querySelector("body").classList.remove("fixed");
+        }
+    }
+
+    /**
+     * Toggle's account update modal
+     *
+     * @memberof OnboardingComponent
+     */
+
+    public toggleAccountAsidePane(event?: any): void {
+        if (event) {
+            event.preventDefault();
+        }
+        this.accountAsideMenuState = this.accountAsideMenuState === "out" ? "in" : "out";
+        this.selectedGroupForCreateAcc = "bankaccounts";
+        this.toggleBodyClass();
+    }
+
     public selectConfigureBank() {
         if (this.companyCountry) {
-                this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/integration/payment'));
-                this._router.navigate(['pages/settings/integration/payment'], { replaceUrl: true });
+            this.store.dispatch(this.generalActions.setAppTitle('/pages/settings/integration/payment'));
+            this._router.navigate(['pages/settings/integration/payment'], { replaceUrl: true });
 
 
         } else {
@@ -81,6 +142,10 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.CompanySettingsObj = inventorySetting;
             }
         });
+    }
+
+    public openCreateAccountAsidepan(): void {
+        this.toggleAccountAsidePane();
     }
 
     /**

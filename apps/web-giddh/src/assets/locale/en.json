@@ -36,6 +36,7 @@
     "app_send_email": "Send Email",
     "app_gstin": "GSTIN",
     "app_trn": "TRN",
+    "app_vat": "VAT",
     "app_no_record_found": "No Record Found !!",
     "app_no_records_found": "No Records Found",
     "app_pay_now": "Pay Now",
@@ -80,6 +81,7 @@
     "app_custom_range": "Custom Range",
     "app_select_range": "Select Range",
     "app_quantity": "Quantity",
+    "app_default_quantity": "Default Quantity",
     "app_output_quantity": "Output Quantity",
     "app_voucher_types": {
         "sales": "Sales",
@@ -329,6 +331,7 @@
     "app_vehicle_no": "Vehicle No",
     "app_mode": "Mode",
     "app_print": "Print",
+    "app_print_thermal": "Print Receipt",
     "app_export_pdf": "Export Pdf",
     "app_create_credit_note": "Create Credit Note",
     "app_receipt_no": "Receipt No.",
@@ -653,7 +656,8 @@
         "warehouse_created": "New warehouse created successfully.",
         "warehouse_updated": "Warehouse updated successfully.",
         "voucher_saved": "Voucher generated successfully",
-        "file_uploaded": "File uploaded successfully"
+        "file_uploaded": "File uploaded successfully",
+        "auth_hmrc_success_message": "Access token generated and saved successfully. You are now Connected to HMRC Portal."
     },
     "app_supported_languages": {
         "english": "English",
@@ -716,5 +720,9 @@
     "app_hostname": "Hostname",
     "app_copied":"Copied...",
     "domain_verification":"Domain verification for outbound mail",
-    "app_renew_bank_connection": "Renew Bank Connection"
+    "app_renew_bank_connection": "Renew Bank Connection",
+    "app_select_printer": "Select Printer",
+    "app_help": "Help",
+    "app_applicable_date": "Applicable date",
+    "app_name_placeholder": "Enter Name"
 }

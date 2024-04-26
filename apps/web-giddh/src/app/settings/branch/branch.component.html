@@ -84,6 +84,8 @@
                                             mat-button
                                             [matMenuTriggerFor]="menu"
                                             class="icon-dots-three-vertical dropdown-toggle cp mr-0"
+                                            role="button"
+                                            aria-label="dropdown button"
                                         ></button>
                                         <mat-menu #menu="matMenu">
                                             <button mat-menu-item (click)="updateBranch(branch)">

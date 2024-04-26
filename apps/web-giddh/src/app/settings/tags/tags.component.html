@@ -216,10 +216,10 @@
                 </div>
                 <div class="modal-body" [innerHTML]="confirmationMessage"></div>
                 <div class="modal-footer clearfix">
-                    <button (click)="onUserConfirmation(true)" class="btn btn-sm btn-success">
+                    <button aria-label="yes" (click)="onUserConfirmation(true)" class="btn btn-sm btn-success">
                         {{ commonLocaleData?.app_yes }}
                     </button>
-                    <button (click)="onUserConfirmation(false)" class="btn btn-sm btn-danger">
+                    <button aria-label="no" (click)="onUserConfirmation(false)" class="btn btn-sm btn-danger">
                         {{ commonLocaleData?.app_no }}
                     </button>
                 </div>

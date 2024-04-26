@@ -8,36 +8,365 @@
     <div validateSectionPermission [hasPermission]="hasInvoiceSettingPermissions" validateSubscription>
         <section id="invoice-setting">
             <tabset class="tab-integration" #staticTabsSettings>
-                <!-- region general tab-->
-                <tab>
-                    <ng-template tabHeading> <span class="icon-chat2"></span> {{ localeData?.general }} </ng-template>
+                <ng-container *ngIf="selectedVoucher !== 'debit note' && selectedVoucher !== 'credit note'">
+                    <!-- region general tab-->
+                    <tab>
+                        <ng-template tabHeading>
+                            <span class="icon-chat2"></span> {{ localeData?.general }}
+                        </ng-template>
 
-                    <div class="general-tab single-tab-block">
-                        <div class="box clearfix">
-                            <form class="row" autocomplete="off">
-                                <div class="col-sm-12">
-                                    <h4 class="clearfix bd-rb font-16">
-                                        {{ localeData?.general }}
-                                        <span>{{ localeData?.general_settings_applicable }} </span>
-                                    </h4>
+                        <div class="general-tab single-tab-block">
+                            <div class="box clearfix">
+                                <form class="row" autocomplete="off">
+                                    <div class="col-sm-12">
+                                        <h4 class="clearfix bd-rb font-16">
+                                            {{ localeData?.general }}
+                                            <span class="font-12">{{ localeData?.general_settings_applicable }} </span>
+                                        </h4>
+
+                                        <div class="clearfix pd-t1">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                                    <mat-slide-toggle
+                                                        aria-label="enable narration onin voucher"
+                                                        [(ngModel)]="invoiceSetting.enableNarrationOnInvAndVoucher"
+                                                        name="enableNarrationOnInvAndVoucher"
+                                                        class="show-on-mobile"
+                                                        color="primary"
+                                                    >
+                                                    </mat-slide-toggle>
+                                                    <label class="left-gap">{{
+                                                        localeData?.narration_on_mobile
+                                                    }}</label>
+                                                </div>
+
+                                                <div class="col-sm-6 col-md-9 col-lg-8 form-group mr-t05">
+                                                    <mat-slide-toggle
+                                                        aria-label="enable narration onin voucher"
+                                                        [(ngModel)]="invoiceSetting.enableNarrationOnInvAndVoucher"
+                                                        name="enableNarrationOnInvAndVoucher"
+                                                        class="hide-on-mobile"
+                                                        color="primary"
+                                                    >
+                                                    </mat-slide-toggle>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="clearfix pd-t1">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                                    <mat-slide-toggle
+                                                        aria-label="enable narration onin voucher"
+                                                        [(ngModel)]="invoiceSetting.voucherAddressManualEnabled"
+                                                        name="voucherAddressManualEnabled"
+                                                        class="show-on-mobile"
+                                                        color="primary"
+                                                    >
+                                                    </mat-slide-toggle>
+                                                    <label class="left-gap">{{
+                                                        localeData?.add_address_manually_on_voucher
+                                                    }}</label>
+                                                </div>
+
+                                                <div class="col-sm-6 col-md-9 col-lg-8 form-group mr-t05">
+                                                    <mat-slide-toggle
+                                                        aria-label="enable narration onin voucher"
+                                                        [(ngModel)]="invoiceSetting.voucherAddressManualEnabled"
+                                                        name="voucherAddressManualEnabled"
+                                                        class="hide-on-mobile"
+                                                        color="primary"
+                                                    >
+                                                    </mat-slide-toggle>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </tab>
+                    <!-- endregion -->
+
+                    <!-- region Email tab-->
+                    <tab>
+                        <ng-template tabHeading>
+                            <span class="icon-mail"></span> {{ commonLocaleData?.app_email }}
+                        </ng-template>
+
+                        <div class="email-tab single-tab-block">
+                            <div class="box clearfix mb-2">
+                                <h4 class="clearfix bd-rb font-16">
+                                    {{ localeData?.email_sms }}
+                                    <span>{{ localeData?.general_settings_applicable }}</span>
+                                </h4>
+
+                                <div class="clearfix">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
+                                            <label>{{ localeData?.from_email }}</label>
+                                        </div>
+
+                                        <div class="col-sm-12 col-md-12 col-lg-9">
+                                            <div class="row">
+                                                <div class="col-md-5 col-sm-12 col-xs-12">
+                                                    <div class="mb-0 form-group">
+                                                        <div [ngClass]="{ 'input-group': true }">
+                                                            <input
+                                                                type="email"
+                                                                class="form-control"
+                                                                [placeholder]="localeData?.enter_email"
+                                                                name="invoiceEmail"
+                                                                [(ngModel)]="invoiceSetting.email"
+                                                                (ngModelChange)="onChangeEmail($event)"
+                                                                [disabled]="invoiceSetting.emailVerified"
+                                                            />
+                                                            <span
+                                                                class="input-group-addon"
+                                                                *ngIf="!invoiceSetting.emailVerified"
+                                                                ><i
+                                                                    class="fa fa-exclamation-circle"
+                                                                    [tooltip]="localeData?.unverified"
+                                                                ></i
+                                                            ></span>
+                                                            <span
+                                                                class="input-group-addon verify-tick-icon"
+                                                                *ngIf="invoiceSetting.emailVerified"
+                                                                ><i
+                                                                    class="icon-tick"
+                                                                    [tooltip]="localeData?.verified"
+                                                                ></i
+                                                            ></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6 col-sm-12 row pl-0">
+                                                    <div
+                                                        class="btn-wrapper d-flex align-items-center justify-content-center"
+                                                    >
+                                                        <button
+                                                            aria-label="verify"
+                                                            class="btn btn-success mr-l15 mr-r15"
+                                                            (click)="verfiyEmail(invoiceSetting.email)"
+                                                            [disabled]="
+                                                                !isEmailChanged &&
+                                                                (!invoiceSetting.email ||
+                                                                    invoiceSetting.email?.length < 4)
+                                                            "
+                                                            *ngIf="!invoiceSetting.emailVerified"
+                                                        >
+                                                            {{ localeData?.verify }}
+                                                        </button>
+                                                        <span
+                                                            *ngIf="invoiceSetting.emailVerified"
+                                                            class="verified-text"
+                                                            >{{ localeData?.verified }}</span
+                                                        >
+                                                        <span
+                                                            class="delete-verified-icon"
+                                                            [ngClass]="{
+                                                                'delete-icon-opacity':
+                                                                    !invoiceSetting.email ||
+                                                                    invoiceSetting.email?.length < 4,
+                                                                'cursor-pointer': !(
+                                                                    !invoiceSetting.email ||
+                                                                    invoiceSetting.email?.length < 4
+                                                                )
+                                                            }"
+                                                            (click)="
+                                                                !(
+                                                                    !invoiceSetting.email ||
+                                                                    invoiceSetting.email?.length < 4
+                                                                )
+                                                                    ? deleteEmail(invoiceSetting.email)
+                                                                    : ''
+                                                            "
+                                                        >
+                                                            <i class="icon-trash"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="clearfix pd-t1">
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-12 col-sm-12 flex-container">
+                                            <mat-slide-toggle
+                                                aria-label="send email"
+                                                [(ngModel)]="companyEmailSettings.sendThroughGmail"
+                                                name="sendThroughGmail"
+                                                class="show-on-mobile"
+                                                [disabled]="!isGmailIntegrated"
+                                                color="primary"
+                                            >
+                                            </mat-slide-toggle>
+                                            <label class="left-gap">{{ localeData?.send_email_gmail }}</label>
+                                        </div>
+
+                                        <div class="col-lg-9 col-md-12 col-sm-12 form-group d-flex align-items-center">
+                                            <mat-slide-toggle
+                                                aria-label="integrate gmail"
+                                                [(ngModel)]="companyEmailSettings.sendThroughGmail"
+                                                name="sendThroughGmail"
+                                                class="hide-on-mobile"
+                                                [disabled]="!isGmailIntegrated"
+                                                color="primary"
+                                            >
+                                            </mat-slide-toggle>
+
+                                            <span class="ml-1 integrated-email" *ngIf="!isGmailIntegrated">
+                                                <a [href]="gmailAuthCodeUrl$ | async">{{
+                                                    localeData?.integrate_gmail
+                                                }}</a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
+                            </div>
+                        </div>
+                    </tab>
+                    <!-- endregion -->
+
+                    <!-- region estimate tab -->
+                    <tab>
+                        <ng-template tabHeading>
+                            <span class="icon-estimate1"><span class="path1"></span><span class="path2"></span></span>
+                            {{ localeData?.estimate }}
+                        </ng-template>
+
+                        <div class="estimate-tab single-tab-block">
+                            <div class="box clearfix mb-2">
+                                <h4 class="clearfix bd-rb font-16">
+                                    {{ localeData?.estimate_quotation }} <span></span>
+                                </h4>
+
+                                <div class="clearfix">
+                                    <div class="row heading-name">
+                                        <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
+                                            <label>{{ localeData?.heading_name }}<span class="red-text">*</span></label>
+                                        </div>
+
+                                        <div class="col-sm-12 col-md-12 col-lg-9">
+                                            <div>
+                                                <div>
+                                                    <div class="form-group">
+                                                        <div
+                                                            class="estimate-proforma"
+                                                            [ngClass]="{ 'input-group': true }"
+                                                        >
+                                                            <input
+                                                                type="text"
+                                                                class="form-control"
+                                                                [(ngModel)]="estimateSetting.headerName"
+                                                                [placeholder]="localeData?.eg_placeholder"
+                                                                name="estimateHeaderName"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
+                                            <label>{{ localeData?.default_expiry_days }}</label>
+                                        </div>
+
+                                        <div class="col-sm-12 col-md-12 col-lg-3">
+                                            <div class="default-expiry">
+                                                <div>
+                                                    <div class="form-group">
+                                                        <div [ngClass]="{ 'input-group': true }">
+                                                            <input
+                                                                type="tel"
+                                                                class="form-control flex-initial"
+                                                                [(ngModel)]="estimateSetting.duePeriod"
+                                                                maxlength="3"
+                                                                placeholder="00"
+                                                                decimalDigitsDirective
+                                                                name="estimate-default-expiry"
+                                                            />
+                                                            <span> {{ commonLocaleData?.app_days }} </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row next-step-estimate">
+                                        <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
+                                            <label
+                                                >{{ localeData?.estimate_next_step
+                                                }}<span class="red-text">*</span></label
+                                            >
+                                        </div>
+
+                                        <div class="col-sm-12 col-md-12 col-lg-7">
+                                            <div class="select-estimate mr-r3">
+                                                <div class="col-md-12 col-xs-12 p-0">
+                                                    <span class="p-0 mr-r3">
+                                                        <input
+                                                            id="radio-5"
+                                                            class="radio-custom cp ml-0"
+                                                            name="signatureType"
+                                                            type="radio"
+                                                            [(ngModel)]="estimateSetting.nextStepToEstimate"
+                                                            [value]="'salesorder'"
+                                                        />
+                                                        <label for="radio-5" class="radio-custom-label">{{
+                                                            localeData?.proforma
+                                                        }}</label>
+                                                    </span>
+
+                                                    <span class="p-0 mr-r3">
+                                                        <input
+                                                            id="radio-6"
+                                                            class="radio-custom cp ml-0"
+                                                            name="signatureType"
+                                                            type="radio"
+                                                            [(ngModel)]="estimateSetting.nextStepToEstimate"
+                                                            [value]="'invoice'"
+                                                        />
+                                                        <label for="radio-6" class="radio-custom-label">{{
+                                                            commonLocaleData?.app_invoice
+                                                        }}</label>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <div class="clearfix pd-t1">
                                         <div class="row">
                                             <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
                                                 <mat-slide-toggle
-                                                    [(ngModel)]="invoiceSetting.enableNarrationOnInvAndVoucher"
-                                                    name="enableNarrationOnInvAndVoucher"
+                                                    aria-label="status expiry"
+                                                    [(ngModel)]="estimateSetting.autoChangeStatusOnExp"
+                                                    name="estimateAutoChange"
                                                     class="show-on-mobile"
                                                     color="primary"
                                                 >
                                                 </mat-slide-toggle>
-                                                <label class="left-gap">{{ localeData?.narration_on_mobile }}</label>
+                                                <label class="left-gap">{{
+                                                    localeData?.auto_change_status_expiry
+                                                }}</label>
                                             </div>
 
-                                            <div class="col-sm-6 col-md-9 col-lg-8 form-group mr-t05">
+                                            <div class="col-sm-12 col-md-12 col-lg-9 form-group">
                                                 <mat-slide-toggle
-                                                    [(ngModel)]="invoiceSetting.enableNarrationOnInvAndVoucher"
-                                                    name="enableNarrationOnInvAndVoucher"
+                                                    aria-label="estimate settings"
+                                                    [(ngModel)]="estimateSetting.autoChangeStatusOnExp"
+                                                    name="estimateAutoChange"
                                                     class="hide-on-mobile"
                                                     color="primary"
                                                 >
@@ -46,300 +375,33 @@
                                         </div>
                                     </div>
 
-                                    <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </tab>
-                <!-- endregion -->
-
-                <!-- region Email tab-->
-                <tab>
-                    <ng-template tabHeading>
-                        <span class="icon-mail"></span> {{ commonLocaleData?.app_email }}
-                    </ng-template>
-
-                    <div class="email-tab single-tab-block">
-                        <div class="box clearfix mb-2">
-                            <h4 class="clearfix bd-rb font-16">
-                                {{ localeData?.email_sms }}
-                                <span>{{ localeData?.general_settings_applicable }}</span>
-                            </h4>
-
-                            <div class="clearfix">
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
-                                        <label>{{ localeData?.from_email }}</label>
-                                    </div>
-
-                                    <div class="col-sm-12 col-md-12 col-lg-9">
+                                    <div class="clearfix pd-t1">
                                         <div class="row">
-                                            <div class="col-md-5 col-sm-12 col-xs-12">
-                                                <div class="mb-0 form-group">
-                                                    <div [ngClass]="{ 'input-group': true }">
-                                                        <input
-                                                            type="email"
-                                                            class="form-control"
-                                                            [placeholder]="localeData?.enter_email"
-                                                            name="invoiceEmail"
-                                                            [(ngModel)]="invoiceSetting.email"
-                                                            (ngModelChange)="onChangeEmail($event)"
-                                                            [disabled]="invoiceSetting.emailVerified"
-                                                        />
-                                                        <span
-                                                            class="input-group-addon"
-                                                            *ngIf="!invoiceSetting.emailVerified"
-                                                            ><i
-                                                                class="fa fa-exclamation-circle"
-                                                                [tooltip]="localeData?.unverified"
-                                                            ></i
-                                                        ></span>
-                                                        <span
-                                                            class="input-group-addon verify-tick-icon"
-                                                            *ngIf="invoiceSetting.emailVerified"
-                                                            ><i class="icon-tick" [tooltip]="localeData?.verified"></i
-                                                        ></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6 col-sm-12 row pl-0">
-                                                <div
-                                                    class="btn-wrapper d-flex align-items-center justify-content-center"
+                                            <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                                <mat-slide-toggle
+                                                    aria-label="email generate"
+                                                    [(ngModel)]="estimateSetting.autoMail"
+                                                    name="estimateAutomail"
+                                                    class="show-on-mobile"
+                                                    color="primary"
                                                 >
-                                                    <button
-                                                        class="btn btn-success mr-l15 mr-r15"
-                                                        (click)="verfiyEmail(invoiceSetting.email)"
-                                                        [disabled]="
-                                                            !isEmailChanged &&
-                                                            (!invoiceSetting.email || invoiceSetting.email?.length < 4)
-                                                        "
-                                                        *ngIf="!invoiceSetting.emailVerified"
-                                                    >
-                                                        {{ localeData?.verify }}
-                                                    </button>
-                                                    <span *ngIf="invoiceSetting.emailVerified" class="verified-text">{{
-                                                        localeData?.verified
-                                                    }}</span>
-                                                    <span
-                                                        class="delete-verified-icon"
-                                                        [ngClass]="{
-                                                            'delete-icon-opacity':
-                                                                !invoiceSetting.email ||
-                                                                invoiceSetting.email?.length < 4,
-                                                            'cursor-pointer': !(
-                                                                !invoiceSetting.email ||
-                                                                invoiceSetting.email?.length < 4
-                                                            )
-                                                        }"
-                                                        (click)="
-                                                            !(!invoiceSetting.email || invoiceSetting.email?.length < 4)
-                                                                ? deleteEmail(invoiceSetting.email)
-                                                                : ''
-                                                        "
-                                                    >
-                                                        <i class="icon-trash"></i>
-                                                    </span>
-                                                </div>
+                                                </mat-slide-toggle>
+                                                <label class="left-gap">{{ localeData?.auto_email_generate }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-12 col-lg-9 form-group">
+                                                <mat-slide-toggle
+                                                    aria-label="auto mail"
+                                                    [(ngModel)]="estimateSetting.autoMail"
+                                                    name="estimateAutomail"
+                                                    class="hide-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
 
-                            <div class="clearfix pd-t1">
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-12 col-sm-12 flex-container">
-                                        <mat-slide-toggle
-                                            [(ngModel)]="companyEmailSettings.sendThroughGmail"
-                                            name="sendThroughGmail"
-                                            class="show-on-mobile"
-                                            [disabled]="!isGmailIntegrated"
-                                            color="primary"
-                                        >
-                                        </mat-slide-toggle>
-                                        <label class="left-gap">{{ localeData?.send_email_gmail }}</label>
-                                    </div>
-
-                                    <div class="col-lg-9 col-md-12 col-sm-12 form-group d-flex align-items-center">
-                                        <mat-slide-toggle
-                                            [(ngModel)]="companyEmailSettings.sendThroughGmail"
-                                            name="sendThroughGmail"
-                                            class="hide-on-mobile"
-                                            [disabled]="!isGmailIntegrated"
-                                            color="primary"
-                                        >
-                                        </mat-slide-toggle>
-
-                                        <span class="ml-1 integrated-email" *ngIf="!isGmailIntegrated">
-                                            <a [href]="gmailAuthCodeUrl$ | async">{{ localeData?.integrate_gmail }}</a>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
-                        </div>
-                    </div>
-                </tab>
-                <!-- endregion -->
-
-                <!-- region estimate tab -->
-                <tab>
-                    <ng-template tabHeading>
-                        <span class="icon-estimate1"><span class="path1"></span><span class="path2"></span></span>
-                        {{ localeData?.estimate }}
-                    </ng-template>
-
-                    <div class="estimate-tab single-tab-block">
-                        <div class="box clearfix mb-2">
-                            <h4 class="clearfix bd-rb font-16">{{ localeData?.estimate_quotation }} <span></span></h4>
-
-                            <div class="clearfix">
-                                <div class="row heading-name">
-                                    <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
-                                        <label>{{ localeData?.heading_name }}<span class="red-text">*</span></label>
-                                    </div>
-
-                                    <div class="col-sm-12 col-md-12 col-lg-9">
-                                        <div>
-                                            <div>
-                                                <div class="form-group">
-                                                    <div class="estimate-proforma" [ngClass]="{ 'input-group': true }">
-                                                        <input
-                                                            type="text"
-                                                            class="form-control"
-                                                            [(ngModel)]="estimateSetting.headerName"
-                                                            [placeholder]="localeData?.eg_placeholder"
-                                                            name="estimateHeaderName"
-                                                        />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
-                                        <label>{{ localeData?.default_expiry_days }}</label>
-                                    </div>
-
-                                    <div class="col-sm-12 col-md-12 col-lg-3">
-                                        <div class="default-expiry">
-                                            <div>
-                                                <div class="form-group">
-                                                    <div [ngClass]="{ 'input-group': true }">
-                                                        <input
-                                                            type="tel"
-                                                            class="form-control flex-initial"
-                                                            [(ngModel)]="estimateSetting.duePeriod"
-                                                            maxlength="3"
-                                                            placeholder="00"
-                                                            decimalDigitsDirective
-                                                            name="estimate-default-expiry"
-                                                        />
-                                                        <span> {{ commonLocaleData?.app_days }} </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row next-step-estimate">
-                                    <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
-                                        <label
-                                            >{{ localeData?.estimate_next_step }}<span class="red-text">*</span></label
-                                        >
-                                    </div>
-
-                                    <div class="col-sm-12 col-md-12 col-lg-7">
-                                        <div class="select-estimate mr-r3">
-                                            <div class="col-md-12 col-xs-12 p-0">
-                                                <span class="p-0 mr-r3">
-                                                    <input
-                                                        id="radio-5"
-                                                        class="radio-custom cp ml-0"
-                                                        name="signatureType"
-                                                        type="radio"
-                                                        [(ngModel)]="estimateSetting.nextStepToEstimate"
-                                                        [value]="'salesorder'"
-                                                    />
-                                                    <label for="radio-5" class="radio-custom-label">{{
-                                                        localeData?.proforma
-                                                    }}</label>
-                                                </span>
-
-                                                <span class="p-0 mr-r3">
-                                                    <input
-                                                        id="radio-6"
-                                                        class="radio-custom cp ml-0"
-                                                        name="signatureType"
-                                                        type="radio"
-                                                        [(ngModel)]="estimateSetting.nextStepToEstimate"
-                                                        [value]="'invoice'"
-                                                    />
-                                                    <label for="radio-6" class="radio-custom-label">{{
-                                                        commonLocaleData?.app_invoice
-                                                    }}</label>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="clearfix pd-t1">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="estimateSetting.autoChangeStatusOnExp"
-                                                name="estimateAutoChange"
-                                                class="show-on-mobile"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label class="left-gap">{{ localeData?.auto_change_status_expiry }}</label>
-                                        </div>
-
-                                        <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="estimateSetting.autoChangeStatusOnExp"
-                                                name="estimateAutoChange"
-                                                class="hide-on-mobile"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="clearfix pd-t1">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="estimateSetting.autoMail"
-                                                name="estimateAutomail"
-                                                class="show-on-mobile"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label class="left-gap">{{ localeData?.auto_email_generate }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="estimateSetting.autoMail"
-                                                name="estimateAutomail"
-                                                class="hide-on-mobile"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- <div class="clearfix pd-t1">
+                                    <!-- <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-md-12 col-lg-3">
                                             <input type="checkbox" [(ngModel)]="estimateSetting.sendSms" class="pull-left"
@@ -357,122 +419,133 @@
                                     </div>
                                 </div> -->
 
-                                <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
+                                    <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </tab>
-                <!-- endregion -->
+                    </tab>
+                    <!-- endregion -->
 
-                <!-- region sales order tab -->
-                <tab>
-                    <ng-template tabHeading>
-                        <span class="icon-sales-order"></span> {{ localeData?.proforma }}
-                    </ng-template>
+                    <!-- region sales order tab -->
+                    <tab>
+                        <ng-template tabHeading>
+                            <span class="icon-sales-order"></span> {{ localeData?.proforma }}
+                        </ng-template>
 
-                    <div class="estimate-tab sales-order-tab single-tab-block">
-                        <div class="box clearfix mb-2">
-                            <h4 class="clearfix bd-rb font-16">{{ localeData?.proforma_invoice }} <span></span></h4>
+                        <div class="estimate-tab sales-order-tab single-tab-block">
+                            <div class="box clearfix mb-2">
+                                <h4 class="clearfix bd-rb font-16">{{ localeData?.proforma_invoice }} <span></span></h4>
 
-                            <div class="clearfix">
-                                <div class="row heading-name">
-                                    <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
-                                        <label>{{ localeData?.heading_name }}<span class="red-text">*</span></label>
-                                    </div>
-                                    <div class="col-sm-12 col-md-12 col-lg-9">
-                                        <div>
+                                <div class="clearfix">
+                                    <div class="row heading-name">
+                                        <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
+                                            <label>{{ localeData?.heading_name }}<span class="red-text">*</span></label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-12 col-lg-9">
                                             <div>
-                                                <div class="form-group">
-                                                    <div class="estimate-proforma" [ngClass]="{ 'input-group': true }">
-                                                        <input
-                                                            type="text"
-                                                            class="form-control"
-                                                            [placeholder]="localeData?.eg_placeholder"
-                                                            name="proformaHeaderName"
-                                                            [(ngModel)]="proformaSetting.headerName"
-                                                        />
+                                                <div>
+                                                    <div class="form-group">
+                                                        <div
+                                                            class="estimate-proforma"
+                                                            [ngClass]="{ 'input-group': true }"
+                                                        >
+                                                            <input
+                                                                type="text"
+                                                                class="form-control"
+                                                                [placeholder]="localeData?.eg_placeholder"
+                                                                name="proformaHeaderName"
+                                                                [(ngModel)]="proformaSetting.headerName"
+                                                            />
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
-                                        <label>{{ localeData?.default_expiry_days }}</label>
-                                    </div>
-                                    <div class="col-sm-12 col-md-12 col-lg-9">
-                                        <div class="default-expiry">
-                                            <div>
-                                                <div class="form-group">
-                                                    <div [ngClass]="{ 'input-group': true }">
-                                                        <input
-                                                            type="tel"
-                                                            class="form-control flex-initial"
-                                                            placeholder="00"
-                                                            name="proformaDuePeriod"
-                                                            decimalDigitsDirective
-                                                            maxlength="3"
-                                                            [(ngModel)]="proformaSetting.duePeriod"
-                                                        />
-                                                        <span> {{ commonLocaleData?.app_days }} </span>
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
+                                            <label>{{ localeData?.default_expiry_days }}</label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-12 col-lg-9">
+                                            <div class="default-expiry">
+                                                <div>
+                                                    <div class="form-group">
+                                                        <div [ngClass]="{ 'input-group': true }">
+                                                            <input
+                                                                type="tel"
+                                                                class="form-control flex-initial"
+                                                                placeholder="00"
+                                                                name="proformaDuePeriod"
+                                                                decimalDigitsDirective
+                                                                maxlength="3"
+                                                                [(ngModel)]="proformaSetting.duePeriod"
+                                                            />
+                                                            <span> {{ commonLocaleData?.app_days }} </span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="clearfix pd-t1">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="proformaSetting.autoChangeStatusOnExp"
-                                                name="proformaAutoChange"
-                                                class="show-on-mobile"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label class="left-gap">{{ localeData?.auto_change_status_expiry }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="proformaSetting.autoChangeStatusOnExp"
-                                                name="proformaAutoChange"
-                                                class="hide-on-mobile"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
+                                    <div class="clearfix pd-t1">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                                <mat-slide-toggle
+                                                    aria-label="expiry"
+                                                    [(ngModel)]="proformaSetting.autoChangeStatusOnExp"
+                                                    name="proformaAutoChange"
+                                                    class="show-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                                <label class="left-gap">{{
+                                                    localeData?.auto_change_status_expiry
+                                                }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-12 col-lg-9 form-group">
+                                                <mat-slide-toggle
+                                                    aria-label="proforma change"
+                                                    [(ngModel)]="proformaSetting.autoChangeStatusOnExp"
+                                                    name="proformaAutoChange"
+                                                    class="hide-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="clearfix pd-t1">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="proformaSetting.autoMail"
-                                                name="proformaAutomail"
-                                                class="show-on-mobile"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label class="left-gap">{{ localeData?.auto_mail_generate_update }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-12 col-lg-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="proformaSetting.autoMail"
-                                                name="proformaAutomail"
-                                                class="hide-on-mobile"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
+                                    <div class="clearfix pd-t1">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                                <mat-slide-toggle
+                                                    aria-label="proforma auto mail"
+                                                    [(ngModel)]="proformaSetting.autoMail"
+                                                    name="proformaAutomail"
+                                                    class="show-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                                <label class="left-gap">{{
+                                                    localeData?.auto_mail_generate_update
+                                                }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-12 col-lg-9 form-group">
+                                                <mat-slide-toggle
+                                                    aria-label="auto mail"
+                                                    [(ngModel)]="proformaSetting.autoMail"
+                                                    name="proformaAutomail"
+                                                    class="hide-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <!-- <div class="clearfix pd-t1">
+                                    <!-- <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <input type="checkbox" [(ngModel)]="proformaSetting.sendSms" class="pull-left"
@@ -489,117 +562,127 @@
                                     </div>
                                 </div> -->
 
-                                <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
+                                    <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </tab>
-                <!-- endregion -->
+                    </tab>
+                    <!-- endregion -->
 
-                <!-- region invoice tab -->
-                <tab>
-                    <ng-template tabHeading>
-                        <span class="icon-invoice-icon"></span>{{ commonLocaleData?.app_invoice }}
-                    </ng-template>
+                    <!-- region invoice tab -->
+                    <tab>
+                        <ng-template tabHeading>
+                            <span class="icon-invoice-icon"></span>{{ commonLocaleData?.app_invoice }}
+                        </ng-template>
 
-                    <div class="estimate-tab invoice-tab single-tab-block">
-                        <div class="box clearfix mb-2">
-                            <h4 class="clearfix bd-rb font-16">{{ commonLocaleData?.app_invoice }} <span></span></h4>
-                            <div class="clearfix">
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-12 col-lg-3 lh-34">
-                                        <label>{{ localeData?.default_expiry_days }}</label>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-12 col-lg-9">
-                                        <div class="default-expiry">
-                                            <div>
-                                                <div class="form-group">
-                                                    <div [ngClass]="{ 'input-group': true }">
-                                                        <input
-                                                            type="tel"
-                                                            class="form-control flex-initial"
-                                                            placeholder="00"
-                                                            maxlength="3"
-                                                            decimalDigitsDirective
-                                                            [(ngModel)]="invoiceSetting.duePeriod"
-                                                            name="default-expiry"
-                                                        />
-                                                        <span> {{ commonLocaleData?.app_days }} </span>
+                        <div class="estimate-tab invoice-tab single-tab-block">
+                            <div class="box clearfix mb-2">
+                                <h4 class="clearfix bd-rb font-16">
+                                    {{ commonLocaleData?.app_invoice }} <span></span>
+                                </h4>
+                                <div class="clearfix">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-sm-12 col-lg-3 lh-34">
+                                            <label>{{ localeData?.default_expiry_days }}</label>
+                                        </div>
+                                        <div class="col-xs-12 col-sm-12 col-lg-9">
+                                            <div class="default-expiry">
+                                                <div>
+                                                    <div class="form-group">
+                                                        <div [ngClass]="{ 'input-group': true }">
+                                                            <input
+                                                                type="tel"
+                                                                class="form-control flex-initial"
+                                                                placeholder="00"
+                                                                maxlength="3"
+                                                                decimalDigitsDirective
+                                                                [(ngModel)]="invoiceSetting.duePeriod"
+                                                                name="default-expiry"
+                                                            />
+                                                            <span> {{ commonLocaleData?.app_days }} </span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="clearfix">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <label class="lock-date-label">{{ localeData?.invoice_lock_date }}</label>
-                                        </div>
+                                    <div class="clearfix">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3">
+                                                <label class="lock-date-label">{{
+                                                    localeData?.invoice_lock_date
+                                                }}</label>
+                                            </div>
 
-                                        <div class="col-sm-12 col-md-9">
-                                            <div class="form-group date-picker-invoice invoice-lock-date mb-0 custom-input-field">
-                                                <giddh-datepicker
-                                                    name="invoiceLockDate"
-                                                    [placeholder]="commonLocaleData?.app_select_date"
-                                                    [(ngModel)]="invoiceSetting.lockDate"
-                                                    [showToggleIcon]="false"
-                                                ></giddh-datepicker>
+                                            <div class="col-sm-12 col-md-9">
+                                                <div
+                                                    class="form-group date-picker-invoice invoice-lock-date mb-0 custom-input-field"
+                                                >
+                                                    <giddh-datepicker
+                                                        name="invoiceLockDate"
+                                                        [placeholder]="commonLocaleData?.app_select_date"
+                                                        [(ngModel)]="invoiceSetting.lockDate"
+                                                        [showToggleIcon]="false"
+                                                    ></giddh-datepicker>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="clearfix pd-t1">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSetting.showSeal"
-                                                name="invoiceStatusPayment"
-                                                class="show-on-mobile"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label class="left-gap">{{ localeData?.show_seal }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSetting.showSeal"
-                                                name="invoiceStatusPayment"
-                                                class="hide-on-mobile"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
+                                    <div class="clearfix pd-t1">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                                <mat-slide-toggle
+                                                    aria-label="show seal"
+                                                    [(ngModel)]="invoiceSetting.showSeal"
+                                                    name="invoiceStatusPayment"
+                                                    class="show-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                                <label class="left-gap">{{ localeData?.show_seal }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-9 form-group">
+                                                <mat-slide-toggle
+                                                    aria-label="invoice setting"
+                                                    [(ngModel)]="invoiceSetting.showSeal"
+                                                    name="invoiceStatusPayment"
+                                                    class="hide-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="clearfix pd-t1">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSetting.autoMail"
-                                                name="invoiceAutomail"
-                                                class="show-on-mobile"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label class="left-gap">{{ localeData?.auto_mail_update }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSetting.autoMail"
-                                                name="invoiceAutomail"
-                                                class="hide-on-mobile"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
+                                    <div class="clearfix pd-t1">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                                <mat-slide-toggle
+                                                    aria-label="invoice mail"
+                                                    [(ngModel)]="invoiceSetting.autoMail"
+                                                    name="invoiceAutomail"
+                                                    class="show-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                                <label class="left-gap">{{ localeData?.auto_mail_update }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-9 form-group">
+                                                <mat-slide-toggle
+                                                    aria-label="invoice mail"
+                                                    [(ngModel)]="invoiceSetting.autoMail"
+                                                    name="invoiceAutomail"
+                                                    class="hide-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <!-- <div class="clearfix pd-t1">
+                                    <!-- <div class="clearfix pd-t1">
                                     <div class="row">
 
                                         <div class="col-sm-12 col-md-12 col-lg-3">
@@ -631,11 +714,302 @@
                                         </div>
                                     </div>
                                 </div> -->
-                                <div class="clearfix pt-1">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                    <div class="clearfix pt-1">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                                <mat-slide-toggle
+                                                    aria-label="invoice no"
+                                                    [(ngModel)]="invoiceSetting.useCustomInvoiceNumber"
+                                                    name="customInvoice"
+                                                    class="pull-left estimation-check show-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                                <label class="left-gap">{{ localeData?.custom_invoice_no }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-9">
+                                                <div class="form-group clearfix d-flex">
+                                                    <mat-slide-toggle
+                                                        aria-label="custom invoice"
+                                                        [(ngModel)]="invoiceSetting.useCustomInvoiceNumber"
+                                                        name="customInvoice"
+                                                        class="pull-left estimation-check hide-on-mobile"
+                                                        color="primary"
+                                                    >
+                                                    </mat-slide-toggle>
+                                                    <div
+                                                        class="d-inline-flex custom-estimation"
+                                                        *ngIf="invoiceSetting.useCustomInvoiceNumber"
+                                                    >
+                                                        <div class="d-inline-flex position-relative">
+                                                            <label>{{ localeData?.branch_prefix }}</label>
+                                                            <input
+                                                                type="text"
+                                                                class="form-control"
+                                                                name="branchPrefix"
+                                                                [(ngModel)]="invoiceSetting.branchInvoiceNumberPrefix"
+                                                            />
+                                                        </div>
+                                                        <div class="d-inline-flex position-relative">
+                                                            <label>{{ localeData?.sub_prefix }}</label>
+                                                            <input
+                                                                type="text"
+                                                                class="form-control"
+                                                                name="prefixNumber"
+                                                                [(ngModel)]="invoiceSetting.invoiceNumberPrefix"
+                                                            />
+                                                        </div>
+                                                        <div class="d-inline-flex position-relative">
+                                                            <label>{{ localeData?.initial_no }}</label>
+                                                            <input
+                                                                type="text"
+                                                                class="form-control"
+                                                                name="initialNumber"
+                                                                [(ngModel)]="invoiceSetting.initialInvoiceNumber"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="clearfix pd-t1">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                                <mat-slide-toggle
+                                                    aria-label="delete entries"
+                                                    [(ngModel)]="invoiceSetting.autoDeleteEntries"
+                                                    name="invoiceAutoDeleteEntries"
+                                                    class="show-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                                <label class="left-gap">{{ localeData?.auto_delete_entries }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-9 form-group">
+                                                <mat-slide-toggle
+                                                    aria-label="delete entries"
+                                                    [(ngModel)]="invoiceSetting.autoDeleteEntries"
+                                                    name="invoiceAutoDeleteEntries"
+                                                    class="hide-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                                <mat-slide-toggle
+                                                    aria-label="invoice sale"
+                                                    [(ngModel)]="invoiceSetting.salesRoundOff"
+                                                    name="salesRoundOff"
+                                                    class="show-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                                <label class="left-gap">{{ localeData?.apply_sales_round_off }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-9 form-group">
+                                                <mat-slide-toggle
+                                                    aria-label="invoice sale"
+                                                    [(ngModel)]="invoiceSetting.salesRoundOff"
+                                                    name="salesRoundOff"
+                                                    class="hide-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3">
+                                                <mat-slide-toggle
+                                                    aria-label="generate voucher"
+                                                    [(ngModel)]="invoiceSetting.autoPaid"
+                                                    (ngModelChange)="
+                                                        invoiceSetting.autoPaid
+                                                            ? null
+                                                            : (invoiceSetting.autoGenerateVoucherFromEntry = false)
+                                                    "
+                                                    name="autoPaid"
+                                                    class="show-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                                <label class="left-gap">{{
+                                                    localeData?.run_auto_paid_for_all_the_accounts
+                                                }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-9 form-group">
+                                                <mat-slide-toggle
+                                                    aria-label="generate voucher entry"
+                                                    [(ngModel)]="invoiceSetting.autoPaid"
+                                                    (ngModelChange)="
+                                                        invoiceSetting.autoPaid
+                                                            ? null
+                                                            : (invoiceSetting.autoGenerateVoucherFromEntry = false)
+                                                    "
+                                                    name="autoPaid"
+                                                    class="hide-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        class="clearfix pd-t1"
+                                        *ngIf="voucherApiVersion === 2 && invoiceSetting.autoPaid"
+                                    >
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3">
+                                                <mat-slide-toggle
+                                                    aria-label="generate voucher entry"
+                                                    [(ngModel)]="invoiceSetting.autoGenerateVoucherFromEntry"
+                                                    name="autoGenerateVoucher"
+                                                    class="show-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                                <label class="left-gap">{{
+                                                    localeData?.automatically_generate_voucher_for_the_entries_present_in_the_ledger
+                                                }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-9 form-group">
+                                                <mat-slide-toggle
+                                                    aria-label="generate voucher entry"
+                                                    [(ngModel)]="invoiceSetting.autoGenerateVoucherFromEntry"
+                                                    name="autoGenerateVoucher"
+                                                    class="hide-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div
+                                        *ngIf="(activeCompany$ | async)?.countryV2?.alpha2CountryCode === 'IN'"
+                                        class="clearfix pd-t1"
+                                    >
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                                <mat-slide-toggle
+                                                    aria-label="gst invoice"
+                                                    [(ngModel)]="invoiceSetting.gstEInvoiceEnable"
+                                                    class="show-on-mobile"
+                                                    color="primary"
+                                                    (change)="handleEInvoiceChange($event)"
+                                                >
+                                                </mat-slide-toggle>
+                                                <label class="left-gap">{{
+                                                    localeData?.e_invoice_authentication_label
+                                                }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-9 form-group user-authenticate d-flex">
+                                                <mat-slide-toggle
+                                                    aria-label="gst invoice"
+                                                    [(ngModel)]="invoiceSetting.gstEInvoiceEnable"
+                                                    class="hide-on-mobile"
+                                                    color="primary"
+                                                    (change)="handleEInvoiceChange($event)"
+                                                >
+                                                </mat-slide-toggle>
+                                                <div *ngIf="invoiceSetting.gstEInvoiceEnable" class="d-inline-flex">
+                                                    <div class="d-inline-flex position-relative mr-l15">
+                                                        <label>Username</label>
+                                                        <input
+                                                            [(ngModel)]="invoiceSetting.gstEInvoiceUserName"
+                                                            type="text"
+                                                            class="form-control"
+                                                            name="userName"
+                                                        />
+                                                    </div>
+                                                    <div class="d-inline-flex position-relative mr-l15">
+                                                        <label>Password</label>
+                                                        <input
+                                                            [(ngModel)]="invoiceSetting.gstEInvoiceUserPassword"
+                                                            type="password"
+                                                            class="form-control"
+                                                            name="password"
+                                                        />
+                                                    </div>
+                                                    <div class="d-inline-flex position-relative mr-l15">
+                                                        <label>GSTIN</label>
+                                                        <input
+                                                            [(ngModel)]="invoiceSetting.gstEInvoiceGstin"
+                                                            type="text"
+                                                            class="form-control"
+                                                            name="gstin"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                    class="clearfix pd-t1"
+                                    *ngIf="voucherApiVersion === 2 && invoiceSetting.gstEInvoiceEnable"
+                                >
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-12 col-lg-3">
+                                                <mat-slide-toggle
+                                                    aria-label="generate einvoice"
+                                                    [(ngModel)]="invoiceSetting.generateEinvoiceShowPopUp"
+                                                    name="enableEInvoiceShowPopup"
+                                                    class="show-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                                <label class="left-gap">{{
+                                                    localeData?.enable_confirmation_pop_up_to_create_e_invoice
+                                                }}</label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-9 form-group">
+                                                <mat-slide-toggle
+                                                    aria-label="generate einvoice"
+                                                    [(ngModel)]="invoiceSetting.generateEinvoiceShowPopUp"
+                                                    name="enableEInvoiceShowPopup"
+                                                    class="hide-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </tab>
+                </ng-container>
+                
+                <ng-container
+                    *ngIf="
+                        voucherApiVersion === 2 &&
+                        (selectedVoucher === 'debit note' || selectedVoucher === 'credit note')
+                    "
+                >
+                    <tab>
+                        <ng-template tabHeading>
+                            <span class="icon-invoice-icon"></span>
+                            {{ commonLocaleData?.app_voucher_types?.debit_note }}
+                        </ng-template>
+                        <div class="general-tab single-tab-block">
+                            <div class="box clearfix">
+                                <h4 class="clearfix bd-rb font-16">
+                                    {{ commonLocaleData?.app_voucher_types?.debit_note }}
+                                </h4>
+                                <div class="clearfix pt-3">
+                                    <div class="row ml-0 mr-0">
+                                        <div class="col-sm-12 col-md-12 col-lg-2 flex-container pl-0 pr-0">
                                             <mat-slide-toggle
-                                                [(ngModel)]="invoiceSetting.useCustomInvoiceNumber"
+                                                aria-label="invoice no"
+                                                [(ngModel)]="invoiceSetting.useCustomDebitNoteNumber"
                                                 name="customInvoice"
                                                 class="pull-left estimation-check show-on-mobile"
                                                 color="primary"
@@ -646,7 +1020,8 @@
                                         <div class="col-sm-12 col-md-9">
                                             <div class="form-group clearfix d-flex">
                                                 <mat-slide-toggle
-                                                    [(ngModel)]="invoiceSetting.useCustomInvoiceNumber"
+                                                    aria-label="custom invoice"
+                                                    [(ngModel)]="invoiceSetting.useCustomDebitNoteNumber"
                                                     name="customInvoice"
                                                     class="pull-left estimation-check hide-on-mobile"
                                                     color="primary"
@@ -654,7 +1029,7 @@
                                                 </mat-slide-toggle>
                                                 <div
                                                     class="d-inline-flex custom-estimation"
-                                                    *ngIf="invoiceSetting.useCustomInvoiceNumber"
+                                                    *ngIf="invoiceSetting.useCustomDebitNoteNumber"
                                                 >
                                                     <div class="d-inline-flex position-relative">
                                                         <label>{{ localeData?.branch_prefix }}</label>
@@ -662,7 +1037,7 @@
                                                             type="text"
                                                             class="form-control"
                                                             name="branchPrefix"
-                                                            [(ngModel)]="invoiceSetting.branchInvoiceNumberPrefix"
+                                                            [(ngModel)]="invoiceSetting.branchDebitNoteNumberPrefix"
                                                         />
                                                     </div>
                                                     <div class="d-inline-flex position-relative">
@@ -671,7 +1046,7 @@
                                                             type="text"
                                                             class="form-control"
                                                             name="prefixNumber"
-                                                            [(ngModel)]="invoiceSetting.invoiceNumberPrefix"
+                                                            [(ngModel)]="invoiceSetting.debitNoteNumberPrefix"
                                                         />
                                                     </div>
                                                     <div class="d-inline-flex position-relative">
@@ -680,31 +1055,30 @@
                                                             type="text"
                                                             class="form-control"
                                                             name="initialNumber"
-                                                            [(ngModel)]="invoiceSetting.initialInvoiceNumber"
+                                                            [(ngModel)]="invoiceSetting.initialDebitNoteNumber"
                                                         />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="clearfix pd-t1">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                    <div class="row ml-0 mr-0">
+                                        <div class="col-sm-12 col-md-12 col-lg-2 flex-container pl-0 pr-0">
                                             <mat-slide-toggle
-                                                [(ngModel)]="invoiceSetting.autoDeleteEntries"
-                                                name="invoiceAutoDeleteEntries"
+                                                aria-label="debit note"
+                                                [(ngModel)]="invoiceSetting.debitNoteRoundOff"
+                                                name="debitNoteRoundOff"
                                                 class="show-on-mobile"
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
-                                            <label class="left-gap">{{ localeData?.auto_delete_entries }}</label>
+                                            <label class="left-gap">{{ localeData?.apply_debit_note_round_off }}</label>
                                         </div>
-                                        <div class="col-sm-12 col-md-9 form-group">
+                                        <div class="col-sm-12 col-md-9">
                                             <mat-slide-toggle
-                                                [(ngModel)]="invoiceSetting.autoDeleteEntries"
-                                                name="invoiceAutoDeleteEntries"
+                                                aria-label="debit note"
+                                                [(ngModel)]="invoiceSetting.debitNoteRoundOff"
+                                                name="debitNoteRoundOff"
                                                 class="hide-on-mobile"
                                                 color="primary"
                                             >
@@ -712,33 +1086,84 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                <div class="col-sm-12 col-md-12 col-lg-2 pl-0 pr-0">
+                                    <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </tab>
+                    <tab>
+                        <ng-template tabHeading>
+                            <span class="icon-invoice-icon"></span
+                            >{{ commonLocaleData?.app_voucher_types?.credit_note }}
+                        </ng-template>
+                        <div class="general-tab single-tab-block">
+                            <div class="box clearfix">
+                                <h4 class="clearfix bd-rb font-16">
+                                    {{ commonLocaleData?.app_voucher_types?.credit_note }}
+                                </h4>
+                                <div class="clearfix pt-3">
+                                    <div class="row ml-0 mr-0">
+                                        <div class="col-sm-12 col-md-12 col-lg-2 flex-container pl-0 pr-0">
                                             <mat-slide-toggle
-                                                [(ngModel)]="invoiceSetting.salesRoundOff"
-                                                name="salesRoundOff"
-                                                class="show-on-mobile"
+                                                aria-label="custom invoice"
+                                                [(ngModel)]="invoiceSetting.useCustomCreditNoteNumber"
+                                                name="customInvoice"
+                                                class="pull-left estimation-check show-on-mobile"
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
-                                            <label class="left-gap">{{ localeData?.apply_sales_round_off }}</label>
+                                            <label class="left-gap">{{ localeData?.custom_invoice_no }}</label>
                                         </div>
-                                        <div class="col-sm-12 col-md-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSetting.salesRoundOff"
-                                                name="salesRoundOff"
-                                                class="hide-on-mobile"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
+                                        <div class="col-sm-12 col-md-9">
+                                            <div class="form-group clearfix d-flex">
+                                                <mat-slide-toggle
+                                                    aria-label="custom invoice"
+                                                    [(ngModel)]="invoiceSetting.useCustomCreditNoteNumber"
+                                                    name="customInvoice"
+                                                    class="pull-left estimation-check hide-on-mobile"
+                                                    color="primary"
+                                                >
+                                                </mat-slide-toggle>
+                                                <div
+                                                    class="d-inline-flex custom-estimation"
+                                                    *ngIf="invoiceSetting.useCustomCreditNoteNumber"
+                                                >
+                                                    <div class="d-inline-flex position-relative">
+                                                        <label>{{ localeData?.branch_prefix }}</label>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            name="branchPrefix"
+                                                            [(ngModel)]="invoiceSetting.branchCreditNoteNumberPrefix"
+                                                        />
+                                                    </div>
+                                                    <div class="d-inline-flex position-relative">
+                                                        <label>{{ localeData?.sub_prefix }}</label>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            name="prefixNumber"
+                                                            [(ngModel)]="invoiceSetting.creditNoteNumberPrefix"
+                                                        />
+                                                    </div>
+                                                    <div class="d-inline-flex position-relative">
+                                                        <label>{{ localeData?.initial_no }}</label>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            name="initialNumber"
+                                                            [(ngModel)]="invoiceSetting.initialCreditNoteNumber"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                    <div class="row ml-0 mr-0">
+                                        <div class="col-sm-12 col-md-12 col-lg-2 flex-container pl-0 pr-0">
                                             <mat-slide-toggle
+                                                aria-label="credit note"
                                                 [(ngModel)]="invoiceSetting.creditNoteRoundOff"
                                                 name="creditNoteRoundOff"
                                                 class="show-on-mobile"
@@ -749,8 +1174,9 @@
                                                 localeData?.apply_credit_note_round_off
                                             }}</label>
                                         </div>
-                                        <div class="col-sm-12 col-md-9 form-group">
+                                        <div class="col-sm-12 col-md-9">
                                             <mat-slide-toggle
+                                                aria-label="credit note"
                                                 [(ngModel)]="invoiceSetting.creditNoteRoundOff"
                                                 name="creditNoteRoundOff"
                                                 class="hide-on-mobile"
@@ -760,127 +1186,23 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSetting.autoPaid"
-                                                (ngModelChange)="invoiceSetting.autoPaid ? null : invoiceSetting.autoGenerateVoucherFromEntry = false"
-                                                name="autoPaid"
-                                                class="show-on-mobile"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label class="left-gap">{{ localeData?.run_auto_paid_for_all_the_accounts }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSetting.autoPaid"
-                                                (ngModelChange)="invoiceSetting.autoPaid ? null : invoiceSetting.autoGenerateVoucherFromEntry = false" 
-                                                name="autoPaid"
-                                                class="hide-on-mobile"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
-                                        </div>
-                                    </div>
+                                <div class="col-sm-12 col-md-12 col-lg-2 pl-0 pr-0">
+                                    <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                                 </div>
-                                <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2 && invoiceSetting.autoPaid">
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSetting.autoGenerateVoucherFromEntry"
-                                                name="autoGenerateVoucher"
-                                                class="show-on-mobile"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label class="left-gap">{{ localeData?.automatically_generate_voucher_for_the_entries_present_in_the_ledger }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-9 form-group">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSetting.autoGenerateVoucherFromEntry"
-                                                name="autoGenerateVoucher"
-                                                class="hide-on-mobile"
-                                                color="primary"
-                                            >
-                                            </mat-slide-toggle>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    *ngIf="(activeCompany$ | async)?.countryV2?.alpha2CountryCode === 'IN'"
-                                    class="clearfix pd-t1"
-                                >
-                                    <div class="row">
-                                        <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSetting.gstEInvoiceEnable"
-                                                class="show-on-mobile"
-                                                color="primary"
-                                                (change)="handleEInvoiceChange($event)"
-                                            >
-                                            </mat-slide-toggle>
-                                            <label class="left-gap">{{
-                                                localeData?.e_invoice_authentication_label
-                                            }}</label>
-                                        </div>
-                                        <div class="col-sm-12 col-md-9 form-group user-authenticate d-flex">
-                                            <mat-slide-toggle
-                                                [(ngModel)]="invoiceSetting.gstEInvoiceEnable"
-                                                class="hide-on-mobile"
-                                                color="primary"
-                                                (change)="handleEInvoiceChange($event)"
-                                            >
-                                            </mat-slide-toggle>
-                                            <div *ngIf="invoiceSetting.gstEInvoiceEnable" class="d-inline-flex">
-                                                <div class="d-inline-flex position-relative mr-l15">
-                                                    <label>Username</label>
-                                                    <input
-                                                        [(ngModel)]="invoiceSetting.gstEInvoiceUserName"
-                                                        type="text"
-                                                        class="form-control"
-                                                        name="userName"
-                                                    />
-                                                </div>
-                                                <div class="d-inline-flex position-relative mr-l15">
-                                                    <label>Password</label>
-                                                    <input
-                                                        [(ngModel)]="invoiceSetting.gstEInvoiceUserPassword"
-                                                        type="password"
-                                                        class="form-control"
-                                                        name="password"
-                                                    />
-                                                </div>
-                                                <div class="d-inline-flex position-relative mr-l15">
-                                                    <label>GSTIN</label>
-                                                    <input
-                                                        [(ngModel)]="invoiceSetting.gstEInvoiceGstin"
-                                                        type="text"
-                                                        class="form-control"
-                                                        name="gstin"
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                             </div>
                         </div>
-                    </div>
-                </tab>
+                    </tab>
+                </ng-container>
                 <!-- endregion -->
             </tabset>
         </section>
 
         <ng-template #buttonsSection>
             <div class="btn-group mr-t2" role="group" aria-label="Basic example">
-                <button type="button" class="btn btn-success mr-r1" (click)="UpdateForm()">
+                <button aria-label="save" type="button" class="btn btn-success mr-r1" (click)="UpdateForm()">
                     {{ commonLocaleData?.app_save }}
                 </button>
-                <button type="button" class="btn btn-cancel" (click)="resetForm()">
+                <button aria-label="cancel" type="button" class="btn btn-cancel" (click)="resetForm()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>

@@ -1,9 +1,9 @@
 <ng-container>
-    <div class="aside-pane">
+    <div class="aside-pane" role="dialog" aria-labelledby="dialog-title">
         <form [formGroup]="addressForm" novalidate (ngSubmit)="handleFormSubmit()" autocomplete="off">
             <section class="w-100">
                 <div>
-                    <div class="form-header">
+                    <div class="form-header" tabindex="0">
                         <h3 mat-dialog-title *ngIf="
                                 addressConfiguration.type === 'createAddress' ||
                                 addressConfiguration.type === 'createBranchAddress'
@@ -13,7 +13,7 @@
                         <h3 *ngIf="addressConfiguration.type === 'editAddress'">{{ localeData?.update_address }}</h3>
                         <h3 *ngIf="addressConfiguration.type === 'editBranch'">{{ localeData?.edit_branch }}</h3>
                         <h3 *ngIf="addressConfiguration.type === 'editWarehouse'">{{ localeData?.edit_warehouse }}</h3>
-                        <button id="close" mat-dialog-close (click)="closeAsidePane($event)">
+                        <button id="close" aria-label="close" mat-dialog-close (click)="closeAsidePane($event)">
                             <i class="icon-cross"></i>
                         </button>
                     </div>
@@ -75,7 +75,7 @@
                                                     " [options]="addressConfiguration.stateList"
                                                     (selectedOption)="selectState($event)"
                                                     [defaultValue]="addressToUpdate ? addressToUpdate?.stateCode + ' - ' + addressToUpdate?.stateName : ''"
-                                                    [cssClass]="w - 100" [required]="true"></dropdown-field>
+                                                    [cssClass]="w-100" [required]="true"></dropdown-field>
                                             </div>
                                             <!-- static code added for the pincode -->
                                             <div class="col-sm-4">
@@ -526,7 +526,7 @@
                                     <div class="col-xs-12 col-sm-12 text-left">
                                         <div>
                                             <button mat-stroked-button color="primary" [ladda]="showLoader"
-                                                [disabled]="addressForm?.invalid" type="submit" class="btn custom-btn">
+                                                [disabled]="addressForm?.invalid" type="submit" class="btn custom-btn" aria-label="save">
                                                 <ng-container *ngIf="
                                                         addressConfiguration.type === 'createAddress' ||
                                                         addressConfiguration.type === 'createBranchAddress'
@@ -539,7 +539,7 @@
                                                     ">
                                                     {{ commonLocaleData?.app_update }}</ng-container>
                                             </button>
-                                            <button mat-stroked-button type="reset" (click)="selectedEntity = []" class="btn custom-btn">
+                                            <button mat-stroked-button type="reset" (click)="selectedEntity = []" class="btn custom-btn" aria-label="clear">
                                                 {{ commonLocaleData?.app_clear }}
                                             </button>
                                         </div>

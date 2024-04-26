@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
@@ -14,7 +14,6 @@ import { CompanyService } from '../../../services/company.service';
 import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchService } from '../../../services/settings.branch.service';
 import { AppState } from '../../../store';
-import { AuthService } from '../../../theme/ng-social-login-module';
 import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.action';
 import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
 import { CommonActions } from '../../../actions/common.actions';
@@ -44,10 +43,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Stores the active company details */
     public activeCompany: CompanyResponse;
-    /** True, if login is made with social account */
-    public isLoggedInWithSocialAccount$: Observable<boolean>;
-    /** Company name initials (upto 2 characters) */
-    public companyInitials: any = '';
     /** This will hold all company data and branches of the company */
     public companyBranches: any = {};
     /** Search company name */
@@ -68,15 +63,12 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
     public currentCompanyBranches: Array<any>;
     /** This holds current branch unique name */
     public currentBranchUniqueName: string = "";
-    /** This holds user's email */
-    public userEmail: string = "";
 
     constructor(
         private store: Store<AppState>,
         private companyActions: CompanyActions,
         private generalService: GeneralService,
         private loginAction: LoginActions,
-        private socialAuthService: AuthService,
         private settingsBranchService: SettingsBranchService,
         private changeDetectorRef: ChangeDetectorRef,
         private companyService: CompanyService,
@@ -95,15 +87,8 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof CompanyBranchComponent
      */
     public ngOnInit(): void {
-        this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
         this.isCompanyRefreshInProcess$ = this.store.pipe(select(state => state.session.isRefreshing), takeUntil(this.destroyed$));
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-
-        this.store.pipe(select(state => state.session.user), takeUntil(this.destroyed$)).subscribe(user => {
-            if (user?.user) {
-                this.userEmail = user?.user?.email;
-            }
-        });
 
         this.store.pipe(select((state: AppState) => state.session.companies), takeUntil(this.destroyed$)).subscribe(companies => {
             if (!companies || companies?.length === 0) {
@@ -123,7 +108,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(selectedCmp => {
             if (selectedCmp && selectedCmp?.uniqueName === this.generalService.companyUniqueName) {
                 this.activeCompany = selectedCmp;
-                this.companyInitials = this.generalService.getInitialsFromString(selectedCmp.name);
 
                 if (!this.companyBranches?.branches) {
                     this.companyBranches = selectedCmp;
@@ -279,43 +263,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
         event.preventDefault();
         this.companyListForFilter = [];
         this.store.dispatch(this.companyActions.RefreshCompanies());
-    }
-
-    /**
-     * Logs out the user
-     *
-     * @memberof CompanyBranchComponent
-     */
-    public logout(): void {
-        /** Reset the current organization type on logout as we
-         * don't know receive switched branch from API in last state (state API)
-        */
-        const details = {
-            branchDetails: {
-                uniqueName: ''
-            }
-        };
-        this.setOrganizationDetails(OrganizationType.Company, details);
-        localStorage.removeItem('isNewArchitecture');
-        if (isElectron) {
-            this.store.dispatch(this.loginAction.ClearSession());
-        } else {
-            // check if logged in via social accounts
-            this.isLoggedInWithSocialAccount$.subscribe((val) => {
-                if (val) {
-                    this.socialAuthService.signOut().then(() => {
-                        this.store.dispatch(this.loginAction.ClearSession());
-                        this.store.dispatch(this.loginAction.socialLogoutAttempt());
-                    }).catch((err) => {
-                        this.store.dispatch(this.loginAction.ClearSession());
-                        this.store.dispatch(this.loginAction.socialLogoutAttempt());
-                    });
-
-                } else {
-                    this.store.dispatch(this.loginAction.ClearSession());
-                }
-            });
-        }
     }
 
     /**

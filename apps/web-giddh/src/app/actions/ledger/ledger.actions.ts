@@ -161,7 +161,7 @@ export class LedgerActions {
                 } else if (response?.status === 'no-network') {
                     this.ResetUpdateLedger();
                     return { type: 'EmptyAction' };
-                } else if (response?.status === 'confirm') {
+                } else if (response?.status === 'confirm' ||  response?.status === 'einvoice-confirm') {
                     return {
                         type: LEDGER.SHOW_DUPLICATE_VOUCHER_CONFIRMATION,
                         payload: response
@@ -325,6 +325,8 @@ export class LedgerActions {
                 let data: BaseResponse<any, GenerateBulkInvoiceRequest[]> = response?.payload;
                 if (data?.status === 'error') {
                     this.toaster.showSnackBar("error", data.message, data.code);
+                } else if (data?.status === 'einvoice-confirm') {
+                    return this.setBulkGenerateConfirm(data);
                 } else {
                     if (typeof data.body === 'string') {
                         this.toaster.showSnackBar("success", data.body);
@@ -618,6 +620,7 @@ export class LedgerActions {
         };
     }
 
+
     public DeSelectGivenEntries(entries: string[]): CustomActions {
         return {
             type: LEDGER.DESELECT_GIVEN_ENTRIES,
@@ -652,7 +655,7 @@ export class LedgerActions {
                 this.toaster.showSnackBar("error", response.message);
             }
             return errorAction;
-        } else if (response?.status === "confirm") {
+        } else if (response?.status === "confirm" ||  response?.status === 'einvoice-confirm') {
             if (isCreateLedger) {
                 return {
                     type: LEDGER.SHOW_DUPLICATE_VOUCHER_CONFIRMATION,
@@ -678,6 +681,13 @@ export class LedgerActions {
         return {
             type: LEDGER.REFRESH_LEDGER,
             payload: request
+        };
+    }
+
+    public setBulkGenerateConfirm(body: any): CustomActions {
+        return {
+            type: LEDGER.SHOW_BULK_GENERATE_VOUCHER_CONFIRMATION,
+            payload: body
         };
     }
 }

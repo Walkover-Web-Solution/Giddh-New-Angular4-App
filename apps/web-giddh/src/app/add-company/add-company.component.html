@@ -22,7 +22,7 @@
                 (selectionChange)="onSelectedTab($event)"
                 [disableRipple]="firstStepForm.invalid"
             >
-                <mat-step [stepControl]="firstStepForm">
+                <mat-step [stepControl]="firstStepForm" role="tabpanel">
                     <form [formGroup]="firstStepForm" name="firstStepForm" autocomplete="off" novalidate>
                         <ng-template matStepLabel>{{ commonLocaleData?.app_company_name }}</ng-template>
                         <div class="row row-gap">
@@ -85,7 +85,12 @@
                                 <span id="init-contact-proforma-error-msg" class="d-none"></span>
                             </div>
                             <div class="col-6 mobile-no-action-buttons" *ngIf="showMobileField">
-                                <button mat-stroked-button (click)="reVerifyNumber()" *ngIf="isMobileNumberVerified || showOtpField" class="btn-min-width">
+                                <button
+                                    mat-stroked-button
+                                    (click)="reVerifyNumber()"
+                                    *ngIf="isMobileNumberVerified || showOtpField"
+                                    class="btn-min-width"
+                                >
                                     {{ localeData?.change }}
                                 </button>
 
@@ -173,7 +178,7 @@
                         </div>
                     </form>
                 </mat-step>
-                <mat-step [stepControl]="secondStepForm" name="secondStepForm">
+                <mat-step [stepControl]="secondStepForm" name="secondStepForm" role="tabpanel">
                     <form [formGroup]="secondStepForm" autocomplete="off" novalidate>
                         <ng-template matStepLabel>{{ localeData?.company_address }}</ng-template>
                         <div class="row row-gap">
@@ -272,11 +277,17 @@
                                 <dropdown-field
                                     [name]="'state'"
                                     [label]="
-                                        secondStepForm.controls['businessType']?.value === businessTypes.Registered
+                                        selectedCountryCode === 'EE'
+                                            ? secondStepForm.controls['businessType']?.value ===
+                                              businessTypes.Registered
+                                                ? localeData?.county + '*'
+                                                : localeData?.county
+                                            : secondStepForm.controls['businessType']?.value ===
+                                              businessTypes.Registered
                                             ? commonLocaleData?.app_state + '*'
                                             : commonLocaleData?.app_state
                                     "
-                                    [placeholder]="localeData?.select_state"
+                                    [placeholder]=" selectedCountryCode === 'EE' ? localeData?.select_county:localeData?.select_state"
                                     [options]="states"
                                     [showError]="isFormSubmitted && secondStepForm.get('state')?.invalid"
                                     [readonly]="disabledState"

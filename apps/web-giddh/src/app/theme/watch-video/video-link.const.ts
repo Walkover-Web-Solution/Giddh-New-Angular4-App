@@ -1,7 +1,7 @@
 export const VIDEOLINK = {
-    VOUCHER_SALES: 'https://www.youtube.com/embed/TDEl-daOySU?si=NJovgqKIUEwxG54M&amp;start=82',
-    VOUCHER_CASH: 'https://www.youtube.com/embed/TDEl-daOySU?si=NJovgqKIUEwxG54M',
-    SALES_PREVIEW: 'https://www.youtube.com/embed/y9at0bOnHcw?si=FjqP45U0hWvIcFIM',
+    VOUCHER_SALES: "https://www.youtube.com/embed/TDEl-daOySU?si=NJovgqKIUEwxG54M&amp;start=82",
+    VOUCHER_CASH: "https://www.youtube.com/embed/TDEl-daOySU?si=NJovgqKIUEwxG54M",
+    SALES_PREVIEW: "https://www.youtube.com/embed/y9at0bOnHcw?si=FjqP45U0hWvIcFIM",
     INVENTORY_MASTER: "https://www.youtube.com/embed/SCymMiHtG30?si=7_jYkM8LBwFz_v3r",
     INVENTORY_MASTER_GROUP: "https://www.youtube.com/embed/SCymMiHtG30?si=xPtwoa7nD55bJg2C&amp;start=41",
     INVENTORY_CREATE_STOCK: "https://www.youtube.com/embed/BpQNwfVqvto?si=RMDls_K39f9gKp-7",
@@ -18,4 +18,13 @@ export const VIDEOLINK = {
     IMPORT_MASTER: "https://www.youtube.com/embed/Ij_kNKOzuqo?si=KLLx0XolqYBYB_U9",
     BARCODE: "https://www.youtube.com/embed/x1OJlwia3OY?si=1LBbTy-hxJI4bfKe",
     DAYBOOK: "https://www.youtube.com/embed/zYFouv7uaEo?si=34xOTDVT1-fC27H_",
+    AGING_REPORT: "https://www.youtube.com/embed/W7G3v8LP7oU?si=QadB2zrrhM_Qop7S",
+    INVOICE_SETTING: "https://www.youtube.com/embed/YX_KWaLsCzo?si=ykTR452gVresHOS_",
+    TWO_FACTOR_AUTHENTICATION: "https://www.youtube.com/embed/IYsfaPO69qM?si=TpkGmDDlqiYYAfzu",
+    TAX_CREATION: "https://www.youtube.com/embed/KCiFTUJB7xA?si=vQ2EwLAt0cLmu6I8",
+    MRP_DISCOUNT: "https://www.youtube.com/embed/vxsPm9zjcYM?si=xkn96Tt9DlA-oZDl",
+    CUSTOM_FIELD: "https://www.youtube.com/embed/GI4WbIjGf4E?si=6jSdhkGb6DLOguGN",
+    MANUFACTURING: "https://www.youtube.com/embed/u7ivsMSMCJY?si=HuPvklS2c_Oif6pR",
+    MULTI_USER_ACCESS: "https://www.youtube.com/embed/rINmg0iFzkE?si=c70kAcolQBeuy2QE",
+    INVOICE_TEMPLATE: "https://www.youtube.com/embed/VkFdPHadXuY?si=cpEMLLokip97pFa-"
 };

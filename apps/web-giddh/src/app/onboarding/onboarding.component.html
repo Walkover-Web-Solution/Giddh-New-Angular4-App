@@ -32,7 +32,13 @@
                                 }}</a
                             >
                         </mat-list-item>
-                        <mat-list-item role="listitem" class="mr-b1 px-0" *ngIf="companyCountry !=='India'">
+                        <mat-list-item role="listitem" class="mr-b1 px-0" *ngIf="isPlaidSupportedCountry">
+                            <a (click)="openCreateAccountAsidepan()" class="cursor-pointer">
+                                <img src="{{ imgPath }}create-new.svg" alt="" class="mr-r1" />
+                                {{ localeData?.create_bank_account }}
+                            </a>
+                        </mat-list-item>
+                        <mat-list-item role="listitem" class="mr-b1 px-0" *ngIf="(companyCountry !== 'India') && isPlaidSupportedCountry">
                             <a href="javascript:;" (click)="selectConfigureBank()">
                                 <img src="{{ imgPath }}configure-bank-account.svg" alt="" class="mr-r1" />{{
                                     localeData?.configure_bank_account
@@ -84,6 +90,7 @@
                     <h1 class="border-btm">{{ localeData?.watch_onboarding }}</h1>
                     <div class="onboarding-video">
                         <iframe
+                            title="onboarding"
                             width="100%"
                             height="100%"
                             src="https://www.youtube.com/embed/videoseries?si=iINeTc512_whk0ec&list=PL2D8agyw4OJeuLGGci5W8bn-jwAXDsoiC&rel=0&autoplay=1"
@@ -95,5 +102,18 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+    <div *ngIf="accountAsideMenuState === 'in'">
+        <aside-menu-account
+            [activeGroupUniqueName]="selectedGroupForCreateAcc"
+            [activeAccountDetails]="activeAccountDetails"
+            [isUpdateAccount]="false"
+            class="account-aside-menu-state transform-inherit"
+            [@slideInOut]="accountAsideMenuState"
+            [commonLocaleData]="commonLocaleData"
+            (closeAsideEvent)="toggleAccountAsidePane($event)"
+        >
+        </aside-menu-account>
     </div>
 </ng-container>

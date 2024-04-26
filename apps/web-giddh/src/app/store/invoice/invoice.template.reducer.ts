@@ -23,6 +23,7 @@ export const initialState: CustomTemplateState = {
         isDefault: false,
         fontMedium: 12,
         isDefaultForVoucher: false,
+        showSectionsInline: false,
         uniqueName: 'gst_template_a',
         createdAt: '',
         updatedAt: '',
@@ -129,7 +130,7 @@ export const initialState: CustomTemplateState = {
                         display: true,
                         width: null
                     },
-                    showIrnNumber: {
+                    showEInvoiceDetails: {
                         label: '',
                         display: false,
                         width: null
@@ -380,7 +381,7 @@ export const initialState: CustomTemplateState = {
         logoSize: 'small/medium/large',
         logoUniqueName: null,
         copyFrom: 'gst_template_a',
-        templateColor: '#f63407',
+        templateColor: '#AB1F00',
         tableColor: '#f2f3f4',
         templateType: 'gst_template_a',
         name: '',

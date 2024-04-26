@@ -28,6 +28,7 @@
                         </a>
                     </div>
                     <button
+                        aria-label="create warehouse"
                         mat-stroked-button
                         color="primary"
                         class="btn mr-0"
@@ -69,8 +70,10 @@
                                     <button
                                         mat-button
                                         [matMenuTriggerFor]="menu"
+                                        aria-label="vertical dots"
+                                        id="warehouse dots"
                                         class="icon-dots-three-vertical dropdown-toggle cp mr-0"
-                                    ></button>
+                                    ><span class="icon-dots-three-vertical"></span></button>
                                     <mat-menu #menu="matMenu">
                                         <button mat-menu-item (click)="editWarehouse(warehouse)">
                                             {{ commonLocaleData?.app_edit }}

@@ -1,0 +1,18 @@
+<div>
+  <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        Design
+      </ng-template>
+      <app-design-filter></app-design-filter>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <div matBadge="2" matBadgePosition="false">
+          <p>Content</p>
+        </div>
+      </ng-template>
+      <app-content-filter></app-content-filter>
+    </mat-tab>
+  </mat-tab-group>
+</div>

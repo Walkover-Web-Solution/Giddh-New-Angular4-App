@@ -1,8 +1,7 @@
-<div #dd [style.width]="width">
-    <!-- <div class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'" (click)="show($event)" [class.open]="isOpen" tabindex="0" (focus)="show($event)" (blur)="hide($event)" (keydown)="keydownUp($event)"> -->
+<!-- <div class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'" (click)="show($event)" [class.open]="isOpen" tabindex="0" (focus)="show($event)" (blur)="hide($event)" (keydown)="keydownUp($event)"> -->
 
-    <!--region multiple-->
-    <!-- <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}" style="background: white;" class="bdr">
+<!--region multiple-->
+<!-- <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}" style="background: white;" class="bdr">
           <ng-container *ngIf="selectedValues?.length">
               <span class="chip" *ngFor="let sl of selectedValues">
                   {{ sl.label }}
@@ -11,13 +10,13 @@
           </ng-container>
           <input type="text" style="opacity: 0 !important;position: absolute" class="pd-l1" [ngClass]="{'hasValue':filter?.length}" #inputFilter (click)="show($event);" (blur)="filterInputBlur($event)" [placeholder]="selectedValues?.length > 0 ? filter : placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)">
       </div> -->
-    <!--endregion-->
+<!--endregion-->
 
-    <!--region single-->
-    <!-- <input type="text" class="form-control" #inputFilter tabindex="0" *ngIf="!multiple" [hidden]="((!isOpen || !isFilterEnabled))" (click)="show($event);" (blur)="filterInputBlur($event)" [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)"
+<!--region single-->
+<!-- <input type="text" class="form-control" #inputFilter tabindex="0" *ngIf="!multiple" [hidden]="((!isOpen || !isFilterEnabled))" (click)="show($event);" (blur)="filterInputBlur($event)" [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)"
           style="padding-right: 22px !important;opacity: 0;position: absolute"> -->
 
-    <!-- <div (click)="show($event);" *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
+<!-- <div (click)="show($event);" *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
           <ng-container *ngIf="selectedValues?.length">
               <div *ngIf="!multiple">
                   <input type="text" readonly value="{{selectedValues[0].label}}" class="form-control selected-val cp" />
@@ -27,11 +26,11 @@
               <input type="text" class="form-control" [placeholder]="placeholder" [value]="filter" style="padding-right: 22px !important;" />
           </ng-container>
       </div> -->
-    <!--endregion-->
+<!--endregion-->
 
-    <!-- </div> -->
-    <!-- <span class="clear" *ngIf="showClear && selectedValues.length > 0" (click)="$event.stopPropagation();clear();">&times;</span> -->
-    <virtual-list-menu
+<!-- </div> -->
+<!-- <span class="clear" *ngIf="showClear && selectedValues.length > 0" (click)="$event.stopPropagation();clear();">&times;</span> -->
+<!-- <virtual-list-menu
         #menuEle
         [isOpen]="isOpen"
         [rows]="rows"
@@ -48,5 +47,52 @@
         [isPaginationEnabled]="isPaginationEnabled"
         [dropdownMinHeight]="dropdownMinHeight"
         (scrollEnd)="scrollEnd.emit()"
-    ></virtual-list-menu>
+    ></virtual-list-menu> -->
+<div [style.width]="width" class="h-100">
+    <div #dd class="menu" *ngIf="isOpen" class="h-100">
+        <ul *ngIf="rows?.length === 0" class="grp-list group-list-no-found users-last-list">
+            <li>
+                <a href="javascript:void(0)"> {{ notFoundMsg }}</a>
+            </li>
+            <li>
+                <a class="btn-link" (click)="noResultsClicked.emit(); hide()" href="javascript:void(0)">{{
+                    notFoundLinkText
+                }}</a>
+            </li>
+        </ul>
+        <div
+            class="h-100"
+        >
+            <ng-container *ngIf="rows?.length">
+                <ul class="grp-list users-last-list">
+                    <cdk-virtual-scroll-viewport
+                        class="virtual-group-list overflow-x-hidden"
+                        [itemSize]="37"
+                        [minBufferPx]="400"
+                        [maxBufferPx]="800"
+                        #cdkMenu
+                    >
+                        <li
+                            *cdkVirtualFor="let row of rows; let j = index; trackBy: trackByFn"
+                            [ngClass]="{ 'hilighted': j === selectedIndex }"
+                            class="list-item sidebarTooltip text-overflow-ellipsis"
+                        >
+                            <a
+                                #focusElement
+                                href="javascript:void(0);"
+                                class="isAcc account-list"
+                                id="acc_{{ row.label }}"
+                                tooltip="{{ row.label }}"
+                                placement="bottom"
+                                (click)="toggleSelected(row)"
+                                (keydown.enter)="toggleSelected(row)"
+                            >
+                                {{ row?.label }}
+                            </a>
+                        </li>
+                    </cdk-virtual-scroll-viewport>
+                </ul>
+            </ng-container>
+        </div>
+    </div>
 </div>

@@ -5,9 +5,12 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div class="pd-b2 mt-2" *ngIf="localeData?.give_permission">
-        <h3 class="mr-b2">
-            <strong>{{ localeData?.give_permission }}:</strong>
-        </h3>
+        <div class="d-flex justify-content-between">
+            <h3 class="mr-b2">
+                <strong>{{ localeData?.give_permission }}:</strong>
+            </h3>
+            <watch-video [cssClass]="'text-primary'" [moduleName]="'MULTI_USER_ACCESS'"></watch-video>
+        </div>
         <setting-permission-form
             [userdata]="null"
             [isLblShow]="false"
@@ -98,6 +101,7 @@
                                                     type="button"
                                                     [hidden]="usrGrp.rows[0].isLoggedInUser"
                                                     (click)="showModalForEdit(user)"
+                                                    aria-label="edit icon"
                                                 >
                                                     <i aria-hidden="true" class="icon-edit-pencil"></i>
                                                 </button>
@@ -106,6 +110,7 @@
                                                     type="button"
                                                     [hidden]="usrGrp.rows[0].isLoggedInUser"
                                                     (click)="onRevokePermission(user?.uniqueName)"
+                                                    aria-label="delete icon"
                                                 >
                                                     <i aria-hidden="true" class="icon-trash"></i>
                                                 </button>
@@ -121,13 +126,12 @@
         </div>
     </div>
 
-    <!-- create Ac modal -->
-
+    <!-- Create Account Dialog -->
     <ng-template #editUserModal>
         <div class="modal-content">
             <div class="modal-header d-flex justify-content-between">
                 <h3 mat-dialog-title>{{ localeData?.create_user_permission }}</h3>
-                <button class="close" (click)="closeEditUserModal(true)">×</button>
+                <button class="close" (click)="closeEditUserModal(true)" aria-label="close">×</button>
             </div>
             <div class="modal-body pt-4">
                 <setting-permission-form
@@ -138,8 +142,8 @@
                     [isHorizntl]="false"
                     [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData"
-                    (hasUnsavedChanges)="updateUnsavedChanges($event)"
                     (onSubmitForm)="submitPermissionForm($event)"
+                    (hasUnsavedChanges)="hasUnsavedChanges = $event"
                 ></setting-permission-form>
             </div>
         </div>

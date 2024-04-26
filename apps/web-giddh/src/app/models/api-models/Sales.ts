@@ -130,6 +130,7 @@ class CompanyDetailsClass {
 }
 
 export class GstDetailsClass {
+    public index?:number;
     public gstNumber?: any;
     public address: string[];
     public state?: StateCode;
@@ -145,6 +146,7 @@ export class GstDetailsClass {
     public taxNumber?: string;
     constructor() {
         this.address = [];
+        this.index = 0;
         this.state = new StateCode();
         this.county = new CountyCode();
     }
@@ -384,6 +386,8 @@ export class SalesEntryClass {
     public tcsTaxList?: string[];
     public tdsTaxList?: string[];
     public purchaseOrderItemMapping?: { uniqueName: string; entryUniqueName: any; };
+    public discountFixedValueModal?: number;
+    public discountPercentageModal?: number;
 
     constructor() {
         this.transactions = [new SalesTransactionItemClass()];
@@ -624,6 +628,7 @@ export class VoucherClass {
     public deposit?: any;
     public exchangeRate?: number;
     public einvoiceGenerated?: boolean;
+    public generateEInvoice?: boolean = undefined;
 
     constructor() {
         this.accountDetails = new AccountDetailsClass();

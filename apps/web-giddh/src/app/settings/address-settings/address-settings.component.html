@@ -12,11 +12,12 @@
                     href="javascript:;"
                     (click)="resetFilter()"
                     [tooltip]="localeData?.reset_search"
+                    aria-label="filter"
                 >
                     <i aria-hidden="true" class="icon-refresh"></i> {{ commonLocaleData?.app_clear_filter }}
                 </a>
             </div>
-            <button mat-stroked-button color="primary" type="button" class="mr-0" (click)="openAddAndManage()">
+            <button mat-stroked-button color="primary" type="button" class="mr-0" (click)="openAddAndManage()" aria-label="address">
                 {{ localeData?.add_address }}
             </button>
         </div>
@@ -26,7 +27,7 @@
             class="w-100 d-flex justify-content-between mb-4 align-items-center address-list-top"
         >
             <div class="font-15">{{ localeData?.address_list }}</div>
-            <button mat-stroked-button color="primary" type="button" class="mr-0" (click)="openAddAndManage()">
+            <button mat-stroked-button color="primary" type="button" class="mr-0" (click)="openAddAndManage()" aria-label="address">
                 {{ localeData?.add_address }}
             </button>
         </div>
@@ -206,10 +207,10 @@
 
                                     <div class="ml-auto">
                                         <div class="action-icon">
-                                            <a href="javascript:void(0);" (click)="handleUpdateAddress(address)">
+                                            <a href="javascript:void(0);" (click)="handleUpdateAddress(address)" aria-label="edit icon">
                                                 <span class="icon-edit"></span
                                             ></a>
-                                            <a href="javascript:void(0);" (click)="showConfirmationModal(address)">
+                                            <a href="javascript:void(0);" (click)="showConfirmationModal(address)" aria-label="delete icon">
                                                 <span class="icon-trash"></span
                                             ></a>
                                         </div>
@@ -220,10 +221,10 @@
                                 <div class="d-flex wrap-linked-company">
                                     <div class="ml-auto">
                                         <div class="action-icon">
-                                            <a href="javascript:void(0);" (click)="handleUpdateAddress(address)">
+                                            <a href="javascript:void(0);" (click)="handleUpdateAddress(address)" aria-label="edit icon">
                                                 <span class="icon-edit"></span
                                             ></a>
-                                            <a href="javascript:void(0);" (click)="showConfirmationModal(address)">
+                                            <a href="javascript:void(0);" (click)="showConfirmationModal(address)" aria-label="delete icon">
                                                 <span class="icon-trash"></span
                                             ></a>
                                         </div>
@@ -568,10 +569,10 @@
                             <h3>{{ localeData?.want_to_continue }}</h3>
                         </div>
                         <div class="d-flex justify-content-start column-gap1">
-                            <button mat-stroked-button color="primary" type="submit" (click)="onConfirmation()">
+                            <button mat-stroked-button color="primary" type="submit" (click)="onConfirmation()" aria-label="yes">
                                 {{ commonLocaleData?.app_yes }}
                             </button>
-                            <button mat-dialog-close mat-stroked-button type="submit" class="btn custom-btn">
+                            <button mat-dialog-close mat-stroked-button type="submit" class="btn custom-btn" aria-label="no">
                                 {{ commonLocaleData?.app_no }}
                             </button>
                         </div>

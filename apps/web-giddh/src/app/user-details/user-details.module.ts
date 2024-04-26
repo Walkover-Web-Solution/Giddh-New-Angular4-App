@@ -40,6 +40,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ClipboardModule } from 'ngx-clipboard';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 
 @NgModule({
 
@@ -92,7 +93,8 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         MatSlideToggleModule,
         ClipboardModule,
         MatTooltipModule,
-        FormFieldsModule
+        FormFieldsModule,
+        WatchVideoModule
     ],
     providers: [
         DecimalPipe

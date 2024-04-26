@@ -7,7 +7,7 @@
 >
     <div class="msg91-container" *ngIf="!showTriggerForm && !(editCommunicationPlatform === 'MSG91')">
         <div class="menu" *ngIf="communicationPlatforms?.MSG91?.isConnected">
-            <button mat-icon-button disableRipple id="edit-model-basic" [matMenuTriggerFor]="beforeMenu">
+            <button mat-icon-button disableRipple id="edit-model-basic" [matMenuTriggerFor]="beforeMenu" aria-label="vertical dot img">
                 <span class="icon-dots-three-vertical"></span>
             </button>
             <mat-menu #beforeMenu="matMenu" xPosition="before">

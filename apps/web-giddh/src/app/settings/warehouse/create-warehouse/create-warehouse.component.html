@@ -27,6 +27,7 @@
                                             src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{
                                                 companyDetails?.country?.countryCode
                                             }}.svg"
+                                            alt="flag"
                                         />
                                         {{ companyDetails?.country?.countryName }} -
                                         {{ companyDetails?.country?.currencyCode }}
@@ -38,7 +39,7 @@
                     </div>
                     <div class="col-lg-2 col-sm-2">
                         <div class="warehouse-image">
-                            <img class="warehouse-image m-15" src="{{ imgPath }}" [alt]="localeData?.warehouse_image" />
+                            <img class="warehouse-image m-15" src="{{ imgPath }}" [alt]="localeData?.warehouse_image" alt="warehouse image" />
                         </div>
                     </div>
                 </div>
@@ -143,10 +144,11 @@
                 </div>
                 <div class="footer-btn row">
                     <div class="button-group">
-                        <button mat-stroked-button type="reset" (click)="handleFormClear()" class="btn custom-btn">
+                        <button mat-stroked-button type="reset" aria-label="clear" (click)="handleFormClear()" class="btn custom-btn">
                             {{ commonLocaleData?.app_clear }}
                         </button>
                         <button
+                            aria-label="create warehouse"
                             mat-stroked-button
                             color="primary"
                             type="submit"

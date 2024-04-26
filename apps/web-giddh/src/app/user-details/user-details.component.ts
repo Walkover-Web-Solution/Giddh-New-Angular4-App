@@ -142,8 +142,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            console.log("params",params);
-            
             if (params['type'] && this.tabName[this.activeTabIndex] !== params['type']) {
                 this.activeTabIndex = this.tabName.indexOf(params['type']);
             } else if (!params['type'] && !this.activeTabIndex) {

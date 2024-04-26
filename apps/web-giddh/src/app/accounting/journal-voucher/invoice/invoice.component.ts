@@ -177,6 +177,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
             }
             return true;
         }), takeUntil(this.destroyed$)).subscribe((d) => {
+
             if (d && d.gridType === 'invoice') {
                 this.data.voucherType = d.page;
                 this.gridType = d.gridType;
