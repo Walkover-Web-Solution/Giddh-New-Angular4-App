@@ -46,7 +46,7 @@ export class AuthHMRCComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.generalService.getClientIp().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.ipAddress) {
-                this.clientIp = response?.ipAddress;
+                this.clientIp = response.ipAddress;
             }
         });
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(query => {
