@@ -9,12 +9,13 @@ import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { Router } from '@angular/router';
-import { AdjustedVoucherType, BROADCAST_CHANNELS, JOURNAL_VOUCHER_ALLOWED_DOMAINS, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
+import { AdjustedVoucherType, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class GeneralService {
@@ -85,7 +86,8 @@ export class GeneralService {
     private _sessionId: string;
 
     constructor(
-        private router: Router
+        private router: Router,
+        private http: HttpClient
     ) { }
 
     public SetIAmLoaded(iAmLoaded: boolean) {
@@ -1711,10 +1713,16 @@ export class GeneralService {
         return plaidSupportedCountryList.includes(countryName.toUpperCase());
     }
 
+    /**
+     * Retrieves the operating system configuration based on the user agent string.
+     *
+     * @returns {string} The name of the operating system.
+     * @memberof GeneralService
+     */
     public getOsConfiguration() {
         const userAgent = window.navigator.userAgent;
-        console.log(userAgent);
         let osName;
+
         if (userAgent.indexOf("Win") != -1) {
             osName = "Windows";
         } else if (userAgent.indexOf("Mac") != -1) {
@@ -1728,14 +1736,20 @@ export class GeneralService {
         } else {
             osName = "Unknown";
         }
+
         return osName;
     }
 
+    /**
+     * Retrieves the device manufacturer based on the user agent string.
+     *
+     * @returns {string} The device manufacturer.
+     * @memberof GeneralService
+     */
     public getDeviceManufacture() {
         const userAgent = window.navigator.userAgent;
         let deviceManufacture = 'Unknown';
 
-        // Example of inferring device manufacturer based on user agent string
         if (userAgent.indexOf('iPhone') !== -1 || userAgent.indexOf('iPad') !== -1) {
             deviceManufacture = 'Apple';
         } else if (userAgent.indexOf('Android') !== -1) {
@@ -1745,20 +1759,27 @@ export class GeneralService {
         return deviceManufacture;
     }
 
+    /**
+     * Retrieves the current timestamp in ISO format.
+     *
+     * @returns {string} The current timestamp.
+     * @memberof GeneralService
+     */
     public getTimesStamp() {
         const timestamp = new Date().toISOString();
         return timestamp;
     }
 
-    public getClientIp() {
-
-    }
-
+    /**
+     * Retrieves the device model based on the user agent string.
+     *
+     * @returns {string} The device model.
+     * @memberof GeneralService
+     */
     public getDeviceModel() {
         const userAgent = window.navigator.userAgent;
         let deviceModel = 'Unknown';
 
-        // Example of inferring device model based on user agent string
         if (userAgent.indexOf('iPhone') !== -1) {
             // Extracting iPhone model from user agent string (Example: "iPhone12,1")
             const match = userAgent.match(/iPhone([\d,_]+)/);
@@ -1779,6 +1800,12 @@ export class GeneralService {
         return deviceModel;
     }
 
+    /**
+     * Retrieves the operating system family based on the user agent string.
+     *
+     * @returns {string} The operating system family.
+     * @memberof GeneralService
+     */
     public getOSFamily() {
         const userAgent = window.navigator.userAgent;
         let osFamily = 'Unknown';
@@ -1798,6 +1825,12 @@ export class GeneralService {
         return osFamily;
     }
 
+    /**
+     * Retrieves the operating system version based on the user agent string.
+     *
+     * @returns {string} The operating system version.
+     * @memberof GeneralService
+     */
     public getOSVersion() {
         const userAgent = window.navigator.userAgent;
         let osVersion = 'Unknown';
@@ -1815,7 +1848,14 @@ export class GeneralService {
         return osVersion;
     }
 
-    extractWindowsVersion(userAgent: string): string {
+    /**
+     * Extracts the Windows version from the user agent string.
+     *
+     * @param {string} userAgent - The user agent string.
+     * @returns {string} The Windows version.
+     * @memberof GeneralService
+     */
+    public extractWindowsVersion(userAgent: string): string {
         // Example: "Windows NT 10.0"
         const startIndex = userAgent.indexOf('Windows NT');
         if (startIndex !== -1) {
@@ -1825,7 +1865,14 @@ export class GeneralService {
         }
     }
 
-    extractMacOSVersion(userAgent: string): string {
+    /**
+     * Extracts the macOS version from the user agent string.
+     *
+     * @param {string} userAgent - The user agent string.
+     * @returns {string} The macOS version.
+     * @memberof GeneralService
+     */
+    public extractMacOSVersion(userAgent: string): string {
         // Example: "Mac OS X 10_15_7"
         const startIndex = userAgent.indexOf('Mac OS X');
         if (startIndex !== -1) {
@@ -1835,7 +1882,14 @@ export class GeneralService {
         }
     }
 
-    extractAndroidVersion(userAgent: string): string {
+    /**
+     * Extracts the Android version from the user agent string.
+     *
+     * @param {string} userAgent - The user agent string.
+     * @returns {string} The Android version.
+     * @memberof GeneralService
+     */
+    public extractAndroidVersion(userAgent: string): string {
         // Example: "Android 10"
         const startIndex = userAgent.indexOf('Android');
         if (startIndex !== -1) {
@@ -1845,7 +1899,14 @@ export class GeneralService {
         }
     }
 
-    extractiOSVersion(userAgent: string): string {
+    /**
+    * Extracts the OS version from the user agent string.
+    *
+    * @param {string} userAgent - The user agent string.
+    * @returns {string} The Android version.
+    * @memberof GeneralService
+    */
+    public extractiOSVersion(userAgent: string): string {
         // Example: "iPhone OS 14_4"
         const startIndex = userAgent.indexOf('iPhone OS');
         if (startIndex !== -1) {
@@ -1853,5 +1914,41 @@ export class GeneralService {
         } else {
             return 'Unknown';
         }
+    }
+
+    /**
+     * This will be use for get user agent
+     *
+     * @param {*} clientIp
+     * @return {*}
+     * @memberof GeneralService
+     */
+    public getUserAgentData(clientIp: any) {
+        let osName = this.getOsConfiguration();
+        let osVersion = this.getOSVersion();
+        let osFamily = this.getOSFamily();
+        let deviceManufacture = this.getDeviceManufacture();
+        let deviceModel = this.getDeviceModel();
+        let deviceTimestamp = this.getTimesStamp();
+        let ip = clientIp;
+        let args: any = { headers: {} };
+        args.headers['os'] = osName;
+        args.headers['os-family'] = osFamily;
+        args.headers['os-version'] = osVersion;
+        args.headers['device-manufacturer'] = deviceManufacture;
+        args.headers['device-model'] = deviceModel;
+        args.headers['mac-address'] = osName;
+        args.headers['timestamp'] = deviceTimestamp;
+        args.headers['client-ip'] = ip;
+        return args.headers
+    }
+
+    /**
+     *This will return the client IP address
+     *
+     * @memberof GeneralService
+     */
+    public getClientIp() {
+        return this.http.get<any>(MOBILE_NUMBER_SELF_URL);
     }
 }
