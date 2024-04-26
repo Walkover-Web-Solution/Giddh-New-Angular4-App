@@ -148,19 +148,23 @@
                                                     </span> -->
                                                 <mat-form-field appearance="outline" class="w-100">
                                                     <mat-label>{{ commonLocaleData?.app_address }}</mat-label>
-                                                    <textarea matInput [class.error-box]="
-                                                            addressForm?.get('taxNumber')?.valid &&
-                                                            addressForm?.get('taxNumber')?.value &&
-                                                            addressForm?.get('address')?.touched &&
-                                                            addressForm?.get('address')?.errors?.required
-                                                        " name="name" class="form-control min-height-100"
+                                                    <textarea 
+                                                        matInput 
+                                                        name="name" 
+                                                        class="form-control min-height-100"
                                                         formControlName="address"
-                                                        [placeholder]="localeData?.enter_address" [attr.required]="
+                                                        [placeholder]="localeData?.enter_address"
+                                                        [class.error-box]="
+                                                                addressForm?.get('taxNumber')?.valid &&
+                                                                addressForm?.get('taxNumber')?.value &&
+                                                                addressForm?.get('address')?.touched &&
+                                                                addressForm?.get('address')?.errors?.required" 
+                                                        [attr.required]="
                                                             addressForm?.get('taxNumber')?.valid &&
                                                             addressForm?.get('taxNumber')?.value &&
                                                             addressConfiguration?.tax &&
-                                                            addressConfiguration?.tax?.name === 'GSTIN'
-                                                        "></textarea>
+                                                            addressConfiguration?.tax?.name === 'GSTIN'"
+                                                    ></textarea>
                                                 </mat-form-field>
                                             </div>
                                         </div>
@@ -296,8 +300,8 @@
                                                 <mat-form-field appearance="outline" class="w-100">
                                                     <mat-label>{{localeData?.link_entity}}</mat-label>
                                                     <mat-chip-list #chipList>
-                                                      <mat-chip *ngFor="let selected of selectedEntity" (removed)="removeItem(selected)">
-                                                        {{ selected?.name }} 
+                                                      <mat-chip class="mr-1" *ngFor="let selected of addressForm.get('linkedEntity')?.value" (removed)="removeItem(selected)">
+                                                        {{ selected?.alias }} 
                                                         <span matChipRemove><i class="icon-cross"></i></span>
                                                       </mat-chip>
                                                     </mat-chip-list>

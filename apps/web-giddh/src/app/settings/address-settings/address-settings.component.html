@@ -450,8 +450,8 @@
                                 <label>{{ commonLocaleData?.app_address }}:</label>
                                 <p>
                                     {{ address.address }}
-                                    <ng-container *ngIf="showTaxColumn && address.taxType && address.taxNumber">
-                                        <br *ngIf="address.address" />
+                                    <ng-container *ngIf="showTaxColumn && address.taxType && address.taxNumber && address.address">
+                                        <br/>
                                         {{ address.taxType }} : {{ address.taxNumber }}
                                     </ng-container>
                                 </p>

@@ -10,6 +10,10 @@ import { ScrollingModule } from "@angular/cdk/scrolling";
 import { CreateAddressComponent } from "./create-address.component";
 import { LaddaModule } from "angular2-ladda";
 import { MatDialogModule } from "@angular/material/dialog";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
+import { MatChipsModule } from "@angular/material/chips";
 
 @NgModule({
     declarations: [
@@ -25,7 +29,11 @@ import { MatDialogModule } from "@angular/material/dialog";
         FormFieldsModule,
         ShSelectModule,
         LaddaModule,
-        MatDialogModule
+        MatDialogModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatChipsModule
     ],
     exports: [
         CreateAddressComponent

@@ -278,7 +278,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         });
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            this.currentTab = (params['referrer']) ? params['referrer'] : "personal";
+            this.currentTab = (params['referrer']) ? params['referrer'] : this.router.navigate(['/pages/settings/profile/personal']);
             if((params['referrer']) === 'personal') { this.activeTabIndex = 0; }
             if((params['referrer']) === 'address') { this.activeTabIndex = 1; }
             if((params['referrer']) === 'other') { this.activeTabIndex = 2; }
@@ -989,6 +989,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public createNewAddress(addressDetails: any): void {
+        console.log("createNewAddress  at SettingProfileComponent ", addressDetails);
+        
         this.isAddressChangeInProgress = true;
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState?.value === addressDetails.formValue.state);
         let linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity?.uniqueName))).map(filteredEntity => ({
@@ -1016,6 +1018,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 } else if (this.currentOrganizationType === OrganizationType.Branch) {
                     this.store.dispatch(this.settingsProfileActions.getBranchInfo());
                 }
+                console.log("settingsProfileService.createNewAddress");
                 this._toasty.successToast('Address created successfully');
             } else {
                 this._toasty.errorToast(response?.message);

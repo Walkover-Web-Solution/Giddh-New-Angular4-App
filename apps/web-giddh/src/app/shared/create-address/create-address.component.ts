@@ -74,6 +74,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public ngOnInit(): void {
+        console.log(this.addressConfiguration.linkedEntities);
+
         if (this.addressConfiguration) {
             if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateBranchAddress) {
                 this.addressConfiguration.linkedEntities = this.addressConfiguration.linkedEntities?.filter(address => (!address.entity?.includes(this.entityArchived)) || (address.entity?.includes(this.entityArchived) && !address.isArchived));
@@ -90,7 +92,10 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 if (this.currentOrganizationUniqueName && this.addressConfiguration && this.addressConfiguration.linkedEntities
                     && this.addressConfiguration.linkedEntities.some(entity => entity?.uniqueName === this.currentOrganizationUniqueName)) {
                     // This will by default show the current organization unique name as selected linked entity
-                    this.addressForm.get('linkedEntity')?.patchValue([`${this.currentOrganizationUniqueName}`]);
+                    const currentOrganizationUniqueNameObj = this.addressConfiguration.linkedEntities?.filter(i => i?.uniqueName === this.currentOrganizationUniqueName);
+                    this.addressForm.get('linkedEntity')?.patchValue(currentOrganizationUniqueNameObj);
+                    console.log(this.addressForm.get('linkedEntity').value);
+
                 }
             } else if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress) {
                 if (this.addressToUpdate) {
@@ -327,9 +332,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             });
         }
         option.isDefault = !option.isDefault;
-        if (option.isDefault) {
-            this.addressForm.get('linkedEntity')?.patchValue([...this.addressForm.get('linkedEntity')?.value, option?.value]);
-        }
+        // if (option.isDefault) { UNSED LOGIC
+        //     this.addressForm.get('linkedEntity')?.patchValue([...this.addressForm.get('linkedEntity')?.value, option?.value]);
+        // }
     }
 
     /**
@@ -340,33 +345,20 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      */
     public selectEntity(option: any): void {
 
-        console.log("option", option.value);
-        console.log("this.selectedEntity", this.selectedEntity);
-        
-
-        if (option.value[0]?.alias) {
-            if (!this.selectedEntity.some(item => item.uniqueName === (option.value[option.value.length - 1]?.uniqueName))) {
-                this.selectedEntity.push({ name: option.value[option.value.length - 1]?.alias, uniqueName: option.value[option.value.length - 1]?.uniqueName });
-            }else{
-                const index = this.selectedEntity.findIndex( item =>  item?.uniqueName == option.value[option.value.length - 1]?.uniqueName);
-                this.selectedEntity.splice(index, 1);
-            }
-        }
-
         if (option?.isDefault) {
             option.isDefault = false;
         }
     }
 
+    /**
+     * Handle Remove Item from Mat Chip and 
+     * remove item form linkedEntity
+     *
+     * @param {*} element
+     * @memberof CreateAddressComponent
+     */
     public removeItem(element: any): void {
-        const index = this.selectedEntity.findIndex(item => item == element);
-        this.addressForm.get('linkedEntity')?.value
-        console.log("address form", this.addressForm.get('linkedEntity')?.value);
-
-        // this.addressForm.get('linkedEntity')?.patchValue([...this.addressForm.get('linkedEntity')?.value,option.value[0]?.uniqueName]);
-        this.selectedEntity.splice(index, 1);
-        console.log("selectedEntity", this.selectedEntity);
-
+        this.addressForm.get('linkedEntity')?.patchValue(this.addressForm.get('linkedEntity').value.filter(i => i !== element));
     }
 
     /**
