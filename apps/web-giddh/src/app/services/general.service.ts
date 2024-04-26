@@ -102,6 +102,7 @@ export class GeneralService {
                 url += `${delimiter}${key}=${params[key]}`
             }
         });
+        return url;
     }
 
     public setIsMobileView(isMobileView: boolean) {
