@@ -271,7 +271,7 @@
                                                 </div>
                                             </mat-menu>
 
-                                            <div class="vouchers-address-form form-disabled"
+                                            <div class="vouchers-address-form" [ngClass]="{'form-disabled': copyAccountBillingInShippingAddress}"
                                                 *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                                 <div class="address-field">
                                                     <textarea rows="2" matInput class="w-100" name="shippingDetails"
@@ -463,7 +463,7 @@
                                             </div>
                                         </mat-menu>
 
-                                        <div class="vouchers-address-form form-disabled"
+                                        <div class="vouchers-address-form" [ngClass]="{'form-disabled': copyCompanyBillingInShippingAddress}"
                                             *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                             <div class="address-field">
                                                 <textarea rows="2" matInput class="w-100" name="companyShippingAddress"
