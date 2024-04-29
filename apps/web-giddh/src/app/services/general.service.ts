@@ -9,13 +9,14 @@ import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { Router } from '@angular/router';
-import { AdjustedVoucherType, BROADCAST_CHANNELS, JOURNAL_VOUCHER_ALLOWED_DOMAINS, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
+import { AdjustedVoucherType, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class GeneralService {
@@ -86,7 +87,8 @@ export class GeneralService {
     private _sessionId: string;
 
     constructor(
-        private router: Router
+        private router: Router,
+        private http: HttpClient
     ) { }
 
     public SetIAmLoaded(iAmLoaded: boolean) {
@@ -1693,25 +1695,252 @@ export class GeneralService {
     }
 
     /**
-     * This will return the system current user time zone
+     * Retrieves the operating system configuration based on the user agent string.
      *
-     * @return {*}
+     * @returns {string} The name of the operating system.
      * @memberof GeneralService
      */
-    public getUserTimeZone(): any {
-        let offset = new Date().getTimezoneOffset(), o = Math.abs(offset);
-        return (offset < 0 ? "+" : "-") + ("00" + Math.floor(o / 60)).slice(-2) + ":" + ("00" + (o % 60)).slice(-2);
+    public getOsConfiguration(): string {
+        const userAgent = window.navigator.userAgent;
+        let osName;
+
+        if (userAgent.indexOf("Win") !== -1) {
+            osName = "Windows";
+        } else if (userAgent.indexOf("Mac") !== -1) {
+            osName = "Macintosh";
+        } else if (userAgent.indexOf("Linux") !== -1) {
+            osName = "Linux";
+        } else if (userAgent.indexOf("Android") !== -1) {
+            osName = "Android";
+        } else if (userAgent.indexOf("iOS") !== -1) {
+            osName = "iOS";
+        } else {
+            osName = "Unknown";
+        }
+
+        return osName;
     }
 
     /**
-     *This will be return government client time zone header
+     * Retrieves the device manufacturer based on the user agent string.
      *
-     * @param {*} timezone
-     * @return {*}  {*}
+     * @returns {string} The device manufacturer.
      * @memberof GeneralService
      */
-    public getGovClientTimezoneHeader(timezone: any): any {
-        const headers = new HttpHeaders().set('Gov-Client-Timezone', 'UTC' + timezone);
-        return { headers };
+    public getDeviceManufacture(): string {
+        const userAgent = window.navigator.userAgent;
+        let deviceManufacture = 'Unknown';
+
+        if (userAgent.indexOf('iPhone') !== -1 || userAgent.indexOf('iPad') !== -1) {
+            deviceManufacture = 'Apple';
+        } else if (userAgent.indexOf('Android') !== -1) {
+            deviceManufacture = 'Samsung'; // Assuming Samsung for Android, could be any Android device manufacturer
+        } // Add additional checks for other common devices if needed
+
+        return deviceManufacture;
+    }
+
+    /**
+     * Retrieves the current timestamp in ISO format.
+     *
+     * @returns {string} The current timestamp.
+     * @memberof GeneralService
+     */
+    public getTimesStamp(): any {
+        const timestamp = new Date().toISOString();
+        return timestamp;
+    }
+
+    /**
+     * Retrieves the device model based on the user agent string.
+     *
+     * @returns {string} The device model.
+     * @memberof GeneralService
+     */
+    public getDeviceModel(): string {
+        const userAgent = window.navigator.userAgent;
+        let deviceModel = 'Unknown';
+
+        if (userAgent.indexOf('iPhone') !== -1) {
+            // Extracting iPhone model from user agent string (Example: "iPhone12,1")
+            const match = userAgent.match(/iPhone([\d,_]+)/);
+            if (match && match.length > 1) {
+                deviceModel = match[1].replace(/_/g, '.'); // Replacing underscores with dots
+            }
+        } else if (userAgent.indexOf('iPad') !== -1) {
+            // Extracting iPad model from user agent string (Example: "iPad11,1")
+            const match = userAgent.match(/iPad([\d,_]+)/);
+            if (match && match.length > 1) {
+                deviceModel = match[1].replace(/_/g, '.'); // Replacing underscores with dots
+            }
+        } else if (userAgent.indexOf('Android') !== -1) {
+            // Example of assuming device model for Android devices
+            deviceModel = 'Unknown'; // This might vary significantly
+        } // Add additional checks for other common devices if needed
+
+        return deviceModel;
+    }
+
+    /**
+     * Retrieves the operating system family based on the user agent string.
+     *
+     * @returns {string} The operating system family.
+     * @memberof GeneralService
+     */
+    public getOSFamily(): string {
+        const userAgent = window.navigator.userAgent;
+        let osFamily = 'Unknown';
+
+        if (userAgent.indexOf('Windows') !== -1) {
+            osFamily = 'Windows';
+        } else if (userAgent.indexOf('Macintosh') !== -1) {
+            osFamily = 'Macintosh';
+        } else if (userAgent.indexOf('Linux') !== -1) {
+            osFamily = 'Linux';
+        } else if (userAgent.indexOf('Android') !== -1) {
+            osFamily = 'Android';
+        } else if (userAgent.indexOf('iPhone') !== -1 || userAgent.indexOf('iPad') !== -1) {
+            osFamily = 'iOS';
+        } // Add additional checks for other OS families if needed
+
+        return osFamily;
+    }
+
+    /**
+     * Retrieves the operating system version based on the user agent string.
+     *
+     * @returns {string} The operating system version.
+     * @memberof GeneralService
+     */
+    public getOSVersion(): string {
+        const userAgent = window.navigator.userAgent;
+        let osVersion = 'Unknown';
+
+        if (userAgent.indexOf('Windows NT') !== -1) {
+            osVersion = this.extractWindowsVersion(userAgent);
+        } else if (userAgent.indexOf('Mac OS X') !== -1) {
+            osVersion = this.extractMacOSVersion(userAgent);
+        } else if (userAgent.indexOf('Android') !== -1) {
+            osVersion = this.extractAndroidVersion(userAgent);
+        } else if (userAgent.indexOf('iPhone') !== -1 || userAgent.indexOf('iPad') !== -1) {
+            osVersion = this.extractiOSVersion(userAgent);
+        } // Add additional checks for Linux, etc. if needed
+
+        return osVersion;
+    }
+
+    /**
+     * Extracts the Windows version from the user agent string.
+     *
+     * @param {string} userAgent - The user agent string.
+     * @returns {string} The Windows version.
+     * @memberof GeneralService
+     */
+    public extractWindowsVersion(userAgent: string): string {
+        // Example: "Windows NT 10.0"
+        const startIndex = userAgent.indexOf('Windows NT');
+        if (startIndex !== -1) {
+            return userAgent.substring(startIndex + 11, userAgent.indexOf(';', startIndex));
+        } else {
+            return 'Unknown';
+        }
+    }
+
+    /**
+     * Extracts the macOS version from the user agent string.
+     *
+     * @param {string} userAgent - The user agent string.
+     * @returns {string} The macOS version.
+     * @memberof GeneralService
+     */
+    public extractMacOSVersion(userAgent: string): string {
+        // Example: "Mac OS X 10_15_7"
+        const startIndex = userAgent.indexOf('Mac OS X');
+        if (startIndex !== -1) {
+            return userAgent.substring(startIndex + 9, userAgent.indexOf(')', startIndex)).replace(/_/g, '.');
+        } else {
+            return 'Unknown';
+        }
+    }
+
+    /**
+     * Extracts the Android version from the user agent string.
+     *
+     * @param {string} userAgent - The user agent string.
+     * @returns {string} The Android version.
+     * @memberof GeneralService
+     */
+    public extractAndroidVersion(userAgent: string): string {
+        // Example: "Android 10"
+        const startIndex = userAgent.indexOf('Android');
+        if (startIndex !== -1) {
+            return userAgent.substring(startIndex + 8, userAgent.indexOf(';', startIndex));
+        } else {
+            return 'Unknown';
+        }
+    }
+
+    /**
+    * Extracts the OS version from the user agent string.
+    *
+    * @param {string} userAgent - The user agent string.
+    * @returns {string} The Android version.
+    * @memberof GeneralService
+    */
+    public extractiOSVersion(userAgent: string): string {
+        // Example: "iPhone OS 14_4"
+        const startIndex = userAgent.indexOf('iPhone OS');
+        if (startIndex !== -1) {
+            return userAgent.substring(startIndex + 10, userAgent.indexOf(';', startIndex)).replace(/_/g, '.');
+        } else {
+            return 'Unknown';
+        }
+    }
+
+    /**
+    * Generates a UUID (Universally Unique Identifier).
+    *
+    * @returns {string} The generated UUID.
+    * @memberof GeneralService
+    */
+    public generateUUID(): string {
+        return uuidv4();
+    }
+
+    /**
+     * This will be use for get user agent
+     *
+     * @param {*} clientIp
+     * @return {*}
+     * @memberof GeneralService
+     */
+    public getUserAgentData(clientIp: any): any {
+        let osName = this.getOsConfiguration();
+        let osVersion = this.getOSVersion();
+        let osFamily = this.getOSFamily();
+        let deviceManufacture = this.getDeviceManufacture();
+        let deviceModel = this.getDeviceModel();
+        let deviceTimestamp = this.getTimesStamp();
+        let macAddress = this.generateUUID();
+        let ip = clientIp;
+        let args: any = { headers: {} };
+        args.headers['os'] = osName;
+        args.headers['os-family'] = osFamily;
+        args.headers['os-version'] = osVersion;
+        args.headers['device-manufacturer'] = deviceManufacture;
+        args.headers['device-model'] = deviceModel;
+        args.headers['mac-address'] = macAddress;
+        args.headers['timestamp'] = deviceTimestamp;
+        args.headers['client-ip'] = ip;
+        return args.headers
+    }
+
+    /**
+     *This will return the client IP address
+     *
+     * @memberof GeneralService
+     */
+    public getClientIp(): any {
+        return this.http.get<any>(MOBILE_NUMBER_SELF_URL);
     }
 }
