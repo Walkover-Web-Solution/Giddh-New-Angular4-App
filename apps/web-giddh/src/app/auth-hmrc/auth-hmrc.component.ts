@@ -5,6 +5,7 @@ import { VatService } from '../services/vat.service';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
 import { ToasterService } from '../services/toaster.service';
+import { GeneralService } from '../services/general.service';
 
 @Component({
     selector: 'auth-hmrc-component',
@@ -19,11 +20,14 @@ export class AuthHMRCComponent implements OnInit, OnDestroy {
     private companyUniqueName: string;
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Hold system user client ip */
+    public clientIp: string = "";
 
     constructor(
         private router: Router,
         private route: ActivatedRoute,
         private vatService: VatService,
+        private generalService: GeneralService,
         private store: Store<AppState>,
         private toaster: ToasterService
     ) {
@@ -40,6 +44,11 @@ export class AuthHMRCComponent implements OnInit, OnDestroy {
     * @memberof AuthHMRCComponent
     */
     public ngOnInit(): void {
+        this.generalService.getClientIp().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.ipAddress) {
+                this.clientIp = response.ipAddress;
+            }
+        });
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(query => {
             if (query?.code) {
                 this.saveAuthorization(query.code);
@@ -55,7 +64,7 @@ export class AuthHMRCComponent implements OnInit, OnDestroy {
     * @memberof AuthHMRCComponent
     */
     private saveAuthorization(authorizationCode: string): void {
-        this.vatService.saveAuthorizationCode(this.companyUniqueName, { code: authorizationCode }).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this.vatService.saveAuthorizationCode(this.companyUniqueName, { code: authorizationCode }, this.clientIp).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === 'success') {
                 this.toaster.showSnackBar('success', this.commonLocaleData?.app_messages.auth_hmrc_success_message);
                 this.router.navigate(['/pages/vat-report/obligations']);
