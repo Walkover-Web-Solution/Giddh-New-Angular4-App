@@ -31,12 +31,18 @@
                                 aria-labelledby="button-basic2"
                             >
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:void(0)" (click)="goToInvoice('cash')">{{
+                                    <a class="dropdown-item" href="javascript:void(0)" *ngIf="voucherApiVersion === 1" (click)="goToInvoice('cash')">{{
+                                        localeData?.cash_invoice
+                                    }}</a>
+                                    <a class="dropdown-item" href="javascript:void(0)" *ngIf="voucherApiVersion === 2" [routerLink]="['/pages/vouchers/cash/create']">{{
                                         localeData?.cash_invoice
                                     }}</a>
                                 </li>
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:void(0)" (click)="goToInvoice('sales')">{{
+                                    <a class="dropdown-item" href="javascript:void(0)" *ngIf="voucherApiVersion === 1" (click)="goToInvoice('sales')">{{
+                                        localeData?.sales_invoice
+                                    }}</a>
+                                    <a class="dropdown-item" href="javascript:void(0)" *ngIf="voucherApiVersion === 2" [routerLink]="['/pages/vouchers/sales/create']">{{
                                         localeData?.sales_invoice
                                     }}</a>
                                 </li>

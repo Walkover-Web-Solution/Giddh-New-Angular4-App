@@ -11,9 +11,16 @@
             <div class="d-flex date-advance-search">
                 <div class="btn-wrapper">
                     <button
-                        *ngIf="!isCompany"
+                        *ngIf="!isCompany && voucherApiVersion === 1"
                         class="btn btn-sky-blue desktop-view-btn"
                         [routerLink]="['/pages/purchase-management/purchase-order/new']"
+                    >
+                        {{ localeData?.new_order }}
+                    </button>
+                    <button
+                        *ngIf="!isCompany && voucherApiVersion === 2"
+                        class="btn btn-sky-blue desktop-view-btn"
+                        [routerLink]="['/pages/vouchers/purchase-order/create']"
                     >
                         {{ localeData?.new_order }}
                     </button>

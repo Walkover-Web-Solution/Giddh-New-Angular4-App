@@ -192,6 +192,8 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     public hasVoucherListPermissions: boolean = true;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(private store: Store<AppState>, private proformaActions: ProformaActions, private router: Router, private _cdr: ChangeDetectorRef, private _breakPointObservar: BreakpointObserver, private generalService: GeneralService, private modalService: BsModalService, private commonActions: CommonActions) {
         this.advanceSearchFilter.page = 1;
@@ -216,6 +218,7 @@ export class ProformaListComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile) {
                 this.baseCurrencySymbol = profile.baseCurrencySymbol;
