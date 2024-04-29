@@ -404,14 +404,14 @@ export class VouchersUtilityService {
     }
 
     public copyCompanyStateToCounty(invoiceForm: any): any {
-        if (invoiceForm.company.billingDetails.state?.code) {
+        if (invoiceForm.company?.billingDetails?.state?.code) {
             invoiceForm.company.billingDetails.county = {
                 name: invoiceForm.company.billingDetails.state?.name,
                 code: invoiceForm.company.billingDetails.state?.code
             };
         }
 
-        if (invoiceForm.company.shippingDetails.state?.code) {
+        if (invoiceForm.company?.shippingDetails?.state?.code) {
             invoiceForm.company.shippingDetails.county = {
                 name: invoiceForm.company.shippingDetails.state?.name,
                 code: invoiceForm.company.shippingDetails.state?.code
