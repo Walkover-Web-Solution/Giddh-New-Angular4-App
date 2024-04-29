@@ -318,24 +318,28 @@ export class VouchersUtilityService {
         return invoiceForm;
     }
 
+    private getAddress(address: any): string {
+        return (typeof address === "string") ? address : address[0];
+    }
+
     public formatBillingShippingAddress(invoiceForm: any): any {
-        if (invoiceForm?.account?.billingDetails?.address) {
-            invoiceForm.account.billingDetails.address = [invoiceForm.account.billingDetails.address?.trim()?.replace(/\n/g, '<br />')];
+        if (invoiceForm?.account?.billingDetails?.address?.length) {
+            invoiceForm.account.billingDetails.address = [this.getAddress(invoiceForm.account.billingDetails.address)?.trim()?.replace(/\n/g, '<br />')];
             invoiceForm.account.billingDetails.address = invoiceForm.account.billingDetails.address[0]?.split('<br />');
         }
 
-        if (invoiceForm?.account?.shippingDetails?.address) {
-            invoiceForm.account.shippingDetails.address = [invoiceForm.account.shippingDetails.address?.trim()?.replace(/\n/g, '<br />')];
+        if (invoiceForm?.account?.shippingDetails?.address?.length) {
+            invoiceForm.account.shippingDetails.address = [this.getAddress(invoiceForm.account.shippingDetails.address)?.trim()?.replace(/\n/g, '<br />')];
             invoiceForm.account.shippingDetails.address = invoiceForm.account.shippingDetails.address[0]?.split('<br />');
         }
 
-        if (invoiceForm?.company?.billingDetails?.address) {
-            invoiceForm.company.billingDetails.address = [invoiceForm.company.billingDetails.address?.trim()?.replace(/\n/g, '<br />')];
+        if (invoiceForm?.company?.billingDetails?.address?.length) {
+            invoiceForm.company.billingDetails.address = [this.getAddress(invoiceForm.company.billingDetails.address)?.trim()?.replace(/\n/g, '<br />')];
             invoiceForm.company.billingDetails.address = invoiceForm.company.billingDetails.address[0]?.split('<br />');
         }
 
-        if (invoiceForm?.company?.shippingDetails?.address) {
-            invoiceForm.company.shippingDetails.address = [invoiceForm.company.shippingDetails.address?.trim()?.replace(/\n/g, '<br />')];
+        if (invoiceForm?.company?.shippingDetails?.address?.length) {
+            invoiceForm.company.shippingDetails.address = [this.getAddress(invoiceForm.company.shippingDetails.address)?.trim()?.replace(/\n/g, '<br />')];
             invoiceForm.company.shippingDetails.address = invoiceForm.company.shippingDetails.address[0]?.split('<br />');
         }
 

@@ -3077,6 +3077,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else if (this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice) {
             invoiceForm.type = VoucherTypeEnum.sales;
 
+            if (!this.isUkAccount) {
+                if (invoiceForm.account?.billingDetails?.state?.code) {
+                    invoiceForm.account.billingDetails.stateCode = invoiceForm.account.billingDetails.state?.code;
+                    invoiceForm.account.billingDetails.stateName = invoiceForm.account.billingDetails.state?.name;
+                }
+
+                if (invoiceForm.account?.shippingDetails?.state?.code) {
+                    invoiceForm.account.shippingDetails.stateCode = invoiceForm.account.shippingDetails.state?.code;
+                    invoiceForm.account.shippingDetails.stateName = invoiceForm.account.shippingDetails.state?.name;
+                }
+            }
+
             if (invoiceForm.deposit?.amountForAccount) {
                 invoiceForm.paymentAction = {
                     action: 'paid',
