@@ -1,15 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ReplaySubject} from 'rxjs';
-import { BsModalService } from 'ngx-bootstrap/modal';
-import { GeneralService } from '../../services/general.service';
+import { ReplaySubject, take} from 'rxjs';
 import { AppState } from '../../store';
 import { Store } from '@ngrx/store';
-import { GstReconcileService } from '../../services/gst-reconcile.service';
-import { FormControl, UntypedFormBuilder, Validators } from '@angular/forms';
-import { VatService } from '../../services/vat.service';
+import { FormControl, Validators } from '@angular/forms';
 import { ToasterService } from '../../services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { SettingsProfileService } from '../../services/settings.profile.service';
+import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 
 @Component({
     selector: 'with-held-setting-component',
@@ -27,19 +25,16 @@ export class WithHeldSettingComponent implements OnInit, OnDestroy {
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideTaxSidebarMenuState: string = 'in';
     /** Holds With Held Form control */
-    public taxPercentage: FormControl = new FormControl(6, [Validators.required]);
-
+    public taxPercentage: FormControl = new FormControl(6, [Validators.max(100), Validators.required]);
 
     constructor(
-        private store: Store<AppState>,
-        private generalService: GeneralService,
-        private vatService: VatService,
+        private settingsProfileService: SettingsProfileService,
         private toaster: ToasterService,
         public dialog: MatDialog,
-        private route: Router
-    ) {
-
-    }
+        private route: Router,
+        private store: Store<AppState>,
+        private settingsProfileActions: SettingsProfileActions
+    ) {}
 
     /**
     * Lifecycle hook for initialization
@@ -47,7 +42,35 @@ export class WithHeldSettingComponent implements OnInit, OnDestroy {
     * @memberof WithHeldSettingComponent
     */
     public ngOnInit(): void {
+        this.getWithHeldValue();
         document.querySelector('body').classList.add('gst-sidebar-open');
+    }
+
+    /**
+     * Get With Held Tax Percentage value
+     *
+     * @private
+     * @memberof WithHeldSettingComponent
+     */
+    private getWithHeldValue(): void {
+        this.settingsProfileService.getCompanyDetails(null).pipe(take(1)).subscribe((response: any) => {
+            if (response?.status === "success" && response?.body?.withHeldTax) {
+                this.taxPercentage.patchValue(response.body.withHeldTax);
+            } else if(response?.message){
+                this.toaster.errorToast(response.message);
+            }
+        });
+    }
+
+    /**
+     * Handle form submit and update 
+     * With Held Tax Percentage value
+     *
+     * @memberof WithHeldSettingComponent
+     */
+    public handleFormSubmit(): void {
+        const model = { withHeldTax: this.taxPercentage.value }
+        this.store.dispatch(this.settingsProfileActions.PatchProfile(model));
     }
 
     /**
