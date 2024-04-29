@@ -1051,7 +1051,7 @@
                                                                                 class="font-14 text-gray mt-1 d-inline-block"
                                                                                 *ngIf="isMultiCurrencyVoucher">
                                                                                 <amount-field
-                                                                                    [amount]="transaction.get('stock.rate.rateForAccount')?.value * invoiceForm.get('exchangeRate')?.value"
+                                                                                    [amount]="currencySwitched ? transaction.get('stock.rate.rateForAccount')?.value / invoiceForm.get('exchangeRate')?.value : transaction.get('stock.rate.rateForAccount')?.value * invoiceForm.get('exchangeRate')?.value"
                                                                                     [currencySymbol]="company.baseCurrencySymbol"
                                                                                     [currencyCode]="company.baseCurrency">
                                                                                 </amount-field>
@@ -1090,7 +1090,7 @@
                                                                     <span class="font-14 text-gray mt-1 d-inline-block wrap-td-data"
                                                                         *ngIf="isMultiCurrencyVoucher">
                                                                         <amount-field
-                                                                            [amount]="transaction.get('amount.amountForAccount')?.value * invoiceForm.get('exchangeRate')?.value"
+                                                                            [amount]="currencySwitched ? transaction.get('amount.amountForAccount')?.value / invoiceForm.get('exchangeRate')?.value : transaction.get('amount.amountForAccount')?.value * invoiceForm.get('exchangeRate')?.value"
                                                                             [currencySymbol]="company.baseCurrencySymbol"
                                                                             [currencyCode]="company.baseCurrency">
                                                                         </amount-field>
@@ -1129,7 +1129,7 @@
                                                                     <span class="font-14 text-gray mt-1 d-inline-block wrap-td-data"
                                                                         *ngIf="isMultiCurrencyVoucher">
                                                                         <amount-field
-                                                                            [amount]="entry.get('totalDiscount')?.value * invoiceForm.get('exchangeRate')?.value"
+                                                                            [amount]="currencySwitched ? entry.get('totalDiscount')?.value / invoiceForm.get('exchangeRate')?.value : entry.get('totalDiscount')?.value * invoiceForm.get('exchangeRate')?.value"
                                                                             [currencySymbol]="company.baseCurrencySymbol"
                                                                             [currencyCode]="company.baseCurrency">
                                                                         </amount-field>
@@ -1170,7 +1170,7 @@
                                                                     <span class="font-14 text-gray mt-1 d-inline-block wrap-td-data"
                                                                         *ngIf="isMultiCurrencyVoucher">
                                                                         <amount-field
-                                                                            [amount]="entry.get('totalTax')?.value * invoiceForm.get('exchangeRate')?.value"
+                                                                            [amount]="currencySwitched ? entry.get('totalTax')?.value / invoiceForm.get('exchangeRate')?.value : entry.get('totalTax')?.value * invoiceForm.get('exchangeRate')?.value"
                                                                             [currencySymbol]="company.baseCurrencySymbol"
                                                                             [currencyCode]="company.baseCurrency">
                                                                         </amount-field>
@@ -1212,7 +1212,7 @@
                                                                 <span class="font-14 text-gray mt-1 d-inline-block"
                                                                     *ngIf="isMultiCurrencyVoucher">
                                                                     <amount-field
-                                                                        [amount]="entry.get('total.amountForAccount')?.value * invoiceForm.get('exchangeRate')?.value"
+                                                                        [amount]="currencySwitched ? entry.get('total.amountForAccount')?.value / invoiceForm.get('exchangeRate')?.value : entry.get('total.amountForAccount')?.value * invoiceForm.get('exchangeRate')?.value"
                                                                         [currencySymbol]="company.baseCurrencySymbol"
                                                                         [currencyCode]="company.baseCurrency">
                                                                     </amount-field>
@@ -1270,7 +1270,7 @@
                                                             <div class="font-14 text-gray mt-1"
                                                                 *ngIf="entry.get('otherTax.name')?.value && isMultiCurrencyVoucher">
                                                                 <amount-field
-                                                                    [amount]="entry.get('otherTax.amount')?.value * invoiceForm.get('exchangeRate')?.value"
+                                                                    [amount]="currencySwitched ? entry.get('otherTax.amount')?.value / invoiceForm.get('exchangeRate')?.value : entry.get('otherTax.amount')?.value * invoiceForm.get('exchangeRate')?.value"
                                                                     [currencySymbol]="company.baseCurrencySymbol"
                                                                     [currencyCode]="company.baseCurrency">
                                                                 </amount-field>
