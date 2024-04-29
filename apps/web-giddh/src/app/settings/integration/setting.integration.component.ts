@@ -1127,7 +1127,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     // }
     public openCreateNewAccountModal() {
         this.dialog.open(AccountCreateEditComponent, {
-            width: '630px'
+            width: '630px',
+            disableClose: true
         });
     }
 

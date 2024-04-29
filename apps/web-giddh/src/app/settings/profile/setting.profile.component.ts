@@ -984,8 +984,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public createNewAddress(addressDetails: any): void {
-        console.log("createNewAddress  at SettingProfileComponent ", addressDetails);
-        
         this.isAddressChangeInProgress = true;
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState?.value === addressDetails.formValue.state);
         let linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity?.uniqueName))).map(filteredEntity => ({
@@ -1013,7 +1011,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 } else if (this.currentOrganizationType === OrganizationType.Branch) {
                     this.store.dispatch(this.settingsProfileActions.getBranchInfo());
                 }
-                console.log("settingsProfileService.createNewAddress");
                 this._toasty.successToast('Address created successfully');
             } else {
                 this._toasty.errorToast(response?.message);

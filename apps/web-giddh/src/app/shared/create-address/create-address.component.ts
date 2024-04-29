@@ -231,7 +231,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      */
     public handleFormSubmit(): void {
 
-        let value = this.addressForm.get('linkedEntity')?.value.map(item => {
+        let value = this.addressForm.get('linkedEntity')?.value?.map(item => {
             return item = item.uniqueName;
         });
         const tempAddressFormData = this.addressForm.get('linkedEntity')?.value;
