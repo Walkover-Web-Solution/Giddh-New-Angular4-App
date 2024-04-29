@@ -57,7 +57,7 @@ export class WithHeldSettingComponent implements OnInit, OnDestroy {
             if (response?.status === "success" && response?.body?.withHeldTax) {
                 this.taxPercentage.patchValue(response.body.withHeldTax);
             } else if(response?.message){
-                this.toaster.errorToast(response.message);
+                this.toaster.showSnackBar("error", response.message);
             }
         });
     }
