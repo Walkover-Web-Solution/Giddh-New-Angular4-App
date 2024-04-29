@@ -373,6 +373,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public europeanCountryList: any[] = [];
     /** Create new account */
     public createNewAccount: boolean = true;
+    /** True if currency switched */
+    private currencySwitched: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -528,6 +530,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.invoiceForm.get('account.uniqueName')?.patchValue(null);
                 }
                 this.invoiceForm.get('type').patchValue(this.voucherType);
+
+                if (params?.uniqueName) {
+                    this.isUpdateMode = true;
+                    this.getVoucherDetails(params);
+                }
             }
         });
 
@@ -923,7 +930,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.invoiceSettings = settings;
                 if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
                     this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
-                    this.useCustomVoucherNumber = settings?.invoiceSettings?.useCustomInvoiceNumber;
+                    this.useCustomVoucherNumber = settings.invoiceSettings?.useCustomInvoiceNumber;
                 } else if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
                     this.useCustomVoucherNumber = true;
@@ -932,7 +939,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.useCustomVoucherNumber = true;
                 } else if (this.voucherType === VoucherTypeEnum.creditNote) {
                     this.applyRoundOff = settings.invoiceSettings.creditNoteRoundOff;
-                    this.useCustomVoucherNumber = settings?.invoiceSettings?.useCustomCreditNoteNumber;
+                    this.useCustomVoucherNumber = settings.invoiceSettings?.useCustomCreditNoteNumber;
                 } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
                     this.applyRoundOff = true;
                     this.useCustomVoucherNumber = true;
@@ -1502,7 +1509,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             applicableTaxes: accountData.applicableTaxes,
             excludeTax: (this.company.countryName === "India" && accountData.country?.countryName !== "India") || isPartyTypeSez
         };
-
+        
         let defaultAddress = null;
         let index = 0;
 
@@ -2702,7 +2709,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public copyInvoice(item: PreviousInvoicesVm): void {
         this.startLoader(true);
         this.invoiceForm.get("voucherUniqueName")?.patchValue(item?.uniqueName);
-        this.componentStore.getVoucherDetails({ isCopy: true, accountUniqueName: item.account?.uniqueName, payload: { invoiceNo: item.versionNumber, uniqueName: item?.uniqueName, voucherType: this.voucherType } });
+        this.componentStore.getVoucherDetails({ isCopyVoucher: true, accountUniqueName: item.account?.uniqueName, payload: { uniqueName: item?.uniqueName, voucherType: this.voucherType } });
     }
 
     /**
@@ -2714,13 +2721,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.invoiceForm.get("date").value) {
             let duePeriod: number;
             if (this.invoiceType.isEstimateInvoice) {
-                duePeriod = this.invoiceSettings.estimateSettings ? this.invoiceSettings.estimateSettings.duePeriod : 0;
+                duePeriod = this.invoiceSettings?.estimateSettings ? this.invoiceSettings?.estimateSettings.duePeriod : 0;
             } else if (this.invoiceType.isProformaInvoice) {
-                duePeriod = this.invoiceSettings.proformaSettings ? this.invoiceSettings.proformaSettings.duePeriod : 0;
+                duePeriod = this.invoiceSettings?.proformaSettings ? this.invoiceSettings?.proformaSettings.duePeriod : 0;
             } else if (this.invoiceType.isPurchaseOrder) {
-                duePeriod = this.invoiceSettings.purchaseBillSettings ? this.invoiceSettings.purchaseBillSettings.poDuePeriod : 0;
+                duePeriod = this.invoiceSettings?.purchaseBillSettings ? this.invoiceSettings?.purchaseBillSettings.poDuePeriod : 0;
             } else {
-                duePeriod = this.invoiceSettings.invoiceSettings ? this.invoiceSettings.invoiceSettings.duePeriod : 0;
+                duePeriod = this.invoiceSettings?.invoiceSettings ? this.invoiceSettings?.invoiceSettings?.duePeriod : 0;
             }
 
             if (typeof (this.invoiceForm.get("date").value) === "object") {
@@ -4224,5 +4231,27 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             transactionFormGroup.get('amount.amountForAccount').patchValue(amount);
             transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue((amount / transactionFormGroup.get('stock.quantity')?.value));
         }, 10);
+    }
+
+    /**
+     * Switches currency
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public switchCurrency(): void {
+        this.currencySwitched = !this.currencySwitched;
+        this.invoiceForm.get('exchangeRate')?.patchValue(1 / this.invoiceForm.get('exchangeRate')?.value);
+    }
+
+    /**
+     * Gets voucher details
+     *
+     * @private
+     * @param {*} params
+     * @memberof VoucherCreateComponent
+     */
+    private getVoucherDetails(params: any): void {
+        this.startLoader(true);
+        this.componentStore.getVoucherDetails({ isCopyVoucher: false, accountUniqueName: params?.accountUniqueName, payload: { uniqueName: params?.uniqueName, voucherType: this.voucherType } });
     }
 }
