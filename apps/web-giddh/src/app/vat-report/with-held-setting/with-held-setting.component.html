@@ -9,7 +9,10 @@
         </div>
     </div>
     <div class="obligations pd-15">
-        <form (ngSubmit)="handleFormSubmit()">
+        <div *ngIf="isLoading">
+            <giddh-page-loader></giddh-page-loader>
+        </div>
+        <form (ngSubmit)="handleFormSubmit()" *ngIf="!isLoading">
             <div class="container-fluid ml-0">
                     <div class="row align-items-center row-gap">
                     <input-field

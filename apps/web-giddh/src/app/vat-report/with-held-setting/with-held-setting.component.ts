@@ -26,6 +26,8 @@ export class WithHeldSettingComponent implements OnInit, OnDestroy {
     public asideTaxSidebarMenuState: string = 'in';
     /** Holds With Held Form control */
     public taxPercentage: FormControl = new FormControl(6, [Validators.max(100), Validators.required]);
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(
         private settingsProfileService: SettingsProfileService,
@@ -53,12 +55,14 @@ export class WithHeldSettingComponent implements OnInit, OnDestroy {
      * @memberof WithHeldSettingComponent
      */
     private getWithHeldValue(): void {
+        this.isLoading = true;
         this.settingsProfileService.getCompanyDetails(null).pipe(take(1)).subscribe((response: any) => {
             if (response?.status === "success" && response?.body?.withHeldTax) {
                 this.taxPercentage.patchValue(response.body.withHeldTax);
             } else if(response?.message){
                 this.toaster.showSnackBar("error", response.message);
             }
+            this.isLoading = false;
         });
     }
 
