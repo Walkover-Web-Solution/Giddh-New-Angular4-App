@@ -512,14 +512,16 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
-    readonly getVoucherDetails = this.effect((data: Observable<{ isCopy: boolean, accountUniqueName: string, payload: any }>) => {
+    readonly getVoucherDetails = this.effect((data: Observable<{ isCopyVoucher: boolean, accountUniqueName: string, payload: any }>) => {
         return data.pipe(
             switchMap((req) => {
                 return this.voucherService.getVoucherDetails(req.accountUniqueName, req.payload).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
+                            let voucherDetails = res?.body ?? {};
+                            voucherDetails.isCopyVoucher = req.isCopyVoucher;
                             return this.patchState({
-                                voucherDetails: res?.body ?? {}
+                                voucherDetails: voucherDetails
                             });
                         },
                         (error: any) => {
