@@ -3174,6 +3174,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entriesFormArray.clear();
         this.invoiceForm.reset();
 
+        this.copyAccountBillingInShippingAddress = true;
+        this.copyCompanyBillingInShippingAddress = true;
+
         this.account = {
             countryName: '',
             countryCode: '',
