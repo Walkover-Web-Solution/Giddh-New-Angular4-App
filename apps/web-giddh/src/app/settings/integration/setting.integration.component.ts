@@ -26,7 +26,7 @@ import { SalesService } from '../../services/sales.service';
 import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
 import { TabDirective } from 'ngx-bootstrap/tabs';
 import { MatTabGroup } from '@angular/material/tabs';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { NgxPlaidLinkService } from 'ngx-plaid-link';
 import { CommonActions } from '../../actions/common.actions';
 import { AccountCreateEditComponent } from './payment/icici/account-create-edit/account-create-edit.component';
@@ -182,6 +182,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public iciciAllowedCompanies: any[] = ICICI_ALLOWED_COMPANIES;
     /** Holds true if current company country is plaid supported country */
     public isPlaidSupportedCountry: boolean;
+    /** Holds Create New Account Dialog Ref */
+    public createNewAccountDialogRef: MatDialogRef<any>;
 
     constructor(
         private router: Router,
@@ -1126,7 +1128,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     //     this.createNewAccountModal?.show();
     // }
     public openCreateNewAccountModal() {
-        this.dialog.open(AccountCreateEditComponent, {
+        this.createNewAccountDialogRef = this.dialog.open(this.createNewAccountModal, {
             width: '630px',
             disableClose: true
         });
@@ -1214,7 +1216,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.isLoading = false;
             if (response?.body) {
                 this.connectedBankAccounts = response.body;
-
+                
                 this.connectedBankAccounts.forEach(bankAccount => {
                     if (bankAccount?.bankResource?.payor?.length > 0) {
                         bankAccount?.bankResource?.payor.forEach(payor => {
@@ -1223,7 +1225,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     }
                 });
             }
-
+            
             this.changeDetectionRef.detectChanges();
         });
     }
@@ -1375,21 +1377,23 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public getPayorRegistrationStatus(bankAccount: any, payor: any): void {
-        let request;
+            if(bankAccount?.bankResource?.uniqueName?.length && payor?.urn?.length){
+            let request;
 
-        if (this.isPlaidSupportedCountry) {
-            request = { bankAccountUniqueName: bankAccount?.bankResource?.uniqueName, urn: payor?.urn };
-        } else {
-            request = { bankAccountUniqueName: bankAccount?.bankResource?.uniqueName, bankUserId: payor?.urn };
-        }
-
-        this.settingsIntegrationService.getPayorRegistrationStatus(request).pipe(take(1)).subscribe(response => {
-            payor.isConnected = (response?.body?.status === ACCOUNT_REGISTERED_STATUS);
-
-            if (!payor.isConnected && response?.body?.message) {
-                this.toasty.errorToast(response?.body?.message);
+            if (this.isPlaidSupportedCountry) {
+                request = { bankAccountUniqueName: bankAccount.bankResource.uniqueName, urn: payor.urn };
+            } else {
+                request = { bankAccountUniqueName: bankAccount.bankResource.uniqueName, bankUserId: payor.urn };
             }
-        });
+            
+            this.settingsIntegrationService.getPayorRegistrationStatus(request).pipe(take(1)).subscribe(response => {
+                payor.isConnected = (response?.body?.status === ACCOUNT_REGISTERED_STATUS);
+                
+                if (!payor.isConnected && response?.body?.message) {
+                    this.toasty.errorToast(response?.body?.message);
+                }
+            });
+        }
     }
 
 

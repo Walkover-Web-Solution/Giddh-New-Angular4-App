@@ -705,7 +705,7 @@
                 <icici-account-create-edit
                     [commonLocaleData]="commonLocaleData"
                     (getAllBankAccounts)="getAllBankAccounts()"
-                    (closeModalEvent)="closeCreateNewAccountModal()"
+                    (closeModalEvent)="this.createNewAccountDialogRef.close()"
                 >
                 </icici-account-create-edit>
             </div>

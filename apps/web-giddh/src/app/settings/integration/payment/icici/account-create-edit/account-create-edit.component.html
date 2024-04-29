@@ -20,6 +20,7 @@
             <button
                 [attr.aria-label]="commonLocaleData?.app_close"
                 class="close hover-orange"
+                type="button"
                 (click)="closeAccountModal()"
             >
                 ×
@@ -33,6 +34,7 @@
                             [label]="localeData?.payment?.icici_login_id"
                             [required]="true"
                             [name]="'loginId'"
+                            formControlName="loginId"
                             [type]="'text'"
                             [placeholder]="localeData?.payment?.login_id_placeholder"
                         ></input-field>
@@ -43,6 +45,7 @@
                             [required]="true"
                             [name]="'accountNumber'"
                             [type]="'text'"
+                            formControlName="accountNumber"
                             [ngClass]="{
                                 'error-box':
                                     accountForm?.get('accountNumber')?.dirty &&
@@ -53,20 +56,13 @@
                         ></input-field>
                     </div>
                     <div class="mr-t1">
-                        <!-- <label>{{ localeData?.payment?.link_account_label }}<span class="red-text">*</span></label>
-                        <sh-select
-                            formControlName="accountUniqueName"
-                            name="accountUniqueName"
-                            [placeholder]="localeData?.payment?.link_account_placeholder"
-                            [options]="bankAccounts$ | async"
-                            required
-                        ></sh-select> -->
                         <dropdown-field
                             [label]="localeData?.payment?.link_account_label"
                             [name]="'accountUniqueName'"
                             [placeholder]="localeData?.payment?.link_account_placeholder"
                             [options]="bankAccounts$ | async"
                             [required]="true"
+                            (selectedOption)="accountForm?.get('accountUniqueName').patchValue($event.value)"
                         ></dropdown-field>
                     </div>
                     <div class="mr-t1" *ngIf="!activeBankAccount">
@@ -76,6 +72,7 @@
                             [placeholder]="localeData?.payment?.select_user"
                             [options]="usersList"
                             [required]="true"
+                            (selectedOption)="accountForm?.get('userUniqueName').patchValue($event.value)"
                         ></dropdown-field>
                     </div>
                     <div class="mr-t1">
@@ -111,16 +108,27 @@
                                 </ng-container>
                             </ng-template>
                         </sh-select> -->
-                        <dropdown-field
-                            [label]="localeData?.payment?.payment_updates"
-                            name="paymentAlerts"
-                            [placeholder]="localeData?.payment?.select_receipients"
-                            [options]="paymentAlertsUsersList"
-                            [multiple]="true"
-                            [forceClearReactive]="forceClearPaymentUpdates$ | async"
-                            [isSelectAllChecked]="paymentAlerts?.includes(selectAllRecords)"
-                            (clearSingleItem)="clearSingleItem($event)"
-                        ></dropdown-field>
+                            <!-- <dropdown-field
+                                [label]="localeData?.payment?.payment_updates"
+                                name="paymentAlerts"
+                                [placeholder]="localeData?.payment?.select_receipients"
+                                [options]="paymentAlertsUsersList"
+                                [multiple]="true"
+                                [forceClearReactive]="forceClearPaymentUpdates$ | async"
+                                [isSelectAllChecked]="paymentAlerts?.includes(selectAllRecords)"
+                                (clearSingleItem)="clearSingleItem($event)"
+                                (selectedOption)="accountForm?.get('paymentAlerts').patchValue($event.value)"
+                            ></dropdown-field> -->
+                        <mat-form-field class="w-100" appearance="outline">
+                            <mat-label>{{ localeData?.payment?.payment_updates }}</mat-label>
+                            <mat-select formControlName="paymentAlerts" name="paymentAlerts"  multiple>
+                                <ng-container *ngFor="let item of bankAccounts$ | async">
+                                    <mat-option (onSelectionChange)="selectPaymentAlertUsers(item)" [value]="item.value">
+                                        {{ item.label }}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
                 </ng-container>
                 <ng-container *ngIf="isLoading || !localeData?.payment">
