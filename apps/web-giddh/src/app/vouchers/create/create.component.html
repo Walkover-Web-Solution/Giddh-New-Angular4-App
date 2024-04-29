@@ -44,7 +44,7 @@
                                                 [autoFocus]="true" formControlName="customerName"></input-field>
                                         </div>
                                         <ng-container
-                                            *ngIf="(invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote) && invoiceForm.controls['account'].get('uniqueName')?.value && (lastVouchersList$ | async)?.length">
+                                            *ngIf="!isUpdateMode && (invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote) && invoiceForm.controls['account'].get('uniqueName')?.value && (lastVouchersList$ | async)?.length">
                                             <div class="vouchers-copy-sales mr-l3 cursor-pointer" [matMenuTriggerFor]="copyLastVouchers">
                                                 <i class="icon-copy-file"></i>
                                                 {{ voucherType | voucherCopyLink: localeData | titlecase }}
@@ -644,11 +644,9 @@
                             <div class="vouchers-large-container mr-t15 pt-4">
                                 <div class="change-currency  d-flex justify-content-end align-items-center column-gap1 text-uppercase pb-2"
                                     *ngIf="isMultiCurrencyVoucher">
-                                    <span>{{ commonLocaleData?.app_numbers?.one }} {{ account?.baseCurrency }}</span>
-                                    <img alt="switch-icon" height="15px" src="/assets/images/switch-icon.svg" />
-                                    <span *ngIf="!showExchangeRateEditField">{{ invoiceForm.get('exchangeRate')?.value
-                                        }} {{
-                                        company?.baseCurrency }}</span>
+                                    <span>{{ commonLocaleData?.app_numbers?.one }} <ng-container *ngIf="currencySwitched">{{ company?.baseCurrency }}</ng-container><ng-container *ngIf="!currencySwitched">{{ account?.baseCurrency }}</ng-container></span>
+                                    <img alt="switch-icon" height="15px" src="/assets/images/switch-icon.svg" class="cursor-pointer" (click)="switchCurrency()" />
+                                    <span *ngIf="!showExchangeRateEditField">{{ invoiceForm.get('exchangeRate')?.value | giddhCurrency }} <ng-container *ngIf="currencySwitched">{{ account?.baseCurrency }}</ng-container><ng-container *ngIf="!currencySwitched">{{ company?.baseCurrency }}</ng-container></span>
                                     <div class="currency-input-wrapper" *ngIf="showExchangeRateEditField">
                                         <text-field [cssClass]="'form-control'" [type]="'number'"
                                             [matSuffix]="account?.baseCurrency"
