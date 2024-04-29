@@ -16,7 +16,6 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { HttpClient } from '@angular/common/http';
-import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class GeneralService {
@@ -1918,16 +1917,6 @@ export class GeneralService {
     }
 
     /**
-    * Generates a UUID (Universally Unique Identifier).
-    *
-    * @returns {string} The generated UUID.
-    * @memberof GeneralService
-    */
-    public generateUUID(): string {
-        return uuidv4();
-    }
-
-    /**
      * This will be use for get user agent
      *
      * @param {*} clientIp
@@ -1935,23 +1924,14 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public getUserAgentData(clientIp: any): any {
-        let osName = this.getOsConfiguration();
-        let osVersion = this.getOSVersion();
-        let osFamily = this.getOSFamily();
-        let deviceManufacture = this.getDeviceManufacture();
-        let deviceModel = this.getDeviceModel();
-        let deviceTimestamp = this.getTimesStamp();
-        let macAddress = this.generateUUID();
-        let ip = clientIp;
         let args: any = {};
-        args['os'] = osName;
-        args['os-family'] = osFamily;
-        args['os-version'] = osVersion;
-        args['device-manufacturer'] = deviceManufacture;
-        args['device-model'] = deviceModel;
-        args['mac-address'] = macAddress;
-        args['timestamp'] = deviceTimestamp;
-        args['client-ip'] = ip;
+        args['os'] = this.getOsConfiguration();
+        args['os-family'] = this.getOSFamily();
+        args['os-version'] = this.getOSVersion();
+        args['device-manufacturer'] = this.getDeviceManufacture();
+        args['device-model'] = this.getDeviceModel();
+        args['timestamp'] = this.getTimesStamp();
+        args['client-ip'] = clientIp;
         return args
     }
 
