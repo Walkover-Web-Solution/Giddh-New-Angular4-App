@@ -143,8 +143,8 @@ export class VatService {
     public saveAuthorizationCode(companyUniqueName: string, model: any, clientIp?: string): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + VAT_API.SAVE_AUTHORIZATION_CODE;
         url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
-        let headers = this.generalService.getUserAgentData(clientIp);
-        return this.http.post(url, model, { headers }).pipe(
+        let payload = this.generalService.getUserAgentData(clientIp);
+        return this.http.post(url, { ...model, ...payload }).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
@@ -167,8 +167,8 @@ export class VatService {
         url = url?.replace(':status', encodeURIComponent(model?.status));
         url = url?.replace(':from', encodeURIComponent(model?.from));
         url = url?.replace(':to', encodeURIComponent(model?.to));
-        let headers = this.generalService.getUserAgentData(clientIp);
-        return this.http.get(url, {}, { headers }).pipe(
+        let payload = this.generalService.getUserAgentData(clientIp);
+        return this.http.post(url, payload).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
@@ -194,8 +194,8 @@ export class VatService {
         url = url?.replace(':periodKey', encodeURIComponent(model?.periodKey));
         url = url?.replace(':from', encodeURIComponent(model?.from));
         url = url?.replace(':to', encodeURIComponent(model?.to));
-        let headers = this.generalService.getUserAgentData(clientIp);
-        return this.http.post(url, {}, { headers }).pipe(
+        let payload = this.generalService.getUserAgentData(clientIp);
+        return this.http.post(url, payload).pipe(
             map((res) => {
                 let data: any = res;
                 return data;
@@ -217,8 +217,8 @@ export class VatService {
         url = url?.replace(':periodKey', encodeURIComponent(model?.periodKey));
         url = url?.replace(':from', encodeURIComponent(model?.from));
         url = url?.replace(':to', encodeURIComponent(model?.to));
-        let headers = this.generalService.getUserAgentData(clientIp);
-        return this.http.get(url, {}, { headers }).pipe(
+        let payload = this.generalService.getUserAgentData(clientIp);
+        return this.http.post(url, payload).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;

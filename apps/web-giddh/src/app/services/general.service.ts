@@ -1923,16 +1923,16 @@ export class GeneralService {
         let deviceTimestamp = this.getTimesStamp();
         let macAddress = this.generateUUID();
         let ip = clientIp;
-        let args: any = { headers: {} };
-        args.headers['os'] = osName;
-        args.headers['os-family'] = osFamily;
-        args.headers['os-version'] = osVersion;
-        args.headers['device-manufacturer'] = deviceManufacture;
-        args.headers['device-model'] = deviceModel;
-        args.headers['mac-address'] = macAddress;
-        args.headers['timestamp'] = deviceTimestamp;
-        args.headers['client-ip'] = ip;
-        return args.headers
+        let args: any = {};
+        args['os'] = osName;
+        args['os-family'] = osFamily;
+        args['os-version'] = osVersion;
+        args['device-manufacturer'] = deviceManufacture;
+        args['device-model'] = deviceModel;
+        args['mac-address'] = macAddress;
+        args['timestamp'] = deviceTimestamp;
+        args['client-ip'] = ip;
+        return args
     }
 
     /**
