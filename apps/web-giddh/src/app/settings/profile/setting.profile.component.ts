@@ -843,14 +843,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
                 if (response) {
-                    console.log("response update",response);
-                    
                     if (response.status === 'success') {
                         this._toasty.successToast('Profile Updated Successfully.');
-                        this.snackOpen = false; 
-                        // setTimeout(() => { 
-                        //     this.snackOpen = false;                            
-                        // },9000)
+                        this.snackOpen = false;
                     } else {
                         this._toasty.errorToast(response.message);
                     }

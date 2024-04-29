@@ -221,11 +221,9 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
                 }
             });
         }
-
+        
         if (changes.closeSidePane?.currentValue) {
-            if (this.accountAsideMenuState === 'in') {
-                this.toggleAccountAsidePane();
-            }
+            this.closeAccountAsidePane();
         }
     }
 
@@ -309,7 +307,6 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public saveAddress(form: any): void {
         this.saveNewAddress.emit(form);
-        this.asideAccountAsidePaneRef.close();
     }
 
     /**
@@ -321,7 +318,6 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public updateAddress(form: any): void {
         form.formValue['uniqueName'] = this.addressToUpdate?.uniqueName;
         this.updatedAddress.emit(form);
-        this.asideAccountAsidePaneRef.close();
     }
 
     /**

@@ -57,6 +57,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     @Input() public commonLocaleData: any = {};
     /** True if we need to hide link entity field */
     @Input() public hideLinkEntity: boolean = true;
+    /** True, if aside pane needs to be closed */
+    @Input() public closeSidePane: boolean;
     /** List of entities which can be archived */
     public entityArchived: string[] = ["BRANCH", "WAREHOUSE"];
     public selectedEntity: any[] = [];
@@ -74,8 +76,6 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public ngOnInit(): void {
-        console.log(this.addressConfiguration.linkedEntities);
-
         if (this.addressConfiguration) {
             if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateBranchAddress) {
                 this.addressConfiguration.linkedEntities = this.addressConfiguration.linkedEntities?.filter(address => (!address.entity?.includes(this.entityArchived)) || (address.entity?.includes(this.entityArchived) && !address.isArchived));
@@ -94,8 +94,6 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                     // This will by default show the current organization unique name as selected linked entity
                     const currentOrganizationUniqueNameObj = this.addressConfiguration.linkedEntities?.filter(i => i?.uniqueName === this.currentOrganizationUniqueName);
                     this.addressForm.get('linkedEntity')?.patchValue(currentOrganizationUniqueNameObj);
-                    console.log(this.addressForm.get('linkedEntity').value);
-
                 }
             } else if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress) {
                 if (this.addressToUpdate) {
@@ -236,6 +234,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         let value = this.addressForm.get('linkedEntity')?.value.map(item => {
             return item = item.uniqueName;
         });
+        const tempAddressFormData = this.addressForm.get('linkedEntity')?.value;
         this.addressForm.get('linkedEntity').patchValue(value);
 
         if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
@@ -261,6 +260,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 addressDetails: this.addressConfiguration
             });
         }
+        this.addressForm.get('linkedEntity').patchValue(tempAddressFormData);
     }
 
     /**

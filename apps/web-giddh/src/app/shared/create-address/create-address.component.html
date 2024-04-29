@@ -299,8 +299,8 @@
                                             <div class="col-sm-12 form-group linked-entities">
                                                 <mat-form-field appearance="outline" class="w-100">
                                                     <mat-label>{{localeData?.link_entity}}</mat-label>
-                                                    <mat-chip-list #chipList>
-                                                      <mat-chip class="mr-1" *ngFor="let selected of addressForm.get('linkedEntity')?.value" (removed)="removeItem(selected)">
+                                                    <mat-chip-list #chipList class="d-flex flex-wrap column-gap5 row-gap1">
+                                                      <mat-chip *ngFor="let selected of addressForm.get('linkedEntity')?.value" (removed)="removeItem(selected)">
                                                         {{ selected?.alias }} 
                                                         <span matChipRemove><i class="icon-cross"></i></span>
                                                       </mat-chip>
