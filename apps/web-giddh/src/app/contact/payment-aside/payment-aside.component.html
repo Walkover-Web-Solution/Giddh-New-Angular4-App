@@ -107,7 +107,7 @@
                                     [placeholder]="localeData?.select_payor"
                                     [options]="payorsList"
                                     (selected)="selectPayor($event)"
-                                    name="urn"
+                                    name="bankUserId"
                                     [forceClearReactive]="forceClear$ | async"
                                 ></sh-select>
                             </div>
@@ -179,9 +179,9 @@
                                 type="button"
                                 [ngClass]="{
                                     'disabled-ladda-btn':
-                                        !isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData
+                                        !isBankSelectedForBulkPayment || !selectedBankUserId || !isValidData
                                 }"
-                                [disabled]="!isBankSelectedForBulkPayment || !selectedBankUrn || !isValidData"
+                                [disabled]="!isBankSelectedForBulkPayment || !selectedBankUserId || !isValidData"
                                 [ladda]="isRequestInProcess"
                                 (click)="payClicked()"
                                 class="pay-btn"
@@ -199,13 +199,13 @@
                                 [ngClass]="{
                                     'disabled-ladda-btn':
                                         !isBankSelectedForBulkPayment ||
-                                        !selectedBankUrn ||
+                                        !selectedBankUserId ||
                                         !isValidData ||
                                         !receivedOtp
                                 }"
                                 [disabled]="
                                     !isBankSelectedForBulkPayment ||
-                                    !selectedBankUrn ||
+                                    !selectedBankUserId ||
                                     !isValidData ||
                                     !receivedOtp
                                 "

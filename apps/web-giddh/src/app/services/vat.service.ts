@@ -12,13 +12,11 @@ import { Observable } from "rxjs";
 @Injectable()
 export class VatService {
     private companyUniqueName: string;
-
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService, private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
-
     }
 
     /**
-     * This function will use for UK vat report 
+     * This function will use for UK vat report
      *
      * @param {VatReportRequest} request
      * @return {*}  {Observable<BaseResponse<any, any>>}
@@ -26,10 +24,10 @@ export class VatService {
      */
     public getCountryWiseVatReport(request: VatReportRequest, countryCode: 'UK' | 'ZW' = 'UK'): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-
+      
         const apiEndPoint = countryCode === 'UK' ? VAT_API.VIEW_REPORT : VAT_API.VIEW_ZW_REPORT;
 
-        let url = this.config.apiUrl + apiEndPoint;
+        let url = this.config.apiUrl + apiEndPoint;;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         url = url?.replace(':from', request.from);
         url = url?.replace(':to', request.to);
@@ -145,10 +143,11 @@ export class VatService {
      * @returns
      * @memberof VatService
      */
-    public saveAuthorizationCode(companyUniqueName: string, model: any): Observable<BaseResponse<any, any>> {
+    public saveAuthorizationCode(companyUniqueName: string, model: any, clientIp?: string): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + VAT_API.SAVE_AUTHORIZATION_CODE;
         url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
-        return this.http.post(url, model).pipe(
+        let payload = this.generalService.getUserAgentData(clientIp);
+        return this.http.post(url, { ...model, ...payload }).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
@@ -163,7 +162,7 @@ export class VatService {
      * @returns
      * @memberof VatService
      */
-    public getVatObligations(companyUniqueName: string, model: any): Observable<BaseResponse<any, any>> {
+    public getVatObligations(companyUniqueName: string, model: any, clientIp?: string): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + VAT_API.VAT_OBLIGATIONS;
         url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
         url = url?.replace(':branchUniqueName', encodeURIComponent(model?.branchUniqueName));
@@ -171,12 +170,16 @@ export class VatService {
         url = url?.replace(':status', encodeURIComponent(model?.status));
         url = url?.replace(':from', encodeURIComponent(model?.from));
         url = url?.replace(':to', encodeURIComponent(model?.to));
-        return this.http.get(url).pipe(
+        let payload = this.generalService.getUserAgentData(clientIp);
+        return this.http.post(url, payload).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
+
+
+
 
     /**
      * This is used to File VAT Return
@@ -186,7 +189,7 @@ export class VatService {
      * @returns
      * @memberof VatService
      */
-    public fileVatReturn(companyUniqueName: string, model: any): any {
+    public fileVatReturn(companyUniqueName: string, model: any, clientIp: string): any {
         let url = this.config.apiUrl + VAT_API.SUBMIT_VAT_RETURN;
         url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
         url = url?.replace(':branchUniqueName', encodeURIComponent(model?.branchUniqueName));
@@ -194,7 +197,8 @@ export class VatService {
         url = url?.replace(':periodKey', encodeURIComponent(model?.periodKey));
         url = url?.replace(':from', encodeURIComponent(model?.from));
         url = url?.replace(':to', encodeURIComponent(model?.to));
-        return this.http.post(url, {}).pipe(
+        let payload = this.generalService.getUserAgentData(clientIp);
+        return this.http.post(url, payload).pipe(
             map((res) => {
                 let data: any = res;
                 return data;
@@ -209,14 +213,15 @@ export class VatService {
      * @returns
      * @memberof VatService
      */
-    public viewVatReturn(companyUniqueName: string, model: any): Observable<BaseResponse<any, any>> {
+    public viewVatReturn(companyUniqueName: string, model: any, clientIp?: string): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + VAT_API.VIEW_VAT_RETURN;
         url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
         url = url?.replace(':taxNumber', encodeURIComponent(model?.taxNumber));
         url = url?.replace(':periodKey', encodeURIComponent(model?.periodKey));
         url = url?.replace(':from', encodeURIComponent(model?.from));
         url = url?.replace(':to', encodeURIComponent(model?.to));
-        return this.http.get(url).pipe(
+        let payload = this.generalService.getUserAgentData(clientIp);
+        return this.http.post(url, payload).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;

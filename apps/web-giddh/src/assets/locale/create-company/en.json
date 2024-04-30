@@ -76,5 +76,7 @@
     "otp": "OTP",
     "verify": "Verify",
     "resend_otp": "Resend OTP",
-    "verify_number": "Please verify mobile number"
+    "verify_number": "Please verify mobile number",
+    "county":"County",
+    "select_county":"Select County"
 }

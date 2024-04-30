@@ -53,6 +53,35 @@
                                             </div>
                                         </div>
 
+                                        <div class="clearfix pd-t1">
+                                            <div class="row">
+                                                <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
+                                                    <mat-slide-toggle
+                                                        aria-label="enable narration onin voucher"
+                                                        [(ngModel)]="invoiceSetting.voucherAddressManualEnabled"
+                                                        name="voucherAddressManualEnabled"
+                                                        class="show-on-mobile"
+                                                        color="primary"
+                                                    >
+                                                    </mat-slide-toggle>
+                                                    <label class="left-gap">{{
+                                                        localeData?.add_address_manually_on_voucher
+                                                    }}</label>
+                                                </div>
+
+                                                <div class="col-sm-6 col-md-9 col-lg-8 form-group mr-t05">
+                                                    <mat-slide-toggle
+                                                        aria-label="enable narration onin voucher"
+                                                        [(ngModel)]="invoiceSetting.voucherAddressManualEnabled"
+                                                        name="voucherAddressManualEnabled"
+                                                        class="hide-on-mobile"
+                                                        color="primary"
+                                                    >
+                                                    </mat-slide-toggle>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                         <ng-container *ngTemplateOutlet="buttonsSection"></ng-container>
                                     </div>
                                 </form>

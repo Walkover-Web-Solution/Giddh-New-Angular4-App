@@ -1,6 +1,67 @@
+$hilighted-color: var(--color-blue) !important;
+$text-overflow-ellipsis-width: 255px;
+
 :host {
     display: block;
     position: relative;
+    height: 100%;
+}
+
+.virtual-group-list {
+    height: 100%;
+    min-height: 500px;
+}
+
+.text-overflow-ellipsis .list-item {
+    text-overflow: ellipsis;
+    width: 255px;
+}
+
+.grp-list {
+    padding: 0px 0 10px !important;
+}
+
+.hilighted {
+    color: var(--color-blue) !important;
+    background: var(--color-dark-fog) !important;
+}
+
+.account-list:hover {
+    color: var(--color-blue) !important;
+    background: var(--color-dark-fog) !important;
+}
+
+.hilighted {
+    >a {
+        color: $hilighted-color;
+    }
+}
+
+.text-overflow-ellipsis {
+    .list-item {
+        text-overflow: ellipsis;
+        width: $text-overflow-ellipsis-width;
+    }
+}
+
+.no-result-link {
+    >a {
+        color: $hilighted-color;
+    }
+}
+
+.group-list-no-found {
+    min-height: 150px !important;
+}
+
+.grp-list li {
+    .account-list {
+        padding: 9px 12px !important;
+    }
+}
+
+#noresult:hover {
+    background: transparent;
 }
 
 /* .header {
@@ -139,10 +200,10 @@ i.close.icon.clear:hover::after {
     background: var(--color-white) !important;
 }
 
-.header.open > input[type="text"] {
+.header.open>input[type="text"] {
     border-color: var(--color-iron);
 }
 
-.header .bdr > input[type="text"] {
+.header .bdr>input[type="text"] {
     border: 0;
 }
