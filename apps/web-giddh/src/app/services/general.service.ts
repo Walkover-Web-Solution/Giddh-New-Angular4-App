@@ -1706,18 +1706,6 @@ export class GeneralService {
     }
 
     /**
-     *This will be return government client time zone header
-     *
-     * @param {*} timezone
-     * @return {*}  {*}
-     * @memberof GeneralService
-     */
-    public getGovClientTimezoneHeader(timezone: any): any {
-        const headers = new HttpHeaders().set('Gov-Client-Timezone', 'UTC' + timezone);
-        return { headers };
-    }
-
-    /**
      * Retrieves the operating system configuration based on the user agent string.
      *
      * @returns {string} The name of the operating system.
@@ -1936,8 +1924,8 @@ export class GeneralService {
         args['device-model'] = this.getDeviceModel();
         args['timestamp'] = this.getTimesStamp();
         args['client-ip'] = clientIp;
-        args['Gov-Client-Timezone'] = this.getGovClientTimezoneHeader(this.getUserTimeZone());
-        return args
+        args['Gov-Client-Timezone'] = 'UTC' + this.getUserTimeZone();
+        return args;
     }
 
     /**
