@@ -138,6 +138,10 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Hold discount event  */
+    public discountEvent: boolean;
+    /** Hold tax event  */
+    public taxEvent: boolean;
 
     /** @ignore */
     constructor(

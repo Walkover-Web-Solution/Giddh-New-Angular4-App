@@ -1,7 +1,7 @@
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { IPageInfo, TallyModuleService } from './../tally-service';
 import { ReplaySubject } from 'rxjs';
-import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { VOUCHERS } from '../constants/accounting.constant';
 
@@ -25,7 +25,10 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
     public selectedGrid: string = null;
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public accountingVouchers: any = VOUCHERS;
-
+    /** Emits the discount event  */
+    @Output() public discountEvent: EventEmitter<boolean> = new EventEmitter();
+    /** Emits the tax event  */
+    @Output() public taxEvent: EventEmitter<boolean> = new EventEmitter();
     constructor(private _tallyModuleService: TallyModuleService) {
         //
     }
@@ -75,4 +78,15 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
         this.destroyed$.complete();
     }
 
+    public openDiscountSidebar(event: any): void {
+        if (event) {
+            this.discountEvent.emit(true);
+        }
+    }
+
+    public openTaxSidebar(event: any): void {
+        if (event) {
+            this.taxEvent.emit(true);
+        }
+    }
 }
