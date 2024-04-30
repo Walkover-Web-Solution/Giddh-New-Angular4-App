@@ -450,9 +450,11 @@ export class ThermalService {
         }
         let totalQty: any = 0;
         for (let entry of request?.entries) {
-            let productName =
-                entry?.transactions[0]?.stock?.name ||
-                entry?.transactions[0]?.account?.name;
+            let variant = entry?.transactions[0]?.stock?.variant?.name;
+            let productName = entry?.transactions[0]?.stock?.name && variant 
+            ? `${entry?.transactions[0]?.stock?.name} - ${variant}`
+            : entry?.transactions[0]?.stock?.name ? entry?.transactions[0]?.stock?.name : entry?.transactions[0]?.account?.name;
+            
             let quantity;
             if (defaultTemplate?.sections?.table?.data?.quantity?.display) {
                 if (entry?.transactions[0]?.stock?.quantity) {
@@ -498,31 +500,27 @@ export class ThermalService {
                 amount?.padStart(amountPadding);
 
             let itemLength = this.maxLength - itemDetails?.length;
-            let itemName = productName?.substr(0, itemLength);
+            let completeProductName = this.wrapStringByLength(productName, itemLength);
+            let itemName = Array.isArray(completeProductName) ? completeProductName[0] : completeProductName;
 
             if (entry?.transactions[0]?.stock?.quantity) {
                 totalQty = totalQty + Number(quantity);
             }
 
-
             if (itemName?.length === 0) {
-                let productNameShow;
+                let productNameShow = "";
                 if (defaultTemplate?.sections?.table?.data?.item?.display) {
                     productNameShow = this.printerFormat.formatCenter(this.justifyText(productName)
                     )
-                } else {
-                    productNameShow = "";
                 }
                 items +=
                     productNameShow +
                     this.printerFormat.formatCenter(this.justifyText("", itemDetails)
                     );
             } else {
-                let itemNameShow;
+                let itemNameShow = "";
                 if (defaultTemplate?.sections?.table?.data?.item?.display) {
                     itemNameShow = itemName;
-                } else {
-                    itemNameShow = '';
                 }
 
                 const itemNameShowHide = itemNameShow?.length ? this.justifyText(itemNameShow, itemDetails) : this.justifyText(itemDetails);
@@ -530,10 +528,9 @@ export class ThermalService {
                 items += this.printerFormat.formatCenter(
                     itemNameShowHide
                 );
-                if (itemName?.length < productName?.length) {
-                    let lastIndex = productName.length - itemName.length;
-                    for (let itemNameIndex = itemName?.length; itemNameIndex < lastIndex; itemNameIndex = itemNameIndex + 10) {
-                        items += this.printerFormat.formatCenter(this.printerFormat.leftAlign + productName?.substr(itemNameIndex, 10));
+                if ((itemName?.length < productName?.length) && Array.isArray(completeProductName)) {
+                    for (let i = 1; i < completeProductName?.length; i++) {
+                        items += (this.printerFormat.leftAlign + completeProductName[i] + this.printerFormat.lineBreak);
                     }
                 }
             }
@@ -821,5 +818,35 @@ export class ThermalService {
             dash += " ";
         }
         return dash;
+    }
+
+    /**
+     * Trim String based on desired String Length and return array of trimed string
+     *
+     * @private
+     * @param {string} productName
+     * @param {string} vaiant
+     * @param {number} desiredStringLength
+     * @returns {*}
+     * @memberof ThermalService
+     */
+    private wrapStringByLength(productNameWithVariant: string,desiredStringLength: number): any {
+        let trimmedStringArray: any = [];
+
+        if (productNameWithVariant?.length > desiredStringLength) {
+            let remainingString = productNameWithVariant;
+
+            while (remainingString?.length !== 0) {
+                
+                let cutString = remainingString.substr(0, desiredStringLength);
+                remainingString = remainingString.substr(cutString.length);
+
+                trimmedStringArray.push(cutString);
+
+            }
+
+            return trimmedStringArray;
+        }
+            return productNameWithVariant;
     }
 }

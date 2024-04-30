@@ -2393,7 +2393,21 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
         // convert date object
         data.voucherDetails.voucherDate = this.convertDateForAPI(data.voucherDetails.voucherDate);
         data.voucherDetails.dueDate = this.convertDateForAPI(data.voucherDetails.dueDate);
-        data.templateDetails.other.shippingDate = this.convertDateForAPI(data.templateDetails?.other.shippingDate);
+
+        if (!data.templateDetails) {
+            data.templateDetails = {
+                other: {
+                    shippingDate: undefined,
+                    shippedVia: '',
+                    trackingNumber: '',
+                    customField1: '',
+                    customField2: '',
+                    customField3: ''
+                }
+            };
+        }
+        
+        data.templateDetails.other.shippingDate = this.convertDateForAPI(data.templateDetails?.other?.shippingDate);
 
         let txnErr: boolean;
 

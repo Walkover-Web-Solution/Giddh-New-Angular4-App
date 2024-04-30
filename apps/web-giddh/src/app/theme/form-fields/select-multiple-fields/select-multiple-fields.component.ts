@@ -31,6 +31,12 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public showError: boolean = false;
     /** Name of search field */
     @Input() public name: any = "";
+    /** Holds appearance of dropdown field */
+    @Input() public appearance: string = '';
+    /** True if it's purchase order multi selection field */
+    @Input() public isPurchaseOrder: string = '';
+    /** Holds module translation data */
+    @Input() public localeData: any = {};
     /** Callback for option selected */
     @Output() public selectedOption: EventEmitter<any> = new EventEmitter<any>();
     /** List of chips based on selected values */
@@ -119,7 +125,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      */
     public selectOption(option: any): void {
         this.allowAddChip = false;
-        const selectOptionValue = option?.option?.value?.value;
+        const selectOptionValue = option?.option?.value?.label;
         if (selectOptionValue && !this.chipList.includes(selectOptionValue)) {
             this.chipList.push(selectOptionValue);
             this.emitList();

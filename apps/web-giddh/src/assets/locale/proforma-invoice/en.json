@@ -1,10 +1,10 @@
 {
     "invoice_types": {
-        "sales": "Sales",
+        "invoice": "Invoice",
         "credit_note": "Credit Note",
         "debit_note": "Debit Note",
         "purchase": "Bill",
-        "cash": "Cash",
+        "cash_invoice": "Cash Invoice",
         "proforma": "Proforma",
         "estimate": "Estimate",
         "cash_bill": "Cash Bill",
