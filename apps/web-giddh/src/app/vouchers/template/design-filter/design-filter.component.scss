@@ -1,0 +1,56 @@
+.design-field {
+    max-width: 300px;
+}
+.template-design-wrap {
+    .template-view-design {
+        width: 190px;
+        height: 240px;
+        .beta-img {
+            top: 0;
+            right: 0;
+        }
+    }
+    // upload-file
+    .upload-logo-wrap {
+        .upload-button {
+            width: 200px !important;
+            background: var(--color-white);
+            display: table-cell;
+            text-align: center;
+            height: 100px;
+            vertical-align: middle;
+            border: 2px dashed var(--color-gray);
+            cursor: pointer;
+        }
+        
+        .upload-button input[type="file"] {
+            display: none;
+        }
+    }
+    // colour change
+    .colour-wrap {
+        .colour-box-wrap {
+            width: 100px;
+            .colour-box {
+                height: 100px;
+                background-color: red;
+                border-radius: 50px;
+            }
+        }
+        .colour-picker {
+            ul {
+                li {
+                    width: 24px;
+                    height: 24px;
+                    display: inline-block;
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+    .print-field {
+        input-field {
+            width: 20%;
+        }
+    }
+}

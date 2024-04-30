@@ -722,5 +722,8 @@
     "domain_verification":"Domain verification for outbound mail",
     "app_renew_bank_connection": "Renew Bank Connection",
     "app_select_printer": "Select Printer",
-    "app_help": "Help"
+    "app_help": "Help",
+    "app_applicable_date": "Applicable date",
+    "app_name_placeholder": "Enter Name",
+    "app_county": "County"
 }
