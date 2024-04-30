@@ -721,5 +721,6 @@
     "app_select_printer": "प्रिंटर चुनें",
     "app_help": "मदद",
     "app_applicable_date": "लागू तिथि",
-    "app_name_placeholder": "नाम दर्ज करें"
+    "app_name_placeholder": "नाम दर्ज करें",
+    "app_county": "काउंटी"
 }

@@ -145,6 +145,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         applicableDiscounts: null,
         applicableTaxes: null,
         excludeTax: false,
+        taxType: '',
         taxTypeLabel: ''
     };
     /** Invoice Settings */
@@ -498,12 +499,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getCountryList();
         this.getDiscountsList();
         this.getCompanyBranches();
-        this.getCompanyProfile();
         this.getCompanyTaxes();
         this.getWarehouses();
 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
+                this.company.countryName = "";
+                this.getCompanyProfile();
                 this.openAccountDropdown = false;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 if (this.voucherApiVersion !== 2) {
@@ -1086,6 +1088,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.companyFormFields[response.body?.fields[key]?.name] = response.body?.fields[key];
                         }
                     });
+
+                    if (this.invoiceType.isCashInvoice) {
+                        this.accountFormFields = cloneDeep(this.companyFormFields);
+                        this.account.taxTypeLabel = cloneDeep(this.company.taxTypeLabel);
+                        this.account.taxType = cloneDeep(this.company.taxType);
+                    }
                 }
             });
         } else {
@@ -3286,8 +3294,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             otherApplicableTaxes: null,
             applicableDiscounts: null,
             applicableTaxes: null,
-            excludeTax: false
+            excludeTax: false,
+            taxTypeLabel: ''
         };
+
+        if (this.invoiceType.isCashInvoice) {
+            this.accountFormFields = cloneDeep(this.companyFormFields);
+            this.account.taxTypeLabel = cloneDeep(this.company.taxTypeLabel);
+            this.account.taxType = cloneDeep(this.company.taxType);
+        }
 
         this.addNewLineEntry(false);
 
