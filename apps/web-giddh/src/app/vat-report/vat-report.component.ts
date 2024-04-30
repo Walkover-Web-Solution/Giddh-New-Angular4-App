@@ -90,9 +90,9 @@ export class VatReportComponent implements OnInit, OnDestroy {
     /** Hold Zimbabwe table displayed columns for last section */
     public zwDisplayedColumnsForLastSection: string[] = ['name', 'amount', 'decimal'];
     /** Hold Kenya table displayed columns */
-    public keDisplayedColumns: string[] = ['number', 'description', 'amount', 'rate', 'ot-amount'];
+    public kenyaDisplayedColumns: string[] = ['number', 'description', 'amount', 'rate', 'ot-amount'];
     /** Hold Kenya table displayed columns */
-    public keDisplayedColumnsForLastSection: string[] = ['number', 'description', 'vat-amount'];
+    public kenyaDisplayedColumnsForLastSection: string[] = ['number', 'description', 'vat-amount'];
     /** Holds Section Number which  show Total Output Tax Row */
     public showTotalOutputTaxIn: number[] = [9, 19, 20, 21, 22, 23];
     /** True if active country is UK */
