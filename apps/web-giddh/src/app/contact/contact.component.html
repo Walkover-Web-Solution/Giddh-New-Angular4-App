@@ -377,10 +377,10 @@
                                 <div *ngIf="!isMobileScreen && !isGetAccountsInProcess">
                                     <ng-container *ngTemplateOutlet="mainTable"></ng-container>
                                 </div>
-                               
+
                                 <giddh-page-loader *ngIf="!isMobileScreen && isGetAccountsInProcess">
                                 </giddh-page-loader>
-                                
+
                                 <div *ngIf="isMobileScreen">
                                     <ng-container *ngTemplateOutlet="mainTable"></ng-container>
                                 </div>

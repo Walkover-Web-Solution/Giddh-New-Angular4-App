@@ -374,7 +374,8 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
 
     public ngOnInit() {
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
-            if (event && event?.getDataLength() - event?.getRenderedRange().end < 20) {
+            if (event && event?.getDataLength() - event?.getRenderedRange().end < 20 && !this.loadMoreInProgress) {
+                this.loadMoreInProgress = true;
                 this.scrollEnd.emit()
                 this.cdRef.detectChanges();
             }

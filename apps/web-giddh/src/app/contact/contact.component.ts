@@ -287,7 +287,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             let queryParams = result[1];
             let lastTabType = this.moduleType;
             this.moduleType = (params.type)?.toUpperCase();
-            
+
             if (params) {
                if ((params["type"] && params["type"].indexOf("customer") > -1) || (queryParams && queryParams.tab && queryParams.tab === "customer")) {
                     const activeTab = this.activeTab;
