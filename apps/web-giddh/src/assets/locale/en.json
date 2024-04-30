@@ -724,5 +724,6 @@
     "app_select_printer": "Select Printer",
     "app_help": "Help",
     "app_applicable_date": "Applicable date",
-    "app_name_placeholder": "Enter Name"
+    "app_name_placeholder": "Enter Name",
+    "app_county": "County"
 }

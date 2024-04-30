@@ -193,7 +193,7 @@
                                                         localeData?.add_new_address }}</button>
                                                 </div>
                                             </mat-menu>
-                                            <div class="vouchers-address-form" *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
+                                            <div class="vouchers-address-form" [ngClass]="{'without-taxnumber': !account?.taxTypeLabel}" *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                                 <div class="address-field">
                                                     <textarea rows="2" matInput
                                                         (keyup)="copyAccountBillingAddressToShippingAddress()" class="w-100"
@@ -206,7 +206,7 @@
                                                 <div class="state-field" formGroupName="state">
                                                     <reactive-dropdown-field [cssClass]="'border-0'"
                                                         formControlName="code" [name]="'billingStateCode'"
-                                                        [label]="commonLocaleData?.app_state" [placeholder]="commonLocaleData?.app_state"
+                                                        [label]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state" [placeholder]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
                                                         [options]="accountStateList$ | async"
                                                         [labelValue]="invoiceForm.controls['account'].get('billingDetails').get('state').get('name')?.value"
                                                         [appearance]="'fill'" [showLabel]="false"
@@ -271,7 +271,7 @@
                                                 </div>
                                             </mat-menu>
 
-                                            <div class="vouchers-address-form" [ngClass]="{'form-disabled': copyAccountBillingInShippingAddress}"
+                                            <div class="vouchers-address-form" [ngClass]="{'form-disabled': copyAccountBillingInShippingAddress, 'without-taxnumber': !account?.taxTypeLabel}"
                                                 *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                                 <div class="address-field">
                                                     <textarea rows="2" matInput class="w-100" name="shippingDetails"
@@ -284,7 +284,7 @@
                                                 <div class="state-field" formGroupName="state">
                                                     <reactive-dropdown-field [cssClass]="'border-0'"
                                                         formControlName="code" [name]="'shippingStateCode'"
-                                                        [label]="commonLocaleData?.app_state" [placeholder]="commonLocaleData?.app_state"
+                                                        [label]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state" [placeholder]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
                                                         [options]="accountStateList$ | async"
                                                         [labelValue]="invoiceForm.controls['account'].get('shippingDetails').get('state').get('name')?.value"
                                                         [appearance]="'fill'" [showLabel]="false"
@@ -389,7 +389,7 @@
                                                 </ng-container>
                                             </div>
                                         </mat-menu>
-                                        <div class="vouchers-address-form" *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
+                                        <div class="vouchers-address-form" [ngClass]="{'without-taxnumber': !company?.taxTypeLabel}" *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                             <div class="address-field">
                                                 <textarea rows="2" matInput
                                                     (keyup)="copyCompanyBillingAddressToShippingAddress()" class="w-100"
@@ -401,13 +401,13 @@
                                             <div class="state-field" formGroupName="state">
                                                 <reactive-dropdown-field [cssClass]="'border-0'"
                                                     formControlName="code" [name]="'companyBillingStateCode'"
-                                                    [label]="commonLocaleData?.app_state" [placeholder]="commonLocaleData?.app_state"
+                                                    [label]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state" [placeholder]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
                                                     [options]="companyStateList$ | async"
                                                     [labelValue]="invoiceForm.controls['company'].get('billingDetails').get('state').get('name')?.value"
                                                     [appearance]="'fill'" [showLabel]="false"
                                                     (selectedOption)="selectState('company', 'billingDetails', $event); copyCompanyBillingAddressToShippingAddress()"></reactive-dropdown-field>
                                             </div>
-                                            <div class="gstin-field">
+                                            <div class="gstin-field" *ngIf="company?.taxTypeLabel">
                                                 <text-field [type]="'text'" [name]="'companyBillingTaxNumber'"
                                                     (keyup)="copyCompanyBillingAddressToShippingAddress()"
                                                     [placeholder]="company.taxTypeLabel" [cssClass]="'border-0'"
@@ -463,7 +463,7 @@
                                             </div>
                                         </mat-menu>
 
-                                        <div class="vouchers-address-form" [ngClass]="{'form-disabled': copyCompanyBillingInShippingAddress}"
+                                        <div class="vouchers-address-form" [ngClass]="{'form-disabled': copyCompanyBillingInShippingAddress, 'without-taxnumber': !company?.taxTypeLabel}"
                                             *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                             <div class="address-field">
                                                 <textarea rows="2" matInput class="w-100" name="companyShippingAddress"
@@ -475,13 +475,13 @@
                                             <div class="state-field" formGroupName="state">
                                                 <reactive-dropdown-field [cssClass]="'border-0'"
                                                     formControlName="code" [name]="'companyShippingStateCode'"
-                                                    [label]="commonLocaleData?.app_state" [placeholder]="commonLocaleData?.app_state"
+                                                    [label]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state" [placeholder]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
                                                     [options]="companyStateList$ | async"
                                                     [labelValue]="invoiceForm.controls['company'].get('shippingDetails').get('state').get('name')?.value"
                                                     [appearance]="'fill'" [showLabel]="false"
                                                     (selectedOption)="selectState('company', 'shippingDetails', $event)"></reactive-dropdown-field>
                                             </div>
-                                            <div class="gstin-field">
+                                            <div class="gstin-field" *ngIf="company?.taxTypeLabel">
                                                 <text-field [type]="'text'" [name]="'companyShippingTaxNumber'"
                                                     [placeholder]="company.taxTypeLabel" [cssClass]="'border-0'"
                                                     [showError]="taxNumberValidations['company']['shippingDetails'] | async"
