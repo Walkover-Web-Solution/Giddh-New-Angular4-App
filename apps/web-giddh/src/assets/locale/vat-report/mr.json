@@ -37,5 +37,9 @@
     "for_office_use": "कार्यालयात वापरण्यासाठी",
     "mat_code": "सामग्री कोड",
     "value_of_supply": "पुरवठा किंमत",
-    "output_tax": "आउटपुट कर"
+    "output_tax": "आउटपुट कर",
+    "detailsOfSales": "विक्रीचे तपशील",
+    "detailsOfPurchases": "खरेदीचे तपशील",
+    "amountExclVat": "रक्कम (व्हॅट वगळून)",
+    "amountOfOutputTax": "आउटपुट कराची रक्कम"
 }
