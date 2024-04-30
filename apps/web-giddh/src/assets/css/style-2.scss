@@ -15058,6 +15058,17 @@ aside-menu-product-service {
     }
 }
 
+
+//  Material checkbox color
+.mat-mdc-checkbox {
+    .mdc-form-field{
+       .mdc-checkbox{
+           .mdc-checkbox__background{
+               border-color: var(--color-common-primary-text) !important;
+           }
+       }
+    }
+}
 .text-underline {
     text-decoration: underline;
 
@@ -15151,7 +15162,10 @@ aside-menu-product-service {
 .color-link {
     color: var(--color-link) !important;
 }
+<<<<<<< HEAD
 
 .bg-transparent {
     background-color: var(--color-transparent-background) !important;
 }
+=======
+>>>>>>> 639b6a7b02345d4687a0c2a26fc9d3f839b0566f
