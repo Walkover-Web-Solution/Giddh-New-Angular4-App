@@ -200,7 +200,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
                 return;
             }
 
-            let request = { bankAccountUniqueName: this.activeBankAccount?.bankResource?.uniqueName, urn: this.activePayorAccount?.urn };
+            let request = { bankAccountUniqueName: this.activeBankAccount?.bankResource?.uniqueName, bankUserId: this.activePayorAccount?.bankUserId };
 
             this.settingsIntegrationService.updatePayorAccount(this.accountUserForm.value, request).pipe(take(1)).subscribe(response => {
                 if (response?.status === "success") {

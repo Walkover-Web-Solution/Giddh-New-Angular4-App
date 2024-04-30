@@ -467,6 +467,7 @@ export class CustomTemplateResponse {
     public logoSize: string; // design
     public isDefault: boolean;
     public isDefaultForVoucher: boolean;
+    public showSectionsInline: boolean;
     public sections: ISection; // done
     public name: string;
     public copyFrom?: string; // done

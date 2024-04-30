@@ -1,0 +1,10 @@
+<div class="bg-dark text-info text-center h-100 p-5">
+    <giddh-page-loader *ngIf="isVoucherDownloading"></giddh-page-loader>
+    <div *ngIf="isVoucherDownloadError && !isVoucherDownloading" class="error">
+        <span>
+            {{ localeData?.invoice_preview_unavailable }}
+        </span>
+    </div>
+    <iframe #pdfContainer *ngIf="sanitizedPdfFileUrl && !isVoucherDownloading" width="100%" height="100%"
+        [src]="sanitizedPdfFileUrl"></iframe>
+</div>

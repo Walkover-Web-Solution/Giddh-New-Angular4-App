@@ -45,6 +45,8 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     @Input() public label: any;
     /** True if datepicker has to be opened by default */
     @Input() public isOpened: boolean = false;
+    /** True if datepicker has to be opened by default */
+    @Input() public hideLabel: boolean = false;
     /** Emitting selected date object as output */
     @Output() public dateSelected: EventEmitter<any> = new EventEmitter<any>();
     /** Emitting the state of datepicker (open/close) */

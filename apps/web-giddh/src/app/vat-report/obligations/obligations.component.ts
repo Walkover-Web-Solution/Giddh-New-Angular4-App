@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, MOBILE_NUMBER_SELF_URL } from '../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
@@ -72,7 +72,8 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     public isLoading: boolean;
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
-
+    /** Hold system user client ip */
+    public clientIp: string = "";
 
     constructor(
         private gstReconcileService: GstReconcileService,
@@ -104,6 +105,12 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         this.getUniversalDatePickerDate();
         this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
         this.loadTaxDetails();
+
+        this.generalService.getClientIp().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.ipAddress) {
+                this.clientIp = response.ipAddress;
+            }
+        });
 
         if (this.isCompanyMode) {
             this.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -138,7 +145,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     */
     public getVatObligations(): void {
         this.isLoading = true;
-        this.vatService.getVatObligations(this.companyUniqueName, this.obligationsForm.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.vatService.getVatObligations(this.companyUniqueName, this.obligationsForm.value, this.clientIp).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response?.status === "success" && response?.body?.obligations) {
                 this.tableDataSource = response?.body?.obligations.map(item => {
@@ -148,6 +155,8 @@ export class ObligationsComponent implements OnInit, OnDestroy {
 
                     return item;
                 });
+            } else if (response?.body?.message) {
+                this.toaster.showSnackBar('error', response?.body?.message);
             } else if (response?.message) {
                 this.toaster.showSnackBar('error', response?.message);
             }
