@@ -12,18 +12,6 @@ import { ToasterService } from '../../services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AsideMenuAccountInContactComponent } from '../../shared/aside-menu-account/aside.menu.account.component';
 
-export interface PeriodicElement {
-    number: number;
-    name: string;
-    action: string
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-    {number: 1, name: '10', action: ''},
-    {number: 2, name: '20', action: ''},
-    {number: 3, name: '30', action: ''}
-]
-
 @Component({
     selector: 'setting-discount',
     templateUrl: './discount.component.html',
@@ -61,9 +49,11 @@ export class DiscountComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if get all discounts api call in progress */
     public isLoading: boolean = false;
-    /*-- mat-table --*/
+    /** Holds Mat Table Display columns */
     displayedColumns: string[] = ['number', 'name', 'action'];
-    dataSource = ELEMENT_DATA;
+    // /** Holds Mat Table Data */
+    // public dataSource: any[] = [];
+    /** Holds Mat Table Data */
     public discountConfirmationModelRef:any;
 
     constructor(
@@ -145,7 +135,8 @@ export class DiscountComponent implements OnInit, OnDestroy {
     //     this.discountConfirmationModel?.show();
     // }
 
-    public showDeleteDiscountModal(): void {
+    public showDeleteDiscountModal(uniqueName: string): void {
+        this.deleteRequest = uniqueName;
         this.discountConfirmationModelRef =  this.dialog.open(this.discountConfirmationModel, {
             panelClass: 'modal-dialog',
         });
