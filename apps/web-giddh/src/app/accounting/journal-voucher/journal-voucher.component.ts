@@ -139,9 +139,9 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Hold discount event  */
-    public discountEvent: boolean;
+    public showDiscountEvent: boolean;
     /** Hold tax event  */
-    public taxEvent: boolean;
+    public showTaxEvent: boolean;
 
     /** @ignore */
     constructor(

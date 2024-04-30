@@ -374,6 +374,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     this.activeRowType = "account";
                     this.showLedgerAccountList = false;
                     this.showDiscountSidebar = false;
+                    this.showTaxSidebar = false;
+                    this.closeDiscountSidebar();
+                    this.closeTaxSidebar();
                     voucherTypeControl.setValue(this.currentVoucher);
                     this.resetEntriesIfVoucherChanged();
                     setTimeout(() => {
@@ -489,6 +492,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             } else if (event?.target?.value === 'ð') {
                 this.showDiscountSidebar = true;
                 return;
+            } else if (event?.target?.value === 'þ') {
+                this.showTaxSidebar = true;
+                return;
             } else {
                 this.searchAccount(event, event.target?.value);
             }
@@ -503,7 +509,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     @HostListener('window:keydown', ['$event'])
     handleKeyDown(event: KeyboardEvent) {
-        console.log(event);
         if (event.key === 'F6') {
             event.preventDefault(); // Prevent default F6 behavior
             this.customFunctionForF6();
@@ -518,9 +523,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         else if (event.key === 'Escape') {
             if (this.showDiscountSidebar) {
                 this.showDiscountSidebar = false;
+                this.closeDiscountSidebar();
+                this.closeTaxSidebar();
             }
             if (this.showTaxSidebar) {
                 this.showTaxSidebar = false;
+                this.closeDiscountSidebar();
+                this.closeTaxSidebar();
             }
             if (this.showLedgerAccountList) {
                 this.showLedgerAccountList = false;
@@ -565,6 +574,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.showDiscountSidebar = true;
         this.showLedgerAccountList = false;
         this.showTaxSidebar = false;
+        this.closeTaxSidebar();
     }
 
     /**
@@ -576,6 +586,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.showTaxSidebar = true;
         this.showLedgerAccountList = false;
         this.showDiscountSidebar = false;
+        this.closeDiscountSidebar();
     }
 
     /**
@@ -680,7 +691,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public newEntryObj(byOrTo?: string, typeData?: any, type?: any): void {
-        console.log(byOrTo, typeData, type);
+        let formArray = this.journalVoucherForm.get('transactions') as FormArray;
         const newTransactionFormGroup = this.initTransactionFormGroup();
         let discountData = null;
         let taxData = null;
@@ -713,17 +724,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 }
             });
             this.selectAccUnqName = discountData?.additional?.uniqueName ? discountData?.additional?.uniqueName : discountData?.uniqueName;
-            setTimeout(() => {
-                let voucherType = cloneDeep(VOUCHERS);
-                this.checkVoucherTypeNewEntries(this.currentVoucher, voucherType);
-            },);
-            (this.journalVoucherForm.get('transactions') as FormArray).push(newTransactionFormGroup);
-        }
-        if (taxData) {
-            let tax = taxData?.additional?.taxDetail[0]
+        } else if (taxData) {
+            let filteredTaxData = this.companyTaxesList?.filter(tax => tax?.additional?.uniqueName === taxData?.uniqueName);
+            let tax = taxData?.additional?.taxDetail[0] ?? filteredTaxData[0]?.additional?.taxDetail[0];
             newTransactionFormGroup.patchValue({
                 amount: tax?.taxValue,
-                particular: tax?.uniqueName,
+                particular: tax?.uniqueName ?? filteredTaxData[0]?.additional?.uniqueName,
                 currentBalance: '',
                 applyApplicableTaxes: false,
                 isDiscountApplied: false,
@@ -735,22 +741,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 discounts: [],
                 inventory: null,
                 selectedAccount: {
-                    name: taxData?.additional?.name,
-                    UniqueName: taxData?.additional?.unqiueName,
+                    name: taxData?.additional?.name ?? filteredTaxData[0]?.additional?.name,
+                    UniqueName: tax?.uniqueName ?? filteredTaxData[0]?.additional?.uniqueName,
                     groupUniqueName: '',
-                    account: taxData?.additional?.name,
+                    account: taxData?.additional?.name ?? filteredTaxData[0]?.additional?.name,
                     type: '',
                     parentGroup: ''
                 }
             });
-            this.selectAccUnqName = taxData?.additional?.uniqueName;
-            setTimeout(() => {
-                let voucherType = cloneDeep(VOUCHERS);
-                this.checkVoucherTypeNewEntries(this.currentVoucher, voucherType);
-            },);
-            (this.journalVoucherForm.get('transactions') as FormArray).push(newTransactionFormGroup);
-            // let
-            // this.calculateAmount(Number(transactionAtIndex.get('amount').value), transactionAtIndex, idx);
+            this.selectAccUnqName = taxData?.additional?.uniqueName ?? filteredTaxData[0]?.additional?.name;
         } else {
             newTransactionFormGroup.patchValue({
                 amount: null,
@@ -772,9 +771,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     parentGroups: []
                 }
             });
-            (this.journalVoucherForm.get('transactions') as FormArray).push(newTransactionFormGroup);
         }
         // Push the new transaction FormGroup into the form array
+        formArray.push(newTransactionFormGroup);
+        const index = formArray.controls.findIndex(formGroup => formGroup === newTransactionFormGroup);
+        console.log(formArray, index, newTransactionFormGroup);
+        this.calculateAmount(Number(newTransactionFormGroup.get('amount').value), newTransactionFormGroup, index);
     }
 
     /**
@@ -812,6 +814,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.showLedgerAccountList = false;
         this.showDiscountSidebar = false;
         this.showTaxSidebar = false;
+        this.closeDiscountSidebar();
+        this.closeTaxSidebar();
         setTimeout(() => {
             transaction?.get('selectedAccount.name')?.patchValue("");
         }, 100);
@@ -887,6 +891,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.showLedgerAccountList = false;
             this.showDiscountSidebar = false;
             this.showTaxSidebar = false;
+            this.closeDiscountSidebar();
+            this.closeTaxSidebar();
             this.showStockList = false;
         }
         this.showAccountList.emit(false);
@@ -903,6 +909,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.showLedgerAccountList = false;
             this.showDiscountSidebar = false;
             this.showTaxSidebar = false;
+            this.closeDiscountSidebar();
+            this.closeTaxSidebar();
             this.showStockList = false;
             this.activeRowIndex = null;
             this.activeRowType = null;
@@ -979,16 +987,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                             this.salesEntry = true;
                         }
                     });
-                    if (response.body.applicableDiscounts?.length) {
-                        response.body.applicableDiscounts.forEach(discount => {
-                            this.newEntryObj('by', discount, 'discount');
-                        });
-                    }
-                    if (response.body.applicableTaxes?.length) {
-                        response.body.applicableTaxes.forEach(tax => {
-                            this.newEntryObj('by', tax, 'tax');
-                        });
-                    }
                 }
                 let idx = this.selectedIdx;
                 transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
@@ -1038,7 +1036,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         this.changeTab('enter', 'account', true);
                     }
                     this.calculateAmount(Number(transactionAtIndex.get('amount').value), transactionAtIndex, idx);
-
+                    if (response.body.applicableDiscounts?.length) {
+                        response.body.applicableDiscounts.forEach(discount => {
+                            this.newEntryObj('by', discount, 'discount');
+                        });
+                    }
+                    if (response.body.applicableTaxes?.length) {
+                        response.body.applicableTaxes.forEach(tax => {
+                            this.newEntryObj('by', tax, 'tax');
+                        });
+                    }
                 } else {
                     this.deleteRow(idx);
                 }
@@ -1082,9 +1089,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.filterByText = accountName;
             this.showLedgerAccountList = true;
             this.onAccountSearchQueryChanged(this.filterByText);
-            // setTimeout(() => {
-            //     this.showLedgerAccountList = true;
-            // }, 200);
         }
     }
 
@@ -1213,6 +1217,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.showLedgerAccountList = false;
         this.showDiscountSidebar = false;
         this.showTaxSidebar = false;
+        this.closeDiscountSidebar();
+        this.closeTaxSidebar();
         this.showStockList = false;
         const transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
         const totalDebitAmount = transactionsFormArray.controls.reduce((acc: number, control: AbstractControl) => {
@@ -1948,6 +1954,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.showLedgerAccountList = false;
             this.showDiscountSidebar = false;
             this.showTaxSidebar = false;
+            this.closeDiscountSidebar();
+            this.closeTaxSidebar();
             document.querySelector('body').classList.remove('fixed');
         }
     }
@@ -2267,6 +2275,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             if (key === this.KEYS.ESC || key === this.KEYS.TAB || (key === this.KEYS.UP && event.altKey)) {
                 this.showDiscountSidebar = false;
                 this.showTaxSidebar = false;
+                this.closeDiscountSidebar();
+                this.closeTaxSidebar();
             } else if (key === this.KEYS.ENTER) {
                 const selectedElement = elements[this.selectedIndex];
                 const anchorElement = selectedElement.firstChild as HTMLElement;
@@ -2296,6 +2306,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (discount) {
             this.showDiscountSidebar = false;
             this.newEntryObj('by', discount, 'discount');
+            this.changeTab('enter', 'account', true);
             this.changeDetectionRef.detectChanges();
         }
     }
@@ -2304,6 +2315,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (tax) {
             this.showTaxSidebar = false;
             this.newEntryObj('to', tax, 'tax');
+            this.changeTab('enter', 'account', true);
             this.changeDetectionRef.detectChanges();
         }
     }

@@ -26,9 +26,9 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public accountingVouchers: any = VOUCHERS;
     /** Emits the discount event  */
-    @Output() public discountEvent: EventEmitter<boolean> = new EventEmitter();
+    @Output() public showDiscountEvent: EventEmitter<boolean> = new EventEmitter();
     /** Emits the tax event  */
-    @Output() public taxEvent: EventEmitter<boolean> = new EventEmitter();
+    @Output() public showTaxEvent: EventEmitter<boolean> = new EventEmitter();
     constructor(private _tallyModuleService: TallyModuleService) {
         //
     }
@@ -78,15 +78,27 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
         this.destroyed$.complete();
     }
 
-    public openDiscountSidebar(event: any): void {
+    /**
+     * This will be use for emiiting the show discount sidebar state
+     *
+     * @param {*} event
+     * @memberof AccountingSidebarComponent
+     */
+    public showDiscountSidebar(event: any): void {
         if (event) {
-            this.discountEvent.emit(true);
+            this.showDiscountEvent.emit(true);
         }
     }
 
-    public openTaxSidebar(event: any): void {
+    /**
+     * This will be use for emiiting the show tax sidebar state
+     *
+     * @param {*} event
+     * @memberof AccountingSidebarComponent
+     */
+    public showTaxSidebar(event: any): void {
         if (event) {
-            this.taxEvent.emit(true);
+            this.showTaxEvent.emit(true);
         }
     }
 }
