@@ -731,10 +731,18 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     public goToInvoice(type?: string) {
         // remove fixed class because we are navigating to invoice generate page where user can scroll the page
         document.querySelector('body').classList.remove('fixed');
-        if (type === 'cash') {
-            this.router.navigate(['/pages/proforma-invoice/invoice/', type]);
+        if (this.voucherApiVersion === 1) {
+            if (type === 'cash') {
+                this.router.navigate(['/pages/proforma-invoice/invoice/', type]);
+            } else {
+                this.router.navigate(['/pages/proforma-invoice/invoice/', this.voucherType]);
+            }
         } else {
-            this.router.navigate(['/pages/proforma-invoice/invoice/', this.voucherType]);
+            if (type === 'cash') {
+                this.router.navigate(['/pages/vouchers/cash/create']);
+            } else {
+                this.router.navigate(['/pages/vouchers/'+ this.voucherType.replace(/\s+/g, "-") +'/create']);
+            }
         }
     }
 

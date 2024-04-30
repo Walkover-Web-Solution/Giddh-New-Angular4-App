@@ -15,6 +15,7 @@ import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfac
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
+import { HttpHeaders } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable()
@@ -94,33 +95,13 @@ export class GeneralService {
         this.IAmLoaded.next(iAmLoaded);
     }
 
-    public createQueryString(str, model) {
-        let url = str;
-        if ((model.from)) {
-            url = url + 'from=' + model.from + '&';
-        }
-        if ((model.to)) {
-            url = url + 'to=' + model.to + '&';
-        }
-        if ((model.page)) {
-            url = url + 'page=' + model.page + '&';
-        }
-        if ((model.count)) {
-            url = url + 'count=' + model.count;
-        }
-
-        if ((model.type)) {
-            url = url + '&type=' + model.type;
-        }
-        if ((model.sort)) {
-            url = url + '&sort=' + model.sort;
-        }
-        if ((model.sortBy)) {
-            url = url + '&sortBy=' + model.sortBy;
-        }
-        if ((model.q)) {
-            url = url + '&q=' + model.q;
-        }
+    public createQueryString(url: string, params: any) {
+        Object.keys(params).forEach((key, index) => {
+            if (params[key] !== undefined) {
+                const delimiter = url.indexOf('?') === -1 ? '?' : '&';
+                url += `${delimiter}${key}=${params[key]}`
+            }
+        });
         return url;
     }
 
@@ -1714,6 +1695,17 @@ export class GeneralService {
     }
 
     /**
+     * This will return the system current user time zone
+     *
+     * @return {*}
+     * @memberof GeneralService
+     */
+    public getUserTimeZone(): any {
+        let offset = new Date().getTimezoneOffset(), o = Math.abs(offset);
+        return (offset < 0 ? "+" : "-") + ("00" + Math.floor(o / 60)).slice(-2) + ":" + ("00" + (o % 60)).slice(-2);
+    }
+
+    /**
      * Retrieves the operating system configuration based on the user agent string.
      *
      * @returns {string} The name of the operating system.
@@ -1932,7 +1924,8 @@ export class GeneralService {
         args['device-model'] = this.getDeviceModel();
         args['timestamp'] = this.getTimesStamp();
         args['client-ip'] = clientIp;
-        return args
+        args['Gov-Client-Timezone'] = 'UTC' + this.getUserTimeZone();
+        return args;
     }
 
     /**

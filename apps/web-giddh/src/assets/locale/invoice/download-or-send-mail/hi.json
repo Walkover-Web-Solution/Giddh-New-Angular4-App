@@ -6,6 +6,7 @@
     "original": "मूल",
 	"download_invoice": "इनवाइस को डाउनलोड करो",
 	"enter_valid_email_error": "कुछ मान्य ईमेल आईडी दर्ज करें",
+    "select_invoice_copy": "कृपया चालान प्रतियां चुनें",
 	"invalid_emails": "अमान्य ईमेल।",
 	"enter_valid_number_error": "कुछ मान्य नंबर दर्ज करें",
 	"invalid_aadhar_no": "अमान्य आधार संख्या:",
