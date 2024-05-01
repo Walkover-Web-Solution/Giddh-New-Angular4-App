@@ -11,18 +11,12 @@
 
                     th,
                     td {
-                        border: 1px solid var(--color-table-primary-content-bar-border) !important;
-
                         &[colspan="2"] {
                             text-align: center;
                         }
 
                         &.d-none {
                             display: none !important;
-                        }
-
-                        &.bg-grey {
-                            background-color: var(--color-wild-sand) !important;
                         }
                     }
                 }
@@ -35,6 +29,22 @@
                         &:last-child {
                             display: none !important;
                         }
+                    }
+                }
+            }
+            &.bordered-table {
+                tr {
+                    th,td {
+                        border: 1px solid var(--color-table-primary-content-bar-border) !important;
+                    }
+                }
+            }
+
+            tr {
+                th,
+                td {
+                    &.bg-grey {
+                        background-color: var(--color-wild-sand) !important;
                     }
                 }
             }
