@@ -68,12 +68,12 @@
                                 >
                                 <div class="btn-group" dropdown>
                                     <button
-                                        mat-button
+                                        mat-icon-button
                                         [matMenuTriggerFor]="menu"
                                         aria-label="vertical dots"
-                                        id="warehouse dots"
-                                        class="icon-dots-three-vertical dropdown-toggle cp mr-0"
-                                    ><span class="icon-dots-three-vertical"></span></button>
+                                    >
+                                        <span class="icon-dots-three-vertical mr-0 font-14 d-block"></span>
+                                     </button>
                                     <mat-menu #menu="matMenu">
                                         <button mat-menu-item (click)="editWarehouse(warehouse)">
                                             {{ commonLocaleData?.app_edit }}
@@ -174,8 +174,6 @@
                 [requireCommonData]="false"
             >
                 <create-address
-                    [class]="asideEditWarehousePane"
-                    [@slideInOut]="asideEditWarehousePane"
                     [currentOrganizationUniqueName]="currentOrganizationUniqueName"
                     [warehouseToUpdate]="warehouseToUpdate"
                     [showLoader]="isWarehouseUpdateInProgress"

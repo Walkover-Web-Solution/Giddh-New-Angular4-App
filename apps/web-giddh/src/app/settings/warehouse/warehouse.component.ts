@@ -45,19 +45,7 @@ import { WarehouseState } from './reducer/warehouse.reducer';
     selector: 'setting-warehouse',
     templateUrl: './warehouse.component.html',
     styleUrls: ['./warehouse.component.scss'],
-    providers: [{ provide: BsDropdownConfig, useValue: { autoClose: true } }],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    providers: [{ provide: BsDropdownConfig, useValue: { autoClose: true } }]
 })
 export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
 
@@ -80,8 +68,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public searchWarehouseQuery: string = '';
     /** True, if API is in progress */
     public showLoader: boolean = true;
-    /** 'in' if edit warehouse flow is carried out */
-    public asideEditWarehousePane: string = 'out';
     /** True, if warehouse update is in progress */
     public isWarehouseUpdateInProgress: boolean;
     /** Warehouse details to update */
@@ -96,7 +82,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Warehouse pagination instance */
     @ViewChild('warehousePagination', { static: true }) warehousePagination: PaginationComponent;
     /** Warehouse search field instance */
-    @ViewChild('searchWarehouse', { static: false }) public searchWarehouse: ElementRef;
+    @ViewChild('searchWarehouse', { static: false }) public searchWarehouse: any;
     /*-- mat-dialog --*/
     @ViewChild('asideAccountAsidePane', { static: true }) public asideAccountAsidePane: any;
     /** Warehouse on boarding modal viewchild */
@@ -162,7 +148,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     public ngAfterViewInit(): void {
-        fromEvent(this.searchWarehouse?.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((event: any) => {
+        fromEvent(this.searchWarehouse?.textField?.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((event: any) => {
             this.showLoader = true;
             this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, query: encodeURIComponent(event.target?.value), count: PAGINATION_LIMIT }));
         });
@@ -279,24 +265,33 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     // public editWarehouse(warehouse: any): void {
     //     this.selectedWarehouse = warehouse;
 
-    //     this.loadAddresses('GET', () => {
-    //         this.warehouseToUpdate = {
-    //             name: warehouse.name,
-    //             // address: warehouse.address,
-    //             linkedEntities: warehouse.addresses || []
-    //         };
-    //         this.toggleAsidePane();
-    //     });
+        // this.loadAddresses('GET', () => {
+        //     this.warehouseToUpdate = {
+        //         name: warehouse.name,
+        //         // address: warehouse.address,
+        //         linkedEntities: warehouse.addresses || []
+        //     };
+        //     this.toggleAsidePane();
+        // });
     // }
 
-    public editWarehouse() {
-        this.dialog.open(this.asideAccountAsidePane, {
-            width: '760px',
-            height: '100vh !important',
-            position: {
-                right: '0',
-                top: '0'
-            }
+    public editWarehouse(warehouse: any) {
+        this.selectedWarehouse = warehouse;
+        this.loadAddresses('GET', () => {
+            this.warehouseToUpdate = {
+                name: warehouse.name,
+                // address: warehouse.address,
+                linkedEntities: warehouse.addresses || []
+            };
+            
+            this.dialog.open(this.asideAccountAsidePane, {
+                width: '760px',
+                height: '100vh !important',
+                position: {
+                    right: '0',
+                    top: '0'
+                }
+            });
         });
     }
 
@@ -358,25 +353,12 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
     public toggleAsidePane(event?: any): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.asideEditWarehousePane = this.asideEditWarehousePane === 'out' ? 'in' : 'out';
+        // if (event) {
+        //     event.preventDefault();
+        // }
+        // this.asideEditWarehousePane = this.asideEditWarehousePane === 'out' ? 'in' : 'out';
         this.isWarehouseUpdateInProgress = false;
-        this.toggleBodyClass();
-    }
-
-    /**
-     * Toggles fixed body class
-     *
-     * @memberof WarehouseComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.asideEditWarehousePane === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
+        // this.toggleBodyClass();
     }
 
     /**
@@ -399,7 +381,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         };
         this.settingsProfileService.updatWarehouseInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
-                this.asideEditWarehousePane = 'out';
                 this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
                 this.toasterService.successToast(this.localeData?.warehouse_updated);
             } else {

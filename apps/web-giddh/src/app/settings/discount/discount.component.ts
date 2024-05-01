@@ -9,52 +9,49 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { SalesService } from '../../services/sales.service';
 import { SettingsDiscountService } from '../../services/settings.discount.service';
 import { ToasterService } from '../../services/toaster.service';
-import { MatDialog } from '@angular/material/dialog';
-import { AsideMenuAccountInContactComponent } from '../../shared/aside-menu-account/aside.menu.account.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
     selector: 'setting-discount',
     templateUrl: './discount.component.html',
-    styleUrls: ['./discount.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    styleUrls: ['./discount.component.scss']
 })
 
 export class DiscountComponent implements OnInit, OnDestroy {
-    @ViewChild('discountConfirmationModel', { static: true }) public discountConfirmationModel: TemplateRef<any>;
+    /** Holds Delete Discount Confirmation Dialog Template Ref */
+    @ViewChild('discountConfirmationDialog', { static: true }) public discountConfirmationDialog: TemplateRef<any>;
+    /** Holds Create New Account Dialog Template Ref */
     @ViewChild('createNew', { static: true }) public createNew: TemplateRef<any>;
+    /** Holds Discount Type Input Field Element Ref */
+    @ViewChild('discountTypeField', { static: true }) public discountTypeField: any;
+    /** Holds Translated Discount Type List */
     public discountTypeList: IOption[] = []
+    /** Holds Linked Account List */
     public accounts: IOption[];
+    /** Holds Create Request */
     public createRequest: CreateDiscountRequest = new CreateDiscountRequest();
+    /** Holds Delete Request */
     public deleteRequest: string = null;
+    /** Holds Discount list */
     public discountList: IDiscountList[] = [];
     /** Observable for create/update/delete api call in progress */
     public isLoading$: Observable<boolean>;
-    public accountAsideMenuState: string = 'out';
+    /** Observable for create account api call is success */
     private createAccountIsSuccess$: Observable<boolean>;
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** 8 This will hold common JSON data */
     public commonLocaleData: any = {};
     /** True if get all discounts api call in progress */
     public isLoading: boolean = false;
     /** Holds Mat Table Display columns */
-    displayedColumns: string[] = ['number', 'name', 'action'];
-    // /** Holds Mat Table Data */
-    // public dataSource: any[] = [];
-    /** Holds Mat Table Data */
-    public discountConfirmationModelRef:any;
+    public displayedColumns: string[] = ['number', 'name', 'action'];
+    /** Holds Discount Confirmation Dialog Ref */
+    public discountConfirmationDialogRef: MatDialogRef<any>;
+    /** Holds Create New Account Dialog Ref */
+    public createNewAccountDialogRef: MatDialogRef<any>
 
     constructor(
         private salesService: SalesService,
@@ -66,30 +63,30 @@ export class DiscountComponent implements OnInit, OnDestroy {
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
 
-    public ngOnInit() {
+    /**
+     * Lifecycle hook for initialization
+     *
+     * @memberof DiscountComponent
+     */
+    public ngOnInit(): void {
         this.getDiscountAccounts();
         this.getDiscounts();
 
-        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((yes: boolean) => {
-            if (yes) {
-                if (this.accountAsideMenuState === 'in') {
-                    this.toggleAccountAsidePane();
-                    this.getDiscountAccounts();
-                }
+        this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: boolean) => {
+            if (response) {
+                this.openAccountAsidePane();
+                this.getDiscountAccounts();
             }
         });
     }
 
-    // public toggleAccountAsidePane(event?): void {
-    //     if (event) {
-    //         event.preventDefault();
-    //     }
-    //     this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
-    //     this.toggleBodyClass();
-    // }
-
-    public toggleAccountAsidePane(): void {
-        this.dialog.open(AsideMenuAccountInContactComponent, {
+    /**
+     * Open Creat Account Aside Pane
+     *
+     * @memberof DiscountComponent
+     */
+    public openAccountAsidePane(): void {
+        this.createNewAccountDialogRef = this.dialog.open(this.createNew, {
             width: '768px',
             position: {
                 right: '0',
@@ -98,14 +95,11 @@ export class DiscountComponent implements OnInit, OnDestroy {
         });
     }
 
-    public toggleBodyClass() {
-        if (this.accountAsideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
-    }
-
+    /**
+     * Create / Update Discount API Call
+     *
+     * @memberof DiscountComponent
+     */
     public submit() {
         if (this.createRequest.discountUniqueName) {
             this.isLoading$ = of(true);
@@ -122,34 +116,53 @@ export class DiscountComponent implements OnInit, OnDestroy {
         }
     }
 
-    public edit(data: IDiscountList) {
+    /**
+     * Set discount details in input feilds to update 
+     *
+     * @param {IDiscountList} data
+     * @memberof DiscountComponent
+     */
+    public editDiscount(data: IDiscountList) {
         this.createRequest.type = data.discountType;
         this.createRequest.name = data.name;
         this.createRequest.discountValue = data.discountValue;
         this.createRequest.accountUniqueName = data.linkAccount?.uniqueName;
         this.createRequest.discountUniqueName = data.uniqueName;
+        this.discountTypeField?.selectField?.nativeElement.focus();
     }
 
-    // public showDeleteDiscountModal(uniqueName: string) {
-    //     this.deleteRequest = uniqueName;
-    //     this.discountConfirmationModel?.show();
-    // }
-
-    public showDeleteDiscountModal(uniqueName: string): void {
+    /**
+     * Open delete discount confirmation dialog
+     *
+     * @param {string} uniqueName
+     * @memberof DiscountComponent
+     */
+    public showDeleteDiscountDialog(uniqueName: string): void {
         this.deleteRequest = uniqueName;
-        this.discountConfirmationModelRef =  this.dialog.open(this.discountConfirmationModel, {
+        this.discountConfirmationDialogRef = this.dialog.open(this.discountConfirmationDialog, {
             panelClass: 'modal-dialog',
         });
     }
 
+    /**
+     * Close delete discount confirmation dialog
+     *
+     * @memberof DiscountComponent
+     */
     public hideDeleteDiscountModal() {
         this.deleteRequest = null;
-        this.discountConfirmationModelRef.close();
+        this.discountConfirmationDialogRef.close();
     }
 
-    public delete() {
+    /**
+     * Delete Discount API Call
+     *
+     * @memberof DiscountComponent
+     */
+    public deleteDiscount() {
         this.isLoading$ = of(true);
         this.settingsDiscountService.DeleteDiscount(this.deleteRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.discountConfirmationDialogRef.close();
             this.showToaster(this.commonLocaleData?.app_messages?.discount_deleted, response);
             this.isLoading$ = of(false);
         });
@@ -170,11 +183,6 @@ export class DiscountComponent implements OnInit, OnDestroy {
                 this.accounts = [];
             }
         });
-    }
-
-    public ngOnDestroy() {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
     }
 
     /**
@@ -226,5 +234,30 @@ export class DiscountComponent implements OnInit, OnDestroy {
         } else {
             this.toaster.errorToast(response?.message, response?.code);
         }
+    }
+
+    /**
+     * Get label by value for Dropdown Field
+     *
+     * @param {*} source
+     * @param {string} value
+     * @returns {string}
+     * @memberof DiscountComponent
+     */
+    public getDropdownLabelByValue(source: any, value: string): string {
+        if (value?.length && source?.length) {
+            let filteredArray = source?.filter(item => item.value === value);
+            return filteredArray[0].label;
+        }
+    }
+
+    /**
+     * Unsubscribes from all the listeners
+     *
+     * @memberof DiscountComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }

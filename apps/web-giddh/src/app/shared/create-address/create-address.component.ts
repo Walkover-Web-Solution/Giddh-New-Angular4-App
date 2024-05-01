@@ -230,12 +230,14 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public handleFormSubmit(): void {
-
-        let value = this.addressForm.get('linkedEntity')?.value?.map(item => {
-            return item = item.uniqueName;
-        });
+    
+        if(this.addressForm.get('linkedEntity')?.value?.length){
+            let value = this.addressForm?.get('linkedEntity')?.value?.map(item => {
+                return item = item.uniqueName;
+            });
+            this.addressForm.get('linkedEntity').patchValue(value);
+        }
         const tempAddressFormData = this.addressForm.get('linkedEntity')?.value;
-        this.addressForm.get('linkedEntity').patchValue(value);
 
         if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
             const taxField = this.addressForm.get('taxNumber');

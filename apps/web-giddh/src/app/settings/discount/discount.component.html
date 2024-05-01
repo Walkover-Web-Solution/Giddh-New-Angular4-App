@@ -15,8 +15,10 @@
                 <div class="col-xl-2 col-md-6 col-xs-12">
                     <div class="discount-type">
                         <dropdown-field
+                            #discountTypeField
                             [options]="discountTypeList"
                             [name]="'type'"
+                            [defaultValue]="getDropdownLabelByValue(discountTypeList, createRequest.type)"
                             [placeholder]="localeData?.discount_type_placeholder"
                             (selectedOption)="createRequest.type = $event.value"
                         ></dropdown-field>
@@ -60,12 +62,11 @@
                         [label]="localeData?.linked_accounts_label"
                         [name]="'account'"
                         [placeholder]="localeData?.linked_accounts_placeholder"
-                        [showNotFoundLinkAsDefault]="true"
                         [options]="accounts"
-                        [ItemHeight]="'max-content'"
-                        [cssClass]="select - linked - accounts"
-                        (selectedOption)="(createRequest.accountUniqueName)"
-                        (createOption)="toggleAccountAsidePane($event)"
+                        [cssClass]="'select-linked-accounts'"
+                        [defaultValue]="getDropdownLabelByValue(accounts, createRequest.accountUniqueName)"
+                        (selectedOption)="createRequest.accountUniqueName = $event.value"
+                        (createOption)="openAccountAsidePane($event)"
                         [showCreateNew]="true"
                         [hasMoreValue]="true"
                     ></dropdown-field>
@@ -138,7 +139,7 @@
                     <table mat-table [dataSource]="discountList" class="table basic mr-b05 on-mobile-view w-100">
                         <ng-container matColumnDef="number">
                             <th mat-header-cell *matHeaderCellDef>#</th>
-                            <td mat-cell *matCellDef="let element">{{ element.number }}</td>
+                            <td mat-cell *matCellDef="let element;let i = index">{{ i + 1 }}</td>
                         </ng-container>
                         <ng-container matColumnDef="name">
                             <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_name }}</th>
@@ -147,11 +148,11 @@
                         <ng-container matColumnDef="action">
                             <th class="text-right" mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_action }}</th>
                             <td mat-cell *matCellDef="let element" class="icon-btn text-right">
-                                <button mat-stroked-button (click)="edit(element?.uniqueName)" class="p-0 mr-3 action-btn">
-                                    <i class="icon-edit-pencil"></i>{{ element?.uniqueName }}
+                                <button mat-stroked-button (click)="editDiscount(element)" class="p-0 mr-3 action-btn">
+                                    <i class="icon-edit-pencil"></i>
                                 </button>
-                                <button mat-stroked-button (click)="showDeleteDiscountModal(element?.uniqueName)" class="p-0 action-btn">
-                                    <i class="fa fa-trash"></i>{{ element?.uniqueName }}
+                                <button mat-stroked-button (click)="showDeleteDiscountDialog(element?.uniqueName)" class="p-0 action-btn">
+                                    <i class="fa fa-trash"></i>
                                 </button>
                             </td>
                         </ng-container>
@@ -166,22 +167,19 @@
     <!-- open account aside -->
     <ng-template #createNew>
         <aside-menu-account
-            *ngIf="accountAsideMenuState === 'in'"
-            [class]="accountAsideMenuState"
-            [@slideInOut]="accountAsideMenuState"
-            (closeAsideEvent)="toggleAccountAsidePane($event)"
+            (closeAsideEvent)="createNewAccountDialogRef.close()"
             [activeGroupUniqueName]="'discount'"
             [commonLocaleData]="commonLocaleData"
         ></aside-menu-account>
     </ng-template>
 
     <!--delete discount confirmation model -->
-    <ng-template #discountConfirmationModel>
+    <ng-template #discountConfirmationDialog>
         <div class="modal-md">
             <div class="modal-content">
                 <confirm-modal
                     [body]="localeData?.delete_discount"
-                    (successCallBack)="delete()"
+                    (successCallBack)="deleteDiscount()"
                     (cancelCallBack)="hideDeleteDiscountModal()"
                 ></confirm-modal>
             </div>
