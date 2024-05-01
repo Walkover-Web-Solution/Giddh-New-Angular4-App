@@ -170,8 +170,8 @@
                                                         {{ commonLocaleData?.app_rate }}
                                                     </ng-container>
                                                 </th>
-                                                <td mat-cell *matCellDef="let element" class="text-right" [attr.width]="isKenyaCompany ? '5%' : '15%'" [ngClass]="{'bg-grey': vatReport[i]?.sections[vatReport[i]?.sections?.length -
-                                                2]?.section === element?.section && isKenyaCompany}">
+                                                <td mat-cell *matCellDef="let element" class="text-right" [attr.width]="isKenyaCompany ? '5%' : '15%'" [ngClass]="{'bg-grey': isKenyaCompany && vatReport[i]?.sections[vatReport[i]?.sections?.length -
+                                                2]?.section === element?.section}">
                                                     <ng-conatiner *ngIf="!isKenyaCompany">
                                                         {{ activeCompany.baseCurrencySymbol }}
                                                         {{ element.vatAmount | giddhCurrency }}
@@ -201,8 +201,8 @@
                                                         {{ localeData?.amountOfOutputTax }}
                                                     </ng-container>
                                                 </th>
-                                                <td mat-cell *matCellDef="let element" class="text-right" [attr.width]="isKenyaCompany ? '15%' : '20%'" [ngClass]="{'bg-grey': vatReport[i]?.sections[vatReport[i]?.sections?.length -
-                                                2]?.section === element?.section && isKenyaCompany}">
+                                                <td mat-cell *matCellDef="let element" class="text-right" [attr.width]="isKenyaCompany ? '15%' : '20%'" [ngClass]="{'bg-grey': isKenyaCompany && vatReport[i]?.sections[vatReport[i]?.sections?.length -
+                                                2]?.section === element?.section}">
                                                     <ng-container *ngIf="!isKenyaCompany">
                                                         {{ activeCompany.baseCurrencySymbol }}
                                                         {{ element?.adjustmentAmount | giddhCurrency }}
