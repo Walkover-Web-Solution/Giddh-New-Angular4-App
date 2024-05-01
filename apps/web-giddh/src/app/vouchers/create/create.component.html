@@ -553,7 +553,7 @@
                                     <!-- Voucher Date -->
                                     <div class="col-3 pr-2">
                                         <giddh-datepicker (keydown.enter)="$event.preventDefault()"
-                                            [label]="invoiceType.isSalesInvoice ? commonLocaleData?.app_invoice_date : invoiceType.isPurchaseInvoice ? localeData?.bill_date : invoiceType.isCreditNote ? localeData?.cr_note_date : invoiceType.isDebitNote ? localeData?.dr_note_date : invoiceType.isEstimateInvoice ? localeData?.estimate_date : invoiceType.isProformaInvoice ? localeData?.proforma_date : invoiceType.isPurchaseOrder ? localeData?.order_date : ''"
+                                            [label]="voucherDateLabel"
                                             [placeholder]="'DD-MM-YYYY'" name="voucherDate" [showToggleIcon]="false"
                                             [appearance]="'outline'" formControlName="date"
                                             (dateSelected)="onBlueVoucherDate()">
@@ -564,7 +564,7 @@
                                     <div class="col-3 pl-2"
                                         *ngIf="(currentVoucherFormDetails?.dueDate || invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isPurchaseOrder || invoiceType.isProformaInvoice || invoiceType.isEstimateInvoice) && !invoiceType.isCashInvoice">
                                         <giddh-datepicker (keydown.enter)="$event.preventDefault()"
-                                            [label]="(invoiceType.isSalesInvoice || invoiceType.isProformaInvoice || invoiceType.isPurchaseInvoice) ? localeData?.due_date : invoiceType.isPurchaseOrder ? localeData?.expected_delivery : invoiceType.isEstimateInvoice ? localeData?.expiry_date : ''"
+                                            [label]="voucherDueDateLabel"
                                             [placeholder]="'DD-MM-YYYY'" name="voucherDueDate" [showToggleIcon]="false"
                                             [appearance]="'outline'" formControlName="dueDate">
                                         </giddh-datepicker>
@@ -572,12 +572,13 @@
 
                                     <!-- Select Voucher -->
                                     <div class="col-6"
-                                        *ngIf="invoiceType.isCreditNote || invoiceType.isDebitNote">
+                                        *ngIf="!invoiceType.isCashInvoice && (invoiceType.isCreditNote || invoiceType.isDebitNote)">
                                         <reactive-dropdown-field [cssClass]="'border-0'" [name]="'invoiceLinking'"
                                             [label]="commonLocaleData?.app_select_voucher"
                                             [placeholder]="commonLocaleData?.app_select_voucher"
                                             [options]="vouchersListForCreditDebitNote$ | async"
                                             (selectedOption)="creditDebitNoteInvoiceSelected($event)"
+                                            (onClear)="resetCreditDebitNoteSelectedInvoice()"
                                             [enableDynamicSearch]="true" (dynamicSearchedQuery)="
                                                 searchReferenceVoucher = $event;
                                                 resetVoucherListForCreditDebitNote();
@@ -1698,7 +1699,7 @@
 <!-- region print voucher popup -->
 <ng-template #printVoucherModal>
     <ng-container>
-        <print-voucher [voucherType]="voucherType" [localeData]="localeData" [commonLocaleData]="commonLocaleData"
+        <print-voucher [invoiceType]="invoiceType" [voucherType]="voucherType" [localeData]="localeData" [commonLocaleData]="commonLocaleData"
             [selectedItem]="{
             voucherNumber: voucherDetails?.number,
             uniqueName: voucherDetails?.account?.uniqueName,
@@ -1709,7 +1710,7 @@
 
 <!-- region send email popup -->
 <ng-template #sendEmailModal>
-    <app-email-send-dialog (successEvent)="sendEmail($event)" [selectedItem]="voucherDetails"
+    <app-email-send-dialog (successEvent)="sendEmail($event)" [invoiceType]="invoiceType" [selectedItem]="voucherDetails"
         (cancelEvent)="cancelEmailModal()">
     </app-email-send-dialog>
 </ng-template>

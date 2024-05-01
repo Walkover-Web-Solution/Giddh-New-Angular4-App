@@ -89,18 +89,12 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public zwDisplayedHeaderColumns = ['section', 'office-use', 'value-of-supply', 'output-tax'];
     /** Hold Zimbabwe table displayed columns for last section */
     public zwDisplayedColumnsForLastSection: string[] = ['name', 'amount', 'decimal'];
-    /** Hold Kenya table displayed columns */
-    public kenyaDisplayedColumns: string[] = ['number', 'description', 'amount', 'rate', 'ot-amount'];
-    /** Hold Kenya table displayed columns */
-    public kenyaDisplayedColumnsForLastSection: string[] = ['number', 'description', 'vat-amount'];
     /** Holds Section Number which  show Total Output Tax Row */
     public showTotalOutputTaxIn: number[] = [9, 19, 20, 21, 22, 23];
     /** True if active country is UK */
     public isUKCompany: boolean = false;
     /** True if active country is Zimbabwe */
     public isZimbabweCompany: boolean = false;
-    /** True if active country is Kenya */
-    public isKenyaCompany: boolean = false;
     /** Hold static months array */
     public months: any[] = [
         { label: 'January', value: 1 },
@@ -163,7 +157,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 this.activeCompany = activeCompany;
                 this.isUKCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'GB';
                 this.isZimbabweCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'ZW';
-                this.isKenyaCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'KE';
                 if (this.isUKCompany) {
                     this.getURLHMRCAuthorization();
                 }
@@ -273,14 +266,12 @@ export class VatReportComponent implements OnInit, OnDestroy {
             if (this.isZimbabweCompany) {
                 vatReportRequest.currencyCode = this.vatReportCurrencyCode;
                 countryCode = 'ZW';
-            } else if (this.isKenyaCompany) {
-                countryCode = 'KE';
             } else {
                 countryCode = 'UK';
             }
             this.vatReport = [];
             this.isLoading = true;
-            if (!this.isUKCompany && !this.isZimbabweCompany && !this.isKenyaCompany) {
+            if (!this.isUKCompany && !this.isZimbabweCompany) {
                 this.vatService.getVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (res) {
                         this.isLoading = false;
@@ -325,8 +316,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
         if (this.activeCompany?.countryV2?.alpha2CountryCode === 'ZW') {
             vatReportRequest.currencyCode = this.vatReportCurrencyCode;
             countryCode = 'ZW';
-        } else if (this.isKenyaCompany) {
-            countryCode = 'KE';
         } else {
             countryCode = 'UK';
         }
@@ -334,7 +323,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.vatService.downloadVatReport(vatReportRequest, countryCode).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === "success") {
                 let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
-                return saveAs(blob, `VatReport${this.isKenyaCompany ? '.csv' :'.xlsx'}`);
+                return saveAs(blob, `VatReport.xlsx`);
             } else {
                 this.toasty.clearAllToaster();
                 this.toasty.errorToast(res?.message);
