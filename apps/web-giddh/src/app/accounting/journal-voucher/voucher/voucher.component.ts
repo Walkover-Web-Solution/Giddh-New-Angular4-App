@@ -265,9 +265,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public activeRowType: string = null;
     /** Active row for current fields*/
     public selectedInputFieldIndex: number = null;
-    /** True if it is open from custom sidebar*/
+    /** True if show discount sidebar*/
     public showDiscountSidebar: boolean = false;
-    /** True if it is open from custom sidebar*/
+    /** True if show tax sidebar */
     public showTaxSidebar: boolean = false;
     /** List of discounts */
     public discountsList: any[] = [];
@@ -571,7 +571,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
-    *This will be use for call custom keys functionality for windows
+    *This will be use for call custom keys functionality for discount sidebar
     *
     * @memberof AccountAsVoucherComponent
     */
@@ -585,7 +585,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
-    *This will be use for call custom keys functionality for windows
+    *This will be use for call custom keys functionality for tax sidebar
     *
     * @memberof AccountAsVoucherComponent
     */
@@ -1092,7 +1092,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                                     this.newEntryObj('by', discount, 'discount');
                                 }
                             });
-
                         }
                         if (response.body.applicableTaxes?.length) {
                             let index = transactionsFormArray?.value?.findIndex(obj => obj.particular === '');
@@ -1217,7 +1216,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
-     * This will calculate the amount
+     * This will calculate the total amount
      *
      * @param {*} amount
      * @param {*} transactionObj
@@ -1234,19 +1233,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
             if (control.get('type').value.toLowerCase() === 'to') {
-                if (control.get('isDiscountApplied')?.value) {
-                    // totalCredit -= control.get('amount').value;
-                } else {
+                if (!control.get('isDiscountApplied')?.value) {
                     totalCredit += control.get('amount').value;
                 }
             } else {
-                if (control.get('isDiscountApplied')?.value) {
-                    // totalDebit -= control.get('amount').value;
-                } else {
+                if (!control.get('isDiscountApplied')?.value) {
                     totalDebit += control.get('amount').value;
                 }
             }
-        })
+        });
         this.totalCreditAmount = totalCredit;
         this.totalDebitAmount = totalDebit;
         if (indx === lastIndx && transactionObj.get('selectedAccount.name').value) {
@@ -1258,6 +1253,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
     }
 
+    /**
+     * This will be use for check voucher type new entries
+     *
+     * @param {*} currentVoucher
+     * @param {*} voucherType
+     * @memberof AccountAsVoucherComponent
+     */
     public checkVoucherTypeNewEntries(currentVoucher: any, voucherType: any): void {
         if (this.totalCreditAmount < this.totalDebitAmount || (this.totalCreditAmount === 0 && this.totalDebitAmount === 0)) {
             if (currentVoucher === voucherType.RECEIPT) {
@@ -1312,24 +1314,20 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.showStockList = false;
         let totalCredit = 0;
         let totalDebit = 0;
+
         (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
             if (control.get('type').value.toLowerCase() === 'to') {
-                if (control.get('isDiscountApplied')?.value) {
-                    // totalCredit -= control.get('amount').value;
-                } else {
+                if (!control.get('isDiscountApplied')?.value) {
                     totalCredit += control.get('amount').value;
                 }
             } else {
-                if (control.get('isDiscountApplied')?.value) {
-                    // totalDebit -= control.get('amount').value;
-                } else {
+                if (!control.get('isDiscountApplied')?.value) {
                     totalDebit += control.get('amount').value;
                 }
             }
-        })
-        this.totalCreditAmount = totalCredit;
-        this.totalDebitAmount = totalDebit;
-        if(this.totalCreditAmount === this.totalDebitAmount) {
+        });
+
+        if (totalCredit === totalDebit) {
             this.showConfirmationBox = true;
             const descriptionControl = this.journalVoucherForm.get('description');
             if (descriptionControl?.value?.length > 1) {
@@ -2330,7 +2328,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     *
     * @memberof AccountAsVoucherComponent
     */
-    public changeTab(mode: any, type: any, againAccountSelect?: boolean, discountApplied?: any): void {
+    public changeTab(mode: any, type: any, againAccountSelect?: boolean, discountTaxApplied?: any): void {
         let transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
         if (againAccountSelect) {
             this.activeRowIndex = this.selectedIdx;
@@ -2370,7 +2368,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         } else if (mode === "tab") {
             if (type === 'amount') {
-                this.activeRowIndex = discountApplied ? this.activeRowIndex + 2 : this.activeRowIndex + 1;
+                this.activeRowIndex = discountTaxApplied ? this.activeRowIndex + 2 : this.activeRowIndex + 1;
                 this.activeRowType = "type";
             } else if (type === 'type') {
                 this.activeRowType = "account";
@@ -2395,11 +2393,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
- * Keydown handler event
- *
- * @param {*} event
- * @memberof AccountAsVoucherComponent
- */
+     * Keydown handler event
+     *
+     * @param {*} event
+     * @memberof AccountAsVoucherComponent
+     */
     public keydownUp(event): void {
         const elements = this.eleRef?.nativeElement?.querySelectorAll('.list-item');
         let key = event.which;
@@ -2434,6 +2432,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.changeDetectionRef.detectChanges();
     }
 
+    /**
+     * This will use for selecting the discount from sidebar list
+     *
+     * @param {*} discount
+     * @memberof AccountAsVoucherComponent
+     */
     public toggleDiscountSelected(discount: any): void {
         if (discount) {
             this.showDiscountSidebar = false;
@@ -2476,6 +2480,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
     }
 
+    /**
+     * This will be use for selecting the tax from sidebar list
+     *
+     * @param {*} tax
+     * @memberof AccountAsVoucherComponent
+     */
     public toggleTaxSelected(tax: any): void {
         if (tax) {
             this.showTaxSidebar = false;
@@ -2518,6 +2528,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
     }
 
+    /**
+     * This wil be use for get taxes
+     *
+     * @memberof AccountAsVoucherComponent
+     */
     public getTaxes(): void {
         this.store.pipe(select(response => response.company && response.company.isGetTaxesSuccess), takeUntil(this.destroyed$)).subscribe(isGetTaxes => {
             if (isGetTaxes) {
@@ -2538,6 +2553,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
     }
 
+    /**
+     * This will be use for get discounts
+     *
+     * @private
+     * @memberof AccountAsVoucherComponent
+     */
     private getDiscounts(): void {
         this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {

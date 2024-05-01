@@ -43,10 +43,14 @@
     </li>
     <ng-container *ngIf="salesEntry">
         <li>
-            <a class="cp text-underline" (click)="showDiscountSidebar($event)">Alt + D: Discount List</a>
+            <a class="cp text-underline" (click)="showDiscountSidebar($event)"
+                >{{ commonLocaleData?.app_alt_d }} : Discount List</a
+            >
         </li>
         <li>
-            <a class="cp text-underline" (click)="showTaxSidebar($event)">Alt + T: Tax List</a>
+            <a class="cp text-underline" (click)="showTaxSidebar($event)"
+                >{{ commonLocaleData?.app_alt_t }} : Tax List</a
+            >
         </li>
     </ng-container>
     <!--    "isHidden" class  if user is not able to access the module

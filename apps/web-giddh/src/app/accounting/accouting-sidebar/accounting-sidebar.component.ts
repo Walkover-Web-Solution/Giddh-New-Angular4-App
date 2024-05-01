@@ -25,9 +25,9 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
     public selectedGrid: string = null;
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public accountingVouchers: any = VOUCHERS;
-    /** Emits the discount event  */
+    /** Emits the show discount event  */
     @Output() public showDiscountEvent: EventEmitter<boolean> = new EventEmitter();
-    /** Emits the tax event  */
+    /** Emits the show tax event  */
     @Output() public showTaxEvent: EventEmitter<boolean> = new EventEmitter();
     /** Hold sales entry event  */
     @Input() public salesEntry: boolean;
@@ -82,7 +82,7 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
     }
 
     /**
-     * This will be use for emiiting the show discount sidebar state
+     * This will be use for emit the show discount sidebar state
      *
      * @param {*} event
      * @memberof AccountingSidebarComponent
@@ -94,7 +94,7 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
     }
 
     /**
-     * This will be use for emiiting the show tax sidebar state
+     * This will be use for emit the show tax sidebar state
      *
      * @param {*} event
      * @memberof AccountingSidebarComponent

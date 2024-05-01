@@ -506,7 +506,6 @@ export class TallyModuleService {
      * @memberof TallyModuleService
      */
     public getGroupByVoucher(voucherType: string, selectedTransactionType?: string): any {
-        console.log(voucherType, selectedTransactionType);
         if (voucherType.toLowerCase() === VOUCHERS.CONTRA) {
             return {
                 group: encodeURIComponent('bankaccounts, cash, loanandoverdraft'),
