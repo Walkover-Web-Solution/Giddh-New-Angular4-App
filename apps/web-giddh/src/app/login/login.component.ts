@@ -257,6 +257,10 @@ export class LoginComponent implements OnInit, OnDestroy {
                 }
             }
         });
+        
+        if (PRODUCTION_ENV && !isElectron) {
+            window.location.href = 'https://giddh.com/login';
+        }
     }
 
     public onHiddenAuthModal(event: any): void {
