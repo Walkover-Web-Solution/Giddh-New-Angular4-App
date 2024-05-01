@@ -144,14 +144,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         otherApplicableTaxes: null,
         applicableDiscounts: null,
         applicableTaxes: null,
-        excludeTax: false
+        excludeTax: false,
+        taxType: '',
+        taxTypeLabel: ''
     };
     /** Invoice Settings */
     public activeCompany: any;
     /** This will hold onboarding api form request */
     public onboardingFormRequest: OnboardingFormRequest = { formName: '', country: '' };
-    /** Onboarding form fields */
-    public formFields: any[] = [];
+    /** Onboarding account form fields */
+    public accountFormFields: any[] = [];
+    /** Onboarding company form fields */
+    public companyFormFields: any[] = [];
     /** Holds company tax list  */
     public allCompanyTaxes: TaxResponse[] = [];
     /** Holds company tax list  */
@@ -495,12 +499,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getCountryList();
         this.getDiscountsList();
         this.getCompanyBranches();
-        this.getCompanyProfile();
         this.getCompanyTaxes();
         this.getWarehouses();
 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
+                this.company.countryName = "";
+                this.getActiveCompany();
+                this.getCompanyProfile();
                 this.openAccountDropdown = false;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 if (this.voucherApiVersion !== 2) {
@@ -517,10 +523,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.getVoucherType();
                 this.searchAccount();
                 this.getIsTcsTdsApplicable();
-                this.getActiveCompany();
                 this.getInvoiceSettings();
                 this.getCreatedTemplates();
-                this.getOnboardingFormData();
+                this.getAccountOnboardingFormData();
                 this.searchStock();
 
                 if (this.invoiceType.isCashInvoice) {
@@ -644,7 +649,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            this.checkGstNumValidation(searchedText, "account", "billingDetails");
+            this.checkAccountTaxValidation(searchedText, "account", "billingDetails", this.localeData?.billing_address);
         });
 
         /** Account shipping address tax number observable */
@@ -653,7 +658,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            this.checkGstNumValidation(searchedText, "account", "shippingDetails");
+            this.checkAccountTaxValidation(searchedText, "account", "shippingDetails", this.localeData?.shipping_address);
         });
 
         /** Company billing address tax number observable */
@@ -662,7 +667,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            this.checkGstNumValidation(searchedText, "company", "billingDetails");
+            this.checkCompanyTaxValidation(searchedText, "company", "billingDetails", this.localeData?.billing_address);
         });
 
         /** Company shipping address tax number observable */
@@ -671,7 +676,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            this.checkGstNumValidation(searchedText, "company", "shippingDetails");
+            this.checkCompanyTaxValidation(searchedText, "company", "shippingDetails", this.localeData?.shipping_address);
         });
 
         /** Voucher details */
@@ -1001,7 +1006,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.company.baseCurrencySymbol = profile.baseCurrencySymbol;
                 this.company.inputMaskFormat = profile.balanceDisplayFormat?.toLowerCase() || '';
                 this.company.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
-                this.showTaxTypeByCountry(this.company.countryCode);
+                this.showCompanyTaxTypeByCountry(this.company.countryCode);
 
                 this.getCountryData(this.company.countryCode);
 
@@ -1034,7 +1039,31 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {string} countryCode
      * @memberof VoucherCreateComponent
      */
-    private showTaxTypeByCountry(countryCode: string): void {
+    private showAccountTaxTypeByCountry(countryCode: string): void {
+        this.account.taxType = this.vouchersUtilityService.showTaxTypeByCountry(countryCode, this.activeCompany?.countryV2?.alpha2CountryCode);
+        if (this.account.taxType) {
+            if (this.account.taxType === TaxType.GST) {
+                this.account.taxTypeLabel = this.commonLocaleData?.app_gstin;
+            } else if (this.account.taxType === TaxType.VAT) {
+                this.account.taxTypeLabel = this.commonLocaleData?.app_enter_vat;
+            } else if (this.account.taxType === TaxType.TRN) {
+                this.account.taxTypeLabel = this.commonLocaleData?.app_trn;
+            }
+
+            this.getOnboardingForm(countryCode);
+        } else {
+            this.account.taxTypeLabel = "";
+        }
+    }
+
+    /**
+     * Finds tax type by country and calls onboarding form api
+     *
+     * @private
+     * @param {string} countryCode
+     * @memberof VoucherCreateComponent
+     */
+    private showCompanyTaxTypeByCountry(countryCode: string): void {
         this.company.taxType = this.vouchersUtilityService.showTaxTypeByCountry(countryCode, this.activeCompany?.countryV2?.alpha2CountryCode);
         if (this.company.taxType) {
             if (this.company.taxType === TaxType.GST) {
@@ -1045,7 +1074,30 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.company.taxTypeLabel = this.commonLocaleData?.app_trn;
             }
 
-            this.getOnboardingForm(countryCode);
+            const onboardingFormRequest = {
+                formName: 'onboarding',
+                country: countryCode
+            };
+
+            this.commonService.getOnboardingForm(onboardingFormRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response) {
+                    this.companyFormFields = [];
+                    Object.keys(response.body?.fields)?.forEach(key => {
+                        if (response?.body?.fields[key]) {
+                            this.companyFormFields[response.body?.fields[key]?.name] = [];
+                            this.companyFormFields[response.body?.fields[key]?.name] = response.body?.fields[key];
+                        }
+                    });
+
+                    if (this.invoiceType.isCashInvoice) {
+                        this.accountFormFields = cloneDeep(this.companyFormFields);
+                        this.account.taxTypeLabel = cloneDeep(this.company.taxTypeLabel);
+                        this.account.taxType = cloneDeep(this.company.taxType);
+                    }
+                }
+            });
+        } else {
+            this.company.taxTypeLabel = "";
         }
     }
 
@@ -1070,14 +1122,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @private
      * @memberof VoucherCreateComponent
      */
-    private getOnboardingFormData(): void {
+    private getAccountOnboardingFormData(): void {
         this.componentStore.onboardingForm$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.formFields = [];
+                this.accountFormFields = [];
                 Object.keys(response.fields)?.forEach(key => {
                     if (response?.fields[key]) {
-                        this.formFields[response.fields[key]?.name] = [];
-                        this.formFields[response.fields[key]?.name] = response.fields[key];
+                        this.accountFormFields[response.fields[key]?.name] = [];
+                        this.accountFormFields[response.fields[key]?.name] = response.fields[key];
                     }
                 });
             }
@@ -1483,7 +1535,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.componentStore.getAccountCountryStates(accountData.country?.countryCode);
         }
 
-        this.showTaxTypeByCountry(accountData.country?.countryCode);
+        this.showAccountTaxTypeByCountry(accountData.country?.countryCode);
 
         let isPartyTypeSez = false;
         if (accountData?.addresses?.length > 0) {
@@ -1498,18 +1550,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.componentStore.getBriefAccounts({ currency: accountData?.baseCurrency + ', ' + this.company.baseCurrency, group: BriedAccountsGroup });
         }
 
-        this.account = {
-            countryName: accountData.country?.countryName,
-            countryCode: accountData.country?.countryCode,
-            baseCurrency: accountData.currency,
-            baseCurrencySymbol: accountData.currencySymbol,
-            addresses: accountData.addresses,
-            otherApplicableTaxes: accountData.otherApplicableTaxes,
-            applicableDiscounts: accountData.applicableDiscounts || accountData.inheritedDiscounts,
-            applicableTaxes: accountData.applicableTaxes,
-            excludeTax: (this.company.countryName === "India" && accountData.country?.countryName !== "India") || isPartyTypeSez
-        };
-        
+        this.account.countryName = accountData.country?.countryName;
+        this.account.countryCode = accountData.country?.countryCode;
+        this.account.baseCurrency = accountData.currency;
+        this.account.baseCurrencySymbol = accountData.currencySymbol;
+        this.account.addresses = accountData.addresses;
+        this.account.otherApplicableTaxes = accountData.otherApplicableTaxes;
+        this.account.applicableDiscounts = accountData.applicableDiscounts || accountData.inheritedDiscounts;
+        this.account.applicableTaxes = accountData.applicableTaxes;
+        this.account.excludeTax = (this.company.countryName === "India" && accountData.country?.countryName !== "India") || isPartyTypeSez;
+
         let defaultAddress = null;
         let index = 0;
 
@@ -2794,18 +2844,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     *To check Tax number validation using regex get by API
+     * To check Tax number validation using regex get by API
      *
      * @param {*} value
      * @memberof VoucherCreateComponent
      */
-    public checkGstNumValidation(value: any, entity: string, type: string): void {
+    public checkAccountTaxValidation(value: any, entity: string, type: string, fieldName: string): void {
         if (this.company.taxType === TaxType.GST) {
             let isValid: boolean = false;
             if (value?.trim()) {
-                if (this.formFields['taxName']['regex'] !== "" && this.formFields['taxName']['regex']?.length > 0) {
-                    for (let key = 0; key < this.formFields['taxName']['regex'].length; key++) {
-                        let regex = new RegExp(this.formFields['taxName']['regex'][key]);
+                if (this.accountFormFields['taxName']['regex'] !== "" && this.accountFormFields['taxName']['regex']?.length > 0) {
+                    for (let key = 0; key < this.accountFormFields['taxName']['regex'].length; key++) {
+                        let regex = new RegExp(this.accountFormFields['taxName']['regex'][key]);
                         if (regex.test(value)) {
                             isValid = true;
                             break;
@@ -2815,7 +2865,46 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     isValid = true;
                 }
                 if (!isValid) {
-                    this.toasterService.showSnackBar('error', 'Invalid ' + this.formFields['taxName']?.label);
+                    let invalidTax = this.localeData?.invalid_tax_field;
+                    invalidTax = invalidTax?.replace("[TAX_NAME]", this.accountFormFields['taxName']?.label);
+                    invalidTax = invalidTax?.replace("[FIELD_NAME]", fieldName);
+                    this.toasterService.showSnackBar('error', invalidTax);
+                    this.taxNumberValidations[entity][type] = observableOf(true);
+                } else {
+                    this.taxNumberValidations[entity][type] = null;
+                }
+            } else {
+                this.taxNumberValidations[entity][type] = null;
+            }
+        }
+    }
+
+    /**
+     * To check Tax number validation using regex get by API
+     *
+     * @param {*} value
+     * @memberof VoucherCreateComponent
+     */
+    public checkCompanyTaxValidation(value: any, entity: string, type: string, fieldName: string): void {
+        if (this.company.taxType === TaxType.GST) {
+            let isValid: boolean = false;
+            if (value?.trim()) {
+                if (this.companyFormFields['taxName']['regex'] !== "" && this.companyFormFields['taxName']['regex']?.length > 0) {
+                    for (let key = 0; key < this.companyFormFields['taxName']['regex'].length; key++) {
+                        let regex = new RegExp(this.companyFormFields['taxName']['regex'][key]);
+                        if (regex.test(value)) {
+                            isValid = true;
+                            break;
+                        }
+                    }
+                } else {
+                    isValid = true;
+                }
+                if (!isValid) {
+                    let invalidTax = this.localeData?.invalid_tax_field;
+                    invalidTax = invalidTax?.replace("[TAX_NAME]", this.companyFormFields['taxName']?.label);
+                    invalidTax = invalidTax?.replace("[FIELD_NAME]", fieldName);
+                    this.toasterService.showSnackBar('error', invalidTax);
                     this.taxNumberValidations[entity][type] = observableOf(true);
                 } else {
                     this.taxNumberValidations[entity][type] = null;
@@ -2942,6 +3031,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         let invoiceForm = cloneDeep(this.invoiceForm.value);
         invoiceForm.entries = entries;
+
+        if (this.currencySwitched) {
+            invoiceForm.exchangeRate = 1 / invoiceForm.exchangeRate;
+        }
 
         invoiceForm = this.vouchersUtilityService.cleanVoucherObject(invoiceForm);
 
@@ -3188,6 +3281,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.copyAccountBillingInShippingAddress = true;
         this.copyCompanyBillingInShippingAddress = true;
+        this.currencySwitched = false;
+
+        this.accountFormFields = [];
 
         this.account = {
             countryName: '',
@@ -3198,8 +3294,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             otherApplicableTaxes: null,
             applicableDiscounts: null,
             applicableTaxes: null,
-            excludeTax: false
+            excludeTax: false,
+            taxTypeLabel: ''
         };
+
+        if (this.invoiceType.isCashInvoice) {
+            this.accountFormFields = cloneDeep(this.companyFormFields);
+            this.account.taxTypeLabel = cloneDeep(this.company.taxTypeLabel);
+            this.account.taxType = cloneDeep(this.company.taxType);
+        }
 
         this.addNewLineEntry(false);
 
