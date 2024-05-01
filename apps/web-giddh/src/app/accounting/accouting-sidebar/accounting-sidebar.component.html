@@ -41,12 +41,14 @@
             >{{ commonLocaleData?.app_keys?.f8 }}: {{ commonLocaleData?.app_voucher_types?.sales }}</a
         >
     </li>
-    <li>
-        <a class="cp text-underline" (click)="showDiscountSidebar($event)">Alt + D: Discount List</a>
-    </li>
-    <li>
-        <a class="cp text-underline" (click)="showTaxSidebar($event)">Alt + T: Tax List</a>
-    </li>
+    <ng-container *ngIf="salesEntry">
+        <li>
+            <a class="cp text-underline" (click)="showDiscountSidebar($event)">Alt + D: Discount List</a>
+        </li>
+        <li>
+            <a class="cp text-underline" (click)="showTaxSidebar($event)">Alt + T: Tax List</a>
+        </li>
+    </ng-container>
     <!--    "isHidden" class  if user is not able to access the module
     <li><a class="cp" (click)="setSelectedPage('Sales', 'voucher', 'sales')"
             [ngClass]="{ 'active-parent': selectedVoucher === 'Sales'}">F8: Sales</a></li>

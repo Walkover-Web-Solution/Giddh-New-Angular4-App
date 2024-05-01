@@ -142,6 +142,8 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
     public showDiscountEvent: boolean;
     /** Hold tax event  */
     public showTaxEvent: boolean;
+    /** Hold sales entry event  */
+    public salesEntry: boolean;
 
     /** @ignore */
     constructor(
@@ -243,6 +245,16 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
             }
         });
         this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
+    }
+
+    /**
+     * This will be use for transfer data
+     *
+     * @param {*} event
+     * @memberof JournalVoucherComponent
+     */
+    public transferData(event): void {
+        this.salesEntry = event;
     }
 
     /**
