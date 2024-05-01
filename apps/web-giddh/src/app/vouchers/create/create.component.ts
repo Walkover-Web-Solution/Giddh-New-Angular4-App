@@ -3383,6 +3383,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.stockUnits = [];
 
         this.componentStore.resetAll();
+        this.resetVoucherListForCreditDebitNote();
 
         this.searchAccount();
 
