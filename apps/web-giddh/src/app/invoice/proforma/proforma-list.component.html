@@ -13,7 +13,7 @@
                             <button *ngIf="!isCompany && voucherApiVersion === 1" class="btn btn-sky-blue m-0" (click)="goToInvoice('proformas')">
                                 {{ localeData?.new_proforma }}
                             </button>
-                            <button *ngIf="!isCompany && voucherApiVersion === 2" class="btn btn-sky-blue m-0" [routerLink]="['/pages/vouchers/proforma/create']">
+                            <button *ngIf="!isCompany && voucherApiVersion === 2" class="btn btn-sky-blue m-0" [routerLink]="['/pages/vouchers/proformas/create']">
                                 {{ localeData?.new_proforma }}
                             </button>
                         </div>
@@ -22,7 +22,7 @@
                             <button *ngIf="!isCompany && voucherApiVersion === 1" class="btn btn-sky-blue m-0" (click)="goToInvoice('estimates')">
                                 {{ localeData?.new_estimate }}
                             </button>
-                            <button *ngIf="!isCompany && voucherApiVersion === 2" class="btn btn-sky-blue m-0" [routerLink]="['/pages/vouchers/estimate/create']">
+                            <button *ngIf="!isCompany && voucherApiVersion === 2" class="btn btn-sky-blue m-0" [routerLink]="['/pages/vouchers/estimates/create']">
                                 {{ localeData?.new_estimate }}
                             </button>
                         </div>

@@ -29,7 +29,7 @@
                         </mat-option>
                         <mat-divider *ngIf="showOptionDivider"></mat-divider>
                     </ng-container>
-                    <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)">
+                    <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length">
                         {{ commonLocaleData?.app_no_result_found }}
                     </mat-option>
                     <a href="javascript:;" *ngIf="createNewText" (click)="createNewRecord()"
@@ -72,6 +72,9 @@
             <mat-option *ngFor="let option of fieldFilteredOptions$ | async" [value]="option"
                 [matTooltip]="option?.label" matTooltipPosition="right">
                 {{option?.label}}
+            </mat-option>
+            <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length">
+                {{ commonLocaleData?.app_no_result_found }}
             </mat-option>
         </mat-autocomplete>
     </ng-container>
