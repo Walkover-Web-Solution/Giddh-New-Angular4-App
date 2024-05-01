@@ -509,7 +509,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 this.company.countryName = "";
-                this.getCompanyProfile();
                 this.openAccountDropdown = false;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
 
@@ -527,6 +526,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.getVoucherType();
                 this.getVoucherDateLabelPlaceholder();
                 this.searchAccount();
+                this.getCompanyProfile();
                 this.getIsTcsTdsApplicable();
                 this.getInvoiceSettings();
                 this.getCreatedTemplates();
