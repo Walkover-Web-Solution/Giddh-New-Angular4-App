@@ -50,7 +50,7 @@
             "nsis-web",
             "zip"
         ],
-        "icon": "resources/icon.ico",
+        "icon": "./resources/icon.ico",
         "publisherName": "",
         "legalTrademarks": "",
         "signAndEditExecutable": false
