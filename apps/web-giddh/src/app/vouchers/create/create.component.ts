@@ -873,6 +873,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Credit/Debit note voucher clear selection callback
+     *
+     * @param {*} event
+     * @memberof VoucherCreateComponent
+     */
+    public resetCreditDebitNoteSelectedInvoice(): void {
+        const referenceVoucher = this.invoiceForm.controls["referenceVoucher"];
+        referenceVoucher.get("uniqueName")?.patchValue("");
+        referenceVoucher.get("voucherType")?.patchValue("");
+        referenceVoucher.get("number")?.patchValue("");
+        referenceVoucher.get("date")?.patchValue("");
+    }
+
+    /**
      * Resets invoice list and current page
      *
      * @memberof VoucherCreateComponent

@@ -1,10 +1,11 @@
+
 import { INTL_INPUT_OPTION, PHONE_NUMBER_REGEX } from '../../app.constant';
 declare var window;
 
 export class IntlPhoneLib {
     private intl: any;
     private changeFlagZIndexInterval: any;
-
+    
     /**
      * Creates an instance of IntlPhoneLib.
      * @param {*} inputElement
@@ -19,7 +20,7 @@ export class IntlPhoneLib {
     ) {
         const script = document.createElement('script');
         script.type = 'text/javascript';
-        script.src = 'https://control.msg91.com/app/assets/js/intl-tel-input/intlTelInput.min.js';
+        script.src = 'https://giddh-plugin-resources.s3.ap-south-1.amazonaws.com/intlTelInput.min.js';
         script.onload = () => {
             this.intl = window.intlTelInput(inputElement, { ...INTL_INPUT_OPTION, ...intlOptions });
             this.checkMobileFlag(parentDom, changeFlagZIndex);
@@ -59,8 +60,8 @@ export class IntlPhoneLib {
         });
         this.showCountryDropdown(parentDom);
         window.addEventListener('resize', (event) => {
-            let shadowRoot = parentDom?.querySelector('.iti__flag-container');
-            let flagDropdownView = parentDom?.querySelector('.iti__country-list');
+            let shadowRoot = parentDom.querySelector('.iti__flag-container');
+            let flagDropdownView = parentDom.querySelector('.iti__country-list');
             if (shadowRoot && flagDropdownView) {
                 this.calculateFlagDropdownView(shadowRoot, flagDropdownView);
             }
@@ -102,13 +103,13 @@ export class IntlPhoneLib {
     private checkMobileFlag(parentDom, changeFlagZIndex): void {
         let count = 0;
         let interval = setInterval(() => {
-            let mobileViewInit = document?.querySelector('body.iti-mobile');
+            let mobileViewInit = document.querySelector('body.iti-mobile');
             let childCount = 0;
             let flagDropDownElInterval = setInterval(() => {
-                let flagDropdownView = parentDom?.querySelector('.iti__flag-container');
+                let flagDropdownView = parentDom.querySelector('.iti__flag-container');
                 if (changeFlagZIndex) {
                     this.changeFlagZIndexInterval = setInterval(() => {
-                        let flagDropDown = document?.querySelector('.iti--container');
+                        let flagDropDown = document.querySelector('.iti--container');
                         flagDropDown?.setAttribute('style', 'z-index: 9999999');
                         if (flagDropDown) {
                             clearInterval(this.changeFlagZIndexInterval);
@@ -136,8 +137,8 @@ export class IntlPhoneLib {
      */
     private showCountryDropdown(parentDom: HTMLElement) {
         setTimeout(() => {
-            let shadowRoot = parentDom?.querySelector('.iti__flag-container');
-            let flagDropdownView = parentDom?.querySelector('.iti__country-list');
+            let shadowRoot = parentDom.querySelector('.iti__flag-container');
+            let flagDropdownView = parentDom.querySelector('.iti__country-list');
             if (flagDropdownView) {
                 shadowRoot.addEventListener('click', (event: PointerEvent) => {
                     if (shadowRoot && flagDropdownView) {
