@@ -1,9 +1,47 @@
+$hilighted-color: var(--color-blue) !important;
+$text-overflow-ellipsis-width: 255px;
+
 .day-date {
     display: flex;
     .voucher-date-field {
         width: auto;
     }
 }
+
+.discount-sidebar-section {
+    padding: 5px !important;
+}
+
+.grp-list {
+    padding: 0 !important;
+        .account-list {
+                padding: 9px 12px !important;
+            }
+}
+
+.hilighted {
+    color: var(--color-blue) !important;
+    background: var(--color-dark-fog) !important;
+}
+
+.account-list:hover {
+    color: var(--color-blue) !important;
+    background: var(--color-dark-fog) !important;
+}
+
+.hilighted {
+    >a {
+        color: $hilighted-color;
+    }
+}
+
+.text-overflow-ellipsis {
+    .list-item {
+        text-overflow: ellipsis;
+        width: $text-overflow-ellipsis-width;
+    }
+}
+
 .voucher-heading {
     padding: 10px;
     font-weight: bolder;

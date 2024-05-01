@@ -25,15 +25,34 @@
             >{{ commonLocaleData?.app_keys?.f6 }}: {{ commonLocaleData?.app_voucher_types?.receipt }}
         </a>
     </li>
-
     <li>
         <a
             class="cp"
             (click)="setSelectedPage(accountingVouchers.JOURNAL, 'voucher', 'purchases')"
             [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.JOURNAL }"
-            >F7: Journal</a
+            >{{ commonLocaleData?.app_keys?.f7 }}: {{ commonLocaleData?.app_voucher_types?.journal }}</a
         >
     </li>
+    <li>
+        <a
+            class="cp"
+            (click)="setSelectedPage(accountingVouchers.SALES, 'voucher', 'sales')"
+            [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.SALES }"
+            >{{ commonLocaleData?.app_keys?.f8 }}: {{ commonLocaleData?.app_voucher_types?.sales }}</a
+        >
+    </li>
+    <ng-container *ngIf="salesEntry">
+        <li>
+            <a class="cp text-underline" (click)="showDiscountSidebar($event)"
+                >{{ commonLocaleData?.app_alt_d }} : Discount List</a
+            >
+        </li>
+        <li>
+            <a class="cp text-underline" (click)="showTaxSidebar($event)"
+                >{{ commonLocaleData?.app_alt_t }} : Tax List</a
+            >
+        </li>
+    </ng-container>
     <!--    "isHidden" class  if user is not able to access the module
     <li><a class="cp" (click)="setSelectedPage('Sales', 'voucher', 'sales')"
             [ngClass]="{ 'active-parent': selectedVoucher === 'Sales'}">F8: Sales</a></li>
