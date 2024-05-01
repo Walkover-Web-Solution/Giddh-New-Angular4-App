@@ -15,5 +15,7 @@
     "add_vrn": "Add VRN",
     "add_address": "Add Address",
     "filing_status": "Filing Status",
-    "vat_obligations": "Vat Obligations"
+    "vat_obligations": "Vat Obligations",
+    "with_held_setting": "With Held Setting",
+    "add_vat": "Add VAT"
 }

@@ -1,23 +1,83 @@
 .vat-report {
     .vat-report-table {
+        &.mat-mdc-table {
+            &.zimbabwe-vat-report-table {
+                tr {
+                    height: 44px !important;
+
+                    th {
+                        padding: 5px 10px !important;
+                    }
+
+                    th,
+                    td {
+                        &[colspan="2"] {
+                            text-align: center;
+                        }
+
+                        &.d-none {
+                            display: none !important;
+                        }
+                    }
+                }
+
+            }
+
+            &.hide-last-row {
+                tbody {
+                    tr {
+                        &:last-child {
+                            display: none !important;
+                        }
+                    }
+                }
+            }
+            &.bordered-table {
+                tr {
+                    th,td {
+                        border: 1px solid var(--color-table-primary-content-bar-border) !important;
+                    }
+                }
+            }
+
+            tr {
+                th,
+                td {
+                    &.bg-grey {
+                        background-color: var(--color-wild-sand) !important;
+                    }
+                }
+            }
+        }
+
         tfoot {
             background-color: var(--color-wild-sand);
         }
     }
+
+    .vat-report-action-wrapper {
+        max-width: calc(1360px + 30px);
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
+
 .table-hide-title {
     thead {
         display: none !important;
     }
 }
+
 .white-box {
-    .table-heading{
+    .table-heading {
         color: var(--color-giddh-blue);
         font-size: var(--font-size-16);
     }
-    .inner-table-heading{
+
+    .inner-table-heading {
         color: var(--color-giddh-blue);
     }
+
     table {
         tbody {
             tr {
@@ -30,44 +90,52 @@
         }
     }
 }
+
 .gst-sidebar-open {
     .mat-menu-item {
         height: 40px !important;
         line-height: 34px !important;
     }
+
     #cdk-overlay-1 {
         .mat-menu-panel {
             max-width: 340px !important;
+
             .mat-menu-content {
                 width: 288px !important;
             }
         }
     }
+
     #cdk-overlay-2 {
         .mat-menu-panel {
             max-width: 330px !important;
+
             .mat-menu-content {
                 width: 230px !important;
             }
         }
     }
+
     .mat-dialog-container {
         overflow: hidden;
     }
+
     .modal-dialog {
         max-width: unset !important;
         width: 980px;
 
-        &.modal-md{     
+        &.modal-md {
             width: 600px;
         }
+
         .close-modal {
             right: 38px;
         }
     }
 }
 
-.obligations{
+.obligations {
     .mat-mdc-table {
         .mdc-data-table__content {
             .mat-mdc-row {
