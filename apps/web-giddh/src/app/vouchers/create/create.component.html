@@ -578,6 +578,7 @@
                                             [placeholder]="commonLocaleData?.app_select_voucher"
                                             [options]="vouchersListForCreditDebitNote$ | async"
                                             (selectedOption)="creditDebitNoteInvoiceSelected($event)"
+                                            (onClear)="resetCreditDebitNoteSelectedInvoice()"
                                             [enableDynamicSearch]="true" (dynamicSearchedQuery)="
                                                 searchReferenceVoucher = $event;
                                                 resetVoucherListForCreditDebitNote();
