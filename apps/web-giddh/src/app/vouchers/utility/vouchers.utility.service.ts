@@ -17,7 +17,7 @@ export class VouchersUtilityService {
                 return TaxType.GST;
             } else if (countryCode === TaxSupportedCountries.UAE) {
                 return TaxType.TRN;
-            } else if (countryCode === TaxSupportedCountries.UK) {
+            } else if (countryCode === TaxSupportedCountries.UK || countryCode === TaxSupportedCountries.ZW) {
                 return TaxType.VAT;
             }
         } else {
