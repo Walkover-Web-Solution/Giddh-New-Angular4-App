@@ -253,7 +253,7 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof JournalVoucherComponent
      */
-    public getSalesEntryEvent(event): void {
+    public getSalesEntryEvent(event: any): void {
         this.salesEntry = event;
     }
 

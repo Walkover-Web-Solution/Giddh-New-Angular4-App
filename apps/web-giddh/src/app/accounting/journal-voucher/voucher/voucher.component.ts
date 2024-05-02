@@ -17,7 +17,7 @@ import {
     ChangeDetectorRef,
     HostListener
 } from '@angular/core';
-import { AbstractControl, FormArray, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormArray, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-service';
@@ -271,7 +271,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public showTaxSidebar: boolean = false;
     /** List of discounts */
     public discountsList: any[] = [];
-    /** Keys. **/
+    /** Keys **/
     private KEYS: any = {
         BACKSPACE: 8,
         TAB: 9,
@@ -674,23 +674,23 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
-     * This will be use for close discount sidaber
+     * This will be use for close discount sidebar
      *
      * @memberof AccountAsVoucherComponent
      */
     public closeDiscountSidebar(): void {
         this.showDiscountSidebar = false;
-        this.hideDiscountSidebar.emit(true)
+        this.hideDiscountSidebar.emit(true);
     }
 
     /**
-     * This will be use for close tax sidaber
+     * This will be use for close tax sidebar
      *
      * @memberof AccountAsVoucherComponent
      */
     public closeTaxSidebar(): void {
         this.showTaxSidebar = false;
-        this.hideTaxSidebar.emit(true)
+        this.hideTaxSidebar.emit(true);
     }
 
     /**
