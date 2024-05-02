@@ -209,6 +209,18 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      */
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                if (this.activeCompany?.uniqueName !== activeCompany?.uniqueName) {
+                    this.activeCompany = activeCompany;
+                    this.getCompanyCustomField();
+                }
+                if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
+                    this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
+                }
+                this.companyCurrency = clone(this.activeCompany?.baseCurrency);
+            }
+        });
         this.getCountry();
         this.getCallingCodes();
         this.getPartyTypes();
@@ -377,18 +389,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
 
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                if (this.activeCompany?.uniqueName !== activeCompany?.uniqueName) {
-                    this.activeCompany = activeCompany;
-                    this.getCompanyCustomField();
-                }
-                if (this.activeCompany.countryV2 !== undefined && this.activeCompany.countryV2 !== null) {
-                    this.getStates(this.activeCompany.countryV2.alpha2CountryCode);
-                }
-                this.companyCurrency = clone(this.activeCompany?.baseCurrency);
-            }
-        });
         this.addAccountForm.get('activeGroupUniqueName')?.setValue(this.activeGroupUniqueName);
 
         if (this.autoFocus !== undefined) {
@@ -1049,11 +1049,20 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
     }
-
+    
+    /**
+     * Get Party Type List
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
     public getPartyTypes() {
         this.store.pipe(select(s => s.common.partyTypes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                this.partyTypeSource = res;
+                switch (this.activeCompany?.countryV2?.alpha2CountryCode) {
+                    case 'ZW': this.partyTypeSource = res.filter(item => (item.label === 'GOVERNMENT ENTITY') || (item.label === 'NOT APPLICABLE'));
+                        break;
+                    default: this.partyTypeSource = res;
+                }
             } else {
                 this.store.dispatch(this.commonActions.GetPartyType());
             }
