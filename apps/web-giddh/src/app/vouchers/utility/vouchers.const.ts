@@ -2,7 +2,8 @@ export enum TaxSupportedCountries {
     'IN' = 'IN',
     'UAE' = 'UAE',
     'GB' = 'GB',
-    'ZW' = 'ZW'
+    'ZW' = 'ZW',
+    'KE' = 'KE'
 };
 
 export enum TaxType {
