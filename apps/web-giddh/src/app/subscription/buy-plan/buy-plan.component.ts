@@ -160,7 +160,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private location: Location,
-        private elementRef : ElementRef
+        private elementRef: ElementRef
     ) {
         this.session$ = this.store.pipe(select(p => p.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
         this.store.dispatch(this.generalActions.openSideMenu(false));
@@ -255,42 +255,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public toggleDuration(event: any): void {
         if (event) {
-            this.setFinalAmount();
-        }
-    }
-
-    /**
-     * This will be use for set final amount
-     *
-     * @memberof BuyPlanComponent
-     */
-    public setFinalAmount(): void {
-        if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in' && !this.promoCodeResponse?.length) {
-            this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
-                if (result) {
-                    this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
-                    if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                        this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
-                    } else {
-                        this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
-                    }
-                    if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
-                        this.finalPlanAmount = this.finalPlanAmount + (this.finalPlanAmount * this.taxPercentage);
-                    } else {
-                        if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                            this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
-                        } else {
-                            this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
-                        }
-                    }
-                }
-            });
-        } else {
-            if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
-            } else {
-                this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
-            }
+                this.firstStepForm.get('duration').setValue(event?.value);
+                this.setPlans();
         }
     }
 
@@ -697,6 +663,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (this.firstStepForm?.get('promoCode')?.value) {
             this.firstStepForm?.get('promoCode')?.setValue(this.firstStepForm?.get('promoCode')?.value);
         }
+
         this.selectedStep++;
     }
 
@@ -709,7 +676,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public onSelectedTab(event: any): void {
         this.selectedStep = event?.selectedIndex;
-        if (this.selectedStep === 1) {
+        if (!this.intlClass) {
             this.initIntl();
         }
     }
@@ -721,20 +688,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public getAllPlans(): void {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.inputData = [];
             if (response?.length) {
-                const filteredPlans = response.filter(plan => plan.monthlyAmount > 0 && plan.yearlyAmount > 0);
-                this.selectedPlan = filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1];
-                this.popularPlan = filteredPlans[1];
-
-                this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan?.uniqueName);
-
-                filteredPlans?.forEach(plan => {
-                    this.inputData.push(plan);
-                });
-
-                this.monthlyPlans = filteredPlans?.filter(plan => plan?.monthlyAmountAfterDiscount > 0);
-                this.yearlyPlans = filteredPlans?.filter(plan => plan?.yearlyAmountAfterDiscount > 0);
+                this.monthlyPlans = response?.filter(plan => plan?.monthlyAmountAfterDiscount > 0);
+                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmountAfterDiscount > 0);
 
                 if (this.yearlyPlans?.length) {
                     this.firstStepForm.get('duration').setValue('YEARLY');
@@ -742,16 +698,61 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     this.firstStepForm.get('duration').setValue('MONTHLY');
                 }
 
-                if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                    this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
-                } else {
-                    this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
-                }
-
+                this.setPlans();
             } else {
                 this.inputData = [];
             }
         });
+    }
+
+    private setPlans(): void {
+        this.inputData = [];
+        const filteredPlans = this.firstStepForm.get('duration').value === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
+        this.selectedPlan = filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1];
+        this.popularPlan = filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1];
+
+        this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan?.uniqueName);
+
+        filteredPlans?.forEach(plan => {
+            this.inputData.push(plan);
+        });
+
+        this.setFinalAmount();
+    }
+
+    /**
+     * This will be use for set final amount
+     *
+     * @memberof BuyPlanComponent
+     */
+    public setFinalAmount(): void {
+        if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in' && !this.promoCodeResponse?.length) {
+            this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                if (result) {
+                    this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
+                    if (this.firstStepForm.get('duration').value === 'YEARLY') {
+                        this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
+                    } else {
+                        this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
+                    }
+                    if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
+                        this.finalPlanAmount = this.finalPlanAmount + (this.finalPlanAmount * this.taxPercentage);
+                    } else {
+                        if (this.firstStepForm.get('duration').value === 'YEARLY') {
+                            this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
+                        } else {
+                            this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
+                        }
+                    }
+                }
+            });
+        } else {
+            if (this.firstStepForm.get('duration').value === 'YEARLY') {
+                this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
+            } else {
+                this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
+            }
+        }
     }
 
     /**

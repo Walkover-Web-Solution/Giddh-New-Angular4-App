@@ -50,7 +50,7 @@
                             <button
                                 aria-label="subscriptionid"
                                 mat-menu-item
-                                (click)="transferSubscription(viewSubscriptionData?.subscriptionId)"
+                                (click)="transferSubscription(subscriptionId)"
                             >
                                 {{ localeData?.request_transfer }}
                             </button>
@@ -129,32 +129,47 @@
                 </mat-card-content>
             </mat-card>
         </div>
-        <div class="billing-account">
-            <mat-card class="outline-card">
-                <mat-card-content>
-                    <h4 class="font-16 strong border-bottom pb-2">{{ localeData?.billing_account }}</h4>
-                    <p class="strong my-3 light-gray">
-                        {{ commonLocaleData?.app_payment_mode }} : {{ viewSubscriptionData?.cashfreeBillingInfo?.mode }}
-                    </p>
-                    <p class="mr-b15" *ngIf="viewSubscriptionData?.cashfreeBillingInfo?.upiId">
-                        {{ localeData?.upi_id }}:
-                        <span class="strong light-gray">{{ viewSubscriptionData?.cashfreeBillingInfo?.upiId }}</span>
-                    </p>
-                    <p class="mr-b15" *ngIf="viewSubscriptionData?.cashfreeBillingInfo?.bankAccountNumber">
-                        {{ commonLocaleData?.app_account_number }} :
-                        <span class="strong light-gray">{{
-                            viewSubscriptionData?.cashfreeBillingInfo?.bankAccountNumber
-                        }}</span>
-                    </p>
-                    <p class="mr-b15" *ngIf="viewSubscriptionData?.cashfreeBillingInfo?.bankAccountHolder">
-                        {{ localeData?.account_holder }} :
-                        <span class="strong light-gray">{{
-                            viewSubscriptionData?.cashfreeBillingInfo?.bankAccountHolder
-                        }}</span>
-                    </p>
-                </mat-card-content>
-            </mat-card>
-        </div>
+        <ng-container
+            *ngIf="viewSubscriptionData?.cashfreeBillingInfo || viewSubscriptionData?.paymentMethodTypeMode"
+        >
+            <div class="billing-account">
+                <mat-card class="outline-card">
+                    <mat-card-content>
+                        <h4 class="font-16 strong border-bottom pb-2">{{ localeData?.billing_account }}</h4>
+                        <ng-container *ngIf="viewSubscriptionData?.cashfreeBillingInfo">
+                            <p class="strong my-3 light-gray">
+                                {{ commonLocaleData?.app_payment_mode }} :
+                                {{ viewSubscriptionData?.cashfreeBillingInfo?.mode }}
+                            </p>
+                            <p class="mr-b15" *ngIf="viewSubscriptionData?.cashfreeBillingInfo?.upiId">
+                                {{ localeData?.upi_id }}:
+                                <span class="strong light-gray">{{
+                                    viewSubscriptionData?.cashfreeBillingInfo?.upiId
+                                }}</span>
+                            </p>
+                            <p class="mr-b15" *ngIf="viewSubscriptionData?.cashfreeBillingInfo?.bankAccountNumber">
+                                {{ commonLocaleData?.app_account_number }} :
+                                <span class="strong light-gray">{{
+                                    viewSubscriptionData?.cashfreeBillingInfo?.bankAccountNumber
+                                }}</span>
+                            </p>
+                            <p class="mr-b15" *ngIf="viewSubscriptionData?.cashfreeBillingInfo?.bankAccountHolder">
+                                {{ localeData?.account_holder }} :
+                                <span class="strong light-gray">{{
+                                    viewSubscriptionData?.cashfreeBillingInfo?.bankAccountHolder
+                                }}</span>
+                            </p>
+                        </ng-container>
+                        <ng-container *ngIf="viewSubscriptionData?.paymentMethodTypeMode">
+                            <p class="strong my-3 light-gray">
+                                {{ commonLocaleData?.app_payment_mode }} :
+                                {{ viewSubscriptionData?.paymentMethodTypeMode }}
+                            </p>
+                        </ng-container>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </ng-container>
     </div>
 </ng-container>
 <!-- MoveCompany Modal -->
