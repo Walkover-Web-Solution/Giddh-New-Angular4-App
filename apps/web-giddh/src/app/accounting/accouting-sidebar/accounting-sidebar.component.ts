@@ -16,6 +16,8 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
     @Input() public AccountListOpen: boolean;
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /* This will hold locale JSON data */
+    @Input() public localeData: any = {};
     public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
     public isGroupToggle: boolean;
     public accountSearch: string = '';
