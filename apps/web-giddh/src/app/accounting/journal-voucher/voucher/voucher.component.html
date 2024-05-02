@@ -71,7 +71,10 @@
                                                 [id]="'transactionType_' + i"
                                                 [type]="'text'"
                                                 [cssClass]="'form-control text-capitalize byTo'"
-                                                [readonly]="i === 0 && !isFirstRowDeleted"
+                                                [readonly]="
+                                                    (i === 0 && !isFirstRowDeleted) ||
+                                                    transaction?.get('isDiscountApplied')?.value
+                                                "
                                                 formControlName="type"
                                                 (input)="selectRow(true, i, transaction)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
@@ -139,6 +142,7 @@
                                             }"
                                         >
                                             <text-field
+                                                [readonly]="transaction?.get('isDiscountApplied')?.value"
                                                 [id]="'transactionAmount_' + i"
                                                 (keydown.Tab)="changeTab('tab', 'amount')"
                                                 (keydown.Shift.Tab)="changeTab('shift', 'amount')"
@@ -171,6 +175,7 @@
                                             }"
                                         >
                                             <text-field
+                                                [readonly]="transaction?.get('isDiscountApplied')?.value"
                                                 *ngIf="transaction.get('type')?.value?.toLowerCase() === 'to'"
                                                 [autoFocus]="activeRowIndex === i && activeRowType === 'amount'"
                                                 [autocomplete]="'off'"
@@ -324,6 +329,116 @@
             [notFoundMsg]="commonLocaleData?.app_no_result_found"
             [notFoundLinkText]="commonLocaleData?.app_create_new"
         ></accounting-virtual-list>
+    </div>
+    <div class="sidebar-list form-control" [hidden]="!showDiscountSidebar">
+        <div class="bd-rb d-flex justify-content-between align-items-center discount-sidebar-section">
+            <h3 class="primary-color">{{ localeData?.discount_list}}</h3>
+            <i class="fa fa-close pdR-5 cursor-pointer" (click)="closeDiscountSidebar()"></i>
+        </div>
+        <div [style.width]="width" class="h-100">
+            <div #dd class="menu" *ngIf="showDiscountSidebar" class="h-100">
+                <div class="h-100">
+                    <ul
+                        role="discount-list"
+                        *ngIf="discountsList?.length === 0"
+                        class="grp-list group-list-no-found users-last-list"
+                    >
+                        <li role="items" class="list-item sidebarTooltip text-overflow-ellipsis">
+                            <span class="account-list d-block w-100"> {{ commonLocaleData?.app_no_data_found }}</span>
+                        </li>
+                    </ul>
+                    <ng-container *ngIf="discountsList?.length">
+                        <ul role="discount-list-items" class="grp-list users-last-list">
+                            <cdk-virtual-scroll-viewport
+                                tabindex="0"
+                                class="virtual-group-list overflow-x-hidden"
+                                [itemSize]="37"
+                                [minBufferPx]="400"
+                                [maxBufferPx]="800"
+                                #cdkMenu
+                            >
+                                <li
+                                    role="discount-items"
+                                    *cdkVirtualFor="let discount of discountsList; let j = index; trackBy: trackByFn"
+                                    class="list-item sidebarTooltip text-overflow-ellipsis"
+                                    [ngClass]="{ 'hilighted': j === selectedIndex }"
+                                >
+                                    <a
+                                        aria-label="discount"
+                                        #focusElement
+                                        href="javascript:void(0);"
+                                        class="isAcc account-list"
+                                        id="acc_{{ discount.label }}"
+                                        tooltip="{{ discount.label }}"
+                                        placement="bottom"
+                                        (click)="toggleDiscountSelected(discount)"
+                                        (keydown.enter)="toggleDiscountSelected(discount)"
+                                        cdkFocusInitial
+                                    >
+                                        {{ discount?.label }}
+                                    </a>
+                                </li>
+                            </cdk-virtual-scroll-viewport>
+                        </ul>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="sidebar-list form-control" [hidden]="!showTaxSidebar">
+        <div class="bd-rb d-flex justify-content-between align-items-center discount-sidebar-section">
+            <h3 class="primary-color">{{ localeData?.tax_list}}</h3>
+            <i class="fa fa-close pdR-5 cursor-pointer" (click)="closeTaxSidebar()"></i>
+        </div>
+        <div [style.width]="width" class="h-100">
+            <div #dd class="menu" *ngIf="showTaxSidebar" class="h-100">
+                <div class="h-100">
+                    <ul
+                        role="tax-list"
+                        *ngIf="companyTaxesList?.length === 0"
+                        class="grp-list group-list-no-found users-last-list"
+                    >
+                        <li role="tax-list-items" class="list-item sidebarTooltip text-overflow-ellipsis">
+                            <span class="account-list d-block w-100"> {{ commonLocaleData?.app_no_data_found }}</span>
+                        </li>
+                    </ul>
+                    <ng-container *ngIf="companyTaxesList?.length">
+                        <ul role="user-list" class="grp-list users-last-list">
+                            <cdk-virtual-scroll-viewport
+                                tabindex="0"
+                                class="virtual-group-list overflow-x-hidden"
+                                [itemSize]="37"
+                                [minBufferPx]="400"
+                                [maxBufferPx]="800"
+                                #cdkMenu
+                            >
+                                <li
+                                    role="tax-items"
+                                    *cdkVirtualFor="let tax of companyTaxesList; let j = index; trackBy: trackByFn"
+                                    class="list-item sidebarTooltip text-overflow-ellipsis"
+                                    [ngClass]="{ 'hilighted': j === selectedIndex }"
+                                >
+                                    <a
+                                        aria-label="account"
+                                        #focusElement
+                                        href="javascript:void(0);"
+                                        class="isAcc account-list"
+                                        id="acc_{{ tax.label }}"
+                                        tooltip="{{ tax.label }}"
+                                        placement="bottom"
+                                        (click)="toggleTaxSelected(tax)"
+                                        (keydown.enter)="toggleTaxSelected(tax)"
+                                        cdkFocusInitial
+                                    >
+                                        {{ tax?.label }}
+                                    </a>
+                                </li>
+                            </cdk-virtual-scroll-viewport>
+                        </ul>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
