@@ -15,5 +15,7 @@
     "add_vrn": "वीआरएन जोडा",
     "add_address": "पत्ता जोडा",
     "filing_status": "दाखल स्थिती",
-    "vat_obligations": "व्हॅट बंधने"
+    "vat_obligations": "व्हॅट बंधने",
+    "with_held_setting": "धरलेल्या सेटिंगसह",
+    "add_vat": "व्हॅट जोडा"
 }

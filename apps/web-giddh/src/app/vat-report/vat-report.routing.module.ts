@@ -4,6 +4,7 @@ import { VatReportComponent } from './vat-report.component';
 import { VatReportTransactionsComponent } from './transactions/vat-report-transactions.component';
 import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { ObligationsComponent } from './obligations/obligations.component';
+import { WithHeldSettingComponent } from './with-held-setting/with-held-setting.component';
 
 @NgModule({
     imports: [
@@ -25,6 +26,11 @@ import { ObligationsComponent } from './obligations/obligations.component';
             {
                 path: 'obligations',
                 component: ObligationsComponent,
+                canActivate: [NeedsAuthentication]
+            },
+            {
+                path: 'with-held-setting',
+                component: WithHeldSettingComponent,
                 canActivate: [NeedsAuthentication]
             }
         ])

@@ -31,6 +31,7 @@ import { ObligationsComponent } from './obligations/obligations.component';
 import { ViewReturnComponent } from './view-return/view-return.component';
 import { FileReturnComponent } from './file-return/file-return.component';
 import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
+import { WithHeldSettingComponent } from './with-held-setting/with-held-setting.component';
 
 @NgModule({
     declarations: [
@@ -38,7 +39,8 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
         VatReportTransactionsComponent,
         ObligationsComponent,
         ViewReturnComponent,
-        FileReturnComponent
+        FileReturnComponent,
+        WithHeldSettingComponent
     ],
     imports: [
         VatReportRoutingModule,
