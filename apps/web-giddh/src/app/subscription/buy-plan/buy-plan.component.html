@@ -281,10 +281,10 @@
                                                     </div>
                                                 </ng-container>
                                             </div>
-                                                      <div class="grid-list-div list-grid">
+                                            <div class="grid-list-div list-grid">
                                                 <div class="grid-title-left">
                                                     <span class="inner-name mat-table-sticky">
-                                                        <span>Companies Allowed} </span>
+                                                        <span>Companies Allowed </span>
                                                     </span>
                                                 </div>
                                                 <ng-container *ngFor="let plan of inputData">
@@ -451,7 +451,8 @@
                                                         formControlName="email"
                                                         [placeholder]="commonLocaleData?.app_email"
                                                         [showError]="
-                                                            isFormSubmitted && !secondStepForm.get('email')?.value
+                                                            isFormSubmitted && (!secondStepForm.get('email')?.value ||
+                                                            secondStepForm.get('email')?.errors?.pattern)
                                                         "
                                                         [autocomplete]="'off'"
                                                     >
