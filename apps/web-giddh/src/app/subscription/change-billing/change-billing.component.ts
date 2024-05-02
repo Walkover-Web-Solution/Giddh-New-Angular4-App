@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChangeBillingComponentStore } from './utility/change-billing.store';
 import { IntlPhoneLib } from '../../theme/mobile-number-field/intl-phone-lib.class';
@@ -100,7 +100,8 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
         private location: Location,
         private router: Router,
         private route: ActivatedRoute,
-        private generalActions: GeneralActions
+        private generalActions: GeneralActions,
+        private elementRef: ElementRef
     ) { }
 
     /**
@@ -203,8 +204,8 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
      * @memberof ChangeBillingComponent
      */
     public initIntl(): void {
-        const parentDom = document.querySelector('create');
-        const input = document.getElementById('init-billing');
+        const parentDom = this.elementRef?.nativeElement;
+        const input = document?.getElementById('init-billing');
         if (input) {
             this.intlClass = new IntlPhoneLib(
                 input,
