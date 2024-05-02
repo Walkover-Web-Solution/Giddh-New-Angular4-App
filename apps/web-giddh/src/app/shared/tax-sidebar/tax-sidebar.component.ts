@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Output, Input, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { NavigationStart, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { GstReport } from '../../gst/constants/gst.constant';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
-import { filter, take, takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { GstReconcileService } from '../../services/gst-reconcile.service';
@@ -50,6 +50,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public showGstMenus: boolean = false;
     /** True if we need to show VAT menus */
     public showVatMenus: boolean = false;
+    /** Holds Tax Type Translated Label for sidebar menu */
+    public taxTypeSidebarLabel: string;
     /* This will hold list of vat supported countries */
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
@@ -62,6 +64,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public imgPath: string = "";
     /** True if active country is UK */
     public isUKCompany: boolean;
+    /** True if active country is Zimbabwe */
+    public isZimbabweCompany: boolean;
 
     constructor(
         private router: Router,
@@ -90,6 +94,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.isUKCompany = activeCompany?.country === "United Kingdom";
+                this.isZimbabweCompany = activeCompany?.country === "Zimbabwe";
+                
                 if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                     this.showVatMenus = true;
                     this.showGstMenus = false;
@@ -230,5 +236,27 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
      */
     public navigateToGstR3B(type: string): void {
         this.router.navigate(['pages', 'gstfiling', 'gstR3'], { queryParams: { return_type: type, from: this.currentPeriod.from, to: this.currentPeriod.to, isCompany: this.isCompany, selectedGst: this.activeCompanyGstNumber } });
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {*} event
+     * @memberof TaxSidebarComponent
+     */
+    public translationComplete(event: any): void {
+        if(event) {
+            let label = '';
+            if (this.showVatMenus && this.isZimbabweCompany) {
+                label = this.localeData?.add_vat;
+            } else if (this.showVatMenus) {
+                label = this.localeData?.add_trn;
+            } else if (this.showGstMenus) {
+                label = this.localeData?.add_gst;
+            } else {
+                label = this.localeData?.add_address;
+            }
+            this.taxTypeSidebarLabel = label;
+        }
     }
 }
