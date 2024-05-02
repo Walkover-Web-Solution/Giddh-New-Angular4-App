@@ -9,7 +9,7 @@ import {
     TemplateRef,
     ViewChild,
 } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap/modal';
@@ -104,6 +104,8 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     private currentPage: number = 1;
     /** Holds modal reference */
     public statusModalRef:any;
+    /** Holds Create Account Asidepane Dialog Ref */
+    public asideAccountAsidePaneDialogRef: MatDialogRef<any>;
 
     /** Stores the address configuration */
     public addressConfiguration: SettingsAsideConfiguration = {
@@ -256,25 +258,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    /**
-     * Handles the update warehouse flow
-     *
-     * @param {*} warehouse Warehouse to update
-     * @memberof WarehouseComponent
-     */
-    // public editWarehouse(warehouse: any): void {
-    //     this.selectedWarehouse = warehouse;
-
-        // this.loadAddresses('GET', () => {
-        //     this.warehouseToUpdate = {
-        //         name: warehouse.name,
-        //         // address: warehouse.address,
-        //         linkedEntities: warehouse.addresses || []
-        //     };
-        //     this.toggleAsidePane();
-        // });
-    // }
-
     public editWarehouse(warehouse: any) {
         this.selectedWarehouse = warehouse;
         this.loadAddresses('GET', () => {
@@ -284,7 +267,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
                 linkedEntities: warehouse.addresses || []
             };
             
-            this.dialog.open(this.asideAccountAsidePane, {
+            this.asideAccountAsidePaneDialogRef = this.dialog.open(this.asideAccountAsidePane, {
                 width: '760px',
                 height: '100vh !important',
                 position: {
@@ -352,13 +335,9 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param {*} [event] Event
      * @memberof WarehouseComponent
      */
-    public toggleAsidePane(event?: any): void {
-        // if (event) {
-        //     event.preventDefault();
-        // }
-        // this.asideEditWarehousePane = this.asideEditWarehousePane === 'out' ? 'in' : 'out';
+    public closeAsidePane(event?: any): void {
         this.isWarehouseUpdateInProgress = false;
-        // this.toggleBodyClass();
+        this.asideAccountAsidePaneDialogRef.close() 
     }
 
     /**
@@ -383,6 +362,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             if (response?.status === 'success') {
                 this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: PAGINATION_LIMIT }));
                 this.toasterService.successToast(this.localeData?.warehouse_updated);
+                this.closeAsidePane();
             } else {
                 this.toasterService.errorToast(response?.message);
             }
@@ -570,20 +550,16 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param {*} warehouse
      * @memberof WarehouseComponent
      */
-    // public confirmStatusUpdate(warehouse: any): void {
-    //     if (!warehouse?.isDefault || warehouse?.isArchived) {
-    //         this.warehouseStatusToUpdate = warehouse;
-    //         this.statusModal?.show();
-    //     } else {
-    //         this.toasterService.warningToast(this.localeData?.archive_notallowed);
-    //     }
-    // }
-
-    public confirmStatusUpdate() {
-       this.statusModalRef = this.dialog.open(this.statusModal, {
-            panelClass: 'modal-dialog',
-            width: '1000px',
-        });
+    public confirmStatusUpdate(warehouse: any): void {
+        if (!warehouse?.isDefault || warehouse?.isArchived) {
+            this.warehouseStatusToUpdate = warehouse;
+            this.statusModalRef = this.dialog.open(this.statusModal, {
+                panelClass: 'modal-dialog',
+                width: '1000px',
+            });
+        } else {
+            this.toasterService.warningToast(this.localeData?.archive_notallowed);
+        }
     }
 
     /**

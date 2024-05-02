@@ -154,39 +154,35 @@
     </ng-container>
 
     <!-- Warehouse on boarding modal (Step 1) -->
-
-    <div>
-        <ng-template #warehouseOnBoardingModal>
-            <div class="modal-dialog modal-xl">
-                <div class="modal-content">
-                    <ng-template element-view-container-ref #onBoardingContainer="elementviewcontainerref">
-                    </ng-template>
-                </div>
+    <ng-template #warehouseOnBoardingModal>
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <ng-template element-view-container-ref #onBoardingContainer="elementviewcontainerref">
+                </ng-template>
             </div>
-        </ng-template>
-    </div>
-    <div>
-        <ng-template #asideAccountAsidePane>
-            <ng-container
-                appTranslate
-                [file]="'settings/profile'"
-                (localeData)="profileLocaleData = $event"
-                [requireCommonData]="false"
+        </div>
+    </ng-template>
+
+    <ng-template #asideAccountAsidePane>
+        <ng-container
+            appTranslate
+            [file]="'settings/profile'"
+            (localeData)="profileLocaleData = $event"
+            [requireCommonData]="false"
+        >
+            <create-address
+                [currentOrganizationUniqueName]="currentOrganizationUniqueName"
+                [warehouseToUpdate]="warehouseToUpdate"
+                [showLoader]="isWarehouseUpdateInProgress"
+                (updateAddress)="updateWarehouseInfo($event)"
+                [addressConfiguration]="addressConfiguration"
+                [localeData]="profileLocaleData"
+                [commonLocaleData]="commonLocaleData"
+                (closeAsideEvent)="closeAsidePane($event)"
             >
-                <create-address
-                    [currentOrganizationUniqueName]="currentOrganizationUniqueName"
-                    [warehouseToUpdate]="warehouseToUpdate"
-                    [showLoader]="isWarehouseUpdateInProgress"
-                    (updateAddress)="updateWarehouseInfo($event)"
-                    [addressConfiguration]="addressConfiguration"
-                    [localeData]="profileLocaleData"
-                    [commonLocaleData]="commonLocaleData"
-                    (closeAsideEvent)="toggleAsidePane($event)"
-                >
-                </create-address>
-            </ng-container>
-        </ng-template>
-    </div>
+            </create-address>
+        </ng-container>
+    </ng-template>
     <!-- Welcome component (Step 2) -->
     <ng-template #welcomeComponent>
         <welcome-component

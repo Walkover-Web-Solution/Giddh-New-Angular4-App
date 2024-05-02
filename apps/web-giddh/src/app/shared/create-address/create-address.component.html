@@ -13,7 +13,7 @@
                         <h3 *ngIf="addressConfiguration.type === 'editAddress'">{{ localeData?.update_address }}</h3>
                         <h3 *ngIf="addressConfiguration.type === 'editBranch'">{{ localeData?.edit_branch }}</h3>
                         <h3 *ngIf="addressConfiguration.type === 'editWarehouse'">{{ localeData?.edit_warehouse }}</h3>
-                        <button id="close" aria-label="close" mat-dialog-close (click)="closeAsidePane($event)">
+                        <button id="close" aria-label="close" type="button" (click)="closeAsidePane($event)">
                             <i class="icon-cross"></i>
                         </button>
                     </div>
@@ -308,7 +308,6 @@
                                               
                                                     <mat-select
                                                         [placeholder]="commonLocaleData?.app_select_entity"
-                                                        (selectionChange)="selectEntity($event)"
                                                         formControlName="linkedEntity" 
                                                         multiple
                                                     >
@@ -316,42 +315,40 @@
                                                         
                                                     </mat-select-trigger>
                                                       <mat-option *ngFor="let item of addressConfiguration?.linkedEntities; let i = index" [value]="item">
-                                                        <a href="javascript:void(0)"
-                                                        class="list-item d-flex column-gap1">
-                                                        <span class="entity-icon">
-                                                            <i class="icon-branch-icon pull-right"
-                                                                *ngIf="item?.entity === 'BRANCH'"
-                                                                [tooltip]="commonLocaleData?.app_branch"></i>
-                                                            <i class="icon-warehouse-icon pull-right"
-                                                                *ngIf="item?.entity === 'WAREHOUSE'"
-                                                                [tooltip]="commonLocaleData?.app_warehouse"></i>
-                                                        </span>
-                                                        <span class="entity-details">
-                                                            <div class="item giddh-limit single-line-clamp">
-                                                                {{ item?.label || "-" }}
-                                                            </div>
-                                                            <div class="
-                                                                          item-unique
-                                                                          giddh-limit
-                                                                          single-line-clamp
-                                                                      ">
-                                                                {{ item?.name || "-" }}
-                                                            </div>
-                                                        </span>
-                                                        <span class="default-entity ml-auto">
-                                                            <i (click)="setDefault(item, $event)"
-                                                                *ngIf="!item?.isDefault"
-                                                                class="icon-no-selected mr-r05"></i>
-                                                            <i (click)="setDefault(item, $event)"
-                                                                *ngIf="item?.isDefault"
-                                                                class="icon-favorite-selected mr-r05"></i>
-                                                        </span>
-                                                    </a>
+                                                        <a href="javascript:void(0)" class="list-item d-flex column-gap1" (click)="selectEntity(item)">
+                                                            <span class="entity-icon">
+                                                                <i class="icon-branch-icon pull-right"
+                                                                    *ngIf="item?.entity === 'BRANCH'"
+                                                                    [tooltip]="commonLocaleData?.app_branch"></i>
+                                                                <i class="icon-warehouse-icon pull-right"
+                                                                    *ngIf="item?.entity === 'WAREHOUSE'"
+                                                                    [tooltip]="commonLocaleData?.app_warehouse"></i>
+                                                            </span>
+                                                            <span class="entity-details">
+                                                                <div class="item giddh-limit single-line-clamp">
+                                                                    {{ item?.label || "-" }}
+                                                                </div>
+                                                                <div class="
+                                                                            item-unique
+                                                                            giddh-limit
+                                                                            single-line-clamp
+                                                                        ">
+                                                                    {{ item?.name || "-" }}
+                                                                </div>
+                                                            </span>
+                                                            <span class="default-entity ml-auto">
+                                                                <i (click)="setDefault(item, $event)"
+                                                                    *ngIf="!item?.isDefault"
+                                                                    class="icon-no-selected mr-r05"></i>
+                                                                <i (click)="setDefault(item, $event)"
+                                                                    *ngIf="item?.isDefault"
+                                                                    class="icon-favorite-selected mr-r05"></i>
+                                                            </span>
+                                                        </a>
                                                       </mat-option>
                                                     </mat-select>
                                                   </mat-form-field>
                                             </div>
-                                            
                                         </div>
                                     </div>
                                 </section>

@@ -230,8 +230,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public handleFormSubmit(): void {
-    
-        if(this.addressForm.get('linkedEntity')?.value?.length){
+        if(Array.isArray(this.addressForm.get('linkedEntity')?.value)){
             let value = this.addressForm?.get('linkedEntity')?.value?.map(item => {
                 return item = item.uniqueName;
             });
@@ -257,6 +256,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             });
         } else if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress || this.addressConfiguration.type === SettingsAsideFormType.EditBranch ||
             this.addressConfiguration.type === SettingsAsideFormType.EditWarehouse) {
+                
             this.updateAddress.emit({
                 formValue: this.addressForm.getRawValue(),
                 addressDetails: this.addressConfiguration
@@ -334,9 +334,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             });
         }
         option.isDefault = !option.isDefault;
-        // if (option.isDefault) { UNSED LOGIC
-        //     this.addressForm.get('linkedEntity')?.patchValue([...this.addressForm.get('linkedEntity')?.value, option?.value]);
-        // }
+        if (option.isDefault) {
+            this.addressForm.get('linkedEntity')?.patchValue([...this.addressForm.get('linkedEntity')?.value, option]);
+        }
     }
 
     /**
@@ -346,7 +346,6 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public selectEntity(option: any): void {
-
         if (option?.isDefault) {
             option.isDefault = false;
         }
