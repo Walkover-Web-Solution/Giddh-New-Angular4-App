@@ -1,5 +1,5 @@
-<ul class="menu-list">
-    <li>
+<ul class="menu-list" role="account-list">
+    <li role="account-items">
         <a
             href="javascript:;"
             aria-label="contra"
@@ -10,7 +10,7 @@
         </a>
     </li>
 
-    <li>
+    <li role="account-items">
         <a
             href="javascript:;"
             aria-label="payment"
@@ -21,7 +21,7 @@
         >
     </li>
 
-    <li>
+    <li role="account-items">
         <a
             href="javascript:;"
             aria-label="receipt"
@@ -31,7 +31,7 @@
             >{{ commonLocaleData?.app_keys?.f6 }}: {{ commonLocaleData?.app_voucher_types?.receipt }}
         </a>
     </li>
-    <li>
+    <li role="account-items">
         <a
             href="javascript:;"
             aria-label="journal"
@@ -41,7 +41,7 @@
             >{{ commonLocaleData?.app_keys?.f7 }}: {{ commonLocaleData?.app_voucher_types?.journal }}</a
         >
     </li>
-    <li>
+    <li role="account-items">
         <a
             href="javascript:;"
             aria-label="sales"
@@ -52,13 +52,21 @@
         >
     </li>
     <ng-container *ngIf="salesEntry">
-        <li>
-            <a class="cursor-pointer text-underline" href="javascript:;" aria-label="discount" (click)="showDiscountSidebar($event)"
+        <li role="account-items">
+            <a
+                class="cursor-pointer text-underline"
+                href="javascript:;"
+                aria-label="discount"
+                (click)="showDiscountSidebar($event)"
                 >{{ commonLocaleData?.app_alt_d }} : Discount List</a
             >
         </li>
-        <li>
-            <a href="javascript:;" aria-label="tax" class="cursor-pointer text-underline" (click)="showTaxSidebar($event)"
+        <li role="account-items">
+            <a
+                href="javascript:;"
+                aria-label="tax"
+                class="cursor-pointer text-underline"
+                (click)="showTaxSidebar($event)"
                 >{{ commonLocaleData?.app_alt_t }} : Tax List</a
             >
         </li>
