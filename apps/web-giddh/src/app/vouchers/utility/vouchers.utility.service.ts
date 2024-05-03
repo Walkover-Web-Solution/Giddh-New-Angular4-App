@@ -34,6 +34,8 @@ export class VouchersUtilityService {
         let isProformaInvoice = voucherType === VoucherTypeEnum.proforma || voucherType === VoucherTypeEnum.generateProforma;
         let isEstimateInvoice = voucherType === VoucherTypeEnum.estimate || voucherType === VoucherTypeEnum.generateEstimate;
         let isPurchaseOrder = voucherType === VoucherTypeEnum.purchaseOrder;
+        let isReceiptInvoice = voucherType === VoucherTypeEnum.receipt;
+        let isPaymentInvoice = voucherType === VoucherTypeEnum.payment;
 
         // special case when we double click on account name and that accountUniqueName is cash then we have to mark as Cash Invoice
         if (isSalesInvoice && !isLastInvoiceCopied) {
@@ -43,7 +45,7 @@ export class VouchersUtilityService {
             }
         }
 
-        return { isSalesInvoice, isCashInvoice, isCreditNote, isDebitNote, isPurchaseInvoice, isProformaInvoice, isEstimateInvoice, isPurchaseOrder };
+        return { isSalesInvoice, isCashInvoice, isCreditNote, isDebitNote, isPurchaseInvoice, isProformaInvoice, isEstimateInvoice, isPurchaseOrder, isReceiptInvoice, isPaymentInvoice };
     }
 
     public parseVoucherType(voucherType: string): string {
@@ -74,10 +76,9 @@ export class VouchersUtilityService {
         let group: string;
 
         if (searchType === SearchType.CUSTOMER) {
-            group = (voucherType === VoucherTypeEnum.debitNote) ? 'sundrycreditors' : (voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.purchaseOrder) ? 'sundrycreditors' : 'sundrydebtors';
+            group = (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.purchaseOrder || voucherType === VoucherTypeEnum.payment) ? 'sundrycreditors' : 'sundrydebtors';
         } else if (searchType === SearchType.ITEM) {
-            group = (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.cashBill || voucherType === VoucherTypeEnum.cashDebitNote || voucherType === VoucherTypeEnum.purchaseOrder) ?
-                'operatingcost, indirectexpenses, fixedassets' : 'otherincome, revenuefromoperations, fixedassets';
+            group = voucherType === VoucherTypeEnum.receipt || voucherType === VoucherTypeEnum.payment ? 'bankaccounts, cash, loanandoverdraft' : (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.cashBill || voucherType === VoucherTypeEnum.cashDebitNote || voucherType === VoucherTypeEnum.purchaseOrder) ? 'operatingcost, indirectexpenses, fixedassets' : 'otherincome, revenuefromoperations, fixedassets';
             withStocks = true;
         } else if (searchType === SearchType.BANK) {
             group = 'bankaccounts, cash, loanandoverdraft';
