@@ -86,7 +86,7 @@
     "no_account_error": "बँक / रोख खाते किंवा ग्राहक नाव निवडण्याची आवश्यकता आहे",
     "no_customer_error": "ग्राहक नाव रिक्त असू शकत नाही",
     "invalid_email": "अवैध ई - मेल पत्ता",
-    "no_product_error": "उत्पादन / सेवा रिक्त असू शकत नाही",
+    "no_product_error": "लाइन आयटम रिकामे असू शकत नाहीत",
     "no_entry_error": "विक्री-इनव्हॉइस व्युत्पन्न करण्यासाठी किमान एक नोंद आवश्यक आहे",
     "no_state_error": "राज्य अनिवार्य आहे",
     "custom_field1": "सानुकूल फील्ड 1",
@@ -142,5 +142,13 @@
     "order_no": "ऑर्डर #",
     "order_no_placeholder": "ऑर्डर प्रविष्ट करा #",
     "expected_delivery": "अपेक्षित वितरण",
-    "vendor_name": "विक्रेता नाव"
+    "vendor_name": "विक्रेता नाव",
+    "create_receipt": "पावती तयार करा",
+    "create_payment": "पेमेंट तयार करा",
+    "receipt_date": "पावतीची तारीख",
+    "payment_date": "पगाराची तारीख",
+    "cheque_no": "धनादेश#",
+    "cheque_no_placeholder": "चेक# प्रविष्ट करा",
+    "clearance_date": "तारीख तपासा",
+    "receipt_mode": "पावती मोड"
 }
