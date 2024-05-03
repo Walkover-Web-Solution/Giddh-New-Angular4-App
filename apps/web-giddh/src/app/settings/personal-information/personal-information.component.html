@@ -95,12 +95,12 @@
                         }"
                         [max]="50"
                         [(ngModel)]="profileData.portalDomain"
-                        (ngModelChange)="checkPortalDomain(profileData.portalDomain)"
+                        (onChange)="checkPortalDomain(profileData.portalDomain)"
                         [type]="'text'"
                         [label]="localeData?.portal_domain"
                         #domain
-                >
-                </input-field>
+                    >
+                    </input-field>
                 </div>
             </div>
             <div class="row" *ngIf="organizationType === 'COMPANY' && voucherApiVersion === 2">

@@ -260,6 +260,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             .pipe(debounceTime(5000), distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((event: any) => {
                 this.patchProfile(this.dataToSave);
+                
             });
 
         this.gstKeyDownSubject$
@@ -585,6 +586,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 ele.classList.remove('error-box');
                 this.isPANValid = true;
                 this.patchProfile({ panNumber: ele.value });
+
             } else {
                 this.isPANValid = false;
                 this._toasty.errorToast('Invalid PAN number');
@@ -665,6 +667,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             delete obj['contactNo'];
         }
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
+
     }
 
     public typeaheadOnSelect(e: TypeaheadMatch): void {
@@ -695,6 +698,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             return;
         }
         this.patchProfile({ balanceDecimalPlaces: this.companyProfileObj.balanceDecimalPlaces });
+
     }
 
     public nameAlisPush(event) {
@@ -703,6 +707,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
 
         this.patchProfile({ nameAlias: this.companyProfileObj.nameAlias });
+
     }
 
     public savePincode(event) {

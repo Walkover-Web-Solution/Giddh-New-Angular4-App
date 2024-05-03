@@ -352,8 +352,6 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof AddressSettingsComponent
      */
     public handleUpdateAddress(address: any): void {
-        console.log("handleUpdateAddress", address);
-        
         this.addressConfiguration.type = SettingsAsideFormType.EditAddress;
         this.addressToUpdate = address;
         this.toggleAccountAsidePane();

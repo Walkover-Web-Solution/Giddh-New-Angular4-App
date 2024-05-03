@@ -140,8 +140,6 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     //     setTimeout(() => this.showEditUserModal = false, 700);
     // }
     public closeEditUserModal(event?: any): void {
-        console.log("closeEditUserModal", this.hasUnsavedChanges);
-        
         if (event && this.hasUnsavedChanges) {
             this.pageLeaveUtilityService.confirmPageLeave((action) => {
                 if (action) {
@@ -205,8 +203,6 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
      */
     public updateUnsavedChanges(event: any): void {
         this.hasUnsavedChanges = event;
-        console.log("updateUnsavedChanges");
-        
         if (event) {
             this.pageLeaveUtilityService.addBrowserConfirmationDialog();
         } else {

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Optional, Output, Self, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Optional, Output, Self, SimpleChanges, ViewChild } from "@angular/core";
 import { ControlValueAccessor, NgControl } from "@angular/forms";
 import { MatFormFieldControl } from "@angular/material/form-field";
 import { Subject } from "rxjs";
@@ -78,6 +78,8 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public floatLabel: any = 'auto';
     /** Holds Mat Input Label */
     @Input() public label: string;
+    /** Holds Mat Input Value */
+    @Input() public defaultValue: any;
     /** Emits on change event */
     @Output() public onChange: EventEmitter<any> = new EventEmitter<any>();
     /** ngModel of input */
@@ -103,7 +105,11 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      *
      * @memberof InputFieldComponent
      */
-    public ngOnChanges(): void {
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes?.defaultValue) {
+            this.ngModel = this.defaultValue;
+        }
+        
         if (this.autoFocus) {
             setTimeout(() => {
                 this.textField?.nativeElement?.focus();

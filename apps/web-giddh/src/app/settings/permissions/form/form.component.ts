@@ -1,6 +1,6 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
@@ -26,7 +26,8 @@ const CIDR_RANGE = 'cidr_range';
 @Component({
     selector: 'setting-permission-form',
     templateUrl: './form.component.html',
-    styleUrls: ['./form.component.scss']
+    styleUrls: ['./form.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
@@ -48,7 +49,9 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public showTimeSpan: boolean = false;
     public showIPWrap: boolean = false;
     public permissionForm: UntypedFormGroup;
-    public allRoles: object[] = [];
+    public allRoles: any[] = [];
+    /** Holds all role list used to reset all all roles after filtered allRoles Varible */
+    public allRolesConstantList: any[] = [];
     public selectedTimeSpan: string = '';
     // Selected Type of IP range
     public selectedIPRange: string = '';
@@ -128,7 +131,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.allRoles = cloneDeep(allRoleArray);
-
+                this.allRolesConstantList = this.allRoles;
             } else {
                 this.store.dispatch(this._permissionActions.GetRoles());
             }
@@ -165,13 +168,6 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    // public onSelectDateRange(start: any, end: any): void {
-    //     console.log("onSelectDateRange Main");
-
-    //     let from = dayjs(start).format(GIDDH_DATE_FORMAT);
-    //     let to = dayjs(end).format(GIDDH_DATE_FORMAT);
-    //     this.permissionForm?.patchValue({ from, to });
-    // }
 
     public togglePeriodOptionsVal(val: string) {
         if (val === DATE_RANGE) {
@@ -330,7 +326,6 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             form.from = dayjs(this.permissionForm.get('from').value).format(GIDDH_DATE_FORMAT);
             form.to = dayjs(this.permissionForm.get('to').value).format(GIDDH_DATE_FORMAT);
         }
-        console.log(form);
         forEach(form.allowedCidrs, (n) => {
             if (n.range) {
                 CidrArr.push(n.range);
@@ -380,7 +375,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 if (res?.status === 'success') {
                     this.hasUnsavedChanges.emit(false);
                     this.resetForm = '';
-                    setTimeout(() => { this.resetForm = null },100);
+                    setTimeout(() => { this.resetForm = null }, 100);
                     this._toasty.successToast(this.localeData?.permission_updated_success);
                 } else {
                     this._toasty.warningToast(res?.message, res?.code);
@@ -437,5 +432,26 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
      */
     public handleTimeSpanChange(value: string): void {
         this.permissionForm.get('periodOptions')?.patchValue(value, { onlySelf: true });
+    }
+    
+    /**
+     * Handle Role search Query
+     *
+     * @param {*} event
+     * @memberof SettingPermissionFormComponent
+     */
+    public onRoleSearchQueryChange(event: any): void {
+        if (event) {
+            this.allRoles = this.allRoles?.filter(role => role.label.toUpperCase().indexOf(event.toUpperCase()) > -1);
+        }
+    }
+
+    /**
+     * Handle Role Search Clear
+     *
+     * @memberof SettingPermissionFormComponent
+     */
+    public onSearchClear(): void {
+            this.allRoles = this.allRolesConstantList;
     }
 }

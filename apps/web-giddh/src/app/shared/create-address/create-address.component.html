@@ -314,8 +314,8 @@
                                                     <mat-select-trigger>
                                                         
                                                     </mat-select-trigger>
-                                                      <mat-option *ngFor="let item of addressConfiguration?.linkedEntities; let i = index" [value]="item">
-                                                        <a href="javascript:void(0)" class="list-item d-flex column-gap1" (click)="selectEntity(item)">
+                                                      <mat-option *ngFor="let item of addressConfiguration?.linkedEntities; let i = index" [value]="item" (click)="selectEntity(item)">
+                                                        <a href="javascript:void(0)" class="list-item d-flex column-gap1">
                                                             <span class="entity-icon">
                                                                 <i class="icon-branch-icon pull-right"
                                                                     *ngIf="item?.entity === 'BRANCH'"
