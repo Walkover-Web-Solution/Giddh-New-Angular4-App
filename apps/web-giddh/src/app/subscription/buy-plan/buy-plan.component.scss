@@ -3,6 +3,11 @@
         border: 1px solid var(--color-red-border) !important;
     }
 
+    .country-dropdown {
+        min-width: 274px;
+        width: 274px;
+    }
+
     .plan-content {
         padding: 10px 8px 20px 8px;
         height: calc(100% - 36px);
@@ -141,13 +146,10 @@
         width: 320px;
         flex-shrink: 0;
 
-        h2 {
-            height: 18px;
-        }
     }
 
     .plan-summary-heading {
-        height: 38px !important;
+        height: 47px;
     }
 
     .plan-summary {
