@@ -14079,6 +14079,14 @@ input[type="checkbox"].cdk-visually-hidden::after {
     }
 }
 
+.subscription-report-table {
+    .position-relative.word-wrap {
+        .table-menu-first-td {
+            left: 0px !important;
+        }
+    }
+}
+
 .subscription-page {
     .position-relative.word-wrap {
         .table-menu-first-td {

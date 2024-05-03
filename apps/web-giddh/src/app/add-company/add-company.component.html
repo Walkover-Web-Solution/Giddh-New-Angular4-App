@@ -176,6 +176,9 @@
                             <button mat-stroked-button color="primary" (click)="nextStepForm()">
                                 {{ commonLocaleData?.app_next }}
                             </button>
+                            <button mat-stroked-button color="primary" *ngIf="isCreateBySubscription" (click)="back()">
+                                {{ commonLocaleData?.app_back }}
+                            </button>
                             <button
                                 *ngIf="companiesList?.length === 0"
                                 mat-stroked-button
@@ -510,7 +513,7 @@
                                 </div>
                             </div>
                             <div class="d-flex column-gap15 mt-3">
-                                <button mat-stroked-button matStepperPrevious >
+                                <button mat-stroked-button matStepperPrevious>
                                     {{ commonLocaleData?.app_back }}
                                 </button>
                                 <button mat-stroked-button color="primary" (click)="onSubmit()">

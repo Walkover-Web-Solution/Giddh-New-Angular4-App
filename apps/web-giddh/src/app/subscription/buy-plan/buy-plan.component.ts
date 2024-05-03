@@ -84,6 +84,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public applyPromoCodeSuccess$ = this.componentStore.select(state => state.applyPromoCodeSuccess);
     /** Holds Store Apply Promocode API response state as observable*/
     public promoCodeResponse$ = this.componentStore.select(state => state.promoCodeResponse);
+    /** Holds Store Change plan API response state as observable*/
+    public updatePlanSuccess$ = this.componentStore.select(state => state.updatePlanSuccess);
     /** Mobile number library instance */
     public intlClass: any;
     /** This will hold onboarding api form request */
@@ -146,6 +148,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public subscriptionId: string = '';
     /** True if api call in progress */
     public isLoading: boolean = false;
+    /** True if it is change plan */
+    public isChangePlan: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -201,10 +205,28 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.updatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.responseSubscriptionId = response.subscriptionId;
+                if (response.duration === "YEARLY") {
+                    this.isLoading = true;
+                    this.subscriptionResponse = response;
+                    this.initializePayment(response);
+                } else {
+                    this.openCashfreeDialog(response?.redirectLink);
+                }
+            }
+        });
+
+
         this.updateSubscriptionPaymentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isLoading = false;
-                this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                if (this.isChangePlan) {
+                    this.router.navigate(['/pages/subscription'])
+                } else {
+                    this.router.navigate(['/pages/new-company/' + this.subscriptionId])
+                };
             }
         });
 
@@ -255,8 +277,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public toggleDuration(event: any): void {
         if (event) {
-                this.firstStepForm.get('duration').setValue(event?.value);
-                this.setPlans();
+            this.firstStepForm.get('duration').setValue(event?.value);
+            this.setPlans();
         }
     }
 
@@ -762,10 +784,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public newUserSelectCountry(event: any): void {
-        if (this.isNewUserLoggedIn) {
-            this.componentStore.getAllPlans({ params: { countryCode: event?.value } });
-            this.newUserSelectedCountry = event.label;
-        }
+        this.componentStore.getAllPlans({ params: { countryCode: event?.value } });
+        this.newUserSelectedCountry = event.label;
     }
 
     /**
@@ -852,6 +872,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             };
         }
         if (this.changePlan) {
+            this.isChangePlan = true;
             this.componentStore.updateSubscription(request);
         } else {
             this.componentStore.createSubscription(request);
