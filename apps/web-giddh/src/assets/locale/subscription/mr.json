@@ -138,5 +138,6 @@
         "upi_id":" Upi आयडी",
         "account_holder":"खातेधारक",
         "for":"च्या साठी",
-		"save":"बचत"
+		"save":"बचत",
+        "companies_allowed":"कंपन्यांना परवानगी आहे"
 	}

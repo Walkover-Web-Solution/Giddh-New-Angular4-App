@@ -79,7 +79,7 @@
     "verify_number": "Please verify mobile number",
     "make_yourself":"Make yourself as a Super Admin",
     "permission":"Give Permission to",
-    "permission_placeholder":"'Unique Name/Email ID",
+    "permission_placeholder":"Unique Name/Email ID",
     "roles":"Roles",
     "add_user": "Add User"
 }

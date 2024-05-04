@@ -337,7 +337,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.promoCodeResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.promoCodeResponse[0] = response;
-                if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in' && this.promoCodeResponse?.length) {
+                if (this.secondStepForm?.get('country')?.value?.toLowerCase() === 'in' && this.promoCodeResponse?.length) {
                     this.finalPlanAmount = response?.finalAmount + (response?.finalAmount * this.taxPercentage);
                 } else {
                     this.finalPlanAmount = response?.finalAmount;
