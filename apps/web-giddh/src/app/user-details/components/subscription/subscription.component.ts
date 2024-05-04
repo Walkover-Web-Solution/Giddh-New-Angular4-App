@@ -108,6 +108,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     public isExpand: boolean = false;
     /** This will use for active company */
     public activeCompany: any = {};
+    /** True if subscription will move */
+    public subscriptionMove: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -247,6 +249,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         event.preventDefault();
         event.stopPropagation();
         this.selectedCompany = company;
+        this.subscriptionMove = true;
         this.dialog.open(this.moveCompany, { width: '40%' });
     }
 

@@ -179,7 +179,7 @@
                             <button
                                 mat-stroked-button
                                 color="primary"
-                                *ngIf="isCreateBySubscription"
+                                *ngIf="isCreateBySubscription && !isNewUserLoggedIn"
                                 (click)="back()"
                                 aria-label="back"
                             >

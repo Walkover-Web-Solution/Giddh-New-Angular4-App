@@ -107,5 +107,6 @@
         "upi_id":" Upi ID",
         "account_holder":"Account holder",
         "for":"for",
-        "save":"Save"
+        "save":"Save",
+        "companies_allowed":"Companies allowed"
     }

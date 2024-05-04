@@ -138,5 +138,6 @@
         "upi_id":" यूपीआई आईडी",
         "account_holder":"खाता धारक",
         "for":"के लिए",
-		"save":"बचत"
+		"save":"बचत",
+        "companies_allowed":"कंपनियों को अनुमति"
 	}
