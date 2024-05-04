@@ -223,7 +223,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             if (response) {
                 this.isLoading = false;
                 if (this.isChangePlan) {
-                    this.router.navigate(['/pages/subscription'])
+                    this.router.navigate(['/pages/subscription']);
                 } else {
                     this.router.navigate(['/pages/new-company/' + this.subscriptionId])
                 };
@@ -727,6 +727,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * This will be use for set plan details
+     *
+     * @private
+     * @memberof BuyPlanComponent
+     */
     private setPlans(): void {
         this.inputData = [];
         const filteredPlans = this.firstStepForm.get('duration').value === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;

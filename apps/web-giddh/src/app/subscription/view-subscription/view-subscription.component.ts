@@ -168,7 +168,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
      * @memberof ViewSubscriptionComponent
      */
     public changeBilling(): void {
-        this.router.navigate(['/pages/subscription/change-billing/' + this.viewSubscriptionData?.billingAccountUniqueName]);
+        this.router.navigate([`/pages/subscription/change-billing/${this.viewSubscriptionData?.billingAccountUniqueName}`]);
     }
 
     /**
