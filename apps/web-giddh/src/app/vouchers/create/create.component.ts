@@ -1738,8 +1738,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getEntriesFormGroup(entryData?: any): FormGroup {
+        let voucherDate = "";
+
+        if (typeof (this.invoiceForm?.get('date')?.value) === "object") {
+            voucherDate = dayjs(this.invoiceForm?.get('date')?.value).format(GIDDH_DATE_FORMAT);
+        } else {
+            voucherDate = this.invoiceForm?.get('date')?.value;
+        }
+
         return this.formBuilder.group({
-            date: [!this.invoiceType.isPurchaseOrder && !this.invoiceType.isEstimateInvoice && !this.invoiceType.isProformaInvoice ? this.invoiceForm?.get('date')?.value || this.universalDate || dayjs().format(GIDDH_DATE_FORMAT) : null],
+            date: [!this.invoiceType.isPurchaseOrder && !this.invoiceType.isEstimateInvoice && !this.invoiceType.isProformaInvoice ? voucherDate || this.universalDate || dayjs().format(GIDDH_DATE_FORMAT) : null],
             description: [entryData ? entryData?.description : ''],
             voucherType: [this.voucherType],
             uniqueName: [''],
