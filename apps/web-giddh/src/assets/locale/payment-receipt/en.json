@@ -36,5 +36,7 @@
     "description": "Description",
     "confirm_delete_file": "Are you sure you want to delete the attached file?",
     "print_voucher": "Print Voucher",
-    "voucher_preview_unavailable": "Voucher Preview is not available right now! Please try again.."
+    "voucher_preview_unavailable": "Voucher Preview is not available right now! Please try again..",
+    "place_supply": "Place of Supply",
+    "amount_received": "Amount Received"
 }
