@@ -14,7 +14,7 @@ export interface BuyPlanState {
     createSubscriptionSuccess: boolean;
     createSubscriptionResponse: any;
     createSubscriptionInProgress: boolean;
-    updatePlanSuccess: boolean;
+    updatePlanSuccess: any;
     updatePlanInProgress: boolean;
     applyPromoCodeSuccess: boolean;
     applyPromoCodeInProgress: boolean;
@@ -32,7 +32,7 @@ export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
     applyPromoCodeSuccess: false,
     applyPromoCodeInProgress: false,
     promoCodeResponse: null,
-    updatePlanSuccess: false,
+    updatePlanSuccess: null,
     updatePlanInProgress: false,
     updateSubscriptionPaymentInProgress: false,
     updateSubscriptionPaymentIsSuccess: null
@@ -152,10 +152,10 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.toasterService.showSnackBar('success', 'Update Plan Successfully');
+                                this.toasterService.showSnackBar('success', 'Plan update Successfully');
                                 return this.patchState({
                                     updatePlanInProgress: false,
-                                    updatePlanSuccess: true
+                                    updatePlanSuccess: res?.body ?? null,
                                 });
                             } else {
                                 if (res.message) {
@@ -163,7 +163,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                                 }
                                 return this.patchState({
                                     updatePlanInProgress: false,
-                                    updatePlanSuccess: false
+                                    updatePlanSuccess: null
                                 });
                             }
                         },

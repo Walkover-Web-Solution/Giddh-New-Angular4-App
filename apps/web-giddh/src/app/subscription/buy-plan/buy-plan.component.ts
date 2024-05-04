@@ -84,6 +84,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public applyPromoCodeSuccess$ = this.componentStore.select(state => state.applyPromoCodeSuccess);
     /** Holds Store Apply Promocode API response state as observable*/
     public promoCodeResponse$ = this.componentStore.select(state => state.promoCodeResponse);
+    /** Holds Store Change plan API response state as observable*/
+    public updatePlanSuccess$ = this.componentStore.select(state => state.updatePlanSuccess);
     /** Mobile number library instance */
     public intlClass: any;
     /** This will hold onboarding api form request */
@@ -146,6 +148,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public subscriptionId: string = '';
     /** True if api call in progress */
     public isLoading: boolean = false;
+    /** True if it is change plan */
+    public isChangePlan: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -160,7 +164,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private location: Location,
-        private elementRef : ElementRef
+        private elementRef: ElementRef
     ) {
         this.session$ = this.store.pipe(select(p => p.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
         this.store.dispatch(this.generalActions.openSideMenu(false));
@@ -201,10 +205,28 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.updatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.responseSubscriptionId = response.subscriptionId;
+                if (response.duration === "YEARLY") {
+                    this.isLoading = true;
+                    this.subscriptionResponse = response;
+                    this.initializePayment(response);
+                } else {
+                    this.openCashfreeDialog(response?.redirectLink);
+                }
+            }
+        });
+
+
         this.updateSubscriptionPaymentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isLoading = false;
-                this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                if (this.isChangePlan) {
+                    this.router.navigate(['/pages/subscription']);
+                } else {
+                    this.router.navigate(['/pages/new-company/' + this.subscriptionId])
+                };
             }
         });
 
@@ -255,42 +277,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public toggleDuration(event: any): void {
         if (event) {
-            this.setFinalAmount();
-        }
-    }
-
-    /**
-     * This will be use for set final amount
-     *
-     * @memberof BuyPlanComponent
-     */
-    public setFinalAmount(): void {
-        if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in' && !this.promoCodeResponse?.length) {
-            this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
-                if (result) {
-                    this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
-                    if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                        this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
-                    } else {
-                        this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
-                    }
-                    if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
-                        this.finalPlanAmount = this.finalPlanAmount + (this.finalPlanAmount * this.taxPercentage);
-                    } else {
-                        if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                            this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
-                        } else {
-                            this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
-                        }
-                    }
-                }
-            });
-        } else {
-            if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
-            } else {
-                this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
-            }
+            this.firstStepForm.get('duration').setValue(event?.value);
+            this.setPlans();
         }
     }
 
@@ -349,7 +337,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.promoCodeResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.promoCodeResponse[0] = response;
-                if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in' && this.promoCodeResponse?.length) {
+                if (this.secondStepForm?.get('country')?.value?.toLowerCase() === 'in' && this.promoCodeResponse?.length) {
                     this.finalPlanAmount = response?.finalAmount + (response?.finalAmount * this.taxPercentage);
                 } else {
                     this.finalPlanAmount = response?.finalAmount;
@@ -697,6 +685,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (this.firstStepForm?.get('promoCode')?.value) {
             this.firstStepForm?.get('promoCode')?.setValue(this.firstStepForm?.get('promoCode')?.value);
         }
+
         this.selectedStep++;
     }
 
@@ -709,7 +698,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public onSelectedTab(event: any): void {
         this.selectedStep = event?.selectedIndex;
-        if (this.selectedStep === 1) {
+        if (!this.intlClass) {
             this.initIntl();
         }
     }
@@ -721,20 +710,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public getAllPlans(): void {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.inputData = [];
             if (response?.length) {
-                const filteredPlans = response.filter(plan => plan.monthlyAmount > 0 && plan.yearlyAmount > 0);
-                this.selectedPlan = filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1];
-                this.popularPlan = filteredPlans[1];
-
-                this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan?.uniqueName);
-
-                filteredPlans?.forEach(plan => {
-                    this.inputData.push(plan);
-                });
-
-                this.monthlyPlans = filteredPlans?.filter(plan => plan?.monthlyAmountAfterDiscount > 0);
-                this.yearlyPlans = filteredPlans?.filter(plan => plan?.yearlyAmountAfterDiscount > 0);
+                this.monthlyPlans = response?.filter(plan => plan?.monthlyAmountAfterDiscount > 0);
+                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmountAfterDiscount > 0);
 
                 if (this.yearlyPlans?.length) {
                     this.firstStepForm.get('duration').setValue('YEARLY');
@@ -742,16 +720,67 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     this.firstStepForm.get('duration').setValue('MONTHLY');
                 }
 
-                if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                    this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
-                } else {
-                    this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
-                }
-
+                this.setPlans();
             } else {
                 this.inputData = [];
             }
         });
+    }
+
+    /**
+     * This will be use for set plan details
+     *
+     * @private
+     * @memberof BuyPlanComponent
+     */
+    private setPlans(): void {
+        this.inputData = [];
+        const filteredPlans = this.firstStepForm.get('duration').value === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
+        this.selectedPlan = filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1];
+        this.popularPlan = filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1];
+
+        this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan?.uniqueName);
+
+        filteredPlans?.forEach(plan => {
+            this.inputData.push(plan);
+        });
+
+        this.setFinalAmount();
+    }
+
+    /**
+     * This will be use for set final amount
+     *
+     * @memberof BuyPlanComponent
+     */
+    public setFinalAmount(): void {
+        if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in' && !this.promoCodeResponse?.length) {
+            this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                if (result) {
+                    this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
+                    if (this.firstStepForm.get('duration').value === 'YEARLY') {
+                        this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
+                    } else {
+                        this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
+                    }
+                    if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
+                        this.finalPlanAmount = this.finalPlanAmount + (this.finalPlanAmount * this.taxPercentage);
+                    } else {
+                        if (this.firstStepForm.get('duration').value === 'YEARLY') {
+                            this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
+                        } else {
+                            this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
+                        }
+                    }
+                }
+            });
+        } else {
+            if (this.firstStepForm.get('duration').value === 'YEARLY') {
+                this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
+            } else {
+                this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
+            }
+        }
     }
 
     /**
@@ -761,10 +790,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public newUserSelectCountry(event: any): void {
-        if (this.isNewUserLoggedIn) {
-            this.componentStore.getAllPlans({ params: { countryCode: event?.value } });
-            this.newUserSelectedCountry = event.label;
-        }
+        this.componentStore.getAllPlans({ params: { countryCode: event?.value } });
+        this.newUserSelectedCountry = event.label;
     }
 
     /**
@@ -851,6 +878,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             };
         }
         if (this.changePlan) {
+            this.isChangePlan = true;
             this.componentStore.updateSubscription(request);
         } else {
             this.componentStore.createSubscription(request);

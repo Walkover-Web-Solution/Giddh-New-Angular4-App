@@ -38,7 +38,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will use for table heading */
-    public displayedColumns: string[] = ['companyName', 'billingAccountName', 'subscriberName', 'countryName', 'planName', 'status', 'duration', 'renewalDate'];
+    public displayedColumns: string[] = ['companyName', 'billingAccountName', 'subscriberName', 'countryName', 'planName', 'status', 'renewalDate'];
     /** Hold the data of subscriptions */
     public dataSource: any;
     /** True if translations loaded */

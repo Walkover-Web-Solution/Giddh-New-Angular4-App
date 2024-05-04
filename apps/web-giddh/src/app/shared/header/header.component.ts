@@ -249,6 +249,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isLoggedInWithSocialAccount$: Observable<boolean>;
     /* True if we need to show Depreciation Message */
     public showDepreciationMessage: boolean = false;
+    /** Hold user details response */
+    public FectchUserDetailsResponse$: Observable<any>;
+
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -775,8 +778,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     window.location.href = (environment.production) ? `https://giddh.com/login` : `https://test.giddh.com/login`;
                 }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
+
                 this.zone.run(() => {
-                    this.router.navigate(['/pages/subscription/buy-plan']);
+                    let hasSubscriptionPermission: boolean;
+                    this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => hasSubscriptionPermission = response?.user?.hasSubscriptionPermission);
+                    if (hasSubscriptionPermission) {
+                        this.router.navigate(['/pages/subscription']);
+                    } else {
+                        this.router.navigate(['/pages/subscription/buy-plan']);
+                    }
                 });
             } else if (s === userLoginStateEnum.userLoggedIn) {
                 if (this.generalService.getUtmParameter("companyUniqueName")) {

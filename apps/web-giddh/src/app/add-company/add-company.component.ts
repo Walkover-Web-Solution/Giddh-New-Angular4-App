@@ -26,6 +26,7 @@ import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-
 import { HttpClient } from "@angular/common/http";
 import { AddCompanyComponentStore } from "./utility/add-company.store";
 import { userLoginStateEnum } from "../models/user-login-state";
+import { Location } from '@angular/common';
 
 declare var initSendOTP: any;
 declare var window: any;
@@ -212,6 +213,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public session$: Observable<userLoginStateEnum>;
     /** True if new user logged in */
     public isNewUserLoggedIn: boolean = false;
+    /** True if is come from subscription */
+    public isCreateBySubscription: boolean = false;
 
 
     /** Returns true if form is dirty else false */
@@ -237,7 +240,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         public dialog: MatDialog,
         private verifyActions: VerifyMobileActions,
         private socialAuthService: AuthService,
-        private activateRoute: ActivatedRoute
+        private activateRoute: ActivatedRoute,
+        private location: Location
     ) {
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
         this.session$ = this.store.pipe(select(state => state.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
@@ -258,6 +262,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.company.subscriptionRequest.subscriptionId = res?.subscriptionId;
+                this.isCreateBySubscription = true;
             }
         });
 
@@ -986,8 +991,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         }
 
         if (this.isNewUserLoggedIn && this.selectedStep === 2 && this.thirdStepForm.invalid) {
-                this.isFormSubmitted = true;
-                return;
+            this.isFormSubmitted = true;
+            return;
         }
 
         this.firstStepForm.controls['mobile'].setValue(this.showMobileField ? this.intl?.getNumber() : this.mobileNo);
@@ -1432,6 +1437,15 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         const mappings = this.thirdStepForm.get('permissionRoles') as FormArray;
         const userGroup = mappings?.at(index) as FormGroup;
         userGroup?.get('roleUniqueName').setValue(role);
+    }
+
+    /**
+     * This will be use for back to previous page
+     *
+     * @memberof AddCompanyComponent
+     */
+    public back(): void {
+        this.location.back();
     }
 
     /**

@@ -48,7 +48,10 @@
                                 [label]="commonLocaleData?.app_email"
                                 formControlName="email"
                                 [placeholder]="commonLocaleData?.app_email"
-                                [showError]="isFormSubmitted && !changeBillingForm.get('email')?.value"
+                                   [showError]="
+                                                            isFormSubmitted && (!changeBillingForm.get('email')?.value ||
+                                                            changeBillingForm.get('email')?.errors?.pattern)
+                                                        "
                             >
                             </input-field>
                         </div>
@@ -116,7 +119,7 @@
                                 [showError]="
                                     (isFormSubmitted && !changeBillingForm.get('taxNumber')?.value) || !isGstinValid
                                 "
-                                
+
                                 [maxlength]="15"
                                 (change)="validateGstNumber()"
                             >

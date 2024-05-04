@@ -173,12 +173,22 @@
                             </ng-container>
                         </div>
                         <div class="d-flex column-gap15 mr-t15">
-                            <button mat-stroked-button color="primary" (click)="nextStepForm()">
+                            <button mat-stroked-button color="primary" (click)="nextStepForm()" aria-label="next">
                                 {{ commonLocaleData?.app_next }}
+                            </button>
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                *ngIf="isCreateBySubscription && !isNewUserLoggedIn"
+                                (click)="back()"
+                                aria-label="back"
+                            >
+                                {{ commonLocaleData?.app_back }}
                             </button>
                             <button
                                 *ngIf="companiesList?.length === 0"
                                 mat-stroked-button
+                                aria-label="cancel"
                                 (click)="openLogoutConfirmationDialog()"
                             >
                                 {{ commonLocaleData?.app_cancel }}
@@ -510,7 +520,7 @@
                                 </div>
                             </div>
                             <div class="d-flex column-gap15 mt-3">
-                                <button mat-stroked-button matStepperPrevious >
+                                <button mat-stroked-button matStepperPrevious>
                                     {{ commonLocaleData?.app_back }}
                                 </button>
                                 <button mat-stroked-button color="primary" (click)="onSubmit()">
