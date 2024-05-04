@@ -7,6 +7,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'invoice-bulk-export',
@@ -150,7 +151,7 @@ export class BulkExportModal implements OnInit, OnDestroy {
 
         this.bulkVoucherExportService.bulkExport(getRequest, postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
-            if (response.status === "success" && response.body) {
+            if (response?.status === "success" && response?.body) {
                 if (response.body.type === "base64") {
                     this.closeModal();
                     let blob = this.generalService.base64ToBlob(response.body.file, 'application/zip', 512);
@@ -162,7 +163,7 @@ export class BulkExportModal implements OnInit, OnDestroy {
                 }
             } else {
                 this.toaster.clearAllToaster();
-                this.toaster.errorToast(response.message);
+                this.toaster.errorToast(response?.message);
                 this.closeModal();
             }
         });

@@ -31,12 +31,18 @@
                                 aria-labelledby="button-basic2"
                             >
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:void(0)" (click)="goToInvoice('cash')">{{
+                                    <a class="dropdown-item" href="javascript:void(0)" *ngIf="voucherApiVersion === 1" (click)="goToInvoice('cash')">{{
+                                        localeData?.cash_invoice
+                                    }}</a>
+                                    <a class="dropdown-item" href="javascript:void(0)" *ngIf="voucherApiVersion === 2" [routerLink]="['/pages/vouchers/cash/create']">{{
                                         localeData?.cash_invoice
                                     }}</a>
                                 </li>
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:void(0)" (click)="goToInvoice('sales')">{{
+                                    <a class="dropdown-item" href="javascript:void(0)" *ngIf="voucherApiVersion === 1" (click)="goToInvoice('sales')">{{
+                                        localeData?.sales_invoice
+                                    }}</a>
+                                    <a class="dropdown-item" href="javascript:void(0)" *ngIf="voucherApiVersion === 2" [routerLink]="['/pages/vouchers/sales/create']">{{
                                         localeData?.sales_invoice
                                     }}</a>
                                 </li>
@@ -48,15 +54,16 @@
                             *ngIf="!isCompany && voucherType !== 'sales'"
                             (click)="goToInvoice()"
                         >
-                            {{ localeData?.new }} {{ voucherType | voucherTypeToNamePipe }}
+                            {{ localeData?.new }}
+                            {{ voucherType === "purchase" ? localeData?.bill : (voucherType | voucherTypeToNamePipe) }}
                         </button>
                     </div>
 
                     <ul class="invoice-sidebar">
-                        <perfect-scrollbar #perfectScrollbar>
+                        <cdk-virtual-scroll-viewport [itemSize]="62" tabindex="0">
                             <li
                                 class="single-invoice-detail cp"
-                                *ngFor="let item of filteredData"
+                                *cdkVirtualFor="let item of filteredData"
                                 [ngClass]="{ 'activeItem': item?.uniqueName === selectedItem?.uniqueName }"
                                 (click)="selectVoucher(item)"
                             >
@@ -90,7 +97,7 @@
                                     </div>
                                 </div>
                             </li>
-                        </perfect-scrollbar>
+                        </cdk-virtual-scroll-viewport>
                     </ul>
                 </div>
             </div>
@@ -117,7 +124,7 @@
                                 <div class="col-md-8 col-12">
                                     <div class="edit-change-status">
                                         <span class="close-modal cp pull-right p-0" (click)="onCancel()">
-                                            <img src="assets/images/multiply.svg"
+                                            <img src="assets/images/multiply.svg" alt="close icon"
                                         /></span>
 
                                         <!-- region for proforma and estimates -->
@@ -229,7 +236,7 @@
                                                     *ngIf="voucherType === 'sales'"
                                                     class="cp"
                                                     role="menuitem"
-                                                    (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()"
+                                                    (click)="invokeLoadPaymentModes(); receivePaymentPopup.show()"
                                                 >
                                                     <a class="dropdown-item">{{
                                                         commonLocaleData?.app_payment_status?.paid
@@ -334,6 +341,7 @@
                                                         [tooltip]="commonLocaleData?.app_edit"
                                                         placement="top"
                                                         (click)="isCompany ? '' : toggleEditMode()"
+                                                        aria-label="edit icon"
                                                         ><i class="icon-edit-pencil"></i
                                                     ></a>
                                                 </span>
@@ -344,6 +352,7 @@
                                                         [tooltip]="commonLocaleData?.app_send_email"
                                                         placement="top"
                                                         (click)="showEmailSendModal.toggle()"
+                                                        aria-label="envelope icon"
                                                         ><i class="icon-envelope font-12"></i
                                                     ></a>
                                                 </span>
@@ -354,12 +363,15 @@
                                                         [tooltip]="commonLocaleData?.app_send_email"
                                                         placement="top"
                                                         (click)="openSendMailModal(sendEmailModal)"
+                                                        aria-label="envelope icon"
                                                         ><i class="icon-envelope font-12"></i
                                                     ></a>
                                                 </span>
 
                                                 <span
-                                                    *ngIf="shouldShowPrintDocument"
+                                                    *ngIf="
+                                                        shouldShowPrintDocument
+                                                    "
                                                     [ngClass]="{
                                                         'disabled':
                                                             isVoucherDownloading ||
@@ -372,24 +384,43 @@
                                                         [tooltip]="commonLocaleData?.app_print"
                                                         placement="top"
                                                         (click)="printVoucher()"
+                                                        aria-label="print icon"
+                                                        ><i class="fa fa-print"></i
+                                                    ></a>
+                                                </span>
+                                                <!-- Thermal Feature -->
+                                                <span *ngIf="thermalTemplate?.templateType === 'thermal_template'">
+                                                    <a
+                                                        href="javascript:;"
+                                                        [tooltip]="commonLocaleData?.app_print_thermal"
+                                                        placement="top"
+                                                        (click)="printThermal()"
+                                                        aria-label="print icon"
                                                         ><i class="fa fa-print"></i
                                                     ></a>
                                                 </span>
 
                                                 <span
-                                                    *ngIf="selectedItem?.voucherType === 'purchase' && pdfPreviewLoaded"
+                                                    *ngIf="
+                                                        selectedItem?.voucherType === 'purchase' &&
+                                                        pdfPreviewLoaded &&
+                                                        showDownloadButton
+                                                    "
                                                 >
                                                     <a
                                                         href="javascript:;"
                                                         [tooltip]="commonLocaleData?.app_download_pdf"
                                                         placement="top"
                                                         (click)="downloadPurchaseBillPDF()"
-                                                        ><i class="icon-file"></i
+                                                        aria-label="download"
+                                                        ><i class="icon-download-circle"></i
                                                     ></a>
                                                 </span>
 
                                                 <span
-                                                    *ngIf="selectedItem?.voucherType !== 'purchase'"
+                                                    *ngIf="
+                                                        selectedItem?.voucherType !== 'purchase' && showDownloadButton
+                                                    "
                                                     [ngClass]="{
                                                         'disabled':
                                                             isVoucherDownloading ||
@@ -403,11 +434,13 @@
                                                         [tooltip]="commonLocaleData?.app_download_pdf"
                                                         placement="top"
                                                         (click)="downloadPdf()"
-                                                        ><i class="icon-file"></i
+                                                        aria-label="download"
+                                                        ><i class="icon-download-circle"></i
                                                     ></a>
                                                 </span>
 
                                                 <span
+                                                    class="download-file-text"
                                                     *ngIf="
                                                         selectedItem?.voucherType === 'purchase' &&
                                                         attachedDocumentType?.type &&
@@ -426,7 +459,8 @@
                                                         [tooltip]="localeData?.download_attachment"
                                                         placement="top"
                                                         (click)="downloadFile()"
-                                                        ><i class="icon-download-new"></i
+                                                        aria-label="download"
+                                                        ><i class="icon-download-circle"></i
                                                     ></a>
                                                 </span>
 
@@ -436,6 +470,7 @@
                                                         [tooltip]="commonLocaleData?.app_delete"
                                                         placement="top"
                                                         (click)="deleteConfirmationModel.toggle()"
+                                                        aria-label="delete icon"
                                                         ><i class="icon-trash"></i
                                                     ></a>
                                                 </span>
@@ -480,11 +515,11 @@
                                     "
                                 >
                                     <div class="single-payment-detail clearfix pr-4">
-                                        <div class="payment-icon"><img src="assets/images/dollar-icon.svg" /></div>
+                                        <div class="payment-icon"><img src="assets/images/dollar-icon.svg" alt="dollar-icon" /></div>
                                         <p class="payment-content">{{ localeData?.record_payment }}</p>
                                         <a
                                             href="javascript:;"
-                                            (click)="invokeLoadPaymentModes(); receivePaymentPopup.toggle()"
+                                            (click)="invokeLoadPaymentModes(); receivePaymentPopup.show()"
                                             >{{ localeData?.receipt_payment }}</a
                                         >
                                     </div>
@@ -492,9 +527,9 @@
 
                                 <div class="col-md-4 col-12">
                                     <div class="single-payment-detail clearfix">
-                                        <div class="payment-icon"><img src="assets/images/send-icon.svg" /></div>
+                                        <div class="payment-icon"><img src="assets/images/send-icon.svg" alt="send-icon" /></div>
                                         <p class="payment-content">{{ localeData?.email_invoice }}</p>
-                                        <a href="javascript:;" (click)="showEmailSendModal.show()">
+                                        <a href="javascript:;" (click)="showEmailSendModal?.show()">
                                             {{
                                                 selectedItem?.voucherType === "credit note" ||
                                                 selectedItem?.voucherType === "debit note"
@@ -516,7 +551,7 @@
                                 </div>
                                 <div
                                     class="less-more-details"
-                                    *ngIf="filteredVoucherVersions.length && !moreLogsDisplayed"
+                                    *ngIf="filteredVoucherVersions?.length && !moreLogsDisplayed"
                                 >
                                     <a href="javascript:;" (click)="filterVoucherVersions(true)">{{
                                         localeData?.more_details
@@ -537,7 +572,7 @@
                             </div>
                         </div>
                         <div
-                            class="linked-purchase-order font-14 mr-t15"
+                            class="linked-purchase-order font-15 mr-t15"
                             *ngIf="
                                 selectedItem?.voucherType === 'purchase' &&
                                 purchaseOrderNumbers &&
@@ -562,13 +597,15 @@
                             *ngIf="selectedItem?.voucherType === 'purchase' && !shouldShowUploadAttachment"
                             class="pd-l15"
                         >
-                            <h5 class="pd-b05 font-16">
+                            <h5 class="pd-b05 font-15">
                                 <strong>{{ localeData?.uploaded_purchase_bill }}</strong>
                             </h5>
                         </div>
                     </div>
-
-                    <div class="invoice-image-section">
+                    <div *ngIf="!showDownloadButton" class="h-100 d-flex justify-content-center align-items-center">
+                        <span class="font-15">{{ localeData?.thermal_message }}</span>
+                    </div>
+                    <div class="invoice-image-section" *ngIf="showDownloadButton">
                         <div class="relative">
                             <div class="position-relative" *ngIf="isVoucherDownloading || isFileUploading">
                                 <giddh-page-loader [cssClass]="'mb-0 mt-0'"></giddh-page-loader>
@@ -597,7 +634,6 @@
                                     attachedDocumentType?.type === 'image'
                                 "
                                 class="img-expand-collapse"
-                                [ngClass]="{ 'image-collapsed': !isAttachmentExpanded }"
                             >
                                 <img class="image-preview img-expand w-100" [src]="imagePreviewSource" />
                             </div>
@@ -615,10 +651,7 @@
                                     [placeholder]="localeData?.upload_excel_csv"
                                     droppable="true"
                                     class="form-control"
-                                    [options]="fileUploadOptions"
-                                    ngFileSelect
-                                    [uploadInput]="uploadInput"
-                                    (uploadOutput)="onUploadOutput($event)"
+                                    (change)="uploadFile()"
                                 />
                                 <div class="clearfix position-relative width-100">
                                     <div class="file-input-wrapper text-center">
@@ -626,7 +659,7 @@
                                             <img src="assets/images/new/import_icon.svg" />
                                         </div>
                                         <div class="clearfix pd-r2 pd-l2">
-                                            <label class="clearfix text-light-2 font-14">{{
+                                            <label class="clearfix text-light-2 font-15">{{
                                                 localeData?.drop_file
                                             }}</label>
                                             <div class="mr-t3">
@@ -638,6 +671,23 @@
                                     </div>
                                 </div>
                             </div>
+                            <ng-container
+                                *ngIf="
+                                    voucherApiVersion === 2 &&
+                                    shouldShowUploadAttachment &&
+                                    isCompany &&
+                                    !isPdfAvailable &&
+                                    !attachedPdfFileUrl &&
+                                    !imagePreviewSource
+                                "
+                            >
+                                <no-data
+                                    class="mr-t15 d-block"
+                                    [primaryMessage]="commonLocaleData?.app_attachment_not_allowed"
+                                    [primaryMessageClass]="'bold'"
+                                    [secondaryMessage]="' '"
+                                ></no-data>
+                            </ng-container>
                             <div
                                 *ngIf="
                                     selectedItem?.voucherType === 'purchase' &&
@@ -646,56 +696,32 @@
                                 "
                                 #attachedDocumentPreview
                                 class="pdf-expand-collapse pdf-preview mt-0"
-                                [ngClass]="{ 'image-collapsed': !isAttachmentExpanded }"
                             >
-                                <iframe #pdfContainer width="100%" height="100%" [src]="attachedPdfFileUrl"></iframe>
+                                <iframe #pdfContainer width="100%" height="100%" [src]="attachedPdfFileUrl" title="attached PDF"></iframe>
                             </div>
-                            <div #attachedDocumentPreview class="pdf-preview">
+                            <div
+                                #attachedDocumentPreview
+                                class="pdf-preview"
+                                *ngIf="
+                                    sanitizedPdfFileUrl &&
+                                    !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)
+                                "
+                            >
                                 <h5
-                                    *ngIf="selectedItem?.voucherType === 'purchase'"
-                                    class="text-left pd-l15 font-16 pd-t1 pd-b1"
+                                    *ngIf="selectedItem?.voucherType === 'purchase' && isPdfAvailable"
+                                    class="text-left pd-l15 font-15 pd-t1 pd-b1"
                                 >
                                     <strong>{{ localeData?.auto_generated_purchase_bill }}</strong>
                                 </h5>
-                                <iframe
-                                    #pdfContainer
-                                    *ngIf="
-                                        sanitizedPdfFileUrl &&
-                                        !(isVoucherDownloading || isVoucherDownloadError || isFileUploading)
-                                    "
-                                    width="100%"
-                                    height="100%"
-                                    [src]="sanitizedPdfFileUrl"
-                                ></iframe>
+                                <iframe #pdfContainer width="100%" height="100%" [src]="sanitizedPdfFileUrl" title="sanatized PDF"></iframe>
                                 <giddh-page-loader
-                                    *ngIf="!sanitizedPdfFileUrl && selectedItem?.voucherType === 'purchase'"
+                                    *ngIf="
+                                        isPdfAvailable &&
+                                        !sanitizedPdfFileUrl &&
+                                        selectedItem?.voucherType === 'purchase'
+                                    "
                                     [cssClass]="'mb-0 mt-0'"
                                 ></giddh-page-loader>
-                            </div>
-
-                            <div
-                                class="expand-file"
-                                *ngIf="
-                                    selectedItem?.voucherType === 'purchase' &&
-                                    (imagePreviewSource || attachedPdfFileUrl)
-                                "
-                            >
-                                <a
-                                    href="javascript:;"
-                                    *ngIf="!isAttachmentExpanded"
-                                    class="cp"
-                                    (click)="isAttachmentExpanded = true"
-                                    ><span><img src="assets/images/expand.svg" /></span
-                                    >{{ commonLocaleData?.app_expand }}</a
-                                >
-                                <a
-                                    href="javascript:;"
-                                    *ngIf="isAttachmentExpanded"
-                                    class="cp"
-                                    (click)="isAttachmentExpanded = false"
-                                    ><span><img src="assets/images/expand.svg" class="collapse-icon" /></span
-                                    >{{ commonLocaleData?.app_collapse }}</a
-                                >
                             </div>
                         </div>
                     </div>
@@ -704,13 +730,23 @@
         </div>
     </div>
     <!-- endregion -->
-
     <!-- region edit invoice -->
     <div *ngIf="showEditMode">
         <div class="invoice-edit-wrapper">
             <div class="invoice-edit-header">
                 <span>
-                    <p>{{ getEditVoucherText(selectedItem?.voucherType | voucherTypeToNamePipe | titlecase) }}</p>
+                    <p>
+                        {{
+                            getEditVoucherText(
+                                (selectedItemVoucher?.voucherType
+                                    ? selectedItemVoucher?.voucherType
+                                    : selectedItem?.voucherType
+                                )
+                                    | voucherTypeToNamePipe
+                                    | titlecase
+                            )
+                        }}
+                    </p>
                 </span>
 
                 <span class="close-modal cp p-0" (click)="toggleEditMode()">
@@ -719,7 +755,7 @@
             </div>
 
             <div class="invoice-edit-body">
-                <proforma-invoice-component
+                <voucher-component
                     [accountUniqueName]="selectedItem?.account?.uniqueName"
                     [selectedItem]="selectedItem"
                     [invoiceNo]="voucherType !== 'purchase' ? selectedItem?.voucherNumber : selectedItem?.uniqueName"
@@ -728,7 +764,7 @@
                     (cancelVoucherUpdate)="toggleEditMode()"
                     (reloadFiles)="downloadVoucher('base64')"
                 >
-                </proforma-invoice-component>
+                </voucher-component>
             </div>
         </div>
     </div>
@@ -762,6 +798,7 @@
                 width="100%"
                 height="100%"
                 [src]="sanitizedPdfFileUrl"
+                title="sanatized PDF"
             ></iframe>
             <img
                 *ngIf="selectedItem?.voucherType === 'purchase' && attachedDocumentType?.type === 'image'"
@@ -785,9 +822,9 @@
         <div class="modal-content">
             <app-send-email-invoice-component
                 [voucherType]="voucherType"
-                (successEvent)="sendEmail.emit($event); showEmailSendModal.hide()"
+                (successEvent)="sendEmail.emit($event); showEmailSendModal?.hide()"
                 [selectedItem]="selectedItem"
-                (cancelEvent)="showEmailSendModal.hide()"
+                (cancelEvent)="showEmailSendModal?.hide()"
             >
             </app-send-email-invoice-component>
         </div>
@@ -810,7 +847,7 @@
                 [selectedItem]="selectedItem"
                 [localeData]="localeData"
                 [commonLocaleData]="commonLocaleData"
-                (cancelEvent)="downloadVoucherModal.hide()"
+                (cancelEvent)="downloadVoucherModal?.hide()"
             >
             </download-voucher>
         </div>
@@ -861,7 +898,8 @@
                 [selectedInvoiceForPayment]="selectedItem"
                 [localeData]="localeData"
                 [commonLocaleData]="commonLocaleData"
-                (closeModelEvent)="processPaymentEvent.emit($event); receivePaymentPopup.toggle()"
+                (performActionPopup)="processPaymentEvent.emit($event)"
+                (closeModelEvent)="closePerformActionPopup(); receivePaymentPopup.hide()"
             >
             </invoice-payment-model>
         </div>

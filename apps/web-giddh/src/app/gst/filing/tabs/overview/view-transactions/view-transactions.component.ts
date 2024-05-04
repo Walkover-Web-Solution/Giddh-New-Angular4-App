@@ -10,7 +10,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { takeUntil } from 'rxjs/operators';
 import { GStTransactionRequest, GstTransactionResult, GstTransactionSummary } from '../../../../../models/api-models/GstReconcile';
-import { GstReconcileActions } from '../../../../../actions/gst-reconcile/GstReconcile.actions';
+import { GstReconcileActions } from '../../../../../actions/gst-reconcile/gst-reconcile.actions';
 import { DownloadOrSendInvoiceOnMailComponent } from '../../../../../invoice/preview/models/download-or-send-mail/download-or-send-mail.component';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
@@ -144,7 +144,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             this.selectedGstNumber = params.selectedGst;
             this.filterParam.entityType = params.entityType;
             this.filterParam.type = params.type;
-            this.filterParam.status = params.status;
+            this.filterParam.status = params?.status;
             this.viewFilteredTxn('page', 1);
         });
         this.voucherApiVersion = this.generalService.voucherApiVersion;
@@ -178,14 +178,14 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
                 downloadVoucherRequestObject = {
                     voucherNumber: [invoice.voucherNumber],
                     voucherType: invoice.voucherType,
-                    accountUniqueName: invoice.account.uniqueName
+                    accountUniqueName: invoice.account?.uniqueName
                 };
-            
+
                 this.store.dispatch(this.invoiceReceiptActions.VoucherPreview(downloadVoucherRequestObject, downloadVoucherRequestObject.accountUniqueName));
             }
         }
         this.loadDownloadOrSendMailComponent();
-        this.downloadOrSendMailModel.show();
+        this.downloadOrSendMailModel?.show();
     }
 
     public loadDownloadOrSendMailComponent() {
@@ -220,12 +220,12 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     public mapFilters() {
         let filters = _.cloneDeep(this.filterParam);
         if (this.selectedGst === GstReport.Gstr1) {
-            let selected = _.find(this.gstr1entityType, o => o.value === filters.entityType);
+            let selected = _.find(this.gstr1entityType, o => o?.value === filters.entityType);
             if (selected) {
                 this.selectedFilter.entityType = selected.label;
             }
         } else {
-            let selected = _.find(this.gstr2entityType, o => o.value === filters.entityType);
+            let selected = _.find(this.gstr2entityType, o => o?.value === filters.entityType);
             if (selected) {
                 this.selectedFilter.entityType = selected.label;
             }
@@ -235,12 +235,12 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             let selected;
             if (this.selectedGst === GstReport.Gstr1) {
                 if (this.filterParam.entityType === 'advance-receipt') {
-                    selected = _.find(this.otherEntityType, o => o.value === filters.type)
+                    selected = _.find(this.otherEntityType, o => o?.value === filters.type)
                 } else {
-                    selected = _.find(this.invoiceType, o => o.value === filters.type);
+                    selected = _.find(this.invoiceType, o => o?.value === filters.type);
                 }
             } else {
-                selected = _.find(this.gstr2InvoiceType, o => o.value === filters.type);
+                selected = _.find(this.gstr2InvoiceType, o => o?.value === filters.type);
             }
             if (selected) {
                 this.selectedFilter.type = selected.label;
@@ -263,7 +263,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
      */
     public downloadFile(): void {
         let blob = this.generalService.base64ToBlob(this.base64Data, 'application/pdf', 512);
-        return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account.uniqueName}.pdf`);
+        return saveAs(blob, `${this.commonLocaleData?.app_invoice}-${this.selectedInvoice.account?.uniqueName}.pdf`);
     }
 
     /**
@@ -277,14 +277,14 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             this.downloadFile();
         } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
             if (this.voucherApiVersion === 2) {
-                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account?.uniqueName, {
                     email: { to: userResponse.emails },
-                    uniqueName: this.selectedInvoice.uniqueName,
+                    uniqueName: this.selectedInvoice?.uniqueName,
                     copyTypes: userResponse.typeOfInvoice,
                     voucherType: this.selectedInvoice.voucherType
                 }));
             } else {
-                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account?.uniqueName, {
                     emailId: userResponse.emails,
                     voucherNumber: [this.selectedInvoice.voucherNumber],
                     typeOfInvoice: userResponse.typeOfInvoice,
@@ -292,7 +292,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
                 }));
             }
         } else if (userResponse.action === 'send_sms' && userResponse.numbers && userResponse.numbers.length) {
-            this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account.uniqueName, { numbers: userResponse.numbers }, this.selectedInvoice.voucherNumber));
+            this.store.dispatch(this.invoiceActions.SendInvoiceOnSms(this.selectedInvoice.account?.uniqueName, { numbers: userResponse.numbers }, this.selectedInvoice.voucherNumber));
         }
     }
 
@@ -314,7 +314,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             let accountUniqueName: string = this.selectedInvoice.account?.uniqueName;
             this.receiptService.DownloadVoucher(model, accountUniqueName, false).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 if (res) {
-                    if (model.typeOfInvoice.length > 1) {
+                    if (model.typeOfInvoice?.length > 1) {
                         return saveAs(res, `${model.voucherNumber[0]}.` + 'zip');
                     }
                     return saveAs(res, `${this.selectedInvoice.voucherNumber}.` + 'pdf');
@@ -328,10 +328,10 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
                 typeOfInvoice: invoiceCopy,
                 voucherType: this.selectedInvoice.voucherType
             };
-            this.invoiceService.DownloadInvoice(this.selectedInvoice.account.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
+            this.invoiceService.DownloadInvoice(this.selectedInvoice.account?.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
                 .subscribe(res => {
                     if (res) {
-                        if (dataToSend.typeOfInvoice.length > 1) {
+                        if (dataToSend.typeOfInvoice?.length > 1) {
                             return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'zip');
                         }
                         return saveAs(res, `${dataToSend.voucherNumber[0]}.` + 'pdf');

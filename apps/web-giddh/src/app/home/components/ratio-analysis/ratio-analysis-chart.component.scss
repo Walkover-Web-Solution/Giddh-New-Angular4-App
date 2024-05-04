@@ -3,19 +3,22 @@
     padding-right: 0;
 }
 .ratio-analysis-panel-body h1 {
-    font-size: 14px;
+    font-size: var(--font-size-15);
     color: var(--color-nero);
 }
 
 .ratio-analysis-panel-body small {
     color: var(--color-abbey);
-    font-size: 14px;
+    font-size: var(--font-size-15);
 }
 .ratio-chart-block {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+}
+.full-height {
+    height: 374px;
 }
 @media (max-width: 767px) {
     .ratio-chart-block {

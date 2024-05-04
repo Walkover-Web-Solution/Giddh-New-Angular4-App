@@ -113,28 +113,28 @@
                 <th *ngIf="purchaseRegisterTotal.taxTotal" class="width-200px">
                     <div class="d-flex">
                         <div class="flex-fill text-right">
-                            {{ commonLocaleData?.app_tax }}
+                            {{ localeData?.net_tax }}
                         </div>
                     </div>
                 </th>
                 <th *ngIf="purchaseRegisterTotal.discountTotal" class="width-200px">
                     <div class="d-flex">
                         <div class="flex-fill text-right">
-                            {{ commonLocaleData?.app_discount }}
+                            {{ localeData?.net_discount }}
                         </div>
                     </div>
                 </th>
                 <th *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tcsTotal" class="width-200px">
                     <div class="d-flex">
                         <div class="flex-fill text-right">
-                            {{ commonLocaleData?.app_tcs }}
+                            {{ localeData?.net_tcs }}
                         </div>
                     </div>
                 </th>
                 <th *ngIf="isTcsTdsApplicable && purchaseRegisterTotal.tdsTotal" class="width-200px">
                     <div class="d-flex">
                         <div class="flex-fill text-right">
-                            {{ commonLocaleData?.app_tds }}
+                            {{ localeData?.net_tds }}
                         </div>
                     </div>
                 </th>

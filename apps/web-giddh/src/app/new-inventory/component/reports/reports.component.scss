@@ -1,0 +1,246 @@
+.pagination-wrapper {
+    padding-bottom: 20px !important;
+}
+
+.edit-icon {
+    display: none;
+}
+
+tr {
+    &:hover {
+        .edit-icon {
+            display: inline-block !important;
+            z-index: 9999;
+        }
+    }
+}
+
+td {
+    .v-align-center {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+    .edit-icon {
+        width: 66px;
+        float: right;
+    }
+}
+.stock-group-footer {
+    background-color: var(--color-white);
+    z-index: 3;
+    width: calc(100% - 240px);
+    padding-right: 15px;
+    line-height: 1.8;
+    box-shadow: 0 0 6px var(--color-primary-common-box-shadow);
+    padding-top: 5px;
+
+    .stock-value {
+        padding-right: 80px;
+
+        .total-stock-value {
+            padding-left: 30px;
+        }
+    }
+}
+
+.report-quantity {
+    float: left;
+    width: 100%;
+    text-align: right;
+    text-transform: lowercase;
+}
+
+.virtual-group-list {
+    height: 193px;
+}
+
+.stock-mat-salect {
+    border: 1px solid var(--color-secondary-input-bar-border);
+    border-radius: 5px !important;
+    padding: 8px;
+    font-size: var(--font-size-15);
+    min-width: 250px;
+}
+
+.transactional-filter-section {
+    .transactional-wise-common-btn {
+        height: 42px;
+        width: 42px;
+        border: 1px solid var(--color-gray);
+        border-radius: 20px;
+        box-shadow: none;
+        background: var(--color-white);
+    }
+
+    .icon-download-circle {
+        font-size: 16px;
+        color: var(--color-gray);
+    }
+}
+
+.unit-badge {
+    text-transform: lowercase;
+}
+
+.td-search-box {
+    .input-container {
+        input {
+            height: 36px;
+            min-width: 100%;
+            padding: 11px 40px 11px 11px;
+            color: var(--color-nero);
+            border: none;
+            background-color: var(--color-wild-sand);
+            border-radius: 5px;
+        }
+    }
+}
+
+.inventory-report-table {
+    .mat-table-sticky {
+        top: 60px !important;
+    }
+}
+
+::ng-deep {
+    .inventory-transaction-list {
+        tbody {
+            .mat-no-data-row:last-child {
+                border-bottom: none !important;
+
+                td {
+                    border-bottom: none !important;
+                }
+            }
+        }
+    }
+
+    .columns-wrapper {
+        .menu-buttons {
+            margin-right: 10px;
+        }
+    }
+}
+
+.select-multiple-chiplist-inventory {
+    font-weight: 400 !important;
+    font-size: var(--font-size-15) !important;
+    width: 82%;
+
+    .mat-chip.mat-standard-chip {
+        color: var(--color-chips-primary) !important;
+        background-color: var(--color-body-background) !important;
+        border: 1px solid var(--color-primary-login-box-body-text) !important;
+        font-size: var(--font-size-12) !important;
+    }
+}
+
+.searching-bar-chiplist {
+    width: 83% !important;
+}
+
+.no-data-inventory {
+    text-align: center;
+    margin-top: 100px;
+    padding-bottom: 100px;
+    font-size: var(--font-size-32);
+    color: var(--color-dark-gray);
+}
+
+.filter-dropdown-branch {
+    max-width: 250px;
+}
+
+.filter-dropdown-warehouse {
+    max-width: 250px;
+    margin-left: 5px;
+}
+
+.top-main-bar {
+    padding-top: 15px;
+}
+
+@media (max-width: 1440px) {
+    .select-multiple-chiplist-inventory {
+        width: 77%;
+    }
+}
+
+@media (max-width: 1024px) {
+    .select-multiple-chiplist-inventory {
+        width: 57%;
+    }
+
+    .stock-mat-salect {
+        min-width: 187px;
+    }
+
+    .inventory-report-table {
+        overflow-x: scroll !important;
+    }
+}
+
+@media (max-width: 1019px) {
+    .select-multiple-chiplist-inventory {
+        width: 57%;
+    }
+
+    .stock-mat-salect {
+        min-width: 199px;
+    }
+
+    .stock-group-footer {
+        width: 100% !important;
+        position: fixed !important;
+        margin-top: 15px;
+
+        .stock-value {
+            justify-content: space-between !important;
+        }
+
+        .by-date {
+            display: flex;
+        }
+    }
+}
+
+.account-name-column {
+    padding-left: 0 !important;
+}
+
+@media (max-width: 767px) {
+    .stock-group-footer {
+        position: static !important;
+
+        .stock-value {
+            padding-right: 0 !important;
+        }
+    }
+}
+
+@media (max-width: 575px) {
+    .stock-group-footer {
+        text-align: left;
+
+        p,
+        label {
+            padding-left: 15px;
+        }
+
+        .pd-l15 {
+            padding-left: 0 !important;
+        }
+
+        .stock-value {
+            justify-content: flex-start !important;
+            text-align: left;
+            padding-left: 0;
+            flex-direction: column;
+
+            .total-stock-value {
+                padding-left: 0;
+            }
+        }
+    }
+}

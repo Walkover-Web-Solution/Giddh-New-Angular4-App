@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } 
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Observable, of, ReplaySubject, Subject, merge } from 'rxjs';
 import { SettingsLinkedAccountsService } from '../../../services/settings.linked.accounts.service';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { Store, select } from '@ngrx/store';
@@ -60,7 +60,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
         name: ''
     };
     public step: number = 1;
-    public loginForm: FormGroup;
+    public loginForm: UntypedFormGroup;
     public bankSyncInProgress: boolean;
     public apiInInterval: any;
     public cancelRequest: boolean = false;
@@ -74,7 +74,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
 
     constructor(public sanitizer: DomSanitizer,
         private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
-        private _fb: FormBuilder,
+        private _fb: UntypedFormBuilder,
         private _toaster: ToasterService,
         private store: Store<AppState>
     ) {
@@ -100,8 +100,8 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
                     }));
                 }),
                 map((res) => {
-                    if (res.status === 'success') {
-                        let data = res.body.provider;
+                    if (res?.status === 'success') {
+                        let data = res?.body?.provider;
                         this.dataSourceBackup = res;
                         return data;
                     }
@@ -148,8 +148,8 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
             this.searchResults = [];
             return [];
         }), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response.status === 'success') {
-                this.searchResults = response.body.provider.map(result => ({
+            if (response?.status === 'success') {
+                this.searchResults = response?.body?.provider?.map(result => ({
                     ...result,
                     label: result.name,
                     value: result.id
@@ -241,8 +241,8 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
 
     // add addInputRow controls
     public addInputRow(i: number, item) {
-        const inputRowControls = this.loginForm.controls['row'] as FormArray;
-        const control = this.loginForm.controls['row'] as FormArray;
+        const inputRowControls = this.loginForm.controls['row'] as UntypedFormArray;
+        const control = this.loginForm.controls['row'] as UntypedFormArray;
 
         // add addInputRow to the list
         if (item) {
@@ -255,14 +255,14 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
                 }, 200);
             }
         } else {
-            if (inputRowControls.controls[i].value.rate && inputRowControls.controls[i].value.stockUnitCode) {
+            if (inputRowControls.controls[i]?.value.rate && inputRowControls.controls[i]?.value.stockUnitCode) {
                 control.push(this.rowArray());
             }
         }
     }
 
     public onSelectProvider() {
-        const inputRowControls = this.loginForm.controls['row'] as FormArray;
+        const inputRowControls = this.loginForm.controls['row'] as UntypedFormArray;
         if (inputRowControls?.controls?.length > 1) {
             inputRowControls.controls = inputRowControls.controls.splice(1);
         }
@@ -276,7 +276,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
         this.loginForm.reset();
         this._settingsLinkedAccountsService.GetLoginForm(providerId).pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && a.status === 'success') {
-                let response = _.cloneDeep(a.body.loginForm[0]);
+                let response = _.cloneDeep(a.body?.loginForm[0]);
                 this.createLoginForm(response);
                 this.step = 2;
             }
@@ -290,11 +290,11 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
         let objToSend = {
             loginForm: []
         };
-        objToSend.loginForm.push(this.loginForm.value);
+        objToSend.loginForm.push(this.loginForm?.value);
         this._settingsLinkedAccountsService.AddProvider(_.cloneDeep(objToSend), this.selectedProvider.id).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success') {
-                this._toaster.successToast(res.body);
-                let providerId = res.body?.replace(/[^0-9]+/ig, '');
+            if (res?.status === 'success') {
+                this._toaster.successToast(res?.body);
+                let providerId = res?.body?.replace(/[^0-9]+/ig, '');
                 if (providerId) {
                     this.cancelRequest = false;
                     this.getBankSyncStatus(providerId);
@@ -302,7 +302,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
                     this.onCancel();
                 }
             } else {
-                this._toaster.errorToast(res.message);
+                this._toaster.errorToast(res?.message);
                 this.onCancel();
             }
         });
@@ -314,9 +314,9 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
     public getBankSyncStatus(providerId) {
         let validateProvider;
         this._settingsLinkedAccountsService.GetBankSyncStatus(providerId).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success' && res.body.providerAccount && res.body.providerAccount.length) {
+            if (res?.status === 'success' && res?.body?.providerAccount && res?.body?.providerAccount?.length) {
                 this.bankSyncInProgress = true;
-                validateProvider = this.validateProviderResponse(res.body.providerAccount[0]);
+                validateProvider = this.validateProviderResponse(res?.body?.providerAccount[0]);
                 if (!validateProvider && !this.cancelRequest) {
                     setTimeout(() => {
                         this.getBankSyncStatus(providerId);
@@ -331,7 +331,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
      * validateProviderResponse
      */
     public validateProviderResponse(provider) {
-        let status = provider.status.toLowerCase();
+        let status = provider?.status?.toLowerCase();
         if (status === 'success' || status === 'failed') {
             if (status === 'failed') {
                 this._toaster.errorToast(this.localeData?.authentication_failed);
@@ -343,7 +343,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
             let response = _.cloneDeep(provider.loginForm[0]);
             this.providerId = provider.id;
             if (response.formType === 'image') {
-                this.bypassSecurityTrustResourceUrl(response.row[0].field[0].value);
+                this.bypassSecurityTrustResourceUrl(response.row[0].field[0]?.value);
             }
             response.row[0].field[0].value = '';
             this.createLoginForm(response);
@@ -371,7 +371,7 @@ export class ConnectBankModalComponent implements OnChanges, OnInit, OnDestroy {
             loginForm: [],
             providerAccountId: this.providerId
         };
-        objToSend.loginForm.push(this.loginForm.value);
+        objToSend.loginForm.push(this.loginForm?.value);
         this.refreshAccountEvent.emit(objToSend);
         this.getBankSyncStatus(this.providerAccountId);
     }

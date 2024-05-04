@@ -7,7 +7,7 @@
     height: inherit;
     padding: 0;
     overflow: auto;
-    z-index: 1;
+    z-index: 9;
 }
 
 .fake-label {
@@ -16,7 +16,7 @@
     line-height: 24px;
 }
 
-:host .disabled-label {
+.disabled-label {
     cursor: not-allowed;
     opacity: 0.5;
 }
@@ -29,7 +29,7 @@
     display: block !important;
 }
 sup.mandatory-asterisk {
-    font-size: 14px;
+    font-size: var(--font-size-15);
     top: 0;
     color: var(--color-danger);
 }
@@ -37,4 +37,17 @@ sup.mandatory-asterisk {
 .dropdown-menu {
     left: unset !important;
     top: 0px;
+    li{
+        padding: 0 10px;
+        height: 40px;
+        &:hover{
+            background-color: var(--color-dark-fog) !important;
+        }
+    }
+}
+
+
+.tax-dropdown {
+    max-height: 102px;
+    min-height: 134px
 }

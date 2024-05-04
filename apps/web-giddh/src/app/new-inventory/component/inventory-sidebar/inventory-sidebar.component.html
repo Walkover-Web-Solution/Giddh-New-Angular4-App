@@ -1,0 +1,73 @@
+<ng-container
+    appTranslate
+    [file]="'inventory'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div class="aside-pane inventory-aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)" asideInventorySidebarMenuState>
+        <div class="help-aside-body">
+            <div class="back-to-main-slider">
+                <a [routerLink]="['/pages/giddh-all-items']" href="javascript:void(0);" aria-label="home icon">
+                    <span>
+                        <img src="{{ imgPath }}home-icon-black.svg" alt="home-icon" class="icon-pull-top">
+                    </span>
+                </a>
+                <h1 class="heading">{{ localeData?.sidebar?.inventory }}</h1>
+            </div>
+            <div class="inventory-items">
+                <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+                    <mat-tree-node
+                        *matTreeNodeDef="let node"
+                        matTreeNodePadding
+                        class="sub-option"
+                        [routerLink]="node?.link"
+                        routerLinkActive="active"
+                        [ngClass]="{
+                            'hide-node': node.onlyBranchMode && isCompany,
+                            'active': !node?.link && node.hiddenLink.includes(currentUrl),
+                            'mr-t1': (node.name == localeData?.sidebar?.warehouse_balance)
+                        }"
+                    >
+                        <span
+                            class="w-100 d-inline-flex"
+                            [ngClass]="{ 'align-items-start': (node.name == localeData?.sidebar?.warehouse_balance),
+                                         'align-items-center': !(node.name == localeData?.sidebar?.warehouse_balance)}"
+                            *ngIf="!(node.onlyBranchMode && isCompany)"
+                            (click)="toggleAsidePane($event, node)"
+                        >
+                            <img src="{{ imgPath }}{{ node.icons }}" [ngClass]="{ 'mt-1': (node.name == localeData?.sidebar?.warehouse_balance)}" class="sidebar-menu-icons" alt="icon" />
+                            <h2>{{ node.name }}</h2>
+                        </span>
+                    </mat-tree-node>
+                    <mat-tree-node
+                        *matTreeNodeDef="let node; when: hasChild"
+                        matTreeNodePadding
+                        matTreeNodeToggle
+                        class="list"
+                    >
+                        <button mat-icon-button disableRipple matTreeNodeToggle class="arrow-btn" aria-label="sidebar icon">
+                            <span class="sidebar-list-icon">
+                                <i *ngIf="treeControl.isExpanded(node)" class="icon-up mr-l1 font-15 sidebar-icon"></i>
+                                <i
+                                    *ngIf="!treeControl.isExpanded(node)"
+                                    class="icon-down-new mr-l1 font-15 sidebar-icon"
+                                ></i>
+                            </span>
+                        </button>
+                        <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="menu icon" />
+                        <h2>{{ node.name }}</h2>
+                    </mat-tree-node>
+                </mat-tree>
+            </div>
+        </div>
+    </div>
+</ng-container>
+<div class="aside-overlay" *ngIf="asideMenuState === 'in'"></div>
+<aside-create-new-inventory
+    *ngIf="asideMenuState === 'in'"
+    [@slideInOut]="asideMenuState"
+    (closeAsideEvent)="closeAsideMenu()"
+    [class]="asideMenuState"
+    [moduleType]="moduleType"
+></aside-create-new-inventory>

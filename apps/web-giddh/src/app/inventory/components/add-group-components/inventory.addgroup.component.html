@@ -66,7 +66,7 @@
                                         maxlength="10"
                                         decimalDigitsDirective
                                         formControlName="hsnNumber"
-                                        *ngIf="addGroupForm.get('showCodeType').value === 'hsn'"
+                                        *ngIf="addGroupForm.get('showCodeType')?.value === 'hsn'"
                                     />
                                     <input
                                         type="text"
@@ -74,35 +74,28 @@
                                         maxlength="10"
                                         formControlName="sacNumber"
                                         decimalDigitsDirective
-                                        *ngIf="addGroupForm.get('showCodeType').value === 'sac'"
+                                        *ngIf="addGroupForm.get('showCodeType')?.value === 'sac'"
                                     />
                                 </div>
                             </div>
+                            <div class="pd-b1" [hidden]="defaultGrpActive">
+                                <mat-slide-toggle
+                                    formControlName="isSubGroup"
+                                    id="isSelfParentUpdt"
+                                    name="parentStockGroup"
+                                    color="primary"
+                                >
+                                </mat-slide-toggle>
+                                <label class="is-subgroup-label" for="isSelfParentUpdt">Is it a sub group?</label>
+                            </div>
                             <div class="row">
                                 <div class="col-xs-6 col-sm-6">
-                                    <div class="pd-b1" [hidden]="defaultGrpActive">
-                                        <label for="isSelfParentUpdt">
-                                            <ngx-switch
-                                                [status]="addGroupForm.get('isSubGroup').value ? true : false"
-                                                id="isSelfParentUpdt"
-                                                name="parentStockGroup"
-                                                [onText]="'On'"
-                                                [offText]="'Off'"
-                                                [onColor]="bootstrapToggleSwitch?.On"
-                                                [offColor]="bootstrapToggleSwitch?.Off"
-                                                [size]="bootstrapToggleSwitch?.Size"
-                                                (statusChange)="addGroupForm.get('isSubGroup').setValue($event)"
-                                            >
-                                            </ngx-switch>
-                                            Is it a sub group?</label
-                                        >
-                                    </div>
                                     <div class="form-group">
                                         <label>Parent Group</label>
                                         <sh-select
                                             [options]="groupsData$ | async"
                                             formControlName="parentStockGroupUniqueName"
-                                            [disabled]="!addGroupForm.get('isSubGroup').value"
+                                            [disabled]="!addGroupForm.get('isSubGroup')?.value"
                                             [placeholder]="'Select Parent Group'"
                                             [multiple]="false"
                                             (selected)="groupSelected($event)"
@@ -126,7 +119,7 @@
                                             type="button"
                                             class="dropdown-toggle form-control text-left"
                                         >
-                                            Selected ({{ taxTempArray.length }})
+                                            Selected ({{ taxTempArray?.length }})
                                             <span class="pull-right"><span class="caret"></span></span>
                                         </button>
                                         <ul *dropdownMenu class="dropdown-menu dropdown-menu-right" role="menu">
@@ -145,7 +138,7 @@
                                                     {{ tax.name }}
                                                 </a>
                                             </li>
-                                            <li *ngIf="(companyTaxesList$ | async).length < 1">
+                                            <li *ngIf="(companyTaxesList$ | async)?.length < 1">
                                                 <a class="dropdown-item" (click)="$event.stopPropagation()"
                                                     >No Tax Found</a
                                                 >
@@ -154,7 +147,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="clearfix text-left mt-5">
+                            <div class="clearfix text-left mt-2">
                                 <div *ngIf="addGroup">
                                     <button
                                         type="submit"

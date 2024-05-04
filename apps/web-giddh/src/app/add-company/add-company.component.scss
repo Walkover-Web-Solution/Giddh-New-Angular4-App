@@ -1,0 +1,52 @@
+.add-company-wrapper {
+    padding: 15px;
+    max-width: 600px;
+    margin: 0 auto;
+    form {
+        p {
+            color: var(--color-abbey);
+        }
+        .mobile-number {
+            position: relative;
+            padding-right: 6px;
+            .flag-input{
+                z-index: 2 !important;
+            }
+            .country-flag {
+                position: absolute;
+                top: 50%;
+                left: 25px;
+                z-index: 1 !important;
+                transform: translateY(-50%);
+                img {
+                    height: 14px;
+                }
+            }
+            input {
+                height: 46px;
+                width: 100%;
+                border-radius: 8px !important;
+                border: 1px solid var(--color-iron);
+            }
+        }
+        .country-space {
+            padding-right: 6px;
+        }
+        .currency-space {
+            padding-left: 6px;
+        }
+        .mobile-no-action-buttons{
+            padding-left: 6px;
+            padding-top: 6.5px;
+        }
+        .otp-input{
+            padding-right: 6px;
+        }
+        .btn-min-width{
+            min-width: 84px;
+        }
+        .send-otp-btn{
+            min-width: 112px;
+        }
+    }
+}

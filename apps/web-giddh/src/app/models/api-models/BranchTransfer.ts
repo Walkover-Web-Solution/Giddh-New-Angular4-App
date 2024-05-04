@@ -1,4 +1,4 @@
-import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+import { INameUniqueName } from '../interfaces/name-unique-name.interface';
 
 export class BranchTransfersArray {
     constructor(public entityDetails: BranchTransferEntity, public quantity: number, public stockUnit: string, public rate: number) {
@@ -93,10 +93,11 @@ export class NewBranchTransferSourceDestination {
 }
 
 export class NewBranchTransferProductStockDetails {
-    public stockUnit: any;
+    public stockUnit?: any;
     public amount: any;
     public rate: any;
     public quantity: any;
+    public stockUnitUniqueName?: any;
 }
 
 export class NewBranchTransferProduct {

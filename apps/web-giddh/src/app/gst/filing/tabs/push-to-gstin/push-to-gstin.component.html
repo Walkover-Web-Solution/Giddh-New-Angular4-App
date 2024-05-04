@@ -28,8 +28,8 @@
                             </div>
                         </div>
                     </div>
-                    <tabset #staticTabs class="sub-filter-nav-band" *ngIf="!gstr1SummaryDetailsInProcess">
-                        <tab>
+                    <!-- <tabset #staticTabs class="sub-filter-nav-band" *ngIf="!gstr1SummaryDetailsInProcess"> -->
+                    <!-- <tab>
                             <ng-template tabHeading>
                                 {{ localeData?.filing?.transaction_summary }}
                             </ng-template>
@@ -44,20 +44,20 @@
                                     [commonLocaleData]="commonLocaleData"
                                 ></transaction-summary>
                             </div>
-                        </tab>
+                        </tab> -->
 
-                        <tab [active]="showHsn">
+                    <!-- <tab [active]="showHsn">
                             <ng-template tabHeading>
                                 {{ commonLocaleData?.app_hsn }}
-                            </ng-template>
-                            <div class="subtabs-box transactions-overview">
-                                <hsn-summary
-                                    [hsnSummary]="gstr1SummaryDetails.data.hsn"
-                                    [localeData]="localeData"
-                                    [commonLocaleData]="commonLocaleData"
-                                ></hsn-summary>
-                            </div>
-                        </tab>
+                            </ng-template> -->
+                    <div class="subtabs-box transactions-overview">
+                        <hsn-summary
+                            [hsnSummary]="gstr1SummaryDetails.data.hsn"
+                            [localeData]="localeData"
+                            [commonLocaleData]="commonLocaleData"
+                        ></hsn-summary>
+                    </div>
+                    <!-- </tab>
 
                         <tab>
                             <ng-template tabHeading>
@@ -109,8 +109,8 @@
                                 >
                                 </failed-transactions>
                             </div>
-                        </tab>
-                    </tabset>
+                        </tab> -->
+                    <!-- </tabset> -->
 
                     <div class="filings-empty-state" *ngIf="gstr1SummaryDetailsInProcess">
                         <div class="spinner2">

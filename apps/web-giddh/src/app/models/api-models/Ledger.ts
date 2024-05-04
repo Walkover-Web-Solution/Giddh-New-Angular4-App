@@ -1,10 +1,10 @@
 import { IForwardBalance, ILedger, ILedgerTransactionItem, ITotalItem, ITransactionItem, ITransactions, IVoucherItem } from '../interfaces/ledger.interface';
-import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+import { INameUniqueName } from '../interfaces/name-unique-name.interface';
 import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from './Sales';
 import { PettyCashEntryStatus } from './Expences';
 import { VoucherAdjustments } from './AdvanceReceiptsAdjust';
 import { PAGINATION_LIMIT } from '../../app.constant';
-import { ReferenceVoucher } from '../../material-ledger/ledger.vm';
+import { ReferenceVoucher } from '../../ledger/ledger.vm';
 
 /*
  * Model for ledger create api request
@@ -131,6 +131,7 @@ export class LedgerResponse {
     public voucherUniqueName?: string;
     public referenceVoucher?: ReferenceVoucher;
     public gainLoss?: number;
+    public generateEInvoice?: boolean = null;
 }
 
 /** Model adjusted amounts for invoices */
@@ -430,4 +431,8 @@ export interface InvoiceList {
 export interface IUnpaidInvoiceListResponse {
     invoiceList: InvoiceList[];
     size: number;
+}
+
+export interface IVariant extends IParticular {
+    variantDiscount?: any;
 }

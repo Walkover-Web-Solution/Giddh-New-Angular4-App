@@ -8,7 +8,7 @@ import { VersionCheckService } from './version-check.service';
 import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
-import { reassignNavigationalArray } from './models/defaultMenus'
+import { reassignNavigationalArray } from './models/default-menus'
 import { Configuration } from "./app.constant";
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
@@ -72,10 +72,17 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._generalService.companyUniqueName = ss.companyUniqueName;
         });
 
+        if (this._generalService.getUrlParameter("companyUniqueName")) {
+            this._generalService.setParameterInLocalStorage("companyUniqueName", this._generalService.getUrlParameter("companyUniqueName"));
+        }
+        if (this._generalService.getUrlParameter("version")) {
+            this._generalService.setParameterInLocalStorage("voucherApiVersion", this._generalService.getUrlParameter("version"));
+        }
+
         if (!(this._generalService.user && this._generalService.sessionId)) {
-            if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download')) {
+            if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download') && !window.location.href.includes('dns')) {
                 if (PRODUCTION_ENV && !isElectron) {
-                    window.location.href = 'https://stage.giddh.com/login/';
+                    window.location.href = 'https://giddh.com/login/';
                 } else {
                     this.router.navigate(['/login']);
                 }
@@ -91,12 +98,12 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             const { ipcRenderer } = (window as any).require("electron");
             // google
             const t = ipcRenderer.send("take-server-environment", {
-                STAGING_ENV,
-                LOCAL_ENV,
-                TEST_ENV,
-                PRODUCTION_ENV,
-                AppUrl,
-                APP_FOLDER
+                'STAGING_ENV': STAGING_ENV,
+                'LOCAL_ENV': LOCAL_ENV,
+                'TEST_ENV': TEST_ENV,
+                'PRODUCTION_ENV': PRODUCTION_ENV,
+                'AppUrl': AppUrl,
+                'APP_FOLDER': APP_FOLDER
             });
         }
 
@@ -110,7 +117,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             }
         });
     }
-    
 
     public sidebarStatusChange(event) {
         this.sideMenu.isopen = event;
@@ -133,7 +139,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
             branches = response || [];
         });
-        reassignNavigationalArray(isMobile, this._generalService.currentOrganizationType === OrganizationType.Company && branches.length > 1, []);
+        reassignNavigationalArray(isMobile, this._generalService.currentOrganizationType === OrganizationType.Company && branches?.length > 1, []);
         this._generalService.setIsMobileView(isMobile);
     }
 
@@ -143,12 +149,15 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.changeOnMobileView(result.matches);
         });
+        this.breakpointObserver.observe([
+            '(max-width: 480px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (result.matches) {
+                this.router.navigate(['/mobile-restricted']);
+            }
+        });
         this.sideBarStateChange(true);
         this.subscribeToLazyRouteLoading();
-
-        if (this._generalService.companyUniqueName && !window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
-            this.store.dispatch(this.companyActions.RefreshCompanies());
-        }
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -172,9 +181,36 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[0]));
             }
         });
+
+        setTimeout(() => {
+            this._generalService.addLinkTag("./assets/css/font-awesome.css");
+            this._generalService.addLinkTag("./assets/fonts/icomoon/icomoon.css");
+            this._generalService.addLinkTag("./assets/css/toastr.css");
+            this._generalService.addLinkTag("./assets/css/ngx-bootstrap/bs-datepicker.css");
+            this._generalService.addLinkTag("./assets/css/ladda-themeless.min.css");
+            this._generalService.addLinkTag("./assets/css/lightbox.scss");
+
+            /* RAZORPAY */
+            if (window['Razorpay'] === undefined) {
+                let scriptTag = document.createElement('script');
+                scriptTag.src = 'https://checkout.razorpay.com/v1/checkout.js';
+                scriptTag.type = 'text/javascript';
+                scriptTag.defer = true;
+                document.body.appendChild(scriptTag);
+            }
+            /* RAZORPAY */
+        }, 1000);
     }
 
     public ngAfterViewInit() {
+        this.hideMainGiddhLoader();
+
+        if (this._generalService.companyUniqueName && !window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
+            setTimeout(() => {
+                this.store.dispatch(this.companyActions.RefreshCompanies());
+            }, 1000);
+        }
+
         this._generalService.IAmLoaded.next(true);
         this._cdr.detectChanges();
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((evt) => {
@@ -208,7 +244,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }
 
         if (!LOCAL_ENV && !isElectron) {
-            this._versionCheckService.initVersionCheck(AppUrl + '/version.json');
+            this._versionCheckService.initVersionCheck(AppUrl + 'version.json');
 
             this._versionCheckService.onVersionChange$.pipe(takeUntil(this.destroyed$)).subscribe((isChanged: boolean) => {
                 if (isChanged) {
@@ -216,6 +252,16 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 }
             });
         }
+    }
+
+    /**
+     * Hides main giddh loader for login/signup/token verify and shows on other pages
+     *
+     * @private
+     * @memberof AppComponent
+     */
+    private hideMainGiddhLoader(): void {
+        document.getElementById("main-giddh-loader")?.classList.add("d-none");
     }
 
     private getLastStateFromUrl(url: string): string {

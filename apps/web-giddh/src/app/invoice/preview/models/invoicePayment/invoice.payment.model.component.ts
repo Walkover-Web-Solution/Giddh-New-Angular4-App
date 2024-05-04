@@ -2,13 +2,13 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren, ChangeDetectorRef } from '@angular/core';
 import { ILedgersInvoiceResult, InvoicePaymentRequest } from '../../../../models/api-models/Invoice';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../../../shared/helpers/defaultDateFormat';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { AppState } from '../../../../store';
 import { select, Store } from '@ngrx/store';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
-import { orderBy } from '../../../../lodash-optimized';
+import { cloneDeep, orderBy } from '../../../../lodash-optimized';
 import { LedgerService } from "../../../../services/ledger.service";
 import { ReceiptItem } from "../../../../models/api-models/recipt";
 import { INameUniqueName } from "../../../../models/api-models/Inventory";
@@ -25,7 +25,8 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChanges {
 
     @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
-    @Output() public closeModelEvent: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
+    @Output() public performActionPopup: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
+    @Output() public closeModelEvent: EventEmitter<void> = new EventEmitter();
     @ViewChildren(ShSelectComponent) public allShSelectComponents: QueryList<ShSelectComponent>;
     @ViewChild('amountField', { static: true }) amountField;
     @Input() public selectedInvoiceForPayment: ReceiptItem;
@@ -35,7 +36,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     @Input() public commonLocaleData: any = {};
 
     public paymentActionFormObj: InvoicePaymentRequest;
-    public moment = moment;
+    public dayjs = dayjs;
     public showDatePicker: boolean = false;
     public showClearanceDatePicker: boolean = false;
     public paymentMode: IOption[] = [];
@@ -79,7 +80,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         private generalService: GeneralService
     ) {
         this.paymentActionFormObj = new InvoicePaymentRequest();
-        this.paymentActionFormObj.paymentDate = moment().toDate();
+        this.paymentActionFormObj.paymentDate = dayjs().toDate();
         this.isActionSuccess$ = this.store.pipe(select(s => s.invoice.invoiceActionUpdated), takeUntil(this.destroyed$));
         // get user country from his profile
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
@@ -95,8 +96,8 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         let b = { nameStr: '', uNameStr: '' };
         try {
             arr.forEach((item: INameUniqueName) => {
-                o.nameStr.push(item.name);
-                o.uNameStr.push(item.uniqueName);
+                o.nameStr.push(item?.name);
+                o.uNameStr.push(item?.uniqueName);
             });
             b.nameStr = o.nameStr.join(', ');
             b.uNameStr = o.uNameStr.join(', ');
@@ -120,16 +121,13 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
         this.isActionSuccess$.subscribe(a => {
             if (a) {
                 this.resetFrom();
-                
-                if (this.selectedInvoiceForPayment) {
-                    this.assignAmount(this.selectedInvoiceForPayment?.balanceDue?.amountForAccount, this.selectedInvoiceForPayment?.account?.currency?.symbol);
-                }
+                this.closeModelEvent.emit();
             }
         });
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
-                this.inputMaskFormat = activeCompany.balanceDisplayFormat ? activeCompany.balanceDisplayFormat.toLowerCase() : '';
+                this.inputMaskFormat = activeCompany.balanceDisplayFormat ? activeCompany.balanceDisplayFormat?.toLowerCase() : '';
             }
         });
 
@@ -137,27 +135,30 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public onConfirmation(formObj) {
-        formObj.paymentDate = moment(formObj.paymentDate).format(GIDDH_DATE_FORMAT);
-        formObj.exchangeRate = this.exchangeRate;
+        let newFormObj = cloneDeep(formObj);
+        newFormObj.paymentDate = dayjs(newFormObj.paymentDate).format(GIDDH_DATE_FORMAT);
+        if (newFormObj.chequeClearanceDate) {
+            newFormObj.chequeClearanceDate = dayjs(newFormObj.chequeClearanceDate).format(GIDDH_DATE_FORMAT);
+        }
+        newFormObj.exchangeRate = this.exchangeRate;
 
         if (this.generalService.voucherApiVersion === 2) {
-            formObj.date = formObj.paymentDate;
+            newFormObj.date = newFormObj.paymentDate;
 
             if (this.selectedInvoiceForPayment?.account?.currency?.code === this.selectedPaymentMode?.additional?.currency) {
-                formObj.amountForAccount = formObj.amount;
+                newFormObj.amountForAccount = newFormObj.amount;
             } else {
-                formObj.amountForCompany = formObj.amount;
+                newFormObj.amountForCompany = newFormObj.amount;
             }
 
-            formObj.tagNames = (formObj.tagUniqueName) ? [formObj.tagUniqueName] : [];
+            newFormObj.tagNames = (newFormObj.tagUniqueName) ? [newFormObj.tagUniqueName] : [];
 
-            delete formObj.paymentDate;
-            delete formObj.amount;
-            delete formObj.tagUniqueName;
+            delete newFormObj.paymentDate;
+            delete newFormObj.amount;
+            delete newFormObj.tagUniqueName;
         }
 
-        this.closeModelEvent.emit(formObj);
-        this.resetFrom();
+        this.performActionPopup.emit(newFormObj);
     }
 
     public onCancel() {
@@ -169,13 +170,13 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
      * setPaymentDate
      */
     public setPaymentDate(date) {
-        this.paymentActionFormObj.paymentDate = _.cloneDeep(moment(date).format(GIDDH_DATE_FORMAT));
+        this.paymentActionFormObj.paymentDate = _.cloneDeep(dayjs(date).format(GIDDH_DATE_FORMAT));
         this.showDatePicker = !this.showDatePicker;
     }
 
     public setClearanceDate(date) {
         this.showClearanceDatePicker = !this.showClearanceDatePicker;
-        this.paymentActionFormObj.chequeClearanceDate = _.cloneDeep(moment(date).format(GIDDH_DATE_FORMAT));
+        this.paymentActionFormObj.chequeClearanceDate = _.cloneDeep(dayjs(date).format(GIDDH_DATE_FORMAT));
     }
 
     public onSelectPaymentMode(event) {
@@ -185,7 +186,6 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
             } else {
                 this.assignAmount(this.selectedInvoiceForPayment?.balanceDue?.amountForCompany, event?.additional?.currencySymbol);
             }
-            
             this.selectedPaymentMode = event;
             this.searchService.loadDetails(event.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.body) {
@@ -203,6 +203,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
                     this.paymentActionFormObj.chequeClearanceDate = '';
                     this.paymentActionFormObj.chequeNumber = '';
                 }
+                this.changeDetectorRef.detectChanges();
             })
             this.paymentActionFormObj.accountUniqueName = event.value;
         } else {
@@ -213,11 +214,12 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
             this.paymentActionFormObj.chequeClearanceDate = '';
             this.paymentActionFormObj.chequeNumber = '';
         }
+        this.changeDetectorRef.detectChanges();
     }
 
     public resetFrom() {
         this.paymentActionFormObj = new InvoicePaymentRequest();
-        this.paymentActionFormObj.paymentDate = moment().toDate();
+        this.paymentActionFormObj.paymentDate = dayjs().toDate();
         this.paymentActionFormObj.uniqueName = this.selectedInvoiceForPayment?.uniqueName;
 
         if (this.allShSelectComponents) {
@@ -249,7 +251,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
             this.paymentMode = paymentModeChanges;
             if (this.baseCurrencySymbol !== c.selectedInvoiceForPayment.currentValue.accountCurrencySymbol) {
                 this.isMulticurrencyAccount = true;
-                this.accountCurrency = this.selectedInvoiceForPayment.account.currency ? this.selectedInvoiceForPayment.account.currency.code : null;
+                this.accountCurrency = this.selectedInvoiceForPayment.account?.currency ? this.selectedInvoiceForPayment.account.currency.code : null;
                 this.getCurrencyRate(this.accountCurrency, this.companyCurrencyName);
             } else {
                 this.isMulticurrencyAccount = false;
@@ -293,7 +295,7 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
 
     public getCurrencyRate(from, to) {
         if (from && to) {
-            let date = moment().format(GIDDH_DATE_FORMAT);
+            let date = dayjs().format(GIDDH_DATE_FORMAT);
             this._ledgerService.GetCurrencyRateNewApi(from, to, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 let rate = response.body;
                 if (rate) {
@@ -315,13 +317,13 @@ export class InvoicePaymentModelComponent implements OnInit, OnDestroy, OnChange
 
     public loadPaymentModes() {
         const paymentMode: IOption[] = [];
-        this.salesService.getAccountsWithCurrency('cash, bankaccounts').pipe(takeUntil(this.destroyed$)).subscribe(data => {
+        this.salesService.getAccountsWithCurrency((this.generalService.voucherApiVersion === 2) ? 'cash, bankaccounts, loanandoverdraft' : 'cash, bankaccounts').pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && data.body && data.body.results) {
                 data.body.results.forEach(account => {
                     paymentMode.push({
                         label: account.name,
                         value: account.uniqueName,
-                        additional: { currency: account.currency?.code || this.companyCurrencyName, currencySymbol: account.currency?.symbol || this.baseCurrencySymbol }
+                        additional: { currency: account?.currency?.code || this.companyCurrencyName, currencySymbol: account?.currency?.symbol || this.baseCurrencySymbol }
                     });
                 });
             }

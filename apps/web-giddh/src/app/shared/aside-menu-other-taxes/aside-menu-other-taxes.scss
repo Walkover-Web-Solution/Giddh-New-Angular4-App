@@ -1,15 +1,15 @@
 :host {
     position: fixed;
     left: auto;
-    top: 60px;
+    top: calc(var(--top-distance) + 60px);
     right: 0;
     bottom: 0;
     width: 100%;
     max-width: 760px;
-    z-index: 99999;
+    z-index: 9999;
 }
 
-:host.in #close {
+:host.in #closedialog {
     position: absolute;
     left: auto;
     right: 10px;

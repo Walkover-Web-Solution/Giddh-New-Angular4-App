@@ -66,7 +66,6 @@
                     </div>
                     <div class="input-grp-date-range-picker d-flex">
                         <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                            <i class="icon-calender calendar-addon"></i>
                             <input
                                 type="text"
                                 name="selectedDateRange"
@@ -188,7 +187,7 @@
                                             id="button-basic"
                                             dropdownToggle
                                             class="btn dropdown-toggle text-light-2"
-                                            aria-controls="dropdown-alignment"
+                                            aria-label="dropdown-alignment"
                                         >
                                             <i class="fa fa-ellipsis-v"></i>
                                         </a>
@@ -353,7 +352,7 @@
                                     <amount-field
                                         [amount]="reverseCharge.taxableValue"
                                         [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                        [currencyCode]="activeCompany.baseCurrency"
+                                        [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
                                 </span>
@@ -373,7 +372,7 @@
                                     <amount-field
                                         [amount]="reverseCharge.taxAmount"
                                         [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                        [currencyCode]="activeCompany.baseCurrency"
+                                        [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
                                 </span>
@@ -389,7 +388,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="pagination-wrapper" [hidden]="isLoading" *ngIf="reverseChargeReportResults.totalPages > 1">
+            <div class="pagination-wrapper mt-1" [hidden]="isLoading" *ngIf="reverseChargeReportResults.totalPages > 1">
                 <pagination
                     [totalItems]="reverseChargeReportResults.totalItems"
                     [(ngModel)]="reverseChargeReportResults.page"
@@ -411,7 +410,7 @@
                     !isLoading &&
                     (!reverseChargeReportResults ||
                         !reverseChargeReportResults.items ||
-                        reverseChargeReportResults.items.length === 0)
+                        reverseChargeReportResults.items?.length === 0)
                 "
             >
                 <no-data [secondaryMessageClass]="'p-0'"></no-data>

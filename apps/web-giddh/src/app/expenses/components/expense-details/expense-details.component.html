@@ -5,18 +5,20 @@
                 <p class="bold mr-b05">{{ selectedItem?.entryDate }} | {{ selectedItem?.baseAccount?.name }}</p>
             </div>
             <div class="col-sm-6 text-right xs-left">
-                <div class="d-flex justify-content-end align-items-center">
+                <div class="d-flex justify-content-end align-items-center column-gap1">
                     <button
-                        mat-raised-button
-                        class="mr-b05 btn btn-success d-flex align-items-center"
+                        mat-stroked-button
+                        color="primary"
+                        class="mr-b05 d-flex align-items-center"
                         type="button"
                         (click)="showApproveConfirmPopup(approveConfirm)"
                     >
                         {{ localeData?.approve }}
                     </button>
                     <button
-                        mat-raised-button
-                        class="mr-b05 btn btn-danger"
+                        mat-stroked-button
+                        color="warn"
+                        class="mr-b05"
                         type="button"
                         (click)="openModal(rejectionReason)"
                     >
@@ -44,10 +46,7 @@
                                     type="file"
                                     accept="image/png, image/jpeg"
                                     id="signatureImg-edit"
-                                    ngFileSelect
-                                    (uploadOutput)="onUploadFileOutput($event)"
-                                    [options]="fileUploadOptions"
-                                    [uploadInput]="uploadInput"
+                                    (change)="uploadFile()"
                                 />
                             </div>
                         </li>
@@ -56,10 +55,10 @@
             </div>
             <div class="col-sm-12">
                 <div class="petty-cash">
-                    <div class="bg-white pd-b1">
+                    <div class="bg-color pd-b1">
                         <div class="row">
                             <div class="col-12">
-                                <div class="form-group mb-2">
+                                <div class="form-group mb-2 custom-input-field">
                                     <mat-form-field appearance="fill" class="w-100">
                                         <label>{{ commonLocaleData?.app_description }}</label>
                                         <textarea
@@ -76,7 +75,7 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="d-inline-block mr-2">
-                                    <label class="font-14">
+                                    <label class="font-15">
                                         {{ entryAgainstObject.base }}<span class="text-danger">*</span>
                                     </label>
                                     <div class="clearfix">
@@ -105,7 +104,7 @@
                                             <ng-template #optionTemplate1 let-option="option">
                                                 <a href="javascript:void(0)" class="list-item">
                                                     <div class="item">{{ option.label }}</div>
-                                                    <div class="item-unique">{{ option.value }}</div>
+                                                    <div class="item-unique">{{ option?.value }}</div>
                                                 </a>
                                             </ng-template>
                                         </sh-select>
@@ -118,7 +117,7 @@
                                 (click)="toggleEntryAgainst()"
                                 *ngIf="entryAgainstObject.against"
                             >
-                                <a href="javascript:void(0)" class="d-inline-block pt-3 font-14">
+                                <a href="javascript:void(0)" class="d-inline-block pt-3 font-15">
                                     {{ entryAgainstObject.against }}
                                 </a>
                             </div>
@@ -131,7 +130,7 @@
                                     [isPettyCash]="true"
                                     [pettyCashEntry]="accountEntryPettyCash"
                                     [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
-                                    [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular.uniqueName"
+                                    [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular?.uniqueName"
                                     (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane()"
                                 ></update-ledger-entry-panel>
                             </div>
@@ -169,16 +168,15 @@
 <!-- endregion -->
 
 <!-- region other taxes aside menu -->
-<div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
-<app-aside-menu-sales-other-taxes
-    *ngIf="asideMenuStateForOtherTaxes === 'in'"
-    [class]="asideMenuStateForOtherTaxes"
-    [taxes]="companyTaxesList"
-    [otherTaxesModal]="updateLedgerComponentInstance.vm.selectedLedger.otherTaxModal"
-    [@slideInOut]="asideMenuStateForOtherTaxes"
-    [commonLocaleData]="commonLocaleData"
-    (closeModal)="toggleOtherTaxesAsidePane()"
-    (applyTaxes)="updateLedgerComponentInstance.vm.calculateOtherTaxes($event); toggleOtherTaxesAsidePane()"
->
-</app-aside-menu-sales-other-taxes>
+<ng-template #asideMenuStateForOtherTaxes>    
+    <app-aside-menu-sales-other-taxes
+        [class]="asideMenuStateForOtherTaxes"
+        [taxes]="companyTaxesList"
+        [otherTaxesModal]="updateLedgerComponentInstance.vm.selectedLedger.otherTaxModal"
+        [commonLocaleData]="commonLocaleData"
+        (closeModal)="asideMenuStateForOtherTaxesDialogRef.close()"
+        (applyTaxes)="updateLedgerComponentInstance.vm.calculateOtherTaxes($event); asideMenuStateForOtherTaxesDialogRef.close()"
+    >
+    </app-aside-menu-sales-other-taxes>
+</ng-template>
 <!-- endregion -->

@@ -1,4 +1,5 @@
-<ng-container
+<cdk-virtual-scroll-viewport [itemSize]="100" class="setting-scroll">
+    <ng-container
     appTranslate
     [file]="'aside-setting'"
     (localeData)="localeData = $event"
@@ -7,14 +8,14 @@
 >
     <div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)">
         <div class="aside-help-header relative">
-            <h4 class="font-14" *ngIf="showSettingHeading">{{ localeData?.page_heading }}</h4>
+            <h4 class="font-15" *ngIf="showSettingHeading">{{ localeData?.page_heading }}</h4>
             <div hidden id="close" class="cursor-pointer" (click)="closeAsidePane($event)">
                 <i class="icon-cross"></i>
             </div>
         </div>
         <div class="help-aside-body">
             <div class="back-to-main-slider" [ngClass]="{ 'setting-close-icon': isMobileScreen }">
-                <a href="javascript:;">
+                <a href="javascript:;" aria-label="back icon">
                     <span
                         class="d-flex align-items-center"
                         *ngIf="!isMobileScreen && !showSettingHeading"
@@ -35,7 +36,7 @@
                         *ngFor="let tab of section"
                         [ngClass]="{ 'active-link': tab.link === routerUrl || tab?.linked_pages?.includes(routerUrl) }"
                     >
-                        <a class="d-block clearfix" [routerLink]="[tab.link]">
+                        <a href="javascript:;" aria-label="icon" class="d-block clearfix" [routerLink]="[tab.link]">
                             <span [innerHTML]="tab.icon"></span>
                             <span>{{ tab.label }}</span>
                         </a>
@@ -45,3 +46,5 @@
         </div>
     </div>
 </ng-container>
+</cdk-virtual-scroll-viewport>
+

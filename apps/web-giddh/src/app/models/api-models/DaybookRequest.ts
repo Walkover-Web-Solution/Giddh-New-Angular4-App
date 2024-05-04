@@ -12,6 +12,29 @@ export class DaybookQueryRequest {
     public branchUniqueName: string;
 }
 
+export class ExportBodyRequest {
+    from?: string;
+    to?: string;
+    sort?: string;
+    showVoucherNumber?: boolean;
+    showVoucherTotal?: boolean;
+    showEntryVoucher?: boolean;
+    showEntryVoucherNo?: boolean;
+    showDescription?: boolean;
+    groupUniqueName?: string;
+    accountUniqueName?: string;
+    exportType?: string;
+    branchUniqueName?: string;
+    fileType?: string;
+    tagName?: string;
+    interval?: string;
+    isExpanded?: boolean;
+    columnsToExport?: any[];
+    q?: any;
+    tagNames?: any[];
+    includeTag?: boolean;
+}
+
 export interface DayBookRequestModel {
     amountLessThan: boolean;
     includeAmount: boolean;
@@ -25,6 +48,7 @@ export interface DayBookRequestModel {
     particulars: any[];
     vouchers: any[];
     inventory: Inventory;
+    tags?: any[];
 }
 
 export interface Inventory {

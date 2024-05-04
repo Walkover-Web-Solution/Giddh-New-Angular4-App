@@ -58,6 +58,7 @@ export class Addresses {
     public name?: string;
     public taxType?: string;
     public pincode?: string;
+    public county?: { code: string; name?: string };
 }
 
 export class CompanyTotals {
@@ -234,6 +235,10 @@ export class States {
         stateGstCode: string;
         name: string;
         code: string;
+    }];
+    public countyList: [{
+        name: string;
+        code: string;
     }]
 }
 
@@ -243,7 +248,7 @@ export interface ICurrencyResponse {
 }
 
 export class BankTransferRequest {
-    public URN: string;
+    public bankUserId: string;
     public transferAccountUniqueName: string;
     public otp: number;
     public amount: number;
@@ -271,6 +276,7 @@ export class BillingDetails {
     contactNo: string;
     gstin: string;
     stateCode: string;
+    county?: { code: string, name: string };
     address: string;
     autorenew: any;
 }
@@ -332,6 +338,7 @@ export class PlanDetails {
     companiesLimit: number;
     durationUnit: string;
     transactionLimit: number;
+    currency?: any;
 }
 
 export class UserDetail {
@@ -361,6 +368,11 @@ export class StateList {
     code: string;
     name: string;
     stateGstCode: string
+}
+
+export class CountyList {
+    code: string;
+    name: string;
 }
 
 export class BranchFilterRequest {

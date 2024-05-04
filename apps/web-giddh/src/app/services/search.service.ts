@@ -1,5 +1,5 @@
 import { Inject, Injectable, Optional } from '@angular/core';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
@@ -24,13 +24,13 @@ export class SearchService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         const request = reqPayload.request;
         let url = this.config.apiUrl + SEARCH_API.SEARCH
-            .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':groupName', encodeURIComponent(request.groupName))
-            .replace(':count', encodeURIComponent('15'))
-            .replace(':from', encodeURIComponent(request.fromDate))
-            .replace(':to', encodeURIComponent(request.toDate))
-            .replace(':refresh', String(request.refresh))
-            .replace(':page', String(request.page));
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':groupName', encodeURIComponent(request.groupName))
+            ?.replace(':count', encodeURIComponent('15'))
+            ?.replace(':from', encodeURIComponent(request.fromDate))
+            ?.replace(':to', encodeURIComponent(request.toDate))
+            ?.replace(':refresh', String(request.refresh))
+            ?.replace(':page', String(request.page));
         if (request.branchUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
@@ -54,7 +54,7 @@ export class SearchService {
      */
     public searchAccount(params: any): Observable<any> {
         const companyUniqueName = this.generalService.companyUniqueName;
-        let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_SEARCH}`.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_SEARCH}`?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)).replace(':version/', String(this.generalService.voucherApiVersion === 1 ? '' : 'v3/'));
         if (params) {
             Object.keys(params).forEach((key, index) => {
                 const delimiter = index === 0 ? '?' : '&'
@@ -79,7 +79,7 @@ export class SearchService {
      */
     public searchAccountV2(params: any): Observable<any> {
         const companyUniqueName = this.generalService.companyUniqueName;
-        let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_SEARCH_V2}`.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_SEARCH_V2}`?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
         if (params) {
             Object.keys(params).forEach((key, index) => {
                 const delimiter = index === 0 ? '?' : '&'
@@ -106,8 +106,9 @@ export class SearchService {
     public loadDetails(uniqueName: string, params?: any): Observable<any> {
         const companyUniqueName = this.generalService.companyUniqueName;
         let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_DETAIL}`
-            .replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
-            .replace(':accountUniqueName', encodeURIComponent(uniqueName));
+            ?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(uniqueName))
+            ?.replace(':version', this.generalService.voucherApiVersion === 1 ? 'v2' : 'v3');
         if (params) {
             Object.keys(params).forEach((key, index) => {
                 const delimiter = index === 0 ? '?' : '&';
@@ -122,4 +123,28 @@ export class SearchService {
             .pipe(catchError((error) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(error)));
     }
 
+    /**
+     * Searches account
+     *
+     * @param {*} params Request payload for API call
+     * @returns {Observable<any>} Observable to carry out further operations
+     * @memberof SearchService
+     */
+    public searchAccountV3(params: any): Observable<any> {
+        const companyUniqueName = this.generalService.companyUniqueName;
+        let contextPath = `${this.config.apiUrl}${SEARCH_API.ACCOUNT_SEARCH_V3}`?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        if (params) {
+            Object.keys(params).forEach((key, index) => {
+                const delimiter = index === 0 ? '?' : '&'
+                if (params[key] !== undefined) {
+                    if (key === 'branchUniqueName') {
+                        params[key] = params[key] === companyUniqueName ? '' : params[key];
+                    }
+                    contextPath += `${delimiter}${key}=${params[key]}`
+                }
+            });
+        }
+        return this.http.get(contextPath)
+            .pipe(catchError((error) => this.errorHandler.HandleCatch<SearchResponse[], SearchRequest>(error)));
+    }
 }

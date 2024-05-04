@@ -1,14 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, NavigationStart } from "@angular/router";
+import { Router, NavigationStart, ActivatedRoute } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { CompanyActions } from "../../../actions/company.actions";
-import { CompanyService } from "../../../services/companyService.service";
+import { CompanyService } from "../../../services/company.service";
 import { PurchaseReportsModel, ReportsRequestModel } from "../../../models/api-models/Reports";
 import { ToasterService } from "../../../services/toaster.service";
 import { createSelector } from "reselect";
 import { takeUntil, filter, take } from "rxjs/operators";
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject } from "rxjs";
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -17,6 +17,8 @@ import { SettingsBranchActions } from '../../../actions/settings/branch/settings
 import { GeneralService } from '../../../services/general.service';
 import { OrganizationType } from '../../../models/user-login-state';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
+import { LedgerService } from '../../../services/ledger.service';
 
 @Component({
     selector: 'purchase-register-component',
@@ -34,7 +36,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public selectedType = 'monthly';
     private selectedMonth: string;
     public dateRange: Date[];
-    public moment = moment;
+    public dayjs = dayjs;
     public financialOptions: IOption[] = [];
     public selectedCompany: CompanyResponse;
     private interval: any;
@@ -58,13 +60,15 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public isMobileScreen: boolean = false;
     constructor(
         private router: Router,
+        private activeRoute: ActivatedRoute,
         private store: Store<AppState>,
         private companyActions: CompanyActions,
         private companyService: CompanyService,
         private _toaster: ToasterService,
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
-        private breakPointObservar: BreakpointObserver) {
+        private breakPointObservar: BreakpointObserver,
+        private ledgerService: LedgerService) {
             this.breakPointObservar.observe([
                 '(max-width: 767px)'
             ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -90,10 +94,10 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
-                    label: branch.alias,
-                    value: branch.uniqueName,
-                    name: branch.name,
-                    parentBranch: branch.parentBranch
+                    label: branch?.alias,
+                    value: branch?.uniqueName,
+                    name: branch?.name,
+                    parentBranch: branch?.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
@@ -105,7 +109,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 if (!this.currentBranch?.uniqueName) {
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -115,13 +119,13 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                         };
                     }
                 } else {
-                    const selectedBranch = _.cloneDeep(response.find(branch => branch.uniqueName === this.currentBranch?.uniqueName));
+                    const selectedBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === this.currentBranch?.uniqueName));
                     if (selectedBranch) {
                         this.currentBranch.name = selectedBranch.name;
                         this.currentBranch.alias = selectedBranch.alias;
                     } else {
                         // Company was selected from the branch dropdown
-                        this.currentBranch.name = this.activeCompany.name;
+                        this.currentBranch.name = this.activeCompany?.name;
                     }
                 }
             } else {
@@ -151,10 +155,13 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             reportsModel.discountTotal = item.discountTotal;
             reportsModel.tcsTotal = item.tcsTotal;
             reportsModel.tdsTotal = item.tdsTotal;
-            reportsModel.netPurchase = item.balance.amount;
-            reportsModel.cumulative = item.closingBalance.amount;
+            reportsModel.netPurchase = (item.balance.type === "CREDIT") ? Number("-" + item.balance.amount) : item.balance.amount;
+            reportsModel.cumulative = (item.closingBalance.type === "CREDIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
             reportsModel.from = item.from;
             reportsModel.to = item.to;
+            reportsModel.interval = this.interval;
+            reportsModel.selectedMonth = this.selectedMonth;
+
             let mdyFrom = item.from.split('-');
             let mdyTo = item.to.split('-');
             let dateDiff = this.datediff(this.parseDate(mdyFrom), this.parseDate(mdyTo));
@@ -173,8 +180,10 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 reportsModelCombined.discountTotal += item.discountTotal;
                 reportsModelCombined.tcsTotal += item.tcsTotal;
                 reportsModelCombined.tdsTotal += item.tdsTotal;
-                reportsModelCombined.netPurchase += item.balance.amount;
-                reportsModelCombined.cumulative = item.closingBalance.amount;
+                reportsModelCombined.netPurchase += (item.balance.type === "CREDIT") ? Number("-" + item.balance.amount) : item.balance.amount;
+                reportsModelCombined.cumulative = (item.closingBalance.type === "CREDIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
+                reportsModelCombined.interval = this.interval;
+                reportsModelCombined.selectedMonth = this.selectedMonth;
                 reportModelArray.push(reportsModel);
                 if (indexMonths % 3 === 0) {
                     reportsModelCombined.particular = this.commonLocaleData?.app_quarter + ' ' + indexMonths / 3;
@@ -210,6 +219,16 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         let currentBranchUniqueName = '';
         let currentTimeFilter = '';
 
+        this.activeRoute.queryParams.pipe(take(1)).subscribe(params => {
+            if (params?.interval || params?.selectedMonth) {
+                this.selectedType = params.interval;
+                this.interval = params.interval;
+                this.selectedMonth = params.selectedMonth;
+
+                this.router.navigate(['pages' ,'reports', 'purchase-register']);
+            }
+        });
+
         // set financial years based on company financial year
         this.store.pipe(select(createSelector([(state: AppState) => state.session.activeCompany, (state: AppState) => state.session.registerReportFilters], (activeCompany, registerReportFilters) => {
             financialYearChosenInReportUniqueName = registerReportFilters ? registerReportFilters.financialYearChosenInReport : '';
@@ -219,8 +238,10 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
         })), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
-                this.financialOptions = activeCompany.financialYears.map(q => {
-                    return { label: q.uniqueName, value: q.uniqueName };
+                this.financialOptions = activeCompany.financialYears.map(response => {
+                    if(response){
+                        return { label: response.uniqueName, value: response.uniqueName };
+                    }
                 });
                 let selectedFinancialYear, activeFinancialYear, uniqueNameToSearch;
                 if (financialYearChosenInReportUniqueName) {
@@ -229,13 +250,15 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 } else {
                     uniqueNameToSearch = activeCompany.activeFinancialYear?.uniqueName;
                 }
-                selectedFinancialYear = this.financialOptions.find(p => p.value === uniqueNameToSearch);
-                activeFinancialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === uniqueNameToSearch);
+                selectedFinancialYear = this.financialOptions.find(p => p?.value === uniqueNameToSearch);
+                activeFinancialYear = this.selectedCompany.financialYears.find(p => p?.uniqueName === uniqueNameToSearch);
                 this.activeFinacialYr = activeFinancialYear;
+                if(selectedFinancialYear){
                 this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
+                }
                 this.currentBranch.uniqueName = currentBranchUniqueName ? currentBranchUniqueName : this.currentBranch?.uniqueName;
                 this.selectedType = currentTimeFilter ? currentTimeFilter.toLowerCase() : this.selectedType;
-                this.populateRecords(this.selectedType);
+                this.populateRecords(this.selectedType, this.selectedMonth);
                 this.purchaseRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
             }
         });
@@ -243,7 +266,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
 
     public selectFinancialYearOption(v: IOption) {
         if (v?.value) {
-            let financialYear = this.selectedCompany.financialYears.find(p => p.uniqueName === v?.value);
+            let financialYear = this.selectedCompany.financialYears.find(p => p?.uniqueName === v?.value);
             this.activeFinacialYr = financialYear;
             this.populateRecords(this.interval, this.selectedMonth);
         }
@@ -252,17 +275,25 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public populateRecords(interval, month?) {
         this.interval = interval;
         if (this.activeFinacialYr) {
-            let startDate = this.activeFinacialYr.financialYearStarts.toString();
-            let endDate = this.activeFinacialYr.financialYearEnds.toString();
+            let startDate = this.activeFinacialYr.financialYearStarts?.toString();
+            let endDate = this.activeFinacialYr.financialYearEnds?.toString();
             if (month) {
                 this.selectedMonth = month;
-                let startEndDate = this.getDateFromMonth(this.monthNames.indexOf(this.selectedMonth) + 1);
+                let startEndDate = this.getDateFromMonth(this.monthNames?.indexOf(this.selectedMonth) + 1);
                 startDate = startEndDate.firstDay;
                 endDate = startEndDate.lastDay;
             } else {
                 this.selectedMonth = null;
             }
-            this.selectedType = interval.charAt(0).toUpperCase() + interval.slice(1);
+            this.selectedType = interval?.charAt(0)?.toUpperCase() + interval?.slice(1);
+
+            if (this.currentOrganizationType === OrganizationType.Branch) {
+                if (!this.currentBranch) {
+                    this.currentBranch = {};
+                }
+                this.currentBranch.uniqueName = this.generalService.currentBranchUniqueName;
+            }
+            
             let request: ReportsRequestModel = {
                 to: endDate,
                 from: startDate,
@@ -270,12 +301,12 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 branchUniqueName: this.currentBranch?.uniqueName
             }
             this.companyService.getPurchaseRegister(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if (res.status === 'error') {
-                    this._toaster.errorToast(res.message);
+                if (res?.status === 'error') {
+                    this._toaster.errorToast(res?.message);
                 } else {
                     this.purchaseRegisterTotal = new PurchaseReportsModel();
-                    this.purchaseRegisterTotal.particular = this.activeFinacialYr.uniqueName;
-                    this.reportRespone = this.filterReportResp(res.body);
+                    this.purchaseRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
+                    this.reportRespone = this.filterReportResp(res?.body);
                 }
             });
             this.savePreferences();
@@ -289,18 +320,18 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public bsValueChange(event: any) {
         if (event) {
             let request: ReportsRequestModel = {
-                to: moment(event[1]).format(GIDDH_DATE_FORMAT),
-                from: moment(event[0]).format(GIDDH_DATE_FORMAT),
+                to: dayjs(event[1]).format(GIDDH_DATE_FORMAT),
+                from: dayjs(event[0]).format(GIDDH_DATE_FORMAT),
                 interval: 'monthly',
                 branchUniqueName: this.currentBranch?.uniqueName
             }
             this.companyService.getPurchaseRegister(request).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                if (res.status === 'error') {
-                    this._toaster.errorToast(res.message);
+                if (res?.status === 'error') {
+                    this._toaster.errorToast(res?.message);
                 } else {
                     this.purchaseRegisterTotal = new PurchaseReportsModel();
                     this.purchaseRegisterTotal.particular = this.activeFinacialYr?.uniqueName;
-                    this.reportRespone = this.filterReportResp(res.body);
+                    this.reportRespone = this.filterReportResp(res?.body);
                 }
             });
 
@@ -310,8 +341,8 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     public getDateFromMonth(selectedMonth) {
         let firstDay = '', lastDay = '';
         if (this.activeFinacialYr) {
-            let mdyFrom = this.activeFinacialYr.financialYearStarts.split('-');
-            let mdyTo = this.activeFinacialYr.financialYearEnds.split('-');
+            let mdyFrom = this.activeFinacialYr.financialYearStarts?.split('-');
+            let mdyTo = this.activeFinacialYr.financialYearEnds?.split('-');
 
             let startDate;
 
@@ -323,7 +354,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             let startDateSplit = startDate.split('-');
             let dt = new Date(startDateSplit[2], startDateSplit[1], startDateSplit[0]);
             // GET THE MONTH AND YEAR OF THE SELECTED DATE.
-            let month = (dt.getMonth() + 1).toString(),
+            let month = (dt.getMonth() + 1)?.toString(),
                 year = dt.getFullYear();
 
             // GET THE FIRST AND LAST DATE OF THE MONTH.
@@ -355,7 +386,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
      */
     private savePreferences(): void {
         this.store.dispatch(this.companyActions.setUserChosenFinancialYear({
-            financialYear: this.currentActiveFinacialYear.value, branchUniqueName: this.currentBranch?.uniqueName, timeFilter: this.selectedType
+            financialYear: this.currentActiveFinacialYear?.value, branchUniqueName: this.currentBranch?.uniqueName, timeFilter: this.selectedType
         }));
     }
 
@@ -375,8 +406,10 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             this.purchaseRegisterTotal.discountTotal += item.discountTotal;
             this.purchaseRegisterTotal.tcsTotal += item.tcsTotal;
             this.purchaseRegisterTotal.tdsTotal += item.tdsTotal;
-            this.purchaseRegisterTotal.netPurchase += item.balance.amount;
-            this.purchaseRegisterTotal.cumulative = item.closingBalance.amount;
+            this.purchaseRegisterTotal.netPurchase += (item.balance.type === "CREDIT") ? Number("-" + item.balance.amount) : item.balance.amount;
+            this.purchaseRegisterTotal.cumulative = (item.closingBalance.type === "CREDIT") ? Number("-" + item.closingBalance.amount) : item.closingBalance.amount;
+            this.purchaseRegisterTotal.interval = this.interval;
+            this.purchaseRegisterTotal.selectedMonth = this.selectedMonth;
         }
     }
 
@@ -402,5 +435,36 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
 
             this.setCurrentFY();
         }
+    }
+
+    /**
+     * Exports purchase register overview report
+     *
+     * @memberof PurchaseRegisterComponent
+     */
+    public export(): void {
+        let startDate = this.activeFinacialYr?.financialYearStarts?.toString();
+        let endDate = this.activeFinacialYr?.financialYearEnds?.toString();
+        if (this.selectedMonth) {
+            let startEndDate = this.getDateFromMonth(this.monthNames?.indexOf(this.selectedMonth) + 1);
+            startDate = startEndDate.firstDay;
+            endDate = startEndDate.lastDay;
+        }
+
+        let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
+        exportBodyRequest.from = startDate;
+        exportBodyRequest.to = endDate;
+        exportBodyRequest.exportType = "PURCHASE_REGISTER_OVERVIEW_EXPORT";
+        exportBodyRequest.fileType = "CSV";
+        exportBodyRequest.interval = this.interval;
+        exportBodyRequest.branchUniqueName = this.currentBranch?.uniqueName;
+        this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === 'success') {
+                this._toaster.successToast(response?.body);
+                this.router.navigate(["/pages/downloads"]);
+            } else {
+                this._toaster.errorToast(response?.message);
+            }
+        });
     }
 }

@@ -1,4 +1,4 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
@@ -16,11 +16,13 @@ import { LaddaModule } from 'angular2-ladda';
         ClickOutsideModule,
         SharedModule,
         ShSelectModule,
-        TooltipModule,
-        LaddaModule
+        TooltipModule.forRoot(),
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        })
     ],
-    declarations: [QuickAccountComponent],
-    entryComponents: [QuickAccountComponent]
+    declarations: [QuickAccountComponent]
 })
 
 export class QuickAccountModule { }

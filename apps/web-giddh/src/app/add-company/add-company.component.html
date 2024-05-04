@@ -1,0 +1,398 @@
+<div class="add-company-wrapper">
+    <ng-container
+        appTranslate
+        [file]="'create-company'"
+        (localeData)="localeData = $event"
+        (commonLocaleData)="commonLocaleData = $event"
+    >
+        <hamburger-menu *ngIf="companiesList?.length"></hamburger-menu>
+        <div *ngIf="isLoading">
+            <giddh-page-loader></giddh-page-loader>
+        </div>
+        <ng-container *ngIf="!isLoading">
+            <div>
+                <p class="text-center p-3">{{ localeData?.create_company_note }}</p>
+            </div>
+            <mat-stepper
+                linear
+                #stepper
+                [formGroup]="companyForm"
+                name="companyForm"
+                [selectedIndex]="selectedStep"
+                (selectionChange)="onSelectedTab($event)"
+                [disableRipple]="firstStepForm.invalid"
+            >
+                <mat-step [stepControl]="firstStepForm" role="tabpanel">
+                    <form [formGroup]="firstStepForm" name="firstStepForm" autocomplete="off" novalidate>
+                        <ng-template matStepLabel>{{ commonLocaleData?.app_company_name }}</ng-template>
+                        <div class="row row-gap">
+                            <div class="col-lg-12">
+                                <input-field
+                                    [name]="'name'"
+                                    [label]="commonLocaleData?.app_company_name + '*'"
+                                    [placeholder]="localeData?.enter_company_name"
+                                    [type]="'text'"
+                                    formControlName="name"
+                                    [showError]="isFormSubmitted && !firstStepForm.get('name')?.value"
+                                    [maxlength]="100"
+                                >
+                                </input-field>
+                            </div>
+                            <div class="col-6 country-space">
+                                <dropdown-field
+                                    [name]="'country'"
+                                    [label]="commonLocaleData?.app_country + '*'"
+                                    [placeholder]="localeData?.enter_country_name"
+                                    [options]="countries"
+                                    (selectedOption)="selectCountry($event)"
+                                    [defaultValue]="selectedCountry"
+                                    [showError]="isFormSubmitted && !firstStepForm.get('country')?.value"
+                                >
+                                </dropdown-field>
+                            </div>
+                            <div class="col-6 currency-space">
+                                <dropdown-field
+                                    [name]="'currency'"
+                                    [label]="commonLocaleData?.app_currency + '*'"
+                                    [placeholder]="localeData?.enter_currency_name"
+                                    [options]="currencies"
+                                    [showError]="isFormSubmitted && !firstStepForm.get('currency')?.value"
+                                    [defaultValue]="company.baseCurrency"
+                                    (selectedOption)="selectCurrency($event)"
+                                >
+                                </dropdown-field>
+                            </div>
+                            <div class="col-6 mobile-number mobile-number-wrapper" *ngIf="showMobileField">
+                                <input-field
+                                    [name]="'mobile'"
+                                    [type]="'tel'"
+                                    #mobileNoField
+                                    class="flag-input"
+                                    [id]="'init-contact-proforma'"
+                                    (keydown.enter)="$event.preventDefault()"
+                                    [label]="commonLocaleData?.app_mobile_number + '*'"
+                                    [placeholder]="localeData?.enter_mobile_number"
+                                    [floatLabel]="intl?.getNumber() ? 'always' : 'auto'"
+                                    (onChange)="firstStepForm.controls['mobile'].setValue(intl?.getNumber())"
+                                    [showError]="
+                                        (isFormSubmitted && !firstStepForm.get('mobile')?.value) ||
+                                        isMobileNumberInvalid
+                                    "
+                                    [readonly]="isMobileNumberVerified || showOtpField"
+                                >
+                                </input-field>
+                                <span id="init-contact-proforma-valid-msg" class="d-none"></span>
+                                <span id="init-contact-proforma-error-msg" class="d-none"></span>
+                            </div>
+                            <div class="col-6 mobile-no-action-buttons" *ngIf="showMobileField">
+                                <button
+                                    mat-stroked-button
+                                    (click)="reVerifyNumber()"
+                                    *ngIf="isMobileNumberVerified || showOtpField"
+                                    class="btn-min-width"
+                                >
+                                    {{ localeData?.change }}
+                                </button>
+
+                                <button
+                                    mat-stroked-button
+                                    (click)="sendOtp()"
+                                    [disabled]="sendOtpInProgress"
+                                    *ngIf="!showOtpField && !isMobileNumberVerified"
+                                    class="send-otp-btn"
+                                >
+                                    <mat-progress-spinner
+                                        *ngIf="sendOtpInProgress"
+                                        diameter="20"
+                                        color="primary"
+                                        mode="indeterminate"
+                                        value="50"
+                                    >
+                                    </mat-progress-spinner>
+                                    <span *ngIf="!sendOtpInProgress">{{ localeData?.send_otp }}</span>
+                                </button>
+                            </div>
+                            <ng-container *ngIf="showMobileField && showOtpField">
+                                <div class="col-6 otp-input">
+                                    <input-field
+                                        (clickOutside)="showHideFocusFromOtpField(false)"
+                                        [name]="'mobileOtp'"
+                                        [type]="'tel'"
+                                        [label]="localeData?.otp"
+                                        [placeholder]="localeData?.enter_otp"
+                                        [floatLabel]="showFocusInOtpField ? 'always' : 'auto'"
+                                        formControlName="mobileOtp"
+                                        [autoFocus]="true"
+                                    >
+                                    </input-field>
+                                </div>
+                                <div class="col-6 mobile-no-action-buttons">
+                                    <div class="d-flex align-items-center">
+                                        <button
+                                            mat-stroked-button
+                                            (click)="verifyOtp()"
+                                            [disabled]="verifyOtpInProgress || resendOtpInProgress"
+                                            class="btn-min-width"
+                                        >
+                                            <mat-progress-spinner
+                                                *ngIf="verifyOtpInProgress"
+                                                diameter="20"
+                                                color="primary"
+                                                mode="indeterminate"
+                                                value="50"
+                                            >
+                                            </mat-progress-spinner>
+                                            <span *ngIf="!verifyOtpInProgress">{{ localeData?.verify }}</span>
+                                        </button>
+                                        <button
+                                            mat-stroked-button
+                                            (click)="resendOtp()"
+                                            [disabled]="resendOtpInProgress || verifyOtpInProgress"
+                                            class="ml-auto send-otp-btn"
+                                        >
+                                            <mat-progress-spinner
+                                                *ngIf="resendOtpInProgress"
+                                                diameter="20"
+                                                color="primary"
+                                                mode="indeterminate"
+                                                value="50"
+                                            >
+                                            </mat-progress-spinner>
+                                            <span *ngIf="!resendOtpInProgress">{{ localeData?.resend_otp }}</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                        <div class="d-flex column-gap15 mr-t15">
+                            <button mat-stroked-button color="primary" (click)="nextStepForm()">
+                                {{ commonLocaleData?.app_next }}
+                            </button>
+                            <button
+                                *ngIf="companiesList?.length === 0"
+                                mat-stroked-button
+                                (click)="openLogoutConfirmationDialog()"
+                            >
+                                {{ commonLocaleData?.app_cancel }}
+                            </button>
+                        </div>
+                    </form>
+                </mat-step>
+                <mat-step [stepControl]="secondStepForm" name="secondStepForm" role="tabpanel">
+                    <form [formGroup]="secondStepForm" autocomplete="off" novalidate>
+                        <ng-template matStepLabel>{{ localeData?.company_address }}</ng-template>
+                        <div class="row row-gap">
+                            <div class="col-lg-12 fill-form">
+                                <input-field
+                                    [placeholder]="firstStepForm.get('name')?.value"
+                                    [label]="commonLocaleData?.app_company_name + '*'"
+                                    [type]="'text'"
+                                    [readonly]="true"
+                                    [floatLabel]="'always'"
+                                    [ngClass]="{ 'readonly-field': firstStepForm.get('name')?.value }"
+                                >
+                                </input-field>
+                            </div>
+                            <div class="col-lg-6 country-space">
+                                <dropdown-field
+                                    [readonly]="true"
+                                    [label]="commonLocaleData?.app_country + '*'"
+                                    [defaultValue]="firstStepForm.get('country')?.value?.label"
+                                    [ngClass]="{ 'readonly-field': firstStepForm.get('country')?.value?.label }"
+                                >
+                                </dropdown-field>
+                            </div>
+                            <div class="col-lg-6 currency-space">
+                                <dropdown-field
+                                    [readonly]="true"
+                                    [label]="commonLocaleData?.app_currency + '*'"
+                                    [defaultValue]="firstStepForm.get('currency')?.value?.value"
+                                    [ngClass]="{ 'readonly-field': firstStepForm.get('currency')?.value?.value }"
+                                >
+                                </dropdown-field>
+                            </div>
+                            <div class="col-lg-12 mobile-number fill-form" *ngIf="showMobileField">
+                                <span class="country-flag">
+                                    <img
+                                        *ngIf="currentFlag"
+                                        src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{
+                                            currentFlag
+                                        }}.svg"
+                                        width="27"
+                                    />
+                                </span>
+                                <input-field
+                                    [name]="'mobile'"
+                                    [type]="'tel'"
+                                    [label]="commonLocaleData?.app_mobile_number + '*'"
+                                    [placeholder]="firstStepForm.controls['mobile'].value"
+                                    [floatLabel]="'always'"
+                                    [readonly]="true"
+                                    [ngClass]="{ 'readonly-field': firstStepForm.get('mobile')?.value }"
+                                    class="readflag"
+                                >
+                                </input-field>
+                            </div>
+                            <div class="col-lg-12">
+                                <dropdown-field
+                                    [name]="'businessType'"
+                                    [label]="localeData?.business_type"
+                                    [placeholder]="localeData?.select_business_type"
+                                    [options]="businessTypeList"
+                                    (selectedOption)="selectBusinessType($event.value)"
+                                    [defaultValue]="isOtherCountry ? businessTypeList[0].label : ''"
+                                >
+                                </dropdown-field>
+                            </div>
+                            <div class="col-lg-12">
+                                <dropdown-field
+                                    [name]="'businessNature'"
+                                    [label]="localeData?.business_nature"
+                                    [placeholder]="localeData?.select_business_nature"
+                                    [options]="businessNatureList"
+                                    (selectedOption)="selectBusinessNature($event)"
+                                >
+                                </dropdown-field>
+                            </div>
+                            <ng-container
+                                *ngIf="secondStepForm.controls['businessType']?.value === businessTypes.Registered"
+                            >
+                                <div class="col-lg-12">
+                                    <input-field
+                                        [name]="'gstin'"
+                                        [placeholder]="getEnterTaxText()"
+                                        [type]="'text'"
+                                        formControlName="gstin"
+                                        [showError]="
+                                            isFormSubmitted && (!secondStepForm.get('gstin')?.value || !isGstinValid)
+                                        "
+                                        [label]="formFields['taxName']?.label + '*'"
+                                        [maxlength]="15"
+                                        (change)="validateGstNumber()"
+                                    >
+                                    </input-field>
+                                </div>
+                            </ng-container>
+                            <div class="col-lg-12" *ngIf="!countyList?.length">
+                                <dropdown-field
+                                    [name]="'state'"
+                                    [label]="
+                                        selectedCountryCode === 'EE'
+                                            ? secondStepForm.controls['businessType']?.value ===
+                                              businessTypes.Registered
+                                                ? localeData?.county + '*'
+                                                : localeData?.county
+                                            : secondStepForm.controls['businessType']?.value ===
+                                              businessTypes.Registered
+                                            ? commonLocaleData?.app_state + '*'
+                                            : commonLocaleData?.app_state
+                                    "
+                                    [placeholder]=" selectedCountryCode === 'EE' ? localeData?.select_county:localeData?.select_state"
+                                    [options]="states"
+                                    [showError]="isFormSubmitted && secondStepForm.get('state')?.invalid"
+                                    [readonly]="disabledState"
+                                    [defaultValue]="selectedState"
+                                    (selectedOption)="selectState($event)"
+                                    [ngClass]="{ 'readonly-field': disabledState }"
+                                >
+                                </dropdown-field>
+                            </div>
+                            <div class="col-lg-12" *ngIf="countyList?.length">
+                                <dropdown-field
+                                    [name]="'county'"
+                                    [label]="
+                                        secondStepForm.controls['businessType']?.value === businessTypes.Registered
+                                            ? commonLocaleData?.app_region + '*'
+                                            : commonLocaleData?.app_region
+                                    "
+                                    [placeholder]="commonLocaleData?.app_select_region"
+                                    [options]="countyList"
+                                    [showError]="isFormSubmitted && !secondStepForm.get('county')?.value"
+                                    [defaultValue]="secondStepForm.get('county')?.value?.label"
+                                    (selectedOption)="secondStepForm.get('county')?.patchValue($event)"
+                                >
+                                </dropdown-field>
+                            </div>
+                            <ng-container
+                                *ngIf="secondStepForm.controls['businessType']?.value === businessTypes.Registered"
+                            >
+                                <div class="col-lg-12">
+                                    <mat-form-field class="w-100" appearance="outline">
+                                        <mat-label>{{ localeData?.applicable_tax }}</mat-label>
+                                        <mat-select
+                                            [placeholder]="commonLocaleData?.app_select_tax"
+                                            [formControlName]="'taxes'"
+                                            multiple
+                                        >
+                                            <mat-option *ngFor="let tax of taxesList" [value]="tax?.value">{{
+                                                tax?.label
+                                            }}</mat-option>
+                                            <mat-option
+                                                class="create-update-no-data"
+                                                [disabled]="true"
+                                                *ngIf="!taxesList?.length"
+                                                >{{ commonLocaleData?.app_no_result_found }}</mat-option
+                                            >
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                            </ng-container>
+                            <div class="col-lg-12">
+                                <input-field
+                                    [name]="'pincode'"
+                                    [label]="commonLocaleData?.app_pin_code"
+                                    [placeholder]="commonLocaleData?.app_enter_pin_code"
+                                    [type]="'text'"
+                                    formControlName="pincode"
+                                >
+                                </input-field>
+                            </div>
+                            <div class="col-lg-12">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>{{
+                                        secondStepForm.controls["businessType"]?.value === businessTypes.Registered
+                                            ? localeData?.company_address
+                                            : localeData?.company_address
+                                    }}</mat-label>
+                                    <textarea
+                                        matInput
+                                        rows="3"
+                                        [name]="'address'"
+                                        formControlName="address"
+                                        [placeholder]="localeData?.type_your_address"
+                                        [required]="
+                                            secondStepForm.controls['businessType']?.value === businessTypes.Registered
+                                        "
+                                    ></textarea>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-12">
+                                <p class="pb-2">{{ localeData?.onboarding_note }}</p>
+                                <p
+                                    class="taxation-not-supported"
+                                    [innerHTML]="localeData?.tax_reports_note"
+                                    *ngIf="isOtherCountry"
+                                ></p>
+                            </div>
+                        </div>
+                        <div class="pt-2 d-flex column-gap15">
+                            <button mat-stroked-button matStepperPrevious (click)="selectedStep = 0">
+                                {{ commonLocaleData?.app_back }}
+                            </button>
+                            <button mat-stroked-button color="primary" (click)="onSubmit()">
+                                {{ commonLocaleData?.app_submit }}
+                            </button>
+                            <button
+                                *ngIf="companiesList?.length === 0"
+                                mat-stroked-button
+                                (click)="openLogoutConfirmationDialog()"
+                            >
+                                {{ commonLocaleData?.app_cancel }}
+                            </button>
+                        </div>
+                    </form>
+                </mat-step>
+            </mat-stepper>
+        </ng-container>
+    </ng-container>
+</div>

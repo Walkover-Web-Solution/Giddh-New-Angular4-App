@@ -1,6 +1,6 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
@@ -25,7 +25,7 @@ export class ActivityLogsService {
      */
     public getActivityLogs(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + ACTIVITY_LOGS_API.GET_ACTIVITY_LOGS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+        return this.http.post(this.config.apiUrl + ACTIVITY_LOGS_API.GET_ACTIVITY_LOGS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = model;

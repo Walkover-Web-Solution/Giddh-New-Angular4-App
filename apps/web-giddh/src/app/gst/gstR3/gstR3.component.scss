@@ -1,5 +1,5 @@
 .font-xlarge {
-    font-size: 18px;
+    font-size: var(--font-size-16);
 }
 
 a {
@@ -9,9 +9,11 @@ a {
 
 svg.icon.icon-lg {
     height: 18px;
-    width: 18px;
+    width: 12px;
     filter: invert(0);
     color: var(--color-primary-checkbox-and-expansion-panel-arrow);
+    position: relative;
+    top: -1px;
 }
 
 .text-middle {
@@ -44,7 +46,7 @@ svg.icon.icon-sm {
 }
 
 .font-large {
-    font-size: 16px;
+    font-size: var(--font-size-16);
 }
 
 .text-primary {
@@ -86,7 +88,7 @@ svg.icon.icon-sm {
 
 .btn,
 input.gsc-input {
-    font-size: 14px;
+    font-size: var(--font-size-15);
     line-height: 1.42857143;
     vertical-align: middle;
 }
@@ -210,13 +212,13 @@ svg.icon.icon-xxlg {
 }
 
 .font-xxxlarge {
-    font-size: 24px;
+    font-size: var(--font-size-24);
 }
 
 .tax-engine .summary-content {
     max-width: 930px;
     margin: 0 auto 30px;
-    font-family: ProximaNovaLight, ProximaNovaRegular, "Source Sans Pro", Arial, sans-serif;
+    font-family: var(--font-regular);
 }
 
 .tax-engine .summary-content .gstr-3b-user {
@@ -224,7 +226,7 @@ svg.icon.icon-xxlg {
 }
 
 .font-medium {
-    font-size: 15px;
+    font-size: var(--font-size-15);
 }
 
 .table,
@@ -249,7 +251,7 @@ address {
 .tax-engine .summary-content .gstr-3b-report.table > thead > tr > td {
     border: 1px solid var(--color-table-primary-header-bar-border) !important;
     padding: 6px;
-    font-size: 13px;
+    font-size: var(--font-size-15);
 }
 
 .btn-link:focus,
@@ -269,7 +271,7 @@ table {
 }
 
 .tax-engine .summary-content .gstr-3b-report.table > tbody > tr > td {
-    font-size: 13px;
+    font-size: var(--font-size-15);
     border: 1px solid var(--color-table-primary-content-bar-border) !important;
     padding: 6px;
 }
@@ -286,6 +288,15 @@ table {
     background-color: var(--color-table-body-secondary-background);
 }
 
+.dropdown-menu {
+    .btn-default {
+        &.disabled {
+            cursor: not-allowed;
+            opacity: 1 !important;
+        }
+    }
+}
+
 *,
 :after,
 :before {
@@ -294,7 +305,7 @@ table {
 
 .h4,
 h4 {
-    font-size: 18px;
+    font-size: var(--font-size-16);
 }
 
 h4,
@@ -315,15 +326,15 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: ProximaNovaRegular, "Source Sans Pro", Helvetica, Arial, sans-serif;
+    font-family: var(--font-regular);
     font-weight: 500;
     line-height: 1.1;
 }
 
 .modal-backdrop {
     position: fixed;
-    top: 0;
-    z-index: 1030;
+    top: var(--top-distance);
+    z-index: 991;
     background-color: var(--color-white);
     transition: all 0.3s;
 }
@@ -337,7 +348,7 @@ h6 {
 }
 
 .modal-header {
-    font-size: 18px;
+    font-size: var(--font-size-16);
 }
 
 .modal-header {
@@ -474,7 +485,7 @@ dropdown-menu-right {
 .successful-file-detail h3,
 .gst-return-date h3 {
     color: var(--color-nero) !important;
-    font-size: 24px !important;
+    font-size: var(--font-size-24) !important;
     margin: 20px 0 7px !important;
 }
 
@@ -492,11 +503,11 @@ dropdown-menu-right {
 }
 
 .file-your-return {
-    font-size: 18px;
+    font-size: var(--font-size-16);
 }
 
 .authenticate-btn {
-    font-size: 14px;
+    font-size: var(--font-size-15);
 }
 
 ul#dropdown-menu {
@@ -556,6 +567,14 @@ ul#dropdown-menu {
         }
     }
 }
+.month-picker {
+    li {
+        a:hover {
+            background-color: transparent !important;
+            border: none !important;
+        }
+    }
+}
 @media (max-width: 991px) {
     .gstr-summary-head {
         height: auto;
@@ -598,7 +617,7 @@ ul#dropdown-menu {
             width: 100%;
             padding-bottom: 15px;
             .font-xlarge {
-                font-size: 16px;
+                font-size: var(--font-size-15);
             }
             .dropdown {
                 margin-left: 0;

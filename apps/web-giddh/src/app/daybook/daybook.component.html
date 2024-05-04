@@ -11,7 +11,7 @@
             <!-- ledger header -->
             <div class="col-md-12">
                 <div class="d-flex justify-content-between">
-                    <div class="d-flex">
+                    <div class="d-flex align-items-end">
                         <div class="d-flex company-date-picker">
                             <div
                                 class="form-group mb-0 mr-r15 linked-entities"
@@ -31,7 +31,7 @@
                                     >
                                         <ng-template #optionTemplate let-option="option">
                                             <ng-container>
-                                                <a href="javascript:void(0)" class="list-item d-flex">
+                                                <a href="javascript:void(0);" aria-label="branch" class="list-item d-flex">
                                                     <span class="entity-icon">
                                                         <i
                                                             class="icon-branch-icon pull-right"
@@ -64,7 +64,6 @@
                             </div>
                             <div class="form-inline align-items-center d-flex flex-nowrap daybook-filter">
                                 <div class="form-group custom-datepicker mr-r15" (click)="showGiddhDatepicker($event)">
-                                    <i class="icon-calender calendar-addon"></i>
                                     <input
                                         matInput
                                         type="text"
@@ -77,6 +76,8 @@
                         </div>
                         <div class="form-group mb-0 expand-collapse-btn">
                             <a
+                                href="javascript:void(0);"
+                                aria-label="expand icon"
                                 class="cp"
                                 (click)="toggleExpand()"
                                 [matTooltip]="commonLocaleData?.app_expand_all"
@@ -87,6 +88,8 @@
                                 <span class="icon-expandIcon"></span>
                             </a>
                             <a
+                                href="javascript:void(0);"
+                                aria-label="icon collapse"
                                 class="cp"
                                 (click)="toggleExpand()"
                                 [matTooltip]="commonLocaleData?.app_collapse_all"
@@ -99,28 +102,33 @@
                         </div>
                     </div>
                     <div *ngIf="showAdvanceSearchIcon" class="clear-filter form-group mb-0">
-                        <button mat-button class="btn btn-filter" (click)="initialRequest()">
-                            <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                        <button mat-stroked-button (click)="initialRequest()">
+                            <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
                         </button>
                     </div>
                     <div class="filter-export d-flex align-items-center">
+                        <div>
+                            <watch-video [cssClass]="'text-primary'" [moduleName]="'DAYBOOK'"></watch-video>
+                        </div>
                         <div class="form-group mb-0 cursor-pointer">
                             <button
-                                class="advance-icon align-items-center btn btn-primary"
+                                class="advance-icon align-items-center"
                                 [matTooltip]="commonLocaleData?.app_advance_search"
                                 [matTooltipPosition]="'above'"
                                 matTooltipClass="tooltip-black"
                                 (click)="onOpenAdvanceSearch()"
-                                mat-raised-button
+                                mat-stroked-button
+                                color="primary"
                             >
                                 <span class="pd-r05 d-sm-inline d-none">{{ commonLocaleData?.app_filter }}</span>
                                 <span class="icon-advance-filter"></span>
                             </button>
                         </div>
                         <button
-                            mat-raised-button
+                            mat-stroked-button
+                            color="primary"
                             type="button"
-                            class="btn btn-default bdr export-btn mr-0 d-flex align-items-center"
+                            class="bdr export-btn mr-0 d-flex align-items-center"
                             (click)="exportDaybook()"
                             *ngIf="daybookData?.entries?.length > 0"
                         >
@@ -128,42 +136,9 @@
                         </button>
                     </div>
                 </div>
-                <div class="d-md-none d-flex justify-content-between mr-t1">
-                    <button
-                        mat-raised-button
-                        type="button"
-                        class="btn btn-default bdr mr-0"
-                        (click)="exportDaybook()"
-                        *ngIf="daybookData?.entries?.length > 0"
-                    >
-                        {{ commonLocaleData?.app_export }}
-                    </button>
-                    <div class="expand-collapse-btn">
-                        <a
-                            class="cp"
-                            (click)="toggleExpand()"
-                            [matTooltip]="commonLocaleData?.app_expand_all"
-                            [matTooltipPosition]="'above'"
-                            matTooltipClass="tooltip-black"
-                            *ngIf="!isAllExpanded"
-                        >
-                            <span class="icon-expandIcon"></span>
-                        </a>
-                        <a
-                            class="cp"
-                            (click)="toggleExpand()"
-                            [matTooltip]="commonLocaleData?.app_collapse_all"
-                            [matTooltipPosition]="'above'"
-                            matTooltipClass="tooltip-black"
-                            *ngIf="isAllExpanded"
-                        >
-                            <span class="icon-collapse"></span>
-                        </a>
-                    </div>
-                </div>
                 <div class="d-none clear-filter-responsive mr-t1 clear-filter" *ngIf="showAdvanceSearchIcon">
-                    <button mat-raised-button class="btn btn-filter" (click)="initialRequest()">
-                        <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+                    <button mat-stroked-button color="primary" (click)="initialRequest()">
+                        <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
             </div>
@@ -183,14 +158,14 @@
                                 mat-header-cell
                                 [hidden]="!daybookData?.entries?.length"
                                 *matHeaderCellDef
-                                class="no-wrap daybook-w-100"
+                                class="daybook-w-150"
                             >
                                 {{ commonLocaleData?.app_date }}
                             </th>
                             <td
                                 mat-cell
                                 *matCellDef="let entry"
-                                class="no-wrap"
+                                class="daybook-w-150"
                                 [attr.data-title]="commonLocaleData?.app_date"
                             >
                                 {{ entry.entryDate }}
@@ -244,7 +219,7 @@
                             <td
                                 mat-cell
                                 *matCellDef="let entry"
-                                class="text-right"
+                                class="text-right daybook-w-150"
                                 [attr.data-title]="localeData?.voucher_no"
                             >
                                 {{
@@ -268,7 +243,7 @@
                             <td
                                 mat-cell
                                 *matCellDef="let entry"
-                                class="text-right"
+                                class="text-right daybook-w-150"
                                 [attr.data-title]="localeData?.debit_amount"
                             >
                                 <span class="d-flex justify-content-end">
@@ -293,7 +268,7 @@
                             <td
                                 mat-cell
                                 *matCellDef="let entry"
-                                class="text-right"
+                                class="text-right daybook-w-150"
                                 [attr.data-title]="localeData?.credit_amount"
                             >
                                 <span class="d-flex justify-content-end">
@@ -320,6 +295,7 @@
                                 *matCellDef="let entry"
                                 [attr.data-title]="localeData?.product_service"
                                 class="daybook-w-200"
+
                             ></td>
                         </ng-container>
                         <ng-container *ngIf="isEntryExpanded" matColumnDef="quantity">
@@ -334,8 +310,9 @@
                             <td
                                 mat-cell
                                 *matCellDef="let entry"
-                                class="text-right"
+                                class="text-right daybook-w-100"
                                 [attr.data-title]="localeData?.qty"
+
                             ></td>
                         </ng-container>
                         <ng-container *ngIf="isEntryExpanded" matColumnDef="unit">
@@ -347,7 +324,8 @@
                             >
                                 {{ commonLocaleData?.app_unit }}
                             </th>
-                            <td mat-cell *matCellDef="let entry" [attr.data-title]="commonLocaleData?.app_unit"></td>
+                            <td mat-cell *matCellDef="let entry" [attr.data-title]="commonLocaleData?.app_unit" class="daybook-w-100"
+                            ></td>
                         </ng-container>
                         <ng-container *ngIf="isEntryExpanded" matColumnDef="rate">
                             <th
@@ -361,7 +339,7 @@
                             <td
                                 mat-cell
                                 *matCellDef="let entry"
-                                class="text-right"
+                                class="text-right daybook-w-150"
                                 [attr.data-title]="commonLocaleData?.app_rate"
                             ></td>
                         </ng-container>
@@ -374,7 +352,7 @@
                             >
                                 {{ commonLocaleData?.app_hsn_sac }}
                             </th>
-                            <td mat-cell *matCellDef="let entry" [attr.data-title]="commonLocaleData?.app_hsn_sac"></td>
+                            <td mat-cell *matCellDef="let entry" [attr.data-title]="commonLocaleData?.app_hsn_sac" class="daybook-w-100"></td>
                         </ng-container>
                         <ng-container *ngIf="isEntryExpanded" matColumnDef="sku">
                             <th
@@ -385,7 +363,7 @@
                             >
                                 {{ commonLocaleData?.app_sku }}
                             </th>
-                            <td mat-cell *matCellDef="let entry" [attr.data-title]="commonLocaleData?.app_sku"></td>
+                            <td mat-cell *matCellDef="let entry" [attr.data-title]="commonLocaleData?.app_sku" class="daybook-w-100"></td>
                         </ng-container>
                         <ng-container *ngIf="isEntryExpanded" matColumnDef="warehouse">
                             <th
@@ -420,7 +398,7 @@
                                             [dataSource]="entry.otherTransactions"
                                         >
                                             <ng-container matColumnDef="expanded_entry_date">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef></th>
+                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef class="daybook-w-100"></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -428,7 +406,7 @@
                                                 ></td>
                                             </ng-container>
                                             <ng-container matColumnDef="expanded_particular">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef></th>
+                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef class="daybook-w-300"></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -439,7 +417,7 @@
                                                 </td>
                                             </ng-container>
                                             <ng-container matColumnDef="expanded_voucher_name">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef></th>
+                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef class="daybook-w-200"></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -447,7 +425,7 @@
                                                 ></td>
                                             </ng-container>
                                             <ng-container matColumnDef="expanded_voucher_no">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef></th>
+                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef class="daybook-w-150"></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -455,7 +433,7 @@
                                                 ></td>
                                             </ng-container>
                                             <ng-container matColumnDef="expanded_debit_amount">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef></th>
+                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef class="text-right daybook-w-150"></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -476,7 +454,7 @@
                                                 </td>
                                             </ng-container>
                                             <ng-container matColumnDef="expanded_credit_amount">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef></th>
+                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef class="text-right daybook-w-150"></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -500,7 +478,7 @@
                                                 *ngIf="isEntryExpanded"
                                                 matColumnDef="expanded_product_service"
                                             >
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef></th>
+                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef class="daybook-w-200"></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -511,7 +489,7 @@
                                                 </td>
                                             </ng-container>
                                             <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_quantity">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef></th>
+                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef class="text-right daybook-w-100"></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -526,7 +504,7 @@
                                                 </td>
                                             </ng-container>
                                             <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_unit">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef></th>
+                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef class="daybook-w-100"></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -537,7 +515,7 @@
                                                 </td>
                                             </ng-container>
                                             <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_rate">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef></th>
+                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef  class="text-right daybook-w-150"></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -556,7 +534,7 @@
                                                 </td>
                                             </ng-container>
                                             <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_hsn_sac">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef></th>
+                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef  class="daybook-w-100"></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -567,7 +545,7 @@
                                                 </td>
                                             </ng-container>
                                             <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_sku">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef></th>
+                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef class="daybook-w-100"></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -578,7 +556,7 @@
                                                 </td>
                                             </ng-container>
                                             <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_warehouse">
-                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef></th>
+                                                <th mat-header-cell [hidden]="true" *matHeaderCellDef  class="daybook-w-200"></th>
                                                 <td
                                                     mat-cell
                                                     *matCellDef="let details"
@@ -635,7 +613,7 @@
                     </table>
                 </div>
 
-                <div class="mr-t2 text-center" [hidden]="!daybookData?.entries?.length">
+                <div class="mt-5 text-center" [hidden]="!daybookData?.entries?.length">
                     <small class="grey" *ngIf="daybookData?.totalItems"
                         >{{ daybookData?.totalItems }}
                         {{ commonLocaleData?.app_transactions }}
@@ -647,7 +625,10 @@
                 </div>
 
                 <!-- pagination -->
-                <div class="mt-1" [hidden]="!daybookData?.entries?.length">
+                <div
+                    class="pagination-wrapper mt-1"
+                    [hidden]="!daybookData?.entries?.length || daybookData?.totalItems <= daybookData?.count"
+                >
                     <pagination
                         [totalItems]="daybookData?.totalItems"
                         [(ngModel)]="daybookData.page"
@@ -726,19 +707,34 @@
         [isPettyCash]="false"
         (closeUpdateLedgerModal)="hideUpdateLedgerModal()"
         (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane()"
+        [entrySide]="entrySide"
+        [activeCompany]="activeCompany"
+        (showQuickAccountModalFromUpdateLedger)="toggleAsidePane()"
     ></update-ledger-entry-panel>
 </ng-template>
 
 <!-- aside menu section -->
-<div class="aside-overlay" *ngIf="asideMenuStateForOtherTaxes === 'in'"></div>
-<app-aside-menu-sales-other-taxes
-    *ngIf="asideMenuStateForOtherTaxes === 'in'"
-    [class]="asideMenuStateForOtherTaxes"
-    [taxes]="companyTaxesList"
-    [otherTaxesModal]="updateLedgerComponent.vm.selectedLedger.otherTaxModal"
-    [commonLocaleData]="commonLocaleData"
-    [@slideInOut]="asideMenuStateForOtherTaxes"
-    (closeModal)="toggleOtherTaxesAsidePane(null)"
-    (applyTaxes)="calculateOtherTaxes($event); toggleOtherTaxesAsidePane(null)"
->
-</app-aside-menu-sales-other-taxes>
+<ng-template #ledgerAsidePane>
+    <ledger-aside-pane
+        [class]="ledgerAsidePane"
+        [keyboardShortcut]="'esc'"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        (onShortcutPress)="ledgerAsidePaneModal?.close()"
+        (closeAsideEvent)="ledgerAsidePaneModal?.close()"
+    >
+    </ledger-aside-pane>
+</ng-template>
+
+<!-- aside menu section -->
+<ng-template #asideMenuStateForOtherTaxes>
+    <app-aside-menu-sales-other-taxes
+        [class]="asideMenuStateForOtherTaxes"
+        [taxes]="companyTaxesList"
+        [otherTaxesModal]="updateLedgerComponent?.vm?.selectedLedger?.otherTaxModal"
+        [commonLocaleData]="commonLocaleData"
+        (closeModal)="asideMenuStateForOtherTaxesDialogRef.close()"
+        (applyTaxes)="calculateOtherTaxes($event); asideMenuStateForOtherTaxesDialogRef.close()"
+    >
+    </app-aside-menu-sales-other-taxes>
+</ng-template>

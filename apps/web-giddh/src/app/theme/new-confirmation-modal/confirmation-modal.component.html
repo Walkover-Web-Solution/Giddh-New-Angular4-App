@@ -1,26 +1,40 @@
 <div class="custom-confirmation-modal">
     <div class="modal-header flex-row-reverse">
-        <span class="close font-16"><span class="icon-cross" (click)="sendResponse('Close')"></span></span>
+        <span class="close font-15"><span class="icon-cross" (click)="sendResponse('Close')"></span></span>
         <h3 mat-dialog-title [ngClass]="inputData?.configuration?.headerCssClass">
             {{ inputData?.configuration?.headerText }}
         </h3>
     </div>
-    <div class="modal-body font-14">
+    <div class="modal-body font-15">
         <p
             [ngClass]="inputData?.configuration?.messageCssClass"
             [innerHTML]="inputData?.configuration?.messageText"
         ></p>
         <p [ngClass]="inputData?.configuration?.footerCssClass">{{ inputData?.configuration?.footerText }}</p>
-        <div>
-            <button
-                mat-button
-                class="confirmation-buttons"
-                *ngFor="let button of inputData?.configuration?.buttons"
-                (click)="sendResponse(button?.text)"
-                [ngClass]="button?.cssClass"
-            >
-                {{ button?.text }}
-            </button>
+        <div class="d-flex column-gap15">
+            <ng-container *ngFor="let button of inputData?.configuration?.buttons">
+                <button
+                    *ngIf="!inputData?.configuration?.disableRipple"
+                    mat-stroked-button
+                    class="confirmation-buttons"
+                    (click)="sendResponse(button?.text)"
+                    [ngClass]="button?.cssClass"
+                    [color]="button?.color"
+                >
+                    {{ button?.text }}
+                </button>
+                <button
+                    *ngIf="inputData?.configuration?.disableRipple"
+                    [disableRipple]="true"
+                    mat-button
+                    class="confirmation-buttons"
+                    (click)="sendResponse(button?.text)"
+                    [ngClass]="button?.cssClass"
+                    [color]="button?.color"
+                >
+                    {{ button?.text }}
+                </button>
+            </ng-container>
         </div>
     </div>
 </div>

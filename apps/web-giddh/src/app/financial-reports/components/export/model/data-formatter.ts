@@ -31,11 +31,11 @@ export class DataFormatter {
         csv = '';
         row = '';
         title = '' + ',' + localeData?.csv.trial_balance.opening_balance + ',' + localeData?.csv.trial_balance.debit + ',' + localeData?.csv.trial_balance.credit + ',' + localeData?.csv.trial_balance.closing_balance + '\n';
-        header = `${this.selectedCompany.name}\r\n"${this.selectedCompany.address}"\r\n${this.selectedCompany.city}-${this.selectedCompany.pincode}\r\n${localeData?.csv.trial_balance.trial_balance} ${localeData?.csv.trial_balance.fromDate} ${localeData?.csv.trial_balance.to} ${localeData?.csv.trial_balance.toDate}\r\n`;
+        header = `${this.selectedCompany?.name}\r\n"${this.selectedCompany?.address}"\r\n${this.selectedCompany?.city}-${this.selectedCompany?.pincode}\r\n${localeData?.csv.trial_balance.trial_balance} ${localeData?.csv.trial_balance.fromDate} ${localeData?.csv.trial_balance.to} ${localeData?.csv.trial_balance.toDate}\r\n`;
         csv += `${header}\r\n${title}`;
 
         this.exportData.forEach(obj => {
-            row += `${obj.groupName} (${obj.uniqueName}),${obj.forwardedBalance.amount} ${this.recType.transform(obj.forwardedBalance)},${obj.debitTotal},${obj.creditTotal},${obj.closingBalance.amount}${this.recType.transform(obj.closingBalance)}\r\n`;
+            row += `${obj.groupName} (${obj?.uniqueName}),${obj.forwardedBalance.amount} ${this.recType.transform(obj.forwardedBalance)},${obj.debitTotal},${obj.creditTotal},${obj.closingBalance.amount}${this.recType.transform(obj.closingBalance)}\r\n`;
             total = this.calculateTotal(obj, total);
         });
         csv += `${row}\r\n`;
@@ -54,28 +54,30 @@ export class DataFormatter {
         formatable.setHeader(this.selectedCompany);
         createCsv = (groups: ChildGroup[]) => {
             const addRow = (group: ChildGroup) => {
-                if (group.accounts.length > 0) {
+                if (group.accounts?.length > 0) {
                     group.accounts.forEach(account => {
-                        let data1 = [];
-                        let name = this.truncate(`${this.firstCapital(account.name)} (${this.firstCapital(group.groupName)})`, true, 37);
-                        data1.push(name);
-                        data1.push(`${account.openingBalance.amount}${this.recType.transform(account.openingBalance)}`);
-                        data1.push(account.debitTotal);
-                        data1.push(account.creditTotal);
-                        data1.push(`${account.closingBalance.amount}${this.recType.transform(account.closingBalance)}`);
-                        formatable.setRowData(data1, 0);
+                        if (account) {
+                            let data1 = [];
+                            let name = this.truncate(`${this.firstCapital(account.name)} (${this.firstCapital(group.groupName)})`, true, 37);
+                            data1.push(name);
+                            data1.push(`${account.openingBalance.amount}${this.recType.transform(account.openingBalance)}`);
+                            data1.push(account.debitTotal);
+                            data1.push(account.creditTotal);
+                            data1.push(`${account.closingBalance.amount}${this.recType.transform(account.closingBalance)}`);
+                            formatable.setRowData(data1, 0);
+                        }
                     });
                 }
             };
             groups.forEach(group => {
-                if (group.accounts.length > 0) {
+                if (group.accounts?.length > 0) {
                     addRow(group);
                 }
                 group.childGroups.forEach(childGroup => {
-                    if (childGroup.accounts.length > 0) {
+                    if (childGroup.accounts?.length > 0) {
                         addRow(childGroup);
                     }
-                    if (childGroup.childGroups.length > 0) {
+                    if (childGroup.childGroups?.length > 0) {
                         return createCsv(childGroup.childGroups);
                     }
                 });
@@ -113,16 +115,16 @@ export class DataFormatter {
                 }
                 if (group.closingBalance.amount !== 0) {
                     let data1: any[] = [];
-                    data1.push(this.truncate(group.groupName.toUpperCase(), true, 25));
+                    data1.push(this.truncate(group.groupName?.toUpperCase(), true, 25));
                     data1.push(`${group.forwardedBalance.amount} ${this.recType.transform(group.forwardedBalance)}`);
                     data1.push(group.debitTotal);
                     data1.push(group.creditTotal);
                     data1.push(`${group.closingBalance.amount} ${this.recType.transform(group.closingBalance)}`);
                     formatable.setRowData(data1, strIndex);
                     data1 = [];
-                    if (group.accounts.length > 0) {
+                    if (group.accounts?.length > 0) {
                         group.accounts.forEach(acc => {
-                            if (true) {
+                            if (acc) {
                                 data1.push(this.truncate(`${this.firstCapital(acc.name)}(${this.firstCapital(group.groupName)})`, true, 25));
                                 data1.push(`${acc.openingBalance.amount}${this.recType.transform(acc.openingBalance)}`);
                                 data1.push(acc.debitTotal);
@@ -133,7 +135,7 @@ export class DataFormatter {
                             }
                         });
                     }
-                    if (group.childGroups.length > 0) {
+                    if (group.childGroups?.length > 0) {
                         createCsv(group.childGroups, index + 1);
                     }
                 }
@@ -195,7 +197,7 @@ export class DataFormatter {
         return total;
     }
 
-    private firstCapital = (s: string) => s[0].toUpperCase() + s.slice(1);
+    private firstCapital = (s: string) => s[0]?.toUpperCase() + s.slice(1);
     private suffixRecordType = (balance: number): string => {
         if (balance < 0) {
             balance = balance * -1;
@@ -218,7 +220,7 @@ export class DataFormatter {
         if (!max) {
             return value;
         }
-        if (value.length <= max) {
+        if (value?.length <= max) {
             return value;
         }
         value = value.substr(0, max);

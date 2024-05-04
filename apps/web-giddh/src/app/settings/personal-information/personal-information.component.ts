@@ -3,6 +3,9 @@ import { ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { OrganizationType } from '../../models/user-login-state';
 import { OrganizationProfile } from '../constants/settings.constant';
+import { GeneralService } from '../../services/general.service';
+import { ToasterService } from '../../services/toaster.service';
+import { ClipboardService } from 'ngx-clipboard';
 
 @Component({
     selector: 'personal-information',
@@ -15,7 +18,6 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
     public saveProfileSubject: Subject<any> = new Subject();
     /** Updated data by the user */
     public updatedData: any = {};
-
     /** Stores the profile data of an organization (company or profile) */
     @Input() public profileData: OrganizationProfile = {
         name: '',
@@ -34,7 +36,8 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
         businessType: '',
         nameAlias: '',
         headQuarterAlias: '',
-        taxType: ''
+        taxType: '',
+        portalDomain: ''
     };
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
@@ -44,11 +47,18 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
     @Input() public commonLocaleData: any = {};
     /** Emits the saved value */
     @Output() public saveProfile: EventEmitter<any> = new EventEmitter();
-
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Portal Domain name validation with regex pattern */
+    public isValidDomain: boolean;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
+    /** This will hold isCopied */
+    public isCopied: boolean = false;
+    /** This will hold portal url */
+    public portalUrl: any = PORTAL_URL;
 
-    constructor() { }
+    constructor(private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService) { }
 
     /**
      * Initializes the component
@@ -56,9 +66,11 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
      * @memberof PersonalInformationComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.saveProfileSubject.pipe(debounceTime(5000), takeUntil(this.destroyed$)).subscribe(() => {
             this.saveProfile.emit(this.updatedData);
         });
+        this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(this.profileData.portalDomain)
     }
 
     /**
@@ -79,7 +91,37 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
      */
     public profileUpdated(keyName: string): void {
         this.updatedData[keyName] = this.profileData[keyName];
-        this.saveProfileSubject.next();
+        this.saveProfileSubject.next(true);
+    }
+
+    /**
+     * This will be use for check portal domain validation
+     *
+     * @param {*} keyName
+     * @return {*}  {void}
+     * @memberof PersonalInformationComponent
+     */
+    public checkPortalDomain(keyName: any): void {
+        this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(keyName);
+        if (this.isValidDomain) {
+            this.profileUpdated('portalDomain');
+        } else {
+            this.toasty.errorToast(this.localeData.domain_error_message);
+        }
+    }
+
+    /**
+     *This will use for copy api url link and display copied
+     *
+     * @memberof PersonalInformationComponent
+     */
+    public copyUrl(): void {
+        const urlToCopy = this.portalUrl + this.profileData.portalDomain;
+        this.clipboardService.copyFromContent(urlToCopy);
+        this.isCopied = true;
+        setTimeout(() => {
+            this.isCopied = false;
+        }, 3000);
     }
 
 }

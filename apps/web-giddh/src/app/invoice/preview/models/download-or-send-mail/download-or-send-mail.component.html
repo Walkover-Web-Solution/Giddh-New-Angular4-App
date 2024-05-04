@@ -17,7 +17,11 @@
                 {{ commonLocaleData?.app_more }} <span class="caret"></span>
             </button>
         </span>
-        <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel('closed')"></i>
+        <i
+            class="icon-cross text-right close-modal"
+            aria-hidden="true"
+            (click)="onCancel('closed')"
+        ></i>
 
         <!-- drop down for Esignature area -->
         <div class="dropdown-menu mr-l3" [ngClass]="{ open: showEsign }">
@@ -67,7 +71,7 @@
                 </div>
                 <ng-container *ngIf="currentVoucherFilter === 'invoices'">
                     <div class="clearfix" [hidden]="smsTabActive">
-                        <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
+                        <h3 class="font-15 mr-b05">{{ localeData?.invoice_copy }}</h3>
                         <hr />
                         <div class="checkbox" *ngIf="voucherApiVersion === 2">
                             <label
@@ -114,7 +118,7 @@
                         [hidden]="!emailTabActive"
                         type="button"
                         class="btn btn-sm btn-success"
-                        (click)="onSendInvoiceOnMail(emailList.value)"
+                        (click)="onSendInvoiceOnMail(emailList?.value)"
                     >
                         {{ commonLocaleData?.app_send }}
                     </button>
@@ -122,7 +126,7 @@
                         type="button"
                         class="btn btn-sm btn-success"
                         (click)="downloadInvoice()"
-                        [disabled]="!invoiceType.length && !isAttachment"
+                        [disabled]="!invoiceType?.length && !isAttachment"
                         [hidden]="emailTabActive || smsTabActive"
                     >
                         {{ localeData?.download_invoice }}
@@ -131,7 +135,7 @@
                         [hidden]="!smsTabActive"
                         type="button"
                         class="btn btn-sm btn-success"
-                        (click)="onSendInvoiceOnSms(smsList.value)"
+                        (click)="onSendInvoiceOnSms(smsList?.value)"
                     >
                         {{ commonLocaleData?.app_send }}
                     </button>
@@ -200,7 +204,7 @@
                 <textarea class="form-control" #smsList [placeholder]="localeData?.enter_mobile_no"></textarea>
             </div>
             <div class="clearfix" [hidden]="smsTabActive">
-                <h3 class="font-16 mr-b05">{{ localeData?.invoice_copy }}</h3>
+                <h3 class="font-15 mr-b05">{{ localeData?.invoice_copy }}</h3>
                 <hr />
                 <div class="checkbox">
                     <label
@@ -224,7 +228,7 @@
                     [disabled]="!emailList?.value || (currentVoucherFilter === 'invoices' && !invoiceType?.length)"
                     type="button"
                     class="btn btn-sm btn-success"
-                    (click)="onSendInvoiceOnMail(emailList.value)"
+                    (click)="onSendInvoiceOnMail(emailList?.value)"
                 >
                     {{ commonLocaleData?.app_send }}
                 </button>
@@ -232,7 +236,7 @@
                     type="button"
                     class="btn btn-sm btn-success"
                     (click)="downloadInvoice()"
-                    [disabled]="!invoiceType.length && !isAttachment && currentVoucherFilter === 'invoices'"
+                    [disabled]="!invoiceType?.length && !isAttachment && currentVoucherFilter === 'invoices'"
                     [hidden]="emailTabActive || smsTabActive"
                 >
                     {{ localeData?.download_invoice }}
@@ -241,7 +245,7 @@
                     [hidden]="!smsTabActive"
                     type="button"
                     class="btn btn-sm btn-success"
-                    (click)="onSendInvoiceOnSms(smsList.value)"
+                    (click)="onSendInvoiceOnSms(smsList?.value)"
                 >
                     {{ commonLocaleData?.app_send }}
                 </button>

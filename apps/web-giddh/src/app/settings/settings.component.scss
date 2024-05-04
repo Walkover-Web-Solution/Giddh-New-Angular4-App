@@ -1,5 +1,10 @@
 .setting-container {
-    padding: 0 15px 15px;
+    padding: 0 15px 15px !important;
     margin-top: 15px;
-    min-height: calc(100vh - 205px);
+    min-height: calc(100vh - 84px);
+}
+.video-link{
+    right: 0;
+    top: 15px;
+    z-index: 2;
 }

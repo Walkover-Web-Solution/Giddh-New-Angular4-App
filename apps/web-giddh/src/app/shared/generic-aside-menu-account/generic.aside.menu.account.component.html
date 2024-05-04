@@ -6,15 +6,15 @@
 >
     <div class="form-header">
         <div>
-            <h3>
+            <h2>
                 <span>{{ actionAccount }}</span>
-            </h3>
+            </h2>
         </div>
     </div>
-    <button id="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
+    <button id="closedialog" aria-label="close" (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
     <div class="aside-body">
         <div class="aside-pane-form">
-            <ng-container *ngIf="!selectedAccountUniqueName && activeGroupUniqueName && !createAccountFromCommandK">
+            <ng-container *ngIf="!selectedAccountUniqueName && (activeGroupUniqueName || allGroups) && !createAccountFromCommandK">
                 <account-add-new-details
                     [activeGroupUniqueName]="activeGroupUniqueName"
                     (isGroupSelected)="isGroupSelected($event)"
@@ -28,8 +28,7 @@
                     [showBankDetail]="showBankDetail"
                     [isServiceCreation]="isServiceCreation"
                     [isCustomerCreation]="isCustomerCreation"
-                    (goToCustomFields)="showCustomFieldsTab($event)"
-                    [reloadCustomFields]="reloadCustomFields"
+                    (closeAccountModal)="closeAccountModal?.emit($event)"
                 >
                 </account-add-new-details>
             </ng-container>
@@ -46,8 +45,7 @@
                     [showDeleteButton]="false"
                     [showBankDetail]="showBankDetail"
                     (submitClicked)="updateAccount($event)"
-                    (goToCustomFields)="showCustomFieldsTab($event)"
-                    [reloadCustomFields]="reloadCustomFields"
+                    (closeAccountModal)="closeAccountModal?.emit($event)"
                 >
                 </account-update-new-details>
             </ng-container>
@@ -66,8 +64,7 @@
                     [isServiceCreation]="isServiceCreation"
                     [isCustomerCreation]="isCustomerCreation"
                     [fromCommandK]="true"
-                    (goToCustomFields)="showCustomFieldsTab($event)"
-                    [reloadCustomFields]="reloadCustomFields"
+                    (closeAccountModal)="closeAccountModal?.emit($event)"
                 >
                 </account-add-new-details>
             </ng-container>

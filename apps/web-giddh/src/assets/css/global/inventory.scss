@@ -1,0 +1,275 @@
+.inventory-v2 {
+    .nav.nav-tabs {
+        display: none !important;
+    }
+
+    .branch-transfer-report {
+        padding-top: 10px !important;
+    }
+}
+
+.stock-create-edit,
+.custom-units {
+    .options-line-value {
+        padding: 10px;
+        vertical-align: middle;
+        min-height: 50px !important;
+
+        .option-label {
+            color: var(--color-common-primary-text);
+        }
+
+        .option-value {
+            float: left !important;
+            width: 100% !important;
+            color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
+            font-size: var(--font-size-14);
+        }
+
+        .mat-option-text {
+            line-height: 16px;
+        }
+    }
+}
+
+/*---- report-filter-chip ----*/
+report-filters {
+    .inventory-filter-bar {
+        .select-multiple-chiplist-inventory {
+            .mat-mdc-standard-chip {
+                color: var(--color-chips-primary) !important;
+                background-color: var(--color-body-background) !important;
+                border: 1px solid var(--color-primary-login-box-body-text) !important;
+                font-size: var(--font-size-12) !important;
+                border-radius: 5px !important;
+            }
+        }
+    }
+}
+
+/*---- inventory-stock ----*/
+.back-btn-align {
+    .mdc-button {
+        .mdc-button__label {
+            display: flex;
+            align-items: center;
+            column-gap: 2px;
+        }
+    }
+}
+
+/*---- inventory-sidebar ----*/
+inventory-sidebar {
+    .mat-mdc-icon-button {
+        &.mat-mdc-button-base {
+            width: 40px;
+        }
+    }
+}
+
+/*---- variant ----*/
+.option-value-field {
+    text-field,
+    select-field {
+        input {
+            padding: 11px 16px !important;
+            border: 1px solid var(--color-fields-border) !important;
+            border-radius: 4px;
+            height: auto;
+
+            &.disabled {
+                background-color: var(--color-primary-input-bar-background) !important;
+            }
+        }
+    }
+
+    select-field {
+        position: relative;
+
+        input {
+            height: 48px !important;
+        }
+
+        &::before {
+            content: "";
+            position: absolute;
+            width: 0px;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid var(--color-popup-list-input-text) !important;
+            top: 50%;
+            right: 12px;
+            z-index: 9;
+            transform: translateY(-50%);
+        }
+    }
+}
+
+body {
+    &.fixed {
+        .mat-grid-wrapper {
+            .inventory-search {
+                z-index: 99 !important;
+            }
+        }
+    }
+}
+
+.text-field-right {
+    .select-field-input {
+        text-align: right !important;
+        border: 0;
+        padding: 6px;
+        background-color: transparent;
+    }
+}
+
+.inventory-report-table {
+    .mat-mdc-table {
+        .mat-mdc-header-row {
+            .mat-mdc-header-cell {
+                .mat-mdc-icon-button.mat-mdc-button-base {
+                    font-size: var(--font-size-15) !important;
+                    padding: 0;
+                }
+            }
+        }
+    }
+}
+
+.consumption-details-wrapper {
+    .mat-expansion-panel {
+        .mat-expansion-panel-header {
+            .mat-expansion-panel-header-title {
+                color: var(--color-primary-header-background) !important;
+            }
+        }
+    }
+}
+
+.field-m-width {
+    max-width: 170px;
+
+    .select-field-input {
+        width: 100% !important;
+    }
+}
+
+inventory-master {
+    .mat-grid-wrapper {
+        .mat-list-wrap {
+            .inventory-sub-sideabar {
+                .item-list {
+                    a {
+                        mat-list-item {
+                            .mdc-list-item__primary-text {
+                                color: var(--color-field-hover) !important;
+                            }
+                        }
+
+                        &.isActive {
+                            mat-list-item {
+                                .mdc-list-item__primary-text {
+                                    color: var(--color-list) !important;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*--- branch-transfer ---*/
+#branch-transfer-list {
+    table {
+        .bg-transparent {
+            &.mat-mdc-button {
+                .mdc-button__label {
+                    padding: 0 5px;
+                }
+            }
+        }
+    }
+}
+
+.manage-table {
+    table {
+        thead {
+            th {
+                &.mat-table-name {
+                    width: 30%;
+                }
+
+                &.mat-table-id {
+                    width: 40%;
+                }
+
+                &.mat-table-action {
+                    width: 30%;
+                }
+            }
+        }
+    }
+}
+
+// Mat-Select search input
+.mat-mdc-option {
+    &.contains-mat-select-search {
+        background-color: var(--color-white);
+    }
+}
+
+// For Bulk Stock Edit
+.bulk-stock {
+    .bulk-stock-hide-show-button {
+        padding-left: 28px;
+        border: 1px solid var(--color-fields-border);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 6px;
+        height: 40px;
+        width: 40px;
+    }
+    &-body {
+        .bulk-stock-table {
+            table {
+                th,
+                td {
+                    input {
+                        width: 100%;
+                        height: inherit;
+                        border: none;
+                        padding: 6px 10px;
+                        background: transparent;
+                    }
+                    .vertical-margin {
+                        margin: 5.4px 0;
+                        padding: 0 10px;
+                    }
+                }
+            }
+        }
+    }
+}
+.max-height-50 {
+    &.mat-mdc-menu-panel {
+        max-height: 50vh;
+    }
+
+    /*---- create-menufacturing ----*/
+    .consumption-details-wrapper {
+        .mat-expansion-panel {
+            .mat-expansion-panel-header {
+                height: 45px;
+
+                &.mat-expanded {
+                    height: 45px;
+                }
+            }
+        }
+    }
+}

@@ -26,9 +26,10 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public updatedData: any = {};
     /** Company number system */
     public numberSystem: string;
-
     /** Decides when to emit the value for UPDATE operation */
     public saveProfileSubject: Subject<any> = new Subject();
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
 
     /** Emits the saved value */
     @Output() public saveProfile: EventEmitter<any> = new EventEmitter();
@@ -51,7 +52,8 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         nameAlias: '',
         balanceDisplayFormat: '',
         taxType: '',
-        manageInventory: false
+        manageInventory: false,
+        withPay: false
     };
     /** Stores the type of the organization (company or profile)  */
     @Input() public organizationType: OrganizationType;
@@ -71,6 +73,10 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public availableThemes: IOption[] = [];
     /** This holds the active theme */
     public activeTheme: string = "";
+    /** List of available themes */
+    public exportTypes: IOption[] = [];
+    /** Holds export type */
+    public exportType: string = '';
 
     constructor(private commonActions: CommonActions, private generalService: GeneralService, private store: Store<AppState>, private toasterService: ToasterService) { }
 
@@ -81,21 +87,22 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public ngOnInit(): void {
         currencyNumberSystems.map(currency => {
-            this.numberSystemSource.push({ value: currency.value, label: `${currency.name}`, additional: currency });
+            this.numberSystemSource.push({ value: currency?.value, label: `${currency.name}`, additional: currency });
         });
         digitAfterDecimal.map(d => {
-            this.decimalDigitSource.push({ value: d.value, label: d.name });
+            this.decimalDigitSource.push({ value: d?.value, label: d.name });
         });
         this.saveProfileSubject.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.saveProfile.emit(this.updatedData);
         });
-        const currencySystem = currencyNumberSystems.find(numberSystem => numberSystem.value === this.profileData.balanceDisplayFormat);
+        const currencySystem = currencyNumberSystems.find(numberSystem => numberSystem?.value === this.profileData.balanceDisplayFormat);
         if (currencySystem) {
             this.numberSystem = currencySystem.name;
         }
 
         this.translationLocales = this.generalService.getSupportedLocales();
         this.availableThemes = this.generalService.getAvailableThemes();
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             this.activeLocale = response?.value;
@@ -125,9 +132,18 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof OtherSettingsComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        const currencySystem = currencyNumberSystems.find(numberSystem => numberSystem.value === changes?.profileData?.currentValue?.balanceDisplayFormat);
+        const currencySystem = currencyNumberSystems.find(numberSystem => numberSystem?.value === changes?.profileData?.currentValue?.balanceDisplayFormat);
         if (currencySystem) {
             this.numberSystem = currencySystem.name;
+        }
+
+        this.exportTypes = [
+            { label: this.localeData?.with_pay, value: 'yes' },
+            { label: this.localeData?.without_pay, value: 'no' }
+        ];
+
+        if (typeof changes?.profileData?.currentValue?.withPay === "boolean") {
+            this.exportType = (changes?.profileData?.currentValue?.withPay) ? 'yes' : 'no';
         }
     }
 
@@ -150,10 +166,10 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public profileUpdated(keyName: string): void {
         delete this.updatedData['manageInventory'];
         this.updatedData[keyName] = this.profileData[keyName];
-        this.saveProfileSubject.next();
+        this.saveProfileSubject.next(true);
     }
 
-    /**
+        /**
      * Inventory type update handler
      *
      * @param {boolean} value True, if Product is selected
@@ -163,7 +179,6 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         this.profileData.manageInventory = value;
         this.profileUpdated('manageInventory');
     }
-
     /**
      * This will set active locale
      *
@@ -171,8 +186,13 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof OtherSettingsComponent
      */
     public selectLocale(event?: any): void {
-        this.store.dispatch(this.commonActions.setActiveLocale({ label: event?.label, value: event?.value }));
-        this.showLanguageChangeMessage = true;
+        if (event?.value) {
+            this.store.dispatch(this.commonActions.setActiveLocale({ label: event?.label, value: event?.value }));
+            this.showLanguageChangeMessage = true;
+        } else {
+            event = this.translationLocales[0];
+            this.store.dispatch(this.commonActions.setActiveLocale({ label: event?.label, value: event?.value }));
+        }
     }
 
     /**
@@ -196,5 +216,16 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public setActiveTheme(event?: any): void {
         this.store.dispatch(this.commonActions.setActiveTheme({ label: event?.label, value: event?.value }));
+    }
+
+    /**
+     * Saves export type
+     *
+     * @memberof OtherSettingsComponent
+     */
+    public setExportType(event?: any): void {
+        this.exportType = event?.value;
+        this.updatedData['withPay'] = event?.value === 'yes' ? true : false;
+        this.saveProfileSubject.next(true);
     }
 }

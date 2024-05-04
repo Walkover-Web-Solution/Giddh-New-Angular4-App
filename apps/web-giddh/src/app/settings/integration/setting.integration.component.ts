@@ -1,40 +1,32 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { Component, Input, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Component, Input, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, NgForm } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
-import {
-    AmazonSellerClass,
-    CashfreeClass,
-    EmailKeyClass,
-    PaymentClass,
-    RazorPayClass,
-    SmsKeyClass
-} from '../../models/api-models/SettingsIntegraion';
+import { AmazonSellerClass, CashfreeClass, EmailKeyClass, PaymentClass, PayPalClass, RazorPayClass, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-select/option.interface';
-import { TabsetComponent, TabDirective } from "ngx-bootstrap/tabs";
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
-import { BootstrapToggleSwitch, Configuration, SELECT_ALL_RECORDS } from "../../app.constant";
+import { BootstrapToggleSwitch, BROADCAST_CHANNELS, Configuration, EMAIL_VALIDATION_REGEX, ICICI_ALLOWED_COMPANIES, SELECT_ALL_RECORDS } from "../../app.constant";
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
 import { EcommerceService } from '../../services/ecommerce.service';
-import { forIn } from '../../lodash-optimized';
 import { GeneralService } from '../../services/general.service';
 import { ShareRequestForm } from '../../models/api-models/Permission';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { SettingsIntegrationService } from '../../services/settings.integraion.service';
-import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, UNLIMITED_LIMIT } from '../constants/settings.constant';
+import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, SettingsIntegrationTabV1, UNLIMITED_LIMIT } from '../constants/settings.constant';
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
 import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
-
-export declare const gapi: any;
+import { TabDirective } from 'ngx-bootstrap/tabs';
+import { MatTabGroup } from '@angular/material/tabs';
+import { CommonActions } from '../../actions/common.actions';
 
 @Component({
     selector: 'setting-integration',
@@ -42,22 +34,27 @@ export declare const gapi: any;
     styleUrls: ['./setting.integration.component.scss']
 })
 export class SettingIntegrationComponent implements OnInit, AfterViewInit {
-
     public auth2: any;
     public smsFormObj: SmsKeyClass = new SmsKeyClass();
     public emailFormObj: EmailKeyClass = new EmailKeyClass();
     public paymentFormObj: PaymentClass = new PaymentClass();
     public razorPayObj: RazorPayClass = new RazorPayClass();
+    /**Hold paypal request obj */
+    public paypalObj: PayPalClass = new PayPalClass();
     public payoutObj: CashfreeClass = new CashfreeClass();
     public autoCollectObj: CashfreeClass = new CashfreeClass();
     public amazonSeller: AmazonSellerClass = new AmazonSellerClass();
     public accounts$: Observable<IOption[]>;
+    /**Observable for paypal accounts */
+    public paypalAccounts$: Observable<IOption[]>;
+    /**True if paypal is update */
+    public updatePaypal: boolean = false;
     public updateRazor: boolean = false;
     public autoCollectAdded: boolean = false;
     public payoutAdded: boolean = false;
     public bankAccounts$: Observable<IOption[]>;
     public gmailAuthCodeUrl$: Observable<string> = null;
-    public amazonSellerForm: FormGroup;
+    public amazonSellerForm: UntypedFormGroup;
     public amazonEditItemIdx: number;
     public amazonSellerRes: AmazonSellerClass[];
     public isGmailIntegrated$: Observable<boolean>;
@@ -66,15 +63,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     private gmailAuthCodeStaticUrl: string = 'https://accounts.google.com/o/oauth2/auth?redirect_uri=:redirect_url&response_type=code&client_id=:client_id&scope=https://www.googleapis.com/auth/gmail.send&approval_prompt=force&access_type=offline';
     private isSellerAdded: Observable<boolean> = observableOf(false);
     private isSellerUpdate: Observable<boolean> = observableOf(false);
-    /** user who is logged in currently */
-    private loggedInUserEmail: string;
     /** Input mast for number format */
     public inputMaskFormat: string = '';
-    /** To check company country */
-    public isIndianCompany: boolean = true;
-
-    @Input() private selectedTabParent: number;
-    @ViewChild('integrationTab', { static: true }) public integrationTab: TabsetComponent;
+    /**This will use for select tab index */
+    @Input() public selectedTabParent: number;
     @ViewChild('removegmailintegration', { static: true }) public removegmailintegration: ModalDirective;
     @ViewChild('paymentForm', { static: true }) paymentForm: NgForm;
     @ViewChild('paymentFormAccountName', { static: true }) paymentFormAccountName: ShSelectComponent;
@@ -88,7 +80,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     @ViewChild('editAccountUserModal', { static: false }) public editAccountUserModal: ModalDirective;
     /** Instance of delete account user modal */
     @ViewChild('confirmationModal', { static: false }) public confirmationModal: ModalDirective;
-
     //variable holding account Info
     public registeredAccount;
     public isEcommerceShopifyUserVerified: boolean = false;
@@ -96,12 +87,32 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public selectedCompanyUniqueName: string;
     /* This will clear the selected linked account */
     public forceClearLinkAccount$: Observable<IForceClear> = observableOf({ status: false });
+    /* This will clear the selected paypal linked account */
+    public paypalForceClearLinkAccount$: Observable<IForceClear> = observableOf({ status: false });
+    /** Stores the search results pagination details */
+    public paypalAccountsSearchResultsPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
+    /** Default search suggestion list to be shown for search */
+    public paypalDefaultAccountSuggestions: Array<IOption> = [];
+    /** True, if API call should be prevented on default scroll caused by scroll in list */
+    public paypalPreventDefaultScrollApiCall: boolean = false;
+    /** Stores the default search results pagination details */
+    public paypalDefaultAccountPaginationData = {
+        page: 0,
+        totalPages: 0,
+        query: ''
+    };
     /** Stores the search results pagination details */
     public accountsSearchResultsPaginationData = {
         page: 0,
         totalPages: 0,
         query: ''
     };
+    /** Stores the list of accounts */
+    public paypalAccounts: IOption[];
     /** Default search suggestion list to be shown for search */
     public defaultAccountSuggestions: Array<IOption> = [];
     /** True, if API call should be prevented on default scroll caused by scroll in list */
@@ -119,7 +130,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Form Group for create new account form */
-    public createNewAccountForm: FormGroup;
+    public createNewAccountForm: UntypedFormGroup;
     /** List of users to receive payment alerts */
     public paymentAlerts: any[] = [];
     /** Holds string for select all records */
@@ -135,17 +146,33 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /** This will have payor account details */
     public activePayorAccount: any;
     /** Form Group for edit account user form */
-    public editAccountUserForm: FormGroup;
+    public editAccountUserForm: UntypedFormGroup;
     /** Form Group for edit account form */
-    public editAccountForm: FormGroup;
+    public editAccountForm: UntypedFormGroup;
     /** Holds unlimited text for amount limit */
     public unlimitedLimit: string = UNLIMITED_LIMIT;
     /** This will hold active company data */
     public activeCompany: any;
     /** Holds image path */
     public imgPath: string = '';
+    /** This will hold apiUrl */
+    public apiUrl: string = '';
+    /** This will hold isCopied */
+    public isCopied: boolean = false;
     /** This will hold toggle buttons value and size */
     public bootstrapToggleSwitch = BootstrapToggleSwitch;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2;
+    /** List of icici bank supported countries */
+    public iciciBankSupportedCountryList: any[] = ["IN", "NP", "BT"];
+    /** True, if is other country in payment integration */
+    public isIciciBankSupportedCountry: boolean = false;
+    /** True, if is add or manage group form outside */
+    public isAddAndManageOpenedFromOutside: boolean = false;
+    /** Holds array of company uniqueNames which ICICI allowed companies */
+    public iciciAllowedCompanies: any[] = ICICI_ALLOWED_COMPANIES;
+    /** Holds true if current company country is plaid supported country */
+    public isPlaidSupportedCountry: boolean;
 
     constructor(
         private router: Router,
@@ -155,12 +182,16 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private toasty: ToasterService,
         private _companyActions: CompanyActions,
         private _authenticationService: AuthenticationService,
-        private _fb: FormBuilder,
+        private _fb: UntypedFormBuilder,
         private settingsPermissionActions: SettingsPermissionActions,
         private generalService: GeneralService,
         private settingsIntegrationService: SettingsIntegrationService,
         private searchService: SearchService,
-        private salesService: SalesService
+        private salesService: SalesService,
+        private activateRoute: ActivatedRoute,
+        private commonAction: CommonActions,
+        private changeDetectionRef: ChangeDetectorRef
+
     ) {
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
         this.gmailAuthCodeUrl$ = observableOf(this.gmailAuthCodeStaticUrl);
@@ -171,32 +202,31 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(s => s.session.user), take(1)).subscribe(result => {
             if (result && result.user) {
                 this.generalService.user = result.user;
-                this.loggedInUserEmail = result.user.email;
             }
         });
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
-        //logic to switch to payment tab if coming from vedor tabs add payment
-        if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
-            this.selectTab(this.selectedTabParent);
-        }
+        this.imgPath = (isElectron) ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+
+        let companyUniqueName = this.generalService.companyUniqueName;
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.apiUrl = `${ApiUrl}company/${companyUniqueName}/imports/tally-import`;
 
         // getting all page data of integration page
-        this.store.pipe(select(p => p.settings.integration), takeUntil(this.destroyed$)).subscribe((o) => {
+        this.store.pipe(select(p => p?.settings?.integration), takeUntil(this.destroyed$)).subscribe((o) => {
             // set sms form data
-            if (o.smsForm) {
+            if (o?.smsForm) {
                 this.smsFormObj = o.smsForm;
             }
             // set email form data
-            if (o.emailForm) {
+            if (o?.emailForm) {
                 this.emailFormObj = o.emailForm;
             }
             // set razor pay form data
-            if (o.razorPayForm) {
-                if (typeof o.razorPayForm !== "string") {
-                    this.razorPayObj = cloneDeep(o.razorPayForm);
+            if (o?.razorPayForm) {
+                if (typeof o?.razorPayForm !== "string") {
+                    this.razorPayObj = cloneDeep(o?.razorPayForm);
                     if (this.razorPayObj && this.razorPayObj.account === null) {
                         this.razorPayObj.account = { name: null, uniqueName: null };
                         this.forceClearLinkAccount$ = observableOf({ status: true });
@@ -207,6 +237,21 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             } else {
                 this.setDummyData();
                 this.updateRazor = false;
+            }
+
+            // set paypal form data
+            if (o?.paypalForm) {
+                if (typeof o?.paypalForm !== "string") {
+                    this.paypalObj = cloneDeep(o?.paypalForm);
+                    if (this.paypalObj && this.paypalObj.account === null) {
+                        this.paypalObj.account = { name: null, uniqueName: null };
+                        this.paypalForceClearLinkAccount$ = observableOf({ status: true });
+                    }
+                }
+                this.updatePaypal = true;
+            } else {
+                this.setPaypalDummyData();
+                this.updatePaypal = false;
             }
             // set cashfree form data
             if (o.payoutForm && o.payoutForm.userName) {
@@ -227,6 +272,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.amazonSellerRes = cloneDeep(o.amazonSeller);
                 this.amazonSellerForm.controls['sellers']?.patchValue(this.amazonSellerRes);
                 this.addAmazonSellerRow();
+            }
+        });
+
+        this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
             }
         });
 
@@ -263,10 +314,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
-                this.isIndianCompany = profile.countryV2.alpha2CountryCode === 'IN' ? true : false;
-                if (!this.isIndianCompany && this.selectedTabParent === 3) {
-                    this.selectedTabParent = 0;
-                    this.selectTab(this.selectedTabParent);
+                if (this.iciciBankSupportedCountryList.includes(profile.countryV2.alpha2CountryCode)) {
+                    this.isIciciBankSupportedCountry = true;
+                } else {
+                    this.isIciciBankSupportedCountry = false;
                 }
             }
         });
@@ -280,39 +331,271 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.activeCompany = activeCompany;
             }
         });
+
+        this.store.pipe(select(select => select.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$)).subscribe(response => {
+            if (!response && this.isAddAndManageOpenedFromOutside) {
+                this.activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(resp => {
+                    if (resp?.referrer === 'payment') {
+                        this.loadDefaultBankAccountsSuggestions();
+                    }
+                });
+            }
+            this.isAddAndManageOpenedFromOutside = response;
+        });
+
+        const broadcast = new BroadcastChannel(BROADCAST_CHANNELS.REAUTH_PLAID_SUCCESS);
+        broadcast.onmessage = (event) => {
+            if (event?.data) {
+                this.loadPaymentData();
+            }
+        };
     }
 
-    public ngAfterViewInit() {
-        if (this.selectedTabParent !== undefined && this.selectedTabParent !== null) {
-            this.selectTab(this.selectedTabParent);
+    /**
+     * This hook will be called after component is initialized
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public ngAfterViewInit(): void {
+        if (this.selectedTabParent) {
+            this.loadTabData(this.selectedTabParent);
         }
-        this.loadTabData();
     }
 
     public setDummyData() {
-        this.razorPayObj.userName = '';
-        this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
-        this.razorPayObj.account = { name: null, uniqueName: null };
-        this.razorPayObj.autoCapturePayment = true;
+        if (this.razorPayObj) {
+            this.razorPayObj.userName = '';
+            this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
+            this.razorPayObj.account = { name: null, uniqueName: null };
+            this.razorPayObj.autoCapturePayment = true;
+        }
         this.forceClearLinkAccount$ = observableOf({ status: true });
+    }
+
+    /**
+     * This will be use for set paypal dummy data
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public setPaypalDummyData(): void {
+        if (this.paypalObj) {
+            this.paypalObj.email = null;
+            this.paypalObj.account = { name: null, uniqueName: null };
+        }
+        this.paypalForceClearLinkAccount$ = observableOf({ status: true });
+    }
+
+    /**
+     * This will be use for validation for paypal account email
+     *
+     * @param {*} emailStr
+     * @return {*}  {boolean}
+     * @memberof SettingIntegrationComponent
+     */
+    public validateEmail(emailStr: any): boolean {
+        return EMAIL_VALIDATION_REGEX.test(emailStr);
+    }
+
+    /**
+     * This will be use for select linked account
+     *
+     * @param {IOption} event
+     * @memberof SettingIntegrationComponent
+     */
+    public selectLinkedAccount(event: IOption): void {
+        if (event?.value) {
+            this.paypalAccounts$.subscribe((arr: IOption[]) => {
+                let res = find(arr, (o) => o?.value === event.value);
+                if (res) {
+                    this.paypalObj.account.name = res.text;
+                }
+            });
+        }
+    }
+
+    /**
+     * This will be use for save paypal details
+     *
+     * @return {*}
+     * @memberof SettingIntegrationComponent
+     */
+    public savePaypalDetails(): void {
+        let data = cloneDeep(this.paypalObj);
+        if (!(this.validateEmail(data?.email))) {
+            this.toasty.warningToast(this.localeData?.collection?.invalid_email_error, this.commonLocaleData?.app_warning);
+            return;
+        }
+        data.message = this.localeData?.collection?.paypal_save_successfully;
+        this.store.dispatch(this.settingsIntegrationActions.savePaypalDetails(data));
+    }
+
+    /**
+     * This will be use for update paypal details
+     *
+     * @return {*}
+     * @memberof SettingIntegrationComponent
+     */
+    public updatePaypalDetails(): void {
+        let data = cloneDeep(this.paypalObj);
+        if (!(this.validateEmail(data?.email))) {
+            this.toasty.warningToast(this.localeData?.collection?.invalid_email_error, this.commonLocaleData?.app_warning);
+            return;
+        }
+        data.message = this.localeData?.collection?.paypal_update_successfully;
+        this.store.dispatch(this.settingsIntegrationActions.updatePaypalDetails(data));
+    }
+
+    /**
+     * This will be use for unlink account from paypal
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public unlinkAccountFromPaypal(): void {
+        if (this.paypalObj.account && this.paypalObj.account.name && this.paypalObj.account?.uniqueName) {
+            let data = cloneDeep(this.paypalObj);
+            if (data) {
+                data.account.uniqueName = null;
+                data.account.name = null;
+            }
+
+            data.message = this.localeData?.collection?.unlinked_account_successfully;
+            this.store.dispatch(this.settingsIntegrationActions.updatePaypalDetails(data));
+        } else {
+            this.toasty.warningToast(this.localeData?.collection?.unlink_paypal_message);
+        }
+    }
+
+    /**
+     * This will be use for delete paypal details
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public deletePaypalDetails(): void {
+        this.store.dispatch(this.settingsIntegrationActions.deletePaypalDetails());
+    }
+
+
+    /**
+     * This will be use for scroll end handler
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public paypalHandleScrollEnd(): void {
+        if (this.paypalAccountsSearchResultsPaginationData.page < this.paypalAccountsSearchResultsPaginationData.totalPages) {
+            this.paypalOnAccountSearchQueryChanged(
+                this.paypalAccountsSearchResultsPaginationData.query,
+                this.paypalAccountsSearchResultsPaginationData.page + 1,
+                (response) => {
+                    if (!this.paypalAccountsSearchResultsPaginationData.query) {
+                        const results = response.map(result => {
+                            return {
+                                value: result?.uniqueName,
+                                label: result.name
+                            }
+                        }) || [];
+                        this.paypalDefaultAccountSuggestions = this.paypalDefaultAccountSuggestions.concat(...results);
+                        this.paypalDefaultAccountPaginationData.page = this.paypalAccountsSearchResultsPaginationData.page;
+                        this.paypalDefaultAccountPaginationData.totalPages = this.paypalAccountsSearchResultsPaginationData.totalPages;
+                    }
+                });
+        }
+        this.changeDetectionRef.detectChanges();
+    }
+
+    /**
+    * Loads the default account search suggestion when module is loaded
+    *
+    * @private
+    * @memberof SettingIntegrationComponent
+    */
+    private paypalLoadDefaultAccountsSuggestions(): void {
+        this.paypalOnAccountSearchQueryChanged('', 1, (response) => {
+            this.paypalDefaultAccountSuggestions = response.map(result => {
+                return {
+                    value: result?.uniqueName,
+                    label: result?.name
+                }
+            }) || [];
+            this.paypalDefaultAccountPaginationData.page = this.paypalAccountsSearchResultsPaginationData.page;
+            this.paypalDefaultAccountPaginationData.totalPages = this.paypalAccountsSearchResultsPaginationData.totalPages;
+            this.paypalAccounts = [...this.paypalDefaultAccountSuggestions];
+        });
+        this.changeDetectionRef.detectChanges();
+    }
+
+    /**
+    * Search query change handler
+    *
+    * @param {string} query Search query
+    * @param {number} [page=1] Page to request
+    * @param {boolean} withStocks True, if search should include stocks in results
+    * @param {Function} successCallback Callback to carry out further operation
+    * @memberof SettingIntegrationComponent
+    */
+    public paypalOnAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
+        this.paypalAccountsSearchResultsPaginationData.query = query;
+        if (!this.paypalPreventDefaultScrollApiCall &&
+            (query || (this.paypalDefaultAccountSuggestions && this.paypalDefaultAccountSuggestions.length === 0) || successCallback)) {
+            // Call the API when either query is provided, default suggestions are not present or success callback is provided
+            const requestObject: any = {
+                q: encodeURIComponent(query),
+                page
+            }
+            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data && data.body && data.body.results) {
+                    const searchResults = data.body.results.map(result => {
+                        return {
+                            value: result?.uniqueName,
+                            label: result.name
+                        }
+                    }) || [];
+                    if (page === 1) {
+                        this.paypalAccounts = searchResults;
+                    } else {
+                        this.paypalAccounts = [
+                            ...this.paypalAccounts,
+                            ...searchResults
+                        ];
+                    }
+                    this.paypalAccounts$ = observableOf(this.paypalAccounts);
+                    this.paypalAccountsSearchResultsPaginationData.page = data.body.page;
+                    this.paypalAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    if (successCallback) {
+                        successCallback(data.body.results);
+                    } else {
+                        this.paypalAccountsSearchResultsPaginationData.page = data.body.page;
+                        this.paypalAccountsSearchResultsPaginationData.totalPages = data.body.totalPages;
+                    }
+                }
+            });
+        } else {
+            this.paypalAccounts = [...this.paypalDefaultAccountSuggestions];
+            this.paypalAccountsSearchResultsPaginationData.page = this.paypalDefaultAccountPaginationData.page;
+            this.paypalAccountsSearchResultsPaginationData.totalPages = this.paypalDefaultAccountPaginationData.totalPages;
+            this.paypalPreventDefaultScrollApiCall = true;
+            setTimeout(() => {
+                this.paypalPreventDefaultScrollApiCall = false;
+            }, 500);
+        }
+        this.changeDetectionRef.detectChanges();
     }
 
     public onSubmitMsgform(f: NgForm) {
         if (f.valid) {
-            this.store.dispatch(this.settingsIntegrationActions.SaveSMSKey(f.value.smsFormObj));
+            this.store.dispatch(this.settingsIntegrationActions.SaveSMSKey(f?.value.smsFormObj));
         }
     }
 
     public onSubmitEmailform(f: NgForm) {
         if (f.valid) {
-            this.store.dispatch(this.settingsIntegrationActions.SaveEmailKey(f.value));
+            this.store.dispatch(this.settingsIntegrationActions.SaveEmailKey(f?.value));
         }
     }
 
     public selectAccount(event: IOption) {
-        if (event.value) {
+        if (event?.value) {
             this.accounts$.subscribe((arr: IOption[]) => {
-                let res = find(arr, (o) => o.value === event.value);
+                let res = find(arr, (o) => o?.value === event.value);
                 if (res) {
                     this.razorPayObj.account.name = res.text;
                 }
@@ -331,10 +614,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public unlinkAccountFromRazorPay() {
-        if (this.razorPayObj.account && this.razorPayObj.account.name && this.razorPayObj.account.uniqueName) {
+        if (this.razorPayObj.account && this.razorPayObj.account.name && this.razorPayObj.account?.uniqueName) {
             let data = cloneDeep(this.razorPayObj);
-            data.account.uniqueName = null;
-            data.account.name = null;
+            if (data) {
+                data.account.uniqueName = null;
+                data.account.name = null;
+            }
             this.store.dispatch(this.settingsIntegrationActions.UpdateRazorPayDetails(data));
         } else {
             this.toasty.warningToast(this.localeData?.collection?.unlink_razorpay_message);
@@ -352,7 +637,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public selectCashfreeAccount(event: IOption, objToApnd) {
         let accObj = {
             name: event.label,
-            uniqueName: event.value
+            uniqueName: event?.value
         };
         objToApnd.account = accObj;
     }
@@ -398,7 +683,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public saveAmazonSeller(obj) {
         let sellers = [];
-        sellers.push(cloneDeep(obj.value));
+        sellers.push(cloneDeep(obj?.value));
         this.store.dispatch(this.settingsIntegrationActions.AddAmazonSeller(sellers));
     }
 
@@ -406,10 +691,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * updateAmazonSeller
      */
     public updateAmazonSeller(obj) {
-        if (!obj.value.sellerId) {
+        if (!obj?.value.sellerId) {
             return;
         }
-        let sellerObj = cloneDeep(obj.value);
+        let sellerObj = cloneDeep(obj?.value);
         delete sellerObj['secretKey'];
         this.store.dispatch(this.settingsIntegrationActions.UpdateAmazonSeller(sellerObj));
     }
@@ -418,7 +703,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * deleteAmazonSeller
      */
     public deleteAmazonSeller(sellerId, idx) {
-        let seller = this.amazonSellerRes.findIndex((o) => o.sellerId === sellerId);
+        let seller = this.amazonSellerRes?.findIndex((o) => o.sellerId === sellerId);
         if (seller > -1) {
             this.store.dispatch(this.settingsIntegrationActions.DeleteAmazonSeller(sellerId));
             this.removeAmazonSeller(idx);
@@ -439,25 +724,25 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     public addAmazonSellerRow(i?: number, item?: any) {
-        const control = this.amazonSellerForm.controls['sellers'] as FormArray;
+        const control = this.amazonSellerForm.controls['sellers'] as UntypedFormArray;
         if (item) {
             if (control.controls[i]) {
                 control.controls[i]?.patchValue(item);
-                if (control.controls[i].value.sellerId) {
+                if (control.controls[i]?.value.sellerId) {
                     control.controls[i].disable();
                 }
             } else {
                 control.push(this.initAmazonReseller());
                 setTimeout(() => {
                     control.controls[i]?.patchValue(item);
-                    if (control.controls[i].value.sellerId) {
+                    if (control.controls[i]?.value.sellerId) {
                         control.controls[i].disable();
                     }
                 }, 200);
             }
         } else {
-            let arr = control.value;
-            if (!control.value[arr?.length - 1].sellerId) {
+            let arr = control?.value;
+            if (!control?.value[arr?.length - 1]?.sellerId) {
                 return;
             }
             control.push(this.initAmazonReseller());
@@ -467,7 +752,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     // remove amazon Seller controls
     public removeAmazonSeller(i: number) {
         // remove address from the list
-        const control = this.amazonSellerForm.controls['sellers'] as FormArray;
+        const control = this.amazonSellerForm.controls['sellers'] as UntypedFormArray;
         if (control?.length > 1) {
             control.removeAt(i);
         } else {
@@ -487,7 +772,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * enableDisableAmazonControl
      */
     public enableDisableAmazonControl(idx, type) {
-        const control = this.amazonSellerForm.controls['sellers'] as FormArray;
+        const control = this.amazonSellerForm.controls['sellers'] as UntypedFormArray;
         if (type === 'enable') {
             control.controls[idx].enable();
         } else {
@@ -497,12 +782,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     private getRedirectUrl(baseHref: string) {
         return `${baseHref}pages/settings?tab=integration`;
-    }
-
-    public selectTab(id: number) {
-        if (this.integrationTab.tabs[id] && this.integrationTab.tabs[id] !== undefined) {
-            this.integrationTab.tabs[id].active = true;
-        }
     }
 
     /**
@@ -537,7 +816,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     };
                     this._authenticationService.saveGmailToken(dataToSave).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
 
-                        if (res.status === 'success') {
+                        if (res?.status === 'success') {
                             this.toasty.successToast(this.localeData?.email?.gmail_added_successfully, this.commonLocaleData?.app_success);
                         } else {
                             this.toasty.errorToast(res.message, res.code);
@@ -565,12 +844,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public prepareDataForUI(data: ShareRequestForm[]): any {
         return data.map((item) => {
             if (item.allowedCidrs && item.allowedCidrs.length > 0) {
-                item.cidrsStr = item.allowedCidrs.toString();
+                item.cidrsStr = item.allowedCidrs?.toString();
             } else {
                 item.cidrsStr = null;
             }
             if (item.allowedIps && item.allowedIps.length > 0) {
-                item.ipsStr = item.allowedIps.toString();
+                item.ipsStr = item.allowedIps?.toString();
             } else {
                 item.ipsStr = null;
             }
@@ -585,11 +864,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public loadPaymentData(event?: any): void {
+        this.store.pipe(select(select => select.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$)).subscribe(result => {
+            this.isAddAndManageOpenedFromOutside = result;
+        });
         if (event && event instanceof TabDirective || !event) {
             this.loadDefaultBankAccountsSuggestions();
             this.getAllBankAccounts();
             this.store.dispatch(this._companyActions.getAllRegistrations());
-            this.store.dispatch(this.settingsIntegrationActions.GetPaymentGateway());
             this.store.pipe(take(1)).subscribe(s => {
                 this.selectedCompanyUniqueName = s.session.companyUniqueName;
                 this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
@@ -604,7 +885,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public loadEcommerceData(event?: any): void {
-        if (event && event instanceof TabDirective || !event) {
+        if (event && event instanceof MatTabGroup || !event) {
             this.store.dispatch(this.settingsIntegrationActions.GetAmazonSellers());
         }
     }
@@ -615,12 +896,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @param {any} event Tab select event
      * @memberof SettingIntegrationComponent
      */
-    public loadCollectionData(event?): void {
-        if (event && event instanceof TabDirective || !event) {
+    public loadCollectionData(event?: any): void {
+        if (event && event instanceof MatTabGroup || !event) {
             this.loadDefaultAccountsSuggestions();
             this.loadDefaultBankAccountsSuggestions();
+            this.paypalLoadDefaultAccountsSuggestions();
             this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
+            this.store.dispatch(this.settingsIntegrationActions.getPaypalDetails());
         }
+        this.changeDetectionRef.detectChanges();
     }
 
     /**
@@ -630,7 +914,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public loadEmailData(event?: any): void {
-        if (event && event instanceof TabDirective || !event) {
+        if (event && event instanceof MatTabGroup || !event) {
             this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
             this.store.dispatch(this.settingsIntegrationActions.GetEmailKey());
         }
@@ -643,10 +927,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public loadSmsData(event?: any): void {
-        if (event && event instanceof TabDirective || !event) {
-            if (event && event instanceof TabDirective || !event) {
-                this.store.dispatch(this.settingsIntegrationActions.GetSMSKey());
-            }
+        if (event && event instanceof MatTabGroup || !event) {
+            this.store.dispatch(this.settingsIntegrationActions.GetSMSKey());
         }
     }
 
@@ -656,25 +938,27 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @private
      * @memberof SettingIntegrationComponent
      */
-    private loadTabData(): void {
-        switch (this.selectedTabParent) {
-            // case SettingsIntegrationTab.Sms:
-            //     this.loadSmsData();
-            //     break;
-            case SettingsIntegrationTab.Email:
+    private loadTabData(index: number): void {
+        if (this.voucherApiVersion === 2) {
+            if (SettingsIntegrationTab.Email === index) {
                 this.loadEmailData();
-                break;
-            case SettingsIntegrationTab.Collection:
+            }
+            if (SettingsIntegrationTab.Collection === index) {
                 this.loadCollectionData();
-                break;
-            case SettingsIntegrationTab.ECommerce:
-                this.loadEcommerceData();
-                break;
-            case SettingsIntegrationTab.Payment:
+            }
+            if (SettingsIntegrationTab.Payment === index) {
                 this.loadPaymentData();
-                break;
-            default:
-                break;
+            }
+        } else {
+            if (SettingsIntegrationTabV1.Email === index) {
+                this.loadEmailData();
+            }
+            if (SettingsIntegrationTabV1.Collection === index) {
+                this.loadCollectionData();
+            }
+            if (SettingsIntegrationTabV1.Payment === index) {
+                this.loadPaymentData();
+            }
         }
     }
 
@@ -684,8 +968,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @param {string} tab
      * @memberof SettingIntegrationComponent
      */
-    public tabChanged(tab: string): void {
+    public tabChanged(event: any): void {
+        let tab = event?.tab?.textLabel?.toLocaleLowerCase();
         this.router.navigateByUrl('/pages/settings/integration/' + tab);
+        this.loadTabData(event?.index);
     }
 
     /**
@@ -710,7 +996,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
-                            value: result.uniqueName,
+                            value: result?.uniqueName,
                             label: result.name
                         }
                     }) || [];
@@ -759,7 +1045,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     if (!this.accountsSearchResultsPaginationData.query) {
                         const results = response.map(result => {
                             return {
-                                value: result.uniqueName,
+                                value: result?.uniqueName,
                                 label: result.name
                             }
                         }) || [];
@@ -781,8 +1067,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.onAccountSearchQueryChanged('', 1, (response) => {
             this.defaultAccountSuggestions = response.map(result => {
                 return {
-                    value: result.uniqueName,
-                    label: result.name
+                    value: result?.uniqueName,
+                    label: result?.name
                 }
             }) || [];
             this.defaultAccountPaginationData.page = this.accountsSearchResultsPaginationData.page;
@@ -798,11 +1084,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     private loadDefaultBankAccountsSuggestions(): void {
-        this.salesService.getAccountsWithCurrency('bankaccounts').pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.salesService.getAccountsWithCurrency('bankaccounts,loanandoverdraft').pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body?.results) {
                 const bankAccounts = response.body.results.map(account => ({
-                    label: account.name,
-                    value: account.uniqueName
+                    label: account?.name,
+                    value: account?.uniqueName
                 }))
                 this.bankAccounts$ = observableOf(bankAccounts);
             }
@@ -826,6 +1112,45 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public openCreateNewAccountModal(): void {
         this.createNewAccountModal?.show();
+    }
+
+    /**
+     * Initiate request to open plaid popup
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public getPlaidLinkToken(itemId?: any): void {
+        this.store.dispatch(this.commonAction.reAuthPlaid({ itemId: itemId, reauth: true }));
+    }
+
+    /**
+     * This will use for select bank account only for plaid integration
+     *
+     * @param {*} event
+     * @param {*} bank
+     * @memberof SettingIntegrationComponent
+     */
+    public selectBankAccount(event: any, bank: any): void {
+        if (event) {
+            let request = { bankAccountUniqueName: bank?.bankResource?.uniqueName };
+            let accountForm = {
+                accountNumber: bank?.bankResource?.accountNumber,
+                accountUniqueName: event?.value,
+                paymentAlerts: [],
+                bankName: 'plaid'
+            };
+            this.settingsIntegrationService.updateAccount(accountForm, request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === "success") {
+                    if (response?.body?.message) {
+                        this.toasty.clearAllToaster();
+                        this.toasty.successToast(response?.body?.message);
+                    }
+                } else {
+                    this.toasty.clearAllToaster();
+                    this.toasty.errorToast(response?.message);
+                }
+            });
+        }
     }
 
     /**
@@ -872,13 +1197,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.connectedBankAccounts = response.body;
 
                 this.connectedBankAccounts.forEach(bankAccount => {
-                    if(bankAccount?.iciciDetailsResource?.payor?.length > 0) {
-                        bankAccount?.iciciDetailsResource?.payor.forEach(payor => {
+                    if (bankAccount?.bankResource?.payor?.length > 0) {
+                        bankAccount?.bankResource?.payor.forEach(payor => {
                             this.getPayorRegistrationStatus(bankAccount, payor);
                         });
                     }
                 });
             }
+
+            this.changeDetectionRef.detectChanges();
         });
     }
 
@@ -891,7 +1218,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public trackByAccountUniqueName(index: number, item: any): any {
-        return item?.iciciDetailsResource?.uniqueName;
+        return item?.bankResource?.uniqueName;
     }
 
     /**
@@ -915,7 +1242,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public trackByPayorUniqueName(index: number, item: any): any {
-        return item?.urn;
+        return item?.bankUserId;
     }
 
     /**
@@ -924,7 +1251,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public deleteBankAccountLogin(): void {
-        let model = { uniqueName: this.activeBankAccount?.uniqueName, urn: this.activeBankAccount?.urn }
+        let model;
+        if (this.isPlaidSupportedCountry) {
+            model = { uniqueName: this.activeBankAccount?.uniqueName, urn: this.activeBankAccount?.bankUserId }
+        } else {
+            model = { uniqueName: this.activeBankAccount?.uniqueName, bankUserId: this.activeBankAccount?.bankUserId }
+        }
         this.settingsIntegrationService.deleteBankAccountLogin(model).pipe(take(1)).subscribe(response => {
             if (response?.status === "success") {
                 this.getAllBankAccounts();
@@ -944,7 +1276,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public showDeleteBankAccountLoginConfirmationModal(bankAccount: any, payor: any): void {
-        this.activeBankAccount = { uniqueName: bankAccount?.iciciDetailsResource?.uniqueName, urn: payor?.urn, loginId: payor?.loginId };
+        if (this.isPlaidSupportedCountry) {
+            this.activeBankAccount = { uniqueName: bankAccount?.bankResource?.uniqueName, urn: payor?.bankUserId, loginId: payor?.loginId };
+        } else {
+            this.activeBankAccount = { uniqueName: bankAccount?.bankResource?.uniqueName, bankUserId: payor?.bankUserId, loginId: payor?.loginId };
+        }
         this.confirmationModal?.show();
     }
 
@@ -1007,14 +1343,34 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public getPayorRegistrationStatus(bankAccount: any, payor: any): void {
-        let request = { bankAccountUniqueName: bankAccount?.iciciDetailsResource?.uniqueName, urn: payor?.urn };
+        let request;
+
+        if (this.isPlaidSupportedCountry) {
+            request = { bankAccountUniqueName: bankAccount?.bankResource?.uniqueName, urn: payor?.urn };
+        } else {
+            request = { bankAccountUniqueName: bankAccount?.bankResource?.uniqueName, bankUserId: payor?.urn };
+        }
 
         this.settingsIntegrationService.getPayorRegistrationStatus(request).pipe(take(1)).subscribe(response => {
             payor.isConnected = (response?.body?.status === ACCOUNT_REGISTERED_STATUS);
 
-            if(!payor.isConnected && response?.body?.message) {
+            if (!payor.isConnected && response?.body?.message) {
                 this.toasty.errorToast(response?.body?.message);
             }
         });
     }
+
+
+    /**
+     *This will use for copy api url link and display copied
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public copyUrl(): void {
+        this.isCopied = true;
+        setTimeout(() => {
+            this.isCopied = false;
+        }, 3000);
+    }
 }
+

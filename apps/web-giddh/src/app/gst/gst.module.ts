@@ -1,12 +1,10 @@
 import { PurchaseModule } from '../purchase/purchase.module';
 import { PushToGstInComponent } from './filing/tabs/push-to-gstin/push-to-gstin.component';
 import { TransactionSummaryComponent } from './filing/tabs/push-to-gstin/components/transaction-summary/transaction-summary.component';
-import { AlertModule } from 'ngx-bootstrap/alert';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { PaginationComponent, PaginationModule } from 'ngx-bootstrap/pagination';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { FilingComponent } from './filing/filing.component';
@@ -21,7 +19,6 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
 import { HsnSummaryComponent } from './filing/tabs/push-to-gstin/components/hsn-summary/hsn-summary.component';
 import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
-import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { ViewTransactionsComponent } from './filing/tabs/overview/view-transactions/view-transactions.component';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { LaddaModule } from 'angular2-ladda';
@@ -38,6 +35,20 @@ import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.co
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { SharedModule } from '../shared/shared.module';
+import { UnitMappingComponent } from './unit-mapping/unit-mapping.component';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatButtonModule } from '@angular/material/button';
+import { PushToPortalComponent } from './modals/push-to-portal/push-to-portal.component';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { FilingStatusComponent } from './filing-status/filing-status.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
     declarations: [FileGstR3Component,
@@ -45,36 +56,44 @@ import { SharedModule } from '../shared/shared.module';
         ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent,
         OverviewSummaryComponent, TransactionSummaryComponent,
         PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent,
-        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent],
+        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, UnitMappingComponent, PushToPortalComponent,FilingStatusComponent],
     imports: [
         GstRoutingModule,
         CollapseModule,
-        PaginationModule,
-        DatepickerModule,
-        BsDropdownModule,
+        PaginationModule.forRoot(),
+        BsDatepickerModule.forRoot(),
+        BsDropdownModule.forRoot(),
         Daterangepicker,
-        LaddaModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         HighlightModule,
-        TooltipModule,
+        TooltipModule.forRoot(),
         ClickOutsideModule,
-        TabsModule,
+        TabsModule.forRoot(),
         ElementViewChildModule,
-        AlertModule,
         DecimalDigitsModule,
-        ModalModule,
+        ModalModule.forRoot(),
         PurchaseModule,
         InvoiceModule,
-        PerfectScrollbarModule,
         CurrencyModule,
         ConfirmModalModule,
         SharedModule,
         ShSelectModule,
-        TaxSidebarModule
+        TaxSidebarModule,
+        MatGridListModule,
+        FormFieldsModule,
+        MatButtonModule,
+        MatTableModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        WatchVideoModule,
+        MatTooltipModule
     ],
     providers: [],
-    entryComponents: [
-        PaginationComponent
-    ],
     exports: [ViewTransactionsComponent]
 })
 export class GstModule {

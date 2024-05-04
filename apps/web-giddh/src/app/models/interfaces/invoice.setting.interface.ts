@@ -1,4 +1,4 @@
-import { RazorPayDetailsResponse } from '../api-models/SettingsIntegraion';
+import { PaypalDetailsResponse, RazorPayDetailsResponse } from '../api-models/SettingsIntegraion';
 
 export interface InvoiceWebhooks {
     entity: string;
@@ -15,6 +15,7 @@ export interface InvoiceSetting {
     estimateSettings: EstimateSettings;
     webhooks: any[];
     razorPayform?: RazorPayDetailsResponse;
+    paypalForm?: PaypalDetailsResponse;
     companyEmailSettings: CompanyEmailSettings;
     companyCashFreeSettings: CompanyCashFreeSettings;
     companyInventorySettings: CompanyInventorySettings;
@@ -79,12 +80,17 @@ export class InvoiceSettings {
         this.autoDeleteEntries = false;
         this.gstEInvoiceEnable = false;
         this.enableNarrationOnInvAndVoucher = false;
+        this.salesRoundOff = false;
+        this.purchaseRoundOff = false;
+        this.debitNoteRoundOff = false;
+        this.creditNoteRoundOff = false;
     }
     duePeriod?: any;
     autoMail: boolean;
     autoEntryAndInvoice: boolean;
     showSeal: boolean;
     autoPaid: any;
+    autoGenerateVoucherFromEntry: boolean;
     branchInvoiceNumberPrefix: any;
     createPaymentEntry: boolean;
     email?: any;
@@ -121,4 +127,8 @@ export class InvoiceSettings {
     gstEInvoiceGstin?: string;
     gstEInvoiceUserName?: string;
     gstEInvoiceUserPassword?: string;
+    salesRoundOff: boolean;
+    purchaseRoundOff: boolean;
+    debitNoteRoundOff: boolean;
+    creditNoteRoundOff: boolean;
 }

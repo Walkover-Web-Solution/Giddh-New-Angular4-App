@@ -1,22 +1,23 @@
-<div class="container-fluid setting-profile-container">
+<div class="container-fluid" [ngClass]="{ 'setting-profile-container': !addressOnly }">
     <div class="row">
         <div
             *ngIf="organizationType === 'COMPANY'"
             class="w-100 d-flex justify-content-between mb-4 align-items-center address-list-top"
         >
             <div class="search-container">
-                <div class="font-14">{{ localeData?.company_address_list }}</div>
+                <div class="font-15">{{ localeData?.company_address_list }}</div>
                 <a
                     class="cp mr-l1 clear-filter-btn"
                     *ngIf="searchStateInput?.value || searchAddressInput?.value || searchAddressNameInput?.value"
                     href="javascript:;"
                     (click)="resetFilter()"
                     [tooltip]="localeData?.reset_search"
+                    aria-label="filter"
                 >
                     <i aria-hidden="true" class="icon-refresh"></i> {{ commonLocaleData?.app_clear_filter }}
                 </a>
             </div>
-            <button type="button" class="btn btn-sky-blue mr-0" (click)="openAddAndManage()">
+            <button type="button" class="btn btn-sky-blue mr-0" (click)="openAddAndManage()" aria-label="address">
                 {{ localeData?.add_address }}
             </button>
         </div>
@@ -25,8 +26,8 @@
             *ngIf="organizationType === 'BRANCH'"
             class="w-100 d-flex justify-content-between mb-4 align-items-center address-list-top"
         >
-            <div class="font-14">{{ localeData?.address_list }}</div>
-            <button type="button" class="btn btn-sky-blue mr-0" (click)="openAddAndManage()">
+            <div class="font-15">{{ localeData?.address_list }}</div>
+            <button type="button" class="btn btn-sky-blue mr-0" (click)="openAddAndManage()" aria-label="address">
                 {{ localeData?.add_address }}
             </button>
         </div>
@@ -90,6 +91,29 @@
                                     </ng-container>
                                 </div>
                             </th>
+                            <ng-container *ngIf="showTaxColumn">
+                                <th
+                                    #searchTaxInputField
+                                    width="25%"
+                                    class="td-search-box"
+                                    (clickOutside)="clickedOutside($event, searchTaxInputField, 'searchTaxInput')"
+                                >
+                                    <div>
+                                        <ng-container
+                                            *ngTemplateOutlet="
+                                                searchTemplate;
+                                                context: {
+                                                    $implicit: showSearchTax,
+                                                    title: taxType,
+                                                    fieldName: 'searchTaxInput',
+                                                    formControl: searchTaxInput
+                                                }
+                                            "
+                                        >
+                                        </ng-container>
+                                    </div>
+                                </th>
+                            </ng-container>
                             <th
                                 #searchStateInputField
                                 width="15%"
@@ -102,7 +126,9 @@
                                             searchTemplate;
                                             context: {
                                                 $implicit: showSearchState,
-                                                title: commonLocaleData?.app_state,
+                                                title: addressConfiguration.countyList?.length
+                                                    ? commonLocaleData?.app_region
+                                                    : commonLocaleData?.app_state,
                                                 fieldName: 'searchStateInput',
                                                 formControl: searchStateInput
                                             }
@@ -111,11 +137,12 @@
                                     </ng-container>
                                 </div>
                             </th>
-                            <th width="25%" class="td-search-box">
+                            <th width="25%" class="td-search-box" *ngIf="!hideLinkEntity">
                                 <div>
                                     <span>{{ localeData?.linked_with }}</span>
                                 </div>
                             </th>
+                            <th width="25%" class="td-search-box" *ngIf="hideLinkEntity">&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody *ngIf="!shouldShowLoader">
@@ -129,18 +156,38 @@
                             <td [attr.data-title]="commonLocaleData?.app_address">
                                 <div>
                                     <p class="address-row">{{ address.address }}</p>
-                                    <ng-container *ngIf="address.taxType && address.taxNumber">
-                                        {{ address.taxType }} : {{ address.taxNumber }}&nbsp;
-                                    </ng-container>
                                     <ng-container *ngIf="address.pincode">
                                         {{ commonLocaleData?.app_pin }}: {{ address.pincode }}
                                     </ng-container>
                                 </div>
                             </td>
-                            <td [attr.data-title]="commonLocaleData?.app_state">
-                                <div>{{ address.stateCode }} - {{ address.stateName }}</div>
+                            <td [attr.data-title]="taxType" *ngIf="showTaxColumn">
+                                <div>
+                                    <ng-container *ngIf="address.taxType && address.taxNumber">
+                                        {{ address.taxNumber }}
+                                    </ng-container>
+                                </div>
                             </td>
-                            <td [attr.data-title]="localeData?.linked_with" width="30%" class="linked-with">
+                            <td
+                                [attr.data-title]="
+                                    addressConfiguration.countyList?.length
+                                        ? commonLocaleData?.app_region
+                                        : commonLocaleData?.app_state
+                                "
+                            >
+                                <div *ngIf="addressConfiguration.countyList?.length">
+                                    {{ address.county?.code }} - {{ address.county?.name }}
+                                </div>
+                                <div *ngIf="!addressConfiguration.countyList?.length">
+                                    {{ address.stateCode }} - {{ address.stateName }}
+                                </div>
+                            </td>
+                            <td
+                                [attr.data-title]="localeData?.linked_with"
+                                width="30%"
+                                class="linked-with"
+                                *ngIf="!hideLinkEntity"
+                            >
                                 <div class="d-flex wrap-linked-company">
                                     <div class="d-flex flex-column linked-with w-100">
                                         <span *ngFor="let entity of address.linkedEntities" class="pb-1">
@@ -160,10 +207,24 @@
 
                                     <div class="ml-auto">
                                         <div class="action-icon">
-                                            <a href="javascript:void(0);" (click)="handleUpdateAddress(address)">
+                                            <a href="javascript:void(0);" (click)="handleUpdateAddress(address)" aria-label="edit icon">
                                                 <span class="icon-edit"></span
                                             ></a>
-                                            <a href="javascript:void(0);" (click)="showConfirmationModal(address)">
+                                            <a href="javascript:void(0);" (click)="showConfirmationModal(address)" aria-label="delete icon">
+                                                <span class="icon-trash"></span
+                                            ></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td width="30%" class="linked-with" *ngIf="hideLinkEntity">
+                                <div class="d-flex wrap-linked-company">
+                                    <div class="ml-auto">
+                                        <div class="action-icon">
+                                            <a href="javascript:void(0);" (click)="handleUpdateAddress(address)" aria-label="edit icon">
+                                                <span class="icon-edit"></span
+                                            ></a>
+                                            <a href="javascript:void(0);" (click)="showConfirmationModal(address)" aria-label="delete icon">
                                                 <span class="icon-trash"></span
                                             ></a>
                                         </div>
@@ -190,7 +251,7 @@
                                 <label>{{ commonLocaleData?.app_address }}:</label>
                                 <p>
                                     {{ address.address }}
-                                    <ng-container *ngIf="address.taxType && address.taxNumber">
+                                    <ng-container *ngIf="showTaxColumn && address.taxType && address.taxNumber">
                                         <br *ngIf="address.address" />
                                         {{ address.taxType }} : {{ address.taxNumber }}
                                     </ng-container>
@@ -235,7 +296,7 @@
             </div>
         </div>
         <!-- branch profile element end -->
-        <div *ngIf="organizationType === 'COMPANY'" class="w-100 text-center">
+        <div *ngIf="organizationType === 'COMPANY'" class="w-100 text-center mt-4 mb-5">
             <pagination
                 [(ngModel)]="paginationConfig.page"
                 *ngIf="!shouldShowLoader && paginationConfig?.totalItems > paginationLimit"
@@ -274,6 +335,9 @@
         [addressConfiguration]="addressConfiguration"
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"
+        [hideLinkEntity]="
+            (addressToUpdate && hideLinkEntity) || (!addressToUpdate && addresses?.length <= 0 && hideLinkEntity)
+        "
     >
     </create-address>
 </div>
@@ -308,15 +372,15 @@
                     <i class="icon-cross text-right close-modal" aria-hidden="true" (click)="onCancel()"></i>
                 </div>
                 <div class="modal-body pd-l2 pd-r2 clearfix" id="export-body">
-                    <form name="newRole" novalidate class="" autocomplete="off">
+                    <form name="newRole" novalidate autocomplete="off">
                         <div class="modal-wrap mr-b2">
                             <h3>{{ localeData?.want_to_continue }}</h3>
                         </div>
                         <div class="d-flex justify-content-start">
-                            <button type="submit" class="btn btn-md btn-success mr-r1" (click)="onConfirmation()">
+                            <button type="submit" class="btn btn-md btn-success mr-r1" (click)="onConfirmation()" aria-label="yes">
                                 {{ commonLocaleData?.app_yes }}
                             </button>
-                            <button type="submit" class="btn btn-md btn-cancel" (click)="onCancel()">
+                            <button type="submit" class="btn btn-md btn-cancel" (click)="onCancel()" aria-label="no">
                                 {{ commonLocaleData?.app_no }}
                             </button>
                         </div>

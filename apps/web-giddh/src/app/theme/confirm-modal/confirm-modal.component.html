@@ -1,14 +1,14 @@
 <div>
     <div class="modal-header">
-        <h3 class="modal-title">{{ title }}</h3>
-        <button mat-icon-button class="close" data-dismiss="modal" (click)="onCancel($event)">×</button>
+        <h2 class="modal-title">{{ title }}</h2>
+        <button aria-label="cross" mat-icon-button class="close" data-dismiss="modal" (click)="onCancel($event)">×</button>
     </div>
     <div class="modal-body">
         {{ body }}
-        <p class="text-gray font-14 mr-t05">{{ permanentlyDeleteMessage }}</p>
+        <p class="font-15 mr-t05">{{ permanentlyDeleteMessage }}</p>
     </div>
     <div class="modal-footer">
-        <button mat-raised-button class="btn-success" (click)="onSuccess($event)">{{ ok }}</button>
-        <button mat-raised-button class="btn-danger" (click)="onCancel($event)">{{ cancel }}</button>
+        <button aria-label="yes" mat-stroked-button color="primary" (click)="onSuccess($event)">{{ ok }}</button>
+        <button aria-label="no" mat-stroked-button (click)="onCancel($event)">{{ cancel }}</button>
     </div>
 </div>

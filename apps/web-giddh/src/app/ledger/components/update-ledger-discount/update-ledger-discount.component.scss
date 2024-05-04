@@ -1,0 +1,35 @@
+.or-line::before {
+    content: " ";
+    border-bottom: 1px solid var(--color-iron);
+    display: inline-block;
+    width: 57px;
+    margin-right: 13px;
+}
+
+.or-line::after {
+    content: "";
+    border-bottom: 1px solid var(--color-iron);
+    display: inline-block;
+    width: 57px;
+    margin-left: 13px;
+}
+
+.or-line {
+    display: flex;
+    align-items: center;
+    color: var(--color-iron);
+    margin-bottom: 10px;
+}
+.discount-item {
+    input[type="checkbox"] {
+        height: 19px;
+    }
+}
+.my-dropdown-menu {
+    padding: 10px;
+}
+.adjust {
+    .mat-input-element {
+        box-sizing: border-box !important;
+    }
+}

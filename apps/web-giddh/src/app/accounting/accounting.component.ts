@@ -61,7 +61,7 @@ export const PAGE_SHORTCUT_MAPPING = [
         keyCode: 117, // 'F6',
         inputForFn: {
             page: 'Receipt',
-            uniqueName: 'null',
+            uniqueName: 'purchases',
             gridType: 'voucher'
         }
     },
@@ -128,22 +128,22 @@ export class AccountingComponent implements OnInit, OnDestroy {
                 this.saveEntryInInvoice = false;
             }, 100);
         } else if (event.altKey && event.which === 86) { // Handling Alt + V and Alt + I
-            const selectedPage = this._tallyModuleService.selectedPageInfo.value;
-            if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
+            const selectedPage = this._tallyModuleService.selectedPageInfo?.value;
+            if (PAGES_WITH_CHILD?.indexOf(selectedPage.page) > -1) {
                 this._tallyModuleService.setVoucher({
                     page: selectedPage.page,
-                    uniqueName: selectedPage.uniqueName,
+                    uniqueName: selectedPage?.uniqueName,
                     gridType: 'voucher'
                 });
             } else {
                 return;
             }
         } else if (event.altKey && event.which === 73) { // Alt + I
-            const selectedPage = this._tallyModuleService.selectedPageInfo.value;
-            if (PAGES_WITH_CHILD.indexOf(selectedPage.page) > -1) {
+            const selectedPage = this._tallyModuleService.selectedPageInfo?.value;
+            if (PAGES_WITH_CHILD?.indexOf(selectedPage.page) > -1) {
                 this._tallyModuleService.setVoucher({
                     page: selectedPage.page,
-                    uniqueName: selectedPage.uniqueName,
+                    uniqueName: selectedPage?.uniqueName,
                     gridType: 'invoice'
                 });
             } else {
@@ -186,3 +186,4 @@ export class AccountingComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 }
+

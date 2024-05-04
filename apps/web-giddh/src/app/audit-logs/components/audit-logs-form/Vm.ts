@@ -1,5 +1,5 @@
 import { UserDetails } from '../../../models/api-models/loginModels';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { Observable } from 'rxjs';
 import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -16,7 +16,7 @@ export class AuditLogsSidebarVM {
     /** Audit log form's company shared users list Observer */
     public users$: Observable<IOption[]>;
     /** Date format library reference */
-    public moment = moment;
+    public dayjs = dayjs;
     /** Audit log form's company operations list */
     public filters: IOption[] = [];
     /** Audit log form's company entity type list */
@@ -58,7 +58,7 @@ export class AuditLogsSidebarVM {
         this.selectedUserUniqueName = '';
         this.selectedGroupUniqueName = '';
         this.selectedAccountUniqueName = '';
-        this.selectedFromDate = moment().toDate();
-        this.selectedToDate = moment().toDate();
+        this.selectedFromDate = dayjs().toDate();
+        this.selectedToDate = dayjs().toDate();
     }
 }

@@ -8,5 +8,14 @@
     "eway_bill": "ई-वे बिल",
     "reverse_charge": "रिवर्स चार्ज",
     "setting": "सेटिंग",
-    "vat_report": "वैट रिपोर्ट"
+    "vat_report": "वैट रिपोर्ट",
+    "unit_mapping": "यूनिट मैपिंग",
+    "add_gst": "जीएसटी जोड़ें",
+    "add_trn": "टीआरएन जोड़ें",
+    "add_vrn": "वीआरएन जोड़ें",
+    "add_address": "पता बनाएँ",
+    "filing_status": "दाखिल स्थिति",
+    "vat_obligations": "वैट दायित्व",
+    "with_held_setting": "हेल्ड सेटिंग के साथ",
+    "add_vat": "वैट जोड़ें"
 }

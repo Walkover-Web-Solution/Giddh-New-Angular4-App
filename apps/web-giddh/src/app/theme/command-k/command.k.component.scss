@@ -11,7 +11,7 @@
         .search-element {
             outline: none;
             border: none;
-            font-size: 14px;
+            font-size: var(--font-size-15);
             font-weight: normal;
             line-height: initial;
             width: 95%;
@@ -35,7 +35,7 @@
             display: inline-flex;
             box-sizing: border-box;
             text-transform: capitalize;
-            font-size: 14px;
+            font-size: var(--font-size-15);
             .vT {
                 letter-spacing: 0.3px;
                 display: inline-block;
@@ -47,7 +47,7 @@
                 direction: ltr;
             }
             .vM {
-                font-size: 22px;
+                font-size: var(--font-size-24);
                 margin-left: 6px;
             }
         }
@@ -107,8 +107,10 @@
             min-height: auto;
             overflow: initial;
             padding: 0 24px;
+            height: unset !important;
             a {
                 min-height: auto;
+                width: 100%;
             }
             .item-icon {
                 color: var(--color-gray);
@@ -122,11 +124,11 @@
             }
             .item-details {
                 position: relative;
-                font-size: 14px;
+                font-size: var(--font-size-15);
                 color: var(--color-popup-secondary-list-head-text);
                 text-transform: capitalize;
-                margin-left: 25px;
-                padding: 5px 0;
+                width: 100%;
+                padding: 2px 0 2px 25px;
                 .width-65 {
                     width: 65%;
                 }
@@ -138,8 +140,9 @@
                     text-overflow: ellipsis;
                 }
                 small {
-                    font-size: 12px;
+                    font-size: var(--font-size-12);
                     color: var(--color-abbey);
+                    display: block;
                 }
                 .command-hover-text {
                     color: var(--color-common-primary-text);
@@ -148,19 +151,28 @@
                     width: 25%;
                     word-break: break-word;
                     text-align: right;
+                    display: inline;
+                    white-space: initial;
                 }
                 .command-bread-crumb {
                     max-width: 150px;
                     overflow: hidden;
                 }
+                p{
+                    display: inline;
+                    white-space: initial;
+                }
             }
             // hover effect
             &.selected {
-                background-color: var(--color-popup-list-hover);
+                background-color: var(--color-primary-header-background);
                 .item-details {
                     color: var(--color-popup-list-input-text-hover);
                     small {
                         color: var(--color-popup-list-input-text-hover);
+                    }
+                    .command-hover-text {
+                        color: var(--color-white);
                     }
                 }
                 .item-icon {
@@ -211,15 +223,10 @@
     .universal-data-list-wrapper {
         .universal-list-items {
             .item {
-                height: 40px;
-                margin-bottom: 3px;
-                a {
-                    height: 40px;
-                }
                 .item-details {
                     padding-left: 24px;
                     line-height: 1.4;
-                    font-size: 12px;
+                    font-size: var(--font-size-12);
                 }
             }
         }

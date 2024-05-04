@@ -3,10 +3,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ConfirmModalModule } from '../../../theme';
-
 import { ShSelectModule } from '../../../theme/ng-virtual-select/sh-select.module';
 import { InventoryAddStockComponent } from './inventory.addstock.component';
-import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
+import { DecimalDigitsModule } from '../../../shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { LaddaModule } from 'angular2-ladda';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 @NgModule({
     declarations: [InventoryAddStockComponent],
@@ -15,9 +16,11 @@ import { NgxBootstrapSwitchModule } from 'ngx-bootstrap-switch';
         FormsModule,
         ReactiveFormsModule,
         ShSelectModule,
-        BsDropdownModule,
+        BsDropdownModule.forRoot(),
         ConfirmModalModule,
-        NgxBootstrapSwitchModule.forRoot()
+        DecimalDigitsModule,
+        MatSlideToggleModule,
+        LaddaModule
     ],
     exports: [InventoryAddStockComponent]
 })

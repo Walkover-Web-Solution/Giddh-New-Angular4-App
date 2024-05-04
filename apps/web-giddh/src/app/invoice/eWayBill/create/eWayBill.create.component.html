@@ -415,7 +415,7 @@
     <div class="right-modal account-aside-menu-state">
         <div class="aside-overlay" [ngClass]="status ? 'in' : 'out'"></div>
         <div class="aside-pane aside-right" [ngClass]="status ? 'in' : 'out'">
-            <button type="button" class="btn btn-sm btn-primary" id="close" (click)="OpenTransporterModel()">
+            <button type="button" class="btn btn-sm btn-primary" id="closedialog" (click)="OpenTransporterModel()">
                 <i class="icon-cross"></i>
             </button>
             <div class="form-header">
@@ -449,7 +449,7 @@
                                 Transportersname.invalid &&
                                 Transportersname.touched &&
                                 Transportersname.dirty &&
-                                Transportersname.value
+                                Transportersname?.value
                             "
                             >{{ commonLocaleData?.app_invalid_transporter_name_message }}
                         </small>
@@ -481,7 +481,7 @@
                                 TransportersID.invalid &&
                                 TransportersID.touched &&
                                 TransportersID.dirty &&
-                                TransportersID.value
+                                TransportersID?.value
                             "
                             >{{ commonLocaleData?.app_invalid_transporter_id_message }}
                         </small>
@@ -583,7 +583,7 @@
                     </tr>
                 </table>
             </div>
-            <div class="text-center mt-4 mb-4" *ngIf="transporterListDetails">
+            <div class="text-center mt-4 mb-5" *ngIf="transporterListDetails?.totalPages > 1">
                 <pagination
                     [totalItems]="transporterListDetails.totalPages"
                     [(ngModel)]="transporterListDetails.page"

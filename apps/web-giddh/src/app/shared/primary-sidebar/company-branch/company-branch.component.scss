@@ -1,5 +1,5 @@
 .company-branch-dropdown {
-    font-family: "opensans-regular";
+    font-family: var(--font-regular);
     .search-box {
         padding: 0 20px;
         .input-group-text {
@@ -13,6 +13,7 @@
         input {
             border-left: none;
             padding-left: 0 !important;
+            padding-right: 6px !important;
             background-color: var(--color-sidebar-primary-search-bar-background) !important;
             border-top-left-radius: 0px !important;
             border-bottom-left-radius: 0px !important;
@@ -27,7 +28,7 @@
             }
         }
         .input-group-append {
-            font-size: 12px;
+            font-size: var(--font-size-12);
             color: var(--color-primary-company-branch-input-group-append);
             right: 10px;
             top: 0;
@@ -51,7 +52,7 @@
     }
     tab {
         position: relative;
-        font-family: "opensans-regular" !important;
+        font-family: var(--font-regular) !important;
     }
     tab.icon-company {
         margin: 0 -20px;
@@ -71,9 +72,9 @@
             p {
                 span {
                     small {
-                        font-size: 10px;
+                        font-size: var(--font-size-9);
                         line-height: 12.4px;
-                        font-weight: 700;
+                        font-weight: 500;
                         padding: 2px 5px;
                         border-radius: 5px;
                         color: var(--color-sidebar-company-count-text);
@@ -130,7 +131,7 @@
         }
     }
     .company-list {
-        height: calc(100vh - 345px) !important;
+        height: calc(100vh - 285px) !important;
         overflow: auto;
         margin: 0;
         padding: 0px;
@@ -278,6 +279,7 @@
             }
         }
         &.branch-list {
+            height: calc(100vh - 250px) !important;
             ul {
                 margin: 0;
                 li {
@@ -322,49 +324,7 @@
             }
         }
     }
-    .profile-user {
-        position: fixed;
-        bottom: 0;
-        width: 240px;
-        left: 0;
-        border-top: 1px solid var(--color-common-secondary-border);
-        z-index: 991;
-        background-color: var(--color-sidebar-footer-logout-section-background);
-        .profile-name {
-            cursor: pointer;
-            .profile-alice {
-                display: inline-flex;
-                width: 24px;
-                height: 24px;
-                background-color: var(--color-secondary-button-background);
-                border-radius: 30px;
-                font-size: 12px;
-                justify-content: center;
-                align-items: center;
-                color: var(--color-secondary-button-text);
-                letter-spacing: -1px;
-            }
-        }
-        .profile-logout {
-            display: flex;
-            align-items: center;
-            button {
-                border: 1px solid var(--color-secondary-button-border);
-                background: var(--color-tertiary-button-background);
-                color: var(--color-tertiary-button-text);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                font-size: 12px;
-                padding: 5px 10px;
-                border-radius: 5px !important;
-                font-size: 12px;
-                &:hover {
-                    background-color: var(--color-tertiary-button-background-hover);
-                }
-            }
-        }
-    }
+   
     .custom-tabs {
         .icon-company-branch-connect {
             position: absolute;
@@ -380,7 +340,7 @@
                     small {
                         background: var(--color-primary-company-branch-wrap-company-refresh-small-background);
                         color: var(--color-primary-company-branch-wrap-company-refresh-small);
-                        font-size: 10px;
+                        font-size: var(--font-size-9);
                         line-height: 12.4px;
                         font-weight: 700;
                         padding: 2px 5px;
@@ -494,7 +454,7 @@
     margin-right: 2px;
 }
 .font-semibold {
-    font-family: "opensans-semibold";
+    font-family: var(--font-semibold);
 }
 
 ::ng-deep {

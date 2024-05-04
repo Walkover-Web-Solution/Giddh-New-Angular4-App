@@ -84,6 +84,8 @@
                                             dropdownToggle
                                             class="icon-dots-three-vertical dropdown-toggle cp"
                                             aria-controls="dropdown-basic"
+                                            role="button"
+                                            aria-label="dropdown button"
                                         >
                                         </a>
                                         <ul
@@ -199,9 +201,9 @@
                 <div class="modal-content">
                     <div class="modal-header clearfix">
                         <h3>{{ localeData?.create_new_branch }}</h3>
-                        <span aria-hidden="true" class="close" (click)="hideAddBranchModal()" data-dismiss="modal"
-                            >×</span
-                        >
+                        <button aria-hidden="true" class="close" (click)="hideAddBranchModal()" data-dismiss="modal">
+                            ×
+                        </button>
                     </div>
                     <div class="modal-body">
                         <div>
@@ -231,7 +233,7 @@
                                     <li *ngFor="let cmp of companies$ | async">
                                         <input
                                             type="checkbox"
-                                            [checked]="selectedCompaniesUniquename.indexOf(cmp.uniqueName) !== -1"
+                                            [checked]="selectedCompaniesUniquename?.indexOf(cmp?.uniqueName) !== -1"
                                             (click)="checkUncheckMe(cmp, $event)"
                                         />
                                         {{ cmp.name }} <span *ngIf="cmp.nameAlias"> ({{ cmp.nameAlias }})</span>
@@ -302,9 +304,14 @@
                 <div class="modal-content">
                     <div class="modal-header clearfix">
                         <h3>{{ commonLocaleData?.app_confirmation }}</h3>
-                        <span aria-hidden="true" class="close" (click)="onUserConfirmation(false)" data-dismiss="modal"
-                            >×</span
+                        <button
+                            aria-hidden="true"
+                            class="close"
+                            (click)="onUserConfirmation(false)"
+                            data-dismiss="modal"
                         >
+                            ×
+                        </button>
                     </div>
                     <div class="modal-body" [innerHTML]="confirmationMessage"></div>
                     <div class="modal-footer clearfix">

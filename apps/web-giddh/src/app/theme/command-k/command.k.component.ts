@@ -45,9 +45,9 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() public ItemHeight: number = 52;
     @Input() public ItemWidth: number = 300;
     @Input() public visibleItems: number = 10;
-
-    @Output() public closeEmitter: EventEmitter<boolean | any> = new EventEmitter<boolean | any>();
+    
     @Output() public selectedItemEmitter: EventEmitter<any | any[]> = new EventEmitter<any | any[]>();
+    @Output() public closeDailogEmitter: EventEmitter<any | any[]> = new EventEmitter<any | any[]>();
     @Output() public groupEmitter: EventEmitter<any> = new EventEmitter<any>();
     @Output() public noResultFoundEmitter: EventEmitter<any> = new EventEmitter<null>();
     @Output() public newTeamCreationEmitter: EventEmitter<any> = new EventEmitter<null>();
@@ -139,6 +139,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     public closeMaster(): void {
         this.store.dispatch(this.generalAction.addAndManageClosed());
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+        document.querySelector('body')?.classList?.remove('master-page');
     }
 
     /**
@@ -177,12 +178,18 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param {*} item
      * @memberof CommandKComponent
      */
-    public itemSelected(item: any): void {
-        // emit data in case of direct A/c or Menus
+    public itemSelected(item: any, event?:any): void {              
+        if (event && (event.ctrlKey || event.metaKey)){
+            this.closeDailogEmitter.emit();
+            return ;
+        }else if(event && event.type ==="click"){
+            event.preventDefault();
+        }
+       // emit data in case of direct A/c or Menus
         if (!item.type || (item.type && (item.type === 'MENU' || item.type === 'ACCOUNT'))) {
             if (item.type === 'MENU') {
                 item.uniqueName = item.route;
-            }
+            }           
             this.selectedItemEmitter.emit(item);
         } else {
             // emit value for save data in db
@@ -239,7 +246,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
 
         if (this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
             let lastGroup = this._generalService.getLastElement(this.listOfSelectedGroups);
-            this.commandKRequestParams.group = lastGroup.uniqueName;
+            this.commandKRequestParams.group = lastGroup?.uniqueName;
         } else {
             this.commandKRequestParams.group = "";
         }
@@ -259,7 +266,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.commandKRequestParams.totalPages = res.body.totalPages;
                 this._cdref.detectChanges();
             } else {
-                if (this.searchedItems.length === 0) {
+                if (this.searchedItems?.length === 0) {
                     this.noResultsFound = true;
                     this.allowLoadMore = false;
                 }
@@ -324,7 +331,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         // prevent caret movement and animate selected element
-        if (this.isOpen && [UP_ARROW, DOWN_ARROW].indexOf(key) !== -1 && this.virtualScrollElem) {
+        if (this.isOpen && [UP_ARROW, DOWN_ARROW]?.indexOf(key) !== -1 && this.virtualScrollElem) {
             e.preventDefault();
             let item = this.virtualScrollElem.directionToll(key);
             if (item) {
@@ -344,7 +351,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
                 e.preventDefault();
                 e.stopPropagation();
                 // first escape
-                if (this.searchEle?.nativeElement.value) {
+                if (this.searchEle?.nativeElement?.value) {
                     this.searchEle.nativeElement.value = null;
                 } else {
                     // second time pressing escape
@@ -354,7 +361,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
         if (this.isOpen && key === BACKSPACE) {
-            if (!this.searchEle?.nativeElement.value && this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
+            if (!this.searchEle?.nativeElement?.value && this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
                 this.removeItemFromSelectedGroups();
             }
         }
@@ -368,7 +375,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public removeItemFromSelectedGroups(item?: any): void {
         if (item) {
-            this.listOfSelectedGroups = remove(this.listOfSelectedGroups, o => item.uniqueName !== o.uniqueName);
+            this.listOfSelectedGroups = remove(this.listOfSelectedGroups, o => item.uniqueName !== o?.uniqueName);
         } else {
             this.listOfSelectedGroups.pop();
         }
@@ -415,7 +422,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     public initSearch(e: KeyboardEvent, term: string): void {
         let key = e.which || e.keyCode;
         // preventing search operation on arrows key
-        if (this.isOpen && SPECIAL_KEYS.indexOf(key) !== -1) {
+        if (this.isOpen && SPECIAL_KEYS?.indexOf(key) !== -1) {
             return;
         }
         term = term.trim();
@@ -454,16 +461,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof CommandKComponent
      */
     public trackByFn(index, item: any) {
-        return item.uniqueName; // unique id corresponding to the item
-    }
-
-    /**
-     * This will close the modal
-     *
-     * @memberof CommandKComponent
-     */
-    public close() {
-        this.closeEmitter.emit(true);
+        return item?.uniqueName; // unique id corresponding to the item
     }
 
     /**
@@ -497,7 +495,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     @HostListener('scroll', ['$event'])
     onScroll(event: any) {
         // visible height + pixel scrolled >= total height - 200 (deducted 200 to load list little earlier before user reaches to end)
-        if (event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 200)) {
+        if (event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 800)) {
             if (this.allowLoadMore && !this.isLoading) {
                 if (this.commandKRequestParams.page + 1 <= this.commandKRequestParams.totalPages) {
                     this.commandKRequestParams.page++;
@@ -515,9 +513,9 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof CommandKComponent
      */
     public getPageUniqueName(route: string): string {
-        let string = route.replace(/\s+/g, '-');
-        string = string.replace(/\//g, '-');
-        string = string.replace(/^-|-$/g, '');
+        let string = route?.replace(/\s+/g, '-');
+        string = string?.replace(/\//g, '-');
+        string = string?.replace(/^-|-$/g, '');
         return string;
     }
 
@@ -529,7 +527,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     public onPasteInSearch(): void {
         setTimeout(() => {
             if (this.searchEle && this.searchEle.nativeElement) {
-                let term = this.searchEle.nativeElement.value;
+                let term = this.searchEle.nativeElement?.value;
                 term = (term) ? term.trim() : "";
                 this.searchSubject.next(term);
             }

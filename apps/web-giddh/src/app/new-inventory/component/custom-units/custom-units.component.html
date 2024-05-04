@@ -1,0 +1,145 @@
+    <ng-container
+    appTranslate
+    [file]="'inventory/unit'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
+    <div class="mat-grid-wrapper">
+        <div class="mat-list-wrap">
+            <mat-grid-list cols="10" rowHeight="500px">
+                <mat-grid-tile [colspan]="2" class="border-grid">
+                    <mat-list class="item-list group-list">
+                        <strong class="pb-2 list-font pd-l15">{{ commonLocaleData?.app_group }}</strong>
+                        <giddh-page-loader *ngIf="isGroupListLoading"></giddh-page-loader>
+                        <ng-container *ngIf="!isGroupListLoading">
+                            <ng-container *ngIf="!unitGroups?.length">
+                                <mat-list role="list" class="list-head">
+                                    <mat-list-item class="items mat-left">
+                                        <strong>{{ commonLocaleData?.app_no_result_found }}</strong>
+                                    </mat-list-item>
+                                </mat-list>
+                            </ng-container>
+                            <ng-container *ngIf="unitGroups?.length">
+                                <cdk-virtual-scroll-viewport
+                                    class="virtual-group-list overflow-x-hidden"
+                                    [itemSize]="38"
+                                    [minBufferPx]="400"
+                                    [maxBufferPx]="800"
+                                >
+                                    <ng-container
+                                        *cdkVirtualFor="let group of unitGroups; let i = index; trackBy: trackByGroup"
+                                    >
+                                        <mat-divider></mat-divider>
+                                        <mat-list-item
+                                            class="items cursor-pointer mat-left"
+                                            [ngClass]="{ 'selected-unit-group': selectedUnitGroupIndex === i }"
+                                            (click)="
+                                                selectedUnitGroupIndex = i; selectedGroup = group; getUnitMappings()
+                                            "
+                                        >
+                                            <a href="javascript:void(0);">{{ group?.name }}</a>
+                                        </mat-list-item>
+                                    </ng-container>
+                                </cdk-virtual-scroll-viewport>
+                            </ng-container>
+                        </ng-container>
+                    </mat-list>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="3" class="border-grid">
+                    <mat-list class="item-list">
+                        <strong class="pb-2 list-font pd-l15">{{ commonLocaleData?.app_unit }}</strong>
+                        <mat-divider></mat-divider>
+                        <giddh-page-loader *ngIf="isUnitListLoading"></giddh-page-loader>
+                        <ng-container *ngIf="!isUnitListLoading">
+                            <ng-container *ngIf="!unitMappings?.length">
+                                <mat-list role="list" class="list-head">
+                                    <mat-list-item class="items mat-left">
+                                        <strong>{{ commonLocaleData?.app_no_result_found }}</strong>
+                                    </mat-list-item>
+                                </mat-list>
+                            </ng-container>
+                            <ng-container *ngIf="unitMappings?.length">
+                                <mat-list role="list" class="list-head pd-l15">
+                                    <mat-list-item role="listitem" class="items">
+                                        <strong>{{ commonLocaleData?.app_name }}</strong>
+                                    </mat-list-item>
+                                    <mat-list-item role="listitem" class="items map-item pd-r2">
+                                        <strong>{{ localeData?.mapped_unit }}</strong>
+                                    </mat-list-item>
+                                </mat-list>
+                                <cdk-virtual-scroll-viewport
+                                    class="virtual-group-list overflow-x-hidden"
+                                    [itemSize]="38"
+                                    [minBufferPx]="400"
+                                    [maxBufferPx]="800"
+                                >
+                                    <ng-container *cdkVirtualFor="let mapping of unitMappings; let i = index">
+                                        <mat-divider></mat-divider>
+                                        <mat-list
+                                            role="list"
+                                            class="list-head cursor-pointer"
+                                            (click)="selectedUnitIndex = i; editUnit(mapping?.stockUnitX?.uniqueName)"
+                                            [ngClass]="{
+                                                'selected-unit': selectedUnitIndex === i
+                                            }"
+                                        >
+                                            <mat-list-item role="listitem" class="items mat-left" matTooltipPosition="left" [matTooltip]="mapping?.stockUnitX?.name + '('+ mapping?.stockUnitX?.code +')'">
+                                                <a href="javascript:void(0);"
+                                                    >{{ mapping?.stockUnitX?.name }} ({{
+                                                        mapping?.stockUnitX?.code
+                                                    }})</a
+                                                >
+                                            </mat-list-item>
+                                            <mat-list-item role="listitem" class="items map-item mat-gap" matTooltipPosition="right" [matTooltip]="mapping?.stockUnitY?.code ? mapping?.quantity + ' ' + mapping?.stockUnitY?.name : null ">
+                                                <a href="javascript:void(0);"
+                                                    >{{ mapping?.quantity }} {{ mapping?.stockUnitY?.name }}
+                                                    <span *ngIf="mapping?.stockUnitY?.code"
+                                                        >({{ mapping?.stockUnitY?.code }})</span
+                                                    ><span *ngIf="!mapping?.stockUnitY?.code">-</span></a
+                                                >
+                                            </mat-list-item>
+                                        </mat-list>
+                                    </ng-container>
+                                </cdk-virtual-scroll-viewport>
+                            </ng-container>
+                        </ng-container>
+                    </mat-list>
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="5" class="form-btn">
+                    <div class="custom-form">
+                        <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
+                        <create-unit
+                            [style.visibility]="hasEditFormLoaded ? 'visible' : 'hidden'"
+                            *ngIf="!isLoading && unitDetails?.uniqueName"
+                            [unitDetails]="unitDetails"
+                            (closeAsideEvent)="closeUpdateUnit($event)"
+                            (formHasLoaded)="formHasLoaded()"
+                        ></create-unit>
+                        <create-unit-group
+                            *ngIf="selectedUnitIndex === null && selectedGroup?.uniqueName"
+                            [unitGroupDetails]="selectedGroup"
+                            (closeAsideEvent)="closeUpdateUnitGroup($event)"
+                        ></create-unit-group>
+                    </div>
+                    <div class="create-btn-grp column-gap15">
+                        <button mat-stroked-button color="primary" (click)="openCreateUnitModal()">
+                            {{ commonLocaleData?.app_create_unit }}
+                        </button>
+                        <button mat-stroked-button color="primary" (click)="openCreateUnitGroupModal()">
+                            {{ commonLocaleData?.app_create_group }}
+                        </button>
+                    </div>
+                </mat-grid-tile>
+            </mat-grid-list>
+        </div>
+    </div>
+</ng-container>
+<ng-template #createUnit>
+    <aside-create-unit
+        [unitGroupDetails]="selectedGroup"
+        (closeAsideEvent)="closeCreateUnitModal($event)"
+    ></aside-create-unit>
+</ng-template>
+<ng-template #createUnitGroup>
+    <aside-create-unit-group (closeAsideEvent)="closeCreateUnitGroupModal($event)"></aside-create-unit-group>
+</ng-template>

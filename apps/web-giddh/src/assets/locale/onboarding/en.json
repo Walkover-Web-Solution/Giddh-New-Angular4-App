@@ -15,5 +15,7 @@
     "visit": "or visit:",
     "help_url": "giddh.com/help",
     "import_data": "Import Data",
-    "data_available": "Have data in CSV or Excel files?"
+    "data_available": "Have data in CSV or Excel files?",
+    "watch_onboarding": "Watch Onboarding",
+    "create_bank_account": "Create bank account"
 }

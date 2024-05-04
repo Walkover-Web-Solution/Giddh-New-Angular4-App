@@ -41,27 +41,25 @@
                             (click)="viewTransactions(item)"
                             class="row-hover"
                             [ngClass]="{
-                                'cp-none':
-                                    item.gstReturnType === 'hsnsac' ||
-                                    item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'
+                                'cp-none': item.gstReturnType === 'CreditNote/DebitNote/RefundVouchers'
                             }"
                         >
                             <td [ngSwitch]="true" [attr.data-title]="localeData?.filing?.description">
                                 <ng-container
                                     *ngSwitchCase="item.gstReturnType === 'b2b' || item.gstReturnType === 'b2bur'"
                                 >
-                                    <img src="{{ imgPath }}b2b.svg" class="icon text-bottom" />
+                                    <img src="{{ imgPath }}b2b.svg" class="icon text-bottom" alt="b2b img" />
                                 </ng-container>
                                 <ng-container
                                     *ngSwitchCase="item.gstReturnType === 'b2cs' || item.gstReturnType === 'b2cl'"
                                 >
-                                    <img src="{{ imgPath }}b2cs.svg" class="icon text-bottom" />
+                                    <img src="{{ imgPath }}b2cs.svg" class="icon text-bottom" alt="b2c img" />
                                 </ng-container>
                                 <ng-container *ngSwitchCase="item.gstReturnType === 'export'">
-                                    <img src="{{ imgPath }}export.svg" class="icon text-bottom" />
+                                    <img src="{{ imgPath }}export.svg" class="icon text-bottom" alt="export img" />
                                 </ng-container>
                                 <ng-container *ngSwitchCase="item.gstReturnType === 'nil'">
-                                    <img src="{{ imgPath }}nil.svg" class="icon text-bottom" />
+                                    <img src="{{ imgPath }}nil.svg" class="icon text-bottom" alt="nil img" />
                                 </ng-container>
                                 <ng-container
                                     *ngSwitchCase="
@@ -71,7 +69,7 @@
                                         item.gstReturnType === 'imps'
                                     "
                                 >
-                                    <img src="{{ imgPath }}cdn.svg" class="icon text-bottom" />
+                                    <img src="{{ imgPath }}cdn.svg" class="icon text-bottom" alt="cdn img" />
                                 </ng-container>
                                 <ng-container
                                     *ngSwitchCase="
@@ -79,18 +77,18 @@
                                         item.gstReturnType === 'advance-payments'
                                     "
                                 >
-                                    <img src="{{ imgPath }}adv.svg" class="icon text-bottom" />
+                                    <img src="{{ imgPath }}adv.svg" class="icon text-bottom" alt="adv img" />
                                 </ng-container>
 
                                 <ng-container *ngSwitchCase="item.gstReturnType === 'hsnsac'">
-                                    <img src="{{ imgPath }}hsnsac.svg" class="icon text-bottom" />
+                                    <img src="{{ imgPath }}hsnsac.svg" class="icon text-bottom" alt="hsnsac img" />
                                 </ng-container>
                                 <ng-container *ngSwitchCase="item.gstReturnType === 'taxPaid'">
-                                    <img src="{{ imgPath }}taxpaid.svg" class="icon text-bottom" />
+                                    <img src="{{ imgPath }}taxpaid.svg" class="icon text-bottom" alt="taxpaid img" />
                                 </ng-container>
 
                                 <ng-container *ngSwitchCase="item.gstReturnType === 'impg'">
-                                    <img src="{{ imgPath }}impg.svg" class="icon text-bottom" />
+                                    <img src="{{ imgPath }}impg.svg" class="icon text-bottom" alt="impg img" />
                                 </ng-container>
                                 <span class="mr-l05"> {{ item?.name }}</span>
                             </td>
@@ -99,7 +97,7 @@
                                 [attr.data-title]="localeData?.filing?.total_transactions"
                                 *ngIf="item.gstReturnType !== 'CreditNote/DebitNote/RefundVouchers'"
                             >
-                                <a href="javascript:void(0)"> {{ item?.totalTransactions }} </a>
+                                <a href="javascript:void(0);" aria-label="transaction"> {{ item?.totalTransactions }} </a>
                             </td>
                             <td
                                 class="text-center"
@@ -109,7 +107,7 @@
                                 -
                             </td>
                             <td class="text-right" [attr.data-title]="localeData?.filing?.taxable_amount">
-                                <i class="icon-rupees font-11"></i>
+                                <i class="icon-rupees icon-font-11"></i>
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="item?.taxableAmount"
@@ -120,7 +118,7 @@
                                 </span>
                             </td>
                             <td class="text-right" [attr.data-title]="localeData?.filing?.igst">
-                                <i class="icon-rupees font-11"></i>
+                                <i class="icon-rupees icon-font-11"></i>
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="item?.igstAmount"
@@ -131,7 +129,7 @@
                                 </span>
                             </td>
                             <td class="text-right" [attr.data-title]="localeData?.filing?.cgst">
-                                <i class="icon-rupees font-11"></i>
+                                <i class="icon-rupees icon-font-11"></i>
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="item?.cgstAmount"
@@ -142,7 +140,7 @@
                                 </span>
                             </td>
                             <td class="text-right" [attr.data-title]="localeData?.filing?.sgst">
-                                <i class="icon-rupees font-11"></i>
+                                <i class="icon-rupees icon-font-11"></i>
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="item?.sgstAmount"
@@ -153,7 +151,7 @@
                                 </span>
                             </td>
                             <td class="text-right" [attr.data-title]="localeData?.filing?.cess">
-                                <i class="icon-rupees font-11"></i>
+                                <i class="icon-rupees icon-font-11"></i>
                                 <span class="d-inline-flex">
                                     <amount-field
                                         [amount]="item?.cessAmount"
@@ -171,10 +169,10 @@
                                     <div class="secondary-row">{{ item?.name }}</div>
                                 </td>
                                 <td class="text-center" [attr.data-title]="localeData?.filing?.total_transactions">
-                                    <a href="javascript:void(0)"> {{ item?.totalTransactions }} </a>
+                                    <a href="javascript:void(0);" aria-label="transaction"> {{ item?.totalTransactions }} </a>
                                 </td>
                                 <td class="text-right" [attr.data-title]="localeData?.filing?.taxable_amount">
-                                    <i class="icon-rupees font-11"></i>
+                                    <i class="icon-rupees icon-font-11"></i>
                                     <span class="d-inline-flex">
                                         <amount-field
                                             [amount]="item?.taxableAmount"
@@ -185,7 +183,7 @@
                                     </span>
                                 </td>
                                 <td class="text-right" [attr.data-title]="localeData?.filing?.igst">
-                                    <i class="icon-rupees font-11"></i>
+                                    <i class="icon-rupees icon-font-11"></i>
                                     <span class="d-inline-flex">
                                         <amount-field
                                             [amount]="item?.igstAmount"
@@ -196,7 +194,7 @@
                                     </span>
                                 </td>
                                 <td class="text-right" [attr.data-title]="localeData?.filing?.cgst">
-                                    <i class="icon-rupees font-11"></i>
+                                    <i class="icon-rupees icon-font-11"></i>
                                     <span class="d-inline-flex">
                                         <amount-field
                                             [amount]="item?.cgstAmount"
@@ -207,7 +205,7 @@
                                     </span>
                                 </td>
                                 <td class="text-right" [attr.data-title]="localeData?.filing?.sgst">
-                                    <i class="icon-rupees font-11"></i>
+                                    <i class="icon-rupees icon-font-11"></i>
                                     <span class="d-inline-flex">
                                         <amount-field
                                             [amount]="item?.sgstAmount"
@@ -218,7 +216,7 @@
                                     </span>
                                 </td>
                                 <td class="text-right" [attr.data-title]="localeData?.filing?.cess">
-                                    <i class="icon-rupees font-11"></i>
+                                    <i class="icon-rupees icon-font-11"></i>
                                     <span class="d-inline-flex">
                                         <amount-field
                                             [amount]="item?.cessAmount"
@@ -237,7 +235,7 @@
 
         <div *ngIf="!gstrOverviewData.count">
             <div class="filings-empty-state">
-                <img src="{{ imgPath }}nofound.svg" [style.max-width.px]="110" />
+                <img src="{{ imgPath }}nofound.svg" [style.max-width.px]="110" alt="Image not found" />
                 <div class="empty-msg">
                     <span> {{ localeData?.filing?.no_result_found }} </span>
                 </div>

@@ -3,7 +3,7 @@ import { AppState } from '../../../store/roots';
 import { Store, select } from '@ngrx/store';
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
-import { IStocksItem } from '../../../models/interfaces/stocksItem.interface';
+import { IStocksItem } from '../../../models/interfaces/stocks-item.interface';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { InventoryUser } from '../../../models/api-models/Inventory-in-out';
 import { SidebarAction } from '../../../actions/inventory/sidebar.actions';

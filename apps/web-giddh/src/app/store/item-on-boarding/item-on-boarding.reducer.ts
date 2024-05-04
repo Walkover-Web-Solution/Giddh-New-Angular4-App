@@ -1,4 +1,4 @@
-import { CustomActions } from '../customActions';
+import { CustomActions } from '../custom-actions';
 import { OnBoardingType } from '../../app.constant';
 import { ItemOnBoardingActions } from '../../actions/item-on-boarding/item-on-boarding.action';
 

@@ -46,7 +46,7 @@ export class EWayBillCredentialsComponent implements OnInit {
         this.closeModelEvent.emit(true);
     }
     public onSubmit(form: NgForm) {
-        this.store.dispatch(this.invoiceActions.LoginEwaybillUser(form.value));
+        this.store.dispatch(this.invoiceActions.LoginEwaybillUser(form?.value));
     }
     public showPassword() {
         this.togglePassword = this.togglePassword ? false : true;

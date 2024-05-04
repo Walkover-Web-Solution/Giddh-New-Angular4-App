@@ -46,11 +46,6 @@
                     "label": "टॅग्ज",
                     "link": "/pages/settings/tag",
                     "icon": "<i class='icon-tag-new'></i>"
-                },
-                {
-                    "label": "ट्रिगर",
-                    "link": "/pages/settings/trigger",
-                    "icon": "<i class='icon-trigger-new'></i>"
                 }
             ],
             [
@@ -132,11 +127,6 @@
                     "label": "टॅग्ज",
                     "link": "/pages/settings/tag",
                     "icon": "<i class='icon-tag-new'></i>"
-                },
-                {
-                    "label": "ट्रिगर",
-                    "link": "/pages/settings/trigger",
-                    "icon": "<i class='icon-trigger'></i>"
                 }
             ],
             [

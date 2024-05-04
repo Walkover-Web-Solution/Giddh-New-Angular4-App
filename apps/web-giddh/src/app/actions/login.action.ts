@@ -22,10 +22,10 @@ import { map, switchMap, take } from 'rxjs/operators';
 import { OrganizationType, userLoginStateEnum } from '../models/user-login-state';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { DbService } from '../services/db.service';
-import { CompanyService } from '../services/companyService.service';
+import { CompanyService } from '../services/company.service';
 import { GeneralService } from '../services/general.service';
 import { Observable, zip as observableZip } from 'rxjs';
-import { CustomActions } from '../store/customActions';
+import { CustomActions } from '../store/custom-actions';
 import { LoginWithPassword, SignUpWithPassword } from '../models/api-models/login';
 import { AuthenticationService } from '../services/authentication.service';
 import { ROUTES } from '../routes-array';
@@ -90,6 +90,8 @@ export class LoginActions {
 
     public static AutoLoginWithPasswdResponse = 'AutoLoginWithPasswdResponse';
 
+    public static hideTwoWayOtpPopup = 'hideTwoWayOtpPopup';
+
     public signupWithGoogle$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.SIGNUP_WITH_GOOGLE_REQUEST),
@@ -104,7 +106,7 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE),
             map((action: CustomActions) => {
-                let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
+                let response: BaseResponse<VerifyEmailResponseModel, string> = action?.payload;
                 if (response) {
                     if (response.status === 'error') {
                         this._toaster.errorToast(action.payload.message, action.payload.code);
@@ -135,7 +137,7 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.SignupWithEmailResponce),
             map((action: CustomActions) => {
-                if (action.payload.status === 'success') {
+                if (action.payload?.status === 'success') {
                     this._toaster.successToast(action.payload.body);
                 } else {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
@@ -155,8 +157,8 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.VerifyEmailResponce),
             map((action: CustomActions) => {
-                let response: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action.payload;
-                if (response.status === 'error') {
+                let response: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action?.payload;
+                if (response?.status === 'error') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                     return { type: 'EmptyAction' };
                 }
@@ -173,7 +175,7 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.SignupWithMobileResponce),
             map((action: CustomActions) => {
-                if (action.payload.status === 'success') {
+                if (action.payload?.status === 'success') {
                     this._toaster.successToast(action.payload.body);
                 } else {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
@@ -208,11 +210,11 @@ export class LoginActions {
                 if (companies.body && companies.body.length === 0) {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
                     this.zone.run(() => {
-                        this._router.navigate(['/pages/new-user']);
+                        this._router.navigate(['/pages/new-company']);
                     });
                     return { type: 'EmptyAction' };
                 } else {
-                    if (stateDetail.body && stateDetail.status === 'success') {
+                    if (stateDetail.body && stateDetail?.status === 'success') {
                         this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
                         this._generalService.currentBranchUniqueName = stateDetail.body.branchUniqueName || '';
                         if (stateDetail.body.branchUniqueName) {
@@ -229,7 +231,7 @@ export class LoginActions {
                             this.store.dispatch(this.companyActions.setCompanyBranch(organization));
                         }
                         cmpUniqueName = stateDetail.body.companyUniqueName;
-                        if (companies?.body?.findIndex(p => p.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
+                        if (companies?.body?.findIndex(p => p?.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
                             return this.finalThingTodo(stateDetail, companies);
                         } else {
                             // old user fail safe scenerio
@@ -273,11 +275,11 @@ export class LoginActions {
                 if (companies.body && companies.body.length === 0) {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
                     this.zone.run(() => {
-                        this._router.navigate(['/pages/new-user']);
+                        this._router.navigate(['/pages/new-company']);
                     });
                     return { type: 'EmptyAction' };
                 } else {
-                    if (stateDetail.body && stateDetail.status === 'success') {
+                    if (stateDetail.body && stateDetail?.status === 'success') {
                         this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
                         this._generalService.currentBranchUniqueName = stateDetail.body.branchUniqueName || '';
                         this._generalService.voucherApiVersion = stateDetail.body.voucherVersion || 1;
@@ -295,7 +297,7 @@ export class LoginActions {
                             this.store.dispatch(this.companyActions.setCompanyBranch(organization));
                         }
                         cmpUniqueName = stateDetail.body.companyUniqueName;
-                        if (companies?.body?.findIndex(p => p.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
+                        if (companies?.body?.findIndex(p => p?.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
                             return this.finalThingTodo(stateDetail, companies, results[2]);
                         } else {
                             // old user fail safe scenerio
@@ -317,7 +319,7 @@ export class LoginActions {
             ofType(LoginActions.LogOut),
             map((action: CustomActions) => {
                 if (PRODUCTION_ENV && !isElectron) {
-                    window.location.href = 'https://stage.giddh.com/login/';
+                    window.location.href = 'https://giddh.com/login/';
                 } else if (isElectron) {
                     this._router.navigate(['/login']);
                     window.location.reload();
@@ -339,8 +341,8 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.VerifyMobileResponce),
             map((action: CustomActions) => {
-                let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
-                if (response.status === 'error') {
+                let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action?.payload;
+                if (response?.status === 'error') {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
                     return { type: 'EmptyAction' };
                 }
@@ -359,8 +361,8 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.VerifyTwoWayAuthResponse),
             map((action: CustomActions) => {
-                let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
-                if (response.status === 'error') {
+                let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action?.payload;
+                if (response?.status === 'error') {
                     this._toaster.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
@@ -381,7 +383,7 @@ export class LoginActions {
             ofType(CompanyActions.CHANGE_COMPANY),
             switchMap((action: CustomActions) => this._companyService.getStateDetails(action.payload.cmpUniqueName, action.payload.fetchLastState)),
             map(response => {
-                if ((response.status === 'error' || ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) === -1) || (response.status === 'error' || response.code === 'NOT_FOUND')) {
+                if ((response?.status === 'error' || ROUTES.findIndex(p => p.path.split('/')[0] === response.body?.lastState.split('/')[0]) === -1) || (response?.status === 'error' || response.code === 'NOT_FOUND')) {
                     let dummyResponse = new BaseResponse<StateDetailsResponse, string>();
                     dummyResponse.body = new StateDetailsResponse();
                     dummyResponse.body.companyUniqueName = response.request;
@@ -392,9 +394,9 @@ export class LoginActions {
                     });
                     return this.ChangeCompanyResponse(dummyResponse);
                 }
-                if (response.body.companyUniqueName) {
-                    this._generalService.currentBranchUniqueName = response.body.branchUniqueName || '';
-                    if (response.body.branchUniqueName) {
+                if (response.body?.companyUniqueName) {
+                    this._generalService.currentBranchUniqueName = response?.body?.branchUniqueName || '';
+                    if (response.body?.branchUniqueName) {
                         const details = {
                             branchDetails: {
                                 uniqueName: this._generalService.currentBranchUniqueName
@@ -407,22 +409,22 @@ export class LoginActions {
                         };
                         this.store.dispatch(this.companyActions.setCompanyBranch(organization));
                     }
-                    if (response.body.lastState && ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) !== -1) {
+                    if (response.body?.lastState && ROUTES.findIndex(p => p.path.split('/')[0] === response.body?.lastState.split('/')[0]) !== -1) {
                         this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
-                            this.finalNavigate(response.body.lastState);
+                            this.finalNavigate(response.body?.lastState);
                         });
                     } else {
                         if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
-                            if (this.activatedRoute.firstChild.children && this.activatedRoute.firstChild.children.length > 0) {
+                            if (this.activatedRoute.firstChild.children && this.activatedRoute.firstChild.children?.length > 0) {
                                 let path = [];
                                 let parament = {};
                                 this.activatedRoute.firstChild.firstChild.url.pipe(take(1)).subscribe(p => {
-                                    if (p.length > 0) {
+                                    if (p?.length > 0) {
                                         path = [p[0].path];
                                         parament = { queryParams: p[0].parameters };
                                     }
                                 });
-                                if (path.length > 0 && parament) {
+                                if (path?.length > 0 && parament) {
                                     this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
                                         if (ROUTES.findIndex(p => p.path.split('/')[0] === path[0].split('/')[0]) > -1) {
                                             this.finalNavigate(path[0], parament);
@@ -443,9 +445,7 @@ export class LoginActions {
         .pipe(
             ofType(CompanyActions.CHANGE_COMPANY_RESPONSE),
             map((action: CustomActions) => {
-                if (action.payload.status === 'success') {
-                    // get groups with accounts for general use
-                    this.store.dispatch(this._generalAction.getGroupWithAccounts());
+                if (action.payload?.status === 'success') {
                     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                 }
                 return { type: 'EmptyAction' };
@@ -461,7 +461,7 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.AddNewMobileNoResponse),
             map((action: CustomActions) => {
-                if (action.payload.status === 'success') {
+                if (action.payload?.status === 'success') {
                     this._toaster.successToast(this.localeService.translate("app_messages.receive_otp"));
                 } else {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
@@ -481,8 +481,8 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.VerifyAddNewMobileNoResponse),
             map((action: CustomActions) => {
-                let response: BaseResponse<string, VerifyMobileModel> = action.payload;
-                if (response.status === 'error') {
+                let response: BaseResponse<string, VerifyMobileModel> = action?.payload;
+                if (response?.status === 'error') {
                     this._toaster.errorToast(response.message, response.code);
                     return { type: 'EmptyAction' };
                 }
@@ -524,10 +524,10 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.SignupWithPasswdResponse),
             map((action: CustomActions) => {
-                if (action.payload.status === 'success') {
+                if (action.payload?.status === 'success') {
                     this._toaster.successToast(this.localeService.translate("app_messages.otp_sent_email"));
                 } else {
-                    this._toaster.errorToast(action.payload.message, action.payload.code,6000);
+                    this._toaster.errorToast(action.payload.message, action.payload.code, 6000);
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -542,12 +542,12 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.LoginWithPasswdResponse),
             map((action: CustomActions) => {
-                if (action.payload.status === 'success') {
-                    if (action.payload.body.statusCode === "AUTHENTICATE_TWO_WAY") {
-                        if (action.payload.body.text) {
-                            this._toaster.successToast(action.payload.body.text, action.payload.code);
+                if (action.payload?.status === 'success') {
+                    if (action.payload.body?.statusCode === "AUTHENTICATE_TWO_WAY") {
+                        if (action.payload.body?.text) {
+                            this._toaster.successToast(action.payload.body?.text, action.payload.code);
                         }
-                    } else if (action.payload.body.user.isVerified) {
+                    } else if (action.payload.body?.user?.isVerified) {
                         return this.LoginSuccess();
                     }
                 } else {
@@ -566,7 +566,7 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.forgotPasswordResponse),
             map((action: CustomActions) => {
-                if (action.payload.status === 'success') {
+                if (action.payload?.status === 'success') {
                     this._toaster.successToast(action.payload.body);
                 } else {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
@@ -584,7 +584,7 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.resetPasswordResponse),
             map((action: CustomActions) => {
-                if (action.payload.status === 'success') {
+                if (action.payload?.status === 'success') {
                     this._toaster.successToast(action.payload.body);
                 } else {
                     this._toaster.errorToast(action.payload.message, action.payload.code);
@@ -602,7 +602,7 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.renewSessionResponse),
             map((action: CustomActions) => {
-                if (action.payload.status === 'success' && action.payload.body && action.payload.body.session) {
+                if (action.payload?.status === 'success' && action.payload.body && action.payload.body.session) {
                     this._generalService.setCookie("giddh_session_id", action.payload.body.session.id, 30);
                 }
                 return { type: 'EmptyAction' };
@@ -938,15 +938,27 @@ export class LoginActions {
         };
     }
 
+    /**
+     * Sets false in reducer
+     *
+     * @returns {CustomActions}
+     * @memberof LoginActions
+     */
+    public hideTwoWayOtpPopup(): CustomActions {
+        return {
+            type: LoginActions.hideTwoWayOtpPopup
+        }
+    }
+
     private doSameStuffs(companies, isSocialLogin?: boolean) {
         let respState = new BaseResponse<StateDetailsResponse, string>();
         respState.body = new StateDetailsResponse();
-        companies.body = sortBy(companies.body, ['name']);
+        companies.body = sortBy(companies?.body, ['name']);
         // now take first company from the companies
-        let cArr = companies.body.sort((a, b) => a.name.length - b.name.length);
+        let cArr = companies?.body?.sort((a, b) => a?.name?.length - b?.name?.length);
         let company = cArr[0];
         if (company) {
-            respState.body.companyUniqueName = company.uniqueName;
+            respState.body.companyUniqueName = company?.uniqueName;
         } else {
             respState.body.companyUniqueName = "";
         }
@@ -957,10 +969,10 @@ export class LoginActions {
         try {
             if (company && company.userEntityRoles && company.userEntityRoles.length) {
                 // find sorted userEntityRoles
-                let entitiesArr = company.userEntityRoles.sort((a, b) => a.entity.name.length - b.entity.name.length);
+                let entitiesArr = company.userEntityRoles.sort((a, b) => a?.entity?.name?.length - b?.entity?.name?.length);
                 let entityObj = entitiesArr[0].entity;
                 if (entityObj.entity === 'ACCOUNT') {
-                    respState.body.lastState = `ledger/${entityObj.uniqueName}`;
+                    respState.body.lastState = `ledger/${entityObj?.uniqueName}`;
                 } else if (entityObj.entity === 'GROUP') {
                     // get a/c`s of group and set first a/c
                     this.store.dispatch(this.SetRedirectToledger());
@@ -976,15 +988,26 @@ export class LoginActions {
         return this.finalThingTodo(respState, companies, isSocialLogin);
     }
 
+    /**
+     * This will be use for final things to do
+     *
+     * @private
+     * @param {*} stateDetail
+     * @param {*} companies
+     * @param {boolean} [isSocialLogin]
+     * @return {*}
+     * @memberof LoginActions
+     */
     private finalThingTodo(stateDetail: any, companies: any, isSocialLogin?: boolean) {
         this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => {
-            let request = { userUniqueName: response.user.uniqueName, companyUniqueName: stateDetail.body.companyUniqueName };
+            let request = { userUniqueName: response.user?.uniqueName, companyUniqueName: stateDetail?.body.companyUniqueName };
             this.store.dispatch(this.companyActions.getCompanyUser(request));
         });
         this.store.dispatch(this.companyActions.GetStateDetailsResponse(stateDetail));
         this.store.dispatch(this.companyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-        this.finalNavigate(stateDetail.body.lastState, false, isSocialLogin);
+        let route = (stateDetail?.body?.lastUpdated > 7 || !stateDetail?.body?.lastUpdated) ? '/pages/home' : stateDetail.body?.lastState;
+        this.finalNavigate(route, false, isSocialLogin);
         return { type: 'EmptyAction' };
     }
 

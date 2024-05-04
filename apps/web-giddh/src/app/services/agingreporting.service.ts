@@ -1,10 +1,10 @@
 import { catchError, map } from 'rxjs/operators';
 import { Inject, Injectable, Optional } from '@angular/core';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { DueAmountReportQueryRequest, DueAmountReportRequest, DueAmountReportResponse, DueRangeRequest } from '../models/api-models/Contact';
 import { empty, Observable } from 'rxjs';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { DUEAMOUNTREPORT_API_V2, DUEDAYSRANGE_API_V2 } from './apiurls/aging-reporting';
+import { AGINGREPORT_API, DUEAMOUNTREPORT_API_V2, DUEDAYSRANGE_API_V2 } from './apiurls/aging-reporting';
 import { GeneralService } from './general.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
@@ -21,7 +21,7 @@ export class AgingreportingService {
 
     public CreateDueDaysRange(model: DueRangeRequest): Observable<BaseResponse<string, DueRangeRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + DUEDAYSRANGE_API_V2.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
+        return this.http.post(this.config.apiUrl + DUEDAYSRANGE_API_V2.CREATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(
             map((res) => {
                 let data: BaseResponse<string, DueRangeRequest> = res;
                 data.request = model;
@@ -32,7 +32,7 @@ export class AgingreportingService {
 
     public GetDueDaysRange(): Observable<BaseResponse<string[], string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + DUEDAYSRANGE_API_V2.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(
+        return this.http.get(this.config.apiUrl + DUEDAYSRANGE_API_V2.CREATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(
             map((res) => {
                 let data: BaseResponse<string[], string> = res;
                 return data;
@@ -42,15 +42,13 @@ export class AgingreportingService {
 
     public GetDueAmountReport(model: DueAmountReportRequest, queryRequest: DueAmountReportQueryRequest, branchUniqueName: string): Observable<BaseResponse<DueAmountReportResponse, DueAmountReportRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + DUEAMOUNTREPORT_API_V2.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            .replace(':q', encodeURIComponent(queryRequest.q || ''))
-            .replace(':page', encodeURIComponent(queryRequest.page.toString()))
-            .replace(':count', encodeURIComponent(queryRequest.count.toString()))
-            .replace(':sort', encodeURIComponent(queryRequest.sort.toString()))
-            .replace(':sortBy', encodeURIComponent(queryRequest.sortBy.toString()))
-            .replace(':fromDate', encodeURIComponent(queryRequest.from))
-            .replace(':toDate', encodeURIComponent(queryRequest.to))
-            .replace(':rangeCol', encodeURIComponent(queryRequest.rangeCol ? queryRequest.rangeCol.toString() : ''));
+        let url = this.config.apiUrl + DUEAMOUNTREPORT_API_V2.GET?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':q', encodeURIComponent(queryRequest.q || ''))
+            ?.replace(':page', encodeURIComponent(queryRequest.page?.toString()))
+            ?.replace(':count', encodeURIComponent(queryRequest.count?.toString()))
+            ?.replace(':sort', encodeURIComponent(queryRequest.sort?.toString()))
+            ?.replace(':sortBy', encodeURIComponent(queryRequest.sortBy?.toString()))
+            ?.replace(':rangeCol', encodeURIComponent(queryRequest.rangeCol ? queryRequest.rangeCol?.toString() : ''));
         if (branchUniqueName) {
             branchUniqueName = branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${branchUniqueName}`);
@@ -68,4 +66,25 @@ export class AgingreportingService {
         }
     }
 
+    /**
+     * This will be use for export aging report
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<string, any>>}
+     * @memberof AgingreportingService
+     */
+    public exportAgingReport(model: any, branchUniqueName: string): Observable<BaseResponse<string, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + AGINGREPORT_API.EXPORT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        if (branchUniqueName) {
+            url = url.concat(`?branchUniqueName=${branchUniqueName}`);
+        }
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                let data: BaseResponse<string, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, any>(e, model, {})));
+    }
 }

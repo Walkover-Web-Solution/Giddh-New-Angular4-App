@@ -8,6 +8,7 @@
         <hamburger-menu [pageHeading]="isMobileScreen ? getPageHeading() : ''"></hamburger-menu>
         <div class="clearfix petty-cash">
             <mat-tab-group
+                mat-stretch-tabs="false"
                 animationDuration="0ms"
                 [selectedIndex]="selectedTabIndex"
                 (selectedTabChange)="tabChanged($event)"
@@ -23,7 +24,6 @@
                                             class="input-group input-calender custom-datepicker"
                                             (click)="showGiddhDatepicker($event)"
                                         >
-                                            <i class="icon-calender calendar-addon"></i>
                                             <input
                                                 type="text"
                                                 name="selectedDateRange"
@@ -95,7 +95,6 @@
                                             class="input-group input-calender custom-datepicker"
                                             (click)="showGiddhDatepicker($event)"
                                         >
-                                            <i class="icon-calender calendar-addon"></i>
                                             <input
                                                 type="text"
                                                 name="selectedDateRange"

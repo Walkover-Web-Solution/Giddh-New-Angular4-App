@@ -11,15 +11,129 @@
                     "icon": "icon-aging-report-new",
                     "description": "Amount Due in previous days & upcoming",
                     "additional": {
-                        "tab": "aging-report",
-                        "tabIndex": 1
+                        "queryParams": {
+                            "tab": "aging-report",
+                            "tabIndex": 1
+                        }
                     }
                 },
                 {
-                    "label": "Cash Invoice",
+                    "label": "Customer",
+                    "link": "/pages/contact/customer",
+                    "icon": "icon-customer",
+                    "description": "Manage customers, send reminders via SMS/Email"
+                },
+                {
+                    "label": "New Invoice",
                     "link": "/pages/proforma-invoice/invoice/cash",
                     "icon": "icon-invoice-new",
-                    "description": "Generate cash invoice"
+                    "description": "Generate Cash/Credit invoice for customers.",
+                    "submenu": [
+                        {
+                            "label": "Cash Invoice",
+                            "link": "/pages/proforma-invoice/invoice/cash",
+                            "icon": "icon-invoice-new",
+                            "description": "Generate instant paid invoice without managing customers (Without separate account/ledger)."
+                        },
+                        {
+                            "label": "Credit Invoice",
+                            "link": "/pages/proforma-invoice/invoice/sales",
+                            "icon": "icon-invoice-new",
+                            "description": "Create invoice and manage accounts/ledger separately."
+                        }
+                    ],
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "New Invoice",
+                    "link": "/pages/vouchers/cash/create",
+                    "icon": "icon-invoice-new",
+                    "description": "Generate Cash/Credit invoice for customers.",
+                    "submenu": [
+                        {
+                            "label": "Cash Invoice",
+                            "link": "/pages/vouchers/cash/create",
+                            "icon": "icon-invoice-new",
+                            "description": "Generate instant paid invoice without managing customers (Without separate account/ledger)."
+                        },
+                        {
+                            "label": "Credit Invoice",
+                            "link": "/pages/vouchers/sales/create",
+                            "icon": "icon-invoice-new",
+                            "description": "Create invoice and manage accounts/ledger separately."
+                        }
+                    ],
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "Invoices",
+                    "link": "/pages/invoice/preview/sales",
+                    "icon": "icon-invoice-new",
+                    "description": "Multicurrency, Recurring invoice, Cash invoice"
+                },
+                {
+                    "label": "Estimates (Beta)",
+                    "link": "/pages/invoice/preview/estimates",
+                    "icon": "icon-sales-order1",
+                    "description": "Final sales order"
+                },
+                {
+                    "label": "New Credit Note",
+                    "link": "/pages/proforma-invoice/invoice/cash",
+                    "icon": "icon-credit-note-new",
+                    "description": "Generate Credit note voucher.",
+                    "submenu": [
+                        {
+                            "label": "Cash Credit Note",
+                            "link": "/pages/proforma-invoice/invoice/cash credit note",
+                            "icon": "icon-invoice-new",
+                            "description": "Generate instant paid credit note without managing vendors (Without separate account/ledger)."
+                        },
+                        {
+                            "label": "Credit Note",
+                            "link": "/pages/proforma-invoice/invoice/credit note",
+                            "icon": "icon-credit-note-new",
+                            "description": "Generate credit note and manage customers (customer accounts/ledger separately)."
+                        }
+                    ],
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "New Credit Note",
+                    "link": "/pages/vouchers/credit-note/create",
+                    "icon": "icon-credit-note-new",
+                    "description": "Generate Credit note voucher.",
+                    "submenu": [
+                        {
+                            "label": "Cash Credit Note",
+                            "link": "/pages/vouchers/cash-credit-note/create",
+                            "icon": "icon-invoice-new",
+                            "description": "Generate instant paid credit note without managing vendors (Without separate account/ledger)."
+                        },
+                        {
+                            "label": "Credit Note",
+                            "link": "/pages/vouchers/credit-note/create",
+                            "icon": "icon-credit-note-new",
+                            "description": "Generate credit note and manage customers (customer accounts/ledger separately)."
+                        }
+                    ],
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "Credit Note",
@@ -28,20 +142,10 @@
                     "description": "Generate credit note & update A/c"
                 },
                 {
-                    "label": "Customer",
-                    "link": "/pages/contact/customer",
-                    "icon": "icon-customer",
-                    "description": "Manage customers, send reminders via SMS/Email",
-                    "additional": {
-                        "tab": "customer",
-                        "tabIndex": 0
-                    }
-                },
-                {
-                    "label": "Invoice",
-                    "link": "/pages/invoice/preview/sales",
-                    "icon": "icon-invoice-new",
-                    "description": "Multicurrency, Recurring invoice, Cash invoice"
+                    "label": "Invoice Settings",
+                    "link": "/pages/invoice/preview/settings/sales",
+                    "icon": "icon-settings-cog",
+                    "description": "Invoice settings"
                 },
                 {
                     "label": "Receipt",
@@ -50,22 +154,13 @@
                     "description": "Advance, normal, total, & unused receipts"
                 },
                 {
-                    "label": "Sales Invoice",
-                    "link": "/pages/proforma-invoice/invoice/sales",
-                    "icon": "icon-invoice-new",
-                    "description": "Generate sales invoice"
-                },
-                {
-                    "label": "Sales Order",
-                    "link": "/pages/invoice/preview/estimates",
-                    "icon": "icon-sales-order1",
-                    "description": "Final sales order"
-                },
-                {
                     "label": "Sales Register",
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
-                    "description": "Net & cumulative sales"
+                    "description": "Net & cumulative sales",
+                    "additionalRoutes": [
+                        "/pages/reports/sales-detailed-expand"
+                    ]
                 },
                 {
                     "label": "Template",
@@ -81,40 +176,134 @@
             "icon": "icon-vendor",
             "items": [
                 {
-                    "label": "Debit Note",
-                    "link": "/pages/invoice/preview/debit note",
-                    "icon": "icon-debit-note-new",
-                    "description": "Record debit note & update A/c"
+                    "label": "Vendor",
+                    "link": "/pages/contact/vendor",
+                    "icon": "icon-vendor",
+                    "description": "Send Bulk SMS/Emails, Set reminders"
                 },
                 {
-                    "label": "Purchase Bill",
-                    "link": "/pages/proforma-invoice/invoice/purchase",
+                    "label": "New Bill",
+                    "link": "/pages/proforma-invoice/invoice/cash",
                     "icon": "icon-invoice-new",
-                    "description": "Purchase request, purchase bill, modify PO"
+                    "description": "Add Cash/Credit bill for vendors.",
+                    "submenu": [
+                        {
+                            "label": "Cash Bill",
+                            "link": "/pages/proforma-invoice/invoice/cash bill",
+                            "icon": "icon-invoice-new",
+                            "description": "Generate instant paid bill without managing vendors (Without separate account/ledger)."
+                        },
+                        {
+                            "label": "Credit bill",
+                            "link": "/pages/proforma-invoice/invoice/purchase",
+                            "icon": "icon-invoice-new",
+                            "description": "Generate bill and manage vendors (vendor accounts/ledger separately)."
+                        }
+                    ],
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
                 },
                 {
-                    "label": "Purchase Management",
+                    "label": "New Bill",
+                    "link": "/pages/vouchers/purchase/create",
+                    "icon": "icon-invoice-new",
+                    "description": "Add Cash/Credit bill for vendors.",
+                    "submenu": [
+                        {
+                            "label": "Cash Bill",
+                            "link": "/pages/vouchers/cash-bill/create",
+                            "icon": "icon-invoice-new",
+                            "description": "Generate instant paid bill without managing vendors (Without separate account/ledger)."
+                        },
+                        {
+                            "label": "Credit bill",
+                            "link": "/pages/vouchers/purchase/create",
+                            "icon": "icon-invoice-new",
+                            "description": "Generate bill and manage vendors (vendor accounts/ledger separately)."
+                        }
+                    ],
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "Bills",
                     "link": "/pages/purchase-management/purchase/bill",
                     "icon": "icon-purchase-management1",
                     "description": "Purchase request, purchase bill, modify PO"
                 },
                 {
-                    "label": "Purchase Order",
+                    "label": "Bill Settings",
+                    "link": "/pages/purchase-management/purchase/settings",
+                    "icon": "icon-settings-cog",
+                    "description": "Bill settings"
+                },
+                {
+                    "label": "New Purchase Order",
                     "link": "/pages/purchase-management/purchase-order/new",
                     "icon": "icon-purchase-order",
                     "description": "Purchase request, purchase bill, modify PO"
                 },
                 {
-                    "label": "Purchase Register",
-                    "link": "/pages/reports/purchase-register",
-                    "icon": "icon-register-new",
-                    "description": "Net & cumulative purchases"
+                    "label": "New Debit Note",
+                    "link": "/pages/proforma-invoice/invoice/cash",
+                    "icon": "icon-debit-note-new",
+                    "description": "Add Debit note voucher.",
+                    "submenu": [
+                        {
+                            "label": "Cash Debit Note",
+                            "link": "/pages/proforma-invoice/invoice/cash debit note",
+                            "icon": "icon-invoice-new",
+                            "description": "Add instant paid debit note without managing vendors (Without separate account/ledger)."
+                        },
+                        {
+                            "label": "Debit Note",
+                            "link": "/pages/proforma-invoice/invoice/debit note",
+                            "icon": "icon-debit-note-new",
+                            "description": "Add debit note and manage vendors (vendor accounts/ledger separately)."
+                        }
+                    ],
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
                 },
                 {
-                    "label": "Vendor",
-                    "link": "/pages/contact/vendor",
-                    "icon": "icon-vendor",
-                    "description": "Send Bulk SMS/Emails, Set reminders"
+                    "label": "New Debit Note",
+                    "link": "/pages/vouchers/debit-note/create",
+                    "icon": "icon-debit-note-new",
+                    "description": "Add Debit note voucher.",
+                    "submenu": [
+                        {
+                            "label": "Cash Debit Note",
+                            "link": "/pages/vouchers/cash-debit-note/create",
+                            "icon": "icon-invoice-new",
+                            "description": "Add instant paid debit note without managing vendors (Without separate account/ledger)."
+                        },
+                        {
+                            "label": "Debit Note",
+                            "link": "/pages/vouchers/debit-note/create",
+                            "icon": "icon-debit-note-new",
+                            "description": "Add debit note and manage vendors (vendor accounts/ledger separately)."
+                        }
+                    ],
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "Debit Note",
+                    "link": "/pages/invoice/preview/debit note",
+                    "icon": "icon-debit-note-new",
+                    "description": "Record debit note & update A/c"
                 },
                 {
                     "label": "Payment",
@@ -122,8 +311,19 @@
                     "icon": "icon-reciept-new",
                     "description": "Total, & unused payments",
                     "additional": {
-                        "voucherVersion": 2
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
                     }
+                },
+                {
+                    "label": "Purchase Register",
+                    "link": "/pages/reports/purchase-register",
+                    "icon": "icon-register-new",
+                    "description": "Net & cumulative purchases",
+                    "additionalRoutes": [
+                        "/pages/reports/purchase-detailed-expand"
+                    ]
                 }
             ]
         },
@@ -132,25 +332,19 @@
             "icon": "icon-tax-new",
             "items": [
                 {
-                    "label": "E-way bill",
-                    "link": "/pages/invoice/ewaybill",
-                    "icon": "icon-eway-bill-new",
-                    "description": "Generate directly from Giddh after",
-                    "hide": "sidebar",
-                    "additional": {
-                        "countrySpecific": ["IN"]
-                    }
-                },
-                {
                     "label": "GSTR1",
                     "icon": "icon-GSTR",
                     "description": "File & view GSTR1",
                     "hide": "sidebar",
                     "alwaysPresent": true,
                     "additional": {
-                        "isGstMenu": true,
-                        "type": "gstr1",
-                        "countrySpecific": ["IN"]
+                        "queryParams": {
+                            "isGstMenu": true,
+                            "type": "gstr1",
+                            "countrySpecific": [
+                                "IN"
+                            ]
+                        }
                     }
                 },
                 {
@@ -160,9 +354,13 @@
                     "hide": "sidebar",
                     "alwaysPresent": true,
                     "additional": {
-                        "isGstMenu": true,
-                        "type": "gstr2",
-                        "countrySpecific": ["IN"]
+                        "queryParams": {
+                            "isGstMenu": true,
+                            "type": "gstr2",
+                            "countrySpecific": [
+                                "IN"
+                            ]
+                        }
                     }
                 },
                 {
@@ -172,10 +370,50 @@
                     "hide": "sidebar",
                     "alwaysPresent": true,
                     "additional": {
-                        "isGstMenu": true,
-                        "type": "gstr3b",
-                        "countrySpecific": ["IN"]
+                        "queryParams": {
+                            "isGstMenu": true,
+                            "type": "gstr3b",
+                            "countrySpecific": [
+                                "IN"
+                            ]
+                        }
                     }
+                },
+                {
+                    "label": "E-way bill",
+                    "link": "/pages/invoice/ewaybill",
+                    "icon": "icon-eway-bill-new",
+                    "description": "Generate directly from Giddh after",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "countrySpecific": [
+                                "IN"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "Unit Mapping",
+                    "link": "/pages/gstfiling/unit-mapping",
+                    "icon": "unit-mapping-icon",
+                    "description": "Unit Mapping",
+                    "alwaysPresent": true,
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "countrySpecific": [
+                                "IN"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "Setting",
+                    "link": "/pages/settings/taxes",
+                    "icon": "icon-settings-cog",
+                    "description": "Tax setting",
+                    "hide": "sidebar"
                 },
                 {
                     "label": "Reverse Charge",
@@ -192,15 +430,13 @@
                     "description": "File & review VAT",
                     "hide": "sidebar",
                     "additional": {
-                        "countrySpecific": ["AE"]
+                        "queryParams": {
+                            "countrySpecific": [
+                                "AE",
+                                "GB"
+                            ]
+                        }
                     }
-                },
-                {
-                    "label": "Setting",
-                    "link": "/pages/settings/taxes",
-                    "icon": "icon-settings-cog",
-                    "description": "Tax setting",
-                    "hide": "sidebar"
                 }
             ],
             "link": "/pages/settings/taxes"
@@ -210,13 +446,39 @@
             "icon": "icon-reports",
             "items": [
                 {
+                    "label": "Trial balance",
+                    "link": "/pages/trial-balance-and-profit-loss",
+                    "icon": "icon-trial-balance-new",
+                    "description": "Download of all credit & debit balances",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "trial-balance",
+                            "tabIndex": 0
+                        }
+                    }
+                },
+                {
+                    "label": "Profit and Loss",
+                    "link": "/pages/trial-balance-and-profit-loss",
+                    "icon": "icon-proft-loss-new",
+                    "description": "Download data in Excel, project wise report",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "profit-loss",
+                            "tabIndex": 1
+                        }
+                    }
+                },
+                {
                     "label": "Balance Sheet",
                     "link": "/pages/trial-balance-and-profit-loss",
                     "icon": "icon-balance-sheet-new",
                     "description": "Download BS in Excel, multiple type of exports",
                     "additional": {
-                        "tab": "balance-sheet",
-                        "tabIndex": 2
+                        "queryParams": {
+                            "tab": "balance-sheet",
+                            "tabIndex": 2
+                        }
                     }
                 },
                 {
@@ -226,30 +488,10 @@
                     "description": "Everyday entries that can be exported"
                 },
                 {
-                    "label": "Profit and Loss",
-                    "link": "/pages/trial-balance-and-profit-loss",
-                    "icon": "icon-proft-loss-new",
-                    "description": "Download data in Excel, project wise report",
-                    "additional": {
-                        "tab": "profit-loss",
-                        "tabIndex": 1
-                    }
-                },
-                {
                     "label": "Sales Bifurcation ",
                     "link": "/pages/new-vs-old-invoices",
                     "icon": "icon-sale-bifurcation",
                     "description": "Compare new versus old invoices"
-                },
-                {
-                    "label": "Trial balance",
-                    "link": "/pages/trial-balance-and-profit-loss",
-                    "icon": "icon-trial-balance-new",
-                    "description": "Download of all credit & debit balances",
-                    "additional": {
-                        "tab": "trial-balance",
-                        "tabIndex": 0
-                    }
                 },
                 {
                     "label": "Columnar Report",
@@ -260,68 +502,74 @@
             ]
         },
         {
-            "label": "Import",
-            "icon": "icon-import",
-            "items": [
-                {
-                    "label": "Accounts",
-                    "link": "/pages/import/account",
-                    "icon": "icon-proft-loss-new",
-                    "description": "Import excel and CSV and update existing one"
-                },
-                {
-                    "label": "Company Import",
-                    "link": "/pages/company-import-export",
-                    "icon": "icon-company-impex",
-                    "description": "Company import & export"
-                },
-                {
-                    "label": "Entries",
-                    "link": "/pages/import/entries",
-                    "icon": "icon-invoice-new",
-                    "description": "Multicurrency, Recurring invoice, Cash invoice"
-                },
-                {
-                    "label": "Group",
-                    "link": "/pages/import/group",
-                    "icon": "icon-group-new",
-                    "description": "Import excel and CSV and update existing one"
-                },
-                {
-                    "label": "Inventory",
-                    "link": "/pages/import/stock",
-                    "icon": "icon-inventory",
-                    "description": "Import/create stock, group & unit"
-                },
-                {
-                    "label": "Trial Balance",
-                    "link": "/pages/import/trial-balance",
-                    "icon": "icon-trial-balance-new",
-                    "description": "Import all credit & debit balances"
-                }
-            ]
-        },
-        {
             "label": "Inventory",
             "icon": "icon-inventory",
             "items": [
                 {
-                    "label": "Branch Transfer",
-                    "link": "/pages/inventory/report",
-                    "icon": "icon-branch-transfer",
-                    "description": "Manage & Transfer inventory"
-                },
-                {
                     "label": "Inventory",
                     "link": "/pages/inventory",
                     "icon": "icon-inventory",
-                    "description": "Import/create stock, group & unit"
+                    "description": "Import/create stock, group & unit",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "Inventory",
+                    "link": "/pages/inventory/v2/reports/product/stock",
+                    "icon": "icon-inventory",
+                    "description": "Import/create stock, group & unit",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "Manufacturing",
                     "link": "/pages/inventory/manufacturing",
                     "icon": "icon-manufacturing1",
-                    "description": "Find mfg. inventory status"
+                    "description": "Find mfg. inventory status",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "Manufacturing",
+                    "link": "/pages/inventory/v2/manufacturing/list",
+                    "icon": "icon-manufacturing1",
+                    "description": "Find mfg. inventory status",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "Branch Transfer",
+                    "link": "/pages/inventory/v2/branch-transfer/list",
+                    "icon": "icon-branch-transfer",
+                    "description": "Manage & Transfer inventory",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "Branch Transfer",
+                    "link": "/pages/inventory/report",
+                    "icon": "icon-branch-transfer",
+                    "description": "Manage & Transfer inventory",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
                 },
                 {
                     "label": "Warehouse",
@@ -336,21 +584,31 @@
             "icon": "icon-other",
             "items": [
                 {
-                    "label": "Audit Logs New",
+                    "label": "Dashboard",
+                    "link": "/pages/home",
+                    "icon": "icon-dashboard-new",
+                    "description": "Overdues, P&L, Bank account, Ratio Analysis"
+                },
+                {
+                    "label": "Audit Trail",
                     "link": "/pages/audit-logs/new",
                     "icon": "icon-audit-log",
                     "description": "Chronological data of entries",
                     "additional": {
-                        "voucherVersion": 1
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
                     }
                 },
-                  {
-                    "label": "Activity Logs",
+                {
+                    "label": "Audit Trail",
                     "link": "/pages/activity-logs",
                     "icon": "icon-audit-log",
                     "description": "Chronological data of entries",
                     "additional": {
-                        "voucherVersion": 2
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
                     }
                 },
                 {
@@ -360,13 +618,7 @@
                     "description": "Download cash flow report"
                 },
                 {
-                    "label": "Dashboard",
-                    "link": "/pages/home",
-                    "icon": "icon-dashboard-new",
-                    "description": "Overdues, P&L, Bank account, Ratio Analysis"
-                },
-                {
-                    "label": "Journal Voucher *",
+                    "label": "Journal Entries *",
                     "link": "/pages/journal-voucher",
                     "icon": "icon-journal-voucher-new",
                     "description": "Entries of Journal Voucher"
@@ -383,8 +635,10 @@
                     "icon": "icon-petty-cash",
                     "description": "Manage petty cash & transaction",
                     "additional": {
-                        "tab": "pending",
-                        "tabIndex": 0
+                        "queryParams": {
+                            "tab": "pending",
+                            "tabIndex": 0
+                        }
                     }
                 },
                 {
@@ -392,6 +646,21 @@
                     "link": "/pages/search",
                     "icon": "icon-search",
                     "description": "Select group and search for a time span"
+                },
+                {
+                    "label": "Downloads",
+                    "link": "/pages/downloads",
+                    "icon": "icon-download-circle"
+                },
+                {
+                    "label": "Custom Fields",
+                    "link": "/pages/custom-fields/list",
+                    "icon": "icon-custom-field"
+                },
+                {
+                    "label": "Import",
+                    "link": "/pages/import/select-type",
+                    "icon": "icon-tally-import1"
                 }
             ]
         }

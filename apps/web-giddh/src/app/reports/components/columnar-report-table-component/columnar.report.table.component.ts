@@ -88,7 +88,7 @@ export class ColumnarReportTableComponent implements OnInit, OnDestroy, OnChange
         this.columnsName = ['#', this.localeData?.name_of_ledger, this.localeData?.parent_group, this.localeData?.opening_balance, this.localeData?.closing_balance, this.localeData?.grand_total];
         let response = cloneDeep(columnarRes);
         if (columnarRes && columnarRes.closingBalance) {
-            if (!Object.keys(columnarRes.closingBalance).length) {
+            if (!Object.keys(columnarRes.closingBalance)?.length) {
                 this.columnsName.splice(3, 2);
                 this.isShowClosingOpeningBalance$ = of(false);
             } else {

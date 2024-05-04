@@ -2,11 +2,11 @@ import { map, switchMap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { CommonService } from '../services/common.service';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { CountryRequest, CountryResponse, CurrencyResponse, CallingCodesResponse, OnboardingFormRequest, OnboardingFormResponse } from '../models/api-models/Common';
+import { CountryRequest, CountryResponse, CallingCodesResponse, OnboardingFormRequest, OnboardingFormResponse } from '../models/api-models/Common';
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { CustomActions } from '../store/customActions';
+import { CustomActions } from '../store/custom-actions';
 import { LocaleService } from '../services/locale.service';
 
 @Injectable()
@@ -30,6 +30,12 @@ export class CommonActions {
     public static SET_ACTIVE_LOCALE = 'SetActiveLocale';
     public static SET_ACTIVE_FINANCIAL_YEAR = 'SetActiveFinancialYear';
     public static SET_ACTIVE_THEME = 'SetActiveTheme';
+    public static SET_FILTERS = 'SetFilters';
+    public static SET_IMPORT_BANK_TRANSACTIONS_RESPONSE = 'SetImportBankTransactionsResponse';
+    public static HAS_UNSAVED_CHANGES = 'HAS_UNSAVED_CHANGES';
+    public static BYPASS_UNSAVED_CHANGES = 'BYPASS_UNSAVED_CHANGES';
+    public static REAUTH_PLAID = 'REAUTH_PLAID';
+    public static SELECT_PRINTER = 'SELECT_PRINTER';
 
     public getCountry$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -139,7 +145,7 @@ export class CommonActions {
             payload: value
         };
     }
-    
+
     public resetOnboardingForm(): CustomActions {
         return {
             type: CommonActions.RESET_ONBOARDING_FORM_RESPONSE
@@ -216,7 +222,7 @@ export class CommonActions {
      * @memberof CommonActions
      */
     public setActiveFinancialYear(data: any): CustomActions {
-        return  {
+        return {
             type: CommonActions.SET_ACTIVE_FINANCIAL_YEAR,
             payload: data
         }
@@ -229,9 +235,93 @@ export class CommonActions {
      * @returns {CustomActions}
      * @memberof CommonActions
      */
-     public setActiveTheme(data: any): CustomActions {
+    public setActiveTheme(data: any): CustomActions {
         return {
             type: CommonActions.SET_ACTIVE_THEME,
+            payload: data
+        }
+    }
+
+    /**
+     * Set filters in store
+     *
+     * @param {*} data
+     * @returns {CustomActions}
+     * @memberof CommonActions
+     */
+    public setFilters(data: any): CustomActions {
+        return {
+            type: CommonActions.SET_FILTERS,
+            payload: data
+        }
+    }
+
+    /**
+     * This will set the bank transactions import response data
+     *
+     * @param {*} data
+     * @returns {CustomActions}
+     * @memberof CommonActions
+     */
+    public setImportBankTransactionsResponse(data: any): CustomActions {
+        return {
+            type: CommonActions.SET_IMPORT_BANK_TRANSACTIONS_RESPONSE,
+            payload: data
+        }
+    }
+
+    /**
+     * Maintains if any page has unsaved changes
+     *
+     * @param {boolean} data
+     * @returns {CustomActions}
+     * @memberof CommonActions
+     */
+    public hasUnsavedChanges(data: boolean): CustomActions {
+        return {
+            type: CommonActions.HAS_UNSAVED_CHANGES,
+            payload: data
+        }
+    }
+
+    /**
+     * Maintains if need to bypass unsaved changes
+     *
+     * @param {boolean} data
+     * @returns {CustomActions}
+     * @memberof CommonActions
+     */
+    public bypassUnsavedChanges(data: boolean): CustomActions {
+        return {
+            type: CommonActions.BYPASS_UNSAVED_CHANGES,
+            payload: data
+        }
+    }
+
+    /**
+     * Triggers plaid reauth popup
+     *
+     * @param {boolean} reauth
+     * @returns {CustomActions}
+     * @memberof CommonActions
+     */
+    public reAuthPlaid(data: any): CustomActions {
+        return {
+            type: CommonActions.REAUTH_PLAID,
+            payload: data
+        }
+    }
+
+    /**
+     * This will open the select printer dialog
+     *
+     * @param {boolean} data
+     * @returns {CustomActions}
+     * @memberof CommonActions
+     */
+    public selectPrinter(data?: any): CustomActions {
+        return {
+            type: CommonActions.SELECT_PRINTER,
             payload: data
         }
     }

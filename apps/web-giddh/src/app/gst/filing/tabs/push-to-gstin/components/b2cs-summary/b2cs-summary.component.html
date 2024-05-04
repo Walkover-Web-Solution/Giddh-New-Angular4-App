@@ -4,7 +4,7 @@
 
     <div>
         <div>
-            <table class="transactions-table table-striped table zi-table on-mobile-view" *ngIf="brcsSummary.length">
+            <table class="transactions-table table-striped table zi-table on-mobile-view" *ngIf="brcsSummary?.length">
                 <thead>
                     <tr>
                         <th class="text-left">
@@ -98,7 +98,7 @@
             </table>
         </div>
 
-        <div *ngIf="!brcsSummary.length">
+        <div *ngIf="!brcsSummary?.length">
             <div class="filings-empty-state">
                 <img src="{{ imgPath }}nofound.svg" [style.max-width.px]="110" />
                 <div class="empty-msg">

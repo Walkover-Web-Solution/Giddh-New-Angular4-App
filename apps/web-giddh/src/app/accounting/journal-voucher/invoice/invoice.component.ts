@@ -17,10 +17,10 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { BlankLedgerVM } from 'apps/web-giddh/src/app/material-ledger/ledger.vm';
+import { BlankLedgerVM } from 'apps/web-giddh/src/app/ledger/ledger.vm';
 import { cloneDeep, forEach, isEqual, sumBy, concat, find, without, orderBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import { TaxResponse } from 'apps/web-giddh/src/app/models/api-models/Company';
-import * as moment from 'moment';
+import * as dayjs from 'dayjs';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { Observable, ReplaySubject } from 'rxjs';
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
@@ -29,7 +29,7 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { AccountResponse } from '../../../models/api-models/Account';
-import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
+import { IFlattenAccountsResultItem } from '../../../models/interfaces/flatten-accounts-result-item.interface';
 import { AccountService } from '../../../services/account.service';
 import { InventoryService } from '../../../services/inventory.service';
 import { ToasterService } from '../../../services/toaster.service';
@@ -97,7 +97,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     public totalCreditAmount: number = 0;
     public totalDebitAmount: number = 0;
     public showConfirmationBox: boolean = false;
-    public moment = moment;
+    public dayjs = dayjs;
     public accountSearch: string = '';
     public stockSearch: string;
     public selectedRowIdx: any;
@@ -177,6 +177,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
             }
             return true;
         }), takeUntil(this.destroyed$)).subscribe((d) => {
+
             if (d && d.gridType === 'invoice') {
                 this.data.voucherType = d.page;
                 this.gridType = d.gridType;
@@ -243,7 +244,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
                 this.taxesToRemember = [];
             }
         });
-        this.entryDate = moment().format(GIDDH_DATE_FORMAT);
+        this.entryDate = dayjs().format(GIDDH_DATE_FORMAT);
         // this.refreshEntry();
         // this.data.transactions[this.data.transactions.length - 1].inventory.push(this.initInventory());
 
@@ -251,7 +252,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
             if (accounts) {
                 let accList: IOption[] = [];
                 accounts.forEach((acc: IFlattenAccountsResultItem) => {
-                    accList.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName, additional: acc });
+                    accList.push({ label: `${acc.name} (${acc?.uniqueName})`, value: acc?.uniqueName, additional: acc });
                 });
                 this.flattenAccounts = accList;
                 this.inputForList = cloneDeep(this.flattenAccounts);
@@ -369,7 +370,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
      * selectEntryType() to validate Type i.e BY/TO
      */
     public selectEntryType(transactionObj, val, idx) {
-        if (val.length === 2 && (val.toLowerCase() !== 'to' && val.toLowerCase() !== 'by')) {
+        if (val?.length === 2 && (val?.toLowerCase() !== 'to' && val?.toLowerCase() !== 'by')) {
             this._toaster.errorToast("Spell error, you can only use 'To/By'");
             transactionObj.type = 'DEBIT';
         } else {
@@ -426,10 +427,10 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
                 let accModel = {
                     name: acc.name,
                     UniqueName: acc.uniqueName,
-                    groupUniqueName: acc.parentGroups[acc.parentGroups.length - 1],
+                    groupUniqueName: acc.parentGroups[acc.parentGroups?.length - 1],
                     account: acc.name
                 };
-                this.accountsTransaction[idx].particular = accModel.UniqueName;
+                this.accountsTransaction[idx].particular = accModel?.UniqueName;
                 this.accountsTransaction[idx].selectedAccount = accModel;
                 this.accountsTransaction[idx].stocks = acc.stocks;
             }
@@ -465,7 +466,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
      * addNewStock
      */
     public addNewStock(amount, transactionObj, idx) {
-        let lastIdx = this.stocksTransaction.length - 1;
+        let lastIdx = this.stocksTransaction?.length - 1;
         if (amount) {
             transactionObj.amount = Number(amount);
         }
@@ -486,8 +487,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         this.showLedgerAccountList = false;
         this.showStockList.emit(false);
         this.showConfirmationBox = true;
-        if (this.data.description.length > 1) {
-            this.data.description = this.data.description.replace(/(?:\r\n|\r|\n)/g, '');
+        if (this.data.description?.length > 1) {
+            this.data.description = this.data.description?.replace(/(?:\r\n|\r|\n)/g, '');
             setTimeout(() => {
                 submitBtnEle.focus();
             }, 100);
@@ -506,8 +507,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         this.totalDebitAmount = 0;
         this.addNewRow('stock');
         this.addNewRow('account');
-        this.data.entryDate = moment().format(GIDDH_DATE_FORMAT);
-        this.entryDate = moment().format(GIDDH_DATE_FORMAT);
+        this.data.entryDate = dayjs().format(GIDDH_DATE_FORMAT);
+        this.entryDate = dayjs().format(GIDDH_DATE_FORMAT);
         this.creditorAcc = {};
         this.debtorAcc = {};
         this.stockTotal = null;
@@ -599,7 +600,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         this.stocksTransaction[stkIdx].inventory.unit.code = item.stockUnit.code;
         this.stocksTransaction[stkIdx].inventory.unit.stockUnitCode = item.stockUnit.name;
 
-        this.stocksTransaction[stkIdx].inventory.stock = { name: item.name, uniqueName: item.uniqueName };
+        this.stocksTransaction[stkIdx].inventory.stock = { name: item.name, uniqueName: item?.uniqueName };
     }
 
     /**
@@ -678,7 +679,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
      * saveEntry
      */
     public saveEntry() {
-        if (!this.creditorAcc.uniqueName) {
+        if (!this.creditorAcc?.uniqueName) {
             this._toaster.errorToast("Party A/c Name can't be blank.");
             return setTimeout(() => this.partyAccNameInputField?.nativeElement.focus(), 200);
         }
@@ -689,7 +690,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         data = this._tallyModuleService.prepareRequestForAPI(data);
         data.transactions = this.validateTransaction(data.transactions);
 
-        let accUniqueName: string = this.creditorAcc.uniqueName;
+        let accUniqueName: string = this.creditorAcc?.uniqueName;
 
         forEach(data.transactions, (element: any) => {
             element.type = (element.type === 'by') ? 'debit' : 'credit';
@@ -733,7 +734,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         let accountsTransaction = [];
         let filterData = this._tallyModuleService.prepareRequestForAPI(data);
 
-        if (filterData.transactions.length) {
+        if (filterData.transactions?.length) {
             forEach(filterData.transactions, function (o, i) {
                 if (o.inventory && o.inventory.amount) {
                     stocksTransaction.push(o);
@@ -745,10 +746,10 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
             this.accountsTransaction = accountsTransaction;
             this.stocksTransaction = stocksTransaction;
 
-            if (!stocksTransaction.length) {
+            if (!stocksTransaction?.length) {
                 this.addNewRow('stock');
             }
-            if (!accountsTransaction.length) {
+            if (!accountsTransaction?.length) {
                 this.addNewRow('account');
             }
         }
@@ -773,7 +774,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         this.keyUpDownEvent = ev;
         if (ev && ev.which === 8 && isFirstAccountField) {
             if (ev.target && (ev.target.getAttribute('data-changed') === 'false' || ev.target.value === '')) {
-                let indx = this.stocksTransaction.length - 1;
+                let indx = this.stocksTransaction?.length - 1;
                 let stockEle = document.getElementById(`stock_${indx - 1}`);
                 return stockEle.focus();
             }
@@ -791,9 +792,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public dateEntered() {
-        const date = moment(this.entryDate, GIDDH_DATE_FORMAT);
-        if (moment(date).format('dddd') !== 'Invalid date') {
-            this.displayDay = moment(date).format('dddd');
+        const date = dayjs(this.entryDate, GIDDH_DATE_FORMAT);
+        if (dayjs(date).format('dddd') !== 'Invalid date') {
+            this.displayDay = dayjs(date).format('dddd');
         } else {
             this.displayDay = '';
         }
@@ -815,9 +816,9 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
             this.sortStockItems(cloneDeep(this.allStocks));
         } else {
             this.inventoryService.GetStocks().pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                if (data.status === 'success') {
-                    this.sortStockItems(data.body.results);
-                    this.allStocks = cloneDeep(data.body.results);
+                if (data?.status === 'success') {
+                    this.sortStockItems(data?.body?.results);
+                    this.allStocks = cloneDeep(data?.body?.results);
                     if (focusTargetElement) {
                         this.selectedStockInputField.focus();
                     }
@@ -830,8 +831,8 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         let stockAccountArr: IOption[] = [];
         forEach(ItemArr, (obj: any) => {
             stockAccountArr.push({
-                label: `${obj.name} (${obj.uniqueName})`,
-                value: obj.uniqueName,
+                label: `${obj.name} (${obj?.uniqueName})`,
+                value: obj?.uniqueName,
                 additional: obj
             });
         });
@@ -848,15 +849,15 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
             this.showLedgerAccountList = false;
         }, 200);
 
-        if (ev.value === 'createnewitem') {
+        if (ev?.value === 'createnewitem') {
             return this.showQuickAccountModal();
         }
 
         if (this.selectedField === 'account') {
             this.setAccount(ev.additional);
             setTimeout(() => {
-                let accIndx = this.accountsTransaction.findIndex((acc) => acc.selectedAccount.UniqueName === ev.value);
-                let indexInTaxesToRemember = this.taxesToRemember.findIndex((t) => t.taxUniqueName === ev.value);
+                let accIndx = this.accountsTransaction?.findIndex((acc) => acc?.selectedAccount?.UniqueName === ev?.value);
+                let indexInTaxesToRemember = this.taxesToRemember?.findIndex((t) => t.taxUniqueName === ev?.value);
                 if (indexInTaxesToRemember > -1 && accIndx > -1) {
                     let rate = this.taxesToRemember[indexInTaxesToRemember].taxValue;
                     this.accountsTransaction[accIndx].rate = rate;
@@ -864,21 +865,21 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
                 }
             }, 100);
         } else if (this.selectedField === 'stock') {
-            let stockUniqueName = ev.value;
-            let taxIndex = this.taxesToRemember.findIndex((i) => i.stockUniqueName === stockUniqueName);
+            let stockUniqueName = ev?.value;
+            let taxIndex = this.taxesToRemember?.findIndex((i) => i.stockUniqueName === stockUniqueName);
             if (taxIndex === -1) {
                 this.inventoryService.GetStockUniqueNameWithDetail(stockUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((stockFullDetails) => {
-                    if (stockFullDetails && stockFullDetails.body.taxes && stockFullDetails.body.taxes.length) {
+                    if (stockFullDetails && stockFullDetails.body && stockFullDetails.body.taxes && stockFullDetails.body.taxes.length) {
                         this.companyTaxesList$.pipe(take(1)).subscribe((taxes: TaxResponse[]) => {
                             stockFullDetails.body.taxes.forEach((tax: string) => {
-                                let selectedTax = taxes.find((t) => t.uniqueName === tax);
+                                let selectedTax = taxes.find((t) => t?.uniqueName === tax);
                                 let taxTotalValue = 0;
                                 if (selectedTax) {
                                     selectedTax.taxDetail.forEach((st) => {
                                         taxTotalValue += st.taxValue;
                                     });
                                 }
-                                let taxIndx = this.taxesToRemember.findIndex((i) => i.taxUniqueName === tax);
+                                let taxIndx = this.taxesToRemember?.findIndex((i) => i.taxUniqueName === tax);
                                 if (taxIndx === -1) {
                                     this.taxesToRemember.push({ stockUniqueName, taxUniqueName: tax, taxValue: taxTotalValue });
                                 }
@@ -922,7 +923,7 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
     public showQuickAccountModal() {
         if (this.selectedField === 'account') {
             this.loadQuickAccountComponent();
-            this.quickAccountModal.show();
+            this.quickAccountModal?.show();
         } else if (this.selectedField === 'stock') {
             this.asideMenuStateForProductService = 'in';
             this.autoFocusStockGroupField = true;
@@ -1040,14 +1041,14 @@ export class AccountAsInvoiceComponent implements OnInit, OnDestroy, AfterViewIn
         this.store.pipe(select(p => p.session.companyUniqueName), take(1)).subscribe(a => {
             if (a && a !== '') {
                 this._accountService.getFlattenAccounts('', '', '').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                    if (data.status === 'success') {
-                        this.allFlattenAccounts = cloneDeep(data.body.results);
+                    if (data?.status === 'success') {
+                        this.allFlattenAccounts = cloneDeep(data?.body?.results);
                         if (groupUniqueName) {
-                            const filteredAccounts: IFlattenAccountsResultItem[] = data.body.results.filter((acc) => acc.parentGroups.findIndex((g) => g.uniqueName === groupUniqueName) > -1);
+                            const filteredAccounts: IFlattenAccountsResultItem[] = data?.body?.results?.filter((acc) => acc?.parentGroups?.findIndex((g) => g?.uniqueName === groupUniqueName) > -1);
                             this._tallyModuleService.setFlattenAccounts(filteredAccounts);
                             this.isAccountListFiltered = true;
                         } else {
-                            this._tallyModuleService.setFlattenAccounts(data.body.results);
+                            this._tallyModuleService.setFlattenAccounts(data?.body?.results);
                             this.isAccountListFiltered = false;
                         }
                         if (needToFocusSelectedInputField) {

@@ -94,7 +94,7 @@
     margin-top: 0;
     min-width: 100%;
     li {
-        font-size: 14px;
+        font-size: var(--font-size-15);
     }
 }
 
@@ -214,7 +214,7 @@ td.card-header.clearfix {
 
 .card .over-due-date {
     position: absolute;
-    font-size: 12px;
+    font-size: var(--font-size-12);
     bottom: -15px;
     right: 0;
 }
@@ -299,7 +299,7 @@ ul.select-action-dropdown {
 
 .select-action-dropdown a {
     color: var(--color-dropdown-list);
-    font-size: 14px;
+    font-size: var(--font-size-15);
     padding: 5px 10px;
     display: block;
 }
@@ -320,10 +320,6 @@ ul.select-action-dropdown {
 .input-group input.form-control {
     padding-left: 35px !important;
     border-color: var(--color-blue);
-    background-image: url("../../../assets/images/calender-icon.svg") !important;
-    background-size: 17px !important;
-    background-position: 9px 8px !important;
-    background-repeat: no-repeat !important;
     padding-left: 45px !important;
     position: relative;
     z-index: 99;
@@ -353,7 +349,7 @@ ul.select-action-dropdown {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    font-size: 14px;
+    font-size: var(--font-size-15);
     margin-right: 10px;
     color: var(--color-primary-filter-button-text);
     border-color: var(--color-secondary-input-bar-border) !important;
@@ -365,7 +361,7 @@ ul.select-action-dropdown {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    font-size: 18px;
+    font-size: var(--font-size-16);
     margin-left: 10px;
     border: 1px solid var(--color-iron);
     border-radius: 5px;
@@ -398,9 +394,9 @@ button.btn.btn-default.ladda-button {
 }
 .clear-filter {
     button.btn.btn-filter {
-        background: var(--color-dark-fog);
+        background: var(--color-filter-background);
         border: 1px solid var(--color-dark-fog);
-        font-size: 14px;
+        font-size: var(--font-size-15);
         color: var(--color-giddh-blue);
         display: inline-flex;
         justify-content: space-between;
@@ -567,13 +563,6 @@ span.icon-export-icon {
 }
 
 /* responsive */
-@media (max-width: 1024px) {
-    .perform-payment {
-        max-width: 100% !important;
-        min-width: 100% !important;
-    }
-}
-
 @media (max-width: 1124px) {
     .add-invoice {
         flex-direction: column-reverse;
@@ -728,9 +717,6 @@ span.icon-export-icon {
         margin-bottom: 0;
         flex-direction: column-reverse;
     }
-    .mobile-search .input-container input {
-        font-size: 13px;
-    }
     .invoice-modal-content {
         top: 131px;
         left: 0;
@@ -755,7 +741,7 @@ span.icon-export-icon {
         width: 100%;
         justify-content: center;
         margin-bottom: 5px;
-        font-size: 14px;
+        font-size: var(--font-size-15);
     }
     .invoice-control .nav.nav-tabs {
         margin-bottom: 28px;
@@ -814,7 +800,7 @@ span.icon-export-icon {
     .small-loading {
         padding-left: 0;
         color: var(--color-nero);
-        font-size: 12px;
+        font-size: var(--font-size-12);
         position: relative;
         top: 2px;
         padding-right: 0;
@@ -913,14 +899,7 @@ span.icon-export-icon {
 
     .custom-datepicker input {
         width: 200px !important;
-        max-width: 200px !important;
-    }
-}
-
-@media (min-width: 769px) {
-    .table-responsive {
-        max-height: calc(100vh - 295px);
-        overflow-y: auto;
+        max-width: 204px !important;
     }
 }
 

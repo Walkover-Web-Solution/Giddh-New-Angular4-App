@@ -8,7 +8,7 @@
 
 4. Run `npm i` for installation of dependencies.
 
-5. You need to add a ```.env``` file at the root of the project (similar to ```.env.example``` already present at the root) which is  used to store credentials related to Google, Razorpay, LinkedIn, Twitter. You can get the ```.env``` file from any of the contributors of this project.
+5. You need to add a ```.env``` file at the root of the project (similar to ```.env.example``` already present at the root) which is  used to store credentials related to Google, Razorpay. You can get the ```.env``` file from any of the contributors of this project.
 
 5. Run `npm run start` to local serve the project.
 
@@ -45,6 +45,28 @@ All of the changes **must be present on a single branch `<card-id>-stage`** whic
 `dtqvbd-stage` -> `beta-stage` -> `beta-branch` -> `production`
 
 If you face any issues in the understanding of contributing guideline then please reach out to other contributors first than trying it out for yourself. If you have any suggestions for the improvement of this guideline then also you're welcome :)
+
+
+
+# Desktop signing
+For Giddh desktop builds, we support Windows and Mac platforms.
+For signing Windows build:
+1. You need to have the certificate in CER format. Usually, the certificates are available in CRT format. To convert from CRT to CER format follow below steps (use Windows system):
+    - Double-click on the **yourwebsite.crt** file to open it into the certificate display.
+    - Click on the **Details** tab, and then select the **Copy to file** button.
+    - Click **Next** in the certificate wizard.
+    - Choose **Base-64 encoded X.509 (.CER)**, and then click on **Next**.
+    - Now, browse to store your file and type in the filename that you want to keep
+    - Finally, save the file.
+2. Once the CER format is obtained, convert this to PFX extension for it to be used in Electron builder variables. Command to run (use Windows system) for conversion:
+```
+openssl pkcs12 -export -in path/to/yourcertificate.cer -out desitnation/for/yourcertificate.pfx -nokeys
+```
+This command will ask for password, make sure you set a rememberable password.
+
+3. Once the .pfx certificate is obtained, we need to update the Github Action secret variable `CSC_LINK_WIN` with its downloadable link. Upload the file on Google Drive, and get the downloadable link by pasting the G-Drive link (public link) on [direct link generator](http://www.syncwithtech.org/p/direct-download-link-generator.html). The link obtained from here should be set in `CSC_LINK_WIN`.
+4. Set the variable `CSC_LINK_WIN_PASS` with the password that you've set in step 3.
+
 
 # Angular Style Guide
 
@@ -324,11 +346,6 @@ Just like files, functions also follow the single responsibility princinple. Def
 
 10. Make data services responsible for XHR calls, local storage, stashing in memory, or any other data operations.
 
-
-
 ## Lifecycle Hooks
 
-
-
-1. Implement the lifecycle hook interfaces. Don't just use methods without implementing the Lifecycle Hook Interfaces.
-
+Implement the lifecycle hook interfaces. Don't just use methods without implementing the Lifecycle Hook Interfaces.

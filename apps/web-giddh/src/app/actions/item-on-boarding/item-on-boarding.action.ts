@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { CustomActions } from '../../store/customActions';
+import { CustomActions } from '../../store/custom-actions';
 import { OnBoardingType } from '../../app.constant';
 
 /**

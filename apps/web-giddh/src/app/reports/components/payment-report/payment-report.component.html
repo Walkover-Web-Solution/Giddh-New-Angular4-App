@@ -69,7 +69,6 @@
                     </div>
                     <div class="d-flex">
                         <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                            <i class="icon-calender calendar-addon"></i>
                             <input
                                 type="text"
                                 name="selectedDateRange"
@@ -89,37 +88,46 @@
                     "
                     *ngIf="showClearFilter"
                 >
-                    <button class="btn btn-filter mr-0" (click)="resetAdvanceSearch()">
+                    <button class="btn btn-filter mr-0" (click)="resetAdvanceSearch()" aria-label="filter">
                         <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
                 <div
-                    *ngIf="!isCompany && selectedPayments?.length > 0"
+                    *ngIf="selectedPayments?.length > 0"
                     class="btn-group ml-auto"
                     dropdown
                     #dp="bs-dropdown"
                 >
                     <button
-                        dropdownToggle
-                        type="button"
-                        class="btn btn-primary more-btn-dropdown dropdown-toggle mr-0"
-                        aria-controls="dropdown-basic"
+                        class="btn btn-default mr-r15"
+                        [tooltip]="commonLocaleData?.app_export"
+                        (click)="exportCsvDownload()"
                     >
-                        {{ commonLocaleData?.app_more }}
-                        <span class="caret"></span>
+                        <span class="icon-export-icon"></span>
                     </button>
-                    <ul
-                        *dropdownMenu
-                        class="dropdown-menu fixed-dropdown-plus"
-                        role="menu"
-                        aria-labelledby="button-basic"
-                    >
-                        <li role="menuitem">
-                            <a class="dropdown-item cp" href="javascript:void(0)" (click)="openConfirmationPopup()">{{
-                                commonLocaleData?.app_delete
-                            }}</a>
-                        </li>
-                    </ul>
+                    <ng-container *ngIf="!isCompany">
+                        <button
+                            dropdownToggle
+                            type="button"
+                            class="btn btn-primary more-btn-dropdown dropdown-toggle mr-0"
+                            aria-controls="dropdown-basic"
+                        >
+                            {{ commonLocaleData?.app_more }}
+                            <span class="caret"></span>
+                        </button>
+                        <ul
+                            *dropdownMenu
+                            class="dropdown-menu fixed-dropdown-plus"
+                            role="menu"
+                            aria-labelledby="button-basic"
+                        >
+                            <li role="menuitem">
+                                <a class="dropdown-item cp" href="javascript:void(0)" (click)="openConfirmationPopup()">{{
+                                    commonLocaleData?.app_delete
+                                }}</a>
+                            </li>
+                        </ul>
+                    </ng-container>
                 </div>
                 <div
                     class="advance-icon cursor-pointer btn btn-primary mr-0"
@@ -150,7 +158,7 @@
                                                 ? activeCompany?.baseCurrencySymbol
                                                 : paymentsSummaryData?.total?.symbol
                                         "
-                                        [currencyCode]="activeCompany.baseCurrency"
+                                        [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
                                 </span>
@@ -173,7 +181,7 @@
                                                 ? activeCompany?.baseCurrencySymbol
                                                 : paymentsSummaryData?.unUsed?.symbol
                                         "
-                                        [currencyCode]="activeCompany.baseCurrency"
+                                        [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
                                 </span>
@@ -211,11 +219,13 @@
                                         src="assets/images/unchecked.png"
                                         *ngIf="!allPaymentsSelected"
                                         (click)="toggleAllPayments()"
+                                        alt="uncheck"
                                     />
                                     <img
                                         src="assets/images/checked.png"
                                         *ngIf="allPaymentsSelected"
                                         (click)="toggleAllPayments()"
+                                        alt="check"
                                     />
                                 </div>
                             </th>
@@ -350,11 +360,13 @@
                                         *ngIf="!payment.isSelected"
                                         src="assets/images/unchecked.png"
                                         (click)="togglePayment(payment, true)"
+                                        alt="uncheck"
                                     />
                                     <img
                                         *ngIf="payment.isSelected"
                                         src="assets/images/checked.png"
                                         (click)="togglePayment(payment, false)"
+                                        alt="check"
                                     />
                                 </div>
                             </td>
@@ -425,7 +437,7 @@
                                                 ? payment?.accountCurrencySymbol
                                                 : payment?.totalAmount?.symbol
                                         "
-                                        [currencyCode]="activeCompany.baseCurrency"
+                                        [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
                                 </span>
@@ -450,7 +462,7 @@
                                                 ? payment?.accountCurrencySymbol
                                                 : payment?.unusedAmount?.symbol
                                         "
-                                        [currencyCode]="activeCompany.baseCurrency"
+                                        [currencyCode]="activeCompany?.baseCurrency"
                                     >
                                     </amount-field>
                                 </span>
@@ -470,7 +482,7 @@
                 </table>
             </div>
 
-            <div [hidden]="isLoading" *ngIf="pageConfiguration.totalItems > paginationLimit" class="pagination-wrapper">
+            <div [hidden]="isLoading" *ngIf="pageConfiguration.totalItems > paginationLimit" class="pagination-wrapper mt-2">
                 <pagination
                     [totalItems]="pageConfiguration.totalItems"
                     [(ngModel)]="pageConfiguration.currentPage"
@@ -501,7 +513,7 @@
         class="modal fade open-popup"
         role="dialog"
     >
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <ng-template element-view-container-ref #paymentSearchFilterModal="elementviewcontainerref">
                 </ng-template>

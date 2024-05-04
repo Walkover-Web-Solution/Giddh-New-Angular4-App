@@ -1,19 +1,18 @@
 import { ToasterService } from '../../../../../services/toaster.service';
 import { ActivatedRoute } from '@angular/router';
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, DoCheck, EventEmitter, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, DoCheck, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../models/api-models/Invoice';
-import { Observable, ReplaySubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../../store';
-import { Configuration } from '../../../../../app.constant';
-import { humanizeBytes, UploaderOptions, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
-import { INVOICE_API } from 'apps/web-giddh/src/app/services/apiurls/invoice';
-import { CurrentCompanyState } from 'apps/web-giddh/src/app/store/Company/company.reducer';
+import { CurrentCompanyState } from 'apps/web-giddh/src/app/store/company/company.reducer';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { NgForm } from '@angular/forms';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
 
 @Component({
     selector: 'content-selector',
@@ -22,7 +21,6 @@ import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 })
 
 export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDestroy {
-
     @Input() public content: boolean;
     public customTemplate: CustomTemplateResponse = new CustomTemplateResponse();
     public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
@@ -33,19 +31,14 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     public voucherType = '';
     public formData: FormData;
     public signatureSrc: string = '';
-    public fileUploadOptions: UploaderOptions;
     public signatureImgAttached: boolean = false;
     public isSignatureUploadInProgress: boolean = false;
-    public uploadInput: EventEmitter<UploadInput>;
-    public files: UploadFile[] = [];
-    public humanizeBytes: any;
+    public files: any[] = [];
     public dragOver: boolean;
     public imagePreview: any;
     public isFileUploaded: boolean = false;
     public isFileUploadInProgress: boolean = false;
     public companyUniqueName = null;
-    public sessionId$: Observable<string>;
-    public companyUniqueName$: Observable<string>;
     /** True, if company country supports other tax (TCS/TDS) */
     public isTcsTdsApplicable: boolean;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -57,13 +50,17 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     public activeCompanyName: string;
     /** Ng form instance of content filter component */
     @ViewChild(NgForm) contentForm: NgForm;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: 1 | 2;
 
     constructor(
         private store: Store<AppState>,
-        private _invoiceUiDataService: InvoiceUiDataService,
-        private _activatedRoute: ActivatedRoute,
-        private _toasty: ToasterService,
-        private invoiceService: InvoiceService
+        private invoiceUiDataService: InvoiceUiDataService,
+        private activatedRoute: ActivatedRoute,
+        private toaster: ToasterService,
+        private invoiceService: InvoiceService,
+        private generalService: GeneralService,
+        private commonService: CommonService
     ) {
         let companies = null;
         let defaultTemplate = null;
@@ -76,10 +73,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         this.store.pipe(select(s => s.invoiceTemplate), take(1)).subscribe(ss => {
             defaultTemplate = ss.defaultTemplate;
         });
-        this._invoiceUiDataService.initCustomTemplate(this.companyUniqueName, companies, defaultTemplate);
-
-        this.sessionId$ = this.store.pipe(select(p => p.session.user.session.id), takeUntil(this.destroyed$));
-        this.companyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
+        this.invoiceUiDataService.initCustomTemplate(this.companyUniqueName, companies, defaultTemplate);
     }
 
     /**
@@ -88,6 +82,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
      * @memberof ContentFilterComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany?.countryV2?.countryName) {
                 this.showGstComposition = activeCompany.countryV2.countryName === 'India';
@@ -101,40 +96,36 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
                 this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
             }
         });
-        this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
+        this.activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (!a) {
                 return;
             }
-            this.voucherType = a.voucherType;
-            // this.getVoucher(false);
+            this.voucherType = a?.voucherType;
         });
-        this._invoiceUiDataService.templateVoucherType.pipe(takeUntil(this.destroyed$)).subscribe((voucherType: string) => {
+        this.invoiceUiDataService.templateVoucherType.pipe(takeUntil(this.destroyed$)).subscribe((voucherType: string) => {
             this.voucherType = cloneDeep(voucherType);
         });
-        this._invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
+        this.invoiceUiDataService.customTemplate.pipe(takeUntil(this.destroyed$)).subscribe((template: CustomTemplateResponse) => {
             if (this.contentForm) {
-                this._invoiceUiDataService.setContentForm(this.contentForm);
+                this.invoiceUiDataService.setContentForm(this.contentForm);
             }
             this.customTemplate = cloneDeep(template);
             this.assignImageSignature();
         });
 
-        this._invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
+        this.invoiceUiDataService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
             this.templateUISectionVisibility = cloneDeep(info);
         });
 
-        this._invoiceUiDataService.isCompanyNameVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
+        this.invoiceUiDataService.isCompanyNameVisible.pipe(takeUntil(this.destroyed$)).subscribe((yesOrNo: boolean) => {
             this.showCompanyName = cloneDeep(yesOrNo);
         });
 
-        this._invoiceUiDataService.fieldsAndVisibility.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
+        this.invoiceUiDataService.fieldsAndVisibility.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
             this.fieldsAndVisibility = cloneDeep(obj);
         });
 
-        this.fileUploadOptions = { concurrency: 1, allowedContentTypes: ['image/png', 'image/jpeg'] };
         this.files = []; // local uploading files array
-        this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
-        this.humanizeBytes = humanizeBytes;
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -142,7 +133,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
             this.signatureImgAttached = false;
             this.signatureSrc = '';
             this.assignImageSignature();
-            this._invoiceUiDataService.setContentForm(this.contentForm);
+            this.invoiceUiDataService.setContentForm(this.contentForm);
         }
     }
 
@@ -152,7 +143,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
      * @memberof ContentFilterComponent
      */
     public ngDoCheck(): void {
-        this._invoiceUiDataService.setContentForm(this.contentForm);
+        this.invoiceUiDataService.setContentForm(this.contentForm);
     }
 
     /**
@@ -160,8 +151,8 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
      */
     public onFieldChange(sectionName: string, fieldName: string, value: string) {
         let template = cloneDeep(this.customTemplate);
-        this._invoiceUiDataService.setContentForm(this.contentForm);
-        this._invoiceUiDataService.setCustomTemplate(template);
+        this.invoiceUiDataService.setContentForm(this.contentForm);
+        this.invoiceUiDataService.setCustomTemplate(template);
     }
 
     public changeDisableShipping() {
@@ -173,7 +164,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         //   template.sections.header.data.billingGstin.display = true;
         //   template.sections.header.data.billingState.display = true;
         // }
-        if (!template.sections.header.data.shippingAddress.display) {
+        if (!template.sections.header.data.shippingAddress?.display) {
             template.sections.header.data.shippingGstin.display = false;
             template.sections.header.data.shippingState.display = false;
 
@@ -182,11 +173,12 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
             template.sections.header.data.shippingState.display = true;
         }
 
-        this._invoiceUiDataService.setCustomTemplate(template);
+        this.invoiceUiDataService.setCustomTemplate(template);
     }
+
     public changeDisableBilling() {
         let template = cloneDeep(this.customTemplate);
-        if (!template.sections.header.data.billingAddress.display) {
+        if (!template.sections.header.data.billingAddress?.display) {
             template.sections.header.data.billingGstin.display = false;
             template.sections.header.data.billingState.display = false;
         } else {
@@ -194,22 +186,22 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
             template.sections.header.data.billingState.display = true;
         }
 
-        this._invoiceUiDataService.setCustomTemplate(template);
+        this.invoiceUiDataService.setCustomTemplate(template);
     }
     /**
      * onChangeFieldVisibility
      */
     public onChangeFieldVisibility(sectionName: string, fieldName: string, value: boolean) {
         let template = cloneDeep(this.customTemplate);
-        this._invoiceUiDataService.setContentForm(this.contentForm);
-        this._invoiceUiDataService.setCustomTemplate(template);
+        this.invoiceUiDataService.setContentForm(this.contentForm);
+        this.invoiceUiDataService.setCustomTemplate(template);
     }
 
     /**
      * onChangeCompanyNameVisibility
      */
     public onChangeCompanyNameVisibility() {
-        this._invoiceUiDataService.setCompanyNameVisibility(this.showCompanyName);
+        this.invoiceUiDataService.setCompanyNameVisibility(this.showCompanyName);
     }
 
     public ngOnDestroy() {
@@ -217,76 +209,44 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
         this.destroyed$.complete();
     }
 
-    public onUploadFileOutput(output: UploadOutput): void {
-        if (output.type === 'allAddedToQueue' || output.type === 'addedToQueue') {
-            if (output.file) {
-                this.signatureImgAttached = true;
-                this.previewFile();
-            }
-        } else if (output.type === 'start') {
-            this.isSignatureUploadInProgress = true;
-        } else if (output.type === 'done') {
-            if (output.file.response.status === 'success') {
-                if (this._invoiceUiDataService.unusedImageSignature) {
-                    this.removeFileFromServer();
-                }
-                this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + output.file.response.body.uniqueName;
-                this.customTemplate.sections.footer.data.imageSignature.label = output.file.response.body.uniqueName;
-                this._invoiceUiDataService.unusedImageSignature = output.file.response.body.uniqueName;
-                this.onChangeFieldVisibility(null, null, null);
-                this._toasty.successToast('file uploaded successfully.');
-                this.startUpload();
-            } else {
-                this._toasty.errorToast(output.file.response.message, output.file.response.code);
-            }
-            this.isSignatureUploadInProgress = false;
-            this.signatureImgAttached = true;
+    /**
+     * Uploads signature
+     *
+     * @memberof ContentFilterComponent
+     */
+    public uploadImage(): void {
+        const selectedFile: any = document.getElementById("signatureImg-edit");
+        if (selectedFile?.files?.length) {
+            const file = selectedFile?.files[0];
+
+            this.generalService.getSelectedFileBase64(file, (base64) => {
+                this.isSignatureUploadInProgress = true;
+
+                this.commonService.uploadImageBase64({ base64: base64, format: file.type, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    this.isSignatureUploadInProgress = false;
+
+                    if (response?.status === 'success') {
+                        if (this.invoiceUiDataService.unusedImageSignature) {
+                            this.removeFileFromServer();
+                        }
+                        this.signatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + response.body?.uniqueName;
+                        this.customTemplate.sections.footer.data.imageSignature.label = response.body?.uniqueName;
+                        this.invoiceUiDataService.unusedImageSignature = response.body?.uniqueName;
+                        this.onChangeFieldVisibility(null, null, null);
+                        this.toaster.showSnackBar("success", 'File uploaded successfully.');
+                    } else {
+                        this.signatureImgAttached = false;
+                        this.toaster.showSnackBar("error", response.message);
+                    }
+                });
+            });
         }
-    }
-
-    public startUpload(): void {
-        let sessionId = null;
-        let companyUniqueName = null;
-        this.sessionId$.pipe(take(1)).subscribe(a => sessionId = a);
-        this.companyUniqueName$.pipe(take(1)).subscribe(a => companyUniqueName = a);
-        const event: UploadInput = {
-            type: 'uploadAll',
-            url: Configuration.ApiUrl + INVOICE_API.UPLOAD_LOGO.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)),
-            method: 'POST',
-            headers: { 'Session-Id': sessionId },
-        };
-
-        this.uploadInput.emit(event);
-    }
-
-    public previewFile() {
-        let preview: any = document.getElementById('signatureImage');
-        let a: any = document.getElementById('signatureImg-edit');
-        let file = a.files[0];
-        let reader = new FileReader();
-
-        reader.onloadend = () => {
-            preview.src = reader.result;
-            this.startUpload();
-            //this._invoiceUiDataService.setLogoPath(preview.src);
-        };
-
-        if (file) {
-            reader.readAsDataURL(file);
-        } else {
-            preview.src = '';
-            //this._invoiceUiDataService.setLogoPath('');
-        }
-    }
-
-    public cancelUpload(id: string): void {
-        this.uploadInput.emit({ type: 'cancel', id });
     }
 
     public removeFile(): void {
         this.signatureImgAttached = false;
         this.customTemplate.sections.footer.data.imageSignature.label = '';
-        this._invoiceUiDataService.setCustomTemplate(this.customTemplate);
+        this.invoiceUiDataService.setCustomTemplate(this.customTemplate);
     }
 
     /**
@@ -295,11 +255,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
      * @memberof ContentFilterComponent
      */
     public removeFileFromServer(): void {
-        this.invoiceService.removeSignature(this._invoiceUiDataService.unusedImageSignature).subscribe(() => { });
-    }
-
-    public removeAllFiles(): void {
-        this.uploadInput.emit({ type: 'removeAll' });
+        this.invoiceService.removeSignature(this.invoiceUiDataService.unusedImageSignature).subscribe(() => { });
     }
 
     /**
@@ -314,7 +270,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
             template.sections.footer.data.imageSignature.display = true;
             template.sections.footer.data.slogan.display = false;
         }
-        this._invoiceUiDataService.setCustomTemplate(template);
+        this.invoiceUiDataService.setCustomTemplate(template);
 
     }
 
@@ -326,13 +282,13 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     public changeDisableQuantity(): void {
         let template = cloneDeep(this.customTemplate);
         if (template && template.sections && template.sections.table && template.sections.table.data && template.sections.table.data.totalQuantity) {
-            if (!template.sections.table.data.quantity.display) {
+            if (!template.sections.table.data.quantity?.display) {
                 template.sections.table.data.totalQuantity.display = false;
             } else {
                 template.sections.table.data.totalQuantity.display = true;
             }
         }
-        this._invoiceUiDataService.setCustomTemplate(template);
+        this.invoiceUiDataService.setCustomTemplate(template);
     }
 
     /**
@@ -345,14 +301,14 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
     public checkedTaxBifurcation(label: string, sectionType: string) {
         let template = cloneDeep(this.customTemplate);
         if (sectionType === 'table' && template && template.sections && template.sections.table && template.sections.table.data && template.sections.table.data.taxBifurcation) {
-            if (template.sections.table.data.taxBifurcation.display) {
+            if (template.sections.table.data.taxBifurcation?.display) {
                 template.sections.table.data.taxBifurcation.label = label;
             } else {
                 template.sections.table.data.taxBifurcation.label = '';
             }
         } else {
             if (template && template.sections && template.sections.footer && template.sections.footer.data && template.sections.footer.data.taxBifurcation) {
-                if (template.sections.footer.data.taxBifurcation.display) {
+                if (template.sections.footer.data.taxBifurcation?.display) {
                     template.sections.footer.data.taxBifurcation.label = label;
                 } else {
                     template.sections.footer.data.taxBifurcation.label = '';
@@ -360,7 +316,7 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
             }
         }
 
-        this._invoiceUiDataService.setCustomTemplate(template);
+        this.invoiceUiDataService.setCustomTemplate(template);
     }
 
     /**

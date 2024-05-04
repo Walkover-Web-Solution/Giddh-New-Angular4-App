@@ -1,12 +1,12 @@
 p.bank-name {
-    font-size: 14px;
+    font-size: var(--font-size-15);
     color: var(--color-common-senary-text);
     margin-bottom: 5px;
 }
 
 p.bank-balance {
     color: var(--color-abbey);
-    font-size: 14px;
+    font-size: var(--font-size-15);
     display: flex;
     justify-content: space-between;
 }
@@ -16,16 +16,16 @@ p.bank-balance {
     margin-bottom: 10px;
 }
 a.connect-bank {
-    bottom: 10px;
     color: var(--color-common-primary-text);
-    font-size: 14px;
+    font-size: var(--font-size-15);
     text-decoration: underline;
-    padding-top: 20px;
+    padding-top: 5px;
     display: block;
 }
-.wrap-single-bank-detail {
-    height: 265px;
-    overflow-y: auto;
+.bank-details-block {
+    cdk-virtual-scroll-viewport {
+        height: 270px;
+    }
 }
 .add-bank-details {
     display: flex;
@@ -37,6 +37,13 @@ a.connect-bank {
 p {
     color: var(--color-abbey);
 }
-.add-bank-details a.connect-bank {
-    padding-top: 5px;
+.banks-scrollbar-wrapper{
+    row-gap: 0;
+}
+.bank-menu {
+    top: -39px;
+    float: right;
+}
+.width-86 {
+    width: 86% !important;
 }

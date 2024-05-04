@@ -15,54 +15,20 @@
     text-rendering: optimizeLegibility;
 }
 
+/*--- inter-font ---*/
 @font-face {
-    font-family: "opensans-semibold";
+    font-family: "inter-regular";
     font-display: swap;
-    src: url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.eot");
-    src: url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.eot?#iefix")
-            format("embedded-opentype"),
-        url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.svg")
-            format("svg"),
-        url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.woff")
-            format("woff"),
-        url("../fonts/open-sans/open-sans-semibold/OpenSans-SemiBold.ttf")
+    src: url("../fonts/interfont/Inter-Regular.ttf")
             format("truetype");
     font-style: normal;
     font-weight: normal;
     text-rendering: optimizeLegibility;
 }
-@font-face {
-    font-family: "opensans-bold";
-    font-display: swap;
-    src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot");
-    src: url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.eot?#iefix")
-            format("embedded-opentype"),
-        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.svg") format("svg"),
-        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.woff")
-            format("woff"),
-        url("../fonts/open-sans/open-sans-bold/OpenSans-Bold.ttf")
-            format("truetype");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
-@font-face {
-    font-family: "opensans-extra-bold";
-    font-display: swap;
-    src: url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.eot");
-    src: url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.eot?#iefix")
-            format("embedded-opentype"),
-        url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.svg")
-            format("svg"),
-        url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.woff")
-            format("woff"),
-        url("../fonts/open-sans/open-sans-extra-bold/OpenSans-ExtraBold.ttf")
-            format("truetype");
-    font-style: normal;
-    font-weight: normal;
-    text-rendering: optimizeLegibility;
-}
+
 html,
-body {
-    font-family: "opensans-regular";
+body{
+    --font-regular: "inter-regular";
+    --font-semibold: "inter-regular";
+    --font-bold: "inter-regular";
 }

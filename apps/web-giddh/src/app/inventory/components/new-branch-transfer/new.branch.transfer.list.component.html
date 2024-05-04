@@ -58,7 +58,6 @@
                             </sh-select>
                         </div>
                         <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                            <i class="icon-calender calendar-addon"></i>
                             <input
                                 type="text"
                                 name="selectedDateRange"
@@ -323,7 +322,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="pagination-wrapper" *ngIf="branchTransferResponse.totalPages > 1">
+        <div class="pagination-wrapper mt-4" *ngIf="branchTransferResponse.totalPages > 1">
             <pagination
                 [totalItems]="branchTransferResponse.totalPages"
                 [(ngModel)]="branchTransferResponse.page"

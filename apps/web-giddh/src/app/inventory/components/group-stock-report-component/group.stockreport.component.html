@@ -33,7 +33,7 @@
                                                     Transaction Count
                                                 </div>
                                                 <div
-                                                    class=""
+                                                    
                                                     *ngIf="GroupStockReportRequest.branchDetails !== 'allEntity'"
                                                 >
                                                     Product Count
@@ -49,7 +49,7 @@
                                                     >
                                                 </div>
                                                 <div
-                                                    class=""
+                                                    
                                                     *ngIf="GroupStockReportRequest.branchDetails !== 'allEntity'"
                                                 >
                                                     <span class="text-purple" *ngIf="groupStockReport.totalItems"
@@ -249,14 +249,15 @@
                             width="17%"
                             *ngIf="GroupStockReportRequest.branchDetails != 'allEntity'"
                         >
-                            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                <i class="icon-calender calendar-addon"></i>
-                                <input
-                                    type="text"
-                                    name="selectedDateRange"
-                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                    class="giddh-datepicker date-range-picker"
-                                />
+                            <div class="custom-datepicker-wrapper-group">
+                                <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                    <input
+                                        type="text"
+                                        name="selectedDateRange"
+                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                        class="giddh-datepicker date-range-picker"
+                                    />
+                                </div>
                             </div>
                         </th>
                         <ng-container *ngIf="groupStockReport?.count">
@@ -831,7 +832,7 @@
                                         <div *ngIf="GroupStockReportRequest.branchDetails === 'allEntity'">
                                             Transaction Count
                                         </div>
-                                        <div class="" *ngIf="GroupStockReportRequest.branchDetails !== 'allEntity'">
+                                        <div *ngIf="GroupStockReportRequest.branchDetails !== 'allEntity'">
                                             Product Count
                                         </div>
                                         <div class="mt-1">Profit/Loss</div>
@@ -844,7 +845,7 @@
                                                 >&nbsp;{{ groupStockReport.totalItems | giddhCurrency }}</span
                                             >
                                         </div>
-                                        <div class="" *ngIf="GroupStockReportRequest.branchDetails !== 'allEntity'">
+                                        <div *ngIf="GroupStockReportRequest.branchDetails !== 'allEntity'">
                                             <span class="text-purple" *ngIf="groupStockReport.totalItems"
                                                 >&nbsp;{{ groupStockReport.totalItems | giddhCurrency }}</span
                                             >
@@ -964,9 +965,9 @@
         <div class="modal-content">
             <div class="modal-header theme-bg">
                 <h3 class="modal-title bg" id="modal-title">Advance Search</h3>
-                <span aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')"
-                    >×</span
-                >
+                <button aria-hidden="true" class="close" data-dismiss="modal" (click)="advanceSearchAction('cancel')">
+                    ×
+                </button>
             </div>
             <div class="modal-body clearfix" [hidden]="!showAdvanceSearchModal">
                 <form action="" [formGroup]="advanceSearchForm">
@@ -974,7 +975,6 @@
                         <div class="col-sm-4">Date Range</div>
                         <div class="col-sm-8">
                             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                <i class="icon-calender calendar-addon"></i>
                                 <input
                                     type="text"
                                     name="selectedDateRange"

@@ -3,12 +3,13 @@ import { ControlValueAccessor, NgControl } from "@angular/forms";
 import { MatFormFieldControl } from "@angular/material/form-field";
 import { Subject } from "rxjs";
 
-const noop = () => { };
+const noop = () => {
+};
 
 @Component({
-    selector: 'text-field',
-    styleUrls: ['./text-field.component.scss'],
-    templateUrl: './text-field.component.html',
+    selector: "text-field",
+    styleUrls: ["./text-field.component.scss"],
+    templateUrl: "./text-field.component.html",
     providers: [
         {
             provide: MatFormFieldControl,
@@ -16,11 +17,18 @@ const noop = () => { };
             multi: true
         }
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
-    @ViewChild('textField', {static: false}) public textField: ElementRef;
+    @ViewChild('textField', { static: false }) public textField: ElementRef;
+    @Input() public pattern: any = null;
+    @Input() public required: boolean = false;
+    @Input() public min: number = null;
+    @Input() public max: number = null;
+    @Input() public allowDecimalDigitsOnly: boolean = false;
+    @Input() public allowDigitsOnly: boolean = false;
     @Input() public cssClass: string = "";
+    @Input() public cssStyle: string = "";
     /** Taking placeholder as input */
     @Input() public placeholder: any = "";
     /** Taking name as input */
@@ -33,6 +41,15 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     @Input() public showError: boolean = false;
     /** It will focus in the text field */
     @Input() public autoFocus: boolean = false;
+    /** It will enable mask in the text field */
+    @Input() public useMask: boolean = false;
+    /** It will show mask in the text field */
+    @Input() public mask: any;
+    /** It will show prefix in the text field */
+    @Input() public prefix: any;
+    /** It will show suffix in the text field */
+    @Input() public suffix: any;
+    @Input() public customDecimalPlaces: any;
     /** ngModel of input */
     public ngModel: any;
     /** Used for change detection */
@@ -40,6 +57,10 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
     private onTouchedCallback: () => void = noop;
     private onChangeCallback: (_: any) => void = noop;
+    /** True if field is autocomplete */
+    @Input() public autocomplete: string;
+    /** Holds mat suffic */
+    @Input() public matSuffix: any;
 
     constructor(
         @Optional() @Self() public ngControl: NgControl,
@@ -66,7 +87,7 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      * @memberof TextFieldComponent
      */
     public ngOnChanges(changes: SimpleChanges): void {
-        if(this.autoFocus) {
+        if (this.autoFocus) {
             setTimeout(() => {
                 this.textField?.nativeElement?.focus();
             }, 20);
@@ -101,6 +122,8 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      */
     set value(value: any) {
         this.ngModel = value;
+        this.onChangeCallback(value);
+        this.onTouchedCallback();
         this.stateChanges.next();
     }
 
@@ -151,8 +174,8 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      * @memberof TextFieldComponent
      */
     public setDescribedByIds(ids: string[]): void {
-        const controlElement = this.elementRef.nativeElement.querySelector('.text-field-container')!;
-        controlElement.setAttribute('aria-describedby', ids.join(' '));
+        const controlElement = this.elementRef.nativeElement.querySelector(".text-field-container")!;
+        controlElement.setAttribute("aria-describedby", ids.join(" "));
     }
 
     /**
@@ -161,6 +184,10 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      * @memberof TextFieldComponent
      */
     public handleInput(): void {
+        this.onChangeCallback(this.value);
+    }
+
+    public handleChange(): void {
         this.onChangeCallback(this.value);
     }
 }

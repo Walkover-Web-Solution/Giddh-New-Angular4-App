@@ -34,10 +34,11 @@
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
 
                             <div
-                                class="filings-empty-state"
+                                class="filings-empty-state mb-5"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
-                                    (gstNotFoundOnPortalData$ | async)?.count > 20
+                                    (gstNotFoundOnPortalData$ | async)?.data?.totalItems >
+                                        (gstNotFoundOnPortalData$ | async)?.data?.count
                                 "
                             >
                                 <pagination
@@ -84,10 +85,11 @@
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
 
                             <div
-                                class="filings-empty-state"
+                                class="filings-empty-state mb-5"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
-                                    (gstNotFoundOnGiddhData$ | async)?.count > 20
+                                    (gstNotFoundOnGiddhData$ | async)?.data?.totalItems >
+                                        (gstNotFoundOnGiddhData$ | async)?.data?.count
                                 "
                             >
                                 <pagination
@@ -134,10 +136,11 @@
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
 
                             <div
-                                class="filings-empty-state"
+                                class="filings-empty-state mb-5"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
-                                    (gstPartiallyMatchedData$ | async)?.count > 20
+                                    (gstPartiallyMatchedData$ | async)?.data?.totalItems >
+                                        (gstPartiallyMatchedData$ | async)?.data?.count
                                 "
                             >
                                 <pagination
@@ -158,7 +161,7 @@
                         <tab (selectTab)="reconcileTabChanged('matched')">
                             <ng-template tabHeading>
                                 {{ localeData?.filing?.matched }}
-                                <span class="count">{{ "(" + (gstMatchedData$ | async)?.count + ")" }}</span>
+                                <span class="count matched">{{ "(" + (gstMatchedData$ | async)?.count + ")" }}</span>
                             </ng-template>
 
                             <ng-container
@@ -184,11 +187,10 @@
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
 
                             <div
-                                class="filings-empty-state"
+                                class="filings-empty-state mb-5"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
-                                    (gstMatchedData$ | async)?.count &&
-                                    (gstMatchedData$ | async)?.count > 20
+                                    (gstMatchedData$ | async)?.data?.totalItems > (gstMatchedData$ | async)?.data?.count
                                 "
                             >
                                 <pagination
@@ -252,14 +254,37 @@
 <!-- region common header template for reconciliation table -->
 <ng-template #commonHeaderTemplateForReconciliationTable>
     <tr>
+        <th class="text-left width-vendor" *ngIf="selectedGst === 'gstr1'">
+            <div class="position-relative">
+                <div
+                    [attr.data-test-title]="localeData?.section"
+                    [attr.title]="localeData?.section"
+                    class="pull-left over-flow"
+                >
+                    {{ localeData?.section }}
+                </div>
+            </div>
+        </th>
         <th id="4" class="text-left width-vendor">
             <div class="position-relative">
                 <div
-                    [attr.data-test-title]="localeData?.filing?.vendor_details"
-                    [attr.title]="localeData?.filing?.vendor_details"
+                    [attr.data-test-title]="commonLocaleData?.app_gstin"
+                    [attr.title]="commonLocaleData?.app_gstin"
                     class="pull-left over-flow"
                 >
-                    {{ localeData?.filing?.vendor_details }}
+                    {{ commonLocaleData?.app_gstin }}
+                </div>
+            </div>
+        </th>
+
+        <th class="text-left width-vendor">
+            <div class="position-relative">
+                <div
+                    [attr.data-test-title]="commonLocaleData?.app_voucher_no"
+                    [attr.title]="commonLocaleData?.app_voucher_no"
+                    class="pull-left over-flow"
+                >
+                    {{ commonLocaleData?.app_voucher_no }}
                 </div>
             </div>
         </th>
@@ -366,9 +391,20 @@
 <!-- region missing in gstin template -->
 <ng-template let-item #missingInGstinTemplate>
     <tr class="cursor-pointer">
+        <td class="primary-details" *ngIf="selectedGst === 'gstr1'">
+            <div>
+                {{ item.section ? item.section : "-" }}
+            </div>
+        </td>
         <td class="primary-details">
             <div>
-                {{ item.ctin }}<span class="text-muted font-xxs"> ({{ item.invoice_number }})</span>
+                {{ item.ctin ? item.ctin : "-" }}
+            </div>
+        </td>
+
+        <td class="primary-details">
+            <div>
+                {{ item.invoice_number ? item.invoice_number : "-" }}
             </div>
         </td>
 
@@ -448,9 +484,21 @@
 <!-- region missing in giddh template -->
 <ng-template let-item #missingInGiddhTemplate>
     <tr class="cursor-pointer">
+        <td class="primary-details" *ngIf="selectedGst === 'gstr1'">
+            <div>
+                {{ item.section ? item.section : "-" }}
+            </div>
+        </td>
+
         <td class="primary-details">
             <div>
-                {{ item.ctin }}<span class="text-muted font-xxs"> ({{ item.invoice_number }})</span>
+                {{ item.ctin ? item.ctin : "-" }}
+            </div>
+        </td>
+
+        <td class="primary-details">
+            <div>
+                {{ item.invoice_number ? item.invoice_number : "-" }}
             </div>
         </td>
 
@@ -530,9 +578,20 @@
 <!-- region partially matched template -->
 <ng-template let-item #partiallyMatchedTemplate>
     <tr class="cursor-pointer">
+        <td class="primary-details" *ngIf="selectedGst === 'gstr1'">
+            <div>
+                {{ item.section ? item.section : "-" }}
+            </div>
+        </td>
         <td class="primary-details">
             <div>
-                {{ item.ctin }}<span class="text-muted font-xxs"> ({{ item.invoice_number }})</span>
+                {{ item.ctin ? item.ctin : "-" }}
+            </div>
+        </td>
+
+        <td class="primary-details">
+            <div>
+                {{ item.invoice_number ? item.invoice_number : "-" }}
             </div>
         </td>
 
@@ -691,9 +750,20 @@
 <!-- region matched template -->
 <ng-template let-item #matchedTemplate>
     <tr class="cursor-pointer">
+        <td class="primary-details" *ngIf="selectedGst === 'gstr1'">
+            <div>
+                {{ item.section ? item.section : "-" }}
+            </div>
+        </td>
         <td class="primary-details">
             <div>
-                {{ item.ctin }}<span class="text-muted font-xxs"> ({{ item.invoice_number }})</span>
+                {{ item.ctin ? item.ctin : "-" }}
+            </div>
+        </td>
+
+        <td class="primary-details">
+            <div>
+                {{ item.invoice_number ? item.invoice_number : "-" }}
             </div>
         </td>
 
@@ -842,7 +912,7 @@
 <!--region common not found msg-->
 <ng-template #notFoundTmpl let-show>
     <div class="filings-empty-state" *ngIf="show">
-        <img src="{{ imgPath }}nofound.svg" [style.max-width.px]="110" />
+        <img src="{{ imgPath }}nofound.svg" [style.max-width.px]="110" alt="Image not found"  />
         <div class="empty-msg">
             <span>{{ localeData?.filing?.reconcilation_note }}</span>
         </div>

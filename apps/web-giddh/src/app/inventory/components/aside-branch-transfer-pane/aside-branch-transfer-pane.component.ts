@@ -5,12 +5,12 @@ import { select, Store } from '@ngrx/store';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { InventoryUsersActions } from '../../../actions/inventory/inventory.users.actions';
-import { IStocksItem } from '../../../models/interfaces/stocksItem.interface';
+import { IStocksItem } from '../../../models/interfaces/stocks-item.interface';
 import { InventoryEntry, InventoryUser } from '../../../models/api-models/Inventory-in-out';
 import { InventoryEntryActions } from '../../../actions/inventory/inventory.entry.actions';
 import { GeneralService } from '../../../services/general.service';
 import { StockUnitRequest } from '../../../models/api-models/Inventory';
-import { CustomStockUnitAction } from '../../../actions/inventory/customStockUnit.actions';
+import { CustomStockUnitAction } from '../../../actions/inventory/custom-stock-unit.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { CompanyResponse } from "../../../models/api-models/Company";
 import { createSelector } from "reselect";
@@ -47,6 +47,8 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnDestroy {
     public transferEntrySuccess$: Observable<boolean>;
     public isSaveClicked: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Hold branch transfer report type */
+    @Input() public reportType: string;
 
     constructor(private _store: Store<AppState>,
         private _inventoryAction: InventoryAction,
@@ -61,12 +63,12 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this._store.dispatch(this._inventoryAction.GetStock());
         // dispatch stockunit request
-        this._store.dispatch(this._customStockActions.GetStockUnit());
+        this._store.dispatch(this._customStockActions.getStockUnit());
         this._store.dispatch(this._inventoryUserAction.getAllUsers());
-        
+
         this.stockList$ = this._store.pipe(select(p => p.inventory.stocksList && p.inventory.stocksList.results), takeUntil(this.destroyed$));
         this.stockUnits$ = this._store.pipe(select(p => p.inventory.stockUnits), takeUntil(this.destroyed$));
-        this.userList$ = this._store.pipe(select(p => p.inventoryInOutState.inventoryUsers.filter(o => o.uniqueName !== this._generalService.companyUniqueName)), takeUntil(this.destroyed$));
+        this.userList$ = this._store.pipe(select(p => p.inventoryInOutState.inventoryUsers?.filter(o => o?.uniqueName !== this._generalService.companyUniqueName)), takeUntil(this.destroyed$));
         this._store.pipe(select(p => p.inventoryInOutState.entryInProcess), takeUntil(this.destroyed$)).subscribe(p => this.isLoading = p);
 
         this.entrySuccess$.subscribe(s => {
@@ -75,6 +77,11 @@ export class AsideBranchTransferPaneComponent implements OnInit, OnDestroy {
                 this.isSaveClicked = false;
             }
         });
+        setTimeout(() => {
+            if (this.reportType) {
+                this.openBranchTransferPopup(this.reportType);
+            }
+        }, 500);
 
         // tslint:disable-next-line:no-shadowed-variable
         this._store.pipe(select(createSelector([(state: AppState) => state.settings.branches], (branches) => {

@@ -10,7 +10,6 @@
     >
         <tax-sidebar
             (navigateEvent)="handleNavigation($event)"
-            [activeCompanyGstNumber]="activeCompanyGstNumber"
             (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
             [exclude]="'#primary-new-header'"
             [isMonthSelected]="isMonthSelected"
@@ -35,23 +34,26 @@
         </div>
 
         <div *ngIf="taxes?.length" class="row mb-3 mt-3 ml-3 ml-0 mr-0">
-            <div class="tax-heading col-xl-2 col-lg-3 col-md-3 col-sm-3 col-3">
+            <div class="tax-heading col-xl-1 col-lg-3 col-md-3 col-sm-3 col-3">
                 <label>{{ commonLocaleData?.app_gstin }}:</label>
             </div>
             <div class="tax-dropdown col-xl-3 col-lg-6 col-md-3 col-sm-9 col-9">
                 <sh-select
-                    [options]="taxes"
-                    [(ngModel)]="activeCompanyGstNumber"
-                    (selected)="selectTax($event)"
-                    [defaultValue]="activeCompanyGstNumber"
+                [options]="taxes"
+                [(ngModel)]="activeCompanyGstNumber"
+                (selected)="selectTax($event)"
+                [defaultValue]="activeCompanyGstNumber"
                     [placeholder]="localeData?.select_gstin"
                     [showClear]="false"
                     [multiple]="false"
                     [ItemHeight]="67"
                     [isRequired]="true"
-                >
+                    >
                 </sh-select>
             </div>
+            <span class="ml-auto">
+                <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'GST_FILLING_DASHBOARD'"></watch-video>
+            </span>
         </div>
         <div
             class="tax-engine"
@@ -66,7 +68,7 @@
                 <div class="header-info pull-left">
                     <ul class="list-inline list-middle">
                         <li>
-                            <span class="text-muted normal"> {{ localeData?.gst_summary_for }} </span>
+                            <span class="normal"> {{ localeData?.gst_summary_for }} </span>
                         </li>
                         <li>
                             <div
@@ -74,8 +76,8 @@
                                 dropdown
                                 [autoClose]="false"
                                 (isOpenChange)="onOpenChange($event)"
-                                #periodDropdown="bs-dropdown"
-                                (clickOutside)="checkIfDatepickerVisible()"
+                                #monthWise="bs-dropdown"
+                                (clickOutside)="monthWise?.hide()"
                                 [attachOutsideOnClick]="true"
                                 [isDisabled]="
                                     (gstr1OverviewDataInProgress$ | async) ||
@@ -100,59 +102,29 @@
                                     aria-controls="dropdown-nested"
                                 >
                                     <ng-container *ngIf="isMonthSelected">
-                                        {{ moment(selectedMonth).format("MMMM YYYY") }}
+                                        {{ dayjs(selectedMonth).format("MMMM YYYY") }}
                                     </ng-container>
                                     <ng-container *ngIf="!isMonthSelected">
-                                        {{ moment(currentPeriod?.from, giddhDateFormat).format("DD MMM YYYY") }}
-                                        - {{ moment(currentPeriod?.to, giddhDateFormat).format("DD MMM YYYY") }}
+                                        {{ dayjs(currentPeriod?.from, giddhDateFormat).format("DD MMM YYYY") }}
+                                        - {{ dayjs(currentPeriod?.to, giddhDateFormat).format("DD MMM YYYY") }}
                                     </ng-container>
                                     <span class="caret"></span>
                                 </button>
-
-                                <ul
-                                    id="dropdown-nested"
-                                    *dropdownMenu
-                                    class="dropdown-menu"
-                                    role="menu"
-                                    aria-labelledby="button-nested"
-                                >
-                                    <li
-                                        role="menuitem"
-                                        dropdown
-                                        placement="right"
-                                        [autoClose]="false"
-                                        #monthWise="bs-dropdown"
-                                    >
-                                        <a dropdownToggle class="dropdown-item dropdown-toggle cp">
-                                            {{ commonLocaleData?.app_month_wise }}
-                                            <div class="pull-right">
-                                                <span class="caret rotate-90"></span>
-                                            </div>
+                                <ul *dropdownMenu class="dropdown-menu month-picker" role="menu" id="monthPicker">
+                                    <li role="menuitem">
+                                        <a class="dropdown-item" href="javascript:void(0);" aria-label="datepicker">
+                                            <bs-datepicker-inline
+                                                name="fromDate"
+                                                (click)="$event.stopPropagation()"
+                                                (bsValueChange)="periodChanged($event); monthWise.hide()"
+                                                [bsConfig]="{ startView: 'month', dateInputFormat: 'MM/YYYY', adaptivePosition: true, minMode:'month' }"
+                                                [ngModelOptions]="{standalone: true}"
+                                            >
+                                            </bs-datepicker-inline>
                                         </a>
-                                        <ul
-                                            *dropdownMenu
-                                            class="dropdown-menu month-picker"
-                                            role="menu"
-                                            id="monthPicker"
-                                        >
-                                            <li role="menuitem">
-                                                <a class="dropdown-item" href="javascript:void(0)">
-                                                    <datepicker
-                                                        [datepickerMode]="'month'"
-                                                        name="fromDate"
-                                                        (click)="$event.stopPropagation()"
-                                                        [showWeeks]="false"
-                                                        [minMode]="'month'"
-                                                        (selectionDone)="periodChanged($event); monthWise.hide()"
-                                                        [ngModel]="selectedMonth"
-                                                    >
-                                                    </datepicker>
-                                                </a>
-                                            </li>
-                                        </ul>
                                     </li>
-
-                                    <!-- <li role="menuitem">
+                                </ul>
+                                <!-- <li role="menuitem">
                                         <a
                                             class="dropdown-item"
                                             href="javascript:void(0)"
@@ -177,7 +149,6 @@
                                             />
                                         </a>
                                     </li> -->
-                                </ul>
                             </div>
                         </li>
                     </ul>
@@ -201,7 +172,7 @@
                 >
                     <span class="btn-toolbar pull-right"> </span>
                     <div>
-                        <img src="{{ imgPath }}summary.svg" class="icon gstr-icon text-middle" />
+                        <img src="{{ imgPath }}summary.svg" class="icon gstr-icon text-middle" alt="summary img" />
                         <div class="return-top text-middle">
                             <div class="font-xlarge">
                                 <b>{{ localeData?.gstr3b_summary }}</b>
@@ -209,7 +180,8 @@
                         </div>
                         <span class="btn-toolbar view-summary-btn pull-right">
                             <a
-                                href="javascript:void(0)"
+                                href="javascript:void(0);"
+                                aria-label="summary"
                                 class="btn btn-primary"
                                 (click)="navigateTogstR3B(GstReport.Gstr3b)"
                             >
@@ -230,30 +202,29 @@
                     >
                         <div>
                             <div class="return-top text-middle gstr-1-label">
-                                <img src="{{ imgPath }}cart.svg" class="icon gstr-icon text-middle" />
+                                <img src="{{ imgPath }}cart.svg" class="icon gstr-icon text-middle" alt="cart-img" />
                                 <div>
                                     <div class="font-xlarge">
                                         <b class="text-middle"
                                             >{{ localeData?.gstr1_label }}
                                             <ng-container *ngIf="isMonthSelected">
-                                                ({{ moment(selectedMonth).format("MMMM YYYY") }})
+                                                ({{ dayjs(selectedMonth).format("MMMM YYYY") }})
                                             </ng-container>
                                             <ng-container *ngIf="!isMonthSelected">
-                                                ({{
-                                                    moment(currentPeriod?.from, giddhDateFormat).format("DD MMM YYYY")
-                                                }}
+                                                ({{ dayjs(currentPeriod?.from, giddhDateFormat).format("DD MMM YYYY") }}
                                                 -
-                                                {{ moment(currentPeriod?.to, giddhDateFormat).format("DD MMM YYYY") }})
+                                                {{ dayjs(currentPeriod?.to, giddhDateFormat).format("DD MMM YYYY") }})
                                             </ng-container>
                                         </b>
                                         &nbsp;&nbsp;
                                     </div>
-                                    <p class="text-muted">{{ localeData?.outward_supplies_details }}</p>
+                                    <p>{{ localeData?.outward_supplies_details }}</p>
                                 </div>
                             </div>
                             <span class="btn-toolbar view-summary-btn pull-right mr-t1" *ngIf="gstr1TransactionCounts">
                                 <a
-                                    href="javascript:void(0)"
+                                    href="javascript:void(0);"
+                                    aria-label="summary"
                                     class="btn btn-primary"
                                     (click)="navigateToOverview(GstReport.Gstr1)"
                                 >
@@ -268,7 +239,7 @@
                                 </div>
                                 <div class="line"></div>
                                 <div class="count">
-                                    <a (click)="navigateToOverview(GstReport.Gstr1)"
+                                    <a (click)="navigateToOverview(GstReport.Gstr1)" href="javascript:void(0);" aria-label="transaction"
                                         ><span class="font-xxxlarge"
                                             ><b> {{ gstr1TransactionCounts }} </b></span
                                         >
@@ -323,9 +294,6 @@
                                                 d="M406.5 251.5c-1-.9-2.3-1.4-3.7-1.4l-42.8 2c-1.4.1-2.7.7-3.6 1.8l-38.6 46H202.9l-42.1-46.2c-.9-1-2.1-1.6-3.4-1.6l-48.1-2.4c-1.4-.1-2.7.4-3.7 1.4-1 .9-1.6 2.3-1.6 3.6V392c0 2.8 2.2 5 5 5h294c2.8 0 5-2.2 5-5V255.2c0-1.4-.6-2.7-1.5-3.7zm-251.7 10.6l42.2 46.3c.9 1 2.3 1.6 3.7 1.6h119.5c1.5 0 2.9-.7 3.8-1.8l38.6-46.1 35.4-1.7V351H114v-91l40.8 2.1zM114 387v-26h284v26H114z"
                                             ></path>
                                         </svg>
-                                        <div class="font-large">
-                                            <b>{{ localeData?.push_gstin }}</b>
-                                        </div>
                                     </div>
                                     <div
                                         *ngIf="isCompany"
@@ -377,7 +345,8 @@
                     >
                         <span class="btn-toolbar pull-right mr-t1" *ngIf="gstr2TransactionCounts">
                             <a
-                                href="javascript:void(0)"
+                                href="javascript:void(0);"
+                                aria-label="summary"
                                 class="btn btn-primary"
                                 (click)="navigateToOverview(GstReport.Gstr2)"
                             >
@@ -387,25 +356,23 @@
 
                         <div>
                             <div class="return-top text-middle gstr-2-label">
-                                <img src="{{ imgPath }}bag.svg" class="icon gstr-icon text-middle" />
+                                <img src="{{ imgPath }}bag.svg" class="icon gstr-icon text-middle"  alt="bag img"  />
                                 <div>
                                     <div class="font-xlarge">
                                         <b
                                             >{{ localeData?.gstr2_label }}
 
                                             <ng-container *ngIf="isMonthSelected">
-                                                ({{ moment(selectedMonth).format("MMMM YYYY") }})
+                                                ({{ dayjs(selectedMonth).format("MMMM YYYY") }})
                                             </ng-container>
                                             <ng-container *ngIf="!isMonthSelected">
-                                                ({{
-                                                    moment(currentPeriod?.from, giddhDateFormat).format("DD MMM YYYY")
-                                                }}
+                                                ({{ dayjs(currentPeriod?.from, giddhDateFormat).format("DD MMM YYYY") }}
                                                 -
-                                                {{ moment(currentPeriod?.to, giddhDateFormat).format("DD MMM YYYY") }})
+                                                {{ dayjs(currentPeriod?.to, giddhDateFormat).format("DD MMM YYYY") }})
                                             </ng-container>
                                         </b>
                                     </div>
-                                    <p class="text-muted">{{ localeData?.inward_supplies_details }}</p>
+                                    <p>{{ localeData?.inward_supplies_details }}</p>
                                 </div>
                             </div>
                         </div>
@@ -417,7 +384,7 @@
                                 </div>
                                 <div class="line"></div>
                                 <div class="count">
-                                    <a (click)="navigateToOverview(GstReport.Gstr2)"
+                                    <a (click)="navigateToOverview(GstReport.Gstr2)"  href="javascript:void(0);"  aria-label="transaction"
                                         ><span class="font-xxxlarge"
                                             ><b> {{ gstr2TransactionCounts }} </b></span
                                         >
@@ -433,6 +400,7 @@
                                 <div class="line"></div>
                                 <div class="count">
                                     <a
+                                        href="javascript:void(0);"  aria-label="transaction"
                                         ><span class="font-xxxlarge"
                                             ><b>{{ commonLocaleData?.app_numbers?.zero }}</b></span
                                         >
@@ -566,7 +534,7 @@
                             <div class="font-xlarge">
                                 <b>{{ localeData?.tax_payments }}</b>
                             </div>
-                            <p class="text-muted">{{ localeData?.record_tax_payments }}</p>
+                            <p>{{ localeData?.record_tax_payments }}</p>
                         </div>
                     </div>
                     <div class="content-graph">

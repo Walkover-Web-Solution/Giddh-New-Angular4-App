@@ -1,8 +1,8 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
-import { fromEvent, merge, Observable, ReplaySubject } from 'rxjs';
+import { fromEvent, merge, Observable, of, ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil, take } from 'rxjs/operators';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
@@ -19,8 +19,10 @@ import { ElementViewContainerRef } from '../../../shared/helpers/directives/elem
 import { AppState } from '../../../store';
 import { ADVANCE_RECEIPT_REPORT_FILTERS, ReceiptAdvanceSearchModel } from '../../constants/reports.constant';
 import { ReceiptAdvanceSearchComponent } from '../receipt-advance-search/receipt-advance-search.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { InvoiceBulkUpdateService } from '../../../services/invoice.bulkupdate.service';
+import { saveAs } from 'file-saver';
+import { InvoiceService } from '../../../services/invoice.service';
 
 @Component({
     selector: 'advance-receipt-report',
@@ -50,8 +52,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     @ViewChild('receiptAdvanceSearchModalContainer', { static: false }) public receiptAdvanceSearchModalContainer: ModalDirective;
     /** Instance of receipt confirmation modal */
     @ViewChild('receiptConfirmationModel', { static: false }) public receiptConfirmationModel: ModalDirective;
-    /** Moment method */
-    public moment = moment;
+    /** dayjs method */
+    public dayjs = dayjs;
     /** Receipt type for filter */
     public receiptType: Array<any>;
     /** Modal reference */
@@ -106,7 +108,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         adjustmentVoucherDetails: {
             vouchers: [],
             selectedValue: this.searchQueryParams.receiptTypes[0],
-            isDisabled: !!this.searchQueryParams.receiptTypes.length
+            isDisabled: !!this.searchQueryParams.receiptTypes?.length
         },
         totalAmountFilter: {
             filterValues: [],
@@ -128,7 +130,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -167,6 +169,14 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public hoveredReceiptTable: boolean = false;
     /** Holds currency */
     public baseCurrency: string = '';
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
+    /** Holds Payment Report export request */
+    private exportcsvRequest: any = {
+        from: '',
+        to: '',
+        dataToSend: {}
+    };
 
     /** @ignore */
     constructor(
@@ -179,9 +189,9 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         private generalService: GeneralService,
         private settingsBranchAction: SettingsBranchActions,
         private modalService: BsModalService,
-        private router: Router,
         private route: ActivatedRoute,
-        private invoiceBulkUpdateService: InvoiceBulkUpdateService
+        private invoiceBulkUpdateService: InvoiceBulkUpdateService,
+        private invoiceService: InvoiceService
     ) {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.uniqueName && params?.accountUniqueName) {
@@ -194,6 +204,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile) {
                 this.baseCurrency = profile.baseCurrency;
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
         });
     }
@@ -208,10 +219,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             if (applicationDate) {
                 this.universalDate = applicationDate;
                 let universalDate = _.cloneDeep(applicationDate);
-                this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
-                this.selectedDateRangeUi = moment(applicationDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(applicationDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.fromDate = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                this.toDate = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
+                this.selectedDateRangeUi = dayjs(applicationDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(applicationDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
             this.fetchReceiptsData();
         });
@@ -223,30 +234,30 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
-                    value: branch.uniqueName,
+                    value: branch?.uniqueName,
                     name: branch.name,
                     parentBranch: branch.parentBranch
                 }));
                 this.currentCompanyBranches.unshift({
                     label: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
                     name: this.activeCompany ? this.activeCompany.name : '',
-                    value: this.activeCompany ? this.activeCompany.uniqueName : '',
+                    value: this.activeCompany ? this.activeCompany?.uniqueName : '',
                     isCompany: true
                 });
-                if (!this.currentBranch.uniqueName) {
+                if (!this.currentBranch?.uniqueName) {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
                     let currentBranchUniqueName;
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
-                        currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
+                        currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
                             alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                            uniqueName: this.activeCompany ? this.activeCompany?.uniqueName : '',
                         };
                     }
                 }
@@ -400,10 +411,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      */
     public resetAdvanceSearch(): void {
         this.showClearFilter = false;
-        this.selectedDateRange = { startDate: moment(this.universalDate[0]), endDate: moment(this.universalDate[1]) };
-        this.selectedDateRangeUi = moment(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-        this.fromDate = moment(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
-        this.toDate = moment(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+        this.selectedDateRange = { startDate: dayjs(this.universalDate[0]), endDate: dayjs(this.universalDate[1]) };
+        this.selectedDateRangeUi = dayjs(this.universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+        this.fromDate = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+        this.toDate = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
 
         this.searchQueryParams = {
             receiptTypes: [],
@@ -418,7 +429,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
             adjustmentVoucherDetails: {
                 vouchers: [...this.receiptTypes],
                 selectedValue: this.searchQueryParams.receiptTypes[0],
-                isDisabled: !!this.searchQueryParams.receiptTypes.length
+                isDisabled: !!this.searchQueryParams.receiptTypes?.length
             },
             totalAmountFilter: {
                 filterValues: [...this.advanceReceiptAdvanceSearchAmountFilters],
@@ -509,7 +520,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 balanceDue: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.amount : "",
                 sort: this.searchQueryParams.sort,
                 sortBy: this.searchQueryParams.sortBy,
-                branchUniqueName: this.currentBranch.uniqueName
+                branchUniqueName: this.currentBranch?.uniqueName
             };
 
             if (additionalRequestParameters.receiptTypes?.length > 0) {
@@ -527,7 +538,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
 
             if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'GREATER_THAN') {
                 requestObject.balanceMoreThan = true;
-            } else if(this.advanceSearchModel.unusedAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
+            } else if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
                 requestObject.balanceEqual = true;
                 requestObject.balanceMoreThan = true;
             } else if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'LESS_THAN_OR_EQUALS') {
@@ -543,7 +554,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
 
             if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'GREATER_THAN') {
                 requestObject.totalMoreThan = true;
-            } else if(this.advanceSearchModel.totalAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
+            } else if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
                 requestObject.totalEqual = true;
                 requestObject.totalMoreThan = true;
             } else if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'LESS_THAN_OR_EQUALS') {
@@ -574,14 +585,14 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 unUsedAmountOperation: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.selectedValue : "",
                 sort: this.searchQueryParams.sort,
                 sortBy: this.searchQueryParams.sortBy,
-                branchUniqueName: this.currentBranch.uniqueName
+                branchUniqueName: this.currentBranch?.uniqueName
             };
         }
 
         const optionalParams = cloneDeep(additionalRequestParameters);
         if (optionalParams) {
             for (let key in optionalParams) {
-                if ((optionalParams[key] === undefined || optionalParams[key] === null) || (optionalParams[key] && isArray(optionalParams[key]) && !optionalParams[key].length)) {
+                if ((optionalParams[key] === undefined || optionalParams[key] === null) || (optionalParams[key] && isArray(optionalParams[key]) && !optionalParams[key]?.length)) {
                     // Delete empty keys or keys with empty arrays as values
                     delete optionalParams[key]; // Delete falsy values
                 }
@@ -611,7 +622,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 companyUniqueName: this.activeCompanyUniqueName,
                 from: this.fromDate,
                 to: this.toDate,
-                branchUniqueName: this.currentBranch.uniqueName
+                branchUniqueName: this.currentBranch?.uniqueName
             };
             return this.receiptService.fetchSummary(requestObject);
         }
@@ -636,10 +647,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
 
                 this.allReceipts.forEach(receipt => {
                     let isSeleted = this.selectedReceipts?.some(selectedReceipt => selectedReceipt === receipt?.uniqueName);
-                    if(isSeleted) {
+                    if (isSeleted) {
                         receipt.isSelected = true;
                     }
-                    receipt = this.generalService.addToolTipText("receipt", this.baseCurrency, receipt, this.localeData, this.commonLocaleData);
+                    receipt = this.generalService.addToolTipText("receipt", this.baseCurrency, receipt, this.localeData, this.commonLocaleData, this.giddhBalanceDecimalPlaces);
                 });
 
                 this.changeDetectorRef.detectChanges();
@@ -710,10 +721,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.showClearFilter = true;
             this.fetchReceiptsData();
         }
@@ -786,7 +797,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      */
     public toggleReceipt(receipt: any): void {
         if (receipt.isSelected) {
-            this.selectedReceipts = this.selectedReceipts.filter(selectedReceipt => selectedReceipt !== receipt?.uniqueName);
+            this.selectedReceipts = this.selectedReceipts?.filter(selectedReceipt => selectedReceipt !== receipt?.uniqueName);
             this.allReceiptsSelected = false;
         } else {
             this.selectedReceipts.push(receipt?.uniqueName);
@@ -866,5 +877,43 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      */
     public closeConfirmationPopup() {
         this.receiptConfirmationModel?.hide();
+    }
+
+    /**
+    * Export Selected advance receipt report to .xls
+    *
+    * @returns {*}
+    * @memberof AdvanceReceiptReportComponent
+    */
+    public exportCsvDownload(): any {
+        const isAllItemsSelected = this.allReceiptsSelected;
+        this.exportcsvRequest.from = this.fromDate;
+        this.exportcsvRequest.to = this.toDate;
+        let dataTosend = { accountUniqueName: '', uniqueNames: [], type: 'payment' };
+        if (this.selectedReceipts?.length === 1) {
+            dataTosend.accountUniqueName = this.selectedReceipts[0].account?.uniqueName;
+        } else {
+            delete dataTosend.accountUniqueName;
+        }
+        if (this.selectedReceipts.length) {
+            dataTosend.uniqueNames = this.selectedReceipts;
+        }
+        this.exportcsvRequest.dataToSend = dataTosend;
+        this.invoiceService.exportCsvInvoiceDownload(this.exportcsvRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                if (response.status === 'success') {
+                    this.selectedReceipts = [];
+                    this.allReceiptsSelected = false;
+                    this.allReceipts.forEach((item) => {
+                        item.isSelected = false;
+                    });
+                    let blob = this.generalService.base64ToBlob(response.body, 'application/xls', 512);
+                    const fileName = `${isAllItemsSelected ? this.localeData?.all_receipts : this.localeData?.receipts}.xls`;
+                    return saveAs(blob, fileName);
+                } else {
+                    this.toastService.errorToast(response.message);
+                }
+            }
+        });
     }
 }

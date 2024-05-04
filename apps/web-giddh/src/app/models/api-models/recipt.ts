@@ -1,4 +1,4 @@
-import { ReferenceVoucher } from '../../material-ledger/ledger.vm';
+import { ReferenceVoucher } from '../../ledger/ledger.vm';
 import { InvoiceFilterClassForInvoicePreview } from './Invoice';
 import { AmountClassMulticurrency, IInvoiceLinkingRequest } from "./Sales";
 
@@ -8,6 +8,9 @@ export class InvoiceReceiptFilter extends InvoiceFilterClassForInvoicePreview {
     public sortBy: any;
     public isLastInvoicesRequest?: boolean = false;
     public purchaseOrderNumber?: any;
+    public balanceStatus?: any;
+    public accountUniqueName?: string;
+    public source?: string;
 }
 
 export interface ReciptDeleteRequest {

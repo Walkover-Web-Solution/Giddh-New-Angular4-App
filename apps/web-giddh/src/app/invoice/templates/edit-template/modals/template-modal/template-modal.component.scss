@@ -11,7 +11,6 @@
     max-height: calc(100vh - 108px);
     /* margin-bottom: 70px; */
 }
-
 #email-template {
     background-color: var(--color-white);
     border: 1px solid var(--color-iron);
@@ -44,6 +43,12 @@
         width: 75%;
         padding-left: 15px;
     }
+    .template-editor {
+        width: 25%;
+    }
+}
+
+@media (max-width: 1300px) and (min-width: 1267px) {
     .template-editor {
         width: 25%;
     }

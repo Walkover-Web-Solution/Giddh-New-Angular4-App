@@ -8,7 +8,8 @@ export enum Separators {
     IND_COMMA_SEPARATED = 'ind_comma_separated',
     INT_COMMA_SEPARATED = 'int_comma_separated',
     INT_SPACE_SEPARATED = 'int_space_separated',
-    INT_APOSTROPHE_SEPARATED = 'int_apostrophe_separated'
+    INT_APOSTROPHE_SEPARATED = 'int_apostrophe_separated',
+    NOT_SEPARATED = 'not_separated'
 }
 
 @Injectable()
@@ -70,12 +71,12 @@ export class MaskApplierService {
         let stepBack: boolean = false;
         this.prefix = this.prefix || '';
 
-        if (inputValue.slice(0, this.prefix.length) === this.prefix) {
-            inputValue = inputValue.slice(this.prefix.length, inputValue.length);
+        if (inputValue.slice(0, this.prefix?.length) === this.prefix) {
+            inputValue = inputValue.slice(this.prefix?.length, inputValue?.length);
         }
-        const inputArray: string[] = inputValue.toString().split('');
+        const inputArray: string[] = inputValue?.toString()?.split('');
         if (maskExpression === 'IP') {
-            this.ipError = !!(inputArray.filter((i: string) => i === '.').length < 3 && inputArray.length < 7);
+            this.ipError = !!(inputArray?.filter((i: string) => i === '.')?.length < 3 && inputArray?.length < 7);
             maskExpression = '099.099.099.099';
         }
         if (maskExpression.startsWith('percent')) {
@@ -84,14 +85,14 @@ export class MaskApplierService {
                 const precision: number = this.getPrecision(maskExpression);
                 inputValue = this.checkInputPrecision(inputValue, precision, '.');
             }
-            if (inputValue.indexOf('.') > 0 && !this.percentage(inputValue.substring(0, inputValue.indexOf('.')))) {
-                const base: string = inputValue.substring(0, inputValue.indexOf('.') - 1);
-                inputValue = `${base}${inputValue.substring(inputValue.indexOf('.'), inputValue.length)}`;
+            if (inputValue?.indexOf('.') > 0 && !this.percentage(inputValue.substring(0, inputValue?.indexOf('.')))) {
+                const base: string = inputValue.substring(0, inputValue?.indexOf('.') - 1);
+                inputValue = `${base}${inputValue.substring(inputValue?.indexOf('.'), inputValue?.length)}`;
             }
             if (this.percentage(inputValue)) {
                 result = inputValue;
             } else {
-                result = inputValue.substring(0, inputValue.length - 1);
+                result = inputValue.substring(0, inputValue?.length - 1);
             }
         } else if (
             maskExpression.startsWith(Separators.SEPARATOR) ||
@@ -100,7 +101,8 @@ export class MaskApplierService {
             maskExpression.startsWith(Separators.IND_COMMA_SEPARATED) ||
             maskExpression.startsWith(Separators.INT_APOSTROPHE_SEPARATED) ||
             maskExpression.startsWith(Separators.INT_COMMA_SEPARATED) ||
-            maskExpression.startsWith(Separators.INT_SPACE_SEPARATED)
+            maskExpression.startsWith(Separators.INT_SPACE_SEPARATED) ||
+            maskExpression.startsWith(Separators.NOT_SEPARATED)
         ) {
             if (
                 inputValue.match('[wа-яА-Я]') ||
@@ -115,70 +117,74 @@ export class MaskApplierService {
             if (maskExpression.startsWith(Separators.SEPARATOR)) {
                 if (
                     inputValue.includes(',') &&
-                    inputValue.endsWith(',') &&
-                    inputValue.indexOf(',') !== inputValue.lastIndexOf(',')
+                    inputValue?.endsWith(',') &&
+                    inputValue?.indexOf(',') !== inputValue.lastIndexOf(',')
                 ) {
-                    inputValue = inputValue.substring(0, inputValue.length - 1);
+                    inputValue = inputValue.substring(0, inputValue?.length - 1);
                 }
-                inputValue = inputValue.replace('.', ' ');
+                inputValue = inputValue?.replace('.', ' ');
             }
             if (maskExpression.startsWith(Separators.DOT_SEPARATOR)) {
                 if (
-                    inputValue.indexOf('.') !== -1 &&
-                    inputValue.indexOf('.') === inputValue.lastIndexOf('.') &&
-                    (inputValue.indexOf('.') > 3 || inputValue.length < 6)
+                    inputValue?.indexOf('.') !== -1 &&
+                    inputValue?.indexOf('.') === inputValue.lastIndexOf('.') &&
+                    (inputValue?.indexOf('.') > 3 || inputValue?.length < 6)
                 ) {
-                    inputValue = inputValue.replace('.', ',');
+                    inputValue = inputValue?.replace('.', ',');
                 }
                 inputValue =
-                    inputValue.length > 1 && inputValue[0] === '0' && inputValue[1] !== ','
-                        ? inputValue.slice(1, inputValue.length)
+                    inputValue?.length > 1 && inputValue[0] === '0' && inputValue[1] !== ','
+                        ? inputValue.slice(1, inputValue?.length)
                         : inputValue;
             }
             if (maskExpression.startsWith(Separators.COMMA_SEPARATOR)) {
                 inputValue =
-                    inputValue.length > 1 && inputValue[0] === '0' && inputValue[1] !== '.'
-                        ? inputValue.slice(1, inputValue.length)
+                    inputValue?.length > 1 && inputValue[0] === '0' && inputValue[1] !== '.'
+                        ? inputValue.slice(1, inputValue?.length)
                         : inputValue;
             }
 
             if (maskExpression.startsWith(Separators.SEPARATOR)) {
                 if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:.";<>?\/]/)) {
-                    inputValue = inputValue.substring(0, inputValue.length - 1);
+                    inputValue = inputValue.substring(0, inputValue?.length - 1);
                 }
                 inputValue = this.checkInputPrecision(inputValue, precision, ',');
-                strForSep = inputValue.replace(/\s/g, '');
+                strForSep = inputValue?.replace(/\s/g, '');
                 result = this.separator(strForSep, ' ', ',', precision);
             } else if (maskExpression.startsWith(Separators.DOT_SEPARATOR)) {
                 if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:\s";<>?\/]/)) {
-                    inputValue = inputValue.substring(0, inputValue.length - 1);
+                    inputValue = inputValue.substring(0, inputValue?.length - 1);
                 }
                 inputValue = this.checkInputPrecision(inputValue, precision, ',');
-                strForSep = inputValue.replace(/\./g, '');
+                strForSep = inputValue?.replace(/\./g, '');
                 result = this.separator(strForSep, '.', ',', precision);
             } else if (maskExpression.startsWith(Separators.COMMA_SEPARATOR)) {
-                strForSep = inputValue.replace(/,/g, '');
+                strForSep = inputValue?.replace(/,/g, '');
                 result = this.separator(strForSep, ',', '.', precision);
             } else if (maskExpression.startsWith(Separators.IND_COMMA_SEPARATED)) {
                 inputValue = this.checkInputPrecisionForCustomInput(inputValue, this.giddhDecimalPlaces, '.');
-                strForSep = inputValue.replace(/,/g, '');
+                strForSep = inputValue?.replace(/,/g, '');
                 result = this.currencySeparator(strForSep, ',', '.', precision, true);
             } else if (maskExpression.startsWith(Separators.INT_SPACE_SEPARATED)) {
                 inputValue = this.checkInputPrecisionForCustomInput(inputValue, this.giddhDecimalPlaces, '.');
-                strForSep = inputValue.replace(/[ ,']/g, '');
+                strForSep = inputValue?.replace(/[ ,']/g, '');
                 result = this.currencySeparator(strForSep, ' ', '.', precision);
             } else if (maskExpression.startsWith(Separators.INT_COMMA_SEPARATED)) {
                 inputValue = this.checkInputPrecisionForCustomInput(inputValue, this.giddhDecimalPlaces, '.');
-                strForSep = inputValue.replace(/,/g, '');
+                strForSep = inputValue?.replace(/,/g, '');
                 result = this.currencySeparator(strForSep, ',', '.', precision);
             } else if (maskExpression.startsWith(Separators.INT_APOSTROPHE_SEPARATED)) {
                 inputValue = this.checkInputPrecisionForCustomInput(inputValue, this.giddhDecimalPlaces, '.');
-                strForSep = inputValue.replace(/[ ,']/g, '');
+                strForSep = inputValue?.replace(/[ ,']/g, '');
                 result = this.currencySeparator(strForSep, '\'', '.', precision);
+            } else if (maskExpression.startsWith(Separators.NOT_SEPARATED)) {
+                inputValue = this.checkInputPrecision(inputValue, precision, ',');
+                strForSep = inputValue;
+                result = strForSep;
             }
 
-            const commaShift: number = result.indexOf(',') - inputValue.indexOf(',');
-            let shiftStep: number = result.length - inputValue.length;
+            const commaShift: number = result?.indexOf(',') - inputValue?.indexOf(',');
+            let shiftStep: number = result?.length - inputValue?.length;
 
             // position shifting issue fixed for custom separators
             if (!(maskExpression.startsWith(Separators.IND_COMMA_SEPARATED) ||
@@ -193,8 +199,8 @@ export class MaskApplierService {
                         _shift++;
                     } while (_shift < shiftStep);
                 } else if (
-                    (commaShift !== 0 && position > 0 && !(result.indexOf(',') >= position && position > 3)) ||
-                    (!(result.indexOf('.') >= position && position > 3) && shiftStep <= 0)
+                    (commaShift !== 0 && position > 0 && !(result?.indexOf(',') >= position && position > 3)) ||
+                    (!(result?.indexOf('.') >= position && position > 3) && shiftStep <= 0)
                 ) {
                     this._shift.clear();
                     backspaceShift = true;
@@ -217,9 +223,12 @@ export class MaskApplierService {
                     case Separators.INT_SPACE_SEPARATED:
                         shiftCustomOperator = ' ';
                         break;
+                    case Separators.NOT_SEPARATED:
+                        shiftCustomOperator = '';
+                        break;    
                 }
-                let resultSpecialCharLength: number = (result.match(new RegExp(shiftCustomOperator, 'g')) || []).length;
-                let inputSpecialCharLength: number = (inputValue.match(new RegExp(shiftCustomOperator, 'g')) || []).length;
+                let resultSpecialCharLength: number = (result.match(new RegExp(shiftCustomOperator, 'g')) || [])?.length;
+                let inputSpecialCharLength: number = (inputValue.match(new RegExp(shiftCustomOperator, 'g')) || [])?.length;
 
                 // if new separator character added to result then shift cursor by special character length
                 if (resultSpecialCharLength > inputSpecialCharLength) {
@@ -239,10 +248,10 @@ export class MaskApplierService {
             for (
                 // tslint:disable-next-line
                 let i: number = 0, inputSymbol: string = inputArray[0];
-                i < inputArray.length;
+                i < inputArray?.length;
                 i++, inputSymbol = inputArray[i]
             ) {
-                if (cursor === maskExpression.length) {
+                if (cursor === maskExpression?.length) {
                     break;
                 }
                 if (this._checkSymbolMask(inputSymbol, maskExpression[cursor]) && maskExpression[cursor + 1] === '?') {
@@ -278,9 +287,9 @@ export class MaskApplierService {
                         if (Number(inputSymbol) > 2) {
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
-                                ? inputArray.length
+                                ? inputArray?.length
                                 : cursor;
-                            this._shift.add(shiftStep + this.prefix.length || 0);
+                            this._shift.add(shiftStep + this.prefix?.length || 0);
                             i--;
                             continue;
                         }
@@ -296,9 +305,9 @@ export class MaskApplierService {
                         if (Number(inputSymbol) > 5) {
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
-                                ? inputArray.length
+                                ? inputArray?.length
                                 : cursor;
-                            this._shift.add(shiftStep + this.prefix.length || 0);
+                            this._shift.add(shiftStep + this.prefix?.length || 0);
                             i--;
                             continue;
                         }
@@ -307,9 +316,9 @@ export class MaskApplierService {
                         if (Number(inputSymbol) > 5) {
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
-                                ? inputArray.length
+                                ? inputArray?.length
                                 : cursor;
-                            this._shift.add(shiftStep + this.prefix.length || 0);
+                            this._shift.add(shiftStep + this.prefix?.length || 0);
                             i--;
                             continue;
                         }
@@ -318,9 +327,9 @@ export class MaskApplierService {
                         if (Number(inputValue.slice(cursor - 1, cursor + 1)) > 31 || inputValue[cursor] === '/') {
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
-                                ? inputArray.length
+                                ? inputArray?.length
                                 : cursor;
-                            this._shift.add(shiftStep + this.prefix.length || 0);
+                            this._shift.add(shiftStep + this.prefix?.length || 0);
                             i--;
                             continue;
                         }
@@ -336,9 +345,9 @@ export class MaskApplierService {
                         ) {
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
-                                ? inputArray.length
+                                ? inputArray?.length
                                 : cursor;
-                            this._shift.add(shiftStep + this.prefix.length || 0);
+                            this._shift.add(shiftStep + this.prefix?.length || 0);
                             i--;
                             continue;
                         }
@@ -346,16 +355,16 @@ export class MaskApplierService {
 
                     result += inputSymbol;
                     cursor++;
-                } else if (this.maskSpecialCharacters.indexOf(maskExpression[cursor]) !== -1) {
+                } else if (this.maskSpecialCharacters?.indexOf(maskExpression[cursor]) !== -1) {
                     result += maskExpression[cursor];
                     cursor++;
                     const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
-                        ? inputArray.length
+                        ? inputArray?.length
                         : cursor;
-                    this._shift.add(shiftStep + this.prefix.length || 0);
+                    this._shift.add(shiftStep + this.prefix?.length || 0);
                     i--;
                 } else if (
-                    this.maskSpecialCharacters.indexOf(inputSymbol) > -1 &&
+                    this.maskSpecialCharacters?.indexOf(inputSymbol) > -1 &&
                     this.maskAvailablePatterns[maskExpression[cursor]] &&
                     this.maskAvailablePatterns[maskExpression[cursor]].optional
                 ) {
@@ -379,7 +388,7 @@ export class MaskApplierService {
                     result += inputSymbol;
                 } else if (
                     this.showMaskTyped &&
-                    this.maskSpecialCharacters.indexOf(inputSymbol) < 0 &&
+                    this.maskSpecialCharacters?.indexOf(inputSymbol) < 0 &&
                     inputSymbol !== '_'
                 ) {
                     stepBack = true;
@@ -387,10 +396,10 @@ export class MaskApplierService {
             }
         }
         if (
-            result.length + 1 === maskExpression.length &&
-            this.maskSpecialCharacters.indexOf(maskExpression[maskExpression.length - 1]) !== -1
+            result?.length + 1 === maskExpression?.length &&
+            this.maskSpecialCharacters?.indexOf(maskExpression[maskExpression?.length - 1]) !== -1
         ) {
-            result += maskExpression[maskExpression.length - 1];
+            result += maskExpression[maskExpression?.length - 1];
         }
 
         let newPosition: number = position + 1;
@@ -409,7 +418,7 @@ export class MaskApplierService {
             this._shift.clear();
         }
         let res: string = this.suffix ? `${this.prefix}${result}${this.suffix}` : `${this.prefix}${result}`;
-        if (result.length === 0) {
+        if (result?.length === 0) {
             res = `${this.prefix}${result}`;
         }
         return res;
@@ -431,11 +440,11 @@ export class MaskApplierService {
     private separator = (str: string, char: string, decimalChar: string, precision: number) => {
         str += '';
         const x: string[] = str.split(decimalChar);
-        const decimals: string = x.length > 1 ? `${decimalChar}${x[1]}` : '';
+        const decimals: string = x?.length > 1 ? `${decimalChar}${x[1]}` : '';
         let res: string = x[0];
         const rgx: RegExp = /(\d+)(\d{3})/;
         while (rgx.test(res)) {
-            res = res.replace(rgx, '$1' + char + '$2');
+            res = res?.replace(rgx, '$1' + char + '$2');
         }
         if (precision === undefined) {
             return res + decimals;
@@ -457,15 +466,15 @@ export class MaskApplierService {
         indFormat: boolean = false) => {
         str += '';
         const x: string[] = str.split(decimalChar);
-        const decimals: string = x.length > 1 ? `${decimalChar}${x[1]}` : '';
+        const decimals: string = x?.length > 1 ? `${decimalChar}${x[1]}` : '';
         const baseNum: string = x[0];
-        let lastThree: string = baseNum.substring(baseNum.length - 3);
-        const otherNumbers: string = baseNum.substring(0, baseNum.length - 3);
+        let lastThree: string = baseNum.substring(baseNum?.length - 3);
+        const otherNumbers: string = baseNum.substring(0, baseNum?.length - 3);
         if (otherNumbers !== '') {
             lastThree = char + lastThree;
         }
-        const res: string = (indFormat ? otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, char) :
-            otherNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, char)) + lastThree;
+        const res: string = (indFormat ? otherNumbers?.replace(/\B(?=(\d{2})+(?!\d))/g, char) :
+            otherNumbers?.replace(/\B(?=(\d{3})+(?!\d))/g, char)) + lastThree;
         if (precision === undefined) {
             return res + decimals;
         } else if (precision === 0) {
@@ -480,8 +489,8 @@ export class MaskApplierService {
 
     private getPrecision = (maskExpression: string): number => {
         const x: string[] = maskExpression.split('.');
-        if (x.length > 1) {
-            return Number(x[x.length - 1]);
+        if (x?.length > 1) {
+            return Number(x[x?.length - 1]);
         }
         return Infinity;
     };
@@ -497,10 +506,10 @@ export class MaskApplierService {
             }
 
             const precisionMatch: RegExpMatchArray | null = inputValue.match(precisionRegEx);
-            if (precisionMatch && precisionMatch[0].length - 1 > precision) {
-                inputValue = inputValue.substring(0, inputValue.length - 1);
-            } else if (precision === 0 && inputValue.endsWith(decimalMarker)) {
-                inputValue = inputValue.substring(0, inputValue.length - 1);
+            if (precisionMatch && precisionMatch[0]?.length - 1 > precision) {
+                inputValue = inputValue.substring(0, inputValue?.length - 1);
+            } else if (precision === 0 && inputValue?.endsWith(decimalMarker)) {
+                inputValue = inputValue.substring(0, inputValue?.length - 1);
             }
         }
         return inputValue;
@@ -522,12 +531,12 @@ export class MaskApplierService {
             } else {
                 if (splitter[1]) {
                     // decimal points are grater then allowed then replace
-                    if (splitter[1].length > precision) {
+                    if (splitter[1]?.length > precision) {
                         splitter[1] = splitter[1].substr(0, precision);
                         inputValue = splitter.join('.');
                     } else {
                         // add necessary decimal points
-                        // let missingPoints = precision - splitter[1].length;
+                        // let missingPoints = precision - splitter[1]?.length;
                         // while (missingPoints) {
                         //   splitter[1] = splitter[1] + '0';
                         //   missingPoints--;

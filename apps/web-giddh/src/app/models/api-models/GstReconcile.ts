@@ -1,5 +1,5 @@
 // tslint:disable:variable-name
-import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+import { INameUniqueName } from '../interfaces/name-unique-name.interface';
 
 export class VerifyOtpRequest {
     public otp: string;
@@ -24,6 +24,7 @@ export class GstReconcileInvoiceRequest {
     public refresh: boolean;
     public category: string;
     public gstin?: string;
+    public gstReturnType?: string;
 }
 
 export interface GstReconcileInvoiceResult {
@@ -88,6 +89,7 @@ export class GstOverViewRequest {
     public gstin: string;
     public from: string;
     public to: string;
+    public currentDateTime?: string;
 }
 
 export class GstrSheetDownloadRequest extends GstOverViewRequest {
@@ -97,13 +99,13 @@ export class GstrSheetDownloadRequest extends GstOverViewRequest {
 }
 
 export class FileGstr1Request extends GstOverViewRequest {
-    public gsp: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
+    public gsp: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
 }
 
 export class GstSaveGspSessionRequest {
     public gstin: string;
     public userName: string;
-    public gsp: 'VAYANA' | 'TAXPRO' | 'RECONCILE' | 'JIO_GST';
+    public gsp: 'TAXPRO' | 'RECONCILE' | 'JIO_GST' | 'VAYANA';
     public otp?: string;
 }
 
@@ -385,4 +387,30 @@ export class Gstr3bOverviewResult2 {
 export class Gstr3bOverviewResult {
     status: string;
     body: Gstr3bOverviewResult2;
+}
+export class GstrJsonDownloadRequest extends GstOverViewRequest {
+    public type: string;
+}
+
+/**
+ * Filing Status List Request
+ *
+ * @export
+ * @class FilingStatusListRequest
+ * @extends {GstOverViewRequest}
+ */
+export class FilingStatusListRequest extends GstOverViewRequest {
+    public gsp: 'TAXPRO';
+    public page: number;
+    public count: number;
+}
+
+/**
+ * Filing Status Request
+ *
+ * @export
+ * @class FilingStatusRequest
+ */
+export class FilingStatusRequest {
+    public referenceId: string;
 }

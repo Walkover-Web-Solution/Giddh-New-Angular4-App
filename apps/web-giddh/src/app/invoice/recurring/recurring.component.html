@@ -235,7 +235,7 @@
                         </div>
                     </div>
                     <div class="d-flex mb-2">
-                        <div class="more-dropdown" *ngIf="selectedItems.length < 0">
+                        <div class="more-dropdown" *ngIf="selectedItems?.length < 0">
                             <div
                                 class="btn-group d-inline-block mr-b1"
                                 dropdown
@@ -359,7 +359,7 @@
 
                             <th>
                                 <div class="d-flex">
-                                    <div class="">{{ localeData?.interval }}</div>
+                                    <div >{{ localeData?.interval }}</div>
 
                                     <div class="icon-pointer">
                                         <ng-container *ngTemplateOutlet="sortTemplate; context: { column: 'duration' }">
@@ -369,7 +369,7 @@
                             </th>
                             <th>
                                 <div class="d-flex">
-                                    <div class="">{{ localeData?.last_invoice_date }}</div>
+                                    <div >{{ localeData?.last_invoice_date }}</div>
                                     <div class="icon-pointer">
                                         <ng-container
                                             *ngTemplateOutlet="sortTemplate; context: { column: 'lastinvoicedate' }"
@@ -380,7 +380,7 @@
                             </th>
                             <th>
                                 <div class="d-flex">
-                                    <div class="">{{ localeData?.next_invoice_date }}</div>
+                                    <div >{{ localeData?.next_invoice_date }}</div>
                                     <div class="icon-pointer">
                                         <ng-container
                                             *ngTemplateOutlet="sortTemplate; context: { column: 'nextcrondate' }"
@@ -391,7 +391,7 @@
                             </th>
                             <th>
                                 <div class="d-flex">
-                                    <div class="">{{ commonLocaleData?.app_status }}</div>
+                                    <div >{{ commonLocaleData?.app_status }}</div>
                                     <div class="icon-pointer">
                                         <ng-container *ngTemplateOutlet="sortTemplate; context: { column: 'status' }">
                                         </ng-container>
@@ -429,7 +429,7 @@
                                 <a
                                     *ngIf="!isMobileScreen"
                                     class="cp btn-link-2"
-                                    (click)="col.status !== 'inactive' && openUpdatePanel(col)"
+                                    (click)="col?.status !== 'inactive' && openUpdatePanel(col)"
                                     >{{ col.voucherNumber || "-" }}</a
                                 >
                                 <a *ngIf="isMobileScreen" class="cp btn-link-2">{{ col.voucherNumber || "-" }}</a>
@@ -441,7 +441,7 @@
                             <td [attr.data-title]="localeData?.last_invoice_date">{{ col.lastInvoiceDate || "-" }}</td>
                             <td [attr.data-title]="localeData?.next_invoice_date">{{ col.nextCronDate || "-" }}</td>
                             <td [attr.data-title]="commonLocaleData?.app_status">
-                                {{ col.status || "-" | titlecase }}
+                                {{ col?.status || "-" | titlecase }}
                             </td>
                             <td [attr.data-title]="localeData?.invoice_amount" class="text-right">
                                 <span class="d-inline-flex">
@@ -465,7 +465,7 @@
                 </table>
             </div>
 
-            <div class="pagination-wrapper" *ngIf="(recurringData$ | async)?.totalItems > 20" [hidden]="isLoading">
+            <div class="pagination-wrapper mt-4" *ngIf="(recurringData$ | async)?.totalItems > 20" [hidden]="isLoading">
                 <div class="text-center">
                     <pagination
                         [maxSize]="5"

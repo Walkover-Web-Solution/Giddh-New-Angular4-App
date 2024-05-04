@@ -52,7 +52,9 @@
                                                     [doNotReset]="true"
                                                     [isPaginationEnabled]="true"
                                                     (scrollEnd)="handleScrollEnd('vendor')"
-                                                    (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'vendor')"
+                                                    (dynamicSearchedQuery)="  isAccountSearchData = true;
+                                                        onSearchQueryChanged($event, 1, 'vendor')
+                                                    "
                                                     [notFoundMsg]="noResultsFoundLabel"
                                                     [enableDynamicSearch]="true"
                                                     [fixedValue]="purchaseOrder.account.name"
@@ -64,29 +66,24 @@
                                                     [notFoundLinkText]="localeData?.add_vendor"
                                                     (keyup)="resetVendor($event)"
                                                     (onClear)="resetVendor(null)"
-                                                    [isOpen]="!isUpdateMode && !purchaseOrder.account.uniqueName"
+                                                    [isOpen]="!isUpdateMode && !purchaseOrder.account?.uniqueName"
                                                 >
                                                     <ng-template #optionTemplate let-option="option">
                                                         <a
                                                             href="javascript:void(0)"
+                                                            aria-label="label"
                                                             class="list-item flex-column border-none"
                                                         >
                                                             <div class="item">{{ option.label }}</div>
-                                                            <div class="item-unique">{{ option.value }}</div>
+                                                            <div class="item-unique">{{ option?.value }}</div>
                                                         </a>
                                                     </ng-template>
 
                                                     <ng-template #notFoundLinkTemplate>
                                                         <a
                                                             href="javascript:void(0)"
-                                                            class="
-                                                                list-item
-                                                                pd-l05 pd-r05
-                                                                d-flex
-                                                                justify-content-between
-                                                                w-100
-                                                                border-none
-                                                            "
+                                                            aria-label="found text"
+                                                            class="list-item pd-l05 pd-r05 d-flex justify-content-between w-100 border-none"
                                                             [keyboardShortcut]="'alt+c'"
                                                         >
                                                             <div class="item">{{ vendorNotFoundText }}</div>
@@ -100,7 +97,7 @@
                                                     *ngIf="purchaseOrder.voucherDetails.customerName"
                                                 >
                                                     <span class="cp aqua-color" *ngIf="!isUpdateMode">
-                                                        <a href="javascript:void(0)" (click)="getVendorDetails()">{{
+                                                        <a href="javascript:void(0)" aria-label="vendor details" (click)="getVendorDetails()">{{
                                                             localeData?.vendor_details
                                                         }}</a>
                                                     </span>
@@ -110,13 +107,14 @@
                                                     <p>
                                                         <small>{{ localeData?.pending_po }}</small>
                                                     </p>
-                                                    <p class="font-14">
+                                                    <p class="font-15">
                                                         <a
                                                             href="javascript:;"
+                                                            aria-label="number"
                                                             (click)="
                                                                 openPurchaseOrderPreviewPopup(
                                                                     purchaseOrderPreviewModal,
-                                                                    order.uniqueName,
+                                                                    order?.uniqueName,
                                                                     order.accountUniqueName
                                                                 )
                                                             "
@@ -161,6 +159,8 @@
                                                                         *ngIf="accountAddressList?.length > 1"
                                                                     >
                                                                         <a
+                                                                            href="javascript:void(0);"
+                                                                            aria-label="change"
                                                                             dropdownToggle
                                                                             type="button"
                                                                             class="dropdown-toggle"
@@ -168,11 +168,7 @@
                                                                         >
                                                                         <ul
                                                                             *dropdownMenu
-                                                                            class="
-                                                                                dropdown-menu
-                                                                                change-address-dropdown
-                                                                                dropdown-menu-right
-                                                                            "
+                                                                            class="dropdown-menu change-address-dropdown dropdown-menu-right"
                                                                             role="menu"
                                                                         >
                                                                             <li
@@ -182,6 +178,8 @@
                                                                                 "
                                                                             >
                                                                                 <a
+                                                                                    href="javascript:void(0);"
+                                                                                    aria-label="address"
                                                                                     class="dropdown-item"
                                                                                     (click)="
                                                                                         selectAddress(
@@ -192,7 +190,11 @@
                                                                                     "
                                                                                 >
                                                                                     {{ address.address }}
-                                                                                    {{ address.state?.name }}
+                                                                                    {{
+                                                                                        address.state?.name
+                                                                                            ? address.state?.name
+                                                                                            : address.county?.name
+                                                                                    }}
                                                                                     <span class="d-block"
                                                                                         >{{
                                                                                             address.gstNumber
@@ -231,8 +233,11 @@
                                                                             {{ vendorCountry }}
                                                                         </label>
                                                                     </div>
-
-                                                                    <div class="col-sm-12 col-md-6" #vendorBillingState>
+                                                                    <div
+                                                                        class="col-sm-12 col-md-6"
+                                                                        #vendorBillingState
+                                                                        *ngIf="statesSource?.length"
+                                                                    >
                                                                         <sales-sh-select
                                                                             [placeholder]="commonLocaleData?.app_state"
                                                                             class="select-border-bottom"
@@ -255,12 +260,38 @@
                                                                         >
                                                                         </sales-sh-select>
                                                                     </div>
-
+                                                                    <div
+                                                                        class="col-sm-12 col-md-6"
+                                                                        #vendorBillingState
+                                                                        *ngIf="regionsSource?.length"
+                                                                    >
+                                                                        <sales-sh-select
+                                                                            [placeholder]="commonLocaleData?.app_region"
+                                                                            class="select-border-bottom"
+                                                                            (selected)="
+                                                                                fillShippingBillingDetails(
+                                                                                    $event,
+                                                                                    true,
+                                                                                    'vendor'
+                                                                                );
+                                                                                autoFillShippingDetails('vendor')
+                                                                            "
+                                                                            #vendorStatesBilling
+                                                                            [showBottomBorderOnly]="true"
+                                                                            [options]="regionsSource"
+                                                                            name="vendorBillingDetailsRegionCode"
+                                                                            [(ngModel)]="
+                                                                                purchaseOrder.account.billingDetails
+                                                                                    .county.code
+                                                                            "
+                                                                        >
+                                                                        </sales-sh-select>
+                                                                    </div>
                                                                     <div
                                                                         class="col-sm-12 col-md-6"
                                                                         *ngIf="
-                                                                            shouldShowTrnGstField &&
-                                                                            (showGSTINNo || showTRNNo)
+                                                                            shouldShowTrnGstVatField &&
+                                                                            (showGSTINNo || showTRNNo || showVATNo)
                                                                         "
                                                                     >
                                                                         <input
@@ -275,12 +306,21 @@
                                                                             class="form-control input-custom"
                                                                             (blur)="autoFillShippingDetails('vendor')"
                                                                             (change)="
-                                                                                getStateCode('billingDetails', 'vendor')
+                                                                                !showVATNo
+                                                                                    ? getStateCode(
+                                                                                          'billingDetails',
+                                                                                          'vendor'
+                                                                                      )
+                                                                                    : null
                                                                             "
                                                                             [placeholder]="
                                                                                 showGSTINNo
                                                                                     ? commonLocaleData?.app_gstin
-                                                                                    : commonLocaleData?.app_trn
+                                                                                    : showTRNNo
+                                                                                    ? commonLocaleData?.app_trn
+                                                                                    : showVATNo
+                                                                                    ? commonLocaleData?.app_enter_vat
+                                                                                    : ''
                                                                             "
                                                                         />
                                                                     </div>
@@ -288,9 +328,11 @@
                                                                     <div
                                                                         [ngClass]="{
                                                                             'col-sm-12 col-md-6':
-                                                                                showGSTINNo || showTRNNo,
+                                                                                showGSTINNo || showTRNNo || showVATNo,
                                                                             'col-sm-12 col-md-12': !(
-                                                                                showGSTINNo || showTRNNo
+                                                                                showGSTINNo ||
+                                                                                showTRNNo ||
+                                                                                showVATNo
                                                                             )
                                                                         }"
                                                                     >
@@ -325,17 +367,21 @@
                                                     <!-- region shipping address -->
                                                     <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
                                                         <div class="form-group p-0 width-100">
-                                                            <div class="d-flex align-items-center pb-1">
-                                                                <span class="pd-r15">
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        autocomplete="None"
-                                                                        name="autoFillVendorShipping"
-                                                                        [(ngModel)]="autoFillVendorShipping"
-                                                                        (change)="autoFillShippingDetails('vendor')"
-                                                                    />
-                                                                    {{ localeData?.shipping_billing_same }}
-                                                                </span>
+                                                            <div class="d-flex align-items-start pb-1">
+                                                                <div class="d-flex align-items-start pd-r15">
+                                                                    <div class="pt-1">
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            autocomplete="None"
+                                                                            name="autoFillVendorShipping"
+                                                                            [(ngModel)]="autoFillVendorShipping"
+                                                                            (change)="autoFillShippingDetails('vendor')"
+                                                                        />
+                                                                    </div>
+                                                                    <div>
+                                                                        {{ localeData?.shipping_billing_same }}
+                                                                    </div>
+                                                                </div>
                                                                 <span>
                                                                     <div
                                                                         class="btn-group btn-block"
@@ -352,17 +398,15 @@
                                                                     >
                                                                         <a
                                                                             dropdownToggle
+                                                                            href="javascript:void(0);"
+                                                                            aria-label="change"
                                                                             type="button"
                                                                             class="dropdown-toggle"
                                                                             >{{ localeData?.change }}</a
                                                                         >
                                                                         <ul
                                                                             *dropdownMenu
-                                                                            class="
-                                                                                dropdown-menu
-                                                                                change-address-dropdown
-                                                                                dropdown-menu-right
-                                                                            "
+                                                                            class="dropdown-menu change-address-dropdown dropdown-menu-right"
                                                                             role="menu"
                                                                         >
                                                                             <li
@@ -372,6 +416,8 @@
                                                                                 "
                                                                             >
                                                                                 <a
+                                                                                    href="javascript:void(0);"
+                                                                                    aria-label="address"
                                                                                     class="dropdown-item"
                                                                                     (click)="
                                                                                         selectAddress(
@@ -382,7 +428,11 @@
                                                                                     "
                                                                                 >
                                                                                     {{ address.address }}
-                                                                                    {{ address.state?.name }}
+                                                                                    {{
+                                                                                        address.state?.name
+                                                                                            ? address.state?.name
+                                                                                            : address.county?.name
+                                                                                    }}
                                                                                     {{
                                                                                         address.gstNumber
                                                                                             ? (showGSTINNo
@@ -426,11 +476,9 @@
                                                                             </div>
                                                                         </div>
                                                                         <div
-                                                                            class="
-                                                                                col-sm-12 col-md-6
-                                                                                select-border-bottom
-                                                                            "
+                                                                            class="col-sm-12 col-md-6 select-border-bottom"
                                                                             #vendorShippingState
+                                                                            *ngIf="statesSource?.length"
                                                                         >
                                                                             <sales-sh-select
                                                                                 [placeholder]="
@@ -457,10 +505,39 @@
                                                                             </sales-sh-select>
                                                                         </div>
                                                                         <div
+                                                                            class="col-sm-12 col-md-6 select-border-bottom"
+                                                                            #vendorShippingState
+                                                                            *ngIf="regionsSource?.length"
+                                                                        >
+                                                                            <sales-sh-select
+                                                                                [placeholder]="
+                                                                                    commonLocaleData?.app_region
+                                                                                "
+                                                                                [disabled]="autoFillVendorShipping"
+                                                                                class="select-border-bottom"
+                                                                                (selected)="
+                                                                                    fillShippingBillingDetails(
+                                                                                        $event,
+                                                                                        false,
+                                                                                        'vendor'
+                                                                                    )
+                                                                                "
+                                                                                #vendorStatesShipping
+                                                                                [showBottomBorderOnly]="true"
+                                                                                [options]="regionsSource"
+                                                                                name="vendorShippingDetailsRegionCode"
+                                                                                [(ngModel)]="
+                                                                                    purchaseOrder.account
+                                                                                        .shippingDetails.county.code
+                                                                                "
+                                                                            >
+                                                                            </sales-sh-select>
+                                                                        </div>
+                                                                        <div
                                                                             class="col-sm-12 col-md-6"
                                                                             *ngIf="
-                                                                                shouldShowTrnGstField &&
-                                                                                (showGSTINNo || showTRNNo)
+                                                                                shouldShowTrnGstVatField &&
+                                                                                (showGSTINNo || showTRNNo || showVATNo)
                                                                             "
                                                                         >
                                                                             <input
@@ -474,15 +551,21 @@
                                                                                 "
                                                                                 class="form-control input-custom"
                                                                                 (change)="
-                                                                                    getStateCode(
-                                                                                        'shippingDetails',
-                                                                                        'vendor'
-                                                                                    )
+                                                                                    !showVATNo
+                                                                                        ? getStateCode(
+                                                                                              'shippingDetails',
+                                                                                              'vendor'
+                                                                                          )
+                                                                                        : null
                                                                                 "
                                                                                 [placeholder]="
                                                                                     showGSTINNo
                                                                                         ? commonLocaleData?.app_gstin
-                                                                                        : commonLocaleData?.app_trn
+                                                                                        : showTRNNo
+                                                                                        ? commonLocaleData?.app_trn
+                                                                                        : showVATNo
+                                                                                        ? commonLocaleData?.app_enter_vat
+                                                                                        : ''
                                                                                 "
                                                                             />
                                                                         </div>
@@ -490,9 +573,13 @@
                                                                         <div
                                                                             [ngClass]="{
                                                                                 'col-sm-12 col-md-6':
-                                                                                    showGSTINNo || showTRNNo,
+                                                                                    showGSTINNo ||
+                                                                                    showTRNNo ||
+                                                                                    showVATNo,
                                                                                 'col-sm-12 col-md-12': !(
-                                                                                    showGSTINNo || showTRNNo
+                                                                                    showGSTINNo ||
+                                                                                    showTRNNo ||
+                                                                                    showVATNo
                                                                                 )
                                                                             }"
                                                                         >
@@ -582,6 +669,8 @@
                                                                 *ngIf="companyAddressList?.length > 1"
                                                             >
                                                                 <a
+                                                                    href="javascript:void(0);"
+                                                                    aria-label="change"
                                                                     dropdownToggle
                                                                     type="button"
                                                                     class="dropdown-toggle"
@@ -589,10 +678,7 @@
                                                                 >
                                                                 <ul
                                                                     *dropdownMenu
-                                                                    class="
-                                                                        dropdown-menu dropdown-menu-right
-                                                                        change-address-dropdown
-                                                                    "
+                                                                    class="dropdown-menu dropdown-menu-right change-address-dropdown"
                                                                     role="menu"
                                                                 >
                                                                     <li
@@ -600,6 +686,8 @@
                                                                         *ngFor="let address of companyAddressList"
                                                                     >
                                                                         <a
+                                                                            href="javascript:void(0);"
+                                                                            aria-label="address"
                                                                             class="dropdown-item"
                                                                             (click)="
                                                                                 selectAddress(
@@ -611,14 +699,23 @@
                                                                             "
                                                                         >
                                                                             {{ address.address }}
-                                                                            {{ address.state?.name }}
+                                                                            {{
+                                                                                address.state?.name
+                                                                                    ? address.state?.name
+                                                                                    : address.county?.name
+                                                                            }}
                                                                             {{
                                                                                 address.taxNumber
                                                                                     ? (showGSTINNo
                                                                                           ? commonLocaleData?.app_gstin +
-                                                                                            ": "
-                                                                                          : commonLocaleData?.app_trn +
-                                                                                            ": ") + address.taxNumber
+                                                                                            ":"
+                                                                                          : showTRNNo
+                                                                                          ? commonLocaleData?.app_trn +
+                                                                                            ":"
+                                                                                          : showVATNo
+                                                                                          ? commonLocaleData?.enter_vat_no +
+                                                                                            ":"
+                                                                                          : "") + address.gstNumber
                                                                                     : ""
                                                                             }}
                                                                         </a>
@@ -646,7 +743,11 @@
                                                                     {{ companyCountryName }}
                                                                 </label>
                                                             </div>
-                                                            <div class="col-sm-12 col-md-6" #companyBillingState>
+                                                            <div
+                                                                class="col-sm-12 col-md-6"
+                                                                #companyBillingState
+                                                                *ngIf="companyStatesSource?.length"
+                                                            >
                                                                 <sales-sh-select
                                                                     [placeholder]="commonLocaleData?.app_state"
                                                                     class="select-border-bottom"
@@ -682,8 +783,47 @@
                                                             </div>
                                                             <div
                                                                 class="col-sm-12 col-md-6"
+                                                                #companyBillingState
+                                                                *ngIf="companyRegionsSource?.length"
+                                                            >
+                                                                <sales-sh-select
+                                                                    [placeholder]="commonLocaleData?.app_region"
+                                                                    class="select-border-bottom"
+                                                                    (selected)="
+                                                                        fillShippingBillingDetails(
+                                                                            $event,
+                                                                            true,
+                                                                            'company'
+                                                                        );
+                                                                        autoFillShippingDetails('company')
+                                                                    "
+                                                                    [showBottomBorderOnly]="true"
+                                                                    [options]="companyRegionsSource"
+                                                                    name="companyBillingDetailsRegionCode"
+                                                                    [disabled]="
+                                                                        purchaseOrder.company.billingDetails.county
+                                                                            .code &&
+                                                                        purchaseOrder.company.billingDetails
+                                                                            .gstNumber &&
+                                                                        purchaseOrder.company.billingDetails.gstNumber
+                                                                            .length >= 2
+                                                                            ? true
+                                                                            : null
+                                                                    "
+                                                                    [fixedValue]="
+                                                                        purchaseOrder.company.billingDetails.county.name
+                                                                    "
+                                                                    [(ngModel)]="
+                                                                        purchaseOrder.company.billingDetails.county.code
+                                                                    "
+                                                                >
+                                                                </sales-sh-select>
+                                                            </div>
+                                                            <div
+                                                                class="col-sm-12 col-md-6"
                                                                 *ngIf="
-                                                                    shouldShowTrnGstField && (showGSTINNo || showTRNNo)
+                                                                    shouldShowTrnGstVatField &&
+                                                                    (showGSTINNo || showTRNNo || showVATNo)
                                                                 "
                                                             >
                                                                 <input
@@ -696,19 +836,32 @@
                                                                     "
                                                                     class="form-control input-custom"
                                                                     (blur)="autoFillShippingDetails('company')"
-                                                                    (change)="getStateCode('billingDetails', 'company')"
+                                                                    (change)="
+                                                                        !showVATNo
+                                                                            ? getStateCode('billingDetails', 'company')
+                                                                            : null
+                                                                    "
                                                                     [placeholder]="
                                                                         showGSTINNo
                                                                             ? commonLocaleData?.app_gstin
-                                                                            : commonLocaleData?.app_trn
+                                                                            : showTRNNo
+                                                                            ? commonLocaleData?.app_trn
+                                                                            : showVATNo
+                                                                            ? commonLocaleData?.app_enter_vat
+                                                                            : ''
                                                                     "
                                                                 />
                                                             </div>
                                                             <!-- static pin code  -->
                                                             <div
                                                                 [ngClass]="{
-                                                                    'col-sm-12 col-md-6': showGSTINNo || showTRNNo,
-                                                                    'col-sm-12 col-md-12': !(showGSTINNo || showTRNNo)
+                                                                    'col-sm-12 col-md-6':
+                                                                        showGSTINNo || showTRNNo || showVATNo,
+                                                                    'col-sm-12 col-md-12': !(
+                                                                        showGSTINNo ||
+                                                                        showTRNNo ||
+                                                                        showVATNo
+                                                                    )
                                                                 }"
                                                             >
                                                                 <div class="form-group mr-b05">
@@ -737,16 +890,89 @@
                                             <!-- region shipping address -->
                                             <div class="col-sm-12 col-xl-6 col-md-10 bill-add">
                                                 <div class="form-group p-0 width-100">
-                                                    <div class="d-flex align-items-center pb-1">
-                                                        <span class="pd-r15">
-                                                            <input
-                                                                type="checkbox"
-                                                                autocomplete="None"
-                                                                name="autoFillCompanyShipping"
-                                                                [(ngModel)]="autoFillCompanyShipping"
-                                                                (change)="autoFillShippingDetails('company')"
-                                                            />
-                                                            {{ localeData?.shipping_billing_same }}
+                                                    <div class="d-flex align-items-start pb-1">
+                                                        <div class="d-flex align-items-start pd-r15">
+                                                            <div class="pt-1">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    autocomplete="None"
+                                                                    name="autoFillCompanyShipping"
+                                                                    [(ngModel)]="autoFillCompanyShipping"
+                                                                    (change)="autoFillShippingDetails('company')"
+                                                                />
+                                                            </div>
+                                                            <div>
+                                                                {{ localeData?.shipping_billing_same }}
+                                                            </div>
+                                                        </div>
+                                                        <span>
+                                                            <div
+                                                                class="btn-group btn-block"
+                                                                dropdown
+                                                                #companyShippingAddressDropDownWeb="bs-dropdown"
+                                                                [attachOutsideOnClick]="true"
+                                                                (clickOutside)="
+                                                                    companyShippingAddressDropDownWeb.hide()
+                                                                "
+                                                                *ngIf="
+                                                                    companyAddressList?.length > 1 &&
+                                                                    !autoFillCompanyShipping
+                                                                "
+                                                            >
+                                                                <a
+                                                                    href="javascript:void(0);"
+                                                                    aria-label="change"
+                                                                    dropdownToggle
+                                                                    type="button"
+                                                                    class="dropdown-toggle"
+                                                                    >{{ localeData?.change }}</a
+                                                                >
+                                                                <ul
+                                                                    *dropdownMenu
+                                                                    class="dropdown-menu change-address-dropdown dropdown-menu-right"
+                                                                    role="menu"
+                                                                >
+                                                                    <li
+                                                                        role="menuitem"
+                                                                        *ngFor="let address of companyAddressList"
+                                                                    >
+                                                                        <a
+                                                                            href="javascript:void(0);"
+                                                                            aria-label="address"
+                                                                            class="dropdown-item"
+                                                                            (click)="
+                                                                                selectAddress(
+                                                                                    purchaseOrder.company
+                                                                                        .shippingDetails,
+                                                                                    address,
+                                                                                    true
+                                                                                )
+                                                                            "
+                                                                        >
+                                                                            {{ address.address }}
+                                                                            {{
+                                                                                address.state?.name
+                                                                                    ? address.state?.name
+                                                                                    : address.county?.name
+                                                                            }}
+                                                                            {{
+                                                                                address.taxNumber
+                                                                                    ? (showGSTINNo
+                                                                                          ? commonLocaleData?.app_gstin +
+                                                                                            ":"
+                                                                                          : showTRNNo
+                                                                                          ? commonLocaleData?.app_trn +
+                                                                                            ":"
+                                                                                          : showVATNo
+                                                                                          ? commonLocaleData?.enter_vat_no +
+                                                                                            ":"
+                                                                                          : "") + address.gstNumber
+                                                                                    : ""
+                                                                            }}
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
                                                         </span>
                                                     </div>
                                                     <div
@@ -775,7 +1001,11 @@
                                                                         </label>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-sm-12 col-md-6" #companyShippingState>
+                                                                <div
+                                                                    class="col-sm-12 col-md-6"
+                                                                    #companyShippingState
+                                                                    *ngIf="companyStatesSource?.length"
+                                                                >
                                                                     <sales-sh-select
                                                                         [placeholder]="commonLocaleData?.app_state"
                                                                         [disabled]="autoFillCompanyShipping"
@@ -813,9 +1043,43 @@
                                                                 </div>
                                                                 <div
                                                                     class="col-sm-12 col-md-6"
+                                                                    #companyShippingState
+                                                                    *ngIf="companyRegionsSource?.length"
+                                                                >
+                                                                    <sales-sh-select
+                                                                        [placeholder]="commonLocaleData?.app_region"
+                                                                        [disabled]="autoFillCompanyShipping"
+                                                                        class="select-border-bottom disabled"
+                                                                        (selected)="
+                                                                            fillShippingBillingDetails(
+                                                                                $event,
+                                                                                false,
+                                                                                'company'
+                                                                            )
+                                                                        "
+                                                                        [showBottomBorderOnly]="true"
+                                                                        [options]="companyRegionsSource"
+                                                                        name="companyShippingDetailsRegionCode"
+                                                                        [disabled]="
+                                                                            purchaseOrder.company.shippingDetails.county
+                                                                                .code
+                                                                        "
+                                                                        [fixedValue]="
+                                                                            purchaseOrder.company.shippingDetails.county
+                                                                                .name
+                                                                        "
+                                                                        [(ngModel)]="
+                                                                            purchaseOrder.company.shippingDetails.county
+                                                                                .code
+                                                                        "
+                                                                    >
+                                                                    </sales-sh-select>
+                                                                </div>
+                                                                <div
+                                                                    class="col-sm-12 col-md-6"
                                                                     *ngIf="
-                                                                        shouldShowTrnGstField &&
-                                                                        (showGSTINNo || showTRNNo)
+                                                                        shouldShowTrnGstVatField &&
+                                                                        (showGSTINNo || showTRNNo || showVATNo)
                                                                     "
                                                                 >
                                                                     <input
@@ -829,21 +1093,33 @@
                                                                         "
                                                                         class="form-control input-custom"
                                                                         (change)="
-                                                                            getStateCode('shippingDetails', 'company')
+                                                                            !showVATNo
+                                                                                ? getStateCode(
+                                                                                      'shippingDetails',
+                                                                                      'company'
+                                                                                  )
+                                                                                : null
                                                                         "
                                                                         [placeholder]="
                                                                             showGSTINNo
                                                                                 ? commonLocaleData?.app_gstin
-                                                                                : commonLocaleData?.app_trn
+                                                                                : showTRNNo
+                                                                                ? commonLocaleData?.app_trn
+                                                                                : showVATNo
+                                                                                ? commonLocaleData?.app_enter_vat
+                                                                                : ''
                                                                         "
                                                                     />
                                                                 </div>
                                                                 <!-- static pin code  -->
                                                                 <div
                                                                     [ngClass]="{
-                                                                        'col-sm-12 col-md-6': showGSTINNo || showTRNNo,
+                                                                        'col-sm-12 col-md-6':
+                                                                            showGSTINNo || showTRNNo || showVATNo,
                                                                         'col-sm-12 col-md-12': !(
-                                                                            showGSTINNo || showTRNNo
+                                                                            showGSTINNo ||
+                                                                            showTRNNo ||
+                                                                            showVATNo
                                                                         )
                                                                     }"
                                                                 >
@@ -887,12 +1163,7 @@
                             </div>
                             <!-- region customer dropdown -->
                             <div
-                                class="
-                                    select-customer-name
-                                    order-expected-delivery
-                                    d-flex
-                                    col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12
-                                "
+                                class="select-customer-name order-expected-delivery d-flex col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12"
                             >
                                 <!-- region if not cashinvoice show customer dropdown -->
 
@@ -912,8 +1183,8 @@
                                     </div>
                                 </div>
                                 <!-- endregion -->
-                                <div class="col-sm-6" *ngIf="!isMobileScreen">
-                                    <div class="invoice-due-date">
+                                <div class="col-sm-6 pr-0" *ngIf="!isMobileScreen">
+                                    <div class="invoice-due-date column-gap2">
                                         <div class="d-flex">
                                             <label>{{ localeData?.order_date }}<span class="red-text">*</span></label>
                                             <input
@@ -988,8 +1259,8 @@
                 </div>
             </div>
         </div>
-        <ng-container *ngIf="!purchaseOrder.account.uniqueName">
-            <img src="assets/images/new/search-vendor.svg" class="img-responsive search-arrow-image" />
+        <ng-container *ngIf="!purchaseOrder.account?.uniqueName">
+            <img src="assets/images/new/search-vendor.svg" class="img-responsive search-arrow-image" alt="search vendor" />
         </ng-container>
         <section
             *ngIf="!isMobileScreen"
@@ -1027,6 +1298,7 @@
                             autoSaveIcon = !autoSaveIcon;
                             newExchangeRate = originalExchangeRate
                         "
+                        alt="edit"
                     />
                     <img
                         src="assets/images/autosave.svg"
@@ -1041,6 +1313,7 @@
                             calculateGrandTotal()
                         "
                         *ngIf="autoSaveIcon"
+                        alt="edit"
                     />
                 </span>
             </div>
@@ -1051,6 +1324,7 @@
                     src="assets/images/switch-icon.svg"
                     alt="switch-icon"
                     (click)="switchCurrencyImg(false)"
+                    alt="edit"
                 />
                 <span class="right-currency">
                     <span class="currency-digits" *ngIf="!showCurrencyValue">
@@ -1072,12 +1346,14 @@
                         src="assets/images/edit-pencilicon.svg"
                         class="edit-pencil"
                         (click)="saveCancelExcRate(false)"
+                        alt="edit"
                     />
                     <img
                         src="assets/images/autosave.svg"
                         class="edit-pencil"
                         (click)="saveCancelExcRate(true)"
                         *ngIf="autoSaveIcon"
+                        alt="edit"
                     />
                 </span>
             </div>
@@ -1126,6 +1402,14 @@
                                     >({{ transaction.stockDetails?.name }})</span
                                 >
                             </div>
+                            <p
+                                *ngIf="
+                                    transaction.variant?.name && ((stockVariants | async)[entryIdx] | async)?.length > 1
+                                "
+                                class="variant"
+                            >
+                                {{ localeData?.variant + ": " + transaction.variant?.name }}
+                            </p>
                             <div class="description">
                                 {{ transaction.description }}
                             </div>
@@ -1150,7 +1434,7 @@
                                                         : transaction.sacNumber
                                                 }}
                                                 <span class="edit-icon cp">
-                                                    <img src="assets/images/edit-pencilicon.svg" />
+                                                    <img src="assets/images/edit-pencilicon.svg" alt="edit" />
                                                 </span>
                                             </span>
                                         </div>
@@ -1159,7 +1443,7 @@
                             </div>
                         </td>
                         <td class="text-right stock-unit">
-                            <div class="wrap-td-data">{{ transaction.quantity }} {{ transaction.stockUnit }}</div>
+                            <div class="wrap-td-data">{{ transaction.quantity }} {{ transaction.stockUnitCode }}</div>
                         </td>
                         <td class="text-right tra-rate item-rate">
                             <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
@@ -1183,7 +1467,6 @@
                                                 >
                                                 </amount-field>
                                             </span>
-                                            <br />
                                         </div>
                                     </div>
                                 </div>
@@ -1312,7 +1595,7 @@
                         </td>
                         <td class="text-right item-tax delete-btn-absolute">
                             <div class="td-wrapper">
-                                <div>
+                                <div class="flex-fill">
                                     <div class="wrap-td-data">
                                         <span>
                                             <span class="d-flex justify-content-end">
@@ -1333,7 +1616,7 @@
                                             </span>
                                         </span>
                                         <br />
-                                        <span *ngIf="entry.isOtherTaxApplicable">
+                                        <span class="d-flex justify-content-end" *ngIf="entry.isOtherTaxApplicable">
                                             {{ entry.otherTaxModal?.appliedOtherTax?.name }} :
                                             <span class="d-flex justify-content-end">
                                                 <amount-field
@@ -1404,18 +1687,23 @@
                         <td>{{ entryIdx + 1 }}</td>
                         <td>
                             <div class="product-name">
-                                <div class="ng-select-wrap">
+                                <div class="ng-select-wrap" (click)="setUserManuallyClicked()">
                                     <sh-select
                                         [options]="salesAccounts$ | async"
                                         #selectAccount
                                         [(ngModel)]="transaction.fakeAccForSelect2"
                                         name="transaction.fakeAccForSelect2_{{ entryIdx }}"
-                                        (selected)="onSelectSalesAccount($event, transaction, entry, false, entryIdx)"
+                                        (selected)="
+                                            entry['initiallyCall'] = undefined;
+                                            onSelectSalesAccount($event, transaction, entry, false, entryIdx)
+                                        "
                                         [placeholder]="localeData?.select_acc"
                                         [notFoundLink]="true"
                                         [isPaginationEnabled]="true"
                                         (scrollEnd)="handleScrollEnd('item')"
-                                        (dynamicSearchedQuery)="onSearchQueryChanged($event, 1, 'item')"
+                                        (dynamicSearchedQuery)="isAccountSearchData = true;
+                                            onSearchQueryChanged($event, 1, 'item')
+                                        "
                                         (onHide)="noResultsFoundLabel = localeData?.search_acc"
                                         [notFoundMsg]="noResultsFoundLabel"
                                         [enableDynamicSearch]="true"
@@ -1433,7 +1721,7 @@
                                     >
                                         <ng-template #optionTemplate let-option="option">
                                             <ng-container *ngIf="!option.additional?.stock">
-                                                <a href="javascript:void(0)" class="list-item flex-column">
+                                                <a href="javascript:void(0);" aria-label="uniqueName" class="list-item flex-column">
                                                     <div class="item">{{ option.label }}</div>
                                                     <div class="item-unique">
                                                         {{ option.additional?.uniqueName }}
@@ -1441,14 +1729,14 @@
                                                 </a>
                                             </ng-container>
                                             <ng-container *ngIf="option.additional?.stock">
-                                                <a href="javascript:void(0)" class="list-item flex-column">
+                                                <a href="javascript:void(0);" aria-label="uniqueName" class="list-item flex-column">
                                                     <div class="item">{{ option.label }}</div>
                                                     <div class="item-unique">
                                                         {{ option.additional?.uniqueName }}
                                                     </div>
                                                     <div class="item-stock">
                                                         {{ commonLocaleData?.app_stock }}:
-                                                        {{ option.additional?.stock.uniqueName }}
+                                                        {{ option.additional?.stock?.uniqueName }}
                                                     </div>
                                                 </a>
                                             </ng-container>
@@ -1456,7 +1744,33 @@
                                     </sh-select>
                                 </div>
                             </div>
-
+                            <ng-container
+                                *ngIf="
+                                    transaction?.isStockTxn && ((stockVariants | async)[entryIdx] | async) as variants
+                                "
+                            >
+                                <div *ngIf="variants?.length > 1" class="variant-name">
+                                    <!-- <select-field
+                                        [disabled]="isReadOnly"
+                                        [cssClass]="'form-control mat-field-border'"
+                                        [placeholder]="localeData?.select_variant"
+                                        (selectedOption)="variantChanged($event, transaction, entry)"
+                                        [options]="variants"
+                                        [required]="true"
+                                        [name]="'variant' + entryIdx"
+                                        [(ngModel)]="transaction.variant.uniqueName"
+                                    >
+                                    </select-field> -->
+                                    <sh-select
+                                        [placeholder]="localeData?.select_variant"
+                                        [options]="variants"
+                                        (selected)="variantChanged($event, transaction, entry)"
+                                        [isRequired]="true"
+                                        name="{{ 'variant' + entryIdx }}"
+                                        [(ngModel)]="transaction.variant.uniqueName"
+                                    ></sh-select>
+                                </div>
+                            </ng-container>
                             <div *ngIf="transaction.fakeAccForSelect2">
                                 <div class="description mt-1">
                                     <textarea
@@ -1506,7 +1820,7 @@
                                                             >{{ commonLocaleData?.app_update }}
                                                         </span>
                                                         <span class="edit-icon cp">
-                                                            <img src="assets/images/edit-pencilicon.svg" />
+                                                            <img src="assets/images/edit-pencilicon.svg" alt="edit" />
                                                         </span>
                                                     </span>
                                                 </div>
@@ -1604,7 +1918,10 @@
                                 [disabled]="!transaction.isStockTxn"
                                 name="transaction.stockUnit_{{ entryIdx }}"
                                 [(ngModel)]="transaction.stockUnit"
-                                (ngModelChange)="onChangeUnit(transaction, $event); transaction.setAmount(entry)"
+                                (ngModelChange)="
+                                    onChangeUnit(transaction, $event);
+                                    handlePriceCalculationOnUnitChange(entry, transaction)
+                                "
                             >
                                 <option *ngFor="let stock of transaction.stockList" [ngValue]="stock.id">
                                     {{ stock.text }}
@@ -1684,11 +2001,16 @@
                                     <discount-control-component
                                         #discountComponent
                                         [discountMenu]="false"
+                                        [discountsList]="discountsList"
                                         [discountAccountsDetails]="entry.discounts"
+                                        [discountPercentageModal]="entry.discountPercentageModal"
+                                        [discountFixedValueModal]="entry.discountFixedValueModal"
                                         [discountSum]="entry.discountSum"
                                         [showHeaderText]="false"
                                         (hideOtherPopups)="closeTaxControlPopup()"
-                                        (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
+                                        (discountTotalUpdated)="
+                                            calculateWhenTrxAltered(entry, transaction, false, $event)
+                                        "
                                         [maskInput]="inputMaskFormat"
                                         [prefixInput]="purchaseOrder.accountDetails.currencySymbol"
                                         [suffixInput]="selectedSuffixForCurrency"
@@ -1786,9 +2108,10 @@
                                                 <span class="mr-r05">
                                                     <a
                                                         href="javascript:;"
+                                                        aria-label="image"
                                                         (click)="toggleOtherTaxesAsidePane(true, entryIdx)"
                                                     >
-                                                        <img src="assets/images/edit-pencilicon.svg" />
+                                                        <img src="assets/images/edit-pencilicon.svg" alt="edit-icon" />
                                                     </a>
                                                 </span>
                                                 <input
@@ -1832,9 +2155,6 @@
                                         </amount-field>
                                     </span>
                                 </div>
-
-                                <ng-container *ngTemplateOutlet="otherTaxesModal; context: { $implicit: entry }">
-                                </ng-container>
                             </div>
 
                             <div
@@ -1853,8 +2173,8 @@
                 <!-- region add bulk items -->
                 <div class="p-1 aqua-color add-line-bulk-item">
                     <a href="javascript:void 0" (click)="addBlankRow(null)">{{ localeData?.add_new_line }}</a>
-                    <span class="font-14"> | </span>
-                    <a (click)="bulkItemsModal.show()" href="javascript:void(0)">{{ localeData?.add_bulk_entries }}</a>
+                    <span class="font-15"> | </span>
+                    <a (click)="addBulkItems()" href="javascript:;" aria-label="bulk entries">{{ localeData?.add_bulk_entries }}</a>
                 </div>
                 <!-- endregion -->
                 <tfoot>
@@ -1879,12 +2199,13 @@
                                     </div>
                                     <div [collapse]="isOthrDtlCollapsed" class="clearfix max-width-600 pd-l3 m-0">
                                         <div class="row">
-                                            <div class="form-group col-xs-4 col-sm-4 mb-0">
+                                            <div class="form-group col-xs-4 col-sm-4 mb-0 custom-input-field">
                                                 <giddh-datepicker
+                                                    [cssClass]="'mat-field-border bdr form-control'"
                                                     #shippingDate="ngModel"
                                                     [placeholder]="localeData?.ship_date"
                                                     name="shippingDate"
-                                                    [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate"
+                                                    [(ngModel)]="purchaseOrder?.templateDetails?.other.shippingDate"
                                                     [class.invalid-inp]="
                                                         shippingDate.errors &&
                                                         (shippingDate.dirty || shippingDate.touched)
@@ -1906,7 +2227,7 @@
                                                 <input
                                                     type="text"
                                                     name="shippedVia"
-                                                    [(ngModel)]="purchaseOrder.templateDetails.other.shippedVia"
+                                                    [(ngModel)]="purchaseOrder.templateDetails?.other.shippedVia"
                                                     class="form-control"
                                                     [placeholder]="localeData?.ship_via"
                                                 />
@@ -1915,7 +2236,7 @@
                                                 <input
                                                     type="text"
                                                     name="trackingNumber"
-                                                    [(ngModel)]="purchaseOrder.templateDetails.other.trackingNumber"
+                                                    [(ngModel)]="purchaseOrder.templateDetails?.other.trackingNumber"
                                                     class="form-control"
                                                     [placeholder]="localeData?.tracking_number"
                                                 />
@@ -1931,7 +2252,7 @@
                                 <textarea
                                     class="form-control"
                                     name="message2"
-                                    [(ngModel)]="purchaseOrder.templateDetails.other.message2"
+                                    [(ngModel)]="purchaseOrder.templateDetails?.other.message2"
                                 ></textarea>
                             </div>
                             <!-- endregion -->
@@ -2125,7 +2446,7 @@
                                             [suffix]="selectedSuffixForCurrency"
                                             [mask]="inputMaskFormat"
                                             [(ngModel)]="grandTotalMulDum"
-                                            (blur)="updateExchangeRate(grandTotalInr.value)"
+                                            (blur)="updateExchangeRate(grandTotalInr?.value)"
                                         />
                                     </div>
                                 </div>
@@ -2199,7 +2520,15 @@
                                             >({{ transaction.stockDetails?.name }})</span
                                         >
                                     </div>
-
+                                    <p
+                                        *ngIf="
+                                            transaction.variant?.name &&
+                                            ((stockVariants | async)[entryIdx] | async)?.length > 1
+                                        "
+                                        class="variant"
+                                    >
+                                        {{ localeData?.variant + ": " + transaction.variant?.name }}
+                                    </p>
                                     <p class="description">
                                         {{ transaction.description }}
                                     </p>
@@ -2239,7 +2568,7 @@
                                 <div class="single-card-row">
                                     <div class="qty-unit">
                                         <label class="card-label">{{ commonLocaleData?.app_quantity_unit }}</label>
-                                        <p>{{ transaction.quantity }} {{ transaction.stockUnit }}</p>
+                                        <p>{{ transaction.quantity }} {{ transaction.stockUnitCode }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -2438,7 +2767,7 @@
                             </div>
                         </div>
                         <div class="edit-card" (click)="setActiveIndex(entryIdx); $event.stopPropagation()">
-                            <img src="assets/images/edit-pencilicon.svg" />
+                            <img src="assets/images/edit-pencilicon.svg" alt="edit" />
                         </div>
                         <div
                             class="del-card"
@@ -2464,6 +2793,7 @@
                                                     #selectAccount
                                                     name="transaction.fakeAccForSelect2_{{ entryIdx }}"
                                                     (selected)="
+                                                        entry['initiallyCall'] = undefined;
                                                         onSelectSalesAccount(
                                                             $event,
                                                             transaction,
@@ -2482,7 +2812,7 @@
                                                 >
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
-                                                            <a href="javascript:void(0)" class="list-item flex-column">
+                                                            <a href="javascript:void(0)" aria-label="uniqueName" class="list-item flex-column">
                                                                 <div class="item">{{ option.label }}</div>
                                                                 <div class="item-unique">
                                                                     {{ option.additional?.uniqueName }}
@@ -2490,14 +2820,14 @@
                                                             </a>
                                                         </ng-container>
                                                         <ng-container *ngIf="option.additional?.stock">
-                                                            <a href="javascript:void(0)" class="list-item flex-column">
+                                                            <a href="javascript:void(0)" aria-label="uniqueName" class="list-item flex-column">
                                                                 <div class="item">{{ option.label }}</div>
                                                                 <div class="item-unique">
                                                                     {{ option.additional?.uniqueName }}
                                                                 </div>
                                                                 <div class="item-stock">
                                                                     {{ commonLocaleData?.app_stock }}:
-                                                                    {{ option.additional?.stock.uniqueName }}
+                                                                    {{ option.additional?.stock?.uniqueName }}
                                                                 </div>
                                                             </a>
                                                         </ng-container>
@@ -2561,7 +2891,7 @@
                                                                         >{{ commonLocaleData?.app_update }}
                                                                     </span>
                                                                     <span class="edit-icon cp">
-                                                                        <img src="assets/images/edit-pencilicon.svg" />
+                                                                        <img src="assets/images/edit-pencilicon.svg" alt="edit" />
                                                                     </span>
                                                                 </span>
                                                             </div>
@@ -2674,7 +3004,8 @@
                                                     name="transaction.stockUnit_{{ entryIdx }}"
                                                     [(ngModel)]="transaction.stockUnit"
                                                     (ngModelChange)="
-                                                        onChangeUnit(transaction, $event); transaction.setAmount(entry)
+                                                        onChangeUnit(entry, transaction, $event);
+                                                        handlePriceCalculationOnUnitChange(entry, transaction)
                                                     "
                                                 >
                                                     <option
@@ -2777,11 +3108,16 @@
                                             <discount-control-component
                                                 #discountComponent
                                                 [discountMenu]="false"
+                                                [discountsList]="discountsList"
                                                 [discountAccountsDetails]="entry.discounts"
+                                                [discountPercentageModal]="entry.discountPercentageModal"
+                                                [discountFixedValueModal]="entry.discountFixedValueModal"
                                                 [discountSum]="entry.discountSum"
                                                 [showHeaderText]="false"
                                                 (hideOtherPopups)="closeTaxControlPopup()"
-                                                (discountTotalUpdated)="calculateWhenTrxAltered(entry, transaction)"
+                                                (discountTotalUpdated)="
+                                                    calculateWhenTrxAltered(entry, transaction, false, $event)
+                                                "
                                                 [maskInput]="inputMaskFormat"
                                                 [prefixInput]="purchaseOrder.accountDetails.currencySymbol"
                                                 [suffixInput]="selectedSuffixForCurrency"
@@ -2886,9 +3222,10 @@
                                                         <span class="mr-r05">
                                                             <a
                                                                 href="javascript:;"
+                                                                aria-label="image"
                                                                 (click)="toggleOtherTaxesAsidePane(true, entryIdx)"
                                                             >
-                                                                <img src="assets/images/edit-pencilicon.svg" />
+                                                                <img src="assets/images/edit-pencilicon.svg" alt="edit icon" />
                                                             </a>
                                                         </span>
 
@@ -2932,11 +3269,6 @@
                                                 </amount-field>
                                             </span>
                                         </div>
-
-                                        <ng-container
-                                            *ngTemplateOutlet="otherTaxesModal; context: { $implicit: entry }"
-                                        >
-                                        </ng-container>
                                     </div>
                                 </div>
                             </div>
@@ -2978,10 +3310,11 @@
                             <div class="row">
                                 <div class="form-group col-xs-4">
                                     <giddh-datepicker
+                                        [cssClass]="'mat-field-border bdr form-control'"
                                         #shippingDate="ngModel"
                                         [placeholder]="localeData?.ship_date"
                                         name="shippingDate"
-                                        [(ngModel)]="purchaseOrder.templateDetails.other.shippingDate"
+                                        [(ngModel)]="purchaseOrder.templateDetails?.other.shippingDate"
                                         [class.invalid-inp]="
                                             shippingDate.errors && (shippingDate.dirty || shippingDate.touched)
                                         "
@@ -3000,7 +3333,7 @@
                                     <input
                                         type="text"
                                         name="shippedVia"
-                                        [(ngModel)]="purchaseOrder.templateDetails.other.shippedVia"
+                                        [(ngModel)]="purchaseOrder.templateDetails?.other.shippedVia"
                                         class="form-control"
                                         [placeholder]="localeData?.ship_via"
                                     />
@@ -3010,7 +3343,7 @@
                                     <input
                                         type="text"
                                         name="trackingNumber"
-                                        [(ngModel)]="purchaseOrder.templateDetails.other.trackingNumber"
+                                        [(ngModel)]="purchaseOrder.templateDetails?.other.trackingNumber"
                                         class="form-control"
                                         [placeholder]="localeData?.tracking_number"
                                     />
@@ -3024,7 +3357,7 @@
                         <textarea
                             class="form-control"
                             name="message2"
-                            [(ngModel)]="purchaseOrder.templateDetails.other.message2"
+                            [(ngModel)]="purchaseOrder.templateDetails?.other.message2"
                         ></textarea>
                     </div>
                 </div>
@@ -3195,7 +3528,7 @@
                                 [suffix]="selectedSuffixForCurrency"
                                 [mask]="inputMaskFormat"
                                 [(ngModel)]="grandTotalMulDum"
-                                (blur)="updateExchangeRate(grandTotalInr.value)"
+                                (blur)="updateExchangeRate(grandTotalInr?.value)"
                             />
                         </div>
                     </div>
@@ -3258,7 +3591,7 @@
                 <!-- endregion -->
 
                 <!-- region update mode -->
-                <div class="pull-right pr" *ngIf="isUpdateMode">
+                <div class="pull-right pr d-flex column-gap15" *ngIf="isUpdateMode">
                     <button type="button" class="btn btn-danger d-inline-block v-align-middle" (click)="cancelUpdate()">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
@@ -3310,42 +3643,32 @@
     </aside-menu-product-service>
 
     <!-- region bulk items -->
-    <div
-        bsModal
-        #bulkItemsModal="bs-modal"
-        tabindex="-1"
-        class="modal fade"
-        role="dialog"
-        [config]="{ animated: true, keyboard: false, backdrop: false, ignoreBackdropClick: true }"
-    >
-        <ng-container *ngIf="bulkItemsModal?.isShown">
-            <proforma-add-bulk-items-component
-                [invoiceType]="invoiceType"
-                (saveItemsEvent)="addBulkStockItems($event)"
-                (closeEvent)="bulkItemsModal.hide()"
-            ></proforma-add-bulk-items-component>
-        </ng-container>
-    </div>
-    <!-- endregion -->
-    <ng-template let-entry #otherTaxesModal>
-        <div id="top0">
-            <app-aside-menu-other-taxes
-                *ngIf="asideMenuStateForOtherTaxes === 'in'"
-                [class]="asideMenuStateForOtherTaxes"
-                [taxes]="companyTaxesList"
-                [otherTaxesModal]="entry.otherTaxModal"
-                [commonLocaleData]="commonLocaleData"
-                [@slideInOut]="asideMenuStateForOtherTaxes"
-                (closeModal)="toggleOtherTaxesAsidePane(true, null)"
-                (applyTaxes)="
-                    calculateOtherTaxes($event, entry);
-                    toggleOtherTaxesAsidePane(true, null);
-                    calculateAffectedThingsFromOtherTaxChanges()
-                "
-            >
-            </app-aside-menu-other-taxes>
-        </div>
+    <ng-template #bulkItemsModal>
+        <voucher-add-bulk-items-component
+            [accountUniqueName]="purchaseOrder.accountDetails.uniqueName"
+            [invoiceType]="invoiceType"
+            (saveItemsEvent)="addBulkStockItems($event)"
+            (closeEvent)="cancelBulkItemsModal()"
+        ></voucher-add-bulk-items-component>
     </ng-template>
+    <!-- endregion -->
+    <div id="top0">
+        <app-aside-menu-other-taxes
+            *ngIf="asideMenuStateForOtherTaxes === 'in'"
+            [class]="asideMenuStateForOtherTaxes"
+            [taxes]="companyTaxesList"
+            [otherTaxesModal]="activeEntry.otherTaxModal"
+            [commonLocaleData]="commonLocaleData"
+            [@slideInOut]="asideMenuStateForOtherTaxes"
+            (closeModal)="closeAsideMenuStateForOtherTaxes()"
+            (applyTaxes)="
+                calculateOtherTaxes($event, activeEntry);
+                toggleOtherTaxesAsidePane(true, null);
+                calculateAffectedThingsFromOtherTaxChanges()
+            "
+        >
+        </app-aside-menu-other-taxes>
+    </div>
     <ng-template #purchaseOrderPreviewModal>
         <purchase-order-preview-modal
             [purchaseOrderUniqueName]="purchaseOrderPreviewUniqueName"

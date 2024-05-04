@@ -21,6 +21,7 @@
         "trial_balance_account_wise_report_file_name": "Trial_Balance_account-wise.csv",
         "condensed_report": "Condensed Report",
         "account_wise_report": "Account Wise Report",
+        "flat_report": "Flat Report",
         "trial_balance": {
             "name": "Name",
             "opening_balance": "Opening Balance",

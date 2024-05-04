@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as jsonTreeViewer from 'json-tree-viewer';
 @Component({
@@ -7,7 +7,7 @@ import * as jsonTreeViewer from 'json-tree-viewer';
     styleUrls: ['activity-logs-json.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ActivityLogsJsonComponent implements OnInit {
+export class ActivityLogsJsonComponent implements OnInit, OnDestroy {
     /** Instance of activity logs json */
     @ViewChild('activityLogs', { static: false }) public activityLogs: ElementRef;
     /** This will hold local JSON data */
@@ -28,5 +28,14 @@ export class ActivityLogsJsonComponent implements OnInit {
             jsonTreeViewer?.create(this.inputData, this.activityLogs?.nativeElement);
         }, 100);
         this.changeDetection.detectChanges();
+    }
+
+    /**
+     * Life cycle hook runs when the component is destroyed
+     *
+     * @memberof ActivityLogsJsonComponent
+     */
+    public ngOnDestroy(): void {
+        document.querySelector('.cdk-overlay-container')?.classList?.remove('cdk-overlay-container-z-index');
     }
 }

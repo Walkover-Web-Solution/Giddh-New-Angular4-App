@@ -1,6 +1,5 @@
 import { first, takeUntil } from 'rxjs/operators';
 import { ShareRequestForm } from './../../../../models/api-models/Permission';
-import { PermissionActions } from '../../../../actions/permission/permission.action';
 import { GetAllPermissionResponse } from './../../../../permissions/permission.utility';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { Component, EventEmitter, OnDestroy, OnInit, Output, Input } from '@angular/core';
@@ -35,14 +34,14 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private accountActions: AccountsAction, private _permissionActions: PermissionActions) {
+    constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private accountActions: AccountsAction) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
         this.activeGroupSharedWith$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroupSharedWith), takeUntil(this.destroyed$));
         this.allPermissions$ = this.store.pipe(select(state => state.permission.permissions), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.store.dispatch(this._permissionActions.GetAllPermissions());
+
     }
 
     public getGroupSharedWith() {
@@ -58,10 +57,10 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
         let userRole = {
             emailId: this.email,
             entity: 'group',
-            entityUniqueName: activeGrp.uniqueName,
+            entityUniqueName: activeGrp?.uniqueName,
         };
         let selectedPermission = clone(this.selectedPermission);
-        this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission.toLowerCase()));
+        this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission?.toLowerCase()));
         this.email = '';
         this.selectedPermission = '';
     }
@@ -72,7 +71,7 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
 
     public updatePermission(model: ShareRequestForm, event: any) {
         let data = cloneDeep(model);
-        let newPermission = event.target.value;
+        let newPermission = event.target?.value;
         data.roleUniqueName = newPermission;
         this.store.dispatch(this.accountActions.updateEntityPermission(data, newPermission, 'group'));
     }

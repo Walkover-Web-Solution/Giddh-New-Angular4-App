@@ -11,6 +11,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
+import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
@@ -32,7 +33,6 @@ import {
 import { BalanceSheetExportXlsComponent } from './components/export/balance-sheet/export-xls/export-xls.component';
 import { ProfitLossExportXlsComponent } from './components/export/profit-loss/export-xls/export-xls.component';
 import { TrialBalanceExportCsvComponent } from './components/export/trial-balance/export-csv/export-csv.component';
-import { TrialBalanceExportPdfComponent } from './components/export/trial-balance/export-pdf/export-pdf.component';
 import { TrialBalanceExportXlsComponent } from './components/export/trial-balance/export-xls/export-xls.component';
 import { FinancialReportsFilterComponent } from './components/filter/filter.component';
 import { GridRowComponent } from './components/grid-row/grid-row.component';
@@ -62,7 +62,6 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
         ProfitLossGridRowComponent,
         ProfitLossExportXlsComponent,
         TrialBalanceExportCsvComponent,
-        TrialBalanceExportPdfComponent,
         TrialBalanceExportXlsComponent,
         BalanceSheetExportXlsComponent,
         BalanceSheetComponent,
@@ -78,20 +77,23 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
     providers: [],
     imports: [
         CommonModule,
-        ModalModule,
+        ModalModule.forRoot(),
         FormsModule,
         ReactiveFormsModule,
         Daterangepicker,
         FinancialReportsRoutingModule,
-        TabsModule,
-        LaddaModule,
+        TabsModule.forRoot(),
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         HighlightModule,
         RecTypeModule,
         ShSelectModule,
         ClickOutsideModule,
-        BsDropdownModule,
+        BsDropdownModule.forRoot(),
         CurrencyModule,
-        TooltipModule,
+        TooltipModule.forRoot(),
         AccountDetailModalModule,
         ScrollingModule,
         TranslateDirectiveModule,
@@ -99,7 +101,8 @@ import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
         GiddhPageLoaderModule,
         AmountFieldComponentModule,
         DatepickerWrapperModule,
-        PopoverModule
+        PopoverModule.forRoot(),
+        AsideMenuAccountModule
     ],
 })
 export class FinancialReportsModule {

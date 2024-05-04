@@ -1,3 +1,6 @@
+import { INameUniqueName } from "./Inventory";
+import { ReceiptItem } from "./recipt";
+
 /** Voucher form modal to toogle fields and make the form dynamic */
 export class VoucherForm {
     /** Stores the type of voucher */
@@ -24,4 +27,27 @@ export class VoucherForm {
     public dueDate: boolean;
     /** True, if the voucher supports to have attachment (for eg - Purchase Bill (PB) voucher) */
     public attachmentAllowed: boolean;
+}
+
+export interface OptionInterface {
+    value: string;
+    label: string;
+    disabled?: boolean;
+    additional?: any;
+}
+
+export class LastInvoices {
+    voucherNumber: string;
+    account: INameUniqueName;
+    grandTotal: any;
+    date: string;
+    uniqueName?: string;
+}
+
+export interface LastVouchersResponse {
+    items?: any[];
+    page?: number;
+    count?: number;
+    totalPages?: number;
+    totalItems?: number;
 }

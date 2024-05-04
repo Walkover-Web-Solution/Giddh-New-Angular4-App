@@ -6,21 +6,28 @@
                     <div class="invoice-search-box">
                         <input type="text" [placeholder]="commonLocaleData?.app_search" #searchElement />
                         <button
-                            *ngIf="!isCompany"
+                            *ngIf="!isCompany && voucherApiVersion === 1"
                             class="btn btn-sky-blue"
                             [routerLink]="['/pages/purchase-management/purchase-order/new']"
                         >
                             {{ localeData?.new_order }}
                         </button>
+                        <button
+                            *ngIf="!isCompany && voucherApiVersion === 2"
+                            class="btn btn-sky-blue"
+                            [routerLink]="['/pages/vouchers/purchase-order/create']"
+                        >
+                            {{ localeData?.new_order }}
+                        </button>
                     </div>
                     <ul class="invoice-sidebar">
-                        <perfect-scrollbar #perfectScrollbar *ngIf="filteredData && filteredData.length > 0">
+                        <cdk-virtual-scroll-viewport [itemSize]="62" *ngIf="filteredData && filteredData.length > 0">
                             <li
                                 class="single-invoice-detail cp"
-                                [ngClass]="{ 'activeItem': row.uniqueName === purchaseOrderUniqueName }"
-                                *ngFor="let row of filteredData; let i = index"
+                                [ngClass]="{ 'activeItem': row?.uniqueName === purchaseOrderUniqueName }"
+                                *cdkVirtualFor="let row of filteredData; let i = index"
                             >
-                                <div class="row" (click)="showPurchaseOrderPreview(row.uniqueName)">
+                                <div class="row" (click)="showPurchaseOrderPreview(row?.uniqueName)">
                                     <div class="col-7 col-sm-7">
                                         <div class="invoice-number-date">
                                             <span class="order-number">
@@ -45,7 +52,7 @@
                                     </div>
                                 </div>
                             </li>
-                        </perfect-scrollbar>
+                        </cdk-virtual-scroll-viewport>
                     </ul>
                 </div>
             </div>
@@ -95,14 +102,16 @@
                                                 role="menu"
                                                 aria-labelledby="button-basic"
                                             >
-                                                <li
-                                                    class="cp"
-                                                    role="menuitem"
-                                                    *ngIf="purchaseOrder.status === 'OPEN' && voucherApiVersion !== 2"
-                                                >
-                                                    <a class="dropdown-item" (click)="convertToBill()">{{
-                                                        localeData?.convert_tobill
-                                                    }}</a>
+                                                <li class="cp" role="menuitem" *ngIf="purchaseOrder?.status === 'OPEN'">
+                                                    <a
+                                                        class="dropdown-item"
+                                                        (click)="
+                                                            voucherApiVersion === 2
+                                                                ? openBulkConvert(purchaseBulkConvert)
+                                                                : convertToBill()
+                                                        "
+                                                        >{{ localeData?.convert_tobill }}</a
+                                                    >
                                                 </li>
                                                 <li class="cp" role="menuitem">
                                                     <a
@@ -119,7 +128,7 @@
                                                         class="cp"
                                                         href="javascript:void(0)"
                                                         (click)="statusUpdate('cancelled')"
-                                                        *ngIf="purchaseOrder.status !== 'CANCELLED'"
+                                                        *ngIf="purchaseOrder?.status !== 'CANCELLED'"
                                                         >{{ commonLocaleData?.app_cancel }}</a
                                                     >
                                                     <a
@@ -127,8 +136,8 @@
                                                         href="javascript:void(0)"
                                                         (click)="statusUpdate('open')"
                                                         *ngIf="
-                                                            purchaseOrder.status === 'CANCELLED' ||
-                                                            purchaseOrder.status === 'EXPIRED'
+                                                            purchaseOrder?.status === 'CANCELLED' ||
+                                                            purchaseOrder?.status === 'EXPIRED'
                                                         "
                                                         >{{ localeData?.open }}</a
                                                     >
@@ -263,12 +272,21 @@
 >
     <div class="modal-dialog modal-md">
         <div class="modal-content">
-            <delete-role-confirmation-model
+            <delete-voucher-confirmation-modal
                 [module]="'purchaseorder'"
                 (confirmDeleteEvent)="deleteItem()"
                 (closeModelEvent)="closeConfirmationPopup()"
             >
-            </delete-role-confirmation-model>
+            </delete-voucher-confirmation-modal>
         </div>
     </div>
 </div>
+<ng-template #purchaseBulkConvert>
+    <bulk-convert
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        [selectedPo]="selectedPurchaseOrders"
+        (closeModelEvent)="closeBulkConvertPopup($event)"
+    >
+    </bulk-convert>
+</ng-template>

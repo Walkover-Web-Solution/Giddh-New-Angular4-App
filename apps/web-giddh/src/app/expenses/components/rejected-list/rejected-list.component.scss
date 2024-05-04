@@ -1,25 +1,9 @@
 .basic > thead > tr > th {
     position: relative;
 }
-
-.search-icon {
-    position: absolute;
-    right: 12px;
-    font-size: 11px;
-    color: var(--color-abbey);
-    top: 13px;
-}
-
-.arrow-filter {
-    font-size: 11px;
-    position: absolute;
-    right: 10px;
-    color: var(--color-gray);
-    cursor: pointer;
-    top: 12px;
-}
 .action-btns {
     display: flex;
+    height: 52px;
 }
 .btn-icon {
     display: inline-block;
@@ -47,10 +31,4 @@
 }
 .icon-pointer {
     cursor: pointer;
-}
-@media (min-width: 769px) {
-    .table-responsive {
-        max-height: calc(100vh - 245px);
-        overflow-y: auto;
-    }
 }

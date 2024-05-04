@@ -6,7 +6,7 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { EXCEPTION_API } from './apiurls/exception-log.api';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
-import { HttpWrapperService } from './httpWrapper.service';
+import { HttpWrapperService } from './http-wrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 @Injectable()
@@ -27,12 +27,14 @@ export class ExceptionLogService implements ErrorHandler {
      */
     public handleError(error: any): void {
         if (error.stack) {
-            this.addUiException({ component: '', exception: error.stack }).pipe(take(1)).subscribe(() => {
-                const chunkFailedMessage = /Loading chunk [\d]+ failed/;
-                if (chunkFailedMessage.test(error.stack)) {
-                    window.location.reload();
-                }
-            }, () => { });
+            const chunkFailedMessage = /Loading chunk [\d]+ failed/;
+            if (chunkFailedMessage.test(error.stack)) {
+                window.location.reload();
+            } else {
+                this.addUiException({ component: '', exception: error.stack }).pipe(take(1)).subscribe(() => {
+
+                }, () => { });
+            }
         }
         throw error;
     }

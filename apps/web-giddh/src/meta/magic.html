@@ -54,9 +54,9 @@
                             <div class="font-12 text-color">Opening</div>
                             <div v-if="legderBalanceData && legderBalanceData.forwardedBalance">
                                 <!-- | number:'1.2-2' -->
-                                <span class="font-18 text-color">{{legderBalanceData.forwardedBalance.amount | currency
+                                <span class="font-16 text-color">{{legderBalanceData.forwardedBalance.amount | currency
                                     }}</span>
-                                <span class="font-16 text-color">{{legderBalanceData.forwardedBalance.type === 'DEBIT' ?
+                                <span class="font-15 text-color">{{legderBalanceData.forwardedBalance.type === 'DEBIT' ?
                                     'Dr' : 'Cr' }}</span>
                             </div>
                         </div>
@@ -70,10 +70,10 @@
                                 Closing
                             </div>
                             <div v-if="legderBalanceData && legderBalanceData.closingBalance">
-                                <span class="font-16 text-color">{{ legderBalanceData.closingBalance.type === 'DEBIT' ?
+                                <span class="font-15 text-color">{{ legderBalanceData.closingBalance.type === 'DEBIT' ?
                                     'Dr' : 'Cr' }}</span>
                                 <!-- | number:'1.2-2' -->
-                                <span class="font-18 text-color">{{legderBalanceData.closingBalance.amount | currency
+                                <span class="font-16 text-color">{{legderBalanceData.closingBalance.amount | currency
                                     }}</span>
                             </div>
                         </div>
@@ -128,16 +128,16 @@
                                                             <!-- | number: '1.2-2'  -->
                                                             <span
                                                                 v-if="legderBalanceData.forwardedBalance.type === 'DEBIT'"
-                                                                class="">{{ legderBalanceData.forwardedBalance.amount |
+                                                                >{{ legderBalanceData.forwardedBalance.amount |
                                                                 currency }}</span>
                                                             <span
                                                                 v-if="legderBalanceData.forwardedBalance.type === 'CREDIT'"
-                                                                class="">0</span>
+                                                                >0</span>
                                                         </td>
                                                     </tr>
                                                     <tr class="ledger-row bd-rb"
                                                         v-if="(legderBalanceData.forwardedBalance.type !== 'DEBIT') || (legderBalanceData.forwardedBalance.amount == 0)">
-                                                        <td colspan="3" class="">&nbsp;</td>
+                                                        <td colspan="3" >&nbsp;</td>
                                                     </tr>
                                                     <!-- v-if="ledger.hasDebit" -->
                                                     <!-- v-for="item in items" -->
@@ -197,7 +197,7 @@
                                                     <tr class="total-col row mr-0 ml-0"
                                                         v-if="legderBalanceData.closingBalance.type === 'CREDIT' && isResponsive">
                                                         <td colspan="12" class="col-12 text-right h32">
-                                                            <span v-tooltip="'(-) Asset ( ohh no!)'" class="">
+                                                            <span v-tooltip="'(-) Asset ( ohh no!)'" >
                                                                 <!-- | number: '1.2-2'  -->
                                                                 To Balance C/F: {{legderBalanceData.forwardedBalance ?
                                                                 legderBalanceData.forwardedBalance.type === 'CREDIT' ?
@@ -218,7 +218,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div role="tabpanel" class="tab-pane col-lg-6 col-md-12 col-md-12"
+                                <div role="tabpanel" class="tab-pane col-lg-6 col-md-12 col-12"
                                     v-bind:class="{'active': selectedTab === 'credit', 'pd-t350':!isResponsive}"
                                     id="credit" v-if="!selectedTab || selectedTab == 'credit'">
                                     <div class="row">
@@ -499,7 +499,7 @@
                                                 </ul>
                                             </div>
 
-                                            <div class="">
+                                            <div >
                                                 <ul class="list-style-ul menu-item" id="menu-primary-menu">
                                                     <li><a target="_blank"
                                                             href="https://giddh.com/make-the-switch/">Make The
@@ -546,7 +546,7 @@
                                                 </ul>
                                             </div>
 
-                                            <div class="">
+                                            <div >
                                                 <ul class="list-style-ul menu-item" id="menu-primary-menu">
                                                     <li><a target="_blank"
                                                             href="https://giddh.com/privacy-policy/">Privacy Policy</a>
@@ -771,7 +771,7 @@
         var folderPath = '';
 
         var jquery = document.createElement('script');
-        jquery.src = '../' + folderPath + 'assets/js/jquery-1.11.3.min.js';
+        jquery.src = '../' + folderPath + 'assets/js/jquery.min.js';
         document.head.appendChild(jquery);
 
         jquery.onload = function () {

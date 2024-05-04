@@ -1,10 +1,18 @@
 /** Settings integration tabs */
 export enum SettingsIntegrationTab {
-    //Sms = 0,
+    Communication = 0,
+    Email = 1,
+    Collection = 2,
+    ECommerce = 3,
+    Payment=4
+}
+
+/** Settings integration tabs V1 */
+export enum SettingsIntegrationTabV1 {
     Email = 0,
-    Collection,
-    ECommerce,
-    Payment
+    Collection = 1,
+    ECommerce = 2,
+    Payment = 3
 }
 
 /** Country interface for Organization profile */
@@ -33,6 +41,8 @@ export interface OrganizationProfile {
     taxType: string;
     isMultipleCurrency?: boolean;
     manageInventory?: boolean;
+    portalDomain?: string;
+    withPay?: any;
 }
 
 /** Form type in setting aside component */
@@ -48,6 +58,7 @@ export enum SettingsAsideFormType {
 export interface SettingsAsideConfiguration {
     type: SettingsAsideFormType;
     stateList?: Array<any>;
+    countyList?: Array<any>;
     tax?: {
         name: string,
         validation: Array<any>

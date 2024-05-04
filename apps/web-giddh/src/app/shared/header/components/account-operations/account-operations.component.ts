@@ -14,21 +14,25 @@ import { GroupResponse, GroupsTaxHierarchyResponse } from '../../../../models/ap
 import { AppState } from '../../../../store';
 import { Store, select } from '@ngrx/store';
 import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { AccountMergeRequest, AccountMoveRequest, AccountRequestV2, AccountResponseV2, AccountsTaxHierarchyResponse, AccountUnMergeRequest, ShareAccountRequest } from '../../../../models/api-models/Account';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { ColumnGroupsAccountVM, GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
-import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
+import { IAccountsInfo } from '../../../../models/interfaces/account-info.interface';
 import { ToasterService } from '../../../../services/toaster.service';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { createSelector } from 'reselect';
-import { DaybookQueryRequest } from '../../../../models/api-models/DaybookRequest';
+import { DaybookQueryRequest, ExportBodyRequest } from '../../../../models/api-models/DaybookRequest';
 import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import { IDiscountList } from '../../../../models/api-models/SettingsDiscount';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 import { differenceBy, each, flatten, flattenDeep, map, omit, union } from 'apps/web-giddh/src/app/lodash-optimized';
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
+import { Router } from '@angular/router';
+import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
+import { PermissionActions } from 'apps/web-giddh/src/app/actions/permission/permission.action';
+import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 
 @Component({
     selector: 'account-operations',
@@ -41,6 +45,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** True if master is open */
+    @Input() public isMasterOpen: boolean = false;
     /** This will hold content for group shared with */
     public groupSharedWith: string = "";
     /** This will hold content for account shared with */
@@ -50,20 +56,15 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public showEditAccount$: Observable<boolean>;
     public showEditGroup$: Observable<boolean>;
     @Output() public ShowForm: EventEmitter<boolean> = new EventEmitter(false);
-    /** Emits if we have to switch to custom fields tab */
-    @Output() public goToCustomFields: EventEmitter<boolean> = new EventEmitter();
-    /** True if custom fields api needs to be called again */
-    @Input() public reloadCustomFields: boolean = false;
-    @Input() public columnsRef: GroupAccountSidebarVM;
+    @Input() public topSharedGroups: any[];
     @Input() public height: number;
     public activeAccount$: Observable<AccountResponseV2>;
     public isTaxableAccount$: Observable<boolean>;
     public isDiscountableAccount$: Observable<boolean>;
     public activeAccountSharedWith$: Observable<ShareRequestForm[]>;
-    public shareAccountForm: FormGroup;
-    public moveAccountForm: FormGroup;
+    public shareAccountForm: UntypedFormGroup;
+    public moveAccountForm: UntypedFormGroup;
     public activeGroupSelected$: Observable<string[]>;
-    public config: PerfectScrollbarConfigInterface = { suppressScrollX: true, suppressScrollY: false };
     @ViewChild('shareGroupModal', { static: true }) public shareGroupModal: ModalDirective;
     @ViewChild('shareAccountModal', { static: true }) public shareAccountModal: ModalDirective;
     @ViewChild('shareAccountModalComp', { static: true }) public shareAccountModalComp: ShareAccountModalComponent;
@@ -85,9 +86,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     // tslint:disable-next-line:no-empty
     public showNewForm$: Observable<boolean>;
-    public groupDetailForm: FormGroup;
-    public taxGroupForm: FormGroup;
-    public discountAccountForm: FormGroup;
+    public groupDetailForm: UntypedFormGroup;
+    public taxGroupForm: UntypedFormGroup;
+    public discountAccountForm: UntypedFormGroup;
     public showGroupForm: boolean = false;
     public activeGroup$: Observable<GroupResponse>;
     public activeGroupUniqueName$: Observable<string>;
@@ -126,9 +127,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public selectedItems = [];
     public dropdownSettings = {};
     public settings = {};
+    // This will use for group export body request
+    public groupExportLedgerBodyRequest: ExportBodyRequest = new ExportBodyRequest();
+    /** List of discounts */
+    public discounts: any[] = [];
 
-    constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-        private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions) {
+    constructor(private _fb: UntypedFormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
+        private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions, public generalService: GeneralService, public ledgerService: LedgerService, public router: Router, private settingsDiscountService: SettingsDiscountService, private permissionActions: PermissionActions, private generalAction: GeneralActions) {
         this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
     }
 
@@ -154,7 +159,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 let arr: IOption[] = [];
                 if (taxes) {
                     if (activeAccount) {
-                        let applicableTaxes = activeAccount.applicableTaxes.map(p => p.uniqueName);
+                        let applicableTaxes = activeAccount.applicableTaxes.map(p => p?.uniqueName);
 
                         // set isGstEnabledAcc or not
                         if (activeAccount.parentGroups[0]?.uniqueName) {
@@ -166,17 +171,17 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                         if (activeAccountTaxHierarchy) {
 
                             if (activeAccountTaxHierarchy.inheritedTaxes) {
-                                let inheritedTaxes = flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j.uniqueName);
-                                let allTaxes = applicableTaxes?.filter(f => inheritedTaxes.indexOf(f) === -1);
+                                let inheritedTaxes = flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((j: any) => j?.uniqueName);
+                                let allTaxes = applicableTaxes?.filter(f => inheritedTaxes?.indexOf(f) === -1);
                                 // set value in tax group form
                                 this.taxGroupForm.setValue({ taxes: allTaxes });
                             } else {
                                 this.taxGroupForm.setValue({ taxes: applicableTaxes });
                             }
                             return differenceBy(taxes.map(p => {
-                                return { label: p.name, value: p.uniqueName };
+                                return { label: p.name, value: p?.uniqueName };
                             }), flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-                                return { label: p.name, value: p.uniqueName };
+                                return { label: p.name, value: p?.uniqueName };
                             }), 'value');
 
                         } else {
@@ -184,7 +189,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                             this.taxGroupForm.setValue({ taxes: applicableTaxes });
 
                             return taxes.map(p => {
-                                return { label: p.name, value: p.uniqueName };
+                                return { label: p.name, value: p?.uniqueName };
                             });
 
                         }
@@ -231,7 +236,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
             if (a && this.breadcrumbUniquePath[1]) {
                 this.isDiscountableAccount$ = observableOf(this.breadcrumbUniquePath[1] === 'sundrydebtors');
-                this.discountAccountForm?.patchValue({ discountUniqueName: a.discounts[0] ? a.discounts[0].uniqueName : undefined });
+                this.discountAccountForm?.patchValue({ discountUniqueName: a.discounts[0] ? a.discounts[0]?.uniqueName : undefined });
             }
         });
         this.groupDetailForm = this._fb.group({
@@ -258,7 +263,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
         this.showAddNewGroup$.subscribe(s => {
             if (s) {
-                if (this.breadcrumbPath.indexOf(this.commonLocaleData?.app_create_group) === -1) {
+                if (this.breadcrumbPath?.indexOf(this.commonLocaleData?.app_create_group) === -1) {
                     this.breadcrumbPath.push(this.commonLocaleData?.app_create_group);
                 }
             }
@@ -266,7 +271,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
         this.showAddNewAccount$.subscribe(s => {
             if (s) {
-                if (this.breadcrumbPath.indexOf(this.commonLocaleData?.app_create_account) === -1) {
+                if (this.breadcrumbPath?.indexOf(this.commonLocaleData?.app_create_account) === -1) {
                     this.breadcrumbPath.push(this.commonLocaleData?.app_create_account);
                 }
             }
@@ -324,15 +329,18 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
         this.activeGroupSharedWith$.subscribe(response => {
             if (response) {
-                this.groupSharedWith = this.localeData?.shared_with.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
+                this.groupSharedWith = this.localeData?.shared_with?.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
             }
         });
 
         this.activeAccountSharedWith$.subscribe(response => {
             if (response) {
-                this.accountSharedWith = this.localeData?.shared_with.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
+                this.accountSharedWith = this.localeData?.shared_with?.replace("[ACCOUNT_GROUPS_COUNT]", String(response.length));
             }
         });
+
+        this.getDiscountList();
+        this.store.dispatch(this.permissionActions.GetAllPermissions());
     }
 
     public ngAfterViewInit() {
@@ -356,13 +364,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAcc = p);
         let accObject = new ShareAccountRequest();
         accObject.role = 'view_only';
-        accObject.user = this.shareAccountForm.controls['userEmail'].value;
-        this.store.dispatch(this._ledgerActions.shareAccount(accObject, activeAcc.uniqueName));
+        accObject.user = this.shareAccountForm.controls['userEmail']?.value;
+        this.store.dispatch(this._ledgerActions.shareAccount(accObject, activeAcc?.uniqueName));
         this.shareAccountForm.reset();
     }
 
     public moveToAccountSelected(event: any) {
-        this.moveAccountForm?.patchValue({ moveto: event.item.uniqueName });
+        this.moveAccountForm?.patchValue({ moveto: event?.item?.uniqueName });
     }
 
     public moveAccount() {
@@ -370,11 +378,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAcc = p);
 
         let grpObject = new AccountMoveRequest();
-        grpObject.uniqueName = this.moveAccountForm.controls['moveto'].value;
+        grpObject.uniqueName = this.moveAccountForm.controls['moveto']?.value;
 
         let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath?.length - 2];
 
-        this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc.uniqueName, activeGrpName));
+        this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc?.uniqueName, activeGrpName));
         this.moveAccountForm.reset();
     }
 
@@ -382,13 +390,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let activeGrp;
         this.activeGroup$.pipe(take(1)).subscribe(p => activeGrp = p);
 
-        this.store.dispatch(this.groupWithAccountsAction.unShareGroup(val, activeGrp.uniqueName));
+        this.store.dispatch(this.groupWithAccountsAction.unShareGroup(val, activeGrp?.uniqueName));
     }
 
     public unShareAccount(val) {
         let activeAcc;
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAcc = p);
-        this.store.dispatch(this.accountsAction.unShareAccount(val, activeAcc.uniqueName));
+        this.store.dispatch(this.accountsAction.unShareAccount(val, activeAcc?.uniqueName));
     }
 
     public flattenGroup(rawList: any[], parents: any[] = []) {
@@ -399,7 +407,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             newParents = union([], parents);
             newParents.push({
                 name: listItem.name,
-                uniqueName: listItem.uniqueName
+                uniqueName: listItem?.uniqueName
             });
             listItem = Object.assign({}, listItem, { parentGroups: [] });
             listItem.parentGroups = newParents;
@@ -415,9 +423,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public isRootLevelGroupFunc(uniqueName: string) {
-        const rootLevelGroups: ColumnGroupsAccountVM[] | any[] = this.columnsRef?.columns[0]?.groups || [];
-        for (let grp of rootLevelGroups) {
-            if (grp.uniqueName === uniqueName) {
+        for (let grp of this.topSharedGroups) {
+            if (grp?.uniqueName === uniqueName) {
                 this.isRootLevelGroup = true;
                 return;
             } else {
@@ -440,10 +447,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let obj;
         obj = map(rawList, (item: any) => {
             obj = {};
-            obj.name = item.name;
-            obj.uniqueName = item.uniqueName;
-            obj.synonyms = item.synonyms;
-            obj.parentGroups = item.parentGroups;
+            obj.name = item?.name;
+            obj.uniqueName = item?.uniqueName;
+            obj.synonyms = item?.synonyms;
+            obj.parentGroups = item?.parentGroups;
             return obj;
         });
         return obj;
@@ -501,12 +508,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 if (t) {
                     t.inheritedTaxes.forEach(tt => {
                         tt.applicableTaxes.forEach(ttt => {
-                            data.taxes.push(ttt.uniqueName);
+                            data.taxes.push(ttt?.uniqueName);
                         });
                     });
                 }
             });
-            data.taxes.push.apply(data.taxes, this.taxGroupForm.value.taxes);
+            data.taxes.push.apply(data.taxes, this.taxGroupForm?.value.taxes);
             data.uniqueName = activeAccount.uniqueName;
             this.store.dispatch(this.accountsAction.applyAccountTax(data));
         }
@@ -514,21 +521,21 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public showShareGroupModal() {
-        this.shareGroupModal.show();
+        this.shareGroupModal?.show();
         this.shareGroupModalComp.getGroupSharedWith();
     }
 
     public hideShareGroupModal() {
-        this.shareGroupModal.hide();
+        this.shareGroupModal?.hide();
     }
 
     public showShareAccountModal() {
-        this.shareAccountModal.show();
+        this.shareAccountModal?.show();
         this.shareAccountModalComp.getAccountSharedWith();
     }
 
     public hideShareAccountModal() {
-        this.shareAccountModal.hide();
+        this.shareAccountModal?.hide();
     }
 
     public showAddGroupForm() {
@@ -542,7 +549,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     public showDeleteMergedAccountModal(merge: string) {
         merge = merge?.trim();
-        this.deleteMergedAccountModalBody = this.localeData?.delete_merged_account_content.replace("[MERGE]", merge);
+        this.deleteMergedAccountModalBody = this.localeData?.delete_merged_account_content?.replace("[MERGE]", merge);
         this.selectedAccountForDelete = merge;
         this.deleteMergedAccountModal?.show();
     }
@@ -556,7 +563,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.activeAccount$.pipe(take(1)).subscribe(p => activeAccount = p);
         let obj = new AccountUnMergeRequest();
         obj.uniqueNames = [this.selectedAccountForDelete];
-        this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount.uniqueName, obj));
+        this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount?.uniqueName, obj));
         this.showDeleteMove = false;
         this.hideDeleteMergedAccountModal();
     }
@@ -565,7 +572,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         if (v?.length) {
             let accounts = [];
             v.map(a => {
-                accounts.push(a.value);
+                accounts.push(a?.value);
             });
             this.selectedaccountForMerge = accounts;
         } else {
@@ -591,20 +598,20 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             this.store.dispatch(this.accountsAction.mergeAccount(activeAccount?.uniqueName, finalData));
             this.showDeleteMove = false;
         } else {
-            this._toaster.errorToast(this.localeData?.merge_account_error);
+            this.toaster.errorToast(this.localeData?.merge_account_error);
             return;
         }
     }
 
     public showMoveMergedAccountModal() {
         this.moveMergedAccountModalBody = this.localeData?.move_merged_account_content
-            .replace("[SOURCE_ACCOUNT]", this.setAccountForMove)
-            .replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
-        this.moveMergedAccountModal.show();
+            ?.replace("[SOURCE_ACCOUNT]", this.setAccountForMove)
+            ?.replace("[DESTINATION_ACCOUNT]", this.selectedAccountForMove);
+        this.moveMergedAccountModal?.show();
     }
 
     public hideMoveMergedAccountModal() {
-        this.moveMergedAccountModal.hide();
+        this.moveMergedAccountModal?.hide();
     }
 
     public moveMergeAccountTo() {
@@ -613,7 +620,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let obj = new AccountUnMergeRequest();
         obj.uniqueNames = [this.setAccountForMove];
         obj.moveTo = this.selectedAccountForMove;
-        this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount.uniqueName, obj));
+        this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount?.uniqueName, obj));
         this.showDeleteMove = false;
         this.hideDeleteMergedAccountModal();
         this.hideMoveMergedAccountModal();
@@ -623,21 +630,22 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         this.store.dispatch(this.accountsAction.createAccountV2(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
     }
 
-    public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }) {
-        this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject.value, accRequestObject.accountRequest));
+    public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string, isMasterOpen?: boolean }, accountRequest: AccountRequestV2 }) {
+        accRequestObject.value.isMasterOpen = this.isMasterOpen;
+        this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject?.value, accRequestObject.accountRequest));
     }
 
     public showDeleteAccountModal() {
-        this.deleteAccountModal.show();
+        this.deleteAccountModal?.show();
     }
 
     public hideDeleteAccountModal() {
-        this.deleteAccountModal.hide();
+        this.deleteAccountModal?.hide();
     }
 
     public deleteAccount() {
         let activeAccUniqueName = null;
-        this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s.uniqueName);
+        this.activeAccount$.pipe(take(1)).subscribe(s => activeAccUniqueName = s?.uniqueName);
         let activeGrpName = this.breadcrumbUniquePath[this.breadcrumbUniquePath?.length - 2];
         this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName, activeGrpName));
 
@@ -649,19 +657,40 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     public exportGroupLedger() {
-        this.groupExportLedgerModal.show();
+        this.groupExportLedgerModal?.show();
     }
 
+    /**
+     * This will use for hide group export model
+     *
+     * @param {*} response
+     * @memberof AccountOperationsComponent
+     */
     public hideGroupExportModal(response: any) {
         this.groupExportLedgerModal.hide();
         this.activeGroupUniqueName$.pipe(take(1)).subscribe((grpUniqueName: string) => {
             if (response !== 'close') {
-                this.groupExportLedgerQueryRequest.type = response.type;
-                this.groupExportLedgerQueryRequest.format = response.fileType;
-                this.groupExportLedgerQueryRequest.sort = response.order;
-                this.groupExportLedgerQueryRequest.from = response.from;
-                this.groupExportLedgerQueryRequest.to = response.to;
-                this.store.dispatch(this._ledgerActions.GroupExportLedger(grpUniqueName, this.groupExportLedgerQueryRequest));
+                this.groupExportLedgerBodyRequest.from = response.body?.from;
+                this.groupExportLedgerBodyRequest.to = response.body?.to;
+                this.groupExportLedgerBodyRequest.showVoucherNumber = response.body?.showVoucherNumber;
+                this.groupExportLedgerBodyRequest.showVoucherTotal = response.body?.showVoucherTotal;
+                this.groupExportLedgerBodyRequest.showEntryVoucher = response.body?.showEntryVoucher;
+                this.groupExportLedgerBodyRequest.showDescription = response.body?.showDescription;
+                this.groupExportLedgerBodyRequest.exportType = response.body?.exportType;
+                this.groupExportLedgerBodyRequest.showEntryVoucherNo = response.body?.showEntryVoucherNo;
+                this.groupExportLedgerBodyRequest.groupUniqueName = grpUniqueName;
+                this.groupExportLedgerBodyRequest.sort = response.body?.sort ? 'ASC' : 'DESC';
+                this.groupExportLedgerBodyRequest.fileType = response.fileType;
+                this.ledgerService.exportData(this.groupExportLedgerBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.status === 'success') {
+                        this.router.navigate(["/pages/downloads"]);
+                        this.toaster.showSnackBar("success", response?.body);
+                        this.store.dispatch(this.generalAction.addAndManageClosed());
+                        this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+                    } else {
+                        this.toaster.showSnackBar("error", response?.message, response?.code);
+                    }
+                });
             }
         });
     }
@@ -674,8 +703,29 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             }
         }
     }
+
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    /**
+     * To get discount list
+     *
+     * @memberof AccountOperationsComponent
+     */
+    public getDiscountList(): void {
+        this.discounts = [];
+        this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                Object.keys(response?.body).forEach(key => {
+                    this.discounts.push({
+                        label: response?.body[key]?.name,
+                        value: response?.body[key]?.uniqueName,
+                        isSelected: false
+                    });
+                });
+            }
+        });
     }
 }

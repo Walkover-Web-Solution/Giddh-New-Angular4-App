@@ -44,15 +44,15 @@ export const PAGE_SHORTCUT_MAPPING = [
             gridType: 'voucher'
         }
     },
-    // {
-    //     keyCode: 116, // 'F5',
-    //     key: FUNCTIONAL_KEYS.F5,
-    //     inputForFn: {
-    //         page: 'Payment',
-    //         uniqueName: 'purchases',
-    //         gridType: 'voucher'
-    //     }
-    // },
+    {
+        keyCode: 116, // 'F5',
+        key: FUNCTIONAL_KEYS.F5,
+        inputForFn: {
+            page: 'Payment',
+            uniqueName: 'purchases',
+            gridType: 'voucher'
+        }
+    },
     {
         keyCode: 117, // 'F6',
         key: FUNCTIONAL_KEYS.F6,
@@ -62,15 +62,16 @@ export const PAGE_SHORTCUT_MAPPING = [
             gridType: 'voucher'
         }
     },
-    // {
-    //     keyCode: 118, // 'F7',
-    //     key: FUNCTIONAL_KEYS.F7,
-    //     inputForFn: {
-    //         page: 'Journal',
-    //         uniqueName: 'purchases',
-    //         gridType: 'voucher'
-    //     }
-    // }, {
+    {
+        keyCode: 118, // 'F7',
+        key: FUNCTIONAL_KEYS.F7,
+        inputForFn: {
+            page: 'Journal',
+            uniqueName: 'purchases',
+            gridType: 'voucher'
+        }
+    },
+    //{
     //     keyCode: 119, // 'F8',
     //     key: FUNCTIONAL_KEYS.F8,
     //     inputForFn: {
@@ -159,7 +160,7 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
 
     @HostListener('document:keyup', ['$event'])
     public handleKeyboardEvent(event: KeyboardEvent) {
-        if (event.ctrlKey && event.key.toLowerCase() === 'a') { // Ctrl + A
+        if (event.ctrlKey && event.key?.toLowerCase() === 'a') { // Ctrl + A
             event.preventDefault();
             event.stopPropagation();
             if (this.gridType === 'voucher') {
@@ -233,7 +234,7 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
             }
         });
         this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());

@@ -7,7 +7,7 @@ import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { LocaleService } from '../../../services/locale.service';
 import { SettingsTaxesService } from '../../../services/settings.taxes.service';
 import { ToasterService } from '../../../services/toaster.service';
-import { CustomActions } from '../../../store/customActions';
+import { CustomActions } from '../../../store/custom-actions';
 import { AppState } from '../../../store/roots';
 import { GeneralActions } from '../../general/general.actions';
 import { SETTINGS_TAXES_ACTIONS } from './settings.taxes.const';
@@ -28,10 +28,12 @@ export class SettingsTaxesActions {
             ofType(SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
-                    this.toasty.errorToast(data.message, data.code);
-                } else {
-                    this.toasty.successToast(this.localeService.translate("app_messages.tax_created"));
+                if (data) {
+                    if (data?.status === 'error') {
+                        this.toasty.errorToast(data.message, data.code);
+                    } else {
+                        this.toasty.successToast(this.localeService.translate("app_messages.tax_created"));
+                    }
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -40,7 +42,7 @@ export class SettingsTaxesActions {
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.UPDATE_TAX),
             switchMap((action: CustomActions) => {
-                return this.settingsTaxesService.UpdateTax(action.payload, action.payload.uniqueName).pipe(
+                return this.settingsTaxesService.UpdateTax(action.payload, action.payload?.uniqueName).pipe(
                     map(response => this.UpdateTaxResponse(response)));
             })));
 
@@ -49,7 +51,7 @@ export class SettingsTaxesActions {
             ofType(SETTINGS_TAXES_ACTIONS.UPDATE_TAX_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.toasty.successToast(this.localeService.translate("app_messages.tax_updated"));
@@ -61,7 +63,7 @@ export class SettingsTaxesActions {
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX),
             switchMap((action: CustomActions) => {
-                return this.settingsTaxesService.DeleteTax(action.payload.value).pipe(
+                return this.settingsTaxesService.DeleteTax(action.payload?.value).pipe(
                     tap(resp => {
                         if (action.payload.linkedAccount) {
                             this.store.dispatch(this.generalActions.updateCurrentLiabilities(action.payload.linkedAccount));
@@ -75,7 +77,7 @@ export class SettingsTaxesActions {
             ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX_RESPONSE),
             map((response: CustomActions) => {
                 let data: BaseResponse<any, any> = response.payload;
-                if (data.status === 'error') {
+                if (data?.status === 'error') {
                     this.toasty.errorToast(data.message, data.code);
                 } else {
                     this.toasty.successToast(this.localeService.translate("app_messages.tax_deleted"));
@@ -145,7 +147,7 @@ export class SettingsTaxesActions {
     }
 
     public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
-        if (response.status === 'error') {
+        if (response?.status === 'error') {
             if (showToast) {
                 this.toasty.errorToast(response.message);
             }

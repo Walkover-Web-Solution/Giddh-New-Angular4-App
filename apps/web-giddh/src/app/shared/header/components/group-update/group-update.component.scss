@@ -18,9 +18,7 @@
 .move-group-form {
     width: calc(100% - 112px);
 }
-.all-taxes {
-    width: calc(100% - 115px);
-}
+
 .move-group-form .list-item {
     border-bottom: 1px solid var(--color-iron);
 }
@@ -39,6 +37,7 @@
         .ladda-button[type="submit"] {
             border-color: var(--color-secondary-button-background) !important;
             background-color: var(--color-secondary-button-background) !important;
+            color: var(--color-white) !important;
             &:hover {
                 border-color: var(--color-secondary-button-background-hover) !important;
                 background-color: var(--color-secondary-button-background-hover) !important;

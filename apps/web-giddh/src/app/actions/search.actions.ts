@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { SearchService } from '../services/search.service';
 import { SearchRequest } from '../models/api-models/Search';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { CustomActions } from '../store/customActions';
+import { CustomActions } from '../store/custom-actions';
 
 @Injectable()
 export class SearchActions {
@@ -46,13 +46,13 @@ export class SearchActions {
     }
 
     private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
-        if (response.status === 'error') {
+        if (response?.status === 'error') {
             if (showToast) {
                 this._toasty.errorToast(response.message);
             }
             return errorAction;
         } else {
-            if (showToast && typeof response.body === 'string') {
+            if (showToast && typeof response?.body === 'string') {
                 this._toasty.successToast(response.message);
             }
         }

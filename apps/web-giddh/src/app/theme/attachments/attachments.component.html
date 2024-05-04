@@ -6,21 +6,24 @@
 >
     <div class="wrapper">
         <div class="header">
-            <span
+            <button
                 aria-hidden="true"
-                class="cursor-pointer"
+                class="cursor-pointer font-15 d-flex p-0 attachment-back-button"
                 [attr.aria-label]="commonLocaleData?.app_back"
                 #close
+                disableRipple
+                type="button"
                 mat-button
                 [mat-dialog-close]="refreshAfterClose"
-                ><i class="icon-left"></i> {{ commonLocaleData?.app_back }}</span
             >
+                <i class="icon-left"></i> {{ commonLocaleData?.app_back }}
+            </button>
         </div>
         <div class="section" *ngIf="!isLoading">
             <div class="left-side">
                 <mat-checkbox
                     *ngIf="voucherPdf || attachments?.length > 0"
-                    class="select-all font-14"
+                    class="select-all font-15"
                     color="primary"
                     [(ngModel)]="selectAll"
                     (change)="selectAllAttachments($event)"
@@ -33,12 +36,12 @@
                             color="primary"
                             [(ngModel)]="voucherPdf.isChecked"
                             (change)="selectAttachment($event, voucherPdf)"
-                            >&nbsp;</mat-checkbox
+                            ></mat-checkbox
                         >
                         <span
-                            class="cursor-pointer font-14"
+                            class="cursor-pointer font-15"
                             [ngClass]="{
-                                'active-file': !isMobileView && voucherPdf?.uniqueName === previewedFile?.uniqueName
+                                'active-file': voucherPdf?.uniqueName === previewedFile?.uniqueName
                             }"
                             (click)="showVoucherPreview()"
                             >{{ voucherPdf?.name || commonLocaleData?.app_not_available }}</span
@@ -52,7 +55,7 @@
                     <p class="attachment">{{ localeData?.attachments }}</p>
                     <div class="attachment-list">
                         <mat-list role="list" *ngFor="let attachment of attachments; let i = index">
-                            <mat-list-item role="listitem">
+                            <mat-list-item role="listitem" class="p-0">
                                 <mat-checkbox
                                     color="primary"
                                     [(ngModel)]="attachment.isChecked"
@@ -60,10 +63,10 @@
                                     >&nbsp;</mat-checkbox
                                 >
                                 <span
-                                    class="file-name cursor-pointer font-14"
+                                    class="file-name cursor-pointer font-15"
                                     [ngClass]="{
                                         'active-file':
-                                            !isMobileView && attachment?.uniqueName === previewedFile?.uniqueName
+                                            attachment?.uniqueName === previewedFile?.uniqueName
                                     }"
                                     (click)="showFilePreview(attachment)"
                                     >{{ attachment?.name }}</span
@@ -75,39 +78,8 @@
                         </mat-list>
                     </div>
                 </ng-container>
-                <!-- <label class="upload-div">
-                    <input [disabled]="
-                            !isPettyCash &&
-                            currentOrganizationType === 'COMPANY' &&
-                            branches?.length > 1
-                        " type="file" name="invoiceFile" #fileInputUpdate id="invoiceFile" ngFileSelect
-                        [uploadInput]="uploadInput" [options]="fileUploadOptions" (uploadOutput)="onUploadOutput($event)" />
-                    <label for="invoiceFile" class="cp font-16">
-                        <i [ngClass]="
-                                !isFileUploading ? 'icon-file-path' : 'fa fa-spinner rotate'
-                            "></i>
-                        Attach File</label>
-                </label> -->
-                <div class="right-side-buttons" *ngIf="isMobileView">
-                    <a
-                        href="javascript:;"
-                        (click)="downloadFiles()"
-                        [matTooltip]="commonLocaleData?.app_download"
-                        [matTooltipPosition]="'above'"
-                    >
-                        <i class="icon-file"></i>
-                    </a>
-                    <a
-                        href="javascript:;"
-                        (click)="printFiles()"
-                        [matTooltip]="commonLocaleData?.app_print"
-                        [matTooltipPosition]="'above'"
-                    >
-                        <i class="fa fa-print"></i>
-                    </a>
-                </div>
             </div>
-            <div class="right-side" *ngIf="!isMobileView">
+            <div class="right-side">
                 <div class="right-side-buttons" *ngIf="previewedFile">
                     <span [ngClass]="{ 'disabled': previewedFile?.type === 'unsupported' }" *ngIf="previewedFile?.type">
                         <a
@@ -117,6 +89,7 @@
                             [disabled]="selectAll || previewedFile?.type === 'unsupported'"
                             [matTooltip]="commonLocaleData?.app_preview"
                             [matTooltipPosition]="'above'"
+                            aria-label="icon search"
                             ><i class="icon-search"></i
                         ></a>
                         <a
@@ -124,12 +97,14 @@
                             (click)="openPreview()"
                             [matTooltip]="commonLocaleData?.app_preview"
                             [matTooltipPosition]="'above'"
+                            aria-label="icon search"
                             ><i class="icon-search"></i
                         ></a>
                         <a
                             *ngIf="previewedFile?.type === 'unsupported'"
                             [matTooltip]="commonLocaleData?.app_preview"
                             [matTooltipPosition]="'above'"
+                            aria-label="icon search"
                             ><i class="icon-search"></i
                         ></a>
                     </span>
@@ -138,6 +113,7 @@
                             (click)="downloadFiles()"
                             [matTooltip]="commonLocaleData?.app_download"
                             [matTooltipPosition]="'above'"
+                            aria-label="icon file"
                             ><i class="icon-file"></i
                         ></a>
                     </span>
@@ -146,6 +122,7 @@
                             (click)="printFiles()"
                             [matTooltip]="commonLocaleData?.app_print"
                             [matTooltipPosition]="'above'"
+                            aria-label="icon print"
                         >
                             <i class="fa fa-print"></i>
                         </a>
@@ -154,6 +131,7 @@
                 <div class="display-area">
                     <img *ngIf="previewedFile?.type === 'image'" [src]="previewedFile?.src" />
                     <iframe
+                        title="myFrame"
                         *ngIf="previewedFile?.type === 'pdf'"
                         #pdfContainer
                         width="100%"

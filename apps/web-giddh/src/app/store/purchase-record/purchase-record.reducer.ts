@@ -1,5 +1,5 @@
 import { PurchaseRecordUpdateModel } from "../../purchase/purchase-record/constants/purchase-record.interface";
-import { CustomActions } from '../customActions';
+import { CustomActions } from '../custom-actions';
 import { PURCHASE_RECORD_ACTIONS } from '../../actions/purchase-record/purchase-record.const';
 
 /**

@@ -1,5 +1,5 @@
 <div class="form-header">
-    <h2 class="">Transfer Note</h2>
+    <h2 >Transfer Note</h2>
 </div>
 <div class="form-body white-bg clearfix margin-child-label">
     <div class="clearfix">
@@ -60,7 +60,7 @@
                         [options]="userListOptions"
                         [multiple]="false"
                         [placeholder]="'Select Receiver'"
-                        (selected)="recieverUniqueName = $event.value"
+                        (selected)="recieverUniqueName = $event?.value"
                         [ItemHeight]="'33'"
                         [isRequired]="true"
                     >

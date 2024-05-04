@@ -67,6 +67,7 @@ declare var TEST_ENV: boolean;
 declare var LOCAL_ENV: boolean;
 declare var APP_FOLDER: string;
 declare var ApiUrl: string;
+declare var PORTAL_URL: string;
 declare var isElectron: boolean;
 declare var fileChooser: any;
 declare var FilePicker: any;
@@ -77,8 +78,8 @@ declare var enableVoucherAdjustmentMultiCurrency: boolean;
 declare var GOOGLE_CLIENT_ID: string;
 declare var GOOGLE_CLIENT_SECRET: string;
 declare var RAZORPAY_KEY: string;
-// declare var $: JQueryStatic;
-// declare var jQuery: JQueryStatic;
+declare var OTP_WIDGET_ID: string;
+declare var OTP_TOKEN_AUTH: string;
 
 interface SystemJS {
     import: (path?: string) => Promise<any>;
@@ -91,6 +92,7 @@ interface GlobalEnvironment {
     System: SystemJS;
     AppUrl: string;
     ApiUrl: string;
+    PORTAL_URL: string;
     isElectron: boolean;
     errlyticsNeeded: boolean;
     errlyticsKey: string;

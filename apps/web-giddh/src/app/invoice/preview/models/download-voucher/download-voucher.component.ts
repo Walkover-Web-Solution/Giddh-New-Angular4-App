@@ -50,27 +50,27 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
             this.invoiceType.push('Original');
         }
 
-        this.isProformaEstimatesInvoice = (this.selectedItem) ? [VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.selectedItem.voucherType) : false;
+        this.isProformaEstimatesInvoice = (this.selectedItem) ? [VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma].includes(this.selectedItem?.voucherType) : false;
     }
 
     public invoiceTypeChanged(event): void {
-        let val = event.target.value;
-        if (event.target.checked) {
+        let val = event.target?.value;
+        if (event.target?.checked) {
             this.invoiceType.push(val);
         } else {
-            this.invoiceType = this.invoiceType.filter(f => f !== val);
+            this.invoiceType = this.invoiceType?.filter(f => f !== val);
         }
     }
 
     public onDownloadInvoiceEvent(): void {
         // as discussed with backend team voucherType will never be cash, It will be sales always for download vouchers
-        let voucherType = this.selectedItem && this.selectedItem.voucherType === VoucherTypeEnum.cash ? VoucherTypeEnum.sales : this.selectedItem.voucherType;
+        let voucherType = this.selectedItem && this.selectedItem.voucherType === VoucherTypeEnum.cash ? VoucherTypeEnum.sales : this.selectedItem?.voucherType;
 
         if (this.generalService.voucherApiVersion === 2) {
             let dataToSend = {
                 copyTypes: this.invoiceType,
                 voucherType: voucherType,
-                uniqueName: this.selectedItem.uniqueName
+                uniqueName: this.selectedItem?.uniqueName
             };
 
             let downloadOption = "";
@@ -90,9 +90,9 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
 
             this.commonService.downloadFile(dataToSend, downloadOption, fileType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status !== "error") {
-                    if (dataToSend.copyTypes.length > 1 || this.isAttachment) {
+                    if (dataToSend.copyTypes?.length > 1 || this.isAttachment) {
                         if (fileType === "base64") {
-                            saveAs((this.generalService.base64ToBlob(response.body.attachments[0].encodedData, '', 512)), response.body.attachments[0].name);
+                            saveAs((this.generalService.base64ToBlob(response.body?.attachments[0]?.encodedData, '', 512)), response.body?.attachments[0]?.name);
                         } else {
                             saveAs(response, `${voucherNumber}.` + 'zip');
                         }
@@ -113,10 +113,10 @@ export class DownloadVoucherComponent implements OnInit, OnDestroy {
                 voucherType: voucherType
             };
 
-            this.invoiceService.DownloadInvoice(this.selectedItem.account.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
+            this.invoiceService.DownloadInvoice(this.selectedItem.account?.uniqueName, dataToSend).pipe(takeUntil(this.destroyed$))
                 .subscribe(res => {
                     if (res?.status !== "error") {
-                        if (dataToSend.typeOfInvoice.length > 1) {
+                        if (dataToSend.typeOfInvoice?.length > 1) {
                             saveAs(res, `${this.selectedItem.voucherNumber}.` + 'zip');
                         } else {
                             saveAs(res, `${this.selectedItem.voucherNumber}.` + 'pdf');

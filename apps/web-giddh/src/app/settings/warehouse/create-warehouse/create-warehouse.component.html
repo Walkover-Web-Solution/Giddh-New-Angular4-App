@@ -27,6 +27,7 @@
                                             src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{
                                                 companyDetails?.country?.countryCode
                                             }}.svg"
+                                            alt="flag"
                                         />
                                         {{ companyDetails?.country?.countryName }} -
                                         {{ companyDetails?.country?.currencyCode }}
@@ -38,7 +39,7 @@
                     </div>
                     <div class="col-lg-2 col-sm-2">
                         <div class="warehouse-image">
-                            <img class="warehouse-image m-15" src="{{ imgPath }}" [alt]="localeData?.warehouse_image" />
+                            <img class="warehouse-image m-15" src="{{ imgPath }}" [alt]="localeData?.warehouse_image" alt="warehouse image" />
                         </div>
                     </div>
                 </div>
@@ -117,10 +118,10 @@
                 </div>
                 <div class="footer-btn row">
                     <div class="button-group">
-                        <button type="reset" (click)="handleFormClear()" class="btn btn-primary mr-r15">
+                        <button type="reset" aria-label="clear" (click)="handleFormClear()" class="btn btn-primary mr-r15">
                             {{ commonLocaleData?.app_clear }}
                         </button>
-                        <button type="submit" [disabled]="warehouseForm?.invalid" class="btn btn-success">
+                        <button type="submit" aria-label="create warehouse" [disabled]="warehouseForm?.invalid" class="btn btn-success">
                             {{ localeData?.create_warehouse }}
                         </button>
                     </div>
@@ -151,6 +152,7 @@
             [showLoader]="isAddressChangeInProgress"
             (closeAsideEvent)="toggleAddressAsidePane($event)"
             *ngIf="addressAsideMenuState === 'in'"
+            [hideLinkEntity]="addresses?.length <= 0 && hideLinkEntity"
         ></create-address>
         <!-- aside pane for create address end -->
     </ng-container>

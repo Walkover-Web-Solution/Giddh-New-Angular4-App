@@ -58,6 +58,16 @@
                                     <img src="./assets/images/templates/beta.png" alt="" />
                                 </div>
                             </li>
+                            <!--Hide Thermal Feature  -->
+                            <li
+                                (click)="onDesignChange('uniqueName', template?.uniqueName)"
+                                *ngIf="template?.templateType === 'thermal_template'"
+                            >
+                                <img src="./assets/images/templates/{{ template.templateType }}.png" alt="" />
+                                <div class="beta-img">
+                                    <img src="./assets/images/templates/beta.png" alt="" />
+                                </div>
+                            </li>
                         </ng-container>
                         <!-- <li (click)="onDesignChange('uniqueName', 'gst_template_a')">
                 <img src="./assets/images/template1.jpg" alt="" />
@@ -89,10 +99,14 @@
                     </ul>
                 </div>
             </li>
-            <li [hidden]="templateUISectionVisibility.logo" (click)="onChangeVisibility('logo')">
+            <li
+                [hidden]="templateUISectionVisibility.logo"
+                (click)="onChangeVisibility('logo')"
+                *ngIf="customTemplate.templateType !== 'thermal_template'"
+            >
                 <i class="ico-edit"></i> <label>Make logo edit</label>
             </li>
-            <li [hidden]="!templateUISectionVisibility.logo">
+            <li [hidden]="!templateUISectionVisibility.logo" *ngIf="customTemplate.templateType !== 'thermal_template'">
                 <i class="ico-edit"></i> <label>Make logo edit</label>
                 <div class="clearfix mr-t1">
                     <div class="logo-tool">
@@ -103,11 +117,8 @@
                                     #fileInput
                                     accept="image/png, image/jpeg"
                                     id="logo-edit"
-                                    [options]="fileUploadOptions"
-                                    ngFileSelect
                                     [disabled]="isFileUploaded"
-                                    (uploadOutput)="onUploadMyFileOutput($event)"
-                                    [uploadInput]="uploadInput"
+                                    (change)="uploadLogo()"
                                 />
                                 <small>Upload Your Logo</small>
                             </label>
@@ -115,15 +126,6 @@
                                 <img src="" alt="" id="logoImage" [hidden]="!logoAttached" />
                             </label>
                         </span>
-                        <button
-                            *ngIf="showUploadButton"
-                            type="button"
-                            class="start-upload-btn btn btn-success"
-                            (click)="startUpload()"
-                            tooltip="Clicking on Upload, will Upload image on server"
-                        >
-                            Upload
-                        </button>
                         <span class="start-upload-btn" *ngIf="isFileUploadInProgress"><b>Uploading...</b></span>
                         <button
                             *ngIf="showDeleteButton"
@@ -184,39 +186,43 @@
                 </div>
             </li>
 
-            <li [hidden]="templateUISectionVisibility.color" (click)="onChangeVisibility('color')">
+            <li
+                [hidden]="templateUISectionVisibility.color"
+                (click)="onChangeVisibility('color')"
+                *ngIf="customTemplate.templateType !== 'thermal_template'"
+            >
                 <i class="ico-swatch"></i> <label>Try other colour</label>
             </li>
             <!--<li *ngIf="ifColorSelected">-->
-            <li [hidden]="!templateUISectionVisibility.color">
+            <li [hidden]="!templateUISectionVisibility.color" *ngIf="templateType !== 'thermal_template'">
                 <i class="ico-swatch"></i> <label>Try other colour</label>
                 <!-- edit color  start -->
                 <div class="clearfix mr-t1">
                     <div class="swatch text-center">
                         <span class="swatch-preview"
-                            ><span class="" [ngStyle]="{ 'background-color': customTemplate.templateColor }"></span>
+                            ><span [ngStyle]="{ 'background-color': customTemplate.templateColor }"></span>
                             {{ customTemplate.templateColor }}
                         </span>
                         <div class="mr-l1 pull-left">
                             <ul>
-                                <li class="" (click)="changeColor('#bdbdbd', '#fcfcfc')"></li>
-                                <li class="" (click)="changeColor('#636363', '#f7f7f7')"></li>
-                                <li class="" (click)="changeColor('#000000', '#f2f2f2')"></li>
-                                <li class="" (click)="changeColor('#e34818', '#f2f3f4')"></li>
-                                <li class="" (click)="changeColor('#7889a1', '#f8f9fa')"></li>
-                                <li class="" (click)="changeColor('#48565f', '#f6f6f7')"></li>
-                                <li class="" (click)="changeColor('#79bd58', '#f8fcf6')"></li>
-                                <li class="" (click)="changeColor('#0e909a', '#f3f9fa')"></li>
-                                <li class="" (click)="changeColor('#202e5a', '#f4f4f7')"></li>
-                                <li class="" (click)="changeColor('#96bc2d', '#fafcf4')"></li>
-                                <li class="" (click)="changeColor('#2a651d', '#f4f7f3')"></li>
-                                <li class="" (click)="changeColor('#004254', '#f2f5f6')"></li>
-                                <li class="" (click)="changeColor('#ff8c00', '#fffaf3')"></li>
-                                <li class="" (click)="changeColor('#82001d', '#f9f2f3')"></li>
-                                <li class="" (click)="changeColor('#6b1438', '#f7f3f5')"></li>
-                                <li class="" (click)="changeColor('#f4749b', '#fef8fa')"></li>
-                                <li class="" (click)="changeColor('#950069', '#faf2f7')"></li>
-                                <li class="" (click)="changeColor('#542852', '#f6f4f6')"></li>
+                                <li (click)="changeColor('#bdbdbd', '#fcfcfc')"></li>
+                                <li (click)="changeColor('#636363', '#f7f7f7')"></li>
+                                <li (click)="changeColor('#000000', '#f2f2f2')"></li>
+                                <li (click)="changeColor('#e34818', '#f2f3f4')"></li>
+                                <li (click)="changeColor('#7889a1', '#f8f9fa')"></li>
+                                <li (click)="changeColor('#48565f', '#f6f6f7')"></li>
+                                <li (click)="changeColor('#79bd58', '#f8fcf6')"></li>
+                                <li (click)="changeColor('#0e909a', '#f3f9fa')"></li>
+                                <li (click)="changeColor('#202e5a', '#f4f4f7')"></li>
+                                <li (click)="changeColor('#96bc2d', '#fafcf4')"></li>
+                                <li (click)="changeColor('#2a651d', '#f4f7f3')"></li>
+                                <li (click)="changeColor('#004254', '#f2f5f6')"></li>
+                                <li (click)="changeColor('#ff8c00', '#fffaf3')"></li>
+                                <li (click)="changeColor('#82001d', '#f9f2f3')"></li>
+                                <li (click)="changeColor('#6b1438', '#f7f3f5')"></li>
+                                <li (click)="changeColor('#f4749b', '#fef8fa')"></li>
+                                <li (click)="changeColor('#950069', '#faf2f7')"></li>
+                                <li (click)="changeColor('#542852', '#f6f4f6')"></li>
                             </ul>
                         </div>
                     </div>
@@ -224,10 +230,13 @@
                 <!-- edit color end -->
             </li>
 
-            <li *ngIf="!templateUISectionVisibility.font" (click)="onChangeVisibility('font')">
+            <li
+                *ngIf="!templateUISectionVisibility.font && customTemplate.templateType !== 'thermal_template'"
+                (click)="onChangeVisibility('font')"
+            >
                 <i class="ico-txt"></i> <label>Select different fonts</label>
             </li>
-            <li *ngIf="templateUISectionVisibility.font">
+            <li *ngIf="templateUISectionVisibility.font && customTemplate.templateType !== 'thermal_template'">
                 <i class="ico-txt"></i> <label>Select different fonts</label>
                 <div class="row font-selector mr-t1 form-group">
                     <div class="col-9">
@@ -243,7 +252,10 @@
                 </div>
             </li>
             <ng-container>
-                <li *ngIf="!templateUISectionVisibility.fontSize" (click)="onChangeVisibility('fontSize')">
+                <li
+                    *ngIf="!templateUISectionVisibility.fontSize && customTemplate.templateType !== 'thermal_template'"
+                    (click)="onChangeVisibility('fontSize')"
+                >
                     <i class="ico-txt"></i> <label>Select different fonts size</label>
                 </li>
                 <li *ngIf="templateUISectionVisibility.fontSize">
@@ -262,7 +274,11 @@
                     </div>
                 </li>
             </ng-container>
-            <li [hidden]="templateUISectionVisibility.print" (click)="onChangeVisibility('print')">
+            <li
+                [hidden]="templateUISectionVisibility.print"
+                (click)="onChangeVisibility('print')"
+                *ngIf="customTemplate.templateType !== 'thermal_template'"
+            >
                 <i class="ico-print"></i> <label>Edit print setting</label>
             </li>
             <li [hidden]="!templateUISectionVisibility.print">
@@ -345,6 +361,19 @@
                     </div>
                 </div>
             </li>
+                  <li>
+                    <div *ngIf="customTemplate.templateType !== 'thermal_template'" class="form-group">
+                    <input
+                        type="checkbox"
+                        color="primary"
+                        name="showSectionsInline"
+                        [(ngModel)]="customTemplate.showSectionsInline"
+                        (ngModelChange)="onChangeFieldVisibility('showSectionsInline',customTemplate.showSectionsInline)"
+                        checked
+                    />
+                    Show Header/Footer on first and last page
+                </div>
+                </li>
         </ul>
     </div>
 </div>

@@ -49,5 +49,6 @@
     "select_groups_placeholder": "Search Groups",
     "from_to": "From - To",
     "select_item": "Select Item",
-    "select_query": "Select Query"
+    "select_query": "Select Query",
+    "company_address": "Company Address"
 }

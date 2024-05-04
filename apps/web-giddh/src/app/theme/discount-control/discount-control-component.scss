@@ -1,25 +1,30 @@
-.multi-select .caret {
-    display: block !important;
+.checkbox{
+    .checkbox-label{
+        white-space: normal;
+        line-height: normal;
+    }
 }
-.fa-percent {
-    top: 9px;
-    right: 6px;
-    color: var(--color-gray);
+.display-block {
+    display: block;
 }
-.discount-name-ul {
-    list-style: none;
-    overflow: auto;
-    max-height: 100px;
+.display-none {
+    display: none;
 }
-.width-50 {
-    width: 50px;
-}
-.value-width {
-    width: 110px;
-}
-.percentage-width {
-    padding-right: 22px !important;
-}
-.label-line {
-    line-height: 1.4 !important;
+.custom-discount-menu{
+
+    ul{
+        &.discount-list{
+            max-height: 164px !important;
+        }
+    }
+
+    .or-line {
+        &::before {
+            width: 85px;
+        }
+        &::after {
+            width: 85px;
+        }
+    }
+
 }

@@ -14,8 +14,11 @@ import { SharedModule } from '../shared/shared.module';
         FormsModule,
         ReactiveFormsModule,
         SignupRoutingModule,
-        ModalModule,
-        LaddaModule,
+        ModalModule.forRoot(),
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         ShSelectModule,
         SharedModule
     ],

@@ -69,7 +69,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
             if (!a) {
                 return;
             }
-            this.voucherType = a.voucherType;
+            this.voucherType = a?.voucherType;
         });
         this._invoiceUiDataService.templateVoucherType.pipe(takeUntil(this.destroyed$)).subscribe((voucherType: string) => {
             this.voucherType = cloneDeep(voucherType);
@@ -95,7 +95,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
                 }
             }
             if (template && template.sections) {
-                if (template.sections.footer.data.imageSignature.display) {
+                if (template.sections.footer.data.imageSignature?.display) {
                     this.showImageSignature = true;
                     if (template.sections.footer.data.imageSignature.label) {
                         this.imageSignatureSrc = ApiUrl + 'company/' + this.companyUniqueName + '/image/' + template.sections.footer.data.imageSignature.label;
@@ -106,7 +106,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
                     this.showImageSignature = false;
                     this.imageSignatureSrc = '';
                 }
-            } else if (template && template.sections && template.sections.footer.data.slogan.display) {
+            } else if (template && template.sections && template.sections.footer.data.slogan?.display) {
                 this.showImageSignature = false;
                 this.imageSignatureSrc = '';
             }

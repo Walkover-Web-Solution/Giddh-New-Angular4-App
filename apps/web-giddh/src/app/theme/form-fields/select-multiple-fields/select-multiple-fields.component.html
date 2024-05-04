@@ -1,0 +1,51 @@
+<div [ngClass]="{'custom-input-field communication-input': !appearance }">
+    <mat-form-field [floatLabel]="!appearance ? 'never' : null" class="w-100" [appearance]="appearance">
+        <mat-chip-grid #matChipList>
+            <mat-chip-row
+                *ngFor="let chip of chipList; let indx = index"
+                [selectable]="true"
+                [removable]="true"
+                (removed)="removeOption(indx)"
+                role="option"
+            >
+                {{ chip }}
+                <span matChipRemove>
+                    <i class="icon-cross"></i>
+                </span>
+            </mat-chip-row>
+            <input
+                type="text"
+                matInput
+                [formControl]="searchFormControl"
+                [placeholder]="placeholder"
+                [matAutocomplete]="auto"
+                [matChipInputFor]="matChipList"
+                [matChipInputAddOnBlur]="!auto.isOpen"
+                (matChipInputTokenEnd)="addChip($event)"
+                [ngClass]="{ 'chiplist-error': showError }"
+                #trigger="matAutocompleteTrigger"
+                [name]="name"
+                #selectField
+                [autocomplete]="'off'"
+                matAutocompletePosition="auto"
+                class="select-multiple-field-input"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            />
+        </mat-chip-grid>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectOption($event); selectField.value = ''">
+            <mat-option [ngClass]="{'po-options-line': isPurchaseOrder }" *ngFor="let option of fieldFilteredOptions" [value]="option">
+                <ng-container *ngIf="!isPurchaseOrder">{{ option.label }}</ng-container>
+                <ng-container *ngIf="isPurchaseOrder">
+                    <span class="po-option-label"> {{ option?.label }}</span>
+                    <span class="po-option-value" *ngIf="option?.additional?.pending">
+                        {{ localeData?.pending }}: {{ option?.additional?.pending }}</span
+                    >
+                    <span class="po-option-value" *ngIf="option.additional?.grandTotal">
+                        {{ commonLocaleData?.app_amount }}:
+                        {{ option?.additional?.grandTotal }}</span
+                    >
+                </ng-container>
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+</div>

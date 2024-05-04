@@ -39,7 +39,17 @@
 		"client_secret_key_placeholder": "क्लायंट सिक्रेट की",
 		"auto_collect_form_heading": "स्वयंचलित संग्रह",
 		"payment_gateway_form_heading": "प्रदानाची द्वारमार्गिका",
-		"unlink_razorpay_message": "आपल्याकडे रेझरपेयेशी कोणतेही खाते जोडलेले नाही."
+		"unlink_razorpay_message": "आपल्याकडे रेझरपेयेशी कोणतेही खाते जोडलेले नाही.",
+        "unlink_paypal_message": "तुमच्याकडून पेपाल सह काही खाते नसतात.",
+        "invalid_email_error": "मान्य ईमेल आयडी प्रविष्ट करा",
+        "paypal_form_heading": "पेपाल माहिती",
+        "email_id_label": "ईमेल आयडी",
+        "email_id_placeholder": "ईमेल आयडी",
+        "paypal_save_successfully":"पेपाल खाते तपशील यशस्वीरित्या जतन केले गेले आहेत.",
+        "paypal_update_successfully": "पेपाल खात्याची माहिती सफलतेचे अद्यतित केली गेली आहे.",
+        "unlinked_account_successfully": "पेपाल खात्याची माहिती सफलतापूर्वक अनलिंक केली गेली आहे.",
+        "paypal_tab_heading": "पेपाल",
+        "razorpay_tab_heading": "रेजरपे"
 	},
 	"ecommerce": {
 		"tab_heading": "ई-कॉम",
@@ -117,6 +127,16 @@
         "used": "वापरलेले",
         "get_instant_overdraft": "इन्स्टंट ओव्हरड्राफ्ट मिळवा",
         "duration_error": "कृपया दिलेल्या रकमेचा कालावधी निवडा",
-        "required_field_error": "कृपया सर्व आवश्यक फील्ड भरा"
-	}
+        "required_field_error": "कृपया सर्व आवश्यक फील्ड भरा",
+        "connect_bank": "बँक कनेक्ट करा"
+	},
+    "communication": {
+        "tab_heading": "संवाद"
+    },
+    "tally":{
+        "help_documentation":"मदत दस्तऐवजीकरण",
+        "copied":"कॉपी केले...",
+        "api_url":"API URL :",
+        "heading":"टेली"
+    }
 }

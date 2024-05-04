@@ -66,12 +66,6 @@
     right: 10px;
     top: 12px;
 }
-.pagination-wrapper {
-    position: fixed;
-    bottom: 20px;
-    width: 80%;
-    padding: 20px 0;
-}
 
 .dropdown-menu > li > a:hover {
     color: var(--color-blue);
@@ -155,7 +149,7 @@ ul.select-action-dropdown {
 }
 .select-action-dropdown a {
     color: var(--color-nero);
-    font-size: 14px;
+    font-size: var(--font-size-15);
     padding: 5px 10px;
     display: block;
 }
@@ -179,10 +173,6 @@ ul.select-action-dropdown {
 .input-group input.form-control {
     padding-left: 35px !important;
     border-color: var(--color-blue);
-    background-image: url("../../../assets/images/calender-icon.svg") !important;
-    background-size: 17px !important;
-    background-position: 9px 8px !important;
-    background-repeat: no-repeat !important;
     padding-left: 45px !important;
     position: relative;
     z-index: 99;
@@ -208,7 +198,7 @@ ul.select-action-dropdown {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 18px;
+    font-size: var(--font-size-16);
     margin-left: 10px;
     border: 1px solid var(--color-iron);
     border-radius: 5px;
@@ -221,7 +211,7 @@ ul.select-action-dropdown {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 14px;
+    font-size: var(--font-size-15);
     border-radius: 5px;
     align-items: center;
     justify-content: center;
@@ -234,7 +224,7 @@ ul.select-action-dropdown {
 button.btn.btn-filter {
     background: var(--color-dark-fog);
     border: 1px solid var(--color-common-secondary-border);
-    font-size: 14px;
+    font-size: var(--font-size-15);
     color: var(--color-giddh-blue);
     display: inline-flex;
     justify-content: space-between;
@@ -284,6 +274,9 @@ span.icon-advance-filter {
 .select-all-proformas-on-mobile-view {
     display: none;
 }
+.advance-search-mobile {
+    display: none;
+}
 .btn-wrapper-more {
     height: 30px;
 }
@@ -312,12 +305,15 @@ span.icon-advance-filter {
             }
         }
     }
+    .advance-search-mobile {
+        display: block;
+    }
     .select-all-proformas-on-mobile-view {
         display: flex;
         align-items: center;
         margin-bottom: 0;
         line-height: 1;
-        font-size: 14px;
+        font-size: var(--font-size-15);
         min-height: 20px;
         .checkbox-img {
             img {
@@ -333,9 +329,6 @@ span.icon-advance-filter {
     .index-no {
         display: flex;
         justify-content: flex-start;
-    }
-    .mobile-search .input-container input {
-        font-size: 13px;
     }
     .mobile-search button.btn.btn-sky-blue {
         width: 100%;
@@ -363,17 +356,12 @@ span.icon-advance-filter {
     .form-inline {
         align-items: flex-start;
     }
-    .pagination-wrapper {
-        position: relative;
-        margin-top: 20px;
-        margin-bottom: 0px;
-    }
 }
 @media (max-width: 420px) {
     .small-loading {
         padding-left: 0;
         color: var(--color-nero);
-        font-size: 12px;
+        font-size: var(--font-size-12);
         position: relative;
         top: 2px;
         padding-right: 0;
@@ -384,7 +372,7 @@ span.icon-advance-filter {
         width: 100%;
         justify-content: center;
         margin-bottom: 5px;
-        font-size: 14px;
+        font-size: var(--font-size-15);
     }
     .form-group div {
         display: block;
@@ -405,12 +393,6 @@ span.icon-advance-filter {
     }
 }
 
-@media (min-width: 769px) {
-    .table-responsive {
-        max-height: calc(100vh - 245px);
-        overflow-y: auto;
-    }
-}
 @media (max-width: 599px) {
     .dropdown-toggle.more-btn-dropdown {
         width: auto !important;

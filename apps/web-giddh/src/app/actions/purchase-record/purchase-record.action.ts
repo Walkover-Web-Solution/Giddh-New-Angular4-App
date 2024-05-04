@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CustomActions } from '../../store/customActions';
+import { CustomActions } from '../../store/custom-actions';
 import { PURCHASE_RECORD_ACTIONS } from './purchase-record.const';
 import { PurchaseRecordUpdateModel } from '../../purchase/purchase-record/constants/purchase-record.interface';
 

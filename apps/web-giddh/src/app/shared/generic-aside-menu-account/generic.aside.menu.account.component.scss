@@ -1,27 +1,32 @@
 :host {
     position: fixed;
     left: auto;
-    top: 0;
+    top: var(--top-distance);
     right: 0;
     bottom: 0;
     max-width: 760px;
     width: 100%;
-    z-index: 99999;
+    z-index: 999;
+
+    &.page-leave-confirmation-showing {
+        z-index: 9999 !important;
+    }
 }
 .aside-pane {
     padding: 0 !important;
 }
 
-:host.in #close {
+:host.in #closedialog {
     display: block;
     position: absolute;
-    right: 0;
-    top: 16px;
+    right: 10px;
+    top: 18px;
     z-index: 5;
     border: 0;
     border-radius: 0;
     background: transparent;
     color: var(--color-popup-list-head-text);
+    font-size: 17px;
 }
 
 :host .container-fluid {

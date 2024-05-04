@@ -1,10 +1,9 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ElementRef, ViewChild } from '@angular/core';
-import * as Highcharts from 'highcharts';
+import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ViewChild, TemplateRef } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import {
     ProfitLossData,
@@ -20,6 +19,9 @@ import { GeneralService } from '../../../services/general.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { TlPlService } from '../../../services/tl-pl.service';
 import { cloneDeep } from '../../../lodash-optimized';
+import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
 
 @Component({
     selector: 'profit-loss',
@@ -30,7 +32,7 @@ import { cloneDeep } from '../../../lodash-optimized';
 export class ProfitLossComponent implements OnInit, OnDestroy {
     @Input() public refresh: boolean = false;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: TemplateRef<any>;
     /* This will store if device is mobile or not */
     public isMobileScreen: boolean = false;
     /* This will store modal reference */
@@ -51,8 +53,6 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public toDate: string;
     public imgPath: string = '';
     public requestInFlight: boolean = true;
-    public profitLossChart: typeof Highcharts = Highcharts;
-    public chartOptions: Highcharts.Options;
     public totalIncome: number = 0;
     public totalIncomeType: string = '';
     public totalExpense: number = 0;
@@ -70,9 +70,19 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /* this will store active company data */
     public activeCompany: any = {};
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
+    /** Chart object */
+    public chart: any;
 
     constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhCurrencyPipe, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService, private tlPlService: TlPlService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
+
+        this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            if (profile) {
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+            }
+        });
     }
 
     public ngOnInit() {
@@ -90,10 +100,10 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
                 let dates = [];
-                dates = [moment(dateObj[0]).format(GIDDH_DATE_FORMAT), moment(dateObj[1]).format(GIDDH_DATE_FORMAT), false];
+                dates = [dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT), dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT), false];
 
-                this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
 
                 this.getFilterDate(dates);
             }
@@ -108,73 +118,6 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         this.totalExpenseType = '';
         this.netProfitLossType = '';
         this.netProfitLoss = 0;
-        this.requestInFlight = false;
-        this.cdRef.detectChanges();
-    }
-
-    public generateCharts() {
-        let baseCurrencySymbol = this.amountSettings.baseCurrencySymbol;
-        let cPipe = this.currencyPipe;
-
-        this.chartOptions = {
-            colors: ['#FED46A', '#4693F1'],
-            chart: {
-                type: 'pie',
-                polar: false,
-                className: 'profit-loss-chart',
-                width: 260,
-                height: '180px'
-            },
-            title: {
-                text: '',
-            },
-            yAxis: {
-                title: {
-                    text: ''
-                },
-                gridLineWidth: 0,
-                minorGridLineWidth: 0,
-            },
-            xAxis: {
-                categories: []
-            },
-            legend: {
-                enabled: false
-            },
-            credits: {
-                enabled: false
-            },
-            plotOptions: {
-                pie: {
-                    showInLegend: true,
-                    innerSize: '70%',
-                    allowPointSelect: true,
-                    dataLabels: {
-                        enabled: false,
-                        crop: true,
-                        defer: true
-                    },
-                    shadow: false
-                },
-                series: {
-                    animation: false,
-                    dataLabels: {}
-                }
-            },
-            tooltip: {
-                shared: true,
-                useHTML: true,
-                formatter: function () {
-                    return (this.point) ? baseCurrencySymbol + " " + cPipe.transform(this.point.y) + '/-' : '';
-                }
-            },
-            series: [{
-                name: 'Profit & Loss',
-                type: 'pie',
-                data: [['Total Income', this.totalIncome], ['Total Expenses', this.totalExpense]],
-            }],
-        };
-
         this.requestInFlight = false;
         this.cdRef.detectChanges();
     }
@@ -248,10 +191,10 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.requestInFlight = true;
             this.plRequest.from = this.fromDate;
             this.plRequest.to = this.toDate;
@@ -276,7 +219,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 
                 if (data && data.incomeStatment && data.incomeStatment.revenue) {
                     revenue = cloneDeep(data.incomeStatment.revenue) as GetRevenueResponse;
-                    this.totalIncome = revenue.amount;
+                    this.totalIncome = giddhRoundOff(revenue.amount, this.giddhBalanceDecimalPlaces);
                     this.totalIncomeType = (revenue.type === "CREDIT") ? "Cr." : "Dr.";
                 } else {
                     this.totalIncome = 0;
@@ -285,7 +228,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 
                 if (data && data.incomeStatment && data.incomeStatment.totalExpenses) {
                     expense = cloneDeep(data.incomeStatment.totalExpenses) as GetTotalExpenseResponse;
-                    this.totalExpense = expense.amount;
+                    this.totalExpense = giddhRoundOff(expense.amount, this.giddhBalanceDecimalPlaces);
                     this.totalExpenseType = (expense.type === "CREDIT") ? "Cr." : "Dr.";
                 } else {
                     this.totalExpense = 0;
@@ -295,7 +238,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                 if (data && data.incomeStatment && data.incomeStatment.incomeBeforeTaxes) {
                     npl = cloneDeep(data.incomeStatment.incomeBeforeTaxes) as GetIncomeBeforeTaxes;
                     this.netProfitLossType = (npl.type === "CREDIT") ? "+" : "-";
-                    this.netProfitLoss = npl.amount;
+                    this.netProfitLoss = giddhRoundOff(npl.amount, this.giddhBalanceDecimalPlaces);
                 } else {
                     this.netProfitLossType = '';
                     this.netProfitLoss = 0;
@@ -304,10 +247,70 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                 if (this.totalIncome === 0 && this.totalExpense === 0) {
                     this.resetChartData();
                 } else {
-                    this.generateCharts();
+                    this.createChart()
                 }
             }
             this.requestInFlight = false;
         });
     }
+
+    /**
+     * Create chart
+     *
+     * @memberof ProfitLossComponent
+     */
+    public createChart(): void {
+        let totalIncome = this.amountSettings.baseCurrencySymbol + " " + this.currencyPipe.transform(this.totalIncome) + "/-";
+        let totalExpense = this.amountSettings.baseCurrencySymbol + " " + this.currencyPipe.transform(this.totalExpense) + "/-";
+        let label = [totalIncome, totalExpense];
+        let data = [this.totalIncome, this.totalExpense]
+
+        this.chart?.destroy();
+
+        this.chart = new Chart("profitLossChartCanvas", {
+            type: 'doughnut',
+            data: {
+                labels: label,
+                datasets: [{
+                    label: '',
+                    data: data,
+                    backgroundColor: ['#A52A2A', '#1a237e'],
+                    hoverOffset: 18,
+                    hoverBorderColor: '#fff',
+                    borderWidth: 1,
+                    offset: 6
+                }],
+            },
+
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255,0.8)',
+                        borderColor: 'rgb(95, 172, 255)',
+                        bodyFont: {
+                            size: 0,
+                        },
+                        titleColor: 'rgb(0, 0, 0)',
+                        borderWidth: 0.5,
+                        titleFont: {
+                            weight: 'normal'
+                        },
+                        displayColors: false
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                spacing: 1,
+                cutout: 50,
+                radius: '95%'
+            }
+        });
+
+        this.requestInFlight = false;
+        this.cdRef.detectChanges();
+    }
+
 }

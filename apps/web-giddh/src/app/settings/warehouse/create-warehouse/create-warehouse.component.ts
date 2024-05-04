@@ -1,19 +1,23 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { ReplaySubject } from 'rxjs';
+import { combineLatest, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OnboardingFormRequest } from '../../../models/api-models/Common';
+import { BranchFilterRequest } from '../../../models/api-models/Company';
 import { CommonService } from '../../../services/common.service';
-import { CompanyService } from '../../../services/companyService.service';
+import { CompanyService } from '../../../services/company.service';
 import { GeneralService } from '../../../services/general.service';
 import { SettingsProfileService } from '../../../services/settings.profile.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../../constants/settings.constant';
 import { SettingsUtilityService } from '../../services/settings-utility.service';
+import { WarehouseActions } from '../action/warehouse.action';
+import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
 
 @Component({
     selector: 'create-warehouse',
@@ -34,7 +38,6 @@ import { SettingsUtilityService } from '../../services/settings-utility.service'
 })
 
 export class CreateWarehouseComponent implements OnInit, OnDestroy {
-
     /** Address aside menu state */
     public addressAsideMenuState: string = 'out';
     /** Stores the comapny details */
@@ -59,16 +62,15 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         linkedEntities: []
     };
     /** Warehouse form */
-    public warehouseForm: FormGroup;
+    public warehouseForm: UntypedFormGroup;
     /** Stores the addresses */
     public addresses: Array<any>;
     /** True, if address change is in progress */
     public isAddressChangeInProgress: boolean = false;
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
-
+    /** Holds image root path */
     public imgPath: string = '';
-
     /** Unsubscribe from listener */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -77,17 +79,26 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     public profileLocaleData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** True if need to hide link entity */
+    public hideLinkEntity: boolean = true;
+    /** Returns true if form is dirty else false */
+    public get showPageLeaveConfirmation(): boolean {
+        return this.warehouseForm?.dirty;
+    }
 
     constructor(
         private commonService: CommonService,
         private companyService: CompanyService,
-        private formBuilder: FormBuilder,
+        private formBuilder: UntypedFormBuilder,
         private generalService: GeneralService,
         private router: Router,
         private store: Store<AppState>,
         private settingsProfileService: SettingsProfileService,
         private settingsUtilityService: SettingsUtilityService,
-        private toastService: ToasterService
+        private toastService: ToasterService,
+        private warehouseActions: WarehouseActions,
+        private settingsBranchActions: SettingsBranchActions,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         this.warehouseForm = this.formBuilder.group({
             name: ['', Validators.required],
@@ -109,7 +120,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                     businessType: response.businessType,
                     country: {
                         countryName: response.countryV2 ? response.countryV2.countryName : '',
-                        countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode.toLowerCase() : '',
+                        countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode?.toLowerCase() : '',
                         currencyCode: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.code : '',
                         currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                     }
@@ -137,7 +148,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                     businessType: response.businessType,
                     country: {
                         countryName: response.countryV2 ? response.countryV2.countryName : '',
-                        countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode.toLowerCase() : '',
+                        countryCode: response.countryV2 ? response.countryV2.alpha2CountryCode?.toLowerCase() : '',
                         currencyCode: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.code : '',
                         currencyName: response.countryV2 && response.countryV2.currency ? response.countryV2.currency.symbol : ''
                     }
@@ -151,6 +162,12 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         });
 
         this.imgPath = isElectron ? 'assets/images/warehouse-image.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-image.svg';
+
+        this.warehouseForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (this.showPageLeaveConfirmation) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
+        });
     }
 
     /**
@@ -171,7 +188,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      */
     public handleFinalSelection(selectedAddresses: Array<any>): void {
         this.addresses.forEach(address => {
-            if (!selectedAddresses.includes(address.uniqueName)) {
+            if (!selectedAddresses.includes(address?.uniqueName)) {
                 address.isDefault = false;
             }
         });
@@ -201,7 +218,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         event.preventDefault();
         if (!option.isDefault) {
             this.addresses.forEach(address => {
-                if (address.value !== option.value) {
+                if (address?.value !== option?.value) {
                     address.isDefault = false;
                 }
             });
@@ -209,8 +226,8 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         option.isDefault = !option.isDefault;
         if (option.isDefault) {
             this.warehouseForm.get('address')?.patchValue([
-                ...(this.warehouseForm.get('address').value || []),
-                option.value
+                ...(this.warehouseForm.get('address')?.value || []),
+                option?.value
             ]);
         }
     }
@@ -222,9 +239,9 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      */
     public handleFormSubmit(): void {
         const requestObj = {
-            name: this.warehouseForm.value.name,
-            linkAddresses: this.addresses?.filter(address => this.warehouseForm.value.address.includes(address.uniqueName))?.map(filteredAddress => ({
-                uniqueName: filteredAddress.uniqueName,
+            name: this.warehouseForm?.value.name,
+            linkAddresses: this.addresses?.filter(address => this.warehouseForm?.value.address.includes(address?.uniqueName))?.map(filteredAddress => ({
+                uniqueName: filteredAddress?.uniqueName,
                 isDefault: filteredAddress.isDefault
             }))
         };
@@ -252,6 +269,8 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                 address.isDefault = false;
             }
         });
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+        this.warehouseForm.markAsPristine();
     }
 
     /**
@@ -274,14 +293,24 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
             if (response && response.body && response.status === 'success') {
                 const result = response.body;
                 this.addressConfiguration.stateList = [];
-                Object.keys(result.stateList).forEach(key => {
-                    this.addressConfiguration.stateList.push({
-                        label: result.stateList[key].code + ' - ' + result.stateList[key].name,
-                        value: result.stateList[key].code,
-                        code: result.stateList[key].stateGstCode,
-                        stateName: result.stateList[key].name
+                this.addressConfiguration.countyList = [];
+
+                if (result.stateList) {
+                    Object.keys(result.stateList).forEach(key => {
+                        this.addressConfiguration.stateList.push({
+                            label: result.stateList[key].code + ' - ' + result.stateList[key].name,
+                            value: result.stateList[key].code,
+                            code: result.stateList[key].stateGstCode,
+                            stateName: result.stateList[key].name
+                        });
                     });
-                });
+                }
+
+                if (result.countyList) {
+                    this.addressConfiguration.countyList = result.countyList?.map(county => {
+                        return { label: county.name, value: county.code };
+                    });
+                }
             }
         });
     }
@@ -294,9 +323,9 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      */
     public createNewAddress(addressDetails: any): void {
         this.isAddressChangeInProgress = true;
-        const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState.value === addressDetails.formValue.state);
-        const linkEntity = addressDetails.addressDetails.linkedEntities.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
-            uniqueName: filteredEntity.uniqueName,
+        const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState?.value === addressDetails.formValue.state);
+        const linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity?.uniqueName))).map(filteredEntity => ({
+            uniqueName: filteredEntity?.uniqueName,
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
         }));
@@ -311,16 +340,17 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         };
 
         this.settingsProfileService.createNewAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
-            if (response.status === 'success' && response.body) {
+            if (response?.status === 'success' && response?.body) {
                 this.toggleAddressAsidePane();
                 this.addresses.push({
                     ...response.body,
                     label: response.body.name,
-                    value: response.body.uniqueName
+                    value: response.body?.uniqueName
                 })
-                this.toastService.successToast(this.profileLocaleData?.address_created);
+                
+                this.toastService.successToast(this.localeData?.address_created);
             } else {
-                this.toastService.errorToast(response.message);
+                this.toastService.errorToast(response?.message);
             }
             this.isAddressChangeInProgress = false;
         }, () => {
@@ -363,7 +393,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                     ...result,
                     isDefault: false,
                     label: result.alias,
-                    value: result.uniqueName
+                    value: result?.uniqueName
                 }));
                 if (successCallback) {
                     successCallback();
@@ -403,8 +433,9 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                         ...address,
                         isDefault: false,
                         label: address.name,
-                        value: address.uniqueName
+                        value: address?.uniqueName
                     }));
+                this.checkLinkEntity();
             }
         });
     }
@@ -467,6 +498,33 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         document.querySelector('body').classList.remove('setting-sidebar-open');
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
     }
 
+    /**
+     * Checks if we need to hide link entity
+     *
+     * @memberof CreateWarehouseComponent
+     */
+    public checkLinkEntity(): void {
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, query: "", count: 2 })); // count is 2 because we only have to check if there are more than 1 records
+        let branchFilterRequest = new BranchFilterRequest();
+        branchFilterRequest.from = "";
+        branchFilterRequest.to = "";
+        this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
+
+        this.hideLinkEntity = true;
+
+        if (this.addresses?.length > 1) {
+            this.hideLinkEntity = false;
+        } else {
+            combineLatest([this.store.pipe(select(state => state.warehouse.warehouses)), this.store.pipe(select(state => state.settings.branches))]).pipe(takeUntil(this.destroyed$)).subscribe((response: any[]) => {
+                if (response && response[0] && response[1]) {
+                    if (response[0]?.results?.length > 1 || response[1]?.length > 1) {
+                        this.hideLinkEntity = false;
+                    }
+                }
+            });
+        }
+    }
 }

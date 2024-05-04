@@ -3,13 +3,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LaddaModule } from 'angular2-ladda';
-import { TextMaskModule } from 'angular2-text-mask';
 import {
     AccountingSidebarComponent,
 } from 'apps/web-giddh/src/app/accounting/accouting-sidebar/accounting-sidebar.component';
 import { KeyboardService } from 'apps/web-giddh/src/app/accounting/keyboard.service';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
@@ -33,6 +31,13 @@ import { OnReturnDirective } from './keyboard.directive';
 import { AVShSelectModule } from './ng-virtual-list/virtual-list.module';
 import { TallyModuleService } from './tally-service';
 import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { A11yModule } from '@angular/cdk/a11y';
+import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
+import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 
 @NgModule({
     declarations: [
@@ -55,21 +60,30 @@ import { VoucherGridComponent } from './voucher-grid/voucher-grid.component';
         CurrencyModule,
         FormsModule,
         ReactiveFormsModule,
-        DatepickerModule,
-        ModalModule,
-        LaddaModule,
+        ModalModule.forRoot(),
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
         DecimalDigitsModule,
         AVShSelectModule,
         SharedModule,
         ClickOutsideModule,
-        TooltipModule,
+        TooltipModule.forRoot(),
         TypeaheadModule.forRoot(),
-        TextMaskModule,
         VirtualScrollModule,
         ElementViewChildModule,
         QuickAccountModule,
         InventoryModule,
         NgxMaskModule.forRoot(),
+        FormsModule,
+        FormFieldsModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatInputModule,
+        A11yModule,
+        GiddhDatepickerModule,
+        KeyboardShortutModule
     ],
 })
 export class AccountingModule {

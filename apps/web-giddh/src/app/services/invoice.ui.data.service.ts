@@ -53,7 +53,7 @@ export class InvoiceUiDataService {
     public initCustomTemplate(companyUniqueName: string = '', companies: CompanyResponse[] = [], defaultTemplate: CustomTemplateResponse) {
         this.isLogoVisible.next(true);
         let uniqueName = companyUniqueName;
-        let currentCompany = companies.find((company) => company.uniqueName === uniqueName);
+        let currentCompany = companies.find((company) => company?.uniqueName === uniqueName);
         if (currentCompany) {
             this.companyName = currentCompany.name;
             this.companyAddress = currentCompany.address;
@@ -148,9 +148,9 @@ export class InvoiceUiDataService {
     }
 
     public BRToNewLine(template) {
-        template.sections['footer'].data['message1'].label = template.sections['footer'].data['message1'].label ? template.sections['footer'].data['message1'].label.replace(/<br\s*[\/]?>/gi, '\n') : '';
-        template.sections['footer'].data['companyAddress'].label = template.sections['footer'].data['companyAddress'].label ? template.sections['footer'].data['companyAddress'].label.replace(/<br\s*[\/]?>/gi, '\n') : '';
-        template.sections['footer'].data['slogan'].label = template.sections['footer'].data['slogan'].label ? template.sections['footer'].data['slogan'].label.replace(/<br\s*[\/]?>/gi, '\n') : '';
+        template.sections['footer'].data['message1'].label = template.sections['footer'].data['message1'].label ? template.sections['footer'].data['message1'].label?.replace(/<br\s*[\/]?>/gi, '\n') : '';
+        template.sections['footer'].data['companyAddress'].label = template.sections['footer'].data['companyAddress'].label ? template.sections['footer'].data['companyAddress'].label?.replace(/<br\s*[\/]?>/gi, '\n') : '';
+        template.sections['footer'].data['slogan'].label = template.sections['footer'].data['slogan'].label ? template.sections['footer'].data['slogan'].label?.replace(/<br\s*[\/]?>/gi, '\n') : '';
         return template;
     }
 
@@ -167,7 +167,7 @@ export class InvoiceUiDataService {
     public setTemplateUniqueName(uniqueName: string, mode: string, customCreatedTemplates: CustomTemplateResponse[] = [], defaultTemplate: CustomTemplateResponse) {
         if (customCreatedTemplates && customCreatedTemplates.length) {
             let allTemplates = _.cloneDeep(customCreatedTemplates);
-            let selectedTemplateIndex = allTemplates.findIndex((template) => template.uniqueName === uniqueName);
+            let selectedTemplateIndex = allTemplates?.findIndex((template) => template?.uniqueName === uniqueName);
             let selectedTemplate = _.cloneDeep(allTemplates[selectedTemplateIndex]);
 
             if (selectedTemplate) {
@@ -207,10 +207,10 @@ export class InvoiceUiDataService {
                             width: null
                         };
                 }
-                if (!selectedTemplate.sections['header'].data['showIrnNumber']) {
+                if (!selectedTemplate.sections['header'].data['showEInvoiceDetails']) {
                     // Assign the default value based on value of warehouseAddress
-                    selectedTemplate.sections['header'].data['showIrnNumber'] = defaultTemplate ?
-                        defaultTemplate.sections['header'].data['showIrnNumber'] : {
+                    selectedTemplate.sections['header'].data['showEInvoiceDetails'] = defaultTemplate ?
+                        defaultTemplate.sections['header'].data['showEInvoiceDetails'] : {
                             label: '',
                             display: false,
                             width: null
@@ -250,7 +250,7 @@ export class InvoiceUiDataService {
                         };
                 }
                 if (!selectedTemplate.sections['table'].data['showDescriptionInRows']) {
-                    selectedTemplate.sections['table'].data['showDescriptionInRows'] = defaultTemplate ? 
+                    selectedTemplate.sections['table'].data['showDescriptionInRows'] = defaultTemplate ?
                         defaultTemplate.sections['table'].data['showDescriptionInRows'] : {
                             label: '',
                             display: false,

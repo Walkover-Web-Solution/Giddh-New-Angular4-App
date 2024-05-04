@@ -1,4 +1,4 @@
-<div class="bd-rr row view-forms m-0" id="middleBody" [perfectScrollbar]="config" *ngIf="!(showNewForm$ | async)">
+<div class="bd-rr row view-forms m-0" id="middleBody" *ngIf="!(showNewForm$ | async)">
     <!--breadcrumbs-->
     <div class="breadcrumbs container-fluid top-bar bd-rb row mr-0 ml-0 h-100" *ngIf="breadcrumbPath?.length > 0">
         <div class="col-lg-6">
@@ -12,10 +12,10 @@
         <div class="col-lg-6 pr-0 pl-0" *ngIf="showEditGroup$ | async">
             <!--group-->
             <div class="pull-right text-right">
-                <button class="btn btn-share mr-r1" (click)="exportGroupLedger()">
+                <button aria-label="export" class="btn btn-share mr-r1" (click)="exportGroupLedger()">
                     {{ commonLocaleData?.app_export }}
                 </button>
-                <button class="btn btn-share pull-right" (click)="showShareGroupModal()">
+                <button aria-label="share" class="btn btn-share pull-right" (click)="showShareGroupModal()">
                     {{ commonLocaleData?.app_share }}
                 </button>
                 <div
@@ -28,7 +28,7 @@
         </div>
         <!--account-->
         <div class="pull-right col-lg-6 pr-0 pl-0" *ngIf="showEditAccount$ | async">
-            <button class="btn btn-share pull-right" (click)="showShareAccountModal()">
+            <button aria-label="share" class="btn btn-share pull-right" (click)="showShareAccountModal()">
                 {{ commonLocaleData?.app_share }}
             </button>
             <div
@@ -49,7 +49,12 @@
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
         ></group-add>
-        <group-update *ngIf="showEditGroup$ | async" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
+        <group-update
+            *ngIf="showEditGroup$ | async"
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+            [discountList]="discounts"
+        >
         </group-update>
     </div>
     <!--add/edit group form-->
@@ -73,8 +78,6 @@
             [showBankDetail]="showBankDetail"
             [showVirtualAccount]="showVirtualAccount"
             [isDebtorCreditor]="isDebtorCreditor"
-            (goToCustomFields)="goToCustomFields.emit($event)"
-            [reloadCustomFields]="reloadCustomFields"
         >
         </account-add-new-details>
 
@@ -95,8 +98,6 @@
             [showBankDetail]="showBankDetail"
             [showVirtualAccount]="showVirtualAccount"
             [isDebtorCreditor]="isDebtorCreditor"
-            (goToCustomFields)="goToCustomFields.emit($event)"
-            [reloadCustomFields]="reloadCustomFields"
         >
         </account-update-new-details>
     </div>
@@ -140,11 +141,11 @@
 <!--add new buttons-->
 <div class="inline-table new-form ng-scope" *ngIf="showNewForm$ | async">
     <div class="vertical-center groups-buttons">
-        <button class="btn isActive mr-b2" (click)="showAddGroupForm()">
+        <button aria-label="create group" class="btn isActive mr-b2" (click)="showAddGroupForm()">
             {{ commonLocaleData?.app_create_group }}
         </button>
         <span class="clearfix"></span>
-        <button class="btn isActive" *ngIf="!isRootLevelGroup" (click)="showAddAccountForm()">
+        <button aria-label="create account" class="btn isActive" *ngIf="!isRootLevelGroup" (click)="showAddAccountForm()">
             {{ commonLocaleData?.app_create_ac }}
         </button>
     </div>

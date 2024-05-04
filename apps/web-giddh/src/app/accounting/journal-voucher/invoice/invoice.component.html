@@ -19,7 +19,6 @@
                         type="text"
                         onReturn
                         #dateField
-                        [textMask]="{ mask: dateMask, guide: true }"
                         [(ngModel)]="entryDate"
                         name="entryDate"
                         (blur)="dateEntered()"
@@ -301,7 +300,7 @@
                 </div>
 
                 <div [hidden]="!showConfirmationBox" class="confirmation-box bdr text-center pd-2">
-                    <div class="">
+                    <div >
                         <h1>Accept?</h1>
                         <div class="pd-t2">
                             <button

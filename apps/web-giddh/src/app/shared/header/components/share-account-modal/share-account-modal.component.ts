@@ -1,7 +1,6 @@
 import { first, takeUntil } from 'rxjs/operators';
 import { ShareRequestForm } from './../../../../models/api-models/Permission';
 import { GetAllPermissionResponse } from './../../../../permissions/permission.utility';
-import { PermissionActions } from '../../../../actions/permission/permission.action';
 import { Component, EventEmitter, OnDestroy, OnInit, Output, Input } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
@@ -33,14 +32,14 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-    constructor(private store: Store<AppState>, private accountActions: AccountsAction, private _permissionActions: PermissionActions) {
+    constructor(private store: Store<AppState>, private accountActions: AccountsAction) {
         this.activeAccount$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.activeAccountSharedWith$ = this.store.pipe(select(state => state.groupwithaccounts.activeAccountSharedWith), takeUntil(this.destroyed$));
         this.allPermissions$ = this.store.pipe(select(state => state.permission.permissions), takeUntil(this.destroyed$));
     }
 
     public ngOnInit() {
-        this.store.dispatch(this._permissionActions.GetAllPermissions());
+
     }
 
     public getAccountSharedWith() {
@@ -59,7 +58,7 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
             entityUniqueName: activeAccount?.uniqueName,
         };
         let selectedPermission = clone(this.selectedPermission);
-        this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission.toLowerCase()));
+        this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission?.toLowerCase()));
         this.email = '';
         this.selectedPermission = '';
     }
@@ -70,7 +69,7 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
 
     public updatePermission(model: ShareRequestForm, event: any) {
         let data = cloneDeep(model);
-        let newPermission = event.target.value;
+        let newPermission = event.target?.value;
         data.roleUniqueName = newPermission;
         this.store.dispatch(this.accountActions.updateEntityPermission(data, newPermission, 'account'));
     }

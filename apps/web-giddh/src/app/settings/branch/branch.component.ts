@@ -2,7 +2,7 @@ import { animate, state, style, transition, trigger } from '@angular/animations'
 import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { ModalDirective } from 'ngx-bootstrap/modal';
@@ -19,7 +19,6 @@ import { GeneralService } from '../../services/general.service';
 import { SettingsBranchService } from '../../services/settings.branch.service';
 import { SettingsProfileService } from '../../services/settings.profile.service';
 import { ToasterService } from '../../services/toaster.service';
-import { CompanyAddNewUiComponent } from '../../shared/header/components';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { AppState } from '../../store/roots';
@@ -48,7 +47,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Change status modal instance */
     @ViewChild('statusModal', { static: true }) public statusModal: ModalDirective;
     @ViewChild('branchModal', { static: false }) public branchModal: ModalDirective;
-    @ViewChild('addCompanyModal', { static: false }) public addCompanyModal: ModalDirective;
     @ViewChild('companyadd', { static: false }) public companyadd: ElementViewContainerRef;
     @ViewChild('confirmationModal', { static: false }) public confirmationModal: ModalDirective;
     public bsConfig: Partial<BsDatepickerConfig> = {
@@ -59,7 +57,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     };
     public dataSyncOption = [];
     public currentBranch: string = null;
-    public currentBranchNameAlias: string = null;
     public companies$: Observable<CompanyResponse[]>;
     public branches$: Observable<CompanyResponse[]>;
     public selectedCompaniesUniquename: string[] = [];
@@ -70,7 +67,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public isBranch: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public branchViewType: string = 'card';
-    public moment = moment;
+    public dayjs = dayjs;
     public filters: any[] = [];
     public formFields: any[] = [];
     public universalDate$: Observable<any>;
@@ -132,15 +129,16 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             if (profile && !isEmpty(profile)) {
                 let companyInfo = cloneDeep(profile);
                 this.currentBranch = companyInfo.name;
-                this.currentBranchNameAlias = companyInfo.nameAlias;
+            } else {
+                this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             }
         });
 
         // listen for universal date
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
-                this.filters['from'] = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                this.filters['to'] = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                this.filters['from'] = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                this.filters['to'] = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
 
                 this.dateRangePickerValue = [dateObj[0], dateObj[1]];
                 this.getAllBranches();
@@ -162,9 +160,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 let companiesWithSuperAdminRole = [];
                 each(companies, (cmp) => {
                     each(cmp.userEntityRoles, (company) => {
-                        if (company.entity.entity === 'COMPANY' && company.role.uniqueName === 'super_admin') {
+                        if (company.entity.entity === 'COMPANY' && company.role?.uniqueName === 'super_admin') {
                             if (branches?.length) {
-                                let existIndx = branches.findIndex((b) => b.uniqueName === cmp.uniqueName);
+                                let existIndx = branches.findIndex((b) => b?.uniqueName === cmp?.uniqueName);
                                 if (existIndx === -1) {
                                     companiesWithSuperAdminRole.push(cmp);
                                 }
@@ -193,7 +191,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         fromEvent(this.branchSearch?.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((event: any) => {
-            this.handleBranchSearch(event.target.value);
+            this.handleBranchSearch(event.target?.value);
         });
 
         this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
@@ -209,21 +207,12 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         let branches = [...this.unFilteredBranchList];
         if (query) {
             const lowercaseQuery = query.toLowerCase();
-            branches = this.unFilteredBranchList.filter(branch => (branch.name && branch.name.toLowerCase().includes(lowercaseQuery)) || (branch.alias && branch.alias.toLowerCase().includes(lowercaseQuery)));
+            branches = this.unFilteredBranchList?.filter(branch => (branch.name && branch.name?.toLowerCase().includes(lowercaseQuery)) || (branch.alias && branch.alias?.toLowerCase().includes(lowercaseQuery)));
         }
         this.branches$ = observableOf(branches);
     }
 
     public ngAfterViewInit() {
-        if (this.isBranch) {
-            this.openCreateCompanyModal()
-        }
-    }
-
-    public openCreateCompanyModal(isUpdateMode?: boolean): void {
-        this.loadAddCompanyComponent(isUpdateMode);
-        this.hideAddBranchModal();
-        this.addCompanyModal.show();
     }
 
     /**
@@ -245,53 +234,17 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         });
     }
 
-    public hideAddCompanyModal() {
-        this.addCompanyModal.hide();
-    }
-
-    public hideCompanyModalAndShowAddAndManage() {
-        this.addCompanyModal.hide();
-    }
-
-    public loadAddCompanyComponent(isUpdateMode?: boolean): void {
-        this.store.dispatch(this.commonActions.resetCountry());
-
-        let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddNewUiComponent);
-        let viewContainerRef = this.companyadd.viewContainerRef;
-        viewContainerRef.clear();
-        let componentRef = viewContainerRef.createComponent(componentFactory);
-        (componentRef.instance as CompanyAddNewUiComponent).createBranch = true;
-        (componentRef.instance as CompanyAddNewUiComponent).isUpdateMode = isUpdateMode;
-        (componentRef.instance as CompanyAddNewUiComponent).entityDetails = this.branchDetails;
-        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModal.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
-            this.hideAddCompanyModal();
-            if (isUpdateMode) {
-                this.getAllBranches();
-            }
-        });
-        (componentRef.instance as CompanyAddNewUiComponent).closeCompanyModalAndShowAddManege.pipe(takeUntil(this.destroyed$)).subscribe((a) => {
-            this.hideCompanyModalAndShowAddAndManage();
-        });
-    }
-
     public openAddBranchModal() {
         this.router.navigate(['pages/settings/create-branch']);
-    }
-
-    public hideAddBranchModal() {
-        this.isAllSelected$ = observableOf(false);
-        this.selectedCompaniesUniquename = [];
-        this.selectedCompaniesName = [];
-        this.branchModal.hide();
     }
 
     public selectAllCompanies(ev) {
         this.selectedCompaniesUniquename = [];
         this.selectedCompaniesName = [];
-        if (ev.target.checked) {
+        if (ev.target?.checked) {
             this.companies$.pipe(take(1)).subscribe((companies) => {
                 each(companies, (company) => {
-                    this.selectedCompaniesUniquename.push(company.uniqueName);
+                    this.selectedCompaniesUniquename.push(company?.uniqueName);
                     this.selectedCompaniesName.push(company);
                 });
             });
@@ -300,17 +253,17 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public checkUncheckMe(cmp, ev) {
-        if (ev.target.checked) {
-            if (this.selectedCompaniesUniquename.indexOf(cmp.uniqueName) === -1) {
-                this.selectedCompaniesUniquename.push(cmp.uniqueName);
+        if (ev.target?.checked) {
+            if (this.selectedCompaniesUniquename?.indexOf(cmp?.uniqueName) === -1) {
+                this.selectedCompaniesUniquename.push(cmp?.uniqueName);
             }
             if (cmp.name) {
                 this.selectedCompaniesName.push(cmp);
             }
         } else {
-            let indx = this.selectedCompaniesUniquename.indexOf(cmp.uniqueName);
+            let indx = this.selectedCompaniesUniquename?.indexOf(cmp?.uniqueName);
             this.selectedCompaniesUniquename.splice(indx, 1);
-            let idx = this.selectedCompaniesName.indexOf(cmp);
+            let idx = this.selectedCompaniesName?.indexOf(cmp);
             this.selectedCompaniesName.splice(idx, 1);
         }
         this.isAllCompaniesSelected();
@@ -319,7 +272,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public createBranches() {
         let dataToSend = { childCompanyUniqueNames: this.selectedCompaniesUniquename };
         this.store.dispatch(this.settingsBranchActions.CreateBranches(dataToSend));
-        this.hideAddBranchModal();
     }
 
     public removeBranch(branchUniqueName, companyName) {
@@ -327,7 +279,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         let message = this.localeData?.remove_branch;
         message = message?.replace("[COMPANY_NAME]", companyName);
         this.confirmationMessage = message;
-        this.confirmationModal.show();
+        this.confirmationModal?.show();
     }
 
     public onUserConfirmation(yesOrNo) {
@@ -351,7 +303,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (branchFilterRequest.from && branchFilterRequest.to) {
             this.showLoader = true;
-            this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
             this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
             this.store.dispatch(this.settingsBranchActions.ResetBranchRemoveResponse());
         }
@@ -370,8 +321,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public setFilterDate(data) {
         if (data) {
             let branchFilterRequest = new BranchFilterRequest();
-            branchFilterRequest.from = moment(data[0]).format(GIDDH_DATE_FORMAT);
-            branchFilterRequest.to = moment(data[1]).format(GIDDH_DATE_FORMAT);
+            branchFilterRequest.from = dayjs(data[0]).format(GIDDH_DATE_FORMAT);
+            branchFilterRequest.to = dayjs(data[1]).format(GIDDH_DATE_FORMAT);
 
             this.filters['from'] = branchFilterRequest.from;
             this.filters['to'] = branchFilterRequest.to;
@@ -448,23 +399,23 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public updateBranchInfo(branchDetails: any): void {
         branchDetails.formValue.linkedEntity = branchDetails.formValue.linkedEntity || [];
         this.isBranchChangeInProgress = true;
-        const linkAddresses = branchDetails.addressDetails.linkedEntities.filter(entity => (branchDetails.formValue.linkedEntity.includes(entity.uniqueName))).map(filteredEntity => ({
-            uniqueName: filteredEntity.uniqueName,
+        const linkAddresses = branchDetails.addressDetails.linkedEntities?.filter(entity => (branchDetails.formValue.linkedEntity.includes(entity?.uniqueName))).map(filteredEntity => ({
+            uniqueName: filteredEntity?.uniqueName,
             isDefault: filteredEntity.isDefault,
         }));
         const requestObj = {
             name: branchDetails.formValue.name,
             alias: branchDetails.formValue.alias,
-            branchUniqueName: this.branchDetails.uniqueName,
+            branchUniqueName: this.branchDetails?.uniqueName,
             linkAddresses
         };
         this.settingsProfileService.updateBranchInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 this.closeAddressSidePane = 'out';
                 this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '' }));
                 this.toasterService.successToast(this.localeData?.branch_updated);
             } else {
-                this.toasterService.errorToast(response.message);
+                this.toasterService.errorToast(response?.message);
             }
             this.isBranchChangeInProgress = false;
         }, () => {
@@ -490,7 +441,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (entityType === 'address') {
             branch.addresses.forEach(branchAddress => {
-                if (branchAddress.uniqueName === entity.uniqueName) {
+                if (branchAddress?.uniqueName === entity?.uniqueName) {
                     branchAddress.isDefault = entity.isDefault;
                 } else {
                     branchAddress.isDefault = false;
@@ -498,7 +449,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             });
         } else if (entityType === 'warehouse') {
             branch.warehouseResource.forEach(warehouse => {
-                if (warehouse.uniqueName === entity.uniqueName) {
+                if (warehouse?.uniqueName === entity?.uniqueName) {
                     warehouse.isDefault = entity.isDefault;
                 } else {
                     warehouse.isDefault = false;
@@ -509,12 +460,12 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             name: branch.name,
             alias: branch.alias,
             linkAddresses: branch.addresses,
-            branchUniqueName: branch.uniqueName,
+            branchUniqueName: branch?.uniqueName,
         }
         if (entityType === 'warehouse') {
             requestObject.defaultWarehouse = {
                 name: entity.name,
-                uniqueName: entity.uniqueName
+                uniqueName: entity?.uniqueName
             };
         }
         this.settingsProfileService.updateBranchInfo(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(() => {
@@ -548,7 +499,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                         ...address,
                         isDefault: false,
                         label: address.name,
-                        value: address.uniqueName
+                        value: address?.uniqueName
                     }));
                 if (successCallback) {
                     successCallback();
@@ -582,15 +533,14 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof BranchComponent
      */
     public confirmStatusUpdate(branch: any): void {
-        this.branches$.pipe(take(1)).subscribe((branches: any) => {
-            const unarchivedBranches = branches?.filter(currentBranch => !currentBranch?.isArchived);
-            if (unarchivedBranches?.length > 1 || branch?.isArchived) {
-                this.branchStatusToUpdate = branch;
-                this.statusModal?.show();
-            } else {
-                this.toasterService.warningToast(this.localeData?.archive_notallowed);
-            }
-        });
+        const unarchivedBranches = this.unFilteredBranchList?.filter(currentBranch => !currentBranch?.isArchived);
+        if (unarchivedBranches?.length > 1 || branch?.isArchived) {
+            this.branchStatusToUpdate = branch;
+            this.statusModal?.show();
+        } else {
+            this.toasterService.warningToast(this.localeData?.archive_notallowed);
+        }
+
     }
 
     /**

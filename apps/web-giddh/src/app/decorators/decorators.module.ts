@@ -3,7 +3,7 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { NeedsAuthentication } from './needsAuthentication';
 import { UserAuthenticated } from './UserAuthenticated';
 import { NewUserAuthGuard } from './newUserGuard';
-import { BrowserSupported } from './BrowserSupported';
+import { PageLeaveConfirmationGuard } from './page-leave-confirmation-guard';
 
 @NgModule({
     imports: [],
@@ -18,7 +18,7 @@ export class DecoratorsModule {
                 UserAuthenticated,
                 NewUserAuthGuard,
                 NeedsAuthorization,
-                BrowserSupported
+                PageLeaveConfirmationGuard
             ]
         };
     }

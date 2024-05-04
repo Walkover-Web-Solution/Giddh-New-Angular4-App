@@ -257,7 +257,7 @@
                 </div>
 
                 <div [hidden]="!showConfirmationBox" class="confirmation-box bdr text-center pd-2">
-                    <div class="">
+                    <div >
                         <h1>Accept?</h1>
                         <div class="pd-t2">
                             <button
@@ -356,7 +356,6 @@
                         <label>Cheque Clearance Date:</label>
                         <input
                             #chequeClearanceDateInput
-                            [textMask]="{ mask: dateMask, guide: true }"
                             class="form-control"
                             formControlName="chequeClearanceDate"
                             name="account"

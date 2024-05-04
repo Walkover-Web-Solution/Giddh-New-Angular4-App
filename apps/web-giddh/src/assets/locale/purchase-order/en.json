@@ -1,4 +1,5 @@
 {
+    "account_missing_in_stock": "account is not linked with stock",
     "bulk_update": "Bulk Update",
     "convert_tobill": "Convert to bill",
     "expired": "Expired",
@@ -29,7 +30,7 @@
     "edit_po": "Edit Purchase Order",
     "select_vendor": "Select Vendor",
     "add_vendor": "Add Vendor",
-    "vendor_details": "Vendor Details",
+    "vendor_details": "Edit Vendor",
     "pending_po": "Pending Purchase order of selected vendor",
     "deliver_from": "Deliver From",
     "billing_address": "Billing Address",
@@ -70,5 +71,10 @@
     "currency_conversion": "In [BASE_CURRENCY]: [AMOUNT]<br />(Conversion Rate: [CONVERSION_RATE])",
     "delayed_by_days": "Delayed by [DAYS] days",
     "delivery_in_day": "Delivery in [DAYS] day",
-    "delivery_in_days": "Delivery in [DAYS] days"
+    "delivery_in_days": "Delivery in [DAYS] days",
+    "select_variant": "Select Variant",
+    "variant": "Variant",
+    "convert_bill_popup_heading": "Convert to Bill",
+    "purchase_bill_number": "Purchase Bill Number",
+    "po_selection_vendor_error": "Please select purchase orders of only 1 vendor."
 }

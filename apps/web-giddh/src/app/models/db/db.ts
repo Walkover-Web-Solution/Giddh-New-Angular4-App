@@ -1,7 +1,7 @@
 import Dexie from 'dexie';
 import { ICompAidata, Igtbl, IUlist } from '../interfaces/ulist.interface';
 import { orderBy } from '../../lodash-optimized';
-import { DEFAULT_MENUS } from '../defaultMenus';
+import { DEFAULT_MENUS } from '../default-menus';
 
 export class UlistDbModel implements IUlist {
     public id: number;
@@ -91,37 +91,37 @@ class AppDatabase extends Dexie {
             if (entity === 'menus') {
                 // if any fromInvalidState remove it and replace it with new menu
                 if (fromInvalidState) {
-                    let invalidEntryIndex = arr.findIndex(f => f.uniqueName === fromInvalidState.previous.uniqueName);
+                    let invalidEntryIndex = arr?.findIndex(f => f?.uniqueName === fromInvalidState.previous?.uniqueName);
                     arr[invalidEntryIndex] = Object.assign({}, model, { isRemoved: true, pIndex: arr[invalidEntryIndex].pIndex, isInvalidState: false });
                 } else {
 
                     let duplicateIndex: number;
-                    duplicateIndex = arr.findIndex(s => {
+                    duplicateIndex = arr?.findIndex(s => {
                         if (model.additional) {
                             if (s.additional) {
-                                return s.uniqueName === model.uniqueName && s.additional.tabIndex === model.additional.tabIndex;
+                                return s?.uniqueName === model?.uniqueName && s.additional.tabIndex === model.additional.tabIndex;
                             }
                         } else {
-                            return s.uniqueName === model.uniqueName;
+                            return s?.uniqueName === model?.uniqueName;
                         }
                     });
 
                     // if duplicate item found then skip it
                     if (duplicateIndex === -1) {
-                        let indDefaultIndex = this.clonedMenus.findIndex((item) => {
+                        let indDefaultIndex = this.clonedMenus?.findIndex((item) => {
                             if (model.additional) {
                                 if (item.additional) {
-                                    return item.uniqueName === model.uniqueName && item.name === model.name && item.additional.tabIndex === model.additional.tabIndex;
+                                    return item?.uniqueName === model?.uniqueName && item.name === model.name && item.additional.tabIndex === model.additional.tabIndex;
                                 }
                             } else {
-                                return item.uniqueName === model.uniqueName && item.name === model.name;
+                                return item?.uniqueName === model?.uniqueName && item.name === model.name;
                             }
                         });
 
                         // if searched menu is in default list then add it to menu and mark that item as not removed in default menu
                         if (indDefaultIndex > -1) {
                             // index where menu should be added
-                            let index = arr.findIndex(a => this.clonedMenus[indDefaultIndex].pIndex === a.pIndex);
+                            let index = arr?.findIndex(a => this.clonedMenus[indDefaultIndex].pIndex === a.pIndex);
                             if (isSmallScreen && index > limit) {
                                 index = this.smallScreenHandler(index, isCompany);
                             }
@@ -136,12 +136,12 @@ class AppDatabase extends Dexie {
                               then add it to menu at specific position and then mark that item as removed in default menu
                              */
                             let sorted: IUlist[] = orderBy(this.clonedMenus.filter(f => !f.isRemoved), ['pIndex'], ['desc']);
-                            if (sorted.length === 0) {
+                            if (sorted?.length === 0) {
                                 sorted = DEFAULT_MENUS;
                                 this.clonedMenus = DEFAULT_MENUS;
                             }
                             // index where menu should be added
-                            let index = arr.findIndex(a => sorted[0].pIndex === a.pIndex);
+                            let index = arr?.findIndex(a => sorted[0].pIndex === a.pIndex);
 
                             let originalIndex = duplicateIndex;
                             if (isSmallScreen && index > limit) {
@@ -167,7 +167,7 @@ class AppDatabase extends Dexie {
                         if (isSmallScreen && duplicateIndex > limit) {
                             duplicateIndex = this.smallScreenHandler(duplicateIndex, isCompany);
                         }
-                        if (this.clonedMenus.length === 0) {
+                        if (this.clonedMenus?.length === 0) {
                             this.clonedMenus = DEFAULT_MENUS;
                         }
                         arr[originalDuplicateIndex] = arr[duplicateIndex];
@@ -177,7 +177,7 @@ class AppDatabase extends Dexie {
             } else {
                 // for accounts and groups
                 arr.map((item: IUlist) => {
-                    if (item.uniqueName === model.uniqueName) {
+                    if (item?.uniqueName === model?.uniqueName) {
                         isFound = true;
                         item = Object.assign(item, model);
                         return item;
@@ -221,8 +221,8 @@ class AppDatabase extends Dexie {
             }
             let arr: IUlist[] = res?.aidata[entity];
             // for accounts and groups
-            arr = arr.filter((item: IUlist) => {
-                if (item.uniqueName !== uniqueName) {
+            arr = arr?.filter((item: IUlist) => {
+                if (item?.uniqueName !== uniqueName) {
                     return item;
                 }
             });

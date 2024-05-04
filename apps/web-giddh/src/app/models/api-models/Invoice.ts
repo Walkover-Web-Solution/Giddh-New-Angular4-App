@@ -6,7 +6,7 @@
  */
 
 import { ILedgerTransactionItem, ITotalItem } from '../interfaces/ledger.interface';
-import { IPagination } from '../interfaces/paginatedResponse.interface';
+import { IPagination } from '../interfaces/paginated-response.interface';
 import { AmountClassMulticurrency, OtherSalesItemClass, VoucherTypeEnum } from './Sales';
 import { INameUniqueName } from './Inventory';
 
@@ -467,6 +467,7 @@ export class CustomTemplateResponse {
     public logoSize: string; // design
     public isDefault: boolean;
     public isDefaultForVoucher: boolean;
+    public showSectionsInline: boolean;
     public sections: ISection; // done
     public name: string;
     public copyFrom?: string; // done
@@ -669,6 +670,8 @@ export class IEwayBillfilter {
     toDate?: any;
     page?: number;
     count?: number;
+    branchUniqueName?: string;
+    gstin?: string;
 }
 
 export class InvoicePreviewDetailsVm {

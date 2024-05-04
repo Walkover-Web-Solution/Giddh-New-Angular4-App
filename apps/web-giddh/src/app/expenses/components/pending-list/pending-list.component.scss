@@ -2,23 +2,6 @@
     position: relative;
 }
 
-.search-icon {
-    position: absolute;
-    right: 12px;
-    font-size: 11px;
-    color: var(--color-abbey);
-    top: 13px;
-}
-
-.arrow-filter {
-    font-size: 11px;
-    position: absolute;
-    right: 10px;
-    color: var(--color-gray);
-    cursor: pointer;
-    top: 12px;
-}
-
 .icon-pointer {
     cursor: pointer;
     .active-text-color {
@@ -61,9 +44,19 @@
 .td-search-box {
     position: relative;
 }
-@media (min-width: 769px) {
-    .table-responsive {
-        max-height: calc(100vh - 245px);
-        overflow-y: auto;
+.action-btn{
+    button{
+        min-width: 90px;
+    }
+}
+table{
+    .mat-mdc-number{
+        width: 2%;
+    }
+    .mat-mdc-entry{
+        width: 12%;
+    }
+    .mat-mdc-submit{
+        width: 10%;
     }
 }

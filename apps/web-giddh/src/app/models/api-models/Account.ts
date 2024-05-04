@@ -1,12 +1,12 @@
-import { IAccount, IAccountCreate, ICountryClass } from '../interfaces/accountCreate.interface';
-import { IGstDetailListItem } from '../interfaces/gstDetailListItem.interface';
-import { IUserInfo } from '../interfaces/userInfo.interface';
+import { IAccount, IAccountCreate, ICountryClass } from '../interfaces/account-create.interface';
+import { IGstDetailListItem } from '../interfaces/gst-detail-list-item.interface';
+import { IUserInfo } from '../interfaces/user-info.interface';
 import { INameUniqueName } from './Inventory';
-import { IFlattenAccountsResultItem } from '../interfaces/flattenAccountsResultItem.interface';
-import { IInheritedTaxes } from '../interfaces/inheritedTaxes.interface';
-import { IPaginatedResponse } from '../interfaces/paginatedResponse.interface';
+import { IFlattenAccountsResultItem } from '../interfaces/flatten-accounts-result-item.interface';
+import { IInheritedTaxes } from '../interfaces/inherited-taxes.interface';
+import { IPaginatedResponse } from '../interfaces/paginated-response.interface';
 import { IDiscountList } from './SettingsDiscount';
-import { StateList } from './Company';
+import { CountyList, StateList } from './Company';
 
 /**
  * Model for create account api response
@@ -172,11 +172,14 @@ export class IAccountAddress {
     public gstNumber: string;
     public address: string;
     public state: StateList;
-    public stateCode: string;
+    public stateCode?: string;
     public isDefault: boolean;
     public isComposite: boolean;
     public partyType: string;
     public stateCodeName: string;
+    public pincode?: string;
+    public countyCode?: string;
+    public county?: CountyList;
 }
 export class AccountRequestV2 {
     public addresses: IAccountAddress[];
@@ -199,6 +202,7 @@ export class AccountRequestV2 {
     public applicableDiscounts?: any[];
     public inheritedDiscounts?: any[];
     public customFields?: CustomFieldsData[];
+    public portalDomain?: any
 }
 
 export class AccountResponseV2 {
@@ -242,6 +246,7 @@ export class AccountResponseV2 {
     public customFields?: CustomFieldsData[];
     public category?: string;
     public otherApplicableTaxes?: any[];
+    public portalDomain?: any
 }
 
 /*
@@ -283,4 +288,5 @@ export class UpdateAccountRequest {
 export class CustomFieldsData {
     uniqueName: string;
     value: AccountRequestV2
+    isMandatory?: boolean;
 }

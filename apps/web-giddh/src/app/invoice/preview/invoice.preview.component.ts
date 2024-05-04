@@ -14,12 +14,14 @@ import {
     EventEmitter,
     Output
 } from '@angular/core';
-import { FormControl, NgForm } from '@angular/forms';
+import { UntypedFormControl, NgForm } from '@angular/forms';
 import { BsModalRef, ModalOptions, BsModalService } from 'ngx-bootstrap/modal';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { cloneDeep, map, uniqBy } from '../../lodash-optimized';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
+import * as customParseFormat from 'dayjs/plugin/customParseFormat';
+dayjs.extend(customParseFormat);
 import { InvoiceFilterClassForInvoicePreview, InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../services/invoice.service';
@@ -54,6 +56,7 @@ import { CommonActions } from '../../actions/common.actions';
 import { AdjustmentUtilityService } from '../../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
+import { PurchaseOrderActions } from '../../actions/purchase-order/purchase-order.action';
 
 /** Multi currency modules includes Cash/Sales Invoice and CR/DR note */
 const MULTI_CURRENCY_MODULES = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase];
@@ -95,7 +98,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public selectedInvoice: ReceiptItem;
     public invoiceSearchRequest: InvoiceFilterClassForInvoicePreview = new InvoiceFilterClassForInvoicePreview();
     public voucherData: ReciptResponse;
-    public moment = moment;
+    public dayjs = dayjs;
     public modalRef: BsModalRef;
     public showInvoiceNoSearch = false;
     public modalConfig: ModalOptions = {
@@ -125,9 +128,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public isDeleteSuccess$: Observable<boolean>;
     public allItemsSelected: boolean = false;
     public selectedItems: string[] = [];
-    public voucherNumberInput: FormControl = new FormControl();
-    public accountUniqueNameInput: FormControl = new FormControl();
-    public ProformaPurchaseOrder: FormControl = new FormControl();
+    public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
+    public accountUniqueNameInput: UntypedFormControl = new UntypedFormControl();
+    public ProformaPurchaseOrder: UntypedFormControl = new UntypedFormControl();
     public showAdvanceSearchIcon: boolean = false;
     public hoveredItemForAction: string = '';
     public clickedHoveredItemForAction: string = '';
@@ -141,7 +144,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public exportInvoiceRequestInProcess$: Observable<boolean> = of(false);
     public exportedInvoiceBase64res$: Observable<any>;
     public isFabclicked: boolean = false;
-    public exportInvoiceType: string = '';
     public sortRequestForUi: { sortBy: string, sort: string } = { sortBy: '', sort: '' };
     public appSideMenubarIsOpen: boolean;
     public invoiceSelectedDate: any = {
@@ -185,7 +187,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     /* This will hold if we need to show/hide PO search */
     public showPurchaseOrderSearch: boolean = false;
     /* Field for search */
-    public purchaseOrderNumbersInput: FormControl = new FormControl();
+    public purchaseOrderNumbersInput: UntypedFormControl = new UntypedFormControl();
     /* Send email request params object */
     public sendEmailRequest: any = {};
     /* Company name observable */
@@ -209,7 +211,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: ElementRef;
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Stores the voucher eligible for adjustment */
     public voucherForAdjustment: Array<Adjustment>;
     /** This will store selected date range to show on UI */
@@ -241,6 +243,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public selectedEInvoice: any;
     /** True if dropdown menu needs to show upwards */
     public isDropUp: boolean = false;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
+    /** Holds Voucher Name that suports csv file export */
+    public csvSupportVoucherType: string[] = ['sales', 'debit note', 'credit note','purchase'];
 
     constructor(
         private store: Store<AppState>,
@@ -262,7 +268,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         private modalService: BsModalService,
         private generalService: GeneralService,
         private commonActions: CommonActions,
-        private adjustmentUtilityService: AdjustmentUtilityService
+        private adjustmentUtilityService: AdjustmentUtilityService,
+        private purchaseOrderActions: PurchaseOrderActions
     ) {
         this.advanceReceiptAdjustmentData = null;
         this.invoiceSearchRequest.page = 1;
@@ -277,6 +284,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
         this.voucherDetails$ = this.store.pipe(select(s => s.receipt.voucher), takeUntil(this.destroyed$));
         this.companyName$ = this.store.pipe(select(state => state.session.companyUniqueName), takeUntil(this.destroyed$));
+
+        this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            if (profile) {
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+            }
+        });
     }
 
     /**
@@ -290,6 +303,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         document.querySelector("body")?.classList?.add("invoice-preview-page");
         this._breakPointObservar.observe([
             '(max-width: 1023px)'
@@ -301,51 +315,21 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches.length > 1;
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
             }
         });
         this.advanceSearchFilter.page = 1;
         this.advanceSearchFilter.count = PAGINATION_LIMIT;
+
+        this._activatedRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(a => {
+            if (a && a.accountUniqueName && a.voucherUniqueName) {
+                this.getVoucherDetails(VoucherTypeEnum.sales, a.accountUniqueName, a.voucherUniqueName);
+            }
+        });
+
         this._activatedRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             if (a && a.accountUniqueName && a.purchaseRecordUniqueName) {
-                const apiCallObservable = this.voucherApiVersion === 2 ?
-                    this._receiptServices.getVoucherDetailsV4(a.accountUniqueName, {
-                        invoiceNumber: '',
-                        voucherType: VoucherTypeEnum.purchase,
-                        uniqueName: a.purchaseRecordUniqueName
-                    }) :
-                    this._receiptServices.GetPurchaseRecordDetails(a.accountUniqueName, a.purchaseRecordUniqueName);
-                apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
-                    if (res && res.body) {
-                        if (res.body.date) {
-                            this.invoiceSearchRequest.from = res.body.date;
-                            this.invoiceSearchRequest.to = res.body.date;
-                            this.getVoucher(false);
-                        }
-
-                        this.purchaseRecord = {
-                            balanceStatus: '',
-                            dueDate: res.body.dueDate,
-                            grandTotal: res.body.grandTotal,
-                            account: {
-                                accountType: (res.body.account) ? res.body.account.type : null,
-                                uniqueName: (res.body.account) ? res.body.account.uniqueName : null,
-                                name: (res.body.account) ? res.body.account.name : null
-                            },
-                            uniqueName: res.body.uniqueName,
-                            voucherDate: res.body.date,
-                            voucherNumber: res.body.number,
-                            balanceDue: res.body.balanceTotal,
-                            isSelected: false,
-                            dueDays: null,
-                            cashInvoice: false
-                        };
-                        this.selectedVoucher = VoucherTypeEnum.purchase;
-                        if (this.itemsListForDetails) {
-                            this.onSelectInvoice(this.purchaseRecord);
-                        }
-                    }
-                });
+                this.getVoucherDetails(VoucherTypeEnum.purchase, a.accountUniqueName, a.purchaseRecordUniqueName);
             }
 
             if (!(a && a.voucherType)) {
@@ -354,7 +338,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             if (a && a.voucherType === 'recurring') {
                 return;
             }
-            this.selectedVoucher = (a) ? a.voucherType : "";
+            this.selectedVoucher = (a) ? a?.voucherType : "";
             if (this.selectedVoucher === 'credit note' || this.selectedVoucher === 'debit note') {
                 this.templateType = 'voucher';
             } else {
@@ -375,14 +359,16 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     if (voucherIndex > -1) {
                         let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
                         if (record.mergedRecordUniqueName) {
-                            allItems = allItems.filter(item => item?.uniqueName !== record.mergedRecordUniqueName);
+                            allItems = allItems?.filter(item => item?.uniqueName !== record.mergedRecordUniqueName);
                         }
-                        allItems[voucherIndex].voucherNumber = record.invoiceNumber;
+                        if (allItems[voucherIndex]) {
+                            allItems[voucherIndex].voucherNumber = record.invoiceNumber;
+                        }
                         allItems = uniqBy([allItems[voucherIndex], ...allItems], 'uniqueName');
                         this.itemsListForDetails = allItems;
                         this.toggleBodyClass();
                         setTimeout(() => {
-                            const itemIndex = this.itemsListForDetails.findIndex(item => item?.uniqueName === record.purchaseRecordUniqueName);
+                            const itemIndex = this.itemsListForDetails?.findIndex(item => item?.uniqueName === record.purchaseRecordUniqueName);
                             this.selectedInvoiceForDetails = allItems[itemIndex];
                             this.store.dispatch(this.invoiceReceiptActions.setVoucherForDetails(null, null));
                             this.store.dispatch(this.purchaseRecordActions.resetUpdatePurchaseRecord());
@@ -405,13 +391,13 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             if (dateObj) {
                 if (localStorage.getItem('universalSelectedDate')) {
                     let universalStorageData = localStorage.getItem('universalSelectedDate').split(',');
-                    if ((moment(universalStorageData[0]).format(GIDDH_DATE_FORMAT) === moment(dateObj[0]).format(GIDDH_DATE_FORMAT)) && (moment(universalStorageData[1]).format(GIDDH_DATE_FORMAT) === moment(dateObj[1]).format(GIDDH_DATE_FORMAT))) {
+                    if ((dayjs(universalStorageData[0]).format(GIDDH_DATE_FORMAT) === dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT)) && (dayjs(universalStorageData[1]).format(GIDDH_DATE_FORMAT) === dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT))) {
                         if (window.localStorage && localStorage.getItem('invoiceSelectedDate')) {
                             let storedSelectedDate = JSON.parse(localStorage.getItem('invoiceSelectedDate'));
                             let dateRange = { fromDate: '', toDate: '' };
                             dateRange = this.generalService.dateConversionToSetComponentDatePicker(storedSelectedDate.fromDates, storedSelectedDate.toDates);
-                            this.selectedDateRange = { startDate: moment(dateRange.fromDate), endDate: moment(dateRange.toDate) };
-                            this.selectedDateRangeUi = moment(dateRange.fromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateRange.toDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.selectedDateRange = { startDate: dayjs(dateRange.fromDate), endDate: dayjs(dateRange.toDate) };
+                            this.selectedDateRangeUi = dayjs(dateRange.fromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate).format(GIDDH_NEW_DATE_FORMAT_UI);
                             // assign dates
                             if (storedSelectedDate.fromDates && storedSelectedDate.toDates) {
                                 this.invoiceSearchRequest.from = storedSelectedDate.fromDates;
@@ -419,31 +405,35 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                                 this.isUniversalDateApplicable = false;
                             }
                         } else {
-                            this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                            this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                            this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                             // assign dates
 
-                            this.invoiceSearchRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                            this.invoiceSearchRequest.to = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                            this.invoiceSearchRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                            this.invoiceSearchRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
                             this.isUniversalDateApplicable = true;
                         }
                     } else {
-                        this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                        this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
+                        this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                         // assign dates
 
-                        this.invoiceSearchRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                        this.invoiceSearchRequest.to = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                        this.invoiceSearchRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                        this.invoiceSearchRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
                         this.isUniversalDateApplicable = true;
                     }
                 } else {
-                    this.selectedDateRange = { startDate: moment(dateObj[0]), endDate: moment(dateObj[1]) };
-                    this.selectedDateRangeUi = moment(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                    this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                     // assign dates
 
-                    this.invoiceSearchRequest.from = moment(dateObj[0]).format(GIDDH_DATE_FORMAT);
-                    this.invoiceSearchRequest.to = moment(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                    this.invoiceSearchRequest.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                    this.invoiceSearchRequest.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
                     this.isUniversalDateApplicable = true;
+
+                    if (window.localStorage) {
+                        localStorage.setItem('universalSelectedDate', dateObj);
+                    }
                 }
                 this.getVoucher(true);
             }
@@ -474,9 +464,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             takeUntil(this.destroyed$)
         ).subscribe(s => {
             if (s !== null && s !== undefined) {
-            this.showAdvanceSearchIcon = true;
-            this.invoiceSearchRequest.q = s;
-            this.getVoucher(this.isUniversalDateApplicable);
+                this.showAdvanceSearchIcon = true;
+                this.invoiceSearchRequest.q = s;
+                this.getVoucher(this.isUniversalDateApplicable);
             }
         });
 
@@ -537,11 +527,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 if (this.selectedPerformAdjustPaymentAction) {
                     if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments && this.advanceReceiptAdjustmentData.adjustments.length) {
                         this.showAdvanceReceiptAdjust = true;
-                        this.adjustPaymentModal.show();
+                        this.adjustPaymentModal?.show();
                         this.selectedPerformAdjustPaymentAction = false;
                     } else {
                         if (response.account && response.date) {
-                            this.getAllAdvanceReceipts(response.account.uniqueName, response.date);
+                            this.getAllAdvanceReceipts(response.account?.uniqueName, response.date);
                             this.selectedPerformAdjustPaymentAction = false;
                         }
                     }
@@ -573,7 +563,54 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.store.pipe(select(state => state.receipt.hasVoucherListPermissions), takeUntil(this.destroyed$)).subscribe(response => {
             this.hasVoucherListPermissions = response;
         });
-        this.voucherApiVersion = this.generalService.voucherApiVersion;
+
+        this.store.dispatch(this.purchaseOrderActions.setPurchaseOrderFilters({}));
+    }
+
+    private getVoucherDetails(voucherType: VoucherTypeEnum, accountUniqueName: string, voucherUniqueName: string): void {
+        const apiCallObservable = this.voucherApiVersion === 2 ?
+            this._receiptServices.getVoucherDetailsV4(accountUniqueName, {
+                invoiceNumber: '',
+                voucherType: voucherType,
+                uniqueName: voucherUniqueName
+            }) :
+            this._receiptServices.GetPurchaseRecordDetails(accountUniqueName, voucherUniqueName);
+
+        apiCallObservable.pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
+            if (res && res.body) {
+                if (res.body.date) {
+                    this.invoiceSearchRequest.from = res.body.date;
+                    this.invoiceSearchRequest.to = res.body.date;
+                    this.getVoucher(false);
+                }
+
+                this.purchaseRecord = {
+                    balanceStatus: '',
+                    dueDate: res.body.dueDate,
+                    grandTotal: res.body.grandTotal,
+                    account: {
+                        accountType: (res.body.account) ? res.body.account.type : null,
+                        uniqueName: (res.body.account) ? res.body.account?.uniqueName : null,
+                        name: (res.body.account) ? res.body.account.name : null
+                    },
+                    uniqueName: res.body?.uniqueName,
+                    voucherDate: res.body.date,
+                    voucherNumber: res.body.number,
+                    balanceDue: res.body.balanceTotal,
+                    isSelected: false,
+                    dueDays: null,
+                    cashInvoice: false
+                };
+                this.selectedVoucher = voucherType;
+                if (this.itemsListForDetails) {
+                    this.onSelectInvoice(this.purchaseRecord);
+                }
+
+                if (voucherType === VoucherTypeEnum.sales) {
+                    this.purchaseRecord = null;
+                }
+            }
+        });
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -625,12 +662,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public toggleBulkUpdatePopup(isClose: boolean, refreshVouchers?: boolean): void {
         if (isClose) {
-            this.bulkUpdate.hide();
+            this.bulkUpdate?.hide();
             if (refreshVouchers) {
                 this.getVoucher(this.isUniversalDateApplicable);
             }
         } else {
-            this.bulkUpdate.show();
+            this.bulkUpdate?.show();
         }
     }
 
@@ -682,7 +719,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             let objItem = item || this.selectedInvoiceForDetails;
             let actionToPerform = ev;
             if (actionToPerform === 'paid') {
-                this.performActionOnInvoiceModel.show();
+                this.performActionOnInvoiceModel?.show();
                 setTimeout(() => {
                     this.selectedInvoice = objItem;
                     if (this.invoicePaymentModelComponent) {
@@ -696,7 +733,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                 } else {
                     this.store.dispatch(this.invoiceActions.ActionOnInvoice(objItem?.uniqueName, {
                         action: actionToPerform,
-                        voucherType: objItem.voucherType ?? this.selectedVoucher
+                        voucherType: objItem?.voucherType ?? this.selectedVoucher
                     }));
                 }
             }
@@ -707,23 +744,23 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public onDeleteBtnClick() {
         let allInvoices = cloneDeep(this.voucherData.items);
         this.selectedInvoice = allInvoices.find((o) => o?.uniqueName === this.selectedItems[0]);
-        this.invoiceConfirmationModel.show();
+        this.invoiceConfirmationModel?.show();
     }
 
     public deleteConfirmedInvoice(selectedVoucher?: any) {
-        this.invoiceConfirmationModel.hide();
+        this.invoiceConfirmationModel?.hide();
         if (this.selectedVoucher === VoucherTypeEnum.purchase && this.voucherApiVersion !== 2) {
             const requestObject = {
-                uniqueName: (selectedVoucher) ? encodeURIComponent(selectedVoucher.uniqueName) : (this.selectedInvoice) ? encodeURIComponent(this.selectedInvoice.uniqueName) : (this.selectedInvoiceForDetails) ? encodeURIComponent(this.selectedInvoiceForDetails.uniqueName) : ''
+                uniqueName: (selectedVoucher) ? encodeURIComponent(selectedVoucher?.uniqueName) : (this.selectedInvoice) ? encodeURIComponent(this.selectedInvoice?.uniqueName) : (this.selectedInvoiceForDetails) ? encodeURIComponent(this.selectedInvoiceForDetails?.uniqueName) : ''
             };
             this.purchaseRecordService.deletePurchaseRecord(requestObject).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.selectedItems = [];
-                if (response.status === 'success') {
+                if (response?.status === 'success') {
                     this._toaster.successToast(response.body);
                     this.selectedInvoiceForDetails = null;
                     this.getVoucher(this.isUniversalDateApplicable);
                 } else {
-                    this._toaster.errorToast(response.message);
+                    this._toaster.errorToast(response?.message);
                     this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.lastListingFilters, this.selectedVoucher));
                     this._receiptServices.getAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                         this.parseBalRes(res);
@@ -732,7 +769,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             });
         } else {
             //  It will execute when Bulk delete operation
-            if (this.selectedInvoicesList.length > 1) {
+            if (this.selectedInvoicesList?.length > 1) {
                 let bulkDeleteModel;
                 let selectedVouchers = [];
 
@@ -753,11 +790,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         voucherType: this.selectedVoucher
                     }
                 }
-                if (selectedVouchers?.length && bulkDeleteModel.voucherType) {
+                if (selectedVouchers?.length && bulkDeleteModel?.voucherType) {
                     this._invoiceBulkUpdateService.bulkUpdateInvoice(bulkDeleteModel, 'delete').subscribe(response => {
                         if (response) {
                             if (response.status === "success") {
-                                this.getVoucher(this.isUniversalDateApplicable);
                                 this._toaster.successToast(response.body);
                                 this.getVoucher(false);
                                 this.toggleAllItems(false);
@@ -788,16 +824,25 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    public closeConfirmationPopup() {
-        this.invoiceConfirmationModel.hide();
+    public closeConfirmationPopup(): void {
+        this.invoiceConfirmationModel?.hide();
     }
 
-    public closePerformActionPopup(data) {
-        this.performActionOnInvoiceModel.hide();
+    public performActionPopup(data: any): void {
         if (data) {
             data.action = 'paid';
             this.store.dispatch(this.invoiceActions.ActionOnInvoice(data.uniqueName, data));
         }
+    }
+
+    /**
+     * Closes payment popup
+     *
+     * @memberof InvoicePreviewComponent
+     */
+    public closePerformActionPopup(): void {
+        this.store.dispatch(this.invoiceActions.resetActionOnInvoice());
+        this.performActionOnInvoiceModel?.hide();
     }
 
     public goToInvoice(voucherType: string) {
@@ -818,7 +863,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public closeDownloadOrSendMailPopup(userResponse: { action: string }) {
-        this.downloadOrSendMailModel.hide();
+        this.downloadOrSendMailModel?.hide();
         if (userResponse.action === 'closed') {
             this.store.dispatch(this.invoiceActions.ResetInvoiceData());
         }
@@ -870,8 +915,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public getVoucher(isUniversalDateSelected: boolean) {
         this.lastListingFilters = this.prepareModelForInvoiceReceiptApi(isUniversalDateSelected);
         if (this.lastListingFilters) {
-            this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(this.lastListingFilters, this.selectedVoucher));
-            this._receiptServices.getAllReceiptBalanceDue(this.lastListingFilters, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(cloneDeep(this.lastListingFilters), this.selectedVoucher));
+            this._receiptServices.getAllReceiptBalanceDue(cloneDeep(this.lastListingFilters), this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                 this.parseBalRes(res);
             });
         }
@@ -885,7 +930,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public getVouchersList(isUniversalDateSelected: boolean): void {
         let request;
-
         if (this.lastListingFilters) {
             request = this.lastListingFilters;
         } else {
@@ -908,8 +952,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         let o = cloneDeep(this.invoiceSearchRequest);
         let advanceSearch = cloneDeep(this.advanceSearchFilter);
 
-        if (o.voucherNumber) {
-            model.voucherNumber = o.voucherNumber;
+        if (o?.voucherNumber && model) {
+            model.voucherNumber = o?.voucherNumber;
         }
         if (o.page) {
             advanceSearch.page = o.page;
@@ -948,8 +992,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
         model.sort = o.sort;
         model.sortBy = o.sortBy;
-        if (o.invoiceNumber) {
-            model.voucherNumber = o.invoiceNumber;
+
+        if (o?.invoiceNumber && model) {
+            model.voucherNumber = o?.invoiceNumber;
         }
 
         if (o.q) {
@@ -972,8 +1017,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public bsValueChange(event: any) {
         this.showAdvanceSearchIcon = true;
         if (event) {
-            this.invoiceSearchRequest.from = moment(event.picker.startDate._d).format(GIDDH_DATE_FORMAT);
-            this.invoiceSearchRequest.to = moment(event.picker.endDate._d).format(GIDDH_DATE_FORMAT);
+            this.invoiceSearchRequest.from = dayjs(event.picker.startDate.$d).format(GIDDH_DATE_FORMAT);
+            this.invoiceSearchRequest.to = dayjs(event.picker.endDate.$d).format(GIDDH_DATE_FORMAT);
             this.invoiceSelectedDate.fromDates = this.invoiceSearchRequest.from;
             this.invoiceSelectedDate.toDates = this.invoiceSearchRequest.to;
         }
@@ -1064,7 +1109,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             });
         }
         if (!this.allItemsSelected) {
-            this.selectedInvoicesList = this.selectedInvoicesList.filter((ele) => {
+            this.selectedInvoicesList = this.selectedInvoicesList?.filter((ele) => {
                 return ele.isSelected;
             });
 
@@ -1088,9 +1133,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         if (action) {
             this.selectedInvoices = this.generalService.addValueInArray(this.selectedInvoices, item?.uniqueName);
             this.selectedItems.push(item?.uniqueName);
+            if (this.voucherData.items.length === this.selectedItems.length) {
+                this.allItemsSelected = true
+            }
         } else {
             this.selectedInvoices = this.generalService.removeValueFromArray(this.selectedInvoices, item?.uniqueName);
-            this.selectedItems = this.selectedItems.filter(selectedItem => selectedItem !== item?.uniqueName);
+            this.selectedItems = this.selectedItems?.filter(selectedItem => selectedItem !== item?.uniqueName);
             this.allItemsSelected = false;
         }
         this.itemStateChanged(item);
@@ -1099,19 +1147,19 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public clickedOutside(event: Event, el, fieldName: string) {
 
         if (fieldName === 'invoiceNumber') {
-            if (this.voucherNumberInput.value !== null && this.voucherNumberInput.value !== '') {
+            if (this.voucherNumberInput?.value !== null && this.voucherNumberInput?.value !== '') {
                 return;
             }
         } else if (fieldName === 'accountUniqueName') {
-            if (this.accountUniqueNameInput.value !== null && this.accountUniqueNameInput.value !== '') {
+            if (this.accountUniqueNameInput?.value !== null && this.accountUniqueNameInput?.value !== '') {
                 return;
             }
         } else if (fieldName === 'ProformaPurchaseOrder') {
-            if (this.ProformaPurchaseOrder.value !== null && this.ProformaPurchaseOrder.value !== '') {
+            if (this.ProformaPurchaseOrder?.value !== null && this.ProformaPurchaseOrder?.value !== '') {
                 return;
             }
         } else if (fieldName === 'purchaseOrderNumbers') {
-            if (this.purchaseOrderNumbersInput.value !== null && this.purchaseOrderNumbersInput.value !== '') {
+            if (this.purchaseOrderNumbersInput?.value !== null && this.purchaseOrderNumbersInput?.value !== '') {
                 return;
             }
         }
@@ -1150,19 +1198,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         let indexInv = (this.selectedInvoicesList) ? this.selectedInvoicesList.findIndex(f => f?.uniqueName === item?.uniqueName) : -1;
 
         if (indexInv > -1 && !allSelected) {
-            this.selectedInvoicesList = this.selectedInvoicesList.filter(f => f?.uniqueName !== item?.uniqueName);
+            this.selectedInvoicesList = this.selectedInvoicesList?.filter(f => f?.uniqueName !== item?.uniqueName);
         } else {
             this.selectedInvoicesList.push(item);     // Array of checked seleted Items of the list
         }
 
-        if (this.selectedInvoicesList.length === 1) {
-            this.exportInvoiceType = this.selectedInvoicesList[0].account?.uniqueName;
+        if (this.selectedInvoicesList?.length > 0) {
             this.isExported = true;
         }
-        this.isExported = this.selectedInvoicesList.every(ele => {
-            return ele.account?.uniqueName === this.exportInvoiceType;
-        });
-        this.selectedInvoicesList = this.selectedInvoicesList.filter(s => s.isSelected);
+        this.selectedInvoicesList = this.selectedInvoicesList?.filter(s => s.isSelected);
     }
 
     public applyAdvanceSearch(request: InvoiceFilterClassForInvoicePreview) {
@@ -1185,7 +1229,6 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             request.voucherDate = request.invoiceDate;
             delete request['invoiceDate'];
         }
-
         this.store.dispatch(this.invoiceReceiptActions.GetAllInvoiceReceiptRequest(request, this.selectedVoucher));
         this._receiptServices.getAllReceiptBalanceDue(request, this.selectedVoucher).pipe(takeUntil(this.destroyed$)).subscribe(res => {
             this.parseBalRes(res);
@@ -1232,12 +1275,12 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         // set date picker date as application date
-        if (universalDate.length > 1) {
-            this.selectedDateRange = { startDate: moment(universalDate[0]), endDate: moment(universalDate[1]) };
-            this.selectedDateRangeUi = moment(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+        if (universalDate?.length > 1) {
+            this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
+            this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
 
-            this.invoiceSearchRequest.from = moment(universalDate[0]).format(GIDDH_DATE_FORMAT);
-            this.invoiceSearchRequest.to = moment(universalDate[1]).format(GIDDH_DATE_FORMAT);
+            this.invoiceSearchRequest.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+            this.invoiceSearchRequest.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
         }
         this.getVoucher(this.isUniversalDateApplicable);
     }
@@ -1245,14 +1288,14 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public sendEmail(obj: any) {
         if (obj.email) {
             if (this.voucherApiVersion === 2) {
-                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoiceForDetails.account.uniqueName, {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoiceForDetails.account?.uniqueName, {
                     email: { to: obj.email.split(',') },
-                    uniqueName: obj.uniqueName || this.selectedInvoiceForDetails.uniqueName,
+                    uniqueName: obj?.uniqueName || this.selectedInvoiceForDetails?.uniqueName,
                     voucherType: this.selectedVoucher,
                     copyTypes: obj.invoiceType ? obj.invoiceType : []
                 }));
             } else {
-                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoiceForDetails.account.uniqueName, {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoiceForDetails.account?.uniqueName, {
                     emailId: obj.email.split(','),
                     voucherNumber: [obj.invoiceNumber || this.selectedInvoiceForDetails.voucherNumber],
                     voucherType: this.selectedVoucher,
@@ -1283,18 +1326,17 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         setTimeout(() => {
-            if(!document.getElementsByClassName("sidebar-collapse")?.length) {
+            if (!document.getElementsByClassName("sidebar-collapse")?.length) {
                 this.store.dispatch(this.generalActions.openSideMenu(true));
             }
         }, 200);
     }
 
     public ngOnDestroy() {
-        this.universalDate$.pipe(take(1)).subscribe(a => {
-            if (a && window.localStorage) {
-                localStorage.setItem('universalSelectedDate', a);
-            }
-        });
+        if (window.localStorage) {
+            localStorage.removeItem('universalSelectedDate');
+            localStorage.removeItem('invoiceSelectedDate');
+        }
         document.querySelector('body').classList.remove('fixed');
         document.querySelector('body').classList.remove('invoice-preview-page');
         this.destroyed$.next(true);
@@ -1306,37 +1348,63 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.selectedInvoice = allInvoices.find((o) => o?.uniqueName === this.selectedItems[0]);
         this.validateInvoiceobj.invoiceNumber = this.selectedInvoice.voucherNumber;
         this._invoiceService.validateInvoiceForEwaybill(this.validateInvoiceobj).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success') {
-                if (res.body.errorMessage) {
-                    this._toaster.warningToast(res.body.errorMessage);
+            if (res?.status === 'success') {
+                if (res.body?.errorMessage) {
+                    this._toaster.warningToast(res.body?.errorMessage);
                 }
             }
         });
     }
 
-    public exportCsvDownload() {
+    public exportCsvDownload(type: string): any {
+        const isAllItemsSelected = this.allItemsSelected;
         this.exportcsvRequest.from = this.invoiceSearchRequest.from;
         this.exportcsvRequest.to = this.invoiceSearchRequest.to;
-        let dataTosend = { accountUniqueName: '' };
-        if (this.selectedInvoicesList.length > 0) {
-
-            dataTosend.accountUniqueName = this.allItemsSelected ? '' : this.selectedInvoicesList[0].account?.uniqueName;
+        let dataTosend = { accountUniqueName: '', uniqueNames: [], type: type };
+        if (this.selectedInvoicesList?.length === 1) {
+            dataTosend.accountUniqueName = this.selectedInvoicesList[0].account?.uniqueName;
         } else {
-            dataTosend.accountUniqueName = '';
+            delete dataTosend.accountUniqueName;
+        }
+        if (this.selectedItems.length) {
+            dataTosend.uniqueNames = this.selectedItems;
         }
         this.exportcsvRequest.dataToSend = dataTosend;
-        this.store.dispatch(this.invoiceActions.DownloadExportedInvoice(this.exportcsvRequest));
-        this.exportedInvoiceBase64res$.pipe(debounceTime(800), take(1)).subscribe(res => {
-            if (res) {
-                if (res.status === 'success') {
-                    let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
+        this._invoiceService.exportCsvInvoiceDownload(this.exportcsvRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                if (response.status === 'success') {
                     this.selectedInvoicesList = [];
-                    return saveAs(blob, `${dataTosend.accountUniqueName}${this.localeData?.all_invoices}.xls`);
+                    this.selectedItems = [];
+                    this.allItemsSelected = false;
+                    this.voucherData.items.forEach((item) => {
+                        item.isSelected = false;
+                    });
+                    let blob = this.generalService.base64ToBlob(response.body, 'application/xls', 512);
+                    const fileName  = `${this.getExportFileNameByVoucherType(type, isAllItemsSelected)}.xls`
+                    return saveAs(blob, fileName);
                 } else {
-                    this._toaster.errorToast(res.message);
+                    this._toaster.errorToast(response.message);
                 }
             }
         });
+    }
+
+    /**
+     * Get Translated file name respect to given voucher
+     *
+     * @private
+     * @param {string} type
+     * @param {boolean} isAllItemsSelected
+     * @returns {string}
+     * @memberof InvoicePreviewComponent
+     */
+    private getExportFileNameByVoucherType(type: string, isAllItemsSelected: boolean): string {
+        switch(type){
+            case 'sales': return isAllItemsSelected ? this.localeData?.all_invoices : this.localeData?.invoices;
+            case 'purchase': return isAllItemsSelected ? this.localeData?.all_purchases : this.localeData?.purchases;
+            case 'credit note': return isAllItemsSelected ? this.localeData?.all_credit_notes : this.localeData?.credit_notes;
+            case 'debit note': return isAllItemsSelected ? this.localeData?.all_debit_notes : this.localeData?.debit_notes;
+        }
     }
 
     private parseItemForVm(invoice: ReceiptItem): InvoicePreviewDetailsVm {
@@ -1366,8 +1434,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
     private parseBalRes(res) {
         if (res && res.body) {
-            this.totalSale = giddhRoundOff(res.body.grandTotal, 2);
-            this.totalDue = giddhRoundOff(res.body.totalDue, 2);
+            this.totalSale = giddhRoundOff(res.body.grandTotal, this.giddhBalanceDecimalPlaces);
+            this.totalDue = giddhRoundOff(res.body.totalDue, this.giddhBalanceDecimalPlaces);
         }
         // get user country from his profile
         this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
@@ -1385,26 +1453,27 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoicePreviewComponent
      */
     public onPerformAdjustPaymentAction(item: ReceiptItem): void {
-        let customerUniqueName = this.getUpdatedAccountUniquename(item.voucherNumber, item.account.uniqueName);
+        let customerUniqueName = this.getUpdatedAccountUniquename(item.voucherNumber, item.account?.uniqueName);
 
         if (item && item.totalBalance && item.totalBalance.amountForAccount !== undefined) {
             this.invFormData.voucherDetails.balanceDue = item.totalBalance.amountForAccount;
         }
         this.invFormData.voucherDetails.grandTotal = item.grandTotal.amountForAccount;
-        this.invFormData.voucherDetails.customerName = item.account.name;
+        this.invFormData.voucherDetails.customerName = item.account?.name;
         this.invFormData.voucherDetails.customerUniquename = customerUniqueName;
         this.invFormData.voucherDetails.voucherDate = item.voucherDate;
         this.invFormData.voucherDetails.exchangeRate = item.exchangeRate ?? 1;
         this.invFormData.accountDetails.currencyCode = item.account?.currency?.code ?? this.baseCurrency ?? '';
         this.invFormData.accountDetails.currencySymbol = item.accountCurrencySymbol ?? this.baseCurrencySymbol ?? '';
         this.invFormData.voucherDetails.gainLoss = item.gainLoss;
-        this.changeStatusInvoiceUniqueName = item.uniqueName;
+        this.invFormData.voucherDetails.voucherUniqueName = item.uniqueName;
+        this.changeStatusInvoiceUniqueName = item?.uniqueName;
 
         if (this.voucherApiVersion === 2) {
-            this._receiptServices.getVoucherDetailsV4(item.account.uniqueName, {
+            this._receiptServices.getVoucherDetailsV4(item.account?.uniqueName, {
                 invoiceNumber: item.voucherNumber,
                 voucherType: VoucherTypeEnum.sales,
-                uniqueName: item.uniqueName
+                uniqueName: item?.uniqueName
             }).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
                 if (response?.status === "success") {
                     let tcsSum: number = 0;
@@ -1423,8 +1492,9 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
                     this.updateNewAccountInVoucher(item.account);
                     this.advanceReceiptAdjustmentData = { adjustments: this.adjustmentUtilityService.formatAdjustmentsObject(response.body?.adjustments) };
+                    this.isUpdateMode = (response?.body?.adjustments?.length) ? true : false;
                     this.showAdvanceReceiptAdjust = true;
-                    this.adjustPaymentModal.show();
+                    this.adjustPaymentModal?.show();
                 } else {
                     this._toaster.errorToast(response?.message);
                 }
@@ -1437,7 +1507,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
             this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(customerUniqueName, {
                 invoiceNumber: item.voucherNumber,
                 voucherType: VoucherTypeEnum.sales,
-                uniqueName: item.uniqueName
+                uniqueName: item?.uniqueName
             }));
         }
     }
@@ -1451,7 +1521,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.showAdvanceReceiptAdjust = false;
         this.advanceReceiptAdjustmentData = null;
         this.changeStatusInvoiceUniqueName = '';
-        this.adjustPaymentModal.hide();
+        this.adjustPaymentModal?.hide();
     }
 
     /**
@@ -1464,10 +1534,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
         if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments && this.advanceReceiptAdjustmentData.adjustments.length > 0) {
             this.advanceReceiptAdjustmentData.adjustments.map(item => {
-                item.voucherDate = (item.voucherDate.toString().includes('/')) ? item.voucherDate.trim().replace(/\//g, '-') : item.voucherDate;
+                item.voucherDate = (item.voucherDate?.toString()?.includes('/')) ? item.voucherDate?.trim()?.replace(/\//g, '-') : item.voucherDate;
                 item.voucherNumber = item.voucherNumber === '-' ? '' : item.voucherNumber;
 
-                if(this.voucherApiVersion === 2) {
+                if (this.voucherApiVersion === 2) {
                     item.amount = item.adjustmentAmount;
                     item.unadjustedAmount = item.balanceDue;
                     delete item.adjustmentAmount;
@@ -1501,7 +1571,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public openAdvanceReceiptModal(event: any): void {
         if (event) {
-            const selectedVoucher = this.voucherData.items?.filter(voucher => voucher.uniqueName === event.uniqueName);
+            const selectedVoucher = this.voucherData.items?.filter(voucher => voucher?.uniqueName === event?.uniqueName);
             if (selectedVoucher?.length > 0) {
                 this.onPerformAdjustPaymentAction(selectedVoucher[0]);
             } else {
@@ -1540,7 +1610,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         this.voucherForAdjustment = (res.body.items?.length) ? res.body.items : (res.body.results?.length) ? res.body.results : res.body;
                         this.isAccountHaveAdvanceReceipts = true;
                         this.showAdvanceReceiptAdjust = true;
-                        this.adjustPaymentModal.show();
+                        this.adjustPaymentModal?.show();
                         this.selectedPerformAdjustPaymentAction = false;
                     } else {
                         this.isAccountHaveAdvanceReceipts = false;
@@ -1603,7 +1673,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public deletePurchaseBill(billUniqueName: any): void {
         let allInvoices = cloneDeep(this.voucherData.items);
         this.selectedInvoice = allInvoices.find((inv) => inv?.uniqueName === billUniqueName);
-        this.invoiceConfirmationModel.show();
+        this.invoiceConfirmationModel?.show();
     }
 
     /**
@@ -1675,10 +1745,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         }
         this.hideGiddhDatepicker();
         if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: moment(value.startDate), endDate: moment(value.endDate) };
-            this.selectedDateRangeUi = moment(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + moment(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.invoiceSearchRequest.from = moment(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.invoiceSearchRequest.to = moment(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.invoiceSearchRequest.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.invoiceSearchRequest.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.showAdvanceSearchIcon = true;
             this.invoiceSelectedDate.fromDates = this.invoiceSearchRequest.from;
             this.invoiceSelectedDate.toDates = this.invoiceSearchRequest.to;
@@ -1734,10 +1804,10 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public createBulkEInvoice(): void {
         let requestObject;
 
-        if(this.voucherApiVersion === 2) {
+        if (this.voucherApiVersion === 2) {
             requestObject = {
                 model: {
-                    voucherUniqueNames: this.selectedInvoicesList.map(item => item.uniqueName),
+                    voucherUniqueNames: this.selectedInvoicesList.map(item => item?.uniqueName),
                     voucherType: this.selectedVoucher
                 },
                 actionType: 'einvoice'
@@ -1764,7 +1834,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof InvoicePreviewComponent
      */
     private getEInvoiceTooltipText(item: ReceiptItem): string {
-        switch (item.status?.toLowerCase()) {
+        switch (item?.status?.toLowerCase()) {
             case EInvoiceStatus.YetToBePushed:
                 return this.localeData?.e_invoice_statuses.yet_to_be_pushed;
             case EInvoiceStatus.Pushed:
@@ -1823,27 +1893,27 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                                 item.balanceStatus = item.balanceStatus?.toLocaleLowerCase();
                             }
 
-                            if (this.selectedInvoiceForDetails?.uniqueName === item.uniqueName) {
+                            if (this.selectedInvoiceForDetails?.uniqueName === item?.uniqueName) {
                                 let updatedItem = cloneDeep(item);
-                                updatedItem.voucherType = this.selectedInvoiceForDetails.voucherType;
+                                updatedItem.voucherType = this.selectedInvoiceForDetails?.voucherType;
                                 this.selectedInvoiceForDetails = updatedItem;
                             }
 
-                            let dueDate = item.dueDate ? moment(item.dueDate, GIDDH_DATE_FORMAT) : null;
+                            let dueDate = item.dueDate ? dayjs(item.dueDate, GIDDH_DATE_FORMAT) : null;
 
                             if (dueDate) {
-                                if (dueDate.isAfter(moment()) || ['paid', 'cancel'].includes(item.balanceStatus)) {
+                                if (dueDate.isAfter(dayjs()) || ['paid', 'cancel'].includes(item.balanceStatus)) {
                                     item.dueDays = null;
                                 } else {
-                                    let dueDays = dueDate ? moment().diff(dueDate, 'days') : null;
+                                    let dueDays = dueDate ? dayjs().diff(dueDate, 'day') : null;
                                     item.dueDays = dueDays;
                                 }
                             } else {
                                 item.dueDays = null;
                             }
-                            if (MULTI_CURRENCY_MODULES.indexOf(this.selectedVoucher) > -1) {
+                            if (MULTI_CURRENCY_MODULES?.indexOf(this.selectedVoucher) > -1) {
                                 // For CR/DR note and Cash/Sales invoice
-                                item = this.generalService.addToolTipText(this.selectedVoucher, this.baseCurrency, item, this.localeData, this.commonLocaleData);
+                                item = this.generalService.addToolTipText(this.selectedVoucher, this.baseCurrency, item, this.localeData, this.commonLocaleData, this.giddhBalanceDecimalPlaces);
 
                                 if (this.gstEInvoiceEnable) {
                                     item.eInvoiceStatusTooltip = this.getEInvoiceTooltipText(item);
@@ -1852,7 +1922,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
                             item.isSelected = this.generalService.checkIfValueExistsInArray(this.selectedInvoices, item?.uniqueName);
                             if (item.isSelected) {
-                                existingInvoices.push(item.uniqueName);
+                                existingInvoices.push(item?.uniqueName);
                             }
 
                             this.itemsListForDetails.push(this.parseItemForVm(item));
@@ -1871,7 +1941,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         }
 
                         let voucherData = cloneDeep(res[0]);
-                        if (voucherData.items.length) {
+                        if (voucherData.items?.length) {
                             // this.totalSale = voucherData.items.reduce((c, p) => {
                             //   return Number(c.grandTotal) + Number(p.grandTotal);
                             // }, 0);
@@ -1901,7 +1971,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                     // get voucherDetailsNo so we can open that voucher in details mode
                     if (res[0] && res[1] && res[2]) {
                         this.selectedInvoiceForDetails = null;
-                        let voucherIndex = (res[0] as ReciptResponse).items.findIndex(f => f.voucherNumber === res[1]);
+                        let voucherIndex = (res[0] as ReciptResponse)?.items?.findIndex(f => f.voucherNumber === res[1]);
                         if (voucherIndex > -1) {
                             let allItems: InvoicePreviewDetailsVm[] = cloneDeep(this.itemsListForDetails);
                             const removedItem = allItems.splice(voucherIndex, 1)[0];
@@ -1975,11 +2045,11 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
 
         apiCallObservable.pipe(take(1)).subscribe(response => {
             this.getVoucher(this.isUniversalDateApplicable);
-            if (response.status === 'success') {
+            if (response?.status === 'success') {
                 this._toaster.successToast(response.body);
                 this.modalRef?.hide();
                 this.resetCancelEInvoice();
-            } else if (response.status === 'error') {
+            } else if (response?.status === 'error') {
                 this._toaster.errorToast(response.message, response.code);
             }
         });
@@ -2020,7 +2090,7 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
      */
     public createEWayBill(): void {
         this.store.pipe(select(state => state.receipt.voucher), take(1)).subscribe((voucher: any) => {
-            if(!voucher?.account?.billingDetails?.pincode) {
+            if (!voucher?.account?.billingDetails?.pincode) {
                 this._toaster.errorToast(this.localeData?.pincode_required);
             } else {
                 this._router.navigate(['pages', 'invoice', 'ewaybill', 'create']);

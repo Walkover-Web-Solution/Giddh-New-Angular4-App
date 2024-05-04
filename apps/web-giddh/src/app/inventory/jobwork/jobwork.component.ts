@@ -1,5 +1,5 @@
-import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import * as moment from 'moment';
+import { ChangeDetectorRef, Component, ElementRef, HostListener, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import * as dayjs from 'dayjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { InventoryReportActions } from '../../actions/inventory/inventory.report.actions';
@@ -10,11 +10,11 @@ import { debounceTime, distinctUntilChanged, publishReplay, refCount, take, take
 import { ToasterService } from '../../services/toaster.service';
 import { InventoryService } from '../../services/inventory.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable, ReplaySubject } from 'rxjs';
 import { InvViewService } from '../inv.view.service';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
-import { IStocksItem } from "../../models/interfaces/stocksItem.interface";
+import { IStocksItem } from "../../models/interfaces/stocks-item.interface";
 import { DaterangePickerComponent } from '../../theme/ng2-daterangepicker/daterangepicker.component';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
@@ -44,9 +44,9 @@ export class JobworkComponent implements OnInit, OnDestroy {
     @ViewChild('comparisionFilter', { static: true }) public comparisionFilter: ShSelectComponent;
     @ViewChild(DaterangePickerComponent, { static: true }) public datePicker: DaterangePickerComponent;
 
-    public senderUniqueNameInput: FormControl = new FormControl();
-    public receiverUniqueNameInput: FormControl = new FormControl();
-    public productUniqueNameInput: FormControl = new FormControl();
+    public senderUniqueNameInput: UntypedFormControl = new UntypedFormControl();
+    public receiverUniqueNameInput: UntypedFormControl = new UntypedFormControl();
+    public productUniqueNameInput: UntypedFormControl = new UntypedFormControl();
     public showWelcomePage: boolean = true;
     public showSenderSearch: boolean = false;
     public showReceiverSearch: boolean = false;
@@ -54,7 +54,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public updateDescriptionIdx: number = null;
     // modal advance search
     public isFilterCorrect: boolean = false;
-    public advanceSearchForm: FormGroup;
+    public advanceSearchForm: UntypedFormGroup;
     public COMPARISON_FILTER = [
         { label: 'Equals', value: '=' },
         { label: 'Greater Than', value: '>' },
@@ -91,36 +91,36 @@ export class JobworkComponent implements OnInit, OnDestroy {
         },
         ranges: {
             'Last 1 Day': [
-                moment().subtract(1, 'days'),
-                moment()
+                dayjs().subtract(1, 'day'),
+                dayjs()
             ],
             'Last 7 Days': [
-                moment().subtract(6, 'days'),
-                moment()
+                dayjs().subtract(6, 'day'),
+                dayjs()
             ],
             'Last 30 Days': [
-                moment().subtract(29, 'days'),
-                moment()
+                dayjs().subtract(29, 'day'),
+                dayjs()
             ],
             'Last 6 Months': [
-                moment().subtract(6, 'months'),
-                moment()
+                dayjs().subtract(6, 'month'),
+                dayjs()
             ],
             'Last 1 Year': [
-                moment().subtract(12, 'months'),
-                moment()
+                dayjs().subtract(12, 'month'),
+                dayjs()
             ]
         },
-        startDate: moment().subtract(30, 'days'),
-        endDate: moment()
+        startDate: dayjs().subtract(30, 'day'),
+        endDate: dayjs()
     };
     public inventoryReport: InventoryReport;
     public stocksList$: Observable<IStocksItem[]>;
     public inventoryUsers$: Observable<InventoryUser[]>;
     public filter: InventoryFilter = {};
     public stockOptions: IOption[] = [];
-    public startDate: string = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
-    public endDate: string = moment().format(GIDDH_DATE_FORMAT);
+    public startDate: string = dayjs().subtract(30, 'day').format(GIDDH_DATE_FORMAT);
+    public endDate: string = dayjs().format(GIDDH_DATE_FORMAT);
     public uniqueName: string;
     public type: string;
     public reportType: string;
@@ -133,7 +133,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
         private inventoryReportActions: InventoryReportActions,
         private inventoryService: InventoryService,
         private _toasty: ToasterService,
-        private fb: FormBuilder,
+        private fb: UntypedFormBuilder,
         private invViewService: InvViewService,
         private _store: Store<AppState>,
         private cdr: ChangeDetectorRef) {
@@ -142,7 +142,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.inventoryUsers$ = this._store.pipe(select(s => s.inventoryInOutState.inventoryUsers && s.inventoryInOutState.inventoryUsers), takeUntil(this.destroyed$));
         this.universalDate$ = this._store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
         // on reload page
-        let len = document.location.pathname.split('/').length;
+        let len = document.location.pathname.split('/')?.length;
         if (len === 6) {
             this.uniqueName = document.location.pathname.split('/')[len - 1];
             this.type = document.location.pathname.split('/')[len - 2];
@@ -160,8 +160,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
             stocksList: p.inventory.stocksList,
             inventoryUsers: p.inventoryInOutState.inventoryUsers
         })), takeUntil(this.destroyed$)).subscribe(p => p.inventoryUsers && p.stocksList &&
-            (this.stockOptions = p.stocksList.results.map(r => ({ label: r.name, value: r.uniqueName, additional: 'stock' }))
-                .concat(p.inventoryUsers.map(r => ({ label: r.name, value: r.uniqueName, additional: 'person' })))));
+            (this.stockOptions = p.stocksList.results.map(r => ({ label: r.name, value: r?.uniqueName, additional: 'stock' }))
+                .concat(p.inventoryUsers.map(r => ({ label: r.name, value: r?.uniqueName, additional: 'person' })))));
     }
 
     public ngOnInit() {
@@ -173,9 +173,9 @@ export class JobworkComponent implements OnInit, OnDestroy {
             this.showWelcomePage = false;
             this.type = v.view;
             this.nameStockOrPerson = v.name;
-            if (v.uniqueName) {
+            if (v?.uniqueName) {
                 this.uniqueName = v.uniqueName;
-                let length = document.location.pathname.split('/').length;
+                let length = document.location.pathname.split('/')?.length;
                 if (!v.uniqueName && length === 6) {
                     this.uniqueName = document.location.pathname.split('/')[length - 1];
                 }
@@ -199,7 +199,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
                             let firstElement = res[0];
                             this.showWelcomePage = false;
                             this.nameStockOrPerson = firstElement.name;
-                            this.uniqueName = firstElement.uniqueName;
+                            this.uniqueName = firstElement?.uniqueName;
                             this.filter.includeSenders = true;
                             this.filter.includeReceivers = true;
                             this.filter.receivers = [this.uniqueName];
@@ -215,7 +215,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
                             let firstElement = res[0];
                             this.showWelcomePage = false;
                             this.nameStockOrPerson = firstElement.name;
-                            this.uniqueName = firstElement.uniqueName;
+                            this.uniqueName = firstElement?.uniqueName;
                             this.applyFilters(1, false);
                         } else {
                             this.showWelcomePage = true;
@@ -225,7 +225,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
             }
 
         });
-        
+
         // initialization for voucher type array initially all selected
         this.initVoucherType();
         // Advance search modal
@@ -268,9 +268,9 @@ export class JobworkComponent implements OnInit, OnDestroy {
                     this.showWelcomePage = false;
                     this.type = 'stock';
                     this.nameStockOrPerson = firstElement.name;
-                    this.uniqueName = firstElement.uniqueName;
+                    this.uniqueName = firstElement?.uniqueName;
 
-                    this._store.dispatch(this.inventoryReportActions.genReport(firstElement.uniqueName, this.startDate, this.endDate, 1, 6, this.filter));
+                    this._store.dispatch(this.inventoryReportActions.genReport(firstElement?.uniqueName, this.startDate, this.endDate, 1, 6, this.filter));
                 }
             } else {
                 this.showWelcomePage = true;
@@ -281,8 +281,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.universalDate$.subscribe(a => {
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-                this.startDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                this.endDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
+                this.startDate = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
+                this.endDate = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
                 this.applyFilters(1, true);
             }
         });
@@ -322,8 +322,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
      */
     public updateDescription(txn: any) {
         this.updateDescriptionIdx = null;
-        this.inventoryService.updateDescription(txn.uniqueName, txn.description).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res.status === 'success') {
+        this.inventoryService.updateDescription(txn?.uniqueName, txn.description).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            if (res?.status === 'success') {
                 this.updateDescriptionIdx = null;
             } else {
                 txn.description = null;
@@ -464,7 +464,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
         }
 
         //advanceSearchAction modal filter
-        this.comparisionFilter.clear();
+        this.comparisionFilter?.clear();
         this.advanceSearchForm.controls['filterAmount'].setValue(null);
 
         this.filter.sort = null;
@@ -477,8 +477,8 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.universalDate$.pipe(take(1)).subscribe(a => {
             if (a) {
                 this.datePickerOptions = { ...this.datePickerOptions, startDate: a[0], endDate: a[1], chosenLabel: a[2] };
-                this.startDate = moment(a[0]).format(GIDDH_DATE_FORMAT);
-                this.endDate = moment(a[1]).format(GIDDH_DATE_FORMAT);
+                this.startDate = dayjs(a[0]).format(GIDDH_DATE_FORMAT);
+                this.endDate = dayjs(a[1]).format(GIDDH_DATE_FORMAT);
             }
         });
         //Reset Date
@@ -490,12 +490,12 @@ export class JobworkComponent implements OnInit, OnDestroy {
     }
 
     public onOpenAdvanceSearch() {
-        this.advanceSearchModel.show();
+        this.advanceSearchModel?.show();
     }
 
     public advanceSearchAction(type: string) {
         if (type === 'clear') {
-            this.comparisionFilter.clear();
+            this.comparisionFilter?.clear();
             this.advanceSearchForm.controls['filterAmount'].setValue(null);
             if (this.filter.senderName || this.filter.receiverName || this.senderName.nativeElement.value || this.receiverName.nativeElement.value
                 || this.filter.sortBy || this.filter.sort || this.filter.quantityGreaterThan || this.filter.quantityEqualTo || this.filter.quantityLessThan) {
@@ -555,32 +555,32 @@ export class JobworkComponent implements OnInit, OnDestroy {
     }
 
     public filterByCheck(type: string, event: boolean) {
-        let idx = this.filter.jobWorkTransactionType.indexOf('ALL');
+        let idx = this.filter.jobWorkTransactionType?.indexOf('ALL');
         if (idx !== -1) {
             this.initVoucherType();
         }
         if (event && type) {
             this.filter.jobWorkTransactionType.push(type);
         } else {
-            let index = this.filter.jobWorkTransactionType.indexOf(type);
+            let index = this.filter.jobWorkTransactionType?.indexOf(type);
             if (index !== -1) {
                 this.filter.jobWorkTransactionType.splice(index, 1);
             }
         }
-        if (this.filter.jobWorkTransactionType.length > 0 && this.filter.jobWorkTransactionType.length < this.VOUCHER_TYPES.length) {
-            idx = this.filter.jobWorkTransactionType.indexOf('ALL');
+        if (this.filter.jobWorkTransactionType?.length > 0 && this.filter.jobWorkTransactionType?.length < this.VOUCHER_TYPES.length) {
+            idx = this.filter.jobWorkTransactionType?.indexOf('ALL');
             if (idx !== -1) {
                 this.filter.jobWorkTransactionType.splice(idx, 1);
             }
-            idx = this.filter.jobWorkTransactionType.indexOf('NONE');
+            idx = this.filter.jobWorkTransactionType?.indexOf('NONE');
             if (idx !== -1) {
                 this.filter.jobWorkTransactionType.splice(idx, 1);
             }
         }
-        if (this.filter.jobWorkTransactionType.length === this.VOUCHER_TYPES.length) {
+        if (this.filter.jobWorkTransactionType?.length === this.VOUCHER_TYPES.length) {
             this.filter.jobWorkTransactionType = ['ALL'];
         }
-        if (this.filter.jobWorkTransactionType.length === 0) {
+        if (this.filter.jobWorkTransactionType?.length === 0) {
             this.filter.jobWorkTransactionType = ['NONE'];
         }
         this.isFilterCorrect = true;
@@ -637,10 +637,10 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.inventoryService.downloadJobwork(this.uniqueName, this.type, format, this.startDate, this.endDate, this.filter)
             .pipe(takeUntil(this.destroyed$))
             .subscribe(d => {
-                if (d.status === 'success') {
-                    this._toasty.infoToast(d.body);
+                if (d?.status === 'success') {
+                    this._toasty.infoToast(d?.body);
                 } else {
-                    this._toasty.errorToast(d.message);
+                    this._toasty.errorToast(d?.message);
                 }
             });
     }

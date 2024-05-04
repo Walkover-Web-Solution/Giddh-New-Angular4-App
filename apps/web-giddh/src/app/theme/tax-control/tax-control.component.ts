@@ -14,15 +14,17 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
-import * as moment from 'moment/moment';
+import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TaxResponse } from '../../models/api-models/Company';
-import { ITaxDetail } from '../../models/interfaces/tax.interface';
+import { ITaxControlData, ITaxDetail } from '../../models/interfaces/tax.interface';
 import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 import { AppState } from '../../store';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { isEqual, orderBy } from '../../lodash-optimized';
+import { GeneralService } from '../../services/general.service';
+import { HIGH_RATE_FIELD_PRECISION } from '../../app.constant';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -30,16 +32,6 @@ export const TAX_CONTROL_VALUE_ACCESSOR: any = {
     useExisting: forwardRef(() => TaxControlComponent),
     multi: true
 };
-
-export class TaxControlData {
-    public name?: string;
-    public uniqueName: string;
-    public amount?: number;
-    public isChecked?: boolean;
-    public isDisabled?: boolean;
-    public type?: string;
-    public calculationMethod?: string;
-}
 
 @Component({
     selector: 'tax-control',
@@ -49,12 +41,14 @@ export class TaxControlData {
 })
 
 export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
+    /** True if field is readonly */
+    @Input() public readonly: boolean = false;
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Input() public date: string;
     @Input() public taxes: TaxResponse[];
     @Input() public applicableTaxes: string[] = [];
-    @Input() public taxRenderData: TaxControlData[];
+    @Input() public taxRenderData: ITaxControlData[];
     @Input() public showHeading: boolean = true;
     /** Custom heading to be applied to tax control header */
     @Input() public customHeading: string = '';
@@ -71,16 +65,17 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public maskInput: string;
     @Input() public prefixInput: string;
     @Input() public suffixInput: string;
-    /** True, if current transaction is advance receipt
-     * Required for inclusive tax rate calculation
+    /** True, if current transaction tax needed to be calculated inclusively
+     * Required for inclusive tax rate calculation for advance receipt, variant (purchase-sales-<fixed-asset>) inclusive
     */
+    @Input() public calculateTaxInclusively: boolean;
+    /** True if advance receipt entry is created */
     @Input() public isAdvanceReceipt: boolean;
 
     @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
     @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
     @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
     @Output() public hideOtherPopups: EventEmitter<boolean> = new EventEmitter<boolean>();
-
 
     @ViewChild('taxInputElement', { static: false }) public taxInputElement: ElementRef;
 
@@ -89,10 +84,13 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     public giddhBalanceDecimalPlaces: number = 2;
     private selectedTaxes: string[] = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /* Amount should have precision up to 16 digits for better calculation */
+    public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
 
     constructor(
         private cdr: ChangeDetectorRef,
-        private store: Store<AppState>
+        private store: Store<AppState>,
+        private generalService: GeneralService
     ) { }
 
     public ngOnInit(): void {
@@ -111,22 +109,25 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     public ngOnChanges(changes: SimpleChanges) {
         // change
         if ('date' in changes && changes.date.currentValue !== changes.date.previousValue) {
-            if (moment(changes['date'].currentValue, GIDDH_DATE_FORMAT).isValid()) {
+            this.date = (typeof changes['date'].currentValue === "object") ? dayjs(changes['date'].currentValue).format(GIDDH_DATE_FORMAT) : changes['date'].currentValue;
+            if (dayjs(changes['date'].currentValue, GIDDH_DATE_FORMAT).isValid()) {
                 this.taxSum = 0;
                 this.prepareTaxObject();
                 this.change();
             }
         }
 
-        if ('applicableTaxes' in changes && (Array.isArray(changes.applicableTaxes.currentValue)) && !isEqual(changes.applicableTaxes.currentValue, changes.applicableTaxes.previousValue)) {
+        if ('applicableTaxes' in changes && (Array.isArray(changes.applicableTaxes.currentValue))) {
             this.prepareTaxObject();
-            this.change();
+            if (!isEqual(changes.applicableTaxes.currentValue, changes.applicableTaxes.previousValue)) {
+                this.change();
+            }
         }
 
         if (changes['totalForTax'] && changes['totalForTax'].currentValue !== changes['totalForTax'].previousValue) {
             this.calculateInclusiveOrExclusiveTaxes();
         }
-        if (changes['isAdvanceReceipt'] && changes['isAdvanceReceipt'].currentValue !== changes['isAdvanceReceipt'].previousValue) {
+        if (changes['calculateTaxInclusively'] && changes['calculateTaxInclusively'].currentValue !== changes['calculateTaxInclusively'].previousValue) {
             this.change();
         }
 
@@ -143,43 +144,43 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      */
     public prepareTaxObject() {
         if (this.customTaxTypesForTaxFilter && this.customTaxTypesForTaxFilter.length) {
-            this.taxes = this.taxes.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
+            this.taxes = this.taxes?.filter(f => this.customTaxTypesForTaxFilter.includes(f.taxType));
         }
 
         if (this.exceptTaxTypes && this.exceptTaxTypes.length) {
-            this.taxes = this.taxes.filter(f => !this.exceptTaxTypes.includes(f.taxType));
+            this.taxes = this.taxes?.filter(f => !this.exceptTaxTypes.includes(f.taxType));
         }
 
         this.taxes.map(tax => {
-            let index = this.taxRenderData.findIndex(f => f.uniqueName === tax.uniqueName);
+            let index = this.taxRenderData?.findIndex(f => f?.uniqueName === tax?.uniqueName);
 
             // if tax is already prepared then only check if it's checked or not on basis of applicable taxes
             if (index > -1) {
                 this.taxRenderData[index].isChecked =
-                    this.applicableTaxes && this.applicableTaxes.length ? this.applicableTaxes.some(item => item === tax.uniqueName) :
+                    this.applicableTaxes && this.applicableTaxes.length ? this.applicableTaxes.some(item => item === tax?.uniqueName) :
                         this.taxRenderData[index].isChecked ? this.taxRenderData[index].isChecked : false;
                 if (this.date && tax.taxDetail && tax.taxDetail.length) {
                     this.taxRenderData[index].amount =
-                        (moment(tax.taxDetail[0].date, GIDDH_DATE_FORMAT).isSame(moment(this.date, GIDDH_DATE_FORMAT)) || moment(tax.taxDetail[0].date, GIDDH_DATE_FORMAT) < moment(this.date, GIDDH_DATE_FORMAT)) ?
+                        (dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT).isSame(dayjs(this.date, GIDDH_DATE_FORMAT)) || dayjs(tax.taxDetail[0].date, GIDDH_DATE_FORMAT) < dayjs(this.date, GIDDH_DATE_FORMAT)) ?
                             tax.taxDetail[0].taxValue : 0;
                 }
             } else {
 
-                let taxObj = new TaxControlData();
+                let taxObj = new ITaxControlData();
                 taxObj.name = tax.name;
-                taxObj.uniqueName = tax.uniqueName;
+                taxObj.uniqueName = tax?.uniqueName;
                 taxObj.type = tax.taxType;
 
                 if (this.date) {
                     let taxObject = orderBy(tax.taxDetail, (p: ITaxDetail) => {
-                        return moment(p.date, GIDDH_DATE_FORMAT);
+                        return dayjs(p.date, GIDDH_DATE_FORMAT);
                     }, 'desc');
-                    let exactDate = taxObject.filter(p => moment(p.date, GIDDH_DATE_FORMAT).isSame(moment(this.date, GIDDH_DATE_FORMAT)));
-                    if (exactDate.length > 0) {
+                    let exactDate = taxObject?.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT).isSame(dayjs(this.date, GIDDH_DATE_FORMAT)));
+                    if (exactDate?.length > 0) {
                         taxObj.amount = exactDate[0].taxValue;
                     } else {
-                        let filteredTaxObject = taxObject.filter(p => moment(p.date, GIDDH_DATE_FORMAT) < moment(this.date, GIDDH_DATE_FORMAT));
-                        if (filteredTaxObject.length > 0) {
+                        let filteredTaxObject = taxObject?.filter(p => dayjs(p.date, GIDDH_DATE_FORMAT) < dayjs(this.date, GIDDH_DATE_FORMAT));
+                        if (filteredTaxObject?.length > 0) {
                             taxObj.amount = filteredTaxObject[0].taxValue;
                         } else {
                             taxObj.amount = 0;
@@ -188,7 +189,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 } else {
                     taxObj.amount = tax.taxDetail[0].taxValue;
                 }
-                taxObj.isChecked = this.applicableTaxes && this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tax.uniqueName) : false;
+                taxObj.isChecked = this.applicableTaxes && this.applicableTaxes.length ? this.applicableTaxes.some(s => s === tax?.uniqueName) : false;
 
                 taxObj.isDisabled = false;
                 this.taxRenderData.push(taxObj);
@@ -200,15 +201,16 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     public trackByFn(index, tax) {
-        return tax.uniqueName; // or item.id
+        return tax?.uniqueName; // or item.id
     }
 
     /**
-     * hide menus on outside click of span
-     */
+    * hide menus on outside click of span
+    */
     public toggleTaxPopup(action: any) {
         this.showTaxPopup = action;
     }
+
 
     public ngOnDestroy() {
         this.taxAmountSumEvent.unsubscribe();
@@ -220,18 +222,17 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
     /**
      * select/deselect tax checkbox
+     *
+     * @param {boolean} [preventEmit] Prevent the total amount update event to avoid recursive calculation
+     * @memberof TaxControlComponent
      */
-    public change(event?: any) {
-        if (event) {
-            event.stopPropagation();
-            event.preventDefault();
-        }
+    public change(preventEmit?: boolean) {
         this.selectedTaxes = [];
         this.taxSum = this.calculateSum();
         this.calculateInclusiveOrExclusiveTaxes();
         this.selectedTaxes = this.generateSelectedTaxes();
         if (this.allowedSelection > 0) {
-            if (this.selectedTaxes.length >= this.allowedSelection) {
+            if (this.selectedTaxes?.length >= this.allowedSelection) {
                 this.taxRenderData.map(m => {
                     m.isDisabled = !m.isChecked;
                     return m;
@@ -244,11 +245,11 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             }
         }
 
-        if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.type.length) {
+        if (this.allowedSelectionOfAType && this.allowedSelectionOfAType.type?.length) {
             this.allowedSelectionOfAType.type.forEach(taxType => {
-                const selectedTaxes = this.taxRenderData.filter(appliedTaxes => (appliedTaxes.isChecked && taxType === appliedTaxes.type));
+                const selectedTaxes = this.taxRenderData?.filter(appliedTaxes => (appliedTaxes.isChecked && taxType === appliedTaxes.type));
 
-                if (selectedTaxes.length >= this.allowedSelectionOfAType.count) {
+                if (selectedTaxes?.length >= this.allowedSelectionOfAType.count) {
                     this.taxRenderData.map((taxesApplied => {
                         if (taxType === taxesApplied.type && !taxesApplied.isChecked) {
                             taxesApplied.isDisabled = true;
@@ -268,7 +269,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 // In case of advance receipt only a single tax is allowed in addition to CESS
                 // Check if atleast a single non-cess tax is selected, if yes, then disable all other taxes
                 // except CESS taxes
-                const atleastSingleTaxSelected: boolean = this.taxRenderData.filter((tax) => tax.isChecked && tax.type !== 'gstcess').length !== 0;
+                const atleastSingleTaxSelected: boolean = this.taxRenderData?.filter((tax) => tax.isChecked && tax.type !== 'gstcess')?.length !== 0;
                 if (atleastSingleTaxSelected) {
                     this.taxRenderData.map((taxesApplied => {
                         if ('gstcess' !== taxesApplied.type && !taxesApplied.isChecked) {
@@ -284,8 +285,13 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 this.taxRenderData.sort((firstTax, secondTax) => (firstTax.isChecked === secondTax.isChecked ? 0 : firstTax.isChecked ? -1 : 1));
             }
         }, 100);
-        this.taxAmountSumEvent.emit(this.taxSum);
-        if(this.taxRenderData?.length > 0) {
+        if (!preventEmit) {
+            /** Should emit only conditionally, done to avoid
+             * recursive call to change method in case of inclusive tax calculation for stock
+            */
+            this.taxAmountSumEvent.emit(this.taxSum);
+        }
+        if (this.taxRenderData?.length > 0) {
             this.selectedTaxEvent.emit(this.selectedTaxes);
         }
     }
@@ -305,7 +311,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
                 // check for visibility while always include the current activeElement
                 return element.offsetWidth > 0 || element.offsetHeight > 0 || element === document.activeElement
             });
-        let index = focussable.indexOf(document.activeElement);
+        let index = focussable?.indexOf(document.activeElement);
         if (index > -1) {
             let nextElement = focussable[index + 1] || focussable[0];
             nextElement.focus();
@@ -351,7 +357,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      * @returns {string[]}
      */
     private generateSelectedTaxes(): string[] {
-        return this.taxRenderData.filter(p => p.isChecked).map(p => p.uniqueName);
+        return this.taxRenderData?.filter(p => p.isChecked).map(p => p?.uniqueName);
     }
 
     /**
@@ -362,7 +368,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof TaxControlComponent
      */
     private calculateInclusiveOrExclusiveTaxes(): void {
-        if (this.isAdvanceReceipt) {
+        if (this.calculateTaxInclusively) {
             // Inclusive tax rate
             this.taxTotalAmount = giddhRoundOff((this.totalForTax * this.taxSum) / (100 + this.taxSum), this.giddhBalanceDecimalPlaces);
         } else {
@@ -371,4 +377,22 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
+    /**
+    * Adds styling on focused Dropdown List
+    *
+    * @param {HTMLElement} taxLabel
+    * @memberof TaxControlComponent
+    */
+    public taxLabelFocusing(taxLabel: HTMLElement): void {
+        this.generalService.dropdownFocusIn(taxLabel);
+    }
+    /**
+     * Removes styling from focused Dropdown List
+     *
+     * @param {HTMLElement} taxLabel
+     * @memberof TaxControlComponent
+     */
+    public taxLabelBluring(taxLabel: HTMLElement): void {
+        this.generalService.dropdownFocusOut(taxLabel);
+    }
 }
