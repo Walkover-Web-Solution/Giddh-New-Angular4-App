@@ -76,9 +76,6 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public ngOnInit(): void {
-        console.log("Type: ", this.addressConfiguration.type);
-        console.log("addressToUpdate", this.addressToUpdate);
-        
         if (this.addressConfiguration) {
             if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateBranchAddress) {
                 this.addressConfiguration.linkedEntities = this.addressConfiguration.linkedEntities?.filter(address => (!address.entity?.includes(this.entityArchived)) || (address.entity?.includes(this.entityArchived) && !address.isArchived));
@@ -107,7 +104,10 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                         state: [{ value: this.addressToUpdate.stateCode, disabled: !!this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' }, !this.addressConfiguration.countyList?.length ? Validators.required : null],
                         county: [this.addressToUpdate.county?.code, this.addressConfiguration.countyList?.length ? Validators.required : null],
                         address: [this.addressToUpdate.address, this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' ? [Validators.required] : []],
-                        linkedEntity: [this.addressConfiguration.linkedEntities],
+                        linkedEntity: [this.addressConfiguration.linkedEntities?.filter((item) => {
+                                return item?.uniqueName === 
+                                this.addressToUpdate.linkedEntities?.filter(i => i?.uniqueName === item?.uniqueName)[0]?.uniqueName
+                            })],
                         pincode: [this.addressToUpdate.pincode]
                     });
                     const linkedEntity = [...this.addressToUpdate.linkedEntities];
@@ -182,10 +182,6 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
         });
-
-        setTimeout(() => {
-            console.log(this.addressForm.value);
-        },2000);
     }
 
     /**
@@ -237,8 +233,6 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public handleFormSubmit(): void {
-        console.log("handleFormSubmit");
-        
         if(Array.isArray(this.addressForm.get('linkedEntity')?.value)){
             let value = this.addressForm?.get('linkedEntity')?.value?.map(item => {
                 return item = item.uniqueName;

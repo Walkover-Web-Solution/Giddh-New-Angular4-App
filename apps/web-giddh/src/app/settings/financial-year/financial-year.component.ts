@@ -21,22 +21,6 @@ export interface IGstObj {
     isDefault: boolean;
 }
 
-export interface PeriodicElement {
-    number: number;
-    from: string;
-    to: string;
-    status: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-    {number: 1, from: '12/07/2023', to: '12/07/2023', status: ''},
-    {number: 2, from: '12/07/2023', to: '12/07/2023', status: ''},
-    {number: 3, from: '12/07/2023', to: '12/07/2023', status: ''},
-    {number: 4, from: '12/07/2023', to: '12/07/2023', status: ''},
-    {number: 5, from: '12/07/2023', to: '12/07/2023', status: ''},
-    {number: 6, from: '12/07/2023', to: '12/07/2023', status: ''},
-]
-
 @Component({
     selector: 'financial-year',
     templateUrl: './financial-year.component.html',
@@ -64,9 +48,10 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /*-- mat-table --*/
-    displayedColumns: string[] = ['number', 'from', 'to', 'status'];
-    dataSource = ELEMENT_DATA;
+    /** Holds Table Display Columns */
+    public displayedColumns: string[] = ['number', 'from', 'to', 'status'];
+    /** Holds Table Data to display */
+    public dataSource: any[];
 
     constructor(
         private store: Store<AppState>,
@@ -124,16 +109,18 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
     }
 
     public lockUnlockFinancialYear(financialYear: ActiveFinancialYear) {
-        let year = cloneDeep(financialYear);
-        let dataToSend = {
-            lockAll: true,
-            uniqueName: year?.uniqueName
-        };
-        financialYear.isLocked = !financialYear.isLocked;
-        if (financialYear.isLocked) {
-            this.store.dispatch(this.settingsFinancialYearActions.LockFinancialYear(dataToSend));
-        } else {
-            this.store.dispatch(this.settingsFinancialYearActions.UnlockFinancialYear(dataToSend));
+        if(financialYear) {
+            let year = cloneDeep(financialYear);
+            let dataToSend = {
+                lockAll: true,
+                uniqueName: year?.uniqueName
+            };
+            financialYear.isLocked = !financialYear.isLocked;
+            if (financialYear.isLocked) {
+                this.store.dispatch(this.settingsFinancialYearActions.LockFinancialYear(dataToSend));
+            } else {
+                this.store.dispatch(this.settingsFinancialYearActions.UnlockFinancialYear(dataToSend));
+            }
         }
     }
 

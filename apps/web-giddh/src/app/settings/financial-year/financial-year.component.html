@@ -20,7 +20,7 @@
                                                 [label]="localeData?.add_financial_year"
                                                 [placeholder]="localeData?.select_financial_year"
                                                 [options]="yearOptions"
-                                                (selected)="selectYear($event)"
+                                                (selectedOption)="selectYear($event)"
                                             >
                                             </dropdown-field>
                                         </span>
@@ -39,7 +39,7 @@
                                                 [label]="localeData?.financial_year_period"
                                                 [name]="'selectedFYPeriod'"
                                                 [placeholder]="localeData?.financial_year_period"
-                                                (selected)="selectedFYPeriod = $event.value; selectFYPeriod($event)"
+                                                (selectedOption)="selectedFYPeriod = $event.value; selectFYPeriod($event)"
                                                 [options]="FYPeriodOptions"
                                             >
                                             </dropdown-field>
@@ -52,7 +52,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="table-responsive">
+                            <div class="table-responsive" *ngIf="financialYearObj && financialYearObj.financialYears">
                                 <!-- <table class="table-bordered basic table financial-year on-mobile-view">
                                     <thead [hidden]="!financialYearObj?.financialYears?.length">
                                         <tr>
@@ -93,34 +93,35 @@
 
                                 <table
                                     mat-table
-                                    [dataSource]="dataSource"
+                                    [dataSource]="financialYearObj.financialYears"
                                     class="table-bordered basic table financial-year on-mobile-view"
                                 >
                                     <ng-container matColumnDef="number">
                                         <th mat-header-cell *matHeaderCellDef width="25%">{{ localeData?.sr_no }}</th>
-                                        <td mat-cell *matCellDef="let element">{{ element.number }}</td>
+                                        <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
                                     </ng-container>
                                     <ng-container matColumnDef="from">
                                         <th mat-header-cell *matHeaderCellDef width="25%">
                                             {{ commonLocaleData?.app_from }}
                                         </th>
-                                        <td mat-cell *matCellDef="let element">{{ element.from }}</td>
+                                        <td mat-cell *matCellDef="let element">{{ element?.financialYearStarts }}</td>
                                     </ng-container>
                                     <ng-container matColumnDef="to">
                                         <th mat-header-cell *matHeaderCellDef width="25%">
                                             {{ commonLocaleData?.app_to }}
                                         </th>
-                                        <td mat-cell *matCellDef="let element">{{ element.to }}</td>
+                                        <td mat-cell *matCellDef="let element">{{ element?.financialYearEnds }}</td>
                                     </ng-container>
                                     <ng-container matColumnDef="status">
                                         <th mat-header-cell *matHeaderCellDef width="25%">
                                             {{ localeData?.lock_status }}
                                         </th>
-                                        <td mat-cell *matCellDef="let element">
+                                        <td mat-cell *matCellDef="let element"  class="status">
                                             <mat-slide-toggle
                                                 [color]="'primary'"
                                                 [name]="'lockedUnlockedFinancial'"
-                                                [(ngModel)]="lockedUnlockedFinancial"
+                                                [value]="element.isLocked"
+                                                (change)="lockUnlockFinancialYear(element)"
                                             >
                                                 {{
                                                     lockedUnlockedFinancial ? localeData?.locked : localeData?.unlocked

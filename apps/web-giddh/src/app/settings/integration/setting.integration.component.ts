@@ -418,12 +418,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public selectLinkedAccount(event: IOption): void {
         if (event?.value) {
-            this.paypalAccounts$.subscribe((arr: IOption[]) => {
-                let res = find(arr, (o) => o?.value === event.value);
-                if (res) {
-                    this.paypalObj.account.name = res.text;
-                }
-            });
+            this.paypalObj.account.name = event.label;
+            this.paypalObj.account.uniqueName = event.value;
         }
     }
 
@@ -608,12 +604,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public selectAccount(event: IOption) {
         if (event?.value) {
-            this.accounts$.subscribe((arr: IOption[]) => {
-                let res = find(arr, (o) => o?.value === event.value);
-                if (res) {
-                    this.razorPayObj.account.name = res.text;
-                }
-            });
+            this.razorPayObj.account.uniqueName = event.value;
+            this.razorPayObj.account.name = event.label;
         }
     }
 

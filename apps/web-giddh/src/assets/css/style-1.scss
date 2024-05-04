@@ -519,6 +519,9 @@ aside-menu-account .container-fluid {
 .custom-keyboard-dropdown-list-focus {
     background-color: var(--color-dropdown-list-hover-background);
 }
+.min-width-unset {
+    min-width: unset !important;
+}
 .min-width-100 {
     min-width: 100px;
 }

@@ -63,50 +63,56 @@
                             </ng-container>
                             <ng-container matColumnDef="action">
                                 <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_action }}</th>
-                                <td mat-cell *matCellDef="let element; let i = index" class="icon-btn">
-                                    <button
-                                        *ngIf="updateIndex !== i"
-                                        (click)="setUpdateIndex(i)"
-                                        type="button"
-                                        class="btn btn-xs"
-                                        [matTooltip]="commonLocaleData?.app_edit"
-                                        [matTooltipPosition]="'above'"
-                                    >
-                                        <i
-                                            class="icon-edit-pencil"
-                                            aria-hidden="true"                                           
-                                        ></i>
-                                    </button>
-                                    <button
-                                        *ngIf="updateIndex !== i"
-                                        (click)="deleteTag(element)"
-                                        type="button"
-                                        class="btn btn-xs"
-                                        [matTooltip]="commonLocaleData?.app_delete"
-                                        [matTooltipPosition]="'above'"
-                                    >
-                                        <i
-                                            class="fa fa-trash"
-                                            aria-hidden="true"                                            
-                                        ></i>
-                                    </button>
+                                <td mat-cell *matCellDef="let element; let i = index">
+                                    <div class="d-flex column-gap1">
+                                        <button
+                                            *ngIf="updateIndex !== i"
+                                            (click)="setUpdateIndex(i)"
+                                            type="button"
+                                            class="min-width-unset"
+                                            mat-stroked-button
+                                            [matTooltip]="commonLocaleData?.app_edit"
+                                            [matTooltipPosition]="'above'"
+                                        >
+                                            <i
+                                                class="icon-edit-pencil"
+                                                aria-hidden="true"                                           
+                                            ></i>
+                                        </button>
+                                        <button
+                                            *ngIf="updateIndex !== i"
+                                            (click)="deleteTag(element)"
+                                            type="button"
+                                            class="min-width-unset"
+                                            mat-stroked-button
+                                            [matTooltip]="commonLocaleData?.app_delete"
+                                            [matTooltipPosition]="'above'"
+                                        >
+                                            <i
+                                                class="fa fa-trash"
+                                                aria-hidden="true"                                            
+                                            ></i>
+                                        </button>
 
-                                    <button
-                                        *ngIf="updateIndex === i"
-                                        (click)="updateTag(element, i)"
-                                        type="button"
-                                        class="btn btn-xs"
-                                    >
-                                        <i class="fa fa-check" aria-hidden="true"></i>
-                                    </button>
-                                    <button
-                                        *ngIf="updateIndex === i"
-                                        (click)="resetUpdateIndex()"
-                                        type="button"
-                                        class="btn btn-xs"
-                                    >
-                                        <i class="icon-cross" aria-hidden="true"></i>
-                                    </button>
+                                        <button
+                                            *ngIf="updateIndex === i"
+                                            (click)="updateTag(element, i)"
+                                            type="button"
+                                            class="min-width-unset"
+                                            mat-stroked-button
+                                        >
+                                            <i class="fa fa-check" aria-hidden="true"></i>
+                                        </button>
+                                        <button
+                                            *ngIf="updateIndex === i"
+                                            (click)="resetUpdateIndex()"
+                                            type="button"
+                                            class="min-width-unset"
+                                            mat-stroked-button
+                                        >
+                                            <i class="icon-cross" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
                                 </td>
                             </ng-container>
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -198,32 +204,4 @@
             </div>
         </div>
     </ng-template>
-    <!-- 
-    <div
-        bsModal
-        #confirmationModal="bs-modal"
-        [config]="{ backdrop: 'static', keyboard: false }"
-        class="modal fade"
-        role="dialog"
-    >
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3>{{ commonLocaleData?.app_confirmation }}</h3>
-                    <button aria-hidden="true" class="close" (click)="onUserConfirmation(false)" data-dismiss="modal">
-                        ×
-                    </button>
-                </div>
-                <div class="modal-body" [innerHTML]="confirmationMessage"></div>
-                <div class="modal-footer clearfix">
-                    <button aria-label="yes" (click)="onUserConfirmation(true)" class="btn btn-sm btn-success">
-                        {{ commonLocaleData?.app_yes }}
-                    </button>
-                    <button aria-label="no" (click)="onUserConfirmation(false)" class="btn btn-sm btn-danger">
-                        {{ commonLocaleData?.app_no }}
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div> -->
 </ng-container>

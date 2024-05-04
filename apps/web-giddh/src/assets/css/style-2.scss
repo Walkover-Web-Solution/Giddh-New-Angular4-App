@@ -41,6 +41,7 @@ $custom-typography: mat-typography-config(
 @import "../css/global/dialog.scss";
 @import "../css/global/add-bulk-entry.scss";
 @import "../css/global/global-variable.scss";
+@import "../css/global/settings-sidebar.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -9529,42 +9530,6 @@ span#HW_badge_cont:nth-child(3) {
 
 .giddh-datepicker {
     cursor: pointer !important;
-}
-
-.setting-items {
-    ul {
-        li {
-            a {
-                span {
-                    i {
-                        color: var(--color-sidebar-primary-anchor-text);
-                        margin-right: 10px;
-                        font-size: 22px;
-                    }
-                }
-            }
-
-            &:hover {
-                a {
-                    span {
-                        i {
-                            color: var(--color-primary-right-sidebar-list-text-hover);
-                        }
-                    }
-                }
-            }
-        }
-
-        .active-link {
-            a {
-                span {
-                    i {
-                        color: var(--color-primary-right-sidebar-list-text-hover);
-                    }
-                }
-            }
-        }
-    }
 }
 
 .debtor-details-form {

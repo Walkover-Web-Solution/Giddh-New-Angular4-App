@@ -2,27 +2,10 @@ import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { TagRequest } from '../../models/api-models/settingsTags';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { cloneDeep, filter, map, orderBy } from '../../lodash-optimized';
 import { SettingsTagService } from '../../services/settings.tag.service';
 import { ToasterService } from '../../services/toaster.service';
-
-
-export interface PeriodicElement {
-    number: number;
-    name: string;
-    description: string;
-    action: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-    { number: 1, name: '12/07/2023', description: 'LTS', action: '' },
-    { number: 2, name: '12/07/2023', description: 'LTS', action: '' },
-    { number: 3, name: '12/07/2023', description: 'LTS', action: '' },
-    { number: 4, name: '12/07/2023', description: 'LTS', action: '' },
-    { number: 5, name: '12/07/2023', description: 'LTS', action: '' },
-    { number: 6, name: '12/07/2023', description: 'LTS', action: '' },
-]
 
 @Component({
     selector: 'setting-tags',
@@ -43,12 +26,14 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** directive to get reference of element */
+    /** Create Tag Form template reference */
     @ViewChild('createTagForm', { static: true }) public createTagForm: TemplateRef<any>;
+    /** Create Confirmation Dialog template reference */
     @ViewChild('confirmationModal', { static: true }) public confirmationModal: TemplateRef<any>;
-    /*-- mat-table --*/
-    displayedColumns: string[] = ['number', 'name', 'description', 'action'];
-    dataSource = ELEMENT_DATA;
+    /** Holds Table Display Columns */
+    public displayedColumns: string[] = ['number', 'name', 'description', 'action'];
+    /** Holds Create Tag Dialog reference */
+    public createTagFormRef: MatDialogRef<any>;
 
     constructor(
         private settingsTagService: SettingsTagService,
@@ -80,6 +65,7 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
 
     public createTag(tag: TagRequest) {
         this.settingsTagService.CreateTag(tag).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.createTagFormRef.close();
             this.showToaster(this.commonLocaleData?.app_messages?.tag_created, response);
         });
         this.newTag = new TagRequest();
@@ -147,7 +133,7 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
     }
 
     public showCreateTag(): void {
-        this.dialog.open(this.createTagForm, {
+        this.createTagFormRef = this.dialog.open(this.createTagForm, {
             panelClass: 'openform',
             width: '1000px',
             height: '100vh !important',

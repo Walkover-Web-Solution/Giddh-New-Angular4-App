@@ -136,76 +136,53 @@
                     <mat-tab-group mat-stretch-tabs="false" animationDuration="0ms" [disableRipple]="true">
                         <mat-tab [label]="localeData?.collection?.razorpay_tab_heading">
                             <div class="box clearfix mb-2">
-                                <h3 class="font-16 bold mb-2">{{ localeData?.collection?.razorpay_form_heading }}</h3>
+                                <h3 class="font-16 bold mb-3">{{ localeData?.collection?.razorpay_form_heading }}</h3>
                                 <form #razorPayform="ngForm" novalidate>
                                     <div class="row">
                                         <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                                            <label
-                                                >{{ localeData?.collection?.key_id_label }}
-                                                <span class="required">*</span>
-                                            </label>
-                                            <input
-                                                class="form-control"
-                                                type="text"
+                                            <input-field
+                                                [type]="'text'"
+                                                [label]="localeData?.collection?.key_id_label"
                                                 [placeholder]="localeData?.collection?.key_id_placeholder"
-                                                name="razorPayObj.userName"
                                                 [(ngModel)]="razorPayObj.userName"
-                                                required
-                                                autocomplete="off"
-                                            />
+                                                [name]="'username'"
+                                                [required]="true"
+                                            ></input-field>
                                         </div>
                                         <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                                            <label
-                                                >{{ localeData?.collection?.secret_key_label }}
-                                                <span class="required">*</span>
-                                            </label>
-                                            <input
-                                                class="form-control"
-                                                type="password"
+                                            <input-field
+                                                [type]="'password'"
+                                                [label]="localeData?.collection?.secret_key_label"
                                                 [placeholder]="localeData?.collection?.secret_key_placeholder"
-                                                name="razorPayObj.password"
                                                 [(ngModel)]="razorPayObj.password"
-                                                required
-                                                autocomplete="off"
-                                            />
+                                                [name]="'password'"
+                                                [required]="true"
+                                            ></input-field>
                                         </div>
                                     </div>
                                     <div>
                                         <div class="row">
                                             <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                                                <div>
-                                                    <label>{{ localeData?.collection?.link_account_label }}</label>
-                                                    <div class="input-group">
-                                                        <sh-select
-                                                            class="linked-account"
-                                                            [placeholder]="
-                                                                localeData?.collection?.link_account_placeholder
-                                                            "
-                                                            name="razorPayObj.account"
-                                                            [(ngModel)]="razorPayObj.account.uniqueName"
-                                                            [options]="accounts"
-                                                            (selected)="selectAccount($event)"
-                                                            [forceClearReactive]="forceClearLinkAccount$ | async"
-                                                            [enableDynamicSearch]="true"
-                                                            [isPaginationEnabled]="true"
-                                                            (scrollEnd)="handleScrollEnd()"
-                                                            (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                                            [fixedValue]="razorPayObj?.account?.name"
-                                                            [defaultValue]="razorPayObj?.account?.name"
-                                                        >
-                                                        </sh-select>
-                                                        <div
-                                                            class="input-group-addon cp"
-                                                            *ngIf="
-                                                                razorPayObj?.account?.uniqueName &&
-                                                                razorPayObj?.account?.name
-                                                            "
-                                                        >
-                                                            <span
-                                                                (click)="unlinkAccountFromRazorPay()"
-                                                                class="icon-trash"
-                                                            ></span>
-                                                        </div>
+                                                <div class="input-group align-items-center column-gap1 flex-nowrap">
+                                                    <dropdown-field
+                                                        class="linked-account"
+                                                        [name]="'account'"
+                                                        [scrollableElementId]="'finishedStockDropdown'"
+                                                        [label]="localeData?.collection?.link_account_label"
+                                                        [placeholder]="localeData?.collection?.link_account_placeholder"
+                                                        [options]="accounts"
+                                                        (selectedOption)="selectAccount($event)"
+                                                        [defaultValue]="razorPayObj?.account?.name"
+                                                        [enableDynamicSearch]="true"
+                                                        [isPaginationEnabled]="true"
+                                                        (scrollEnd)="handleScrollEnd()"
+                                                        (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                                                        [allowValueReset]="true"
+                                                        (onClear)="razorPayObj.account.name = null; razorPayObj.account.uniqueName = null"
+                                                    >
+                                                    </dropdown-field>
+                                                    <div class="input-group-addon cursor-pointer" *ngIf="razorPayObj?.account?.uniqueName && razorPayObj?.account?.name">
+                                                        <span (click)="unlinkAccountFromRazorPay()" class="icon-trash"></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -213,8 +190,6 @@
                                                 class="form-group col-lg-4 col-md-6 col-xs-12 mr-t1 empty-label"
                                                 id="inlnImg"
                                             >
-                                                <label>&nbsp;</label>
-                                                <br />
                                                 <mat-slide-toggle
                                                     [(ngModel)]="razorPayObj.autoCapturePayment"
                                                     name="autoCapturePayment"
@@ -232,27 +207,29 @@
                                     <div class="row">
                                         <div class="col-sm-12 form-group">
                                             <button
+                                                mat-stroked-button
+                                                color="primary"
                                                 aria-label="save"
                                                 *ngIf="!updateRazor"
-                                                class="btn btn-success"
                                                 [disabled]="razorPayform.invalid"
                                                 (click)="saveRazorPayDetails()"
                                             >
                                                 {{ commonLocaleData?.app_save }}
                                             </button>
                                             <button
+                                                mat-stroked-button
+                                                color="primary"
                                                 aria-label="update"
                                                 *ngIf="updateRazor"
-                                                class="btn btn-success"
                                                 [disabled]="razorPayform.invalid"
                                                 (click)="updateRazorPayDetails()"
                                             >
                                                 {{ commonLocaleData?.app_update }}
                                             </button>
                                             <button
+                                                mat-stroked-button
                                                 aria-label="delete"
                                                 *ngIf="updateRazor"
-                                                class="btn btn-danger"
                                                 (click)="deleteRazorPayDetails()"
                                             >
                                                 {{ commonLocaleData?.app_delete }}
@@ -264,63 +241,50 @@
                         </mat-tab>
                         <mat-tab [label]="localeData?.collection?.paypal_tab_heading">
                             <div class="box clearfix mb-2">
-                                <h3 class="font-16 bold mb-2">{{ localeData?.collection?.paypal_form_heading }}</h3>
-                                <form #paypalForm="ngForm" novalidate class="">
+                                <h3 class="font-16 bold mb-3">{{ localeData?.collection?.paypal_form_heading }}</h3>
+                                <form #paypalForm="ngForm" novalidate>
                                     <div class="row">
                                         <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                                            <label
-                                                >{{ localeData?.collection?.email_id_label }}
-                                                <span class="required">*</span>
-                                            </label>
-                                            <input
-                                                class="form-control"
-                                                type="text"
+                                            <input-field
+                                                [type]="'text'"
+                                                [label]="localeData?.collection?.email_id_label"
                                                 [placeholder]="localeData?.collection?.email_id_placeholder"
-                                                name="paypalObj.email"
                                                 [(ngModel)]="paypalObj.email"
-                                                required
-                                                autocomplete="off"
-                                            />
+                                                [name]="'name'"
+                                                [required]="true"
+                                            ></input-field>
                                         </div>
                                         <div class="form-group col-lg-4 col-md-6 col-xs-12">
                                             <div>
-                                                <label>{{ localeData?.collection?.link_account_label }}</label>
-                                                <div class="input-group">
-                                                    <div class="d-flex w-100">
-                                                        <sh-select
-                                                            class="linked-account"
-                                                            [placeholder]="
-                                                                localeData?.collection?.link_account_placeholder
-                                                            "
-                                                            name="paypalObj.account"
-                                                            [(ngModel)]="paypalObj.account.uniqueName"
-                                                            [options]="paypalAccounts"
-                                                            (selected)="selectLinkedAccount($event)"
-                                                            [forceClearReactive]="paypalForceClearLinkAccount$ | async"
-                                                            [enableDynamicSearch]="true"
-                                                            [isPaginationEnabled]="true"
-                                                            (scrollEnd)="paypalHandleScrollEnd()"
-                                                            (dynamicSearchedQuery)="
-                                                                paypalOnAccountSearchQueryChanged($event)
-                                                            "
-                                                            [fixedValue]="paypalObj?.account?.name"
-                                                            [defaultValue]="paypalObj?.account?.name"
-                                                        >
-                                                        </sh-select>
-                                                        <div
-                                                            class="input-group-addon cp ml-2"
-                                                            *ngIf="
-                                                                paypalObj?.account?.uniqueName &&
-                                                                paypalObj?.account?.name
-                                                            "
-                                                        >
-                                                            <span
-                                                                (click)="unlinkAccountFromPaypal()"
-                                                                class="icon-trash"
-                                                            ></span>
-                                                        </div>
+                                                <dropdown-field
+                                                        class="linked-account"
+                                                        [name]="'account'"
+                                                        [scrollableElementId]="'finishedStockDropdown'"
+                                                        [label]="localeData?.collection?.link_account_label"
+                                                        [placeholder]="localeData?.collection?.link_account_placeholder"
+                                                        [options]="paypalAccounts"
+                                                        (selectedOption)="selectLinkedAccount($event)"
+                                                        [defaultValue]="paypalObj?.account?.name"
+                                                        [enableDynamicSearch]="true"
+                                                        [isPaginationEnabled]="true"
+                                                        (scrollEnd)="paypalHandleScrollEnd()"
+                                                        (dynamicSearchedQuery)="paypalOnAccountSearchQueryChanged($event)"
+                                                        [allowValueReset]="true"
+                                                        (onClear)="paypalObj.account.name = null; paypalObj.account.uniqueName = null"
+                                                    >
+                                                    </dropdown-field>
+                                                    <div
+                                                        class="input-group-addon cursor-pointer ml-2"
+                                                        *ngIf="
+                                                            paypalObj?.account?.uniqueName &&
+                                                            paypalObj?.account?.name
+                                                        "
+                                                    >
+                                                        <span
+                                                            (click)="unlinkAccountFromPaypal()"
+                                                            class="icon-trash"
+                                                        ></span>
                                                     </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -331,7 +295,8 @@
                                             <button
                                                 aria-label="save"
                                                 *ngIf="!updatePaypal"
-                                                class="btn btn-success"
+                                                mat-stroked-button
+                                                color="primary"
                                                 [disabled]="paypalForm.invalid"
                                                 (click)="savePaypalDetails()"
                                             >
@@ -340,7 +305,8 @@
                                             <button
                                                 aria-label="update"
                                                 *ngIf="updatePaypal"
-                                                class="btn btn-success"
+                                                mat-stroked-button
+                                                color="primary"
                                                 [disabled]="paypalForm.invalid"
                                                 (click)="updatePaypalDetails()"
                                             >
@@ -349,7 +315,7 @@
                                             <button
                                                 aria-label="delete"
                                                 *ngIf="updatePaypal"
-                                                class="btn btn-danger"
+                                                mat-stroked-button
                                                 (click)="deletePaypalDetails()"
                                             >
                                                 {{ commonLocaleData?.app_delete }}

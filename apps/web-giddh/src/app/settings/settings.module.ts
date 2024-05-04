@@ -27,7 +27,7 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { PersonalInformationComponent } from './personal-information/personal-information.component';
 import { AddressSettingsComponent } from './address-settings/address-settings.component';
 import { OtherSettingsComponent } from './other-settings/other-settings.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateBranchComponent } from './branch/create-branch/create-branch.component';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
@@ -95,6 +95,7 @@ import { CreateAddressModule } from '../shared/create-address/create-address.mod
         SettingRountingModule,
         AsideMenuCreateTaxModule,
         ContactModule,
+        FormsModule,
         ReactiveFormsModule,
         CurrencyModule,
         NgxMaskModule.forRoot(),
