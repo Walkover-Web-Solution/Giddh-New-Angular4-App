@@ -192,8 +192,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         private route: ActivatedRoute,
         private router: Router,
         private invoiceBulkUpdateService: InvoiceBulkUpdateService,
-        private invoiceService: InvoiceService,
-        private router: Router
+        private invoiceService: InvoiceService
     ) {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.uniqueName && params?.accountUniqueName) {
