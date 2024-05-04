@@ -274,11 +274,17 @@ export class VouchersUtilityService {
     }
 
     public cleanVoucherObject(invoiceForm: any): any {
-        delete invoiceForm.deposit.currencySymbol;
+        if (invoiceForm.deposit) {
+            delete invoiceForm.deposit.currencySymbol;
+        }
         delete invoiceForm.account.billingDetails.index;
         delete invoiceForm.account.shippingDetails.index;
         delete invoiceForm.company.billingDetails.index;
         delete invoiceForm.company.shippingDetails.index;
+        delete invoiceForm.grandTotalMultiCurrency;
+        delete invoiceForm.chequeNumber;
+        delete invoiceForm.chequeClearanceDate;
+        delete invoiceForm.isAdvanceReceipt;
 
         invoiceForm?.entries?.forEach(entry => {
             delete entry.showCodeType;
@@ -288,6 +294,7 @@ export class VouchersUtilityService {
             delete entry.totalCess;
             delete entry.total;
             delete entry.requiredTax;
+            delete entry.calculateTotal;
 
             entry.taxes?.forEach(tax => {
                 delete tax.taxType;

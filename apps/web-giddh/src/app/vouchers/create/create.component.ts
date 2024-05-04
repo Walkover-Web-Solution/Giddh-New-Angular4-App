@@ -2067,6 +2067,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.getSelectedOtherTax(response.entryIndex, response.tax, response.calculationMethod);
                 } else {
                     const entryFormGroup = this.getEntryFormGroup(entryIndex);
+                    const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
+
+                    for (let taxIndex = 0; taxIndex < taxesFormArray.length; taxIndex++) {
+                        const taxFormGroup = taxesFormArray.at(taxIndex) as FormGroup;
+        
+                        if (taxFormGroup.get('uniqueName')?.value === entryFormGroup.get('otherTax.uniqueName')?.value) {
+                            taxesFormArray.removeAt(taxIndex);
+                        }
+                    }
+
                     entryFormGroup.get('otherTax').reset();
                 }
             }
@@ -3090,8 +3100,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             invoiceForm.exchangeRate = 1 / invoiceForm.exchangeRate;
         }
 
-        invoiceForm = this.vouchersUtilityService.cleanVoucherObject(invoiceForm);
-
         if (!this.isFormValid(invoiceForm)) {
             this.startLoader(false);
             return;
@@ -3209,6 +3217,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 delete invoiceForm.company.shippingDetails.state;
             }
 
+            invoiceForm = this.vouchersUtilityService.cleanVoucherObject(invoiceForm);
+
             this.purchaseOrderService.create(getRequestObject, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.startLoader(false);
                 if (response && response.status === "success") {
@@ -3246,6 +3256,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             invoiceForm.voucherDetails = { voucherType: this.invoiceType.isEstimateInvoice ? VoucherTypeEnum.generateEstimate : VoucherTypeEnum.generateProforma };
             invoiceForm.accountDetails = { uniqueName: invoiceForm.account?.uniqueName };
+
+            invoiceForm = this.vouchersUtilityService.cleanVoucherObject(invoiceForm);
 
             this.proformaService.generate(invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.startLoader(false);
@@ -3307,6 +3319,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 delete invoiceForm.chequeClearanceDate;
             }
 
+            invoiceForm = this.vouchersUtilityService.cleanVoucherObject(invoiceForm);
+
             this.voucherService.generateVoucher(invoiceForm.account.uniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.startLoader(false);
                 if (response?.status === "success") {
@@ -3363,6 +3377,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.currencySwitched = false;
 
         this.accountFormFields = [];
+        this.selectedFileName = '';
 
         this.account = {
             countryName: '',
