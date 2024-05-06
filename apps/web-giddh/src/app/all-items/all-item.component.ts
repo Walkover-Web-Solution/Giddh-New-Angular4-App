@@ -219,11 +219,11 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
      * @param {AllItem} item Menu item
      * @memberof AllGiddhItemComponent
      */
-    public handleItemClick(item: AllItem): void {
+    public handleItemClick(item: AllItem): void {    
         if (item.label === this.commonLocaleData?.app_master) {
             this.store.dispatch(this.groupWithAction.OpenAddAndManageFromOutside(''));
-        } else if (item?.additional?.isGstMenu === true) {
-            this.navigate(item?.additional?.type);
+        } else if (item?.additional?.queryParams?.isGstMenu === true) {
+            this.navigate(item?.additional?.queryParams?.type);
         }
     }
 
@@ -291,7 +291,7 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
         this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
                 let taxes = response.body;
-                if (taxes?.length === 1) {
+                if (taxes?.length >= 1) {
                     this.activeCompanyGstNumber = taxes[0];
                 }
             }
