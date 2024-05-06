@@ -1,6 +1,6 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
@@ -16,7 +16,6 @@ dayjs.extend(customParseFormat);
 import { GeneralService } from '../../../services/general.service';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { cloneDeep, forEach, isEmpty, isNull } from '../../../lodash-optimized';
-import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 // some local const
 const DATE_RANGE = 'daterange';
 const PAST_PERIOD = 'pastperiod';
@@ -80,8 +79,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         private _toasty: ToasterService,
         private store: Store<AppState>,
         private _fb: UntypedFormBuilder,
-        private generalService: GeneralService,
-        private changeDetection: ChangeDetectorRef
+        private generalService: GeneralService
     ) {
         this.createPermissionInProcess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionInProcess), takeUntil(this.destroyed$));
         this.createPermissionSuccess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionSuccess), takeUntil(this.destroyed$));
@@ -96,7 +94,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         this.selectedTimeSpan = this.commonLocaleData?.app_date_range;
         this.selectedIPRange = this.localeData?.cidr_range;
         this._accountsAction.resetShareEntity();
-
+        console.log(this.userdata);
+        
         if (this.userdata) {
             if (this.userdata.from && this.userdata.to) {
                 let from: any = dayjs(this.userdata.from, GIDDH_DATE_FORMAT);
@@ -104,7 +103,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 setTimeout(() => {
                     // Set timeout is used because ngx datepicker doesn't take the
                     // format provided in bsConfig if bsValue is set in ngOnInit
-                    this.dateRangePickerValue = [from.$d, to.$d];
+                    this.dateRangePickerValue = [from, to];
                 }, 0);
             }
             this.initAcForm(this.userdata);
@@ -182,13 +181,15 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     }
 
     public getPeriodFromData(data: ShareRequestForm) {
-        if (data.from && data.to) {
-            this.togglePeriodOptionsVal(DATE_RANGE);
-            return [DATE_RANGE];
-        }
-        if (data.duration && data.period) {
-            this.togglePeriodOptionsVal(PAST_PERIOD);
-            return [PAST_PERIOD];
+        if(data) {
+            if (data.from && data.to) {
+                this.togglePeriodOptionsVal(DATE_RANGE);
+                return [DATE_RANGE];
+            }
+            if (data.duration && data.period) {
+                this.togglePeriodOptionsVal(PAST_PERIOD);
+                return [PAST_PERIOD];
+            }
         }
         return [DATE_RANGE];
     }
@@ -207,14 +208,24 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
     public initAcForm(data?: ShareRequestForm): void {
         if (data) {
+            let fromDate = null;
+            let toDate = null
+            if(data.to && data.from) {
+                const fromDateParts = data.from.split('-').map(Number); // If Date in DD-MM-YYY
+                const toDateParts = data.to.split('-').map(Number); // If Date in DD-MM-YYY
+                
+                 fromDate = new Date(fromDateParts[2], fromDateParts[1] - 1, fromDateParts[0]);
+                 toDate = new Date(toDateParts[2], toDateParts[1] - 1, toDateParts[0]);
+            }
+            
             this.permissionForm = this._fb.group({
                 uniqueName: [data.uniqueName],
                 emailId: [data.emailId, Validators.compose([Validators.required, Validators.maxLength(150)])],
                 entity: ['company'],
                 roleUniqueName: [data.roleUniqueName, [Validators.required]],
                 periodOptions: this.getPeriodFromData(data),
-                from: [data.from],
-                to: [data.to],
+                from: [fromDate],
+                to: [toDate],
                 duration: [data.duration],
                 period: [null],
                 ipOptions: this.getIPOptsFromData(data),

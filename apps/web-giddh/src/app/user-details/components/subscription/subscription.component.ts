@@ -280,7 +280,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         this.subscriptions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             let subscriptions = [];
             this.subscriptions = [];
-
+            
             if (response?.length) {
                 response.forEach(subscription => {
                     let subscriptionDetails = cloneDeep(subscription);
@@ -305,9 +305,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
                     if (flag) {
                         subscriptions.push(subscriptionDetails);
                     }
-                });
+                });                
 
-                this.plansList = uniqBy(response.map(subscription => { return { label: subscription.planDetails?.name, value: subscription.planDetails?.uniqueName } }), "uniqueName");
+                this.plansList = uniqBy(response.map(subscription => { return { label: subscription.planDetails?.name, value: subscription.planDetails?.uniqueName } }), "value");
 
                 if (subscriptions?.length > 0) {
                     this.subscriptions = subscriptions;

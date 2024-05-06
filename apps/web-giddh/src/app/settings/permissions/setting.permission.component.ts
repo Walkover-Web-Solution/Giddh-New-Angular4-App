@@ -122,23 +122,16 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         }
     }
 
-    // public showModalForEdit(user?: any) {
-    //     this.selectedUser = user ? user : '';
-    //     this.showEditUserModal = true;
-    //     setTimeout(() => this.editUserModal?.show(), 700);
-    // }
 
     public showModalForEdit(user?: any): void {
         this.selectedUser = user ? user : '';
-        this.editDialogRef = this.dialog.open(this.editUserModal, { width: '800px', position: {
-            top: '75px'
-        }});
+        this.editDialogRef = this.dialog.open(this.editUserModal, { 
+            width: '800px', 
+            position: {
+                top: '75px'
+            }
+        });
     }
-
-    // public closeEditUserModal() {
-    //     this.editUserModal.hide();
-    //     setTimeout(() => this.showEditUserModal = false, 700);
-    // }
     public closeEditUserModal(event?: any): void {
         if (event && this.hasUnsavedChanges) {
             this.pageLeaveUtilityService.confirmPageLeave((action) => {

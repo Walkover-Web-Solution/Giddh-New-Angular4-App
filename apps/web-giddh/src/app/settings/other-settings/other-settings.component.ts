@@ -149,6 +149,17 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
+     * Get label for export type
+     *
+     * @returns {string}
+     * @memberof OtherSettingsComponent
+     */
+    public getExportTypeLabel(): string {
+        const exportType = this.exportTypes.find(item => item.value === this.exportType);
+        return exportType ? exportType.label : '';
+    }
+
+    /**
      * Unsubscribes from the listeners
      *
      * @memberof OtherSettingsComponent
@@ -170,12 +181,12 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         this.saveProfileSubject.next(true);
     }
 
-        /**
-     * Inventory type update handler
-     *
-     * @param {boolean} value True, if Product is selected
-     * @memberof OtherSettingsComponent
-     */
+    /**
+ * Inventory type update handler
+ *
+ * @param {boolean} value True, if Product is selected
+ * @memberof OtherSettingsComponent
+ */
     public inventoryTypeUpdated(value: boolean): void {
         this.profileData.manageInventory = value;
         this.profileUpdated('manageInventory');
@@ -225,8 +236,10 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof OtherSettingsComponent
      */
     public setExportType(event?: any): void {
-        this.exportType = event?.value;
-        this.updatedData['withPay'] = event?.value === 'yes' ? true : false;
-        this.saveProfileSubject.next(true);
+        if(event && event.value && this.exportType !== event.value) {
+            this.exportType = event.value;
+            this.updatedData['withPay'] = event.value === 'yes';
+            this.saveProfileSubject.next(true);
+        }
     }
 }

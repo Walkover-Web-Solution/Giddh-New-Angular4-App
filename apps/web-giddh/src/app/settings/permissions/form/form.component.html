@@ -27,7 +27,7 @@
                             [placeholder]="localeData?.role_name_placeholder"
                             [options]="allRoles"
                             (selectedOption)="permissionForm.get('roleUniqueName')?.patchValue($event.value)"
-                            [defaultValue]="resetForm"
+                            [defaultValue]="userdata?.roleName"
                             [required]="true"
                             (onClear)="onSearchClear()"
                             [allowValueReset]="true"
