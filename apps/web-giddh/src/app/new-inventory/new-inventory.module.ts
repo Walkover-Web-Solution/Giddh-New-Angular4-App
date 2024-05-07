@@ -84,6 +84,9 @@ import { CustomPriceModule } from "./component/custom-price/custom-price.module"
 import { BulkStockEditComponent } from "./component/bulk-stock-edit/bulk-stock-edit.component";
 import { BulkStockAdvanceFilterComponent } from "./component/bulk-stock-advance-filter/bulk-stock-advance-filter.component";
 import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
+import { GiddhDatepickerModule } from "../theme/giddh-datepicker/giddh-datepicker.module";
+import { AdjustmentComponent } from "./component/adjustment/adjustment.component";
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @NgModule({
     declarations: [
@@ -130,7 +133,9 @@ import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
         CustomUnitsComponent,
         InventoryMasterComponent,
         BulkStockEditComponent,
-        BulkStockAdvanceFilterComponent
+        BulkStockAdvanceFilterComponent,
+        AdjustmentComponent
+        
     ],
     imports: [
         NewInventoryRoutingModule,
@@ -172,7 +177,9 @@ import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
         NoDataModule,
         DragDropModule,
         CustomPriceModule,
-        WatchVideoModule
+        WatchVideoModule,
+        GiddhDatepickerModule,
+        MatExpansionModule
     ],
     exports: [
         NewInventoryComponent,
@@ -208,7 +215,7 @@ import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
         DashboardSellingReport,
         ReportFiltersComponent,
         MatDivider,
-        BulkStockAdvanceFilterComponent
+        BulkStockAdvanceFilterComponent  
     ]
 })
 export class NewInventoryModule { }

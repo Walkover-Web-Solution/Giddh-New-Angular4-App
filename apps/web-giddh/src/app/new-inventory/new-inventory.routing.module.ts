@@ -21,6 +21,7 @@ import { ReportsComponent } from "./component/reports/reports.component";
 import { CustomUnitsComponent } from "./component/custom-units/custom-units.component"
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
 import { BulkStockEditComponent } from "./component/bulk-stock-edit/bulk-stock-edit.component";
+import { AdjustmentComponent } from "./component/adjustment/adjustment.component";
 
 const routes: Routes = [
     {
@@ -151,6 +152,10 @@ const routes: Routes = [
     {
         path: "stock-balance",
         component: StockBalanceComponent,
+    },
+    {
+        path:"adjustment",
+        component:AdjustmentComponent
     }
 ];
 
