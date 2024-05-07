@@ -83,5 +83,6 @@
     "roles": "भूमिकाएँ",
     "add_user": "उपयोगकर्ता जोड़ें",
     "county":"काउंटी",
-    "select_county":"काउंटी चुनें"
+    "select_county":"काउंटी चुनें",
+    "back_to_subscription": "सदस्यता सूची पर वापस जाएँ"
 }

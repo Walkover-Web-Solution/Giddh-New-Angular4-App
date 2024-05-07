@@ -123,6 +123,13 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
                 this.getBillingDetails(this.billingDetails.billingAccountUnqiueName);
             }
         });
+
+        this.updateBillingDetailsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data) {
+                this.router.navigate(['/pages/subscription']);
+            }
+        });
+
     }
     /**
      *
@@ -139,6 +146,7 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
      * @memberof ChangeBillingComponent
      */
     public ngAfterViewInit(): void {
+        this.initIntl();
         this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data) {
                 this.setFormValues(data);
@@ -146,13 +154,6 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
                 this.selectedState = data.state?.name;
                 this.billingDetails.billingName = data?.billingName;
                 this.billingDetails.uniqueName = data?.uniqueName;
-            }
-        });
-        this.initIntl();
-
-        this.updateBillingDetailsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data) {
-                this.router.navigate(['/pages/subscription']);
             }
         });
     }

@@ -249,8 +249,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isLoggedInWithSocialAccount$: Observable<boolean>;
     /* True if we need to show Depreciation Message */
     public showDepreciationMessage: boolean = false;
-    /** Hold user details response */
-    public FectchUserDetailsResponse$: Observable<any>;
 
 
     /**
