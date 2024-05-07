@@ -81,5 +81,6 @@
     "permission":"Give Permission to",
     "permission_placeholder":"Unique Name/Email ID",
     "roles":"Roles",
-    "add_user": "Add User"
+    "add_user": "Add User",
+    "back_to_subscription": "Back to Subscription List"
 }
