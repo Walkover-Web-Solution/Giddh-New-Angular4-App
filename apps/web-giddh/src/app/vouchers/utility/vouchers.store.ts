@@ -116,6 +116,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public voucherListForCreditDebitNote$ = this.select((state) => state.voucherListForCreditDebitNote);
     public pendingPurchaseOrders$ = this.select((state) => state.pendingPurchaseOrders);
     public countryList$ = this.select((state) => state.countryList);
+    public deleteAttachmentIsSuccess$ = this.select((state) => state.deleteAttachmentIsSuccess);
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
@@ -718,4 +719,16 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             })
         );
     });
+
+    readonly resetAttachmentState = this.effect((data: Observable<void>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    deleteAttachmentIsSuccess: null
+                });
+                return of(null);
+            })
+        );
+    });
+
 }
