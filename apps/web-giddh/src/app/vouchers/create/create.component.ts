@@ -804,6 +804,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.linkedPoNumbers = response;
         });
 
+        this.componentStore.deleteAttachmentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.selectedFileName = "";
+                this.componentStore.resetAttachmentState();
+
+                let entryFields = [];
+                entryFields.push({ key: 'attachedFile', value: "" });
+                entryFields.push({ key: 'attachedFileName', value: "" });
+                this.updateEntry(0, entryFields);
+            }
+        });
+
         /** Deposit amount change */
         this.invoiceForm.controls['deposit'].get("amountForAccount")?.valueChanges.pipe(
             debounceTime(100),
@@ -2469,7 +2481,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response === this.commonLocaleData?.app_yes) {
-                this.componentStore.deleteAttachment('');
+                const entryFormGroup = this.getEntryFormGroup(0);
+                this.componentStore.deleteAttachment(entryFormGroup.get('attachedFile')?.value);
             } else {
                 this.dialog.closeAll();
             }
@@ -4153,6 +4166,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.stockVariants[entryIndex] = observableOf([]);
             this.stockUnits[entryIndex] = observableOf([]);
 
+            entryFormGroup.get('hsnNumber')?.patchValue(response.hsnNumber);
+            entryFormGroup.get('sacNumber')?.patchValue(response.sacNumber);
+            entryFormGroup.get('showCodeType')?.patchValue(response.hsnNumber ? 'hsn' : 'sac');
+
             const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
             discountsFormArray.clear();
 
@@ -4373,8 +4390,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public onChangeHsnSacType(entryFormGroup: FormGroup): void {
         if (entryFormGroup.get('showCodeType')?.value === "hsn") {
             entryFormGroup.get('hsnNumber')?.patchValue(entryFormGroup.get('sacNumber')?.value);
+            entryFormGroup.get('sacNumber')?.patchValue(null);
         } else {
             entryFormGroup.get('sacNumber')?.patchValue(entryFormGroup.get('hsnNumber')?.value);
+            entryFormGroup.get('hsnNumber')?.patchValue(null);
         }
     }
 
