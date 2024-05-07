@@ -326,7 +326,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     */
     public ngAfterViewInit(): void {
         this.stepperIcon._getIndicatorType = () => 'number';
-        this.initIntl();
+        this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data && data?.uniqueName) {
+                this.getBillingData = true;
+                this.setFormValues(data);
+                this.selectedCountry = data.country?.name;
+                this.selectedState = data.state?.name;
+            }
+        });
     }
 
     /**
@@ -375,6 +382,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.promoCodeResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.promoCodeResponse[0] = response;
+                console.log(this.secondStepForm?.get('country')?.value);
+                console.log(this.secondStepForm?.get('country')?.value?.value);
                 if (this.secondStepForm?.get('country')?.value?.toLowerCase() === 'in' && this.promoCodeResponse?.length) {
                     this.finalPlanAmount = response?.finalAmount + (response?.finalAmount * this.taxPercentage);
                 } else {
@@ -1064,12 +1073,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.secondStepForm.controls['companyName'].setValue(data.companyName);
         this.secondStepForm.controls['email'].setValue(data.email);
         this.secondStepForm.controls['pincode'].setValue(data.pincode);
-        if (data.mobileNumber && this.intlClass) {
-            if (data?.mobileNumber?.startsWith('+')) {
-                this.secondStepForm.controls['mobileNumber'].setValue(data.mobileNumber);
-            } else {
-                this.secondStepForm.controls['mobileNumber'].setValue('+' + data.mobileNumber);
-            }
+
+        if (data?.mobileNumber?.startsWith('+')) {
+            this.secondStepForm.controls['mobileNumber'].setValue(data.mobileNumber);
+        } else {
+            this.secondStepForm.controls['mobileNumber'].setValue('+' + data.mobileNumber);
         }
         this.secondStepForm.controls['taxNumber'].setValue(data.taxNumber);
         this.secondStepForm.controls['country'].setValue(data.country);
