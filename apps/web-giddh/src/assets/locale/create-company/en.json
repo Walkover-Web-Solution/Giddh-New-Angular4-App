@@ -83,5 +83,6 @@
     "roles":"Roles",
     "add_user": "Add User",
     "county":"County",
-    "select_county":"Select County"
+    "select_county":"Select County",
+    "back_to_subscription": "Back to Subscription List"
 }

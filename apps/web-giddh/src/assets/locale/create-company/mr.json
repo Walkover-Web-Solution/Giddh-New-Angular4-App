@@ -83,5 +83,6 @@
     "roles": "भूमिका",
     "add_user": "वापरकर्ता जोडा",
     "county":"परगणा",
-    "select_county":"काउंटी निवडा"
+    "select_county":"काउंटी निवडा",
+    "back_to_subscription": "सदस्यता सूचीकडे परत"
 }
