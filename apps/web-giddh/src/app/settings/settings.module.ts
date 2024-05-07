@@ -63,6 +63,7 @@ import { AccountNumberMaskModule } from '../shared/helpers/pipes/accountNumberMa
 import { PortalWhiteLabelComponent } from './portal-white-label/portal-white-label.component';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { CreateAddressModule } from '../shared/create-address/create-address.module';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
     declarations: [
@@ -91,6 +92,7 @@ import { CreateAddressModule } from '../shared/create-address/create-address.mod
         SettingCampaignComponent
     ],
     imports: [
+        CommonModule,
         SharedModule,
         SettingRountingModule,
         AsideMenuCreateTaxModule,

@@ -1,7 +1,7 @@
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { Component, Input, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, TemplateRef } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../../store';
@@ -34,7 +34,8 @@ import { AccountCreateEditComponent } from './payment/icici/account-create-edit/
 @Component({
     selector: 'setting-integration',
     templateUrl: './setting.integration.component.html',
-    styleUrls: ['./setting.integration.component.scss']
+    styleUrls: ['./setting.integration.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public auth2: any;
@@ -184,6 +185,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isPlaidSupportedCountry: boolean;
     /** Holds Create New Account Dialog Ref */
     public createNewAccountDialogRef: MatDialogRef<any>;
+    /** Holds Edit New Account Dialog Ref */
+    public editAccountModalRef: MatDialogRef<any>;
+    /** Holds Create New Account User Dialog Ref */
+    public createNewAccountUserModalRef: MatDialogRef<any>;
 
     constructor(
         private router: Router,
@@ -1116,9 +1121,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      *
      * @memberof SettingIntegrationComponent
      */
-    // public openCreateNewAccountModal(): void {
-    //     this.createNewAccountModal?.show();
-    // }
     public openCreateNewAccountModal() {
         this.createNewAccountDialogRef = this.dialog.open(this.createNewAccountModal, {
             width: '630px',
@@ -1166,24 +1168,14 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     /**
-     * This will close the create new account modal
-     *
-     * @memberof SettingIntegrationComponent
-     */
-
-    /**
      * This will open the create new account user modal
      *
      * @param {*} bankAccount
      * @memberof SettingIntegrationComponent
      */
-    // public openCreateNewAccountUserModal(bankAccount: any): void {
-    //     this.activeBankAccount = bankAccount;
-    //     this.createNewAccountUserModal?.show();
-    // }
     public openCreateNewAccountUserModal(bankAccount: any): void {
         this.activeBankAccount = bankAccount;
-        this.dialog.open(this.createNewAccountUserModal, {
+        this.createNewAccountUserModalRef = this.dialog.open(this.createNewAccountUserModal, {
             panelClass: 'modal-dialog',
             width: '1000px',
         });
@@ -1300,24 +1292,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     /**
-     * This will close the delete bank account login confirmation modal
-     *
-     * @memberof SettingIntegrationComponent
-     */
-
-    /**
      * This will open the edit account user modal
      *
      * @param {*} bankAccount
      * @param {*} payor
      * @memberof SettingIntegrationComponent
      */
-    // public openEditAccountUserModal(bankAccount: any, payor: any): void {
-    //     this.activeBankAccount = bankAccount;
-    //     this.activePayorAccount = payor;
-    //     this.editAccountUserModal?.show();
-    // }
-
     public openEditAccountUserModal(bankAccount: any, payor: any): void {
         this.activeBankAccount = bankAccount;
         this.activePayorAccount = payor;
@@ -1328,38 +1308,18 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     /**
-     * This will close the edit account user modal
-     *
-     * @memberof SettingIntegrationComponent
-     */
-    // public closeEditAccountUserModal(): void {
-    //     this.editAccountUserModal?.hide();
-    // }
-
-    /**
      * This will open edit account modal
      *
      * @param {*} bankAccount
      * @memberof SettingIntegrationComponent
      */
-    // public openEditAccountModal(bankAccount: any): void {
-    //     this.activeBankAccount = bankAccount;
-    //     this.editAccountModal?.show();
-    // }
-
     public openEditAccountModal(bankAccount: any): void {
         this.activeBankAccount = bankAccount;
-        this.dialog.open(this.editAccountModal, {
+        this.editAccountModalRef = this.dialog.open(this.editAccountModal, {
             panelClass: 'modal-dialog',
             width: '1000px',
         });
     }
-
-    /**
-     * This will close the edit account modal
-     *
-     * @memberof SettingIntegrationComponent
-     */
 
     /**
      * This will get the payor account registration status

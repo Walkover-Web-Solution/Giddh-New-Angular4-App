@@ -74,7 +74,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
 
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: boolean) => {
             if (response) {
-                this.openAccountAsidePane();
+                this.createNewAccountDialogRef.close();
                 this.getDiscountAccounts();
             }
         });
@@ -85,14 +85,16 @@ export class DiscountComponent implements OnInit, OnDestroy {
      *
      * @memberof DiscountComponent
      */
-    public openAccountAsidePane(): void {
-        this.createNewAccountDialogRef = this.dialog.open(this.createNew, {
-            width: '768px',
-            position: {
-                right: '0',
-                top: '0'
-            }
-        });
+    public openAccountAsidePane(event: any): void {
+        if(event) {
+            this.createNewAccountDialogRef = this.dialog.open(this.createNew, {
+                width: '768px',
+                position: {
+                    right: '0',
+                    top: '0'
+                }
+            });
+        }
     }
 
     /**

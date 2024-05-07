@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -8,7 +8,7 @@ import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
-import { fromEvent, Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
@@ -25,6 +25,7 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { AppState } from '../../store/roots';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/settings.constant';
 import { SettingsUtilityService } from '../services/settings-utility.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
     selector: 'setting-branch',
@@ -80,7 +81,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Stores all the branches */
     public unFilteredBranchList: Array<any>;
     /** Stores the branch searcch query */
-    public searchBranchQuery: string;
+    public searchBranchQuery: FormControl = new FormControl('');
     /** Branch search field instance */
     @ViewChild('branchSearch', { static: true }) public branchSearch: ElementRef;
     /** Stores the address configuration */
@@ -127,6 +128,15 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public ngOnInit() {
         this.getOnboardingForm();
+        this.searchBranchQuery.valueChanges.pipe(debounceTime(700),distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe( query => {
+            if(query !== undefined) {
+                if(query.length) {
+                    this.handleBranchSearch(query);
+                } else {
+                    this.resetFilter();
+                }
+            }
+        });
 
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
 
@@ -195,10 +205,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
 
-        fromEvent(this.branchSearch?.nativeElement, 'input').pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((event: any) => {
-            this.handleBranchSearch(event.target?.value);
-        });
-
         this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
 
@@ -219,23 +225,22 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public ngAfterViewInit() {
         if (this.isBranch) {
-            this.openCreateCompanyModal()
+            this.openCreateCompanyDialog()
         }
     }
 
-    // public openCreateCompanyModal(isUpdateMode?: boolean): void {
-    //     this.loadAddCompanyComponent(isUpdateMode);
-    //     this.hideAddBranchModal();
-    //     this.addCompanyModal?.show();
-    // }
-
-
-    public openCreateCompanyModal() {
+    /**
+     * Open Create company dialog 
+     *
+     * @memberof BranchComponent
+     */
+    public openCreateCompanyDialog(): void {
         this.dialog.open(this.addCompanyModal, {
             panelClass: 'modal-dialog',
             width: '1000px',
         });
     }
+
     /**
      * Handles update branch operation
      *
@@ -496,8 +501,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof BranchComponent
      */
     public resetFilter(): void {
-        this.searchBranchQuery = '';
-        this.handleBranchSearch(this.searchBranchQuery);
+        this.searchBranchQuery.reset();
+        this.handleBranchSearch(this.searchBranchQuery.value);
     }
 
     /**
@@ -544,28 +549,22 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     /**
-     * This will show confirmation modal for branch archive/unarchive
+     * This will show confirmation dialog for branch archive/unarchive
      *
      * @param {*} branch
      * @memberof BranchComponent
      */
-    // public confirmStatusUpdate(branch: any): void {
-    //     const unarchivedBranches = this.unFilteredBranchList?.filter(currentBranch => !currentBranch?.isArchived);
-    //     if (unarchivedBranches?.length > 1 || branch?.isArchived) {
-    //         this.branchStatusToUpdate = branch;
-    //         this.statusModal?.show();
-    //     } else {
-    //         this.toasterService.warningToast(this.localeData?.archive_notallowed);
-    //     }
-
-    // }
-
-    public confirmStatusUpdate() {
-
-        this.statusModalRef = this.dialog.open(this.statusModal, {
-            panelClass: 'modal-dialog',
-            width: '1000px',
-        });
+    public confirmStatusUpdate(branch: any): void {
+        const unarchivedBranches = this.unFilteredBranchList?.filter(currentBranch => !currentBranch?.isArchived);
+        if (unarchivedBranches?.length > 1 || branch?.isArchived) {
+            this.branchStatusToUpdate = branch;
+            this.statusModalRef = this.dialog.open(this.statusModal, {
+                panelClass: 'modal-dialog',
+                width: '1000px',
+            });
+        } else {
+            this.toasterService.warningToast(this.localeData?.archive_notallowed);
+        }
     }
 
     /**

@@ -68,7 +68,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         this.deleteAccountSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.isDeleteAccSuccess)).pipe(takeUntil(this.destroyed$));
     }
 
-    public ngOnInit() {
+    public ngOnInit() { 
         if (this.isUpdateAccount && this.activeAccountDetails) {
             this.accountDetails = this.activeAccountDetails;
             this.store.dispatch(this.accountsAction.getAccountDetails(this.activeAccountDetails.uniqueName));

@@ -17,7 +17,6 @@
                 {{ activePayorAccount ? localeData?.payment?.edit_user : localeData?.payment?.add_user }}
             </h3>
             <a
-                mat-dialog-close
                 [attr.aria-label]="commonLocaleData?.app_close"
                 class="close hover-orange"
                 (click)="closeAccountUserModal()"
@@ -26,78 +25,84 @@
             </a>
         </div>
         <mat-dialog-content>
-            <div class="modal-body icici-payor-account-create-edit">
-                <ng-container *ngIf="localeData?.payment">
-                    <div class="clearfix">
-                        <div class="inline col-md-6 pl-0">
-                            <label>{{ localeData?.payment?.account_number_label }}</label
-                            ><br />
-                            <span class="bold font-15">{{
-                                activeBankAccount?.bankResource?.accountNumber
-                            }}</span>
-                        </div>
-                        <div class="inline col-md-6 pl-0 pr-0">
-                            <label>{{ localeData?.payment?.linked_account }}</label
-                            ><br />
-                            <span class="bold font-15">{{ activeBankAccount?.account?.name }}</span>
-                        </div>
-                    </div>
-                    <div class="clearfix mr-t1" *ngIf="!activePayorAccount">
-                        <input-field
-                            [label]="localeData?.payment?.login_id_labe"
-                            [required]="true"
-                            [name]="'loginId'"
-                            [type]="'text'"
-                            [placeholder]="localeData?.payment?.login_id_placeholder"
-                        >
-                        </input-field>
-                    </div>
-                    <div class="clearfix mr-t1">
-                        <dropdown-field
-                            [label]="localeData?.payment?.user"
-                            [name]="'userUniqueName'"
-                            [placeholder]="localeData?.payment?.select_user"
-                            [options]="usersList"
-                            [required]="true"
-                        ></dropdown-field>
-                    </div>
-                    <div class="clearfix mr-t1">
+                <div class="modal-body icici-payor-account-create-edit">
+                    <ng-container *ngIf="localeData?.payment">
                         <div class="clearfix">
                             <div class="inline col-md-6 pl-0">
-                                <input-field
-                                    [label]="localeData?.payment?.limit_upto"
-                                    [name]="'maxAmount'"
-                                    [type]="'text'"
-                                    [placeholder]="localeData?.payment?.enter_amount"
-                                    digitsOnlyDirectiv
-                                ></input-field>
+                                <label>{{ localeData?.payment?.account_number_label }}</label
+                                ><br />
+                                <span class="bold font-15">{{
+                                    activeBankAccount?.bankResource?.accountNumber
+                                }}</span>
                             </div>
-                            <div class="inline col-md-6 pr-0">
-                                <dropdown-field
-                                    [label]="localeData?.payment?.limit_upto"
-                                    [name]="'duration'"
-                                    [placeholder]="localeData?.payment?.duration"
-                                    [options]="amountLimitDurations"
-                                ></dropdown-field>
+                            <div class="inline col-md-6 pl-0 pr-0">
+                                <label>{{ localeData?.payment?.linked_account }}</label
+                                ><br />
+                                <span class="bold font-15">{{ activeBankAccount?.account?.name }}</span>
                             </div>
                         </div>
-                    </div>
-                </ng-container>
-                <ng-container *ngIf="!localeData?.payment">
-                    <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
-                </ng-container>
-            </div>
-            <div class="modal-footer" *ngIf="localeData?.payment">
-                <button
-                    mat-stroked-button
-                    color="primary"
-                    type="submit"
-                    class="btn mr-1"
-                    [disabled]="accountUserForm?.invalid"
-                >
-                    {{ activePayorAccount ? commonLocaleData?.app_update : commonLocaleData?.app_save }}
-                </button>
-            </div>
+                        <div class="clearfix mr-t2" *ngIf="!activePayorAccount">
+                            <input-field
+                                [label]="localeData?.payment?.login_id_labe"
+                                [required]="true"
+                                [name]="'loginId'"
+                                formControlName="loginId"
+                                [type]="'text'"
+                                [placeholder]="localeData?.payment?.login_id_placeholder"
+                            >
+                            </input-field>
+                        </div>
+                        <div class="clearfix mr-t1">
+                            <dropdown-field
+                                (selectedOption)="accountUserForm.get('userUniqueName').patchValue($event.value)"
+                                [label]="localeData?.payment?.user"
+                                [name]="'userUniqueName'"
+                                [placeholder]="localeData?.payment?.select_user"
+                                [options]="usersList"
+                                [required]="true"
+                            ></dropdown-field>
+                        </div>
+                        <div class="clearfix mr-t1">
+                            <div class="clearfix">
+                                <div class="inline col-md-6 pl-0">
+                                    <input-field
+                                        [label]="localeData?.payment?.limit_upto"
+                                        formControlName="maxAmount"
+                                        [name]="'maxAmount'"
+                                        [type]="'text'"
+                                        [placeholder]="localeData?.payment?.enter_amount"
+                                        digitsOnlyDirectiv
+                                    ></input-field>
+                                </div>
+                                <div class="inline col-md-6 pr-0">
+                                    <dropdown-field
+                                        (selectedOption)="accountUserForm.get('duration').patchValue($event.value)"
+                                        [label]="localeData?.payment?.limit_upto"
+                                        [name]="'duration'"
+                                        [placeholder]="localeData?.payment?.duration"
+                                        [options]="amountLimitDurations"
+                                        
+                                    ></dropdown-field>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="!localeData?.payment">
+                        <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+                    </ng-container>
+                </div>
+                <div class="modal-footer" *ngIf="localeData?.payment">
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        type="submit"
+                        class="btn mr-1"
+                        [disabled]="accountUserForm?.invalid"
+                    >
+                        {{ activePayorAccount ? commonLocaleData?.app_update : commonLocaleData?.app_save }}
+                    </button>
+                </div>
+          
         </mat-dialog-content>
     </form>
 </ng-container>

@@ -62,23 +62,23 @@
                     <h3 class="section-head">{{ localeData?.email?.gmail_integration }}</h3>
                     <div class="d-flex gmail-integration-message">
                         <ng-container *ngIf="!(isGmailIntegrated$ | async)">
-                            <button
+                            <a
                                 *ngIf="!isElectron"
                                 mat-stroked-button
                                 color="primary"
                                 [href]="gmailAuthCodeUrl$ | async"
                             >
                                 {{ localeData?.email?.connect_gmail }}
-                            </button>
+                            </a>
 
-                            <button
+                            <a
                                 *ngIf="isElectron"
                                 mat-stroked-button
                                 color="primary"
                                 (click)="gmailIntegration('google')"
                             >
                                 {{ localeData?.email?.connect_gmail }}
-                            </button>
+                            </a>
                         </ng-container>
 
                         <h4 *ngIf="isGmailIntegrated$ | async" class="text-success align-self-center">
@@ -665,18 +665,20 @@
             </div>
         </div>
     </ng-template>
+
     <ng-template #createNewAccountModal>
         <div class="account-modal">
             <div class="modal-content">
                 <icici-account-create-edit
                     [commonLocaleData]="commonLocaleData"
                     (getAllBankAccounts)="getAllBankAccounts()"
-                    (closeModalEvent)="this.createNewAccountDialogRef.close()"
+                    (closeModalEvent)="createNewAccountDialogRef.close()"
                 >
                 </icici-account-create-edit>
             </div>
         </div>
     </ng-template>
+
     <ng-template #editAccountModal>
         <div class="account-modal">
             <div class="modal-content">
@@ -684,13 +686,14 @@
                     [commonLocaleData]="commonLocaleData"
                     [activeBankAccount]="activeBankAccount"
                     (getAllBankAccounts)="getAllBankAccounts()"
-                    (closeModalEvent)="editAccountUserModalRef.close()"
+                    (closeModalEvent)="editAccountModalRef.close()"
                     [isIciciBankSupportedCountry]="isIciciBankSupportedCountry"
                 >
                 </icici-account-create-edit>
             </div>
         </div>
     </ng-template>
+
     <ng-template #createNewAccountUserModal>
         <div class="user-modal">
             <div class="modal-content">
@@ -698,7 +701,7 @@
                     [commonLocaleData]="commonLocaleData"
                     [activeBankAccount]="activeBankAccount"
                     (getAllBankAccounts)="getAllBankAccounts()"
-                    (closeModalEvent)="closeCreateNewAccountUserModal()"
+                    (closeModalEvent)="createNewAccountUserModalRef.close()"
                 ></icici-payor-account-create-edit>
             </div>
         </div>
@@ -712,6 +715,7 @@
                     [activeBankAccount]="activeBankAccount"
                     [activePayorAccount]="activePayorAccount"
                     (getAllBankAccounts)="getAllBankAccounts()"
+                    (closeModalEvent)="editAccountUserModalRef.close()"
                 >
                 </icici-payor-account-create-edit>
             </div>
@@ -723,7 +727,7 @@
             <div class="modal-content">
                 <confirm-modal
                     [body]="localeData?.payment?.delete_login | replace : '[LOGIN_ID]' : activeBankAccount?.loginId"
-                    (cancelCallBack)="confirmationModal?.hide()"
+                    (cancelCallBack)="confirmationModalRef.close()"
                     (successCallBack)="deleteBankAccountLogin(true)"
                 >
                 </confirm-modal>

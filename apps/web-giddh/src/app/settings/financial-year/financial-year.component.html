@@ -118,14 +118,12 @@
                                         </th>
                                         <td mat-cell *matCellDef="let element"  class="status">
                                             <mat-slide-toggle
-                                                [color]="'primary'"
-                                                [name]="'lockedUnlockedFinancial'"
-                                                [value]="element.isLocked"
+                                                color="primary"
+                                                name="lockedUnlockedFinancial"
+                                                [(ngModel)]="!element.isLocked"
                                                 (change)="lockUnlockFinancialYear(element)"
                                             >
-                                                {{
-                                                    lockedUnlockedFinancial ? localeData?.locked : localeData?.unlocked
-                                                }}
+                                                {{ element.isLocked ? localeData?.locked : localeData?.unlocked }}
                                             </mat-slide-toggle>
                                         </td>
                                     </ng-container>

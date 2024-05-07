@@ -171,131 +171,6 @@
 
                                         <div *ngIf="addressConfiguration.type !== 'createBranchAddress'"
                                             [hidden]="hideLinkEntity" class="row">
-                                            <!-- <div class="col-sm-12 form-group linked-entities">
-                                                <label>{{ localeData?.link_entity }}</label>
-                                                <div class="form-group">
-                                                    <sh-select
-                                                        [options]="addressConfiguration?.linkedEntities"
-                                                        name="linkedEntities"
-                                                        formControlName="linkedEntity"
-                                                        (clearSingleItem)="handleFinalSelection($event)"
-                                                        [isFilterEnabled]="true"
-                                                        [multiple]="true"
-                                                        [placeholder]="commonLocaleData?.app_select_entity"
-                                                    >
-                                                        <ng-template #optionTemplate let-option="option">
-                                                            <ng-container>
-                                                                <a
-                                                                    (click)="selectEntity(option)"
-                                                                    href="javascript:void(0)"
-                                                                    class="list-item d-flex"
-                                                                >
-                                                                    <span
-                                                                        ><input
-                                                                            type="checkbox"
-                                                                            [checked]="
-                                                                                addressForm
-                                                                                    ?.get('linkedEntity')
-                                                                                    ?.value?.includes(option?.value)
-                                                                            "
-                                                                            [value]="option?.value" /></span
-                                                                    >&nbsp;
-                                                                    <span class="entity-icon">
-                                                                        <i
-                                                                            class="icon-branch-icon pull-right"
-                                                                            *ngIf="option.entity === 'BRANCH'"
-                                                                            [tooltip]="commonLocaleData?.app_branch"
-                                                                        ></i>
-                                                                        <i
-                                                                            class="icon-warehouse-icon pull-right"
-                                                                            *ngIf="option.entity === 'WAREHOUSE'"
-                                                                            [tooltip]="commonLocaleData?.app_warehouse"
-                                                                        ></i>
-                                                                    </span>
-                                                                    <span class="entity-details">
-                                                                        <div class="item giddh-limit single-line-clamp">
-                                                                            {{ option.label || "-" }}
-                                                                        </div>
-                                                                        <div
-                                                                            class="
-                                                                                item-unique
-                                                                                giddh-limit
-                                                                                single-line-clamp
-                                                                            "
-                                                                        >
-                                                                            {{ option.name || "-" }}
-                                                                        </div>
-                                                                    </span>
-                                                                    <span class="default-entity">
-                                                                        <i
-                                                                            (click)="setDefault(option, $event)"
-                                                                            *ngIf="!option.isDefault"
-                                                                            class="icon-no-selected mr-r05"
-                                                                        ></i>
-                                                                        <i
-                                                                            (click)="setDefault(option, $event)"
-                                                                            *ngIf="option.isDefault"
-                                                                            class="icon-favorite-selected mr-r05"
-                                                                        ></i>
-                                                                    </span>
-                                                                </a>
-                                                            </ng-container>
-                                                        </ng-template>
-                                                    </sh-select>
-                                                </div>
-                                            </div> -->
-                                            <!-- <div class="col-sm-12 form-group linked-entities">
-                                                <mat-form-field appearance="outline" class="w-100">
-                                                    <mat-label>{{localeData?.link_entity}}</mat-label>
-                                                    <mat-select 
-                                                        formControlName="linkedEntity" 
-                                                        multiple
-                                                        [placeholder]="commonLocaleData?.app_select_entity"
-                                                        (selectionChange)="selectEntity($event)">
-
-                                                        <mat-select-trigger>
-                                                            XXXX
-                                                        </mat-select-trigger>
-                                                        <mat-option
-                                                            *ngFor="let element of addressConfiguration?.linkedEntities"
-                                                            [value]="element">
-                                                            <a (click)="selectEntity(element)" href="javascript:void(0)"
-                                                                class="list-item d-flex">
-                                                                <span class="entity-icon">
-                                                                    <i class="icon-branch-icon pull-right"
-                                                                        *ngIf="element?.entity === 'BRANCH'"
-                                                                        [tooltip]="commonLocaleData?.app_branch"></i>
-                                                                    <i class="icon-warehouse-icon pull-right"
-                                                                        *ngIf="element?.entity === 'WAREHOUSE'"
-                                                                        [tooltip]="commonLocaleData?.app_warehouse"></i>
-                                                                </span>
-                                                                <span class="entity-details">
-                                                                    <div class="item giddh-limit single-line-clamp">
-                                                                        {{ element?.label || "-" }}
-                                                                    </div>
-                                                                    <div class="
-                                                                                  item-unique
-                                                                                  giddh-limit
-                                                                                  single-line-clamp
-                                                                              ">
-                                                                        {{ element?.name || "-" }}
-                                                                    </div>
-                                                                </span>
-                                                                <span class="default-entity">
-                                                                    <i (click)="setDefault(element, $event)"
-                                                                        *ngIf="!element?.isDefault"
-                                                                        class="icon-no-selected mr-r05"></i>
-                                                                    <i (click)="setDefault(element, $event)"
-                                                                        *ngIf="element?.isDefault"
-                                                                        class="icon-favorite-selected mr-r05"></i>
-                                                                </span>
-                                                            </a>
-                                                        </mat-option>
-                                                    </mat-select>
-
-
-                                                </mat-form-field>
-                                            </div> -->
                                             <div class="col-sm-12 form-group linked-entities">
                                                 <mat-form-field appearance="outline" class="w-100">
                                                     <mat-label>{{localeData?.link_entity}}</mat-label>
@@ -395,8 +270,59 @@
 
                                         <div class="clearfix row">
                                             <div class="form-group col-12 linked-entities linked-add create">
-                                                <label>{{ localeData?.linked_addresses }}</label>
-                                                <div class="form-group">
+                                                <mat-form-field appearance="outline" class="w-100">
+                                                    <mat-label>{{ localeData?.linked_addresses }}</mat-label>
+                                                    <mat-chip-list class="d-flex flex-wrap column-gap5 row-gap1">
+                                                      <mat-chip *ngFor="let selected of addressForm.get('linkedEntity')?.value" (removed)="removeItem(selected)">
+                                                        {{ selected?.label }}
+                                                        <span matChipRemove><i class="icon-cross"></i></span>
+                                                      </mat-chip>
+                                                    </mat-chip-list>
+                                              
+                                                    <mat-select
+                                                        [placeholder]="commonLocaleData?.app_select_entity"
+                                                        formControlName="linkedEntity" 
+                                                        multiple
+                                                    >
+                                                    <mat-select-trigger>
+                                                        
+                                                    </mat-select-trigger>
+                                                      <mat-option *ngFor="let item of addressConfiguration?.linkedEntities; let i = index" [value]="item" (click)="selectEntity(item)">
+                                                        <a href="javascript:void(0)" class="list-item d-flex column-gap1">
+                                                            <span class="entity-icon">
+                                                                <i class="icon-branch-icon pull-right"
+                                                                    *ngIf="item?.entity === 'BRANCH'"
+                                                                    [tooltip]="commonLocaleData?.app_branch"></i>
+                                                                <i class="icon-warehouse-icon pull-right"
+                                                                    *ngIf="item?.entity === 'WAREHOUSE'"
+                                                                    [tooltip]="commonLocaleData?.app_warehouse"></i>
+                                                            </span>
+                                                            <span class="entity-details">
+                                                                <div class="item giddh-limit single-line-clamp">
+                                                                    {{ item?.label || "-" }}
+                                                                </div>
+                                                                <div class="
+                                                                            item-unique
+                                                                            giddh-limit
+                                                                            single-line-clamp
+                                                                        ">
+                                                                    {{ item?.name || "-" }}
+                                                                </div>
+                                                            </span>
+                                                            <span class="default-entity ml-auto">
+                                                                <i (click)="setDefault(item, $event)"
+                                                                    *ngIf="!item?.isDefault"
+                                                                    class="icon-no-selected mr-r05"></i>
+                                                                <i (click)="setDefault(item, $event)"
+                                                                    *ngIf="item?.isDefault"
+                                                                    class="icon-favorite-selected mr-r05"></i>
+                                                            </span>
+                                                        </a>
+                                                      </mat-option>
+                                                    </mat-select>
+                                                  </mat-form-field>
+                                                <!-- <label>{{ localeData?.linked_addresses }}</label> -->
+                                                <!-- <div class="form-group">
                                                     <sh-select class="linked-address"
                                                         [options]="addressConfiguration?.linkedEntities"
                                                         name="linkedEntities" formControlName="linkedEntity"
@@ -407,11 +333,13 @@
                                                             <ng-container>
                                                                 <a (click)="selectEntity(option)"
                                                                     href="javascript:void(0)" class="list-item d-flex column-gap1">
-                                                                    <span><input type="checkbox" [checked]="
+                                                                    <span>
+                                                                        <input type="checkbox" [checked]="
                                                                                 addressForm
                                                                                     ?.get('linkedEntity')
                                                                                     ?.value?.includes(option?.value)
-                                                                            " [value]="option?.value" /></span>&nbsp;
+                                                                            " [value]="option?.value" />
+                                                                    </span>&nbsp;
                                                                     <span class="entity-details">
                                                                         <div class="item giddh-limit single-line-clamp">
                                                                             {{ option.label || "-" }}
@@ -437,25 +365,11 @@
                                                             </ng-container>
                                                         </ng-template>
                                                     </sh-select>
-
-                                                    <!-- <dropdown-field
-                                                        [label]="localeData?.linked_addresses"
-                                                        [cssClass]="'linked-address'"
-                                                        [options]="addressConfiguration?.linkedEntities"
-                                                        [name]="'linkedEntities'"
-                                                        formControlName="linkedEntity"
-                                                        (clearSingleItem)="handleFinalSelection($event)"
-                                                        [ItemHeight]="200"
-                                                        [isFilterEnabled]="true"
-                                                        [multiple]="true"
-                                                        [placeholder]="commonLocaleData?.app_select_entity"
-                                                    ></dropdown-field> -->
-                                                </div>
+                                                </div> -->
                                             </div>
                                         </div>
                                     </div>
-                                    <br />
-                                    <div *ngIf="companyName" class="font-15" [innerHTML]="getBranchOfText(companyName)">
+                                    <div *ngIf="companyName" class="font-15 mt-2 mb-4" [innerHTML]="getBranchOfText(companyName)">
                                     </div>
                                 </section>
 
@@ -476,48 +390,61 @@
 
                                         <div class="clearfix row">
                                             <div class="form-group col-12 linked-entities linked-add create">
-                                                <label>{{ localeData?.addresses }}</label>
-                                                <div class="form-group">
-                                                    <sh-select [options]="addressConfiguration?.linkedEntities"
-                                                        name="linkedEntities" formControlName="linkedEntity"
-                                                        [isFilterEnabled]="true"
-                                                        [placeholder]="localeData?.select_address">
-                                                        <ng-template #optionTemplate let-option="option">
-                                                            <ng-container>
-                                                                <a (click)="selectEntity(option)"
-                                                                    href="javascript:void(0)" class="list-item d-flex">
-                                                                    <span class="entity-details">
-                                                                        <div class="item giddh-limit single-line-clamp">
-                                                                            {{ option.label || "-" }}
-                                                                        </div>
-                                                                        <div class="item-unique">
-                                                                            <p *ngIf="
-                                                                                    option.taxType && option.taxNumber
-                                                                                ">
-                                                                                {{ option.taxType }} :
-                                                                                {{ option.taxNumber }}
-                                                                            </p>
-                                                                        </div>
-                                                                    </span>
-                                                                </a>
-                                                            </ng-container>
-                                                        </ng-template>
-                                                    </sh-select>
-
-                                                    <!-- <dropdown-field
-                                                        [label]="localeData?.addresses"
-                                                        [options]="addressConfiguration?.linkedEntities"
-                                                        [name]="'linkedEntities'"
-                                                        formControlName="linkedEntity"
-                                                        [isFilterEnabled]="true"
-                                                        [placeholder]="localeData?.select_address"
-                                                    ></dropdown-field> -->
-                                                </div>
-                                            </div>
+                                                <mat-form-field appearance="outline" class="w-100">
+                                                    <mat-label>{{ localeData?.linked_addresses }}</mat-label>
+                                                    <mat-chip-list #chipList class="d-flex flex-wrap column-gap5 row-gap1">
+                                                      <mat-chip *ngFor="let item of addressForm.get('linkedEntity')?.value" (removed)="removeItem(selected)">
+                                                        {{ item?.label }}
+                                                        <span matChipRemove><i class="icon-cross"></i></span>
+                                                      </mat-chip>
+                                                    </mat-chip-list>
+                                              
+                                                    <mat-select
+                                                        [placeholder]="commonLocaleData?.app_select_entity"
+                                                        formControlName="linkedEntity" 
+                                                        multiple
+                                                    >
+                                                    <mat-select-trigger>
+                                                        
+                                                    </mat-select-trigger>
+                                                      <mat-option *ngFor="let item of addressConfiguration?.linkedEntities; let i = index" [value]="item" (click)="selectEntity(item)">
+                                                        <a href="javascript:void(0)" class="list-item d-flex column-gap1">
+                                                            <span class="entity-icon">
+                                                                <i class="icon-branch-icon pull-right"
+                                                                    *ngIf="item?.entity === 'BRANCH'"
+                                                                    [tooltip]="commonLocaleData?.app_branch"></i>
+                                                                <i class="icon-warehouse-icon pull-right"
+                                                                    *ngIf="item?.entity === 'WAREHOUSE'"
+                                                                    [tooltip]="commonLocaleData?.app_warehouse"></i>
+                                                            </span>
+                                                            <span class="entity-details">
+                                                                <div class="item giddh-limit single-line-clamp">
+                                                                    {{ item?.label || "-" }}
+                                                                </div>
+                                                                <div class="
+                                                                            item-unique
+                                                                            giddh-limit
+                                                                            single-line-clamp
+                                                                        ">
+                                                                    {{ item?.name || "-" }}
+                                                                </div>
+                                                            </span>
+                                                            <span class="default-entity ml-auto">
+                                                                <i (click)="setDefault(item, $event)"
+                                                                    *ngIf="!item?.isDefault"
+                                                                    class="icon-no-selected mr-r05"></i>
+                                                                <i (click)="setDefault(item, $event)"
+                                                                    *ngIf="item?.isDefault"
+                                                                    class="icon-favorite-selected mr-r05"></i>
+                                                            </span>
+                                                        </a>
+                                                      </mat-option>
+                                                    </mat-select>
+                                                  </mat-form-field>
+                                            </div> 
                                         </div>
                                     </div>
-                                    <br />
-                                    <div *ngIf="companyName" class="font-15">
+                                    <div *ngIf="companyName" class="font-15 mt-2 mb-4">
                                         <!-- Headquarter name -->
                                         {{ getBranchOfText(companyName) }}
                                     </div>

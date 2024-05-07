@@ -77,11 +77,11 @@
                         </div>
                     </div>
                     <div class="branch-form-field">
-                        <!-- <label>
+                        <label>
                             {{ localeData?.addresses }}
-                        </label> -->
+                        </label>
                         <div class="address-dropdown form-group mb-0">
-                            <!-- <sales-sh-select
+                            <sales-sh-select
                                 [options]="addresses"
                                 formControlName="address"
                                 name="particulars"
@@ -145,15 +145,7 @@
                                         <div class="item">{{ commonLocaleData?.app_alt_c }}</div>
                                     </a>
                                 </ng-template>
-                            </sales-sh-select> -->
-
-                            <dropdown-field
-                                [label]="localeData?.addresses"
-                                [options]="addresses"
-                                [name]="'particulars'"
-                                [placeholder]="localeData?.select_addresses"
-                                [cssClass]="'linked-add create'"
-                            ></dropdown-field>
+                            </sales-sh-select>
                         </div>
                     </div>
                 </div>

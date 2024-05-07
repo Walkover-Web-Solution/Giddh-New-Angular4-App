@@ -15,15 +15,15 @@
                                 <input-field
                                     [type]="'text'"
                                     [name]="'searchBranch'"
-                                    [(ngModel)]="searchBranchQuery"
+                                    [formControl]="searchBranchQuery"
                                     #branchSearch
                                     [placeholder]="localeData?.search_branch"
                                 >
                                 </input-field>
                             </div>
                             <a
-                                class="cp mr-l1 clear-filter-btn"
-                                *ngIf="searchBranchQuery"
+                                class="cursor-pointer mr-l1 clear-filter-btn"
+                                *ngIf="searchBranchQuery.value"
                                 href="javascript:;"
                                 (click)="resetFilter()"
                                 [matTooltip]="localeData?.reset_search"
@@ -83,7 +83,7 @@
                                         <button
                                             mat-button
                                             [matMenuTriggerFor]="menu"
-                                            class="icon-dots-three-vertical dropdown-toggle cp mr-0"
+                                            class="icon-dots-three-vertical dropdown-toggle cursor-pointer mr-0"
                                             role="button"
                                             aria-label="dropdown button"
                                         ></button>
@@ -247,7 +247,7 @@
                         <div>
                             <br />
                             <span>{{ localeData?.or }}</span>
-                            <button class="btn-link" (click)="openCreateCompanyModal()">
+                            <button class="btn-link" (click)="openCreateCompanyDialog()">
                                 {{ localeData?.create_new_branch }}
                             </button>
                         </div>
@@ -276,20 +276,6 @@
                 </div>
             </div>
         </ng-template>
-        <!-- <div
-            bsModal
-            #addCompanyModal="bs-modal"
-            [config]="{ backdrop: 'static', keyboard: 'true' }"
-            tabindex="-1"
-            class="modal fade open-popup"
-            role="dialog"
-        >
-            <div class="modal-dialog modal-xl modal-width">
-                <div class="modal-content">
-                    <ng-template element-view-container-ref #companyadd="elementviewcontainerref"> </ng-template>
-                </div>
-            </div>
-        </div> -->
 
         <!-- add branch modal -->
         <ng-template #confirmationModal2>

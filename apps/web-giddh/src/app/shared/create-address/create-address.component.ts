@@ -125,8 +125,12 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                     this.addressForm = this.formBuilder.group({
                         name: [this.branchToUpdate.name, [Validators.required, Validators.maxLength(100)]],
                         alias: [this.branchToUpdate.alias, [Validators.required, Validators.maxLength(50)]],
-                        linkedEntity: [this.branchToUpdate.linkedEntities.map(entity => entity?.uniqueName)]
+                        linkedEntity: [this.addressConfiguration.linkedEntities?.filter((item) => {
+                            return item?.uniqueName === 
+                            this.branchToUpdate.linkedEntities?.filter(i => i?.uniqueName === item?.uniqueName)[0]?.uniqueName
+                        })]
                     });
+                    
                     const linkedEntity = [...this.branchToUpdate.linkedEntities];
                     while (linkedEntity?.length) {
                         // Update the default entity status in UPDATE mode
@@ -141,7 +145,10 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 if (this.warehouseToUpdate) {
                     this.addressForm = this.formBuilder.group({
                         name: [this.warehouseToUpdate.name, [Validators.required, Validators.maxLength(100)]],
-                        linkedEntity: [this.warehouseToUpdate.linkedEntities.map(entity => entity?.uniqueName)]
+                        linkedEntity: [this.addressConfiguration.linkedEntities?.filter((item) => {
+                            return item?.uniqueName === 
+                            this.warehouseToUpdate.linkedEntities?.filter(i => i?.uniqueName === item?.uniqueName)[0]?.uniqueName
+                        })]
                     });
                     const linkedEntity = [...this.warehouseToUpdate.linkedEntities];
                     while (linkedEntity?.length) {

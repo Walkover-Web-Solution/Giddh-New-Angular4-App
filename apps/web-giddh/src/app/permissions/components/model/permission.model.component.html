@@ -18,17 +18,6 @@
                     ></input-field>
                 </div>
                 <div class="form-group custom-select position-relative">
-                    <!-- <label>{{ localeData?.role_type_label }}</label>
-                    <select
-                        class="form-control"
-                        required
-                        [(ngModel)]="newRoleObj.isFresh"
-                        name="isFresh"
-                        #isFresh="ngModel"
-                    >
-                        <option [ngValue]="true">{{ localeData?.fresh_start }}</option>
-                        <option [ngValue]="false">{{ localeData?.copy_other_role }}</option>
-                    </select> -->
                     <dropdown-field
                         [label]="localeData?.role_type_label"
                         [required]="true"
@@ -38,55 +27,8 @@
                     ></dropdown-field>
                 </div>
                 <div class="form-group" *ngIf="newRoleObj.isFresh">
-                    <!-- <div
-                        class="btn-group btn-block"
-                        dropdown
-                        (onShown)="onDDShown()"
-                        (onHidden)="onDDHidden()"
-                        #permissionDropDown="bs-dropdown"
-                        [attachOutsideOnClick]="true"
-                        (clickOutside)="permissionDropDown?.hide()"
-                    > -->
-                    <!-- <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
-                            {{ dropdownHeading }}
-                            <span class="select-drop pull-right mr-t1"><i class="fa fa-caret-down"></i></span>
-                        </button>
-                        <ul id="pageListDD" *dropdownMenu class="dropdown-menu pd-l1 pd-r1" role="menu">
-                            <li>
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        [ngModelOptions]="{ standalone: true }"
-                                        (click)="selectAllPages($event)"
-                                        [(ngModel)]="newRoleObj.isSelectedAllPages"
-                                    />
-                                    {{ commonLocaleData?.app_select_all }}
-                                </label>
-                            </li>
-                            <li *ngFor="let item of newRoleObj.pageList; let i = index">
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        [ngModelOptions]="{ standalone: true }"
-                                        (click)="selectPage($event)"
-                                        [(ngModel)]="item.isSelected"
-                                    />
-                                    {{ item.name | capitalize }}
-                                </label>
-                            </li>
-                        </ul> -->
                     <mat-form-field class="w-100" appearance="outline">
                         <mat-label>{{ dropdownHeading }}</mat-label>
-                        <!-- <mat-select>
-                            <div class="select-quantity-option">
-                                <ng-container>
-                                    <mat-option>Please select </mat-option>
-                                </ng-container>
-                                <mat-option *ngFor="let item of newRoleObj.pageList; let i = index">
-                                    {{ item.name | capitalize }}
-                                </mat-option>
-                            </div>
-                        </mat-select> -->
                         <mat-select [(ngModel)]="selectedValues" [ngModelOptions]="{ standalone: true }" multiple>
                             <div class="custom-select-all-option">
                                 <mat-checkbox
@@ -105,22 +47,8 @@
                             </ng-container>
                         </mat-select>
                     </mat-form-field>
-                    <!-- <mat-form-field appearance="outline">
-                            <mat-label>Choose an option</mat-label>
-                            <mat-select>
-                              <mat-option value="option1">Option 1</mat-option>
-                              <mat-option value="option2">Option 2</mat-option>
-                              <mat-option value="option3">Option 3</mat-option>
-                            </mat-select>
-                        </mat-form-field> -->
-                    <!-- </div> -->
                 </div>
                 <div *ngIf="!newRoleObj.isFresh">
-                    <!-- <label>{{ localeData?.copy_permission }}</label>
-                    <select class="form-control text-capitalize" name="somename" [(ngModel)]="newRoleObj.uniqueName">
-                        <option [ngValue]="">{{ commonLocaleData?.app_please_select }}</option>
-                        <option *ngFor="let role of allRoles" [ngValue]="role?.uniqueName">{{ role?.name }}</option>
-                    </select> -->
                     <mat-form-field class="w-100" appearance="outline">
                         <mat-label>{{ localeData?.copy_permission }}</mat-label>
                         <mat-select [(ngModel)]="newRoleObj.uniqueName" [ngModelOptions]="{ standalone: true }">

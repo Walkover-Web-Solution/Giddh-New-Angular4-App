@@ -489,4 +489,15 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
             });
         }
     }
+
+    /**
+     * Handle Remove Item from Mat Chip and 
+     * remove item form linkedEntity
+     *
+     * @param {*} element
+     * @memberof CreateBranchComponent
+     */
+    public removeItem(element: any): void {
+        this.branchForm.get('address')?.patchValue(this.branchForm.get('address').value.filter(i => i !== element));
+    }
 }

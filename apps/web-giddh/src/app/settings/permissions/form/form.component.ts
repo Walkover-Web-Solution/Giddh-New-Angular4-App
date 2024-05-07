@@ -94,7 +94,6 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         this.selectedTimeSpan = this.commonLocaleData?.app_date_range;
         this.selectedIPRange = this.localeData?.cidr_range;
         this._accountsAction.resetShareEntity();
-        console.log(this.userdata);
         
         if (this.userdata) {
             if (this.userdata.from && this.userdata.to) {
