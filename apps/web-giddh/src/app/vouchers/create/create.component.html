@@ -892,7 +892,6 @@
                                                                         <span *ngIf="!(entry.get('hsnNumber')?.value || entry.get('sacNumber')?.value)">
                                                                             {{ commonLocaleData?.app_update }}
                                                                         </span>
-                                                                         
                                                                         {{
                                                                             entry.get('showCodeType')?.value === 'hsn' ?
                                                                             entry.get('hsnNumber')?.value :
@@ -901,8 +900,15 @@
                                                                         <i class="icon-edit text-blue"
                                                                             (click)="updateCurrentHsnSac(entry)"
                                                                             #menuTrigger="matMenuTrigger"
-                                                                            [matMenuTriggerFor]="update"></i></div>
-
+                                                                            [matMenuTriggerFor]="update"></i>
+                                                                    </div>
+                                                                    <div class="mt-1" [hidden]="activeEntryIndex === entryIndex">
+                                                                        {{
+                                                                        entry.get('showCodeType')?.value === 'hsn' ?
+                                                                        entry.get('hsnNumber')?.value :
+                                                                        entry.get('sacNumber')?.value
+                                                                        }}
+                                                                    </div>
                                                                     <!-- Update Menu  -->
                                                                     <mat-menu #update="matMenu">
                                                                         <div class="p-3"

@@ -812,12 +812,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.componentStore.deleteAttachmentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.selectedFileName = "";
-                this.componentStore.resetAttachmentState();
 
                 let entryFields = [];
                 entryFields.push({ key: 'attachedFile', value: "" });
                 entryFields.push({ key: 'attachedFileName', value: "" });
+                this.invoiceForm.get("attachedFiles")?.patchValue([]);
                 this.updateEntry(0, entryFields);
+
+                this.componentStore.resetAttachmentState();
             }
         });
 
@@ -3398,7 +3400,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.currencySwitched = false;
 
         this.accountFormFields = [];
-        this.selectedFileName = '';
+        this.selectedFileName = "";
 
         this.account = {
             countryName: '',
@@ -4180,9 +4182,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 transactionFormGroup.get('stock.customField2.value')?.patchValue(response?.stock?.customField2Value);
             }
 
-            entryFormGroup.get('hsnNumber')?.patchValue(response.stock.hsnNumber);
-            entryFormGroup.get('sacNumber')?.patchValue(response.stock.sacNumber);
-            entryFormGroup.get('showCodeType')?.patchValue(response.stock.hsnNumber ? 'hsn' : 'sac');
+            entryFormGroup.get('hsnNumber')?.patchValue(response.stock.hsnNumber || response.hsnNumber);
+            entryFormGroup.get('sacNumber')?.patchValue(response.stock.sacNumber || response.sacNumber);
+            entryFormGroup.get('showCodeType')?.patchValue(response.stock.hsnNumber || response.hsnNumber ? 'hsn' : 'sac');
 
             let rate = Number((response.stock.variant?.unitRates[0].rate / this.invoiceForm.get('exchangeRate')?.value).toFixed(this.highPrecisionRate));
             transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue(rate);
