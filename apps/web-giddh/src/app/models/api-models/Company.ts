@@ -125,6 +125,7 @@ export class CompanyResponse {
     public parentBranch?: ParentBranch;
     public warehouseResource?: Array<any>;
     public showOnSubscription?: boolean;
+    public planVersion?: any;
 }
 
 export interface UserEntityRole {

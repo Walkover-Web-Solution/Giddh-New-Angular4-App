@@ -5,7 +5,7 @@ import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { select, Store } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
-import { Organization } from 'apps/web-giddh/src/app/models/api-models/Company';
+import { CompanyResponse, Organization } from 'apps/web-giddh/src/app/models/api-models/Company';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { ReplaySubject } from 'rxjs';
 import { LocaleService } from 'apps/web-giddh/src/app/services/locale.service';
@@ -37,6 +37,8 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public showSettingHeading: boolean = false;
     /** This contains router url */
     public routerUrl: string = "";
+    /** Hold selected active company */
+    public selectedCompany: CompanyResponse = null;
 
     constructor(private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
 
@@ -72,6 +74,12 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
             if ((!isElectron && event instanceof NavigationEnd) || (isElectron && (event instanceof NavigationStart || event instanceof NavigationEnd))) {
                 this.showHideSettingsHeading(event.url);
                 this.routerUrl = event.url?.split('?')[0];
+            }
+        });
+
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.selectedCompany = activeCompany;
             }
         });
     }
@@ -132,7 +140,6 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public translationComplete(event: any): void {
         if (event) {
             let settingsPageTabs = this.localeData?.tabs;
-
             if (settingsPageTabs) {
                 let loop = 0;
                 let organizationIndex = 0;
@@ -146,7 +153,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                     }
                     Object.keys(settingsPageTabs[organizationIndex]).forEach(key => {
                         this.settingsPageTabs[loop] = [];
-                        this.settingsPageTabs[loop] = [...settingsPageTabs[organizationIndex][key]];
+                        this.settingsPageTabs[loop] = [...settingsPageTabs[organizationIndex][key]?.filter(value => !value?.planVersion || (value?.planVersion && +this.selectedCompany.planVersion === +value?.planVersion))];
                         loop++;
                     });
                 });
@@ -162,7 +169,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @memberof AsideSettingComponent
      */
     public showHideSettingsHeading(url: string): void {
-        if(!url.includes("/pages/settings") && !url.includes("/pages/user-details")) {
+        if (!url.includes("/pages/settings") && !url.includes("/pages/user-details")) {
             this.showSettingHeading = true;
         } else {
             this.showSettingHeading = false;
