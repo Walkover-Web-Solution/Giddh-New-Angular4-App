@@ -8,16 +8,22 @@
     <section id="single-role" *ngIf="roleObj && localeData?.page_heading">
         <div class="pd-1 bd-rb clearfix text-center mr-b15">
             <span class="lead">{{ newRole.name }}</span>
-            <button class="btn btn-md btn-primary pull-left" (click)="goToRoles()">
-                {{commonLocaleData?.app_back}}
-            </button>
-            <button *ngIf="!newRole.isUpdateCase" class="btn btn-md btn-success pull-right mr-0" (click)="addNewRole()">
+            <button mat-stroked-button class="pull-left" (click)="goToRoles()">{{commonLocaleData?.app_back}}</button>
+            <button
+                mat-stroked-button
+                color="primary"
+                *ngIf="!newRole.isUpdateCase"
+                class="pull-right ml-2"
+                (click)="addNewRole()"
+            >
                 {{commonLocaleData?.app_save}}
             </button>
             <button
+                mat-stroked-button
+                color="primary"
                 *ngIf="newRole.isUpdateCase"
                 [disabled]="newRole.isFixed"
-                class="btn btn-md btn-success pull-right mr-0"
+                class="mr-0 pull-right"
                 (click)="updateRole()"
             >
                 {{commonLocaleData?.app_update}}
@@ -27,7 +33,7 @@
             <div class="row mr-b2">
                 <div class="col-sm-12 form-inline">
                     <div class="form-group custom-select position-relative mr-r15">
-                        <select
+                        <!-- <select
                             class="form-control"
                             [disabled]="newRole.isFixed"
                             required
@@ -42,16 +48,29 @@
                             >
                                 {{page}}
                             </option>
-                        </select>
+                        </select> -->
+                        <dropdown-field
+                            [placeholder]="localeData?.option_select_pages"
+                            [readonly]="newRole.isFixed"
+                            [required]="true"
+                            [name]="'pageName'"
+                            [options]="pageList"
+                            (selectedOption)="pageName = $event.value"
+                        ></dropdown-field>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-success" (click)="addNewPage(pageName)" [disabled]="!pageName">
+                        <button
+                            mat-stroked-button
+                            color="primary"                            
+                            (click)="addNewPage(pageName)"
+                            [disabled]="!pageName"
+                        >
                             {{commonLocaleData?.app_add}}
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
                 <div class="col-sm-4" *ngFor="let page of roleObj?.scopes; let idx = index">
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -124,6 +143,68 @@
                             </table>
                         </div>
                     </div>
+                </div>
+            </div> -->
+            <div class="row">
+                <div class="col-sm-4" *ngFor="let page of roleObj?.scopes; let idx = index">
+                    <div>
+                        <h2 class="pd-l05">{{ page.name }}</h2>
+                        <a
+                            class="close pull-right"
+                            href="javascript:void(0);"
+                            (click)="removePageFromScope(page.name)"
+                            *ngIf="!newRole.isFixed"
+                            >×</a
+                        >
+                    </div>
+                    <table mat-table [dataSource]="page.permissions" class="w-100 permission-table">
+                        <ng-container matColumnDef="admin">
+                            <th mat-header-cell *matHeaderCellDef>{{ newRole.name }}</th>
+                            <td mat-cell *matCellDef="let element, let i = index">
+                                <ng-container *ngIf="element.code === 'SELECT-ALL'">
+                                    <mat-checkbox
+                                        color="primary"
+                                        [checked]="true"
+                                        id="{{page.name}}+_{{idx}}"
+                                        [disabled]="newRole.isFixed"
+                                        (change)="toggleItems(page.name, $event)"
+                                        [(ngModel)]="element.isSelected"
+                                        class="mr-2"
+                                    >
+                                    </mat-checkbox>
+                                    <label for="{{page.name}}+_{{idx}}"> {{commonLocaleData?.app_select_all}}</label>
+                                </ng-container>
+                                <ng-container *ngIf="element.code !== 'SELECT-ALL'">
+                                    <mat-checkbox
+                                        color="primary"
+                                        [checked]="true"
+                                        id="{{page.name}}+_{{idx}}"
+                                        [disabled]="newRole.isFixed"
+                                        (change)="toggleItem(page.name,element ,$event)"
+                                        name="{{element.code}}_{{i}}"
+                                        [(ngModel)]="element.isSelected"
+                                        class="mr-2"
+                                    >
+                                    </mat-checkbox>
+                                    <label for="{{element.code}}+_{{idx}}"> {{getNameByCode(element.code)}} </label>
+                                </ng-container>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="adminicon">
+                            <th mat-header-cell *matHeaderCellDef>{{commonLocaleData?.app_admin}}</th>
+                            <td mat-cell *matCellDef="let element">
+                                <i aria-hidden="true" class="fa fa-check"></i>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="view">
+                            <th mat-header-cell *matHeaderCellDef>{{commonLocaleData?.app_view}}</th>
+                            <td mat-cell *matCellDef="let element">
+                                <i aria-hidden="true" class="fa fa-times"></i>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
                 </div>
             </div>
         </section>

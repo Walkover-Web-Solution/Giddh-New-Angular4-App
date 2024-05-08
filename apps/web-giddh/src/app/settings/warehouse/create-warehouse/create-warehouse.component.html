@@ -47,30 +47,21 @@
             <form [formGroup]="warehouseForm" novalidate (ngSubmit)="handleFormSubmit()">
                 <div class="warehouse-form">
                     <div class="warehouse-form-field">
-                        <label> {{ localeData?.warehouse_name }} <span class="red-text">*</span> </label>
-                        <input
-                            [class.error-box]="
-                                warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.invalid
-                            "
-                            type="text"
-                            maxlength="100"
-                            required
+                        <input-field
+                            [label]="localeData?.warehouse_name"
+                            [type]="'text'"
+                            [maxlength]="100"
+                            [required]="true"
                             formControlName="name"
-                            class="form-control"
-                        />
-                        <span
-                            class="danger pl-1"
-                            *ngIf="warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.errors?.maxlength"
-                        >
-                            {{ commonLocaleData?.app_max_100_characters_allowed_limit }}
-                        </span>
+                            class="form-group"
+                        ></input-field>
                     </div>
                     <div class="warehouse-form-field">
-                        <label>
+                        <!-- <label>
                             {{ localeData?.addresses }}
-                        </label>
+                        </label> -->
                         <div class="address-dropdown form-group mb-0">
-                            <sales-sh-select
+                            <!-- <sales-sh-select
                                 [options]="addresses"
                                 formControlName="address"
                                 name="particulars"
@@ -112,16 +103,59 @@
                                         <div class="item">{{ commonLocaleData?.app_alt_c }}</div>
                                     </a>
                                 </ng-template>
-                            </sales-sh-select>
+                            </sales-sh-select> -->
+                            <dropdown-field
+                                    class="linked-add create"
+                                    [name]="'particulars'"        
+                                    [label]="localeData?.addresses"                        
+                                    [placeholder]="localeData?.select_address"
+                                    [options]="addresses.addressToShow"
+                                    (selectedOption)="warehouseForm?.get('address')?.patchValue($event.name)"
+                                    [defaultValue]="warehouseForm?.get('address')?.value"
+                                    [enableDynamicSearch]="true"
+                                    (dynamicSearchedQuery)="onSearchQueryChanged($event)"
+                                    [allowValueReset]="true"
+                                    (onClear)="onSearchClear()"
+                            >
+                            <ng-template #optionTemplate let-option="option">
+                                <ng-container>
+                                    <a
+                                        (click)="selectAddress(option)"
+                                        href="javascript:void(0)"
+                                        class="list-item d-flex"
+                                        [keyboardShortcut]="'alt+c'"
+                                        (onShortcutPress)="handleShortcutPress()"
+                                    >
+                                        <span class="entity-details">
+                                            <div class="item giddh-limit single-line-clamp">
+                                                {{ option.label || "-" }}
+                                            </div>
+                                            <div class="item-unique">
+                                                <p *ngIf="option.taxType && option.taxNumber">
+                                                    {{ option.taxType }} : {{ option.taxNumber }}
+                                                </p>
+                                            </div>
+                                        </span>
+                                    </a>
+                                </ng-container>
+                            </ng-template>
+                            </dropdown-field>
                         </div>
                     </div>
                 </div>
                 <div class="footer-btn row">
                     <div class="button-group">
-                        <button type="reset" aria-label="clear" (click)="handleFormClear()" class="btn btn-primary mr-r15">
+                        <button mat-stroked-button type="button" aria-label="clear" (click)="handleFormClear()" class="btn custom-btn">
                             {{ commonLocaleData?.app_clear }}
                         </button>
-                        <button type="submit" aria-label="create warehouse" [disabled]="warehouseForm?.invalid" class="btn btn-success">
+                        <button
+                            aria-label="create warehouse"
+                            mat-stroked-button
+                            color="primary"
+                            type="submit"
+                            [disabled]="warehouseForm?.invalid"
+                            class="btn"
+                        >
                             {{ localeData?.create_warehouse }}
                         </button>
                     </div>
@@ -130,30 +164,27 @@
         </div>
     </div>
     <!-- aside pane for create address -->
-    <div class="aside-overlay" *ngIf="addressAsideMenuState === 'in'"></div>
-    <ng-container
-        appTranslate
-        [file]="'settings/profile'"
-        (localeData)="profileLocaleData = $event"
-        [requireCommonData]="false"
-        *ngIf="addressAsideMenuState === 'in'"
-    >
-        <create-address
-            [class]="addressAsideMenuState"
-            [@slideInOut]="addressAsideMenuState"
-            [keyboardShortcut]="'esc'"
-            (onShortcutPress)="toggleAddressAsidePane()"
-            [addressConfiguration]="addressConfiguration"
-            [companyName]="companyDetails?.name"
-            [currentOrganizationUniqueName]="currentOrganizationUniqueName"
-            (saveAddress)="createNewAddress($event)"
-            [localeData]="profileLocaleData"
-            [commonLocaleData]="commonLocaleData"
-            [showLoader]="isAddressChangeInProgress"
-            (closeAsideEvent)="toggleAddressAsidePane($event)"
-            *ngIf="addressAsideMenuState === 'in'"
-            [hideLinkEntity]="addresses?.length <= 0 && hideLinkEntity"
-        ></create-address>
-        <!-- aside pane for create address end -->
-    </ng-container>
+    <ng-template #asideAccountAsidePane>
+        <ng-container
+            appTranslate
+            [file]="'settings/profile'"
+            (localeData)="profileLocaleData = $event"
+            [requireCommonData]="false"
+        >
+            <create-address
+                [keyboardShortcut]="'esc'"
+                (onShortcutPress)="closeAddressAsidePane()"
+                [addressConfiguration]="addressConfiguration"
+                [companyName]="companyDetails?.name"
+                [currentOrganizationUniqueName]="currentOrganizationUniqueName"
+                (saveAddress)="createNewAddress($event)"
+                [localeData]="profileLocaleData"
+                [commonLocaleData]="commonLocaleData"
+                [showLoader]="isAddressChangeInProgress"
+                (closeAsideEvent)="closeAddressAsidePane($event)"
+                [hideLinkEntity]="addresses?.addressToShow?.length <= 0 && hideLinkEntity"
+            ></create-address>
+            <!-- aside pane for create address end -->
+        </ng-container>
+    </ng-template>
 </ng-container>

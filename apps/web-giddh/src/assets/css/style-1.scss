@@ -520,6 +520,9 @@ aside-menu-account .container-fluid {
 .custom-keyboard-dropdown-list-focus {
     background-color: var(--color-dropdown-list-hover-background);
 }
+.min-width-unset {
+    min-width: unset !important;
+}
 .min-width-100 {
     min-width: 100px;
 }
@@ -1731,9 +1734,6 @@ ul.pills li {
 .long-code-details {
     margin-top: 10px;
 }
-.long-code-details figure {
-    margin-left: 8px;
-}
 .long-code-details figure ul {
     padding: 0 20px;
 }
@@ -2078,7 +2078,7 @@ strong {
 b,
 strong {
     font-family: var(--font-semibold);
-    font-weight: 500;
+    font-weight: 600;
 }
 .select2-parent .select2-container--default .select2-selection--single .select2-selection__arrow b {
     border-color: var(--color-abbey) transparent transparent transparent !important;

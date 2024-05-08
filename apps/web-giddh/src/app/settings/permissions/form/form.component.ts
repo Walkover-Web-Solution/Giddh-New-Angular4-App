@@ -1,6 +1,6 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
@@ -16,7 +16,6 @@ dayjs.extend(customParseFormat);
 import { GeneralService } from '../../../services/general.service';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { cloneDeep, forEach, isEmpty, isNull } from '../../../lodash-optimized';
-import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 // some local const
 const DATE_RANGE = 'daterange';
 const PAST_PERIOD = 'pastperiod';
@@ -26,7 +25,8 @@ const CIDR_RANGE = 'cidr_range';
 @Component({
     selector: 'setting-permission-form',
     templateUrl: './form.component.html',
-    styleUrls: ['./form.component.scss']
+    styleUrls: ['./form.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
@@ -48,7 +48,9 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public showTimeSpan: boolean = false;
     public showIPWrap: boolean = false;
     public permissionForm: UntypedFormGroup;
-    public allRoles: object[] = [];
+    public allRoles: any[] = [];
+    /** Holds all role list used to reset all all roles after filtered allRoles Varible */
+    public allRolesConstantList: any[] = [];
     public selectedTimeSpan: string = '';
     // Selected Type of IP range
     public selectedIPRange: string = '';
@@ -68,6 +70,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public isSuperAdminCompany: boolean = false;
     // private methods
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public resetForm: string = null;
 
     constructor(
         private _settingsPermissionService: SettingsPermissionService,
@@ -76,8 +79,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         private _toasty: ToasterService,
         private store: Store<AppState>,
         private _fb: UntypedFormBuilder,
-        private generalService: GeneralService,
-        private settingsProfileActions: SettingsProfileActions
+        private generalService: GeneralService
     ) {
         this.createPermissionInProcess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionInProcess), takeUntil(this.destroyed$));
         this.createPermissionSuccess$ = this.store.pipe(select(permissionStore => permissionStore.permission.createPermissionSuccess), takeUntil(this.destroyed$));
@@ -92,7 +94,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         this.selectedTimeSpan = this.commonLocaleData?.app_date_range;
         this.selectedIPRange = this.localeData?.cidr_range;
         this._accountsAction.resetShareEntity();
-
+        
         if (this.userdata) {
             if (this.userdata.from && this.userdata.to) {
                 let from: any = dayjs(this.userdata.from, GIDDH_DATE_FORMAT);
@@ -100,7 +102,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                 setTimeout(() => {
                     // Set timeout is used because ngx datepicker doesn't take the
                     // format provided in bsConfig if bsValue is set in ngOnInit
-                    this.dateRangePickerValue = [from.$d, to.$d];
+                    this.dateRangePickerValue = [from, to];
                 }, 0);
             }
             this.initAcForm(this.userdata);
@@ -127,6 +129,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.allRoles = cloneDeep(allRoleArray);
+                this.allRolesConstantList = this.allRoles;
             } else {
                 this.store.dispatch(this._permissionActions.GetRoles());
             }
@@ -150,6 +153,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         });
 
         this.permissionForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            ;
             this.hasUnsavedChanges.emit(this.permissionForm?.dirty);
         });
     }
@@ -162,13 +166,6 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         }
     }
 
-    public onSelectDateRange(ev) {
-        if (ev && ev.length) {
-            let from = dayjs(ev[0]).format(GIDDH_DATE_FORMAT);
-            let to = dayjs(ev[1]).format(GIDDH_DATE_FORMAT);
-            this.permissionForm?.patchValue({ from, to });
-        }
-    }
 
     public togglePeriodOptionsVal(val: string) {
         if (val === DATE_RANGE) {
@@ -183,13 +180,15 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     }
 
     public getPeriodFromData(data: ShareRequestForm) {
-        if (data.from && data.to) {
-            this.togglePeriodOptionsVal(DATE_RANGE);
-            return [DATE_RANGE];
-        }
-        if (data.duration && data.period) {
-            this.togglePeriodOptionsVal(PAST_PERIOD);
-            return [PAST_PERIOD];
+        if(data) {
+            if (data.from && data.to) {
+                this.togglePeriodOptionsVal(DATE_RANGE);
+                return [DATE_RANGE];
+            }
+            if (data.duration && data.period) {
+                this.togglePeriodOptionsVal(PAST_PERIOD);
+                return [PAST_PERIOD];
+            }
         }
         return [DATE_RANGE];
     }
@@ -208,14 +207,24 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
     public initAcForm(data?: ShareRequestForm): void {
         if (data) {
+            let fromDate = null;
+            let toDate = null
+            if(data.to && data.from) {
+                const fromDateParts = data.from.split('-').map(Number); // If Date in DD-MM-YYY
+                const toDateParts = data.to.split('-').map(Number); // If Date in DD-MM-YYY
+                
+                 fromDate = new Date(fromDateParts[2], fromDateParts[1] - 1, fromDateParts[0]);
+                 toDate = new Date(toDateParts[2], toDateParts[1] - 1, toDateParts[0]);
+            }
+            
             this.permissionForm = this._fb.group({
                 uniqueName: [data.uniqueName],
                 emailId: [data.emailId, Validators.compose([Validators.required, Validators.maxLength(150)])],
                 entity: ['company'],
                 roleUniqueName: [data.roleUniqueName, [Validators.required]],
                 periodOptions: this.getPeriodFromData(data),
-                from: [data.from],
-                to: [data.to],
+                from: [fromDate],
+                to: [toDate],
                 duration: [data.duration],
                 period: [null],
                 ipOptions: this.getIPOptsFromData(data),
@@ -322,6 +331,11 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         let form: ShareRequestForm = cloneDeep(this.permissionForm?.value);
         let CidrArr = [];
         let IpArr = [];
+
+        if (form?.from && form?.to) {
+            form.from = dayjs(this.permissionForm.get('from').value).format(GIDDH_DATE_FORMAT);
+            form.to = dayjs(this.permissionForm.get('to').value).format(GIDDH_DATE_FORMAT);
+        }
         forEach(form.allowedCidrs, (n) => {
             if (n.range) {
                 CidrArr.push(n.range);
@@ -370,11 +384,14 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             this._settingsPermissionService.UpdatePermission(form).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res?.status === 'success') {
                     this.hasUnsavedChanges.emit(false);
+                    this.resetForm = '';
+                    setTimeout(() => { this.resetForm = null }, 100);
                     this._toasty.successToast(this.localeData?.permission_updated_success);
                 } else {
                     this._toasty.warningToast(res?.message, res?.code);
                 }
                 this.onSubmitForm.emit(obj);
+                // this.changeDetection.detectChanges();
             });
         }
     }
@@ -425,5 +442,26 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
      */
     public handleTimeSpanChange(value: string): void {
         this.permissionForm.get('periodOptions')?.patchValue(value, { onlySelf: true });
+    }
+    
+    /**
+     * Handle Role search Query
+     *
+     * @param {*} event
+     * @memberof SettingPermissionFormComponent
+     */
+    public onRoleSearchQueryChange(event: any): void {
+        if (event) {
+            this.allRoles = this.allRoles?.filter(role => role.label.toUpperCase().indexOf(event.toUpperCase()) > -1);
+        }
+    }
+
+    /**
+     * Handle Role Search Clear
+     *
+     * @memberof SettingPermissionFormComponent
+     */
+    public onSearchClear(): void {
+            this.allRoles = this.allRolesConstantList;
     }
 }

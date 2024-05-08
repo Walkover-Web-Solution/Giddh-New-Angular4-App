@@ -44,31 +44,37 @@
             <form [formGroup]="branchForm" novalidate (ngSubmit)="handleFormSubmit()">
                 <div class="branch-form">
                     <div class="branch-form-field">
-                        <label> {{ commonLocaleData?.app_branch_name }} <span class="red-text">*</span> </label>
-                        <input
-                            maxlength="50"
-                            [class.error-box]="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.invalid"
-                            type="text"
-                            class="form-control"
-                            formControlName="alias"
-                            [placeholder]="localeData?.enter_name"
-                        />
-                        <span
-                            class="danger pl-1"
-                            *ngIf="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.errors?.maxlength"
-                        >
-                            {{ commonLocaleData?.app_max_50_characters_allowed_limit }}
-                        </span>
+                        <div class="address-dropdown">
+                            <input-field
+                                [label]="commonLocaleData?.app_branch_name"
+                                [maxlength]="50"
+                                [class.error-box]="
+                                    branchForm?.get('alias')?.touched && branchForm?.get('alias')?.invalid
+                                "
+                                [type]="'text'"
+                                formControlName="alias"
+                                [placeholder]="localeData?.enter_name"
+                                [required]="true"
+                            ></input-field>
+                            <span
+                                class="danger pl-1"
+                                *ngIf="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.errors?.maxlength"
+                            >
+                                {{ commonLocaleData?.app_max_50_characters_allowed_limit }}
+                            </span>
+                        </div>
                     </div>
                     <!-- This field is kept hidden, DO NOT REMOVE -->
                     <div hidden class="branch-form-field">
-                        <label> {{ commonLocaleData?.app_branch_name }} <span class="red-text">*</span> </label>
-                        <input
-                            type="text"
-                            class="form-control"
-                            formControlName="name"
-                            [placeholder]="localeData?.enter_name"
-                        />
+                        <div class="address-dropdown">
+                            <input-field
+                                [label]="commonLocaleData?.app_branch_name"
+                                [type]="'text'"
+                                formControlName="name"
+                                [placeholder]="localeData?.enter_name"
+                                [required]="true"
+                            ></input-field>
+                        </div>
                     </div>
                     <div class="branch-form-field">
                         <label>
@@ -143,41 +149,48 @@
                         </div>
                     </div>
                 </div>
-                <div class="footer-btn row">
-                    <div class="button-group">
-                        <button type="reset" (click)="handleFormClear()" class="btn btn-primary mr-r15 clear-btn-width">
-                            {{ commonLocaleData?.app_clear }}
-                        </button>
-                        <button type="submit" [disabled]="branchForm?.invalid" class="btn btn-success">
-                            {{ localeData?.create_branch }}
-                        </button>
+                <div class="pd-l15 pd-r15">
+                    <div class="row">
+                        <div class="button-group">
+                            <button mat-stroked-button type="reset" (click)="handleFormClear()" class="btn custom-btn">
+                                {{ commonLocaleData?.app_clear }}
+                            </button>
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                type="submit"
+                                [disabled]="branchForm?.invalid"
+                                class="btn"
+                            >
+                                {{ localeData?.create_branch }}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-    <div class="aside-overlay" *ngIf="addressAsideMenuState === 'in'"></div>
-    <ng-container
-        appTranslate
-        [file]="'settings/profile'"
-        (localeData)="profileLocaleData = $event"
-        [requireCommonData]="false"
-        *ngIf="addressAsideMenuState === 'in'"
-    >
-        <create-address
-            [class]="addressAsideMenuState"
-            [@slideInOut]="addressAsideMenuState"
-            [keyboardShortcut]="'esc'"
-            (onShortcutPress)="toggleAddressAsidePane()"
-            [currentOrganizationUniqueName]="currentOrganizationUniqueName"
-            [showLoader]="isAddressChangeInProgress"
-            (saveAddress)="createNewAddress($event)"
-            [addressConfiguration]="addressConfiguration"
-            (closeAsideEvent)="toggleAddressAsidePane($event)"
-            *ngIf="addressAsideMenuState === 'in'"
-            [localeData]="profileLocaleData"
-            [commonLocaleData]="commonLocaleData"
-            [hideLinkEntity]="addresses?.length <= 0 && hideLinkEntity"
-        ></create-address>
-    </ng-container>
+    <ng-template #asideAccountAsidePane>
+        <ng-container
+            appTranslate
+            [file]="'settings/profile'"
+            (localeData)="profileLocaleData = $event"
+            [requireCommonData]="false"
+        >
+            <create-address
+                [class]="addressAsideMenuState"
+                [@slideInOut]="addressAsideMenuState"
+                [keyboardShortcut]="'esc'"
+                (onShortcutPress)="toggleAddressAsidePane()"
+                [currentOrganizationUniqueName]="currentOrganizationUniqueName"
+                [showLoader]="isAddressChangeInProgress"
+                (saveAddress)="createNewAddress($event)"
+                [addressConfiguration]="addressConfiguration"
+                (closeAsideEvent)="toggleAddressAsidePane($event)"
+                [localeData]="profileLocaleData"
+                [commonLocaleData]="commonLocaleData"
+                [hideLinkEntity]="addresses?.length <= 0 && hideLinkEntity"
+            ></create-address>
+        </ng-container>
+    </ng-template>
 </ng-container>

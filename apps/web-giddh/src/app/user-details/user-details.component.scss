@@ -14,12 +14,17 @@
     margin-left: 5px;
     vertical-align: top;
 }
+.document-link {
+    color: var(--color-giddh-blue);
+}
+
+.margin-top{
+    margin-top: 7px;
+}
 
 .video-link {
-    position: relative;
-    z-index: 10;
-    float: right;
-    line-height: 46px;
+    right: 0;
+    line-height: 54px;
 }
 
 @media (max-width: 575px) {

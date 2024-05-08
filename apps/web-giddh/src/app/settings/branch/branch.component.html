@@ -6,34 +6,35 @@
     (translationComplete)="translationComplete($event)"
 >
     <div class="clearfix">
-        <div class="date-advance-search row">
+        <div class="date-advance-search row mt-4">
             <div class="col-sm-12 mr-b15 branch-header d-flex justify-content-between">
                 <form class="form-inline input-group-date-range-picker pr d-flex flex-row mr-0">
                     <div class="mr-1 branch-header-content w-100">
                         <div class="search-field form-top-fields w-100">
                             <div class="search-branch-box">
-                                <input
-                                    type="text"
-                                    name="searchBranch"
-                                    [(ngModel)]="searchBranchQuery"
+                                <input-field
+                                    [type]="'text'"
+                                    [name]="'searchBranch'"
+                                    [formControl]="searchBranchQuery"
                                     #branchSearch
                                     [placeholder]="localeData?.search_branch"
-                                    class="form-control"
-                                />
+                                >
+                                </input-field>
                             </div>
                             <a
-                                class="cp mr-l1 clear-filter-btn"
-                                *ngIf="searchBranchQuery"
+                                class="cursor-pointer mr-l1 clear-filter-btn"
+                                *ngIf="searchBranchQuery.value"
                                 href="javascript:;"
                                 (click)="resetFilter()"
-                                [tooltip]="localeData?.reset_search"
+                                [matTooltip]="localeData?.reset_search"
+                                [matTooltipPosition]="'above'"
                             >
                                 <i aria-hidden="true" class="icon-refresh"></i> {{ commonLocaleData?.app_clear_filter }}
                             </a>
                         </div>
                     </div>
                 </form>
-                <button class="btn btn-sky-blue mr-0" (click)="openAddBranchModal()">
+                <button mat-stroked-button color="primary" class="mr-0" (click)="openAddBranchModal()">
                     {{ localeData?.create_branch }}
                 </button>
             </div>
@@ -79,33 +80,25 @@
                                         }}</span
                                     >
                                     <div class="btn-group align-items-center" dropdown [autoClose]="true">
-                                        <a
-                                            id="button-basic"
-                                            dropdownToggle
-                                            class="icon-dots-three-vertical dropdown-toggle cp"
-                                            aria-controls="dropdown-basic"
+                                        <button
+                                            mat-button
+                                            [matMenuTriggerFor]="menu"
+                                            class="icon-dots-three-vertical dropdown-toggle cursor-pointer mr-0"
                                             role="button"
                                             aria-label="dropdown button"
-                                        >
-                                        </a>
-                                        <ul
-                                            id="dropdown-basic"
-                                            *dropdownMenu
-                                            class="dropdown-menu"
-                                            role="menu"
-                                            aria-labelledby="button-basic"
-                                        >
-                                            <li role="menuitem">
-                                                <a class="dropdown-item" (click)="updateBranch(branch)">{{
-                                                    commonLocaleData?.app_edit
-                                                }}</a>
-                                                <a class="dropdown-item" (click)="confirmStatusUpdate(branch)">{{
+                                        ></button>
+                                        <mat-menu #menu="matMenu">
+                                            <button mat-menu-item (click)="updateBranch(branch)">
+                                                {{ commonLocaleData?.app_edit }}
+                                            </button>
+                                            <button mat-menu-item (click)="confirmStatusUpdate()">
+                                                {{
                                                     branch?.isArchived
                                                         ? commonLocaleData?.app_unarchive
                                                         : commonLocaleData?.app_archive
-                                                }}</a>
-                                            </li>
-                                        </ul>
+                                                }}
+                                            </button>
+                                        </mat-menu>
                                     </div>
                                 </div>
                             </div>
@@ -186,7 +179,7 @@
         <br />
         <br />
         <div class="branch-vector">
-            <img src="{{ imgPath }}" [alt]="localeData?.branch_image" />
+            <img src="/assets/images/warehouse-vector.svg" [alt]="localeData?.branch_image" />
         </div>
         <!-- add branch modal -->
         <div
@@ -254,7 +247,7 @@
                         <div>
                             <br />
                             <span>{{ localeData?.or }}</span>
-                            <button class="btn-link" (click)="openCreateCompanyModal()">
+                            <button class="btn-link" (click)="openCreateCompanyDialog()">
                                 {{ localeData?.create_new_branch }}
                             </button>
                         </div>
@@ -276,30 +269,18 @@
 
         <!--add company modal  -->
 
-        <div
-            bsModal
-            #addCompanyModal="bs-modal"
-            [config]="{ backdrop: 'static', keyboard: 'true' }"
-            tabindex="-1"
-            class="modal fade open-popup"
-            role="dialog"
-        >
+        <ng-template #addCompanyModal>
             <div class="modal-dialog modal-xl modal-width">
                 <div class="modal-content">
                     <ng-template element-view-container-ref #companyadd="elementviewcontainerref"> </ng-template>
                 </div>
             </div>
-        </div>
+        </ng-template>
 
         <!-- add branch modal -->
-        <div
-            bsModal
-            #confirmationModal="bs-modal"
-            [config]="{ backdrop: 'static', keyboard: 'true' }"
-            tabindex="-1"
-            class="modal fade"
-            role="dialog"
-        >
+        <ng-template #confirmationModal2>
+            Hello
+            <!-- not show content -->
             <div class="modal-dialog modal-md">
                 <div class="modal-content">
                     <div class="modal-header clearfix">
@@ -315,49 +296,27 @@
                     </div>
                     <div class="modal-body" [innerHTML]="confirmationMessage"></div>
                     <div class="modal-footer clearfix">
-                        <button (click)="onUserConfirmation(true)" class="btn btn-sm btn-success">
+                        <button
+                            mat-stroked-button
+                            color="primary"
+                            (click)="onUserConfirmation(true)"
+                            class="btn btn-sm btn-success"
+                        >
                             {{ commonLocaleData?.app_yes }}
                         </button>
-                        <button (click)="onUserConfirmation(false)" class="btn btn-sm btn-danger">
+                        <button mat-stroked-button (click)="onUserConfirmation(false)" class="btn btn-sm btn-danger">
                             {{ commonLocaleData?.app_no }}
                         </button>
                     </div>
                     <!-- modal footer -->
                 </div>
             </div>
-        </div>
-
-        <!-- Edit branch -->
-        <div
-            *ngIf="closeAddressSidePane === 'in'"
-            appTranslate
-            [file]="'settings/profile'"
-            (localeData)="profileLocaleData = $event"
-            [requireCommonData]="false"
-        >
-            <div class="aside-overlay"></div>
-            <create-address
-                [class]="closeAddressSidePane"
-                [@slideInOut]="closeAddressSidePane"
-                [keyboardShortcut]="'esc'"
-                (onShortcutPress)="toggleAsidePane()"
-                [companyName]="currentBranch"
-                [branchToUpdate]="branchToUpdate"
-                [showLoader]="isBranchChangeInProgress"
-                (updateAddress)="updateBranchInfo($event)"
-                [addressConfiguration]="addressConfiguration"
-                [localeData]="profileLocaleData"
-                [commonLocaleData]="commonLocaleData"
-                (closeAsideEvent)="toggleAsidePane($event)"
-            >
-            </create-address>
-        </div>
+        </ng-template>
     </div>
-    <div bsModal #statusModal="bs-modal" class="modal fade aaa" role="dialog">
-        <div class="modal-dialog modal-md">
+    <ng-template #statusModal>
+        <div class="modal-md">
             <div class="modal-content">
                 <confirm-modal
-                    *ngIf="statusModal?.isShown"
                     [title]="commonLocaleData?.app_confirmation"
                     [body]="
                         branchStatusToUpdate?.isArchived
@@ -365,11 +324,35 @@
                             : localeData?.confirm_archive_title
                     "
                     [permanentlyDeleteMessage]="' '"
-                    (cancelCallBack)="branchStatusToUpdate = ''; statusModal?.hide()"
+                    (cancelCallBack)="branchStatusToUpdate = ''; statusModalRef.close()"
                     (successCallBack)="updateBranchStatus()"
                 >
                 </confirm-modal>
             </div>
         </div>
-    </div>
+    </ng-template>
+    <!-- Edit branch -->
+    <ng-template #closeAddressSidePane>
+        <div
+            appTranslate
+            [file]="'settings/profile'"
+            (localeData)="profileLocaleData = $event"
+            [requireCommonData]="false"
+        >
+            <create-address
+                [class]="closeAddressSidePane"
+                [keyboardShortcut]="'esc'"
+                (onShortcutPress)="closeAddressSidePaneRef.close()"
+                [companyName]="currentBranch"
+                [branchToUpdate]="branchToUpdate"
+                [showLoader]="isBranchChangeInProgress"
+                (updateAddress)="updateBranchInfo($event)"
+                [addressConfiguration]="addressConfiguration"
+                [localeData]="profileLocaleData"
+                [commonLocaleData]="commonLocaleData"
+                (closeAsideEvent)="closeAddressSidePaneRef.close()"
+            >
+            </create-address>
+        </div>
+    </ng-template>
 </ng-container>

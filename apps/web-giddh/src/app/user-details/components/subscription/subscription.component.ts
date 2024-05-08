@@ -110,6 +110,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     public activeCompany: any = {};
     /** True if subscription will move */
     public subscriptionMove: boolean = false;
+    public resetSubscription: string = null;
 
     constructor(
         public dialog: MatDialog,
@@ -282,7 +283,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         this.subscriptions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             let subscriptions = [];
             this.subscriptions = [];
-
+            
             if (response?.length) {
                 response.forEach(subscription => {
                     let subscriptionDetails = cloneDeep(subscription);
@@ -294,10 +295,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
                     let flag = true;
                     if (
                         (this.searchSubscription?.value && (subscriptionDetails?.subscriptionId?.toLowerCase()?.indexOf(this.searchSubscription?.value?.toLowerCase()) === -1 && !(subscriptionDetails?.companiesWithTransactions?.filter(company => company?.name?.toLowerCase()?.indexOf(this.searchSubscription?.value?.toLowerCase()) > -1)?.length)) ||
-                        (this.filters?.plan && subscriptionDetails?.planDetails?.uniqueName !== this.filters?.plan) ||
-                        (this.filters?.expiration && (subscriptionDetails?.remainingDays < 0 || subscriptionDetails?.remainingDays > this.filters?.expiration)) ||
-                        (this.filters?.transactionBalance && (subscriptionDetails?.remainingTransactions < 0 || subscriptionDetails?.remainingTransactions > this.filters?.transactionBalance))
-                    ) ||
+                            (this.filters?.plan && subscriptionDetails?.planDetails?.uniqueName !== this.filters?.plan) ||
+                            (this.filters?.expiration && (subscriptionDetails?.remainingDays < 0 || subscriptionDetails?.remainingDays > this.filters?.expiration)) ||
+                            (this.filters?.transactionBalance && (subscriptionDetails?.remainingTransactions < 0 || subscriptionDetails?.remainingTransactions > this.filters?.transactionBalance))
+                        ) ||
                         (this.filters?.plan && subscriptionDetails?.planDetails?.uniqueName !== this.filters?.plan) ||
                         (this.filters?.expiration && (subscriptionDetails?.remainingDays < 0 || subscriptionDetails?.remainingDays > this.filters?.expiration)) ||
                         (this.filters?.transactionBalance && (subscriptionDetails?.remainingTransactions < 0 || subscriptionDetails?.remainingTransactions > this.filters?.transactionBalance))
@@ -307,9 +308,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
                     if (flag) {
                         subscriptions.push(subscriptionDetails);
                     }
-                });
+                });                
 
-                this.plansList = uniqBy(response.map(subscription => { return { name: subscription.planDetails?.name, uniqueName: subscription.planDetails?.uniqueName } }), "uniqueName");
+                this.plansList = uniqBy(response.map(subscription => { return { label: subscription.planDetails?.name, value: subscription.planDetails?.uniqueName } }), "value");
+
                 if (subscriptions?.length > 0) {
                     this.subscriptions = subscriptions;
                     let loop = 0;
@@ -342,6 +344,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         this.filters.plan = '';
         this.filters.expiration = '';
         this.filters.transactionBalance = '';
+        this.resetSubscription = '';
         this.filterSubscriptions();
     }
 
@@ -422,17 +425,17 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
      */
     public translationComplete(): void {
         this.expiringList = [
-            { name: this.localeData?.expiring_list?.seven_days, value: 7 },
-            { name: this.localeData?.expiring_list?.fifteen_days, value: 15 },
-            { name: this.localeData?.expiring_list?.one_month, value: 31 },
-            { name: this.localeData?.expiring_list?.six_months, value: 180 },
-            { name: this.localeData?.expiring_list?.one_year, value: 365 }
+            { label: this.localeData?.expiring_list?.seven_days, value: 7 },
+            { label: this.localeData?.expiring_list?.fifteen_days, value: 15 },
+            { label: this.localeData?.expiring_list?.one_month, value: 31 },
+            { label: this.localeData?.expiring_list?.six_months, value: 180 },
+            { label: this.localeData?.expiring_list?.one_year, value: 365 }
         ];
         this.transactionBalanceList = [
-            { name: this.localeData?.transaction_balance_list?.less_than_1k, value: 1000 },
-            { name: this.localeData?.transaction_balance_list?.less_than_5k, value: 5000 },
-            { name: this.localeData?.transaction_balance_list?.less_than_10k, value: 10000 },
-            { name: this.localeData?.transaction_balance_list?.less_than_50k, value: 50000 }
+            { label: this.localeData?.transaction_balance_list?.less_than_1k, value: 1000 },
+            { label: this.localeData?.transaction_balance_list?.less_than_5k, value: 5000 },
+            { label: this.localeData?.transaction_balance_list?.less_than_10k, value: 10000 },
+            { label: this.localeData?.transaction_balance_list?.less_than_50k, value: 50000 }
         ];
     }
 }

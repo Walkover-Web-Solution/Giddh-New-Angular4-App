@@ -27,7 +27,7 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { PersonalInformationComponent } from './personal-information/personal-information.component';
 import { AddressSettingsComponent } from './address-settings/address-settings.component';
 import { OtherSettingsComponent } from './other-settings/other-settings.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CreateBranchComponent } from './branch/create-branch/create-branch.component';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
@@ -53,12 +53,17 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { SettingCampaignComponent } from './integration/campaign/setting-campaign/setting-campaign.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+
 import { NgxPlaidLinkModule } from "ngx-plaid-link";
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 import { AccountNumberMaskModule } from '../shared/helpers/pipes/accountNumberMaskPipe/accountNumberMask.module';
 import { PortalWhiteLabelComponent } from './portal-white-label/portal-white-label.component';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { CreateAddressModule } from '../shared/create-address/create-address.module';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
     declarations: [
@@ -87,10 +92,12 @@ import { CreateAddressModule } from '../shared/create-address/create-address.mod
         SettingCampaignComponent
     ],
     imports: [
+        CommonModule,
         SharedModule,
         SettingRountingModule,
         AsideMenuCreateTaxModule,
         ContactModule,
+        FormsModule,
         ReactiveFormsModule,
         CurrencyModule,
         NgxMaskModule.forRoot(),
@@ -120,6 +127,10 @@ import { CreateAddressModule } from '../shared/create-address/create-address.mod
         MatChipsModule,
         MatAutocompleteModule,
         MatSlideToggleModule,
+        MatRadioModule,
+        MatTooltipModule,
+        MatMenuModule,
+        MatDatepickerModule,
         NgxPlaidLinkModule,
         AsideMenuAccountModule,
         AccountNumberMaskModule,

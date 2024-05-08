@@ -1,17 +1,15 @@
 <div *ngIf="!isPlanShow">
+    <button mat-stroked-button color="primary" (click)="isPlanShow = true" class="pull-right my-2" *ngIf="!showLoader">
+        {{ commonLocaleData?.app_buy_new_plan }}
+    </button>
     <div class="main-content-subscription">
-        <div class="menu-one-button">
-            <button mat-stroked-button color="primary" (click)="isPlanShow = true" *ngIf="!showLoader">
-                {{ commonLocaleData?.app_buy_new_plan }}
-            </button>
-        </div>
-        <mat-grid-list cols="16" rowHeight="40px" gutterSize="0px">
+        <mat-grid-list cols="16" rowHeight="60px" gutterSize="0px">
             <mat-grid-tile [colspan]="menuOneWidth" rowspan="1" class="ipad-responsive">
                 <div class="menu-two" [ngClass]="{ 'skeleton-common-class': showLoader }">
                     <label for="Search-box">
                         <img src="{{ imgPath }}search.png" alt="SearchBar" *ngIf="!showLoader" />
                     </label>
-                    <div class="custom-input-field">
+                    <div class="custom-input-field mt-3">
                         <mat-form-field class="form-field" *ngIf="!showLoader">
                             <input
                                 matInput
@@ -24,67 +22,40 @@
                 </div>
             </mat-grid-tile>
             <mat-grid-tile [colspan]="menuTwoWidth" class="ipad-responsive">
-                <div class="menu-two-list" [ngClass]="{ 'skeleton-common-class': showLoader }">
-                    <div class="menu-two-list-items">
-                        <span class="mat-body-1 plan">{{ localeData?.subscription?.plan }}</span>
-                            <mat-form-field
-                                floatLabel="never"
-                                class="select-subscription subscription-form-select"
+                <div class="head-dropdown">                    
+                    <div class="menu-two-list" [ngClass]="{ 'skeleton-common-class': showLoader }">
+                        <div class="menu-two-list-items" *ngIf="!showLoader">
+                            <dropdown-field
+                                [placeholder]="commonLocaleData?.app_select"
+                                [label]="localeData?.subscription?.plan"
+                                (selectedOption)="filters.plan = $event.value; filterSubscriptions()"
+                                [defaultValue]="resetSubscription"
+                                [options]="plansList"
+                            ></dropdown-field>
+                        </div>
+                        <div class="menu-two-list-items" *ngIf="!showLoader">
+                            <dropdown-field
+                                [placeholder]="commonLocaleData?.app_select"
+                                [label]="localeData?.subscription?.expiring_within"
+                                (selectedOption)="filters.expiration = $event.value; filterSubscriptions()"
+                                [defaultValue]="resetSubscription"
+                                [options]="expiringList"
+                            ></dropdown-field>
+                        </div>
+                        <div class="menu-two-list-items transaction-box" *ngIf="!showLoader">
+                            <dropdown-field
+                                [placeholder]="commonLocaleData?.app_select"
+                                [label]="localeData?.subscription?.transaction_balance"
+                                (selectedOption)="filters.transactionBalance = $event.value; filterSubscriptions()"
+                                [defaultValue]="resetSubscription"
+                                [options]="transactionBalanceList"
                             >
-                                <mat-select
-                                    [placeholder]="commonLocaleData?.app_select"
-                                    (selectionChange)="filterSubscriptions()"
-                                    [(ngModel)]="filters.plan"
-                                >
-                                    <mat-option value="">{{ commonLocaleData?.app_select }}</mat-option>
-                                    <mat-option *ngFor="let plan of plansList" [value]="plan?.uniqueName">
-                                        {{ plan?.name }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                            </dropdown-field>
+                        </div>
                     </div>
-                    <div class="menu-two-list-items" *ngIf="!showLoader">
-                        <span class="mat-body-1 expiring-within">{{ localeData?.subscription?.expiring_within }}</span>
-                            <mat-form-field floatLabel="never" class="select-subscription">
-                                <mat-select
-                                    [placeholder]="commonLocaleData?.app_select"
-                                    [(ngModel)]="filters.expiration"
-                                    (selectionChange)="filterSubscriptions()"
-                                >
-                                    <mat-option value="">{{ commonLocaleData?.app_select }}</mat-option>
-                                    <mat-option *ngFor="let expiring of expiringList" [value]="expiring?.value">
-                                        {{ expiring?.name }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                    <div class="menu-two-button" [ngClass]="{ 'skeleton-common-class': showLoader }">
+                        <a class="mat-body-2" (click)="clearFilters()">{{ commonLocaleData?.app_clear }}</a>
                     </div>
-                    <div class="menu-two-list-items transaction-box" *ngIf="!showLoader">
-                        <span class="mat-body-1 transaction-balance">{{
-                            localeData?.subscription?.transaction_balance
-                        }}</span>
-                            <mat-form-field floatLabel="never" class="select-subscription">
-                                <mat-select
-                                    [placeholder]="commonLocaleData?.app_select"
-                                    class="transaction-select"
-                                    [(ngModel)]="filters.transactionBalance"
-                                    (selectionChange)="filterSubscriptions()"
-                                >
-                                    <mat-option value="">{{ commonLocaleData?.app_select }}</mat-option>
-                                    <mat-option
-                                        *ngFor="let transactionBalance of transactionBalanceList"
-                                        [value]="transactionBalance?.value"
-                                        >{{ transactionBalance?.name }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                    </div>
-                </div>
-                <div class="menu-two-button" [ngClass]="{ 'skeleton-common-class': showLoader }">
-                    <a
-                        class="mat-body-2"
-                        (click)="clearFilters()"
-                        >{{ commonLocaleData?.app_clear }}</a
-                    >
                 </div>
             </mat-grid-tile>
 
@@ -293,24 +264,6 @@
                         </mat-grid-tile> -->
                             </mat-grid-list>
                         </div>
-                        <div class="expand-button">
-                            <button
-                                (click)="accordion.openAll(); isExpand = true"
-                                mat-button
-                                disableRipple="true"
-                                *ngIf="!isExpand"
-                            >
-                                {{ commonLocaleData?.app_expand_all }}
-                            </button>
-                            <button
-                                (click)="accordion.closeAll(); isExpand = false"
-                                mat-button
-                                disableRipple="true"
-                                *ngIf="isExpand"
-                            >
-                                {{ commonLocaleData?.app_collapse_all }}
-                            </button>
-                        </div>
                         <!-- <div class="menu-two accordion-search-box main-content-search-box">
                         <label for="Search-box">
                             <img src="{{ imgPath }}search.png" alt="SearchBar" />
@@ -319,7 +272,25 @@
                             <input matInput class="search-bar" placeholder="Search month" />
                         </mat-form-field>
                     </div> -->
-                        <div class="main-tabs-content">
+                        <div class="main-tabs-content position-relative">
+                            <div class="expand-button pr-2">
+                                <button
+                                    (click)="accordion.openAll(); isExpand = true"
+                                    mat-button
+                                    disableRipple="true"
+                                    *ngIf="!isExpand"
+                                >
+                                    {{ commonLocaleData?.app_expand_all }}
+                                </button>
+                                <button
+                                    (click)="accordion.closeAll(); isExpand = false"
+                                    mat-button
+                                    disableRipple="true"
+                                    *ngIf="isExpand"
+                                >
+                                    {{ commonLocaleData?.app_collapse_all }}
+                                </button>
+                            </div>
                             <mat-tab-group>
                                 <!-- <mat-tab label="Monthly">
                         <mat-accordion multi="true">
@@ -884,6 +855,7 @@
                                                         <a
                                                             (click)="openModalMove(company, $event)"
                                                             href="javascript:void(0);"
+                                                            class="link-color"
                                                             >{{ localeData?.subscription?.move }}</a
                                                         >
                                                     </mat-panel-title>

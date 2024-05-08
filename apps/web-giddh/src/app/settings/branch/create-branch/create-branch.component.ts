@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { combineLatest, ReplaySubject } from 'rxjs';
@@ -81,6 +82,8 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if need to hide link entity */
     public hideLinkEntity: boolean = true;
+    /** directive to get reference of element */
+    @ViewChild('asideAccountAsidePane', { static: true }) public asideAccountAsidePane: any;
     /** Returns true if form is dirty else false */
     public get showPageLeaveConfirmation(): boolean {
         return this.branchForm?.dirty;
@@ -99,6 +102,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         private toastService: ToasterService,
         private warehouseActions: WarehouseActions,
         private settingsBranchActions: SettingsBranchActions,
+        public dialog: MatDialog,
         private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         this.branchForm = this.formBuilder.group({
@@ -414,16 +418,16 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      *
      * @memberof CreateBranchComponent
      */
-    public handleShortcutPress(): void {
-        if (this.addressAsideMenuState === 'out') {
-            this.loadLinkedEntities(() => {
-                this.toggleAsidePane();
-            });
-        } else {
-            this.toggleAsidePane();
-        }
+    public handleShortcutPress() {
+        this.dialog.open(this.asideAccountAsidePane, {
+            width: '760px',
+            height: '100vh !important',
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
     }
-
     /**
      * Loads all the addresses within a company
      *
@@ -484,5 +488,16 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                 }
             });
         }
+    }
+
+    /**
+     * Handle Remove Item from Mat Chip and 
+     * remove item form linkedEntity
+     *
+     * @param {*} element
+     * @memberof CreateBranchComponent
+     */
+    public removeItem(element: any): void {
+        this.branchForm.get('address')?.patchValue(this.branchForm.get('address').value.filter(i => i !== element));
     }
 }

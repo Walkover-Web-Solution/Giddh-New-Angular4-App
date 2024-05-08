@@ -8,6 +8,7 @@
 
 .portal-url {
     font-size: 14px;
+    word-break: break-all;
 }
 .custom-file-input~.custom-file-label::after {
     content: "";
@@ -71,8 +72,12 @@
     font-size: var(--font-size-24);
     color: var(--color-rectangular-tab-active-primary-text) !important;
     cursor: pointer;
-    margin-right: 5px;
-    padding-top: 5px;
+}
+.copy-text-position{
+    position: absolute;
+    top: 5px;
+    right: 0;
+    transform: translateX(90%);
 }
 @media (max-width: 767px) {
     label {
@@ -82,4 +87,8 @@
     .border-bottom {
         margin-top: 5px;
     }
+}
+.view-txt {
+    display: flex;
+    justify-content: flex-end;
 }

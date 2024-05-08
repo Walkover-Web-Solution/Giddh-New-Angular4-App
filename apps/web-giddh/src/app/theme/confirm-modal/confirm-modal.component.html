@@ -1,7 +1,7 @@
 <div>
     <div class="modal-header">
-        <h2 class="modal-title">{{ title }}</h2>
-        <button aria-label="cross" mat-icon-button class="close" data-dismiss="modal" (click)="onCancel($event)">×</button>
+        <h3 class="modal-title">{{ title }}</h3>
+        <button mat-icon-button mat-dialog-close class="close" aria-label="close" (click)="onCancel($event)">×</button>
     </div>
     <div class="modal-body">
         {{ body }}

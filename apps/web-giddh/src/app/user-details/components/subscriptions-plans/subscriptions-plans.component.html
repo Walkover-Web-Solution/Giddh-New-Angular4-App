@@ -1,4 +1,4 @@
-<div class="welcome-msg">
+<div class="welcome-msg mr-t1">
     <div class="row">
         <div [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-back': showLoader }"></div>
         <div class="col-md-2 col-sm-2" *ngIf="!showLoader">
@@ -273,11 +273,11 @@
                             >
                                 {{ localeData?.subscription?.activation_key_note }}
                             </p>
-                            <div class="d-flex redeem-content">
+                            <div class="d-flex redeem-content align-items-center mr-t1">
                                 <div
                                     [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-input': showLoader }"
                                 ></div>
-                                <input
+                                <!-- <input
                                     *ngIf="!showLoader"
                                     type="text"
                                     name="licenceKey"
@@ -287,7 +287,15 @@
                                     class="form-control mr-t1"
                                     matInput
                                     [placeholder]="localeData?.subscription?.enter_activation_key"
-                                />
+                                /> -->
+                                <input-field
+                                    *ngIf="!showLoader"
+                                    [type]="'text'"
+                                    [id]="licenceKey"
+                                    [name]="'licenceKey'"
+                                    [required]="true"
+                                    [placeholder]="localeData?.subscription?.enter_activation_key"
+                                ></input-field>
                                 <div class="activation-btn mr-l15">
                                     <div
                                         [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-button': showLoader }"

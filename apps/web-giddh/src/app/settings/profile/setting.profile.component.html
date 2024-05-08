@@ -6,37 +6,88 @@
     (translationComplete)="translationComplete($event)"
 >
     <giddh-page-loader *ngIf="getCompanyProfileInProgress$ | async"></giddh-page-loader>
-    <!--Tabs of Company Profile-->
-    <div class="settings-profile-tabs" *ngIf="!addressOnly">
-        <tabset #staticTabs class="profile-tab-container">
-            <tab
-                [active]="this.currentTab === 'personal'"
-                (selectTab)="handleTabChanged('personal')"
-                [heading]="personalInformationTabHeading"
-                [id]="currentTab === 'personal' ? 'giddh-page-heading' : ''"
+    <ng-container *ngIf="!(getCompanyProfileInProgress$ | async)">
+        <!--Tabs of Company Profile-->
+        <div class="settings-profile-tabs" *ngIf="!addressOnly">
+             <div class="row">
+                <div class="col-lg-12 px-3">
+                    <mat-tab-group 
+                        mat-stretch-tabs="false" 
+                        mat-align-tabs="start" 
+                        animationDuration="0ms"
+                        [selectedIndex]="activeTabIndex"
+                        (selectedTabChange)="onTabChange($event)"
+                    >
+                        <mat-tab
+                            [label]="personalInformationTabHeading"
+                        >
+                            <personal-information
+                                (saveProfile)="handleSaveProfile($event)"
+                                [profileData]="companyProfileObj"
+                                [organizationType]="currentOrganizationType"
+                                [localeData]="localeData"
+                                [commonLocaleData]="commonLocaleData"
+                            >
+                            </personal-information>
+                        </mat-tab>
+                        <mat-tab
+                            [label]="
+                                companyProfileObj?.taxType
+                                    ? localeData?.address + companyProfileObj?.taxType
+                                    : localeData?.addresses
+                            "
+                        >
+                            <address-settings
+                                [addresses]="addresses"
+                                [(isAddressChangeInProgress)]="isAddressChangeInProgress"
+                                [(closeSidePane)]="closeAddressSidePane"
+                                [currentOrganizationUniqueName]="currentOrganizationUniqueName"
+                                (searchAddress)="handleSearchInAddress($event)"
+                                (pageChanged)="handlePageChanged($event)"
+                                [addressConfiguration]="addressConfiguration"
+                                (saveNewAddress)="createNewAddress($event)"
+                                (updatedAddress)="updateAddress($event)"
+                                (deleteAddress)="handleDeleteAddress($event)"
+                                (unLinkAddress)="handleAddressUnlinking($event)"
+                                (setDefaultAddress)="handleDefaultAddress($event)"
+                                [profileData]="companyProfileObj"
+                                [shouldShowLoader]="shouldShowAddressLoader"
+                                [paginationConfig]="addressTabPaginationData"
+                                [paginationLimit]="20"
+                                [organizationType]="currentOrganizationType"
+                                [localeData]="localeData"
+                                [commonLocaleData]="commonLocaleData"
+                                [taxType]="taxType"
+                                [showTaxColumn]="showTaxColumn"
+                            ></address-settings>
+                        </mat-tab>
+                        <mat-tab [label]="localeData?.other">
+                            <other-settings
+                                [organizationType]="currentOrganizationType"
+                                (saveProfile)="handleSaveProfile($event)"
+                                [profileData]="companyProfileObj"
+                                [localeData]="localeData"
+                            >
+                            </other-settings>
+                        </mat-tab>
+                    </mat-tab-group>
+                </div>
+            </div>
+        </div>
+        <div class="settings-profile-tabs" *ngIf="addressOnly">
+            <div
+                class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+                *ngIf="asideGstSidebarMenuState === 'in'"
             >
-                <personal-information
-                    *ngIf="!(getCompanyProfileInProgress$ | async) && currentTab === 'personal'"
-                    (saveProfile)="handleSaveProfile($event)"
-                    [profileData]="companyProfileObj"
-                    [organizationType]="currentOrganizationType"
-                    [localeData]="localeData"
-                    [commonLocaleData]="commonLocaleData"
-                >
-                </personal-information>
-            </tab>
-            <tab
-                [active]="this.currentTab === 'address'"
-                (selectTab)="handleTabChanged('address')"
-                [heading]="
-                    companyProfileObj?.taxType
-                        ? localeData?.address + companyProfileObj?.taxType
-                        : localeData?.addresses
-                "
-                [id]="currentTab === 'address' ? 'giddh-page-heading' : ''"
-            >
+                <tax-sidebar
+                    (navigateEvent)="handleNavigation()"
+                    (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
+                    [exclude]="'#primary-new-header'"
+                    class="gst-sidebar"
+                ></tax-sidebar>
+            </div>
+            <div class="profile-tab-container"  *ngIf="!(getCompanyProfileInProgress$ | async)">
                 <address-settings
-                    *ngIf="!(getCompanyProfileInProgress$ | async) && currentTab === 'address'"
                     [addresses]="addresses"
                     [(isAddressChangeInProgress)]="isAddressChangeInProgress"
                     [(closeSidePane)]="closeAddressSidePane"
@@ -56,88 +107,17 @@
                     [organizationType]="currentOrganizationType"
                     [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData"
+                    [addressOnly]="true"
                     [taxType]="taxType"
-                    [showTaxColumn]="showTaxColumn"
                 ></address-settings>
-            </tab>
-            <tab
-                [active]="this.currentTab === 'other'"
-                (selectTab)="handleTabChanged('other')"
-                [heading]="localeData?.other"
-                [id]="currentTab === 'other' ? 'giddh-page-heading' : ''"
-            >
-                <other-settings
-                    [organizationType]="currentOrganizationType"
-                    (saveProfile)="handleSaveProfile($event)"
-                    [profileData]="companyProfileObj"
-                    *ngIf="!(getCompanyProfileInProgress$ | async) && currentTab === 'other'"
-                    [localeData]="localeData"
-                >
-                </other-settings>
-            </tab>
-            <!-- <tab
-                *ngIf="voucherApiVersion === 2 && currentOrganizationType === 'COMPANY'"
-                [active]="this.currentTab === 'portal'"
-                (selectTab)="handleTabChanged('portal')"
-                [heading]="localeData?.portal_heading"
-                [id]="currentTab === 'portal' ? 'giddh-page-heading' : ''"
-            >
-                <portal-white-label
-                    *ngIf="!(getCompanyProfileInProgress$ | async) && currentTab === 'portal'"
-                    (saveProfile)="handleSaveProfile($event)"
-                    [profileData]="companyProfileObj"
-                    [organizationType]="currentOrganizationType"
-                    [localeData]="localeData"
-                    [commonLocaleData]="commonLocaleData"
-                >
-                </portal-white-label>
-            </tab> -->
-        </tabset>
-    </div>
-    <div class="settings-profile-tabs" *ngIf="addressOnly">
-        <div
-            class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-            *ngIf="asideGstSidebarMenuState === 'in'"
-        >
-            <tax-sidebar
-                (navigateEvent)="handleNavigation()"
-                (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
-                [exclude]="'#primary-new-header'"
-                class="gst-sidebar"
-            ></tax-sidebar>
+            </div>
         </div>
-        <div class="profile-tab-container">
-            <address-settings
-                *ngIf="!(getCompanyProfileInProgress$ | async)"
-                [addresses]="addresses"
-                [(isAddressChangeInProgress)]="isAddressChangeInProgress"
-                [(closeSidePane)]="closeAddressSidePane"
-                [currentOrganizationUniqueName]="currentOrganizationUniqueName"
-                (searchAddress)="handleSearchInAddress($event)"
-                (pageChanged)="handlePageChanged($event)"
-                [addressConfiguration]="addressConfiguration"
-                (saveNewAddress)="createNewAddress($event)"
-                (updatedAddress)="updateAddress($event)"
-                (deleteAddress)="handleDeleteAddress($event)"
-                (unLinkAddress)="handleAddressUnlinking($event)"
-                (setDefaultAddress)="handleDefaultAddress($event)"
-                [profileData]="companyProfileObj"
-                [shouldShowLoader]="shouldShowAddressLoader"
-                [paginationConfig]="addressTabPaginationData"
-                [paginationLimit]="20"
-                [organizationType]="currentOrganizationType"
-                [localeData]="localeData"
-                [commonLocaleData]="commonLocaleData"
-                [addressOnly]="true"
-                [taxType]="taxType"
-            ></address-settings>
+        <br />
+        <br />
+        <br />
+        <br />
+        <div class="branch-vector">
+            <img src="{{ imgPath }}" alt="branch-image" />
         </div>
-    </div>
-    <br />
-    <br />
-    <br />
-    <br />
-    <div class="branch-vector">
-        <img src="{{ imgPath }}" alt="branch-image" />
-    </div>
+    </ng-container>
 </ng-container>
