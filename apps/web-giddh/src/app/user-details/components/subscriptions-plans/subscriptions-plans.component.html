@@ -277,21 +277,11 @@
                                 <div
                                     [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-input': showLoader }"
                                 ></div>
-                                <!-- <input
-                                    *ngIf="!showLoader"
-                                    type="text"
-                                    name="licenceKey"
-                                    required
-                                    id="licenceKey"
-                                    [formControl]="licenceKey"
-                                    class="form-control mr-t1"
-                                    matInput
-                                    [placeholder]="localeData?.subscription?.enter_activation_key"
-                                /> -->
                                 <input-field
                                     *ngIf="!showLoader"
                                     [type]="'text'"
-                                    [id]="licenceKey"
+                                    [id]="'licenceKey'"
+                                    [formControl]="licenceKey"
                                     [name]="'licenceKey'"
                                     [required]="true"
                                     [placeholder]="localeData?.subscription?.enter_activation_key"

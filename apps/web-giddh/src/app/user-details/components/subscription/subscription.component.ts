@@ -110,6 +110,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     public activeCompany: any = {};
     /** True if subscription will move */
     public subscriptionMove: boolean = false;
+    /** Used to reset Dropdown-field default value */
     public resetSubscription: string = null;
 
     constructor(

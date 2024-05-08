@@ -9,7 +9,6 @@
     }
 }
 
-/*============Mat Range Date Picker Default CSS Overide =====Start===================*/
 .mat-datepicker-toggle {
     color: var(--color-nero) !important;
 }
@@ -29,6 +28,6 @@
 }
 .main-content-subscription{
     .dropdown-bg {
-        background-color: transparent !important;
+        background-color: var(--color-transparent-background) !important;
     }
 }

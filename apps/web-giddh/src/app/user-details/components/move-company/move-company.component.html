@@ -21,6 +21,10 @@
                             [options]="availablePlansOption"
                             (selectedOption)="selectedPlan = $event.value"
                             [required]="true"
+                            (onClear)="onSearchClear()"
+                            [allowValueReset]="true"
+                            (dynamicSearchedQuery)="onSearchQueryChange($event)"
+                            [enableDynamicSearch]="true"
                         ></dropdown-field>
                     </div>
                 </div>

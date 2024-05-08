@@ -51,6 +51,8 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     @Input() public subscriptionMove: boolean;
     /** Holds Store Subscription list observable*/
     public subscriptionList$ = this.componentStore.select(state => state.subscriptionList);
+    /** Holds all plan list used to reset all all roles after filtered allRoles Varible */
+    public availablePlansOptionList: any[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -146,6 +148,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                                     this.availablePlans[subscription.planDetails?.uniqueName] = [];
                                 }
                                 this.availablePlans[subscription.planDetails?.uniqueName] = subscription;
+                                this.availablePlansOptionList = this.availablePlansOption;
                             }
                         }
                     });
@@ -175,5 +178,28 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
         let text = this.localeData?.subscription?.move_plan_note ? this.localeData?.subscription?.move_plan_note : this.localeData?.move_plan_note;
         text = text?.replace("[COMPANY_NAME]", this.moveSelectedCompany?.name ? this.moveSelectedCompany?.name : (this.moveSelectedCompany?.companies && this.moveSelectedCompany?.companies[0]?.name ? this.moveSelectedCompany?.companies[0]?.name : this.moveSelectedCompany?.companiesList[0]?.name))?.replace("[PLAN_NAME]", this.moveSelectedCompany?.subscription?.planDetails?.name ? this.moveSelectedCompany?.subscription?.planDetails?.name : this.moveSelectedCompany?.plan?.name);
         return text;
+    }
+
+      /**
+     * Handle Role search Query
+     *
+     * @param {*} event
+     * @memberof MoveCompanyComponent
+     */
+      public onSearchQueryChange(event: any): void {
+        if (event) {
+            this.availablePlansOption = this.availablePlansOption?.filter(role => role.label.toUpperCase().indexOf(event.toUpperCase()) > -1);
+        }
+    }
+
+    /**
+     * Handle Role Search Clear
+     *
+     * @memberof MoveCompanyComponent
+     */
+    public onSearchClear(): void {
+            this.availablePlansOption = this.availablePlansOptionList;
+            this.availablePlansOption = this.availablePlansOption;
+            ;
     }
 }

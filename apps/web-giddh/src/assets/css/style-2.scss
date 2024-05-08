@@ -13548,9 +13548,11 @@ body.prevent-body-scroll {
         }
     }
 }
-.custom-btn:disabled {
-    .ladda-label {
-        color: var(--color-giddh-blue) !important;
+.custom-btn {
+    &:disabled {
+        .ladda-label {
+            color: var(--color-giddh-blue) !important;
+        }
     }
 }
 

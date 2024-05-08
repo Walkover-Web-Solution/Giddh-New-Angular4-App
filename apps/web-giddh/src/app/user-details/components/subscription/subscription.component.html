@@ -22,8 +22,8 @@
                 </div>
             </mat-grid-tile>
             <mat-grid-tile [colspan]="menuTwoWidth" class="ipad-responsive">
-                <div class="head-dropdown">                    
-                    <div class="menu-two-list" [ngClass]="{ 'skeleton-common-class': showLoader }">
+                <div class="head-dropdown d-flex align-items-center w-100 pd-l15">                    
+                    <div class="menu-two-list w-100 d-flex align-items-center" [ngClass]="{ 'skeleton-common-class': showLoader }">
                         <div class="menu-two-list-items" *ngIf="!showLoader">
                             <dropdown-field
                                 [placeholder]="commonLocaleData?.app_select"
@@ -257,21 +257,8 @@
                                         </div>
                                     </div>
                                 </mat-grid-tile>
-                                <!-- <mat-grid-tile colspan="2" [rowspan]="overallSummaryBottomRow">
-                            <div class="overall-summary-bar-two">
-                                <p>Total dues <span class="tomato">₹5,200 </span> <span class="grey">Settle now</span></p>
-                            </div>
-                        </mat-grid-tile> -->
                             </mat-grid-list>
                         </div>
-                        <!-- <div class="menu-two accordion-search-box main-content-search-box">
-                        <label for="Search-box">
-                            <img src="{{ imgPath }}search.png" alt="SearchBar" />
-                        </label>
-                        <mat-form-field class="form-field" appearance="none">
-                            <input matInput class="search-bar" placeholder="Search month" />
-                        </mat-form-field>
-                    </div> -->
                         <div class="main-tabs-content position-relative">
                             <div class="expand-button pr-2">
                                 <button
