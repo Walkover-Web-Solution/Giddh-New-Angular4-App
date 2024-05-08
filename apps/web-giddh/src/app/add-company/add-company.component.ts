@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { AbstractControl, FormArray, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
+import { FormArray, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { select, Store } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
@@ -26,7 +26,6 @@ import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-
 import { HttpClient } from "@angular/common/http";
 import { AddCompanyComponentStore } from "./utility/add-company.store";
 import { userLoginStateEnum } from "../models/user-login-state";
-import { Location } from '@angular/common';
 
 declare var initSendOTP: any;
 declare var window: any;
@@ -241,7 +240,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         private verifyActions: VerifyMobileActions,
         private socialAuthService: AuthService,
         private activateRoute: ActivatedRoute,
-        private location: Location
+        public router: Router
     ) {
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
         this.session$ = this.store.pipe(select(state => state.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
@@ -1445,7 +1444,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public back(): void {
-        this.location.back();
+        this.router.navigate(['/pages/subscription']);
     }
 
     /**

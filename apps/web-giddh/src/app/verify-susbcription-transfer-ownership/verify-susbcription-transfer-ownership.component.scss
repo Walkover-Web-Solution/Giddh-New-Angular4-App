@@ -1,0 +1,39 @@
+.flex-col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+
+    .inner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    img {
+        width: 400px;
+        opacity: 0.3;
+    }
+
+    span {
+        font-size: var(--font-size-48);
+        font-weight: bold;
+        display: block;
+        margin-top: 20px;
+    }
+
+    p {
+        color: var(--color-abbey);
+        line-height: 30px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        font-size: var(--font-size-24);
+        text-align: center;
+    }
+
+    .download-button {
+        height: calc(100vh - 150px);
+    }
+}

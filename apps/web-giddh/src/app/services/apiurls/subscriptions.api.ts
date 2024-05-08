@@ -17,5 +17,8 @@ export const SUBSCRIPTION_V2_API = {
     VERIFY_OWNERSHIP: 'v2/subscription/verify/ownership?requestId=:requestId',
     GET_BILLING_DETAILS: 'v2/subscription/billing-account/get?billingAccountUnqiueName=:billingAccountUnqiueName',
     UPDATE_BILLING_DETAILS: 'v2/subscription/billing-account/:billingAccountUnqiueName',
-    GET_COMPANIES_LIST_BY_SUBSCRIPTION_ID: 'v2/subscription/company-list/:subscriptionId?sort=:sort&sortBy=:sortBy&page=:page&count=:count&q=:query'
+    GET_COMPANIES_LIST_BY_SUBSCRIPTION_ID: 'v2/subscription/company-list/:subscriptionId?sort=:sort&sortBy=:sortBy&page=:page&count=:count&q=:query',
+    GENERATE_ORDER_BY_SUBSCRIPTION_ID: 'v2/subscription/:subscriptionId/generate-order',
+    GET_CHANGE_PLAN_DETAILS: 'v2/subscription/change-plan',
+    UPDATE_PLAN: 'v2/subscription/update'
 };

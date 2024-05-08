@@ -21,6 +21,10 @@ export interface BuyPlanState {
     promoCodeResponse: any;
     updateSubscriptionPaymentInProgress: boolean;
     updateSubscriptionPaymentIsSuccess: any;
+    generateOrderBySubscriptionIdInProgress: boolean;
+    subscriptionRazorpayOrderDetails: any;
+    getChangePlanDetailsInProgress: boolean;
+    changePlanDetails: any;
 }
 
 export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
@@ -35,7 +39,11 @@ export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
     updatePlanSuccess: null,
     updatePlanInProgress: false,
     updateSubscriptionPaymentInProgress: false,
-    updateSubscriptionPaymentIsSuccess: null
+    updateSubscriptionPaymentIsSuccess: null,
+    generateOrderBySubscriptionIdInProgress: false,
+    subscriptionRazorpayOrderDetails: null,
+    getChangePlanDetailsInProgress: null,
+    changePlanDetails: null
 };
 
 @Injectable()
@@ -284,6 +292,117 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                                 return this.patchState({
                                     updateSubscriptionPaymentInProgress: false,
                                     updateSubscriptionPaymentIsSuccess: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
+
+                            return this.patchState({
+                                updateSubscriptionPaymentInProgress: false,
+                                updateSubscriptionPaymentIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly generateOrderBySubscriptionId = this.effect((data: Observable<string>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ generateOrderBySubscriptionIdInProgress: true });
+                return this.subscriptionService.generateOrderBySubscriptionId(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    generateOrderBySubscriptionIdInProgress: false,
+                                    subscriptionRazorpayOrderDetails: res?.body ?? null
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    generateOrderBySubscriptionIdInProgress: false,
+                                    subscriptionRazorpayOrderDetails: null,
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
+
+                            return this.patchState({
+                                generateOrderBySubscriptionIdInProgress: false,
+                                subscriptionRazorpayOrderDetails: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getChangePlanDetails = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ getChangePlanDetailsInProgress: true });
+                return this.subscriptionService.getChangePlanDetails(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    getChangePlanDetailsInProgress: false,
+                                    changePlanDetails: res?.body ?? null
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    getChangePlanDetailsInProgress: false,
+                                    changePlanDetails: null,
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
+
+                            return this.patchState({
+                                getChangePlanDetailsInProgress: false,
+                                changePlanDetails: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly changePlan = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ updateSubscriptionPaymentInProgress: true });
+                return this.subscriptionService.updatePlan(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    updateSubscriptionPaymentInProgress: false,
+                                    updateSubscriptionPaymentIsSuccess: res?.body ?? null
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    updateSubscriptionPaymentInProgress: false,
+                                    updateSubscriptionPaymentIsSuccess: null,
                                 });
                             }
                         },

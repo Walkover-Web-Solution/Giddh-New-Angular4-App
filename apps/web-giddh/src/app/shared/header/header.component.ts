@@ -249,8 +249,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isLoggedInWithSocialAccount$: Observable<boolean>;
     /* True if we need to show Depreciation Message */
     public showDepreciationMessage: boolean = false;
-    /** Hold user details response */
-    public FectchUserDetailsResponse$: Observable<any>;
+    /** Hold plan version  */
+    public planVersion: number;
 
 
     /**
@@ -712,6 +712,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public getCurrentCompanyData(): void {
         this.settingsProfileService.GetProfileInfo().pipe(take(1)).subscribe((response: any) => {
             if (response && response.status === "success" && response.body) {
+                this.planVersion = response.body.planVersion;
                 this.store.dispatch(this.settingsProfileAction.handleCompanyProfileResponse(response));
                 let res = response.body;
                 this.store.dispatch(this.companyActions.setActiveCompanyData(res));
@@ -1218,13 +1219,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.modelRefCrossLimit.hide();
         }
         document.querySelector('body').classList.remove('modal-open');
-        this.router.navigate(['/pages', 'user-details'], {
-            queryParams: {
-                tab: 'subscriptions',
-                tabIndex: 3,
-                showPlans: true
-            }
-        });
+        if (this.planVersion === 2) {
+            this.router.navigate(['/pages/subscription/view-subscription/' + this.subscribedPlan?.subscriptionId]);
+        } else {
+            this.router.navigate(['/pages', 'user-details'], {
+                queryParams: {
+                    tab: 'subscriptions',
+                    tabIndex: 3,
+                    showPlans: true
+                }
+            });
+        }
     }
 
     /**
@@ -1730,7 +1735,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public getSubscriptionEndNote(): string {
         let text = this.localeData?.subscription_end_note;
-        text = text?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration)?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit)?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry);
+        if (this.planVersion === 2) {
+            text = text?.replace("[PLAN_DURATION]", this.subscribedPlan?.duration)?.replace("[PLAN_DURATION_UNIT]", '')?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry);
+        } else {
+            text = text?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration)?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit)?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry);
+        }
         return text;
     }
 

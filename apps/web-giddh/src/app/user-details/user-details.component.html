@@ -109,7 +109,11 @@
                             <div class="col-md-12 adjust-width pull-left">
                                 <div class="row">
                                     <div class="col-sm-12 mr-t1">
-                                        <button aria-label="code" class="btn btn-link btn-xs" (click)="expandLongCode = !expandLongCode">
+                                        <button
+                                            aria-label="code"
+                                            class="btn btn-link btn-xs"
+                                            (click)="expandLongCode = !expandLongCode"
+                                        >
                                             <i
                                                 class="icon-plus font-12"
                                                 [ngClass]="{ 'icon-minus': expandLongCode }"
@@ -286,6 +290,7 @@
             </tab>
 
             <tab
+                *ngIf="selectedCompany?.planVersion === 1"
                 [heading]="localeData?.subscription?.tab_heading"
                 [active]="activeTab == 'subscription'"
                 (selectTab)="onTabChanged('subscription')"
