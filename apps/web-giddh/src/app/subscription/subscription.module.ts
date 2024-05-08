@@ -29,10 +29,11 @@ import { ActivateDialogComponent } from './activate-dialog/activate-dialog.compo
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { UserDetailsModule } from '../user-details/user-details.module';
 import { CompanyListDialogComponent } from './company-list-dialog/company-list-dialog.component';
 import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.component';
 import { VerifyOwnershipDialogComponent } from './verify-ownership-dilaog/verify-ownership-dilaog.component';
+import { MoveCompanyComponent } from './move-company/move-company.component';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 
 @NgModule({
     imports: [
@@ -63,10 +64,10 @@ import { VerifyOwnershipDialogComponent } from './verify-ownership-dilaog/verify
         MatButtonToggleModule,
         AmountFieldComponentModule,
         ClickOutsideModule,
-        UserDetailsModule
+        ShSelectModule
     ],
     exports: [
     ],
-    declarations: [SubscriptionComponent, CompanyListDialogComponent, TransferDialogComponent, ChangeBillingComponent, ViewSubscriptionComponent, BuyPlanComponent, ActivateDialogComponent, VerifyOwnershipDialogComponent]
+    declarations: [SubscriptionComponent, CompanyListDialogComponent, TransferDialogComponent, ChangeBillingComponent, ViewSubscriptionComponent, BuyPlanComponent, ActivateDialogComponent, VerifyOwnershipDialogComponent, MoveCompanyComponent]
 })
 export class SubscriptionModule { }

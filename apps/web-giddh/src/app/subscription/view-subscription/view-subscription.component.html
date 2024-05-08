@@ -28,8 +28,11 @@
                             }}</span>
                         </div>
                         <div class="d-flex align-items-center column-gap1">
-                            <button aria-label="buy" mat-stroked-button color="primary" (click)="buyPlan()">
+                            <button aria-label="buy" mat-stroked-button color="primary" (click)="buyPlan()" *ngIf="viewSubscriptionData?.status === 'trial'">
                                 {{ commonLocaleData?.app_buy_plan }}
+                            </button>
+                            <button aria-label="buy" mat-stroked-button color="primary" (click)="buyPlan()" *ngIf="viewSubscriptionData?.status === 'expired'">
+                                {{ localeData?.renew }}
                             </button>
                             <button
                                 aria-label="threedots"
@@ -41,8 +44,11 @@
                             </button>
                         </div>
                         <mat-menu #menu="matMenu">
-                            <button aria-label="plan" mat-menu-item (click)="buyPlan()">
+                            <button aria-label="plan" mat-menu-item (click)="buyPlan()" *ngIf="viewSubscriptionData?.status === 'trial'">
                                 {{ commonLocaleData?.app_buy_plan }}
+                            </button>
+                            <button aria-label="plan" mat-menu-item (click)="buyPlan()" *ngIf="viewSubscriptionData?.status === 'expired'">
+                                {{ localeData?.renew }}
                             </button>
                             <button aria-label="change" mat-menu-item (click)="changeBilling()">
                                 {{ localeData?.change_billing }}
@@ -118,7 +124,7 @@
                             </div>
                         </div>
                         <div class="d-flex column-gap1 mt-3">
-                            <button aria-label="buyplan" mat-stroked-button color="primary" (click)="buyPlan()">
+                            <button aria-label="buyplan" mat-stroked-button color="primary" (click)="changePlan()">
                                 {{ localeData?.change_subscription }}
                             </button>
                             <button aria-label="cancelsubscription" mat-stroked-button (click)="cancelSubscription()">
