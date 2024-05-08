@@ -130,6 +130,15 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
             }
         });
 
+        this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
+            if (data) {
+                this.setFormValues(data);
+                this.selectedCountry = data.country?.name;
+                this.selectedState = data.state?.name;
+                this.billingDetails.billingName = data?.billingName;
+                this.billingDetails.uniqueName = data?.uniqueName;
+            }
+        });
     }
     /**
      *
@@ -147,15 +156,6 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
      */
     public ngAfterViewInit(): void {
         this.initIntl();
-        this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data) {
-                this.setFormValues(data);
-                this.selectedCountry = data.country?.name;
-                this.selectedState = data.state?.name;
-                this.billingDetails.billingName = data?.billingName;
-                this.billingDetails.uniqueName = data?.uniqueName;
-            }
-        });
     }
 
     /**
@@ -188,7 +188,7 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
         this.changeBillingForm.controls['companyName'].setValue(data.companyName);
         this.changeBillingForm.controls['email'].setValue(data.email);
         this.changeBillingForm.controls['pincode'].setValue(data.pincode);
-        if (data?.mobileNumber?.startsWith('+')) {
+        if (data?.mobileNumber && data?.mobileNumber?.startsWith('+')) {
             this.changeBillingForm.controls['mobileNumber'].setValue(data.mobileNumber);
         } else {
             this.changeBillingForm.controls['mobileNumber'].setValue('+' + data.mobileNumber);
