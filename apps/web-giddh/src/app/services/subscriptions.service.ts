@@ -358,6 +358,13 @@ export class SubscriptionsService {
             );
     }
 
+    /**
+     * This will be use for generating order by subscription id
+     *
+     * @param {*} subscriptionId
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SubscriptionsService
+     */
     public generateOrderBySubscriptionId(subscriptionId: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.GENERATE_ORDER_BY_SUBSCRIPTION_ID
             ?.replace(':subscriptionId', encodeURIComponent(subscriptionId)))
@@ -372,6 +379,13 @@ export class SubscriptionsService {
             );
     }
 
+    /**
+     * This will be use for get change plan details
+     *
+     * @param {*} request
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SubscriptionsService
+     */
     public getChangePlanDetails(request: any): Observable<BaseResponse<any, any>> {
         return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_CHANGE_PLAN_DETAILS, request)
             .pipe(
@@ -385,6 +399,13 @@ export class SubscriptionsService {
             );
     }
 
+    /**
+     * This will be use for update plan
+     *
+     * @param {*} request
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SubscriptionsService
+     */
     public updatePlan(request: any): Observable<BaseResponse<any, any>> {
         return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.UPDATE_PLAN, request)
             .pipe(

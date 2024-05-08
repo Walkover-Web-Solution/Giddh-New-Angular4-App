@@ -250,7 +250,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-        if (!this.isNewUserLoggedIn) {
             this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data?.uniqueName) {
                     this.getBillingData = true;
@@ -259,7 +258,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     this.selectedState = data.state?.name;
                 }
             });
-        }
 
         this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
@@ -326,14 +324,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     */
     public ngAfterViewInit(): void {
         this.stepperIcon._getIndicatorType = () => 'number';
-        this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if (data && data?.uniqueName) {
-                this.getBillingData = true;
-                this.setFormValues(data);
-                this.selectedCountry = data.country?.name;
-                this.selectedState = data.state?.name;
-            }
-        });
     }
 
     /**
@@ -382,9 +372,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.promoCodeResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.promoCodeResponse[0] = response;
-                console.log(this.secondStepForm?.get('country')?.value);
-                console.log(this.secondStepForm?.get('country')?.value?.value);
-                if (this.secondStepForm?.get('country')?.value?.toLowerCase() === 'in' && this.promoCodeResponse?.length) {
+                if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in' && this.promoCodeResponse?.length) {
                     this.finalPlanAmount = response?.finalAmount + (response?.finalAmount * this.taxPercentage);
                 } else {
                     this.finalPlanAmount = response?.finalAmount;

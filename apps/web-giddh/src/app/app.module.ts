@@ -65,8 +65,8 @@ if (!environment.production) {
         AppLoginSuccessComponent,
         VerifySusbcriptionTransferOwnershipComponent,
         MobileRestrictedComponent,
-      VerifySusbcriptionTransferOwnershipComponent
-   ],
+        VerifySusbcriptionTransferOwnershipComponent
+    ],
     /**
      * Import Angular's modules.
      */
