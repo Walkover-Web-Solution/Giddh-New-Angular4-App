@@ -804,6 +804,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.linkedPoNumbers = response;
         });
 
+        this.componentStore.deleteAttachmentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.selectedFileName = "";
+
+                let entryFields = [];
+                entryFields.push({ key: 'attachedFile', value: "" });
+                entryFields.push({ key: 'attachedFileName', value: "" });
+                this.invoiceForm.get("attachedFiles")?.patchValue([]);
+                this.updateEntry(0, entryFields);
+
+                this.componentStore.resetAttachmentState();
+            }
+        });
+
         /** Deposit amount change */
         this.invoiceForm.controls['deposit'].get("amountForAccount")?.valueChanges.pipe(
             debounceTime(100),
@@ -1706,7 +1720,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }),
             einvoiceGenerated: [false],
             linkedPo: [null], //temp
-            grandTotalMultiCurrency: [0] //temp
+            grandTotalMultiCurrency: [0], // temp
+            attachedFiles: [] //temp
         });
     }
 
@@ -2440,10 +2455,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     if (response?.status === 'success') {
                         entryFields.push({ key: 'attachedFile', value: response.body?.uniqueName });
                         entryFields.push({ key: 'attachedFileName', value: response.body?.name });
+                        this.invoiceForm.get("attachedFiles")?.patchValue([response.body?.uniqueName]);
                         this.toasterService.showSnackBar("success", this.localeData?.file_uploaded);
                     } else {
                         entryFields.push({ key: 'attachedFile', value: "" });
                         entryFields.push({ key: 'attachedFileName', value: "" });
+                        this.invoiceForm.get("attachedFiles")?.patchValue([]);
                         this.toasterService.showSnackBar("error", response.message);
                     }
 
@@ -2469,7 +2486,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response === this.commonLocaleData?.app_yes) {
-                this.componentStore.deleteAttachment('');
+                const entryFormGroup = this.getEntryFormGroup(0);
+                this.componentStore.deleteAttachment(entryFormGroup.get('attachedFile')?.value);
             } else {
                 this.dialog.closeAll();
             }
@@ -3324,6 +3342,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.currencySwitched = false;
 
         this.accountFormFields = [];
+        this.selectedFileName = "";
 
         this.account = {
             countryName: '',
@@ -4105,9 +4124,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 transactionFormGroup.get('stock.customField2.value')?.patchValue(response?.stock?.customField2Value);
             }
 
-            entryFormGroup.get('hsnNumber')?.patchValue(response.stock.hsnNumber);
-            entryFormGroup.get('sacNumber')?.patchValue(response.stock.sacNumber);
-            entryFormGroup.get('showCodeType')?.patchValue(response.stock.hsnNumber ? 'hsn' : 'sac');
+            entryFormGroup.get('hsnNumber')?.patchValue(response.stock.hsnNumber || response.hsnNumber);
+            entryFormGroup.get('sacNumber')?.patchValue(response.stock.sacNumber || response.sacNumber);
+            entryFormGroup.get('showCodeType')?.patchValue(response.stock.hsnNumber || response.hsnNumber ? 'hsn' : 'sac');
 
             let rate = Number((response.stock.variant?.unitRates[0].rate / this.invoiceForm.get('exchangeRate')?.value).toFixed(this.highPrecisionRate));
             transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue(rate);
@@ -4152,6 +4171,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             this.stockVariants[entryIndex] = observableOf([]);
             this.stockUnits[entryIndex] = observableOf([]);
+
+            entryFormGroup.get('hsnNumber')?.patchValue(response.hsnNumber);
+            entryFormGroup.get('sacNumber')?.patchValue(response.sacNumber);
+            entryFormGroup.get('showCodeType')?.patchValue(response.hsnNumber ? 'hsn' : 'sac');
 
             const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
             discountsFormArray.clear();
@@ -4373,8 +4396,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public onChangeHsnSacType(entryFormGroup: FormGroup): void {
         if (entryFormGroup.get('showCodeType')?.value === "hsn") {
             entryFormGroup.get('hsnNumber')?.patchValue(entryFormGroup.get('sacNumber')?.value);
+            entryFormGroup.get('sacNumber')?.patchValue(null);
         } else {
             entryFormGroup.get('sacNumber')?.patchValue(entryFormGroup.get('hsnNumber')?.value);
+            entryFormGroup.get('hsnNumber')?.patchValue(null);
         }
     }
 
