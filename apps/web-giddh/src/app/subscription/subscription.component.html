@@ -207,7 +207,7 @@
                             ></ng-container>
                         </th>
                         <td mat-cell *matCellDef="let element" class="position-relative">
-                            <span [ngClass]="{ 'text-success': element.status === 'active' }">{{
+                            <span [ngClass]="{ 'text-success': element?.status?.toLowerCase() === 'active' }">{{
                                 element?.status | uppercase
                             }}</span>
                         </td>
