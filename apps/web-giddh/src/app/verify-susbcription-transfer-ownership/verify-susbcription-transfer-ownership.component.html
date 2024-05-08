@@ -1,20 +1,20 @@
-    <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="verifyOwnershipInProgress$ | async"></giddh-page-loader>
-    <div class="flex-col" *ngIf="!(verifyOwnershipInProgress$ | async)">
-        <div class="inner">
-            <img src="{{ imgPath }}giddh-big-logo.svg" />
-            <div class="flex-column d-flex justify-content-center align-items-center" *ngIf="acceptedSubscription">
-                <p>Request accepted sucessfully</p>
-                <a
-                    class="btn btn-primary mr-0 min160 d-flex align-items-center justify-content-center"
-                    [href]="loginUrl"
-                    target="_blank"
-                >
-                    Login to Giddh</a
-                >
-            </div>
-            <p *ngIf="!acceptedSubscription">Request declined sucessfully</p>
+<giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="verifyOwnershipInProgress$ | async"></giddh-page-loader>
+<div class="flex-col" *ngIf="!(verifyOwnershipInProgress$ | async)">
+    <div class="inner">
+        <img src="{{ imgPath }}giddh-big-logo.svg" />
+        <div class="flex-column d-flex justify-content-center align-items-center" *ngIf="acceptedSubscription">
+            <p>Request accepted sucessfully</p>
+            <a
+                class="btn btn-primary mr-0 min160 d-flex align-items-center justify-content-center"
+                [href]="loginUrl"
+                target="_blank"
+            >
+                Login to Giddh</a
+            >
         </div>
+        <p *ngIf="!acceptedSubscription">Request declined sucessfully</p>
     </div>
+</div>
 
 <!--Modal for Transfer Ownership -->
 <ng-template #transferConfirmation>
@@ -33,9 +33,10 @@
                 </button>
             </div>
             <div class="modal-body">
+                <p class="font-15 mr-t05 mb-1">You've been invited to become the susbcriber for {{ requestId }}.</p>
                 <p class="font-15 mr-t05">
                     On accepting, you will become the susbcriber and be the person Giddh has on record as responsible
-                    for the organisation
+                    for the organisation.
                 </p>
             </div>
             <div class="modal-footer">
