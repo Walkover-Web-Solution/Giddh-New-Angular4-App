@@ -371,4 +371,30 @@ export class SubscriptionsService {
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
+
+    public getChangePlanDetails(request: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_CHANGE_PLAN_DETAILS, request)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    data.queryString = {};
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
+    }
+
+    public updatePlan(request: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.UPDATE_PLAN, request)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    data.queryString = {};
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
+    }
 }
