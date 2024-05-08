@@ -33,22 +33,6 @@
             <div class="row mr-b2">
                 <div class="col-sm-12 form-inline">
                     <div class="form-group custom-select position-relative mr-r15">
-                        <!-- <select
-                            class="form-control"
-                            [disabled]="newRole.isFixed"
-                            required
-                            [(ngModel)]="pageName"
-                            name="pageName"
-                        >
-                            <option value="">{{localeData?.option_select_pages}}</option>
-                            <option
-                                [disabled]="checkForAlreadyExistInPageArray(page)"
-                                *ngFor="let page of pageList;"
-                                [ngValue]="page"
-                            >
-                                {{page}}
-                            </option>
-                        </select> -->
                         <dropdown-field
                             [placeholder]="localeData?.option_select_pages"
                             [readonly]="newRole.isFixed"
@@ -70,81 +54,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="row">
-                <div class="col-sm-4" *ngFor="let page of roleObj?.scopes; let idx = index">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            {{ page.name }}
-                            <a
-                                class="close pull-right"
-                                href="javascript:void(0);"
-                                (click)="removePageFromScope(page.name)"
-                                *ngIf="!newRole.isFixed"
-                                >×</a
-                            >
-                        </div>
-                        <div class="panel-body p-0">
-                            <table class="table basic">
-                                <thead>
-                                    <tr>
-                                        <th>{{ newRole.name }}</th>
-                                        <th class="text-center">{{commonLocaleData?.app_admin}}</th>
-                                        <th class="text-center">{{commonLocaleData?.app_view}}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td colspan="100%">
-                                            <input
-                                                id="{{page.name}}+_{{idx}}"
-                                                [disabled]="newRole.isFixed"
-                                                name="{{page.name}}+_{{idx}}"
-                                                (change)="toggleItems(page.name, $event)"
-                                                type="checkbox"
-                                                [(ngModel)]="page.selectAll"
-                                            />
-                                            <label for="{{page.name}}+_{{idx}}">
-                                                {{commonLocaleData?.app_select_all}}</label
-                                            >
-                                        </td>
-                                    </tr>
-                                    <tr *ngFor="let item of page.permissions | sortBy : ['code']; let i = index">
-                                        <ng-container *ngIf="item.code !== 'SHR'">
-                                            <td>
-                                                <input
-                                                    id="{{item.code}}+{{idx}}+{{i}}"
-                                                    [disabled]="newRole.isFixed"
-                                                    (change)="toggleItem(page.name, item, $event)"
-                                                    type="checkbox"
-                                                    name="{{item.code}}_{{i}}"
-                                                    [(ngModel)]="item.isSelected"
-                                                />
-                                                <label for="{{item.code}}+{{idx}}+{{i}}">
-                                                    {{getNameByCode(item.code)}}</label
-                                                >
-                                            </td>
-                                            <td class="text-center">
-                                                <i
-                                                    class="fa"
-                                                    [ngClass]="isHavePermission(page.name, item, 'admin') ? 'fa-check' : 'fa-times'"
-                                                    aria-hidden="true"
-                                                ></i>
-                                            </td>
-                                            <td class="text-center">
-                                                <i
-                                                    class="fa"
-                                                    [ngClass]="isHavePermission(page.name, item, 'view') ? 'fa-check' : 'fa-times'"
-                                                    aria-hidden="true"
-                                                ></i>
-                                            </td>
-                                        </ng-container>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
             <div class="row">
                 <div class="col-sm-4" *ngFor="let page of roleObj?.scopes; let idx = index">
                     <div>

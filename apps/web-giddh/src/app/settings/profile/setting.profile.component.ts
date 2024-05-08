@@ -121,6 +121,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public selectedState: any = '';
     public stateGstCode: any[] = [];
     public formFields: any[] = [];
+    /** Holds Snackbar status */
     public snackOpen : boolean = true;
 
     /** Observer to track get company profile API call in process */
@@ -390,13 +391,10 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public onTabChange(event: any): void {
         this.activeTabIndex = event?.index;
         if(event.index === 0){
-            // this.router.navigateByUrl('pages/settings/profile/personal')
             this.handleTabChanged("personal");
         }else if(event.index === 1){
-            // this.router.navigateByUrl('pages/settings/profile/address')
             this.handleTabChanged("address");
         }else{
-            // this.router.navigateByUrl('pages/settings/profile/other')
             this.handleTabChanged("other");
         }
     }

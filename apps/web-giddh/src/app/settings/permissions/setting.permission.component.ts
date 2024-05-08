@@ -19,14 +19,13 @@ import { SettingsProfileActions } from '../../actions/settings/profile/settings.
     styleUrls: ['./setting.permission.component.scss']
 })
 export class SettingPermissionComponent implements OnInit, OnDestroy {
+    /** Edit User Dialog Reference */
     @ViewChild('editUserModal', { static: true }) public editUserModal: TemplateRef<any>;
-
     public sharedWith: object[] = [];
     public usersList: any;
     public selectedCompanyUniqueName: string;
     public selectedUser: ShareRequestForm;
     public currentUser: any;
-    // modals related
     public showEditUserModal: boolean = false;
     public modalConfig = {
         animated: true,
