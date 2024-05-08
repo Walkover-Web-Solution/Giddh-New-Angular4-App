@@ -50,9 +50,12 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('branchModal', { static: false }) public branchModal: ModalDirective;
     @ViewChild('companyadd', { static: false }) public companyadd: ElementViewContainerRef;
     @ViewChild('confirmationModal', { static: false }) public confirmationModal: ModalDirective;
-    @ViewChild('statusModal', { static: true }) public statusModal: any;
+    /** Holds Status Dialog Template Reference */
+    @ViewChild('statusDialog', { static: true }) public statusDialog: any;
+    /** Holds Add Company Dialog Template Reference */
     @ViewChild('addCompanyModal', { static: true }) public addCompanyModal: any;
-    @ViewChild('closeAddressSidePane', { static: true }) public closeAddressSidePane: any;
+    /** Holds Close Address Dialog Template Reference */
+    @ViewChild('addressAsidePane', { static: true }) public addressAsidePane: any;
     public bsConfig: Partial<BsDatepickerConfig> = {
         showWeekNumbers: false,
         dateInputFormat: GIDDH_DATE_FORMAT,
@@ -104,9 +107,10 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Holds branch to archive/unarchive */
     public branchStatusToUpdate: any;
-    /** Holds MatDailog Reference */
-    public statusModalRef: any;
-    public closeAddressSidePaneRef: any;
+    /** Holds Status MatDailog Reference */
+    public statusDialogRef: any;
+    /** Holds Close Address MatDailog Reference */
+    public addressAsidePaneRef: any;
 
     constructor(
         private router: Router,
@@ -400,7 +404,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         this.isBranchChangeInProgress = false;
 
-        this.closeAddressSidePaneRef = this.dialog.open(this.closeAddressSidePane,
+        this.addressAsidePaneRef = this.dialog.open(this.addressAsidePane,
             {
                 position: {
                     right: '0'
@@ -433,7 +437,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         };
         this.settingsProfileService.updateBranchInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
-                this.closeAddressSidePaneRef.close();
+                this.addressAsidePaneRef.close();
                 this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '' }));
                 this.toasterService.successToast(this.localeData?.branch_updated);
             } else {
@@ -558,7 +562,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         const unarchivedBranches = this.unFilteredBranchList?.filter(currentBranch => !currentBranch?.isArchived);
         if (unarchivedBranches?.length > 1 || branch?.isArchived) {
             this.branchStatusToUpdate = branch;
-            this.statusModalRef = this.dialog.open(this.statusModal, {
+            this.statusDialogRef = this.dialog.open(this.statusDialog, {
                 panelClass: 'modal-dialog',
                 width: '1000px',
             });
@@ -584,7 +588,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             } else {
                 this.toasterService.errorToast(response?.message);
             }
-            this.statusModalRef.close();
+            this.statusDialogRef.close();
         });
     }
 }

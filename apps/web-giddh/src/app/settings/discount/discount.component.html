@@ -65,7 +65,6 @@
                         mat-stroked-button
                         color="primary"
                         type="submit"
-                        class="btn"
                         *ngIf="!createRequest.discountUniqueName"
                         [ladda]="isLoading$ | async"
                     >
@@ -75,7 +74,6 @@
                         mat-stroked-button
                         color="primary"
                         type="submit"
-                        class="btn"
                         *ngIf="createRequest.discountUniqueName"
                         [ladda]="isLoading$ | async"
                     >
@@ -88,8 +86,6 @@
         <div>
             <div class="row mt-4">
                 <div class="col-lg-12">
-
-                    <!-- mat-table -->
                     <table mat-table [dataSource]="discountList" class="bdr table basic mr-b05 on-mobile-view w-100">
                         <ng-container matColumnDef="number">
                             <th mat-header-cell *matHeaderCellDef>#</th>

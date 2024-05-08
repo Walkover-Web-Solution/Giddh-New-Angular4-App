@@ -153,7 +153,6 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         });
 
         this.permissionForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            ;
             this.hasUnsavedChanges.emit(this.permissionForm?.dirty);
         });
     }
@@ -391,7 +390,6 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
                     this._toasty.warningToast(res?.message, res?.code);
                 }
                 this.onSubmitForm.emit(obj);
-                // this.changeDetection.detectChanges();
             });
         }
     }

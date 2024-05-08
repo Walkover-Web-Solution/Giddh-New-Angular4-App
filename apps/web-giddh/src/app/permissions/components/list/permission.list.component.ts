@@ -19,8 +19,10 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     @ViewChild(ElementViewContainerRef, { static: true }) public elementViewContainerRef: ElementViewContainerRef;
-    @ViewChild('permissionModel', { static: true }) public permissionModel: TemplateRef<any>;
-    @ViewChild('permissionConfirmationModel', { static: true }) public permissionConfirmationModel: TemplateRef<any>;
+    /** Hold Permission Dialog Template Reference */
+    @ViewChild('permissiomDialog', { static: true }) public permissiomDialog: TemplateRef<any>;
+    /** Hold Permission Confirmation Dialog Template Reference */
+    @ViewChild('permissionConfirmationDialog', { static: true }) public permissionConfirmationDialog: TemplateRef<any>;
 
     public localState: any;
     public allRoles: IRoleCommonResponseAndRequest[] = [];
@@ -35,8 +37,10 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    private permissionModelRef: MatDialogRef<any>; 
-    public permissionConfirmationModelRef: MatDialogRef<any>;
+    /* Holds Permission Dialog Reference */
+    private permissionDialogRef: MatDialogRef<any>; 
+    /* Holds Permission Confirmation Dialog Reference */
+    public permissionConfirmationDialogRef: MatDialogRef<any>;
 
     constructor(
         private store: Store<AppState>,
@@ -90,7 +94,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
      */
     public ngAfterViewInit(): void {
         if (this.showPopup) {
-            this.openPermissionModal();
+            this.openPermissionDialog();
         }
     }
 
@@ -107,9 +111,14 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
         });
     }
 
+    /**
+     * Close Permission Dialog
+     *
+     * @memberof PermissionListComponent
+     */
     public closePopupEvent(userAction) {
         this.showPopup = false;
-        this.permissionModelRef.close();
+        this.permissionDialogRef.close();
         if (userAction === 'save') {
             this.router.navigate(['/pages', 'permissions', 'details']);
         }
@@ -121,33 +130,36 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
         this.router.navigate(['/pages/permissions/details']);
     }
 
-    // public deleteRole(role: IRoleCommonResponseAndRequest) {
-    //     this.selectedRoleForDelete = role;
-    //     this.permissionConfirmationModel?.show();
-    // }
-
     public deleteRole(role: IRoleCommonResponseAndRequest): void {
         this.selectedRoleForDelete = role;
-       this.permissionConfirmationModelRef =  this.dialog.open(this.permissionConfirmationModel, {
+       this.permissionConfirmationDialogRef =  this.dialog.open(this.permissionConfirmationDialog, {
             panelClass: 'modal-dialog',
             width: '600px'
         });
     }
 
+    
     public deleteConfirmedRole() {
-        this.permissionConfirmationModelRef.close();
+        this.permissionConfirmationDialogRef.close();
         this.store.dispatch(this.permissionActions.DeleteRole(this.selectedRoleForDelete?.uniqueName));
     }
 
-    // public closeConfirmationPopup() {
-    //     this.permissionConfirmationModel.hide();
-    // }
+    /**
+     * Close Permission Confirmation Dialog
+     *
+     * @memberof PermissionListComponent
+     */
+    public closeConfirmationPopup() {
+        this.permissionConfirmationDialogRef.close();
+    }
 
-    // public openPermissionModal() {
-    //     this.permissionModel?.show();
-    // }
-    public openPermissionModal(): void {
-        this.permissionModelRef = this.dialog.open(this.permissionModel, {
+    /**
+     * Open Permission Dialog
+     *
+     * @memberof PermissionListComponent
+     */
+    public openPermissionDialog(): void {
+        this.permissionDialogRef = this.dialog.open(this.permissiomDialog, {
             panelClass: 'modal-dialog',
             width: '650px'
         });

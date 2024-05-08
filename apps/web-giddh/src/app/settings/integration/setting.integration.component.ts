@@ -93,10 +93,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     @ViewChild('editAccountModal', { static: true }) public editAccountModal: TemplateRef<any>;
     /** Instance of create new account user modal */
     @ViewChild('createNewAccountUserModal', { static: true }) public createNewAccountUserModal: TemplateRef<any>;
-    /** Instance of edit account user modal */
-    // @ViewChild('editAccountUserModal', { static: false }) public editAccountUserModal: ModalDirective;
     /** Instance of delete account user modal */
     @ViewChild('confirmationModal', { static: true }) public confirmationModal: TemplateRef<any>;
+    /** Edit Account User Dailog Template Reference */
     @ViewChild('editAccountUserModal', { static: true }) public editAccountUserModal: TemplateRef<any>;
 
     //variable holding account Info
@@ -186,8 +185,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public iciciBankSupportedCountryList: any[] = ["IN", "NP", "BT"];
     /** True, if is other country in payment integration */
     public isIciciBankSupportedCountry: boolean = false;
-/** True, if is add or manage group form outside */
-    public isAddAndManageOpenedFromOutside:boolean = false;
+    /** True, if is add or manage group form outside */
+    public isAddAndManageOpenedFromOutside: boolean = false;
     /** Hold editAccountUserModal mat dailog reference */
     public editAccountUserModalRef: any;
     /** Hold confirmationModalRef mat dailog reference */
@@ -1213,7 +1212,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             this.isLoading = false;
             if (response?.body) {
                 this.connectedBankAccounts = response.body;
-                
+
                 this.connectedBankAccounts.forEach(bankAccount => {
                     if (bankAccount?.bankResource?.payor?.length > 0) {
                         bankAccount?.bankResource?.payor.forEach(payor => {
@@ -1222,7 +1221,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                     }
                 });
             }
-            
+
             this.changeDetectionRef.detectChanges();
         });
     }
@@ -1314,7 +1313,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public openEditAccountUserModal(bankAccount: any, payor: any): void {
         this.activeBankAccount = bankAccount;
         this.activePayorAccount = payor;
-       this.editAccountUserModalRef =  this.dialog.open(this.editAccountUserModal, {
+        this.editAccountUserModalRef = this.dialog.open(this.editAccountUserModal, {
             panelClass: 'modal-dialog',
             width: '1000px',
         });
@@ -1342,7 +1341,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public getPayorRegistrationStatus(bankAccount: any, payor: any): void {
-            if(bankAccount?.bankResource?.uniqueName?.length && payor?.urn?.length){
+        if (bankAccount?.bankResource?.uniqueName?.length && payor?.urn?.length) {
             let request;
 
             if (this.isPlaidSupportedCountry) {
@@ -1350,10 +1349,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             } else {
                 request = { bankAccountUniqueName: bankAccount.bankResource.uniqueName, bankUserId: payor.urn };
             }
-            
+
             this.settingsIntegrationService.getPayorRegistrationStatus(request).pipe(take(1)).subscribe(response => {
                 payor.isConnected = (response?.body?.status === ACCOUNT_REGISTERED_STATUS);
-                
+
                 if (!payor.isConnected && response?.body?.message) {
                     this.toasty.errorToast(response?.body?.message);
                 }

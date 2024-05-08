@@ -53,45 +53,7 @@
                                 </div>
                             </div>
                             <div class="table-responsive" *ngIf="financialYearObj && financialYearObj.financialYears">
-                                <!-- <table class="table-bordered basic table financial-year on-mobile-view">
-                                    <thead [hidden]="!financialYearObj?.financialYears?.length">
-                                        <tr>
-                                            <th>{{ localeData?.sr_no }}</th>
-                                            <th>{{ commonLocaleData?.app_from }}</th>
-                                            <th>{{ commonLocaleData?.app_to }}</th>
-                                            <th>{{ localeData?.lock_status }}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody *ngIf="financialYearObj && financialYearObj.financialYears">
-                                        <tr
-                                            *ngFor="let financialYear of financialYearObj.financialYears; let i = index"
-                                        >
-                                            <td data-title="#">{{ i + 1 }}</td>
-                                            <td [attr.data-title]="commonLocaleData?.app_from">
-                                                {{ financialYear?.financialYearStarts }}
-                                            </td>
-                                            <td [attr.data-title]="commonLocaleData?.app_to">
-                                                {{ financialYear?.financialYearEnds }}
-                                            </td>
-                                            <td [attr.data-title]="localeData?.lock_status" class="status">
-                                                <span *ngIf="financialYear?.isLocked"
-                                                    ><span (click)="lockUnlockFinancialYear(financialYear)"
-                                                        ><i class="fa fa-toggle-off fa-2x cp" aria-hidden="true"></i
-                                                    ></span>
-                                                    <label>{{ localeData?.locked }}</label></span
-                                                >
-                                                <span *ngIf="!financialYear?.isLocked"
-                                                    ><span (click)="lockUnlockFinancialYear(financialYear)"
-                                                        ><i class="fa fa-toggle-on fa-2x cp" aria-hidden="true"></i
-                                                    ></span>
-                                                    <label>{{ localeData?.unlocked }}</label></span
-                                                >
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table> -->
-
-                                <table
+                               <table
                                     mat-table
                                     [dataSource]="financialYearObj.financialYears"
                                     class="table-bordered basic table financial-year on-mobile-view"

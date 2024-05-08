@@ -68,7 +68,7 @@
                     [name]="'title'"
                     [placeholder]="localeData?.communication?.auth_key"
                     [(ngModel)]="communicationPlatformAuthModel.authFields[0].value"
-                    [required]="mandatoryFields.authKey ? true : false"
+                    [required]="mandatoryFields.authKey"
                 ></input-field>
             </div>
             <button

@@ -21,7 +21,7 @@
                     <dropdown-field
                         [label]="localeData?.role_type_label"
                         [required]="true"
-                        (selectedOption)="newRoleObj.isFresh = $event.value"
+                        (selectedOption)="$event.value && newRoleObj.isFresh = $event.value"
                         [name]="'isFresh'"
                         [options]="isFreshOptions"
                     ></dropdown-field>
@@ -34,10 +34,9 @@
                                 <mat-checkbox
                                     color="primary"
                                     (change)="selectAllPages($event)"
-                                    [ngModelOptions]="{ standalone: true }"
-                                    [(ngModel)]="newRoleObj.isSelectedAllPages"
+                                    [checked]="newRoleObj.isSelectedAllPages"
                                 >
-                                    {{ commonLocaleData?.app_select_all }}
+                                    {{ commonLocaleData?.app_select_all }} {{newRoleObj.isSelectedAllPages}}
                                 </mat-checkbox>
                             </div>
                             <ng-container *ngFor="let item of newRoleObj.pageList; let i = index">
@@ -67,7 +66,7 @@
                     <button mat-stroked-button color="primary" type="submit" class="btn" [disabled]="!isFormValid">
                         {{ commonLocaleData?.app_next }}
                     </button>
-                    <button mat-stroked-button mat-dialog-close class="btn custom-btn" (click)="closePopupEvent()">
+                    <button mat-stroked-button class="btn custom-btn" type="button" (click)="closePopupEvent()">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>

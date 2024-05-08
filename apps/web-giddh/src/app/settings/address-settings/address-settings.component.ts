@@ -31,8 +31,9 @@ import { WarehouseActions } from '../warehouse/action/warehouse.action';
     ]
 })
 export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
-    /*--- mat-dialog ---*/
+    /** Holds Aside Account AsidePane Dialog Template Reference */
     @ViewChild("asideAccountAsidePane") public asideAccountAsidePane: TemplateRef<any>;
+    /** Holds Delete Address Confirmation Dialog Template Reference */
     @ViewChild("deleteAddressConfirmationModal") public deleteAddressConfirmationModal: TemplateRef<any>;
     /** True if we need to show manage address section only */
     @Input() public addressOnly: boolean = false;
@@ -134,9 +135,11 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public hideLinkEntity: boolean = true;
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /*-- mat-table --*/
-    displayedColumns: string[] = ['no', 'name', 'address', 'gstin', 'state', 'linked'];
+    /** Holds Table Columns */
+    public displayedColumns: string[] = ['no', 'name', 'address', 'gstin', 'state', 'linked'];
+    /** Holds Delete Address Confirmation Dialog Reference */
     private deleteAddressConfirmationModalRef: MatDialogRef<any>;
+    /** Holds Aside Account AsidePane Dialog Reference */
     private asideAccountAsidePaneRef: MatDialogRef<any>;
 
 
@@ -265,9 +268,6 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      *
      * @memberof AddressSettingsComponent
      */
-    // public openAddAndManage(): void {
-    //     this.toggleAccountAsidePane();
-    // }
     public openAddAndManage() {
         this.toggleAccountAsidePane();
         
@@ -281,7 +281,6 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public toggleAccountAsidePane(): void {
         this.isAddressChangeInProgress = false;
         this.isAddressChangeInProgressChange.emit(this.isAddressChangeInProgress);
-        // this.closeSidePaneChange.emit(this.closeSidePane);
         this.asideAccountAsidePaneRef =  this.dialog.open(this.asideAccountAsidePane, {
             width: '1000px',
             height: '100vh !important',
@@ -290,7 +289,6 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
                 top: '0'
             }
         });
-        // this.toggleBodyClass();
     }
 
     public closeAccountAsidePane(): void{

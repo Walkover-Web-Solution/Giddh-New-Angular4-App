@@ -80,20 +80,20 @@
                                 {{ localeData?.email?.connect_gmail }}
                             </a>
                         </ng-container>
-
-                        <h4 *ngIf="isGmailIntegrated$ | async" class="text-success align-self-center">
-                            {{ localeData?.email?.gmail_connected }}
-                        </h4>
-                        <button
-                            mat-stroked-button
-                            color="warn"
-                            aria-label="remove account"
-                            *ngIf="isGmailIntegrated$ | async"
-                            class="btn mr-l2"
-                            (click)="removegmailintegration.toggle()"
-                        >
-                            {{ localeData?.email?.remove_account }}
-                        </button>
+                        <ng-container *ngIf="isGmailIntegrated$ | async">
+                            <h4 class="text-success align-self-center">
+                                {{ localeData?.email?.gmail_connected }}
+                            </h4>
+                            <button
+                                mat-stroked-button
+                                color="warn"
+                                aria-label="remove account"
+                                class="btn mr-l2"
+                                (click)="removegmailintegration.toggle()"
+                            >
+                                {{ localeData?.email?.remove_account }}
+                            </button>
+                        </ng-container>
                     </div>
                 </div>
 
@@ -294,6 +294,7 @@
                                         <div class="col-sm-12 form-group">
                                             <button
                                                 aria-label="save"
+                                                type="submit"
                                                 *ngIf="!updatePaypal"
                                                 mat-stroked-button
                                                 color="primary"
@@ -305,6 +306,7 @@
                                             <button
                                                 aria-label="update"
                                                 *ngIf="updatePaypal"
+                                                type="submit"
                                                 mat-stroked-button
                                                 color="primary"
                                                 [disabled]="paypalForm.invalid"
@@ -316,6 +318,8 @@
                                                 aria-label="delete"
                                                 *ngIf="updatePaypal"
                                                 mat-stroked-button
+                                                color="warn"
+                                                type="button"
                                                 (click)="deletePaypalDetails()"
                                             >
                                                 {{ commonLocaleData?.app_delete }}

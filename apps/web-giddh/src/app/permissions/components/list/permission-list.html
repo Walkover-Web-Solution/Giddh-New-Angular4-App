@@ -7,7 +7,7 @@
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="container-fluid clearfix" *ngIf="allRoles?.length > 0">
         <div class="col-sm-12 mr-t2 mr-b2 d-flex justify-content-end column-gap5">
-            <button mat-stroked-button color="primary" (click)="openPermissionModal()">
+            <button mat-stroked-button color="primary" (click)="openPermissionDialog()">
                 {{localeData?.add_new_role}}
             </button>
             <button
@@ -28,8 +28,8 @@
                             <button
                                 mat-stroked-button
                                 *ngIf="!role.isFixed"
-                                class="btn custom-btn"
-                                (click)="updateRole(role);"
+                                class="custom-btn"
+                                (click)="updateRole(role)"
                             >
                                 {{commonLocaleData?.app_edit}}
                             </button>
@@ -37,12 +37,11 @@
                                 mat-stroked-button
                                 color="warn"
                                 *ngIf="!role.isFixed"
-                                class="btn"
                                 (click)="deleteRole(role);"
                             >
                                 {{commonLocaleData?.app_delete}}
                             </button>
-                            <button mat-stroked-button color="primary" class="btn" (click)="updateRole(role);">
+                            <button mat-stroked-button color="primary" (click)="updateRole(role)">
                                 {{commonLocaleData?.app_view}}
                             </button>
                         </div>
@@ -58,8 +57,7 @@
     </div>
 
     <!--add and manage role model -->
-    <ng-template #permissionModel>
-        <!-- <div class="modal-dialog modal-md"> -->
+    <ng-template #permissiomDialog>
         <div class="modal-content">
             <permission-model
                 [localeData]="localeData"
@@ -67,11 +65,10 @@
                 (closeEvent)="closePopupEvent($event)"
             ></permission-model>
         </div>
-        <!-- </div> -->
     </ng-template>
 
     <!--delete role confirmation model -->
-    <ng-template #permissionConfirmationModel>
+    <ng-template #permissionConfirmationDialog>
         <div class="modal-content">
             <delete-role-confirmation-model
                 [selectedRoleForDelete]="selectedRoleForDelete"

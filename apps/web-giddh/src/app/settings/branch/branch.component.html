@@ -313,7 +313,7 @@
             </div>
         </ng-template>
     </div>
-    <ng-template #statusModal>
+    <ng-template #statusDialog>
         <div class="modal-md">
             <div class="modal-content">
                 <confirm-modal
@@ -324,7 +324,7 @@
                             : localeData?.confirm_archive_title
                     "
                     [permanentlyDeleteMessage]="' '"
-                    (cancelCallBack)="branchStatusToUpdate = ''; statusModalRef.close()"
+                    (cancelCallBack)="branchStatusToUpdate = ''; statusDialogRef.close()"
                     (successCallBack)="updateBranchStatus()"
                 >
                 </confirm-modal>
@@ -332,7 +332,7 @@
         </div>
     </ng-template>
     <!-- Edit branch -->
-    <ng-template #closeAddressSidePane>
+    <ng-template #addressAsidePane>
         <div
             appTranslate
             [file]="'settings/profile'"
@@ -340,9 +340,9 @@
             [requireCommonData]="false"
         >
             <create-address
-                [class]="closeAddressSidePane"
+                [class]="addressAsidePane"
                 [keyboardShortcut]="'esc'"
-                (onShortcutPress)="closeAddressSidePaneRef.close()"
+                (onShortcutPress)="addressAsidePaneRef.close()"
                 [companyName]="currentBranch"
                 [branchToUpdate]="branchToUpdate"
                 [showLoader]="isBranchChangeInProgress"
@@ -350,7 +350,7 @@
                 [addressConfiguration]="addressConfiguration"
                 [localeData]="profileLocaleData"
                 [commonLocaleData]="commonLocaleData"
-                (closeAsideEvent)="closeAddressSidePaneRef.close()"
+                (closeAsideEvent)="addressAsidePaneRef.close()"
             >
             </create-address>
         </div>
