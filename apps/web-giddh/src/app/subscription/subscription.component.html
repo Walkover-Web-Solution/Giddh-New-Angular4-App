@@ -231,18 +231,24 @@
                             <mat-menu #editModelBasic="matMenu">
                                 <div class="account-detail-custom-header">
                                     <button
-                                        *ngIf="element?.status === 'trial' || element?.status === 'expired'"
                                         mat-menu-item
                                         (click)="changePlan(element)"
                                     >
                                         {{ localeData?.change_plan }}
                                     </button>
                                     <button
-                                        *ngIf="!(element?.status === 'trial' || element?.status === 'expired')"
+                                        *ngIf="element?.status === 'trial'"
                                         mat-menu-item
-                                        (click)="buyPlan()"
+                                        (click)="buyPlan(element)"
                                     >
                                         {{ commonLocaleData?.app_buy_plan }}
+                                    </button>
+                                    <button
+                                        *ngIf="element?.status === 'expired'"
+                                        mat-menu-item
+                                        (click)="buyPlan(element)"
+                                    >
+                                        {{ localeData?.renew }}
                                     </button>
                                     <button mat-menu-item (click)="viewSubscription(element)">
                                         {{ localeData?.view_subscription }}
