@@ -247,6 +247,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
+        if (!this.isNewUserLoggedIn) {
+            this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                if (data && data?.uniqueName) {
+                    this.getBillingData = true;
+                    this.setFormValues(data);
+                    this.selectedCountry = data.country?.name;
+                    this.selectedState = data.state?.name;
+                }
+            });
+        }
+
         this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
             if (this.isNewUserLoggedIn) {
@@ -307,16 +318,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public ngAfterViewInit(): void {
         this.stepperIcon._getIndicatorType = () => 'number';
         this.initIntl();
-        if (!this.isNewUserLoggedIn) {
-            this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                if (data && data?.uniqueName) {
-                    this.getBillingData = true;
-                    this.setFormValues(data);
-                    this.selectedCountry = data.country?.name;
-                    this.selectedState = data.state?.name;
-                }
-            });
-        }
     }
 
     /**
@@ -1054,7 +1055,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.secondStepForm.controls['pincode'].setValue(data.pincode);
         if (data.mobileNumber && this.intlClass) {
             if (data?.mobileNumber?.startsWith('+')) {
-                this.secondStepForm.get['mobileNumber'].setValue(data.mobileNumber);
+                this.secondStepForm.controls['mobileNumber'].setValue(data.mobileNumber);
             } else {
                 this.secondStepForm.controls['mobileNumber'].setValue('+' + data.mobileNumber);
             }
