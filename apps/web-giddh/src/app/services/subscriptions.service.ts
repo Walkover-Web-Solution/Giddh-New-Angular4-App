@@ -357,4 +357,18 @@ export class SubscriptionsService {
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
+
+    public generateOrderBySubscriptionId(subscriptionId: any): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.GENERATE_ORDER_BY_SUBSCRIPTION_ID
+            ?.replace(':subscriptionId', encodeURIComponent(subscriptionId)))
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    data.queryString = {};
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
+    }
 }

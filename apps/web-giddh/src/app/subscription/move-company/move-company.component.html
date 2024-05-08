@@ -1,0 +1,44 @@
+<div class="modal-header d-flex align-items-center flex-row-reverse">
+    <button aria-hidden="true" class="close" mat-dialog-close>×</button>
+    <h3>
+        {{ localeData?.subscription?.move_company ? localeData?.subscription?.move_company : localeData?.move_company }}
+    </h3>
+</div>
+<div *ngIf="isLoading">
+    <giddh-page-loader></giddh-page-loader>
+</div>
+<mat-dialog-content class="move-content w-100">
+    <div *ngIf="!isLoading">
+        <div id="my-frame" class="modal-body move-company-modal-body clearfix">
+            <p class="text-black mb-2" [innerHTML]="getMovePlanText()"></p>
+            <div class="row mb-2">
+                <div class="col-md-6 move-wrapper">
+                    <label class="font-15"
+                        >{{ localeData?.subscription?.select_plan ? localeData?.subscription?.select_plan: localeData?.select_plan }}<span class="text-danger">*</span></label
+                    >
+                    <div class="select-caret position-relative move-select">
+                        <sh-select
+                            [placeholder]="localeData?.subscription?.select_plan ? localeData?.subscription?.select_plan : localeData?.select_plan"
+                            name="availablePlans"
+                            [options]="availablePlansOption"
+                            [isFilterEnabled]="true"
+                            [(ngModel)]="selectedPlan"
+                            [isRequired]="true"
+                        ></sh-select>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix">
+                <button
+                    mat-stroked-button
+                    color="primary"
+                    mat-dialog-close
+                    (click)="moveCompanyInNewPlan()"
+                    [disabled]="!selectedPlan"
+                >
+                    {{ localeData?.subscription?.move ? localeData?.subscription?.move : localeData?.move }}
+                </button>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
