@@ -77,7 +77,7 @@
                         <div class="d-flex justify-content-between my-3">
                             <p class="strong mb-1 font-16">{{ viewSubscriptionData?.planName }}</p>
                             <span class="font-24">
-                                {{ viewSubscriptionData?.amount }}
+                                {{ viewSubscriptionData?.planCurrency?.symbol }} {{ viewSubscriptionData?.amount }}
                             </span>
                         </div>
                         <h4 class="strong border-bottom pb-3 font-16 mr-t2">Total</h4>
@@ -135,9 +135,7 @@
                 </mat-card-content>
             </mat-card>
         </div>
-        <ng-container
-            *ngIf="viewSubscriptionData?.cashfreeBillingInfo || viewSubscriptionData?.paymentMethodTypeMode"
-        >
+        <ng-container *ngIf="viewSubscriptionData?.cashfreeBillingInfo || viewSubscriptionData?.paymentMethodTypeMode">
             <div class="billing-account">
                 <mat-card class="outline-card">
                     <mat-card-content>
