@@ -120,8 +120,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** Hold country source observable*/
     public countrySource$: Observable<IOption[]> = observableOf([]);
     /** Hold plan data source*/
-    public changePlan: any;
-    /** Hold plan data source*/
     public promoCodeResponse: any[] = [];
     /** This will use for tax percentage */
     public taxPercentage: number = 0.18;
@@ -155,6 +153,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public getBillingDetails$ = this.changeBillingComponentStore.select(state => state.getBillingDetails);
     /** True if it have billing details */
     public getBillingData: boolean = false;
+    /** Holds Store Get Billing Details observable*/
+    public changePlanDetails$ = this.componentStore.select(state => state.changePlanDetails);
+    /** Holds subscription request */
+    public subscriptionRequest: any;
 
     constructor(
         public dialog: MatDialog,
@@ -195,7 +197,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
             if (params) {
-                this.changePlan = params.change;
+                this.subscriptionId = params.id;
+                this.isChangePlan = true;
             }
         });
 
@@ -293,6 +296,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.promoCodeResponse = [];
                 this.firstStepForm?.get('promoCode').setValue("");
                 this.setFinalAmount();
+            }
+        });
+
+        this.changePlanDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.initializePayment(response);
             }
         });
     }
@@ -893,7 +902,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 address: this.subscriptionForm.value.secondStepForm.address
             },
             promoCode: this.subscriptionForm.value.firstStepForm.promoCode ? this.subscriptionForm.value.firstStepForm.promoCode : null,
-            paymentProvider: this.subscriptionForm.value.firstStepForm.duration === "YEARLY" ? "RAZORPAY" : "CASHFREE"
+            paymentProvider: this.subscriptionForm.value.firstStepForm.duration === "YEARLY" ? "RAZORPAY" : "CASHFREE",
+            subscriptionId: null
         }
 
         if (this.subscriptionForm.value.secondStepForm.country.value === 'UK') {
@@ -907,9 +917,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 code: this.subscriptionForm.value.secondStepForm.state.value ? this.subscriptionForm.value.secondStepForm.state.value : this.subscriptionForm.value.secondStepForm.state.code
             };
         }
-        if (this.changePlan) {
-            this.isChangePlan = true;
-            this.componentStore.updateSubscription(request);
+        if (this.isChangePlan) {
+            request.subscriptionId = this.subscriptionId;
+            this.subscriptionRequest = request;
+            this.componentStore.getChangePlanDetails(request);
         } else {
             this.componentStore.createSubscription(request);
         }

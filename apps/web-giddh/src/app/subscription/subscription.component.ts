@@ -628,8 +628,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @param data - The subscription data for which the plan is to be changed.
      * @memberof SubscriptionComponent
      */
-    public changePlan(): void {
-        this.router.navigate(['/pages/subscription/buy-plan/change']);
+    public changePlan(subscription: any): void {
+        this.router.navigate(['/pages/subscription/buy-plan/' + subscription.subscriptionId]);
     }
 
     /**
