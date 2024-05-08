@@ -456,14 +456,14 @@
                                                         formControlName="mobileNumber"
                                                         [ngClass]="{
                                                             'invalid-input':
-                                                            isFormSubmitted && (!secondStepForm.get('mobileNumber')?.value ||
-                                                                    !intlClass?.isRequiredValidNumber)
+                                                            isFormSubmitted &&
+                                                                    !intlClass?.isRequiredValidNumber
                                                         }"
                                                     />
                                                     <mat-error
                                                         *ngIf="
-                                                        !secondStepForm.get('mobileNumber')?.value  ||
-                                                            !intlClass?.isRequiredValidNumber
+                                                             isFormSubmitted &&
+                                                                    !intlClass?.isRequiredValidNumber
                                                         "
                                                         >{{ localeData?.enter_valid_number }}</mat-error
                                                     >

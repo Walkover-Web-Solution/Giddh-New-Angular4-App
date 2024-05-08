@@ -67,7 +67,7 @@ export class VerifySusbcriptionTransferOwnershipComponent implements OnInit {
      */
     public dialogOpen(): void {
         this.modalDialogRef = this.dialog.open(this.dialogBox, {
-            width: '630px'
+            width: '850px'
         });
     }
 
