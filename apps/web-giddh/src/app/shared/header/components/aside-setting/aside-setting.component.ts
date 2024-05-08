@@ -62,6 +62,11 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
             if (this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('aside-setting', response?.value).subscribe(response => {
                     this.localeData = response;
+                    this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+                        if (activeCompany) {
+                            this.selectedCompany = activeCompany;
+                        }
+                    });
                     this.translationComplete(true);
                 });
             }
@@ -77,11 +82,6 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.selectedCompany = activeCompany;
-            }
-        });
     }
 
     /**
@@ -139,6 +139,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      */
     public translationComplete(event: any): void {
         if (event) {
+
             let settingsPageTabs = this.localeData?.tabs;
             if (settingsPageTabs) {
                 let loop = 0;
@@ -153,7 +154,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                     }
                     Object.keys(settingsPageTabs[organizationIndex]).forEach(key => {
                         this.settingsPageTabs[loop] = [];
-                        this.settingsPageTabs[loop] = [...settingsPageTabs[organizationIndex][key]?.filter(value => !value?.planVersion || (value?.planVersion && +this.selectedCompany.planVersion === +value?.planVersion))];
+                        this.settingsPageTabs[loop] = [...settingsPageTabs[organizationIndex][key]?.filter(value => !value?.planVersion || (value?.planVersion && +this.selectedCompany?.planVersion === +value?.planVersion))];
                         loop++;
                     });
                 });
