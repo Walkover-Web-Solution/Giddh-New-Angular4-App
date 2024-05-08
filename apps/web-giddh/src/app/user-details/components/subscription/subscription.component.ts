@@ -108,6 +108,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     public isExpand: boolean = false;
     /** This will use for active company */
     public activeCompany: any = {};
+    /** Used to reset Dropdown-field default value */
     public resetSubscription: string = null;
 
     constructor(

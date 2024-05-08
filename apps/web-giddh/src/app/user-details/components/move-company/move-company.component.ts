@@ -39,6 +39,8 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     public searchPlan: UntypedFormControl = new UntypedFormControl();
     /** True if api call in progress */
     public isLoading: boolean = true;
+    /** Holds all plan list used to reset all all roles after filtered allRoles Varible */
+    public availablePlansOptionList: any[] = [];
 
     constructor(private store: Store<AppState>, private settingsProfileActions: SettingsProfileActions, private settingsProfileService: SettingsProfileService) {
 
@@ -108,6 +110,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                                 this.availablePlans[plan.planDetails?.uniqueName] = [];
                             }
                             this.availablePlans[plan.planDetails?.uniqueName] = plan;
+                            this.availablePlansOptionList = this.availablePlansOption;
                         }
                     });
                 }
@@ -136,5 +139,28 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
         let text = this.localeData?.subscription?.move_plan_note;
         text = text?.replace("[COMPANY_NAME]", this.moveSelectedCompany?.name)?.replace("[PLAN_NAME]", this.moveSelectedCompany?.subscription?.planDetails?.name);
         return text;
+    }
+
+      /**
+     * Handle Role search Query
+     *
+     * @param {*} event
+     * @memberof MoveCompanyComponent
+     */
+      public onSearchQueryChange(event: any): void {
+        if (event) {
+            this.availablePlansOption = this.availablePlansOption?.filter(role => role.label.toUpperCase().indexOf(event.toUpperCase()) > -1);
+        }
+    }
+
+    /**
+     * Handle Role Search Clear
+     *
+     * @memberof MoveCompanyComponent
+     */
+    public onSearchClear(): void {
+            this.availablePlansOption = this.availablePlansOptionList;
+            this.availablePlansOption = this.availablePlansOption;
+            ;
     }
 }

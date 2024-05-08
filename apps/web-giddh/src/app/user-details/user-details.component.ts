@@ -81,6 +81,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public displayedColumns: string[] = ['ipaddress', 'signindate', 'signintime', 'duration', 'agent', 'action'];
     /** Holds Active Tab Index */
     public activeTabIndex: number = 0;
+    /** Holds Tab Name */
     private tabName = ['auth-key','mobile-number', 'session', 'subscription'];
 
     constructor(private store: Store<AppState>,
@@ -118,7 +119,12 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         }), takeUntil(this.destroyed$));
     }
 
-    public toggleIsCopied() {
+    /**
+     * Copy Authkey to Clipboard
+     *
+     * @memberof UserDetailsComponent
+     */
+    public toggleIsCopied(): void {
         this.isCopied = true;
         this.clipboardService.copyFromContent(this.userAuthKey);
         setTimeout(() => {
@@ -232,17 +238,9 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public ngAfterViewInit(): void {
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
             if (val && val.tab && val.tabIndex) {
-                console.log("val.tabIndex",val.tabIndex);
-                
                 this.selectTab({ index : val.tabIndex});
             }
         });
-
-        // if (document.getElementsByClassName('nav-item') && document.getElementsByClassName('nav-item')[3]) {
-        //     document.getElementsByClassName('nav-item')[3].addEventListener('click', (event) => {
-        //         this.onTabChanged();
-        //     });
-        // }
     }
 
     public addNumber(no: string) {

@@ -28,13 +28,14 @@
                                     <input-field
                                         [label]="localeData?.auth_key?.main_auth_key"
                                         #authKeyUrl
-                                        [id]="authKey"
+                                        [id]="'authKey'"
                                         [name]="'userAuthKey'"
                                         [(ngModel)]="userAuthKey"
                                         [readonly]="true"
                                     ></input-field>                                    
                                 </div>
                                 <button
+                                    type="button"
                                     mat-stroked-button
                                     color="primary"
                                     (click)="toggleIsCopied()"
@@ -48,10 +49,10 @@
                             </div>
                             </div>
                             <div class="form-group clearfix mb-0">
-                                <button mat-stroked-button color="primary" (click)="regenerateKey()" class="mr-4">
+                                <button mat-stroked-button color="primary" type="submit" (click)="regenerateKey()" class="mr-4">
                                     {{ localeData?.auth_key?.regenerate_auth_key }}
                                 </button>
-                                <a class="document-link" href="{{ apiPostmanDocUrl }}" target="_blank">{{
+                                <a class="text-primary" href="{{ apiPostmanDocUrl }}" target="_blank">{{
                                     localeData?.auth_key?.documentation
                                 }}</a>
                             </div>
@@ -77,8 +78,8 @@
                                     [(ngModel)]="phoneNumber"
                                 ></input-field>
                                 <p class="mt-2">
-                                    <b>{{ commonLocaleData?.app_note }}: </b
-                                    >{{ localeData?.mobile_number?.mobile_number_format }}
+                                    <strong>{{ commonLocaleData?.app_note }}: </strong>
+                                    {{ localeData?.mobile_number?.mobile_number_format }}
                                 </p>
                             </div>
                             <div class="col-lg-4 pd-l05">

@@ -88,7 +88,6 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
     }
 
     public onUserConfirmation(yesOrNo: boolean) {
-        // this.confirmationModal.hide();
         if (yesOrNo) {
             let data = cloneDeep(this.newTag);
             this.settingsTagService.DeleteTag(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -132,6 +131,12 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+    * Open Create Tag Dialog
+    *
+    * @param {TagRequest} tag
+    * @memberof SettingsTagsComponent
+    */
     public showCreateTag(): void {
         this.createTagFormRef = this.dialog.open(this.createTagForm, {
             panelClass: 'openform',
@@ -144,8 +149,13 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
         });
     }
 
-
-    public deleteTag(tag: TagRequest) {
+    /**
+     * Open Delete Tag Confirmation Dialog
+     *
+     * @param {TagRequest} tag
+     * @memberof SettingsTagsComponent
+     */
+    public deleteTag(tag: TagRequest): void {
         this.newTag = tag;
         let message = this.localeData?.remove_tag;
         message = message?.replace("[TAG_NAME]", tag.name);

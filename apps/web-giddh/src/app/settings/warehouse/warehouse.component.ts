@@ -83,10 +83,11 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('warehousePagination', { static: true }) warehousePagination: PaginationComponent;
     /** Warehouse search field instance */
     @ViewChild('searchWarehouse', { static: false }) public searchWarehouse: any;
-    /*-- mat-dialog --*/
+    /** Aside Create Address Template Reference */
     @ViewChild('asideAccountAsidePane', { static: true }) public asideAccountAsidePane: any;
     /** Warehouse on boarding modal viewchild */
     @ViewChild('warehouseOnBoardingModal', { static: true }) public warehouseOnBoardingModal: any;
+    /** Status Dialog Template Reference */
     @ViewChild('statusModal', { static: true }) public statusModal: any;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: Subject<boolean> = new Subject();
@@ -103,7 +104,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Holds current page number */
     private currentPage: number = 1;
     /** Holds modal reference */
-    public statusModalRef:any;
+    public statusModalRef: any;
     /** Holds Create Account Asidepane Dialog Ref */
     public asideAccountAsidePaneDialogRef: MatDialogRef<any>;
 
@@ -174,7 +175,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof WarehouseComponent
      */
 
-    public openCreateWarehouseModal() {
+    public openCreateWarehouseModal(): void {
         this.startOnBoarding();
         this.dialog.open(this.warehouseOnBoardingModal, {
             panelClass: 'modal-dialog',
@@ -258,7 +259,13 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         }
     }
 
-    public editWarehouse(warehouse: any) {
+    /**
+     * Handles the update warehouse flow
+     *
+     * @param {*} warehouse Warehouse to update
+     * @memberof WarehouseComponent
+     */
+    public editWarehouse(warehouse: any): void {
         this.selectedWarehouse = warehouse;
         this.loadAddresses('GET', () => {
             this.warehouseToUpdate = {
@@ -266,7 +273,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
                 // address: warehouse.address,
                 linkedEntities: warehouse.addresses || []
             };
-            
+
             this.asideAccountAsidePaneDialogRef = this.dialog.open(this.asideAccountAsidePane, {
                 width: '760px',
                 height: '100vh !important',
@@ -337,7 +344,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public closeAsidePane(event?: any): void {
         this.isWarehouseUpdateInProgress = false;
-        this.asideAccountAsidePaneDialogRef.close() 
+        this.asideAccountAsidePaneDialogRef.close()
     }
 
     /**

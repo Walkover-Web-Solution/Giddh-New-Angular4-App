@@ -61,6 +61,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     @Input() public closeSidePane: boolean;
     /** List of entities which can be archived */
     public entityArchived: string[] = ["BRANCH", "WAREHOUSE"];
+    /** Holds Selected Entity */
     public selectedEntity: any[] = [];
 
     constructor(
@@ -430,6 +431,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public clearForm(): void {
+        this.selectedEntity = [];
         if (this.addressConfiguration.type === 'createAddress' || this.addressConfiguration.type === 'createBranchAddress') {
             this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
             this.addressForm.markAsPristine();

@@ -49,6 +49,7 @@
                     <div class="warehouse-form-field">
                         <input-field
                             [label]="localeData?.warehouse_name"
+                            [cssClass]="warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.invalid ? 'error-box' : ''"
                             [type]="'text'"
                             [maxlength]="100"
                             [required]="true"
@@ -57,11 +58,8 @@
                         ></input-field>
                     </div>
                     <div class="warehouse-form-field">
-                        <!-- <label>
-                            {{ localeData?.addresses }}
-                        </label> -->
                         <div class="address-dropdown form-group mb-0">
-                            <!-- <sales-sh-select
+                            <sales-sh-select
                                 [options]="addresses"
                                 formControlName="address"
                                 name="particulars"
@@ -103,43 +101,7 @@
                                         <div class="item">{{ commonLocaleData?.app_alt_c }}</div>
                                     </a>
                                 </ng-template>
-                            </sales-sh-select> -->
-                            <dropdown-field
-                                    class="linked-add create"
-                                    [name]="'particulars'"        
-                                    [label]="localeData?.addresses"                        
-                                    [placeholder]="localeData?.select_address"
-                                    [options]="addresses.addressToShow"
-                                    (selectedOption)="warehouseForm?.get('address')?.patchValue($event.name)"
-                                    [defaultValue]="warehouseForm?.get('address')?.value"
-                                    [enableDynamicSearch]="true"
-                                    (dynamicSearchedQuery)="onSearchQueryChanged($event)"
-                                    [allowValueReset]="true"
-                                    (onClear)="onSearchClear()"
-                            >
-                            <ng-template #optionTemplate let-option="option">
-                                <ng-container>
-                                    <a
-                                        (click)="selectAddress(option)"
-                                        href="javascript:void(0)"
-                                        class="list-item d-flex"
-                                        [keyboardShortcut]="'alt+c'"
-                                        (onShortcutPress)="handleShortcutPress()"
-                                    >
-                                        <span class="entity-details">
-                                            <div class="item giddh-limit single-line-clamp">
-                                                {{ option.label || "-" }}
-                                            </div>
-                                            <div class="item-unique">
-                                                <p *ngIf="option.taxType && option.taxNumber">
-                                                    {{ option.taxType }} : {{ option.taxNumber }}
-                                                </p>
-                                            </div>
-                                        </span>
-                                    </a>
-                                </ng-container>
-                            </ng-template>
-                            </dropdown-field>
+                            </sales-sh-select>
                         </div>
                     </div>
                 </div>

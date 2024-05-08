@@ -48,11 +48,7 @@
 }
 
 .head-dropdown {
-    display: flex;
     background-color: var(--color-primary-subscription-plans-top-bar-background);
-    padding-left: 15px;
-    align-items: center;
-    width: 100%;
     height: 60px;
 }
 .menu-two-list {
@@ -61,10 +57,7 @@
 }
 
 .menu-two-list {
-    width: 100%;
-    display: flex;
     column-gap: 25px;
-    align-items: center;
     .menu-two-list-items {
         display: flex;
         align-items: center;

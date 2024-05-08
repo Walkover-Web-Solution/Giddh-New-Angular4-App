@@ -34,6 +34,21 @@
                                                     [type]="'text'" formControlName="name"
                                                     [placeholder]="localeData?.enter_name" [required]="true">
                                                 </input-field>
+                                                <span class="danger" *ngIf="
+                                                    addressForm?.get('name')?.touched &&
+                                                    addressForm?.get('name')?.errors?.maxlength"
+                                                >
+                                                    {{ commonLocaleData?.app_max_100_characters_allowed_limit }}
+                                                 </span>
+                                                <span
+                                                    class="danger"
+                                                    *ngIf="
+                                                        addressForm?.get('name')?.touched &&
+                                                        addressForm?.get('name')?.errors?.required
+                                                    "
+                                                >
+                                                    {{ localeData?.field_required_error }}
+                                                </span>
                                             </div>
                                         </div>
 
@@ -48,25 +63,6 @@
                                                     [placeholder]="getEnterTaxText(addressConfiguration?.tax?.name)"></input-field>
                                             </div>
                                             <div class="col-sm-4 form-group">
-                                                <!-- <label>{{ commonLocaleData?.app_state }} <sup>*</sup></label>
-                                                    <sh-select
-                                                        #states
-                                                        [disabled]="
-                                                            addressConfiguration?.type === 'editAddress' &&
-                                                            addressToUpdate?.taxNumber &&
-                                                            addressConfiguration?.tax?.name &&
-                                                            addressConfiguration?.tax?.name === 'GSTIN'
-                                                        "
-                                                        [options]="addressConfiguration.stateList"
-                                                        required
-                                                        [isRequired]="true"
-                                                        [isFilterEnabled]="true"
-                                                        formControlName="state"
-                                                        class="w-100"
-                                                        [useInBuiltFilterForIOptionTypeItems]="true"
-                                                        [forceClearReactive]="forceClear$ | async"
-                                                    >
-                                                    </sh-select> -->
                                                 <dropdown-field [label]="commonLocaleData?.app_state" [disabled]="
                                                         addressConfiguration?.type === 'editAddress' &&
                                                         addressToUpdate?.taxNumber &&
@@ -80,19 +76,6 @@
                                             <!-- static code added for the pincode -->
                                             <div class="col-sm-4">
                                                 <div class="form-group mr-b05">
-                                                    <!-- <label for="pinCodeNum" class="d-block">{{
-                                                            commonLocaleData?.app_pin_code
-                                                        }}</label>
-                                                        <input
-                                                            type="text"
-                                                            class="form-control"
-                                                            autocomplete="false"
-                                                            name="pinCodeNum"
-                                                            [placeholder]="commonLocaleData?.app_enter_pin_code"
-                                                            formControlName="pincode"
-                                                            decimalDigitsDirective
-                                                            [preventDecimal]="true"
-                                                        /> -->
                                                     <input-field [label]="commonLocaleData?.app_pin_code"
                                                         [type]="'text'" [autocomplete]="'false'" [name]="'pinCodeNum'"
                                                         [placeholder]="commonLocaleData?.app_enter_pin_code"
@@ -105,47 +88,6 @@
 
                                         <div class="clearfix row">
                                             <div class="form-group col-12">
-                                                <!-- <label
-                                                        >{{ commonLocaleData?.app_address
-                                                        }}<sup
-                                                            *ngIf="
-                                                                addressForm?.get('taxNumber')?.valid &&
-                                                                addressForm?.get('taxNumber')?.value &&
-                                                                addressConfiguration?.tax &&
-                                                                addressConfiguration?.tax?.name === 'GSTIN'
-                                                            "
-                                                            >*</sup
-                                                        ></label
-                                                    >
-                                                    <textarea
-                                                        [class.error-box]="
-                                                            addressForm?.get('taxNumber')?.valid &&
-                                                            addressForm?.get('taxNumber')?.value &&
-                                                            addressForm?.get('address')?.touched &&
-                                                            addressForm?.get('address')?.errors?.required
-                                                        "
-                                                        name="name"
-                                                        class="form-control min-height-100"
-                                                        formControlName="address"
-                                                        [placeholder]="localeData?.enter_address"
-                                                        [attr.required]="
-                                                            addressForm?.get('taxNumber')?.valid &&
-                                                            addressForm?.get('taxNumber')?.value &&
-                                                            addressConfiguration?.tax &&
-                                                            addressConfiguration?.tax?.name === 'GSTIN'
-                                                        "
-                                                    ></textarea>
-                                                    <span
-                                                        class="danger"
-                                                        *ngIf="
-                                                            addressForm?.get('taxNumber')?.valid &&
-                                                            addressForm?.get('taxNumber')?.value &&
-                                                            addressForm?.get('address')?.touched &&
-                                                            addressForm?.get('address')?.errors?.required
-                                                        "
-                                                    >
-                                                        {{ localeData?.field_required_error }}
-                                                    </span> -->
                                                 <mat-form-field appearance="outline" class="w-100">
                                                     <mat-label>{{ commonLocaleData?.app_address }}</mat-label>
                                                     <textarea 
@@ -234,7 +176,6 @@
                                         <div class="row">
                                             <!-- DO NOT REMOVE THIS HIDDEN FIELD -->
                                             <div hidden class="form-group col-12">
-                                                <label>{{ localeData?.branch_name }} <sup>*</sup></label>
                                                 <input-field [label]="localeData?.branch_name" [maxlength]="100"
                                                     [class.error-box]="
                                                         addressForm?.get('name')?.touched &&
@@ -321,51 +262,6 @@
                                                       </mat-option>
                                                     </mat-select>
                                                   </mat-form-field>
-                                                <!-- <label>{{ localeData?.linked_addresses }}</label> -->
-                                                <!-- <div class="form-group">
-                                                    <sh-select class="linked-address"
-                                                        [options]="addressConfiguration?.linkedEntities"
-                                                        name="linkedEntities" formControlName="linkedEntity"
-                                                        (clearSingleItem)="handleFinalSelection($event)"
-                                                        [ItemHeight]="200" [isFilterEnabled]="true" [multiple]="true"
-                                                        [placeholder]="commonLocaleData?.app_select_entity">
-                                                        <ng-template #optionTemplate let-option="option">
-                                                            <ng-container>
-                                                                <a (click)="selectEntity(option)"
-                                                                    href="javascript:void(0)" class="list-item d-flex column-gap1">
-                                                                    <span>
-                                                                        <input type="checkbox" [checked]="
-                                                                                addressForm
-                                                                                    ?.get('linkedEntity')
-                                                                                    ?.value?.includes(option?.value)
-                                                                            " [value]="option?.value" />
-                                                                    </span>&nbsp;
-                                                                    <span class="entity-details">
-                                                                        <div class="item giddh-limit single-line-clamp">
-                                                                            {{ option.label || "-" }}
-                                                                        </div>
-                                                                        <div class="item-unique">
-                                                                            <p *ngIf="
-                                                                                    option.taxType && option.taxNumber
-                                                                                ">
-                                                                                {{ option.taxType }} :
-                                                                                {{ option.taxNumber }}
-                                                                            </p>
-                                                                        </div>
-                                                                    </span>
-                                                                    <span class="default-entity ml-auto">
-                                                                        <i (click)="setDefault(option, $event)"
-                                                                            *ngIf="!option.isDefault"
-                                                                            class="icon-no-selected mr-r05"></i>
-                                                                        <i (click)="setDefault(option, $event)"
-                                                                            *ngIf="option.isDefault"
-                                                                            class="icon-favorite-selected mr-r05"></i>
-                                                                    </span>
-                                                                </a>
-                                                            </ng-container>
-                                                        </ng-template>
-                                                    </sh-select>
-                                                </div> -->
                                             </div>
                                         </div>
                                     </div>
@@ -467,7 +363,7 @@
                                                     ">
                                                     {{ commonLocaleData?.app_update }}</ng-container>
                                             </button>
-                                            <button mat-stroked-button type="reset" (click)="selectedEntity = []" class="btn custom-btn" aria-label="clear">
+                                            <button mat-stroked-button type="reset" (click)="clearForm()" class="custom-btn" aria-label="clear">
                                                 {{ commonLocaleData?.app_clear }}
                                             </button>
                                         </div>
