@@ -75,7 +75,7 @@ export class CompanyService {
     }
 
     /**
-     * Get country list by susbcription id
+     * Get country list by subscription id
      *
      * @param {*} subscriptionId
      * @return {*}  {Observable<BaseResponse<CompanyResponse[], string>>}
