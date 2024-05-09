@@ -1248,7 +1248,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
                 this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                     if (activeCompany) {
-                        if (activeCompany.countryV2?.alpha2CountryCode === 'ZW') {
+                        if (activeCompany.countryV2?.alpha2CountryCode === 'ZW' || activeCompany.countryV2?.alpha2CountryCode === 'KE') {
                             this.taxType = this.commonLocaleData?.app_vat;
                         } else if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                             this.taxType = this.commonLocaleData?.app_trn;
@@ -1286,7 +1286,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                             if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                                 this.taxType = this.commonLocaleData?.app_trn;
                                 this.localeData.company_address_list = this.localeData.company_trn_list;
-                                if(activeCompany.countryV2?.alpha2CountryCode === 'ZW') {
+                                if(activeCompany.countryV2?.alpha2CountryCode === 'ZW' || activeCompany.countryV2?.alpha2CountryCode === 'KE') {
                                     this.localeData.add_address = this.localeData.add_vat;
                                 } else {
                                     this.localeData.add_address = this.localeData.add_trn;

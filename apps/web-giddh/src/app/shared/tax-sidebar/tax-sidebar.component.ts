@@ -66,6 +66,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public isUKCompany: boolean;
     /** True if active country is Zimbabwe */
     public isZimbabweCompany: boolean;
+    /** True if active country is Kenya */
+    public isKenyaCompany: boolean;
 
     constructor(
         private router: Router,
@@ -95,6 +97,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
             if (activeCompany) {
                 this.isUKCompany = activeCompany?.country === "United Kingdom";
                 this.isZimbabweCompany = activeCompany?.country === "Zimbabwe";
+                this.isKenyaCompany = activeCompany?.country === "Kenya";
                 
                 if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                     this.showVatMenus = true;
@@ -247,7 +250,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public translationComplete(event: any): void {
         if(event) {
             let label = '';
-            if (this.showVatMenus && this.isZimbabweCompany) {
+            if (this.showVatMenus && (this.isZimbabweCompany || this.isKenyaCompany)) {
                 label = this.localeData?.add_vat;
             } else if (this.showVatMenus) {
                 label = this.localeData?.add_trn;
