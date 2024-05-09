@@ -85,7 +85,14 @@
                 {
                     "label": "सदस्यता",
                     "link": "/pages/user-details/subscription",
-                    "icon": "<i class='icon-subscription2'></i>"
+                    "icon": "<i class='icon-subscription2'></i>",
+                    "planVersion": 1
+                },
+                   {
+                    "label": "सदस्यता",
+                    "link": "/pages/subscription",
+                    "icon": "<i class='icon-subscription2'></i>",
+                    "planVersion": 2
                 }
             ]
         ],

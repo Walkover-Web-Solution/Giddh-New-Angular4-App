@@ -1,8 +1,8 @@
 {
 	"giddh_logo": "गिद्ध-लोगो",
 	"click_here": "इथे क्लिक करा",
-	"subscription_end_note": "आपले [PLAN_DURATION] [PLAN_DURATION_UNIT] [PLAN_NAME] [EXPIRY_DATE] रोजी समाप्त होतील. आपली सदस्यता श्रेणीसुधारित करण्यासाठी अर्ज करा.",
-	"subscription_ended_note": "आपले [PLAN_DURATION] [PLAN_DURATION_UNIT] [PLAN_NAME] [EXPIRY_DATE] रोजी समाप्त झाले. आपली सदस्यता श्रेणीसुधारित करण्यासाठी अर्ज करा.",
+	"subscription_end_note": "आपले [PLAN_DURATION] [PLAN_DURATION_UNIT] आहे [PLAN_NAME] [EXPIRY_DATE] रोजी समाप्त होतील. आपली सदस्यता श्रेणीसुधारित करण्यासाठी अर्ज करा.",
+	"subscription_ended_note": "आपले [PLAN_DURATION] [PLAN_DURATION_UNIT] आहे [PLAN_NAME] [EXPIRY_DATE] रोजी समाप्त झाले. आपली सदस्यता श्रेणीसुधारित करण्यासाठी अर्ज करा.",
 	"subscription_transaction_limit_ended": "आपण आपल्या नियुक्त केलेल्या योजनेची व्यवहार मर्यादा ओलांडली आहे [PLAN_NAME] [PLAN_START_DATE] गिद्धसह आपले लेखा चालू ठेवण्यासाठी, कृपया आपल्या सद्य योजनेचे नूतनीकरण करा किंवा दुसर्‍याकडे स्विच करा. अधिक सहाय्यासाठी आमच्याशी संपर्क साधा.",
 	"ready_to_upgrade": "सदस्यता श्रेणीसुधारित करण्यास सज्ज",
 	"renew_plan": "नूतनीकरण योजना",

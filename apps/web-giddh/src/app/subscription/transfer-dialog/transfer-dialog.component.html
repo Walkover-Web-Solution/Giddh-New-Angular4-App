@@ -31,7 +31,7 @@
                         <input-field
                             [type]="'text'"
                             [name]="'lastname'"
-                            [placeholder]="commonLocaleData?.app_last + commonLocaleData?.app_name"
+                            [placeholder]="commonLocaleData?.app_last + ' ' + commonLocaleData?.app_name"
                             formControlName="lastName"
                         >
                         </input-field>
@@ -49,7 +49,7 @@
                     </input-field>
                 </div>
                 <div class="d-flex column-gap15 justify-content-end">
-                    <button mat-stroked-button color="primary" (click)="onSubmit()" class="transfer-btn">
+                    <button mat-stroked-button color="primary" (click)="onSubmit()">
                         {{ localeData?.request_transfer }}
                     </button>
                 </div>

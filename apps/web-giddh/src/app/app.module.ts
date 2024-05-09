@@ -35,6 +35,7 @@ import { MobileRestrictedComponent } from './mobile-restricted/mobile-restricted
 import { LoaderModule } from './loader/loader.module';
 import { PageModule } from './page/page.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { VerifySusbcriptionTransferOwnershipComponent } from './verify-susbcription-transfer-ownership/verify-susbcription-transfer-ownership.component';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -62,7 +63,9 @@ if (!environment.production) {
     declarations: [
         AppComponent,
         AppLoginSuccessComponent,
-        MobileRestrictedComponent
+        VerifySusbcriptionTransferOwnershipComponent,
+        MobileRestrictedComponent,
+        VerifySusbcriptionTransferOwnershipComponent
     ],
     /**
      * Import Angular's modules.
