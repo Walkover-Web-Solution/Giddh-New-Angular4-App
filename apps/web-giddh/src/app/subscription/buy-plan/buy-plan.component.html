@@ -263,7 +263,7 @@
                                         <div class="grid-list-div list-grid">
                                             <div class="grid-title-left">
                                                 <span class="inner-name mat-table-sticky">
-                                                    <span>{{localeData?.companies_allowed}} </span>
+                                                    <span>{{ localeData?.companies_allowed }} </span>
                                                 </span>
                                             </div>
                                             <ng-container *ngFor="let plan of inputData">
@@ -378,7 +378,7 @@
                         <div class="plan-summary d-flex justify-content-center">
                             <div class="plan-width">
                                 <ng-template matStepLabel>{{ localeData?.select_billing }}</ng-template>
-                                <h4 class="font-16 strong d-flex align-items-center mb-3  plan-summary-heading">
+                                <h4 class="font-16 strong d-flex align-items-center mb-3 plan-summary-heading">
                                     {{ localeData?.create_billing }}
                                 </h4>
                                 <mat-card class="outline-card change-billing-wrap">
@@ -456,14 +456,15 @@
                                                         formControlName="mobileNumber"
                                                         [ngClass]="{
                                                             'invalid-input':
-                                                            isFormSubmitted &&
-                                                                    !intlClass?.isRequiredValidNumber
+                                                                isFormSubmitted ||
+                                                                (secondStepForm.get('mobileNumber')?.touched &&
+                                                                    !intlClass?.isRequiredValidNumber)
                                                         }"
                                                     />
                                                     <mat-error
                                                         *ngIf="
-                                                             isFormSubmitted &&
-                                                                    !intlClass?.isRequiredValidNumber
+                                                            secondStepForm.get('mobileNumber')?.touched &&
+                                                            !intlClass?.isRequiredValidNumber
                                                         "
                                                         >{{ localeData?.enter_valid_number }}</mat-error
                                                     >
@@ -568,7 +569,7 @@
                         <div class="plan-summary d-flex justify-content-center">
                             <div class="plan-width">
                                 <ng-template matStepLabel>{{ localeData?.review_pay }}</ng-template>
-                                <h4 class="font-16 mb-3 strong d-flex align-items-center  plan-summary-heading">
+                                <h4 class="font-16 mb-3 strong d-flex align-items-center plan-summary-heading">
                                     {{ localeData?.payment_details }}
                                 </h4>
                                 <div class="new-plan">

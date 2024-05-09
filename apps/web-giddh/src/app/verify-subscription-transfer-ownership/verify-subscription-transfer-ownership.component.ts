@@ -5,12 +5,12 @@ import { ReplaySubject, take, takeUntil } from 'rxjs';
 import { SubscriptionComponentStore } from '../subscription/utility/subscription.store';
 
 @Component({
-    selector: 'verify-susbcription-transfer-ownership',
-    templateUrl: './verify-susbcription-transfer-ownership.component.html',
-    styleUrls: ['./verify-susbcription-transfer-ownership.component.scss'],
+    selector: 'verify-subscription-transfer-ownership',
+    templateUrl: './verify-subscription-transfer-ownership.component.html',
+    styleUrls: ['./verify-subscription-transfer-ownership.component.scss'],
     providers: [SubscriptionComponentStore]
 })
-export class VerifySusbcriptionTransferOwnershipComponent implements OnInit {
+export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
     /** Template reference for subscription transfer ownership model */
     @ViewChild('transferConfirmation', { static: true }) public dialogBox: TemplateRef<any>;
     /** This holds url to request id */
@@ -39,7 +39,7 @@ export class VerifySusbcriptionTransferOwnershipComponent implements OnInit {
     /**
    * Initializes the component
    *
-   * @memberof VerifySusbcriptionTransferOwnershipComponent
+   * @memberof VerifySubscriptionTransferOwnershipComponent
    */
     public ngOnInit(): void {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
@@ -63,11 +63,12 @@ export class VerifySusbcriptionTransferOwnershipComponent implements OnInit {
     /**
      * Open modal dialog
      *
-     * @memberof VerifySusbcriptionTransferOwnershipComponent
+     * @memberof VerifySubscriptionTransferOwnershipComponent
      */
     public dialogOpen(): void {
         this.modalDialogRef = this.dialog.open(this.dialogBox, {
-            width: '850px'
+            width: '850px',
+            disableClose: true
         });
     }
 
@@ -75,7 +76,7 @@ export class VerifySusbcriptionTransferOwnershipComponent implements OnInit {
      * On close dialog success
      *
      * @param {*} event
-     * @memberof VerifySusbcriptionTransferOwnershipComponent
+     * @memberof VerifySubscriptionTransferOwnershipComponent
      */
     public onSuccess(event: any): void {
         if (event) {
@@ -86,7 +87,7 @@ export class VerifySusbcriptionTransferOwnershipComponent implements OnInit {
     /**
    * Closes all dialogs
    *
-   * @memberof VerifySusbcriptionTransferOwnershipComponent
+   * @memberof VerifySubscriptionTransferOwnershipComponent
    */
     public closeAllDialogs(): void {
         this.modalDialogRef.close();
@@ -95,7 +96,7 @@ export class VerifySusbcriptionTransferOwnershipComponent implements OnInit {
     /**
      * Releases the memory
      *
-     * @memberof VerifySusbcriptionTransferOwnershipComponent
+     * @memberof VerifySubscriptionTransferOwnershipComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);

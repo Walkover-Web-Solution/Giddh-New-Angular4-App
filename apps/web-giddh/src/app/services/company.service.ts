@@ -74,6 +74,21 @@ export class CompanyService {
             catchError((e) => this.errorHandler.HandleCatch<CompanyResponse[], string>(e, '')));
     }
 
+    /**
+     * Get country list by susbcription id
+     *
+     * @param {*} subscriptionId
+     * @return {*}  {Observable<BaseResponse<CompanyResponse[], string>>}
+     * @memberof CompanyService
+     */
+    public countryListBySubscriptionId(subscriptionId: any): Observable<BaseResponse<CompanyResponse[], string>> {
+        return this.http.get(this.config.apiUrl + COMPANY_API.GET_COUNTRY_LIST_BY_SUBSCRIPTION_ID?.replace(':subscriptionId', subscriptionId)).pipe(
+            map((res) => {
+                let data: BaseResponse<CompanyResponse[], string> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<CompanyResponse[], string>(e, '')));
+    }
     // Get business nature for create company
     public GetAllBusinessNatureList() {
         return this.http.get(this.config.apiUrl + COMPANY_API.BUSINESS_NATURE_LIST

@@ -1,4 +1,3 @@
-import { concat } from 'apps/web-giddh/src/app/lodash-optimized';
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -131,7 +130,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** Hold final plan amount */
     public finalPlanAmount: number = 0;
     /** True if new user logged in */
-    public isNewUserLoggedIn: boolean = false;
+    public isNewUserLoggedIn: boolean;
     /** Razorpay instance */
     public razorpay: any;
     /** Holds subscription response */
@@ -194,7 +193,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.getCompanyProfile();
         this.getOnboardingFormData();
         this.getActiveCompany();
-        this.getBillingDetails();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
             if (params?.id) {
@@ -251,14 +249,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-            this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                if (data && data?.uniqueName) {
-                    this.getBillingData = true;
-                    this.setFormValues(data);
-                    this.selectedCountry = data.country?.name;
-                    this.selectedState = data.state?.name;
-                }
-            });
 
         this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
@@ -269,6 +259,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     "additional": {
                         "value": "US",
                         "label": "US - United States of America"
+                    }
+                });
+            } else {
+                this.getBillingDetails();
+                this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                    if (data && data?.uniqueName) {
+                        this.getBillingData = true;
+                        this.setFormValues(data);
+                        this.selectedCountry = data.country?.name;
+                        this.selectedState = data.state?.name;
                     }
                 });
             }
@@ -426,6 +426,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     planUniqueName: this.firstStepForm.get('planUniqueName')?.value,
                     duration: this.firstStepForm.get('duration')?.value
                 }
+                this.firstStepForm.get('promoCode')?.setValue("");
             }
             this.componentStore.applyPromocode(request);
         }
@@ -882,6 +883,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.isFormSubmitted = true;
             return;
         }
+        let mobileNumber = this.getBillingData ? this.subscriptionForm.value.secondStepForm.mobileNumber : this.intlClass.selectedCountryData?.dialCode + this.subscriptionForm.value.secondStepForm.mobileNumber;
+        mobileNumber = mobileNumber?.replace(/\+/g, '');
         let request = {
             planUniqueName: this.subscriptionForm.value.firstStepForm.planUniqueName,
             duration: this.subscriptionForm.value.firstStepForm.duration,
@@ -892,7 +895,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 taxNumber: this.subscriptionForm.value.secondStepForm.taxNumber,
                 email: this.subscriptionForm.value.secondStepForm.email,
                 pincode: this.subscriptionForm.value.secondStepForm.pincode,
-                mobileNumber: this.getBillingData ? this.subscriptionForm.value.secondStepForm.mobileNumber : this.intlClass.selectedCountryData?.dialCode + this.subscriptionForm.value.secondStepForm.mobileNumber,
+                mobileNumber: mobileNumber,
                 country: {
                     name: this.subscriptionForm.value.secondStepForm.country.label ? this.subscriptionForm.value.secondStepForm.country.label : this.subscriptionForm.value.secondStepForm.country.name,
                     code: this.subscriptionForm.value.secondStepForm.country.value ? this.subscriptionForm.value.secondStepForm.country.value : this.subscriptionForm.value.secondStepForm.country.code

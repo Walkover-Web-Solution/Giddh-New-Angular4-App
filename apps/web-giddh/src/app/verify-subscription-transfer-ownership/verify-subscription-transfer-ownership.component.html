@@ -33,7 +33,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p class="font-15 mr-t05 mb-1">You've been invited to become the susbcriber for {{ requestId }}.</p>
+                <p class="font-15 mr-t05 mb-1">You've been invited to become the susbcriber.</p>
                 <p class="font-15 mr-t05">
                     On accepting, you will become the susbcriber and be the person Giddh has on record as responsible
                     for the organisation.
@@ -44,12 +44,11 @@
                     aria-label="yes"
                     mat-stroked-button
                     color="primary"
-                    class="btn btn-primary"
                     (click)="onSuccess($event)"
                 >
                     Accept Subscription
                 </button>
-                <button aria-label="no" mat-stroked-button (click)="closeAllDialogs()" class="btn btn-primary">
+                <button aria-label="no" mat-stroked-button (click)="closeAllDialogs()" >
                     Decline Subscription
                 </button>
             </div>
