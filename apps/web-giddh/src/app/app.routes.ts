@@ -6,14 +6,14 @@ import { NewUserAuthGuard } from './decorators/newUserGuard';
 import { AppLoginSuccessComponent } from "./app-login-success/app-login-success";
 import { PageComponent } from './page/page.component';
 import { MobileRestrictedComponent } from './mobile-restricted/mobile-restricted.component';
-import { VerifySusbcriptionTransferOwnershipComponent } from './verify-susbcription-transfer-ownership/verify-susbcription-transfer-ownership.component';
+import { VerifySubscriptionTransferOwnershipComponent } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.component';
 
 export const ROUTES: Routes = [
     { path: 'company/:companyUniqueName/dns', loadChildren: () => import('./dns-records/dns-records.module').then(module => module.DnsRecordsModule) },
     { path: 'download', loadChildren: () => import('./download/download.module').then(module => module.DownloadModule) },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'app-login-success', component: AppLoginSuccessComponent, pathMatch: 'full' },
-    { path: 'verify-subscription-ownership/:requestId', component: VerifySusbcriptionTransferOwnershipComponent, pathMatch: 'full' },
+    { path: 'verify-subscription-ownership/:requestId', component: VerifySubscriptionTransferOwnershipComponent, pathMatch: 'full' },
     { path: 'token-verify', loadChildren: () => import('./login/token-verify.module').then(module => module.TokenVerifyModule), canActivate: [UserAuthenticated] },
     { path: 'login', loadChildren: () => import('./login/login.module').then(module => module.LoginModule), canActivate: [UserAuthenticated] },
     { path: 'signup', loadChildren: () => import('./signup/signup.module').then(module => module.SignupModule) },

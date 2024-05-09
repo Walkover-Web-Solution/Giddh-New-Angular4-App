@@ -130,7 +130,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                 if (this.subscriptions && this.subscriptions.length > 0) {
                     this.subscriptions.forEach(subscription => {
                         if (this.subscriptionMove) {
-                            if (subscription.subscriptionId && this.moveSelectedCompany?.subscription?.subscriptionId !== subscription.subscriptionId && subscription.companies?.length < subscription?.totalCompanies && this.availablePlans[subscription?.plan?.uniqueName] === undefined &&
+                            if (subscription.subscriptionId && this.moveSelectedCompany?.subscription?.subscriptionId !== subscription.subscriptionId && (!subscription.companies?.length || subscription.companies?.length < subscription?.totalCompanies) && this.availablePlans[subscription?.plan?.uniqueName] === undefined &&
                                 subscription.planCountries?.find(country => country?.countryName === this.moveSelectedCompany.country ? this.moveSelectedCompany.country : this.moveSelectedCompany.country?.countryName)
                             ) {
                                 this.availablePlansOption.push({ label: subscription.plan?.name, value: subscription.plan?.uniqueName });

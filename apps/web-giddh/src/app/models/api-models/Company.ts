@@ -126,6 +126,7 @@ export class CompanyResponse {
     public warehouseResource?: Array<any>;
     public showOnSubscription?: boolean;
     public planVersion?: any;
+    public subscription?: any;
 }
 
 export interface UserEntityRole {

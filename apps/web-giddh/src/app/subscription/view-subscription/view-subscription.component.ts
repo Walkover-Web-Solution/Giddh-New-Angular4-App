@@ -86,12 +86,17 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
 
         this.subscriptionRazorpayOrderDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.initializePayment(response);
+                if (response.dueAmount > 0) {
+                    this.initializePayment(response);
+                } else {
+                    this.router.navigate(['/pages/subscription/buy-plan']);
+                }
             }
         });
 
         this.updateSubscriptionPaymentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.router.navigate(['/pages/subscription']);
                 this.getSubscriptionData(this.subscriptionId);
             }
         });
@@ -215,9 +220,11 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     * @memberof ViewSubscriptionComponent
     */
     public addOrMoveCompanyCallback(event: boolean): void {
-        if (event) {
-            this.getSubscriptionData(this.subscriptionId);
-        }
+        this.componentStore.isUpdateCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.getSubscriptionData(this.subscriptionId);
+            }
+        });
     }
 
     /**
