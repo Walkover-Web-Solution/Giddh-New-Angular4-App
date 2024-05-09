@@ -62,15 +62,16 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
             if(this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('aside-setting', response?.value).subscribe(response => {
                     this.localeData = response;
-                    this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-                        if (activeCompany) {
-                            this.selectedCompany = activeCompany;
-                        }
-                    });
-                    this.translationComplete(true);
                 });
             }
             this.activeLocale = response?.value;
+        });
+
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany && this.localeData) {
+                this.selectedCompany = activeCompany;
+                this.translationComplete(true);
+            }
         });
 
         this.showHideSettingsHeading(this.router.url);
@@ -154,7 +155,8 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                     }
                     Object.keys(settingsPageTabs[organizationIndex]).forEach(key => {
                         this.settingsPageTabs[loop] = [];
-                        this.settingsPageTabs[loop] = [...settingsPageTabs[organizationIndex][key]?.filter(value => !value?.planVersion || (value?.planVersion && +this.selectedCompany?.planVersion === +value?.planVersion))];
+                        this.settingsPageTabs[loop] = [...settingsPageTabs[organizationIndex][key]?.filter(value => !value?.planVersion || (value?.planVersion && +this.selectedCompany?.planVersion === +value?.planVersion)
+                        )];
                         loop++;
                     });
                 });

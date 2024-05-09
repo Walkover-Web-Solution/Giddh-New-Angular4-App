@@ -1,3 +1,4 @@
+import { concat } from 'apps/web-giddh/src/app/lodash-optimized';
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -196,7 +197,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.getBillingDetails();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
-            if (params) {
+            if (params?.id) {
                 this.subscriptionId = params.id;
                 this.isChangePlan = true;
             }
@@ -1026,17 +1027,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         let request;
         if (razorPayResponse) {
             request = {
-                subscriptionRequest: {
-                    subscriptionId: this.subscriptionResponse?.subscriptionId
-                },
                 paymentId: razorPayResponse.razorpay_payment_id,
                 razorpaySignature: razorPayResponse.razorpay_signature,
                 amountPaid: this.subscriptionResponse?.dueAmount,
                 callNewPlanApi: true,
                 razorpayOrderId: razorPayResponse?.razorpay_order_id
             };
-            this.subscriptionId = request?.subscriptionRequest?.subscriptionId;
-            this.componentStore.updateNewLoginSubscriptionPayment({ request: request });
+            let data = { ...request, ...this.subscriptionRequest };
+            this.componentStore.changePlan(data);
         }
     }
 
