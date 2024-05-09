@@ -200,6 +200,14 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             }
             /* RAZORPAY */
         }, 1000);
+
+        if (this._generalService.getUrlParameter("region") === "uk") {
+            this._generalService.setParameterInLocalStorage("Country-Region", "EU");
+        } else if (this._generalService.getUrlParameter("region") === "ae") {
+            this._generalService.setParameterInLocalStorage("Country-Region", "GF");
+        } else {
+            this._generalService.setParameterInLocalStorage("Country-Region", "GL");
+        }
     }
 
     public ngAfterViewInit() {

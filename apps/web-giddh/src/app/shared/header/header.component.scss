@@ -2,6 +2,12 @@
     width: 100px;
 }
 
+.custom-header {
+    background-color: var(--color-giddh-blue);
+    padding: 15px;
+    min-height: 60px;
+}
+
 .nav-left-bar {
     position: fixed;
     top: var(--top-sidebar);

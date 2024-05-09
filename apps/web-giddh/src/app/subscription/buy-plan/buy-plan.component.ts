@@ -201,6 +201,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
+
+        });
+
+
         this.createSubscriptionResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.responseSubscriptionId = response.subscriptionId;
@@ -249,19 +254,20 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
+        // if (localStorage.getItem('Country-Region') === 'uk') {
+        //     this.newUserSelectCountry({
+        //         "label": "US - United States of America",
+        //         "value": "US",
+        //         "additional": {
+        //             "value": "US",
+        //             "label": "US - United States of America"
+        //         }
+        //     });
+        // }
 
         this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
-            if (this.isNewUserLoggedIn) {
-                this.newUserSelectCountry({
-                    "label": "US - United States of America",
-                    "value": "US",
-                    "additional": {
-                        "value": "US",
-                        "label": "US - United States of America"
-                    }
-                });
-            } else {
+            if (!this.isNewUserLoggedIn) {
                 this.getBillingDetails();
                 this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
                     if (data && data?.uniqueName) {

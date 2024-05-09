@@ -262,6 +262,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isLoggedInWithSocialAccount$: Observable<boolean>;
     /* True if we need to show Depreciation Message */
     public showDepreciationMessage: boolean = false;
+    /* True if we need to show header according to has subscription permission */
+    public hasSubscriptionPermission: boolean = false;
 
 
     /**
@@ -793,9 +795,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
 
                 this.zone.run(() => {
-                    let hasSubscriptionPermission: boolean;
-                    this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => hasSubscriptionPermission = response?.user?.hasSubscriptionPermission);
-                    if (hasSubscriptionPermission) {
+                    this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => this.hasSubscriptionPermission = response?.user?.hasSubscriptionPermission);
+                    console.log(this.hasSubscriptionPermission);
+                    if (this.hasSubscriptionPermission) {
                         this.router.navigate(['/pages/subscription']);
                     } else {
                         this.router.navigate(['/pages/subscription/buy-plan']);
