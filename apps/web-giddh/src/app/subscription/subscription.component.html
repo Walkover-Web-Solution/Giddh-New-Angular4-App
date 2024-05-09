@@ -325,7 +325,6 @@
 <!-- MoveCompany Modal -->
 <ng-template #moveCompany>
     <move-company
-        (moveCompany)="addOrMoveCompanyCallback($event)"
         [moveSelectedCompany]="selectedCompany"
         [subscriptionMove]="subscriptionMove"
         [localeData]="localeData"

@@ -298,6 +298,13 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 this.showMonthlyYearly = false;
             }
         });
+
+        this.componentStore.isUpdateCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.getAllSubscriptions(null);
+            }
+        });
+
     }
 
     /**
@@ -507,23 +514,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             role: 'alertdialog',
             ariaLabel: 'moveDialog'
         });
-    }
-
-
-    /**
-   * This function will refresh the subscribed companies if move company was succesfull and will close the popup
-   *
-   * @param {*} event
-   * @memberof SubscriptionsComponent
-   */
-    public addOrMoveCompanyCallback(event: boolean): void {
-        if (event) {
-            this.componentStore.isUpdateCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response) {
-                    this.getAllSubscriptions(null);
-                }
-            });
-        }
     }
 
     /**

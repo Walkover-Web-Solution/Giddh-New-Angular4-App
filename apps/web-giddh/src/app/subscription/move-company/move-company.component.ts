@@ -18,8 +18,6 @@ import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 })
 
 export class MoveCompanyComponent implements OnInit, OnDestroy {
-    /* Emit move company response */
-    @Output() public moveCompany = new EventEmitter<boolean>();
     /* Hold subscriptions data */
     @Input() public subscriptions: any[] = [];
     /* Hold move selected company*/
@@ -106,16 +104,6 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      */
     public patchProfile(obj: any): void {
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
-        this.moveCompany.emit(true);
-    }
-
-    /**
-     * This will close the popup
-     *
-     * @memberof MoveCompanyComponent
-     */
-    public closePopup(): void {
-        this.moveCompany.emit(false);
     }
 
     /**
