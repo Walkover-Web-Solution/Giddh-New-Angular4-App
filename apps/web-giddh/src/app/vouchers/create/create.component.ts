@@ -809,6 +809,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.linkedPoNumbers = response;
         });
 
+        this.componentStore.deleteAttachmentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.selectedFileName = "";
+
+                let entryFields = [];
+                entryFields.push({ key: 'attachedFile', value: "" });
+                entryFields.push({ key: 'attachedFileName', value: "" });
+                this.invoiceForm.get("attachedFiles")?.patchValue([]);
+                this.updateEntry(0, entryFields);
+
+                this.componentStore.resetAttachmentState();
+            }
+        });
+
         /** Deposit amount change */
         this.invoiceForm.controls['deposit'].get("amountForAccount")?.valueChanges.pipe(
             debounceTime(100),
@@ -1755,8 +1769,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getEntriesFormGroup(entryData?: any): FormGroup {
+        let voucherDate = "";
+
+        if (typeof (this.invoiceForm?.get('date')?.value) === "object") {
+            voucherDate = dayjs(this.invoiceForm?.get('date')?.value).format(GIDDH_DATE_FORMAT);
+        } else {
+            voucherDate = this.invoiceForm?.get('date')?.value;
+        }
+
         return this.formBuilder.group({
-            date: [!this.invoiceType.isPurchaseOrder && !this.invoiceType.isEstimateInvoice && !this.invoiceType.isProformaInvoice ? this.invoiceForm?.get('date')?.value || this.universalDate || dayjs().format(GIDDH_DATE_FORMAT) : null],
+            date: [!this.invoiceType.isPurchaseOrder && !this.invoiceType.isEstimateInvoice && !this.invoiceType.isProformaInvoice ? voucherDate || this.universalDate || dayjs().format(GIDDH_DATE_FORMAT) : null],
             description: [entryData ? entryData?.description : ''],
             voucherType: [this.voucherType],
             uniqueName: [''],
@@ -2490,7 +2512,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response === this.commonLocaleData?.app_yes) {
-                this.componentStore.deleteAttachment('');
+                const entryFormGroup = this.getEntryFormGroup(0);
+                this.componentStore.deleteAttachment(entryFormGroup.get('attachedFile')?.value);
             } else {
                 this.dialog.closeAll();
             }
@@ -3377,7 +3400,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.currencySwitched = false;
 
         this.accountFormFields = [];
-        this.selectedFileName = '';
+        this.selectedFileName = "";
 
         this.account = {
             countryName: '',
@@ -4159,9 +4182,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 transactionFormGroup.get('stock.customField2.value')?.patchValue(response?.stock?.customField2Value);
             }
 
-            entryFormGroup.get('hsnNumber')?.patchValue(response.stock.hsnNumber);
-            entryFormGroup.get('sacNumber')?.patchValue(response.stock.sacNumber);
-            entryFormGroup.get('showCodeType')?.patchValue(response.stock.hsnNumber ? 'hsn' : 'sac');
+            entryFormGroup.get('hsnNumber')?.patchValue(response.stock.hsnNumber || response.hsnNumber);
+            entryFormGroup.get('sacNumber')?.patchValue(response.stock.sacNumber || response.sacNumber);
+            entryFormGroup.get('showCodeType')?.patchValue(response.stock.hsnNumber || response.hsnNumber ? 'hsn' : 'sac');
 
             let rate = Number((response.stock.variant?.unitRates[0].rate / this.invoiceForm.get('exchangeRate')?.value).toFixed(this.highPrecisionRate));
             transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue(rate);
@@ -4170,10 +4193,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             transactionFormGroup.get('stock.stockUnit.code')?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitCode);
             transactionFormGroup.get('stock.stockUnit.uniqueName')?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitUniqueName);
 
-            if (!transactionFormGroup.get('stock.variant.uniqueName')?.value) {
-                transactionFormGroup.get('stock.variant.name')?.patchValue(response.stock.variant?.name);
-                transactionFormGroup.get('stock.variant.uniqueName')?.patchValue(response.stock.variant?.uniqueName);
-            }
+            transactionFormGroup.get('stock.variant.name')?.patchValue(response.stock.variant?.name);
+            transactionFormGroup.get('stock.variant.uniqueName')?.patchValue(response.stock.variant?.uniqueName);
 
             transactionFormGroup.get('stock.variant.salesTaxInclusive')?.patchValue(response.stock.variant?.salesTaxInclusive);
             transactionFormGroup.get('stock.variant.purchaseTaxInclusive')?.patchValue(response.stock.variant?.purchaseTaxInclusive);
@@ -4206,6 +4227,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             this.stockVariants[entryIndex] = observableOf([]);
             this.stockUnits[entryIndex] = observableOf([]);
+
+            entryFormGroup.get('hsnNumber')?.patchValue(response.hsnNumber);
+            entryFormGroup.get('sacNumber')?.patchValue(response.sacNumber);
+            entryFormGroup.get('showCodeType')?.patchValue(response.hsnNumber ? 'hsn' : 'sac');
 
             const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
             discountsFormArray.clear();
@@ -4427,8 +4452,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public onChangeHsnSacType(entryFormGroup: FormGroup): void {
         if (entryFormGroup.get('showCodeType')?.value === "hsn") {
             entryFormGroup.get('hsnNumber')?.patchValue(entryFormGroup.get('sacNumber')?.value);
+            entryFormGroup.get('sacNumber')?.patchValue(null);
         } else {
             entryFormGroup.get('sacNumber')?.patchValue(entryFormGroup.get('hsnNumber')?.value);
+            entryFormGroup.get('hsnNumber')?.patchValue(null);
         }
     }
 
