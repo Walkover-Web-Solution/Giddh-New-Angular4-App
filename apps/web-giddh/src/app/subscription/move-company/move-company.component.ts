@@ -18,8 +18,6 @@ import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 })
 
 export class MoveCompanyComponent implements OnInit, OnDestroy {
-    /* Emit move company response */
-    @Output() public moveCompany = new EventEmitter<boolean>();
     /* Hold subscriptions data */
     @Input() public subscriptions: any[] = [];
     /* Hold move selected company*/
@@ -106,16 +104,6 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      */
     public patchProfile(obj: any): void {
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
-        this.moveCompany.emit(true);
-    }
-
-    /**
-     * This will close the popup
-     *
-     * @memberof MoveCompanyComponent
-     */
-    public closePopup(): void {
-        this.moveCompany.emit(false);
     }
 
     /**
@@ -130,7 +118,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                 if (this.subscriptions && this.subscriptions.length > 0) {
                     this.subscriptions.forEach(subscription => {
                         if (this.subscriptionMove) {
-                            if (subscription.subscriptionId && this.moveSelectedCompany?.subscription?.subscriptionId !== subscription.subscriptionId && subscription.companies?.length < subscription?.totalCompanies && this.availablePlans[subscription?.plan?.uniqueName] === undefined &&
+                            if (subscription.subscriptionId && this.moveSelectedCompany?.subscription?.subscriptionId !== subscription.subscriptionId && (!subscription.companies?.length || subscription.companies?.length < subscription?.totalCompanies) && this.availablePlans[subscription?.plan?.uniqueName] === undefined &&
                                 subscription.planCountries?.find(country => country?.countryName === this.moveSelectedCompany.country ? this.moveSelectedCompany.country : this.moveSelectedCompany.country?.countryName)
                             ) {
                                 this.availablePlansOption.push({ label: subscription.plan?.name, value: subscription.plan?.uniqueName });

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { debounceTime, distinctUntilChanged, Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, ReplaySubject, takeUntil } from 'rxjs';
 import { GeneralService } from '../services/general.service';
 import { ConfirmModalComponent } from "../theme/new-confirm-modal/confirm-modal.component";
 import { Router } from '@angular/router';
@@ -184,7 +184,11 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
 
         this.subscriptionRazorpayOrderDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.initializePayment(response);
+                if (response.dueAmount > 0) {
+                    this.initializePayment(response);
+                } else {
+                    this.router.navigate(['/pages/subscription/buy-plan']);
+                }
             }
         });
 
@@ -294,6 +298,13 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 this.showMonthlyYearly = false;
             }
         });
+
+        this.componentStore.isUpdateCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.getAllSubscriptions(null);
+            }
+        });
+
     }
 
     /**
@@ -503,19 +514,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             role: 'alertdialog',
             ariaLabel: 'moveDialog'
         });
-    }
-
-
-    /**
-   * This function will refresh the subscribed companies if move company was succesful and will close the popup
-   *
-   * @param {*} event
-   * @memberof SubscriptionsComponent
-   */
-    public addOrMoveCompanyCallback(event: boolean): void {
-        if (event === true) {
-            this.getAllSubscriptions(null);
-        }
     }
 
     /**

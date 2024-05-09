@@ -86,13 +86,25 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
 
         this.subscriptionRazorpayOrderDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.initializePayment(response);
+                if (response.dueAmount > 0) {
+                    this.initializePayment(response);
+                } else {
+                    this.router.navigate(['/pages/subscription/buy-plan']);
+                }
             }
         });
 
         this.updateSubscriptionPaymentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.router.navigate(['/pages/subscription']);
                 this.getSubscriptionData(this.subscriptionId);
+            }
+        });
+
+        this.componentStore.isUpdateCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.getSubscriptionData(this.subscriptionId);
+                this.router.navigate(['/pages/subscription']);
             }
         });
     }
@@ -206,18 +218,6 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
      */
     public changePlan(): void {
         this.router.navigate([`/pages/subscription/buy-plan`]);
-    }
-
-    /**
-    * This function will refresh the subscribed companies if move company was succesful and will close the popup
-    *
-    * @param {*} event
-    * @memberof ViewSubscriptionComponent
-    */
-    public addOrMoveCompanyCallback(event: boolean): void {
-        if (event) {
-            this.getSubscriptionData(this.subscriptionId);
-        }
     }
 
     /**

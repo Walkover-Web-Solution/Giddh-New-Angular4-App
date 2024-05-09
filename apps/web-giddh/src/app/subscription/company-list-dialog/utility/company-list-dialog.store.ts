@@ -6,6 +6,8 @@ import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { SubscriptionsService } from "../../../services/subscriptions.service";
 import { ToasterService } from "../../../services/toaster.service";
 import { SettingsProfileService } from "../../../services/settings.profile.service";
+import { AppState } from "../../../store";
+import { Store } from "@ngrx/store";
 
 export interface CompanyListState {
     companyListInProgress: boolean;
@@ -25,10 +27,13 @@ export class CompanyListDialogComponentStore extends ComponentStore<CompanyListS
     constructor(
         private toasterService: ToasterService,
         private subscriptionService: SubscriptionsService,
-        private settingsProfile: SettingsProfileService
+        private settingsProfile: SettingsProfileService,
+        private store: Store<AppState>
     ) {
         super(DEFAULT_COMPANY_LIST_STATE);
     }
+
+    public isUpdateCompanySuccess$ = this.select(this.store.select(state => state.settings.updateProfileSuccess), (response) => response);
 
     /**
      * Get company list by subscription id
