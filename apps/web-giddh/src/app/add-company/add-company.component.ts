@@ -366,11 +366,11 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.companyService.countryListBySubscriptionId(subscriptionId).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response) {
                 this.countries = [];
-                Object.keys(response).forEach(key => {
+                Object.keys(response?.body).forEach(key => {
                     this.countries.push({
-                        value: response[key].alpha2CountryCode,
-                        label: response[key].alpha2CountryCode + ' - ' + response[key].countryName,
-                        additional: response[key]
+                        value: response?.body[key]?.alpha2CountryCode,
+                        label: response?.body[key]?.alpha2CountryCode + ' - ' + response?.body[key]?.countryName,
+                        additional: response?.body[key]
                     });
                 });
             } else {
