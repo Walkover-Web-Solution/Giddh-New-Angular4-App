@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { RouterModule } from '@angular/router';
 import { LaddaModule } from 'angular2-ladda';
@@ -26,8 +25,7 @@ import { AccountAddNewDetailsComponent } from './account-add-new-details.compone
         TabsModule.forRoot(),
         TranslateDirectiveModule,
         MatSlideToggleModule,
-        RouterModule,
-        MatDialogModule
+        RouterModule
     ]
 })
 export class AccountAddNewDetailsModule { }

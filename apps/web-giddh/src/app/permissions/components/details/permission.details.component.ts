@@ -88,6 +88,11 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
         }
     }
 
+     /**
+     * This hook will be use for component after initialization
+     *
+     * @memberof PermissionDetailsComponent
+     */
     public ngAfterViewInit(): void {
         this.pageList = this.pageList.map(item => {
             return { label: item, value: item, additional: { isDisabled: this.checkForAlreadyExistInPageArray(String(item)) } }

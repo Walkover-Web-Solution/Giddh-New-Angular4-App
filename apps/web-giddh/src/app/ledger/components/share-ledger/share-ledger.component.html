@@ -10,7 +10,7 @@
                 <button
                     aria-hidden="true"
                     class="close"
-                    mat-icon-button
+                    mat-button
                     mat-dialog-close
                     [attr.aria-label]="commonLocaleData?.app_close"
                 >
@@ -40,15 +40,6 @@
                                                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,5}$"
                                             />
                                         </mat-form-field>
-                                        <input-field
-                                            [name]="'userEmail'"
-                                            [type]="'email'"
-                                            [(ngModel)]="email"
-                                            [required]="true"
-                                            [placeholder]="commonLocaleData?.app_email_id"
-                                            [pattern]="'[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,5}$'"
-                                            [cssClass]="'mt-0'"
-                                        ></input-field>
                                         <span class="input-group-btn mr-l1">
                                             <button
                                                 mat-stroked-button
@@ -61,6 +52,7 @@
                                                 {{ commonLocaleData?.app_share }}
                                             </button>
                                         </span>
+                                        <!-- /btn-account -->
                                     </div>
                                 </form>
                                 <!--shared with array-->
@@ -122,7 +114,9 @@
                                         {{ commonLocaleData?.app_copy }}
                                     </button>
                                 </span>
+                                <!-- /btn-group -->
                             </div>
+                            <!-- /input-group -->
                             <small class="mr-t1 light-gray">{{ localeData?.share_note }}</small>
                         </div>
                     </div>

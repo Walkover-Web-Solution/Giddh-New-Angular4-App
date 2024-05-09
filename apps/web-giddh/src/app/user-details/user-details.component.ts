@@ -30,6 +30,7 @@ import { ClipboardService } from 'ngx-clipboard';
     styleUrls: [`./user-details.component.scss`],
 })
 export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
+    /** True If Auth key copied and used toggle Copy text */
     public isCopied: boolean = false;
     public userAuthKey: string = '';
     public expandLongCode: boolean = false;

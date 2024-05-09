@@ -241,14 +241,15 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public handleFormSubmit(): void {
+        const tempAddressFormData = this.addressForm.get('linkedEntity')?.value;
+
         if(Array.isArray(this.addressForm.get('linkedEntity')?.value)){
             let value = this.addressForm?.get('linkedEntity')?.value?.map(item => {
                 return item = item.uniqueName;
             });
             this.addressForm.get('linkedEntity').patchValue(value);
         }
-        const tempAddressFormData = this.addressForm.get('linkedEntity')?.value;
-
+       
         if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
             const taxField = this.addressForm.get('taxNumber');
             if (taxField?.value && taxField.valid && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN') {
