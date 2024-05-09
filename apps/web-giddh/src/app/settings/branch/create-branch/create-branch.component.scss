@@ -39,6 +39,10 @@
         }
     }
     .branch-form {
+        .mat-mdc-select-multiple {
+            display: none !important;
+        }
+
         .branch-form-field {
             font-size: var(--font-size-15);
             display: flex;
@@ -95,6 +99,9 @@
                     }
                 }
             }
+            mat-form-field {
+                max-width: 350px;
+            }
         }
     }
 }
@@ -150,6 +157,12 @@
                 }
             }
         }
+    }
+}
+
+.bg-grey-on-hover {
+    &:hover {
+        background: var(--color-dark-fog) !important;
     }
 }
 /* create warehouse css end */
