@@ -698,7 +698,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         //             transactionFormGroup.get('amount.amountForAccount').patchValue(amount);
         //             transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue((amount / transactionFormGroup.get('stock.quantity')?.value));
         //         });
-        //     } 
+        //     }
         // });
 
         /** Voucher details */
@@ -2115,7 +2115,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                     for (let taxIndex = 0; taxIndex < taxesFormArray.length; taxIndex++) {
                         const taxFormGroup = taxesFormArray.at(taxIndex) as FormGroup;
-        
+
                         if (taxFormGroup.get('uniqueName')?.value === entryFormGroup.get('otherTax.uniqueName')?.value) {
                             taxesFormArray.removeAt(taxIndex);
                         }
@@ -2743,7 +2743,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Validate the mobile number 
+     * Validate the mobile number
      *
      * @memberof VoucherCreateComponent
      */
@@ -3031,7 +3031,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
     }
 
-    /* 
+    /*
      * Updates account and generate voucher
      *
      * @memberof VoucherCreateComponent
@@ -3535,7 +3535,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * This will be use for send email after create voucher 
+     * This will be use for send email after create voucher
      *
      * @param {*} response
      * @memberof VoucherCreateComponent

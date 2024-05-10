@@ -140,7 +140,6 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      */
     public translationComplete(event: any): void {
         if (event) {
-
             let settingsPageTabs = this.localeData?.tabs;
             if (settingsPageTabs) {
                 let loop = 0;
@@ -154,6 +153,13 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                         }
                     }
                     Object.keys(settingsPageTabs[organizationIndex]).forEach(key => {
+                        settingsPageTabs[organizationIndex][key] = settingsPageTabs[organizationIndex][key]?.map(value => {
+                            if (this.selectedCompany?.planVersion === 1 && this.selectedCompany?.subscription?.status === "expired") {
+                                value.link = "/pages/subscription";
+                            }
+                            return value;
+                        });
+
                         this.settingsPageTabs[loop] = [];
                         this.settingsPageTabs[loop] = [...settingsPageTabs[organizationIndex][key]?.filter(value => !value?.planVersion || (value?.planVersion && +this.selectedCompany?.planVersion === +value?.planVersion)
                         )];

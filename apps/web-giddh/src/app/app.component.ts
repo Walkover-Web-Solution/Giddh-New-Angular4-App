@@ -202,6 +202,16 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }, 1000);
 
         if (this._generalService.getUrlParameter("region") === "uk") {
+            this._generalService.setParameterInLocalStorage("Country-Region", "GB");
+        } else if (this._generalService.getUrlParameter("region") === "ae") {
+            this._generalService.setParameterInLocalStorage("Country-Region", "AE");
+        } else if (this._generalService.getUrlParameter("region") === "in") {
+            this._generalService.setParameterInLocalStorage("Country-Region", "IN");
+        } else {
+            this._generalService.setParameterInLocalStorage("Country-Region", "GL");
+        }
+
+        if (this._generalService.getUrlParameter("region") === "uk") {
             this._generalService.setParameterInLocalStorage("X-Tenant", "GB");
         } else {
             this._generalService.setParameterInLocalStorage("X-Tenant", "GL");

@@ -11,6 +11,8 @@ import { SettingsProfileService } from "../../../services/settings.profile.servi
 export interface BuyPlanState {
     planListInProgress: boolean;
     planList: any
+    countryListInProgress: boolean;
+    countryList: any
     createSubscriptionSuccess: boolean;
     createSubscriptionResponse: any;
     createSubscriptionInProgress: boolean;
@@ -30,6 +32,8 @@ export interface BuyPlanState {
 export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
     planListInProgress: true,
     planList: [],
+    countryListInProgress: true,
+    countryList: [],
     createSubscriptionSuccess: false,
     createSubscriptionResponse: null,
     createSubscriptionInProgress: false,
@@ -420,6 +424,48 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
             })
         );
     });
+
+    /**
+   * Get All Country List
+   *
+   * @memberof BuyPlanComponentStore
+   */
+    readonly getCountryList = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap(() => {
+                this.patchState({ countryListInProgress: true });
+                return this.subscriptionService.getCountryList().pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    countryList: res?.body ?? [],
+                                    countryListInProgress: false,
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    countryList: [],
+                                    countryListInProgress: false,
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
+                            return this.patchState({
+                                countryList: [],
+                                countryListInProgress: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
 
     /**
      * Lifecycle hook for component destroy

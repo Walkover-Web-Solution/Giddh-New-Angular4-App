@@ -151,11 +151,11 @@ export class VouchersUtilityService {
             case VoucherTypeEnum.purchaseOrder:
                 voucherName = localeData?.invoice_types?.purchase_order;
                 break;
-            
+
             case VoucherTypeEnum.receipt:
                 voucherName = localeData?.invoice_types?.receipt;
                 break;
-            
+
             case VoucherTypeEnum.payment:
                 voucherName = localeData?.invoice_types?.payment;
                 break;
@@ -197,7 +197,7 @@ export class VouchersUtilityService {
                 code: defaultAddress.stateCode,
                 name: defaultAddress.stateName
             };
-        } 
+        }
 
         return { defaultAddress, defaultAddressIndex };
     }
@@ -313,7 +313,7 @@ export class VouchersUtilityService {
                 if (!entry.taxes) {
                     entry.taxes = [];
                 }
-                
+
                 entry.taxes.push({
                     uniqueName: entry.otherTax?.uniqueName,
                     calculationMethod: entry.otherTax?.calculationMethod

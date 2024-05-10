@@ -82,7 +82,7 @@
     "permission_placeholder":"Unique Name/Email ID",
     "roles":"Roles",
     "add_user": "Add User",
+    "back_to_subscription": "Back to Subscription List",
     "county":"County",
-    "select_county":"Select County",
-    "back_to_subscription": "Back to Subscription List"
+    "select_county":"Select County"
 }

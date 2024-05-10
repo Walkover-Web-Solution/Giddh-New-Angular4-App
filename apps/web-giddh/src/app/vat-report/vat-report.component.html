@@ -257,7 +257,7 @@
                                                 </td>
                                             </ng-container>
                                             <ng-container matColumnDef="description">
-                                                <th mat-header-cell *matHeaderCellDef> 
+                                                <th mat-header-cell *matHeaderCellDef>
                                                     <ng-container *ngIf="isKenyaCompany">{{ commonLocaleData?.app_description }}</ng-container>
                                                 </th>
                                                 <td mat-cell *matCellDef="let element" [attr.width]="isKenyaCompany ? null : '40%'">{{ element.description }}</td>
@@ -511,7 +511,7 @@
                                             <ng-container matColumnDef="output-tax">
                                                 <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" class="font-weight-bold">{{ localeData?.output_tax }}</th>
                                             </ng-container>
-                                            
+
                                             <!-- For Header row 1 -->
                                             <tr mat-header-row *matHeaderRowDef="zwDisplayedHeaderColumns"></tr>
                                             <!-- For Header row 2 -->

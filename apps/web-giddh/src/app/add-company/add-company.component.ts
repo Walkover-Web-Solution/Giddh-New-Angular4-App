@@ -1161,6 +1161,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             number = phoneNumber.replace(countryCode, '').trim();
             number = number.substring(1);
         }
+
         let taxDetails = this.prepareTaxDetail(this.companyForm);
         this.company.name = this.firstStepForm.value.name;
         this.company.country = this.firstStepForm.value.country.value;
