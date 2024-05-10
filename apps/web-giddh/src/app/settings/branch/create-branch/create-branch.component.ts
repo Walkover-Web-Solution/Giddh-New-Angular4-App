@@ -235,7 +235,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
             });
         }
         option.isDefault = !option.isDefault;
-        if (option.isDefault) {
+        if (option.isDefault &&( (this.branchForm.get('address')?.value === '') || (this.branchForm.get('address')?.value.findIndex(i => i.uniqueName === option.uniqueName) === -1))) {
             this.branchForm.get('address')?.patchValue([...this.branchForm.get('address')?.value, option]);
         }
     }
@@ -480,6 +480,13 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      */
     public removeItem(element: any): void { 
         this.branchForm.get('address')?.patchValue(this.branchForm.get('address').value.filter(i => i !== element));
+
+        this.addresses = this.addresses.map(address => {
+            if(address?.uniqueName === element?.uniqueName){
+                address.isDefault = false;
+            }
+            return address
+        });
     }
 
     /**
