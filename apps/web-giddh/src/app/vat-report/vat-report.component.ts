@@ -108,7 +108,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         { label: 'March', value: 3 },
         { label: 'April', value: 4 },
         { label: 'May', value: 5 },
-        { label: 'June', value: 61 },
+        { label: 'June', value: 6 },
         { label: 'July', value: 7 },
         { label: 'August', value: 8 },
         { label: 'September', value: 9 },
@@ -140,6 +140,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public vatReportCurrencySymbol: string = this.vatReportCurrencyList[0].additional.symbol;
     /** Holds Current Currency Map Amount Decimal currency wise for Zimbabwe report */
     public vatReportCurrencyMap: string[];
+    /** Hold True if Current branch has Tax Number */
+    public hasTaxNumber: boolean = false;
 
     constructor(
         private gstReconcileService: GstReconcileService,
@@ -160,8 +162,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && !this.activeCompany) {
-                console.log(activeCompany);
-                
                 this.activeCompany = activeCompany;
                 this.isUKCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'GB';
                 this.isZimbabweCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'ZW';
@@ -215,6 +215,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
+                        this.hasTaxNumber = this.currentBranch.hasOwnProperty('addresses');
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -241,7 +242,9 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 this.selectedMonth = "";
                 this.selectedYear = "";
                 this.year = null;
-                this.loadTaxDetails();
+                if(this.hasTaxNumber || this.currentOrganizationType === OrganizationType.Company){
+                    this.loadTaxDetails();
+                }
             }
         });
     }
@@ -362,7 +365,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
             this.fromDate = dayjs(startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = dayjs(endDate).format(GIDDH_DATE_FORMAT);
             this.getVatReport();
-
+            
         }
     }
 
