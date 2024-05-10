@@ -1024,6 +1024,22 @@ textarea {
 
 }
 
+.company-button {
+    .mdc-button__label {
+        display: flex;
+            align-items: center;
+            column-gap: 7px;
+    }
+}
+
+.word-wrap-dots {
+    max-width: 230px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+}
+
 
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {

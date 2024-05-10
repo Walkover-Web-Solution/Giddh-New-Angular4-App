@@ -1,5 +1,4 @@
 <!-- for voucher v1 company message -->
-<ng-container>
     <div class="message-wrapper" *ngIf="showDepreciationMessage">
         <p class="text-center py-2">
             {{ localeData?.depreciation_message }}
@@ -58,13 +57,13 @@
                 <div class="d-flex justify-content-between align-items-center h-100">
                     <button
                         *ngIf="companyList?.length && isSubscriptionPage"
-                        class="min160 company-button"
+                        class="min160 company-button "
                         color="primary"
                         mat-stroked-button
                         (click)="backToCompany()"
                     >
                         <i class="icon-left back-left"></i>
-                        {{ commonLocaleData?.app_back }} {{ commonLocaleData?.app_to }} {{ activeCompany?.name }}
+                        {{ commonLocaleData?.app_back }} {{ commonLocaleData?.app_to }} <span class="word-wrap-dots">{{ activeCompany?.name }}</span>
                     </button>
                     <div class="logo-wrapper pd-l4">
                         <img
@@ -794,7 +793,6 @@
         </div>
     </div>
     <connect-plaid></connect-plaid>
-</ng-container>
 <!--CMD + G modal  -->
 <ng-template #navigationModal>
     <command-k

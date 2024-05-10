@@ -19,11 +19,12 @@ import { NavigationEnd, Router } from '@angular/router';
 
 export class PageComponent implements AfterViewInit {
     public sideMenu: { isopen: boolean } = { isopen: true };
+    /**True if it is subscription page */
     public isSubscriptionPage: boolean = false;
 
     constructor(
-        private store: Store<AppState>, 
-        private generalService: GeneralService, 
+        private store: Store<AppState>,
+        private generalService: GeneralService,
         private generalActions: GeneralActions,
         private router: Router
     ) {
