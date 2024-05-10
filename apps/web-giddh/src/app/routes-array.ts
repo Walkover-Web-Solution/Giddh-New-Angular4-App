@@ -23,6 +23,7 @@ export const ROUTES: Routes = [
     { path: 'ledger/:accountUniqueName', redirectTo: 'pages/ledger/:accountUniqueName', pathMatch: 'full' },
     { path: 'dummy', loadChildren: () => import('./dummy/dummy.module').then(module => module.DummyModule) },
     { path: 'proforma-invoice' },
+    { path: 'subscription', loadChildren: () => import('./subscription/subscription.module').then(module => module.SubscriptionModule) },
     { path: 'subscription/buy-plan', loadChildren: () => import('./subscription/subscription.module').then(module => module.SubscriptionModule) },
     { path: 'new-company', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
     { path: 'new-company/:subscriptionId', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
@@ -106,6 +107,7 @@ export const ROUTES: Routes = [
             { path: 'custom-fields', loadChildren: () => import('./custom-fields/custom-fields.module').then(module => module.CustomFieldsModule) },
             { path: 'new-company', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
             { path: 'subscription/buy-plan', loadChildren: () => import('./subscription/subscription.module').then(module => module.SubscriptionModule) },
+            { path: 'subscription', loadChildren: () => import('./subscription/subscription.module').then(module => module.SubscriptionModule) },
             { path: 'new-company/:subscriptionId', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
             { path: 'vouchers', loadChildren: () => import('./vouchers/vouchers.module').then(module => module.VouchersModule) },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
