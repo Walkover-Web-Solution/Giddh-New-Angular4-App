@@ -1,4 +1,8 @@
 <!-- for voucher v1 company message -->
+<<<<<<< HEAD
+=======
+<ng-container>
+>>>>>>> 76a846afe98de6166c0632a4e14ec97244fdc00e
     <div class="message-wrapper" *ngIf="showDepreciationMessage">
         <p class="text-center py-2">
             {{ localeData?.depreciation_message }}
@@ -23,7 +27,7 @@
             (mouseover)="expandSidebar()"
             (mouseout)="collapseSidebar(false, true)"
             class="nav-left-bar"
-            [ngClass]="{ 'open': isSidebarExpanded, 'unvisible': companyList?.length === 0 }"
+            [ngClass]="{ 'open': isSidebarExpanded, 'unvisible': companyList?.length === 0 && !isSubscriptionPage, 'hide-sidebar': isSubscriptionPage }"
             (clickOutside)="closeSidebarMobile($event)"
         >
             <div class="menu-wrapper">
@@ -48,10 +52,13 @@
             <div
                 class="primary-main-header"
                 id="primary-new-header"
-                [ngClass]="{ 'open': sideMenu.isopen, 'unvisible': companyList?.length === 0 }"
+                [ngClass]="{ 'open': sideMenu.isopen, 'unvisible': companyList?.length === 0 && !isSubscriptionPage }"
             >
                 <div class="d-flex justify-content-between align-items-center h-100">
                     <div class="logo-wrapper pd-l4">
+                        <span *ngIf="companyList?.length && isSubscriptionPage">
+                            Back to {{ activeCompany?.name }}
+                        </span>
                         <img
                             src="{{ imgPath }}giddh-white-logo.svg"
                             width="127"
@@ -60,60 +67,184 @@
                         />
                     </div>
                     <ul class="nav universal-date h-100" *ngIf="selectedCompany | async">
-                        <li>
-                            <button
-                                mat-icon-button
-                                aria-label="Search"
-                                class="icon-circle"
-                                (click)="showNavigationModal()"
-                                [matTooltip]="commonLocaleData?.app_search"
-                                [matTooltipPosition]="'below'"
-                            >
-                                <i class="icon-search"></i>
-                            </button>
-                        </li>
-                        <li>
-                            <button
-                                *ngIf="voucherApiVersion === 2"
-                                mat-icon-button
-                                aria-label="menu-option"
-                                #menuTrigger="matMenuTrigger"
-                                [matMenuTriggerFor]="menu"
-                                class="icon-circle"
-                                [matTooltip]="localeData?.quick_create"
-                                [matTooltipPosition]="'below'"
-                            >
-                                <i class="icon-plus"></i>
-                            </button>
-                            <mat-menu #menu="matMenu" class="icon-circle">
-                                <div (click)="$event.stopPropagation()">
-                                    <span class="create-txt font-16 d-block">
-                                        {{ commonLocaleData?.app_create_new }}
-                                    </span>
-                                    <div class="menu-dropdown-wrapper">
-                                        <div
-                                            *ngIf="
-                                                currentOrganizationType === 'BRANCH' ||
-                                                (currentCompanyBranches?.length <= 1 &&
-                                                    currentOrganizationType === 'COMPANY')
-                                            "
-                                        >
-                                            <div class="mr-t2 mr-b05 d-flex justify-content-between">
-                                                <div class="d-flex align-items-center">
+                        <ng-container *ngIf="!isSubscriptionPage">
+                            <li>
+                                <button
+                                    mat-icon-button
+                                    aria-label="Search"
+                                    class="icon-circle"
+                                    (click)="showNavigationModal()"
+                                    [matTooltip]="commonLocaleData?.app_search"
+                                    [matTooltipPosition]="'below'"
+                                >
+                                    <i class="icon-search"></i>
+                                </button>
+                            </li>
+                            <li>
+                                <button
+                                    *ngIf="voucherApiVersion === 2"
+                                    mat-icon-button
+                                    aria-label="menu-option"
+                                    #menuTrigger="matMenuTrigger"
+                                    [matMenuTriggerFor]="menu"
+                                    class="icon-circle"
+                                    [matTooltip]="localeData?.quick_create"
+                                    [matTooltipPosition]="'below'"
+                                >
+                                    <i class="icon-plus"></i>
+                                </button>
+                                <mat-menu #menu="matMenu" class="icon-circle">
+                                    <div (click)="$event.stopPropagation()">
+                                        <span class="create-txt font-16 d-block">
+                                            {{ commonLocaleData?.app_create_new }}
+                                        </span>
+                                        <div class="menu-dropdown-wrapper">
+                                            <div
+                                                *ngIf="
+                                                    currentOrganizationType === 'BRANCH' ||
+                                                    (currentCompanyBranches?.length <= 1 &&
+                                                        currentOrganizationType === 'COMPANY')
+                                                "
+                                            >
+                                                <div class="mr-t2 mr-b05 d-flex justify-content-between">
+                                                    <div class="d-flex align-items-center">
+                                                        <span class="d-flex">
+                                                            <i class="icon-credit-note-new mr-r1"></i>
+                                                        </span>
+                                                        <span
+                                                            >{{ localeData?.credit }}
+                                                            <a
+                                                                [matTooltip]="localeData?.credit_information"
+                                                                [matTooltipPosition]="'above'"
+                                                            >
+                                                                <i class="icon-info mr-l15"></i>
+                                                            </a>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <ul>
+                                                    <li>
+                                                        <span class="dot d-block"></span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="
+                                                                navigateToSubItemLink('/proforma-invoice/invoice/sales')
+                                                            "
+                                                        >
+                                                            {{ localeData?.invoice }}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <span class="dot d-block"></span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="
+                                                                navigateToSubItemLink('/proforma-invoice/invoice/purchase')
+                                                            "
+                                                        >
+                                                            {{ localeData?.bill }}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <span class="dot d-block"></span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="
+                                                                navigateToSubItemLink(
+                                                                    '/proforma-invoice/invoice/credit note'
+                                                                )
+                                                            "
+                                                        >
+                                                            {{ localeData?.credit_note }}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <span class="dot d-block"></span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="
+                                                                navigateToSubItemLink(
+                                                                    '/proforma-invoice/invoice/debit note'
+                                                                )
+                                                            "
+                                                        >
+                                                            {{ localeData?.debit_note }}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div
+                                                *ngIf="
+                                                    currentOrganizationType === 'BRANCH' ||
+                                                    (currentCompanyBranches?.length <= 1 &&
+                                                        currentOrganizationType === 'COMPANY')
+                                                "
+                                            >
+                                                <div class="mr-t2 mr-b05 d-flex align-items-center">
                                                     <span class="d-flex">
-                                                        <i class="icon-credit-note-new mr-r1"></i>
+                                                        <i class="icon-invoice-new mr-r1"></i>
                                                     </span>
                                                     <span
-                                                        >{{ localeData?.credit }}
+                                                        >{{ localeData?.cash }}
                                                         <a
-                                                            [matTooltip]="localeData?.credit_information"
+                                                            [matTooltip]="localeData?.cash_information"
                                                             [matTooltipPosition]="'above'"
                                                         >
                                                             <i class="icon-info mr-l15"></i>
                                                         </a>
                                                     </span>
                                                 </div>
+                                                <ul>
+                                                    <li>
+                                                        <span class="dot d-block"></span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="
+                                                                navigateToSubItemLink('/proforma-invoice/invoice/cash')
+                                                            "
+                                                        >
+                                                            {{ localeData?.invoice }}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <span class="dot d-block"></span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="
+                                                                navigateToSubItemLink('/proforma-invoice/invoice/cash bill')
+                                                            "
+                                                            >{{ localeData?.bill }}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <span class="dot d-block"></span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="
+                                                                navigateToSubItemLink(
+                                                                    '/proforma-invoice/invoice/cash credit note'
+                                                                )
+                                                            "
+                                                        >
+                                                            {{ localeData?.credit_note }}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <span class="dot d-block"></span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="
+                                                                navigateToSubItemLink(
+                                                                    '/proforma-invoice/invoice/cash debit note'
+                                                                )
+                                                            "
+                                                        >
+                                                            {{ localeData?.debit_note }}
+                                                        </a>
+                                                    </li>
+                                                </ul>
                                             </div>
+<<<<<<< HEAD
                                             <ul>
                                                 <li>
                                                     <span class="dot d-block"></span>
@@ -530,13 +661,229 @@
                                 mat-icon-button
                                 aria-label="settings"
                                 [matTooltip]="commonLocaleData?.app_settings"
+=======
+                                            <div
+                                                *ngIf="
+                                                    currentOrganizationType === 'BRANCH' ||
+                                                    (currentCompanyBranches?.length <= 1 &&
+                                                        currentOrganizationType === 'COMPANY')
+                                                "
+                                            >
+                                                <div class="mr-t2 mr-b05 d-flex align-items-center">
+                                                    <span class="d-flex">
+                                                        <i class="icon-branch-transfer mr-r1"></i>
+                                                    </span>
+                                                    <span> {{ localeData?.branch_transfer }} </span>
+                                                </div>
+                                                <ul>
+                                                    <li>
+                                                        <span class="dot d-block"></span>
+                                                        <a
+                                                            href="javascript:void(0);"
+                                                            class="cursor-pointer"
+                                                            aria-label="receipt"
+                                                            (click)="navigateToSubItemLink('receiptnote')"
+                                                        >
+                                                            {{ localeData?.receipt_note }}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <span class="dot d-block"></span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="navigateToSubItemLink('deliverychallan')"
+                                                        >
+                                                            {{ localeData?.delivery_challan }}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <div class="mr-t2 mr-b05 d-flex align-items-center">
+                                                    <span class="d-flex">
+                                                        <i class="icon-stock mr-r1"></i>
+                                                    </span>
+                                                    <span> {{ localeData?.stock }} </span>
+                                                </div>
+                                                <ul>
+                                                    <li>
+                                                        <span class="dot d-block"></span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="
+                                                                navigateToSubItemLink('/inventory/v2/stock/product/create')
+                                                            "
+                                                        >
+                                                            {{ localeData?.product }}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <span class="dot d-block"></span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="
+                                                                navigateToSubItemLink('/inventory/v2/stock/service/create')
+                                                            "
+                                                        >
+                                                            {{ localeData?.service }}
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <span class="dot d-block"></span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="
+                                                                navigateToSubItemLink(
+                                                                    '/inventory/v2/stock/fixedassets/create'
+                                                                )
+                                                            "
+                                                        >
+                                                            {{ localeData?.fixed_assets }}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div
+                                                class="mr-t2 mr-b05 align-items-center"
+                                                *ngIf="
+                                                    currentCompanyBranches?.length > 1 &&
+                                                    currentOrganizationType === 'COMPANY'
+                                                "
+                                            >
+                                                <span>{{ localeData?.go_to_branch_information }} </span>
+                                                <button
+                                                    mat-stroked-button
+                                                    color="primary"
+                                                    class="mr-t2"
+                                                    (click)="gotToBranchTab()"
+                                                >
+                                                    {{ localeData?.go_to_branch }}
+                                                </button>
+                                            </div>
+                                            <ng-container
+                                                *ngIf="
+                                                    currentOrganizationType === 'BRANCH' ||
+                                                    (currentCompanyBranches?.length <= 1 &&
+                                                        currentOrganizationType === 'COMPANY')
+                                                "
+                                            >
+                                                <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
+                                                    <span class="d-flex">
+                                                        <i class="icon-estimate-new mr-r1"></i>
+                                                    </span>
+                                                    <span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="
+                                                                navigateToSubItemLink('/proforma-invoice/invoice/estimates')
+                                                            "
+                                                        >
+                                                            {{ localeData?.estimate }}
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                                <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                                    <span class="d-flex">
+                                                        <i class="icon-proforma mr-r1"></i>
+                                                    </span>
+                                                    <span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="
+                                                                navigateToSubItemLink('/proforma-invoice/invoice/proformas')
+                                                            "
+                                                        >
+                                                            {{ localeData?.proforma }}
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                                <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                                    <span class="d-flex">
+                                                        <i class="icon-purchase-order mr-r1"></i>
+                                                    </span>
+                                                    <span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="
+                                                                navigateToSubItemLink(
+                                                                    '/purchase-management/purchase-order/new'
+                                                                )
+                                                            "
+                                                        >
+                                                            {{ localeData?.purchase_order }}
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                                <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                                    <span class="d-flex">
+                                                        <i class="icon-manufacturing1 mr-r1"></i>
+                                                    </span>
+                                                    <span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="
+                                                                navigateToSubItemLink('/inventory/v2/manufacturing/create')
+                                                            "
+                                                        >
+                                                            {{ localeData?.manufacturing }}
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </mat-menu>
+                            </li>
+                            <li
+                                class="border-none pd-r15 notification"
+                                [ngClass]="{ 'mr-0': isTodaysDateSelected }"
+                                [matTooltip]="localeData?.notifications"
+>>>>>>> 76a846afe98de6166c0632a4e14ec97244fdc00e
                                 [matTooltipPosition]="'below'"
-                                (click)="toggleSidebar(false)"
-                                class="icon-circle"
                             >
-                                <i class="icon-settings-cog"></i>
-                            </button>
-                        </li>
+                                <button mat-icon-button aria-label="notification" class="icon-circle">
+                                    <i class="icon-bell-new"></i>
+                                </button>
+                            </li>
+                            <li class="border-none pl-0 select-today" *ngIf="!isTodaysDateSelected">
+                                <button class="btn btn-link p-1" (click)="dateSelectedCallback()">
+                                    {{ commonLocaleData?.app_today }}
+                                </button>
+                            </li>
+                            <li class="not-today cursor-pointer" [ngClass]="{ 'if-today': isTodaysDateSelected }">
+                                <span class="icon-calender-new calendar-addon" (click)="showGiddhDatepicker($event)"></span>
+                                <div class="input-date" [ngClass]="{ 'today-date pl-2': isTodaysDateSelected }">
+                                    <input
+                                        type="text"
+                                        name="selectedDateRange"
+                                        (click)="showGiddhDatepicker($event)"
+                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                        class="giddh-datepicker form-control date-range-picker"
+                                    />
+                                </div>
+                            </li>
+                            <li>
+                                <a
+                                    href="javascript:void(0);"
+                                    aria-label="master"
+                                    id="add-manage"
+                                    (click)="showManageGroupsModal()"
+                                    ><i class="icon-master-new1"></i> {{ commonLocaleData?.app_master }}</a
+                                >
+                            </li>
+                            <li class="header-utility-icons">
+                                <button
+                                    mat-icon-button
+                                    aria-label="settings"
+                                    [matTooltip]="commonLocaleData?.app_settings"
+                                    [matTooltipPosition]="'below'"
+                                    (click)="toggleSidebar(false)"
+                                    class="icon-circle"
+                                >
+                                    <i class="icon-settings-cog"></i>
+                                </button>
+                            </li>
+                        </ng-container>    
                         <li class="header-utility-icons">
                             <a href="javascript:void(0);" aria-label="help-info" (click)="toggleHelpSupportPane(true)">
                                 <button
@@ -598,6 +945,7 @@
         </div>
         <!-- New header ends -->
 
+<<<<<<< HEAD
     <div
         class="plan-wrapper"
         *ngIf="
@@ -650,6 +998,63 @@
         <div class="modal-dialog modal-xl modal-liq-90 mr-0 width-100 h-100">
             <div class="modal-content full-screen-modal">
                 <ng-template element-view-container-ref #addmanage="elementviewcontainerref"> </ng-template>
+=======
+        <div
+            class="plan-wrapper"
+            *ngIf="
+                subscribedPlan !== undefined &&
+                subscribedPlan?.status !== 'expired' &&
+                remainingSubscriptionDays !== false &&
+                remainingSubscriptionDays <= 7
+            "
+            [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionPage }"
+        >
+            <div class="white-row plan-issue">
+                <p>
+                    <span class="icon-traingle-info"></span> {{ getSubscriptionEndNote() }}
+                    <a
+                        href="javascript:void(0);"
+                        class="click-here"
+                        aria-label="go to plan"
+                        (click)="goToSelectPlan()"
+                        >{{ localeData?.click_here }}</a
+                    >
+                </p>
+            </div>
+        </div>
+
+        <div
+            class="plan-wrapper"
+            *ngIf="subscribedPlan !== undefined && subscribedPlan?.status === 'expired'"
+            [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionPage }"
+        >
+            <div class="white-row plan-issue">
+                <p>
+                    <span class="icon-traingle-info"></span> {{ getSubscriptionEndedNote() }}
+                    <a
+                        href="javascript:void(0);"
+                        class="click-here"
+                        aria-label="get select "
+                        (click)="goToSelectPlan()"
+                        >{{ localeData?.click_here }}</a
+                    >
+                </p>
+            </div>
+        </div>
+
+        <div
+            class="plan-wrapper"
+            *ngIf="subscribedPlan !== undefined && subscribedPlan.additionalCharges"
+            [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionPage }"
+        >
+            <div class="white-row plan-issue">
+                <p>
+                    <span class="icon-traingle-info"></span> {{ getSubscriptionTransactionEndedNote() }}
+                    <a href="javascript:void(0);" class="click-here" aria-label="get plan" (click)="goToSelectPlan()">{{
+                        localeData?.click_here
+                    }}</a>
+                </p>
+>>>>>>> 76a846afe98de6166c0632a4e14ec97244fdc00e
             </div>
         </div>
         <!--add and manage group account modal -->
@@ -866,9 +1271,3 @@
     >
     </generic-aside-menu-account>
 </div>
-
-<header class="custom-header" *ngIf="hasSubscriptionPermission">
-    <div class="logo">
-        <a href="https://app.giddh.com/" target="_blank"><img src="{{ imgPath }}giddh-white-logo.svg" alt="" /></a>
-    </div>
-</header>

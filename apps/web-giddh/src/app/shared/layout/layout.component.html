@@ -1,3 +1,3 @@
-<div id="content-wrapper" [ngClass]="{ menu_open: sideMenu.isopen }">
+<div id="content-wrapper" [ngClass]="{ menu_open: sideMenu.isopen && !isSubscriptionPage }">
     <ng-content></ng-content>
 </div>

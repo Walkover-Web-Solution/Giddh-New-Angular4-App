@@ -10627,6 +10627,14 @@ body {
     padding-left: 240px !important;
 }
 
+.subscription-page .plan-wrapper, .subscription-page #content-wrapper {
+    padding-left: 23px !important;
+}
+
+.subscription-page .hamburger-menu {
+    display: none;
+}
+
 .setting-sidebar-open #content-wrapper {
     padding-left: 0;
 }
