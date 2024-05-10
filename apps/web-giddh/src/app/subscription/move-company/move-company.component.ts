@@ -18,6 +18,8 @@ import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 })
 
 export class MoveCompanyComponent implements OnInit, OnDestroy {
+    /* Emit move company response */
+    @Output() public moveCompany = new EventEmitter<boolean>();
     /* Hold subscriptions data */
     @Input() public subscriptions: any[] = [];
     /* Hold move selected company*/
@@ -117,25 +119,15 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                 this.moveSelectedCompany = response.body;
                 if (this.subscriptions && this.subscriptions.length > 0) {
                     this.subscriptions.forEach(subscription => {
-                        if (this.subscriptionMove) {
-                            if (subscription.subscriptionId && this.moveSelectedCompany?.subscription?.subscriptionId !== subscription.subscriptionId && (!subscription.companies?.length || subscription.companies?.length < subscription?.totalCompanies) && this.availablePlans[subscription?.plan?.uniqueName] === undefined &&
+                            if (subscription.subscriptionId && this.moveSelectedCompany?.subscription?.subscriptionId !== subscription.subscriptionId && (!subscription.companies?.length || subscription.companies?.length < subscription?.totalCompanies) && this.availablePlans[subscription?.subscriptionId] === undefined &&
                                 subscription.planCountries?.find(country => country?.countryName === this.moveSelectedCompany.country ? this.moveSelectedCompany.country : this.moveSelectedCompany.country?.countryName)
                             ) {
-                                this.availablePlansOption.push({ label: subscription.plan?.name, value: subscription.plan?.uniqueName });
-                                if (this.availablePlans[subscription.plan?.uniqueName] === undefined) {
-                                    this.availablePlans[subscription.plan?.uniqueName] = [];
+                                this.availablePlansOption.push({ label: subscription.plan?.name + " - "+ subscription?.subscriptionId, value: subscription.plan?.uniqueName});
+                                if (this.availablePlans[subscription.subscriptionId] === undefined) {
+                                    this.availablePlans[subscription.subscriptionId] = [];
                                 }
-                                this.availablePlans[subscription.plan?.uniqueName] = subscription;
+                                this.availablePlans[subscription.subscriptionId] = subscription;
                             }
-                        } else {
-                            if (subscription.subscriptionId && subscription.planDetails?.companiesLimit > subscription.totalCompanies && this.moveSelectedCompany?.subscription?.subscriptionId !== subscription.subscriptionId && this.availablePlans[subscription.planDetails?.uniqueName] === undefined && subscription.planDetails.countries.includes(this.moveSelectedCompany.country)) {
-                                this.availablePlansOption.push({ label: subscription.planDetails?.name, value: subscription.planDetails?.uniqueName });
-                                if (this.availablePlans[subscription.planDetails?.uniqueName] === undefined) {
-                                    this.availablePlans[subscription.planDetails?.uniqueName] = [];
-                                }
-                                this.availablePlans[subscription.planDetails?.uniqueName] = subscription;
-                            }
-                        }
                     });
                 }
             }

@@ -595,7 +595,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.openCrossedTxLimitModel(this.crossedTxLimitModel);
             }
         }
-        this.manageGroupsAccountsModal.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(e => {
+        this.manageGroupsAccountsModal?.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(e => {
             this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
         });
 
@@ -796,7 +796,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
                 this.zone.run(() => {
                     this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => this.hasSubscriptionPermission = response?.user?.hasSubscriptionPermission);
-                    console.log(this.hasSubscriptionPermission);
                     if (this.hasSubscriptionPermission) {
                         this.router.navigate(['/pages/subscription']);
                     } else {

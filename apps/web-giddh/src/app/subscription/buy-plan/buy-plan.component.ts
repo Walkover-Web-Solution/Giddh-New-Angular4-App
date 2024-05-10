@@ -398,6 +398,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * This will be use for back to previous page
+     *
+     * @memberof BuyPlanComponent
+     */
+    public backToPreviousPage(): void {
+        if (this.firstStepForm?.get('promoCode')?.value) {
+            this.firstStepForm?.get('promoCode')?.setValue(this.firstStepForm?.get('promoCode')?.value);
+        }
+    }
+
+    /**
      * Gets active company details
      *
      * @private
