@@ -37,5 +37,9 @@
     "for_office_use": "For Office use",
     "mat_code": "Mat. Code",
     "value_of_supply": "Value of Supply",
-    "output_tax": "Output Tax"
+    "output_tax": "Output Tax",
+    "detailsOfSales": "Details of Sales",
+    "detailsOfPurchases": "Details of Purchases",
+    "amountExclVat": "Amount(Excl VAT)",
+    "amountOfOutputTax": "Amount of Output Tax"
 }

@@ -35,9 +35,15 @@
     border-color: var(--color-table-primary-header-bar-border);
 }
 
-.entry-table tbody tr td {
-    padding: 0;
-    border: 0;
+.entry-table {
+    tbody {
+        tr {
+            td {
+                padding: 5px;
+                border: 0;
+            }
+        }
+    }
 }
 
 .entry-table tbody tr td .form-control {

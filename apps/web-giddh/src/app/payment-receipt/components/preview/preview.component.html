@@ -25,7 +25,7 @@
                                 class="mr-l1"
                                 mat-stroked-button
                                 color="primary"
-                                [routerLink]="['/pages/voucher/' + voucherType + '/create']"
+                                [routerLink]="['/pages/vouchers/' + voucherType + '/create']"
                             >
                                 {{ localeData?.new_voucher }}
                             </button>
@@ -100,7 +100,7 @@
 
                                             <div class="wrap-edit-history-btn">
                                                 <div class="edit-action-btn-groups pull-right">
-                                                    <span *ngIf="!isCompany">
+                                                    <!-- <span *ngIf="!isCompany">
                                                         <a
                                                             href="javascript:;"
                                                             [matTooltip]="commonLocaleData?.app_edit"
@@ -115,7 +115,7 @@
                                                             "
                                                             ><i class="icon-edit-pencil"></i
                                                         ></a>
-                                                    </span>
+                                                    </span> -->
 
                                                     <span>
                                                         <a

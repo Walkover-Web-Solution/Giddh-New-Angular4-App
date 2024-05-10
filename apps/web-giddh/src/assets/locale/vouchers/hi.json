@@ -10,7 +10,9 @@
         "estimate": "अनुमान",
         "cash_bill": "नकद बिल",
         "cash_credit_note": "कैश क्रेडिट नोट",
-        "cash_debit_note": "नकद डेबिट नोट"
+        "cash_debit_note": "नकद डेबिट नोट",
+        "receipt": "रसीद",
+        "payment": "भुगतान"
     },
     "customer_name": "ग्राहक का नाम",
     "enter_customer_name": "Enter Customer Name",
@@ -86,7 +88,7 @@
     "no_account_error": "बैंक / कैश ए / सी या ग्राहक नाम का चयन करने की आवश्यकता है",
     "no_customer_error": "ग्राहक का नाम रिक्त नहीं हो सकता",
     "invalid_email": "अमान्य ईमेल पता",
-    "no_product_error": "उत्पाद / सेवा खाली नहीं हो सकती",
+    "no_product_error": "पंक्ति वस्तुएँ खाली नहीं हो सकतीं",
     "no_entry_error": "बिक्री-इनवॉइस जनरेट करने के लिए कम से कम एक प्रविष्टि आवश्यक है",
     "no_state_error": "राज्य अनिवार्य है",
     "custom_field1": "कस्टम फ़ील्ड 1",
@@ -142,5 +144,14 @@
     "order_no": "गण #",
     "order_no_placeholder": "आदेश दर्ज करें #",
     "expected_delivery": "अपेक्षित सुपुर्दगी",
-    "vendor_name": "विक्रेता का नाम"
+    "vendor_name": "विक्रेता का नाम",
+    "create_receipt": "रसीद बनाएं",
+    "create_payment": "भुगतान बनाएँ",
+    "receipt_date": "रसीद तारीख",
+    "payment_date": "भुगतान तिथि",
+    "cheque_no": "चेक नंबर",
+    "cheque_no_placeholder": "चेक नंबर दर्ज करें",
+    "clearance_date": "चेक तिथि",
+    "receipt_mode": "रसीद मोड",
+    "payment_mode": "Payment Mode"
 }
