@@ -29,7 +29,7 @@
                             <div class="plan-width">
                                 <ng-template matStepLabel>{{ localeData?.all_plans }}</ng-template>
                                 <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <h2 class="font-16 strong">{{ localeData?.choose_plans }}</h2>
+                                    <h2 class="font-16 strong mr-3">{{ localeData?.choose_plans }}</h2>
                                     <div class="d-flex column-gap15 align-items-center">
                                         <!-- <button mat-stroked-button color="primary" class="w-100" (click)="activateDialog()">
                                         Activate Via Key
@@ -44,7 +44,7 @@
                                                 "
                                                 class="country-dropdown d-block"
                                                 [options]="countrySource"
-                                                (selectedOption)="newUserSelectCountry($event)"
+                                                (selectedOption)="newUserSelectCountry($event,false)"
                                                 [defaultValue]="newUserSelectedCountry"
                                             >
                                             </dropdown-field>

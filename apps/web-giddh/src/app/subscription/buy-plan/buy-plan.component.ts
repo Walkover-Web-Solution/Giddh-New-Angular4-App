@@ -210,9 +210,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     "value": "IN",
                     "label": "IN - India"
                 }
-            });
+            }, false);
         }
-        if (localStorage.getItem('Country-Region') === 'UK') {
+        if (localStorage.getItem('Country-Region') === 'GB') {
             this.newUserSelectCountry({
                 "label": "GB - United Kingdom",
                 "value": "GB",
@@ -220,7 +220,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     "value": "GB",
                     "label": "GB - United Kingdom"
                 }
-            });
+            }, false);
         }
         if (localStorage.getItem('Country-Region') === 'AE') {
             this.newUserSelectCountry({
@@ -231,7 +231,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     "label": "AE - United Arab Emirates"
                 }
 
-            });
+            }, false);
         }
         if (localStorage.getItem('Country-Region') === 'GL') {
             this.newUserSelectCountry({
@@ -241,7 +241,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     "value": "GL",
                     "label": "GL - Global"
                 }
-            });
+            }, true);
         }
 
 
@@ -886,18 +886,30 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof BuyPlanComponent
      */
-    public newUserSelectCountry(event: any): void {
-        let data ;
-        if (localStorage.getItem('Country-Region') === 'GL') {
-            data = {
-                region:event?.value
-             }
+    public newUserSelectCountry(event: any, initialCall: boolean): void {
+        let data;
+        if (initialCall) {
+            if (localStorage.getItem('Country-Region') === 'GL') {
+                data = {
+                    region: event?.value
+                }
+            } else {
+                data = {
+                    countryCode: event?.value
+                }
+            }
         } else {
-            data = {
-                countryCode: event?.value
+            if (event?.value === 'GL') {
+                data = {
+                    region: event?.value
+                }
+            } else {
+                data = {
+                    countryCode: event?.value
+                }
             }
         }
-        this.componentStore.getAllPlans({ params: data  });
+        this.componentStore.getAllPlans({ params: data });
         this.newUserSelectedCountry = event.label;
     }
 
