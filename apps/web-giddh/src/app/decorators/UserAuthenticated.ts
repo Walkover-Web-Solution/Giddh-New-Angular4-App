@@ -2,7 +2,7 @@ import { AppState } from '../store';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { Injectable, NgZone } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { distinctUntilChanged, map, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, map, switchMap, take } from 'rxjs/operators';
 import { userLoginStateEnum } from '../models/user-login-state';
 import { ROUTES } from '../routes-array';
 
@@ -39,7 +39,13 @@ export class UserAuthenticated  {
             }
             if (p.userLoginState === userLoginStateEnum.newUserLoggedIn) {
                 this.zone.run(() => {
-                    this.router.navigate(['/pages/subscription/buy-plan']);
+                    let hasSubscriptionPermission: boolean;
+                    this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => hasSubscriptionPermission = response?.user?.hasSubscriptionPermission);
+                    if (hasSubscriptionPermission) {
+                        this.router.navigate(['/pages/subscription']);
+                    } else {
+                        this.router.navigate(['/pages/subscription/buy-plan']);
+                    }
                 });
             }
             return !(p.userLoginState === userLoginStateEnum.userLoggedIn || p.userLoginState === userLoginStateEnum.newUserLoggedIn);

@@ -1,4 +1,4 @@
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { AppState } from '../store';
 import { Router } from '@angular/router';
 import { Injectable, NgZone } from '@angular/core';
@@ -14,7 +14,13 @@ export class NeedsAuthentication  {
         return this.store.pipe(select(p => p.session.userLoginState), map(p => {
             if (p === userLoginStateEnum.newUserLoggedIn) {
                 this.zone.run(() => {
-                    this.router.navigate(['/pages/subscription/buy-plan']);
+                    let hasSubscriptionPermission: boolean;
+                    this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => hasSubscriptionPermission = response?.user?.hasSubscriptionPermission);
+                    if (hasSubscriptionPermission) {
+                        this.router.navigate(['/pages/subscription']);
+                    } else {
+                        this.router.navigate(['/pages/subscription/buy-plan']);
+                    }
                 });
             }
             if (p === userLoginStateEnum.notLoggedIn) {

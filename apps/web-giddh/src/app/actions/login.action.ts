@@ -210,7 +210,13 @@ export class LoginActions {
                 if (companies.body && companies.body.length === 0) {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
                     this.zone.run(() => {
-                        this._router.navigate(['/pages/subscription/buy-plan']);
+                        let hasSubscriptionPermission: boolean;
+                        this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => hasSubscriptionPermission = response?.user?.hasSubscriptionPermission);
+                        if (hasSubscriptionPermission) {
+                            this._router.navigate(['/pages/subscription']);
+                        } else {
+                            this._router.navigate(['/pages/subscription/buy-plan']);
+                        }
                     });
                     return { type: 'EmptyAction' };
                 } else {
@@ -275,7 +281,13 @@ export class LoginActions {
                 if (companies.body && companies.body.length === 0) {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
                     this.zone.run(() => {
-                        this._router.navigate(['/pages/subscription/buy-plan']);
+                        let hasSubscriptionPermission: boolean;
+                        this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => hasSubscriptionPermission = response?.user?.hasSubscriptionPermission);
+                        if (hasSubscriptionPermission) {
+                            this._router.navigate(['/pages/subscription']);
+                        } else {
+                            this._router.navigate(['/pages/subscription/buy-plan']);
+                        }
                     });
                     return { type: 'EmptyAction' };
                 } else {
