@@ -544,7 +544,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isIpadScreen = result?.breakpoints['(max-width: 768px)'];
         });
 
-        //this.sideBarStateChange(true);
         this.store.pipe(select(state => state.general.openSideMenu), takeUntil(this.destroyed$)).subscribe(response => {
             this.sideBarStateChange(response);
 
@@ -1225,7 +1224,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     * @memberof HeaderComponent
     */
     public backToCompany(): void {
-        this.router.navigate(['/pages', 'home'],);
+        this.router.navigate(['/pages', 'home']);
     }
 
     /**

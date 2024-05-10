@@ -211,8 +211,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     "label": "IN - India"
                 }
             }, false);
-        }
-        if (localStorage.getItem('Country-Region') === 'GB') {
+        } else if (localStorage.getItem('Country-Region') === 'GB') {
             this.newUserSelectCountry({
                 "label": "GB - United Kingdom",
                 "value": "GB",
@@ -221,8 +220,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     "label": "GB - United Kingdom"
                 }
             }, false);
-        }
-        if (localStorage.getItem('Country-Region') === 'AE') {
+        }else if (localStorage.getItem('Country-Region') === 'AE') {
             this.newUserSelectCountry({
                 "label": "AE - United Arab Emirates",
                 "value": "AE",
@@ -232,8 +230,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 }
 
             }, false);
-        }
-        if (localStorage.getItem('Country-Region') === 'GL') {
+        } else if (localStorage.getItem('Country-Region') === 'GL') {
             this.newUserSelectCountry({
                 "label": "GL - Global",
                 "value": "GL",
@@ -300,7 +297,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 Object.keys(response).forEach(key => {
                     this.countrySource.push({
                         value: response[key].alpha2CountryCode,
-                        label: response[key].alpha2CountryCode + ' - ' + response[key].countryName
+                        label: response[key].alpha2CountryCode + ' - ' + response[key].countryName,
+                        additional :response[key]
                     });
                 });
                 this.countrySource$ = observableOf(this.countrySource);
@@ -888,7 +886,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 }
             }
         } else {
-            if (event?.value === 'GL') {
+            if (event?.additional?.entity ==='region') {
                 data = {
                     region: event?.value
                 }
