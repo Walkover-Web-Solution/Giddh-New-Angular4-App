@@ -32,6 +32,10 @@ export class VatService {
         url = url?.replace(':to', request.to);
         url = url?.replace(':taxNumber', request.taxNumber);
         if(countryCode === 'ZW' || countryCode === 'KE') {
+            url = url?.replace(':currencyCode', request.currencyCode);
+        }
+        if (request.branchUniqueName) {
+            request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
         }
         return this.http.get(url).pipe(
