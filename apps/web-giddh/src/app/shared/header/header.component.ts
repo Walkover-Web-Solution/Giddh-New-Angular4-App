@@ -251,7 +251,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public showDepreciationMessage: boolean = false;
     /** Hold plan version  */
     public planVersion: number;
-
+    /** True if it's a subscription page */
+    public isSubscriptionPage: boolean = false;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -323,6 +324,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (!this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details") && !this.router.url.includes("/billing-detail")) {
                     this.currentPageUrl = this.router.url;
                 }
+
+                if (this.router.url.includes("/pages/subscription")) {
+                    this.isSubscriptionPage = true;
+                } else {
+                    this.isSubscriptionPage = false;
+                }
+
                 this.setCurrentPage();
                 this.addClassInBodyIfPageHasTabs();
                 this.checkIfPageHasTabs();
@@ -1219,7 +1227,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.modelRefCrossLimit.hide();
         }
         document.querySelector('body').classList.remove('modal-open');
-        if (this.planVersion === 2) {
+        if (this.planVersion === 2 || this.subscribedPlan?.status === 'expired') {
             this.router.navigate(['/pages/subscription/view-subscription/' + this.subscribedPlan?.subscriptionId]);
         } else {
             this.router.navigate(['/pages', 'user-details'], {
