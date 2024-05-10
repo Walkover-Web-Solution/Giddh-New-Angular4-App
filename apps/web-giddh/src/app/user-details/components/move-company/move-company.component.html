@@ -1,8 +1,6 @@
 <div class="modal-header d-flex align-items-center flex-row-reverse">
     <button aria-hidden="true" class="close" mat-dialog-close>×</button>
-    <h3>
-        {{ localeData?.subscription?.move_company ? localeData?.subscription?.move_company : localeData?.move_company }}
-    </h3>
+    <h3>{{ localeData?.subscription?.move_company }}</h3>
 </div>
 <div *ngIf="isLoading">
     <giddh-page-loader></giddh-page-loader>
@@ -10,15 +8,15 @@
 <mat-dialog-content class="move-content w-100">
     <div *ngIf="!isLoading">
         <div id="my-frame" class="modal-body move-company-modal-body clearfix">
-            <p class="text-black mb-2" [innerHTML]="getMovePlanText()"></p>
+            <p class="mb-2" [innerHTML]="getMovePlanText()"></p>
             <div class="row mb-2">
                 <div class="col-md-6 move-wrapper">
                     <label class="font-15"
-                        >{{ localeData?.subscription?.select_plan ? localeData?.subscription?.select_plan: localeData?.select_plan }}<span class="text-danger">*</span></label
+                        >{{ localeData?.subscription?.select_plan }}<span class="text-danger">*</span></label
                     >
                     <div class="select-caret position-relative move-select">
                         <sh-select
-                            [placeholder]="localeData?.subscription?.select_plan ? localeData?.subscription?.select_plan : localeData?.select_plan"
+                            [placeholder]="localeData?.subscription?.select_plan"
                             name="availablePlans"
                             [options]="availablePlansOption"
                             [isFilterEnabled]="true"
@@ -36,7 +34,7 @@
                     (click)="moveCompanyInNewPlan()"
                     [disabled]="!selectedPlan"
                 >
-                    {{ localeData?.subscription?.move ? localeData?.subscription?.move : localeData?.move }}
+                    {{ localeData?.subscription?.move }}
                 </button>
             </div>
         </div>

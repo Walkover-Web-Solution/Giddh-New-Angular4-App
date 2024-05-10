@@ -105,6 +105,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      * @memberof MoveCompanyComponent
      */
     public patchProfile(obj: any): void {
+        this.moveCompany.emit(true);
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
     }
 

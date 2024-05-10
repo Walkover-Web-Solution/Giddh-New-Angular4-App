@@ -117,6 +117,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public stateSource$: Observable<IOption[]> = observableOf([]);
     /** Hold country source*/
     public countrySource: IOption[] = [];
+    /** Hold  common country source*/
+    public commonCountrySource: IOption[] = [];
+    /** Hold common country source observable*/
+    public commonCountrySource$: Observable<IOption[]> = observableOf([]);
     /** Hold country source observable*/
     public countrySource$: Observable<IOption[]> = observableOf([]);
     /** Hold plan data source*/
@@ -220,7 +224,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     "label": "GB - United Kingdom"
                 }
             }, false);
-        }else if (localStorage.getItem('Country-Region') === 'AE') {
+        } else if (localStorage.getItem('Country-Region') === 'AE') {
             this.newUserSelectCountry({
                 "label": "AE - United Arab Emirates",
                 "value": "AE",
@@ -298,7 +302,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     this.countrySource.push({
                         value: response[key].alpha2CountryCode,
                         label: response[key].alpha2CountryCode + ' - ' + response[key].countryName,
-                        additional :response[key]
+                        additional: response[key]
                     });
                 });
                 this.countrySource$ = observableOf(this.countrySource);
@@ -309,6 +313,22 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.componentStore.commonCountries$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.commonCountrySource = [];
+                Object.keys(response).forEach(key => {
+                    this.commonCountrySource.push({
+                        value: response[key].alpha2CountryCode,
+                        label: response[key].alpha2CountryCode + ' - ' + response[key].countryName
+                    });
+                });
+                this.commonCountrySource$ = observableOf(this.commonCountrySource);
+            } else {
+                let countryRequest = new CountryRequest();
+                countryRequest.formName = 'onboarding';
+                this.store.dispatch(this.commonActions.GetCountry(countryRequest));
+            }
+        });
 
 
         this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -886,7 +906,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 }
             }
         } else {
-            if (event?.additional?.entity ==='region') {
+            if (event?.additional?.entity === 'region') {
                 data = {
                     region: event?.value
                 }
