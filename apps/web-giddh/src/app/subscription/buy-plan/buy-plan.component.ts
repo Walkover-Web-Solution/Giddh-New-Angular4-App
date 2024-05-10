@@ -155,7 +155,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public getBillingData: boolean = false;
     /** Holds Store Get Billing Details observable*/
     public changePlanDetails$ = this.componentStore.select(state => state.changePlanDetails);
-    /** Holds Store Get Billing Details observable*/
+    /** Holds Store Get Country list observable*/
     public getCountryList$ = this.componentStore.select(state => state.countryList);
     /** Holds subscription request */
     public subscriptionRequest: any;
@@ -515,17 +515,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.company.inputMaskFormat = profile.balanceDisplayFormat?.toLowerCase() || '';
                 this.company.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                 this.showTaxTypeByCountry(this.company.countryCode);
-                // let data;
-                // if (localStorage.getItem('Country-Region') === 'GL') {
-                //     data = {
-                //         region: this.company.countryCode
-                //     }
-                // } else {
-                //     data = {
-                //         countryCode: this.company.countryCode
-                //     }
-                // }
-                // this.componentStore.getAllPlans({ params: data  });
             }
         });
     }

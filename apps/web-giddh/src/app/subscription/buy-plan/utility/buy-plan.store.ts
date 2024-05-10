@@ -426,7 +426,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
     });
 
     /**
-   * Get All Plans
+   * Get All Country List
    *
    * @memberof BuyPlanComponentStore
    */

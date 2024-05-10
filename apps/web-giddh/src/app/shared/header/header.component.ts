@@ -1217,10 +1217,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
-     *This will be use for back to company dashboard
-     *
-     * @memberof HeaderComponent
-     */
+    *This will be use for back to company dashboard
+    *
+    * @memberof HeaderComponent
+    */
     public backToCompany(): void {
         this.router.navigate(['/pages', 'home'],);
     }

@@ -9,7 +9,7 @@ import { NavigationEnd, Router } from '@angular/router';
 
 export class LayoutComponent {
     @Input() public sideMenu: { isopen: boolean, isExpanded: boolean } = { isopen: true, isExpanded: false };
-
+    /** True if it is subscription page */
     public isSubscriptionPage: boolean = false;
 
     constructor(
