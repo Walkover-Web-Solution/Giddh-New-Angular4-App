@@ -101,12 +101,6 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStore.isUpdateCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.getSubscriptionData(this.subscriptionId);
-                this.router.navigate(['/pages/subscription']);
-            }
-        });
     }
 
     /**
@@ -128,6 +122,23 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
                 transferDialogRef.close();
             }
         });
+    }
+
+/**
+* This function will refresh the subscribed companies if move company was succesful and will close the popup
+*
+* @param {*} event
+* @memberof ViewSubscriptionComponent
+*/
+    public addOrMoveCompanyCallback(event: boolean): void {
+        if (event) {
+            this.componentStore.isUpdateCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response) {
+                    this.getSubscriptionData(this.subscriptionId);
+                    this.router.navigate(['/pages/subscription']);
+                }
+            });
+        }
     }
 
     /**

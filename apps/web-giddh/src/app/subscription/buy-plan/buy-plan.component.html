@@ -674,7 +674,11 @@
                             </p>
                             <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">
                                 <amount-field
-                                    [amount]="selectedPlan?.yearlyDiscountAmount"
+                                    [amount]="
+                                        promoCodeResponse?.length
+                                            ? promoCodeResponse[0]?.discountValue
+                                            : selectedPlan?.yearlyDiscountAmount
+                                    "
                                     [currencySymbol]="selectedPlan?.currency?.symbol"
                                     [currencyCode]="selectedPlan?.currency?.code"
                                 >
@@ -707,23 +711,6 @@
                                 >
                                 </amount-field>
                             </span>
-                        </div>
-                        <div
-                            class="d-flex justify-content-between py-3 border-bottom"
-                            *ngIf="firstStepForm.get('planUniqueName').value && promoCodeResponse?.length"
-                        >
-                            <p>
-                                {{ localeData?.promo_code }} {{ commonLocaleData?.app_discount }}
-                                {{ commonLocaleData?.app_amount }}
-                            </p>
-                            <span>
-                                <amount-field
-                                    [amount]="promoCodeResponse[0]?.discountValue"
-                                    [currencySymbol]="false"
-                                    [currencyCode]="false"
-                                >
-                                </amount-field
-                            ></span>
                         </div>
                         <div *ngIf="firstStepForm.get('planUniqueName').value">
                             <div class="d-flex justify-content-between py-3">
@@ -782,12 +769,13 @@
                                         </button>
                                         <button
                                             *ngIf="promoCodeResponse[0]?.discountValue"
-                                            mat-icon-button
                                             aria-label="Clear"
-                                            class="d-flex align-items-center"
+                                            mat-button
+                                            class="apply-btn"
+                                            color="primary"
                                             (click)="applyPromoCode('remove')"
                                         >
-                                            <i class="icon-cross font-20"></i>
+                                            {{ commonLocaleData?.app_remove }}
                                         </button>
                                     </div>
                                 </div>
@@ -828,7 +816,7 @@
                                 aria-label="back"
                                 mat-stroked-button
                                 class="w-100 mt-2"
-                                (click)="selectedStep = 0"
+                                (click)="selectedStep = 0; backToPreviousPage()"
                                 *ngIf="selectedStep === 1"
                             >
                                 {{ localeData?.back_plan }}
@@ -837,7 +825,7 @@
                                 aria-label="billing"
                                 mat-stroked-button
                                 class="w-100 mt-2"
-                                (click)="selectedStep = 1"
+                                (click)="selectedStep = 1; backToPreviousPage()"
                                 *ngIf="selectedStep === 2"
                             >
                                 {{ localeData?.back_billing }}
