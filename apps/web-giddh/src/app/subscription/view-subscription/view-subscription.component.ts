@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewSubscriptionComponentStore } from './utility/view-subscription.store';
-import { ReplaySubject, takeUntil } from 'rxjs';
+import { ReplaySubject, take, takeUntil } from 'rxjs';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { Location } from '@angular/common';
 import { SubscriptionComponentStore } from '../utility/subscription.store';
@@ -47,6 +47,8 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     public selectedCompany: any;
     /** True if subscription will move */
     public subscriptionMove: boolean = false;
+    /** True if subscription will move */
+    public selectedMoveCompany: boolean = false;
     /** Razorpay instance */
     public razorpay: any;
 
@@ -58,7 +60,8 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         private readonly componentStoreBuyPlan: BuyPlanComponentStore,
         private subscriptionComponentStore: SubscriptionComponentStore,
         private location: Location
-    ) { }
+    ) {
+    }
 
     /**
    * Initializes the component by subscribing to route parameters and fetching subscription data.
@@ -101,6 +104,13 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.componentStore.isUpdateCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && this.selectedMoveCompany) {
+                this.getSubscriptionData(this.subscriptionId);
+                this.router.navigate(['/pages/subscription']);
+            }
+        });
+
     }
 
     /**
@@ -132,12 +142,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
 */
     public addOrMoveCompanyCallback(event: boolean): void {
         if (event) {
-            this.componentStore.isUpdateCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response) {
-                    this.getSubscriptionData(this.subscriptionId);
-                    this.router.navigate(['/pages/subscription']);
-                }
-            });
+            this.selectedMoveCompany = true;
         }
     }
 
