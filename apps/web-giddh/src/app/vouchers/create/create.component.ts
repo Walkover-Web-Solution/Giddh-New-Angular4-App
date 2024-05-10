@@ -689,17 +689,25 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.checkCompanyTaxValidation(searchedText, "company", "shippingDetails", this.localeData?.shipping_address);
         });
 
-        // this.invoiceForm.get("isAdvanceReceipt")?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-        //     if (response) {
-        //         this.invoiceForm.get('entries')['controls']?.forEach((entryFormGroup: any, entryIndex: number) => {
-        //             let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
-
-        //             const amount = this.vouchersUtilityService.calculateInclusiveRate(entryFormGroup?.value, this.companyTaxes, this.company.giddhBalanceDecimalPlaces);
-        //             transactionFormGroup.get('amount.amountForAccount').patchValue(amount);
-        //             transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue((amount / transactionFormGroup.get('stock.quantity')?.value));
-        //         });
-        //     }
-        // });
+        this.invoiceForm.get("isAdvanceReceipt")?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.invoiceForm.get('entries')['controls']?.forEach((entryFormGroup: any) => {
+                    entryFormGroup.get('calculateAmount')?.patchValue(false);
+                    entryFormGroup.get('calculateTotal')?.patchValue(false);
+                    const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
+                    taxesFormArray.clear();
+                });
+            } else {
+                this.invoiceForm.get('entries')['controls']?.forEach((entryFormGroup: any) => {
+                    const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+                    transactionFormGroup.get('amount.amountForAccount').patchValue(Number(entryFormGroup.get('total.amountForAccount')?.value));
+                    entryFormGroup.get('calculateAmount')?.patchValue(true);
+                    entryFormGroup.get('calculateTotal')?.patchValue(true);
+                    const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
+                    taxesFormArray.clear();
+                });
+            }
+        });
 
         /** Voucher details */
         this.componentStore.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -1814,6 +1822,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             totalTaxWithoutCess: [''], //temp
             totalCess: [''], //temp
             calculateTotal: [true], //temp
+            calculateAmount: [true], //temp
             otherTax: this.formBuilder.group({ //temp
                 name: [''],
                 uniqueName: [''],
@@ -2855,15 +2864,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {FormGroup} entry
      * @memberof VoucherCreateComponent
      */
-    public updateTotalTax(totalTax: any, entry: FormGroup): void {
-        entry.get('totalTax').patchValue(totalTax);
-        // if (this.invoiceForm.get('isAdvanceReceipt')?.value) {
-        //     entry.get('calculateTotal')?.patchValue(false);
-        //     let transactionFormGroup = this.getTransactionFormGroup(entry);
-        //     const amount = this.vouchersUtilityService.calculateInclusiveRate(entry?.value, this.companyTaxes, this.company.giddhBalanceDecimalPlaces);
-        //     transactionFormGroup.get('amount.amountForAccount').patchValue(amount);
-        //     transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue((amount / transactionFormGroup.get('stock.quantity')?.value));
-        // }
+    public updateTotalTax(totalTax: any, entryFormGroup: FormGroup): void {
+        entryFormGroup.get('totalTax').patchValue(totalTax);
+        if (this.invoiceForm.get('isAdvanceReceipt')?.value) {
+            this.doReverseCalculation(entryFormGroup);
+        }
     }
 
     /**
@@ -4499,10 +4504,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {FormGroup} entryFormGroup
      * @memberof VoucherCreateComponent
      */
-    public doReverseCalculation(entryFormGroup: FormGroup): void {
+    public doReverseCalculation(entryFormGroup: FormGroup, calculateEntryTotal: boolean = false): void {
         setTimeout(() => {
             const transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
-            const amount = this.vouchersUtilityService.calculateInclusiveRate(entryFormGroup?.value, this.companyTaxes, this.company.giddhBalanceDecimalPlaces, Number(entryFormGroup.get('total.amountForAccount')?.value));
+
+            let entryTotal = null;
+            if (!calculateEntryTotal) {
+                entryTotal = Number(entryFormGroup.get('total.amountForAccount')?.value);
+            }
+
+            const amount = this.vouchersUtilityService.calculateInclusiveRate(entryFormGroup?.value, this.companyTaxes, this.company.giddhBalanceDecimalPlaces, entryTotal);
             transactionFormGroup.get('amount.amountForAccount').patchValue(amount);
             transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue((amount / transactionFormGroup.get('stock.quantity')?.value));
         }, 10);
