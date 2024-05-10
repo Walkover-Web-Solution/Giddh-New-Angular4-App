@@ -43,14 +43,6 @@
                 ></span>
             </div>
         </div>
-        <div class="mobile-menu-icon" (click)="sideBarStateChange((sideMenu.isopen = !sideMenu.isopen))">
-            <span
-                class="icon-bar"
-                [tooltip]="sideMenu.isopen ? commonLocaleData?.app_collapse : commonLocaleData?.app_expand"
-                placement="right"
-            ></span>
-        </div>
-    </div>
 
         <!-- New header starts -->
         <div class="fixed-padding">
@@ -513,231 +505,15 @@
                                         class="font-16"
                                         [routerLink]="['/pages/user-details/mobile-number']"
                                     >
-                                        <div class="mr-t2 mr-b05 d-flex align-items-center">
-                                            <span class="d-flex">
-                                                <i class="icon-invoice-new mr-r1"></i>
-                                            </span>
-                                            <span
-                                                >{{ localeData?.cash }}
-                                                <a
-                                                    [matTooltip]="localeData?.cash_information"
-                                                    [matTooltipPosition]="'above'"
-                                                >
-                                                    <i class="icon-info mr-l15"></i>
-                                                </a>
-                                            </span>
+                                        {{ localeData?.my_profile }}
+                                    </button>
+                                    <mat-divider></mat-divider>
+                                    <button mat-menu-item (click)="logout()">
+                                        <div class="d-flex align-items-center">
+                                            <i class="icon-logout mr-2"></i>
+                                            <span class="font-14">{{ localeData?.logout }}</span>
                                         </div>
-                                        <ul>
-                                            <li>
-                                                <span class="dot d-block"></span>
-                                                <a
-                                                    class="cursor-pointer"
-                                                    (click)="navigateToSubItemLink('/vouchers/cash/create')"
-                                                >
-                                                    {{ localeData?.invoice }}
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <span class="dot d-block"></span>
-                                                <a
-                                                    class="cursor-pointer"
-                                                    (click)="navigateToSubItemLink('/vouchers/cash-bill/create')"
-                                                    >{{ localeData?.bill }}
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <span class="dot d-block"></span>
-                                                <a
-                                                    class="cursor-pointer"
-                                                    (click)="
-                                                        navigateToSubItemLink('/vouchers/cash-credit-note/create')
-                                                    "
-                                                >
-                                                    {{ localeData?.credit_note }}
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <span class="dot d-block"></span>
-                                                <a
-                                                    class="cursor-pointer"
-                                                    (click)="
-                                                        navigateToSubItemLink('/vouchers/cash-debit-note/create')
-                                                    "
-                                                >
-                                                    {{ localeData?.debit_note }}
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        *ngIf="
-                                            currentOrganizationType === 'BRANCH' ||
-                                            (currentCompanyBranches?.length <= 1 && currentOrganizationType === 'COMPANY')
-                                        "
-                                    >
-                                        <div class="mr-t2 mr-b05 d-flex align-items-center">
-                                            <span class="d-flex">
-                                                <i class="icon-branch-transfer mr-r1"></i>
-                                            </span>
-                                            <span> {{ localeData?.branch_transfer }} </span>
-                                        </div>
-                                        <ul>
-                                            <li>
-                                                <span class="dot d-block"></span>
-                                                <a href="javascript:void(0);" class="cursor-pointer" aria-label="receipt" (click)="navigateToSubItemLink('receiptnote')">
-                                                    {{ localeData?.receipt_note }}
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <span class="dot d-block"></span>
-                                                <a
-                                                    class="cursor-pointer"
-                                                    (click)="navigateToSubItemLink('deliverychallan')"
-                                                >
-                                                    {{ localeData?.delivery_challan }}
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div>
-                                        <div class="mr-t2 mr-b05 d-flex align-items-center">
-                                            <span class="d-flex">
-                                                <i class="icon-stock mr-r1"></i>
-                                            </span>
-                                            <span> {{ localeData?.stock }} </span>
-                                        </div>
-                                        <ul>
-                                            <li>
-                                                <span class="dot d-block"></span>
-                                                <a
-                                                    class="cursor-pointer"
-                                                    (click)="navigateToSubItemLink('/inventory/v2/stock/product/create')"
-                                                >
-                                                    {{ localeData?.product }}
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <span class="dot d-block"></span>
-                                                <a
-                                                    class="cursor-pointer"
-                                                    (click)="navigateToSubItemLink('/inventory/v2/stock/service/create')"
-                                                >
-                                                    {{ localeData?.service }}
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <span class="dot d-block"></span>
-                                                <a
-                                                    class="cursor-pointer"
-                                                    (click)="
-                                                        navigateToSubItemLink('/inventory/v2/stock/fixedassets/create')
-                                                    "
-                                                >
-                                                    {{ localeData?.fixed_assets }}
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div
-                                        class="mr-t2 mr-b05 align-items-center"
-                                        *ngIf="currentCompanyBranches?.length > 1 && currentOrganizationType === 'COMPANY'"
-                                    >
-                                        <span>{{ localeData?.go_to_branch_information }} </span>
-                                        <button mat-stroked-button color="primary" class="mr-t2" (click)="gotToBranchTab()">
-                                            {{ localeData?.go_to_branch }}
-                                        </button>
-                                    </div>
-                                    <ng-container
-                                        *ngIf="
-                                            currentOrganizationType === 'BRANCH' ||
-                                            (currentCompanyBranches?.length <= 1 && currentOrganizationType === 'COMPANY')
-                                        "
-                                    >
-                                        <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
-                                            <span class="d-flex">
-                                                <i class="icon-estimate-new mr-r1"></i>
-                                            </span>
-                                            <span>
-                                                <a
-                                                    class="cursor-pointer"
-                                                    (click)="navigateToSubItemLink('/vouchers/estimates/create')"
-                                                >
-                                                    {{ localeData?.estimate }}
-                                                </a>
-                                            </span>
-                                        </div>
-                                        <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
-                                            <span class="d-flex">
-                                                <i class="icon-proforma mr-r1"></i>
-                                            </span>
-                                            <span>
-                                                <a
-                                                    class="cursor-pointer"
-                                                    (click)="navigateToSubItemLink('/vouchers/proformas/create')"
-                                                >
-                                                    {{ localeData?.proforma }}
-                                                </a>
-                                            </span>
-                                        </div>
-                                        <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
-                                            <span class="d-flex">
-                                                <i class="icon-purchase-order mr-r1"></i>
-                                            </span>
-                                            <span>
-                                                <a
-                                                    class="cursor-pointer"
-                                                    (click)="
-                                                        navigateToSubItemLink('/vouchers/purchase-order/create')
-                                                    "
-                                                >
-                                                    {{ localeData?.purchase_order }}
-                                                </a>
-                                            </span>
-                                        </div>
-                                        <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
-                                            <span class="d-flex">
-                                                <i class="icon-invoice-new mr-r1"></i>
-                                            </span>
-                                            <span>
-                                                <a
-                                                    class="cursor-pointer"
-                                                    (click)="
-                                                        navigateToSubItemLink('/vouchers/receipt/create')
-                                                    "
-                                                >
-                                                    {{ commonLocaleData?.app_voucher_types?.receipt }}
-                                                </a>
-                                            </span>
-                                        </div>
-                                        <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
-                                            <span class="d-flex">
-                                                <i class="icon-invoice-new mr-r1"></i>
-                                            </span>
-                                            <span>
-                                                <a
-                                                    class="cursor-pointer"
-                                                    (click)="
-                                                        navigateToSubItemLink('/vouchers/payment/create')
-                                                    "
-                                                >
-                                                    {{ commonLocaleData?.app_voucher_types?.payment }}
-                                                </a>
-                                            </span>
-                                        </div>
-                                        <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
-                                            <span class="d-flex">
-                                                <i class="icon-manufacturing1 mr-r1"></i>
-                                            </span>
-                                            <span>
-                                                <a
-                                                    class="cursor-pointer"
-                                                    (click)="navigateToSubItemLink('/inventory/v2/manufacturing/create')"
-                                                >
-                                                    {{ localeData?.manufacturing }}
-                                                </a>
-                                            </span>
-                                        </div>
-                                    </ng-container>
+                                    </button>
                                 </div>
                             </mat-menu>
                         </li>
@@ -885,209 +661,59 @@
                                 (click)="openScheduleModel(); modelRefExpirePlan.hide()"
                                 >{{ localeData?.contact_us }}</a
                             >
-                            <button mat-icon-button aria-label="help" [matTooltip]="commonLocaleData?.app_help" [matTooltipPosition]="'below'" class="icon-circle">
-                                <i class="icon-question-new"></i>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </ng-template>
+        <!-- modal second -->
+        <ng-template #crossedTxLimitModel>
+            <div class="modal-header">
+                <h3 class="modal-title pull-left">{{ localeData?.ready_to_upgrade }}</h3>
+                <button
+                    type="button"
+                    class="close pull-right"
+                    [attr.aria-label]="commonLocaleData?.app_close"
+                    (click)="modelRefCrossLimit.hide()"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pd-2 font-15">
+                <div class="clearfix mb-3">
+                    <p class="mb-2" [innerHTML]="getTransactionLimitCrossedNote()"></p>
+                    <p>{{ localeData?.continue_giddh_note }}</p>
+                </div>
+                <div class="clearfix">
+                    <ul class="list-inline">
+                        <li>
+                            <button class="btn btn-sky-blue" (click)="goToSelectPlan()">
+                                {{ commonLocaleData?.app_buy_plan }}
                             </button>
-                            <span class="pl-1 help-text"> {{ commonLocaleData?.app_help }}</span>
-                        </a>
-                    </li>
-                    <li>
-                        <div class="profile-wrapper" [matMenuTriggerFor]="profileMenu" role="button" aria-label="profile-picture">
-                            <div class="profile-picture text-center cursor-pointer">
-                                <span>{{ userName }}</span>
-                            </div>
-                        </div>
-                        <mat-menu #profileMenu="matMenu">
-                            <div class="user-profile-menu">
-                                <div class="user-info p-3" (click)="$event.stopPropagation()">
-                                    <span class="font-16">{{ userFullName }}</span>
-                                    <p class="font-14 text-gray" [matTooltip]="userEmail?.length > 26 ? userEmail : null" matTooltipPosition="left">{{ userEmail }}</p>
-                                </div>
-                                <mat-divider></mat-divider>
-                                <button mat-menu-item class="font-16" [routerLink]="['/pages/user-details/mobile-number']">{{ localeData?.my_profile }}</button>
-                                <mat-divider></mat-divider>
-                                <button mat-menu-item (click)="logout()">
-                                    <div class="d-flex align-items-center">
-                                        <i class="icon-logout mr-2"></i>
-                                        <span class="font-14">{{ localeData?.logout }}</span>
-                                    </div>
-                                </button>
-                            </div>
-                          </mat-menu>
-                    </li>
-                </ul>
+                        </li>
+                        <li>
+                            <span class="d-inline-block pr-1">{{ localeData?.or }}</span>
+                            <a
+                                href="javascript:void(0);"
+                                class="cursor-pointer"
+                                aria-label="schedule"
+                                (click)="openScheduleModel(); modelRefCrossLimit.hide()"
+                                >{{ localeData?.contact_us }}</a
+                            >
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </div>
-    <!-- New header ends -->
+        </ng-template>
 
-    <div
-        class="plan-wrapper"
-        *ngIf="
-            subscribedPlan !== undefined &&
-            subscribedPlan?.status !== 'expired' &&
-            remainingSubscriptionDays !== false &&
-            remainingSubscriptionDays <= 7
-        "
-        [ngClass]="{ 'menu_open': isSidebarExpanded }"
-    >
-        <div class="white-row plan-issue">
-            <p>
-                <span class="icon-traingle-info"></span> {{ getSubscriptionEndNote() }}
-                <a href="javascript:void(0);" class="click-here text-underline" aria-label="go to plan" (click)="goToSelectPlan()">{{ localeData?.click_here }}</a>
-            </p>
-        </div>
-    </div>
+        <!--help & support sidebar  -->
 
-    <div
-        class="plan-wrapper"
-        *ngIf="subscribedPlan !== undefined && subscribedPlan?.status === 'expired'"
-        [ngClass]="{ 'menu_open': isSidebarExpanded }"
-    >
-        <div class="white-row plan-issue">
-            <p>
-                <span class="icon-traingle-info"></span> {{ getSubscriptionEndedNote() }}
-                <a href="javascript:void(0);" class="click-here text-underline" aria-label="get select " (click)="goToSelectPlan()">{{ localeData?.click_here }}</a>
-            </p>
-        </div>
-    </div>
+        <ng-template #asideHelpSupportMenuStateRef>
+            <aside-help-support (closeAsideEvent)="toggleHelpSupportPane(false)"></aside-help-support>
+        </ng-template>
 
-    <div
-        class="plan-wrapper"
-        *ngIf="subscribedPlan !== undefined && subscribedPlan.additionalCharges"
-        [ngClass]="{ 'menu_open': isSidebarExpanded }"
-    >
-        <div class="white-row plan-issue">
-            <p>
-                <span class="icon-traingle-info"></span> {{ getSubscriptionTransactionEndedNote() }}
-                <a href="javascript:void(0);" class="click-here text-underline" aria-label="get plan" (click)="goToSelectPlan()">{{ localeData?.click_here }}</a>
-            </p>
-        </div>
-    </div>
-    <!--add and manage group account modal -->
-    <div
-        bsModal
-        #manageGroupsAccountsModal="bs-modal"
-        [config]="{ keyboard: false }"
-        class="modal fade full-screen-modal manage-account-popup"
-        role="dialog"
-    >
-        <div class="modal-dialog modal-xl modal-liq-90 mr-0 width-100 h-100">
-            <div class="modal-content full-screen-modal">
-                <ng-template element-view-container-ref #addmanage="elementviewcontainerref"> </ng-template>
-            </div>
-        </div>
-    </div>
-    <!--add company modal  -->
-    <div
-        bsModal
-        #addCompanyModal="bs-modal"
-        [config]="{ backdrop: 'static', keyboard: false }"
-        class="modal fade"
-        role="dialog"
-        (onHidden)="onHide()"
-    >
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <ng-template element-view-container-ref #companyadd="elementviewcontainerref"> </ng-template>
-            </div>
-        </div>
-    </div>
-    <!--add company new modal  -->
-    <div
-        bsModal
-        #addCompanyNewModal="bs-modal"
-        [config]="{ backdrop: 'static', keyboard: false }"
-        class="modal fade"
-        role="dialog"
-        (onHidden)="onHide()"
-    >
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <ng-template element-view-container-ref #companynewadd="elementviewcontainerref"> </ng-template>
-            </div>
-        </div>
-    </div>
-    <ng-template #expiredPlanModel>
-        <div class="modal-header">
-            <h3 class="modal-title pull-left">{{ localeData?.ready_to_upgrade }}</h3>
-            <button
-                type="button"
-                class="close pull-right"
-                [attr.aria-label]="commonLocaleData?.app_close"
-                (click)="modelRefExpirePlan.hide()"
-            >
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body pd-2 font-15">
-            <div class="clearfix mb-3">
-                <p [innerHTML]="getPlanExpiredNote()"></p>
-            </div>
-            <div class="clearfix">
-                <ul class="list-inline upgrade-plan">
-                    <li>
-                        <button class="btn btn-green" *ngIf="currentCompanyPlanAmount" (click)="goToSelectPlan()">
-                            {{ localeData?.renew_plan }}
-                        </button>
-                    </li>
-                    <li>
-                        <button class="btn btn-green" (click)="goToSelectPlan()">{{ localeData?.change_plan }}</button>
-                    </li>
-                    <li>
-                        <span class="d-inline-block pr-1">{{ localeData?.or }}</span>
-                        <a href="javascript:void(0);" class="cursor-pointer" aria-label="contact us" (click)="openScheduleModel(); modelRefExpirePlan.hide()">{{
-                            localeData?.contact_us
-                        }}</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </ng-template>
-    <!-- modal second -->
-    <ng-template #crossedTxLimitModel>
-        <div class="modal-header">
-            <h3 class="modal-title pull-left">{{ localeData?.ready_to_upgrade }}</h3>
-            <button
-                type="button"
-                class="close pull-right"
-                [attr.aria-label]="commonLocaleData?.app_close"
-                (click)="modelRefCrossLimit.hide()"
-            >
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body pd-2 font-15">
-            <div class="clearfix mb-3">
-                <p class="mb-2" [innerHTML]="getTransactionLimitCrossedNote()"></p>
-                <p>{{ localeData?.continue_giddh_note }}</p>
-            </div>
-            <div class="clearfix">
-                <ul class="list-inline">
-                    <li>
-                        <button class="btn btn-sky-blue" (click)="goToSelectPlan()">
-                            {{ commonLocaleData?.app_buy_plan }}
-                        </button>
-                    </li>
-                    <li>
-                        <span class="d-inline-block pr-1">{{ localeData?.or }}</span>
-                        <a href="javascript:void(0);" class="cursor-pointer" aria-label="schedule" (click)="openScheduleModel(); modelRefCrossLimit.hide()">{{
-                            localeData?.contact_us
-                        }}</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </ng-template>
-
-    <!--help & support sidebar  -->
-
-    <ng-template #asideHelpSupportMenuStateRef>
-        <aside-help-support (closeAsideEvent)="toggleHelpSupportPane(false)"></aside-help-support>
-    </ng-template>
-
-    <!-- setting aside pane -->
-    <div class="help-support-aside setting-sidebar-wrapper">
+        <!-- setting aside pane -->
+        <div class="help-support-aside setting-sidebar-wrapper">
             <aside-setting
                 [ngClass]="{
                     'setting-sidebar': isMobileSidebar,
@@ -1095,52 +721,44 @@
                 }"
                 (closeAsideEvent)="toggleSidebarPane(false, false)"
             ></aside-setting>
-    </div>
-    <div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideInventorySidebarMenuState === 'in'">
-        <inventory-sidebar
-            class="inventory-sidebar"
-            [ngClass]="{ 'inventory-sidebar': isMobileSidebar }"
-            (closeAsideEvent)="toggleSidebarPane(false, false)"
-        ></inventory-sidebar>
-    </div>
-    <ng-template #datepickerTemplate>
-        <div class="datepicker-modal">
-            <div class="modal-body">
-                <app-datepicker-wrapper
-                    [inputStartDate]="selectedDateRange?.startDate"
-                    [inputEndDate]="selectedDateRange?.endDate"
-                    [alwaysShowCalendars]="true"
-                    [ranges]="datePickerOptions"
-                    [selectedRangeLabel]="selectedRangeLabel"
-                    [showCustomRangeLabel]="true"
-                    [showClearButton]="false"
-                    [showCancel]="true"
-                    [linkedCalendars]="true"
-                    [showDropdowns]="true"
-                    (rangeClicked)="dateSelectedCallback($event)"
-                    (datesUpdated)="dateSelectedCallback($event)"
-                    [keepCalendarOpeningWithRange]="false"
-                    [showRangeLabelOnInput]="false"
-                    [dateFieldPosition]="dateFieldPosition"
-                    [updatePosition]="false"
-                ></app-datepicker-wrapper>
-            </div>
         </div>
-    </ng-template>
-</ng-container>
-<div class="overlay-cal" *ngIf="isCalendlyModelActivate">
-    <div id="scheduleCall" class="tab-pane active vertical-center modal-body">
-        <div class="calendly-box" #reder>
-            <div class="calendly-inline-widget">
-                <button id="closedialog" class="close-2" (click)="hideScheduleCalendlyModel()" aria-label="close">
-                    <i class="icon-cross"></i>
-                </button>
-                <object [data]="calendlyUrl" title="calendar"></object>
+        <ng-template #datepickerTemplate>
+            <div class="datepicker-modal">
+                <div class="modal-body">
+                    <app-datepicker-wrapper
+                        [inputStartDate]="selectedDateRange?.startDate"
+                        [inputEndDate]="selectedDateRange?.endDate"
+                        [alwaysShowCalendars]="true"
+                        [ranges]="datePickerOptions"
+                        [selectedRangeLabel]="selectedRangeLabel"
+                        [showCustomRangeLabel]="true"
+                        [showClearButton]="false"
+                        [showCancel]="true"
+                        [linkedCalendars]="true"
+                        [showDropdowns]="true"
+                        (rangeClicked)="dateSelectedCallback($event)"
+                        (datesUpdated)="dateSelectedCallback($event)"
+                        [keepCalendarOpeningWithRange]="false"
+                        [showRangeLabelOnInput]="false"
+                        [dateFieldPosition]="dateFieldPosition"
+                        [updatePosition]="false"
+                    ></app-datepicker-wrapper>
+                </div>
+            </div>
+        </ng-template>
+    <div class="overlay-cal" *ngIf="isCalendlyModelActivate">
+        <div id="scheduleCall" class="tab-pane active vertical-center modal-body">
+            <div class="calendly-box" #reder>
+                <div class="calendly-inline-widget">
+                    <button id="closedialog" class="close-2" (click)="hideScheduleCalendlyModel()" aria-label="close">
+                        <i class="icon-cross"></i>
+                    </button>
+                    <object [data]="calendlyUrl" title="calendar"></object>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<connect-plaid></connect-plaid>
+    <connect-plaid></connect-plaid>
 <!--CMD + G modal  -->
 <ng-template #navigationModal>
     <command-k
@@ -1156,9 +774,7 @@
         <strong>↑</strong> <strong>↓</strong>&nbsp; {{ localeData?.to_navigate }}
         <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
         {{ localeData?.to_select }}
-        <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_escape">{{
-            commonLocaleData?.app_esc
-        }}</strong
+        <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_escape">{{ commonLocaleData?.app_esc }}</strong
         >&nbsp;
         {{ commonLocaleData?.app_to_dismiss }}
     </div>
