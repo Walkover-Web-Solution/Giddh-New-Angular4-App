@@ -1,0 +1,26 @@
+<div class="multi-select">
+    <input type="text" class="form-control text-right total-discount-amount" [matMenuTriggerFor]="discountControlMenu" [placeholder]="currency + '0'"
+        readonly [value]="currency + totalDiscountAmount">
+    <mat-menu #discountControlMenu="matMenu">
+        <div class="d-flex flex-column px-3 pt-2 discount-wrapper" (click)="$event.stopPropagation()" [formGroup]="discountForm">
+            <div>
+                <input-field [type]="'number'" [min]="0" [allowDecimalDigitsOnly]="true" [label]="commonLocaleData?.app_percent" [matSuffix]="'%'" class="d-block" [cssClass]="'text-right'" formControlName="percentage" [readonly]="discountForm.get('fixedValue')?.value > 0"></input-field>
+                <input-field [type]="'number'" [min]="0" [allowDecimalDigitsOnly]="true" [label]="commonLocaleData?.app_value" class="d-block mt-3" [cssClass]="'text-right'" formControlName="fixedValue" [readonly]="discountForm.get('percentage')?.value > 0"></input-field>
+            </div>
+            <div class="discount-separator position-relative text-center my-2">
+                <span class="discount-separator-msg">{{commonLocaleData?.app_and}}</span>
+                <div class="discount-separator-line"></div>
+            </div>
+            <div class="discount-checkbox-wrapper d-flex flex-column">
+                <ng-container *ngFor="let discount of discountForm.get('discounts')['controls']; let i = index" formArrayName="discounts">
+                    <ng-container [formGroupName]="i">
+                        <mat-checkbox formControlName="isActive" type="checkbox" color="primary"><span class="font-15">{{ discount?.get('name')?.value }}</span></mat-checkbox>
+                    </ng-container>
+                </ng-container>
+            </div>
+            <div class="create-new pt-2 mt-2 text-center cursor-pointer" (click)="createNew()">
+                <span class="text-blue">{{ commonLocaleData?.app_create_new }}</span>
+            </div>
+        </div>
+    </mat-menu>
+</div>

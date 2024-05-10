@@ -36,7 +36,7 @@
                                                 [(ngModel)]="email"
                                                 required
                                                 [placeholder]="commonLocaleData?.app_email_id"
-                                                class="form-control mat-field-border mt-0"
+                                                class="form-control mat-field-border mt-0 border-radius-5"
                                                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,5}$"
                                             />
                                         </mat-form-field>
@@ -95,7 +95,7 @@
                                     <input
                                         #magicLinkInput
                                         matInput
-                                        class="form-control dashed mat-field-border"
+                                        class="form-control dashed mat-field-border border-radius-5"
                                         [readonly]="true"
                                         type="text"
                                         [(ngModel)]="magicLink"

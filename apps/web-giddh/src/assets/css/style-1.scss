@@ -460,6 +460,12 @@ aside-menu-account .container-fluid {
 .column-gap2 {
     column-gap: 20px;
 }
+.row-gap1 {
+    row-gap: 10px;
+}
+.row-gap15 {
+    row-gap: 15px;
+}
 
 .border-bottom {
     border-bottom-color: var(--color-ledger-grid-border-color);
@@ -537,7 +543,7 @@ aside-menu-account .container-fluid {
     white-space: nowrap;
 }
 .cp {
-    cursor: pointer;
+    cursor: pointer !important;
 }
 .thead {
     font-size: var(--font-size-15);
@@ -667,15 +673,6 @@ aside-menu-account .container-fluid {
 }
 #getGroupModal.get-group-modal #middleBody {
     height: auto;
-}
-/*typography styles*/
-
-.font-15 {
-    font-size: var(--font-size-15);
-}
-
-.font-16 {
-    font-size: var(--font-size-16);
 }
 /*accounts list style*/
 .search-loading {
@@ -2167,6 +2164,7 @@ bs-datepicker-container {
     -ms-flex-pack: justify;
     justify-content: space-between;
 }
+
 /* cmdk modal styles */
 .modal-dialog.universal_modal .modal-body {
     padding: 0;
@@ -2719,6 +2717,7 @@ giddh-datepicker {
     top: 10px;
     right: 0px;
     opacity: 0.8;
+    color: var(--color-default-button);
 }
 .advance-search-by-date {
     .input-wrapper {
@@ -2798,16 +2797,19 @@ update-ledger-entry-panel .ledger-main .mat-form-field {
         background-color: var(--color-green-toast) !important;
     }
 }
-.mat-mdc-snack-bar-container.warning {
+.mat-mdc-snack-bar-container.warning, .mat-mdc-snack-bar-container.info {
     .mdc-snackbar__surface{
         background-color: var(--color-warning-toast) !important;
+        .mdc-snackbar__label{
+            color: var(--color-common-primary-text) !important;
+        }
+        .snack-close-button {
+            color: var(--color-common-primary-text) !important;
+        }
     }
+
 }
-.mat-mdc-snack-bar-container.info {
-    .mdc-snackbar__surface{
-        background-color: var(--color-info-toast) !important;
-    }
-}
+
 .mat-form-field-appearance-fill .mat-form-field-flex,
 .mat-form-field-ripple,
 .mat-form-field-appearance-fill .mat-form-field-underline::before {
@@ -2859,7 +2861,7 @@ tr.mat-footer-row {
     tbody {
         > tr {
             > td {
-                color: var(--color-mat-tbody-tr-td) !important;
+                color: var(--color-table-primary-content) !important;
                 font-size: var(--font-size-15);
                 &:first-child {
                     color: var(--color-mat-table-tbody-td-first-child) !important;
@@ -2983,13 +2985,13 @@ td.mat-footer-cell {
     }
     &.warning {
         .snack-container {
-            background-image: url("../images/exclamation-white.svg");
+            background-image: url("../images/exclamation-black.svg");
             background-position-y: center;
         }
     }
     &.info {
         .snack-container {
-            background-image: url("../images/info-white.svg");
+            background-image: url("../images/info-black.svg");
             background-position-y: center;
         }
     }

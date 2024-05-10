@@ -48,6 +48,8 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public maxlength: number;
     /** True if field is read only */
     @Input() public readonly: boolean;
+    /** True if field is disabled */
+    @Input() public disabled: boolean;
     /** Type of input field */
     @Input() public type: string = "text";
     /** Adds red border around field if true */
@@ -164,7 +166,7 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
             this.value = value;
             this.changeDetectionRef.detectChanges();
         } else {
-            this.value = '';
+            this.value = "";
             this.changeDetectionRef.detectChanges();
         }
     }

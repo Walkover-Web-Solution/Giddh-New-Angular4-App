@@ -60,10 +60,10 @@
                             </ng-container>
                             <ng-container *ngIf="unitMappings?.length">
                                 <mat-list role="list" class="list-head pd-l15">
-                                    <mat-list-item class="items">
+                                    <mat-list-item role="listitem" class="items">
                                         <strong>{{ commonLocaleData?.app_name }}</strong>
                                     </mat-list-item>
-                                    <mat-list-item class="items map-item pd-r2">
+                                    <mat-list-item role="listitem" class="items map-item pd-r2">
                                         <strong>{{ localeData?.mapped_unit }}</strong>
                                     </mat-list-item>
                                 </mat-list>
@@ -83,14 +83,14 @@
                                                 'selected-unit': selectedUnitIndex === i
                                             }"
                                         >
-                                            <mat-list-item class="items mat-left" matTooltipPosition="left" [matTooltip]="mapping?.stockUnitX?.name + '('+ mapping?.stockUnitX?.code +')'">
+                                            <mat-list-item role="listitem" class="items mat-left" matTooltipPosition="left" [matTooltip]="mapping?.stockUnitX?.name + '('+ mapping?.stockUnitX?.code +')'">
                                                 <a href="javascript:void(0);"
                                                     >{{ mapping?.stockUnitX?.name }} ({{
                                                         mapping?.stockUnitX?.code
                                                     }})</a
                                                 >
                                             </mat-list-item>
-                                            <mat-list-item class="items map-item mat-gap" matTooltipPosition="right" [matTooltip]="mapping?.stockUnitY?.code ? mapping?.quantity + ' ' + mapping?.stockUnitY?.name : null ">
+                                            <mat-list-item role="listitem" class="items map-item mat-gap" matTooltipPosition="right" [matTooltip]="mapping?.stockUnitY?.code ? mapping?.quantity + ' ' + mapping?.stockUnitY?.name : null ">
                                                 <a href="javascript:void(0);"
                                                     >{{ mapping?.quantity }} {{ mapping?.stockUnitY?.name }}
                                                     <span *ngIf="mapping?.stockUnitY?.code"

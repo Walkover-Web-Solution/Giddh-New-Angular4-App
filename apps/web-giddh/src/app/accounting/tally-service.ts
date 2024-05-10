@@ -268,9 +268,8 @@ export class TallyModuleService {
     public getAccounts() {
         let accounts = [];
         if (this.selectedPageInfo?.value) {
-            // console.log('this.selectedPageInfo.value inside service is :', this.selectedPageInfo.value);
             switch (this.selectedPageInfo?.value.page) {
-                case 'Journal':
+                case 'journal':
                     // accounts = this.flattenAccounts.value;
                     // As discussed with Manish, Cash and Bank account should not come in Journal entry
                     if (this.purchaseAccounts?.value) {
@@ -321,12 +320,12 @@ export class TallyModuleService {
                         accounts = this.expenseAccounts?.value;
                     }
                     break;
-                case 'Payment':
+                case 'payment':
                     accounts = this.flattenAccounts?.value;
                     break;
-                case 'Receipt':
+                case 'receipt':
                     accounts = this.flattenAccounts?.value;
-                case 'Contra':
+                case 'contra':
                     accounts = (this.cashAccounts?.value) ? this.cashAccounts.value.concat(this.bankAccounts?.value) : this.bankAccounts?.value;
                     break;
                 default:
@@ -374,7 +373,6 @@ export class TallyModuleService {
     }
 
     private validateForData(data) {
-        // console.log('the data in validation fn is :', data);
         let isValid = true;
         switch (data.voucherType) {
             // case 'Purchase':
@@ -508,17 +506,28 @@ export class TallyModuleService {
      * @memberof TallyModuleService
      */
     public getGroupByVoucher(voucherType: string, selectedTransactionType?: string): any {
-        if (voucherType === VOUCHERS.CONTRA) {
+        if (voucherType.toLowerCase() === VOUCHERS.CONTRA) {
             return {
-                group: (this.generalService.voucherApiVersion === 2) ? encodeURIComponent('bankaccounts, cash, loanandoverdraft, currentliabilities') : encodeURIComponent('bankaccounts, cash, currentliabilities'),
-                exceptGroups: encodeURIComponent('sundrycreditors, dutiestaxes')
+                group: encodeURIComponent('bankaccounts, cash, loanandoverdraft'),
+                exceptGroups: encodeURIComponent('sundrycreditors, dutiestaxes, sundrydebtors')
             };
-        } else if (voucherType === VOUCHERS.RECEIPT) {
+        } else if (voucherType.toLowerCase() === VOUCHERS.RECEIPT) {
             return {
-                group: selectedTransactionType === 'to' ?
-                    encodeURIComponent('currentliabilities, sundrycreditors, sundrydebtors') :
-                    (this.generalService.voucherApiVersion === 2) ? encodeURIComponent('bankaccounts, cash, loanandoverdraft, currentliabilities, sundrycreditors, sundrydebtors') : encodeURIComponent('bankaccounts, cash, currentliabilities, sundrycreditors, sundrydebtors'),
-                exceptGroups: encodeURIComponent('dutiestaxes')
+                group: selectedTransactionType?.toLowerCase() === 'to' ?
+                    encodeURIComponent('tcspayable, sundrycreditors, sundrydebtors') :
+                    encodeURIComponent('bankaccounts, cash, loanandoverdraft, tdsreceivable'),
+                exceptGroups: encodeURIComponent('')
+            };
+        } else if (voucherType.toLowerCase() === VOUCHERS.PAYMENT) {
+            return {
+                group: selectedTransactionType?.toLowerCase() === 'by' ? encodeURIComponent('sundrydebtors, sundrycreditors, tcspayable') :
+                    encodeURIComponent('cash, bankaccounts, loanandoverdraft,tdsreceivable'),
+                exceptGroups: encodeURIComponent('')
+            };
+        } else if (voucherType.toLowerCase() === VOUCHERS.JOURNAL) {
+            return {
+                group: encodeURIComponent('shareholdersfunds, noncurrentliabilities, currentliabilities,fixedassets,noncurrentassets,currentassets,revenuefromoperations,otherincome,operatingcost,indirectexpenses'),
+                exceptGroups: encodeURIComponent('')
             };
         } else {
             return {
@@ -528,3 +537,4 @@ export class TallyModuleService {
         }
     }
 }
+

@@ -307,7 +307,8 @@
                         li {
                             padding: 0;
                             margin-bottom: 0 !important;
-                            a {
+                            div {
+                                cursor: pointer;
                                 color: var(--color-sidebar-primary-anchor-text);
                                 align-items: center;
                                 display: flex;
@@ -320,25 +321,51 @@
                                     font-size: 20px;
                                     margin-right: 10px;
                                 }
+                                strong {
+                                    font-size: var(--font-size-24);
+                                    color: inherit;
+                                    visibility: hidden;
+                                    padding: 0;
+                                    margin-right: 10px;
+                                    width: 20px;
+                                    height: 20px;
+                                    border-radius: 50%;
+                                    text-align: center;
+                                    line-height: 18px;
+
+                                    &:hover {
+                                        @include highlight-color(
+                                            var(--color-white-tertiary),
+                                            var(--color-common-primary-text)
+                                        );
+                                    }
+                                }
                                 &.active {
                                     @include highlight-color(
-                                        var(--color-giddh-blue),
-                                        var(--color-sidebar-menu-list-items)
+                                        var(--color-giddh-common-background),
+                                        var(--color-white-tertiary)
                                     );
+                                    strong {
+                                        visibility: visible;
+                                    }
                                 }
                             }
                             &:hover {
-                                a {
+                                a,div {
                                     @include highlight-color(
-                                        var(--color-giddh-blue),
-                                        var(--color-sidebar-menu-list-items)
+                                        var(--color-giddh-common-background),
+                                        var(--color-white-tertiary)
                                     );
+                                    strong {
+                                        visibility: visible;
+                                    }
                                     &.active {
                                         @include highlight-color(
-                                            var(--color-giddh-blue),
-                                            var(--color-sidebar-menu-list-items)
+                                            var(--color-giddh-common-background),
+                                            var(--color-white-tertiary)
                                         );
                                     }
+
                                 }
                             }
                         }
@@ -553,7 +580,7 @@
                             top: 0px !important;
                             padding-bottom: 0 !important;
                             li {
-                                a {
+                                div {
                                     padding: 10px 10px !important;
                                     line-height: 20px;
                                     display: flex;

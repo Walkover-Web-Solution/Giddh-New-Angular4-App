@@ -26,7 +26,7 @@
 	"company_address": "कम्पनी का पता",
 	"onboarding_address": "[ONBOARDING_TYPE] पता",
 	"onboarding_note": "नोट: आप बाद में सेटिंग में जाकर कभी भी अपनी प्राथमिकताएं बदल सकते हैं.",
-	"tax_reports_note": "सभी प्रकार के लेन-देन पर कर बनाएं और लागू करें! कर रिपोर्ट प्राप्त करने के लिए, <a href='mailto:sales@giddh.com'>sales@giddh.com</a> से संपर्क करें!",
+	"tax_reports_note": "सभी प्रकार के लेन-देन पर कर बनाएं और लागू करें! कर रिपोर्ट प्राप्त करने के लिए, <a href='mailto:sales@giddh.com' class='text-underline'>sales@giddh.com</a> से संपर्क करें!",
 	"create_onboarding": "[ONBOARDING_TYPE] बनाएं",
 	"update_onboarding": "[ONBOARDING_TYPE] अपडेट करें",
 	"hello_user": "नमस्ते [USER]!",
@@ -82,5 +82,7 @@
     "permission_placeholder": "अद्वितीय नाम / ईमेल आईडी",
     "roles": "भूमिकाएँ",
     "add_user": "उपयोगकर्ता जोड़ें",
-    "back_to_subscription": "सदस्यता सूची पर वापस जाएँ"
+    "back_to_subscription": "सदस्यता सूची पर वापस जाएँ",
+    "county":"काउंटी",
+    "select_county":"काउंटी चुनें"
 }

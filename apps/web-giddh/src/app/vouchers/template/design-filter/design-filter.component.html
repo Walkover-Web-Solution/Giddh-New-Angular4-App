@@ -1,0 +1,167 @@
+<div>
+  <div class="option-value-field design-field my-3">
+    <text-field [type]="'text'" [name]="'name'" [cssClass]="'form-control'"></text-field>
+  </div>
+  <div class="template-scroll">
+    <mat-accordion class="template-design-wrap">
+      <mat-expansion-panel class="mb-2">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <i class="icon-change_template mr-2"></i>
+            Change up to template
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="d-flex column-gap15 px-3 pb-3">
+          <div class="template-view-design bdr position-relative">
+            <img src="../../../../assets/images/templates/gst_template_a.png" alt="template" class="view-img w-100 h-100 border-radius-5" />
+          </div>
+          <div class="template-view-design bdr position-relative">
+            <img src="../../../../assets/images/templates/thermal_template.png" alt="template" class="view-img w-100 h-100 border-radius-5" />
+            <div class="beta-img position-absolute">
+              <img src="../../../../assets/images/templates/beta.png" alt="beta">
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+      <!-- upload-expansion -->
+      <mat-expansion-panel class="mb-2">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <i class="icon-template_edit mr-2"></i>
+            Make logo edit
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="d-flex align-items-center column-gap15 px-3 pb-3">
+          <div>
+            <div class="upload-logo-wrap">
+              <label for="logo-upload" class="upload-button">
+                <input
+                  type="file"
+                  #fileInput
+                  accept="image/png, image/jpeg"
+                  id="logo-upload"
+                />
+                <small>Upload Logo</small>
+              </label>
+            </div>
+            <span><b>Uploading...</b></span>
+          </div>
+          <div>
+            <p class="mb-1">Size</p>
+            <div class="d-flex column-gap1">
+              <button mat-mini-fab color="primary">
+                <span>S</span>
+              </button>
+              <button mat-mini-fab color="primary">
+                <span>M</span>
+              </button>
+              <button mat-mini-fab color="primary">
+                <span>L</span>
+              </button>
+            </div>
+          </div>
+          <button mat-stroked-button color="warn" [matTooltip]="'Clicking on this, will delete image from server'" [matTooltipPosition]="'top'">Delete</button>
+        </div>
+      </mat-expansion-panel>
+      <!-- colour-expansion -->
+      <mat-expansion-panel class="mb-2">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <i class="ico-swatch mr-2"></i>
+            Try other colour
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="px-3 pb-3">
+          <div class="colour-wrap">
+            <div class="colour-box-wrap">
+              <span class="colour-box d-block mb-1"></span>
+              <span class="d-block text-center">#bdbdbd</span>
+            </div>
+            <div class="colour-picker mt-3">
+              <ul class="list-unstyled">
+                <li style="background-color: #bdbdbd;"></li>
+                <li style="background-color: #636363;"></li>
+                <li style="background-color: #000000;"></li>
+                <li style="background-color: #e34818;"></li>
+                <li style="background-color: #7889a1;"></li>
+                <li style="background-color: #48565f;"></li>
+                <li style="background-color: #79bd58;"></li>
+                <li style="background-color: #0e909a;"></li>
+                <li style="background-color: #202e5a;"></li>
+                <li style="background-color: #96bc2d;"></li>
+                <li style="background-color: #2a651d;"></li>
+                <li style="background-color: #004254;"></li>
+                <li style="background-color: #ff8c00;"></li>
+                <li style="background-color: #82001d;"></li>
+                <li style="background-color: #6b1438;"></li>
+                <li style="background-color: #f4749b;"></li>
+                <li style="background-color: #950069;"></li>
+                <li style="background-color: #542852;"></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+      <!-- font-family-expansion -->
+      <mat-expansion-panel class="mb-2">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <i class="icon-font mr-2"></i>
+            Select different fonts
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="px-3 pb-3">
+          <dropdown-field
+            [placeholder]="'Choose font'"
+          ></dropdown-field>
+        </div>
+      </mat-expansion-panel>
+      <!-- font-size-expansion -->
+      <mat-expansion-panel class="mb-2">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <i class="icon-font mr-2"></i>
+            Select different fonts size
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="px-3 pb-3">
+          <dropdown-field
+            [placeholder]="'Choose font size'"
+          ></dropdown-field>
+        </div>
+      </mat-expansion-panel>
+      <!-- page-margin-expansion -->
+      <mat-expansion-panel class="mb-2">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <i class="icon-print_settings mr-2"></i>
+            Edit print setting
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="px-3 pb-3 d-flex align-items-center column-gap1 print-field">
+          <input-field
+            [type]="'text'"
+            [name]="'top'"
+            [label]="'Top'"
+          ></input-field>
+          <input-field
+            [type]="'text'"
+            [name]="'left'"
+            [label]="'Left'"
+          ></input-field>
+          <input-field
+            [type]="'text'"
+            [name]="'bottom'"
+            [label]="'Bottom'"
+          ></input-field>
+          <input-field
+            [type]="'text'"
+            [name]="'right'"
+            [label]="'Right'"
+          ></input-field>
+          <a href="javascript:;" class="">Reset</a>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</div>

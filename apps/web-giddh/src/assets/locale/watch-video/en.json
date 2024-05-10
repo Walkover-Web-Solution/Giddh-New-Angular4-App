@@ -17,5 +17,14 @@
     "VOUCHER_SALES":  "How to create an Invoice?",
     "ECOMM_INTEGRATION": "How to connect Shopify with Giddh",
     "BARCODE": "How to use barcode in Giddh",
-    "DAYBOOK": "How daybook report works in Giddh"
+    "DAYBOOK": "How daybook report works in Giddh",
+    "AGING_REPORT": "How aging reports works?",
+    "INVOICE_SETTING": "How to change invoice settings?",
+    "TWO_FACTOR_AUTHENTICATION": "How two factor authentication works?",
+    "TAX_CREATION": "How to create taxes?",
+    "MRP_DISCOUNT": "How MRP - discount works?",
+    "CUSTOM_FIELD": "How to create custom fields?",
+    "MANUFACTURING": "How to do manufacturing?",
+    "MULTI_USER_ACCESS": "How multi-user works?",
+    "INVOICE_TEMPLATE": "How invoice template works?"
 }

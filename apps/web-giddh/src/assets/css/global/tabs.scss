@@ -11,11 +11,18 @@
             .mdc-tab__text-label {
                 font-size: var(--font-size-16);
                 color: var(--color-tab-primary-inactive);
+                // for voucher
+                .voucher-svg {
+                    fill: var(--color-tab-primary-inactive);
+                }
             }
 
             &.mdc-tab--active {
                 .mdc-tab__text-label {
                     color: var(--color-giddh-blue);
+                    .voucher-svg {
+                        fill: var(--color-giddh-blue);
+                    }
                 }
             }
         }
@@ -34,6 +41,38 @@
     .mat-button-toggle-appearance-standard {
         .mat-button-toggle-label-content {
             line-height: 36px;
+        }
+    }
+}
+
+// for-box-tabs
+.tabs-box-wrap {
+    &.mat-mdc-tab-group {
+        .mat-mdc-tab-header {
+            border: none;
+        }
+    }
+    .mat-mdc-tab-labels {
+        column-gap: 35px;
+        .mat-mdc-tab {
+            border: 1px solid var(--color-rectangular-tab-inactive-secondary-border);
+            width: 120px;
+            height: 120px!important;
+            border-radius: 4px;
+            .mdc-tab__text-label {
+                flex-direction: column;
+                row-gap: 8px;
+                i {
+                    font-size: 32px;
+                }
+            }
+            .mdc-tab-indicator__content--underline {
+                border: none;
+            }
+            &.mdc-tab-indicator--active {
+                border-color: var(--color-giddh-blue);
+                box-shadow: 0 6px 7px var(--color-primary-common-box-shadow);
+            }
         }
     }
 }

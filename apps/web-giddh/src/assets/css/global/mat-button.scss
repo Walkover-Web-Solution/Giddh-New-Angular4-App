@@ -126,3 +126,16 @@ button {
 button.button-no-background .mdc-button__ripple {
     display: none;
 }
+// common-icon-button
+.mat-icon-md-btn {
+    &.mdc-button {
+        min-width: 40px;
+        width: 40px;
+    }
+}
+.mat-icon-sm-btn {
+    &.mdc-button {
+        min-width: 32px;
+        width: 32px;
+    }
+}

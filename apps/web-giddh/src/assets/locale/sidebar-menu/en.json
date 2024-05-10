@@ -11,51 +11,96 @@
                     "icon": "icon-aging-report-new",
                     "description": "Amount Due in previous days & upcoming",
                     "additional": {
-                        "tab": "aging-report",
-                        "tabIndex": 1
+                        "queryParams": {
+                            "tab": "aging-report",
+                            "tabIndex": 1
+                        }
                     }
-                },
-                {
-                    "label": "Cash Invoice",
-                    "link": "/pages/proforma-invoice/invoice/cash",
-                    "icon": "icon-invoice-new",
-                    "description": "Generate cash invoice"
-                },
-                {
-                    "label": "Credit Note",
-                    "link": "/pages/invoice/preview/credit note",
-                    "icon": "icon-credit-note-new",
-                    "description": "Generate credit note & update A/c"
                 },
                 {
                     "label": "Customer",
                     "link": "/pages/contact/customer",
                     "icon": "icon-customer",
-                    "description": "Manage customers, send reminders via SMS/Email"
+                    "description": "Manage customers, send reminders via SMS/Email",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/contact/customer",
+                            "queryParams": { "addCustomer" : true }
+                        }
+                    }
+                },
+                {
+                    "label": "Credit Note",
+                    "link": "/pages/invoice/preview/credit note",
+                    "icon": "icon-credit-note-new",
+                    "description": "Generate credit note & update A/c",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/proforma-invoice/invoice/credit note"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "Credit Note",
+                    "link": "/pages/invoice/preview/credit note",
+                    "icon": "icon-credit-note-new",
+                    "description": "Generate credit note & update A/c",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/credit-note/create"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "Invoice",
                     "link": "/pages/invoice/preview/sales",
                     "icon": "icon-invoice-new",
-                    "description": "Multicurrency, Recurring invoice, Cash invoice"
+                    "description": "Multicurrency, Recurring invoice, Cash invoice",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/proforma-invoice/invoice/sales"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "Invoice",
+                    "link": "/pages/invoice/preview/sales",
+                    "icon": "icon-invoice-new",
+                    "description": "Multicurrency, Recurring invoice, Cash invoice",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/sales/create"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "Invoice Settings",
+                    "link": "/pages/invoice/preview/settings/sales",
+                    "icon": "icon-settings-cog",
+                    "description": "Invoice settings"
                 },
                 {
                     "label": "Receipt",
                     "link": "/pages/reports/receipt",
                     "icon": "icon-reciept-new",
                     "description": "Advance, normal, total, & unused receipts"
-                },
-                {
-                    "label": "Sales Invoice",
-                    "link": "/pages/proforma-invoice/invoice/sales",
-                    "icon": "icon-invoice-new",
-                    "description": "Generate sales invoice"
-                },
-                {
-                    "label": "Estimates (Beta)",
-                    "link": "/pages/invoice/preview/estimates",
-                    "icon": "icon-sales-order1",
-                    "description": "Final sales order"
                 },
                 {
                     "label": "Sales Register",
@@ -78,28 +123,111 @@
             "icon": "icon-vendor",
             "items": [
                 {
-                    "label": "Debit Note",
-                    "link": "/pages/invoice/preview/debit note",
-                    "icon": "icon-debit-note-new",
-                    "description": "Record debit note & update A/c"
+                    "label": "Bill",
+                    "link": "/pages/purchase-management/purchase/bill",
+                    "icon": "icon-invoice-new",
+                    "description": "Purchase request, purchase bill, modify PO",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/proforma-invoice/invoice/purchase"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
                 },
                 {
                     "label": "Bill",
-                    "link": "/pages/proforma-invoice/invoice/purchase",
+                    "link": "/pages/purchase-management/purchase/bill",
                     "icon": "icon-invoice-new",
-                    "description": "Purchase request, purchase bill, modify PO"
+                    "description": "Purchase request, purchase bill, modify PO",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/purchase/create"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
-                    "label": "Purchase Management",
-                    "link": "/pages/purchase-management/purchase/bill",
-                    "icon": "icon-purchase-management1",
-                    "description": "Purchase request, purchase bill, modify PO"
+                    "label": "Bill Settings",
+                    "link": "/pages/purchase-management/purchase/settings",
+                    "icon": "icon-settings-cog",
+                    "description": "Bill settings"
+                },
+                {
+                    "label": "Debit Note",
+                    "link": "/pages/invoice/preview/debit note",
+                    "icon": "icon-debit-note-new",
+                    "description": "Record debit note & update A/c",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/proforma-invoice/invoice/debit note"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "Debit Note",
+                    "link": "/pages/invoice/preview/debit note",
+                    "icon": "icon-debit-note-new",
+                    "description": "Record debit note & update A/c",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/debit-note/create"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "Payment",
+                    "link": "/pages/reports/payment",
+                    "icon": "icon-reciept-new",
+                    "description": "Total, & unused payments",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "Purchase Order",
-                    "link": "/pages/purchase-management/purchase-order/new",
+                    "link": "/pages/purchase-management/purchase/order",
                     "icon": "icon-purchase-order",
-                    "description": "Purchase request, purchase bill, modify PO"
+                    "description": "Purchase request, purchase bill, modify PO",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/purchase-management/purchase-order/new"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "Purchase Order",
+                    "link": "/pages/purchase-management/purchase/order",
+                    "icon": "icon-purchase-order",
+                    "description": "Purchase request, purchase bill, modify PO",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/purchase-order/create"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "Purchase Register",
@@ -112,21 +240,23 @@
                     "label": "Vendor",
                     "link": "/pages/contact/vendor",
                     "icon": "icon-vendor",
-                    "description": "Send Bulk SMS/Emails, Set reminders"
-                },
-                {
-                    "label": "Payment",
-                    "link": "/pages/reports/payment",
-                    "icon": "icon-reciept-new",
-                    "description": "Total, & unused payments",
+                    "description": "Send Bulk SMS/Emails, Set reminders",
                     "additional": {
-                        "voucherVersion": 2
+                        "queryParams": {
+                            "voucherVersion": 2
+                        },
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/contact/vendor",
+                            "queryParams": { "addVendor" : true }
+                        }
                     }
                 }
             ]
         },
         {
             "label": "Tax",
+            "link": "/pages/settings/taxes",
             "icon": "icon-tax-new",
             "items": [
                 {
@@ -136,7 +266,9 @@
                     "description": "Generate directly from Giddh after",
                     "hide": "sidebar",
                     "additional": {
-                        "countrySpecific": ["IN"]
+                        "queryParams": {
+                            "countrySpecific": ["IN"]
+                        }
                     }
                 },
                 {
@@ -146,9 +278,11 @@
                     "hide": "sidebar",
                     "alwaysPresent": true,
                     "additional": {
-                        "isGstMenu": true,
-                        "type": "gstr1",
-                        "countrySpecific": ["IN"]
+                        "queryParams": {
+                            "isGstMenu": true,
+                            "type": "gstr1",
+                            "countrySpecific": ["IN"]
+                        }
                     }
                 },
                 {
@@ -158,9 +292,11 @@
                     "hide": "sidebar",
                     "alwaysPresent": true,
                     "additional": {
-                        "isGstMenu": true,
-                        "type": "gstr2",
-                        "countrySpecific": ["IN"]
+                        "queryParams": {
+                            "isGstMenu": true,
+                            "type": "gstr2",
+                            "countrySpecific": ["IN"]
+                        }
                     }
                 },
                 {
@@ -170,9 +306,11 @@
                     "hide": "sidebar",
                     "alwaysPresent": true,
                     "additional": {
-                        "isGstMenu": true,
-                        "type": "gstr3b",
-                        "countrySpecific": ["IN"]
+                        "queryParams": {
+                            "isGstMenu": true,
+                            "type": "gstr3b",
+                            "countrySpecific": ["IN"]
+                        }
                     }
                 },
                 {
@@ -190,7 +328,9 @@
                     "description": "File & review VAT",
                     "hide": "sidebar",
                     "additional": {
-                        "countrySpecific": ["AE", "GB"]
+                        "queryParams": {
+                            "countrySpecific": ["AE", "GB"]
+                        }
                     }
                 },
                 {
@@ -208,11 +348,12 @@
                     "alwaysPresent": true,
                     "hide": "sidebar",
                     "additional": {
-                        "countrySpecific": ["IN"]
+                        "queryParams": {
+                            "countrySpecific": ["IN"]
+                        }
                     }
                 }
-            ],
-            "link": "/pages/settings/taxes"
+            ]
         },
         {
             "label": "Reports",
@@ -224,8 +365,10 @@
                     "icon": "icon-balance-sheet-new",
                     "description": "Download BS in Excel, multiple type of exports",
                     "additional": {
-                        "tab": "balance-sheet",
-                        "tabIndex": 2
+                        "queryParams": {
+                            "tab": "balance-sheet",
+                            "tabIndex": 2
+                        }
                     }
                 },
                 {
@@ -240,8 +383,10 @@
                     "icon": "icon-proft-loss-new",
                     "description": "Download data in Excel, project wise report",
                     "additional": {
-                        "tab": "profit-loss",
-                        "tabIndex": 1
+                        "queryParams": {
+                            "tab": "profit-loss",
+                            "tabIndex": 1
+                        }
                     }
                 },
                 {
@@ -256,8 +401,10 @@
                     "icon": "icon-trial-balance-new",
                     "description": "Download of all credit & debit balances",
                     "additional": {
-                        "tab": "trial-balance",
-                        "tabIndex": 0
+                        "queryParams": {
+                            "tab": "trial-balance",
+                            "tabIndex": 0
+                        }
                     }
                 },
                 {
@@ -274,14 +421,18 @@
             "icon": "icon-inventory",
             "description": "Import/create stock, group & unit",
             "additional": {
-                "voucherVersion": 2
+                "queryParams": {
+                    "voucherVersion": 2
+                }
             }
         },
         {
             "label": "Inventory",
             "icon": "icon-inventory",
             "additional": {
-                "voucherVersion": 1
+                "queryParams": {
+                    "voucherVersion": 1
+                }
             },
             "items": [
                 {
@@ -290,7 +441,9 @@
                     "icon": "icon-branch-transfer",
                     "description": "Manage & Transfer inventory",
                     "additional": {
-                        "voucherVersion": 1
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
                     }
                 },
                 {
@@ -299,7 +452,9 @@
                     "icon": "icon-inventory",
                     "description": "Import/create stock, group & unit",
                     "additional": {
-                        "voucherVersion": 1
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
                     }
                 },
                 {
@@ -308,7 +463,9 @@
                     "icon": "icon-manufacturing1",
                     "description": "Find mfg. inventory status",
                     "additional": {
-                        "voucherVersion": 1
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }   
                     }
                 },
                 {
@@ -317,7 +474,9 @@
                     "icon": "icon-warehouse1",
                     "description": "See all the warehouses",
                     "additional": {
-                        "voucherVersion": 1
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
                     }
                 }
             ]
@@ -332,7 +491,9 @@
                     "icon": "icon-audit-log",
                     "description": "Chronological data of entries",
                     "additional": {
-                        "voucherVersion": 1
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
                     }
                 },
                 {
@@ -341,7 +502,9 @@
                     "icon": "icon-audit-log",
                     "description": "Chronological data of entries",
                     "additional": {
-                        "voucherVersion": 2
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
                     }
                 },
                 {
@@ -357,7 +520,7 @@
                     "description": "Overdues, P&L, Bank account, Ratio Analysis"
                 },
                 {
-                    "label": "Journal Voucher *",
+                    "label": "Journal Entries *",
                     "link": "/pages/journal-voucher",
                     "icon": "icon-journal-voucher-new",
                     "description": "Entries of Journal Voucher"
@@ -374,8 +537,10 @@
                     "icon": "icon-petty-cash",
                     "description": "Manage petty cash & transaction",
                     "additional": {
-                        "tab": "pending",
-                        "tabIndex": 0
+                        "queryParams": {
+                            "tab": "pending",
+                            "tabIndex": 0
+                        }
                     }
                 },
                 {

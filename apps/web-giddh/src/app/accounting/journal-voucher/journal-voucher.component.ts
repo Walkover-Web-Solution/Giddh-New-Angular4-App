@@ -44,15 +44,15 @@ export const PAGE_SHORTCUT_MAPPING = [
             gridType: 'voucher'
         }
     },
-    // {
-    //     keyCode: 116, // 'F5',
-    //     key: FUNCTIONAL_KEYS.F5,
-    //     inputForFn: {
-    //         page: 'Payment',
-    //         uniqueName: 'purchases',
-    //         gridType: 'voucher'
-    //     }
-    // },
+    {
+        keyCode: 116, // 'F5',
+        key: FUNCTIONAL_KEYS.F5,
+        inputForFn: {
+            page: 'Payment',
+            uniqueName: 'purchases',
+            gridType: 'voucher'
+        }
+    },
     {
         keyCode: 117, // 'F6',
         key: FUNCTIONAL_KEYS.F6,
@@ -62,15 +62,16 @@ export const PAGE_SHORTCUT_MAPPING = [
             gridType: 'voucher'
         }
     },
-    // {
-    //     keyCode: 118, // 'F7',
-    //     key: FUNCTIONAL_KEYS.F7,
-    //     inputForFn: {
-    //         page: 'Journal',
-    //         uniqueName: 'purchases',
-    //         gridType: 'voucher'
-    //     }
-    // }, {
+    {
+        keyCode: 118, // 'F7',
+        key: FUNCTIONAL_KEYS.F7,
+        inputForFn: {
+            page: 'Journal',
+            uniqueName: 'purchases',
+            gridType: 'voucher'
+        }
+    },
+    //{
     //     keyCode: 119, // 'F8',
     //     key: FUNCTIONAL_KEYS.F8,
     //     inputForFn: {

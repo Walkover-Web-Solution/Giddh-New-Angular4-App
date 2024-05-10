@@ -61,6 +61,8 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
      * used to fetch groups
     */
     @Input() public isCustomerCreation: boolean;
+    /** True if creating account from cmd+k */
+    @Input() public allGroups: boolean;
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold common JSON data */
@@ -71,6 +73,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     private isMasterOpen: boolean = false;
     /** True if account has unsaved changes */
     private hasUnsavedChanges: boolean = false;
+
 
     constructor(
         private store: Store<AppState>,
@@ -83,6 +86,10 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     }
 
     public ngOnInit() {
+        if (this.allGroups) {
+            this.activeGroupUniqueName = "";
+            this.isCustomerCreation = undefined;
+        }
         this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
 
         this.store.pipe(select(state => state.groupwithaccounts.activeTab), takeUntil(this.destroyed$)).subscribe(activeTab => {
@@ -160,6 +167,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
         if ('selectedAccountUniqueName' in s) {
             let value = s.selectedAccountUniqueName;
             if (value.currentValue && value.currentValue !== value.previousValue) {
+                this.store.dispatch(this.accountsAction.resetActiveAccount());
                 this.store.dispatch(this.accountsAction.getAccountDetails(s.selectedAccountUniqueName.currentValue));
             }
         }

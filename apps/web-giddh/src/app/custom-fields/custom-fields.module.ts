@@ -21,6 +21,7 @@ import { FormsModule } from "@angular/forms";
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 import { NoDataModule } from "../shared/no-data/no-data.module";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 
 @NgModule({
     declarations: [
@@ -47,7 +48,8 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
         FormsModule,
         GiddhPageLoaderModule,
         NoDataModule,
-        MatSlideToggleModule
+        MatSlideToggleModule,
+        WatchVideoModule
     ]
 })
 export class CustomFieldsModule {

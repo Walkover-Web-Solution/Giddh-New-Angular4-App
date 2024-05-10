@@ -36,7 +36,7 @@
                 #auto="matAutocomplete"
                 [ngClass]="customPanelClass"
             >
-                <a href="javascript:;" *ngIf="createNewText" (click)="createNewRecord()" class="custom-class-create">
+                <a href="javascript:;" *ngIf="createNewText" (click)="createNewRecord()" class="custom-class-create" aria-label="create new" role="list">
                     <div class="item create-new">{{ createNewText }}</div>
                     <div class="item create-new-command">
                         {{ commonLocaleData?.app_alt_c }}
@@ -88,6 +88,7 @@
                             [minBufferPx]="300"
                             [maxBufferPx]="300"
                             [id]="scrollableElementId"
+                            tabindex="0"
                             [ngStyle]="{
                                 'height':
                                     (fieldFilteredOptions?.length * 51 > 193

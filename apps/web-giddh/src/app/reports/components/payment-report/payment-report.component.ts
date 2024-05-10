@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, 
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
-import { fromEvent, merge, Observable, ReplaySubject } from 'rxjs';
+import { fromEvent, merge, Observable, of, ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil, take } from 'rxjs/operators';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
@@ -21,6 +21,8 @@ import { PAYMENT_REPORT_FILTERS, PaymentAdvanceSearchModel } from '../../constan
 import { PaymentAdvanceSearchComponent } from '../payment-advance-search/payment-advance-search.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { InvoiceBulkUpdateService } from '../../../services/invoice.bulkupdate.service';
+import { InvoiceService } from '../../../services/invoice.service';
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'payment-report',
@@ -149,6 +151,12 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     public baseCurrency: string = '';
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+    /** Holds Payment Report export request */
+    private exportcsvRequest: any = {
+        from: '',
+        to: '',
+        dataToSend: {}
+    };
 
     /** @ignore */
     constructor(
@@ -163,7 +171,8 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
         private modalService: BsModalService,
         private router: Router,
         private route: ActivatedRoute,
-        private invoiceBulkUpdateService: InvoiceBulkUpdateService
+        private invoiceBulkUpdateService: InvoiceBulkUpdateService,
+        private invoiceService: InvoiceService
     ) {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.uniqueName && params?.accountUniqueName) {
@@ -456,7 +465,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
             count: this.paginationLimit,
             q: this.searchQueryParams.q,
             total: (this.advanceSearchModel.totalAmountFilter) ? this.advanceSearchModel.totalAmountFilter.amount : "",
-                balanceDue: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.amount : "",
+            balanceDue: (this.advanceSearchModel.unusedAmountFilter) ? this.advanceSearchModel.unusedAmountFilter.amount : "",
             sort: this.searchQueryParams.sort,
             sortBy: this.searchQueryParams.sortBy,
             branchUniqueName: this.currentBranch?.uniqueName
@@ -468,7 +477,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
 
         if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'GREATER_THAN') {
             requestObject.balanceMoreThan = true;
-        } else if(this.advanceSearchModel.unusedAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
+        } else if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
             requestObject.balanceEqual = true;
             requestObject.balanceMoreThan = true;
         } else if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'LESS_THAN_OR_EQUALS') {
@@ -484,7 +493,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
 
         if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'GREATER_THAN') {
             requestObject.totalMoreThan = true;
-        } else if(this.advanceSearchModel.totalAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
+        } else if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
             requestObject.totalEqual = true;
             requestObject.totalMoreThan = true;
         } else if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'LESS_THAN_OR_EQUALS') {
@@ -769,5 +778,43 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      */
     public closeConfirmationPopup() {
         this.paymentConfirmationModel?.hide();
+    }
+
+    /**
+     * Export Selected payments report to .xls
+     *
+     * @returns {*}
+     * @memberof PaymentReportComponent
+     */
+    public exportCsvDownload(): any {
+        const isAllItemsSelected = this.allPaymentsSelected;
+        this.exportcsvRequest.from = this.fromDate;
+        this.exportcsvRequest.to = this.toDate;
+        let dataTosend = { accountUniqueName: '', uniqueNames: [], type: 'payment' };
+        if (this.selectedPayments?.length === 1) {
+            dataTosend.accountUniqueName = this.selectedPayments[0].account?.uniqueName;
+        } else {
+            delete dataTosend.accountUniqueName;
+        }
+        if (this.selectedPayments.length) {
+            dataTosend.uniqueNames = this.selectedPayments;
+        }
+        this.exportcsvRequest.dataToSend = dataTosend;
+        this.invoiceService.exportCsvInvoiceDownload(this.exportcsvRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                if (response.status === 'success') {
+                    this.selectedPayments = [];
+                    this.allPaymentsSelected = false;
+                    this.allPayments.forEach((item) => {
+                        item.isSelected = false;
+                    });
+                    let blob = this.generalService.base64ToBlob(response.body, 'application/xls', 512);
+                    const fileName = `${isAllItemsSelected ? this.localeData?.all_payments : this.localeData?.payments}.xls`;
+                    return saveAs(blob, fileName);
+                } else {
+                    this.toastService.errorToast(response.message);
+                }
+            }
+        });
     }
 }

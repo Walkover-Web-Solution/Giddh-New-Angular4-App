@@ -315,10 +315,8 @@ ul.sub-list {
 .white-row {
     background-color: var(--color-primary-header-notification-background);
     padding: 10px 15px;
-    margin-bottom: 10px;
     font-size: var(--font-size-15);
     box-shadow: 1px 1px 3px var(--color-primary-common-box-shadow);
-    margin-top: 10px;
     color: var(--color-primary-header-notification-text);
 
     p {
@@ -524,7 +522,7 @@ aside-setting {
 .profile-wrapper{
     padding: 9px 0;
     .profile-picture{
-        color: var(--color-common-primary-text);
+        color: var(--color-dropdown-list-secondary);
         width: 40px;
         height: 40px;
         border: 1px solid var(--color-deep-saffron);

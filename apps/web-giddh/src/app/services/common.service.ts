@@ -246,4 +246,11 @@ export class CommonService {
             }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
 
+    public getCountryStates(country: string): Observable<any> {
+        let url = this.config.apiUrl + 'country/' + country;
+        return this.http.get(url).pipe(map((res) => {
+            let data = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch(e)));
+    }
 }

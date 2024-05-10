@@ -12,7 +12,7 @@ import { IOption } from '../../theme/ng-select/option.interface';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { CompanyActions } from "../../actions/company.actions";
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
-import { BootstrapToggleSwitch, BROADCAST_CHANNELS, Configuration, EMAIL_VALIDATION_REGEX, SELECT_ALL_RECORDS } from "../../app.constant";
+import { BootstrapToggleSwitch, BROADCAST_CHANNELS, Configuration, EMAIL_VALIDATION_REGEX, ICICI_ALLOWED_COMPANIES, SELECT_ALL_RECORDS } from "../../app.constant";
 import { AuthenticationService } from "../../services/authentication.service";
 import { IForceClear } from '../../models/api-models/Sales';
 import { EcommerceService } from '../../services/ecommerce.service';
@@ -169,6 +169,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isIciciBankSupportedCountry: boolean = false;
     /** True, if is add or manage group form outside */
     public isAddAndManageOpenedFromOutside: boolean = false;
+    /** Holds array of company uniqueNames which ICICI allowed companies */
+    public iciciAllowedCompanies: any[] = ICICI_ALLOWED_COMPANIES;
+    /** Holds true if current company country is plaid supported country */
+    public isPlaidSupportedCountry: boolean;
 
     constructor(
         private router: Router,
@@ -268,6 +272,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.amazonSellerRes = cloneDeep(o.amazonSeller);
                 this.amazonSellerForm.controls['sellers']?.patchValue(this.amazonSellerRes);
                 this.addAmazonSellerRow();
+            }
+        });
+
+        this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
             }
         });
 
@@ -1232,7 +1242,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public trackByPayorUniqueName(index: number, item: any): any {
-        return item?.urn;
+        return item?.bankUserId;
     }
 
     /**
@@ -1241,7 +1251,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public deleteBankAccountLogin(): void {
-        let model = { uniqueName: this.activeBankAccount?.uniqueName, urn: this.activeBankAccount?.urn }
+        let model;
+        if (this.isPlaidSupportedCountry) {
+            model = { uniqueName: this.activeBankAccount?.uniqueName, urn: this.activeBankAccount?.bankUserId }
+        } else {
+            model = { uniqueName: this.activeBankAccount?.uniqueName, bankUserId: this.activeBankAccount?.bankUserId }
+        }
         this.settingsIntegrationService.deleteBankAccountLogin(model).pipe(take(1)).subscribe(response => {
             if (response?.status === "success") {
                 this.getAllBankAccounts();
@@ -1261,7 +1276,11 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public showDeleteBankAccountLoginConfirmationModal(bankAccount: any, payor: any): void {
-        this.activeBankAccount = { uniqueName: bankAccount?.bankResource?.uniqueName, urn: payor?.urn, loginId: payor?.loginId };
+        if (this.isPlaidSupportedCountry) {
+            this.activeBankAccount = { uniqueName: bankAccount?.bankResource?.uniqueName, urn: payor?.bankUserId, loginId: payor?.loginId };
+        } else {
+            this.activeBankAccount = { uniqueName: bankAccount?.bankResource?.uniqueName, bankUserId: payor?.bankUserId, loginId: payor?.loginId };
+        }
         this.confirmationModal?.show();
     }
 
@@ -1324,7 +1343,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public getPayorRegistrationStatus(bankAccount: any, payor: any): void {
-        let request = { bankAccountUniqueName: bankAccount?.bankResource?.uniqueName, urn: payor?.urn };
+        let request;
+
+        if (this.isPlaidSupportedCountry) {
+            request = { bankAccountUniqueName: bankAccount?.bankResource?.uniqueName, urn: payor?.urn };
+        } else {
+            request = { bankAccountUniqueName: bankAccount?.bankResource?.uniqueName, bankUserId: payor?.urn };
+        }
 
         this.settingsIntegrationService.getPayorRegistrationStatus(request).pipe(take(1)).subscribe(response => {
             payor.isConnected = (response?.body?.status === ACCOUNT_REGISTERED_STATUS);

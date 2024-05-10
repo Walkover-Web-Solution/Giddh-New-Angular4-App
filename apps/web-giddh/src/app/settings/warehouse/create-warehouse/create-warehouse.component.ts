@@ -347,7 +347,8 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                     label: response.body.name,
                     value: response.body?.uniqueName
                 })
-                this.toastService.successToast(this.profileLocaleData?.address_created);
+                
+                this.toastService.successToast(this.localeData?.address_created);
             } else {
                 this.toastService.errorToast(response?.message);
             }

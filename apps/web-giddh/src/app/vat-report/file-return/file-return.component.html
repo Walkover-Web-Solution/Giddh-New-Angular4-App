@@ -1,8 +1,8 @@
 <div class="modal-header">
     <span mat-dialog-title class="font-16">{{ localeData?.file_return }}</span>
-    <button mat-icon-button mat-dialog-close class="p-0"><i class="icon-cross font-16"></i></button>
+    <button mat-icon-button mat-dialog-close class="p-0" aria-label="close icon"><i class="icon-cross font-16"></i></button>
 </div>
-<div mat-dialog-content class="modal-body">
+<div mat-dialog-content class="modal-body" tabindex="0">
     <div class="no-data" *ngIf="isLoading">
         <giddh-page-loader></giddh-page-loader>
     </div>

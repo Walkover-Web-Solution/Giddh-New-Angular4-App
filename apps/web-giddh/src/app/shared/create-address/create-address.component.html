@@ -1,8 +1,8 @@
-<div class="aside-pane">
+<div class="aside-pane" role="dialog" aria-labelledby="modal-title">
     <form [formGroup]="addressForm" novalidate (ngSubmit)="handleFormSubmit()" autocomplete="off">
         <section class="w-100">
             <div>
-                <div class="form-header">
+                <div class="form-header" tabindex="0">
                     <h3
                         *ngIf="
                             addressConfiguration.type === 'createAddress' ||

@@ -295,9 +295,9 @@ export class SettingsIntegrationService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
-    public RemoveICICI(urn) {
+    public RemoveICICI(bankUserId: any) {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.REMOVE_ICICI_REQUEST?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':urn', urn)).pipe(map((res) => {
+        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.REMOVE_ICICI_REQUEST?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':bankUserId', bankUserId)).pipe(map((res) => {
 
             let data: BaseResponse<any, any> = res;
             return data;
@@ -433,7 +433,7 @@ export class SettingsIntegrationService {
      */
     public updatePayorAccount(model: any, request: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.UPDATE_PAYOR_ACCOUNT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':bankAccountUniqueName', encodeURIComponent(request.bankAccountUniqueName))?.replace(':urn', encodeURIComponent(request.urn)), model).pipe(map((res) => {
+        return this.http.put(this.config.apiUrl + SETTINGS_INTEGRATION_API.UPDATE_PAYOR_ACCOUNT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':bankAccountUniqueName', encodeURIComponent(request.bankAccountUniqueName))?.replace(':bankUserId', encodeURIComponent(request.bankUserId)), model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = model;
             return data;
@@ -467,7 +467,7 @@ export class SettingsIntegrationService {
     public getPayorRegistrationStatus(request: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
-        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_PAYOR_REGISTRATION_STATUS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':bankAccountUniqueName', encodeURIComponent(request.bankAccountUniqueName))?.replace(':urn', encodeURIComponent(request.urn))).pipe(map((res) => {
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GET_PAYOR_REGISTRATION_STATUS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':bankAccountUniqueName', encodeURIComponent(request.bankAccountUniqueName))?.replace(':bankUserId', encodeURIComponent(request.bankUserId ?? request.urn))).pipe(map((res) => {
             let data: BaseResponse<any, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));

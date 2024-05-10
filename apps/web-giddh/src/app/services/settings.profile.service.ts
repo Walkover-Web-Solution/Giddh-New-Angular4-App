@@ -258,7 +258,7 @@ export class SettingsProfileService {
      * @memberof SettingsProfileService
      */
     public getCompanyDetails(companyUniqueName: string): Observable<BaseResponse<SmsKeyClass, string>> {
-        this.companyUniqueName = companyUniqueName;
+        this.companyUniqueName = companyUniqueName ?? this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + SETTINGS_PROFILE_API.GET?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<SmsKeyClass, string> = res;
             data.queryString = {};

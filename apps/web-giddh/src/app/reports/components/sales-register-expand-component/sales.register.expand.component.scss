@@ -264,7 +264,7 @@ table th {
                 top: 1px;
                 right: 10px;
                 background-color: var(--color-secondary-button-background);
-                color: var(--color-white) !important;
+                color: var(--color-white-tertiary) !important;
                 &:hover {
                     background-color: var(--color-secondary-button-background-hover);
                 }
@@ -328,7 +328,7 @@ table th {
 .btn-filters {
     @include common-filters(
         var(--color-giddh-blue),
-        var(--color-primary-filter-background),
+        var(--color-filter-background),
         1px solid var(--color-primary-button-border)
     );
 }

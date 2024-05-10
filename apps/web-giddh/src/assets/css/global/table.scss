@@ -7,7 +7,7 @@
     .mdc-data-table__content {
         .mat-mdc-row {
             .mat-mdc-cell {
-                background-color: var(--color-transparent-background) !important;
+                background-color: var(--color-body-background) !important;
             }
         }
     }
@@ -56,7 +56,7 @@ aging-report {
 .mat-mdc-paginator {
     background-color: var(--color-transparent-background) !important;
     color: var(--color-mat-tbody-tr-td) !important;
-    
+
     .mat-mdc-text-field-wrapper {
         min-width: 100px;
     }

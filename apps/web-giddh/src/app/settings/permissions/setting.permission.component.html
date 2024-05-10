@@ -5,9 +5,12 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div class="pd-b2" *ngIf="localeData?.give_permission">
-        <h3 class="mr-b1">
-            <strong>{{ localeData?.give_permission }}:</strong>
-        </h3>
+        <div class="d-flex justify-content-between">
+            <h3 class="mr-b1">
+                <strong>{{ localeData?.give_permission }}:</strong>
+            </h3>
+            <watch-video [cssClass]="'text-primary'" [moduleName]="'MULTI_USER_ACCESS'"></watch-video>
+        </div>
         <setting-permission-form
             [userdata]="null"
             [isLblShow]="false"
@@ -94,6 +97,7 @@
                                                     type="button"
                                                     [hidden]="usrGrp.rows[0].isLoggedInUser"
                                                     (click)="showModalForEdit(user)"
+                                                    aria-label="edit icon"
                                                 >
                                                     <i aria-hidden="true" class="icon-edit-pencil"></i>
                                                 </button>
@@ -102,6 +106,7 @@
                                                     type="button"
                                                     [hidden]="usrGrp.rows[0].isLoggedInUser"
                                                     (click)="onRevokePermission(user?.uniqueName)"
+                                                    aria-label="delete icon"
                                                 >
                                                     <i aria-hidden="true" class="icon-trash"></i>
                                                 </button>
@@ -131,7 +136,7 @@
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-between">
                     <h3 class="modal-title bg" id="modal-title">{{ localeData?.create_user_permission }}</h3>
-                    <button aria-hidden="true" class="close" data-dismiss="modal" (click)="closeEditUserModal($event)">
+                    <button aria-hidden="true" class="close" data-dismiss="modal" (click)="closeEditUserModal($event)" aria-label="close">
                         ×
                     </button>
                 </div>

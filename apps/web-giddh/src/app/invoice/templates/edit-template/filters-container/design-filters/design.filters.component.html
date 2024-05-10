@@ -361,6 +361,19 @@
                     </div>
                 </div>
             </li>
+                  <li>
+                    <div *ngIf="customTemplate.templateType !== 'thermal_template'" class="form-group">
+                    <input
+                        type="checkbox"
+                        color="primary"
+                        name="showSectionsInline"
+                        [(ngModel)]="customTemplate.showSectionsInline"
+                        (ngModelChange)="onChangeFieldVisibility('showSectionsInline',customTemplate.showSectionsInline)"
+                        checked
+                    />
+                    Show Header/Footer on first and last page
+                </div>
+                </li>
         </ul>
     </div>
 </div>

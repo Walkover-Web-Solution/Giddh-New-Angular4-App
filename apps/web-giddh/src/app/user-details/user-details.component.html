@@ -5,6 +5,9 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div class="setting-page user-detail-page relative" id="setting-tab" *ngIf="!isCreateAndSwitchCompanyInProcess">
+        <div class="video-link mr-r15" *ngIf="activeTab === 'mobile-number'">
+            <watch-video [cssClass]="'text-primary pr-0'" [moduleName]="'TWO_FACTOR_AUTHENTICATION'"></watch-video>
+        </div>
         <hamburger-menu *ngIf="localeData?.auth_key" [pageHeading]="getPageHeading()"></hamburger-menu>
         <!-- start of tab set -->
 
@@ -19,7 +22,7 @@
                 <div class="wrap-tab-content-pd-15" *ngIf="activeTab == 'auth-key'">
                     <div class="box clearfix mt-1 p-0">
                         <h1 class="section-head pt-0">{{ localeData?.auth_key?.main_auth_key }}</h1>
-                        <form name="authKeyForm" #authKeyForm="ngForm" novalidate role="form">
+                        <form name="authKeyForm" #authKeyForm="ngForm" novalidate>
                             <div class="form-group row">
                                 <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                                     <input

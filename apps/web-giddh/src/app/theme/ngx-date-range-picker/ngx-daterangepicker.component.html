@@ -20,12 +20,12 @@
                 <!-- loop over ranges -->
                 <div class="range-container">
                     <div class="date-range-close" *ngIf="isMobileScreen" (click)="closeMobileDatePicker()">
-                        <img src="{{ imgPath }}close-icon.svg" />
+                        <img src="{{ imgPath }}close-icon.svg" alt="close icon" />
                         <span class="pl-2">{{ commonLocaleData?.app_date_range }}</span>
                     </div>
                     <ul class="range-list">
                         <li class="menu-li custom-select-btn" type="button" (click)="openMobileDatepicker()">
-                            <button>{{ commonLocaleData?.app_custom }}</button>
+                            <button aria-label="custom">{{ commonLocaleData?.app_custom }}</button>
                         </li>
                         <li *ngFor="let range of ranges; let i = index" class="menu-li">
                             <button
@@ -133,7 +133,7 @@
                             >{{ startDate.format("MMM DD YYYY") }} - {{ endDate.format("MMM DD YYYY") }}</span
                         >
                         <span class="edit-dates" (click)="openModalWithClass(template)"
-                            ><img src="{{ imgPath }}edit-pencilicon.svg"
+                            ><img src="{{ imgPath }}edit-pencilicon.svg" alt="edit icon"
                         /></span>
                     </div>
                 </div>
@@ -207,7 +207,7 @@
                                     [ngClass]="{ 'focused-date': ActiveDate === 0 }"
                                 >
                                     <span class="mr-2">
-                                        <img src="assets/images/calender-icon.svg" /> &nbsp;
+                                        <img src="assets/images/calender-icon.svg" alt="calendar icon" /> &nbsp;
                                         {{ commonLocaleData?.app_from }} &nbsp;
                                         <i class="fa fa-calendar" aria-hidden="true"></i>
                                     </span>
@@ -236,7 +236,7 @@
                                     [ngClass]="{ 'focused-date': ActiveDate === 1 }"
                                 >
                                     <span class="mr-2"
-                                        ><img src="assets/images/calender-icon.svg" /> &nbsp;
+                                        ><img src="assets/images/calender-icon.svg" alt="calendar icon" /> &nbsp;
                                         {{ commonLocaleData?.app_to }} &nbsp;
                                         <i class="fa fa-calendar" aria-hidden="true"></i>
                                     </span>
@@ -263,7 +263,7 @@
                         <!-- start date/ end date inputs container -->
                         <!-- month name -->
                         <div class="month-field">
-                            <button mat-button class="prev available" (click)="onScroll('top')"></button>
+                            <button mat-button class="prev available" (click)="onScroll('top')" aria-label="prev"></button>
                             <!-- month name and month dropdown -->
                             <div class="month-dropdown">
                                 <span class="month-name">
@@ -281,7 +281,7 @@
                             <!-- month name and month dropdown -->
                             <!-- navigate to previous and next month buttons -->
                             <div class="prev-next-btn">
-                                <button mat-button class="next available" (click)="onScroll('bottom')"></button>
+                                <button mat-button class="next available" (click)="onScroll('bottom')" aria-label="next"></button>
                             </div>
                             <!-- navigate to previous and next month buttons -->
                         </div>

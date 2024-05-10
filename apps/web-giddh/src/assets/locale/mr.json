@@ -720,5 +720,8 @@
     "domain_verification": "बाह्यिक मेलसाठी डोमेन सत्यापन",
     "app_renew_bank_connection": "बँक कनेक्शनचे नूतनीकरण करा",
     "app_select_printer": "प्रिंटर निवडा",
-    "app_help": "मदत"
+    "app_help": "मदत",
+    "app_applicable_date": "लागू तारीख",
+    "app_name_placeholder": "नाव प्रविष्ट करा",
+    "app_county": "परगणा"
 }

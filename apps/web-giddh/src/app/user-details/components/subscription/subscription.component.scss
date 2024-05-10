@@ -97,7 +97,6 @@
         text-decoration: underline;
         font-weight: bold;
         font-size: var(--font-size-15);
-        color: var(--color-gray);
         height: inherit;
         display: grid;
         place-items: center;
@@ -168,7 +167,7 @@
                     color: var(--color-abbey);
                 }
                 .warning {
-                    color: var(--color-orange);
+                    color: var(--color-common-primary-text);
                     font-weight: 500;
                     font-size: var(--font-size-12);
                 }
@@ -385,7 +384,6 @@
             p {
                 font-size: var(--font-size-12);
                 font-weight: 500;
-                color: var(--color-gray);
                 line-height: 19px;
                 span {
                     color: var(--color-red);

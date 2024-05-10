@@ -61,7 +61,7 @@ export const PAGE_SHORTCUT_MAPPING = [
         keyCode: 117, // 'F6',
         inputForFn: {
             page: 'Receipt',
-            uniqueName: 'null',
+            uniqueName: 'purchases',
             gridType: 'voucher'
         }
     },
@@ -186,3 +186,4 @@ export class AccountingComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 }
+

@@ -15,7 +15,7 @@ export const COMPANY_API = {
     BUSINESS_NATURE_LIST: 'business-nature',
     RAZORPAY_ORDERID: 'subscription/generateOrder?amount=:amount&currency=:currency',
 
-    GET_OTP: 'company/:companyUniqueName/bank/generateotp?urn=:urn',
+    GET_OTP: 'company/:companyUniqueName/bank/generateotp?bankUserId=:bankUserId',
     GET_REGISTERED_SALES: 'v2/company/:companyUniqueName/sales-register-overview?from=:fromDate&to=:toDate&interval=:interval',
     GET_DETAILED_REGISTERED_SALES: 'v2/company/:companyUniqueName/sales-register-detailed?',
 

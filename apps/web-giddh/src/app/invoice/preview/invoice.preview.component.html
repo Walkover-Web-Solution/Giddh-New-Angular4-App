@@ -43,6 +43,15 @@
                                             href="javascript:void(0);"
                                             aria-label="invoice"
                                             (click)="goToInvoice('cash')"
+                                            *ngIf="voucherApiVersion === 1"
+                                            >{{ localeData?.cash_invoice }}</a
+                                        >
+                                        <a
+                                            class="dropdown-item"
+                                            href="javascript:void(0);"
+                                            aria-label="invoice"
+                                            [routerLink]="['/pages/vouchers/cash/create']"
+                                            *ngIf="voucherApiVersion === 2"
                                             >{{ localeData?.cash_invoice }}</a
                                         >
                                     </li>
@@ -52,6 +61,15 @@
                                             href="javascript:void(0);"
                                             aria-label="sales invoice"
                                             (click)="goToInvoice('sales')"
+                                            *ngIf="voucherApiVersion === 1"
+                                            >{{ localeData?.sales_invoice }}</a
+                                        >
+                                        <a
+                                            class="dropdown-item"
+                                            href="javascript:void(0);"
+                                            aria-label="sales invoice"
+                                            [routerLink]="['/pages/vouchers/sales/create']"
+                                            *ngIf="voucherApiVersion === 2"
                                             >{{ localeData?.sales_invoice }}</a
                                         >
                                     </li>
@@ -59,27 +77,48 @@
                             </div>
                             <div *ngIf="selectedVoucher === 'purchase'" class="btn-wrapper">
                                 <button
-                                    *ngIf="!isCompany"
+                                    *ngIf="!isCompany && voucherApiVersion === 1"
                                     class="btn btn-sky-blue desktop-view-btn"
                                     (click)="goToInvoice('purchase')"
+                                >
+                                    {{ localeData?.new_bill }}
+                                </button>
+                                <button
+                                    *ngIf="!isCompany && voucherApiVersion === 2"
+                                    class="btn btn-sky-blue desktop-view-btn"
+                                    [routerLink]="['/pages/vouchers/purchase/create']"
                                 >
                                     {{ localeData?.new_bill }}
                                 </button>
                             </div>
                             <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
                                 <button
-                                    *ngIf="!isCompany"
+                                    *ngIf="!isCompany && voucherApiVersion === 1"
                                     class="btn btn-sky-blue desktop-view-btn"
                                     (click)="goToInvoice('credit note')"
+                                >
+                                    {{ localeData?.new_cr_note }}
+                                </button>
+                                <button
+                                    *ngIf="!isCompany && voucherApiVersion === 2"
+                                    class="btn btn-sky-blue desktop-view-btn"
+                                    [routerLink]="['/pages/vouchers/credit-note/create']"
                                 >
                                     {{ localeData?.new_cr_note }}
                                 </button>
                             </div>
                             <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
                                 <button
-                                    *ngIf="!isCompany"
+                                    *ngIf="!isCompany && voucherApiVersion === 1"
                                     class="btn btn-sky-blue desktop-view-btn"
                                     (click)="goToInvoice('debit note')"
+                                >
+                                    {{ localeData?.new_dr_note }}
+                                </button>
+                                <button
+                                    *ngIf="!isCompany && voucherApiVersion === 2"
+                                    class="btn btn-sky-blue desktop-view-btn"
+                                    [routerLink]="['/pages/vouchers/debit-note/create']"
                                 >
                                     {{ localeData?.new_dr_note }}
                                 </button>
@@ -215,9 +254,9 @@
                             </div>
                             <button
                                 class="btn btn-default desktop-view-btn"
-                                *ngIf="selectedVoucher === 'sales' && selectedInvoicesList?.length && isExported"
+                                *ngIf="csvSupportVoucherType.includes(selectedVoucher) && selectedInvoicesList?.length && isExported"
                                 [tooltip]="commonLocaleData?.app_export"
-                                (click)="exportCsvDownload()"
+                                (click)="exportCsvDownload(selectedVoucher)"
                                 [ladda]="exportInvoiceRequestInProcess$ | async"
                                 data-spinner-size="20px"
                             >
@@ -390,6 +429,15 @@
                                                     href="javascript:;"
                                                     aria-label="cash invoice"
                                                     (click)="goToInvoice('cash')"
+                                                    *ngIf="voucherApiVersion === 1"
+                                                    >{{ localeData?.cash_invoice }}</a
+                                                >
+                                                <a
+                                                    class="dropdown-item"
+                                                    href="javascript:;"
+                                                    aria-label="cash invoice"
+                                                    [routerLink]="['/pages/vouchers/cash/create']"
+                                                    *ngIf="voucherApiVersion === 2"
                                                     >{{ localeData?.cash_invoice }}</a
                                                 >
                                             </li>
@@ -399,6 +447,15 @@
                                                     href="javascript:;"
                                                     aria-label="sales invoice"
                                                     (click)="goToInvoice('sales')"
+                                                    *ngIf="voucherApiVersion === 1"
+                                                    >{{ localeData?.sales_invoice }}</a
+                                                >
+                                                <a
+                                                    class="dropdown-item"
+                                                    href="javascript:;"
+                                                    aria-label="sales invoice"
+                                                    [routerLink]="['/pages/vouchers/sales/create']"
+                                                    *ngIf="voucherApiVersion === 2"
                                                     >{{ localeData?.sales_invoice }}</a
                                                 >
                                             </li>
@@ -406,18 +463,32 @@
                                     </div>
                                     <div *ngIf="selectedVoucher === 'credit note'" class="btn-wrapper">
                                         <button
-                                            *ngIf="!isCompany"
+                                            *ngIf="!isCompany && voucherApiVersion === 1"
                                             class="btn btn-sky-blue m-0"
                                             (click)="goToInvoice('credit note')"
+                                        >
+                                            {{ localeData?.new_cr_note }}
+                                        </button>
+                                        <button
+                                            *ngIf="!isCompany && voucherApiVersion === 2"
+                                            class="btn btn-sky-blue m-0"
+                                            [routerLink]="['/pages/vouchers/credit-note/create']"
                                         >
                                             {{ localeData?.new_cr_note }}
                                         </button>
                                     </div>
                                     <div *ngIf="selectedVoucher === 'debit note'" class="btn-wrapper">
                                         <button
-                                            *ngIf="!isCompany"
+                                            *ngIf="!isCompany && voucherApiVersion === 1"
                                             class="btn btn-sky-blue m-0"
                                             (click)="goToInvoice('debit note')"
+                                        >
+                                            {{ localeData?.new_dr_note }}
+                                        </button>
+                                        <button
+                                            *ngIf="!isCompany && voucherApiVersion === 2"
+                                            class="btn btn-sky-blue m-0"
+                                            [routerLink]="['/pages/vouchers/debit-note/create']"
                                         >
                                             {{ localeData?.new_dr_note }}
                                         </button>
@@ -502,9 +573,9 @@
                                 </div>
                                 <button
                                     class="btn btn-default mr-r15"
-                                    *ngIf="selectedVoucher === 'sales' && selectedInvoicesList?.length && isExported"
+                                    *ngIf="csvSupportVoucherType.includes(selectedVoucher) && selectedInvoicesList?.length && isExported"
                                     [tooltip]="commonLocaleData?.app_export"
-                                    (click)="exportCsvDownload()"
+                                    (click)="exportCsvDownload(selectedVoucher)"
                                     [ladda]="exportInvoiceRequestInProcess$ | async"
                                     data-spinner-size="20px"
                                 >
@@ -1181,7 +1252,7 @@
                                                 <a
                                                     href="javascript:void(0);"
                                                     aria-label="menu"
-                                                    id="edit-model"
+                                                    [id]="'edit-model' + i"
                                                     dropdownToggle
                                                     class="dropdown-toggle icon-dots-three-vertical pull-right"
                                                     aria-controls="dropdown-basic"
@@ -1474,7 +1545,7 @@
                                             >
                                                 <a
                                                     href="javascript:void(0);"
-                                                    id="debitOption"
+                                                    [id]="'debitoption' + i"
                                                     dropdownToggle
                                                     class="dropdown-toggle icon-dots-three-vertical pull-right"
                                                     aria-label="dropdown-basic"

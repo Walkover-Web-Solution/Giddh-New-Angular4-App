@@ -3,6 +3,7 @@ export class VatReportRequest {
     to: string;
     taxNumber: string;
     branchUniqueName: string;
+    currencyCode?: string;
 }
 
 export class VatReportSectionData {

@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, 
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
 import { BsModalRef, BsModalService, ModalDirective } from 'ngx-bootstrap/modal';
-import { fromEvent, merge, Observable, ReplaySubject } from 'rxjs';
+import { fromEvent, merge, Observable, of, ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil, take } from 'rxjs/operators';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
@@ -21,6 +21,8 @@ import { ADVANCE_RECEIPT_REPORT_FILTERS, ReceiptAdvanceSearchModel } from '../..
 import { ReceiptAdvanceSearchComponent } from '../receipt-advance-search/receipt-advance-search.component';
 import { ActivatedRoute } from '@angular/router';
 import { InvoiceBulkUpdateService } from '../../../services/invoice.bulkupdate.service';
+import { saveAs } from 'file-saver';
+import { InvoiceService } from '../../../services/invoice.service';
 
 @Component({
     selector: 'advance-receipt-report',
@@ -169,6 +171,12 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     public baseCurrency: string = '';
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+    /** Holds Payment Report export request */
+    private exportcsvRequest: any = {
+        from: '',
+        to: '',
+        dataToSend: {}
+    };
 
     /** @ignore */
     constructor(
@@ -182,7 +190,8 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
         private settingsBranchAction: SettingsBranchActions,
         private modalService: BsModalService,
         private route: ActivatedRoute,
-        private invoiceBulkUpdateService: InvoiceBulkUpdateService
+        private invoiceBulkUpdateService: InvoiceBulkUpdateService,
+        private invoiceService: InvoiceService
     ) {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.uniqueName && params?.accountUniqueName) {
@@ -529,7 +538,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
 
             if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'GREATER_THAN') {
                 requestObject.balanceMoreThan = true;
-            } else if(this.advanceSearchModel.unusedAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
+            } else if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
                 requestObject.balanceEqual = true;
                 requestObject.balanceMoreThan = true;
             } else if (this.advanceSearchModel.unusedAmountFilter.selectedValue === 'LESS_THAN_OR_EQUALS') {
@@ -545,7 +554,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
 
             if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'GREATER_THAN') {
                 requestObject.totalMoreThan = true;
-            } else if(this.advanceSearchModel.totalAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
+            } else if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'GREATER_THAN_OR_EQUALS') {
                 requestObject.totalEqual = true;
                 requestObject.totalMoreThan = true;
             } else if (this.advanceSearchModel.totalAmountFilter.selectedValue === 'LESS_THAN_OR_EQUALS') {
@@ -638,7 +647,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
 
                 this.allReceipts.forEach(receipt => {
                     let isSeleted = this.selectedReceipts?.some(selectedReceipt => selectedReceipt === receipt?.uniqueName);
-                    if(isSeleted) {
+                    if (isSeleted) {
                         receipt.isSelected = true;
                     }
                     receipt = this.generalService.addToolTipText("receipt", this.baseCurrency, receipt, this.localeData, this.commonLocaleData, this.giddhBalanceDecimalPlaces);
@@ -868,5 +877,43 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      */
     public closeConfirmationPopup() {
         this.receiptConfirmationModel?.hide();
+    }
+
+    /**
+    * Export Selected advance receipt report to .xls
+    *
+    * @returns {*}
+    * @memberof AdvanceReceiptReportComponent
+    */
+    public exportCsvDownload(): any {
+        const isAllItemsSelected = this.allReceiptsSelected;
+        this.exportcsvRequest.from = this.fromDate;
+        this.exportcsvRequest.to = this.toDate;
+        let dataTosend = { accountUniqueName: '', uniqueNames: [], type: 'payment' };
+        if (this.selectedReceipts?.length === 1) {
+            dataTosend.accountUniqueName = this.selectedReceipts[0].account?.uniqueName;
+        } else {
+            delete dataTosend.accountUniqueName;
+        }
+        if (this.selectedReceipts.length) {
+            dataTosend.uniqueNames = this.selectedReceipts;
+        }
+        this.exportcsvRequest.dataToSend = dataTosend;
+        this.invoiceService.exportCsvInvoiceDownload(this.exportcsvRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                if (response.status === 'success') {
+                    this.selectedReceipts = [];
+                    this.allReceiptsSelected = false;
+                    this.allReceipts.forEach((item) => {
+                        item.isSelected = false;
+                    });
+                    let blob = this.generalService.base64ToBlob(response.body, 'application/xls', 512);
+                    const fileName = `${isAllItemsSelected ? this.localeData?.all_receipts : this.localeData?.receipts}.xls`;
+                    return saveAs(blob, fileName);
+                } else {
+                    this.toastService.errorToast(response.message);
+                }
+            }
+        });
     }
 }

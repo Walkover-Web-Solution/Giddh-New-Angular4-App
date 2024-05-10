@@ -64,11 +64,12 @@
             class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
             *ngIf="showClearFilter"
         >
-            <button mat-stroked-button class="mr-0" (click)="resetAdvanceSearch()">
+            <button mat-stroked-button class="mr-0" (click)="resetAdvanceSearch()" aria-label="filter">
                 <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
             </button>
         </div>
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between align-items-center">      
+            <watch-video class="mr-r1" [cssClass]="'text-primary'" [moduleName]="'AGING_REPORT'"></watch-video>
             <div class="pull-left d-flex wrap-searching-aging">
                 <div
                     class="form-group search-field max-width-250"
@@ -94,17 +95,18 @@
                     (click)="showAdvanceSearchPopup()"
                     matTooltip="{{ commonLocaleData?.app_advance_search }}"
                     matTooltipPosition="right"
+                    aria-label="filter button"
                 >
                     <div class="d-flex align-items-center">
                         {{ commonLocaleData?.app_filter }}
                         <span class="icon-advance-filter ml-2"></span>
                     </div>
                 </button>
-                <button *ngIf="voucherApiVersion ===2" mat-stroked-button color="primary" (click)="exportReport()">
+                <button *ngIf="voucherApiVersion ===2" mat-stroked-button color="primary" (click)="exportReport()" aria-label="export">
                     {{ commonLocaleData?.app_export }}
                 </button>
                 <span class="refresh-btn" *ngIf="isAdvanceSearchApplied">
-                    <button mat-icon-button (click)="resetAdvanceSearch()">
+                    <button mat-icon-button (click)="resetAdvanceSearch()" aria-label="refresh-btn">
                         <i
                             aria-hidden="true"
                             class="icon-refresh"
@@ -116,7 +118,7 @@
             </div>
         </div>
         <div class="btn-group mr-t15 pull-left mobile-view">
-            <button mat-stroked-button color="primary" class="w-100" (click)="createNewCustomerEvent.emit(true)">
+            <button mat-stroked-button color="primary" class="w-100" (click)="createNewCustomerEvent.emit(true)" aria-label="new customer">
                 {{ localeData?.new_customer }}
             </button>
         </div>
@@ -180,7 +182,7 @@
         ">
                 <div class="align-item-center">
                     <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
-                    <button mat-stroked-button color="primary" (click)="createNewCustomerEvent.emit(true)">
+                    <button mat-stroked-button color="primary" (click)="createNewCustomerEvent.emit(true)" aria-label="new customer">
                         {{ localeData?.new_customer }}
                     </button>
                 </div>
@@ -336,6 +338,7 @@
                             (click)="openAgingDropDown()"
                             [matMenuTriggerFor]="agingDropdown"
                             class="font-italic"
+                            aria-label="days"
                         >
                             0-{{ (agingDropDownoptions$ | async)?.fourth }} {{ commonLocaleData?.app_days }}
                         </button>
@@ -371,6 +374,7 @@
                             mat-button
                             (click)="openAgingDropDown()"
                             class="font-italic m-0"
+                            aria-label="aging-dropdown"
                         >
                             {{ (agingDropDownoptions$ | async)?.fourth + 1 }}-{{
                                 (agingDropDownoptions$ | async)?.fifth
@@ -414,6 +418,7 @@
                             (click)="openAgingDropDown()"
                             [matMenuTriggerFor]="agingDropdown"
                             class="font-italic m-0"
+                            aria-label="aging-dropdown"
                         >
                             {{ (agingDropDownoptions$ | async)?.fifth + 1 }}-{{
                                 (agingDropDownoptions$ | async)?.sixth
@@ -455,6 +460,7 @@
                             (click)="openAgingDropDown()"
                             [matMenuTriggerFor]="agingDropdown"
                             class="font-italic m-0"
+                            aria-label="aging-dropdown"
                         >
                             {{ (agingDropDownoptions$ | async)?.sixth + 1 }}+ {{ commonLocaleData?.app_days }}
                         </button>
@@ -525,7 +531,7 @@
     let-formControl="formControl"
 >
     <div class="align-items-center d-flex" [hidden]="show">
-        <button mat-icon-button (click)="toggleSearch(fieldName)">
+        <button mat-icon-button (click)="toggleSearch(fieldName)" aria-label="search icon">
             <span class="icon-search"></span>
         </button>
         <span>{{ title }}</span>
@@ -545,7 +551,7 @@
     <div class="unpaid-invoice-aside-pane">
         <div class="header d-flex justify-content-space-between align-items-center">
             <h3>{{ localeData?.unpaid_invoices }}</h3>
-            <button mat-button class="rounded-circle" (click)="unpaidInvoiceDailogRef.close()">
+            <button mat-button class="rounded-circle" (click)="unpaidInvoiceDailogRef.close()" aria-label="cross icon">
                 <i class="icon-cross"></i>
             </button>
         </div>

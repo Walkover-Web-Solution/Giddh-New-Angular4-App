@@ -139,36 +139,15 @@ export class ListBranchTransferComponent implements OnInit {
     public translationLoaded: boolean = false;
     /** Getter for show search element by type */
     public get shouldShowElement(): boolean {
-        const hasResponse = this.branchTransferResponse.length > 0;
-        const hasAdvancedSearchResponse = (
-            (this.branchTransferAdvanceSearchFormObj.amountOperator ||
-                this.branchTransferAdvanceSearchFormObj.amount ||
-                this.branchTransferAdvanceSearchFormObj.voucherType) || (!this.branchTransferAdvanceSearchFormObj.amountOperator ||
-                    !this.branchTransferAdvanceSearchFormObj.amount ||
-                    !this.branchTransferAdvanceSearchFormObj.voucherType)
-        );
-
-        // Check if hasResponse has no data and hasAdvancedSearchResponse has a length greater than 0
-        if (!hasResponse && hasAdvancedSearchResponse) {
-            return false;
-        }
-
         return (
-            (hasResponse && this.inlineSearch !== 'sender' || this.showClearFilter) ||
-            (this.inlineSearch === 'sender' && !hasResponse || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch === 'sender' || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch !== 'receiver' || this.showClearFilter) ||
-            (this.inlineSearch === 'receiver' && !hasResponse || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch === 'receiver' || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch !== 'senderReceiver' || this.showClearFilter) ||
-            (this.inlineSearch === 'senderReceiver' && !hasResponse || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch === 'senderReceiver' || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch !== 'fromWarehouse' || this.showClearFilter) ||
-            (this.inlineSearch === 'fromWarehouse' && !hasResponse || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch === 'fromWarehouse' || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch !== 'toWarehouse' || this.showClearFilter) ||
-            (this.inlineSearch === 'toWarehouse' && !hasResponse || this.showClearFilter) ||
-            (hasResponse && this.inlineSearch === 'toWarehouse' || this.showClearFilter)
+            (this.branchTransferForm?.controls['sender']?.value ||
+            this.branchTransferForm?.controls['receiver']?.value ||
+            this.branchTransferForm?.controls['senderReceiver']?.value ||
+            this.branchTransferForm?.controls['fromWarehouse']?.value ||
+            this.branchTransferForm?.controls['toWarehouse']?.value) &&
+            (!this.branchTransferForm?.controls['voucherType']?.value &&
+            !this.branchTransferForm?.controls['amountOperator']?.value &&
+            !this.branchTransferForm?.controls['amount']?.value)
         );
     }
 

@@ -75,6 +75,8 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
     public accountAsideMenuState: string = "out";
     /** Account group unique name */
     public activeGroupUniqueName: string = "";
+    /** True if api call in progress */
+    public isLoading: boolean = false;
 
     constructor(
         private _companyServices: CompanyService,
@@ -99,12 +101,15 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
      * @memberof AccountDetailModalComponent
      */
     public getAccountDetails(accountUniqueName: string): void {
+        this.isLoading = true;
         this._accountService.GetAccountDetailsV2(accountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
+                this.isLoading = false;
                 this.accInfo = response.body;
                 this.changeDetectorRef.detectChanges();
             } else {
                 this._toaster.errorToast(response?.message);
+                this.isLoading = false;
             }
         });
     }

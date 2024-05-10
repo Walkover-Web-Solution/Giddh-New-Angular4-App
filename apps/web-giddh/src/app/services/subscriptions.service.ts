@@ -88,8 +88,27 @@ export class SubscriptionsService {
      * @memberof SubscriptionsService
      */
     public getAllPlans(params: any): Observable<BaseResponse<any, any>> {
+        let data = params?.countryCode || params?.region
         return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_ALL_PLANS
-            ?.replace(':countryCode', encodeURIComponent(params.countryCode ?? ''))
+            ?.replace('countryCode', encodeURIComponent(data ?? ''))?.replace(':region', encodeURIComponent(data ?? ''))
+        ).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
+    }
+
+    /**
+    * Get All Country list
+    *
+    * @param {*} model
+    * @param {*} params
+    * @returns {Observable<BaseResponse<any, any>>}
+    * @memberof SubscriptionsService
+    */
+    public getCountryList(): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_COUNTRY_LIST
         ).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = '';

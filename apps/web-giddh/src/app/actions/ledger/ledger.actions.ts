@@ -620,6 +620,7 @@ export class LedgerActions {
         };
     }
 
+
     public DeSelectGivenEntries(entries: string[]): CustomActions {
         return {
             type: LEDGER.DESELECT_GIVEN_ENTRIES,

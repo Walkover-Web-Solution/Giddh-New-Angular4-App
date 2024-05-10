@@ -298,6 +298,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public entryUniqueNamesForBulkActionDuplicateCopy: string[] = [];
     /** False if there is no data in account search */
     public isAccountSearchData: boolean = true;
+    /** Set of selected debit transaction IDs.*/
+    public selectedDebitTransactionIds = new Set<string>();
+    /**  Set of selected credit transaction IDs.*/
+    public selectedCreditTransactionIds = new Set<string>();
+    /** String representing the selected bank transaction while hovering. */
+    public selectedBankTrxWhileHovering: string;
+
 
     constructor(
         private store: Store<AppState>,
@@ -1047,6 +1054,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.lc.currentBlankTxn.showDropdown = false;
         }
         this.selectedTrxWhileHovering = '';
+        this.selectedBankTrxWhileHovering = '';
         this.lc.showBankLedgerPanel = false;
         this.needToReCalculate.next(false);
         this.lc.currentBlankTxn = null;
@@ -1764,13 +1772,66 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.ledgerActions.SelectDeSelectAllEntries(type, ev?.checked));
     }
 
-    public selectEntryForBulkAction(ev: any, entryUniqueName: string) {
-        if (entryUniqueName) {
-            if (ev?.checked) {
-                this.entryUniqueNamesForBulkAction.push(entryUniqueName);
+    /**
+     * This will be use for select all bank entries
+     *
+     * @param {*} ev
+     * @param {('debit' | 'credit' | 'all')} type
+     * @memberof LedgerComponent
+     */
+    public selectAllBankEntries(event: any, type: 'debit' | 'credit' | 'all'): void {
+        if (event?.checked) {
+            if (type === 'debit') {
+                this.lc.bankTransactionsDebitData.forEach(response => {
+                    this.selectedDebitTransactionIds.add(response.transactions[0]?.id);
+                });
             } else {
-                let itemIndx = this.entryUniqueNamesForBulkAction?.findIndex((item) => item === entryUniqueName);
-                this.entryUniqueNamesForBulkAction?.splice(itemIndx, 1);
+                this.lc.bankTransactionsCreditData.forEach(response => {
+                    this.selectedCreditTransactionIds.add(response.transactions[0]?.id);
+                });
+            }
+        } else {
+            if (type === 'debit') {
+                this.selectedDebitTransactionIds.clear();
+            } else {
+                this.selectedCreditTransactionIds.clear();
+            }
+        }
+    }
+
+    /**
+     * This will be use for bank entry hovered
+     *
+     * @param {string} selectedBankTxnUniqueName
+     * @memberof LedgerComponent
+     */
+    public bankEntryHovered(selectedBankTxnUniqueName: string): void {
+        this.selectedBankTrxWhileHovering = selectedBankTxnUniqueName;
+    }
+
+    /**
+     * This will be use for selecting bank entry
+     *
+     * @param {*} ev
+     * @param {string} entryUniqueName
+     * @param {*} id
+     * @param {string} type
+     * @memberof LedgerComponent
+     */
+    public selectEntryForBulkAction(event: any, entryUniqueName: string, id: any, type: string): void {
+        if (entryUniqueName) {
+            if (event?.checked) {
+                if (type === 'credit') {
+                    this.selectedCreditTransactionIds.add(id);
+                } else if (type === 'debit') {
+                    this.selectedDebitTransactionIds.add(id);
+                }
+            } else {
+                if (type === 'credit') {
+                    this.selectedCreditTransactionIds.delete(id);
+                } else if (type === 'debit') {
+                    this.selectedDebitTransactionIds.delete(id);
+                }
             }
         }
     }
@@ -1778,6 +1839,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public entryHovered(uniqueName: string) {
         this.selectedTrxWhileHovering = uniqueName;
     }
+
 
     public entrySelected(ev: any, uniqueName: string, type: string) {
         const totalLength = (type === 'debit') ? this.ledgerTransactions.debitTransactions?.length :
@@ -2532,11 +2594,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public deleteBankTransactions(): void {
-        let transactionIds = this.entryUniqueNamesForBulkAction.map((transaction: any) => transaction?.transactionId);
-        let params = { transactionIds: transactionIds };
+        let params = { transactionIds: [...this.selectedCreditTransactionIds, ...this.selectedDebitTransactionIds] };
         this.ledgerService.deleteBankTransactions(this.trxRequest.accountUniqueName, params).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.getBankTransactions();
+                this.selectedCreditTransactionIds.clear();
+                this.selectedDebitTransactionIds.clear();
                 this.toaster.showSnackBar("success", response?.body);
             } else {
                 this.toaster.showSnackBar("error", response?.message);

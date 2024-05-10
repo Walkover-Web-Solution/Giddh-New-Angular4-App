@@ -2,12 +2,11 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { SettingsAsideFormType } from '../constants/settings.constant';
 import { IForceClear } from '../../models/api-models/Sales';
 import { ToasterService } from '../../services/toaster.service';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
-import { SettingsAsideConfiguration } from '../constants/settings.constant';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
+import { SettingsAsideConfiguration, SettingsAsideFormType } from '../../settings/constants/settings.constant';
 
 function validateFieldWithPatterns(patterns: Array<string>) {
     return (field: UntypedFormControl): { [key: string]: any } => {

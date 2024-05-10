@@ -155,6 +155,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public getBillingData: boolean = false;
     /** Holds Store Get Billing Details observable*/
     public changePlanDetails$ = this.componentStore.select(state => state.changePlanDetails);
+    /** Holds Store Get Billing Details observable*/
+    public getCountryList$ = this.componentStore.select(state => state.countryList);
     /** Holds subscription request */
     public subscriptionRequest: any;
 
@@ -201,9 +203,45 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
+        if (localStorage.getItem('Country-Region') === 'IN') {
+            this.newUserSelectCountry({
+                "label": "IN - India",
+                "value": "IN",
+                "additional": {
+                    "value": "IN",
+                    "label": "IN - India"
+                }
+            });
+        } else if (localStorage.getItem('Country-Region') === 'UK') {
+            this.newUserSelectCountry({
+                "label": "GB - United Kingdom",
+                "value": "GB",
+                "additional": {
+                    "value": "GB",
+                    "label": "GB - United Kingdom"
+                }
+            });
+        } else if (localStorage.getItem('Country-Region') === 'AE') {
+            this.newUserSelectCountry({
+                "label": "AE - United Arab Emirates",
+                "value": "AE",
+                "additional": {
+                    "value": "AE",
+                    "label": "AE - United Arab Emirates"
+                }
 
-        });
+            });
+        } else {
+            this.newUserSelectCountry({
+                "label": "GL - Global",
+                "value": "GL",
+                "additional": {
+                    "value": "GL",
+                    "label": "GL - Global"
+                }
+            });
+        }
+
 
 
         this.createSubscriptionResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -254,16 +292,24 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-        // if (localStorage.getItem('Country-Region') === 'uk') {
-        //     this.newUserSelectCountry({
-        //         "label": "US - United States of America",
-        //         "value": "US",
-        //         "additional": {
-        //             "value": "US",
-        //             "label": "US - United States of America"
-        //         }
-        //     });
-        // }
+        this.getCountryList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.countrySource = [];
+                Object.keys(response).forEach(key => {
+                    this.countrySource.push({
+                        value: response[key].alpha2CountryCode,
+                        label: response[key].alpha2CountryCode + ' - ' + response[key].countryName
+                    });
+                });
+                this.countrySource$ = observableOf(this.countrySource);
+            } else {
+                let countryRequest = new CountryRequest();
+                countryRequest.formName = 'onboarding';
+                this.store.dispatch(this.commonActions.GetCountry(countryRequest));
+            }
+        });
+
+
 
         this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
@@ -467,7 +513,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.company.inputMaskFormat = profile.balanceDisplayFormat?.toLowerCase() || '';
                 this.company.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                 this.showTaxTypeByCountry(this.company.countryCode);
-                this.componentStore.getAllPlans({ params: { countryCode: this.company.countryCode } });
+                let data;
+                if (localStorage.getItem('Country-Region') === 'GL') {
+                    data = {
+                        region: this.company.countryCode
+                    }
+                } else {
+                    data = {
+                        countryCode: this.company.countryCode
+                    }
+                }
+                this.componentStore.getAllPlans({ params: data  });
             }
         });
     }
@@ -559,22 +615,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public getCountry(): void {
-        this.componentStore.commonCountries$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.countrySource = [];
-                Object.keys(response).forEach(key => {
-                    this.countrySource.push({
-                        value: response[key].alpha2CountryCode,
-                        label: response[key].alpha2CountryCode + ' - ' + response[key].countryName
-                    });
-                });
-                this.countrySource$ = observableOf(this.countrySource);
-            } else {
-                let countryRequest = new CountryRequest();
-                countryRequest.formName = 'onboarding';
-                this.store.dispatch(this.commonActions.GetCountry(countryRequest));
-            }
-        });
+        this.componentStore.getCountryList(null);
     }
 
     /**
@@ -844,7 +885,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public newUserSelectCountry(event: any): void {
-        this.componentStore.getAllPlans({ params: { countryCode: event?.value } });
+        let data ;
+        if (localStorage.getItem('Country-Region') === 'GL') {
+            data = {
+                region:event?.value
+             }
+        } else {
+            data = {
+                countryCode: event?.value
+            }
+        }
+        this.componentStore.getAllPlans({ params: data  });
         this.newUserSelectedCountry = event.label;
     }
 

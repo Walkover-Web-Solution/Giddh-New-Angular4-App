@@ -4,8 +4,10 @@
             <div class="invoice-control w-100 white-bg">
                 <div class="row mr-0 ml-0">
                     <div id="setting-tab" class="w-100">
-                        <div class="video-link mr-r15" *ngIf="activeTab === 'sales'">
-                            <watch-video [cssClass]="'text-primary pr-0'" [moduleName]="'SALES_PREVIEW'"></watch-video>
+                        <div class="video-link mr-r15" *ngIf="['sales', 'settings', 'templates'].includes(activeTab)">
+                            <watch-video *ngIf="activeTab === 'sales'" [cssClass]="'text-primary pr-0'" [moduleName]="'SALES_PREVIEW'"></watch-video>
+                            <watch-video *ngIf="activeTab === 'settings'" [cssClass]="'text-primary pr-0'" [moduleName]="'INVOICE_SETTING'"></watch-video>
+                            <watch-video *ngIf="activeTab === 'templates'" [cssClass]="'text-primary pr-0'" [moduleName]="'INVOICE_TEMPLATE'"></watch-video>
                         </div>
                         <hamburger-menu class="header-hamburger-menu" *ngIf="localeData?.tabs"></hamburger-menu>
                         <ng-template

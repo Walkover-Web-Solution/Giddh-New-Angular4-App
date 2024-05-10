@@ -15,14 +15,14 @@ export const SETTINGS_INTEGRATION_API = {
     GET_PLAID_LINK_TOKEN: COMMON + 'plaid/create/link-token?itemId=:itemId', // GET
     SAVE_PLAID_ACCESS_TOKEN: COMMON + 'plaid/create/access-token',
     REMOVE_GMAIL_INTEGRATION: COMMON + 'gmail-token', //DELETE
-    REMOVE_ICICI_REQUEST: COMMON + 'bank/deregistration?urn=:urn',
+    REMOVE_ICICI_REQUEST: COMMON + 'bank/deregistration?bankUserId=:bankUserId',
     UPDATE_PAYMENT: COMMON + 'bank/updateDetails',
     BANK_INTERATION_VALIDATION_FORM: 'ui/bank/integration/form?bankName=:bankName',
     BANK_ACCOUNT_REGISTRATION: 'v2/company/:companyUniqueName/bank',
     BANK_ACCOUNT_MULTI_REGISTRATION: 'v2/company/:companyUniqueName/bank/multi-registration',
-    UPDATE_PAYOR_ACCOUNT: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor/:urn',
+    UPDATE_PAYOR_ACCOUNT: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor/:bankUserId',
     UPDATE_ACCOUNT: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName',
-    GET_PAYOR_REGISTRATION_STATUS: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor/:urn/status',
+    GET_PAYOR_REGISTRATION_STATUS: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor/:bankUserId/status',
     GET_BANK_ACCOUNT_PAYORS: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor?amount=:amount'
 };
 

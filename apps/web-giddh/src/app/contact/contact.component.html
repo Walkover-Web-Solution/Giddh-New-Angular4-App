@@ -79,7 +79,11 @@
                                             >
                                                 <ng-template #optionTemplate let-option="option">
                                                     <ng-container>
-                                                        <a href="javascript:void(0);" aria-label="branch company" class="list-item d-flex">
+                                                        <a
+                                                            href="javascript:void(0);"
+                                                            aria-label="branch company"
+                                                            class="list-item d-flex"
+                                                        >
                                                             <span class="entity-icon">
                                                                 <i
                                                                     class="icon-branch-icon pull-right"
@@ -132,7 +136,12 @@
                                     class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start w-50"
                                     *ngIf="showClearFilter"
                                 >
-                                    <button mat-stroked-button class="mr-0" (click)="resetAdvanceSearch()" aria-label="filter">
+                                    <button
+                                        mat-stroked-button
+                                        class="mr-0"
+                                        (click)="resetAdvanceSearch()"
+                                        aria-label="filter"
+                                    >
                                         <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                                     </button>
                                 </div>
@@ -563,7 +572,7 @@
                             #searchCustomerContainer
                             (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
                         >
-                            <div class="d-flex select-all-checkbox-wrapper ">
+                            <div class="d-flex select-all-checkbox-wrapper">
                                 <mat-checkbox
                                     class="pos-abs"
                                     color="primary"
@@ -601,7 +610,7 @@
                             [attr.data-title]="localeData?.customer"
                         >
                             <div class="customer-name-filed cursor-pointer pd-r2" (dblclick)="trigger?.openMenu()">
-                                <div class="select-single-checkbox-wrapper ">
+                                <div class="select-single-checkbox-wrapper">
                                     <mat-checkbox
                                         color="primary"
                                         class="mr-2 checkbox-left-side-in-table"
@@ -660,7 +669,12 @@
                                     >
                                         {{ commonLocaleData?.app_goto_ledger }}
                                     </button>
-                                    <button mat-menu-item class="menu-table-item" (click)="performActions(2, account)" aria-label="generate invoice">
+                                    <button
+                                        mat-menu-item
+                                        class="menu-table-item"
+                                        (click)="performActions(2, account)"
+                                        aria-label="generate invoice"
+                                    >
                                         {{ commonLocaleData?.app_generate_invoice }}
                                     </button>
                                     <!-- <button
@@ -905,7 +919,7 @@
                             #searchCustomerContainer
                             (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
                         >
-                            <div class="d-flex select-all-checkbox-wrapper ">
+                            <div class="d-flex select-all-checkbox-wrapper">
                                 <mat-checkbox
                                     class="pos-abs"
                                     color="primary"
@@ -944,7 +958,7 @@
                             [attr.data-title]="commonLocaleData?.app_vendor_name"
                         >
                             <div class="vendor-name-field cursor-pointer pd-r2" (dblclick)="trigger?.openMenu()">
-                                <div class="select-single-checkbox-wrapper ">
+                                <div class="select-single-checkbox-wrapper">
                                     <mat-checkbox
                                         [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
                                         type="checkbox"
@@ -1002,7 +1016,12 @@
                                     >
                                         {{ commonLocaleData?.app_goto_ledger }}
                                     </button>
-                                    <button mat-menu-item class="menu-table-item" (click)="performActions(2, account)" aria-label="record bill">
+                                    <button
+                                        mat-menu-item
+                                        class="menu-table-item"
+                                        (click)="performActions(2, account)"
+                                        aria-label="record bill"
+                                    >
                                         {{ commonLocaleData?.app_record_bill }}
                                     </button>
                                     <!-- <button
@@ -1347,7 +1366,11 @@
                                     [routerLink]="['/pages/settings/integration/payment']"
                                     aria-label="bank"
                                 >
-                                    {{ localeData?.connect_icici_bank }}
+                                    {{
+                                        isPlaidSupportedCountry
+                                            ? localeData?.connect_bank
+                                            : localeData?.connect_icici_bank
+                                    }}
                                 </button>
                             </div>
                             <ng-container
@@ -1550,7 +1573,12 @@
         let-formControl="formControl"
     >
         <div class="align-items-center d-flex" [hidden]="show">
-            <button mat-icon-button aria-label="search" (click)="toggleSearch(fieldName)" class="customer-vendor-name-search-icon">
+            <button
+                mat-icon-button
+                aria-label="search"
+                (click)="toggleSearch(fieldName)"
+                class="customer-vendor-name-search-icon"
+            >
                 <span class="icon-search"></span>
             </button>
             <span> {{ title }}</span>

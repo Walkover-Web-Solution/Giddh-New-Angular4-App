@@ -289,7 +289,7 @@ export class CompanyService {
     public getOTP(request) {
         this.companyUniqueName = this.generalService.companyUniqueName;
         if (this.companyUniqueName) {
-            return this.http.get(this.config.apiUrl + COMPANY_API.GET_OTP?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':urn', encodeURIComponent(request.params.urn))).pipe(map((res) => {
+            return this.http.get(this.config.apiUrl + COMPANY_API.GET_OTP?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':bankUserId', encodeURIComponent(request.params.bankUserId))).pipe(map((res) => {
                 let data: BaseResponse<IRegistration, string> = res;
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<IRegistration, string>(e)));
@@ -378,7 +378,7 @@ export class CompanyService {
      * Bulk pay vendor API call
      *
      * @param {string} companyUniqueName  Company unique name
-     * @param {string} urn selected payor urn number
+     * @param {string} bankUserId selected payor bankUserId
      * @param {string} bankAccountUniqueName Selected bank
      * @param {BulkPaymentConfirmRequest} requestObject Request object
      * @returns {Observable<BaseResponse<BulkPaymentResponse, BulkPaymentConfirmRequest>>}
@@ -394,7 +394,7 @@ export class CompanyService {
     * Resend OTP API call
     *
     * @param {string} companyUniqueName Company unique name
-    * @param {string} urn Urn number
+     * @param {string} bankUserId selected payor bankUserId
     * @param {string} uniqueName Account unique name
     * @returns
     * @memberof CompanyService

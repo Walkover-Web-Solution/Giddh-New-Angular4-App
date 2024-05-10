@@ -52,10 +52,15 @@
 
 .entry-table tbody tr td .form-control.focus:focus {
     background: transparent !important;
+    border: 1px solid var(--color-secondary-input-bar-border) !important;
+}
+
+.active-row-transparent {
+    background: white !important;
 }
 
 .active-row {
-    background: transparent;
+    background: var(--color-sidebar-company-background) !important;
 }
 
 .confirmation-box {
@@ -64,26 +69,32 @@
     padding: 20px;
     width: 230px;
     position: absolute;
-    right: 280px;
+    right: 15px;
     z-index: 9;
     min-height: 135px;
     margin: 20px 0;
+    top: -200px;
 }
 
 .total-box {
-    padding: 15px 0;
+    padding: 5px 0;
     border-top: 1px solid;
     border-bottom: 1px solid;
-    margin: 20px 0;
-    min-width: 250px;
+    margin: 10px 0;
+    width: 100%;
     font-size: var(--font-size-15);
     border-color: var(--color-table-primary-content-bar-border);
+    margin-bottom: 3px;
 }
 
-.total-box > span {
+.custom-border {
+    width: 100%;
+}
+
+.total-box>span {
     margin: 0 8px;
     display: inline-block;
-    min-width: 120px;
+    min-width: 80px;
 }
 
 .appearance-none {
@@ -135,7 +146,8 @@
     position: absolute;
     right: 0;
     top: 0;
-    height: 100vh;
+    height: calc(100vh - 126px);
+    overflow: hidden;
     padding: 0 !important;
     border: 0;
     z-index: 0;
@@ -145,6 +157,7 @@
 .sidebar-list h3 {
     background: var(--color-white);
 }
+
 /*
 .label.isActive {
   font-weight: normal;
@@ -163,18 +176,28 @@ input[name="entryDate"] {
     font-size: var(--font-size-15);
 }
 
-textarea[name="narration"] {
-    background: transparent !important;
-    border: 1px solid var(--color-secondary-input-bar-border);
+.custom-textarea {
+    .form-control {
+        border: none;
+        background: transparent !important;
+        width: 50%;
+    }
 }
 
 textarea[name="narration"]:focus {
     border: 1px solid var(--color-secondary-input-bar-border) !important;
 }
 
-input[name="entryDate"]:focus,
-textarea[name="narration"]:focus {
-    background: transparent !important;
+.custom-entry-date {
+    .form-control {
+        border: none;
+        background: transparent !important;
+    }
+}
+
+input[name="entryDate"]:focus {
+    border: 1px solid var(--color-secondary-input-bar-border) !important;
+    background-color: transparent !important;
 }
 
 :host ::ng-deep .menu {

@@ -245,6 +245,8 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
     public isDropUp: boolean = false;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+    /** Holds Voucher Name that suports csv file export */
+    public csvSupportVoucherType: string[] = ['sales', 'debit note', 'credit note','purchase'];
 
     constructor(
         private store: Store<AppState>,
@@ -1354,14 +1356,15 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
-    public exportCsvDownload() {
+    public exportCsvDownload(type: string): any {
+        const isAllItemsSelected = this.allItemsSelected;
         this.exportcsvRequest.from = this.invoiceSearchRequest.from;
         this.exportcsvRequest.to = this.invoiceSearchRequest.to;
-        let dataTosend = { accountUniqueName: '', uniqueNames: [] };
-        if (this.selectedInvoicesList?.length > 0) {
-            dataTosend.accountUniqueName = this.allItemsSelected ? '' : this.selectedInvoicesList[0].account?.uniqueName;
+        let dataTosend = { accountUniqueName: '', uniqueNames: [], type: type };
+        if (this.selectedInvoicesList?.length === 1) {
+            dataTosend.accountUniqueName = this.selectedInvoicesList[0].account?.uniqueName;
         } else {
-            dataTosend.accountUniqueName = '';
+            delete dataTosend.accountUniqueName;
         }
         if (this.selectedItems.length) {
             dataTosend.uniqueNames = this.selectedItems;
@@ -1377,12 +1380,31 @@ export class InvoicePreviewComponent implements OnInit, OnChanges, OnDestroy {
                         item.isSelected = false;
                     });
                     let blob = this.generalService.base64ToBlob(response.body, 'application/xls', 512);
-                    return saveAs(blob, `${dataTosend?.accountUniqueName}${this.localeData?.all_invoices}.xls`);
+                    const fileName  = `${this.getExportFileNameByVoucherType(type, isAllItemsSelected)}.xls`
+                    return saveAs(blob, fileName);
                 } else {
                     this._toaster.errorToast(response.message);
                 }
             }
         });
+    }
+
+    /**
+     * Get Translated file name respect to given voucher
+     *
+     * @private
+     * @param {string} type
+     * @param {boolean} isAllItemsSelected
+     * @returns {string}
+     * @memberof InvoicePreviewComponent
+     */
+    private getExportFileNameByVoucherType(type: string, isAllItemsSelected: boolean): string {
+        switch(type){
+            case 'sales': return isAllItemsSelected ? this.localeData?.all_invoices : this.localeData?.invoices;
+            case 'purchase': return isAllItemsSelected ? this.localeData?.all_purchases : this.localeData?.purchases;
+            case 'credit note': return isAllItemsSelected ? this.localeData?.all_credit_notes : this.localeData?.credit_notes;
+            case 'debit note': return isAllItemsSelected ? this.localeData?.all_debit_notes : this.localeData?.debit_notes;
+        }
     }
 
     private parseItemForVm(invoice: ReceiptItem): InvoicePreviewDetailsVm {

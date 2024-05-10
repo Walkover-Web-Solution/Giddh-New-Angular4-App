@@ -21,5 +21,7 @@
     "delete_vouchers": "Do you want to delete the voucher(s) / payment(s)?",
     "uploaded_bill": "Uploaded Bill",
     "currency_conversion": "In [BASE_CURRENCY]: [AMOUNT]<br />(Conversion Rate: [CONVERSION_RATE])",
-    "exchange_gain_loss_label": "In [BASE_CURRENCY]: [AMOUNT]<br />Exchange [PROFIT_TYPE]: "
+    "exchange_gain_loss_label": "In [BASE_CURRENCY]: [AMOUNT]<br />Exchange [PROFIT_TYPE]: ",
+    "payments": "Payments",
+    "all_payments": "All-payments"
 }

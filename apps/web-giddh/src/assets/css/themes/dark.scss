@@ -32,13 +32,13 @@ body.dark-theme {
     --color-primary-login-signup-linkedin-icon: #668cff;
     --color-primary-login-slide-content-btn-white: #e58a0026;
     --color-primary-signup-ico-google-background: #e58a0026;
-    --color-primary-login-hash-tag: #9D0010;
+    --color-primary-login-hash-tag: #C51E3A;
     --color-primary-login-signup-body-unresponsive-background: #f5f5f5;
     --color-primary-login-signup-mobile-background: #f5f5f5;
     --color-primary-login-signup-slide-content-background: #f5f5f5;
     --color-primary-login-signup-download-app-ul-li-a-hover: #f5f5f5;
     --color-primary-login-signup-twitter-background: #668cff;
-    --color-primary-login-signup-google-background: #9D0010;
+    --color-primary-login-signup-google-background: #C51E3A;
     --color-primary-login-signup-linkedin-background: #668cff;
     --color-primary-login-signup-login-box-h1: #f5f5f5;
     --color-primary-login-signup-slide-content-btn-white-hover: #f5f5f5;
@@ -83,8 +83,8 @@ body.dark-theme {
     --color-primary-button-text: #1a237e;
     --color-primary-button-background: #f5f5f5;
     --color-secondary-button-text: #f5f5f5;
-    --color-secondary-button-background: #668cff;
-    --color-secondary-button-background-hover: #668cff26;
+    --color-secondary-button-background: #1a237e;
+    --color-secondary-button-background-hover: #1a237e;
     --color-tertiary-button-text: #f5f5f5;
     --color-tertiary-button-background: transparent;
     --color-tertiary-button-background-hover: #e7e9eb26;
@@ -193,8 +193,8 @@ body.dark-theme {
     --color-primary-datepicker-btn-success-hover-active-focus: #668cff26;
     --color-datepicker-mat-select-arrow-active: #668cff;
     --color-primary-datepicker-btn-angle-down: #9b9b9e;
-    --color-primary-datepicker-btn-btn-danger: #9D0010;
-    --color-primary-datepicker-btn-btn-danger-hover-active-focus: #9D0010;
+    --color-primary-datepicker-btn-btn-danger: #C51E3A;
+    --color-primary-datepicker-btn-btn-danger-hover-active-focus: #C51E3A;
     --color-primary-datepicker-drop-down-box-shadow: #cbcfd2;
     --color-primary-datepicker-in-range-background: #668cff26;
     --color-primary-datepicker-activated-date: #668cff26;
@@ -321,10 +321,10 @@ body.dark-theme {
     --color-design-filters-swatch-ul-li-nth-child10-background: #098757;
     --color-design-filters-swatch-ul-li-nth-child12-background: #9b9b9e;
     --color-design-filters-swatch-ul-li-nth-child13-background: #e58a00;
-    --color-design-filters-swatch-ul-li-nth-child14-background: #9D0010;
+    --color-design-filters-swatch-ul-li-nth-child14-background: #C51E3A;
     --color-design-filters-swatch-ul-li-nth-child15-background: #9b9b9e;
-    --color-design-filters-swatch-ul-li-nth-child16-background: #9D0010;
-    --color-design-filters-swatch-ul-li-nth-child17-background: #9D0010;
+    --color-design-filters-swatch-ul-li-nth-child16-background: #C51E3A;
+    --color-design-filters-swatch-ul-li-nth-child17-background: #C51E3A;
     --color-design-filters-swatch-ul-li-nth-child18-background: #9b9b9e;
 
     // Company Branch Color Variables
@@ -401,7 +401,7 @@ body.dark-theme {
 
     // Header and Footer Color Variables
     --color-primary-header-background: #1a237e;
-    --color-primary-header-icon-traingle-info: #9D0010;
+    --color-primary-header-icon-traingle-info: #C51E3A;
     --color-primary-footer-background: #f5f5f5;
     --color-secondary-footer-background: #668cff26;
 
@@ -412,7 +412,7 @@ body.dark-theme {
     --color-primary-ledger-stat-block-border: #668cff26;
 
     // Invoice Preview Details Color Variables
-    --color-invoice-preview-details-default-header: #9D0010;
+    --color-invoice-preview-details-default-header: #C51E3A;
     --color-invoice-preview-giddh-table-tbody-tr-background-hover: #668cff26;
     --color-invoice-preview-giddh-table-border-right: #9b9b9e;
     --color-invoice-preview-span-close-modal-background: #9b9b9e;
@@ -494,7 +494,7 @@ body.dark-theme {
 
     // GST Color Variables
     --color-gst-primary-background-color: #212528;
-    --color-gst-primary-doc-actions: #9D0010;
+    --color-gst-primary-doc-actions: #C51E3A;
     --color-gst-primary-return-body-notification-faq-list-li-a-hover: #668cff;
     --color-gst-primary-return-content-return-filed: #098757;
     --color-gst-primary-c-tab-nav-tabs-active-hover-focus-border-bottom: #668cff;
@@ -522,7 +522,7 @@ body.dark-theme {
     --color-primary-revenue-chart-secondary-dark-bg: #098757;
 
     // Total Overdues Chat Color Variables
-    --color-primary-total-overdues-chart-vendor-due-text: #9D0010;
+    --color-primary-total-overdues-chart-vendor-due-text: #C51E3A;
 
     // Tooltip Color Variables
     --color-primary-tooltip-text: #f5f5f5;
@@ -594,7 +594,7 @@ body.dark-theme {
 
     // Onboarding Contact info color variable
     --color-onboard-contact-info-text: #212528;
-    --color-primary-onboarding-label-required: #9D0010;
+    --color-primary-onboarding-label-required: #C51E3A;
     --color-primary-onboarding-btn-sync: #9b9b9e;
     --color-primary-onboarding-btn-sync-background: #36b28326;
 
@@ -604,11 +604,11 @@ body.dark-theme {
     --color-primary-onboarding-sfsection-jkvq-sfsubmit-btn-primary: #098757;
 
     // Common Color Variables
-    --color-danger: #9D0010;
+    --color-danger: #C51E3A;
     --color-danger-bg-light: #e545561a;
     --color-warning: #e58a00;
     --color-dot-warning: #e58a00;
-    --color-delete: #9D0010;
+    --color-delete: #C51E3A;
     --color-success-enable: #098757;
     --color-success-enable-bg-light: #36b2831a;
     --color-secondary-success: #098757;
@@ -627,9 +627,11 @@ body.dark-theme {
     --color-primary-common-with-opacity-list-hover: #668cff26;
     --color-primary-common-without-opacity-list-hover: #2b3548;
     --color-grey-bootstrap-border: #dee2e6;
+    --color-link: #ffffff;
+    --color-giddh-common-background: #1a237e;
 
     // Toast Color Variables
-    --color-red-toast: #9D0010;
+    --color-red-toast: #C51E3A;
     --color-green-toast: #098757;
     --color-warning-toast: #e58a00;
     --color-info-toast: #668cff;
@@ -646,8 +648,8 @@ body.dark-theme {
     --color-mat-tbody-tr-td: #9b9b9e;
     --color-mat-table-tbody-td-first-child: #f5f5f5;
     --color-daybook-nested-table-tbody-tr-border: #9b9b9e;
-    --color-primary-circle-expenses-background: #9D0010;
-    --color-primary-table-container-cdk-virtual-scroll-viewport-section-expenses-border: #9D0010;
+    --color-primary-circle-expenses-background: #C51E3A;
+    --color-primary-table-container-cdk-virtual-scroll-viewport-section-expenses-border: #C51E3A;
     --color-primary-circle-income-background: #668cff;
     --color-primary-table-container-cdk-virtual-scroll-viewport-section-income-border: #668cff;
     --color-primary-dot-primary: #668cff;
@@ -666,7 +668,7 @@ body.dark-theme {
     --color-pop-panel-form-control-background: #e58a0026;
     --color-ledger-row-td-select2-container-select2-search__field-background: #e58a0026;
     --color-ratio-chart-block-nth-child2-span-pie-text-center: #e58a00;
-    --color-ratio-chart-block-nth-child3-span-pie-text-center: #9D0010;
+    --color-ratio-chart-block-nth-child3-span-pie-text-center: #C51E3A;
     --color-ratio-chart-block-nth-child4-span-pie-text-center: #098757;
     --color-scroll-auto-webkit-scrollbar-track-background: #9b9b9e;
     --color-primary-virtual-scroll-scrollable-content-item-a-item-stock: #cbcfd2;
@@ -696,6 +698,7 @@ body.dark-theme {
         contrast(100%);
     --color-image-filter-senary: invert(0%) sepia(100%) saturate(0%) hue-rotate(35deg) brightness(102%) contrast(102%);
     --color-caret-image: url("../../images/caret-dark.svg");
+    --color-image-filter-white: brightness(0) invert(1);
 
     /************************ COMMON COLORS USED MORE THAN 12 TIMES ************************/
     --color-blue: #668cff;
@@ -708,15 +711,17 @@ body.dark-theme {
     --color-white-tertiary: #ffffff;
     --color-dark-fog: #668cff26;
     --color-lavender: #e7e9eb;
+    --color-filter-background: #212528;
     --color-iron: #9b9b9e;
     --color-black-russian: #212528;
     --color-gray: #cbcfd2;
+    --color-gray-dark: #f5f5f5;
     --color-abbey: #9b9b9e;
     --color-nero: #f5f5f5;
     --color-teal: #098757;
     --color-foam: #36b28326;
     --color-chardon: #e58a0026;
-    --color-red: #9D0010;
+    --color-red: #C51E3A;
     --color-red-border: #e54556;
     --color-orange: #e58a00;
     --color-solitude-light: #668cff26;

@@ -932,10 +932,10 @@ export class SettingsIntegrationActions {
         };
     }
 
-    public RemovePaymentInfo(URN: string): CustomActions {
+    public RemovePaymentInfo(bankUserId: string): CustomActions {
         return {
             type: SETTINGS_INTEGRATION_ACTIONS.REMOVE_ICICI_PAYMENT,
-            payload: URN
+            payload: bankUserId
         };
     }
 

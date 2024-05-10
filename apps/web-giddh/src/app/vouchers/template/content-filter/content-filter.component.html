@@ -1,0 +1,680 @@
+<div class="px-3">
+  <h4 class="font-16 my-3">Header</h4>
+  <div class="template-scroll">
+    <!-- header-fields-start -->
+    <div>
+      <mat-checkbox color="primary">
+        Company Name
+      </mat-checkbox>
+      <div>
+        <mat-checkbox color="primary">
+          Document Title: This is your
+        </mat-checkbox>
+        <div class="ml-4">
+          <div class="option-value-field">
+            <text-field
+              [type]="'text'"
+              [name]="'name'"
+              [cssClass]="'form-control'"
+            ></text-field>
+          </div>
+          <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 8</p>
+        </div>
+        <div class="ml-4">
+          <div class="option-value-field">
+            <text-field
+              [type]="'text'"
+              [name]="'name'"
+              [cssClass]="'form-control'"
+            ></text-field>
+          </div>
+          <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 8</p>
+        </div>
+      </div>
+      <mat-checkbox color="primary" class="d-block">
+        Show IRN number
+      </mat-checkbox>
+      <mat-checkbox color="primary" class="d-block">
+        Show QR code
+      </mat-checkbox>
+      <mat-checkbox color="primary" class="d-block">
+        Company Address
+      </mat-checkbox>
+      <mat-checkbox color="primary" class="d-block">
+        Warehouse Address
+      </mat-checkbox>
+      <div>
+        <mat-checkbox color="primary">
+            <div class="option-value-field">
+              <text-field
+                [type]="'text'"
+                [name]="'name'"
+                [cssClass]="'form-control'"
+                palceholder="'Registered under Composition Scheme'"
+              ></text-field>
+          </div>
+        </mat-checkbox>
+        <p class="ml-4 mt-1"><span class="light-gray font-12">Characters left:</span> 70</p>
+      </div>
+      <div>
+        <mat-checkbox color="primary">
+          Invoice Date
+        </mat-checkbox>
+        <div class="ml-4">
+          <div class="option-value-field">
+            <text-field
+              [type]="'text'"
+              [name]="'name'"
+              [cssClass]="'form-control'"
+            ></text-field>
+          </div>
+          <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 8</p>
+        </div>
+      </div>
+      <div>
+        <mat-checkbox color="primary">
+          Invoice Number
+        </mat-checkbox>
+        <div class="ml-4">
+          <div class="option-value-field">
+            <text-field
+              [type]="'text'"
+              [name]="'name'"
+              [cssClass]="'form-control'"
+            ></text-field>
+          </div>
+          <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 3</p>
+        </div>
+      </div>
+      <!-- voucher -->
+      
+      <div>
+        <mat-checkbox color="primary">
+          Voucher Date
+        </mat-checkbox>
+        <div class="ml-4">
+          <div class="option-value-field">
+            <text-field
+              [type]="'text'"
+              [name]="'name'"
+              [cssClass]="'form-control'"
+            ></text-field>
+          </div>
+          <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 7</p>
+        </div>
+      </div>
+      <div>
+        <mat-checkbox color="primary">
+          Voucher Number
+        </mat-checkbox>
+        <div class="ml-4">
+          <div class="option-value-field">
+            <text-field
+              [type]="'text'"
+              [name]="'name'"
+              [cssClass]="'form-control'"
+            ></text-field>
+          </div>
+          <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 7</p>
+        </div>
+      </div>
+      <div>
+        <mat-checkbox color="primary">
+          Due Date
+        </mat-checkbox>
+        <div class="ml-4">
+          <div class="option-value-field">
+            <text-field
+              [type]="'text'"
+              [name]="'name'"
+              [cssClass]="'form-control'"
+            ></text-field>
+          </div>
+          <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 7</p>
+        </div>
+      </div>
+    </div>
+    <!-- form-fields-start -->
+    <div>
+      <h4 class="font-16 my-2">Form</h4>
+      <div>
+        <mat-checkbox color="primary">
+          Document Title
+        </mat-checkbox>
+        <div class="ml-4">
+          <input-field
+            [type]="'text'"
+            [name]="'invoice'"
+            [label]="'Invoice'"
+          ></input-field>
+          <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 8</p>
+        </div>
+        <div class="ml-4">
+          <input-field
+            [type]="'text'"
+            [name]="'taxinvoice'"
+            [label]="'Tax Invoice'"
+          ></input-field>
+          <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 4</p>
+        </div>
+      </div>
+    </div>
+    <!-- form-fields-end -->
+
+    <!-- customer-details-start -->
+    <div>
+      <h4 class="font-16 my-2">Customer Details</h4>
+      <mat-checkbox color="primary" class="d-block">
+        Customer Name
+      </mat-checkbox>
+      <mat-checkbox color="primary" class="d-block">
+        Attention To
+      </mat-checkbox>
+      <mat-checkbox color="primary" class="d-block">
+        Email ID
+      </mat-checkbox>
+      <mat-checkbox color="primary" class="d-block">
+        Mobile Number
+      </mat-checkbox>
+    </div>
+    <!-- customer-details-end -->
+    <!-- billing-details-start -->
+    <div>
+      <h4 class="font-16 my-2">Billing Details</h4>
+      <div>
+        <mat-checkbox color="primary">
+          Billing Address
+        </mat-checkbox>
+        <div class="ml-4">
+          <div class="option-value-field">
+            <text-field
+              [type]="'text'"
+              [name]="'name'"
+              [cssClass]="'form-control'"
+            ></text-field>
+          </div>
+          <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 3</p>
+        </div>
+      </div>
+      <mat-checkbox color="primary" class="d-block">
+        State
+      </mat-checkbox>
+      <div>
+        <mat-checkbox color="primary">
+          GSTIN
+        </mat-checkbox>
+        <div class="ml-4">
+          <div class="option-value-field">
+            <text-field
+              [type]="'text'"
+              [name]="'name'"
+              [cssClass]="'form-control'"
+            ></text-field>
+          </div>
+          <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 10</p>
+        </div>
+      </div>
+    </div>
+    <!-- billing-details-end -->
+
+    <!-- shipping-details-start -->
+    <h4 class="font-16 my-2">Shipping Details</h4>
+    <div class="mb-3">
+      <mat-checkbox color="primary">
+        GSTIN
+      </mat-checkbox>
+      <div class="ml-4">
+        <div class="option-value-field">
+          <text-field
+            [type]="'text'"
+            [name]="'name'"
+            [cssClass]="'form-control'"
+          ></text-field>
+        </div>
+        <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 10</p>
+      </div>
+    </div>
+    <!-- shipping-details-end -->
+
+    <!-- transport-details-start -->
+    <mat-accordion class="mb-3 d-block">
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Transport Details
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="px-3 pb-3">
+          <div>
+            <mat-checkbox color="primary">
+              Ship Date
+            </mat-checkbox>
+            <div class="ml-4">
+              <div class="option-value-field">
+                <text-field
+                  [type]="'text'"
+                  [name]="'name'"
+                  [cssClass]="'form-control'"
+                ></text-field>
+              </div>
+              <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 6</p>
+            </div>
+          </div>
+          <div>
+            <mat-checkbox color="primary">
+              Ship Via
+            </mat-checkbox>
+            <div class="ml-4">
+              <div class="option-value-field">
+                <text-field
+                  [type]="'text'"
+                  [name]="'name'"
+                  [cssClass]="'form-control'"
+                ></text-field>
+              </div>
+              <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 7</p>
+            </div>
+          </div>
+          <div>
+            <mat-checkbox color="primary">
+              Tracking No.
+            </mat-checkbox>
+            <div class="ml-4">
+              <div class="option-value-field">
+                <text-field
+                  [type]="'text'"
+                  [name]="'name'"
+                  [cssClass]="'form-control'"
+                ></text-field>
+              </div>
+              <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 3</p>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <!-- transport-details-end -->
+
+    <!-- custom-field-start -->
+    <mat-accordion class="mb-3 d-block">
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Custom Field
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="px-3 pb-3">
+          <div>
+            <mat-checkbox color="primary">
+              Custom Field 1
+            </mat-checkbox>
+            <div class="ml-4">
+              <div class="option-value-field">
+                <text-field
+                  [type]="'text'"
+                  [name]="'name'"
+                  [cssClass]="'form-control'"
+                ></text-field>
+              </div>
+              <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 6</p>
+            </div>
+          </div>
+          <div>
+            <mat-checkbox color="primary">
+              Custom Field 2
+            </mat-checkbox>
+            <div class="ml-4">
+              <div class="option-value-field">
+                <text-field
+                  [type]="'text'"
+                  [name]="'name'"
+                  [cssClass]="'form-control'"
+                ></text-field>
+              </div>
+              <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 7</p>
+            </div>
+          </div>
+          <div>
+            <mat-checkbox color="primary">
+              Custom Field 3
+            </mat-checkbox>
+            <div class="ml-4">
+              <div class="option-value-field">
+                <text-field
+                  [type]="'text'"
+                  [name]="'name'"
+                  [cssClass]="'form-control'"
+                ></text-field>
+              </div>
+              <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 3</p>
+            </div>
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+    <!-- custom-field-end -->
+    <!-- header-fields-end -->
+  </div>
+  <!-- table-fields-start -->
+  <h4 class="font-16 my-3">Table</h4>
+  <div class="template-scroll">
+    <div>
+      <mat-checkbox color="primary">
+        HSN/SAC
+      </mat-checkbox>
+      <div class="ml-4">
+        <div class="option-value-field">
+          <text-field
+            [type]="'text'"
+            [name]="'name'"
+            [cssClass]="'form-control'"
+          ></text-field>
+        </div>
+        <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 1</p>
+      </div>
+    </div>
+    <div>
+      <mat-checkbox color="primary">
+        Quantity
+      </mat-checkbox>
+      <div class="ml-4">
+        <div class="option-value-field">
+          <text-field
+            [type]="'text'"
+            [name]="'name'"
+            [cssClass]="'form-control'"
+          ></text-field>
+        </div>
+        <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 2</p>
+      </div>
+    </div>
+    <div>
+      <mat-checkbox color="primary">
+        Description
+      </mat-checkbox>
+      <div class="ml-4">
+        <div class="option-value-field">
+          <text-field
+            [type]="'text'"
+            [name]="'name'"
+            [cssClass]="'form-control'"
+          ></text-field>
+        </div>
+        <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 2</p>
+      </div>
+    </div>
+    <div>
+      <mat-checkbox color="primary">
+        Rate/Item
+      </mat-checkbox>
+      <div class="ml-4">
+        <div class="option-value-field">
+          <text-field
+            [type]="'text'"
+            [name]="'name'"
+            [cssClass]="'form-control'"
+          ></text-field>
+        </div>
+        <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 2</p>
+      </div>
+    </div>
+    <mat-checkbox color="primary">
+      Total Before Dis.
+    </mat-checkbox>
+    <div>
+      <mat-checkbox color="primary">
+        Discount/Item
+      </mat-checkbox>
+      <div class="ml-4">
+        <div class="option-value-field">
+          <text-field
+            [type]="'text'"
+            [name]="'name'"
+            [cssClass]="'form-control'"
+          ></text-field>
+        </div>
+        <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 0</p>
+      </div>
+    </div>
+    <div>
+      <mat-checkbox color="primary">
+        Taxable Value
+      </mat-checkbox>
+      <div class="ml-4">
+        <div class="option-value-field">
+          <text-field
+            [type]="'text'"
+            [name]="'name'"
+            [cssClass]="'form-control'"
+          ></text-field>
+        </div>
+        <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 0</p>
+      </div>
+    </div>
+    <div>
+      <mat-checkbox color="primary">
+        Tax
+      </mat-checkbox>
+      <div class="ml-4">
+        <div class="option-value-field">
+          <text-field
+            [type]="'text'"
+            [name]="'name'"
+            [cssClass]="'form-control'"
+          ></text-field>
+        </div>
+        <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 0</p>
+      </div>
+    </div>
+    <div>
+      <mat-checkbox color="primary">
+        Total
+      </mat-checkbox>
+      <div class="ml-4">
+        <div class="option-value-field">
+          <text-field
+            [type]="'text'"
+            [name]="'name'"
+            [cssClass]="'form-control'"
+          ></text-field>
+        </div>
+        <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 0</p>
+      </div>
+    </div>
+    <div>
+      <mat-checkbox color="primary">
+        Previous Due
+      </mat-checkbox>
+      <div class="ml-4">
+        <div class="option-value-field">
+          <text-field
+            [type]="'text'"
+            [name]="'name'"
+            [cssClass]="'form-control'"
+          ></text-field>
+        </div>
+        <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 0</p>
+      </div>
+    </div>
+    <div>
+      <mat-checkbox color="primary">
+        Total Quantity
+      </mat-checkbox>
+      <div class="ml-4">
+        <div class="option-value-field">
+          <text-field
+            [type]="'text'"
+            [name]="'name'"
+            [cssClass]="'form-control'"
+          ></text-field>
+        </div>
+        <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 0</p>
+      </div>
+    </div>
+  </div>
+  <!-- table-fields-end -->
+
+  <!-- footer-fields-start -->
+  <h4 class="font-16 my-3">Footer</h4>
+  <div class="template-scroll">
+    <div>
+      <mat-checkbox color="primary">
+        TCS
+      </mat-checkbox>
+      <div class="ml-4">
+        <div class="option-value-field">
+          <text-field
+            [type]="'text'"
+            [name]="'name'"
+            [cssClass]="'form-control'"
+          ></text-field>
+        </div>
+        <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 1</p>
+      </div>
+    </div>
+    <div>
+      <mat-checkbox color="primary">
+        TDS
+      </mat-checkbox>
+      <div class="ml-4">
+        <div class="option-value-field">
+          <text-field
+            [type]="'text'"
+            [name]="'name'"
+            [cssClass]="'form-control'"
+          ></text-field>
+        </div>
+        <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 1</p>
+      </div>
+    </div>
+    <div>
+      <mat-checkbox color="primary">
+        Total Due
+      </mat-checkbox>
+      <div class="ml-4">
+        <div class="option-value-field">
+          <text-field
+            [type]="'text'"
+            [name]="'name'"
+            [cssClass]="'form-control'"
+          ></text-field>
+        </div>
+        <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 1</p>
+      </div>
+    </div>
+    <mat-checkbox color="primary" class="d-block">
+      Company Name
+    </mat-checkbox>
+    <mat-checkbox color="primary" class="d-block">
+      Show QR code
+    </mat-checkbox>
+    <mat-checkbox color="primary" class="d-block">
+      GSTIN
+    </mat-checkbox>
+    <div>
+      <mat-checkbox color="primary">
+        Company Address
+      </mat-checkbox>
+      <div class="ml-4">
+          <mat-form-field appearance="outline" class="w-100 address-text">
+            <mat-label>Textarea</mat-label>
+            <textarea matInput rows="2"></textarea>
+          </mat-form-field>
+        <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 1</p>
+      </div>
+    </div>
+    <mat-checkbox color="primary" class="d-block">
+      Taxable Amount
+    </mat-checkbox>
+    <div>
+      <mat-checkbox color="primary">
+        Taxable Amount
+      </mat-checkbox>
+      <div class="ml-4">
+        <div class="option-value-field">
+          <text-field
+            [type]="'text'"
+            [name]="'name'"
+            [cssClass]="'form-control'"
+          ></text-field>
+        </div>
+        <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 1</p>
+      </div>
+    </div>
+    <mat-checkbox color="primary" class="d-block">
+      Total Tax
+    </mat-checkbox>
+    <div>
+      <mat-checkbox color="primary">
+        Invoice Total(in words)
+      </mat-checkbox>
+      <div class="ml-4">
+        <div class="option-value-field">
+          <text-field
+            [type]="'text'"
+            [name]="'name'"
+            [cssClass]="'form-control'"
+          ></text-field>
+        </div>
+        <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 1</p>
+      </div>
+    </div>
+    <div>
+      <mat-checkbox color="primary">
+        Tax Bifurcation
+      </mat-checkbox>
+      <div class="ml-4">
+        <mat-radio-group>
+          <mat-radio-button value="1" class="d-block w-100">Tax Rate</mat-radio-button>
+          <mat-radio-button value="2" class="d-block w-100">HSN/SAC</mat-radio-button>
+        </mat-radio-group>
+      </div>
+    </div>
+    <mat-checkbox color="primary" class="d-block">
+      Show notes at the last page
+    </mat-checkbox>
+    <div>
+      <mat-checkbox color="primary">
+        Note 1
+      </mat-checkbox>
+      <div class="ml-4">
+          <mat-form-field appearance="outline" class="w-100 address-text">
+            <mat-label>Textarea</mat-label>
+            <textarea matInput rows="2" placeholder="Enter any other text you would like in the footer."></textarea>
+          </mat-form-field>
+      </div>
+    </div>
+    <mat-checkbox color="primary">
+      Note 2
+    </mat-checkbox>
+    <div>
+      <mat-checkbox color="primary">
+          <div class="option-value-field">
+            <text-field
+              [type]="'text'"
+              [name]="'name'"
+              [cssClass]="'form-control'"
+              palceholder="'Registered under Composition Scheme'"
+            ></text-field>
+        </div>
+      </mat-checkbox>
+      <p class="ml-4 mt-1"><span class="light-gray font-12">Characters left:</span> 70</p>
+    </div>
+    <div>
+      <mat-checkbox color="primary">
+        Text under Image Signature / Slogan
+      </mat-checkbox>
+      <div class="ml-4">
+        <div class="option-value-field">
+          <text-field
+            [type]="'text'"
+            [name]="'name'"
+            [cssClass]="'form-control'"
+          ></text-field>
+        </div>
+        <p class="mt-1"><span class="light-gray font-12">Characters left:</span> 1</p>
+      </div>
+    </div>
+  </div>
+  <!-- footer-fields-end -->
+</div>

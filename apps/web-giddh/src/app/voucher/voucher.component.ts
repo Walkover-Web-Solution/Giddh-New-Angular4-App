@@ -757,6 +757,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public purchaseBillingIndex: number = 0;
     /** Hold purchase shipping index  */
     public purchaseShippingIndex: number = 0;
+    /** Holds Array of VAT supported Countries */
+    public vatSupportedCountries = ['United Kingdom', 'Zimbabwe'];
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -4798,32 +4800,42 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         if (this.showVATNo) {
             if (data?.account) {
-                delete data.account?.billingDetails?.state;
-                delete data.account?.billingDetails?.stateCode;
-                delete data.account?.billingDetails?.stateName;
+                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW'){
+                    delete data.account?.billingDetails?.state;
+                    delete data.account?.billingDetails?.stateCode;
+                    delete data.account?.billingDetails?.stateName;
+                }
                 delete data.account?.billingDetails?.gstNumber;
 
-                delete data.account?.shippingDetails?.state;
-                delete data.account?.shippingDetails?.stateCode;
-                delete data.account?.shippingDetails?.stateName;
+                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW'){
+                    delete data.account?.shippingDetails?.state;
+                    delete data.account?.shippingDetails?.stateCode;
+                    delete data.account?.shippingDetails?.stateName;
+                }
                 delete data.account?.shippingDetails?.gstNumber;
             }
             if (data?.accountDetails) {
-                delete data.accountDetails?.billingDetails?.state;
-                delete data.accountDetails?.billingDetails?.stateCode;
-                delete data.accountDetails?.billingDetails?.stateName;
+                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW'){
+                    delete data.accountDetails?.billingDetails?.state;
+                    delete data.accountDetails?.billingDetails?.stateCode;
+                    delete data.accountDetails?.billingDetails?.stateName;
+                }
                 delete data.accountDetails?.billingDetails?.gstNumber;
 
-                delete data.accountDetails?.shippingDetails?.state;
-                delete data.accountDetails?.shippingDetails?.stateCode;
-                delete data.accountDetails?.shippingDetails?.stateName;
+                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW'){
+                    delete data.accountDetails?.shippingDetails?.state;
+                    delete data.accountDetails?.shippingDetails?.stateCode;
+                    delete data.accountDetails?.shippingDetails?.stateName;
+                }
                 delete data.accountDetails?.shippingDetails?.gstNumber;
             }
 
             if (data?.company) {
-                delete data.company?.billingDetails?.state;
-                delete data.company?.billingDetails?.stateCode;
-                delete data.company?.billingDetails?.stateName;
+                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW'){
+                    delete data.company?.billingDetails?.state;
+                    delete data.company?.billingDetails?.stateCode;
+                    delete data.company?.billingDetails?.stateName;
+                }
                 delete data.company?.billingDetails?.gstNumber;
 
                 delete data.company?.shippingDetails?.state;
@@ -4832,14 +4844,18 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 delete data.company?.shippingDetails?.gstNumber;
             }
             if (data?.companyDetails) {
-                delete data.companyDetails?.billingDetails?.state;
-                delete data.companyDetails?.billingDetails?.stateCode;
-                delete data.companyDetails?.billingDetails?.stateName;
+                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW'){
+                    delete data.companyDetails?.billingDetails?.state;
+                    delete data.companyDetails?.billingDetails?.stateCode;
+                    delete data.companyDetails?.billingDetails?.stateName;
+                }
                 delete data.companyDetails?.billingDetails?.gstNumber;
 
-                delete data.companyDetails?.shippingDetails?.state;
-                delete data.companyDetails?.shippingDetails?.stateCode;
-                delete data.companyDetails?.shippingDetails?.stateName;
+                if(this.selectedCompany?.countryV2?.alpha2CountryCode !== 'ZW'){
+                    delete data.companyDetails?.shippingDetails?.state;
+                    delete data.companyDetails?.shippingDetails?.stateCode;
+                    delete data.companyDetails?.shippingDetails?.stateName;
+                }
                 delete data.companyDetails?.shippingDetails?.gstNumber;
             }
         }
@@ -6167,11 +6183,18 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.showTRNNo = true;
                 this.showVATNo = false;
                 this.getOnboardingForm('AE')
-            } else if (name === 'United Kingdom') {
+            } else if (this.vatSupportedCountries.includes(name)) {
                 this.showGSTINNo = false;
                 this.showTRNNo = false;
                 this.showVATNo = true;
-                this.getOnboardingForm('GB')
+
+                let countryCode = null;
+                if (name === 'United Kingdom') {
+                    countryCode = 'GB';
+                }else if (name === 'Zimbabwe') {
+                    countryCode = 'ZW';
+                }
+                this.getOnboardingForm(countryCode);
             }
         } else {
             this.showGSTINNo = false;
@@ -8349,14 +8372,14 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
             this.invoiceDateLabel = this.commonLocaleData?.app_invoice_date;
             this.invoiceDueDateLabel = this.localeData?.invoice_due_date;
-            this.pageList[0].label = this.localeData?.invoice_types?.sales;
+            this.pageList[0].label = this.localeData?.invoice_types?.invoice;
             this.pageList[1].label = this.localeData?.invoice_types?.credit_note;
             this.pageList[2].label = this.localeData?.invoice_types?.debit_note;
             this.pageList[3].label = this.localeData?.invoice_types?.purchase;
             this.pageList[4].label = this.localeData?.invoice_types?.proforma;
             this.pageList[5].label = this.localeData?.invoice_types?.estimate;
 
-            this.pageList[0].additional.label = this.localeData?.invoice_types?.sales;
+            this.pageList[0].additional.label = this.localeData?.invoice_types?.invoice;
             this.pageList[1].additional.label = this.localeData?.invoice_types?.credit_note;
             this.pageList[2].additional.label = this.localeData?.invoice_types?.debit_note;
             this.pageList[3].additional.label = this.localeData?.invoice_types?.purchase;
@@ -8417,7 +8440,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.generateInvoiceText = this.localeData?.generate_invoice;
         let invoiceType = ((this.invoiceType === 'proforma' || this.invoiceType === 'proformas') ? this.localeData?.invoice_types?.proforma
             : (this.invoiceType === 'estimate' || this.invoiceType === 'estimates') ? this.localeData?.invoice_types?.estimate
-                : (this.invoiceType === 'sales') ? this.localeData?.invoice_types?.sales : (this.invoiceType === 'credit note') ? this.localeData?.invoice_types?.credit_note : (this.invoiceType === 'debit note') ? this.localeData?.invoice_types?.debit_note : (this.invoiceType === 'purchase') ? this.localeData?.invoice_types?.purchase : (this.invoiceType === 'cash') ? this.localeData?.invoice_types?.cash
+                : (this.invoiceType === 'sales') ? this.localeData?.invoice_types?.invoice : (this.invoiceType === 'credit note') ? this.localeData?.invoice_types?.credit_note : (this.invoiceType === 'debit note') ? this.localeData?.invoice_types?.debit_note : (this.invoiceType === 'purchase') ? this.localeData?.invoice_types?.purchase : (this.invoiceType === 'cash') ? this.localeData?.invoice_types?.cash_invoice
                     : (this.invoiceType === 'cash bill') ? this.localeData?.invoice_types?.cash_bill : (this.invoiceType === 'cash credit note') ? this.localeData?.invoice_types?.cash_credit_note : (this.invoiceType === 'cash debit note') ? this.localeData?.invoice_types?.cash_debit_note : this.invoiceType);
         invoiceType = this.titleCasePipe.transform(invoiceType);
         this.generateInvoiceText = this.generateInvoiceText?.replace("[INVOICE_TYPE]", invoiceType);
@@ -8433,7 +8456,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.updateInvoiceText = this.localeData?.update_invoice;
         let invoiceType = ((this.invoiceType === 'proforma' || this.invoiceType === 'proformas') ? this.localeData?.invoice_types?.proforma
             : (this.invoiceType === 'estimate' || this.invoiceType === 'estimates') ? this.localeData?.invoice_types?.estimate
-                : (this.invoiceType === 'sales') ? this.localeData?.invoice_types?.sales : (this.invoiceType === 'credit note') ? this.localeData?.invoice_types?.credit_note : (this.invoiceType === 'debit note') ? this.localeData?.invoice_types?.debit_note : (this.invoiceType === 'purchase') ? this.localeData?.invoice_types?.purchase : (this.invoiceType === 'cash') ? this.localeData?.invoice_types?.cash
+                : (this.invoiceType === 'sales') ? this.localeData?.invoice_types?.invoice : (this.invoiceType === 'credit note') ? this.localeData?.invoice_types?.credit_note : (this.invoiceType === 'debit note') ? this.localeData?.invoice_types?.debit_note : (this.invoiceType === 'purchase') ? this.localeData?.invoice_types?.purchase : (this.invoiceType === 'cash') ? this.localeData?.invoice_types?.cash_invoice
                     : (this.invoiceType === 'cash bill') ? this.localeData?.invoice_types?.cash_bill : (this.invoiceType === 'cash credit note') ? this.localeData?.invoice_types?.cash_credit_note : (this.invoiceType === 'cash debit note') ? this.localeData?.invoice_types?.cash_debit_note : this.invoiceType);
         invoiceType = this.titleCasePipe.transform(invoiceType);
         this.updateInvoiceText = this.updateInvoiceText?.replace("[INVOICE_TYPE]", invoiceType);
@@ -8540,7 +8563,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 break;
 
             case VoucherTypeEnum.sales:
-                invoiceType = this.localeData?.invoice_types?.sales;
+                invoiceType = this.localeData?.invoice_types?.invoice;
                 break;
 
             case VoucherTypeEnum.creditNote:

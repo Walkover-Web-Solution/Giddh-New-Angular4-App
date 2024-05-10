@@ -81,14 +81,14 @@
                                                     [scrollableElementId]="'customerId'"
                                                 >
                                                     <ng-template #optionTemplate let-option="option">
-                                                        <a href="javascript:void(0);" aria-label="label value">
-                                                            <div class="option-label">
+                                                        <span  aria-label="label value">
+                                                            <div class="option-label cursor-pointer">
                                                                 {{ option?.label }}
                                                             </div>
-                                                            <div class="option-value">
+                                                            <div class="option-value cursor-pointer">
                                                                 {{ option?.value }}
                                                             </div>
-                                                        </a>
+                                                        </span>
                                                     </ng-template>
                                                 </dropdown-field>
                                             </ng-container>
@@ -714,7 +714,7 @@
                                                 *ngIf="!isEinvoiceGenerated && !isCashInvoice"
                                                 [matMenuTriggerFor]="shippingAddress"
                                                 class="icon-edit text-blue cursor-pointer pl-2 font-12"
-                                                aria-label="edit"
+                                                aria-label="edit icon"
                                                 role="button"
                                             ></i>
                                             <mat-menu #shippingAddress="matMenu">
@@ -780,51 +780,38 @@
                                                                     onLoad
                                                                     (elementLoaded)="setIndex('accountShipping', i)"
                                                                     *ngIf="
-                                                                        (invFormData.accountDetails.shippingDetails
-                                                                            .state?.name ||
-                                                                            invFormData.accountDetails.shippingDetails
-                                                                                .stateName ||
-                                                                            invFormData.accountDetails.shippingDetails
-                                                                                .county?.name ||
-                                                                            invFormData.accountDetails.shippingDetails
-                                                                                .gstNumber ||
-                                                                            invFormData.accountDetails.shippingDetails
-                                                                                .taxNumber ||
-                                                                            invFormData.accountDetails.shippingDetails.address[0]?.trim()) &&
-                                                                        (!invFormData.accountDetails.shippingDetails
-                                                                            .state?.name ||
-                                                                            (invFormData.accountDetails.shippingDetails
-                                                                                .state?.name &&
+                                                                        (invFormData.accountDetails.shippingDetails?.state?.name ||
+                                                                            invFormData.accountDetails.shippingDetails?.stateName ||
+                                                                            invFormData.accountDetails.shippingDetails?.county?.name ||
+                                                                            invFormData.accountDetails.shippingDetails?.gstNumber ||
+                                                                            invFormData.accountDetails.shippingDetails?.taxNumber ||
+                                                                            invFormData.accountDetails.shippingDetails?.address[0]?.trim()) &&
+                                                                        (!invFormData.accountDetails.shippingDetails?.state?.name ||
+                                                                            (invFormData.accountDetails.shippingDetails?.state?.name &&
                                                                                 (invFormData.accountDetails
-                                                                                    .shippingDetails.state?.name ===
+                                                                                    .shippingDetails?.state?.name ===
                                                                                     address.state?.name ||
                                                                                     invFormData.accountDetails
-                                                                                        .shippingDetails.stateName ===
+                                                                                        .shippingDetails?.stateName ===
                                                                                         address.state?.name))) &&
-                                                                        (!invFormData.accountDetails.shippingDetails
-                                                                            .county?.name ||
-                                                                            (invFormData.accountDetails.shippingDetails
-                                                                                .county?.name &&
+                                                                        (!invFormData.accountDetails.shippingDetails?.county?.name ||
+                                                                            (invFormData.accountDetails.shippingDetails?.county?.name &&
                                                                                 invFormData.accountDetails
-                                                                                    .shippingDetails.county?.name ===
+                                                                                    .shippingDetails?.county?.name ===
                                                                                     address.county?.name)) &&
-                                                                        (!invFormData.accountDetails.shippingDetails
-                                                                            .gstNumber ||
-                                                                            (invFormData.accountDetails.shippingDetails
-                                                                                .gstNumber &&
+                                                                        (!invFormData.accountDetails.shippingDetails?.gstNumber ||
+                                                                            (invFormData.accountDetails.shippingDetails?.gstNumber &&
                                                                                 invFormData.accountDetails
-                                                                                    .shippingDetails.gstNumber ===
+                                                                                    .shippingDetails?.gstNumber ===
                                                                                     address.gstNumber)) &&
-                                                                        (!invFormData.accountDetails.shippingDetails
-                                                                            .taxNumber ||
-                                                                            (invFormData.accountDetails.shippingDetails
-                                                                                .taxNumber &&
+                                                                        (!invFormData.accountDetails.shippingDetails?.taxNumber ||
+                                                                            (invFormData.accountDetails.shippingDetails?.taxNumber &&
                                                                                 invFormData.accountDetails
-                                                                                    .shippingDetails.taxNumber ===
+                                                                                    .shippingDetails?.taxNumber ===
                                                                                     address.gstNumber)) &&
-                                                                        (!invFormData.accountDetails.shippingDetails.address[0]?.trim() ||
-                                                                            (invFormData.accountDetails.shippingDetails.address[0]?.trim() &&
-                                                                                invFormData.accountDetails.shippingDetails.address[0]?.trim() ===
+                                                                        (!invFormData.accountDetails.shippingDetails?.address[0]?.trim() ||
+                                                                            (invFormData.accountDetails.shippingDetails?.address[0]?.trim() &&
+                                                                                invFormData.accountDetails.shippingDetails?.address[0]?.trim() ===
                                                                                     address.address?.trim()))
                                                                     "
                                                                 ></i>
@@ -836,6 +823,7 @@
                                                         mat-menu-item
                                                         class="vouchers-add-new"
                                                         (click)="getCustomerDetails()"
+                                                        aria-label="new address"
                                                     >
                                                         {{ localeData?.add_new_address }}
                                                     </button>
@@ -1204,6 +1192,7 @@
                                                 [matMenuTriggerFor]="shippingAddress"
                                                 class="icon-edit text-blue cursor-pointer pl-2 font-12"
                                                 role="button"
+                                                aria-label="edit icon"
                                             ></i>
                                             <mat-menu #shippingAddress="matMenu">
                                                 <div class="mat-menu-width-large vouchers-address-menu">
@@ -2021,7 +2010,7 @@
                                                         </span>
                                                     </div>
                                                 </td>
-                                                <td [class.error-box]="transaction.requiredTax" [width]="hasStock ? '10%' : '14%'"
+                                                <td [class.error-box]="transaction.requiredTax && !entry.taxSum" [width]="hasStock ? '10%' : '14%'"
                                                     (focus)="transaction.requiredTax = false" *ngIf="
                                                         (!currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.taxesAllowed) && this.showHideTaxColumn
@@ -2410,7 +2399,7 @@
                                                                                     {{ commonLocaleData?.app_sac_code }}
                                                                                 </mat-radio-button>
                                                                             </mat-radio-group>
-                                                                            <text-field 
+                                                                            <text-field
                                                                                 [id]="'transaction'"
                                                                                 [type]="'text'"
                                                                                 [cssClass]="'form-control hsn-sac-code'"
@@ -2424,7 +2413,7 @@
                                                                                     transaction.showCodeType === 'hsn'
                                                                                 " [(ngModel)]="transaction.hsnNumber"
                                                                                 [readonly]="isEinvoiceGenerated"></text-field>
-                                                                            <text-field 
+                                                                            <text-field
                                                                                 [id]="'transaction'"
                                                                                 [type]="'text'"
                                                                                 [cssClass]="'form-control hsn-sac-code'"
@@ -2500,13 +2489,13 @@
                                                     <!-- region entry date/ hsncode -->
                                                 </div>
                                                 </td>
-                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()" 
+                                                <td (click)="closeDiscountPopup(); closeTaxControlPopup()"
                                                     *ngIf="
                                                         (!currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.quantityAllowed)
                                                     " width="10%" [ngClass]="{ 'd-none' : !hasStock}">
                                                     <ng-container *ngIf="!(!transaction.isStockTxn || isEinvoiceGenerated)">
-                                                        <text-field 
+                                                        <text-field
                                                             [id]="'transaction'"
                                                             [placeholder]="commonLocaleData?.app_quantity"
                                                             [readonly]="!transaction.isStockTxn || isEinvoiceGenerated"
@@ -2539,7 +2528,7 @@
                                                 </ng-container>
                                                 </td>
                                                 <td (click)="closeDiscountPopup(); closeTaxControlPopup()" width="10%" [ngClass]="{ 'd-none' : !hasStock}"
-                                                   
+
                                                     *ngIf="
                                                         (!currentVoucherFormDetails ||
                                                         currentVoucherFormDetails?.rateAllowed)
@@ -2587,7 +2576,7 @@
                                                     </div>
                                                 </td>
                                                 <td (click)="closeDiscountPopup(); closeTaxControlPopup()" [width]="hasStock ? '10%' : '14%'"
-                                                   > 
+                                                   >
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">
                                                             <text-field
@@ -2727,7 +2716,7 @@
                                                     </div>
                                                 </td>
                                                 <td class="position-relative item-tax"
-                                                   
+
                                                     (click)="closeDiscountPopup(); closeTaxControlPopup()" width="16%">
                                                     <div class="td-wrapper">
                                                         <div class="flex-fill">

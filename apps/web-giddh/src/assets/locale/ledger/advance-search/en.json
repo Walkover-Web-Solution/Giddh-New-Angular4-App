@@ -1,11 +1,11 @@
 {
     "merge_accounts": "Merge Accounts",
-    "merge_accounts_note": "you can merge multiple accounts; further filters will depend on this.",
+    "merge_accounts_note": "(you can merge multiple accounts; further filters will depend on this.)",
     "merge_group": "Merge Group",
-    "merge_groups_note": "you can merge multiple groups; further filters will depend on this.",
+    "merge_groups_note": "(you can merge multiple groups; further filters will depend on this.)",
     "select_groups": "Select Groups",
-    "default_accounts_selected": "By default all accounts are selected",
-    "default_vouchers_selected": "By default all vouchers are selected",
+    "default_accounts_selected": "(By default all accounts are selected)",
+    "default_vouchers_selected": "(By default all vouchers are selected)",
     "show_cancelled_entries": "Show cancelled entries",
     "cheque_details": "Cheque Details"
 }

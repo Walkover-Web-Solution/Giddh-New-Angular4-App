@@ -926,7 +926,6 @@ export class VoucherGridComponent implements OnInit, OnDestroy, AfterViewInit, O
                 additional: obj
             });
         });
-        // console.log(stockAccountArr, 'stocks');
         this.stockList = stockAccountArr;
         this.inputForList = cloneDeep(this.stockList);
     }

@@ -21,5 +21,7 @@
     "delete_vouchers": "तुम्हाला व्हाउचर/पेमेंट हटवायचे आहेत का?",
     "uploaded_bill": "बिल अपलोड केले",
     "currency_conversion": "[BASE_CURRENCY] मध्ये: [AMOUNT]<br />(रूपांतरण दर: [CONVERSION_RATE])",
-    "exchange_gain_loss_label": "[BASE_CURRENCY] मध्ये: [AMOUNT]<br />एक्सचेंज [PROFIT_TYPE]: "
+    "exchange_gain_loss_label": "[BASE_CURRENCY] मध्ये: [AMOUNT]<br />एक्सचेंज [PROFIT_TYPE]: ",
+    "payments": "देयके",
+    "all_payments": "सर्व-देयके"
 }

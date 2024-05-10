@@ -11,7 +11,7 @@
                 <!-- reverse charge transction start (make it functional by developer end) -->
                 <ng-container *ngTemplateOutlet="rcmEntryCheckbox"></ng-container>
             </div>
-            <div class="col-4" *ngIf="isLedgerAccountAllowsMultiCurrency">
+            <div *ngIf="isLedgerAccountAllowsMultiCurrency" [ngClass]="{ 'col-4': currentTxn?.shouldShowRcmEntry,'col-12': !currentTxn?.shouldShowRcmEntry }">
                 <div class="multi-currency-wrapper ml-auto">
                     <ul
                         class="list-inline font-15 d-flex align-items-center"
@@ -933,7 +933,7 @@
                                         ><span class="font-16">{{ commonLocaleData?.app_generate_voucher }}</span></mat-checkbox
                                     >
                                     <span class="pd-l05" *ngIf="autoGenerateVoucherFromEntry">
-                                        <span class="icon-info text-dark p-1" [matMenuTriggerFor]="toolTip" #trigger="matMenuTrigger" (mouseenter)="showAutoPaidTooltip()" (mouseleave)="hideAutoPaidTooltip()"></span>
+                                        <span class="icon-info text-dark p-1" [matMenuTriggerFor]="toolTip" #trigger="matMenuTrigger" (mouseenter)="showAutoPaidTooltip()" (mouseleave)="hideAutoPaidTooltip()" aria-expanded="false"></span>
                                         <mat-menu #toolTip="matMenu" class="custom-tooltip" [disableRipple]="true" hasBackdrop="false" xPosition="after" yPosition="above">
                                         <div (mouseenter)="tooltipHoveredStatus = true" (mouseleave)="tooltipHoveredStatus = false; hideAutoPaidTooltipOnMouseLeaveFromTooltip()" (click)="$event.stopPropagation()">
                                             <div class="tooltip-text" [innerHTML]="localeData?.uncheck_auto_generate_tooltip_message"></div>

@@ -31,12 +31,18 @@
                                 aria-labelledby="button-basic2"
                             >
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:void(0)" (click)="goToInvoice('cash')">{{
+                                    <a class="dropdown-item" href="javascript:void(0)" *ngIf="voucherApiVersion === 1" (click)="goToInvoice('cash')">{{
+                                        localeData?.cash_invoice
+                                    }}</a>
+                                    <a class="dropdown-item" href="javascript:void(0)" *ngIf="voucherApiVersion === 2" [routerLink]="['/pages/vouchers/cash/create']">{{
                                         localeData?.cash_invoice
                                     }}</a>
                                 </li>
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:void(0)" (click)="goToInvoice('sales')">{{
+                                    <a class="dropdown-item" href="javascript:void(0)" *ngIf="voucherApiVersion === 1" (click)="goToInvoice('sales')">{{
+                                        localeData?.sales_invoice
+                                    }}</a>
+                                    <a class="dropdown-item" href="javascript:void(0)" *ngIf="voucherApiVersion === 2" [routerLink]="['/pages/vouchers/sales/create']">{{
                                         localeData?.sales_invoice
                                     }}</a>
                                 </li>
@@ -54,7 +60,7 @@
                     </div>
 
                     <ul class="invoice-sidebar">
-                        <cdk-virtual-scroll-viewport [itemSize]="62">
+                        <cdk-virtual-scroll-viewport [itemSize]="62" tabindex="0">
                             <li
                                 class="single-invoice-detail cp"
                                 *cdkVirtualFor="let item of filteredData"
@@ -118,7 +124,7 @@
                                 <div class="col-md-8 col-12">
                                     <div class="edit-change-status">
                                         <span class="close-modal cp pull-right p-0" (click)="onCancel()">
-                                            <img src="assets/images/multiply.svg"
+                                            <img src="assets/images/multiply.svg" alt="close icon"
                                         /></span>
 
                                         <!-- region for proforma and estimates -->
@@ -335,6 +341,7 @@
                                                         [tooltip]="commonLocaleData?.app_edit"
                                                         placement="top"
                                                         (click)="isCompany ? '' : toggleEditMode()"
+                                                        aria-label="edit icon"
                                                         ><i class="icon-edit-pencil"></i
                                                     ></a>
                                                 </span>
@@ -345,6 +352,7 @@
                                                         [tooltip]="commonLocaleData?.app_send_email"
                                                         placement="top"
                                                         (click)="showEmailSendModal.toggle()"
+                                                        aria-label="envelope icon"
                                                         ><i class="icon-envelope font-12"></i
                                                     ></a>
                                                 </span>
@@ -355,6 +363,7 @@
                                                         [tooltip]="commonLocaleData?.app_send_email"
                                                         placement="top"
                                                         (click)="openSendMailModal(sendEmailModal)"
+                                                        aria-label="envelope icon"
                                                         ><i class="icon-envelope font-12"></i
                                                     ></a>
                                                 </span>
@@ -375,6 +384,7 @@
                                                         [tooltip]="commonLocaleData?.app_print"
                                                         placement="top"
                                                         (click)="printVoucher()"
+                                                        aria-label="print icon"
                                                         ><i class="fa fa-print"></i
                                                     ></a>
                                                 </span>
@@ -385,6 +395,7 @@
                                                         [tooltip]="commonLocaleData?.app_print_thermal"
                                                         placement="top"
                                                         (click)="printThermal()"
+                                                        aria-label="print icon"
                                                         ><i class="fa fa-print"></i
                                                     ></a>
                                                 </span>
@@ -401,6 +412,7 @@
                                                         [tooltip]="commonLocaleData?.app_download_pdf"
                                                         placement="top"
                                                         (click)="downloadPurchaseBillPDF()"
+                                                        aria-label="download"
                                                         ><i class="icon-download-circle"></i
                                                     ></a>
                                                 </span>
@@ -422,6 +434,7 @@
                                                         [tooltip]="commonLocaleData?.app_download_pdf"
                                                         placement="top"
                                                         (click)="downloadPdf()"
+                                                        aria-label="download"
                                                         ><i class="icon-download-circle"></i
                                                     ></a>
                                                 </span>
@@ -446,6 +459,7 @@
                                                         [tooltip]="localeData?.download_attachment"
                                                         placement="top"
                                                         (click)="downloadFile()"
+                                                        aria-label="download"
                                                         ><i class="icon-download-circle"></i
                                                     ></a>
                                                 </span>
@@ -456,6 +470,7 @@
                                                         [tooltip]="commonLocaleData?.app_delete"
                                                         placement="top"
                                                         (click)="deleteConfirmationModel.toggle()"
+                                                        aria-label="delete icon"
                                                         ><i class="icon-trash"></i
                                                     ></a>
                                                 </span>
@@ -500,7 +515,7 @@
                                     "
                                 >
                                     <div class="single-payment-detail clearfix pr-4">
-                                        <div class="payment-icon"><img src="assets/images/dollar-icon.svg" /></div>
+                                        <div class="payment-icon"><img src="assets/images/dollar-icon.svg" alt="dollar-icon" /></div>
                                         <p class="payment-content">{{ localeData?.record_payment }}</p>
                                         <a
                                             href="javascript:;"
@@ -512,7 +527,7 @@
 
                                 <div class="col-md-4 col-12">
                                     <div class="single-payment-detail clearfix">
-                                        <div class="payment-icon"><img src="assets/images/send-icon.svg" /></div>
+                                        <div class="payment-icon"><img src="assets/images/send-icon.svg" alt="send-icon" /></div>
                                         <p class="payment-content">{{ localeData?.email_invoice }}</p>
                                         <a href="javascript:;" (click)="showEmailSendModal?.show()">
                                             {{
@@ -682,7 +697,7 @@
                                 #attachedDocumentPreview
                                 class="pdf-expand-collapse pdf-preview mt-0"
                             >
-                                <iframe #pdfContainer width="100%" height="100%" [src]="attachedPdfFileUrl"></iframe>
+                                <iframe #pdfContainer width="100%" height="100%" [src]="attachedPdfFileUrl" title="attached PDF"></iframe>
                             </div>
                             <div
                                 #attachedDocumentPreview
@@ -698,7 +713,7 @@
                                 >
                                     <strong>{{ localeData?.auto_generated_purchase_bill }}</strong>
                                 </h5>
-                                <iframe #pdfContainer width="100%" height="100%" [src]="sanitizedPdfFileUrl"></iframe>
+                                <iframe #pdfContainer width="100%" height="100%" [src]="sanitizedPdfFileUrl" title="sanatized PDF"></iframe>
                                 <giddh-page-loader
                                     *ngIf="
                                         isPdfAvailable &&
@@ -783,6 +798,7 @@
                 width="100%"
                 height="100%"
                 [src]="sanitizedPdfFileUrl"
+                title="sanatized PDF"
             ></iframe>
             <img
                 *ngIf="selectedItem?.voucherType === 'purchase' && attachedDocumentType?.type === 'image'"

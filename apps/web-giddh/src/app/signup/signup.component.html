@@ -20,8 +20,8 @@
                     <div class="giddh-login">
                         <div class="giddh-login-inner">
                             <div class="logo-login">
-                                <a href="https://giddh.com">
-                                    <img src="./assets/images/giddh-white-logo.svg" alt="" width="141px" />
+                                <a href="https://giddh.com" aria-label="giddh logo">
+                                    <img src="./assets/images/giddh-white-logo.svg" alt="giddh logo" width="141px" />
                                 </a>
                             </div>
                             <!-- dynamic content inserted -->
@@ -78,6 +78,7 @@
                                                 <a
                                                     class="btn btn-link cp pull-right"
                                                     (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
+                                                    href="javascript:void(0);"
                                                     >Resend code</a
                                                 >
                                             </div>
@@ -156,6 +157,7 @@
                                                 <a
                                                     class="btn btn-link cp pull-right"
                                                     (click)="LoginWithEmail(signupVerifyForm.controls['email']?.value)"
+                                                    href="javascript:void(0);"
                                                     >Resend code</a
                                                 >
                                             </div>
@@ -166,7 +168,7 @@
                                 <ul class="social-login">
                                     <li class="google-ico">
                                         <a href="javascript:void(0);" (click)="signInWithProviders('google')"
-                                            ><i class="ico-google"> <img src="./assets/images/new/google_ico.svg" /> </i
+                                            ><i class="ico-google"> <img src="./assets/images/new/google_ico.svg" alt="google img" /> </i
                                             ><span>Signup with Google</span></a
                                         >
                                     </li>
@@ -175,15 +177,15 @@
                                     <li class="google-ico msg91-ico">
                                         <a href="javascript:void(0);" (click)="signUpWithOtp()">
                                             <i class="ico-google ico-msg91">
-                                                <img src="./assets/images/msg91-icon-blue.svg" />
+                                                <img src="./assets/images/msg91-icon-blue.svg" alt="msg91 icon" />
                                             </i>
                                             <span>Signup with OTP</span></a
                                         >
                                     </li>
                                 </ul>
                                 <div class="d-flex align-items-center account mt-1">
-                                    <p class="mb-0 mr-2 bold text-light-2">Already have an account?</p>
-                                    <a routerLink="/login" class="btn btn-sm btn-secondary">Login</a>
+                                    <p class="mb-0 mr-2 bold">Already have an account?</p>
+                                    <a routerLink="/login" class="btn btn-sm btn-secondary" href="javascript:void(0);">Login</a>
                                 </div>
                             </div>
                         </div>
@@ -247,6 +249,7 @@
                             <a
                                 class="btn btn-link cp pull-right"
                                 (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
+                                href="javascript:void(0);"
                                 >Resend code</a
                             >
                         </div>

@@ -379,9 +379,9 @@
                 </div>
             </mat-tab>
 
-            <mat-tab [label]="localeData?.payment?.tab_heading" *ngIf="!isIciciBankSupportedCountry">
+            <mat-tab [label]="localeData?.payment?.tab_heading" *ngIf="iciciAllowedCompanies.includes(activeCompany?.uniqueName) || isPlaidSupportedCountry">
                 <div class="clearfix box mat-tab-bottom-spacing">
-                    <!-- <ng-container *ngIf="isIciciBankSupportedCountry">
+                    <ng-container *ngIf="isIciciBankSupportedCountry">
                         <ng-template>
                             <span class="icon-payment"></span> {{ localeData?.payment?.tab_heading }}
                         </ng-template>
@@ -420,8 +420,8 @@
                                 </p>
                             </div>
                         </div>
-                    </ng-container> -->
-                    <ng-container *ngIf="!isIciciBankSupportedCountry">
+                    </ng-container>
+                    <ng-container *ngIf="isPlaidSupportedCountry">
                         <div class="form-group">
                             <button aria-label="connect bank" mat-stroked-button class="mr-r2" color="primary" (click)="getPlaidLinkToken()">
                                 {{ localeData?.payment?.connect_bank }}

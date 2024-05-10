@@ -190,7 +190,7 @@
                                             aria-label="menu"
                                             *ngIf="menu?.items?.length === 0 && menu?.link"
                                             [routerLink]="[menu?.link]"
-                                            [queryParams]="menu?.additional"
+                                            [queryParams]="menu?.additional?.queryParams"
                                             dropdownToggle
                                             class="dropdown-toggle"
                                         >
@@ -202,9 +202,8 @@
                                         <ng-container *ngIf="menu?.items?.length">
                                             <ul *dropdownMenu class="dropdown-menu list-style-none pd-l2 sub-menu" role="menu">
                                                 <li *ngFor="let item of menu?.items; trackBy: trackItems" role="menuitem">
-                                                    <a
+                                                    <div
                                                         *ngIf="item?.link"
-                                                        href="javascript:void(0);"
                                                         aria-label="menu"
                                                         [class.active]="
                                                             rla?.isActive ||
@@ -215,18 +214,43 @@
                                                         routerLinkActive
                                                         #rla="routerLinkActive"
                                                         [routerLinkActiveOptions]="{ exact: true }"
-                                                        [queryParams]="item?.additional"
-                                                        ><i [ngClass]="item.icon"></i>
-                                                        {{ item?.label }}
-                                                    </a>
-                                                    <a
+                                                        [queryParams]="item?.additional?.queryParams"
+                                                        >
+                                                            <i [ngClass]="item.icon"></i>
+                                                            {{ item?.label }}
+                                                            <ng-container *ngIf="!(item?.additional?.createNew?.queryParams?.addVendor || item?.additional?.createNew?.queryParams?.addCustomer)">
+                                                                <strong 
+                                                                    class="ml-auto" 
+                                                                    *ngIf="item?.additional?.createNew" 
+                                                                    (click)="$event.stopPropagation()" 
+                                                                    [routerLink]="[item?.additional?.createNew?.link]"
+                                                                    [queryParams]="item?.additional?.createNew?.queryParams"
+                                                                >
+                                                                {{ item?.additional?.createNew?.label }}
+                                                                </strong>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="(item?.additional?.createNew?.queryParams?.addVendor || item?.additional?.createNew?.queryParams?.addCustomer)">
+                                                                <strong 
+                                                                class="ml-auto" 
+                                                                (click)="
+                                                                    $event.stopPropagation();
+                                                                    selectedGroupForCreateAccount = 
+                                                                    item?.additional?.createNew?.queryParams?.addCustomer
+                                                                    ? 'sundrydebtors'
+                                                                    : 'sundrycreditors';
+                                                                    toggleAccountAsidePane()"
+                                                                >
+                                                                    {{ item?.additional?.createNew?.label }}
+                                                                </strong>
+                                                            </ng-container>
+                                                </div>
+                                                    <div
                                                         *ngIf="!item?.link"
-                                                        href="javascript:void(0);"
                                                         aria-label="menu"
                                                         (click)="handleItemClick(item)"
                                                         ><i [ngClass]="item.icon"></i>
                                                         {{ item?.label }}
-                                                    </a>
+                                                    </div>
                                                 </li>
                                             </ul>
                                         </ng-container>

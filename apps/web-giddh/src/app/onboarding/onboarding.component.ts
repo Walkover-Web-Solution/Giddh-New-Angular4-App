@@ -9,6 +9,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { GeneralActions } from '../actions/general/general.actions';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
+
 @Component({
     selector: 'onboarding-component',
     templateUrl: './onboarding.component.html',
@@ -46,6 +47,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     public accountDetails: any;
     /** Observable for create account success*/
     private createAccountIsSuccess$: Observable<boolean>;
+    /** Holds true if current company country is plaid supported country */
+    public isPlaidSupportedCountry: boolean;
 
     constructor(
         private _router: Router, private _generalService: GeneralService,
@@ -62,6 +65,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.companyCountry = res.country;
+                this.isPlaidSupportedCountry = this._generalService.checkCompanySupportPlaid(res.country);
             }
         });
 

@@ -886,6 +886,11 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      */
     public resetForm(): void {
         this.branchTransferCreateEditForm.reset();
+        setTimeout(() => {
+            this.showContent = true;
+            this.detectChanges();
+        }, 10);
+        this.showContent = false;
         this.isValidForm = true;
         let dateOfSupply = dayjs(this.tempDateParams.dateOfSupply).format(GIDDH_DATE_FORMAT)
         this.branchTransferCreateEditForm.get('dateOfSupply').setValue(dateOfSupply);

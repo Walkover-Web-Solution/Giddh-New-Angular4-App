@@ -1,4 +1,4 @@
-<div id="share-modal" class="pd-b4 share-grp group-share-modal">
+<div id="share-modal" class="pd-b4 share-grp group-share-modal" role="dialog" aria-labelledby="modal-title">
     <div class="modal-header d-flex align-items-center">
         <h3>{{ localeData?.share_group }}</h3>
         <button aria-hidden="true" class="close" data-dismiss="modal" (click)="closeModal()">×</button>
@@ -30,6 +30,7 @@
                                 name="selectedPermission"
                                 class="form-control selected-permission"
                                 [(ngModel)]="selectedPermission"
+                                aria-label="select permission"
                                 required
                             >
                                 <option value="">{{ localeData?.select_permission }}</option>

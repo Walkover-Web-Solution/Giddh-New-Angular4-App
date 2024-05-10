@@ -4,11 +4,20 @@
         width: auto;
     }
 }
+.voucher-heading {
+    padding: 10px;
+    font-weight: bolder;
+}
+
+#content-wrapper {
+    padding-bottom: 0px !important;
+}
 
 .current-balance {
     font-size: var(--font-size-15);
     font-style: italic;
     color: var(--color-table-primary-content);
+    padding-left: 70px;
 }
 
 .cheque-popup .new-account-form .modal-body {

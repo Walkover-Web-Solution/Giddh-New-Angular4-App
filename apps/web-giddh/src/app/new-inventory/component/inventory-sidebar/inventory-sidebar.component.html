@@ -5,7 +5,7 @@
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)" asideInventorySidebarMenuState>
+    <div class="aside-pane inventory-aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)" asideInventorySidebarMenuState>
         <div class="help-aside-body">
             <div class="back-to-main-slider">
                 <a [routerLink]="['/pages/giddh-all-items']" href="javascript:void(0);" aria-label="home icon">

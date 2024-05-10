@@ -1,0 +1,47 @@
+<ng-container 
+    appTranslate
+    [file]="'settings/taxes'"
+    (localeData)="localeData = $event" 
+    (commonLocaleData)="commonLocaleData = $event">
+    <div class="other-tax dialog-asidepan">
+        <div class="dialog-header">
+            <span mat-dialog-title class="font-16">{{ commonLocaleData?.app_tax_applicable }}</span>
+            <i mat-dialog-close class="icon-cross"></i>
+        </div>
+        <div mat-dialog-content class="dialog-body">
+            <form autocomplete="off" novalidate name="otherTaxForm" [formGroup]="otherTaxForm">
+                <div class="row mt-2">
+                    <div class="col-6">
+                        <reactive-dropdown-field [label]="localeData?.select_tax" [placeholder]="localeData?.select_tax"
+                            [labelValue]="otherTaxForm.get('name')?.value" formControlName="tax" [name]="'tax'" [options]="taxesList$ | async" (onClear)="otherTaxForm.get('tax')?.patchValue(null)"
+                            [showError]="isFormSubmitted && !otherTaxForm.get('tax')?.value"
+                            (createOption)="createTaxDialog()" [createNewText]="commonLocaleData?.app_create_new">
+                        </reactive-dropdown-field>
+                    </div>
+                    <div class="col-6">
+                        <span class="custom-mat-form-field">
+                            <mat-form-field appearance="outline">
+                                <mat-label>{{ commonLocaleData?.app_calculation_method }}</mat-label>
+                                <mat-select required="true" formControlName="calculationMethod">
+                                    <mat-option [value]="'OnTaxableAmount'">{{ commonLocaleData?.app_on_taxable_value }}</mat-option>
+                                    <mat-option [value]="'OnTotalAmount'">{{ commonLocaleData?.app_on_total_value }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </span>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <button mat-stroked-button color="primary" (click)="saveTax()">{{ commonLocaleData?.app_apply }}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Create Tax Aside Pane -->
+    <ng-template #createTax>
+        <aside-menu-create-tax-component [class]="'in'" [tax]="selectedTax" [localeData]="localeData" [otherTax]="otherTax"
+            [commonLocaleData]="commonLocaleData" (closeEvent)="closeCreateTaxDialog()"></aside-menu-create-tax-component>
+    </ng-template>
+</ng-container>

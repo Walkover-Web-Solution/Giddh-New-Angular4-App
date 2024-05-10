@@ -91,7 +91,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     public moveCompanyInNewPlan(): void {
         this.subscriptionRequestObj = {
             planUniqueName: '',
-            subscriptionId: this.availablePlans[this.selectedPlan].subscriptionId,
+            subscriptionId: this.selectedPlan,
             userUniqueName: this.moveSelectedCompany?.createdBy?.uniqueName,
             licenceKey: ''
         };
@@ -122,7 +122,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                             if (subscription.subscriptionId && this.moveSelectedCompany?.subscription?.subscriptionId !== subscription.subscriptionId && (!subscription.companies?.length || subscription.companies?.length < subscription?.totalCompanies) && this.availablePlans[subscription?.subscriptionId] === undefined &&
                                 subscription.planCountries?.find(country => country?.countryName === this.moveSelectedCompany.country ? this.moveSelectedCompany.country : this.moveSelectedCompany.country?.countryName)
                             ) {
-                                this.availablePlansOption.push({ label: subscription.plan?.name + " - "+ subscription?.subscriptionId, value: subscription.plan?.uniqueName});
+                                this.availablePlansOption.push({ label: subscription.plan?.name + " - " + subscription?.subscriptionId, value: subscription.subscriptionId });
                                 if (this.availablePlans[subscription.subscriptionId] === undefined) {
                                     this.availablePlans[subscription.subscriptionId] = [];
                                 }

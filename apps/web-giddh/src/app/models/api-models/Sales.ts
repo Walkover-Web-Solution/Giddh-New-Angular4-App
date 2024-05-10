@@ -589,9 +589,9 @@ export class ILinkedInvoice {
 }
 
 export class TemplateDetailsClass {
-    public logoPath: string;
+    public logoPath?: string;
     public other: OtherSalesItemClass;
-    public templateUniqueName: string;
+    public templateUniqueName?: string;
 
     constructor() {
         this.other = new OtherSalesItemClass();

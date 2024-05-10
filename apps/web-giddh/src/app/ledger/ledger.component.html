@@ -201,7 +201,11 @@
                                     container="body"
                                     *ngIf="isMobileScreen"
                                 >
-                                    <img (click)="showGiddhDatepicker($event)" src="{{ imgPath }}calender-icon.svg" alt="calender-icon" />
+                                    <img
+                                        (click)="showGiddhDatepicker($event)"
+                                        src="{{ imgPath }}calender-icon.svg"
+                                        alt="calender-icon"
+                                    />
                                 </div>
                                 <span class="input-wrapper ipad-view-datepicker" (click)="showGiddhDatepicker($event)">
                                     <mat-form-field appearance="fill" class="w-100">
@@ -509,7 +513,7 @@
                                         [matTooltipPosition]="'above'"
                                         matTooltipClass="tooltip-black"
                                         (click)="showBulkDeleteBankTransactionsConfirmationModal()"
-                                        *ngIf="entryUniqueNamesForBulkAction?.length > 0"
+                                        *ngIf="entryUniqueNamesForBulkAction?.length > 0 || selectedDebitTransactionIds?.size > 0 || selectedCreditTransactionIds?.size > 0"
                                     >
                                         <i class="icon-trash lh-0"></i>
                                     </a>
@@ -531,7 +535,11 @@
                                         matTooltipClass="tooltip-black"
                                         (click)="showAutopaidModal()"
                                     >
-                                        <img class="autopaid-icon" src="{{ imgPath }}autopaid.svg" alt="autopaid-icon" />
+                                        <img
+                                            class="autopaid-icon"
+                                            src="{{ imgPath }}autopaid.svg"
+                                            alt="autopaid-icon"
+                                        />
                                     </a>
                                     <span
                                         class="bank-menu"
@@ -673,6 +681,29 @@
                                                     {{ commonLocaleData?.app_amount }}
                                                 </mat-grid-tile>
                                             </mat-grid-list>
+                                            <mat-grid-list cols="4" rowHeight="50px" class="ledger-row">
+                                                <mat-grid-tile colspan="1">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        id="select-all-entries-dr"
+                                                        [checked]="
+                                                            selectedDebitTransactionIds?.size ===
+                                                            lc.bankTransactionsDebitData?.length
+                                                        "
+                                                        [indeterminate]="
+                                                            selectedDebitTransactionIds?.size > 0 &&
+                                                            selectedDebitTransactionIds?.size <
+                                                                lc.bankTransactionsDebitData?.length
+                                                        "
+                                                        *ngIf="selectedDebitTransactionIds?.size > 0"
+                                                        (change)="selectAllBankEntries($event, 'debit')"
+                                                    ></mat-checkbox>
+                                                </mat-grid-tile>
+                                                <mat-grid-tile colspan="2">&nbsp;</mat-grid-tile>
+                                                <mat-grid-tile class="no-right-border" colspan="1"
+                                                    >&nbsp;</mat-grid-tile
+                                                >
+                                            </mat-grid-list>
                                             <mat-grid-list id="ledger-transaction-left-list" cols="4" rowHeight="50px">
                                                 <ng-container
                                                     *ngFor="
@@ -690,6 +721,8 @@
                                                                 'compound-entry':
                                                                     txn.id === lc.selectedBankTxnUniqueName
                                                             }"
+                                                            (mouseover)="bankEntryHovered(txn.id)"
+                                                            (mouseout)="selectedBankTrxWhileHovering = ''"
                                                         >
                                                             <mat-grid-tile colspan="1">
                                                                 <div class="d-flex align-items-center column-gap5">
@@ -700,8 +733,24 @@
                                                                                 'transaction-mapped-select-entry-dr-' +
                                                                                 i
                                                                             "
+                                                                            [checked]="
+                                                                                selectedDebitTransactionIds?.has(txn?.id)
+                                                                            "
+                                                                            [ngClass]="{
+                                                                                'd-none':
+                                                                                    selectedBankTrxWhileHovering !==
+                                                                                        txn.id &&
+                                                                                    !selectedDebitTransactionIds.has(
+                                                                                        txn?.id
+                                                                                    )
+                                                                            }"
                                                                             (change)="
-                                                                                selectEntryForBulkAction($event, item)
+                                                                                selectEntryForBulkAction(
+                                                                                    $event,
+                                                                                    item,
+                                                                                    txn.id,
+                                                                                    'debit'
+                                                                                )
                                                                             "
                                                                             [disabled]="
                                                                                 currentOrganizationType === 'COMPANY' &&
@@ -982,6 +1031,29 @@
                                                     {{ commonLocaleData?.app_amount }}
                                                 </mat-grid-tile>
                                             </mat-grid-list>
+                                            <mat-grid-list cols="4" rowHeight="50px" class="ledger-row">
+                                                <mat-grid-tile colspan="1">
+                                                    <mat-checkbox
+                                                        color="primary"
+                                                        id="select-all-entries-dr"
+                                                        [checked]="
+                                                            selectedCreditTransactionIds?.size ===
+                                                            lc.bankTransactionsCreditData?.length
+                                                        "
+                                                        [indeterminate]="
+                                                            selectedCreditTransactionIds?.size > 0 &&
+                                                            selectedCreditTransactionIds?.size <
+                                                                lc.bankTransactionsCreditData?.length
+                                                        "
+                                                        *ngIf="selectedCreditTransactionIds?.size > 0"
+                                                        (change)="selectAllBankEntries($event, 'credit')"
+                                                    ></mat-checkbox>
+                                                </mat-grid-tile>
+                                                <mat-grid-tile colspan="2">&nbsp;</mat-grid-tile>
+                                                <mat-grid-tile class="no-right-border" colspan="1"
+                                                    >&nbsp;</mat-grid-tile
+                                                >
+                                            </mat-grid-list>
                                             <mat-grid-list id="ledger-transaction-right-list" cols="4" rowHeight="50px">
                                                 <ng-container
                                                     *ngFor="
@@ -999,6 +1071,8 @@
                                                                 'compound-entry':
                                                                     txn.id === lc.selectedBankTxnUniqueName
                                                             }"
+                                                            (mouseover)="bankEntryHovered(txn.id)"
+                                                            (mouseout)="selectedBankTrxWhileHovering = ''"
                                                         >
                                                             <mat-grid-tile colspan="1">
                                                                 <div class="d-flex align-items-center column-gap5">
@@ -1009,9 +1083,26 @@
                                                                                 'transaction-mapped-select-entry-cr-' +
                                                                                 i
                                                                             "
-                                                                            [(ngModel)]="txn.isChecked"
+                                                                            [checked]="
+                                                                                selectedCreditTransactionIds?.has(
+                                                                                    txn?.id
+                                                                                )
+                                                                            "
+                                                                            [ngClass]="{
+                                                                                'd-none':
+                                                                                    selectedBankTrxWhileHovering !==
+                                                                                        txn.id &&
+                                                                                    !selectedCreditTransactionIds?.has(
+                                                                                        txn?.id
+                                                                                    )
+                                                                            }"
                                                                             (change)="
-                                                                                selectEntryForBulkAction($event, item)
+                                                                                selectEntryForBulkAction(
+                                                                                    $event,
+                                                                                    item,
+                                                                                    txn.id,
+                                                                                    'credit'
+                                                                                )
                                                                             "
                                                                             [disabled]="
                                                                                 currentOrganizationType === 'COMPANY' &&
