@@ -287,7 +287,7 @@
             </tab>
 
             <tab
-                *ngIf="selectedCompany?.planVersion === 1"
+                *ngIf="selectedCompany?.planVersion === 1 && selectedCompany?.subscription?.status !== 'expired'"
                 [heading]="localeData?.subscription?.tab_heading"
                 [active]="activeTab == 'subscription'"
                 (selectTab)="onTabChanged('subscription')"
