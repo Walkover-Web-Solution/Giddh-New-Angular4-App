@@ -202,7 +202,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.isChangePlan = true;
             }
         });
-
         if (localStorage.getItem('Country-Region') === 'IN') {
             this.newUserSelectCountry({
                 "label": "IN - India",
@@ -212,7 +211,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     "label": "IN - India"
                 }
             });
-        } else if (localStorage.getItem('Country-Region') === 'UK') {
+        }
+        if (localStorage.getItem('Country-Region') === 'UK') {
             this.newUserSelectCountry({
                 "label": "GB - United Kingdom",
                 "value": "GB",
@@ -221,7 +221,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     "label": "GB - United Kingdom"
                 }
             });
-        } else if (localStorage.getItem('Country-Region') === 'AE') {
+        }
+        if (localStorage.getItem('Country-Region') === 'AE') {
             this.newUserSelectCountry({
                 "label": "AE - United Arab Emirates",
                 "value": "AE",
@@ -231,7 +232,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 }
 
             });
-        } else {
+        }
+        if (localStorage.getItem('Country-Region') === 'GL') {
             this.newUserSelectCountry({
                 "label": "GL - Global",
                 "value": "GL",
@@ -513,17 +515,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.company.inputMaskFormat = profile.balanceDisplayFormat?.toLowerCase() || '';
                 this.company.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                 this.showTaxTypeByCountry(this.company.countryCode);
-                let data;
-                if (localStorage.getItem('Country-Region') === 'GL') {
-                    data = {
-                        region: this.company.countryCode
-                    }
-                } else {
-                    data = {
-                        countryCode: this.company.countryCode
-                    }
-                }
-                this.componentStore.getAllPlans({ params: data  });
+                // let data;
+                // if (localStorage.getItem('Country-Region') === 'GL') {
+                //     data = {
+                //         region: this.company.countryCode
+                //     }
+                // } else {
+                //     data = {
+                //         countryCode: this.company.countryCode
+                //     }
+                // }
+                // this.componentStore.getAllPlans({ params: data  });
             }
         });
     }
