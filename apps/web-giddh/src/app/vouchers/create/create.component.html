@@ -1106,6 +1106,7 @@
                                                                             entryAmount
                                                                             [rate]="transaction.get('stock.uniqueName')?.value ? transaction.get('stock.rate.rateForAccount')?.value : transaction.get('amount.amountForAccount')?.value"
                                                                             [quantity]="transaction.get('stock.uniqueName')?.value ? transaction.get('stock.quantity')?.value : 1"
+                                                                            [calculateAmount]="entry.get('calculateAmount')?.value"
                                                                             [prefix]="account?.baseCurrencySymbol"
                                                                             [mask]="company?.inputMaskFormat"
                                                                             name="transactionAmount{{entryIndex}}"
@@ -1225,7 +1226,7 @@
                                                                     [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'">
                                                                     <input matInput [placeholder]="commonLocaleData?.app_total"
                                                                         class="form-control text-right pr-0" type="text"
-                                                                        entryTotal [entry]="entry?.value" [excludeTax]="account?.excludeTax || invoiceForm.get('isRcmEntry')?.value"
+                                                                        entryTotal [entry]="entry?.value" [excludeTax]="account?.excludeTax || invoiceForm.get('isRcmEntry')?.value || (invoiceType.isReceiptInvoice && !invoiceForm.get('isAdvanceReceipt')?.value)"
                                                                         name="transactionTotal{{entryIndex}}"
                                                                         formControlName="amountForAccount"
                                                                         [prefix]="account?.baseCurrencySymbol"
