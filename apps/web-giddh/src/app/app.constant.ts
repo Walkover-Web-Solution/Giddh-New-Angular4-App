@@ -16,6 +16,80 @@ export enum BusinessTypes {
     Unregistered = 'Unregistered'
 };
 
+export enum TaxSupportedCountries {
+    'IN' = 'IN',
+    'UAE' = 'UAE',
+    'UK' = 'UK'
+};
+
+export enum TaxType {
+    'GST' = 'GST',
+    'TRN' = 'TRN',
+    'VAT' = 'VAT'
+};
+
+
+export const MOBILE_NUMBER_UTIL_URL = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js';
+export const INTL_INPUT_OPTION = {
+    nationalMode: true,
+    utilsScript: MOBILE_NUMBER_UTIL_URL,
+    autoHideDialCode: false,
+    separateDialCode: false,
+    initialCountry: 'auto',
+    geoIpLookup: (success: any, failure: any) => {
+        let countryCode = 'in';
+        const fetchIPApi = ajax({
+            url: MOBILE_NUMBER_SELF_URL,
+            method: 'GET',
+        });
+
+        fetchIPApi.subscribe({
+            next: (res: any) => {
+                if (res?.response?.ipAddress) {
+                    const fetchCountryByIpApi = ajax({
+                        url: MOBILE_NUMBER_IP_ADDRESS_URL + res.response.ipAddress,
+                        method: 'GET',
+                    });
+
+                    fetchCountryByIpApi.subscribe({
+                        next: (fetchCountryByIpApiRes: any) => {
+                            if (fetchCountryByIpApiRes?.response?.countryCode) {
+                                return success(fetchCountryByIpApiRes.response.countryCode);
+                            } else {
+                                return success(countryCode);
+                            }
+                        },
+                        error: (fetchCountryByIpApiErr) => {
+                            const fetchCountryByIpInfoApi = ajax({
+                                url: MOBILE_NUMBER_ADDRESS_JSON_URL + `${res.response.ipAddress}/json`,
+                                method: 'GET',
+                            });
+
+                            fetchCountryByIpInfoApi.subscribe({
+                                next: (fetchCountryByIpInfoApiRes: any) => {
+                                    if (fetchCountryByIpInfoApiRes?.response?.country) {
+                                        return success(fetchCountryByIpInfoApiRes.response.country);
+                                    } else {
+                                        return success(countryCode);
+                                    }
+                                },
+                                error: (fetchCountryByIpInfoApiErr) => {
+                                    return success(countryCode);
+                                },
+                            });
+                        },
+                    });
+                } else {
+                    return success(countryCode);
+                }
+            },
+            error: (err) => {
+                return success(countryCode);
+            },
+        });
+    },
+};
+
 export const APP_DEFAULT_TITLE = '';
 
 export const DEFAULT_TOASTER_OPTIONS = {
@@ -541,66 +615,6 @@ export const MOBILE_NUMBER_SELF_URL = `https://api.db-ip.com/v2/free/self`;
 export const MOBILE_NUMBER_IP_ADDRESS_URL = 'http://ip-api.com/json/';
 export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
 
-export const MOBILE_NUMBER_UTIL_URL = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js';
-export const INTL_INPUT_OPTION = {
-    nationalMode: true,
-    utilsScript: MOBILE_NUMBER_UTIL_URL,
-    autoHideDialCode: false,
-    separateDialCode: false,
-    initialCountry: 'auto',
-    geoIpLookup: (success: any, failure: any) => {
-        let countryCode = 'in';
-        const fetchIPApi = ajax({
-            url: MOBILE_NUMBER_SELF_URL,
-            method: 'GET',
-        });
-
-        fetchIPApi.subscribe({
-            next: (res: any) => {
-                if (res?.response?.ipAddress) {
-                    const fetchCountryByIpApi = ajax({
-                        url: MOBILE_NUMBER_IP_ADDRESS_URL + res.response.ipAddress,
-                        method: 'GET',
-                    });
-
-                    fetchCountryByIpApi.subscribe({
-                        next: (fetchCountryByIpApiRes: any) => {
-                            if (fetchCountryByIpApiRes?.response?.countryCode) {
-                                return success(fetchCountryByIpApiRes.response.countryCode);
-                            } else {
-                                return success(countryCode);
-                            }
-                        },
-                        error: (fetchCountryByIpApiErr) => {
-                            const fetchCountryByIpInfoApi = ajax({
-                                url: MOBILE_NUMBER_ADDRESS_JSON_URL +`${res.response.ipAddress}/json`,
-                                method: 'GET',
-                            });
-
-                            fetchCountryByIpInfoApi.subscribe({
-                                next: (fetchCountryByIpInfoApiRes: any) => {
-                                    if (fetchCountryByIpInfoApiRes?.response?.country) {
-                                        return success(fetchCountryByIpInfoApiRes.response.country);
-                                    } else {
-                                        return success(countryCode);
-                                    }
-                                },
-                                error: (fetchCountryByIpInfoApiErr) => {
-                                    return success(countryCode);
-                                },
-                            });
-                        },
-                    });
-                } else {
-                    return success(countryCode);
-                }
-            },
-            error: (err) => {
-                return success(countryCode);
-            },
-        });
-    },
-};
 
 
 export const OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;

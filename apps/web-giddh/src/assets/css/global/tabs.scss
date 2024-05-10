@@ -1,10 +1,12 @@
-.mat-mdc-tab-group{
+.mat-mdc-tab-group {
     .mat-mdc-tab-header {
         border-bottom: 1px solid var(--color-tab-primary-border-bottom);
+
         .mat-mdc-tab-header {
             padding-left: 15px !important;
             background-color: var(--color-tab-primary-background);
         }
+
         .mat-mdc-tab {
             .mdc-tab__text-label {
                 font-size: var(--font-size-16);
@@ -14,14 +16,31 @@
                     fill: var(--color-tab-primary-inactive);
                 }
             }
+
             &.mdc-tab--active {
-                .mdc-tab__text-label{
+                .mdc-tab__text-label {
                     color: var(--color-giddh-blue);
                     .voucher-svg {
                         fill: var(--color-giddh-blue);
                     }
                 }
             }
+        }
+    }
+}
+
+// custom
+.custom-tab {
+    .mat-button-toggle-appearance-standard {
+        &.mat-button-toggle-checked {
+            background-color: var(--color-giddh-blue);
+            color: var(--color-white);
+        }
+    }
+
+    .mat-button-toggle-appearance-standard {
+        .mat-button-toggle-label-content {
+            line-height: 36px;
         }
     }
 }

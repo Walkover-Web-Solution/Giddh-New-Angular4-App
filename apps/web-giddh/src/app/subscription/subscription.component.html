@@ -1,0 +1,333 @@
+<ng-container
+    appTranslate
+    [file]="'subscription'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div class="subscription-container pd-15">
+        <div class="button-wrapper d-flex w-100 pd-l1 justify-content-between pd-r1 pd-t1">
+            <button
+                *ngIf="
+                    showClearFilter ||
+                    subscriptionListForm?.controls['companyName']?.value ||
+                    subscriptionListForm?.controls['billingAccountName']?.value ||
+                    subscriptionListForm?.controls['subscriberName']?.value ||
+                    subscriptionListForm?.controls['countryName']?.value ||
+                    subscriptionListForm?.controls['planName']?.value ||
+                    subscriptionListForm?.controls['status']?.value ||
+                    subscriptionListForm?.controls['duration']?.value
+                "
+                mat-stroked-button
+                class="min160 mr-l1"
+                color="primary"
+                (click)="clearFilter()"
+            >
+                {{ commonLocaleData?.app_clear }}
+            </button>
+            <div class="min160 mr-l1" *ngIf="!showClearFilter"></div>
+            <button mat-stroked-button class="min160 mr-l1" color="primary" (click)="createSubscription()">
+                + {{ commonLocaleData?.app_add }} {{ localeData?.tab_heading }}
+            </button>
+        </div>
+        <div *ngIf="subscriptionListInProgress$ | async">
+            <giddh-page-loader></giddh-page-loader>
+        </div>
+        <section *ngIf="showData && !(subscriptionListInProgress$ | async)">
+            <form
+                class="table-responsive"
+                name="subscriptionListForm"
+                [formGroup]="subscriptionListForm"
+                novalidate=""
+                autocomplete="off"
+            >
+                <table mat-table [dataSource]="dataSource" multiTemplateDataRows class="giddh-table w-100">
+                    <ng-container matColumnDef="companyName">
+                        <th
+                            mat-header-cell
+                            *matHeaderCellDef
+                            class="td-search-box"
+                            #searchNameContainer
+                            (clickOutside)="handleClickOutside($event, searchNameContainer, commonLocaleData?.app_name)"
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: showName,
+                                        fieldName: commonLocaleData?.app_name,
+                                        formControl: subscriptionListForm.controls['companyName'],
+                                        title: commonLocaleData?.app_name
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td class="subscription-td" mat-cell *matCellDef="let element" width="15%">
+                            <a
+                                class="cursor-pointer"
+                                *ngIf="element?.companies?.length > 1"
+                                (click)="openCompanyDialog(element)"
+                                >{{ element?.companies?.length }}</a
+                            >
+                            <span *ngIf="element?.companies?.length === 1">{{ element?.companies[0]?.name }}</span>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="billingAccountName">
+                        <th
+                            mat-header-cell
+                            *matHeaderCellDef
+                            class="td-search-box"
+                            #searchBillingAccountContainer
+                            (clickOutside)="
+                                handleClickOutside($event, searchBillingAccountContainer, localeData?.billing_account)
+                            "
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: showBillingAccount,
+                                        fieldName: localeData?.billing_account,
+                                        formControl: subscriptionListForm.controls['billingAccountName'],
+                                        title: localeData?.billing_account
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td class="subscription-td" mat-cell *matCellDef="let element">
+                            {{ element.billingAccount?.name ? element.billingAccount?.name : "-" }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="subscriberName">
+                        <th
+                            mat-header-cell
+                            *matHeaderCellDef
+                            class="td-search-box"
+                            #searchSubscriberContainer
+                            (clickOutside)="
+                                handleClickOutside($event, searchSubscriberContainer, localeData?.subscriber)
+                            "
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: showSubscriber,
+                                        fieldName: localeData?.subscriber,
+                                        formControl: subscriptionListForm.controls['subscriberName'],
+                                        title: localeData?.subscriber
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td class="subscription-td" mat-cell *matCellDef="let element">
+                            {{ element.subscriber?.name ? element.subscriber?.name : "-" }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="countryName">
+                        <th
+                            mat-header-cell
+                            *matHeaderCellDef
+                            class="td-search-box"
+                            #searchCountryContainer
+                            (clickOutside)="
+                                handleClickOutside($event, searchCountryContainer, commonLocaleData?.app_country)
+                            "
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: showCountry,
+                                        fieldName: commonLocaleData?.app_country,
+                                        formControl: subscriptionListForm.controls['countryName'],
+                                        title: commonLocaleData?.app_country
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td class="subscription-td" mat-cell *matCellDef="let element">
+                            {{ element.country?.countryName ? element.country?.countryName : "-" }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="planName">
+                        <th
+                            mat-header-cell
+                            *matHeaderCellDef
+                            class="td-search-box"
+                            #searchPlanSubNameContainer
+                            (clickOutside)="
+                                handleClickOutside($event, searchPlanSubNameContainer, localeData?.plan_sub_name)
+                            "
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: showPlanSubName,
+                                        fieldName: localeData?.plan_sub_name,
+                                        formControl: subscriptionListForm.controls['planName'],
+                                        title: localeData?.plan_sub_name
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td
+                            mat-cell
+                            *matCellDef="let element"
+                            class="position-relative"
+                            [matTooltip]="element?.subscriptionId"
+                            [matTooltipPosition]="'above'"
+                            matTooltipClass="tooltip-black"
+                        >
+                            {{ element.plan?.name ? element.plan?.name : "-" }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="status">
+                        <th
+                            mat-header-cell
+                            *matHeaderCellDef
+                            class="td-search-box"
+                            #searchStatusContainer
+                            (clickOutside)="
+                                handleClickOutside($event, searchStatusContainer, commonLocaleData?.app_status)
+                            "
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: showStatus,
+                                        fieldName: commonLocaleData?.app_status,
+                                        formControl: subscriptionListForm.controls['status'],
+                                        title: commonLocaleData?.app_status
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td mat-cell *matCellDef="let element" class="position-relative">
+                            <span [ngClass]="{ 'text-success': element?.status?.toLowerCase() === 'active' }">{{
+                                element?.status | uppercase
+                            }}</span>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="renewalDate">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.renewal_date }}</th>
+                        <td mat-cell *matCellDef="let element" class="position-relative word-wrap">
+                            <div class="d-flex align-items-center justify-content-center column-gap1">
+                                {{ element?.renewalDate }}
+                                <button
+                                    mat-icon-button
+                                    id="edit-model-basic"
+                                    class="table-menu-first-td p-0"
+                                    [ngClass]="{ 'visible': trigger.menuOpen }"
+                                    [matMenuTriggerFor]="editModelBasic"
+                                    #trigger="matMenuTrigger"
+                                >
+                                    <span class="icon-dots-three-vertical"></span>
+                                </button>
+                            </div>
+                            <mat-menu #editModelBasic="matMenu">
+                                <div class="account-detail-custom-header">
+                                    <button
+                                        mat-menu-item
+                                        (click)="changePlan(element)"
+                                    >
+                                        {{ localeData?.change_plan }}
+                                    </button>
+                                    <button
+                                        *ngIf="element?.status?.toLowerCase() === 'trial'"
+                                        mat-menu-item
+                                        (click)="buyPlan(element)"
+                                    >
+                                        {{ commonLocaleData?.app_buy_plan }}
+                                    </button>
+                                    <button
+                                        *ngIf="element?.status?.toLowerCase() === 'expired'"
+                                        mat-menu-item
+                                        (click)="buyPlan(element)"
+                                    >
+                                        {{ localeData?.renew }}
+                                    </button>
+                                    <button mat-menu-item (click)="viewSubscription(element)">
+                                        {{ localeData?.view_subscription }}
+                                    </button>
+                                    <button mat-menu-item (click)="changeBilling(element?.billingAccount?.uniqueName)">
+                                        {{ localeData?.change_billing }}
+                                    </button>
+                                    <button mat-menu-item (click)="transferSubscription(element?.subscriptionId)">
+                                        {{ localeData?.request_transfer }}
+                                    </button>
+                                    <button mat-menu-item (click)="cancelSubscription(element?.subscriptionId)">
+                                        {{ commonLocaleData?.app_cancel }}
+                                    </button>
+                                    <button
+                                        mat-menu-item
+                                        *ngIf="element?.companies?.length === 1"
+                                        (click)="openModalMove(element, $event)"
+                                    >
+                                        {{ localeData?.move }}
+                                    </button>
+                                    <button
+                                        mat-menu-item
+                                        *ngIf="element?.companies?.length < element?.totalCompanies"
+                                        (click)="createCompanyInSubscription(element?.subscriptionId)"
+                                    >
+                                        {{ localeData?.add_company }}
+                                    </button>
+                                </div>
+                            </mat-menu>
+                        </td>
+                    </ng-container>
+                    <tr
+                        (clickOutside)="inlineSearch = null"
+                        mat-header-row
+                        *matHeaderRowDef="displayedColumns; sticky: true"
+                    ></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+            </form>
+        </section>
+        <div class="no-data" *ngIf="!dataSource?.filteredData?.length && !(subscriptionListInProgress$ | async)">
+            <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
+        </div>
+        <div class="pagination-wrapper justify-content-end" *ngIf="showData && !(subscriptionListInProgress$ | async)">
+            <mat-paginator
+                (page)="handlePageChange($event)"
+                [length]="subscriptionRequestParams.totalItems"
+                [pageSize]="subscriptionRequestParams.count"
+                [showFirstLastButtons]="true"
+                [pageSizeOptions]="pageSizeOptions"
+                [hidePageSize]="false"
+                [pageIndex]="pageIndex"
+                class="mt-15"
+            >
+            </mat-paginator>
+        </div>
+    </div>
+</ng-container>
+<ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
+    <div [hidden]="show">
+        <i class="icon-search" (click)="toggleSearch(fieldName)"></i>
+        <span> {{ title }}</span>
+    </div>
+    <div class="input-container" [hidden]="!show">
+        <text-field
+            [type]="'text'"
+            [placeholder]="getSearchFieldText(fieldName)"
+            [cssClass]="'form-control search-table mat-field-border'"
+            [formControl]="formControl"
+            [autoFocus]="show"
+        ></text-field>
+    </div>
+</ng-template>
+<!-- MoveCompany Modal -->
+<ng-template #moveCompany>
+    <move-company
+        [moveSelectedCompany]="selectedCompany"
+        [subscriptionMove]="subscriptionMove"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+    >
+    </move-company>
+</ng-template>

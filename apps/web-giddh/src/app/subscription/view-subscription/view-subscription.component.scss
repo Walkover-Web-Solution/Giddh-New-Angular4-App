@@ -1,0 +1,22 @@
+.view-subscription-wrap {
+    max-width: 1285px;
+    margin: 0 auto;
+
+    .view-box {
+        width: 65%;
+
+        .view-subscription {
+            .view-right {
+                flex-direction: column;
+            }
+        }
+    }
+
+    .billing-account {
+        width: 35%;
+    }
+
+    .mat-mdc-card.outline-card {
+        min-height: 165px !important;
+    }
+}
