@@ -1,6 +1,6 @@
 
 import { Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
-import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, take, takeUntil, tap } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
 import { ManageGroupsAccountsComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, NgZone, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
@@ -806,12 +806,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
 
                 this.zone.run(() => {
-                    this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => this.hasSubscriptionPermission = response?.user?.hasSubscriptionPermission);
-                    if (this.hasSubscriptionPermission) {
-                        this.router.navigate(['/pages/subscription']);
-                    } else {
-                        this.router.navigate(['/pages/subscription/buy-plan']);
-                    }
+                    this.store.pipe(
+                        select(state => state.session.user),
+                        take(1), // take only the first emission
+                        tap(response => {
+                            const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
+                            if (hasSubscriptionPermission) {
+                                this.router.navigate(['/pages/subscription']);
+                            } else {
+                                this.router.navigate(['/pages/subscription/buy-plan']);
+                            }
+                        })
+                    ).subscribe();
                 });
             } else if (s === userLoginStateEnum.userLoggedIn) {
                 if (this.generalService.getUtmParameter("companyUniqueName")) {

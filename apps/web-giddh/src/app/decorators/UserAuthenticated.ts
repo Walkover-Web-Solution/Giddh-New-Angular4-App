@@ -2,12 +2,14 @@ import { AppState } from '../store';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { Injectable, NgZone } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { distinctUntilChanged, map, switchMap, take } from 'rxjs/operators';
+import { distinctUntilChanged, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { userLoginStateEnum } from '../models/user-login-state';
 import { ROUTES } from '../routes-array';
+import { ReplaySubject } from 'rxjs';
 
 @Injectable()
 export class UserAuthenticated  {
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(public router: Router, private store: Store<AppState>, private zone: NgZone) {
     }
 
@@ -39,13 +41,18 @@ export class UserAuthenticated  {
             }
             if (p.userLoginState === userLoginStateEnum.newUserLoggedIn) {
                 this.zone.run(() => {
-                    let hasSubscriptionPermission: boolean;
-                    this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => hasSubscriptionPermission = response?.user?.hasSubscriptionPermission);
-                    if (hasSubscriptionPermission) {
-                        this.router.navigate(['/pages/subscription']);
-                    } else {
-                        this.router.navigate(['/pages/subscription/buy-plan']);
-                    }
+                    this.store.pipe(
+                        select(state => state.session.user),
+                        take(1), // take only the first emission
+                        tap(response => {
+                            const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
+                            if (hasSubscriptionPermission) {
+                                this.router.navigate(['/pages/subscription']);
+                            } else {
+                                this.router.navigate(['/pages/subscription/buy-plan']);
+                            }
+                        })
+                    ).subscribe();
                 });
             }
             return !(p.userLoginState === userLoginStateEnum.userLoggedIn || p.userLoginState === userLoginStateEnum.newUserLoggedIn);
