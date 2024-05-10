@@ -135,9 +135,7 @@
                                                         <span class="dot d-block"></span>
                                                         <a
                                                             class="cursor-pointer"
-                                                            (click)="
-                                                                navigateToSubItemLink('/proforma-invoice/invoice/sales')
-                                                            "
+                                                            (click)="navigateToSubItemLink('/vouchers/sales/create')"
                                                         >
                                                             {{ localeData?.invoice }}
                                                         </a>
@@ -146,11 +144,7 @@
                                                         <span class="dot d-block"></span>
                                                         <a
                                                             class="cursor-pointer"
-                                                            (click)="
-                                                                navigateToSubItemLink(
-                                                                    '/proforma-invoice/invoice/purchase'
-                                                                )
-                                                            "
+                                                            (click)="navigateToSubItemLink('/vouchers/purchase/create')"
                                                         >
                                                             {{ localeData?.bill }}
                                                         </a>
@@ -160,9 +154,7 @@
                                                         <a
                                                             class="cursor-pointer"
                                                             (click)="
-                                                                navigateToSubItemLink(
-                                                                    '/proforma-invoice/invoice/credit note'
-                                                                )
+                                                                navigateToSubItemLink('/vouchers/credit-note/create')
                                                             "
                                                         >
                                                             {{ localeData?.credit_note }}
@@ -173,9 +165,7 @@
                                                         <a
                                                             class="cursor-pointer"
                                                             (click)="
-                                                                navigateToSubItemLink(
-                                                                    '/proforma-invoice/invoice/debit note'
-                                                                )
+                                                                navigateToSubItemLink('/vouchers/debit-note/create')
                                                             "
                                                         >
                                                             {{ localeData?.debit_note }}
@@ -209,9 +199,7 @@
                                                         <span class="dot d-block"></span>
                                                         <a
                                                             class="cursor-pointer"
-                                                            (click)="
-                                                                navigateToSubItemLink('/proforma-invoice/invoice/cash')
-                                                            "
+                                                            (click)="navigateToSubItemLink('/vouchers/cash/create')"
                                                         >
                                                             {{ localeData?.invoice }}
                                                         </a>
@@ -221,9 +209,7 @@
                                                         <a
                                                             class="cursor-pointer"
                                                             (click)="
-                                                                navigateToSubItemLink(
-                                                                    '/proforma-invoice/invoice/cash bill'
-                                                                )
+                                                                navigateToSubItemLink('/vouchers/cash-bill/create')
                                                             "
                                                             >{{ localeData?.bill }}
                                                         </a>
@@ -234,7 +220,7 @@
                                                             class="cursor-pointer"
                                                             (click)="
                                                                 navigateToSubItemLink(
-                                                                    '/proforma-invoice/invoice/cash credit note'
+                                                                    '/vouchers/cash-credit-note/create'
                                                                 )
                                                             "
                                                         >
@@ -247,7 +233,7 @@
                                                             class="cursor-pointer"
                                                             (click)="
                                                                 navigateToSubItemLink(
-                                                                    '/proforma-invoice/invoice/cash debit note'
+                                                                    '/vouchers/cash-debit-note/create'
                                                                 )
                                                             "
                                                         >
@@ -373,9 +359,7 @@
                                                         <a
                                                             class="cursor-pointer"
                                                             (click)="
-                                                                navigateToSubItemLink(
-                                                                    '/proforma-invoice/invoice/estimates'
-                                                                )
+                                                                navigateToSubItemLink('/vouchers/estimates/create')
                                                             "
                                                         >
                                                             {{ localeData?.estimate }}
@@ -390,9 +374,7 @@
                                                         <a
                                                             class="cursor-pointer"
                                                             (click)="
-                                                                navigateToSubItemLink(
-                                                                    '/proforma-invoice/invoice/proformas'
-                                                                )
+                                                                navigateToSubItemLink('/vouchers/proformas/create')
                                                             "
                                                         >
                                                             {{ localeData?.proforma }}
@@ -407,12 +389,36 @@
                                                         <a
                                                             class="cursor-pointer"
                                                             (click)="
-                                                                navigateToSubItemLink(
-                                                                    '/purchase-management/purchase-order/new'
-                                                                )
+                                                                navigateToSubItemLink('/vouchers/purchase-order/create')
                                                             "
                                                         >
                                                             {{ localeData?.purchase_order }}
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                                <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                                    <span class="d-flex">
+                                                        <i class="icon-invoice-new mr-r1"></i>
+                                                    </span>
+                                                    <span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="navigateToSubItemLink('/vouchers/receipt/create')"
+                                                        >
+                                                            {{ commonLocaleData?.app_voucher_types?.receipt }}
+                                                        </a>
+                                                    </span>
+                                                </div>
+                                                <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                                    <span class="d-flex">
+                                                        <i class="icon-invoice-new mr-r1"></i>
+                                                    </span>
+                                                    <span>
+                                                        <a
+                                                            class="cursor-pointer"
+                                                            (click)="navigateToSubItemLink('/vouchers/payment/create')"
+                                                        >
+                                                            {{ commonLocaleData?.app_voucher_types?.payment }}
                                                         </a>
                                                     </span>
                                                 </div>
