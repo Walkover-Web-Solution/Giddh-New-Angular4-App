@@ -24,7 +24,11 @@
             (mouseover)="expandSidebar()"
             (mouseout)="collapseSidebar(false, true)"
             class="nav-left-bar"
-            [ngClass]="{ 'open': isSidebarExpanded, 'unvisible': companyList?.length === 0 && !isSubscriptionPage, 'hide-sidebar': isSubscriptionPage }"
+            [ngClass]="{
+                'open': isSidebarExpanded,
+                'unvisible': companyList?.length === 0 && !isSubscriptionPage,
+                'hide-sidebar': isSubscriptionPage
+            }"
             (clickOutside)="closeSidebarMobile($event)"
         >
             <div class="menu-wrapper">
@@ -52,10 +56,17 @@
                 [ngClass]="{ 'open': sideMenu.isopen, 'unvisible': companyList?.length === 0 && !isSubscriptionPage }"
             >
                 <div class="d-flex justify-content-between align-items-center h-100">
+                    <button
+                        *ngIf="companyList?.length && isSubscriptionPage"
+                        class="min160 company-button"
+                        color="primary"
+                        mat-stroked-button
+                        (click)="backToCompany()"
+                    >
+                        <i class="icon-left back-left"></i>
+                        {{ commonLocaleData?.app_back }} {{ commonLocaleData?.app_to }} {{ activeCompany?.name }}
+                    </button>
                     <div class="logo-wrapper pd-l4">
-                        <span *ngIf="companyList?.length && isSubscriptionPage">
-                            Back to {{ activeCompany?.name }}
-                        </span>
                         <img
                             src="{{ imgPath }}giddh-white-logo.svg"
                             width="127"
@@ -136,7 +147,9 @@
                                                         <a
                                                             class="cursor-pointer"
                                                             (click)="
-                                                                navigateToSubItemLink('/proforma-invoice/invoice/purchase')
+                                                                navigateToSubItemLink(
+                                                                    '/proforma-invoice/invoice/purchase'
+                                                                )
                                                             "
                                                         >
                                                             {{ localeData?.bill }}
@@ -208,7 +221,9 @@
                                                         <a
                                                             class="cursor-pointer"
                                                             (click)="
-                                                                navigateToSubItemLink('/proforma-invoice/invoice/cash bill')
+                                                                navigateToSubItemLink(
+                                                                    '/proforma-invoice/invoice/cash bill'
+                                                                )
                                                             "
                                                             >{{ localeData?.bill }}
                                                         </a>
@@ -290,7 +305,9 @@
                                                         <a
                                                             class="cursor-pointer"
                                                             (click)="
-                                                                navigateToSubItemLink('/inventory/v2/stock/product/create')
+                                                                navigateToSubItemLink(
+                                                                    '/inventory/v2/stock/product/create'
+                                                                )
                                                             "
                                                         >
                                                             {{ localeData?.product }}
@@ -301,7 +318,9 @@
                                                         <a
                                                             class="cursor-pointer"
                                                             (click)="
-                                                                navigateToSubItemLink('/inventory/v2/stock/service/create')
+                                                                navigateToSubItemLink(
+                                                                    '/inventory/v2/stock/service/create'
+                                                                )
                                                             "
                                                         >
                                                             {{ localeData?.service }}
@@ -354,7 +373,9 @@
                                                         <a
                                                             class="cursor-pointer"
                                                             (click)="
-                                                                navigateToSubItemLink('/proforma-invoice/invoice/estimates')
+                                                                navigateToSubItemLink(
+                                                                    '/proforma-invoice/invoice/estimates'
+                                                                )
                                                             "
                                                         >
                                                             {{ localeData?.estimate }}
@@ -369,7 +390,9 @@
                                                         <a
                                                             class="cursor-pointer"
                                                             (click)="
-                                                                navigateToSubItemLink('/proforma-invoice/invoice/proformas')
+                                                                navigateToSubItemLink(
+                                                                    '/proforma-invoice/invoice/proformas'
+                                                                )
                                                             "
                                                         >
                                                             {{ localeData?.proforma }}
@@ -401,7 +424,9 @@
                                                         <a
                                                             class="cursor-pointer"
                                                             (click)="
-                                                                navigateToSubItemLink('/inventory/v2/manufacturing/create')
+                                                                navigateToSubItemLink(
+                                                                    '/inventory/v2/manufacturing/create'
+                                                                )
                                                             "
                                                         >
                                                             {{ localeData?.manufacturing }}
@@ -429,7 +454,10 @@
                                 </button>
                             </li>
                             <li class="not-today cursor-pointer" [ngClass]="{ 'if-today': isTodaysDateSelected }">
-                                <span class="icon-calender-new calendar-addon" (click)="showGiddhDatepicker($event)"></span>
+                                <span
+                                    class="icon-calender-new calendar-addon"
+                                    (click)="showGiddhDatepicker($event)"
+                                ></span>
                                 <div class="input-date" [ngClass]="{ 'today-date pl-2': isTodaysDateSelected }">
                                     <input
                                         type="text"
