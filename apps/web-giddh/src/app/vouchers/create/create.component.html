@@ -684,7 +684,7 @@
                                     <table formArrayName="entries" class="w-100">
                                         <thead>
                                             <tr>
-                                                <th [width]="hasStock ? '20%' : '25%'" class="text-left product-column">{{ !invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice ? localeData?.product_service : localeData?.receipt_mode }}</th>
+                                                <th [width]="hasStock ? '20%' : '25%'" class="text-left product-column">{{ invoiceType.isReceiptInvoice ? localeData?.receipt_mode :  invoiceType.isPaymentInvoice ? localeData?.payment_mode : localeData?.product_service }}</th>
                                                 <th [width]="hasStock ? '15%' : '17%'" class="text-left" *ngIf="!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">{{ commonLocaleData?.app_description }}</th>
                                                 <th [width]="hasStock ? '10%' : '10%'" [ngClass]="{ 'd-none' : !hasStock}">{{ commonLocaleData?.app_quantity_unit }}</th>
                                                 <th [width]="hasStock ? '10%' : '10%'" [ngClass]="{ 'd-none' : !hasStock}">{{ commonLocaleData?.app_rate }}</th>
@@ -1109,6 +1109,7 @@
                                                                             [prefix]="account?.baseCurrencySymbol"
                                                                             [mask]="company?.inputMaskFormat"
                                                                             name="transactionAmount{{entryIndex}}"
+                                                                            [readonly]="invoiceForm.get('isAdvanceReceipt')?.value"
                                                                             decimalDigitsDirective
                                                                             formControlName="amountForAccount"
                                                                             (calculatedAmount)="updateTransactionAmount(transaction, $event)" />
@@ -1628,9 +1629,9 @@
                                                         </td>
                                                         <td>
                                                             <text-field [id]="'grandTotalMultiCurrency'"
-                                                                #grandTotalMultiCurrency [type]="'text'" [cssClass]="
-                                                                    'form-control mat-field-border'
-                                                                " [name]="'grandTotalMultiCurrency'"
+                                                                #grandTotalMultiCurrency [type]="'text'" 
+                                                                [cssClass]="'form-control mat-field-border'" 
+                                                                [name]="'grandTotalMultiCurrency'"
                                                                 [prefix]="company?.baseCurrencySymbol"
                                                                 [mask]="company?.inputMaskFormat" [useMask]="true"
                                                                 [readonly]="isEinvoiceGenerated"
