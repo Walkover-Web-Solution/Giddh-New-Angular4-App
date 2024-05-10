@@ -34,13 +34,13 @@
                                     </div>
                                     <div *ngIf="
                                             currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'
-                                        " class="trn-width">
+                                        " class="input-width">
                                         <dropdown-field [label]="commonLocaleData?.app_entity"
                                             [options]="currentCompanyBranches" width="100%" (selectedOption)="
                                                 currentBranch.uniqueName = $event.value; handleBranchChange($event)
                                             " [placeholder]="localeData?.select_entity"></dropdown-field>
                                     </div>
-                                    <div *ngIf="taxes?.length > 1" class="trn-width">
+                                    <div *ngIf="taxes?.length > 1" class="input-width">
                                         <dropdown-field [label]="isKenyaCompany || isZimbabweCompany ? commonLocaleData?.app_vat : commonLocaleData?.app_trn" [options]="taxes"
                                             (selectedOption)="getVatReport($event)"
                                             [placeholder]="commonLocaleData?.select_trn"
