@@ -10,7 +10,9 @@
         "estimate": "अंदाज",
         "cash_bill": "रोख बिल",
         "cash_credit_note": "रोख क्रेडिट नोट",
-        "cash_debit_note": "कॅश डेबिट नोट"
+        "cash_debit_note": "कॅश डेबिट नोट",
+        "receipt": "पावती",
+        "payment": "पेमेंट"
     },
     "customer_name": "ग्राहकाचे नाव",
     "enter_customer_name": "Enter Customer Name",
@@ -147,8 +149,9 @@
     "create_payment": "पेमेंट तयार करा",
     "receipt_date": "पावतीची तारीख",
     "payment_date": "पगाराची तारीख",
-    "cheque_no": "धनादेश#",
-    "cheque_no_placeholder": "चेक# प्रविष्ट करा",
+    "cheque_no": "चेक तपासा",
+    "cheque_no_placeholder": "चेक तपासा प्रविष्ट करा",
     "clearance_date": "तारीख तपासा",
-    "receipt_mode": "पावती मोड"
+    "receipt_mode": "पावती मोड",
+    "payment_mode": "Payment Mode"
 }
