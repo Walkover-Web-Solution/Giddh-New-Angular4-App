@@ -41,5 +41,6 @@
     "detailsOfSales": "Details of Sales",
     "detailsOfPurchases": "Details of Purchases",
     "amountExclVat": "Amount(Excl VAT)",
-    "amountOfOutputTax": "Amount of Output Tax"
+    "amountOfOutputTax": "Amount of Output Tax",
+    "amountOfInputTax": "Amount of Input Tax"
 }

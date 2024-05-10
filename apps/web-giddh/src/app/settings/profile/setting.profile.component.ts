@@ -1231,16 +1231,15 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
                 this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                     if (activeCompany) {
-                        if (activeCompany.countryV2?.alpha2CountryCode === 'ZW') {
+                        if (activeCompany.countryV2?.alpha2CountryCode === 'ZW' || activeCompany.countryV2?.alpha2CountryCode === 'KE') {
                             this.taxType = this.commonLocaleData?.app_vat;
                         } else if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                             this.taxType = this.commonLocaleData?.app_trn;
-                        }
-                        else {
+                        } else {
                             this.taxType = this.commonLocaleData?.app_gstin;
                         }
                         if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode) || activeCompany.countryV2?.alpha2CountryCode === 'IN') {
-                            this.showTaxColumn = true;
+                            this.showTaxColumn = true;                      
                         } else {
                             this.showTaxColumn = false;
                         }
@@ -1267,16 +1266,21 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                         if (activeCompany) {
                             if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
-                                this.taxType = this.commonLocaleData?.app_trn;
-                                this.localeData.company_address_list = this.localeData.company_trn_list;
-                                if(activeCompany.countryV2?.alpha2CountryCode === 'ZW') {
+                                if(activeCompany.countryV2?.alpha2CountryCode === 'ZW' || activeCompany.countryV2?.alpha2CountryCode === 'KE') {
+                                    this.taxType = this.commonLocaleData?.app_vat;
+                                    this.localeData.company_address_list = this.localeData.company_vat_list;
                                     this.localeData.add_address = this.localeData.add_vat;
+                                    this.localeData.address_list = this.localeData.vat_list;
+                                    this.localeData.create_address = this.localeData.create_vat;
+                                    this.localeData.update_address = this.localeData.update_vat;
                                 } else {
+                                    this.taxType = this.commonLocaleData?.app_trn;
+                                    this.localeData.company_address_list = this.localeData.company_trn_list;
                                     this.localeData.add_address = this.localeData.add_trn;
+                                    this.localeData.address_list = this.localeData.trn_list;
+                                    this.localeData.create_address = this.localeData.create_trn;
+                                    this.localeData.update_address = this.localeData.update_trn;
                                 }
-                                this.localeData.address_list = this.localeData.trn_list;
-                                this.localeData.create_address = this.localeData.create_trn;
-                                this.localeData.update_address = this.localeData.update_trn;
                             } else if (activeCompany.countryV2?.alpha2CountryCode === 'IN') {
                                 this.taxType = this.commonLocaleData?.app_gstin;
                                 this.localeData.company_address_list = this.localeData.company_gst_list;
