@@ -828,7 +828,7 @@
                                 aria-label="back"
                                 mat-stroked-button
                                 class="w-100 mt-2"
-                                (click)="selectedStep = 0"
+                                (click)="selectedStep = 0; backToPreviousPage()"
                                 *ngIf="selectedStep === 1"
                             >
                                 {{ localeData?.back_plan }}
@@ -837,7 +837,7 @@
                                 aria-label="billing"
                                 mat-stroked-button
                                 class="w-100 mt-2"
-                                (click)="selectedStep = 1"
+                                (click)="selectedStep = 1; backToPreviousPage()"
                                 *ngIf="selectedStep === 2"
                             >
                                 {{ localeData?.back_billing }}
