@@ -188,8 +188,8 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
         this.changeBillingForm.controls['companyName'].setValue(data.companyName);
         this.changeBillingForm.controls['email'].setValue(data.email);
         this.changeBillingForm.controls['pincode'].setValue(data.pincode);
-
-        if (data.mobileNumber && this.intlClass) {
+        this.initIntl();
+        if (this.intlClass && data.mobileNumber) {
             if (data?.mobileNumber?.startsWith('+')) {
                 this.changeBillingForm.controls['mobileNumber'].setValue(data.mobileNumber);
             } else {

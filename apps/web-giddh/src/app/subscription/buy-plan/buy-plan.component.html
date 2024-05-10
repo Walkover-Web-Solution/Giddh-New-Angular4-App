@@ -4,7 +4,6 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <hamburger-menu *ngIf="!isNewUserLoggedIn"></hamburger-menu>
     <div class="w-100 float-left pd-15" *ngIf="!isNewUserLoggedIn">
         <button mat-stroked-button class="mb-3" (click)="back()">
             <i class="icon-left back-left"></i>
