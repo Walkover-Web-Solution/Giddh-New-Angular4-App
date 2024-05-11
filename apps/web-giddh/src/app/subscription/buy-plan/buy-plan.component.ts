@@ -1151,7 +1151,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.secondStepForm.controls['companyName'].setValue(data.companyName);
         this.secondStepForm.controls['email'].setValue(data.email);
         this.secondStepForm.controls['pincode'].setValue(data.pincode);
-        if (data.mobileNumber && this.intlClass) {
+        this.initIntl();
+        if (this.intlClass && data.mobileNumber) {
             if (data?.mobileNumber?.startsWith('+')) {
                 this.secondStepForm.controls['mobileNumber'].setValue(data.mobileNumber);
             } else {
@@ -1159,8 +1160,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         }
         this.secondStepForm.controls['taxNumber'].setValue(data.taxNumber);
-        this.secondStepForm.controls['country'].setValue(data.country);
-        this.secondStepForm.controls['state'].setValue(data.state);
+        this.selectCountry({ label: data.country.name, value: data.country.code, additional: data.country })
+        this.selectState({ label: data.state.name, value: data.state.code, additional: data.state })
         this.secondStepForm.controls['address'].setValue(data?.address);
     }
 }
