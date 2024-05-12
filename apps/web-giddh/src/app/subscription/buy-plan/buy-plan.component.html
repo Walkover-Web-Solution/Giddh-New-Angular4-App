@@ -664,7 +664,7 @@
                         </div>
                         <div
                             class="d-flex justify-content-between border-bottom py-3"
-                            *ngIf="selectedPlan?.yearlyDiscountAmount > 0"
+                            *ngIf="selectedPlan?.yearlyDiscountAmount > 0 || selectedPlan?.monthlyDiscountAmount > 0 || promoCodeResponse?.length"
                         >
                             <p>
                                 <span class="strong">
@@ -685,7 +685,11 @@
                             </span>
                             <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">
                                 <amount-field
-                                    [amount]="selectedPlan?.monthlyDiscountAmount"
+                                [amount]="
+                                promoCodeResponse?.length
+                                    ? promoCodeResponse[0]?.discountValue
+                                    : selectedPlan?.monthlyDiscountAmount
+                            "
                                     [currencySymbol]="selectedPlan?.currency?.symbol"
                                     [currencyCode]="selectedPlan?.currency?.code"
                                 >
