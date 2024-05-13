@@ -9,7 +9,7 @@ export const COMMON_API = {
     DOWNLOAD_FILE: 'company/:companyUniqueName/download-file?voucherVersion=2&fileType=:fileType&downloadOption=:downloadOption',
     STOCK_UNITS: 'stock-units',
     GST_STOCK_UNITS: 'v2/company/:companyUniqueName/gst/unit-mapping',
-    MODULE_WISE_COLUMNS: 'company/:companyUniqueName/report-filters?module=:module',
+    MODULE_WISE_COLUMNS: 'report-filters?module=:module&companyUniqueName=:companyUniqueName',
     UPLOAD_FILE: 'company/:companyUniqueName/ledger/upload',
     UPLOAD_IMAGE: 'company/:companyUniqueName/images',
     BARCODE_SCAN: 'v4/company/:companyUniqueName/particular?customerUniqueName=:customerUniqueName&invoiceType=:invoiceType&barcode=:barcode'
