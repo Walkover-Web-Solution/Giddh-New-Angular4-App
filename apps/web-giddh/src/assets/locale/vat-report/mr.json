@@ -41,5 +41,6 @@
     "detailsOfSales": "विक्रीचे तपशील",
     "detailsOfPurchases": "खरेदीचे तपशील",
     "amountExclVat": "रक्कम (व्हॅट वगळून)",
-    "amountOfOutputTax": "आउटपुट कराची रक्कम"
+    "amountOfOutputTax": "आउटपुट कराची रक्कम",
+    "amountOfInputTax": "इनपुट टॅक्सची रक्कम"
 }
