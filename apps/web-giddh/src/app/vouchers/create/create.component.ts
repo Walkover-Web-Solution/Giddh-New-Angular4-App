@@ -3341,8 +3341,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (this.invoiceType.isCashInvoice) {
                 invoiceForm.type = this.invoiceType.isPurchaseInvoice ? "purchase" : this.invoiceType.isCreditNote ? "credit note" : this.invoiceType.isDebitNote ? "debit note" : "sales";
 
-                if(this.invoiceForm.get('salesPurchaseAsReceiptPayment').value){
-                    invoiceForm.type = !this.invoiceType.isCreditNote &&  !this.invoiceType.isDebitNote && !this.invoiceType.isPurchaseInvoice ? VoucherTypeEnum.receipt : VoucherTypeEnum.payment;
+                if (this.invoiceForm.get('salesPurchaseAsReceiptPayment').value) {
+                    invoiceForm.type = !this.invoiceType.isCreditNote && !this.invoiceType.isDebitNote && !this.invoiceType.isPurchaseInvoice ? VoucherTypeEnum.receipt : VoucherTypeEnum.payment;
                 }
 
                 invoiceForm.entries = invoiceForm.entries?.map(entry => {
@@ -3463,6 +3463,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.accountFormFields = cloneDeep(this.companyFormFields);
             this.account.taxTypeLabel = cloneDeep(this.company.taxTypeLabel);
             this.account.taxType = cloneDeep(this.company.taxType);
+
+            this.invoiceForm.get('account.uniqueName')?.patchValue("cash");
+            this.componentStore.getBriefAccounts({ currency: this.company.baseCurrency, group: BriedAccountsGroup });
         }
 
         this.addNewLineEntry(false);
