@@ -16,17 +16,6 @@ export enum BusinessTypes {
     Unregistered = 'Unregistered'
 };
 
-export enum TaxSupportedCountries {
-    'IN' = 'IN',
-    'UAE' = 'UAE',
-    'UK' = 'UK'
-};
-
-export enum TaxType {
-    'GST' = 'GST',
-    'TRN' = 'TRN',
-    'VAT' = 'VAT'
-};
 
 /** Regex for mobile number */
 export const PHONE_NUMBER_REGEX = /^[0-9-+()\/\\ ]+$/;
