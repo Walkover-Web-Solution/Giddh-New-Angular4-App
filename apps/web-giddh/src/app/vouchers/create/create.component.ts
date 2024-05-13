@@ -1766,8 +1766,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             grandTotalMultiCurrency: [0], //temp
             chequeNumber: [null], //temp
             chequeClearanceDate: [null], //temp
-            isAdvanceReceipt: [false], // temp
-            attachedFiles: []
+            isAdvanceReceipt: [false], //temp
+            attachedFiles: [],
+            salesPurchaseAsReceiptPayment: [false] //temp
         });
     }
 
@@ -3339,6 +3340,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             if (this.invoiceType.isCashInvoice) {
                 invoiceForm.type = this.invoiceType.isPurchaseInvoice ? "purchase" : this.invoiceType.isCreditNote ? "credit note" : this.invoiceType.isDebitNote ? "debit note" : "sales";
+
+                if(this.invoiceForm.get('salesPurchaseAsReceiptPayment').value){
+                    invoiceForm.type = !this.invoiceType.isCreditNote &&  !this.invoiceType.isDebitNote && !this.invoiceType.isPurchaseInvoice ? VoucherTypeEnum.receipt : VoucherTypeEnum.payment;
+                }
 
                 invoiceForm.entries = invoiceForm.entries?.map(entry => {
                     entry.voucherType = invoiceForm.type;
