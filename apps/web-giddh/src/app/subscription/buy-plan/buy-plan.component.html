@@ -742,6 +742,16 @@
                             >
                                 {{ localeData?.including_tax }}
                             </p>
+                            <p
+                                class="text-right"
+                                *ngIf="
+                                    selectedPlan?.currency?.code?.toLowerCase() === 'inr' &&
+                                    secondStepForm.get('country')?.value?.value?.toLowerCase() === 'in' &&
+                                    promoCodeResponse[0]?.discountValue
+                                "
+                            >
+                                {{ localeData?.including_tax }}
+                            </p>
                         </div>
                         <div class="position-relative mt-3" *ngIf="firstStepForm.get('planUniqueName').value">
                             <div class="w-100">
