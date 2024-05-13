@@ -9,8 +9,8 @@ import { SUBSCRIPTIONS_API, SUBSCRIPTION_V2_API } from './apiurls/subscriptions.
 import * as dayjs from 'dayjs';
 import { SubscriptionsUser } from '../models/api-models/Subscriptions';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
-import { TaxSupportedCountries, TaxType } from '../app.constant';
 import { GeneralService } from './general.service';
+import { TaxSupportedCountries, TaxType } from '../vouchers/utility/vouchers.const';
 
 @Injectable()
 export class SubscriptionsService {
