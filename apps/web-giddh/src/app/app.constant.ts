@@ -16,19 +16,6 @@ export enum BusinessTypes {
     Unregistered = 'Unregistered'
 };
 
-export enum TaxSupportedCountries {
-    'IN' = 'IN',
-    'UAE' = 'UAE',
-    'UK' = 'UK'
-};
-
-export enum TaxType {
-    'GST' = 'GST',
-    'TRN' = 'TRN',
-    'VAT' = 'VAT'
-};
-
-
 export const MOBILE_NUMBER_UTIL_URL = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js';
 export const INTL_INPUT_OPTION = {
     nationalMode: true,
