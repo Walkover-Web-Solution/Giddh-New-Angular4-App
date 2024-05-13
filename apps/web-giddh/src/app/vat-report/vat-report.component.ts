@@ -215,7 +215,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
-                        this.hasTaxNumber = this.currentBranch?.addresses?.filter(address => address.taxNumber.length > 0)?.length > 0;
+                        this.hasTaxNumber = this.currentBranch?.addresses?.filter(address => address?.taxNumber?.length > 0)?.length > 0;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
