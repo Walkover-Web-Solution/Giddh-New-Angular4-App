@@ -211,7 +211,9 @@
         "quarterly": "तिमाही",
         "half_yearly": "अर्धवार्षिक",
         "yearly": "वार्षिक",
-        "weekly": "साप्ताहिक"
+        "weekly": "साप्ताहिक",
+        "month": "महिना",
+        "year": "वर्ष"
     },
     "app_tax_subtypes": {
         "receivable": "प्राप्य",
