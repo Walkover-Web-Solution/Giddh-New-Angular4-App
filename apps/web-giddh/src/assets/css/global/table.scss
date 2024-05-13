@@ -52,3 +52,12 @@ aging-report {
         }
     }
 }
+
+.mat-mdc-paginator {
+    background-color: var(--color-transparent-background) !important;
+    color: var(--color-mat-tbody-tr-td) !important;
+
+    .mat-mdc-text-field-wrapper {
+        min-width: 100px;
+    }
+}

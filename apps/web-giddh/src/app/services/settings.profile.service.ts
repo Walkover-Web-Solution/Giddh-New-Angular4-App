@@ -48,8 +48,17 @@ export class SettingsProfileService {
     /**
      * Patch company profile
      */
-    public PatchProfile(model): Observable<BaseResponse<any, any>> {
-        this.companyUniqueName = (model.moveCompany) ? model.moveCompany : this.generalService.companyUniqueName;
+    public PatchProfile(model: any, companyUniqueName?: any, status?: any): Observable<BaseResponse<any, any>> {
+        if (companyUniqueName) {
+            this.companyUniqueName = companyUniqueName;
+        } else {
+            this.companyUniqueName = (model.moveCompany) ? model.moveCompany : this.generalService.companyUniqueName;
+        }
+        if (status) {
+            model = status;
+        } else {
+            model = model;
+        }
         const contextPath = (model.callNewPlanApi) ? SETTINGS_PROFILE_API.UPDATE_COMPANY_PLAN : SETTINGS_PROFILE_API.GET;
         return this.http.patch(this.config.apiUrl + contextPath?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
@@ -356,5 +365,22 @@ export class SettingsProfileService {
             data.queryString = {};
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * This will be use for new update subscriptions payment
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsProfileService
+     */
+    public updateSubscriptionPayment(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.config.apiUrl + SETTINGS_PROFILE_API.SUBSCRIPTION_CHARGE?.replace(':subscriptionId', encodeURIComponent(model?.subscriptionRequest?.subscriptionId)), model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 }

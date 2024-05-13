@@ -1,0 +1,180 @@
+<ng-container
+    appTranslate
+    [file]="'subscription'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <div id="main" class="welcome-outer pd-15">
+        <button aria-label="return" mat-stroked-button class="mb-3" (click)="back()">
+            <i class="icon-left back-left"></i>
+            {{ commonLocaleData?.app_back }}
+        </button>
+        <mat-card class="outline-card change-billing-wrap">
+            <form name="changeBillingForm" [formGroup]="changeBillingForm" autocomplete="off" novalidate>
+                <mat-card-content>
+                    <div class="welcome-msg">
+                        <p class="strong font-16 my-3">
+                            {{ localeData?.billing_heading_hello }} {{ billingDetails?.billingName }} !
+                        </p>
+                    </div>
+                    <div class="billing-details">
+                        <div class="form-group">
+                            <input-field
+                                [type]="'text'"
+                                [name]="'billingName'"
+                                [label]="localeData?.billing_name"
+                                [placeholder]="localeData?.billing_name"
+                                formControlName="billingName"
+                                [showError]="isFormSubmitted && !changeBillingForm.get('billingName')?.value"
+                            >
+                            </input-field>
+                        </div>
+                        <div class="form-group">
+                            <input-field
+                                [type]="'text'"
+                                [name]="'companyName'"
+                                [label]="commonLocaleData?.app_company_name"
+                                formControlName="companyName"
+                                [placeholder]="commonLocaleData?.app_company_name"
+                                [showError]="isFormSubmitted && !changeBillingForm.get('companyName')?.value"
+                            >
+                            </input-field>
+                        </div>
+                        <div class="form-group">
+                            <input-field
+                                [type]="'text'"
+                                [name]="'email'"
+                                [label]="commonLocaleData?.app_email"
+                                formControlName="email"
+                                [placeholder]="commonLocaleData?.app_email"
+                                   [showError]="
+                                                            isFormSubmitted && (!changeBillingForm.get('email')?.value ||
+                                                            changeBillingForm.get('email')?.errors?.pattern)
+                                                        "
+                            >
+                            </input-field>
+                        </div>
+                        <div class="form-group">
+                            <input-field
+                                [type]="'number'"
+                                [name]="'pincode'"
+                                [label]="localeData?.pincode"
+                                formControlName="pincode"
+                                [placeholder]="localeData?.pincode"
+                            >
+                            </input-field>
+                        </div>
+                        <div class="form-group">
+                            <!-- Mobile Number -->
+                            <div id="init-contact-wrapper" class="position-relative w-100">
+                                <input
+                                    type="tel"
+                                    class="mat-form-field-border mat-form-field-height mobile-height bg-transparent border"
+                                    #initContact
+                                    aria-autocomplete="none"
+                                    autocomplete="off"
+                                    (keypress)="intlClass?.onlyPhoneNumber($event); validateMobileField()"
+                                    id="init-billing"
+                                    [placeholder]="commonLocaleData?.app_mobile_number"
+                                    formControlName="mobileNumber"
+                                    [ngClass]="{
+                                        'invalid-input':
+                                            isFormSubmitted ||
+                                            (changeBillingForm.get('mobileNumber')?.touched &&
+                                                !intlClass?.isRequiredValidNumber)
+                                    }"
+                                />
+                                <mat-error
+                                    *ngIf="
+                                        changeBillingForm.get('mobileNumber')?.touched &&
+                                        !intlClass?.isRequiredValidNumber
+                                    "
+                                    >{{ localeData?.enter_valid_number }}</mat-error
+                                >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="width-100">
+                                <dropdown-field
+                                    [name]="'country'"
+                                    [label]="commonLocaleData?.app_country + '*'"
+                                    [placeholder]="commonLocaleData?.app_country"
+                                    class="mb-3 d-block"
+                                    [options]="countrySource"
+                                    (selectedOption)="selectCountry($event)"
+                                    [defaultValue]="selectedCountry"
+                                    [showError]="isFormSubmitted && !changeBillingForm.get('country')?.value"
+                                >
+                                </dropdown-field>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input-field
+                                [name]="'taxNumber'"
+                                [label]="formFields['taxName']?.label ?? commonLocaleData?.app_tax_number"
+                                [placeholder]="getEnterTaxText()"
+                                [type]="'text'"
+                                formControlName="taxNumber"
+                                [showError]="
+                                    (isFormSubmitted && !changeBillingForm.get('taxNumber')?.value) || !isGstinValid
+                                "
+
+                                [maxlength]="15"
+                                (change)="validateGstNumber()"
+                            >
+                            </input-field>
+                        </div>
+                        <div class="form-group">
+                            <div *ngIf="!countyList?.length">
+                                <dropdown-field
+                                    [name]="'state'"
+                                    [label]="commonLocaleData?.app_state"
+                                    [placeholder]="commonLocaleData?.app_state"
+                                    [options]="states"
+                                    [showError]="isFormSubmitted && !changeBillingForm.get('state')?.value"
+                                    [readonly]="disabledState"
+                                    [defaultValue]="selectedState"
+                                    (selectedOption)="selectState($event)"
+                                    [ngClass]="{ 'readonly-field': disabledState }"
+                                >
+                                </dropdown-field>
+                            </div>
+                            <div *ngIf="countyList?.length">
+                                <dropdown-field
+                                    [name]="'county'"
+                                    [label]="commonLocaleData?.app_region"
+                                    [placeholder]="commonLocaleData?.app_select_region"
+                                    [options]="countyList"
+                                    [showError]="isFormSubmitted && !changeBillingForm.get('county')?.value"
+                                    [defaultValue]="changeBillingForm.get('county')?.value?.label"
+                                    (selectedOption)="changeBillingForm.get('county')?.patchValue($event)"
+                                >
+                                </dropdown-field>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>{{ commonLocaleData?.app_address }}</mat-label>
+                                <textarea
+                                    matInput
+                                    [placeholder]="commonLocaleData?.app_address"
+                                    formControlName="address"
+                                ></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="pt-2 d-flex column-gap15">
+                            <button aria-label="submit" mat-stroked-button color="primary" (click)="onSubmit()">
+                                {{ commonLocaleData?.app_submit }}
+                            </button>
+                            <button aria-label="back" mat-stroked-button (click)="back()">
+                                {{ commonLocaleData?.app_cancel }}
+                            </button>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </form>
+        </mat-card>
+    </div>
+</ng-container>

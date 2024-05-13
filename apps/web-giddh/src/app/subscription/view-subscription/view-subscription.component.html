@@ -1,0 +1,228 @@
+<ng-container
+    appTranslate
+    [file]="'subscription'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
+    <div class="w-100 float-left pd-15">
+        <button aria-label="back" mat-stroked-button class="mb-3" (click)="back()">
+            <i class="icon-left back-left"></i>
+            {{ commonLocaleData?.app_back }}
+        </button>
+    </div>
+    <div class="view-subscription-wrap pd-15 d-flex w-100 column-gap15">
+        <div class="view-box">
+            <mat-card class="outline-card">
+                <div *ngIf="viewSubscriptionDataInProgress$ | async">
+                    <giddh-page-loader></giddh-page-loader>
+                </div>
+                <mat-card-content *ngIf="!(viewSubscriptionDataInProgress$ | async)">
+                    <div class="d-flex justify-content-between column-gap1 align-items-center border-bottom pb-2">
+                        <div class="d-flex column-gap1">
+                            <h4 class="font-16 strong">
+                                {{ commonLocaleData?.app_view }} {{ localeData?.tab_heading }}
+                            </h4>
+                            <span class="badge btn-success cp font-12">{{
+                                viewSubscriptionData?.status | uppercase
+                            }}</span>
+                        </div>
+                        <div class="d-flex align-items-center column-gap1">
+                            <button
+                                aria-label="buy"
+                                mat-stroked-button
+                                color="primary"
+                                (click)="buyPlan()"
+                                *ngIf="
+                                    viewSubscriptionData?.isOwner &&
+                                    viewSubscriptionData?.status?.toLowerCase() === 'trial'
+                                "
+                            >
+                                {{ commonLocaleData?.app_buy_plan }}
+                            </button>
+                            <button
+                                aria-label="buy"
+                                mat-stroked-button
+                                color="primary"
+                                (click)="buyPlan()"
+                                *ngIf="
+                                    viewSubscriptionData?.isOwner &&
+                                    viewSubscriptionData?.status?.toLowerCase() === 'expired'
+                                "
+                            >
+                                {{ localeData?.renew }}
+                            </button>
+                            <button
+                                *ngIf="viewSubscriptionData?.isOwner"
+                                aria-label="threedots"
+                                mat-icon-button
+                                [matMenuTriggerFor]="menu"
+                                class="d-flex align-items-center justify-content-center"
+                            >
+                                <i class="icon-dots-three-vertical font-16"></i>
+                            </button>
+                        </div>
+                        <mat-menu #menu="matMenu">
+                            <button
+                                aria-label="plan"
+                                mat-menu-item
+                                (click)="buyPlan()"
+                                *ngIf="viewSubscriptionData?.status?.toLowerCase() === 'trial'"
+                            >
+                                {{ commonLocaleData?.app_buy_plan }}
+                            </button>
+                            <button
+                                aria-label="plan"
+                                mat-menu-item
+                                (click)="buyPlan()"
+                                *ngIf="viewSubscriptionData?.status?.toLowerCase() === 'expired'"
+                            >
+                                {{ localeData?.renew }}
+                            </button>
+                            <button aria-label="change" mat-menu-item (click)="changeBilling()">
+                                {{ localeData?.change_billing }}
+                            </button>
+                            <button
+                                aria-label="subscriptionid"
+                                mat-menu-item
+                                (click)="transferSubscription(subscriptionId)"
+                            >
+                                {{ localeData?.request_transfer }}
+                            </button>
+                            <button aria-label="cancel" mat-menu-item (click)="cancelSubscription()">
+                                {{ commonLocaleData?.app_cancel }}
+                            </button>
+                            <button
+                                aria-label="move"
+                                mat-menu-item
+                                *ngIf="viewSubscriptionData?.companiesList?.length === 1"
+                                (click)="openModalMove()"
+                            >
+                                {{ localeData?.move }}
+                            </button>
+                        </mat-menu>
+                    </div>
+                    <div class="view-subscription">
+                        <div class="d-flex justify-content-between my-3">
+                            <p class="strong mb-1 font-16">{{ viewSubscriptionData?.planName }}</p>
+                            <span class="font-24">
+                                {{ viewSubscriptionData?.planCurrency?.symbol }} {{ viewSubscriptionData?.amount }}
+                            </span>
+                        </div>
+                        <h4 class="strong border-bottom pb-3 font-16 mr-t2">Total</h4>
+                        <div class="d-flex justify-content-between mr-b2 pt-3">
+                            <div>
+                                <p class="light-gray mb-1 font-12">{{ commonLocaleData?.app_company }}</p>
+                                <span class="font-24">
+                                    {{ viewSubscriptionData?.totalCompaniesAllowed }}
+                                </span>
+                            </div>
+                            <div>
+                                <p class="light-gray mb-1 font-12">{{ commonLocaleData?.app_invoice }}</p>
+                                <span class="font-24">
+                                    {{ viewSubscriptionData?.totalInvoices }}
+                                </span>
+                            </div>
+                            <div class="view-right d-flex align-items-end">
+                                <p class="light-gray mb-1 font-12">{{ localeData?.bill }}</p>
+                                <span class="font-24">
+                                    {{ viewSubscriptionData?.totalBills }}
+                                </span>
+                            </div>
+                        </div>
+                        <!-- usage -->
+                        <h4 class="strong border-bottom pb-3 font-16 mr-t3">{{ localeData?.usage }}</h4>
+                        <div class="d-flex justify-content-between pt-3">
+                            <div>
+                                <p class="light-gray mb-1 font-12">{{ commonLocaleData?.app_company }}</p>
+                                <span class="font-24">
+                                    {{ viewSubscriptionData?.usageCompanyCount }}
+                                </span>
+                            </div>
+                            <div>
+                                <p class="light-gray mb-1 font-12">{{ commonLocaleData?.app_invoice }}</p>
+                                <span class="font-24">
+                                    {{ viewSubscriptionData?.usageInvoiceCount }}
+                                </span>
+                            </div>
+                            <div class="view-right d-flex align-items-end">
+                                <p class="light-gray mb-1 font-12">{{ localeData?.bill }}</p>
+                                <span class="font-24">
+                                    {{ viewSubscriptionData?.usageBillCount }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="d-flex column-gap1 mt-3">
+                            <button
+                                *ngIf="viewSubscriptionData?.isOwner"
+                                aria-label="buyplan"
+                                mat-stroked-button
+                                color="primary"
+                                (click)="changePlan()"
+                            >
+                                {{ localeData?.change_subscription }}
+                            </button>
+                            <button
+                                *ngIf="viewSubscriptionData?.isOwner"
+                                aria-label="cancelsubscription"
+                                mat-stroked-button
+                                (click)="cancelSubscription()"
+                            >
+                                {{ localeData?.cancel_subscription }}
+                            </button>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <ng-container *ngIf="viewSubscriptionData?.cashfreeBillingInfo || viewSubscriptionData?.paymentMethodTypeMode">
+            <div class="billing-account">
+                <mat-card class="outline-card">
+                    <mat-card-content>
+                        <h4 class="font-16 strong border-bottom pb-2">{{ localeData?.billing_account }}</h4>
+                        <ng-container *ngIf="viewSubscriptionData?.cashfreeBillingInfo">
+                            <p class="strong my-3 light-gray">
+                                {{ commonLocaleData?.app_payment_mode }} :
+                                {{ viewSubscriptionData?.cashfreeBillingInfo?.mode }}
+                            </p>
+                            <p class="mr-b15" *ngIf="viewSubscriptionData?.cashfreeBillingInfo?.upiId">
+                                {{ localeData?.upi_id }}:
+                                <span class="strong light-gray">{{
+                                    viewSubscriptionData?.cashfreeBillingInfo?.upiId
+                                }}</span>
+                            </p>
+                            <p class="mr-b15" *ngIf="viewSubscriptionData?.cashfreeBillingInfo?.bankAccountNumber">
+                                {{ commonLocaleData?.app_account_number }} :
+                                <span class="strong light-gray">{{
+                                    viewSubscriptionData?.cashfreeBillingInfo?.bankAccountNumber
+                                }}</span>
+                            </p>
+                            <p class="mr-b15" *ngIf="viewSubscriptionData?.cashfreeBillingInfo?.bankAccountHolder">
+                                {{ localeData?.account_holder }} :
+                                <span class="strong light-gray">{{
+                                    viewSubscriptionData?.cashfreeBillingInfo?.bankAccountHolder
+                                }}</span>
+                            </p>
+                        </ng-container>
+                        <ng-container *ngIf="viewSubscriptionData?.paymentMethodTypeMode">
+                            <p class="strong my-3 light-gray">
+                                {{ commonLocaleData?.app_payment_mode }} :
+                                {{ viewSubscriptionData?.paymentMethodTypeMode }}
+                            </p>
+                        </ng-container>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </ng-container>
+    </div>
+</ng-container>
+<!-- MoveCompany Modal -->
+<ng-template #moveCompany>
+    <move-company
+        (moveCompany)="addOrMoveCompanyCallback($event)"
+        [moveSelectedCompany]="selectedCompany"
+        [localeData]="localeData"
+        [subscriptionMove]="subscriptionMove"
+        [commonLocaleData]="commonLocaleData"
+    >
+    </move-company>
+</ng-template>
