@@ -154,5 +154,7 @@
     "cheque_no_placeholder": "Enter Cheque Number",
     "clearance_date": "Clearance Date",
     "receipt_mode": "Receipt Mode",
-    "payment_mode": "Payment Mode"
+    "payment_mode": "Payment Mode",
+    "sales_as_receipt": "Sales as Receipt",
+    "purchase_as_payment": "Purchase as Payment"
 }

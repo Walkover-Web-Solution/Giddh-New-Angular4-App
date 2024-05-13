@@ -153,5 +153,7 @@
     "cheque_no_placeholder": "चेक तपासा प्रविष्ट करा",
     "clearance_date": "तारीख तपासा",
     "receipt_mode": "पावती मोड",
-    "payment_mode": "Payment Mode"
+    "payment_mode": "पेमेंट मोड",
+    "sales_as_receipt": "पावती म्हणून विक्री",
+    "purchase_as_payment": "पेमेंट म्हणून खरेदी करा"
 }

@@ -153,5 +153,7 @@
     "cheque_no_placeholder": "चेक नंबर दर्ज करें",
     "clearance_date": "चेक तिथि",
     "receipt_mode": "रसीद मोड",
-    "payment_mode": "Payment Mode"
+    "payment_mode": "भुगतान का प्रकार",
+    "sales_as_receipt": "रसीद के रूप में बिक्री",
+    "purchase_as_payment": "भुगतान के रूप में खरीदारी करें"
 }

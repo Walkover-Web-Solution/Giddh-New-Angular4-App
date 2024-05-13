@@ -6,7 +6,16 @@
             <mat-card-content>
                 <!-- Voucher Page Heading -->
                 <div class="vouchers-title d-flex align-items-center">
-                    <h1>{{ voucherType | voucherName: localeData | titlecase }}</h1>
+                    <div class="d-flex align-items-center">
+                        <h1>{{ voucherType | voucherName: localeData | titlecase }}</h1>
+                        <ng-container [formGroup]="invoiceForm">
+                            <mat-slide-toggle color="primary" class="ml-4" formControlName="salesPurchaseAsReceiptPayment" *ngIf="invoiceType.isCashInvoice &&  !invoiceType.isCreditNote &&  !invoiceType.isDebitNote">
+                                <span class="font-16">
+                                    {{ invoiceType.isPurchaseInvoice ? localeData?.purchase_as_payment : localeData?.sales_as_receipt }}
+                                </span>
+                            </mat-slide-toggle>
+                        </ng-container>
+                    </div>
                     <div class="ml-auto" *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice">
                         <watch-video [cssClass]="'text-blue'"
                             [moduleName]="invoiceType.isSalesInvoice ? 'VOUCHER_SALES' : 'VOUCHER_CASH'"></watch-video>
