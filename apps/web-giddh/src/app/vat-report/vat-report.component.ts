@@ -99,8 +99,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public isUKCompany: boolean = false;
     /** True if active country is Zimbabwe */
     public isZimbabweCompany: boolean = false;
-     /** True if active country is Kenya */
-     public isKenyaCompany: boolean = false;
+    /** True if active country is Kenya */
+    public isKenyaCompany: boolean = false;
     /** Hold static months array */
     public months: any[] = [
         { label: 'January', value: 1 },
@@ -140,7 +140,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public vatReportCurrencySymbol: string = this.vatReportCurrencyList[0].additional.symbol;
     /** Holds Current Currency Map Amount Decimal currency wise for Zimbabwe report */
     public vatReportCurrencyMap: string[];
-    /** Hold True if Current branch has Tax Number */
+    /** True if Current branch has Tax Number */
     public hasTaxNumber: boolean = false;
 
     constructor(
@@ -242,7 +242,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 this.selectedMonth = "";
                 this.selectedYear = "";
                 this.year = null;
-                if(this.hasTaxNumber || this.currentOrganizationType === OrganizationType.Company){
+                if (this.hasTaxNumber || this.currentOrganizationType === OrganizationType.Company) {
                     this.loadTaxDetails();
                 }
             }
@@ -279,7 +279,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 vatReportRequest.currencyCode = this.vatReportCurrencyCode;
                 countryCode = 'ZW';
             } else if (this.isKenyaCompany) {
-                    countryCode = 'KE';
+                countryCode = 'KE';
             } else {
                 countryCode = 'UK';
             }
@@ -339,7 +339,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.vatService.downloadVatReport(vatReportRequest, countryCode).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === "success") {
                 let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
-                return saveAs(blob, `VatReport${this.isKenyaCompany ? '.csv' :'.xlsx'}`);
+                return saveAs(blob, `VatReport${this.isKenyaCompany ? '.csv' : '.xlsx'}`);
             } else {
                 this.toasty.clearAllToaster();
                 this.toasty.errorToast(res?.message);
@@ -365,7 +365,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
             this.fromDate = dayjs(startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = dayjs(endDate).format(GIDDH_DATE_FORMAT);
             this.getVatReport();
-            
+
         }
     }
 

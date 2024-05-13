@@ -1231,7 +1231,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
                 this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                     if (activeCompany) {
-                        if (activeCompany.countryV2?.alpha2CountryCode === 'ZW' || activeCompany.countryV2?.alpha2CountryCode === 'KE') {
+                        if (activeCompany?.countryV2?.alpha2CountryCode === 'ZW' || activeCompany?.countryV2?.alpha2CountryCode === 'KE') {
                             this.taxType = this.commonLocaleData?.app_vat;
                         } else if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                             this.taxType = this.commonLocaleData?.app_trn;
@@ -1266,7 +1266,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                         if (activeCompany) {
                             if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
-                                if(activeCompany.countryV2?.alpha2CountryCode === 'ZW' || activeCompany.countryV2?.alpha2CountryCode === 'KE') {
+                                if(activeCompany?.countryV2?.alpha2CountryCode === 'ZW' || activeCompany?.countryV2?.alpha2CountryCode === 'KE') {
                                     this.taxType = this.commonLocaleData?.app_vat;
                                     this.localeData.company_address_list = this.localeData.company_vat_list;
                                     this.localeData.add_address = this.localeData.add_vat;

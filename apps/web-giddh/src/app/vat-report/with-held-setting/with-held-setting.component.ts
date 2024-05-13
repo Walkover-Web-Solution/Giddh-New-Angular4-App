@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ReplaySubject, take} from 'rxjs';
+import { ReplaySubject, take } from 'rxjs';
 import { AppState } from '../../store';
 import { Store } from '@ngrx/store';
 import { FormControl, Validators } from '@angular/forms';
@@ -24,7 +24,7 @@ export class WithHeldSettingComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideTaxSidebarMenuState: string = 'in';
-    /** Holds With Held Form control */
+    /** Holds Tax Percent */
     public taxPercentage: FormControl = new FormControl('', [Validators.max(100), Validators.required]);
     /** True if api call in progress */
     public isLoading: boolean = false;
@@ -36,7 +36,7 @@ export class WithHeldSettingComponent implements OnInit, OnDestroy {
         private route: Router,
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions
-    ) {}
+    ) { }
 
     /**
     * Lifecycle hook for initialization
@@ -57,9 +57,9 @@ export class WithHeldSettingComponent implements OnInit, OnDestroy {
     private getWithHeldValue(): void {
         this.isLoading = true;
         this.settingsProfileService.getCompanyDetails(null).pipe(take(1)).subscribe((response: any) => {
-            if (response?.status === "success" && response?.body?.withHeldTax) {                
+            if (response?.status === "success" && response?.body?.withHeldTax) {
                 this.taxPercentage.patchValue(response.body.withHeldTax);
-            } else if(response?.message){
+            } else if (response?.message) {
                 this.toaster.showSnackBar("error", response.message);
             }
             this.isLoading = false;
