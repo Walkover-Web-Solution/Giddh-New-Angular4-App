@@ -161,8 +161,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                         });
 
                         this.settingsPageTabs[loop] = [];
-                        this.settingsPageTabs[loop] = [...settingsPageTabs[organizationIndex][key]?.filter(value => !value?.planVersion || (value?.planVersion && +this.selectedCompany?.planVersion === +value?.planVersion)
-                        )];
+                        this.settingsPageTabs[loop] = [...settingsPageTabs[organizationIndex][key]];
                         loop++;
                     });
                 });

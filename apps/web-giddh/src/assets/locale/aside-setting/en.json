@@ -85,14 +85,7 @@
                 {
                     "label": "Subscription",
                     "link": "/pages/user-details/subscription",
-                    "icon": "<i class='icon-subscription2'></i>",
-                   "planVersion": 1
-                },
-                    {
-                    "label": "Subscription",
-                    "link": "/pages/subscription",
-                    "icon": "<i class='icon-subscription2'></i>",
-                   "planVersion": 2
+                    "icon": "<i class='icon-subscription2'></i>"
                 }
             ]
         ],
