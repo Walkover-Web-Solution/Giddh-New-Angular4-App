@@ -211,6 +211,8 @@
         "quarterly": "Quarterly",
         "half_yearly": "Half-Yearly",
         "yearly": "Yearly",
+        "month": "Month",
+        "year": "Year",
         "weekly": "Weekly"
     },
     "app_tax_subtypes": {

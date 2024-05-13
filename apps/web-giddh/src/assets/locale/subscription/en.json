@@ -7,6 +7,7 @@
         "total_transactions": "Total Transactions",
         "move_plan_note": "Select the plan in which you want to move <strong>[COMPANY_NAME]</strong> from [PLAN_NAME] to…",
         "select_plan": "Select Plan",
+        "start_trial": "Start Trial",
         "move": "Move",
         "select_company": "Select Company",
         "add_company_note": "Select the company you want to add in <strong>[PLAN_NAME]</strong> plan",

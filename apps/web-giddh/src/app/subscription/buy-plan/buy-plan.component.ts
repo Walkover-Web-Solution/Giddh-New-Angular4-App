@@ -746,7 +746,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 } else {
                     this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
                 }
-                if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
+
+                if (this.selectedPlan?.currency?.code?.toLowerCase() === 'inr' && this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
                     this.finalPlanAmount = this.finalPlanAmount + this.finalPlanAmount * this.taxPercentage;
                 } else {
                     if (this.firstStepForm.get('duration').value === 'YEARLY') {
@@ -815,8 +816,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public getAllPlans(): void {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length) {
-                this.monthlyPlans = response?.filter(plan => plan?.monthlyAmountAfterDiscount > 0);
-                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmountAfterDiscount > 0);
+                this.monthlyPlans = response?.filter(plan => plan?.monthlyAmount > 0);
+                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmount > 0);
 
                 if (this.yearlyPlans?.length) {
                     this.firstStepForm.get('duration').setValue('YEARLY');
@@ -867,7 +868,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     } else {
                         this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
                     }
-                    if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
+                    if (this.selectedPlan?.currency?.code?.toLowerCase() === 'inr' && this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
                         this.finalPlanAmount = this.finalPlanAmount + (this.finalPlanAmount * this.taxPercentage);
                     } else {
                         if (this.firstStepForm.get('duration').value === 'YEARLY') {
@@ -929,7 +930,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public selectCountry(event: any): void {
         if (event?.value) {
 
-            if (event?.value.toLowerCase() === 'in') {
+            if (this.selectedPlan?.currency?.code?.toLowerCase() === 'inr' && event?.value.toLowerCase() === 'in') {
                 this.finalPlanAmount = this.finalPlanAmount + this.finalPlanAmount * this.taxPercentage;
             } else {
                 if (this.firstStepForm.get('duration').value === 'YEARLY') {
