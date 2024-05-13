@@ -156,7 +156,7 @@
                                                         <amount-field
                                                             class="d-inline-block"
                                                             [amount]="element?.totalAmount"
-                                                            [currencySymbol]="activeCompany?.countryV2?.currency?.code"
+                                                            [currencySymbol]="activeCompany?.baseCurrencySymbol"
                                                             [currencyCode]="false"
                                                         ></amount-field>
                                                     </ng-container>
@@ -178,7 +178,7 @@
                                                                 class="d-inline-block"
                                                                 [amount]="vatReport[i]?.sections[vatReport[i]?.sections?.length -
                                                                 1]?.totalAmount"
-                                                                [currencySymbol]="activeCompany?.countryV2?.currency?.code"
+                                                                [currencySymbol]="activeCompany?.baseCurrencySymbol"
                                                                 [currencyCode]="false"
                                                             ></amount-field>
                                                         </ng-conatiner>
@@ -250,7 +250,7 @@
                                                         <amount-field
                                                             class="d-inline-block"
                                                             [amount]="element?.totalAmountOfOutputTax"
-                                                            [currencySymbol]="activeCompany?.countryV2?.currency?.code"
+                                                            [currencySymbol]="activeCompany?.baseCurrencySymbol"
                                                             [currencyCode]="false"
                                                         ></amount-field>
                                                     </ng-container>
@@ -272,7 +272,7 @@
                                                                  class="d-inline-block"
                                                                  [amount]="vatReport[i]?.sections[vatReport[i]?.sections?.length -
                                                                  1]?.totalAmountOfOutputTax"
-                                                                 [currencySymbol]="activeCompany?.countryV2?.currency?.code"
+                                                                 [currencySymbol]="activeCompany?.baseCurrencySymbol"
                                                                  [currencyCode]="false"
                                                              ></amount-field>
                                                         </ng-container>
@@ -337,7 +337,7 @@
                                                         <amount-field
                                                             class="d-inline-block"
                                                             [amount]="element?.totalAmountOfOutputTax"
-                                                            [currencySymbol]="activeCompany?.countryV2?.currency?.code"
+                                                            [currencySymbol]="activeCompany?.baseCurrencySymbol"
                                                             [currencyCode]="false"
                                                         ></amount-field>
                                                     </ng-container>
@@ -347,7 +347,7 @@
                                                         class="d-inline-block"
                                                         [amount]="vatReport[i]?.sections[vatReport[i]?.sections?.length -
                                                         1]?.totalAmountOfOutputTax ?? 0"
-                                                        [currencySymbol]="isKenyaCompany ? activeCompany?.countryV2?.currency?.code : activeCompany?.baseCurrencySymbol"
+                                                        [currencySymbol]="activeCompany?.baseCurrencySymbol"
                                                         [currencyCode]="false"
                                                     ></amount-field>
                                                 </td>
