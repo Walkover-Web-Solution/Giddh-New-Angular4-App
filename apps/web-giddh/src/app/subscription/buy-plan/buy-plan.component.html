@@ -97,7 +97,7 @@
                                                                     popularPlan?.uniqueName === plan?.uniqueName
                                                             }"
                                                         >
-                                                            <span class="font-20">{{ localeData?.popular }}</span>
+                                                            <span class="font-16">{{ localeData?.popular }}</span>
                                                         </div>
                                                     </ng-container>
                                                     <ng-container
@@ -198,22 +198,29 @@
                                                         <button
                                                             mat-stroked-button
                                                             color="primary"
-                                                            class="w-100 mt-auto"
+                                                            class="selected-plan-button mt-auto"
                                                             aria-label="monthly"
                                                             [class.selected]="
                                                                 firstStepForm.get('planUniqueName').value ===
                                                                 plan?.uniqueName
                                                             "
+                                                            [ngClass]="{
+                                                                'selected-plan':
+                                                                    firstStepForm.get('planUniqueName').value ===
+                                                                    plan?.uniqueName
+                                                            }"
                                                             (click)="selectPlan(plan)"
                                                         >
-                                                            {{
-                                                                firstStepForm.get("planUniqueName").value ===
-                                                                plan.uniqueName
-                                                                    ? localeData?.selected
-                                                                    : isChangePlan
-                                                                    ? localeData?.select_plan
-                                                                    : localeData?.start_trial
-                                                            }}
+                                                            <span class="font-16">
+                                                                {{
+                                                                    firstStepForm.get("planUniqueName").value ===
+                                                                    plan.uniqueName
+                                                                        ? localeData?.selected
+                                                                        : isChangePlan
+                                                                        ? localeData?.select_plan
+                                                                        : localeData?.start_trial
+                                                                }}
+                                                            </span>
                                                         </button>
                                                     </div>
                                                 </div>
@@ -738,16 +745,6 @@
                                     selectedPlan?.currency?.code?.toLowerCase() === 'inr' &&
                                     secondStepForm.get('country')?.value?.value?.toLowerCase() === 'in' &&
                                     !promoCodeResponse[0]?.discountValue
-                                "
-                            >
-                                {{ localeData?.including_tax }}
-                            </p>
-                            <p
-                                class="text-right"
-                                *ngIf="
-                                    selectedPlan?.currency?.code?.toLowerCase() === 'inr' &&
-                                    secondStepForm.get('country')?.value?.value?.toLowerCase() === 'in' &&
-                                    promoCodeResponse[0]?.discountValue
                                 "
                             >
                                 {{ localeData?.including_tax }}

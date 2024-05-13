@@ -152,10 +152,21 @@
                             </div>
                         </div>
                         <div class="d-flex column-gap1 mt-3">
-                            <button aria-label="buyplan" mat-stroked-button color="primary" (click)="changePlan()">
+                            <button
+                                *ngIf="viewSubscriptionData?.isOwner"
+                                aria-label="buyplan"
+                                mat-stroked-button
+                                color="primary"
+                                (click)="changePlan()"
+                            >
                                 {{ localeData?.change_subscription }}
                             </button>
-                            <button aria-label="cancelsubscription" mat-stroked-button (click)="cancelSubscription()">
+                            <button
+                                *ngIf="viewSubscriptionData?.isOwner"
+                                aria-label="cancelsubscription"
+                                mat-stroked-button
+                                (click)="cancelSubscription()"
+                            >
                                 {{ localeData?.cancel_subscription }}
                             </button>
                         </div>
