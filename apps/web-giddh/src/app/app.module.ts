@@ -35,6 +35,8 @@ import { MobileRestrictedComponent } from './mobile-restricted/mobile-restricted
 import { LoaderModule } from './loader/loader.module';
 import { PageModule } from './page/page.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { VerifySubscriptionTransferOwnershipComponent } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.component';
+import { MatButtonModule } from '@angular/material/button';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -62,7 +64,8 @@ if (!environment.production) {
     declarations: [
         AppComponent,
         AppLoginSuccessComponent,
-        MobileRestrictedComponent
+        VerifySubscriptionTransferOwnershipComponent,
+        MobileRestrictedComponent,
     ],
     /**
      * Import Angular's modules.
@@ -90,6 +93,7 @@ if (!environment.production) {
         MatSnackBarModule,
         SnackBarModule,
         MatDialogModule,
+        MatButtonModule,
         LoaderModule,
         PageModule,
         ...CONDITIONAL_IMPORTS

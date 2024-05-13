@@ -5,7 +5,7 @@ declare var window;
 export class IntlPhoneLib {
     private intl: any;
     private changeFlagZIndexInterval: any;
-    
+
     /**
      * Creates an instance of IntlPhoneLib.
      * @param {*} inputElement

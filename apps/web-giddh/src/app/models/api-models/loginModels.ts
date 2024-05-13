@@ -32,6 +32,7 @@ export class UserDetails {
     public uniqueName: string;
     public anAdmin: boolean;
     public authenticateTwoWay: boolean;
+    public hasSubscriptionPermission?: boolean;
     public availableCredit: boolean;
     public isNewUser: boolean;
     public subUser: boolean;

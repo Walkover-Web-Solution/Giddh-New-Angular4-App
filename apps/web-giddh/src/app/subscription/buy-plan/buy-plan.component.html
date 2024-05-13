@@ -1,0 +1,854 @@
+<ng-container
+    appTranslate
+    [file]="'subscription'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <div class="w-100 float-left pd-15" *ngIf="!isNewUserLoggedIn">
+        <button mat-stroked-button class="mb-3" (click)="back()">
+            <i class="icon-left back-left"></i>
+            {{ commonLocaleData?.app_back }}
+        </button>
+    </div>
+    <div class="float-left w-100">
+        <div class="buy-plan-wrapper pd-15 w-100">
+            <mat-stepper
+                linear
+                #stepper
+                [formGroup]="subscriptionForm"
+                name="companyForm"
+                [selectedIndex]="selectedStep"
+                (selectionChange)="onSelectedTab($event)"
+                [disableRipple]="firstStepForm.invalid"
+                class="bg-transparent text-black"
+            >
+                <mat-step [stepControl]="firstStepForm">
+                    <form name="firstStepForm" [formGroup]="firstStepForm" autocomplete="off" class="mt-5" novalidate>
+                        <div class="plan-summary d-flex justify-content-center">
+                            <div class="plan-width">
+                                <ng-template matStepLabel>{{ localeData?.all_plans }}</ng-template>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h2 class="font-16 strong mr-3">{{ localeData?.choose_plans }}</h2>
+                                    <div class="d-flex column-gap15 align-items-center">
+                                        <!-- <button mat-stroked-button color="primary" class="w-100" (click)="activateDialog()">
+                                        Activate Via Key
+                                    </button> -->
+                                        <!-- <div class="form-group col-md-2" *ngIf="isNewUserLoggedIn"> -->
+                                        <div class="width-100">
+                                            <dropdown-field
+                                                [name]="'country'"
+                                                [label]="commonLocaleData?.app_country"
+                                                [placeholder]="
+                                                    commonLocaleData?.app_select + ' ' + commonLocaleData?.app_country
+                                                "
+                                                class="country-dropdown d-block"
+                                                [options]="countrySource"
+                                                (selectedOption)="newUserSelectCountry($event, false)"
+                                                [defaultValue]="newUserSelectedCountry"
+                                            >
+                                            </dropdown-field>
+                                        </div>
+                                        <!-- </div> -->
+                                        <div class="custom-tab w-100">
+                                            <mat-button-toggle-group
+                                                *ngIf="monthlyPlans?.length && yearlyPlans?.length"
+                                                aria-label="Font Style"
+                                                (change)="toggleDuration($event)"
+                                                formControlName="duration"
+                                            >
+                                                <mat-button-toggle value="MONTHLY">{{
+                                                    commonLocaleData?.app_duration?.month
+                                                }}</mat-button-toggle>
+                                                <mat-button-toggle value="YEARLY">{{
+                                                    commonLocaleData?.app_duration?.year
+                                                }}</mat-button-toggle>
+                                            </mat-button-toggle-group>
+                                        </div>
+                                    </div>
+                                </div>
+                                <ng-container *ngIf="!(planListInProgress$ | async) && !isLoading && inputData?.length">
+                                    <!-- <div class="scroll-left">
+                                        <button mat-stroked-button color="primary" (click)="scrollLeft()">
+                                            <i class="icon-left"></i>
+                                        </button>
+                                    </div>
+                                    <div class="scroll-right">
+                                        <button mat-stroked-button color="primary" (click)="scrollRight()">
+                                            <i class="icon-right"></i>
+                                        </button>
+                                    </div> -->
+                                    <div #tableContent class="plan-table mat-elevation-z8">
+                                        <div class="grid-list-div top-heading">
+                                            <div class="grid-title-left grid-title-left-top">
+                                                <span class="inner-name inner-name-bold mat-table-sticky"> </span>
+                                            </div>
+                                            <ng-container *ngFor="let plan of inputData">
+                                                <div
+                                                    class="grid-title-list list-grid-title font-15"
+                                                    [ngClass]="{
+                                                        'active-plan': selectedPlan?.uniqueName === plan?.uniqueName
+                                                    }"
+                                                >
+                                                    <ng-container *ngIf="popularPlan?.uniqueName === plan?.uniqueName">
+                                                        <div
+                                                            class="d-flex justify-content-center align-items-center"
+                                                            [ngClass]="{
+                                                                'popular-txt':
+                                                                    popularPlan?.uniqueName === plan?.uniqueName
+                                                            }"
+                                                        >
+                                                            <span class="font-16">{{ localeData?.popular }}</span>
+                                                        </div>
+                                                    </ng-container>
+                                                    <ng-container
+                                                        *ngIf="!(popularPlan?.uniqueName === plan?.uniqueName)"
+                                                    >
+                                                        <div class="popular-txt-height"></div>
+                                                    </ng-container>
+                                                    <div class="plan-content d-flex flex-column">
+                                                        <h2
+                                                            class="font-20 strong plan-title d-flex align-items-center justify-content-center"
+                                                        >
+                                                            {{ plan?.name }}
+                                                        </h2>
+                                                        <p class="font-15 mt-3 feature-txt">
+                                                            <span *ngIf="plan?.description">
+                                                                {{ plan?.description }}
+                                                            </span>
+                                                        </p>
+                                                        <ng-container
+                                                            *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'"
+                                                        >
+                                                            <p
+                                                                class="mb-2"
+                                                                [ngClass]="{
+                                                                    'feature-txt': !plan?.yearlyDiscountAmount > 0
+                                                                }"
+                                                            >
+                                                                <s *ngIf="plan?.yearlyDiscountAmount > 0">
+                                                                    <span class="strong"
+                                                                        >{{ plan?.currency?.symbol
+                                                                        }}{{ plan?.yearlyAmount }}</span
+                                                                    ></s
+                                                                >
+                                                            </p>
+                                                            <p class="mb-3">
+                                                                <span class="strong font-20"
+                                                                    >{{ plan?.currency?.symbol
+                                                                    }}{{ plan?.yearlyAmountAfterDiscount }} /
+                                                                    {{ commonLocaleData?.app_duration?.year }}</span
+                                                                >
+                                                            </p>
+                                                            <p class="mb-3">
+                                                                <span
+                                                                    class="strong"
+                                                                    *ngIf="plan?.yearlyDiscountAmount > 0"
+                                                                >
+                                                                    {{ localeData?.save }}
+                                                                    {{ plan?.currency?.symbol
+                                                                    }}{{ plan?.yearlyDiscountAmount }}
+                                                                    {{ localeData?.for }}
+                                                                    {{
+                                                                        plan?.yearlyDiscount?.duration
+                                                                            ? plan?.yearlyDiscount?.duration
+                                                                            : 0
+                                                                    }}
+                                                                    {{
+                                                                        commonLocaleData?.app_duration?.year | lowercase
+                                                                    }}
+                                                                </span>
+                                                            </p>
+                                                        </ng-container>
+                                                        <ng-container
+                                                            *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'"
+                                                        >
+                                                            <p class="mb-2">
+                                                                <s *ngIf="plan?.monthlyDiscountAmount > 0">
+                                                                    <span class="strong"
+                                                                        >{{ plan?.currency?.symbol
+                                                                        }}{{ plan?.monthlyDiscountAmount }}</span
+                                                                    >
+                                                                </s>
+                                                            </p>
+                                                            <p class="mb-3">
+                                                                <span class="strong font-20"
+                                                                    >{{ plan?.currency?.symbol
+                                                                    }}{{ plan?.monthlyAmount }} /{{
+                                                                        commonLocaleData?.app_duration?.month
+                                                                    }}</span
+                                                                >
+                                                            </p>
+                                                            <p>
+                                                                <span
+                                                                    class="strong"
+                                                                    *ngIf="plan?.monthlyDiscountAmount > 0"
+                                                                >
+                                                                    {{ localeData?.save }}
+                                                                    {{ plan?.currency?.symbol
+                                                                    }}{{ plan?.monthlyDiscountAmount }}
+                                                                    {{ localeData?.for }}
+                                                                    {{ plan?.monthlyDiscount?.duration }}
+                                                                    {{
+                                                                        commonLocaleData?.app_duration?.month
+                                                                            | lowercase
+                                                                    }}
+                                                                </span>
+                                                            </p>
+                                                        </ng-container>
+                                                        <button
+                                                            mat-stroked-button
+                                                            color="primary"
+                                                            class="selected-plan-button mt-auto"
+                                                            aria-label="monthly"
+                                                            [class.selected]="
+                                                                firstStepForm.get('planUniqueName').value ===
+                                                                plan?.uniqueName
+                                                            "
+                                                            [ngClass]="{
+                                                                'selected-plan':
+                                                                    firstStepForm.get('planUniqueName').value ===
+                                                                    plan?.uniqueName
+                                                            }"
+                                                            (click)="selectPlan(plan)"
+                                                        >
+                                                            <span class="font-16">
+                                                                {{
+                                                                    firstStepForm.get("planUniqueName").value ===
+                                                                    plan.uniqueName
+                                                                        ? localeData?.selected
+                                                                        : isChangePlan
+                                                                        ? localeData?.select_plan
+                                                                        : localeData?.start_trial
+                                                                }}
+                                                            </span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+
+                                        <div class="grid-list-div">
+                                            <div class="grid-title-left grid-title-left-top">
+                                                <span class="inner-name inner-name-bold mat-table-sticky">
+                                                    <span>{{ localeData?.invoice_count }} </span>
+                                                    <i
+                                                        class="icon-info cp"
+                                                        [matTooltip]="commonLocaleData?.app_invoices"
+                                                        [matTooltipPosition]="'above'"
+                                                    ></i>
+                                                </span>
+                                            </div>
+                                            <ng-container *ngFor="let plan of inputData">
+                                                <div
+                                                    class="grid-title-list font-15 plan-row-height"
+                                                    [ngClass]="{
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                    }"
+                                                >
+                                                    <span class="sub-plan-name">{{ plan?.invoicesAllowed }}</span>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                        <div class="grid-list-div list-grid">
+                                            <div class="grid-title-left">
+                                                <span class="inner-name mat-table-sticky">
+                                                    <span>{{ localeData?.bill_count }} </span>
+                                                    <i class="icon-info cp"></i>
+                                                </span>
+                                            </div>
+                                            <ng-container *ngFor="let plan of inputData">
+                                                <div
+                                                    class="grid-title-list list-grid-title plan-row-height"
+                                                    [ngClass]="{
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                    }"
+                                                >
+                                                    <span>{{ plan?.billsAllowed }}</span>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                        <div class="grid-list-div list-grid">
+                                            <div class="grid-title-left">
+                                                <span class="inner-name mat-table-sticky">
+                                                    <span>{{ localeData?.companies_allowed }} </span>
+                                                </span>
+                                            </div>
+                                            <ng-container *ngFor="let plan of inputData">
+                                                <div
+                                                    class="grid-title-list list-grid-title plan-row-height"
+                                                    [ngClass]="{
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                    }"
+                                                >
+                                                    <span>{{ plan?.companiesLimit }}</span>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                        <div class="grid-list-div list-grid">
+                                            <div class="grid-title-left">
+                                                <span class="inner-name mat-table-sticky">
+                                                    {{ localeData?.accountant_consultant }}
+                                                </span>
+                                            </div>
+                                            <ng-container *ngFor="let plan of inputData">
+                                                <div
+                                                    class="grid-title-list list-grid-title plan-row-height"
+                                                    [ngClass]="{
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                    }"
+                                                >
+                                                    <i class="icon-tick"></i>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                        <div class="grid-list-div list-grid">
+                                            <div class="grid-title-left">
+                                                <span class="inner-name mat-table-sticky">
+                                                    {{ localeData?.desktop_mobile_app }}</span
+                                                >
+                                            </div>
+                                            <ng-container *ngFor="let plan of inputData">
+                                                <div
+                                                    class="grid-title-list list-grid-title plan-row-height"
+                                                    [ngClass]="{
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                    }"
+                                                >
+                                                    <i class="icon-tick"></i>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                        <div class="grid-list-div list-grid">
+                                            <div class="grid-title-left">
+                                                <span class="inner-name mat-table-sticky">
+                                                    {{ localeData?.unlimited_users }}</span
+                                                >
+                                            </div>
+                                            <ng-container *ngFor="let plan of inputData">
+                                                <div
+                                                    class="grid-title-list list-grid-title plan-row-height"
+                                                    [ngClass]="{
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                    }"
+                                                >
+                                                    <i class="icon-tick"></i>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                        <div class="grid-list-div list-grid">
+                                            <div class="grid-title-left">
+                                                <span class="inner-name mat-table-sticky">{{
+                                                    localeData?.import_data
+                                                }}</span>
+                                            </div>
+                                            <ng-container *ngFor="let plan of inputData">
+                                                <div
+                                                    class="grid-title-list list-grid-title plan-row-height"
+                                                    [ngClass]="{
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                    }"
+                                                >
+                                                    <i class="icon-tick"></i>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                        <div class="grid-list-div list-grid bottom-grid-list-div">
+                                            <div class="grid-title-left">
+                                                <span class="inner-name mat-table-sticky">{{
+                                                    localeData?.security
+                                                }}</span>
+                                            </div>
+                                            <ng-container *ngFor="let plan of inputData">
+                                                <div
+                                                    class="grid-title-list bottom-buy-button plan-row-height"
+                                                    [ngClass]="{
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
+                                                        'active-plan-td-bottom':
+                                                            selectedPlan?.uniqueName === plan?.uniqueName
+                                                    }"
+                                                >
+                                                    <i class="icon-tick"></i>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <ng-container *ngIf="!(planListInProgress$ | async) && !isLoading && inputData?.length">
+                                <ng-container *ngTemplateOutlet="planSummary"></ng-container>
+                            </ng-container>
+                        </div>
+                    </form>
+                </mat-step>
+                <mat-step [stepControl]="secondStepForm" name="secondStepForm">
+                    <form autocomplete="off" class="mt-5" novalidate [formGroup]="secondStepForm" name="secondStepForm">
+                        <div class="plan-summary d-flex justify-content-center">
+                            <div class="plan-width">
+                                <ng-template matStepLabel>{{ localeData?.select_billing }}</ng-template>
+                                <h4 class="font-16 strong d-flex align-items-center mb-3 plan-summary-heading">
+                                    {{ localeData?.create_billing }}
+                                </h4>
+                                <mat-card class="outline-card change-billing-wrap">
+                                    <mat-card-content>
+                                        <div class="billing-details">
+                                            <div class="form-group">
+                                                <input-field
+                                                    [type]="'text'"
+                                                    [name]="'billingName'"
+                                                    [label]="localeData?.billing_name + '*'"
+                                                    [placeholder]="localeData?.billing_name"
+                                                    formControlName="billingName"
+                                                    [showError]="
+                                                        isFormSubmitted && !secondStepForm.get('billingName')?.value
+                                                    "
+                                                    [autocomplete]="'off'"
+                                                >
+                                                </input-field>
+                                            </div>
+                                            <div class="form-group">
+                                                <input-field
+                                                    [type]="'text'"
+                                                    [name]="'companyName'"
+                                                    [label]="commonLocaleData?.app_company_name + '*'"
+                                                    formControlName="companyName"
+                                                    [placeholder]="commonLocaleData?.app_company_name"
+                                                    [showError]="
+                                                        isFormSubmitted && !secondStepForm.get('companyName')?.value
+                                                    "
+                                                    [autocomplete]="'off'"
+                                                >
+                                                </input-field>
+                                            </div>
+                                            <div class="form-group">
+                                                <input-field
+                                                    [type]="'text'"
+                                                    [name]="'email'"
+                                                    [label]="commonLocaleData?.app_email + '*'"
+                                                    formControlName="email"
+                                                    [placeholder]="commonLocaleData?.app_email"
+                                                    [showError]="
+                                                        isFormSubmitted &&
+                                                        (!secondStepForm.get('email')?.value ||
+                                                            secondStepForm.get('email')?.errors?.pattern)
+                                                    "
+                                                    [autocomplete]="'off'"
+                                                >
+                                                </input-field>
+                                            </div>
+                                            <div class="form-group">
+                                                <input-field
+                                                    [type]="'number'"
+                                                    [name]="'pincode'"
+                                                    [label]="localeData?.pincode"
+                                                    formControlName="pincode"
+                                                    [placeholder]="localeData?.pincode"
+                                                    [autocomplete]="'off'"
+                                                >
+                                                </input-field>
+                                            </div>
+                                            <div class="form-group">
+                                                <!-- Mobile Number -->
+                                                <div id="init-contact-wrapper" class="position-relative w-100">
+                                                    <input
+                                                        type="tel"
+                                                        class="mat-form-field-border mat-form-field-height mobile-height bg-transparent border"
+                                                        #initContact
+                                                        aria-autocomplete="none"
+                                                        [autocomplete]="'off'"
+                                                        (keypress)="
+                                                            intlClass?.onlyPhoneNumber($event); validateMobileField()
+                                                        "
+                                                        id="init-contact"
+                                                        [placeholder]="commonLocaleData?.app_mobile_number + '*'"
+                                                        formControlName="mobileNumber"
+                                                        [ngClass]="{
+                                                            'invalid-input':
+                                                                isFormSubmitted ||
+                                                                (secondStepForm.get('mobileNumber')?.touched &&
+                                                                    !intlClass?.isRequiredValidNumber)
+                                                        }"
+                                                    />
+                                                    <mat-error
+                                                        *ngIf="
+                                                            secondStepForm.get('mobileNumber')?.touched &&
+                                                            !intlClass?.isRequiredValidNumber
+                                                        "
+                                                        >{{ localeData?.enter_valid_number }}</mat-error
+                                                    >
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="width-100">
+                                                    <dropdown-field
+                                                        [name]="'country'"
+                                                        [label]="commonLocaleData?.app_country + '*'"
+                                                        [placeholder]="commonLocaleData?.app_country"
+                                                        class="mb-3 d-block"
+                                                        [options]="commonCountrySource"
+                                                        (selectedOption)="selectCountry($event)"
+                                                        [defaultValue]="selectedCountry"
+                                                        [showError]="
+                                                            isFormSubmitted && !secondStepForm.get('country')?.value
+                                                        "
+                                                    >
+                                                    </dropdown-field>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <input-field
+                                                    [name]="'taxNumber'"
+                                                    [placeholder]="getEnterTaxText()"
+                                                    [type]="'text'"
+                                                    formControlName="taxNumber"
+                                                    [showError]="
+                                                        (isFormSubmitted && !secondStepForm.get('taxNumber')?.value) ||
+                                                        !isGstinValid
+                                                    "
+                                                    [label]="
+                                                        formFields['taxName']?.label ?? commonLocaleData?.app_tax_number
+                                                    "
+                                                    [maxlength]="15"
+                                                    (change)="validateGstNumber()"
+                                                    [autocomplete]="'off'"
+                                                >
+                                                </input-field>
+                                            </div>
+                                            <div class="form-group">
+                                                <div *ngIf="!countyList?.length">
+                                                    <dropdown-field
+                                                        [name]="'state'"
+                                                        [label]="commonLocaleData?.app_state + '*'"
+                                                        [placeholder]="commonLocaleData?.app_state"
+                                                        [options]="states"
+                                                        [showError]="
+                                                            isFormSubmitted && !secondStepForm.get('state')?.value
+                                                        "
+                                                        [readonly]="disabledState"
+                                                        [defaultValue]="selectedState"
+                                                        (selectedOption)="selectState($event)"
+                                                        [ngClass]="{ 'readonly-field': disabledState }"
+                                                    >
+                                                    </dropdown-field>
+                                                </div>
+                                                <div *ngIf="countyList?.length">
+                                                    <dropdown-field
+                                                        [name]="'county'"
+                                                        [label]="commonLocaleData?.app_region"
+                                                        [placeholder]="commonLocaleData?.app_select_region"
+                                                        [options]="countyList"
+                                                        [showError]="
+                                                            isFormSubmitted && !secondStepForm.get('state')?.value
+                                                        "
+                                                        [defaultValue]="selectedState"
+                                                        (selectedOption)="selectState($event)"
+                                                    >
+                                                    </dropdown-field>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <mat-form-field appearance="outline" class="w-100">
+                                                    <mat-label>{{ commonLocaleData?.app_address }}</mat-label>
+                                                    <textarea
+                                                        matInput
+                                                        [placeholder]="commonLocaleData?.app_address"
+                                                        formControlName="address"
+                                                        [autocomplete]="'off'"
+                                                    ></textarea>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </mat-card-content>
+                                </mat-card>
+                            </div>
+                            <ng-container *ngTemplateOutlet="planSummary"></ng-container>
+                        </div>
+                    </form>
+                </mat-step>
+                <mat-step [stepControl]="thirdStepForm">
+                    <form
+                        name="thirdStepForm"
+                        autocomplete="off"
+                        class="mt-5"
+                        novalidate
+                        [formGroup]="thirdStepForm"
+                        name="thirdStepForm"
+                    >
+                        <div class="plan-summary d-flex justify-content-center">
+                            <div class="plan-width">
+                                <ng-template matStepLabel>{{ localeData?.review_pay }}</ng-template>
+                                <h4 class="font-16 mb-3 strong d-flex align-items-center plan-summary-heading">
+                                    {{ localeData?.payment_details }}
+                                </h4>
+                                <div class="new-plan">
+                                    <mat-card class="outline-card">
+                                        <mat-card-content>
+                                            <h5 class="font-16 strong mb-3">{{ localeData?.bill_to }}</h5>
+                                            <div class="payment-header border-bottom pb-3">
+                                                <span class="light-gray font-14 strong d-block">{{
+                                                    secondStepForm.get("billingName")?.value
+                                                }}</span>
+                                                <p class="light-gray font-14">
+                                                    {{ secondStepForm.get("email")?.value }}
+                                                </p>
+                                                <p class="light-gray font-14">
+                                                    {{ secondStepForm.get("mobileNumber")?.value }}
+                                                </p>
+                                            </div>
+                                        </mat-card-content>
+                                    </mat-card>
+                                </div>
+                            </div>
+                            <ng-container *ngTemplateOutlet="planSummary"></ng-container>
+                        </div>
+                    </form>
+                </mat-step>
+            </mat-stepper>
+        </div>
+    </div>
+    <!-- plan-summary -->
+    <ng-template #planSummary>
+        <div class="summary-wrapper">
+            <h2 class="font-16 mb-3 strong d-flex align-items-center plan-summary-heading">
+                {{ localeData?.plan_summary }}
+            </h2>
+            <mat-card class="outline-card">
+                <form
+                    name="firstStepForm"
+                    autocomplete="off"
+                    class="mt-5"
+                    novalidate
+                    [formGroup]="firstStepForm"
+                    name="firstStepForm"
+                >
+                    <mat-card-content>
+                        <div class="d-flex justify-content-between border-bottom pb-3">
+                            <span class="strong">{{ selectedPlan?.name }}</span>
+                            <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">
+                                <amount-field
+                                    [amount]="selectedPlan?.yearlyAmount"
+                                    [currencySymbol]="selectedPlan?.currency?.symbol"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                            <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">
+                                <amount-field
+                                    [amount]="selectedPlan?.monthlyAmount"
+                                    [currencySymbol]="selectedPlan?.currency?.symbol"
+                                    [currencyCode]="selectedPlan?.currency?.code"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                        <div class="border-bottom">
+                            <div class="d-flex justify-content-between py-3">
+                                <span class="strong">
+                                    <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">{{
+                                        commonLocaleData?.app_duration?.year
+                                    }}</span>
+                                    <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">{{
+                                        commonLocaleData?.app_duration?.month
+                                    }}</span>
+                                    {{ commonLocaleData?.app_amount }}</span
+                                >
+
+                                <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">
+                                    <amount-field
+                                        [amount]="selectedPlan?.yearlyAmount"
+                                        [currencySymbol]="selectedPlan?.currency?.symbol"
+                                        [currencyCode]="selectedPlan?.currency?.code"
+                                    >
+                                    </amount-field>
+                                </span>
+                                <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">
+                                    <amount-field
+                                        [amount]="selectedPlan?.monthlyAmount"
+                                        [currencySymbol]="selectedPlan?.currency?.symbol"
+                                        [currencyCode]="selectedPlan?.currency?.code"
+                                    >
+                                    </amount-field>
+                                </span>
+                            </div>
+                        </div>
+                        <div
+                            class="d-flex justify-content-between border-bottom py-3"
+                            *ngIf="
+                                selectedPlan?.yearlyDiscountAmount > 0 ||
+                                selectedPlan?.monthlyDiscountAmount > 0 ||
+                                promoCodeResponse?.length
+                            "
+                        >
+                            <p>
+                                <span class="strong">
+                                    {{ commonLocaleData?.app_discount }} {{ commonLocaleData?.app_amount }}</span
+                                >
+                            </p>
+                            <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">
+                                <amount-field
+                                    [amount]="
+                                        promoCodeResponse?.length
+                                            ? promoCodeResponse[0]?.discountValue
+                                            : selectedPlan?.yearlyDiscountAmount
+                                    "
+                                    [currencySymbol]="selectedPlan?.currency?.symbol"
+                                    [currencyCode]="selectedPlan?.currency?.code"
+                                >
+                                </amount-field>
+                            </span>
+                            <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">
+                                <amount-field
+                                    [amount]="
+                                        promoCodeResponse?.length
+                                            ? promoCodeResponse[0]?.discountValue
+                                            : selectedPlan?.monthlyDiscountAmount
+                                    "
+                                    [currencySymbol]="selectedPlan?.currency?.symbol"
+                                    [currencyCode]="selectedPlan?.currency?.code"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                        <div class="d-flex justify-content-between border-bottom py-3">
+                            <p>{{ commonLocaleData?.app_subtotal }}</p>
+                            <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">
+                                <amount-field
+                                    [amount]="selectedPlan?.yearlyAmountAfterDiscount"
+                                    [currencySymbol]="selectedPlan?.currency?.symbol"
+                                    [currencyCode]="selectedPlan?.currency?.code"
+                                >
+                                </amount-field>
+                            </span>
+                            <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">
+                                <amount-field
+                                    [amount]="selectedPlan?.monthlyAmountAfterDiscount"
+                                    [currencySymbol]="selectedPlan?.currency?.symbol"
+                                    [currencyCode]="selectedPlan?.currency?.code"
+                                >
+                                </amount-field>
+                            </span>
+                        </div>
+                        <div *ngIf="firstStepForm.get('planUniqueName').value">
+                            <div class="d-flex justify-content-between py-3">
+                                <p>{{ localeData?.final_amount }}</p>
+                                <span>
+                                    <amount-field
+                                        [amount]="finalPlanAmount"
+                                        [currencySymbol]="selectedPlan?.currency?.symbol"
+                                        [currencyCode]="selectedPlan?.currency?.code"
+                                    >
+                                    </amount-field>
+                                </span>
+                            </div>
+                            <p
+                                class="text-right"
+                                *ngIf="
+                                    selectedPlan?.currency?.code?.toLowerCase() === 'inr' &&
+                                    secondStepForm.get('country')?.value?.value?.toLowerCase() === 'in' &&
+                                    !promoCodeResponse[0]?.discountValue
+                                "
+                            >
+                                {{ localeData?.including_tax }}
+                            </p>
+                               <p
+                                class="text-right"
+                                *ngIf="
+                                    selectedPlan?.currency?.code?.toLowerCase() === 'inr' &&
+                                    secondStepForm.get('country')?.value?.value?.toLowerCase() === 'in' &&
+                                    promoCodeResponse[0]?.discountValue
+                                "
+                            >
+                                {{ localeData?.including_tax }}
+                            </p>
+                        </div>
+                        <div class="position-relative mt-3" *ngIf="firstStepForm.get('planUniqueName').value">
+                            <div class="w-100">
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <input-field
+                                        [name]="'code'"
+                                        formControlName="promoCode"
+                                        [placeholder]="localeData?.promo_code"
+                                    ></input-field>
+                                    <div>
+                                        <button
+                                            *ngIf="!promoCodeResponse[0]?.discountValue"
+                                            [ngClass]="{
+                                                'promocode-button': promoCodeResponse[0]?.discountValue
+                                            }"
+                                            aria-label="promocode"
+                                            mat-button
+                                            color="primary"
+                                            class="apply-btn"
+                                            (click)="applyPromoCode('add')"
+                                        >
+                                            {{ commonLocaleData?.app_apply }}
+                                        </button>
+                                        <button
+                                            *ngIf="promoCodeResponse[0]?.discountValue"
+                                            aria-label="Clear"
+                                            mat-button
+                                            class="apply-btn"
+                                            color="primary"
+                                            (click)="applyPromoCode('remove')"
+                                        >
+                                            {{ commonLocaleData?.app_remove }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <button
+                                mat-stroked-button
+                                aria-label="next"
+                                color="primary"
+                                class="w-100"
+                                (click)="nextStepForm()"
+                                *ngIf="selectedStep === 0"
+                            >
+                                {{ localeData?.continue_billing_account }}
+                            </button>
+                            <button
+                                mat-stroked-button
+                                aria-label="next-step"
+                                color="primary"
+                                class="w-100"
+                                (click)="nextStepForm()"
+                                *ngIf="selectedStep === 1"
+                            >
+                                {{ localeData?.continue_review }}
+                            </button>
+                            <button
+                                aria-label="submit"
+                                mat-stroked-button
+                                color="primary"
+                                class="w-100"
+                                *ngIf="selectedStep === 2"
+                                (click)="onSubmit()"
+                            >
+                                {{ localeData?.confirm_purchase }}
+                            </button>
+                            <button
+                                aria-label="back"
+                                mat-stroked-button
+                                class="w-100 mt-2"
+                                (click)="selectedStep = 0; backToPreviousPage()"
+                                *ngIf="selectedStep === 1"
+                            >
+                                {{ localeData?.back_plan }}
+                            </button>
+                            <button
+                                aria-label="billing"
+                                mat-stroked-button
+                                class="w-100 mt-2"
+                                (click)="selectedStep = 1; backToPreviousPage()"
+                                *ngIf="selectedStep === 2"
+                            >
+                                {{ localeData?.back_billing }}
+                            </button>
+                        </div>
+                    </mat-card-content>
+                </form>
+            </mat-card>
+        </div>
+    </ng-template>
+</ng-container>

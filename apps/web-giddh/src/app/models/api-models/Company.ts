@@ -125,6 +125,8 @@ export class CompanyResponse {
     public parentBranch?: ParentBranch;
     public warehouseResource?: Array<any>;
     public showOnSubscription?: boolean;
+    public planVersion?: any;
+    public subscription?: any;
 }
 
 export interface UserEntityRole {
@@ -306,6 +308,12 @@ export class CompanyCreateRequest {
     amountPaid?: string;
     orderId?: string;
     razorpaySignature?: string;
+    creatorSuperAdmin: boolean;
+    permission: [{
+        emailId: string,
+        entity: string,
+        roleUniqueName: string
+    }]
 }
 
 export class CreateCompanyUsersPlan {
