@@ -1233,7 +1233,7 @@
                                                                         [mask]="company?.inputMaskFormat"
                                                                         decimalDigitsDirective
                                                                         (focus)="entry.get('calculateTotal')?.patchValue(false)"
-                                                                        (blur)="entry.get('calculateTotal')?.patchValue(true)"
+                                                                        (blur)="invoiceForm.get('isAdvanceReceipt')?.value ? entry.get('calculateTotal')?.patchValue(false) : entry.get('calculateTotal')?.patchValue(true)"
                                                                         (input)="doReverseCalculation(entry)"
                                                                         (calculatedAmount)="updateEntryTotal(entry, $event)" />
                                                                 </div>
