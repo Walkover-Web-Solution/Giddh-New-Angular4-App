@@ -154,7 +154,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                     }
                     Object.keys(settingsPageTabs[organizationIndex]).forEach(key => {
                         settingsPageTabs[organizationIndex][key] = settingsPageTabs[organizationIndex][key]?.map(value => {
-                            if (this.selectedCompany?.planVersion === 2 || this.selectedCompany?.subscription?.status === "expired") {
+                            if (value?.link ==='/pages/user-details/subscription' && this.selectedCompany?.planVersion === 2 || this.selectedCompany?.subscription?.status === "expired") {
                                 value.link = "/pages/subscription";
                             }
                             return value;
