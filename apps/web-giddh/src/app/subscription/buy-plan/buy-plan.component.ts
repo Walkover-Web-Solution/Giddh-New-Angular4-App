@@ -746,7 +746,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 } else {
                     this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
                 }
-                if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
+
+                if (this.selectedPlan?.currency?.code?.toLowerCase() === 'inr' && this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
                     this.finalPlanAmount = this.finalPlanAmount + this.finalPlanAmount * this.taxPercentage;
                 } else {
                     if (this.firstStepForm.get('duration').value === 'YEARLY') {
@@ -815,8 +816,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public getAllPlans(): void {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length) {
-                this.monthlyPlans = response?.filter(plan => plan?.monthlyAmountAfterDiscount > 0);
-                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmountAfterDiscount > 0);
+                this.monthlyPlans = response?.filter(plan => plan?.monthlyAmount > 0);
+                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmount > 0);
 
                 if (this.yearlyPlans?.length) {
                     this.firstStepForm.get('duration').setValue('YEARLY');
@@ -867,7 +868,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     } else {
                         this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
                     }
-                    if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
+                    if (this.selectedPlan?.currency?.code?.toLowerCase() === 'inr' && this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
                         this.finalPlanAmount = this.finalPlanAmount + (this.finalPlanAmount * this.taxPercentage);
                     } else {
                         if (this.firstStepForm.get('duration').value === 'YEARLY') {
@@ -929,7 +930,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public selectCountry(event: any): void {
         if (event?.value) {
 
-            if (event?.value.toLowerCase() === 'in') {
+            if (this.selectedPlan?.currency?.code?.toLowerCase() === 'inr' && event?.value.toLowerCase() === 'in') {
                 this.finalPlanAmount = this.finalPlanAmount + this.finalPlanAmount * this.taxPercentage;
             } else {
                 if (this.firstStepForm.get('duration').value === 'YEARLY') {
@@ -1151,7 +1152,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.secondStepForm.controls['companyName'].setValue(data.companyName);
         this.secondStepForm.controls['email'].setValue(data.email);
         this.secondStepForm.controls['pincode'].setValue(data.pincode);
-        if (data.mobileNumber && this.intlClass) {
+        this.initIntl();
+        if (this.intlClass && data.mobileNumber) {
             if (data?.mobileNumber?.startsWith('+')) {
                 this.secondStepForm.controls['mobileNumber'].setValue(data.mobileNumber);
             } else {
@@ -1159,8 +1161,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         }
         this.secondStepForm.controls['taxNumber'].setValue(data.taxNumber);
-        this.secondStepForm.controls['country'].setValue(data.country);
-        this.secondStepForm.controls['state'].setValue(data.state);
+        this.selectCountry({ label: data.country.name, value: data.country.code, additional: data.country })
+        this.selectState({ label: data.state.name, value: data.state.code, additional: data.state })
         this.secondStepForm.controls['address'].setValue(data?.address);
     }
 }

@@ -27,13 +27,32 @@
                             }}</span>
                         </div>
                         <div class="d-flex align-items-center column-gap1">
-                            <button aria-label="buy" mat-stroked-button color="primary" (click)="buyPlan()" *ngIf="viewSubscriptionData?.status?.toLowerCase() === 'trial'">
+                            <button
+                                aria-label="buy"
+                                mat-stroked-button
+                                color="primary"
+                                (click)="buyPlan()"
+                                *ngIf="
+                                    viewSubscriptionData?.isOwner &&
+                                    viewSubscriptionData?.status?.toLowerCase() === 'trial'
+                                "
+                            >
                                 {{ commonLocaleData?.app_buy_plan }}
                             </button>
-                            <button aria-label="buy" mat-stroked-button color="primary" (click)="buyPlan()" *ngIf="viewSubscriptionData?.status?.toLowerCase() === 'expired'">
+                            <button
+                                aria-label="buy"
+                                mat-stroked-button
+                                color="primary"
+                                (click)="buyPlan()"
+                                *ngIf="
+                                    viewSubscriptionData?.isOwner &&
+                                    viewSubscriptionData?.status?.toLowerCase() === 'expired'
+                                "
+                            >
                                 {{ localeData?.renew }}
                             </button>
                             <button
+                                *ngIf="viewSubscriptionData?.isOwner"
                                 aria-label="threedots"
                                 mat-icon-button
                                 [matMenuTriggerFor]="menu"
@@ -43,10 +62,20 @@
                             </button>
                         </div>
                         <mat-menu #menu="matMenu">
-                            <button aria-label="plan" mat-menu-item (click)="buyPlan()" *ngIf="viewSubscriptionData?.status?.toLowerCase() === 'trial'">
+                            <button
+                                aria-label="plan"
+                                mat-menu-item
+                                (click)="buyPlan()"
+                                *ngIf="viewSubscriptionData?.status?.toLowerCase() === 'trial'"
+                            >
                                 {{ commonLocaleData?.app_buy_plan }}
                             </button>
-                            <button aria-label="plan" mat-menu-item (click)="buyPlan()" *ngIf="viewSubscriptionData?.status?.toLowerCase() === 'expired'">
+                            <button
+                                aria-label="plan"
+                                mat-menu-item
+                                (click)="buyPlan()"
+                                *ngIf="viewSubscriptionData?.status?.toLowerCase() === 'expired'"
+                            >
                                 {{ localeData?.renew }}
                             </button>
                             <button aria-label="change" mat-menu-item (click)="changeBilling()">
@@ -123,10 +152,21 @@
                             </div>
                         </div>
                         <div class="d-flex column-gap1 mt-3">
-                            <button aria-label="buyplan" mat-stroked-button color="primary" (click)="changePlan()">
+                            <button
+                                *ngIf="viewSubscriptionData?.isOwner"
+                                aria-label="buyplan"
+                                mat-stroked-button
+                                color="primary"
+                                (click)="changePlan()"
+                            >
                                 {{ localeData?.change_subscription }}
                             </button>
-                            <button aria-label="cancelsubscription" mat-stroked-button (click)="cancelSubscription()">
+                            <button
+                                *ngIf="viewSubscriptionData?.isOwner"
+                                aria-label="cancelsubscription"
+                                mat-stroked-button
+                                (click)="cancelSubscription()"
+                            >
                                 {{ localeData?.cancel_subscription }}
                             </button>
                         </div>
