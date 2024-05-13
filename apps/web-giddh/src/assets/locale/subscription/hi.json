@@ -39,6 +39,7 @@
 		"total_transactions": "कुल लेनदेन",
 		"move_plan_note": "उस योजना का चयन करें जिसमें आप <strong>[COMPANY_NAME]</strong> को [PLAN_NAME] से स्थानांतरित करना चाहते हैं",
 		"select_plan": "प्लान का चयन करें",
+        "start_trial": "शुरू परीक्षण",
 		"move": "मूव",
 		"select_company": "कंपनी का चयन करें",
 		"add_company_note": "उस कंपनी का चयन करें जिसे आप <strong>[PLAN_NAME]</strong> योजना में जोड़ना चाहते हैं",

@@ -37,6 +37,7 @@
 		"total_transactions": "एकूण व्यवहार",
 		"move_plan_note": "आपण ज्या योजनेत [PLAN_NAME] वरून… <strong>[COMPANY_NAME]</strong> हलवू इच्छिता ते निवडा.",
 		"select_plan": "योजना निवडा",
+        "start_trial": "चाचणी सुरू करा",
 		"move": "हलवा",
 		"select_company": "कंपनी निवडा",
 		"add_company_note": "आपण <strong>[PLAN_NAME]</strong> योजनेत जोडू इच्छित कंपनी निवडा",

@@ -229,21 +229,18 @@
                             </div>
                             <mat-menu #editModelBasic="matMenu">
                                 <div class="account-detail-custom-header">
-                                    <button
-                                        mat-menu-item
-                                        (click)="changePlan(element)"
-                                    >
+                                    <button *ngIf="element?.isOwner" mat-menu-item (click)="changePlan(element)">
                                         {{ localeData?.change_plan }}
                                     </button>
                                     <button
-                                        *ngIf="element?.status?.toLowerCase() === 'trial'"
+                                        *ngIf="element?.status?.toLowerCase() === 'trial' && element?.isOwner"
                                         mat-menu-item
                                         (click)="buyPlan(element)"
                                     >
                                         {{ commonLocaleData?.app_buy_plan }}
                                     </button>
                                     <button
-                                        *ngIf="element?.status?.toLowerCase() === 'expired'"
+                                        *ngIf="element?.status?.toLowerCase() === 'expired' && element?.isOwner"
                                         mat-menu-item
                                         (click)="buyPlan(element)"
                                     >
@@ -252,25 +249,38 @@
                                     <button mat-menu-item (click)="viewSubscription(element)">
                                         {{ localeData?.view_subscription }}
                                     </button>
-                                    <button mat-menu-item (click)="changeBilling(element?.billingAccount?.uniqueName)">
+
+                                    <button
+                                        *ngIf="element?.isOwner"
+                                        mat-menu-item
+                                        (click)="changeBilling(element?.billingAccount?.uniqueName)"
+                                    >
                                         {{ localeData?.change_billing }}
                                     </button>
-                                    <button mat-menu-item (click)="transferSubscription(element?.subscriptionId)">
+                                    <button
+                                        *ngIf="element?.isOwner"
+                                        mat-menu-item
+                                        (click)="transferSubscription(element?.subscriptionId)"
+                                    >
                                         {{ localeData?.request_transfer }}
                                     </button>
-                                    <button mat-menu-item (click)="cancelSubscription(element?.subscriptionId)">
+                                    <button
+                                        *ngIf="element?.isOwner"
+                                        mat-menu-item
+                                        (click)="cancelSubscription(element?.subscriptionId)"
+                                    >
                                         {{ commonLocaleData?.app_cancel }}
                                     </button>
                                     <button
                                         mat-menu-item
-                                        *ngIf="element?.companies?.length === 1"
+                                        *ngIf="element?.companies?.length === 1 && element?.isOwner"
                                         (click)="openModalMove(element, $event)"
                                     >
                                         {{ localeData?.move }}
                                     </button>
                                     <button
                                         mat-menu-item
-                                        *ngIf="element?.companies?.length < element?.totalCompanies"
+                                        *ngIf="element?.isOwner && element?.companies?.length < element?.totalCompanies"
                                         (click)="createCompanyInSubscription(element?.subscriptionId)"
                                     >
                                         {{ localeData?.add_company }}
