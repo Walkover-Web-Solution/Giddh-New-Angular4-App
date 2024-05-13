@@ -154,6 +154,17 @@
                     "description": "Advance, normal, total, & unused receipts"
                 },
                 {
+                    "label": "New Receipt",
+                    "link": "/pages/vouchers/receipt/create",
+                    "icon": "icon-reciept-new",
+                    "description": "Generate receipt",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
                     "label": "Sales Register",
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
@@ -310,6 +321,17 @@
                     "link": "/pages/reports/payment",
                     "icon": "icon-reciept-new",
                     "description": "Total, & unused payments",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "New Payment",
+                    "link": "/pages/vouchers/payment/create",
+                    "icon": "icon-reciept-new",
+                    "description": "Generate payment",
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2
