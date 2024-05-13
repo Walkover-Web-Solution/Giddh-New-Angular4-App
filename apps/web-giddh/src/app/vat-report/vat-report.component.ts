@@ -161,7 +161,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany && !this.activeCompany) {
+            if (activeCompany && this.activeCompany?.uniqueName !== activeCompany.uniqueName) {
                 this.activeCompany = activeCompany;
                 this.isUKCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'GB';
                 this.isZimbabweCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'ZW';
@@ -279,6 +279,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 vatReportRequest.currencyCode = this.vatReportCurrencyCode;
                 countryCode = 'ZW';
             } else if (this.isKenyaCompany) {
+                vatReportRequest.currencyCode = this.vatReportCurrencyCode;
                 countryCode = 'KE';
             } else {
                 countryCode = 'UK';
@@ -331,6 +332,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
             vatReportRequest.currencyCode = this.vatReportCurrencyCode;
             countryCode = 'ZW';
         } else if (this.isKenyaCompany) {
+            vatReportRequest.currencyCode = this.vatReportCurrencyCode;
             countryCode = 'KE';
         } else {
             countryCode = 'UK';
@@ -423,7 +425,9 @@ export class VatReportComponent implements OnInit, OnDestroy {
             }
             this.isTaxApiInProgress = false;
             this.taxNumber = this.taxes[0]?.value;
-            this.getVatReport();
+            setTimeout(() => {
+                this.getVatReport();
+            },100);
         });
     }
 
