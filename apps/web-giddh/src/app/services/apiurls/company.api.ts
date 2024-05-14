@@ -33,4 +33,5 @@ export const COMPANY_API = {
     GET_SIDE_BAR_ITEM: 'company/:companyUniqueName/ui_side_bar_items',
     GET_COMPANY_USER: 'users/:userUniqueName/company-uer?companyUniqueName=:companyUniqueName',
     SEND_NEW_USER_INFO: 'users/send-new-user-info',
+    GET_COUNTRY_LIST_BY_SUBSCRIPTION_ID:'v2/subscription/:subscriptionId/country-list'
 };

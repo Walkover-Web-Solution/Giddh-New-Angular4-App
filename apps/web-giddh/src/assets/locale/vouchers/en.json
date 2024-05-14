@@ -10,7 +10,10 @@
         "estimate": "Estimate",
         "cash_bill": "Cash Bill",
         "cash_credit_note": "Cash Credit Note",
-        "cash_debit_note": "Cash Debit Note"
+        "cash_debit_note": "Cash Debit Note",
+        "purchase_order": "Purchase Order",
+        "receipt": "Receipt",
+        "payment": "Payment"
     },
     "customer_name": "Customer Name",
     "enter_customer_name": "Enter Customer Name",
@@ -147,8 +150,11 @@
     "create_payment": "Create Payment",
     "receipt_date": "Receipt Date",
     "payment_date": "Payment Date",
-    "cheque_no": "Cheque#",
-    "cheque_no_placeholder": "Enter Cheque#",
+    "cheque_no": "Cheque Number",
+    "cheque_no_placeholder": "Enter Cheque Number",
     "clearance_date": "Clearance Date",
-    "receipt_mode": "Receipt Mode"
+    "receipt_mode": "Receipt Mode",
+    "payment_mode": "Payment Mode",
+    "sales_as_receipt": "Sales as Receipt",
+    "purchase_as_payment": "Purchase as Payment"
 }

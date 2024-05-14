@@ -10,7 +10,9 @@
         "estimate": "अनुमान",
         "cash_bill": "नकद बिल",
         "cash_credit_note": "कैश क्रेडिट नोट",
-        "cash_debit_note": "नकद डेबिट नोट"
+        "cash_debit_note": "नकद डेबिट नोट",
+        "receipt": "रसीद",
+        "payment": "भुगतान"
     },
     "customer_name": "ग्राहक का नाम",
     "enter_customer_name": "Enter Customer Name",
@@ -147,8 +149,11 @@
     "create_payment": "भुगतान बनाएँ",
     "receipt_date": "रसीद तारीख",
     "payment_date": "भुगतान तिथि",
-    "cheque_no": "चेक#",
-    "cheque_no_placeholder": "चेक# दर्ज करें",
+    "cheque_no": "चेक नंबर",
+    "cheque_no_placeholder": "चेक नंबर दर्ज करें",
     "clearance_date": "चेक तिथि",
-    "receipt_mode": "रसीद मोड"
+    "receipt_mode": "रसीद मोड",
+    "payment_mode": "भुगतान का प्रकार",
+    "sales_as_receipt": "रसीद के रूप में बिक्री",
+    "purchase_as_payment": "भुगतान के रूप में खरीदारी करें"
 }

@@ -91,7 +91,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     public moveCompanyInNewPlan(): void {
         this.subscriptionRequestObj = {
             planUniqueName: '',
-            subscriptionId: this.availablePlans[this.selectedPlan].subscriptionId,
+            subscriptionId: this.selectedPlan,
             userUniqueName: this.moveSelectedCompany?.createdBy?.uniqueName,
             licenceKey: ''
         };
@@ -105,17 +105,8 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      * @memberof MoveCompanyComponent
      */
     public patchProfile(obj: any): void {
-        this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
         this.moveCompany.emit(true);
-    }
-
-    /**
-     * This will close the popup
-     *
-     * @memberof MoveCompanyComponent
-     */
-    public closePopup(): void {
-        this.moveCompany.emit(false);
+        this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
     }
 
     /**
@@ -129,25 +120,15 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                 this.moveSelectedCompany = response.body;
                 if (this.subscriptions && this.subscriptions.length > 0) {
                     this.subscriptions.forEach(subscription => {
-                        if (this.subscriptionMove) {
-                            if (subscription.subscriptionId && this.moveSelectedCompany?.subscription?.subscriptionId !== subscription.subscriptionId && subscription.companies?.length < subscription?.totalCompanies && this.availablePlans[subscription?.plan?.uniqueName] === undefined &&
+                            if (subscription.subscriptionId && this.moveSelectedCompany?.subscription?.subscriptionId !== subscription.subscriptionId && (!subscription.companies?.length || subscription.companies?.length < subscription?.totalCompanies) && this.availablePlans[subscription?.subscriptionId] === undefined &&
                                 subscription.planCountries?.find(country => country?.countryName === this.moveSelectedCompany.country ? this.moveSelectedCompany.country : this.moveSelectedCompany.country?.countryName)
                             ) {
-                                this.availablePlansOption.push({ label: subscription.plan?.name, value: subscription.plan?.uniqueName });
-                                if (this.availablePlans[subscription.plan?.uniqueName] === undefined) {
-                                    this.availablePlans[subscription.plan?.uniqueName] = [];
+                                this.availablePlansOption.push({ label: subscription.plan?.name + " - " + subscription?.subscriptionId, value: subscription.subscriptionId });
+                                if (this.availablePlans[subscription.subscriptionId] === undefined) {
+                                    this.availablePlans[subscription.subscriptionId] = [];
                                 }
-                                this.availablePlans[subscription.plan?.uniqueName] = subscription;
+                                this.availablePlans[subscription.subscriptionId] = subscription;
                             }
-                        } else {
-                            if (subscription.subscriptionId && subscription.planDetails?.companiesLimit > subscription.totalCompanies && this.moveSelectedCompany?.subscription?.subscriptionId !== subscription.subscriptionId && this.availablePlans[subscription.planDetails?.uniqueName] === undefined && subscription.planDetails.countries.includes(this.moveSelectedCompany.country)) {
-                                this.availablePlansOption.push({ label: subscription.planDetails?.name, value: subscription.planDetails?.uniqueName });
-                                if (this.availablePlans[subscription.planDetails?.uniqueName] === undefined) {
-                                    this.availablePlans[subscription.planDetails?.uniqueName] = [];
-                                }
-                                this.availablePlans[subscription.planDetails?.uniqueName] = subscription;
-                            }
-                        }
                     });
                 }
             }

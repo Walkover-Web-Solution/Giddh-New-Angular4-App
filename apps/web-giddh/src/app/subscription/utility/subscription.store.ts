@@ -46,6 +46,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
     }
 
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
+    public isUpdateCompanySuccess$ = this.select(this.store.select(state => state.settings.updateProfileSuccess), (response) => response);
 
     /**
      * Get All Subscriptions

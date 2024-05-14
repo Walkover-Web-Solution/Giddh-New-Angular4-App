@@ -188,8 +188,8 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
         this.changeBillingForm.controls['companyName'].setValue(data.companyName);
         this.changeBillingForm.controls['email'].setValue(data.email);
         this.changeBillingForm.controls['pincode'].setValue(data.pincode);
-
-        if (data.mobileNumber && this.intlClass) {
+        this.initIntl();
+        if (this.intlClass && data.mobileNumber) {
             if (data?.mobileNumber?.startsWith('+')) {
                 this.changeBillingForm.controls['mobileNumber'].setValue(data.mobileNumber);
             } else {
@@ -497,13 +497,19 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
             this.isFormSubmitted = true;
             return;
         }
+        if (this.changeBillingForm.value.mobileNumber?.startsWith('+')) {
+            this.changeBillingForm.controls['mobileNumber'].setValue(this.changeBillingForm.value.mobileNumber);
+        } else {
+            this.changeBillingForm.controls['mobileNumber'].setValue(this.intlClass.selectedCountryData?.dialCode + this.changeBillingForm.value.mobileNumber);
+        }
+        let mobileNumber = this.changeBillingForm.value.mobileNumber?.replace(/\+/g, '');
         let request = {
             billingName: this.changeBillingForm.value.billingName,
             companyName: this.changeBillingForm.value.companyName,
             taxNumber: this.changeBillingForm.value.taxNumber,
             email: this.changeBillingForm.value.email,
             pincode: this.changeBillingForm.value.pincode,
-            mobileNumber: this.intlClass.selectedCountryData?.dialCode + this.changeBillingForm.value.mobileNumber,
+            mobileNumber: mobileNumber,
             country: {
                 name: this.changeBillingForm.value.country.name,
                 code: this.changeBillingForm.value.country.code

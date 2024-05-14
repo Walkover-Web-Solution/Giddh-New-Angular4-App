@@ -6,7 +6,16 @@
             <mat-card-content>
                 <!-- Voucher Page Heading -->
                 <div class="vouchers-title d-flex align-items-center">
-                    <h1>{{ voucherType | voucherName: localeData | titlecase }}</h1>
+                    <div class="d-flex align-items-center">
+                        <h1>{{ voucherType | voucherName: localeData | titlecase }}</h1>
+                        <ng-container [formGroup]="invoiceForm">
+                            <mat-slide-toggle color="primary" class="ml-4" formControlName="salesPurchaseAsReceiptPayment" *ngIf="invoiceType.isCashInvoice && !invoiceType.isCreditNote && !invoiceType.isDebitNote">
+                                <span class="font-16">
+                                    {{ invoiceType.isPurchaseInvoice ? localeData?.purchase_as_payment : localeData?.sales_as_receipt }}
+                                </span>
+                            </mat-slide-toggle>
+                        </ng-container>
+                    </div>
                     <div class="ml-auto" *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice">
                         <watch-video [cssClass]="'text-blue'"
                             [moduleName]="invoiceType.isSalesInvoice ? 'VOUCHER_SALES' : 'VOUCHER_CASH'"></watch-video>
@@ -684,7 +693,7 @@
                                     <table formArrayName="entries" class="w-100">
                                         <thead>
                                             <tr>
-                                                <th [width]="hasStock ? '20%' : '25%'" class="text-left product-column">{{ !invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice ? localeData?.product_service : localeData?.receipt_mode }}</th>
+                                                <th [width]="hasStock ? '20%' : '25%'" class="text-left product-column">{{ invoiceType.isReceiptInvoice ? localeData?.receipt_mode :  invoiceType.isPaymentInvoice ? localeData?.payment_mode : localeData?.product_service }}</th>
                                                 <th [width]="hasStock ? '15%' : '17%'" class="text-left" *ngIf="!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">{{ commonLocaleData?.app_description }}</th>
                                                 <th [width]="hasStock ? '10%' : '10%'" [ngClass]="{ 'd-none' : !hasStock}">{{ commonLocaleData?.app_quantity_unit }}</th>
                                                 <th [width]="hasStock ? '10%' : '10%'" [ngClass]="{ 'd-none' : !hasStock}">{{ commonLocaleData?.app_rate }}</th>
@@ -1106,9 +1115,11 @@
                                                                             entryAmount
                                                                             [rate]="transaction.get('stock.uniqueName')?.value ? transaction.get('stock.rate.rateForAccount')?.value : transaction.get('amount.amountForAccount')?.value"
                                                                             [quantity]="transaction.get('stock.uniqueName')?.value ? transaction.get('stock.quantity')?.value : 1"
+                                                                            [calculateAmount]="entry.get('calculateAmount')?.value"
                                                                             [prefix]="account?.baseCurrencySymbol"
                                                                             [mask]="company?.inputMaskFormat"
                                                                             name="transactionAmount{{entryIndex}}"
+                                                                            [readonly]="invoiceForm.get('isAdvanceReceipt')?.value"
                                                                             decimalDigitsDirective
                                                                             formControlName="amountForAccount"
                                                                             (calculatedAmount)="updateTransactionAmount(transaction, $event)" />
@@ -1224,14 +1235,14 @@
                                                                     [style.display]="activeEntryIndex === entryIndex ? 'block' : 'none'">
                                                                     <input matInput [placeholder]="commonLocaleData?.app_total"
                                                                         class="form-control text-right pr-0" type="text"
-                                                                        entryTotal [entry]="entry?.value" [excludeTax]="account?.excludeTax || invoiceForm.get('isRcmEntry')?.value"
+                                                                        entryTotal [entry]="entry?.value" [excludeTax]="account?.excludeTax || invoiceForm.get('isRcmEntry')?.value || (invoiceType.isReceiptInvoice && !invoiceForm.get('isAdvanceReceipt')?.value)"
                                                                         name="transactionTotal{{entryIndex}}"
                                                                         formControlName="amountForAccount"
                                                                         [prefix]="account?.baseCurrencySymbol"
                                                                         [mask]="company?.inputMaskFormat"
                                                                         decimalDigitsDirective
                                                                         (focus)="entry.get('calculateTotal')?.patchValue(false)"
-                                                                        (blur)="entry.get('calculateTotal')?.patchValue(true)"
+                                                                        (blur)="invoiceForm.get('isAdvanceReceipt')?.value ? entry.get('calculateTotal')?.patchValue(false) : entry.get('calculateTotal')?.patchValue(true)"
                                                                         (input)="doReverseCalculation(entry)"
                                                                         (calculatedAmount)="updateEntryTotal(entry, $event)" />
                                                                 </div>
@@ -1628,9 +1639,9 @@
                                                         </td>
                                                         <td>
                                                             <text-field [id]="'grandTotalMultiCurrency'"
-                                                                #grandTotalMultiCurrency [type]="'text'" [cssClass]="
-                                                                    'form-control mat-field-border'
-                                                                " [name]="'grandTotalMultiCurrency'"
+                                                                #grandTotalMultiCurrency [type]="'text'" 
+                                                                [cssClass]="'form-control mat-field-border'" 
+                                                                [name]="'grandTotalMultiCurrency'"
                                                                 [prefix]="company?.baseCurrencySymbol"
                                                                 [mask]="company?.inputMaskFormat" [useMask]="true"
                                                                 [readonly]="isEinvoiceGenerated"

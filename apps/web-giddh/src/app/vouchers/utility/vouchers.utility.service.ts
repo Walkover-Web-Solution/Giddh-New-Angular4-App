@@ -149,7 +149,15 @@ export class VouchersUtilityService {
                 break;
 
             case VoucherTypeEnum.purchaseOrder:
-                voucherName = "Purchase Order";
+                voucherName = localeData?.invoice_types?.purchase_order;
+                break;
+
+            case VoucherTypeEnum.receipt:
+                voucherName = localeData?.invoice_types?.receipt;
+                break;
+
+            case VoucherTypeEnum.payment:
+                voucherName = localeData?.invoice_types?.payment;
                 break;
 
             default:
@@ -161,7 +169,7 @@ export class VouchersUtilityService {
     }
 
     public getParentGroupForAccountCreate(voucherType: string): string {
-        if (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.purchaseOrder || voucherType === VoucherTypeEnum.cashBill || voucherType === VoucherTypeEnum.cashDebitNote) {
+        if (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.purchaseOrder || voucherType === VoucherTypeEnum.cashBill || voucherType === VoucherTypeEnum.cashDebitNote || voucherType === VoucherTypeEnum.payment) {
             return 'sundrycreditors';
         } else {
             return 'sundrydebtors';
@@ -189,7 +197,7 @@ export class VouchersUtilityService {
                 code: defaultAddress.stateCode,
                 name: defaultAddress.stateName
             };
-        } 
+        }
 
         return { defaultAddress, defaultAddressIndex };
     }
@@ -285,6 +293,7 @@ export class VouchersUtilityService {
         delete invoiceForm.chequeNumber;
         delete invoiceForm.chequeClearanceDate;
         delete invoiceForm.isAdvanceReceipt;
+        delete invoiceForm.salesPurchaseAsReceiptPayment;
 
         invoiceForm?.entries?.forEach(entry => {
             delete entry.showCodeType;
@@ -302,6 +311,10 @@ export class VouchersUtilityService {
             });
 
             if (entry.otherTax?.uniqueName && entry.otherTax?.calculationMethod) {
+                if (!entry.taxes) {
+                    entry.taxes = [];
+                }
+
                 entry.taxes.push({
                     uniqueName: entry.otherTax?.uniqueName,
                     calculationMethod: entry.otherTax?.calculationMethod
@@ -367,7 +380,11 @@ export class VouchersUtilityService {
 
     public calculateInclusiveRate(entry: any, companyTaxes: any[], balanceDecimalPlaces: any, entryTotal: number = null): number {
         if (entryTotal === null) {
-            entryTotal = giddhRoundOff(Number(entry.transactions[0].stock?.quantity) * Number(entry.transactions[0].stock?.rate?.rateForAccount));
+            if (entry.transactions[0].stock?.uniqueName) {
+                entryTotal = giddhRoundOff(Number(entry.transactions[0].stock?.quantity) * Number(entry.transactions[0].stock?.rate?.rateForAccount));
+            } else {
+                entryTotal = giddhRoundOff(Number(entry.transactions[0].amount.amountForAccount));
+            }
         }
 
         // Calculate percentage discount total

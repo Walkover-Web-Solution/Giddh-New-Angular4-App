@@ -1,8 +1,6 @@
 <div class="modal-header d-flex align-items-center flex-row-reverse">
     <button aria-hidden="true" class="close" mat-dialog-close>×</button>
-    <h3>
-        {{ localeData?.subscription?.move_company ? localeData?.subscription?.move_company : localeData?.move_company }}
-    </h3>
+    <h3>{{ localeData?.subscription?.move_company }}</h3>
 </div>
 <div *ngIf="isLoading">
     <giddh-page-loader></giddh-page-loader>
@@ -37,7 +35,7 @@
                     (click)="moveCompanyInNewPlan()"
                     [disabled]="!selectedPlan"
                 >
-                    {{ localeData?.subscription?.move ? localeData?.subscription?.move : localeData?.move }}
+                    {{ localeData?.subscription?.move }}
                 </button>
             </div>
         </div>

@@ -9,8 +9,8 @@ import { SUBSCRIPTIONS_API, SUBSCRIPTION_V2_API } from './apiurls/subscriptions.
 import * as dayjs from 'dayjs';
 import { SubscriptionsUser } from '../models/api-models/Subscriptions';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
-import { TaxSupportedCountries, TaxType } from '../app.constant';
 import { GeneralService } from './general.service';
+import { TaxSupportedCountries, TaxType } from '../vouchers/utility/vouchers.const';
 
 @Injectable()
 export class SubscriptionsService {
@@ -89,7 +89,25 @@ export class SubscriptionsService {
      */
     public getAllPlans(params: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_ALL_PLANS
-            ?.replace(':countryCode', encodeURIComponent(params.countryCode ?? ''))
+            ?.replace(':countryCode', encodeURIComponent(params?.countryCode || ''))?.replace(':region', encodeURIComponent(params?.region || ''))
+        ).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {})));
+    }
+
+    /**
+    * Get All Country list
+    *
+    * @param {*} model
+    * @param {*} params
+    * @returns {Observable<BaseResponse<any, any>>}
+    * @memberof SubscriptionsService
+    */
+    public getCountryList(): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_COUNTRY_LIST
         ).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = '';

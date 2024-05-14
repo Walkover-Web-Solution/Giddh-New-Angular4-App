@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { ViewSubscriptionComponentStore } from './utility/view-subscription.store';
-import { ReplaySubject, takeUntil } from 'rxjs';
+import { ReplaySubject, take, takeUntil } from 'rxjs';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { Location } from '@angular/common';
 import { SubscriptionComponentStore } from '../utility/subscription.store';
@@ -47,6 +47,8 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     public selectedCompany: any;
     /** True if subscription will move */
     public subscriptionMove: boolean = false;
+    /** True if subscription will move */
+    public selectedMoveCompany: boolean = false;
     /** Razorpay instance */
     public razorpay: any;
 
@@ -58,7 +60,8 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         private readonly componentStoreBuyPlan: BuyPlanComponentStore,
         private subscriptionComponentStore: SubscriptionComponentStore,
         private location: Location
-    ) { }
+    ) {
+    }
 
     /**
    * Initializes the component by subscribing to route parameters and fetching subscription data.
@@ -86,15 +89,28 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
 
         this.subscriptionRazorpayOrderDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.initializePayment(response);
+                if (response.dueAmount > 0) {
+                    this.initializePayment(response);
+                } else {
+                    this.router.navigate(['/pages/subscription/buy-plan']);
+                }
             }
         });
 
         this.updateSubscriptionPaymentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.router.navigate(['/pages/subscription']);
                 this.getSubscriptionData(this.subscriptionId);
             }
         });
+
+        this.componentStore.isUpdateCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && this.selectedMoveCompany) {
+                this.getSubscriptionData(this.subscriptionId);
+                this.router.navigate(['/pages/subscription']);
+            }
+        });
+
     }
 
     /**
@@ -116,6 +132,18 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
                 transferDialogRef.close();
             }
         });
+    }
+
+/**
+* This function will refresh the subscribed companies if move company was succesful and will close the popup
+*
+* @param {*} event
+* @memberof ViewSubscriptionComponent
+*/
+    public addOrMoveCompanyCallback(event: boolean): void {
+        if (event) {
+            this.selectedMoveCompany = true;
+        }
     }
 
     /**
@@ -205,19 +233,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
      * @memberof ViewSubscriptionComponent
      */
     public changePlan(): void {
-        this.router.navigate([`/pages/subscription/buy-plan`]);
-    }
-
-    /**
-    * This function will refresh the subscribed companies if move company was succesful and will close the popup
-    *
-    * @param {*} event
-    * @memberof ViewSubscriptionComponent
-    */
-    public addOrMoveCompanyCallback(event: boolean): void {
-        if (event) {
-            this.getSubscriptionData(this.subscriptionId);
-        }
+        this.router.navigate([`/pages/subscription/buy-plan/`+this.subscriptionId]);
     }
 
     /**

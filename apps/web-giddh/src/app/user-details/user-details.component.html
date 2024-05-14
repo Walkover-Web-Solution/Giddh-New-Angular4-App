@@ -353,9 +353,8 @@
                     </div>
                 </div>
             </mat-tab>
-            <mat-tab
-                [label]="localeData?.subscription?.tab_heading"
-            >
+            <mat-tab *ngIf="selectedCompany?.planVersion === 1 && selectedCompany?.subscription?.status !== 'expired'"
+                [label]="localeData?.subscription?.tab_heading">
                 <div class="wrap-tab-content-pd-15">
                     <subscription [localeData]="localeData" [commonLocaleData]="commonLocaleData"></subscription>
                 </div>

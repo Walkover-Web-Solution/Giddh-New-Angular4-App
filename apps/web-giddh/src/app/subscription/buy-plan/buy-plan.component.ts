@@ -1,4 +1,3 @@
-import { concat } from 'apps/web-giddh/src/app/lodash-optimized';
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -118,6 +117,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public stateSource$: Observable<IOption[]> = observableOf([]);
     /** Hold country source*/
     public countrySource: IOption[] = [];
+    /** Hold  common country source*/
+    public commonCountrySource: IOption[] = [];
+    /** Hold common country source observable*/
+    public commonCountrySource$: Observable<IOption[]> = observableOf([]);
     /** Hold country source observable*/
     public countrySource$: Observable<IOption[]> = observableOf([]);
     /** Hold plan data source*/
@@ -131,7 +134,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** Hold final plan amount */
     public finalPlanAmount: number = 0;
     /** True if new user logged in */
-    public isNewUserLoggedIn: boolean = false;
+    public isNewUserLoggedIn: boolean;
     /** Razorpay instance */
     public razorpay: any;
     /** Holds subscription response */
@@ -156,6 +159,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public getBillingData: boolean = false;
     /** Holds Store Get Billing Details observable*/
     public changePlanDetails$ = this.componentStore.select(state => state.changePlanDetails);
+    /** Holds Store Get Country list observable*/
+    public getCountryList$ = this.componentStore.select(state => state.countryList);
     /** Holds subscription request */
     public subscriptionRequest: any;
 
@@ -194,7 +199,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.getCompanyProfile();
         this.getOnboardingFormData();
         this.getActiveCompany();
-        this.getBillingDetails();
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
             if (params?.id) {
@@ -202,6 +206,46 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.isChangePlan = true;
             }
         });
+        if (localStorage.getItem('Country-Region') === 'IN') {
+            this.newUserSelectCountry({
+                "label": "IN - India",
+                "value": "IN",
+                "additional": {
+                    "value": "IN",
+                    "label": "IN - India"
+                }
+            }, false);
+        } else if (localStorage.getItem('Country-Region') === 'GB') {
+            this.newUserSelectCountry({
+                "label": "GB - United Kingdom",
+                "value": "GB",
+                "additional": {
+                    "value": "GB",
+                    "label": "GB - United Kingdom"
+                }
+            }, false);
+        } else if (localStorage.getItem('Country-Region') === 'AE') {
+            this.newUserSelectCountry({
+                "label": "AE - United Arab Emirates",
+                "value": "AE",
+                "additional": {
+                    "value": "AE",
+                    "label": "AE - United Arab Emirates"
+                }
+
+            }, false);
+        } else if (localStorage.getItem('Country-Region') === 'GL') {
+            this.newUserSelectCountry({
+                "label": "GL - Global",
+                "value": "GL",
+                "additional": {
+                    "value": "GL",
+                    "label": "GL - Global"
+                }
+            }, true);
+        }
+
+
 
         this.createSubscriptionResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -251,24 +295,52 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-            this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                if (data && data?.uniqueName) {
-                    this.getBillingData = true;
-                    this.setFormValues(data);
-                    this.selectedCountry = data.country?.name;
-                    this.selectedState = data.state?.name;
-                }
-            });
+        this.getCountryList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.countrySource = [];
+                Object.keys(response).forEach(key => {
+                    this.countrySource.push({
+                        value: response[key].alpha2CountryCode,
+                        label: response[key].alpha2CountryCode + ' - ' + response[key].countryName,
+                        additional: response[key]
+                    });
+                });
+                this.countrySource$ = observableOf(this.countrySource);
+            } else {
+                let countryRequest = new CountryRequest();
+                countryRequest.formName = 'onboarding';
+                this.store.dispatch(this.commonActions.GetCountry(countryRequest));
+            }
+        });
+
+        this.componentStore.commonCountries$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.commonCountrySource = [];
+                Object.keys(response).forEach(key => {
+                    this.commonCountrySource.push({
+                        value: response[key].alpha2CountryCode,
+                        label: response[key].alpha2CountryCode + ' - ' + response[key].countryName
+                    });
+                });
+                this.commonCountrySource$ = observableOf(this.commonCountrySource);
+            } else {
+                let countryRequest = new CountryRequest();
+                countryRequest.formName = 'onboarding';
+                this.store.dispatch(this.commonActions.GetCountry(countryRequest));
+            }
+        });
+
 
         this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
-            if (this.isNewUserLoggedIn) {
-                this.newUserSelectCountry({
-                    "label": "US - United States of America",
-                    "value": "US",
-                    "additional": {
-                        "value": "US",
-                        "label": "US - United States of America"
+            if (!this.isNewUserLoggedIn) {
+                this.getBillingDetails();
+                this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                    if (data && data?.uniqueName) {
+                        this.getBillingData = true;
+                        this.setFormValues(data);
+                        this.selectedCountry = data.country?.name;
+                        this.selectedState = data.state?.name;
                     }
                 });
             }
@@ -392,6 +464,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * This will be use for back to previous page
+     *
+     * @memberof BuyPlanComponent
+     */
+    public backToPreviousPage(): void {
+        if (this.firstStepForm?.get('promoCode')?.value) {
+            this.firstStepForm?.get('promoCode')?.setValue(this.firstStepForm?.get('promoCode')?.value);
+        }
+    }
+
+    /**
      * Gets active company details
      *
      * @private
@@ -426,6 +509,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     planUniqueName: this.firstStepForm.get('planUniqueName')?.value,
                     duration: this.firstStepForm.get('duration')?.value
                 }
+                this.firstStepForm.get('promoCode')?.setValue("");
             }
             this.componentStore.applyPromocode(request);
         }
@@ -449,7 +533,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.company.inputMaskFormat = profile.balanceDisplayFormat?.toLowerCase() || '';
                 this.company.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                 this.showTaxTypeByCountry(this.company.countryCode);
-                this.componentStore.getAllPlans({ params: { countryCode: this.company.countryCode } });
             }
         });
     }
@@ -541,22 +624,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public getCountry(): void {
-        this.componentStore.commonCountries$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.countrySource = [];
-                Object.keys(response).forEach(key => {
-                    this.countrySource.push({
-                        value: response[key].alpha2CountryCode,
-                        label: response[key].alpha2CountryCode + ' - ' + response[key].countryName
-                    });
-                });
-                this.countrySource$ = observableOf(this.countrySource);
-            } else {
-                let countryRequest = new CountryRequest();
-                countryRequest.formName = 'onboarding';
-                this.store.dispatch(this.commonActions.GetCountry(countryRequest));
-            }
-        });
+        this.componentStore.getCountryList(null);
     }
 
     /**
@@ -678,7 +746,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 } else {
                     this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
                 }
-                if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
+
+                if (this.selectedPlan?.currency?.code?.toLowerCase() === 'inr' && this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
                     this.finalPlanAmount = this.finalPlanAmount + this.finalPlanAmount * this.taxPercentage;
                 } else {
                     if (this.firstStepForm.get('duration').value === 'YEARLY') {
@@ -747,8 +816,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public getAllPlans(): void {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length) {
-                this.monthlyPlans = response?.filter(plan => plan?.monthlyAmountAfterDiscount > 0);
-                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmountAfterDiscount > 0);
+                this.monthlyPlans = response?.filter(plan => plan?.monthlyAmount > 0);
+                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmount > 0);
 
                 if (this.yearlyPlans?.length) {
                     this.firstStepForm.get('duration').setValue('YEARLY');
@@ -799,7 +868,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     } else {
                         this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
                     }
-                    if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
+                    if (this.selectedPlan?.currency?.code?.toLowerCase() === 'inr' && this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
                         this.finalPlanAmount = this.finalPlanAmount + (this.finalPlanAmount * this.taxPercentage);
                     } else {
                         if (this.firstStepForm.get('duration').value === 'YEARLY') {
@@ -825,8 +894,30 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof BuyPlanComponent
      */
-    public newUserSelectCountry(event: any): void {
-        this.componentStore.getAllPlans({ params: { countryCode: event?.value } });
+    public newUserSelectCountry(event: any, initialCall: boolean): void {
+        let data;
+        if (initialCall) {
+            if (localStorage.getItem('Country-Region') === 'GL') {
+                data = {
+                    region: event?.value
+                }
+            } else {
+                data = {
+                    countryCode: event?.value
+                }
+            }
+        } else {
+            if (event?.additional?.entity === 'region') {
+                data = {
+                    region: event?.value
+                }
+            } else {
+                data = {
+                    countryCode: event?.value
+                }
+            }
+        }
+        this.componentStore.getAllPlans({ params: data });
         this.newUserSelectedCountry = event.label;
     }
 
@@ -839,7 +930,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public selectCountry(event: any): void {
         if (event?.value) {
 
-            if (event?.value.toLowerCase() === 'in') {
+            if (this.selectedPlan?.currency?.code?.toLowerCase() === 'inr' && event?.value.toLowerCase() === 'in') {
                 this.finalPlanAmount = this.finalPlanAmount + this.finalPlanAmount * this.taxPercentage;
             } else {
                 if (this.firstStepForm.get('duration').value === 'YEARLY') {
@@ -882,6 +973,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.isFormSubmitted = true;
             return;
         }
+        let mobileNumber = this.getBillingData ? this.subscriptionForm.value.secondStepForm.mobileNumber : this.intlClass.selectedCountryData?.dialCode + this.subscriptionForm.value.secondStepForm.mobileNumber;
+        mobileNumber = mobileNumber?.replace(/\+/g, '');
         let request = {
             planUniqueName: this.subscriptionForm.value.firstStepForm.planUniqueName,
             duration: this.subscriptionForm.value.firstStepForm.duration,
@@ -892,7 +985,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 taxNumber: this.subscriptionForm.value.secondStepForm.taxNumber,
                 email: this.subscriptionForm.value.secondStepForm.email,
                 pincode: this.subscriptionForm.value.secondStepForm.pincode,
-                mobileNumber: this.getBillingData ? this.subscriptionForm.value.secondStepForm.mobileNumber : this.intlClass.selectedCountryData?.dialCode + this.subscriptionForm.value.secondStepForm.mobileNumber,
+                mobileNumber: mobileNumber,
                 country: {
                     name: this.subscriptionForm.value.secondStepForm.country.label ? this.subscriptionForm.value.secondStepForm.country.label : this.subscriptionForm.value.secondStepForm.country.name,
                     code: this.subscriptionForm.value.secondStepForm.country.value ? this.subscriptionForm.value.secondStepForm.country.value : this.subscriptionForm.value.secondStepForm.country.code
@@ -1059,15 +1152,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.secondStepForm.controls['companyName'].setValue(data.companyName);
         this.secondStepForm.controls['email'].setValue(data.email);
         this.secondStepForm.controls['pincode'].setValue(data.pincode);
-
-        if (data?.mobileNumber?.startsWith('+')) {
-            this.secondStepForm.controls['mobileNumber'].setValue(data.mobileNumber);
-        } else {
-            this.secondStepForm.controls['mobileNumber'].setValue('+' + data.mobileNumber);
+        this.initIntl();
+        if (this.intlClass && data.mobileNumber) {
+            if (data?.mobileNumber?.startsWith('+')) {
+                this.secondStepForm.controls['mobileNumber'].setValue(data.mobileNumber);
+            } else {
+                this.secondStepForm.controls['mobileNumber'].setValue('+' + data.mobileNumber);
+            }
         }
         this.secondStepForm.controls['taxNumber'].setValue(data.taxNumber);
-        this.secondStepForm.controls['country'].setValue(data.country);
-        this.secondStepForm.controls['state'].setValue(data.state);
+        this.selectCountry({ label: data.country.name, value: data.country.code, additional: data.country })
+        this.selectState({ label: data.state.name, value: data.state.code, additional: data.state })
         this.secondStepForm.controls['address'].setValue(data?.address);
     }
 }

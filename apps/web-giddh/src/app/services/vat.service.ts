@@ -31,7 +31,7 @@ export class VatService {
         url = url?.replace(':from', request.from);
         url = url?.replace(':to', request.to);
         url = url?.replace(':taxNumber', request.taxNumber);
-        if (countryCode === 'ZW') {
+        if(countryCode === 'ZW' || countryCode === 'KE') {
             url = url?.replace(':currencyCode', request.currencyCode);
         }
         if (request.branchUniqueName) {
@@ -84,7 +84,7 @@ export class VatService {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
         }
-        if (countryCode === 'ZW') {
+        if(countryCode === 'ZW' || countryCode === 'KE') {
             url = url?.replace(':currencyCode', request.currencyCode);
         }
         return this.http.get(url).pipe(

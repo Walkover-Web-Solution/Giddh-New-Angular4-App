@@ -29,6 +29,8 @@ export class ViewSubscriptionComponentStore extends ComponentStore<ViewSubscript
         super(DEFAULT_VIEW_SUBSCRIPTION_STATE);
     }
 
+    public isUpdateCompanySuccess$ = this.select(this.store.select(state => state.settings.updateProfileSuccess), (response) => response);
+
     /**
      * View Subscriptions
      *

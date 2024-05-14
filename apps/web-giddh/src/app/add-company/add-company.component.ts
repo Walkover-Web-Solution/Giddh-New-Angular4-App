@@ -254,13 +254,13 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public ngOnInit(): void {
         document.querySelector('body').classList.add('create-company');
         this.initCompanyForm();
-        this.getCountry();
         this.getStates();
         this.getCurrency();
 
         this.activateRoute.params.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
+            if (res?.subscriptionId) {
                 this.company.subscriptionRequest.subscriptionId = res?.subscriptionId;
+                this.getCountryListBySubscriptionId(res?.subscriptionId);
                 this.isCreateBySubscription = true;
             }
         });
@@ -355,6 +355,32 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.firstStepForm.get('mobileOtp')?.patchValue("");
         this.changeDetection.detectChanges();
     }
+
+    /**
+     * This will be use for get country list by subscription id
+     *
+     * @param {*} subscriptionId
+     * @memberof AddCompanyComponent
+     */
+    public getCountryListBySubscriptionId(subscriptionId: any): void {
+        this.companyService.countryListBySubscriptionId(subscriptionId).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response) {
+                this.countries = [];
+                Object.keys(response?.body).forEach(key => {
+                    this.countries.push({
+                        value: response?.body[key]?.alpha2CountryCode,
+                        label: response?.body[key]?.alpha2CountryCode + ' - ' + response?.body[key]?.countryName,
+                        additional: response?.body[key]
+                    });
+                });
+            } else {
+                let countryRequest = new CountryRequest();
+                countryRequest.formName = 'onboarding';
+                this.store.dispatch(this.commonActions.GetCountry(countryRequest));
+            }
+        });
+    }
+
 
     /**
      * Inits mobile number field
@@ -1135,6 +1161,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             number = phoneNumber.replace(countryCode, '').trim();
             number = number.substring(1);
         }
+
         let taxDetails = this.prepareTaxDetail(this.companyForm);
         this.company.name = this.firstStepForm.value.name;
         this.company.country = this.firstStepForm.value.country.value;

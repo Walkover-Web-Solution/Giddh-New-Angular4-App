@@ -14,7 +14,7 @@
                     <div class="vat-report w-100 pd-l15 pd-r15" id="setting-tab">
                         <div class="row mb-3 mt-3 vat-report-action-wrapper">
                             <div class="col-lg-12">
-                                <div class="advance-search-by-date date-advance-search flex-wrap row-gap">
+                                <div class="advance-search-by-date date-advance-search justify-content-center row-gap">
                                     <dropdown-field [options]="financialYears"
                                         (selectedOption)="getYearStartAndEndDate($event)"
                                         [placeholder]="localeData?.select_year_label"
@@ -34,14 +34,14 @@
                                     </div>
                                     <div *ngIf="
                                             currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'
-                                        " class="trn-width">
+                                        " class="input-width">
                                         <dropdown-field [label]="commonLocaleData?.app_entity"
                                             [options]="currentCompanyBranches" width="100%" (selectedOption)="
                                                 currentBranch.uniqueName = $event.value; handleBranchChange($event)
                                             " [placeholder]="localeData?.select_entity"></dropdown-field>
                                     </div>
-                                    <div *ngIf="taxes?.length > 1" class="trn-width">
-                                        <dropdown-field [label]="commonLocaleData?.app_trn" [options]="taxes"
+                                    <div *ngIf="taxes?.length > 1" class="input-width">
+                                        <dropdown-field [label]="isKenyaCompany || isZimbabweCompany ? commonLocaleData?.app_vat : commonLocaleData?.app_trn" [options]="taxes"
                                             (selectedOption)="getVatReport($event)"
                                             [placeholder]="commonLocaleData?.select_trn"
                                             [defaultValue]="taxes[0]?.label"
@@ -60,7 +60,7 @@
                                                 [required]="true"></dropdown-field>
                                         </div>
                                         <div *ngIf="taxNumber && (isZimbabweCompany || isKenyaCompany)"
-                                            class="export-btn">
+                                            class="export-btn w100">
                                             <button mat-stroked-button color="primary" (click)="downloadVatReport()">
                                                 <i class="icon-download1"></i>
                                                 {{ commonLocaleData?.app_export }}
@@ -127,7 +127,7 @@
                                                     </ng-container>
                                                     <ng-container *ngIf="!isKenyaCompany">
                                                         {{ commonLocaleData?.app_total }}
-                                                    </ng-container>
+                                                     </ng-container>
                                                 </td>
                                             </ng-container>
                                             <ng-container [matColumnDef]="!isKenyaCompany ? 'aed_amt' : 'amount'">
@@ -141,23 +141,44 @@
                                                     </ng-container>
                                                 </th>
                                                 <td mat-cell *matCellDef="let element" class="text-right" [attr.width]="isKenyaCompany ? '12%' : '15%'">
-                                                    {{ activeCompany.baseCurrencySymbol }}
                                                     <ng-container *ngIf="!isKenyaCompany">
-                                                        {{ element?.amount | giddhCurrency }}
+                                                      <amount-field
+                                                            class="d-inline-block"
+                                                            [amount]="element?.amount"
+                                                            [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                                            [currencyCode]="false"
+                                                        ></amount-field>
                                                     </ng-container>
-                                                    <ng-container *ngIf="isKenyaCompany">
-                                                        {{ (element?.totalAmount ?? 0) | giddhCurrency }}
+                                                    <ng-container *ngIf="isKenyaCompany && element?.totalAmount !== undefined">
+                                                        <amount-field
+                                                            class="d-inline-block"
+                                                            [amount]="element?.totalAmount"
+                                                            [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                                            [currencyCode]="false"
+                                                        ></amount-field>
                                                     </ng-container>
                                                 </td>
                                                 <td mat-footer-cell *matFooterCellDef
                                                     class="text-right font-weight-bold">
-                                                    {{ activeCompany.baseCurrencySymbol }}
+                                                    
                                                     <ng-conatiner *ngIf="!isKenyaCompany">
-                                                        {{ report.totalAmount | giddhCurrency }}
-                                                    </ng-conatiner>
-                                                    <ng-conatiner *ngIf="isKenyaCompany">
-                                                        {{ (element?.totalAmount ?? 0) | giddhCurrency }}
-                                                    </ng-conatiner>
+                                                        <amount-field
+                                                            class="d-inline-block"
+                                                            [amount]="report.totalAmount"
+                                                            [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                                            [currencyCode]="false"
+                                                        ></amount-field>
+                                                        </ng-conatiner>
+                                                        <ng-conatiner *ngIf="isKenyaCompany && vatReport[i]?.sections[vatReport[i]?.sections?.length -
+                                                        1]?.totalAmount !== undefined">
+                                                            <amount-field
+                                                                class="d-inline-block"
+                                                                [amount]="vatReport[i]?.sections[vatReport[i]?.sections?.length -
+                                                                1]?.totalAmount"
+                                                                [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                                                [currencyCode]="false"
+                                                            ></amount-field>
+                                                        </ng-conatiner>
                                                 </td>
                                             </ng-container>
                                             <ng-container [matColumnDef]="!isKenyaCompany ? 'vat_amt' : 'rate'">
@@ -165,16 +186,20 @@
                                                     <ng-container *ngIf="!isKenyaCompany">
                                                         {{ localeData?.vat_amount }}
                                                         ({{ activeCompany?.baseCurrency }})
-                                                    </ng-container>
-                                                    <ng-container *ngIf="isKenyaCompany">
-                                                        {{ commonLocaleData?.app_rate }}
-                                                    </ng-container>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="isKenyaCompany">
+                                                            {{ commonLocaleData?.app_rate }}
+                                                        </ng-container>
                                                 </th>
                                                 <td mat-cell *matCellDef="let element" class="text-right" [attr.width]="isKenyaCompany ? '5%' : '15%'" [ngClass]="{'bg-grey': isKenyaCompany && vatReport[i]?.sections[vatReport[i]?.sections?.length -
                                                 2]?.section === element?.section}">
                                                     <ng-conatiner *ngIf="!isKenyaCompany">
-                                                        {{ activeCompany.baseCurrencySymbol }}
-                                                        {{ element.vatAmount | giddhCurrency }}
+                                                        <amount-field
+                                                            class="d-inline-block"
+                                                            [amount]="element?.vatAmount"
+                                                            [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                                            [currencyCode]="false"
+                                                        ></amount-field>
                                                     </ng-conatiner>
                                                     <ng-conatiner *ngIf="isKenyaCompany && vatReport[i]?.sections[vatReport[i]?.sections?.length -
                                                     2]?.section !== element?.section">
@@ -186,8 +211,12 @@
                                                     <ng-container *ngIf="!isKenyaCompany">
                                                         <span *ngIf="i === 0">{{ localeData?.a }}</span>
                                                         <span *ngIf="i === 1">{{ localeData?.c }}</span>
-                                                        {{ activeCompany.baseCurrencySymbol }}
-                                                        {{ report.totalVatAmount | giddhCurrency }}
+                                                        <amount-field
+                                                            class="d-inline-block"
+                                                            [amount]="report.totalVatAmount"
+                                                            [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                                            [currencyCode]="false"
+                                                        ></amount-field>
                                                     </ng-container>
                                                 </td>
                                             </ng-container>
@@ -198,19 +227,29 @@
                                                         ({{ activeCompany?.baseCurrency }})
                                                     </ng-container>
                                                     <ng-container *ngIf="isKenyaCompany">
-                                                        {{ localeData?.amountOfOutputTax }}
+                                                    <ng-container *ngIf="i === 0">{{ localeData?.amountOfOutputTax }}</ng-container>
+                                                    <ng-container *ngIf="i === 1">{{ localeData?.amountOfInputTax }}</ng-container>
+                                                        
                                                     </ng-container>
                                                 </th>
                                                 <td mat-cell *matCellDef="let element" class="text-right" [attr.width]="isKenyaCompany ? '15%' : '20%'" [ngClass]="{'bg-grey': isKenyaCompany && vatReport[i]?.sections[vatReport[i]?.sections?.length -
                                                 2]?.section === element?.section}">
                                                     <ng-container *ngIf="!isKenyaCompany">
-                                                        {{ activeCompany.baseCurrencySymbol }}
-                                                        {{ element?.adjustmentAmount | giddhCurrency }}
+                                                        <amount-field
+                                                            class="d-inline-block"
+                                                            [amount]="element?.adjustmentAmount"
+                                                            [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                                            [currencyCode]="false"
+                                                        ></amount-field>
                                                     </ng-container>
                                                     <ng-container *ngIf="isKenyaCompany && vatReport[i]?.sections[vatReport[i]?.sections?.length -
-                                                    2]?.section !== element?.section">
-                                                        {{ activeCompany.baseCurrencySymbol }}
-                                                        {{ (element?.totalAmountOfOutputTax ?? 0) | giddhCurrency }}
+                                                    2]?.section !== element?.section && element?.totalAmountOfOutputTax">
+                                                        <amount-field
+                                                            class="d-inline-block"
+                                                            [amount]="element?.totalAmountOfOutputTax"
+                                                            [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                                            [currencyCode]="false"
+                                                        ></amount-field>
                                                     </ng-container>
                                                 </td>
                                                 <td mat-footer-cell *matFooterCellDef
@@ -218,15 +257,25 @@
                                                     <ng-container *ngIf="!isKenyaCompany">
                                                         <span *ngIf="i === 0">{{ localeData?.b }}</span><span
                                                             *ngIf="i === 1">{{ localeData?.d }}</span>
-                                                        {{ activeCompany.baseCurrencySymbol }}
-                                                        {{ report.totalAdjustmentAmount | giddhCurrency }}
-                                                    </ng-container>
-                                                    <ng-container *ngIf="isKenyaCompany">
-                                                        {{ activeCompany.baseCurrencySymbol }}
-                                                        {{ (element?.totalAmountOfOutputTax ?? 0) | giddhCurrency }}
-                                                    </ng-container>
+                                                            <amount-field
+                                                                class="d-inline-block"
+                                                                [amount]="report.totalAdjustmentAmount"
+                                                                [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                                                [currencyCode]="false"
+                                                            ></amount-field>
+                                                        </ng-container>
+                                                        <ng-container *ngIf="isKenyaCompany">
+                                                            <amount-field
+                                                                 class="d-inline-block"
+                                                                 [amount]="vatReport[i]?.sections[vatReport[i]?.sections?.length -
+                                                                 1]?.totalAmountOfOutputTax"
+                                                                 [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                                                 [currencyCode]="false"
+                                                             ></amount-field>
+                                                        </ng-container>
                                                 </td>
                                             </ng-container>
+
                                             <tr mat-header-row *matHeaderRowDef="isKenyaCompany? kenyaDisplayedColumns :  displayedColumns"></tr>
                                             <tr mat-row *matRowDef="let row; columns: isKenyaCompany? kenyaDisplayedColumns :  displayedColumns"></tr>
                                             <tr mat-footer-row *matFooterRowDef="isKenyaCompany? kenyaDisplayedColumns :  displayedColumns"></tr>
@@ -238,9 +287,10 @@
                                         <strong class="table-heading">{{ report.section }}</strong>
                                     </p>
                                     <div class="table-responsive">
-                                        <table mat-table [dataSource]="report.sections" [ngClass]="{'hide-last-row bordered-table': isKenyaCompany, 'table-hide-title': !isKenyaCompany}" class="
+                                         <table mat-table [dataSource]="report.sections" [ngClass]="{'hide-last-row bordered-table': isKenyaCompany, 'table-hide-title': !isKenyaCompany}" class="
                                                 table
                                                 vat-report-table
+                                                table-hide-title
                                                 basic
                                                 table-border-bottom
                                                 mr-t2
@@ -260,32 +310,43 @@
                                                 <th mat-header-cell *matHeaderCellDef> 
                                                     <ng-container *ngIf="isKenyaCompany">{{ commonLocaleData?.app_description }}</ng-container>
                                                 </th>
-                                                <td mat-cell *matCellDef="let element" [attr.width]="isKenyaCompany ? null : '40%'">{{ element.description }}</td>
+                                                <td mat-cell *matCellDef="let element">{{ element.description }}</td>
                                                 <td mat-footer-cell *matFooterCellDef class="font-weight-bold">
                                                     {{ vatReport[i]?.sections[vatReport[i]?.sections?.length -
                                                         1]?.description }}
                                                 </td>
                                             </ng-container>
                                             <ng-container [matColumnDef]="!isKenyaCompany ? 'tooltip' : 'vat-amount'">
-                                                <th mat-header-cell *matHeaderCellDef [ngClass]="{'text-right': isKenyaCompany}">
+                                                <th mat-header-cell *matHeaderCellDef class="text-right">
                                                     <ng-container *ngIf="isKenyaCompany">{{ localeData?.vat_amount }}</ng-container>
                                                 </th>
-                                                <td mat-cell *matCellDef="let element" [attr.width]="isKenyaCompany ? '32%' : null" [ngClass]="{'text-right': isKenyaCompany}">
+                                                <td mat-cell *matCellDef="let element" [attr.width]="isKenyaCompany ? '15%' : null" class="text-right">
                                                     <ng-container *ngIf="!isKenyaCompany">
                                                         <span class="pr-1">{{ element.toolTip }}</span>
-                                                        <strong>{{ activeCompany.baseCurrencySymbol }}
-                                                            {{ element?.amount | giddhCurrency }}
-                                                        </strong>
+                                                        <amount-field
+                                                            class="d-inline-block"
+                                                            [amount]="element?.amount"
+                                                            [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                                            [currencyCode]="false"
+                                                            ></amount-field>
                                                     </ng-container>
                                                     <ng-container *ngIf="isKenyaCompany">
-                                                        {{ activeCompany.baseCurrencySymbol }}
-                                                        {{ (element?.totalAmountOfOutputTax ?? 0) | giddhCurrency }}
+                                                        <amount-field
+                                                            class="d-inline-block"
+                                                            [amount]="element?.totalAmountOfOutputTax"
+                                                            [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                                            [currencyCode]="false"
+                                                        ></amount-field>
                                                     </ng-container>
                                                 </td>
                                                 <td mat-footer-cell *matFooterCellDef class="text-right font-weight-bold">
-                                                    {{ activeCompany.baseCurrencySymbol }}
-                                                    {{ (vatReport[i]?.sections[vatReport[i]?.sections?.length -
-                                                        1]?.totalAmountOfOutputTax ?? 0) | giddhCurrency }}
+                                                    <amount-field
+                                                        class="d-inline-block"
+                                                        [amount]="vatReport[i]?.sections[vatReport[i]?.sections?.length -
+                                                        1]?.totalAmountOfOutputTax ?? 0"
+                                                        [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                                        [currencyCode]="false"
+                                                    ></amount-field>
                                                 </td>
                                             </ng-container>
                                             <tr mat-header-row *matHeaderRowDef="isKenyaCompany ? kenyaDisplayedColumnsForLastSection : uaeDisplayedColumns"></tr>
@@ -299,7 +360,7 @@
                             </div>
                             <div *ngIf="!isTaxApiInProgress && !vatReport?.length && !taxes?.length"
                                 class="no-data no-report">
-                                <h1>{{ localeData?.no_trn_available }}</h1>
+                                <h1>{{ isKenyaCompany ? localeData?.no_vat_available : localeData?.no_trn_available }}</h1>
                             </div>
                         </ng-container>
                         <!-- uk-vrn-report -->
@@ -330,7 +391,7 @@
                                             </ng-container>
                                             <ng-container matColumnDef="aed_amt">
                                                 <td mat-cell *matCellDef="let element" class="text-right" width="20%">
-                                                    {{ activeCompany.baseCurrencySymbol }}
+                                                    {{ activeCompany?.baseCurrencySymbol }}
                                                     {{ element?.amount | giddhCurrency }}
                                                 </td>
                                             </ng-container>
@@ -371,7 +432,7 @@
                                                 <th mat-header-cell *matHeaderCellDef></th>
                                                 <td mat-cell *matCellDef="let element" class="text-right">
                                                     <span class="pr-1">{{ element.toolTip }}</span>
-                                                    <strong>{{ activeCompany.baseCurrencySymbol }}
+                                                    <strong>{{ activeCompany?.baseCurrencySymbol }}
                                                         {{ element?.amount | giddhCurrency }}</strong>
                                                 </td>
                                             </ng-container>
@@ -511,7 +572,7 @@
                                             <ng-container matColumnDef="output-tax">
                                                 <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" class="font-weight-bold">{{ localeData?.output_tax }}</th>
                                             </ng-container>
-                                            
+
                                             <!-- For Header row 1 -->
                                             <tr mat-header-row *matHeaderRowDef="zwDisplayedHeaderColumns"></tr>
                                             <!-- For Header row 2 -->

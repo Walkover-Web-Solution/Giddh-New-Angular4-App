@@ -1,5 +1,6 @@
+
 import { Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
-import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { distinctUntilChanged, take, takeUntil, tap } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
 import { ManageGroupsAccountsComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, HostListener, NgZone, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
@@ -249,6 +250,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isLoggedInWithSocialAccount$: Observable<boolean>;
     /* True if we need to show Depreciation Message */
     public showDepreciationMessage: boolean = false;
+    /* True if we need to show header according to has subscription permission */
+    public hasSubscriptionPermission: boolean = false;
+    /** True if it's a subscription page */
+    public isSubscriptionPage: boolean = false;
     /** Hold plan version  */
     public planVersion: number;
 
@@ -323,6 +328,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (!this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details") && !this.router.url.includes("/billing-detail")) {
                     this.currentPageUrl = this.router.url;
                 }
+
+                if (this.router.url.includes("/pages/subscription")) {
+                    this.isSubscriptionPage = true;
+                } else {
+                    this.isSubscriptionPage = false;
+                }
+
                 this.setCurrentPage();
                 this.addClassInBodyIfPageHasTabs();
                 this.checkIfPageHasTabs();
@@ -576,7 +588,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.openCrossedTxLimitModel(this.crossedTxLimitModel);
             }
         }
-        this.manageGroupsAccountsModal.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(e => {
+        this.manageGroupsAccountsModal?.onHidden.pipe(takeUntil(this.destroyed$)).subscribe(e => {
             this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
         });
 
@@ -633,7 +645,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             .subscribe((state: BreakpointState) => {
                 this.isLargeWindow = state.matches;
                 this.adjustNavigationBar();
-                if(state.matches){
+                   if(state.matches){
                     this.expandSidebar(true);
                 } else {
                     this.collapseSidebar(true);
@@ -776,18 +788,23 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (isElectron) {
                     this.router.navigate(['/login']);
                 } else {
-                    window.location.href = (environment.production) ? `https://giddh.com/login` : `https://test.giddh.com/login`;
+                    window.location.href = (environment.production) ? `https://stage.giddh.com/login` : `https://test.giddh.com/login`;
                 }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
 
                 this.zone.run(() => {
-                    let hasSubscriptionPermission: boolean;
-                    this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => hasSubscriptionPermission = response?.user?.hasSubscriptionPermission);
-                    if (hasSubscriptionPermission) {
-                        this.router.navigate(['/pages/subscription']);
-                    } else {
-                        this.router.navigate(['/pages/subscription/buy-plan']);
-                    }
+                    this.store.pipe(
+                        select(state => state.session.user),
+                        take(1), // take only the first emission
+                        tap(response => {
+                            const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
+                            if (hasSubscriptionPermission) {
+                                this.router.navigate(['/pages/subscription']);
+                            } else {
+                                this.router.navigate(['/pages/subscription/buy-plan']);
+                            }
+                        })
+                    ).subscribe();
                 });
             } else if (s === userLoginStateEnum.userLoggedIn) {
                 if (this.generalService.getUtmParameter("companyUniqueName")) {
@@ -1207,6 +1224,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
+    *This will be use for back to company dashboard
+    *
+    * @memberof HeaderComponent
+    */
+    public backToCompany(): void {
+        this.router.navigate(['/pages', 'home']);
+    }
+
+    /**
      * Navigates to user details' subscription tab
      *
      * @memberof HeaderComponent
@@ -1219,7 +1245,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.modelRefCrossLimit.hide();
         }
         document.querySelector('body').classList.remove('modal-open');
-        if (this.planVersion === 2) {
+        if (this.planVersion === 2 || this.subscribedPlan?.status === 'expired') {
             this.router.navigate(['/pages/subscription/view-subscription/' + this.subscribedPlan?.subscriptionId]);
         } else {
             this.router.navigate(['/pages', 'user-details'], {

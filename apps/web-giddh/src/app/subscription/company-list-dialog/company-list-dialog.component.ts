@@ -113,6 +113,12 @@ export class CompanyListDialogComponent implements OnInit {
                 }
             });
 
+        this.componentStore.isUpdateCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.getAllCompaniesList();
+            }
+        });
+
         this.changeDetection.detectChanges();
     }
 
@@ -208,18 +214,6 @@ export class CompanyListDialogComponent implements OnInit {
             role: 'alertdialog',
             ariaLabel: 'moveDialog'
         });
-    }
-
-    /**
-   * This function will refresh the subscribed companies if move company was succesful and will close the popup
-   *
-   * @param {*} event
-   * @memberof CompanyListDialogComponent
-   */
-    public addOrMoveCompanyCallback(event: boolean): void {
-        if (event) {
-            this.getAllCompaniesList();
-        }
     }
 
     /**
