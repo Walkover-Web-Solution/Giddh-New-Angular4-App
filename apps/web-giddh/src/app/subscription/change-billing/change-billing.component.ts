@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChangeBillingComponentStore } from './utility/change-billing.store';
 import { IntlPhoneLib } from '../../theme/mobile-number-field/intl-phone-lib.class';
@@ -21,7 +21,7 @@ import { ActivatedRoute, Router } from '@angular/router';
     styleUrls: ['./change-billing.component.scss'],
     providers: [ChangeBillingComponentStore]
 })
-export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ChangeBillingComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -147,14 +147,6 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
      */
     public back(): void {
         this.location.back();
-    }
-
-    /**
-     * Hook cycle for component after view initialization
-     *
-     * @memberof ChangeBillingComponent
-     */
-    public ngAfterViewInit(): void {
     }
 
     /**
