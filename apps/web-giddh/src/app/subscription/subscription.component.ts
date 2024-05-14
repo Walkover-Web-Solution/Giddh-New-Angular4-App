@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { SubscriptionComponentStore } from './utility/subscription.store';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { PAGINATION_LIMIT } from '../app.constant';
+import { API_COUNT_LIMIT } from '../app.constant';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AppState } from '../store';
 import { Store } from '@ngrx/store';
@@ -56,7 +56,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         page: 1,
         totalPages: 0,
         totalItems: 0,
-        count: PAGINATION_LIMIT,
+        count: API_COUNT_LIMIT,
     }
     /** Hold table page index number*/
     public pageIndex: number = 0;
