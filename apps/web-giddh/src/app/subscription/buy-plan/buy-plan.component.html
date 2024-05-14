@@ -34,7 +34,7 @@
                                         Activate Via Key
                                     </button> -->
                                         <!-- <div class="form-group col-md-2" *ngIf="isNewUserLoggedIn"> -->
-                                        <div class="width-100">
+                                        <div class="width-100" *ngIf="!isChangePlan">
                                             <dropdown-field
                                                 [name]="'country'"
                                                 [label]="commonLocaleData?.app_country"
@@ -451,22 +451,27 @@
                                                 <div id="init-contact-wrapper" class="position-relative w-100">
                                                     <input
                                                         type="tel"
-                                                        class="mat-form-field-border mat-form-field-height mobile-height bg-transparent border"
                                                         #initContact
-                                                        aria-autocomplete="none"
-                                                        [autocomplete]="'off'"
                                                         (keypress)="
-                                                            intlClass?.onlyPhoneNumber($event); validateMobileField()
+                                                            intlClass?.onlyPhoneNumber($event);
+                                                            secondStepForm.controls['mobileNumber']?.markAsDirty()
                                                         "
-                                                        id="init-contact"
-                                                        [placeholder]="commonLocaleData?.app_mobile_number + '*'"
-                                                        formControlName="mobileNumber"
+                                                        [id]="'init-contact'"
+                                                        [placeholder]="commonLocaleData?.app_mobile_number"
+                                                        [attr.name]="'mobileNumber'"
+                                                        class="mat-form-field-border mat-form-field-height mobile-height bg-transparent border"
                                                         [ngClass]="{
                                                             'invalid-input':
                                                                 isFormSubmitted ||
                                                                 (secondStepForm.get('mobileNumber')?.touched &&
                                                                     !intlClass?.isRequiredValidNumber)
                                                         }"
+                                                        (blur)="
+                                                            secondStepForm.controls['mobileNumber']?.markAsTouched();
+                                                            secondStepForm
+                                                                .get('mobileNumber')
+                                                                ?.setValue(intlClass?.phoneNumber?.replace('+', ''))
+                                                        "
                                                     />
                                                     <mat-error
                                                         *ngIf="
@@ -592,6 +597,9 @@
                                                 </p>
                                                 <p class="light-gray font-14">
                                                     {{ secondStepForm.get("mobileNumber")?.value }}
+                                                </p>
+                                                   <p class="light-gray font-14">
+                                                    {{ secondStepForm.get("address")?.value }}
                                                 </p>
                                             </div>
                                         </mat-card-content>
@@ -749,7 +757,7 @@
                             >
                                 {{ localeData?.including_tax }}
                             </p>
-                               <p
+                            <p
                                 class="text-right"
                                 *ngIf="
                                     selectedPlan?.currency?.code?.toLowerCase() === 'inr' &&
