@@ -484,7 +484,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.activeCompany = response;
-                if (this.activeCompany) {
                     this.newUserSelectCountry({
                         "label": this.activeCompany?.countryV2?.alpha2CountryCode + " - " + this.activeCompany?.countryV2?.countryName,
                         "value": this.activeCompany?.countryV2?.alpha2CountryCode,
@@ -493,7 +492,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                             "label": this.activeCompany?.countryV2?.alpha2CountryCode + " - " + this.activeCompany?.countryV2?.countryName
                         }
                     }, false);
-                }
                 this.company.addresses = response.addresses;
             }
         });
