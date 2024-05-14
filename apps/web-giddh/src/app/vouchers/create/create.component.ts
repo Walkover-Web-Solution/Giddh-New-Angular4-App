@@ -3350,10 +3350,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (this.invoiceType.isCashInvoice) {
                 invoiceForm.type = this.invoiceType.isPurchaseInvoice ? "purchase" : this.invoiceType.isCreditNote ? "credit note" : this.invoiceType.isDebitNote ? "debit note" : "sales";
 
-                if (this.invoiceType.isSalesInvoice) {
-                    invoiceForm.type = VoucherTypeEnum.receipt;
-                } else if (this.invoiceType.isPurchaseInvoice) {
+                if (this.invoiceType.isPurchaseInvoice) {
                     invoiceForm.type = VoucherTypeEnum.payment;
+                } else if (!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote) {
+                    invoiceForm.type = VoucherTypeEnum.receipt;
                 }
 
                 invoiceForm.entries = invoiceForm.entries?.map(entry => {
@@ -3404,14 +3404,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.startLoader(false);
                 if (response?.status === "success") {
 
-                    if (this.invoiceType.isCashInvoice && (this.invoiceType.isSalesInvoice || this.invoiceType.isPurchaseInvoice)) {
+                    if (this.invoiceType.isCashInvoice && ((!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote) || this.invoiceType.isPurchaseInvoice)) {
                         const salesAsReceiptValue = this.invoiceForm.get('salesAsReceipt').value;
                         const purchaseAsPaymentValue = this.invoiceForm.get('purchaseAsPayment').value;
-                        
-                        if (salesAsReceiptValue !== this.company.salesAsReceipt) {
-                            this.updateProfileSetting({ salesAsReceipt: salesAsReceiptValue });
-                        } else if (purchaseAsPaymentValue !== this.company.purchaseAsPayment) {
+
+                        if (this.invoiceType.isPurchaseInvoice && (purchaseAsPaymentValue !== this.company.purchaseAsPayment)) {
                             this.updateProfileSetting({ purchaseAsPayment: purchaseAsPaymentValue });
+                        } else if (salesAsReceiptValue !== this.company.salesAsReceipt) {
+                            this.updateProfileSetting({ salesAsReceipt: salesAsReceiptValue });
                         }
                     }
 

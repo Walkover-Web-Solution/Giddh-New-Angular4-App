@@ -9,9 +9,12 @@
                     <div class="vouchers-title d-flex align-items-center">
                         <div class="d-flex align-items-center">
                             <h1>{{ voucherType | voucherName: localeData | titlecase }}</h1>
-                            <mat-slide-toggle color="primary" class="ml-4"
-                                [formControlName]="invoiceType.isCashInvoice && invoiceType.isPurchaseInvoice ? purchaseAsPayment : salesAsReceipt"
-                                *ngIf="invoiceType.isCashInvoice && (invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice)">
+                            <mat-slide-toggle 
+                                color="primary" 
+                                class="ml-4" 
+                                *ngIf="invoiceType.isCashInvoice && ((!invoiceType.isDebitNote && !invoiceType.isCreditNote) || invoiceType.isPurchaseInvoice)"
+                                [formControlName]="invoiceType.isCashInvoice && invoiceType.isPurchaseInvoice ? 'purchaseAsPayment' : 'salesAsReceipt'"
+                            >
                                 <span class="font-16">
                                     {{ invoiceType.isPurchaseInvoice ? localeData?.purchase_as_payment :
                                     localeData?.sales_as_receipt }}
