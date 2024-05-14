@@ -1064,6 +1064,9 @@ textarea {
     display: inline-block;
 }
 
+.iti__country-list--dropup {
+    margin-bottom: -200px !important;
+}
 
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {

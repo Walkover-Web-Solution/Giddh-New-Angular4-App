@@ -47,10 +47,11 @@
                                 [label]="commonLocaleData?.app_email"
                                 formControlName="email"
                                 [placeholder]="commonLocaleData?.app_email"
-                                   [showError]="
-                                                            isFormSubmitted && (!changeBillingForm.get('email')?.value ||
-                                                            changeBillingForm.get('email')?.errors?.pattern)
-                                                        "
+                                [showError]="
+                                    isFormSubmitted &&
+                                    (!changeBillingForm.get('email')?.value ||
+                                        changeBillingForm.get('email')?.errors?.pattern)
+                                "
                             >
                             </input-field>
                         </div>
@@ -69,20 +70,27 @@
                             <div id="init-contact-wrapper" class="position-relative w-100">
                                 <input
                                     type="tel"
-                                    class="mat-form-field-border mat-form-field-height mobile-height bg-transparent border"
                                     #initContact
-                                    aria-autocomplete="none"
-                                    autocomplete="off"
-                                    (keypress)="intlClass?.onlyPhoneNumber($event); validateMobileField()"
-                                    id="init-billing"
+                                    (keypress)="
+                                        intlClass?.onlyPhoneNumber($event);
+                                        changeBillingForm.controls['mobileNumber']?.markAsDirty()
+                                    "
+                                    [id]="'init-contact'"
                                     [placeholder]="commonLocaleData?.app_mobile_number"
-                                    formControlName="mobileNumber"
+                                    [attr.name]="'mobileNumber'"
+                                    class="mat-form-field-border mat-form-field-height mobile-height bg-transparent border"
                                     [ngClass]="{
                                         'invalid-input':
                                             isFormSubmitted ||
                                             (changeBillingForm.get('mobileNumber')?.touched &&
                                                 !intlClass?.isRequiredValidNumber)
                                     }"
+                                    (blur)="
+                                        changeBillingForm.controls['mobileNumber']?.markAsTouched();
+                                        changeBillingForm
+                                            .get('mobileNumber')
+                                            ?.setValue(intlClass?.phoneNumber?.replace('+', ''))
+                                    "
                                 />
                                 <mat-error
                                     *ngIf="
@@ -118,7 +126,6 @@
                                 [showError]="
                                     (isFormSubmitted && !changeBillingForm.get('taxNumber')?.value) || !isGstinValid
                                 "
-
                                 [maxlength]="15"
                                 (change)="validateGstNumber()"
                             >

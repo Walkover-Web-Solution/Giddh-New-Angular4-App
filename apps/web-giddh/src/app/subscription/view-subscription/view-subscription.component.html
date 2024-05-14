@@ -88,7 +88,12 @@
                             >
                                 {{ localeData?.request_transfer }}
                             </button>
-                            <button aria-label="cancel" mat-menu-item (click)="cancelSubscription()">
+                            <button
+                                *ngIf="viewSubscriptionData?.period?.toLowerCase() !== 'yearly'"
+                                aria-label="cancel"
+                                mat-menu-item
+                                (click)="cancelSubscription()"
+                            >
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                             <button
@@ -162,7 +167,10 @@
                                 {{ localeData?.change_subscription }}
                             </button>
                             <button
-                                *ngIf="viewSubscriptionData?.isOwner"
+                                *ngIf="
+                                    viewSubscriptionData?.isOwner &&
+                                    viewSubscriptionData?.planDuration?.toLowerCase() !== 'yearly'
+                                "
                                 aria-label="cancelsubscription"
                                 mat-stroked-button
                                 (click)="cancelSubscription()"
