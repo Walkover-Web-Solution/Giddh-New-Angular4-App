@@ -115,9 +115,9 @@
     }
 
     .active-plan {
-        border-top: 2px solid var(--color-primary-header-background);
-        border-left: 2px solid var(--color-primary-header-background);
-        border-right: 2px solid var(--color-primary-header-background);
+        border-top: 2px solid #3f51b5;
+        border-left: 2px solid #3f51b5;
+        border-right: 2px solid #3f51b5;
     }
 
     .selected-plan-button {
@@ -128,7 +128,7 @@
 
     .popular-txt {
         height: 36px;
-        background-color: var(--color-giddh-blue);
+        background-color: #3f51b5;
 
         span {
             color: var(--color-white);
@@ -136,7 +136,7 @@
     }
 
     .selected-plan {
-        background-color: var(--color-giddh-blue);
+        background-color: #3f51b5;
 
         span {
             color: var(--color-white);
