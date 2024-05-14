@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChangeBillingComponentStore } from './utility/change-billing.store';
 import { IntlPhoneLib } from '../../theme/mobile-number-field/intl-phone-lib.class';
@@ -21,7 +21,7 @@ import { ActivatedRoute, Router } from '@angular/router';
     styleUrls: ['./change-billing.component.scss'],
     providers: [ChangeBillingComponentStore]
 })
-export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ChangeBillingComponent implements OnInit, OnDestroy {
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -150,15 +150,6 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
     }
 
     /**
-     * Hook cycle for component after view initialization
-     *
-     * @memberof ChangeBillingComponent
-     */
-    public ngAfterViewInit(): void {
-        this.initIntl();
-    }
-
-    /**
      * This will be use for initialization form
      *
      * @memberof ChangeBillingComponent
@@ -188,18 +179,12 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
         this.changeBillingForm.controls['companyName'].setValue(data.companyName);
         this.changeBillingForm.controls['email'].setValue(data.email);
         this.changeBillingForm.controls['pincode'].setValue(data.pincode);
-        this.initIntl();
-        if (this.intlClass && data.mobileNumber) {
-            if (data?.mobileNumber?.startsWith('+')) {
-                this.changeBillingForm.controls['mobileNumber'].setValue(data.mobileNumber);
-            } else {
-                this.changeBillingForm.controls['mobileNumber'].setValue('+' + data.mobileNumber);
-            }
-        }
+        this.changeBillingForm.controls['mobileNumber'].setValue(data.mobileNumber);
         this.changeBillingForm.controls['taxNumber'].setValue(data.taxNumber);
         this.changeBillingForm.controls['country'].setValue(data.country);
         this.changeBillingForm.controls['state'].setValue(data.state);
         this.changeBillingForm.controls['address'].setValue(data?.address);
+        this.initIntl(this.changeBillingForm.get('mobileNumber')?.value);
     }
 
     /**
@@ -207,16 +192,28 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
      *
      * @memberof ChangeBillingComponent
      */
-    public initIntl(): void {
+    public initIntl(inputValue?: string): void {
+        let times = 0;
         const parentDom = this.elementRef?.nativeElement;
-        const input = document?.getElementById('init-billing');
-        if (input) {
-            this.intlClass = new IntlPhoneLib(
-                input,
-                parentDom,
-                false
-            );
-        }
+        const input = document.getElementById('init-contact');
+        const interval = setInterval(() => {
+            times += 1;
+            if (input) {
+                clearInterval(interval);
+                this.intlClass = new IntlPhoneLib(
+                    input,
+                    parentDom,
+                    false
+                );
+                if (inputValue) {
+                    input.setAttribute('value', `+${inputValue}`);
+                    this.changeDetection.detectChanges();
+                }
+            }
+            if (times > 25) {
+                clearInterval(interval);
+            }
+        }, 50);
     }
 
     /**
@@ -496,11 +493,6 @@ export class ChangeBillingComponent implements OnInit, AfterViewInit, OnDestroy 
         if (this.changeBillingForm.invalid) {
             this.isFormSubmitted = true;
             return;
-        }
-        if (this.changeBillingForm.value.mobileNumber?.startsWith('+')) {
-            this.changeBillingForm.controls['mobileNumber'].setValue(this.changeBillingForm.value.mobileNumber);
-        } else {
-            this.changeBillingForm.controls['mobileNumber'].setValue(this.intlClass.selectedCountryData?.dialCode + this.changeBillingForm.value.mobileNumber);
         }
         let mobileNumber = this.changeBillingForm.value.mobileNumber?.replace(/\+/g, '');
         let request = {

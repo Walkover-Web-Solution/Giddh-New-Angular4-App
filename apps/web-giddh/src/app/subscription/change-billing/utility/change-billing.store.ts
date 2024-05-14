@@ -55,9 +55,6 @@ export class ChangeBillingComponentStore extends ComponentStore<BillingState> im
                                     getBillingDetailsInProgress: false,
                                 });
                             } else {
-                                if (res.message) {
-                                    this.toasterService.showSnackBar('error', res.message);
-                                }
                                 return this.patchState({
                                     getBillingDetails: [],
                                     getBillingDetailsInProgress: false,
