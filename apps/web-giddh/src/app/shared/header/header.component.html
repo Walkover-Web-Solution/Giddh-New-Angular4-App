@@ -57,6 +57,8 @@
                     color="primary"
                     mat-stroked-button
                     (click)="backToCompany()"
+                    placement="bottom"
+                    [tooltip]="activeCompany?.name"
                 >
                     <i class="icon-left back-left"></i>
                     {{ commonLocaleData?.app_back }} {{ commonLocaleData?.app_to }}

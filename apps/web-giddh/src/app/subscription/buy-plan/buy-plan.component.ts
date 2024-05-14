@@ -234,7 +234,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 }
 
             }, false);
-        } else if (localStorage.getItem('Country-Region') === 'GL') {
+        } else if (!this.isChangePlan && localStorage.getItem('Country-Region') === 'GL') {
             this.newUserSelectCountry({
                 "label": "GL - Global",
                 "value": "GL",
@@ -484,6 +484,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.activeCompany = response;
+                if (this.activeCompany) {
+                    this.newUserSelectCountry({
+                        "label": this.activeCompany?.countryV2?.alpha2CountryCode + " - " + this.activeCompany?.countryV2?.countryName,
+                        "value": this.activeCompany?.countryV2?.alpha2CountryCode,
+                        "additional": {
+                            "value": this.activeCompany?.countryV2?.alpha2CountryCode,
+                            "label": this.activeCompany?.countryV2?.alpha2CountryCode + " - " + this.activeCompany?.countryV2?.countryName
+                        }
+                    }, false);
+                }
                 this.company.addresses = response.addresses;
             }
         });
@@ -591,17 +601,30 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      *
      * @memberof BuyPlanComponent
      */
-    public initIntl(): void {
+    public initIntl(inputValue?: string): void {
+        let times = 0;
         const parentDom = this.elementRef?.nativeElement;
         const input = document.getElementById('init-contact');
-        if (input) {
-            this.intlClass = new IntlPhoneLib(
-                input,
-                parentDom,
-                false
-            );
-        }
+        const interval = setInterval(() => {
+            times += 1;
+            if (input) {
+                clearInterval(interval);
+                this.intlClass = new IntlPhoneLib(
+                    input,
+                    parentDom,
+                    false
+                );
+                if (inputValue) {
+                    input.setAttribute('value', `+${inputValue}`);
+                    this.changeDetection.detectChanges();
+                }
+            }
+            if (times > 25) {
+                clearInterval(interval);
+            }
+        }, 50);
     }
+
 
     /**
      * Validate the mobile number
@@ -818,7 +841,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             if (response?.length) {
                 this.monthlyPlans = response?.filter(plan => plan?.monthlyAmount > 0);
                 this.yearlyPlans = response?.filter(plan => plan?.yearlyAmount > 0);
-
+                this.monthlyPlans = this.monthlyPlans.sort((a, b) => a.monthlyAmount - b.monthlyAmount);
+                this.yearlyPlans = this.yearlyPlans.sort((a, b) => a.yearlyAmount - b.yearlyAmount);
                 if (this.yearlyPlans?.length) {
                     this.firstStepForm.get('duration').setValue('YEARLY');
                 } else {
@@ -973,8 +997,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.isFormSubmitted = true;
             return;
         }
-        let mobileNumber = this.getBillingData ? this.subscriptionForm.value.secondStepForm.mobileNumber : this.intlClass.selectedCountryData?.dialCode + this.subscriptionForm.value.secondStepForm.mobileNumber;
-        mobileNumber = mobileNumber?.replace(/\+/g, '');
+        let mobileNumber = this.subscriptionForm.value.secondStepForm.mobileNumber?.replace(/\+/g, '');
         let request = {
             planUniqueName: this.subscriptionForm.value.firstStepForm.planUniqueName,
             duration: this.subscriptionForm.value.firstStepForm.duration,
@@ -1152,17 +1175,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.secondStepForm.controls['companyName'].setValue(data.companyName);
         this.secondStepForm.controls['email'].setValue(data.email);
         this.secondStepForm.controls['pincode'].setValue(data.pincode);
-        this.initIntl();
-        if (this.intlClass && data.mobileNumber) {
-            if (data?.mobileNumber?.startsWith('+')) {
-                this.secondStepForm.controls['mobileNumber'].setValue(data.mobileNumber);
-            } else {
-                this.secondStepForm.controls['mobileNumber'].setValue('+' + data.mobileNumber);
-            }
-        }
         this.secondStepForm.controls['taxNumber'].setValue(data.taxNumber);
+        this.secondStepForm.controls['mobileNumber'].setValue(data.mobileNumber);
         this.selectCountry({ label: data.country.name, value: data.country.code, additional: data.country })
         this.selectState({ label: data.state.name, value: data.state.code, additional: data.state })
         this.secondStepForm.controls['address'].setValue(data?.address);
+        this.initIntl(this.secondStepForm.get('mobileNumber')?.value);
     }
 }
