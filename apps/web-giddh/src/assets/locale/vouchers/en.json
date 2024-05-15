@@ -142,5 +142,7 @@
     "order_no": "Order #",
     "order_no_placeholder": "Enter Order #",
     "expected_delivery": "Expected Delivery",
-    "vendor_name": "Vendor Name"
+    "vendor_name": "Vendor Name",
+    "sales_as_receipt_voucher": "Sales as Receipt Voucher",
+    "purchase_as_payment_voucher": "Purchase as Payment Voucher"
 }

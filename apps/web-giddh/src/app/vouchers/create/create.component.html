@@ -3,18 +3,26 @@
     <hamburger-menu class="position-absolute"></hamburger-menu>
     <div class="vouchers">
         <mat-card class="container-lg">
-            <mat-card-content>
-                <!-- Voucher Page Heading -->
-                <div class="vouchers-title d-flex align-items-center">
-                    <h1>{{ voucherType | voucherName: localeData | titlecase }}</h1>
-                    <div class="ml-auto" *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice">
-                        <watch-video [cssClass]="'text-blue'"
-                            [moduleName]="invoiceType.isSalesInvoice ? 'VOUCHER_SALES' : 'VOUCHER_CASH'"></watch-video>
+            <form autocomplete="off" novalidate name="invoiceForm" [formGroup]="invoiceForm">
+                <mat-card-content>
+                    <!-- Voucher Page Heading -->
+                    <div class="vouchers-title d-flex align-items-center">
+                        <div class="d-flex align-items-center">
+                            <h1 [ngClass]="{'voucher-heading': !(invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) || ((invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) && !invoiceForm.get('salesPurchaseAsReceiptPayment')?.value), 'cursor-pointer': invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote}" (click)="invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote ? invoiceForm.get('salesPurchaseAsReceiptPayment')?.patchValue(!invoiceForm.get('salesPurchaseAsReceiptPayment')?.value) : ''">{{ voucherType | voucherName: localeData | titlecase }}</h1>
+
+                            <mat-slide-toggle color="primary" class="ml-4" *ngIf="invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote" formControlName="salesPurchaseAsReceiptPayment">
+                                <span [ngClass]="{'voucher-heading': invoiceForm.get('salesPurchaseAsReceiptPayment')?.value}">
+                                    {{ invoiceType.isPurchaseInvoice ? localeData?.purchase_as_payment_voucher : localeData?.sales_as_receipt_voucher }}
+                                </span>
+                            </mat-slide-toggle>
+                        </div>
+                        <div class="ml-auto" *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice">
+                            <watch-video [cssClass]="'text-blue'"
+                                [moduleName]="invoiceType.isSalesInvoice ? 'VOUCHER_SALES' : 'VOUCHER_CASH'"></watch-video>
+                        </div>
                     </div>
-                </div>
-                <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
-                <div class="vouchers-content-wrapper" [hidden]="showLoader">
-                    <form autocomplete="off" novalidate name="invoiceForm" [formGroup]="invoiceForm">
+                    <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
+                    <div class="vouchers-content-wrapper" [hidden]="showLoader">
                         <!-- Voucher Form Top Section -->
                         <div class="vouchers-primary-form" formGroupName="account">
                             <div class="row">
@@ -877,7 +885,7 @@
                                                                             entry.get('showCodeType')?.value === 'hsn' ?
                                                                             entry.get('hsnNumber')?.value :
                                                                             entry.get('sacNumber')?.value
-                                                                         }}
+                                                                            }}
                                                                         <i class="icon-edit text-blue"
                                                                             (click)="updateCurrentHsnSac(entry)"
                                                                             #menuTrigger="matMenuTrigger"
@@ -1674,9 +1682,9 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </div>
-            </mat-card-content>
+                    </div>
+                </mat-card-content>
+            </form>
         </mat-card>
     </div>
 </ng-container>
