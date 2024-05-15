@@ -694,6 +694,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public newEntryObj(byOrTo?: string, typeData?: any, type?: any): void {
+        console.log(byOrTo, typeData, type);
         let formArray = this.journalVoucherForm.get('transactions') as FormArray;
         const newTransactionFormGroup = this.initTransactionFormGroup();
         let discount = null;
@@ -732,8 +733,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             let filteredTaxData = this.companyTaxesList.filter((item) => {
                 return item.additional.name === (taxData.name ? taxData.name : taxData.label) && item.additional.uniqueName === (taxData.uniqueName ? taxData.uniqueName : taxData?.value);
             });
+
             newTransactionFormGroup.patchValue({
-                amount: filteredTaxData[0]?.additional?.taxDetail[0]?.taxValue,
+                amount: this.calculateTax(filteredTaxData[0]?.additional?.taxDetail[0]?.taxValue),
                 particular: filteredTaxData[0]?.additional?.uniqueName,
                 currentBalance: '',
                 applyApplicableTaxes: false,
@@ -754,6 +756,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     parentGroup: ''
                 }
             });
+            console.log(newTransactionFormGroup);
+
             this.selectAccUnqName = filteredTaxData[0]?.additional?.name;
         } else {
             newTransactionFormGroup.patchValue({
@@ -781,6 +785,32 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         formArray.push(newTransactionFormGroup);
         const index = formArray.controls.findIndex(formGroup => formGroup === newTransactionFormGroup);
         this.calculateAmount(Number(newTransactionFormGroup.get('amount').value), newTransactionFormGroup, index);
+    }
+
+    public calculateTax(taxAmount: number) {
+        let taxValue = 0;
+        let calculateTax = 0;
+        let amount = 0;
+        (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
+            amount = control.value.amount;
+        });
+        calculateTax = taxAmount / 100 * amount;
+        taxValue = calculateTax * amount;
+        return calculateTax;
+    }
+
+    public calculateDiscount(discountType?: any, amount?: any) {
+        let discountValue = 0;
+        let discountAmount = 0;
+        (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
+            console.log(control);
+        });
+        if (discountType === 'FIX_AMOUNT') {
+
+        } else {
+
+        }
+        return discountValue;
     }
 
     /**
@@ -972,12 +1002,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             let transactionAtIndex;
             let transaction;
             if ((response?.body?.currency?.code || this.activeCompany?.baseCurrency) === this.activeCompany?.baseCurrency) {
-                let openChequePopup = false;
                 let idx = this.selectedIdx;
                 transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
                 transactionAtIndex = transactionsFormArray.at(idx) as FormGroup;
                 if (acc && acc.parentGroups.find((pg) => pg?.uniqueName === 'bankaccounts')) {
-                    openChequePopup = true;
                     this.openChequeDetailForm();
                 } else {
                     let parentGroups = ['revenuefromoperations', 'otherincome', 'fixedassets'];
@@ -1160,31 +1188,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public addNewEntry(amount: any, transactionObj: any, entryIndex: number): void {
         let index = entryIndex;
-        // let reqField: any = document.getElementById(`first_element_${entryIndex - 1}`);
-        // if (amount === 0 || amount === '0') {
-        //     if (entryIndex === 0) {
-        //         this.isFirstRowDeleted = true;
-        //     } else {
-        //         this.isFirstRowDeleted = false;
-        //     }
-        //     this.requestObj.transactions[index].currentBalance = '';
-        //     this.requestObj.transactions[index].selectedAccount.type = '';
-        //     this.requestObj.transactions.splice(index, 1);
-        //     if (reqField === null) {
-        //         this.dateField.nativeElement.focus();
-        //     } else {
-        //         reqField.focus();
-        //     }
-        //     if (!this.requestObj.transactions.length) {
-        //         if (this.requestObj.voucherType === VOUCHERS.CONTRA) {
-        //             this.newEntryObj('by');
-        //         } else if (this.requestObj.voucherType === VOUCHERS.RECEIPT) {
-        //             this.newEntryObj('to');
-        //         }
-        //     }
-        // } else {
         this.calculateAmount(amount, transactionObj, index);
-        //}
     }
 
     /**
@@ -1203,6 +1207,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const { totalCredit, totalDebit } = this.calculateTotalCreditAndDebit();
         this.totalCreditAmount = totalCredit;
         this.totalDebitAmount = totalDebit;
+
         if (indx === lastIndx && transactionObj.get('selectedAccount.name').value) {
             const voucherTypeControl = this.journalVoucherForm.get('voucherType');
             // Setting the value of voucherType FormControl to currentVoucher
@@ -1221,7 +1226,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public checkVoucherTypeNewEntries(currentVoucher: any, voucherType: any): void {
         if (this.totalCreditAmount < this.totalDebitAmount || (this.totalCreditAmount === 0 && this.totalDebitAmount === 0)) {
-            if (currentVoucher === voucherType.RECEIPT || currentVoucher === voucherType.SALES) {
+            if (currentVoucher === voucherType.RECEIPT) {
                 this.newEntryObj('by');
             } else {
                 this.newEntryObj('to');
@@ -1290,6 +1295,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             if (control.get('type').value.toLowerCase() === 'to') {
                 if (!control.get('isDiscountApplied')?.value) {
                     totalCredit += control.get('amount').value;
+                }
+                if (control.get('isTaxApplied').value) {
+                    let filteredTaxData = this.companyTaxesList.filter((item) => {
+                        return item.additional.uniqueName === control?.value?.particular
+                    });
+                    let taxValue = this.calculateTax(filteredTaxData[0]?.additional?.taxDetail[0]?.taxValue);
+                    console.log(filteredTaxData, control , taxValue);
                 }
             } else {
                 if (!control.get('isDiscountApplied')?.value) {
@@ -1641,8 +1653,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 case VOUCHERS.PAYMENT:
                     firstTransaction.patchValue({ type: 'by' });
                     break;
+
                 case VOUCHERS.SALES:
-                    firstTransaction.patchValue({ type: 'to' });
+                    firstTransaction.patchValue({ type: 'by' });
                     break;
 
                 default:
@@ -2361,7 +2374,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.closeTaxSidebar();
             } else if (key === this.KEYS.ENTER) {
                 const selectedElement = elements[this.selectedIndex];
-                const anchorElement = selectedElement.firstChild as HTMLElement;
+                const anchorElement = selectedElement?.firstChild as HTMLElement;
                 anchorElement.click();
             } else if (key === this.KEYS.UP) {
                 event.preventDefault();
