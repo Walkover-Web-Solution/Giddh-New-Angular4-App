@@ -4580,7 +4580,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private calculateReceiptPaymentAmount(entryFormGroup: FormGroup): void {
-        if (this.invoiceForm.get('isAdvanceReceipt')?.value) {
+        if (this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice) {
             if (entryFormGroup.get('otherTax.calculationMethod')?.value && entryFormGroup.get('otherTax.type')?.value) {
                 let taxPercentage: number = 0;
                 let tdsPercentage: number = 0;
@@ -4599,7 +4599,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     tdsPercentage += entryFormGroup.get('otherTax.taxValue')?.value;
                 }
 
-                const taxableValue = this.generalService.getReceiptPaymentOtherTaxAmount(entryFormGroup.get('otherTax.calculationMethod')?.value, totalAmount, taxPercentage, tdsPercentage, tcsPercentage);
+                let taxableValue = this.generalService.getReceiptPaymentOtherTaxAmount(entryFormGroup.get('otherTax.calculationMethod')?.value, totalAmount, taxPercentage, tdsPercentage, tcsPercentage);
+
+                if (entryFormGroup.get('otherTax.calculationMethod')?.value === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
+                    taxableValue = (taxableValue + entryFormGroup.get('totalTax')?.value);
+                }
+    
+                entryFormGroup.get('otherTax.amount').patchValue(giddhRoundOff(((taxableValue * entryFormGroup.get('otherTax.taxValue')?.value) / 100), this.highPrecisionRate));
 
                 let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
 
@@ -4607,6 +4613,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             } else {
                 this.doReverseCalculation(entryFormGroup);
             }
+            this.calculateVoucherTotals();
         }
     }
 
