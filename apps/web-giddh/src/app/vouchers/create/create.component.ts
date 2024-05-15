@@ -1110,8 +1110,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.company.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                         this.company.salesAsReceipt = profile.salesAsReceipt;
                         this.company.purchaseAsPayment = profile.purchaseAsPayment;
-                        this.invoiceForm.get('salesAsReceipt').patchValue(profile.salesAsReceipt);
-                        this.invoiceForm.get('purchaseAsPayment').patchValue(profile.purchaseAsPayment);
+                        this.invoiceForm.get('salesPurchaseAsReceiptPayment').patchValue(this.invoiceType.isCashInvoice && this.invoiceType.isPurchaseInvoice ? profile.purchaseAsPayment : profile.salesAsReceipt);
                         this.showCompanyTaxTypeByCountry(this.company.countryCode);
 
                         this.getCountryData(this.company.countryCode);
@@ -1776,8 +1775,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             chequeClearanceDate: [null], //temp
             isAdvanceReceipt: [false], //temp
             attachedFiles: [],
-            salesAsReceipt: [null], //temp
-            purchaseAsPayment: [null] //temp
+            salesPurchaseAsReceiptPayment: [null], //temp
         });
     }
 
@@ -3405,13 +3403,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 if (response?.status === "success") {
 
                     if (this.invoiceType.isCashInvoice && ((!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote) || this.invoiceType.isPurchaseInvoice)) {
-                        const salesAsReceiptValue = this.invoiceForm.get('salesAsReceipt').value;
-                        const purchaseAsPaymentValue = this.invoiceForm.get('purchaseAsPayment').value;
+                        const salesPurchaseAsReceiptPayment = this.invoiceForm.get('salesPurchaseAsReceiptPayment').value;
 
-                        if (this.invoiceType.isPurchaseInvoice && (purchaseAsPaymentValue !== this.company.purchaseAsPayment)) {
-                            this.updateProfileSetting({ purchaseAsPayment: purchaseAsPaymentValue });
-                        } else if (salesAsReceiptValue !== this.company.salesAsReceipt) {
-                            this.updateProfileSetting({ salesAsReceipt: salesAsReceiptValue });
+                        if (this.invoiceType.isPurchaseInvoice && (salesPurchaseAsReceiptPayment !== this.company.purchaseAsPayment)) {
+                            this.updateProfileSetting({ purchaseAsPayment: salesPurchaseAsReceiptPayment });
+                        } else if (salesPurchaseAsReceiptPayment !== this.company.salesAsReceipt) {
+                            this.updateProfileSetting({ salesAsReceipt: salesPurchaseAsReceiptPayment });
                         }
                     }
 

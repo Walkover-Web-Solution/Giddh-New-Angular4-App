@@ -2,6 +2,16 @@
     width: 100px;
 }
 
+.company-button {
+    background-color: var(--color-white);
+}
+
+.custom-header {
+    background-color: var(--color-giddh-blue);
+    padding: 15px;
+    min-height: 60px;
+}
+
 .nav-left-bar {
     position: fixed;
     top: var(--top-sidebar);
@@ -902,4 +912,7 @@ aside-setting {
 .schedule-now-link {
     width: 1px;
     height: 1px;
+}
+.hide-sidebar {
+    display: none;
 }

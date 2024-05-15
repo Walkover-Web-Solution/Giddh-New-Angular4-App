@@ -154,6 +154,6 @@
     "clearance_date": "तारीख तपासा",
     "receipt_mode": "पावती मोड",
     "payment_mode": "पेमेंट मोड",
-    "sales_as_receipt": "पावती म्हणून विक्री",
-    "purchase_as_payment": "पेमेंट म्हणून खरेदी करा"
+    "sales_as_receipt_voucher": "पावती व्हाउचर म्हणून विक्री",
+    "purchase_as_payment_voucher": "पेमेंट व्हाउचर म्हणून खरेदी करा"
 }

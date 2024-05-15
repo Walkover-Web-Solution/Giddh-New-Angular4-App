@@ -853,7 +853,7 @@ export class GeneralService {
 
             menuItem.items?.forEach(item => {
                 const isValidItem = apiItems.find(apiItem => apiItem?.uniqueName === item.link);
-                if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.countrySpecific?.length || item.additional?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.queryParams?.voucherVersion || item.additional?.queryParams?.voucherVersion === this.voucherApiVersion)) {
+                if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.queryParams?.countrySpecific?.length || item.additional?.queryParams?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.queryParams?.voucherVersion || item.additional?.queryParams?.voucherVersion === this.voucherApiVersion)) {
                     // If items returned from API have the current item which can be shown in branch/company mode, add it
                     visibleMenuItems[menuIndex].items.push(item);
                 }
