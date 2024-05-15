@@ -47,6 +47,7 @@ import { PurchaseOrderService } from "../../services/purchase-order.service";
 import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustment/services/adjustment-utility.service";
 import { SettingsTaxesActions } from "../../actions/settings/taxes/settings.taxes.action";
 import { ProformaService } from "../../services/proforma.service";
+import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 
 @Component({
     selector: "create",
@@ -132,7 +133,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         isActive: false,
         branch: null,
         addresses: null,
-        giddhBalanceDecimalPlaces: 2
+        giddhBalanceDecimalPlaces: 2,
+        salesAsReceipt: null,
+        purchaseAsPayment: null
     };
     /** Holds account specific data */
     public account: any = {
@@ -493,7 +496,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private purchaseOrderService: PurchaseOrderService,
         private adjustmentUtilityService: AdjustmentUtilityService,
         private settingsTaxesAction: SettingsTaxesActions,
-        private proformaService: ProformaService
+        private proformaService: ProformaService,
+        private settingsProfileActions: SettingsProfileActions
     ) {
 
     }
@@ -1104,6 +1108,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.company.baseCurrencySymbol = profile.baseCurrencySymbol;
                         this.company.inputMaskFormat = profile.balanceDisplayFormat?.toLowerCase() || '';
                         this.company.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+                        this.company.salesAsReceipt = profile.salesAsReceipt;
+                        this.company.purchaseAsPayment = profile.purchaseAsPayment;
+                        this.invoiceForm.get('salesAsReceipt').patchValue(profile.salesAsReceipt);
+                        this.invoiceForm.get('purchaseAsPayment').patchValue(profile.purchaseAsPayment);
                         this.showCompanyTaxTypeByCountry(this.company.countryCode);
 
                         this.getCountryData(this.company.countryCode);
@@ -1768,7 +1776,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             chequeClearanceDate: [null], //temp
             isAdvanceReceipt: [false], //temp
             attachedFiles: [],
-            salesPurchaseAsReceiptPayment: [false] //temp
+            salesAsReceipt: [null], //temp
+            purchaseAsPayment: [null] //temp
         });
     }
 
@@ -3341,8 +3350,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (this.invoiceType.isCashInvoice) {
                 invoiceForm.type = this.invoiceType.isPurchaseInvoice ? "purchase" : this.invoiceType.isCreditNote ? "credit note" : this.invoiceType.isDebitNote ? "debit note" : "sales";
 
-                if (this.invoiceForm.get('salesPurchaseAsReceiptPayment').value) {
-                    invoiceForm.type = !this.invoiceType.isCreditNote && !this.invoiceType.isDebitNote && !this.invoiceType.isPurchaseInvoice ? VoucherTypeEnum.receipt : VoucherTypeEnum.payment;
+                if (this.invoiceType.isPurchaseInvoice) {
+                    invoiceForm.type = VoucherTypeEnum.payment;
+                } else if (!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote) {
+                    invoiceForm.type = VoucherTypeEnum.receipt;
                 }
 
                 invoiceForm.entries = invoiceForm.entries?.map(entry => {
@@ -3392,6 +3403,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.voucherService.generateVoucher(invoiceForm.account.uniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.startLoader(false);
                 if (response?.status === "success") {
+
+                    if (this.invoiceType.isCashInvoice && ((!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote) || this.invoiceType.isPurchaseInvoice)) {
+                        const salesAsReceiptValue = this.invoiceForm.get('salesAsReceipt').value;
+                        const purchaseAsPaymentValue = this.invoiceForm.get('purchaseAsPayment').value;
+
+                        if (this.invoiceType.isPurchaseInvoice && (purchaseAsPaymentValue !== this.company.purchaseAsPayment)) {
+                            this.updateProfileSetting({ purchaseAsPayment: purchaseAsPaymentValue });
+                        } else if (salesAsReceiptValue !== this.company.salesAsReceipt) {
+                            this.updateProfileSetting({ salesAsReceipt: salesAsReceiptValue });
+                        }
+                    }
+
                     if (callback) {
                         this.resetVoucherForm(false);
                     } else {
@@ -4585,5 +4608,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.doReverseCalculation(entryFormGroup);
             }
         }
+    }
+
+    /**
+     * Patch profile settings
+     *
+     * @private
+     * @param {*} keyToUpdate
+     * @memberof VoucherCreateComponent
+     */
+    private updateProfileSetting(keyToUpdate: any): void {
+        this.store.dispatch(this.settingsProfileActions.PatchProfile(keyToUpdate));
     }
 }
