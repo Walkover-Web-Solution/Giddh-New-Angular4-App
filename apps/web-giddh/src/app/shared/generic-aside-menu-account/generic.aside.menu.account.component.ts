@@ -37,6 +37,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     @Input() public isDebtorCreditor: boolean = true;
     /** this will hold if it's bank account */
     @Input() public isBankAccount: boolean = true;
+    @Input() public includeSearchedGroup: boolean = false;
     /** True, if new service is created through this component.
      * Used to differentiate between new customer/vendor creation and service creation
      * as they both need the groups to be shown in a particular category,
