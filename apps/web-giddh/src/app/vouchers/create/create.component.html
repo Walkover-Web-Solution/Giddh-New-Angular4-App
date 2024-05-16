@@ -8,16 +8,11 @@
                     <!-- Voucher Page Heading -->
                     <div class="vouchers-title d-flex align-items-center">
                         <div class="d-flex align-items-center">
-                            <h1>{{ voucherType | voucherName: localeData | titlecase }}</h1>
-                            <mat-slide-toggle 
-                                color="primary" 
-                                class="ml-4" 
-                                *ngIf="invoiceType.isCashInvoice && ((!invoiceType.isDebitNote && !invoiceType.isCreditNote) || invoiceType.isPurchaseInvoice)"
-                                [formControlName]="invoiceType.isCashInvoice && invoiceType.isPurchaseInvoice ? 'purchaseAsPayment' : 'salesAsReceipt'"
-                            >
-                                <span class="font-16">
-                                    {{ invoiceType.isPurchaseInvoice ? localeData?.purchase_as_payment :
-                                    localeData?.sales_as_receipt }}
+                            <h1 [ngClass]="{'voucher-heading': !(invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) || ((invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) && !invoiceForm.get('salesPurchaseAsReceiptPayment')?.value), 'cursor-pointer': invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote}" (click)="invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote ? invoiceForm.get('salesPurchaseAsReceiptPayment')?.patchValue(!invoiceForm.get('salesPurchaseAsReceiptPayment')?.value) : ''">{{ voucherType | voucherName: localeData | titlecase }}</h1>
+
+                            <mat-slide-toggle color="primary" class="ml-4" *ngIf="invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote" formControlName="salesPurchaseAsReceiptPayment">
+                                <span [ngClass]="{'voucher-heading': invoiceForm.get('salesPurchaseAsReceiptPayment')?.value}" class="mr-l2">
+                                    {{ invoiceType.isPurchaseInvoice ? localeData?.purchase_as_payment_voucher : localeData?.sales_as_receipt_voucher }}
                                 </span>
                             </mat-slide-toggle>
                         </div>
@@ -962,10 +957,10 @@
                                                                             {{ commonLocaleData?.app_update }}
                                                                         </span>
                                                                         {{
-                                                                        entry.get('showCodeType')?.value === 'hsn' ?
-                                                                        entry.get('hsnNumber')?.value :
-                                                                        entry.get('sacNumber')?.value
-                                                                        }}
+                                                                            entry.get('showCodeType')?.value === 'hsn' ?
+                                                                            entry.get('hsnNumber')?.value :
+                                                                            entry.get('sacNumber')?.value
+                                                                            }}
                                                                         <i class="icon-edit text-blue"
                                                                             (click)="updateCurrentHsnSac(entry)"
                                                                             #menuTrigger="matMenuTrigger"
