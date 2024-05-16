@@ -224,6 +224,9 @@ export class VatReportComponent implements OnInit, OnDestroy {
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
                         };
                     }
+                    if (this.hasTaxNumber || this.currentOrganizationType === OrganizationType.Company) {
+                        this.loadTaxDetails();
+                    }
                 }
             } else {
                 if (this.generalService.companyUniqueName) {
@@ -242,9 +245,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 this.selectedMonth = "";
                 this.selectedYear = "";
                 this.year = null;
-                if (this.hasTaxNumber || this.currentOrganizationType === OrganizationType.Company) {
-                    this.loadTaxDetails();
-                }
             }
         });
     }
