@@ -1110,8 +1110,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.company.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
                         this.company.salesAsReceipt = profile.salesAsReceipt;
                         this.company.purchaseAsPayment = profile.purchaseAsPayment;
-                        this.invoiceForm.get('salesAsReceipt').patchValue(profile.salesAsReceipt);
-                        this.invoiceForm.get('purchaseAsPayment').patchValue(profile.purchaseAsPayment);
+                        this.invoiceForm.get('salesPurchaseAsReceiptPayment').patchValue(this.invoiceType.isCashInvoice && this.invoiceType.isPurchaseInvoice ? profile.purchaseAsPayment : profile.salesAsReceipt);
                         this.showCompanyTaxTypeByCountry(this.company.countryCode);
 
                         this.getCountryData(this.company.countryCode);
@@ -1776,8 +1775,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             chequeClearanceDate: [null], //temp
             isAdvanceReceipt: [false], //temp
             attachedFiles: [],
-            salesAsReceipt: [null], //temp
-            purchaseAsPayment: [null] //temp
+            salesPurchaseAsReceiptPayment: [null], //temp
         });
     }
 
@@ -3403,22 +3401,27 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.voucherService.generateVoucher(invoiceForm.account.uniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.startLoader(false);
                 if (response?.status === "success") {
+                    const isCashSalesPurchaseInvoice = this.invoiceType.isCashInvoice && ((!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote) || this.invoiceType.isPurchaseInvoice);
 
-                    if (this.invoiceType.isCashInvoice && ((!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote) || this.invoiceType.isPurchaseInvoice)) {
-                        const salesAsReceiptValue = this.invoiceForm.get('salesAsReceipt').value;
-                        const purchaseAsPaymentValue = this.invoiceForm.get('purchaseAsPayment').value;
+                    if (isCashSalesPurchaseInvoice) {
+                        const salesPurchaseAsReceiptPayment = this.invoiceForm.get('salesPurchaseAsReceiptPayment').value;
 
-                        if (this.invoiceType.isPurchaseInvoice && (purchaseAsPaymentValue !== this.company.purchaseAsPayment)) {
-                            this.updateProfileSetting({ purchaseAsPayment: purchaseAsPaymentValue });
-                        } else if (salesAsReceiptValue !== this.company.salesAsReceipt) {
-                            this.updateProfileSetting({ salesAsReceipt: salesAsReceiptValue });
+                        if (this.invoiceType.isPurchaseInvoice && (salesPurchaseAsReceiptPayment !== this.company.purchaseAsPayment)) {
+                            this.updateProfileSetting({ purchaseAsPayment: salesPurchaseAsReceiptPayment });
+                        } else if (salesPurchaseAsReceiptPayment !== this.company.salesAsReceipt) {
+                            this.updateProfileSetting({ salesAsReceipt: salesPurchaseAsReceiptPayment });
                         }
                     }
 
                     if (callback) {
                         this.resetVoucherForm(false);
                     } else {
+                        let salesPurchaseAsReceiptPayment = this.invoiceForm.value.salesPurchaseAsReceiptPayment;
                         this.resetVoucherForm();
+
+                        if (isCashSalesPurchaseInvoice) {
+                            this.invoiceForm.get('salesPurchaseAsReceiptPayment').patchValue(salesPurchaseAsReceiptPayment);
+                        }
                     }
 
                     let message = (response?.body.number) ? `${this.localeData?.entry_created}: ${response?.body.number}` : this.commonLocaleData?.app_messages?.voucher_saved;
@@ -4606,7 +4609,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 if (entryFormGroup.get('otherTax.calculationMethod')?.value === SalesOtherTaxesCalculationMethodEnum.OnTotalAmount) {
                     taxableValue = (taxableValue + entryFormGroup.get('totalTax')?.value);
                 }
-    
+
                 entryFormGroup.get('otherTax.amount').patchValue(giddhRoundOff(((taxableValue * entryFormGroup.get('otherTax.taxValue')?.value) / 100), this.highPrecisionRate));
 
                 let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
