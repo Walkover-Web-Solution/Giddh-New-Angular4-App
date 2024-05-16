@@ -201,7 +201,8 @@
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                                 (change)="
-                                                    calculateAmount(transaction.get('amount')?.value, transaction, i)
+                                                    calculateAmount(transaction.get('amount')?.value, transaction, i);
+                                                    isSalesEntry ? calculateTax() : ''
                                                 "
                                             ></text-field>
                                         </td>
