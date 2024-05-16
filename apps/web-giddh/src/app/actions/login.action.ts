@@ -18,7 +18,7 @@ import { sortBy } from '../lodash-optimized';
 import { COMMON_ACTIONS } from './common.const';
 import { AppState } from '../store';
 import { Injectable, NgZone } from '@angular/core';
-import { map, switchMap, take } from 'rxjs/operators';
+import { map, switchMap, take, tap } from 'rxjs/operators';
 import { OrganizationType, userLoginStateEnum } from '../models/user-login-state';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { DbService } from '../services/db.service';
@@ -210,7 +210,18 @@ export class LoginActions {
                 if (companies.body && companies.body.length === 0) {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
                     this.zone.run(() => {
-                        this._router.navigate(['/pages/new-company']);
+                        this.store.pipe(
+                            select(state => state.session.user),
+                            take(1), // take only the first emission
+                            tap(response => {
+                                const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
+                                if (hasSubscriptionPermission) {
+                                    this._router.navigate(['/pages/subscription']);
+                                } else {
+                                    this._router.navigate(['/pages/subscription/buy-plan']);
+                                }
+                            })
+                        ).subscribe();
                     });
                     return { type: 'EmptyAction' };
                 } else {
@@ -275,8 +286,20 @@ export class LoginActions {
                 if (companies.body && companies.body.length === 0) {
                     this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
                     this.zone.run(() => {
-                        this._router.navigate(['/pages/new-company']);
+                        this.store.pipe(
+                            select(state => state.session.user),
+                            take(1), // take only the first emission
+                            tap(response => {
+                                const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
+                                if (hasSubscriptionPermission) {
+                                    this._router.navigate(['/pages/subscription']);
+                                } else {
+                                    this._router.navigate(['/pages/subscription/buy-plan']);
+                                }
+                            })
+                        ).subscribe();
                     });
+
                     return { type: 'EmptyAction' };
                 } else {
                     if (stateDetail.body && stateDetail?.status === 'success') {

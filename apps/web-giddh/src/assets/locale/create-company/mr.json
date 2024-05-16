@@ -77,6 +77,12 @@
     "verify": "सत्यापित करा",
     "resend_otp": "ओटीपी पुन्हा पाठवा",
     "verify_number": "कृपया मोबाईल नंबर सत्यापित करा",
+    "make_yourself": "स्वतः सुपर व्यवस्थापक म्हणून स्थानांतरित करा",
+    "permission": "अनुमती द्या",
+    "permission_placeholder": "अद्वितीय नाव / ईमेल आयडी",
+    "roles": "भूमिका",
+    "add_user": "वापरकर्ता जोडा",
+    "back_to_subscription": "सदस्यता सूचीकडे परत",
     "county":"परगणा",
     "select_county":"काउंटी निवडा"
 }
