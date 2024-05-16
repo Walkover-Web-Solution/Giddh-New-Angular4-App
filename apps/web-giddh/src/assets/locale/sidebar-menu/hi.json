@@ -329,7 +329,7 @@
                     "hide": "sidebar",
                     "additional": {
                         "queryParams": {
-                            "countrySpecific": ["AE", "GB"]
+                            "countrySpecific": ["AE", "GB", "ZW", "KE"]
                         }
                     }
                 },
