@@ -4263,7 +4263,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             transactionFormGroup.get('stock.stockUnit.code')?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitCode);
             transactionFormGroup.get('stock.stockUnit.uniqueName')?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitUniqueName);
 
-            transactionFormGroup.get('stock.variant.name')?.patchValue(response.stock.variant?.name);
+            if (response.stock.variant?.name) {
+                transactionFormGroup.get('stock.variant.name')?.patchValue(response.stock.variant?.name);
+            }
             transactionFormGroup.get('stock.variant.uniqueName')?.patchValue(response.stock.variant?.uniqueName);
 
             transactionFormGroup.get('stock.variant.salesTaxInclusive')?.patchValue(response.stock.variant?.salesTaxInclusive);
