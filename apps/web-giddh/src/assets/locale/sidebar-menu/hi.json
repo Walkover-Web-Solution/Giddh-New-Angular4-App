@@ -39,6 +39,24 @@
                         "createNew": {
                             "label": "+",
                             "link": "/pages/proforma-invoice/invoice/credit note"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "क्रेडिट नोट",
+                    "link": "/pages/invoice/preview/credit note",
+                    "icon": "icon-credit-note-new",
+                    "description": "क्रेडिट नोट जेनरेट करें और खाता अपडेट करें",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/credit-note/create"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 2
                         }
                     }
                 },
@@ -51,6 +69,24 @@
                         "createNew": {
                             "label": "+",
                             "link": "/pages/proforma-invoice/invoice/sales"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "चालान",
+                    "link": "/pages/invoice/preview/sales",
+                    "icon": "icon-invoice-new",
+                    "description": "बहुमुद्रा, आवर्ती चालान, नकद चालान",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/sales/create"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 1
                         }
                     }
                 },
@@ -95,6 +131,24 @@
                         "createNew": {
                             "label": "+",
                             "link": "/pages/proforma-invoice/invoice/purchase"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "बिल",
+                    "link": "/pages/purchase-management/purchase/bill",
+                    "icon": "icon-invoice-new",
+                    "description": "खरीद अनुरोध, खरीद बिल, पीओ संशोधित करें",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/purchase/create"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 2
                         }
                     }
                 },
@@ -113,6 +167,24 @@
                         "createNew": {
                             "label": "+",
                             "link": "/pages/proforma-invoice/invoice/debit note"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "डेबिट नोट",
+                    "link": "/pages/invoice/preview/debit note",
+                    "icon": "icon-debit-note-new",
+                    "description": "डेबिट नोट रिकॉर्ड करें और खाता अपडेट करें",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/debit-note/create"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 2
                         }
                     }
                 },
@@ -136,6 +208,24 @@
                         "createNew": {
                             "label": "+",
                             "link": "/pages/purchase-management/purchase-order/new"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "खरीद आदेश",
+                    "link": "/pages/purchase-management/purchase/order",
+                    "icon": "icon-purchase-order",
+                    "description": "खरीद अनुरोध, खरीद बिल, पीओ संशोधित करें",
+                    "additional": {
+                        "createNew": {
+                            "label": "+",
+                            "link": "/pages/vouchers/purchase-order/create"
+                        },
+                        "queryParams": {
+                            "voucherVersion": 2
                         }
                     }
                 },

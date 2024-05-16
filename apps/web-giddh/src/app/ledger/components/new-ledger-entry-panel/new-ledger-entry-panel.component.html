@@ -11,7 +11,7 @@
                 <!-- reverse charge transction start (make it functional by developer end) -->
                 <ng-container *ngTemplateOutlet="rcmEntryCheckbox"></ng-container>
             </div>
-            <div class="col-4" *ngIf="isLedgerAccountAllowsMultiCurrency">
+            <div *ngIf="isLedgerAccountAllowsMultiCurrency" [ngClass]="{ 'col-4': currentTxn?.shouldShowRcmEntry,'col-12': !currentTxn?.shouldShowRcmEntry }">
                 <div class="multi-currency-wrapper ml-auto">
                     <ul
                         class="list-inline font-15 d-flex align-items-center"

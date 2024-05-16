@@ -21,6 +21,7 @@
                 [selectedIndex]="selectedStep"
                 (selectionChange)="onSelectedTab($event)"
                 [disableRipple]="firstStepForm.invalid"
+                class="bg-transparent"
             >
                 <mat-step [stepControl]="firstStepForm" role="tabpanel">
                     <form [formGroup]="firstStepForm" name="firstStepForm" autocomplete="off" novalidate>
@@ -165,12 +166,22 @@
                             </ng-container>
                         </div>
                         <div class="d-flex column-gap15 mr-t15">
-                            <button mat-stroked-button color="primary" (click)="nextStepForm()">
+                            <button mat-stroked-button color="primary" (click)="nextStepForm()" aria-label="next">
                                 {{ commonLocaleData?.app_next }}
+                            </button>
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                *ngIf="isCreateBySubscription"
+                                (click)="back()"
+                                aria-label="back"
+                            >
+                                {{ localeData?.back_to_subscription }}
                             </button>
                             <button
                                 *ngIf="companiesList?.length === 0"
                                 mat-stroked-button
+                                aria-label="cancel"
                                 (click)="openLogoutConfirmationDialog()"
                             >
                                 {{ commonLocaleData?.app_cancel }}
@@ -375,23 +386,150 @@
                                 ></p>
                             </div>
                         </div>
-                        <div class="pt-2 d-flex column-gap15">
-                            <button mat-stroked-button matStepperPrevious (click)="selectedStep = 0">
-                                {{ commonLocaleData?.app_back }}
-                            </button>
-                            <button mat-stroked-button color="primary" (click)="onSubmit()">
-                                {{ commonLocaleData?.app_submit }}
-                            </button>
-                            <button
-                                *ngIf="companiesList?.length === 0"
-                                mat-stroked-button
-                                (click)="openLogoutConfirmationDialog()"
-                            >
-                                {{ commonLocaleData?.app_cancel }}
-                            </button>
-                        </div>
+                        <ng-container *ngIf="isNewUserLoggedIn">
+                            <div class="d-flex column-gap15 mr-t15">
+                                <button mat-stroked-button color="primary" (click)="nextStepForm()">
+                                    {{ commonLocaleData?.app_next }}
+                                </button>
+                            </div>
+                        </ng-container>
+                        <ng-container *ngIf="!isNewUserLoggedIn">
+                            <div class="d-flex column-gap15 mt-3">
+                                <button mat-stroked-button matStepperPrevious>
+                                    {{ commonLocaleData?.app_back }}
+                                </button>
+                                <button mat-stroked-button color="primary" (click)="onSubmit()">
+                                    {{ commonLocaleData?.app_submit }}
+                                </button>
+                                <button
+                                    *ngIf="companiesList?.length === 0"
+                                    mat-stroked-button
+                                    (click)="openLogoutConfirmationDialog()"
+                                >
+                                    {{ commonLocaleData?.app_cancel }}
+                                </button>
+                            </div>
+                        </ng-container>
                     </form>
                 </mat-step>
+                <ng-container *ngIf="isNewUserLoggedIn">
+                    <mat-step [stepControl]="thirdStepForm">
+                        <form [formGroup]="thirdStepForm" name="thirdStepForm" autocomplete="off" novalidate>
+                            <ng-template matStepLabel>{{ commonLocaleData?.app_share }}</ng-template>
+                            <div class="row-gap">
+                                <div class="d-flex col-lg-12 pad0">
+                                    <div class="pr-4 pl-0">
+                                        <label>{{ localeData?.make_yourself }} : </label>
+                                    </div>
+                                    <mat-radio-group name="ownerPermission" formControlName="creatorSuperAdmin">
+                                        <mat-radio-button
+                                            color="primary"
+                                            value="true"
+                                            (change)="setOwnerPermission($event)"
+                                            >{{ commonLocaleData?.app_yes }}
+                                        </mat-radio-button>
+                                        <mat-radio-button
+                                            color="primary"
+                                            value="false"
+                                            (change)="setOwnerPermission($event)"
+                                        >
+                                            {{ commonLocaleData?.app_no }}
+                                        </mat-radio-button>
+                                    </mat-radio-group>
+                                </div>
+                                <div formArrayName="permissionRoles" class="mt-3">
+                                    <div
+                                        class="row align-items-center permission-wrapper mb-4"
+                                        *ngFor="
+                                            let permission of thirdStepForm?.get('permissionRoles')['controls'];
+                                            let i = index
+                                        "
+                                        [formGroupName]="i"
+                                    >
+                                        <div class="col-5 country-space">
+                                            <input-field
+                                                [name]="'emailId' + i"
+                                                [label]="localeData?.permission"
+                                                [placeholder]="localeData?.permission_placeholder"
+                                                [type]="'text'"
+                                                formControlName="emailId"
+                                                (input)="permissionRoleIndex = i"
+                                                [showError]="
+                                                    permission.get('emailId').dirty && permission.get('emailId').invalid
+                                                "
+                                            >
+                                            </input-field>
+                                            <span
+                                                class="error-msg"
+                                                *ngIf="
+                                                    permission.get('emailId').dirty && permission.get('emailId').invalid
+                                                "
+                                                id="emailError_{{ i }}"
+                                            >
+                                                {{ localeData?.invalid_email_error }}
+                                            </span>
+                                        </div>
+                                        <div class="col-6 currency-space">
+                                            <mat-form-field
+                                                id="roles_{{ i }}"
+                                                appearance="outline"
+                                                [ngClass]="{ 'error-border': isFormSubmitted && isUserSuperAdmin }"
+                                            >
+                                                <mat-label>{{ localeData?.roles }}</mat-label>
+                                                <mat-select
+                                                    formControlName="roleUniqueName"
+                                                    (selectionChange)="selectRole($event, i); permissionRoleIndex = i"
+                                                >
+                                                    <mat-option
+                                                        *ngFor="let option of permissionRoles"
+                                                        [value]="option.value"
+                                                    >
+                                                        {{ option?.label }}
+                                                    </mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 pl-0 remove-user">
+                                            <div class="inc-dec">
+                                                <div class="plus-minus w-100">
+                                                    <button
+                                                        aria-label="delete icon"
+                                                        class="btn mr-0"
+                                                        (click)="removeUser(i)"
+                                                    >
+                                                        <i class="icon-trash delete"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-lg-12">
+                                            <a class="mr-0 add-new" href="javascript:void(0);" (click)="addNewUser()">
+                                                <i class="icon-plus"></i> {{ localeData?.add_user }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex column-gap15 mt-3">
+                                <button mat-stroked-button matStepperPrevious>
+                                    {{ commonLocaleData?.app_back }}
+                                </button>
+                                <button mat-stroked-button color="primary" (click)="onSubmit()">
+                                    {{ commonLocaleData?.app_submit }}
+                                </button>
+                                <button
+                                    *ngIf="companiesList?.length === 0"
+                                    mat-stroked-button
+                                    (click)="openLogoutConfirmationDialog()"
+                                >
+                                    {{ commonLocaleData?.app_cancel }}
+                                </button>
+                            </div>
+                        </form>
+                    </mat-step>
+                </ng-container>
             </mat-stepper>
         </ng-container>
     </ng-container>

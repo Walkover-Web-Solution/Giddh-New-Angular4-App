@@ -1,0 +1,122 @@
+<ng-container appTranslate [file]="'proforma-invoice/add-bulk-items'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+    <div class="bulk-entry">
+        <div class="dialog-header">
+            <span mat-dialog-title class="font-16">{{ localeData?.add_bulk_items }}</span>
+            <i mat-dialog-close class="icon-cross"></i>
+        </div>
+        <div mat-dialog-content class="bulk-entry-body dialog-body d-flex">
+            <div class="w-100">
+                <form autocomplete="off" novalidate name="createDiscountForm" [formGroup]="addBulkForm">
+                    <div class="d-flex">
+                        <div class="bulk-entry-list">
+                            <input-field [name]="'search'" [type]="'text'" formControlName="stock" [placeholder]="localeData?.search_stock" [label]="commonLocaleData?.app_search"></input-field>
+                            <div class="list-wrapper mt-2">
+                                <mat-list class="p-0">
+                                    <cdk-virtual-scroll-viewport [itemSize]="40" class="list-viewport" [appendOnly]="true">
+                                        <ng-container
+                                            *cdkVirtualFor="let item of stockResults$ | async; let i = index">
+                                            <ng-container *ngIf="item?.additional?.hasVariants">
+                                                <mat-accordion>
+                                                    <mat-expansion-panel>
+                                                        <mat-expansion-panel-header>
+                                                            <mat-panel-title>
+                                                                <mat-list-item class="list-item px-2"
+                                                                    [matTooltip]="item.name" (click)="addItem(item, i)"
+                                                                    matTooltipPosition="left">
+                                                                    <img src="assets/images/item-wise.svg" width="18"
+                                                                        height="18" class="stock-icon" />
+                                                                    {{ item.name }}
+                                                                </mat-list-item>
+                                                            </mat-panel-title>
+                                                        </mat-expansion-panel-header>
+                                                        <div *ngIf="(stockVariants[i] | async)?.length > 1"
+                                                            class="variants-wrapper">
+                                                            <ng-container *ngFor="let variant of stockVariants[i] | async">
+                                                                <mat-list-item (click)="variantChanged(item, variant, i)"
+                                                                    class="list-item pr-2 pl-4"
+                                                                    [matTooltip]="variant?.label"
+                                                                    matTooltipPosition="left">{{ variant?.label
+                                                                    }}</mat-list-item>
+                                                            </ng-container>
+                                                        </div>
+                                                    </mat-expansion-panel>
+                                                </mat-accordion>
+                                            </ng-container>
+                                            <ng-container *ngIf="!item?.additional?.hasVariants">
+                                                <mat-list-item class="list-item px-2" (click)="addItem(item, i)"
+                                                    [matTooltip]="item.name" matTooltipPosition="left">
+                                                    <img src="assets/images/item-wise.svg" width="18" height="18"
+                                                        class="stock-icon" />
+                                                    {{ item.name }}
+                                                </mat-list-item>
+                                            </ng-container>
+                                        </ng-container>
+                                    </cdk-virtual-scroll-viewport>
+                                </mat-list>
+                            </div>
+                        </div>
+                        <div class="bulk-entry-selected-items d-flex flex-column">
+                            <div class="selected-item-title">{{ localeData?.selected_stocks }} ({{ getDataControls?.length }})</div>
+                            <div class="selected-item-wrapper">
+                                <ng-container
+                                    *ngFor="let item of addBulkForm?.get('data')['controls']; let bulkIndex = index"
+                                    formArrayName="data">
+                                    <ng-container [formGroupName]="bulkIndex">
+                                        <mat-list class="p-0">
+                                            <mat-list-item class="px-0 mb-3">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div class="w-75">
+                                                        <p>
+                                                            {{
+                                                            item.get('name')?.value }} {{
+                                                            ('-'+item.get('variantName')?.value ?
+                                                            item.get('variantName')?.value : '')
+                                                            }}
+                                                        </p>
+                                                        <p>
+                                                            <span *ngIf="item.get('additional.skuCode')?.value"
+                                                                class="stockSku mb-1"><label>{{ commonLocaleData?.app_sku }}: </label>{{
+                                                                item.get('additional.skuCode')?.value }}</span>
+                                                            <span
+                                                                [class.rate-stock]="item.get('name')?.value"><label>{{ commonLocaleData?.app_rate }}:&nbsp;</label>
+                                                            </span>{{ item.get('rate')?.value }}
+                                                        </p>
+                                                    </div>
+
+                                                    <div
+                                                        class="d-flex align-items-center justify-content-between column-gap1">
+                                                        <button mat-stroked-button (click)="alterQuantity(item, 'minus')">
+                                                            <i class="icon-minus"></i>
+                                                        </button>
+                                                        <text-field [type]="'text'" value="1" min="1" [name]="'quantity'"
+                                                            formControlName="quantity" [minlength]="1"
+                                                            [cssClass]="'form-control rounded-0 text-center width-60'"></text-field>
+                                                        <button mat-stroked-button (click)="alterQuantity(item)">
+                                                            <i class="icon-add font-16 fw-bold"></i>
+                                                        </button>
+                                                        <button mat-button (click)="
+                                                                deleteSelectedItem(
+                                                                    bulkIndex
+                                                                )
+                                                            ">
+                                                            <i class="icon-cross font-16"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </mat-list-item>
+                                        </mat-list>
+                                    </ng-container>
+                                </ng-container>
+                            </div>
+                            <div class="selected-item-action d-flex column-gap1">
+                                <button mat-stroked-button color="primary" (click)="saveBulkItems()">{{ commonLocaleData?.app_add }}</button>
+                                <button mat-stroked-button mat-dialog-close>{{ commonLocaleData?.app_cancel }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</ng-container>

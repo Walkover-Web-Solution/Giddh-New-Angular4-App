@@ -1,0 +1,43 @@
+<ng-container
+    appTranslate
+    [file]="'invoice/download-or-send-mail'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <div class="modal-header">
+        <h4 mat-dialog-title class="font-16">{{ commonLocaleData?.app_send_email }}</h4>
+        <button mat-icon-button mat-dialog-close type="button"
+            class="close d-flex justify-content-center align-items-center">
+            <i class="icon-cross icon-font-16"></i>
+        </button>
+    </div>
+    <mat-dialog-content>
+        <giddh-page-loader *ngIf="sendEmailInProgress$ | async"></giddh-page-loader>
+        <form autocomplete="off" [style.display]="(sendEmailInProgress$ | async) ? 'none' : 'block'" novalidate name="sendEmailForm" [formGroup]="sendEmailForm" (ngSubmit)="sendEmail()">
+            <div class="modal-body">
+                <div class="w-100 option-value-field" formGroupName="email">
+                    <text-field [name]="'email'" [placeholder]="localeData?.enter_email_addresses" [cssClass]="'w-100'" formControlName="to" [type]="'text'"></text-field>
+                </div>
+                <div class="my-3" *ngIf="!invoiceType?.isEstimateInvoice && !invoiceType?.isProformaInvoice && !invoiceType?.isDebitNote && !invoiceType?.isCreditNote">
+                    <h3 class="mr-b05">{{ localeData?.invoice_copy }}</h3>
+                    <mat-checkbox color="primary" class="d-block font-15" (change)="onCopyTypeChange($event, 'Original')"
+                        formControlName="copyTypeOriginal">
+                        {{ localeData?.original }}
+                    </mat-checkbox>
+                    <mat-checkbox color="primary" class="d-block font-15" (change)="onCopyTypeChange($event, 'Transport')"
+                        formControlName="copyTypeCustomer">
+                        {{ localeData?.transport }}
+                    </mat-checkbox>
+                    <mat-checkbox color="primary" class="d-block font-15" (change)="onCopyTypeChange($event, 'Customer')"
+                        formControlName="copyTypeTransport">
+                        {{ commonLocaleData?.app_customer }}
+                    </mat-checkbox>
+                </div>
+                <div class="d-flex column-gap1" [ngClass]="{'mr-t1' : invoiceType?.isEstimateInvoice || invoiceType?.isProformaInvoice || invoiceType?.isDebitNote || invoiceType?.isCreditNote}">
+                    <button mat-stroked-button color="primary" type="submit">{{ commonLocaleData?.app_send }}</button>
+                    <button mat-stroked-button mat-dialog-close>{{ commonLocaleData?.app_cancel }}</button>
+                </div>
+            </div>
+        </form>
+    </mat-dialog-content>
+</ng-container>

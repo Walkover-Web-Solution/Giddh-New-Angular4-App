@@ -3,6 +3,7 @@
     [file]="'tax-sidebar'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
 >
     <div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)" asideGstSidebarMenuState>
         <div class="help-aside-body">
@@ -28,7 +29,7 @@
                         }"
                     >
                         <a
-                            href="javascript:void(0);"
+                            href="javascript:;"
                             [attr.disabled]="!activeCompanyGstNumber || !isMonthSelected"
                             [ngClass]="{
                                 'disabled': !activeCompanyGstNumber || !isMonthSelected,
@@ -48,7 +49,7 @@
                         }"
                     >
                         <a
-                            href="javascript:void(0);"
+                            href="javascript:;"
                             [ngClass]="{
                                 'disabled': !activeCompanyGstNumber,
                                 'active': selectedGstModule === GstReport.Gstr1
@@ -67,7 +68,7 @@
                         }"
                     >
                         <a
-                            href="javascript:void(0);"
+                            href="javascript:;"
                             [ngClass]="{
                                 'disabled': !activeCompanyGstNumber || !isMonthSelected,
                                 'active': selectedGstModule === GstReport.Gstr2
@@ -83,7 +84,7 @@
                 <ul>
                     <li *ngIf="showGstMenus">
                         <a
-                            href="javascript:void(0);"
+                            href="javascript:;"
                             [routerLink]="['/pages/invoice/ewaybill']"
                             class="d-block clearfix"
                             routerLinkActive
@@ -96,7 +97,7 @@
                     </li>
                     <li>
                         <a
-                            href="javascript:void(0);"
+                            href="javascript:;"
                             [routerLink]="['/pages/reports/reverse-charge']"
                             class="d-block clearfix"
                             routerLinkActive
@@ -109,7 +110,7 @@
                     </li>
                     <li>
                         <a
-                            href="javascript:void(0);"
+                            href="javascript:;"
                             class="d-block clearfix"
                             [routerLink]="['/pages/settings/taxes']"
                             routerLinkActive
@@ -122,7 +123,7 @@
                     </li>
                     <li *ngIf="showGstMenus">
                         <a
-                            href="javascript:void(0);"
+                            href="javascript:;"
                             class="d-block clearfix"
                             routerLinkActive
                             #unitMapping="routerLinkActive"
@@ -137,7 +138,7 @@
                     </li>
                     <li *ngIf="showVatMenus">
                         <a
-                            href="javascript:void(0);"
+                            href="javascript:;"
                             class="d-block clearfix"
                             routerLinkActive
                             #vatReport="routerLinkActive"
@@ -151,7 +152,7 @@
                     </li>
                     <li>
                         <a
-                            href="javascript:void(0);"
+                            href="javascript:;"
                             class="d-block clearfix"
                             [routerLink]="['/pages/settings/addresses']"
                             routerLinkActive
@@ -159,18 +160,12 @@
                             [class.active]="addaddress.isActive"
                         >
                             <span><i class="icon-warehouse1"></i></span>
-                            <span>{{
-                                showVatMenus
-                                    ? localeData?.add_trn
-                                    : showGstMenus
-                                    ? localeData?.add_gst
-                                    : localeData?.add_address
-                            }}</span>
+                            <span>{{ taxTypeSidebarLabel }}</span>
                         </a>
                     </li>
                     <li *ngIf="showVatMenus && isUKCompany">
                         <a
-                            href="javascript:void(0);"
+                            href="javascript:;"
                             class="d-block clearfix"
                             routerLinkActive
                             #vatObligations="routerLinkActive"
@@ -181,9 +176,22 @@
                             <span>{{ localeData?.vat_obligations }}</span>
                         </a>
                     </li>
+                    <li *ngIf="showVatMenus && isZimbabweCompany">
+                        <a
+                            href="javascript:;"
+                            class="d-block clearfix"
+                            routerLinkActive
+                            #withHeld="routerLinkActive"
+                            [class.active]="withHeld.isActive"
+                            [routerLink]="['/pages/vat-report/with-held-setting']"
+                        >
+                            <span><i class="icon-settings-cog"></i></span>
+                            <span>{{ localeData?.with_held_setting }}</span>
+                        </a>
+                    </li>
                     <li *ngIf="showGstMenus">
                         <a
-                            href="javascript:void(0);"
+                            href="javascript:;"
                             [routerLink]="['/pages/gstfiling/filing-status']"
                             class="d-block clearfix"
                             routerLinkActive

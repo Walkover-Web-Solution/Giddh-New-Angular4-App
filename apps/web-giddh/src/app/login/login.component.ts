@@ -232,6 +232,10 @@ export class LoginComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.loginAction.hideTwoWayOtpPopup());
             }
         });
+
+        if (PRODUCTION_ENV && !isElectron) {
+            window.location.href = 'https://giddh.com/login';
+        }
     }
 
     public onHiddenAuthModal(event: any): void {

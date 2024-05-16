@@ -32,7 +32,8 @@ export class FileReturnComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     /** File Return confirmation popup configuration */
     public fileReturnConfirmationConfiguration: ConfirmationModalConfiguration;
-
+    /** Hold client ip address */
+    public clientIp: string = "";
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData: any,
@@ -58,6 +59,13 @@ export class FileReturnComponent implements OnInit, OnDestroy {
     * @memberof FileReturnComponent
     */
     public ngOnInit(): void {
+
+        this.generalService.getClientIp().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.ipAddress) {
+                this.clientIp = response.ipAddress;
+            }
+        });
+
         this.getReport();
     }
 
@@ -75,7 +83,7 @@ export class FileReturnComponent implements OnInit, OnDestroy {
         vatReportRequest.branchUniqueName = this.inputData.branchUniqueName;
 
         this.isLoading = true;
-        this.vatService.getUKVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this.vatService.getCountryWiseVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.isLoading = false;
             if (res.status === 'success' && res.body?.sections) {
                 this.vatReport = res.body?.sections;
@@ -102,7 +110,7 @@ export class FileReturnComponent implements OnInit, OnDestroy {
             branchUniqueName: this.inputData.branchUniqueName
         };
 
-        this.fileReturnConfirmationConfiguration = this.generalService.fileReturnConfiguration(this.localeData, this.commonLocaleData,);
+        this.fileReturnConfirmationConfiguration = this.generalService.fileReturnConfiguration(this.localeData, this.commonLocaleData);
 
         let confirnationDialogRef = this.dialog.open(NewConfirmationModalComponent, {
             width: '630px',
@@ -113,7 +121,7 @@ export class FileReturnComponent implements OnInit, OnDestroy {
 
         confirnationDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response === "Yes") {
-                this.vatService.fileVatReturn(this.inputData.companyUniqueName, model).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                this.vatService.fileVatReturn(this.inputData.companyUniqueName, model, this.clientIp).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (res.status === 'success') {
                         if (res?.body) {
                             this.toaster.showSnackBar('success', res.body);

@@ -9,6 +9,7 @@
     "no_records_found": "No records found",
     "no_trn_available": "Please add TRN to your default address in order to view report.",
     "no_vrn_available": "Please add VRN to your default address in order to view report.",
+    "no_vat_available": "Please add VAT to your default address in order to view report.",
     "select_trn": "Select TRN",
     "select_entity": "Select Entity",
     "a": "A =",
@@ -31,5 +32,10 @@
     "connect_to_hmrc": "Connect to HMRC",
     "connected_to_hmrc": "Connected to HMRC",
     "select_year_label": "Select Year",
-    "file_return_confirmation":"When you submit this VAT information you are making a legal declaration that the information is true and complete. A false declaration can result in prosecution."
+    "file_return_confirmation":"When you submit this VAT information you are making a legal declaration that the information is true and complete. A false declaration can result in prosecution.",
+    "tax_percentage": "Tax Percentage",
+    "for_office_use": "For Office use",
+    "mat_code": "Mat. Code",
+    "value_of_supply": "Value of Supply",
+    "output_tax": "Output Tax"
 }

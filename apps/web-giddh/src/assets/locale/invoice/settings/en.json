@@ -2,6 +2,7 @@
     "general": "General",
     "general_settings_applicable": "(These settings will be applicable on Estimates, Proforma and Invoices)",
     "narration_on_mobile": "Show Narration on Ledger",
+    "add_address_manually_on_voucher": "Add Address Manually on Voucher",
     "email_sms": "Email/SMS",
     "from_email": "From Email",
     "enter_email": "Enter email id",

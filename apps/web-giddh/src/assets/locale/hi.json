@@ -211,7 +211,9 @@
         "quarterly": "तिमाही",
         "half_yearly": "अर्धवार्षिक",
         "yearly": "वार्षिक",
-        "weekly": "साप्ताहिक"
+        "weekly": "साप्ताहिक",
+        "month": "महिना",
+        "year": "वर्ष"
     },
     "app_tax_subtypes": {
         "receivable": "प्राप्य",
@@ -721,5 +723,8 @@
     "domain_verification": "बाहरी मेल के लिए डोमेन सत्यापन",
     "app_renew_bank_connection": "बैंक कनेक्शन नवीनीकृत करें",
     "app_select_printer": "प्रिंटर चुनें",
-    "app_help": "मदद"
+    "app_help": "मदद",
+    "app_applicable_date": "लागू तिथि",
+    "app_name_placeholder": "नाम दर्ज करें",
+    "app_county": "काउंटी"
 }

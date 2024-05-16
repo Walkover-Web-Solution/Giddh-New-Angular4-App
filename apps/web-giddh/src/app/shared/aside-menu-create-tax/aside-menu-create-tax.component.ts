@@ -24,9 +24,9 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     @Input() public tax: TaxResponse;
     @Input() public asidePaneState: string;
     /* This will hold local JSON data */
-    @Input() public localeData: any = {};
+    public localeData: any = {};
     /* This will hold common JSON data */
-    @Input() public commonLocaleData: any = {};
+    public commonLocaleData: any = {};
     public taxList: IOption[] = [];
     public duration: IOption[] = [];
     public tdsTcsTaxSubTypes: IOption[] = [];
@@ -45,6 +45,10 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+    /** This holds dialog open from other tax or create voucher */
+    @Input() public otherTax: boolean;
+    /** Observable for tax created successfully */
+    public isTaxCreatedSuccessfully : boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -59,17 +63,8 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         for (let i = 1; i <= 31; i++) {
             this.days.push({ label: i?.toString(), value: i?.toString() });
         }
-        this.duration = [
-            { label: this.commonLocaleData?.app_duration?.monthly, value: 'MONTHLY' },
-            { label: this.commonLocaleData?.app_duration?.quarterly, value: 'QUARTERLY' },
-            { label: this.commonLocaleData?.app_duration?.half_yearly, value: 'HALFYEARLY' },
-            { label: this.commonLocaleData?.app_duration?.yearly, value: 'YEARLY' }
-        ];
-
-        this.tdsTcsTaxSubTypes = [
-            { label: this.commonLocaleData?.app_tax_subtypes?.receivable, value: 'rc' },
-            { label: this.commonLocaleData?.app_tax_subtypes?.payable, value: 'pay' }
-        ];
+        
+        this.translateDropdownValues();
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && activeCompany.countryV2) {
@@ -93,7 +88,17 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
 
         this.store
             .pipe(select(p => p.company && p.company.isTaxCreationInProcess), takeUntil(this.destroyed$))
-            .subscribe(result => this.isTaxCreateInProcess = result);
+            .subscribe(result => {
+                this.isTaxCreateInProcess = result;
+            });
+
+        this.store
+            .pipe(select(p => p.company && p.company.isTaxCreatedSuccessfully), takeUntil(this.destroyed$))
+            .subscribe(result => {
+                if(result && this.otherTax) {
+                    this.closeEvent.emit();
+                }
+            });
         this.store
             .pipe(select(p => p.company && p.company.isTaxUpdatingInProcess), takeUntil(this.destroyed$))
             .subscribe(result => this.isUpdateTaxInProcess = result);
@@ -250,5 +255,25 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+    }
+
+    public translationComplete(event: any): void {
+        if (event) {
+            this.translateDropdownValues();
+        }
+    }
+
+    private translateDropdownValues(): void {
+        this.duration = [
+            { label: this.commonLocaleData?.app_duration?.monthly, value: 'MONTHLY' },
+            { label: this.commonLocaleData?.app_duration?.quarterly, value: 'QUARTERLY' },
+            { label: this.commonLocaleData?.app_duration?.half_yearly, value: 'HALFYEARLY' },
+            { label: this.commonLocaleData?.app_duration?.yearly, value: 'YEARLY' }
+        ];
+
+        this.tdsTcsTaxSubTypes = [
+            { label: this.commonLocaleData?.app_tax_subtypes?.receivable, value: 'rc' },
+            { label: this.commonLocaleData?.app_tax_subtypes?.payable, value: 'pay' }
+        ];
     }
 }

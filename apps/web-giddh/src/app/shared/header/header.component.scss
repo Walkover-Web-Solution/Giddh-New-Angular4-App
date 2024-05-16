@@ -2,6 +2,16 @@
     width: 100px;
 }
 
+.company-button {
+    background-color: var(--color-white);
+}
+
+.custom-header {
+    background-color: var(--color-giddh-blue);
+    padding: 15px;
+    min-height: 60px;
+}
+
 .nav-left-bar {
     position: fixed;
     top: var(--top-sidebar);
@@ -309,10 +319,8 @@ ul.sub-list {
 .white-row {
     background-color: var(--color-primary-header-notification-background);
     padding: 10px 15px;
-    margin-bottom: 10px;
     font-size: var(--font-size-15);
     box-shadow: 1px 1px 3px var(--color-primary-common-box-shadow);
-    margin-top: 10px;
     color: var(--color-primary-header-notification-text);
 
     p {
@@ -904,4 +912,7 @@ aside-setting {
 .schedule-now-link {
     width: 1px;
     height: 1px;
+}
+.hide-sidebar {
+    display: none;
 }

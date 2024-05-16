@@ -1,5 +1,6 @@
 {
 	"tab_heading": "छूट बनाएं",
+    "discount_type": "छूट का प्रकार",
 	"discount_type_placeholder": "छूट का प्रकार चुनें",
 	"linked_accounts_label": "लिंक किए गए खाते",
 	"linked_accounts_placeholder": "छूट का चयन करें",
@@ -8,5 +9,6 @@
 		"as_per_value": "मूल्य के अनुसार",
 		"as_per_percent": "प्रतिशत के अनुसार"
 	},
-	"delete_discount": "क्या आप वाकई इस छूट को हटाना चाहते हैं?"
+	"delete_discount": "क्या आप वाकई इस छूट को हटाना चाहते हैं?",
+    "discount_value_placeholder": "मान दर्ज करें"
 }

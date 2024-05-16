@@ -1,0 +1,209 @@
+.vouchers {
+    background-color: var(--color-common-quinary-background-for-all-components);
+
+    .vouchers-address-form {
+
+        input,
+        textarea {
+            background: var(--color-transparent-background);
+
+            &::placeholder {
+                color: var(--color-gray) !important;
+            }
+        }
+
+        reactive-dropdown-field {
+            .mat-mdc-form-field-infix {
+                padding-bottom: 1px !important;
+                min-height: 1rem !important;
+                padding-top: 0px !important;
+            }
+
+            .mdc-text-field--no-label {
+                padding: 0 !important;
+            }
+        }
+    }
+
+    .po-mat-select {
+        padding: 10px 0;
+        height: 48px;
+
+        .mat-mdc-select-trigger {
+            padding: 0 10px;
+        }
+    }
+
+    input,
+    textarea,
+    mat-select {
+
+        &.form-control {
+
+            &:hover,
+            &:focus {
+                border-color: var(--color-common-tertiary-text) !important;
+            }
+        }
+    }
+
+    .vouchers-large-container {
+        table {
+            tr{
+                td {
+                    reactive-dropdown-field {
+                        mat-form-field {
+                            .mat-mdc-text-field-wrapper{
+                                padding-left: 0;
+                                padding-right: 0;
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+        .change-currency {
+            .currency-input-wrapper {
+                .text-field-container {
+                    display: flex;
+                    align-items: center;
+                    column-gap: 8px;
+
+                    input {
+                        width: 80px;
+                    }
+                }
+            }
+        }
+    }
+
+    .vouchers-actions {
+        .vouchers-more-option-btn {
+            .caret {
+                transform: rotate(180deg);
+            }
+        }
+    }
+}
+
+.mat-menu-width-large {
+    min-width: 400px;
+    max-height: 50vh;
+}
+
+.vouchers-address-menu {
+    position: relative;
+
+    .vouchers-add-new {
+        position: sticky;
+        bottom: 0;
+        color: var(--color-giddh-blue);
+        z-index: 1;
+        background: var(--color-toast-primary-text) !important;
+        min-height: 0 !important;
+        padding-top: 10px;
+        padding-bottom: 5px;
+    }
+}
+
+// disable slide toggle
+.slide-toggle {
+    .mdc-form-field {
+        column-gap: 10px;
+    }
+}
+
+.disable-toggle {
+    .mdc-switch {
+        .mdc-switch__ripple {
+            display: none;
+        }
+    }
+}
+
+.text-success {
+    color: var(--color-teal);
+}
+
+// display
+.d-grid {
+    display: grid;
+}
+
+// template scroll
+.template-scroll {
+    overflow-y: auto;
+    padding-right: 15px;
+    max-height: calc(100vh - 245px);
+}
+
+.width-80 {
+    width: 80px;
+}
+
+.po-options-line {
+    height: auto !important;
+    padding-bottom: 5px !important;
+
+    .mat-select-search-input {
+        padding: 16px 36px 16px 16px !important;
+        box-sizing: border-box !important;
+    }
+
+    .mat-select-search-inner {
+        position: absolute !important;
+        top: 0 !important;
+        border-bottom-width: 1px !important;
+        border-bottom-style: solid !important;
+        z-index: 100 !important;
+        font-size: inherit !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+    }
+
+    .mat-select-search-clear {
+        margin-right: 0 !important;
+    }
+
+    .mat-pseudo-checkbox-checked {
+        background: var(--color-giddh-blue) !important;
+    }
+
+    .po-option-value {
+        float: left !important;
+        width: 100% !important;
+        line-height: 1.2 !important;
+        color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
+        font-size: var(--font-size-12);
+    }
+
+    .mat-option-text {
+        line-height: 1.8 !important;
+    }
+
+}
+
+.options-line-value {
+    padding: 10px;
+    vertical-align: middle;
+    min-height: 67px !important;
+    border-bottom: 1px solid var(--color-common-primary-border);
+
+    .option-label {
+        color: var(--color-common-primary-text);
+    }
+
+    .item-unique {
+
+        .option-value {
+            color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
+            font-size: var(--font-size-15);
+        }
+
+        .option-value-more {
+            color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
+            font-size: var(--font-size-12);
+        }
+    }
+}

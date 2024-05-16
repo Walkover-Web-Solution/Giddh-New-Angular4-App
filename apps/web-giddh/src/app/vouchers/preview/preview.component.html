@@ -1,0 +1,135 @@
+<ng-container>
+    <hamburger-menu class="hamburger-menu"></hamburger-menu>
+    <div class="invoice-preview-wrapper">
+        <div class="preview-list h-100 pd-b15">
+            <div class="d-flex align-items-center column-gap5 justify-content-between pd-15 w-100 list-responsive row-gap1">
+                <div class="position-relative search-field">
+                    <text-field class="width-inherit" [type]="'text'" [cssClass]="'form-control pl-3'"
+                        [placeholder]="'Search'">
+                    </text-field>
+                    <i class="icon-search position-absolute"></i>
+                </div>
+                <button mat-stroked-button color="primary" [matMenuTriggerFor]="newInvoice" class="invoice-btn">
+                    <span>+ New Invoice</span>
+                    <i class="icon-arrow-down icon-font-11 ml-2"></i>
+                </button>
+                <mat-menu #newInvoice="matMenu">
+                    <button mat-menu-item>Cash Invoice</button>
+                    <button mat-menu-item>Sales Invoice</button>
+                </mat-menu>
+            </div>
+            <div class="mat-grid-wrapper">
+                <div class="mat-list-wrap">
+                    <mat-list>
+                        <cdk-virtual-scroll-viewport [itemSize]="62">
+                            <mat-list-item class="single-invoice-detail cp border-bottom">
+                                <div class="d-flex justify-content-between align-items-center column-gap5">
+                                    <div>
+                                        <span class="font-12 text-blue"> 240122-1 </span>
+                                        <span class="font-12 light-gray"> | 22-01-2024 </span>
+                                        <p class="black-color">00000000</p>
+                                    </div>
+                                    <div>
+                                        <span class="black-color">233.00 </span>
+                                    </div>
+                                </div>
+                            </mat-list-item>
+                        </cdk-virtual-scroll-viewport>
+                    </mat-list>
+                </div>
+            </div>
+        </div>
+        <div class="preview-content pd-15">
+            <div class="preview-header d-flex justify-content-between pd-t15 mr-b4 flex-wrap row-gap1">
+                <div>
+                    <h3 class="font-16 fw-bold"> 240122-1 </h3>
+                    <p>00000000</p>
+                </div>
+                <div class="d-flex column-gap1 flex-wrap row-gap1">
+                    <button mat-stroked-button color="primary" (click)="toggleActivityHistoryAsidePane()">
+                        <i class="icon-history-icon mr-1"></i>
+                        History
+                    </button>
+                    <div class="d-flex action-btn">
+                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Edit'"
+                            [matTooltipPosition]="'above'"><i class="icon-edit-pencil"></i></button>
+                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Send Email'"
+                            [matTooltipPosition]="'above'" (click)="openEmailSendDialog()"><i class="icon-envelope"></i></button>
+                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Print'"
+                            [matTooltipPosition]="'above'"><i class="fa fa-print"></i></button>
+                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Print Receipt'"
+                            [matTooltipPosition]="'above'"><i class="fa fa-print"></i></button>
+                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Download PDF'"
+                            [matTooltipPosition]="'above'"><i class="icon-download-circle"></i></button>
+                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Delete'"
+                            [matTooltipPosition]="'above'"><i class="icon-trash"></i></button>
+                    </div>
+                    <button mat-stroked-button color="primary" [matMenuTriggerFor]="changeStatus">
+                        <span>Change Status</span>
+                        <i class="icon-arrow-down icon-font-11 ml-2"></i>
+                    </button>
+                    <mat-menu #changeStatus="matMenu">
+                        <button mat-menu-item (click)="onPerformAction()">Paid</button>
+                        <button mat-menu-item (click)="adjustPayment()">Adjust Amount</button>
+                        <button mat-menu-item>Unpaid</button>
+                        <button mat-menu-item>Hold</button>
+                        <button mat-menu-item>Cancel</button>
+                    </mat-menu>
+                    <button mat-stroked-button>
+                        Cancel
+                    </button>
+                    <button mat-stroked-button class="mat-icon-sm-btn">
+                        <i class="icon-cross"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="preview-box d-flex">
+                <div>
+                    <span class="d-flex justify-content-center align-items-center border-r">
+                        <img src="assets/images/dollar-icon.svg" alt="img">
+                    </span>
+                    <p class="my-1">Receive payments in cash/check and record <br> payments manually.</p>
+                    <a href="javascript:;" (click)="onPerformAction()">Receive Payment</a>
+                </div>
+                <div>
+                    <span class="d-flex justify-content-center align-items-center border-r">
+                        <img src="assets/images/send-icon.svg" alt="img">
+                    </span>
+                    <p class="my-1">You can now email this invoice to your customer or <br> mark it as sent.</p>
+                    <a href="javascript:;" (click)="openEmailSendDialog()">Send Invoice</a>
+                </div>
+            </div>
+            <div>
+                <no-data
+                    class="mr-t2 d-block text-center"
+                    [primaryMessage]="commonLocaleData?.app_attachment_not_allowed"
+                    [primaryMessageClass]="'bold'"
+                    [secondaryMessage]="' '"
+                ></no-data>
+            </div>
+            <div class="pdf-preview">
+                <h5 class="pd-l15 pd-t1 pd-b1">
+                    <strong class="text-blue">Giddh Auto Generated Bill</strong>
+                </h5>
+                <iframe src="" frameborder="0"></iframe>
+            </div>
+        </div>
+    </div>
+</ng-container>
+
+<!-- paid-dialog -->
+<ng-template #paidDialog>
+    <app-payment-dialog></app-payment-dialog>
+</ng-template>
+<!-- adjust-payment-dialog -->
+<ng-template #adjustPaymentDialog>
+    <app-adjust-payment-dialog></app-adjust-payment-dialog>
+</ng-template>
+<!-- history dialog -->
+<ng-template #historyAsideDialog>
+    <app-history-dialog></app-history-dialog>
+</ng-template>
+<!-- email-dialog -->
+<ng-template #emailSendDialog>
+    <app-email-send-dialog></app-email-send-dialog>
+</ng-template>

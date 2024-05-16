@@ -1,0 +1,59 @@
+<ng-container
+    appTranslate
+    [file]="'subscription'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+
+    <div class="d-flex align-items-center justify-content-between border-bottom p-3">
+        <h3 class="font-16">{{ localeData?.request_transfer }}</h3>
+        <i mat-dialog-close class="icon-cross icon-font-16"></i>
+    </div>
+    <mat-dialog-content class="w-100">
+        <div class="form-container pd-15">
+            <p class="mb-3 text-black">
+                {{ localeData?.request_transfer_message }}
+            </p>
+            <form [formGroup]="transferForm" (ngSubmit)="onSubmit()">
+                <div class="d-flex column-gap15">
+                    <div class="form-group w-50">
+                        <input-field
+                            [type]="'text'"
+                            [name]="'name'"
+                            [placeholder]="commonLocaleData?.app_name"
+                            [required]="true"
+                            formControlName="name"
+                            [showError]="isFormSubmitted && !transferForm.get('name')?.value"
+                        >
+                        </input-field>
+                    </div>
+                    <div class="form-group w-50">
+                        <input-field
+                            [type]="'text'"
+                            [name]="'lastname'"
+                            [placeholder]="commonLocaleData?.app_last + ' ' + commonLocaleData?.app_name"
+                            formControlName="lastName"
+                        >
+                        </input-field>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input-field
+                        [type]="'text'"
+                        [name]="'email'"
+                        [placeholder]="commonLocaleData?.app_email_id"
+                        [required]="true"
+                        formControlName="email"
+                        [showError]="isFormSubmitted && !transferForm.get('email')?.value"
+                    >
+                    </input-field>
+                </div>
+                <div class="d-flex column-gap15 justify-content-end">
+                    <button mat-stroked-button color="primary" (click)="onSubmit()">
+                        {{ localeData?.request_transfer }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </mat-dialog-content>
+</ng-container>

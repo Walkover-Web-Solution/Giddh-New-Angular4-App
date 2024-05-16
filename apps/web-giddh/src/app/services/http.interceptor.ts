@@ -16,7 +16,7 @@ import { LoginActions } from '../actions/login.action';
 @Injectable()
 export class GiddhHttpInterceptor implements HttpInterceptor {
 
-    private isOnline: boolean = navigator.onLine;
+    private isOnline: boolean = true;
     public dayjs = dayjs;
 
     constructor(

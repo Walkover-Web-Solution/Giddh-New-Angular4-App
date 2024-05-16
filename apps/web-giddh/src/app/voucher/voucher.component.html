@@ -780,51 +780,38 @@
                                                                     onLoad
                                                                     (elementLoaded)="setIndex('accountShipping', i)"
                                                                     *ngIf="
-                                                                        (invFormData.accountDetails.shippingDetails
-                                                                            .state?.name ||
-                                                                            invFormData.accountDetails.shippingDetails
-                                                                                .stateName ||
-                                                                            invFormData.accountDetails.shippingDetails
-                                                                                .county?.name ||
-                                                                            invFormData.accountDetails.shippingDetails
-                                                                                .gstNumber ||
-                                                                            invFormData.accountDetails.shippingDetails
-                                                                                .taxNumber ||
-                                                                            invFormData.accountDetails.shippingDetails.address[0]?.trim()) &&
-                                                                        (!invFormData.accountDetails.shippingDetails
-                                                                            .state?.name ||
-                                                                            (invFormData.accountDetails.shippingDetails
-                                                                                .state?.name &&
+                                                                        (invFormData.accountDetails.shippingDetails?.state?.name ||
+                                                                            invFormData.accountDetails.shippingDetails?.stateName ||
+                                                                            invFormData.accountDetails.shippingDetails?.county?.name ||
+                                                                            invFormData.accountDetails.shippingDetails?.gstNumber ||
+                                                                            invFormData.accountDetails.shippingDetails?.taxNumber ||
+                                                                            invFormData.accountDetails.shippingDetails?.address[0]?.trim()) &&
+                                                                        (!invFormData.accountDetails.shippingDetails?.state?.name ||
+                                                                            (invFormData.accountDetails.shippingDetails?.state?.name &&
                                                                                 (invFormData.accountDetails
-                                                                                    .shippingDetails.state?.name ===
+                                                                                    .shippingDetails?.state?.name ===
                                                                                     address.state?.name ||
                                                                                     invFormData.accountDetails
-                                                                                        .shippingDetails.stateName ===
+                                                                                        .shippingDetails?.stateName ===
                                                                                         address.state?.name))) &&
-                                                                        (!invFormData.accountDetails.shippingDetails
-                                                                            .county?.name ||
-                                                                            (invFormData.accountDetails.shippingDetails
-                                                                                .county?.name &&
+                                                                        (!invFormData.accountDetails.shippingDetails?.county?.name ||
+                                                                            (invFormData.accountDetails.shippingDetails?.county?.name &&
                                                                                 invFormData.accountDetails
-                                                                                    .shippingDetails.county?.name ===
+                                                                                    .shippingDetails?.county?.name ===
                                                                                     address.county?.name)) &&
-                                                                        (!invFormData.accountDetails.shippingDetails
-                                                                            .gstNumber ||
-                                                                            (invFormData.accountDetails.shippingDetails
-                                                                                .gstNumber &&
+                                                                        (!invFormData.accountDetails.shippingDetails?.gstNumber ||
+                                                                            (invFormData.accountDetails.shippingDetails?.gstNumber &&
                                                                                 invFormData.accountDetails
-                                                                                    .shippingDetails.gstNumber ===
+                                                                                    .shippingDetails?.gstNumber ===
                                                                                     address.gstNumber)) &&
-                                                                        (!invFormData.accountDetails.shippingDetails
-                                                                            .taxNumber ||
-                                                                            (invFormData.accountDetails.shippingDetails
-                                                                                .taxNumber &&
+                                                                        (!invFormData.accountDetails.shippingDetails?.taxNumber ||
+                                                                            (invFormData.accountDetails.shippingDetails?.taxNumber &&
                                                                                 invFormData.accountDetails
-                                                                                    .shippingDetails.taxNumber ===
+                                                                                    .shippingDetails?.taxNumber ===
                                                                                     address.gstNumber)) &&
-                                                                        (!invFormData.accountDetails.shippingDetails.address[0]?.trim() ||
-                                                                            (invFormData.accountDetails.shippingDetails.address[0]?.trim() &&
-                                                                                invFormData.accountDetails.shippingDetails.address[0]?.trim() ===
+                                                                        (!invFormData.accountDetails.shippingDetails?.address[0]?.trim() ||
+                                                                            (invFormData.accountDetails.shippingDetails?.address[0]?.trim() &&
+                                                                                invFormData.accountDetails.shippingDetails?.address[0]?.trim() ===
                                                                                     address.address?.trim()))
                                                                     "
                                                                 ></i>

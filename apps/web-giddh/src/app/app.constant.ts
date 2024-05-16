@@ -1,5 +1,6 @@
 import * as dayjs from 'dayjs';
 import * as quarterOfYear from 'dayjs/plugin/quarterOfYear' // load on demand
+import { ajax } from 'rxjs/ajax';
 dayjs.extend(quarterOfYear) // use plugin
 
 export const Configuration = {
@@ -13,6 +14,67 @@ export const Configuration = {
 export enum BusinessTypes {
     Registered = 'Registered',
     Unregistered = 'Unregistered'
+};
+
+export const MOBILE_NUMBER_UTIL_URL = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js';
+export const INTL_INPUT_OPTION = {
+    nationalMode: true,
+    utilsScript: MOBILE_NUMBER_UTIL_URL,
+    autoHideDialCode: false,
+    separateDialCode: false,
+    initialCountry: 'auto',
+    geoIpLookup: (success: any, failure: any) => {
+        let countryCode = 'in';
+        const fetchIPApi = ajax({
+            url: MOBILE_NUMBER_SELF_URL,
+            method: 'GET',
+        });
+
+        fetchIPApi.subscribe({
+            next: (res: any) => {
+                if (res?.response?.ipAddress) {
+                    const fetchCountryByIpApi = ajax({
+                        url: MOBILE_NUMBER_IP_ADDRESS_URL + res.response.ipAddress,
+                        method: 'GET',
+                    });
+
+                    fetchCountryByIpApi.subscribe({
+                        next: (fetchCountryByIpApiRes: any) => {
+                            if (fetchCountryByIpApiRes?.response?.countryCode) {
+                                return success(fetchCountryByIpApiRes.response.countryCode);
+                            } else {
+                                return success(countryCode);
+                            }
+                        },
+                        error: (fetchCountryByIpApiErr) => {
+                            const fetchCountryByIpInfoApi = ajax({
+                                url: MOBILE_NUMBER_ADDRESS_JSON_URL + `${res.response.ipAddress}/json`,
+                                method: 'GET',
+                            });
+
+                            fetchCountryByIpInfoApi.subscribe({
+                                next: (fetchCountryByIpInfoApiRes: any) => {
+                                    if (fetchCountryByIpInfoApiRes?.response?.country) {
+                                        return success(fetchCountryByIpInfoApiRes.response.country);
+                                    } else {
+                                        return success(countryCode);
+                                    }
+                                },
+                                error: (fetchCountryByIpInfoApiErr) => {
+                                    return success(countryCode);
+                                },
+                            });
+                        },
+                    });
+                } else {
+                    return success(countryCode);
+                }
+            },
+            error: (err) => {
+                return success(countryCode);
+            },
+        });
+    },
 };
 
 export const APP_DEFAULT_TITLE = '';
@@ -232,7 +294,7 @@ export const INVALID_STOCK_ERROR_MESSAGE = 'Both Unit and Rate fields are mandat
 
 /** Vat supported country codes */
 export const VAT_SUPPORTED_COUNTRIES = [
-    'QA', 'BH', 'AE', 'SA', 'OM', 'KW', 'GB'
+    'QA', 'BH', 'AE', 'SA', 'OM', 'KW', 'GB', 'ZW'
 ];
 
 export const API_POSTMAN_DOC_URL = 'https://apidoc.giddh.com/';
@@ -247,6 +309,10 @@ export const HIGH_RATE_FIELD_PRECISION = 16;
 
 /** Regex to remove trailing zeros from a string representation of number */
 export const REMOVE_TRAILING_ZERO_REGEX = /^([\d,' ]*)$|^([\d,' ]*)\.0*$|^([\d,' ]+\.[0-9]*?)0*$/;
+
+/** Regex for mobile number */
+export const PHONE_NUMBER_REGEX = /^[0-9-+()\/\\ ]+$/;
+
 
 /** Type of voucher that is adjusted */
 export enum AdjustedVoucherType {
@@ -532,11 +598,12 @@ export enum BootstrapToggleSwitch {
     Off = 'gray',
     Size = 'mini'
 }
-
-export const MOBILE_NUMBER_UTIL_URL = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js';
-export const MOBILE_NUMBER_SELF_URL = 'https://api.db-ip.com/v2/free/self';
+export const MOBILE_NUMBER_SELF_URL = `https://api.db-ip.com/v2/free/self`;
 export const MOBILE_NUMBER_IP_ADDRESS_URL = 'http://ip-api.com/json/';
 export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
+
+
+
 export const OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
 export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1.amazonaws.com/sample-file-';

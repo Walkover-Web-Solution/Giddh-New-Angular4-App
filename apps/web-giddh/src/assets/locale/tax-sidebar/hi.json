@@ -15,5 +15,7 @@
     "add_vrn": "वीआरएन जोड़ें",
     "add_address": "पता बनाएँ",
     "filing_status": "दाखिल स्थिति",
-    "vat_obligations": "वैट दायित्व"
+    "vat_obligations": "वैट दायित्व",
+    "with_held_setting": "हेल्ड सेटिंग के साथ",
+    "add_vat": "वैट जोड़ें"
 }

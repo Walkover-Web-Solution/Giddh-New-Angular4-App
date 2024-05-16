@@ -1,5 +1,5 @@
-<div class="custom-input-field communication-input">
-    <mat-form-field floatLabel="never" class="w-100">
+<div [ngClass]="{'custom-input-field communication-input': !appearance }">
+    <mat-form-field [floatLabel]="!appearance ? 'never' : null" class="w-100" [appearance]="appearance">
         <mat-chip-grid #matChipList>
             <mat-chip-row
                 *ngFor="let chip of chipList; let indx = index"
@@ -33,8 +33,18 @@
             />
         </mat-chip-grid>
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selectOption($event); selectField.value = ''">
-            <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
-                {{ option.label }}
+            <mat-option [ngClass]="{'po-options-line': isPurchaseOrder }" *ngFor="let option of fieldFilteredOptions" [value]="option">
+                <ng-container *ngIf="!isPurchaseOrder">{{ option.label }}</ng-container>
+                <ng-container *ngIf="isPurchaseOrder">
+                    <span class="po-option-label"> {{ option?.label }}</span>
+                    <span class="po-option-value" *ngIf="option?.additional?.pending">
+                        {{ localeData?.pending }}: {{ option?.additional?.pending }}</span
+                    >
+                    <span class="po-option-value" *ngIf="option.additional?.grandTotal">
+                        {{ commonLocaleData?.app_amount }}:
+                        {{ option?.additional?.grandTotal }}</span
+                    >
+                </ng-container>
             </mat-option>
         </mat-autocomplete>
     </mat-form-field>

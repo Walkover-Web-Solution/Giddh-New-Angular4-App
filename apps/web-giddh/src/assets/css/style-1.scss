@@ -460,6 +460,12 @@ aside-menu-account .container-fluid {
 .column-gap2 {
     column-gap: 20px;
 }
+.row-gap1 {
+    row-gap: 10px;
+}
+.row-gap15 {
+    row-gap: 15px;
+}
 
 .border-bottom {
     border-bottom-color: var(--color-ledger-grid-border-color);
@@ -537,7 +543,7 @@ aside-menu-account .container-fluid {
     white-space: nowrap;
 }
 .cp {
-    cursor: pointer;
+    cursor: pointer !important;
 }
 .thead {
     font-size: var(--font-size-15);
@@ -667,15 +673,6 @@ aside-menu-account .container-fluid {
 }
 #getGroupModal.get-group-modal #middleBody {
     height: auto;
-}
-/*typography styles*/
-
-.font-15 {
-    font-size: var(--font-size-15);
-}
-
-.font-16 {
-    font-size: var(--font-size-16);
 }
 /*accounts list style*/
 .search-loading {
@@ -1331,6 +1328,20 @@ table:focus {
         }
     }
 }
+
+.column-gap5 {
+    column-gap: 5px;
+}
+.column-gap1 {
+    column-gap: 10px;
+}
+.column-gap15 {
+    column-gap: 15px;
+}
+.column-gap2 {
+    column-gap: 20px;
+}
+
 .bulk-entry-list {
     .mat-expansion-panel {
         .mat-expansion-panel-header {
@@ -2153,6 +2164,7 @@ bs-datepicker-container {
     -ms-flex-pack: justify;
     justify-content: space-between;
 }
+
 /* cmdk modal styles */
 .modal-dialog.universal_modal .modal-body {
     padding: 0;

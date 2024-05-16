@@ -19,7 +19,6 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { cloneDeep } from '../lodash-optimized';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
-import { SettingsFinancialYearActions } from '../actions/settings/financial-year/financial-year.action';
 import { SettingsFinancialYearService } from '../services/settings.financial-year.service';
 @Component({
     selector: 'app-vat-report',
@@ -79,13 +78,23 @@ export class VatReportComponent implements OnInit, OnDestroy {
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /** Hold uae main table displayed columns */
-    public displayedColumns: string[] = ['number', 'name', 'description', 'aed_amt', 'vat_amt', 'adjustment'];
+    public displayedColumns: string[] = ['number', 'name', 'aed_amt', 'vat_amt', 'adjustment'];
     /** Hold uae bottom table displayed columns */
     public uaeDisplayedColumns: string[] = ['number', 'description', 'tooltip'];
     /** Hold uk main table and bottom table displayed columns */
     public ukDisplayedColumns: string[] = ['number', 'name', 'aed_amt'];
+    /** Hold Zimbabwe main table displayed columns */
+    public zwDisplayedColumns: string[] = ['name', 'mat-code', 'vos-amount', 'vos-decimal', 'ot-amount', 'ot-decimal'];
+    /** Hold Zimbabwe table header row displayed columns */
+    public zwDisplayedHeaderColumns = ['section', 'office-use', 'value-of-supply', 'output-tax'];
+    /** Hold Zimbabwe table displayed columns for last section */
+    public zwDisplayedColumnsForLastSection: string[] = ['name', 'amount', 'decimal'];
+    /** Holds Section Number which  show Total Output Tax Row */
+    public showTotalOutputTaxIn: number[] = [9, 19, 20, 21, 22, 23];
     /** True if active country is UK */
     public isUKCompany: boolean = false;
+    /** True if active country is Zimbabwe */
+    public isZimbabweCompany: boolean = false;
     /** Hold static months array */
     public months: any[] = [
         { label: 'January', value: 1 },
@@ -111,6 +120,20 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public selectedYear: any = "";
     /** Hold HMRC portal url */
     public connectToHMRCUrl: string = null;
+    /** Holds Currency List for Zimbabwe Amount exchange rate */
+    public vatReportCurrencyList: any[] = [
+        { label: 'BWP', value: 'BWP', additional: { symbol: 'P' } },
+        { label: 'USD', value: 'USD', additional: { symbol: '$' } },
+        { label: 'GBP', value: 'GBP', additional: { symbol: '£' } },
+        { label: 'INR', value: 'INR', additional: { symbol: '₹' } },
+        { label: 'EUR', value: 'EUR', additional: { symbol: '€' } }
+    ];
+    /** Holds Current Currency Code for Zimbabwe report */
+    public vatReportCurrencyCode: 'BWP' | 'USD' | 'GBP' | 'INR' | 'EUR' = this.vatReportCurrencyList[0].value;
+    /** Holds Current Currency Symbol for Zimbabwe report */
+    public vatReportCurrencySymbol: string = this.vatReportCurrencyList[0].additional.symbol;
+    /** Holds Current Currency Map Amount Decimal currency wise for Zimbabwe report */
+    public vatReportCurrencyMap: string[];
 
     constructor(
         private gstReconcileService: GstReconcileService,
@@ -123,13 +146,22 @@ export class VatReportComponent implements OnInit, OnDestroy {
         private settingsBranchAction: SettingsBranchActions,
         private breakpointObserver: BreakpointObserver,
         private modalService: BsModalService,
-        private settingsFinancialYearActions: SettingsFinancialYearActions,
         public settingsFinancialYearService: SettingsFinancialYearService
     ) {
         this.getFinancialYears();
     }
 
     public ngOnInit() {
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany && !this.activeCompany) {
+                this.activeCompany = activeCompany;
+                this.isUKCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'GB';
+                this.isZimbabweCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'ZW';
+                if (this.isUKCompany) {
+                    this.getURLHMRCAuthorization();
+                }
+            }
+        });
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
             .observe(['(max-width: 767px)'])
@@ -151,16 +183,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
         });
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany && !this.activeCompany) {
-                this.activeCompany = activeCompany;
-                this.isUKCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'GB' ? true : false;
-
-                if (this.isUKCompany) {
-                    this.getURLHMRCAuthorization();
-                }
-            }
-        });
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
@@ -234,14 +256,22 @@ export class VatReportComponent implements OnInit, OnDestroy {
         }
 
         if (this.taxNumber) {
+            let countryCode;
             let vatReportRequest = new VatReportRequest();
             vatReportRequest.from = this.fromDate;
             vatReportRequest.to = this.toDate;
             vatReportRequest.taxNumber = this.taxNumber;
             vatReportRequest.branchUniqueName = this.currentBranch?.uniqueName;
+
+            if (this.isZimbabweCompany) {
+                vatReportRequest.currencyCode = this.vatReportCurrencyCode;
+                countryCode = 'ZW';
+            } else {
+                countryCode = 'UK';
+            }
             this.vatReport = [];
             this.isLoading = true;
-            if (this.activeCompany?.countryV2?.alpha2CountryCode !== 'GB') {
+            if (!this.isUKCompany && !this.isZimbabweCompany) {
                 this.vatService.getVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (res) {
                         this.isLoading = false;
@@ -254,11 +284,17 @@ export class VatReportComponent implements OnInit, OnDestroy {
                     }
                 });
             } else {
-                this.vatService.getUKVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                this.vatService.getCountryWiseVatReport(vatReportRequest, countryCode).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (res) {
                         this.isLoading = false;
-                        if (res.status === 'success') {
+                        if (res && res?.status === 'success' && res?.body) {
                             this.vatReport = res.body?.sections;
+                            if (this.isZimbabweCompany) {
+                                this.vatReportCurrencyCode = res.body?.currency?.code;
+                                this.vatReportCurrencySymbol = this.vatReportCurrencyList.filter(item => item.label === res.body?.currency?.code).map(item => item.additional.symbol).join();
+                                this.vatReportCurrencyMap = res.body?.currencyMap;
+                            }
+
                             this.cdRef.detectChanges();
                         } else {
                             this.toasty.errorToast(res.message);
@@ -270,12 +306,21 @@ export class VatReportComponent implements OnInit, OnDestroy {
     }
 
     public downloadVatReport() {
+        let countryCode;
         let vatReportRequest = new VatReportRequest();
         vatReportRequest.from = this.fromDate;
         vatReportRequest.to = this.toDate;
         vatReportRequest.taxNumber = this.taxNumber;
         vatReportRequest.branchUniqueName = this.currentBranch?.uniqueName;
-        this.vatService.downloadVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+
+        if (this.activeCompany?.countryV2?.alpha2CountryCode === 'ZW') {
+            vatReportRequest.currencyCode = this.vatReportCurrencyCode;
+            countryCode = 'ZW';
+        } else {
+            countryCode = 'UK';
+        }
+
+        this.vatService.downloadVatReport(vatReportRequest, countryCode).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === "success") {
                 let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
                 return saveAs(blob, `VatReport.xlsx`);
@@ -475,6 +520,19 @@ export class VatReportComponent implements OnInit, OnDestroy {
             ];
 
             return { startYear: startYear, endYear: endYear };
+        }
+    }
+
+    /**
+     * Handle Currency change dropdown and call VAT Report API
+     *
+     * @param {*} event
+     * @memberof VatReportComponent
+     */
+    public onCurrencyChange(event: any): void {
+        if (event) {
+            this.vatReportCurrencyCode = event.value;
+            this.getVatReport();
         }
     }
 }
