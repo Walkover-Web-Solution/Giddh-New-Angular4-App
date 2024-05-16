@@ -246,7 +246,7 @@
                                                         ></amount-field>
                                                     </ng-container>
                                                     <ng-container *ngIf="isKenyaCompany && vatReport[i]?.sections[vatReport[i]?.sections?.length -
-                                                    2]?.section !== element?.section && element?.totalAmountOfOutputTax">
+                                                    2]?.section !== element?.section">
                                                         <amount-field
                                                             class="d-inline-block"
                                                             [amount]="element?.totalAmountOfOutputTax"
