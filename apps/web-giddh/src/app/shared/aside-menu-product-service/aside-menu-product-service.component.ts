@@ -10,7 +10,6 @@ import { AppState } from '../../store';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { GeneralService } from '../../services/general.service';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
     selector: 'aside-menu-product-service',
@@ -34,6 +33,7 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
     @Input() public selectedVoucherType: string;
     /* This will hold branch transfer mode input  */
     @Input() public inputData: string = '';
+    @Input() public includeSearchedGroup: boolean = false;
     public autoFocusInChild: boolean = true;
     public isAddStockOpen: boolean = false;
     public isAddServiceOpen: boolean = false;

@@ -36,5 +36,7 @@
     "description": "विवरण",
     "confirm_delete_file": "क्या आप वाकई संलग्न फ़ाइल को हटाना चाहते हैं?",
     "print_voucher": "प्रिंट वाउचर",
-    "voucher_preview_unavailable": "अभी वाउचर पूर्वावलोकन उपलब्ध नहीं है! कृपया पुन: प्रयास करें.."
+    "voucher_preview_unavailable": "अभी वाउचर पूर्वावलोकन उपलब्ध नहीं है! कृपया पुन: प्रयास करें..",
+    "place_supply": "आपूर्ति का स्थान",
+    "amount_received": "रकम प्राप्त"
 }

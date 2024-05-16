@@ -10,7 +10,10 @@
         "estimate": "Estimate",
         "cash_bill": "Cash Bill",
         "cash_credit_note": "Cash Credit Note",
-        "cash_debit_note": "Cash Debit Note"
+        "cash_debit_note": "Cash Debit Note",
+        "purchase_order": "Purchase Order",
+        "receipt": "Receipt",
+        "payment": "Payment"
     },
     "customer_name": "Customer Name",
     "enter_customer_name": "Enter Customer Name",
@@ -86,7 +89,7 @@
     "no_account_error": "Need to select Bank/Cash A/c or Customer Name",
     "no_customer_error": "Customer Name can't be empty",
     "invalid_email": "Invalid Email Address",
-    "no_product_error": "Product/Service can't be empty",
+    "no_product_error": "Line items can't be empty",
     "no_entry_error": "At least a single entry needed to generate sales-invoice",
     "no_state_error": "State is mandatory",
     "custom_field1": "Custom field 1",
@@ -143,6 +146,15 @@
     "order_no_placeholder": "Enter Order #",
     "expected_delivery": "Expected Delivery",
     "vendor_name": "Vendor Name",
+    "create_receipt": "Create Receipt",
+    "create_payment": "Create Payment",
+    "receipt_date": "Receipt Date",
+    "payment_date": "Payment Date",
+    "cheque_no": "Cheque Number",
+    "cheque_no_placeholder": "Enter Cheque Number",
+    "clearance_date": "Clearance Date",
+    "receipt_mode": "Receipt Mode",
+    "payment_mode": "Payment Mode",
     "sales_as_receipt_voucher": "Sales as Receipt Voucher",
     "purchase_as_payment_voucher": "Purchase as Payment Voucher"
 }
