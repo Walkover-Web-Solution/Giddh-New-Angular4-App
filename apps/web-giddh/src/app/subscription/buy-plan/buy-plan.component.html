@@ -89,7 +89,7 @@
                                                         'active-plan': selectedPlan?.uniqueName === plan?.uniqueName
                                                     }"
                                                 >
-                                                    <ng-container *ngIf="popularPlan?.uniqueName === plan?.uniqueName">
+                                                    <!-- <ng-container *ngIf="popularPlan?.uniqueName === plan?.uniqueName">
                                                         <div
                                                             class="d-flex justify-content-center align-items-center"
                                                             [ngClass]="{
@@ -97,42 +97,37 @@
                                                                     popularPlan?.uniqueName === plan?.uniqueName
                                                             }"
                                                         >
-                                                            <span class="font-16">{{ localeData?.popular }}</span>
                                                         </div>
-                                                    </ng-container>
-                                                    <ng-container
+                                                    </ng-container> -->
+                                                    <!-- <ng-container
                                                         *ngIf="!(popularPlan?.uniqueName === plan?.uniqueName)"
                                                     >
-                                                        <div class="popular-txt-height"></div>
-                                                    </ng-container>
+                                                    </ng-container> -->
                                                     <div class="plan-content d-flex flex-column">
-                                                        <h2
-                                                            class="font-20 strong plan-title d-flex align-items-center justify-content-center"
-                                                        >
+                                                        <h2 class="font-20 plan-title d-flex align-items-center justify-content-center">
                                                             {{ plan?.name }}
                                                         </h2>
-                                                        <p class="font-15 mt-3 feature-txt">
-                                                            <span *ngIf="plan?.description">
+                                                        <p *ngIf="plan?.description" class="font-15 feature-txt">
+                                                            <span>
                                                                 {{ plan?.description }}
                                                             </span>
                                                         </p>
                                                         <ng-container
                                                             *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'"
                                                         >
-                                                            <p
-                                                                class="mb-2"
+                                                            <p  *ngIf="plan?.yearlyDiscountAmount > 0"
                                                                 [ngClass]="{
                                                                     'feature-txt': !plan?.yearlyDiscountAmount > 0
                                                                 }"
                                                             >
-                                                                <s *ngIf="plan?.yearlyDiscountAmount > 0">
-                                                                    <span class="strong"
-                                                                        >{{ plan?.currency?.symbol
-                                                                        }}{{ plan?.yearlyAmount }}</span
-                                                                    ></s
-                                                                >
+                                                                <s>
+                                                                    <span class="strong">
+                                                                        {{ plan?.currency?.symbol }}
+                                                                        {{ plan?.yearlyAmount }}
+                                                                    </span>
+                                                                </s>
                                                             </p>
-                                                            <p class="mb-3">
+                                                            <p class="mb-3 mt-2">
                                                                 <span class="font-24">
                                                                     <span class="strong">
                                                                         {{ plan?.currency?.symbol}}
@@ -142,11 +137,8 @@
                                                                 </span
                                                                 >
                                                             </p>
-                                                            <p class="mb-3">
-                                                                <span
-                                                                    class="strong"
-                                                                    *ngIf="plan?.yearlyDiscountAmount > 0"
-                                                                >
+                                                            <p class="mb-3" *ngIf="plan?.yearlyDiscountAmount > 0">
+                                                                <span>
                                                                     {{ localeData?.save }}
                                                                     {{ plan?.currency?.symbol
                                                                     }}{{ plan?.yearlyDiscountAmount }}
@@ -162,11 +154,9 @@
                                                                 </span>
                                                             </p>
                                                         </ng-container>
-                                                        <ng-container
-                                                            *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'"
-                                                        >
-                                                            <p class="mb-2">
-                                                                <s *ngIf="plan?.monthlyDiscountAmount > 0">
+                                                        <ng-container *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">
+                                                            <p class="mb-2" *ngIf="plan?.monthlyDiscountAmount > 0">
+                                                                <s>
                                                                     <span class="strong"
                                                                         >{{ plan?.currency?.symbol
                                                                         }}{{ plan?.monthlyDiscountAmount }}</span
@@ -174,26 +164,23 @@
                                                                 </s>
                                                             </p>
                                                             <p class="mb-3">
-                                                                <span class="strong font-20"
-                                                                    >{{ plan?.currency?.symbol
-                                                                    }}{{ plan?.monthlyAmount }} /{{
+                                                                <span class="strong font-20">
+                                                                    {{ plan?.currency?.symbol }}
+                                                                    {{ plan?.monthlyAmount }} /
+                                                                    {{
                                                                         commonLocaleData?.app_duration?.month
-                                                                    }}</span
-                                                                >
+                                                                    }}
+                                                                </span>
                                                             </p>
-                                                            <p>
-                                                                <span
-                                                                    class="strong"
-                                                                    *ngIf="plan?.monthlyDiscountAmount > 0"
-                                                                >
+                                                            <p *ngIf="plan?.monthlyDiscountAmount > 0">
+                                                                <span class="strong">
                                                                     {{ localeData?.save }}
-                                                                    {{ plan?.currency?.symbol
-                                                                    }}{{ plan?.monthlyDiscountAmount }}
+                                                                    {{ plan?.currency?.symbol }}
+                                                                    {{ plan?.monthlyDiscountAmount }}
                                                                     {{ localeData?.for }}
                                                                     {{ plan?.monthlyDiscount?.duration }}
                                                                     {{
-                                                                        commonLocaleData?.app_duration?.month
-                                                                            | lowercase
+                                                                        commonLocaleData?.app_duration?.month | lowercase
                                                                     }}
                                                                 </span>
                                                             </p>
@@ -214,7 +201,7 @@
                                                             }"
                                                             (click)="selectPlan(plan)"
                                                         >
-                                                            <span class="font-16">
+                                                            <span class="font-14">
                                                                 {{
                                                                     firstStepForm.get("planUniqueName").value ===
                                                                     plan.uniqueName
@@ -591,7 +578,7 @@
                                     <mat-card class="outline-card">
                                         <mat-card-content>
                                             <h5 class="font-16 strong mb-3">{{ localeData?.bill_to }}</h5>
-                                            <div class="payment-header border-bottom pb-3">
+                                            <div class="payment-header pb-3">
                                                 <span class="light-gray font-14 strong d-block">{{
                                                     secondStepForm.get("billingName")?.value
                                                 }}</span>
@@ -626,14 +613,13 @@
                 <form
                     name="firstStepForm"
                     autocomplete="off"
-                    class="mt-5"
                     novalidate
                     [formGroup]="firstStepForm"
                     name="firstStepForm"
                 >
                     <mat-card-content>
                         <div class="d-flex justify-content-between border-bottom pb-3">
-                            <span class="strong">{{ selectedPlan?.name }}</span>
+                            <span>{{ selectedPlan?.name }}</span>
                             <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">
                                 <amount-field
                                     [amount]="selectedPlan?.yearlyAmount"
@@ -653,7 +639,7 @@
                         </div>
                         <div class="border-bottom">
                             <div class="d-flex justify-content-between py-3">
-                                <span class="strong">
+                                <span>
                                     <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">{{
                                         commonLocaleData?.app_duration?.year
                                     }}</span>
@@ -740,8 +726,8 @@
                         </div>
                         <div *ngIf="firstStepForm.get('planUniqueName').value">
                             <div class="d-flex justify-content-between py-3">
-                                <p>{{ localeData?.final_amount }}</p>
-                                <span>
+                                <p class="strong">{{ localeData?.final_amount }}</p>
+                                <span class="strong">
                                     <amount-field
                                         [amount]="finalPlanAmount"
                                         [currencySymbol]="selectedPlan?.currency?.symbol"
@@ -773,37 +759,32 @@
                         </div>
                         <div class="position-relative mt-3" *ngIf="firstStepForm.get('planUniqueName').value">
                             <div class="w-100">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <input-field
-                                        [name]="'code'"
-                                        formControlName="promoCode"
-                                        [placeholder]="localeData?.promo_code"
-                                    ></input-field>
-                                    <div>
-                                        <button
-                                            *ngIf="!promoCodeResponse[0]?.discountValue"
-                                            [ngClass]="{
-                                                'promocode-button': promoCodeResponse[0]?.discountValue
-                                            }"
-                                            aria-label="promocode"
-                                            mat-button
-                                            color="primary"
-                                            class="apply-btn"
-                                            (click)="applyPromoCode('add')"
-                                        >
-                                            {{ commonLocaleData?.app_apply }}
-                                        </button>
-                                        <button
-                                            *ngIf="promoCodeResponse[0]?.discountValue"
-                                            aria-label="Clear"
-                                            mat-button
-                                            class="apply-btn"
-                                            color="primary"
-                                            (click)="applyPromoCode('remove')"
-                                        >
-                                            {{ commonLocaleData?.app_remove }}
-                                        </button>
-                                    </div>
+                                <div class="d-flex align-items-center justify-content-between custom-mat-form-field">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>{{ localeData?.promo_code }}</mat-label>
+                                        <input matInput [name]="'code'" [placeholder]="localeData?.promo_code" formControlName="promoCode">
+                                        <div matSuffix>
+                                            <span
+                                                *ngIf="promoCodeResponse[0]?.discountValue"
+                                                [ngClass]="{
+                                                    'promocode-button': promoCodeResponse[0]?.discountValue
+                                                }"
+                                                aria-label="promocode"
+                                                class="text-primary cursor-pointer d-block px-1 py-3"
+                                                (click)="applyPromoCode('add')"
+                                            >
+                                                {{ commonLocaleData?.app_apply }}
+                                            </span>
+                                            <span
+                                                *ngIf="!promoCodeResponse[0]?.discountValue"
+                                                aria-label="Clear"
+                                                class="text-primary cursor-pointer d-block px-1 py-3"
+                                                (click)="applyPromoCode('remove')"
+                                            >
+                                                {{ commonLocaleData?.app_remove }}
+                                            </span>
+                                        </div>
+                                    </mat-form-field>
                                 </div>
                             </div>
                         </div>

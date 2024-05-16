@@ -4,14 +4,8 @@
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
 >
-    <div class="w-100 float-left pd-15">
-        <button aria-label="back" mat-stroked-button class="mb-3" (click)="back()">
-            <i class="icon-left back-left"></i>
-            {{ commonLocaleData?.app_back }}
-        </button>
-    </div>
     <div class="view-subscription-wrap pd-15 d-flex w-100 column-gap15">
-        <div class="view-box">
+        <div class="view-box mx-auto">
             <mat-card class="outline-card">
                 <div *ngIf="viewSubscriptionDataInProgress$ | async">
                     <giddh-page-loader></giddh-page-loader>
@@ -19,7 +13,7 @@
                 <mat-card-content *ngIf="!(viewSubscriptionDataInProgress$ | async)">
                     <div class="d-flex justify-content-between column-gap1 align-items-center border-bottom pb-2">
                         <div class="d-flex column-gap1">
-                            <h4 class="font-16 strong">
+                            <h4 class="font-16">
                                 {{ commonLocaleData?.app_view }} {{ localeData?.tab_heading }}
                             </h4>
                             <span class="badge btn-success cp font-12">{{
@@ -109,27 +103,27 @@
                     <div class="view-subscription">
                         <div class="d-flex justify-content-between my-3">
                             <p class="strong mb-1 font-16">{{ viewSubscriptionData?.planName }}</p>
-                            <span class="font-24">
+                            <span class="font-20">
                                 {{ viewSubscriptionData?.planCurrency?.symbol }} {{ viewSubscriptionData?.amount }}
                             </span>
                         </div>
-                        <h4 class="strong border-bottom pb-3 font-16 mr-t2">Total</h4>
+                        <h4 class="border-bottom pb-3 font-16 mr-t2">Total</h4>
                         <div class="d-flex justify-content-between mr-b2 pt-3">
                             <div>
                                 <p class="light-gray mb-1 font-12">{{ commonLocaleData?.app_company }}</p>
-                                <span class="font-24">
+                                <span class="font-20">
                                     {{ viewSubscriptionData?.totalCompaniesAllowed }}
                                 </span>
                             </div>
                             <div>
                                 <p class="light-gray mb-1 font-12">{{ commonLocaleData?.app_invoice }}</p>
-                                <span class="font-24">
+                                <span class="font-20">
                                     {{ viewSubscriptionData?.totalInvoices }}
                                 </span>
                             </div>
                             <div class="view-right d-flex align-items-end">
                                 <p class="light-gray mb-1 font-12">{{ localeData?.bill }}</p>
-                                <span class="font-24">
+                                <span class="font-20">
                                     {{ viewSubscriptionData?.totalBills }}
                                 </span>
                             </div>
@@ -139,19 +133,19 @@
                         <div class="d-flex justify-content-between pt-3">
                             <div>
                                 <p class="light-gray mb-1 font-12">{{ commonLocaleData?.app_company }}</p>
-                                <span class="font-24">
+                                <span class="font-20">
                                     {{ viewSubscriptionData?.usageCompanyCount }}
                                 </span>
                             </div>
                             <div>
                                 <p class="light-gray mb-1 font-12">{{ commonLocaleData?.app_invoice }}</p>
-                                <span class="font-24">
+                                <span class="font-20">
                                     {{ viewSubscriptionData?.usageInvoiceCount }}
                                 </span>
                             </div>
                             <div class="view-right d-flex align-items-end">
                                 <p class="light-gray mb-1 font-12">{{ localeData?.bill }}</p>
-                                <span class="font-24">
+                                <span class="font-20">
                                     {{ viewSubscriptionData?.usageBillCount }}
                                 </span>
                             </div>
@@ -183,7 +177,7 @@
             </mat-card>
         </div>
         <ng-container *ngIf="viewSubscriptionData?.cashfreeBillingInfo || viewSubscriptionData?.paymentMethodTypeMode">
-            <div class="billing-account">
+            <div class="billing-account mx-auto">
                 <mat-card class="outline-card">
                     <mat-card-content>
                         <h4 class="font-16 strong border-bottom pb-2">{{ localeData?.billing_account }}</h4>

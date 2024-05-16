@@ -147,15 +147,6 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Navigates back to the previous page.
-     *
-     * @memberof ViewSubscriptionComponent
-     */
-    public back(): void {
-        this.location.back();
-    }
-
-    /**
      * Fetches subscription data by its ID.
      *
      * @param id - The ID of the subscription to fetch.
