@@ -47,6 +47,7 @@ import { PurchaseOrderService } from "../../services/purchase-order.service";
 import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustment/services/adjustment-utility.service";
 import { SettingsTaxesActions } from "../../actions/settings/taxes/settings.taxes.action";
 import { ProformaService } from "../../services/proforma.service";
+import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 
 @Component({
     selector: "create",
@@ -132,7 +133,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         isActive: false,
         branch: null,
         addresses: null,
-        giddhBalanceDecimalPlaces: 2
+        giddhBalanceDecimalPlaces: 2,
+        salesAsReceipt: null,
+        purchaseAsPayment: null
     };
     /** Holds account specific data */
     public account: any = {
@@ -487,7 +490,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private purchaseOrderService: PurchaseOrderService,
         private adjustmentUtilityService: AdjustmentUtilityService,
         private settingsTaxesAction: SettingsTaxesActions,
-        private proformaService: ProformaService
+        private proformaService: ProformaService,
+        private settingsProfileActions: SettingsProfileActions
     ) {
 
     }
@@ -1065,6 +1069,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.company.baseCurrencySymbol = profile.baseCurrencySymbol;
                         this.company.inputMaskFormat = profile.balanceDisplayFormat?.toLowerCase() || '';
                         this.company.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+                        this.company.salesAsReceipt = profile.salesAsReceipt;
+                        this.company.purchaseAsPayment = profile.purchaseAsPayment;
+                        this.invoiceForm.get('salesPurchaseAsReceiptPayment').patchValue(this.invoiceType.isCashInvoice && this.invoiceType.isPurchaseInvoice ? profile.purchaseAsPayment : profile.salesAsReceipt);
                         this.showCompanyTaxTypeByCountry(this.company.countryCode);
 
                         this.getCountryData(this.company.countryCode);
@@ -1721,7 +1728,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             einvoiceGenerated: [false],
             linkedPo: [null], //temp
             grandTotalMultiCurrency: [0], // temp
-            attachedFiles: [] //temp
+            attachedFiles: [], //temp
+            salesPurchaseAsReceiptPayment: [null], //temp
         });
     }
 
@@ -3273,6 +3281,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (this.invoiceType.isCashInvoice) {
                 invoiceForm.type = this.invoiceType.isPurchaseInvoice ? "purchase" : this.invoiceType.isCreditNote ? "credit note" : this.invoiceType.isDebitNote ? "debit note" : "sales";
 
+                if (this.invoiceType.isPurchaseInvoice) {
+                    invoiceForm.type = VoucherTypeEnum.payment;
+                } else if (!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote) {
+                    invoiceForm.type = VoucherTypeEnum.receipt;
+                }
+
                 invoiceForm.entries = invoiceForm.entries?.map(entry => {
                     entry.voucherType = invoiceForm.type;
                     return entry;
@@ -3289,10 +3303,27 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.voucherService.generateVoucher(invoiceForm.account.uniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 this.startLoader(false);
                 if (response?.status === "success") {
+                    const isCashSalesPurchaseInvoice = this.invoiceType.isCashInvoice && ((!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote) || this.invoiceType.isPurchaseInvoice);
+
+                    if (isCashSalesPurchaseInvoice) {
+                        const salesPurchaseAsReceiptPayment = this.invoiceForm.get('salesPurchaseAsReceiptPayment').value;
+
+                        if (this.invoiceType.isPurchaseInvoice && (salesPurchaseAsReceiptPayment !== this.company.purchaseAsPayment)) {
+                            this.updateProfileSetting({ purchaseAsPayment: salesPurchaseAsReceiptPayment });
+                        } else if (salesPurchaseAsReceiptPayment !== this.company.salesAsReceipt) {
+                            this.updateProfileSetting({ salesAsReceipt: salesPurchaseAsReceiptPayment });
+                        }
+                    }
+
                     if (callback) {
                         this.resetVoucherForm(false);
                     } else {
+                        let salesPurchaseAsReceiptPayment = this.invoiceForm.value.salesPurchaseAsReceiptPayment;
                         this.resetVoucherForm();
+
+                        if (isCashSalesPurchaseInvoice) {
+                            this.invoiceForm.get('salesPurchaseAsReceiptPayment').patchValue(salesPurchaseAsReceiptPayment);
+                        }
                     }
 
                     let message = (response?.body.number) ? `${this.localeData?.entry_created}: ${response?.body.number}` : this.commonLocaleData?.app_messages?.voucher_saved;
@@ -4135,7 +4166,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             transactionFormGroup.get('stock.stockUnit.code')?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitCode);
             transactionFormGroup.get('stock.stockUnit.uniqueName')?.patchValue(response.stock.variant?.unitRates[0]?.stockUnitUniqueName);
 
-            transactionFormGroup.get('stock.variant.name')?.patchValue(response.stock.variant?.name);
+            if (response.stock.variant?.name) {
+                transactionFormGroup.get('stock.variant.name')?.patchValue(response.stock.variant?.name);
+            }
             transactionFormGroup.get('stock.variant.uniqueName')?.patchValue(response.stock.variant?.uniqueName);
 
             transactionFormGroup.get('stock.variant.salesTaxInclusive')?.patchValue(response.stock.variant?.salesTaxInclusive);
@@ -4436,5 +4469,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private getVoucherDetails(params: any): void {
         this.startLoader(true);
         this.componentStore.getVoucherDetails({ isCopyVoucher: false, accountUniqueName: params?.accountUniqueName, payload: { uniqueName: params?.uniqueName, voucherType: this.voucherType } });
+    }
+
+    /**
+     * Patch profile settings
+     *
+     * @private
+     * @param {*} keyToUpdate
+     * @memberof VoucherCreateComponent
+     */
+    private updateProfileSetting(keyToUpdate: any): void {
+        this.store.dispatch(this.settingsProfileActions.PatchProfile(keyToUpdate));
     }
 }
