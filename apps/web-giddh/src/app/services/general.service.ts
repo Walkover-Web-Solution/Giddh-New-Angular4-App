@@ -1915,16 +1915,12 @@ export class GeneralService {
      * @return {*}
      * @memberof GeneralService
      */
-    public getUserAgentData(clientIp: any): any {
+    public getUserAgentData(): any {
         let args: any = {};
-        args['os'] = this.getOsConfiguration();
-        args['os-family'] = this.getOSFamily();
-        args['os-version'] = this.getOSVersion();
-        args['device-manufacturer'] = this.getDeviceManufacture();
-        args['device-model'] = this.getDeviceModel();
-        args['timestamp'] = this.getTimesStamp();
-        args['client-ip'] = clientIp;
-        args['Gov-Client-Timezone'] = 'UTC' + this.getUserTimeZone();
+        args["timestamp"] = this.getTimesStamp();
+        args["Gov-Client-Timezone"] = 'UTC' + this.getUserTimeZone();
+        args["Gov-client-screens"] = `width=${window.screen.width}&height=${window.screen.height}&scaling-factor=${window.devicePixelRatio}&colour-depth=${window.screen.colorDepth}`;
+        args["Gov-client-window-size"] = `width=${window.innerWidth}&height=${window.innerHeight}`;
         return args;
     }
 

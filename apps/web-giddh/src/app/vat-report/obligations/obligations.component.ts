@@ -72,9 +72,6 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     public isLoading: boolean;
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
-    /** Hold system user client ip */
-    public clientIp: string = "";
-
     constructor(
         private gstReconcileService: GstReconcileService,
         private formBuilder: UntypedFormBuilder,
@@ -105,12 +102,6 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         this.getUniversalDatePickerDate();
         this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
         this.loadTaxDetails();
-
-        this.generalService.getClientIp().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.ipAddress) {
-                this.clientIp = response.ipAddress;
-            }
-        });
 
         if (this.isCompanyMode) {
             this.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -145,7 +136,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
     */
     public getVatObligations(): void {
         this.isLoading = true;
-        this.vatService.getVatObligations(this.companyUniqueName, this.obligationsForm.value, this.clientIp).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.vatService.getVatObligations(this.companyUniqueName, this.obligationsForm.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response?.status === "success" && response?.body?.obligations) {
                 this.tableDataSource = response?.body?.obligations.map(item => {
