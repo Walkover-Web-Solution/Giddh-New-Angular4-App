@@ -6,7 +6,7 @@ export const SUBSCRIPTIONS_API = {
 };
 
 export const SUBSCRIPTION_V2_API = {
-    GET_ALL_PLANS: 'v2/subscription/plans/all?countryCode=:countryCode&region=:region',
+    GET_ALL_PLANS: 'v2/subscription/plans/all?regionCode=:regionCode',
     GET_COUNTRY_LIST: 'country/country-list',
     CREATE_SUBSCRIPTION: 'v2/subscription',
     UPDATE_SUBSCRIPTION: 'v2/subscription?company=:company',
