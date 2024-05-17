@@ -601,12 +601,11 @@ export enum BootstrapToggleSwitch {
 export const MOBILE_NUMBER_SELF_URL = `https://api.db-ip.com/v2/free/self`;
 export const MOBILE_NUMBER_IP_ADDRESS_URL = 'http://ip-api.com/json/';
 export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
-
-
-
 export const OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
 export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1.amazonaws.com/sample-file-';
+export const OTP_WIDGET_ID = '326a63733354393830313330';
+export const OTP_WIDGET_TOKEN = '205968TmXguUAwoD633af103P1';
 export const OTP_WIDGET_ID_NEW = '33686b716134333831313239';
 export const OTP_WIDGET_TOKEN_NEW = '205968TmXguUAwoD633af103P1';
 export enum BROADCAST_CHANNELS {
