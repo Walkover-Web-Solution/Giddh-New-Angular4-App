@@ -791,7 +791,24 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public updateTransactionActualAmount(transaction: FormGroup): void {
-        transaction.get('actualAmount')?.patchValue(Number(transaction.get('amount')?.value))
+        transaction.get('actualAmount')?.patchValue(Number(transaction.get('amount')?.value));
+    }
+
+    public removeAmountIfAccountRemoved(transaction: FormGroup, index: number): void {
+        if (!transaction.get('account')?.value && (transaction?.get('isDiscountApplied')?.value || transaction?.get('isTaxApplied')?.value)) {
+            const transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
+            transactionsFormArray.removeAt(index);
+
+            this.calculateTaxDiscount();
+            const { totalCredit, totalDebit } = this.calculateTotalCreditAndDebit();
+            this.totalCreditAmount = totalCredit;
+            this.totalDebitAmount = totalDebit;
+        }
+    }
+
+    public calculateTaxDiscount(): void {
+        this.calculateDiscount(); 
+        this.calculateTax();
     }
 
     public calculateDiscount(discountType?: string, discountValue?: number): number {
@@ -810,7 +827,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         });
 
-        if (amount && discountEntryControl) {
+        if (amount) {
             discountAmount = (discountType === 'PERCENTAGE') ? discountValue / 100 * amount : discountValue;
             discountEntryControl?.get('amount')?.patchValue(discountAmount);
         } else {
@@ -821,8 +838,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public calculateTax(taxAmount?: number) {
-        this.calculateDiscount();
-
         let amount = 0;
         let toEntryControl;
         let byEntryControl;
@@ -845,8 +860,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         });
 
-        if (amount && taxAmount) {
-            taxAmount = taxAmount / 100 * amount;
+        if (amount) {
+            if (taxAmount) {
+                taxAmount = taxAmount / 100 * amount;
+            } else {
+                taxAmount = 0;
+            }
             taxEntryControl?.get('amount')?.patchValue(taxAmount);
             toEntryControl.get('amount')?.patchValue(amount + taxAmount);
             byEntryControl.get('amount')?.patchValue(amount + taxAmount);
@@ -1248,6 +1267,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public calculateAmount(amount: any, transactionObj: any, indx: number): any {
+        if (this.isSalesEntry) { 
+            this.calculateTaxDiscount();
+        }
+
         let lastIndx = (this.journalVoucherForm.get('transactions') as FormArray).length - 1;
         // Update amount in transaction object
         transactionObj.get('amount').setValue(Number(amount));

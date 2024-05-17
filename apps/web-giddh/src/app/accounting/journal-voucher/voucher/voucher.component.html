@@ -131,6 +131,7 @@
                                                 (keydown.Shift.Tab)="
                                                     showLedgerAccountList = false; changeTab('shift', 'account')
                                                 "
+                                                (change)="removeAmountIfAccountRemoved(transaction, i)"
                                             ></text-field>
                                         </td>
                                         <td
@@ -203,7 +204,6 @@
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                                 (change)="
                                                     updateTransactionActualAmount(transaction); 
-                                                    isSalesEntry ? calculateTax() : '';
                                                     calculateAmount(transaction.get('amount')?.value, transaction, i)
                                                 "
                                             ></text-field>
