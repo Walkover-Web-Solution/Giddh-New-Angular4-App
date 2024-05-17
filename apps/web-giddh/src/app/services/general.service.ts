@@ -1920,7 +1920,7 @@ export class GeneralService {
     }
 
     /**
-     * Get Client Screen Size (width and height) in single string
+     * Get Client Window Size (width and height) in single string
      *
      * @returns {string}
      * @memberof GeneralService
