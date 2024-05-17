@@ -165,6 +165,7 @@
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                                 (change)="
+                                                    updateTransactionActualAmount(transaction); 
                                                     calculateAmount(transaction.get('amount')?.value, transaction, i)
                                                 "
                                             ></text-field>
@@ -201,8 +202,9 @@
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                                 (change)="
-                                                    calculateAmount(transaction.get('amount')?.value, transaction, i);
-                                                    isSalesEntry ? calculateTax() : ''
+                                                    updateTransactionActualAmount(transaction); 
+                                                    isSalesEntry ? calculateTax() : '';
+                                                    calculateAmount(transaction.get('amount')?.value, transaction, i)
                                                 "
                                             ></text-field>
                                         </td>
