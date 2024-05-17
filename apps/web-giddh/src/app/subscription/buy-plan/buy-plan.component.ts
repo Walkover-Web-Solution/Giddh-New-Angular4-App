@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivateDialogComponent } from '../activate-dialog/activate-dialog.component';
 import { BuyPlanComponentStore } from './utility/buy-plan.store';
-import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime } from 'rxjs';
+import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime, take } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { CountryRequest, OnboardingFormRequest } from '../../models/api-models/Common';
@@ -206,44 +206,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.isChangePlan = true;
             }
         });
-        if (localStorage.getItem('Country-Region') === 'IN') {
-            this.newUserSelectCountry({
-                "label": "IN - India",
-                "value": "IN",
-                "additional": {
-                    "value": "IN",
-                    "label": "IN - India"
-                }
-            }, false);
-        } else if (localStorage.getItem('Country-Region') === 'GB') {
-            this.newUserSelectCountry({
-                "label": "GB - United Kingdom",
-                "value": "GB",
-                "additional": {
-                    "value": "GB",
-                    "label": "GB - United Kingdom"
-                }
-            }, false);
-        } else if (localStorage.getItem('Country-Region') === 'AE') {
-            this.newUserSelectCountry({
-                "label": "AE - United Arab Emirates",
-                "value": "AE",
-                "additional": {
-                    "value": "AE",
-                    "label": "AE - United Arab Emirates"
-                }
 
-            }, false);
-        } else if (!this.isChangePlan && localStorage.getItem('Country-Region') === 'GL') {
-            this.newUserSelectCountry({
-                "label": "GL - Global",
-                "value": "GL",
-                "additional": {
-                    "value": "GL",
-                    "label": "GL - Global"
-                }
-            }, true);
-        }
 
 
 
@@ -481,18 +444,57 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     private getActiveCompany(): void {
-        this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.activeCompany$.pipe(take(1)).subscribe(response => {
             if (response) {
                 this.activeCompany = response;
-                    this.newUserSelectCountry({
-                        "label": this.activeCompany?.countryV2?.alpha2CountryCode + " - " + this.activeCompany?.countryV2?.countryName,
-                        "value": this.activeCompany?.countryV2?.alpha2CountryCode,
-                        "additional": {
-                            "value": this.activeCompany?.countryV2?.alpha2CountryCode,
-                            "label": this.activeCompany?.countryV2?.alpha2CountryCode + " - " + this.activeCompany?.countryV2?.countryName
-                        }
-                    }, false);
+                this.newUserSelectCountry({
+                    "label": this.activeCompany?.subscription.country?.countryCode + " - " + this.activeCompany?.subscription.country?.countryName,
+                    "value": 'IND',
+                    "additional": {
+                        "value": 'IND',
+                        "label": this.activeCompany?.subscription.country?.countryCode + " - " + this.activeCompany?.subscription.country?.countryName
+                    }
+                });
                 this.company.addresses = response.addresses;
+            } else {
+                if (localStorage.getItem('Country-Region') === 'IN') {
+                    this.newUserSelectCountry({
+                        "label": "IND - India",
+                        "value": "IND",
+                        "additional": {
+                            "value": "IND",
+                            "label": "IND - India"
+                        }
+                    });
+                } else if (localStorage.getItem('Country-Region') === 'GB') {
+                    this.newUserSelectCountry({
+                        "label": "GBR - United Kingdom",
+                        "value": "GBR",
+                        "additional": {
+                            "value": "GBR",
+                            "label": "GBR - United Kingdom"
+                        }
+                    });
+                } else if (localStorage.getItem('Country-Region') === 'AE') {
+                    this.newUserSelectCountry({
+                        "label": "ARE - United Arab Emirates",
+                        "value": "ARE",
+                        "additional": {
+                            "value": "ARE",
+                            "label": "ARE - United Arab Emirates"
+                        }
+
+                    });
+                } else if (!this.isChangePlan && localStorage.getItem('Country-Region') === 'GL') {
+                    this.newUserSelectCountry({
+                        "label": "GLB - Global",
+                        "value": "GLB",
+                        "additional": {
+                            "value": "GLB",
+                            "label": "GLB - Global"
+                        }
+                    });
+                }
             }
         });
     }
@@ -916,30 +918,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof BuyPlanComponent
      */
-    public newUserSelectCountry(event: any, initialCall: boolean): void {
-        let data;
-        if (initialCall) {
-            if (localStorage.getItem('Country-Region') === 'GL') {
-                data = {
-                    region: event?.value
-                }
-            } else {
-                data = {
-                    countryCode: event?.value
-                }
-            }
-        } else {
-            if (event?.additional?.entity === 'region') {
-                data = {
-                    region: event?.value
-                }
-            } else {
-                data = {
-                    countryCode: event?.value
-                }
-            }
-        }
-        this.componentStore.getAllPlans({ params: data });
+    public newUserSelectCountry(event: any): void {
+        this.componentStore.getAllPlans({ params: { regionCode: event?.value } });
         this.newUserSelectedCountry = event.label;
     }
 

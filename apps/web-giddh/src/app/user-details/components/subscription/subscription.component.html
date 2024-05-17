@@ -1,7 +1,7 @@
 <div *ngIf="!isPlanShow">
     <div class="main-content-subscription">
         <div class="menu-one-button">
-            <button mat-stroked-button color="primary" (click)="isPlanShow = true" *ngIf="!showLoader">
+            <button mat-stroked-button color="primary" (click)="goToBuyNow()" *ngIf="!showLoader">
                 {{ commonLocaleData?.app_buy_new_plan }}
             </button>
         </div>
@@ -225,7 +225,7 @@
                                     color="primary"
                                     class="right-side-btn"
                                     *ngIf="selectedSubscription?.status !== 'trial'"
-                                    (click)="renewPlan()"
+                                    (click)="goToBuyNow()"
                                 >
                                     {{ commonLocaleData?.app_renew }}
                                 </button>

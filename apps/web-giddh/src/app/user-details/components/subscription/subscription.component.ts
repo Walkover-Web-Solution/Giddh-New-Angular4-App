@@ -294,10 +294,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
                     let flag = true;
                     if (
                         (this.searchSubscription?.value && (subscriptionDetails?.subscriptionId?.toLowerCase()?.indexOf(this.searchSubscription?.value?.toLowerCase()) === -1 && !(subscriptionDetails?.companiesWithTransactions?.filter(company => company?.name?.toLowerCase()?.indexOf(this.searchSubscription?.value?.toLowerCase()) > -1)?.length)) ||
-                        (this.filters?.plan && subscriptionDetails?.planDetails?.uniqueName !== this.filters?.plan) ||
-                        (this.filters?.expiration && (subscriptionDetails?.remainingDays < 0 || subscriptionDetails?.remainingDays > this.filters?.expiration)) ||
-                        (this.filters?.transactionBalance && (subscriptionDetails?.remainingTransactions < 0 || subscriptionDetails?.remainingTransactions > this.filters?.transactionBalance))
-                    ) ||
+                            (this.filters?.plan && subscriptionDetails?.planDetails?.uniqueName !== this.filters?.plan) ||
+                            (this.filters?.expiration && (subscriptionDetails?.remainingDays < 0 || subscriptionDetails?.remainingDays > this.filters?.expiration)) ||
+                            (this.filters?.transactionBalance && (subscriptionDetails?.remainingTransactions < 0 || subscriptionDetails?.remainingTransactions > this.filters?.transactionBalance))
+                        ) ||
                         (this.filters?.plan && subscriptionDetails?.planDetails?.uniqueName !== this.filters?.plan) ||
                         (this.filters?.expiration && (subscriptionDetails?.remainingDays < 0 || subscriptionDetails?.remainingDays > this.filters?.expiration)) ||
                         (this.filters?.transactionBalance && (subscriptionDetails?.remainingTransactions < 0 || subscriptionDetails?.remainingTransactions > this.filters?.transactionBalance))
@@ -434,5 +434,14 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
             { name: this.localeData?.transaction_balance_list?.less_than_10k, value: 10000 },
             { name: this.localeData?.transaction_balance_list?.less_than_50k, value: 50000 }
         ];
+    }
+
+    /**
+     *Redirection to new buy plan page
+     *
+     * @memberof SubscriptionComponent
+     */
+    public goToBuyNow(): void {
+        this.route.navigate(['/pages/subscription/buy-plan']);
     }
 }
