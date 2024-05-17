@@ -17,7 +17,7 @@ export class VouchersUtilityService {
                 return TaxType.GST;
             } else if (countryCode === TaxSupportedCountries.UAE) {
                 return TaxType.TRN;
-            } else if (countryCode === TaxSupportedCountries.GB || countryCode === TaxSupportedCountries.ZW) {
+            } else if (countryCode === TaxSupportedCountries.GB || countryCode === TaxSupportedCountries.ZW || countryCode === TaxSupportedCountries.KE) {
                 return TaxType.VAT;
             }
         } else {
@@ -278,6 +278,7 @@ export class VouchersUtilityService {
         delete invoiceForm.account.shippingDetails.index;
         delete invoiceForm.company.billingDetails.index;
         delete invoiceForm.company.shippingDetails.index;
+        delete invoiceForm.salesPurchaseAsReceiptPayment;
 
         invoiceForm?.entries?.forEach(entry => {
             delete entry.showCodeType;

@@ -142,5 +142,7 @@
     "order_no": "ऑर्डर #",
     "order_no_placeholder": "ऑर्डर प्रविष्ट करा #",
     "expected_delivery": "अपेक्षित वितरण",
-    "vendor_name": "विक्रेता नाव"
+    "vendor_name": "विक्रेता नाव",
+    "sales_as_receipt_voucher": "पावती व्हाउचर म्हणून विक्री",
+    "purchase_as_payment_voucher": "पेमेंट व्हाउचर म्हणून खरेदी करा"
 }
