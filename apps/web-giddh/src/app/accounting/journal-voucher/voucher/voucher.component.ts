@@ -868,7 +868,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
             taxEntryControl?.get('amount')?.patchValue(taxAmount);
             toEntryControl.get('amount')?.patchValue(amount + taxAmount);
-            byEntryControl.get('amount')?.patchValue(amount + taxAmount);
+            byEntryControl.get('amount')?.patchValue(byEntryControl?.value?.actualAmount + taxAmount);
         } else {
             taxAmount = 0;
         }
@@ -1063,7 +1063,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             let transactionsFormArray;
             let transactionAtIndex;
             let transaction;
-            if ((response?.body?.currency?.code || this.activeCompany?.baseCurrency) === this.activeCompany?.baseCurrency) {
+            if (response?.body && (response?.body?.currency?.code || this.activeCompany?.baseCurrency) === this.activeCompany?.baseCurrency) {
                 let idx = this.selectedIdx;
                 transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
                 transactionAtIndex = transactionsFormArray.at(idx) as FormGroup;
