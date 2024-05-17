@@ -1908,6 +1908,28 @@ export class GeneralService {
     }
 
     /**
+     * Get Client Screen Size (width, height,scaling-factor 
+     * and colour-depth) in single string
+     *
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getClientScreens(): string {
+        const screen = window.screen;
+        return `width=${screen.width}&height=${screen.height}&scaling-factor=${window.devicePixelRatio}&colour-depth=${screen.colorDepth}`;
+    }
+
+    /**
+     * Get Client Screen Size (width and height) in single string
+     *
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getClientWindowSize(): string {
+         return `width=${window.innerWidth}&height=${window.innerHeight}`;
+    }
+
+    /**
      * This will be use for get user agent
      *
      * @param {*} clientIp
@@ -1918,8 +1940,8 @@ export class GeneralService {
         let args: any = {};
         args["timestamp"] = this.getTimesStamp();
         args["Gov-Client-Timezone"] = 'UTC' + this.getUserTimeZone();
-        args["Gov-client-screens"] = `width=${window.screen.width}&height=${window.screen.height}&scaling-factor=${window.devicePixelRatio}&colour-depth=${window.screen.colorDepth}`;
-        args["Gov-client-window-size"] = `width=${window.innerWidth}&height=${window.innerHeight}`;
+        args["Gov-client-screens"] = this.getClientScreens();
+        args["Gov-client-window-size"] = this.getClientWindowSize();
         return args;
     }
 
