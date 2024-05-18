@@ -32,6 +32,10 @@ report-filters,
                         color: var(--color-gray) !important;
                     }
                 }
+
+                .mat-mdc-form-field-textarea-control {
+                    vertical-align: unset;
+                }
             }
 
             &.mdc-text-field--outlined {
