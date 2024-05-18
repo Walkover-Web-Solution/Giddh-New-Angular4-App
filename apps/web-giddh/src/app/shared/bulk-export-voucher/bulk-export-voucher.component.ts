@@ -13,11 +13,11 @@ type bulkExportVoucherTypes = 'sales' | 'debit note' | 'credit note' | 'purchase
 
 @Component({
     selector: 'bulk-export-voucher',
-    templateUrl: './bulk-export.component.html',
-    styleUrls: [`./bulk-export.component.scss`]
+    templateUrl: './bulk-export-voucher.component.html',
+    styleUrls: [`./bulk-export-voucher.component.scss`]
 })
 
-export class BulkExportComponent implements OnDestroy {
+export class BulkExportVoucherComponent implements OnDestroy {
     /** Type of voucher */
     @Input() public type: bulkExportVoucherTypes = "sales";
     /** Selected Vouchers */
@@ -59,7 +59,7 @@ export class BulkExportComponent implements OnDestroy {
      * Callback for translation response complete
      *
      * @param {boolean} event
-     * @memberof BulkExportComponent
+     * @memberof BulkExportVoucherComponent
      */
     public translationComplete(event: boolean): void {
         if (event) {
@@ -75,7 +75,7 @@ export class BulkExportComponent implements OnDestroy {
     /**
      * Get company email
      *
-     * @memberof BulkExportComponent
+     * @memberof BulkExportVoucherComponent
      */
     public getRecipientEmail(): void {
         this.store.pipe(select(appState => appState.session.user), take(1)).subscribe(result => {
@@ -89,7 +89,7 @@ export class BulkExportComponent implements OnDestroy {
      * Export the vouchers
      *
      * @param {boolean} event
-     * @memberof BulkExportComponent
+     * @memberof BulkExportVoucherComponent
      */
     public exportVouchers(event: boolean): void {
         if (this.isLoading) {
@@ -178,7 +178,7 @@ export class BulkExportComponent implements OnDestroy {
     /**
      * Emit the close modal event
      *
-     * @memberof BulkExportComponent
+     * @memberof BulkExportVoucherComponent
      */
     public closeModal(): void {
         this.closeModelEvent.emit(true);
@@ -187,7 +187,7 @@ export class BulkExportComponent implements OnDestroy {
     /**
      * Releases memory
      *
-     * @memberof BulkExportComponent
+     * @memberof BulkExportVoucherComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
