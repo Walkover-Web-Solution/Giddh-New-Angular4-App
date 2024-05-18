@@ -444,14 +444,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     private getActiveCompany(): void {
-        this.componentStore.activeCompany$.pipe(take(1)).subscribe(response => {
-            if (response) {
+        this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                 this.activeCompany = response;
                 this.newUserSelectCountry({
                     "label": this.activeCompany?.subscription.country?.countryCode + " - " + this.activeCompany?.subscription.country?.countryName,
-                    "value": 'IND',
+                    "value": this.activeCompany?.subscription.country?.countryCode,
                     "additional": {
-                        "value": 'IND',
+                        "value": this.activeCompany?.subscription.country?.countryCode,
                         "label": this.activeCompany?.subscription.country?.countryCode + " - " + this.activeCompany?.subscription.country?.countryName
                     }
                 });
@@ -839,8 +839,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public getAllPlans(): void {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length) {
-                this.monthlyPlans = response?.filter(plan => plan?.monthlyAmount > 0);
-                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmount > 0);
                 this.monthlyPlans = this.monthlyPlans.sort((a, b) => a.monthlyAmount - b.monthlyAmount);
                 this.yearlyPlans = this.yearlyPlans.sort((a, b) => a.yearlyAmount - b.yearlyAmount);
                 if (this.yearlyPlans?.length) {
