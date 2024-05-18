@@ -137,6 +137,15 @@
                     <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
                     <span class="icon-advance-filter"></span>
                 </div>
+                <div class="btn-group ml-auto">
+                    <button
+                        class="btn btn-primary"
+                        *ngIf="selectedReceipts?.length > 0 || allReceipts?.length > 0"
+                        (click)="openBulkExport(bulkExport)"
+                    >
+                        {{ commonLocaleData?.app_export }}
+                    </button>
+                </div>
                 <!-- Invoice filter section ends -->
             </div>
 
@@ -741,3 +750,20 @@
     [voucherType]="'receipt'"
     [allVouchers]="allReceipts"
 ></preview>
+
+<!-- Bulk export modal -->
+<ng-template #bulkExport>
+    <invoice-bulk-export
+        [type]="'receipt'"
+        [dateRange]="{ from: fromDate, to: toDate}"
+        [advanceSearch]="lastListingFilters"
+        [voucherUniqueNames]="selectedReceipts"
+        [totalItems]="
+            selectedReceipts && selectedReceipts.length > 0
+                ? selectedReceipts.length
+                : allReceipts && pageConfiguration.totalItems
+        "
+        (closeModelEvent)="bulkExportModalRef.hide()"
+    >
+    </invoice-bulk-export>
+</ng-template>

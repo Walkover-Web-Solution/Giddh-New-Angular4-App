@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { BulkVoucherExportService } from 'apps/web-giddh/src/app/services/bulkvoucherexport.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
@@ -9,15 +9,17 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { saveAs } from 'file-saver';
 
+type bulkExportVoucherType = 'sales' | 'debit note' | 'credit note' | 'purchase' | 'payment' | 'receipt';
+
 @Component({
     selector: 'invoice-bulk-export',
     templateUrl: './bulk-export.component.html',
     styleUrls: [`./bulk-export.component.scss`]
 })
 
-export class BulkExportModal implements OnInit, OnDestroy {
+export class BulkExportComponent implements OnDestroy {
     /** Type of voucher */
-    @Input() public type: string = "sales";
+    @Input() public type: bulkExportVoucherType = "sales";
     /** Selected Vouchers */
     @Input() public voucherUniqueNames: any[] = [];
     /** Advance Search Parameters */
@@ -26,13 +28,13 @@ export class BulkExportModal implements OnInit, OnDestroy {
     @Input() public dateRange: any;
     /** Total Items For Export */
     @Input() public totalItems: any = 0;
-    /* This will hold local JSON data */
-    @Input() public localeData: any = {};
-    /* This will hold common JSON data */
-    @Input() public commonLocaleData: any = {};
     /** Emit the close modal event */
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
 
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
     /** Download Voucher Copy Options */
     public downloadCopyOptions: any[] = [];
 
@@ -55,17 +57,20 @@ export class BulkExportModal implements OnInit, OnDestroy {
     }
 
     /**
-     * Initializes the component
+     * Callback for translation response complete
      *
+     * @param {boolean} event
      * @memberof BulkExportModal
      */
-    public ngOnInit(): void {
-        this.downloadCopyOptions = [
-            { label: this.localeData?.invoice_copy_options?.original, value: 'ORIGINAL' },
-            { label: this.localeData?.invoice_copy_options?.customer, value: 'CUSTOMER' },
-            { label: this.localeData?.invoice_copy_options?.transport, value: 'TRANSPORT' }
-        ];
-        this.getRecipientEmail();
+    public translationComplete(event: boolean): void {
+        if (event) {
+            this.downloadCopyOptions = [
+                { label: this.localeData?.invoice_copy_options?.original, value: 'ORIGINAL' },
+                { label: this.localeData?.invoice_copy_options?.customer, value: 'CUSTOMER' },
+                { label: this.localeData?.invoice_copy_options?.transport, value: 'TRANSPORT' }
+            ];
+            this.getRecipientEmail();
+        }
     }
 
     /**
@@ -106,7 +111,9 @@ export class BulkExportModal implements OnInit, OnDestroy {
         } else {
             postRequest.voucherUniqueNames = this.voucherUniqueNames;
         }
-        postRequest.copyTypes = this.copyTypes;
+        if (this.type === 'sales') {
+            postRequest.copyTypes = this.copyTypes;
+        }
 
         delete postRequest.count;
         delete postRequest.page;

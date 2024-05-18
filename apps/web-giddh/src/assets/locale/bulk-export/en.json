@@ -1,0 +1,12 @@
+{
+    "select_copy": "Select Copy",
+    "select_order": "Select Order",
+    "add_multiple_email": "You can add multiple id's comma separated",
+    "recipients_email": "Recipient Email Id's",
+    "invoice_copy_options": {
+        "original": "Original",
+        "customer": "Customer",
+        "transport": "Transport",
+        "attachment": "Attachment"
+    }
+}
