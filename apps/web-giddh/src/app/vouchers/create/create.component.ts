@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
-import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, of as observableOf, take, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, combineLatest, debounceTime, delay, distinctUntilChanged, of as observableOf, take, takeUntil } from "rxjs";
 import * as dayjs from "dayjs";
 import { GeneralService } from "../../services/general.service";
 import { OnboardingFormRequest } from "../../models/api-models/Common";
@@ -510,8 +510,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getCompanyTaxes();
         this.getWarehouses();
 
-        this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
-            if (params) {
+        combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams]).pipe(delay(0), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                let params = response[0];
+                let queryParams = response[1];
+
                 this.company.countryName = "";
                 this.openAccountDropdown = false;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
@@ -520,16 +523,26 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.router.navigate(["/pages/proforma-invoice/invoice/" + this.voucherType]);
                 }
 
-                this.resetVoucherForm();
+                this.resetVoucherForm(true, true);
 
                 /** Open account dropdown on create */
-                if (!params?.uniqueName) {
+                if (params?.uniqueName) {
                     this.invoiceForm.get('uniqueName').patchValue(params?.uniqueName);
                 }
 
                 this.getVoucherType();
                 this.getVoucherDateLabelPlaceholder();
-                this.searchAccount();
+
+                if (params?.accountUniqueName && !params?.uniqueName) {
+                    this.searchAccount(params?.accountUniqueName, 1, true);
+                } else {
+                    this.searchAccount();
+                }
+
+                if (params?.accountUniqueName && queryParams?.entryUniqueNames) {
+                    this.componentStore.getEntriesByEntryUniqueNames({accountUniqueName: params?.accountUniqueName, payload: { entryUniqueNames: queryParams?.entryUniqueNames.split(",") }});
+                }
+
                 this.getCompanyProfile();
                 this.getIsTcsTdsApplicable();
                 this.getInvoiceSettings();
@@ -870,6 +883,141 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.componentStore.briefAccounts$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.briefAccounts$ = observableOf(response);
+            }
+        });
+
+        this.componentStore.ledgerEntries$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                response?.forEach((entry, entryIndex) => {
+                    let item = entry.transactions[0];
+
+                    if (item.stock) {
+                        let stockUniqueName = item.stock.uniqueName;
+                        item.stock.uniqueName = item.account.uniqueName + "#" + item.stock.uniqueName;
+                        item.uniqueName = item.stock.uniqueName;
+                        item.label = item.stock?.name;
+                        item.value = item.stock.uniqueName;
+                        item.additional = item.stock;
+                        item.additional.uniqueName = item.account.uniqueName;
+                        item.additional.stock = {};
+                        item.additional.stock.uniqueName = stockUniqueName;
+                    } else {
+                        item.stock = undefined;
+                        item.uniqueName = item.account?.uniqueName;
+                        item.label = item.account?.name;
+                        item.value = item.account?.uniqueName;
+                        item.additional = item.account;
+                    }
+
+                    let lastIndex = 0;
+                    let entryFormGroup;
+                    if (entryIndex === 0) {
+                        lastIndex = entryIndex;
+                        entryFormGroup = this.getEntryFormGroup(lastIndex);
+                    } else {
+                        this.addNewLineEntry();
+                        lastIndex = this.invoiceForm.get('entries')['controls']?.length - 1;
+                        entryFormGroup = this.getEntryFormGroup(lastIndex);
+                    }
+
+                    this.activeEntryIndex = lastIndex;
+                    const entryDate = this.invoiceForm.get("date")?.value || this.universalDate;
+
+                    let transactionFormGroup = this.getTransactionFormGroup(entryFormGroup);
+
+                    if (typeof (entryDate) === "object") {
+                        transactionFormGroup.get("date")?.patchValue(dayjs(entryDate).format(GIDDH_DATE_FORMAT));
+                    } else {
+                        transactionFormGroup.get("date")?.patchValue(dayjs(entryDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
+                    }
+
+                    entryFormGroup.get("description")?.patchValue(entry.description);
+
+                    const discountsFormArray = entryFormGroup.get('discounts') as FormArray;
+                    discountsFormArray.clear();
+                    if (entry.discounts?.length) {
+                        entry.discounts?.forEach(discount => {
+                            discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                        });
+                    } else {
+                        this.account.applicableDiscounts?.forEach(selectedDiscount => {
+                            this.discountsList?.forEach(discount => {
+                                if (discount?.uniqueName === selectedDiscount?.uniqueName) {
+                                    discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
+                                }
+                            });
+                        });
+                    }
+
+                    const taxesFormArray = entryFormGroup.get('taxes') as FormArray;
+                    taxesFormArray.clear();
+
+                    const selectedTaxes = [];
+                    let otherTax = null;
+                    entry?.taxes?.forEach(selectedTax => {
+                        this.allCompanyTaxes?.forEach(tax => {
+                            if (tax.uniqueName === selectedTax?.uniqueName) {
+                                if (this.otherTaxTypes.includes(tax.taxType)) {
+                                    otherTax = tax;
+                                } else {
+                                    selectedTaxes.push(tax);
+                                }
+                            }
+                        });
+                    });
+
+                    selectedTaxes?.forEach(tax => {
+                        taxesFormArray.push(this.getTransactionTaxFormGroup(tax));
+                    });
+
+                    if (!otherTax && this.account?.otherApplicableTaxes?.length) {
+                        this.allCompanyTaxes?.forEach(tax => {
+                            if (this.account?.otherApplicableTaxes[0]?.uniqueName === tax?.uniqueName && this.otherTaxTypes.includes(tax.taxType)) {
+                                otherTax = tax;
+                            }
+                        });
+                    }
+
+                    if (otherTax) {
+                        const selectedOtherTax = this.allCompanyTaxes?.filter(tax => tax.uniqueName === otherTax.uniqueName);
+                        otherTax['taxDetail'] = selectedOtherTax[0].taxDetail;
+                        otherTax['name'] = selectedOtherTax[0].name;
+                        this.getSelectedOtherTax(entryIndex, otherTax, otherTax.calculationMethod);
+                    }
+
+                    this.activeEntryIndex = entryIndex;
+
+                    transactionFormGroup.get('account.name')?.patchValue(item.account?.name);
+                    transactionFormGroup.get('account.uniqueName')?.patchValue(item.account?.uniqueName);
+                    transactionFormGroup.get('amount.amountForAccount').patchValue(item.amount.amountForAccount);
+                    entryFormGroup.get('hsnNumber')?.patchValue(item.hsnNumber);
+                    entryFormGroup.get('sacNumber')?.patchValue(item.sacNumber);
+                    entryFormGroup.get('showCodeType')?.patchValue(item.hsnNumber ? 'hsn' : 'sac');
+
+                    if (item.stock) {
+                        transactionFormGroup.get('stock.name')?.patchValue(item.stock.name);
+                        transactionFormGroup.get('stock.uniqueName')?.patchValue(item.additional?.stock?.uniqueName);
+                        transactionFormGroup.get('stock.quantity')?.patchValue(item.stock.quantity);
+                        transactionFormGroup.get('stock.rate.rateForAccount')?.patchValue(item.stock.rate.amountForAccount);
+                        transactionFormGroup.get('stock.skuCode')?.patchValue(item.stock.sku);
+                        transactionFormGroup.get('stock.skuCodeHeading')?.patchValue(item.stock.skuCodeHeading);
+                        transactionFormGroup.get('stock.stockUnit.code')?.patchValue(item.stock.stockUnit?.code);
+                        transactionFormGroup.get('stock.stockUnit.uniqueName')?.patchValue(item.stock.stockUnit?.uniqueName);
+                        transactionFormGroup.get('stock.variant.getParticular')?.patchValue(false);
+                        transactionFormGroup.get('stock.variant.name')?.patchValue(item.additional?.variant?.name);
+                        transactionFormGroup.get('stock.variant.uniqueName')?.patchValue(item.additional?.variant?.uniqueName);
+                        transactionFormGroup.get('stock.variant.salesTaxInclusive')?.patchValue(false);
+                        transactionFormGroup.get('stock.variant.purchaseTaxInclusive')?.patchValue(item.stock.taxInclusive);
+
+                        this.stockUnits[entryIndex] = observableOf(item.stock.unitRates);
+                        this.componentStore.getStockVariants({ q: item.additional.stock.uniqueName, index: entryIndex, autoSelectVariant: false });
+                    } else {
+                        this.stockVariants[entryIndex] = observableOf([]);
+                        this.stockUnits[entryIndex] = observableOf([]);
+                    }
+
+                    this.checkIfEntriesHasStock();
+                });
             }
         });
     }
@@ -1321,7 +1469,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @return {*}  {void}
      * @memberof VoucherCreateComponent
      */
-    public searchAccount(query: string = '', page: number = 1): void {
+    public searchAccount(query: string = '', page: number = 1, selectAccount: boolean = false): void {
         if (this.voucherType === VoucherTypeEnum.cash) {
             return;
         }
@@ -1331,6 +1479,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         let accountSearchRequest = this.vouchersUtilityService.getSearchRequestObject(this.voucherType, query, page, SearchType.CUSTOMER);
+        if (this.selectAccount) {
+            accountSearchRequest.group = undefined;
+        }
         this.accountSearchRequest = cloneDeep(accountSearchRequest);
         this.accountSearchRequest.isLoading = true;
 
@@ -1342,11 +1493,28 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.voucherAccountResults$.subscribe(res => voucherAccountResults = res);
                 }
                 const newResults = response?.body?.results?.map(res => { return { label: res.name, value: res.uniqueName, additional: res } });
+
+                if (selectAccount) {
+                    this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(query);
+                    const selectedAccount = newResults?.filter(account => account.value === query);
+                    if (selectedAccount?.length && selectedAccount[0]) {
+                        this.selectAccount(selectedAccount[0]);
+                    } else {
+                        this.selectAccount({ label: "", value: query });
+                    }
+                    this.openAccountDropdown = false;
+                }
+
                 this.voucherAccountResults$ = observableOf(voucherAccountResults.concat(...newResults));
             } else {
                 this.accountSearchRequest.loadMore = false;
                 if (page === 1) {
                     this.voucherAccountResults$ = observableOf(null);
+                }
+
+                if (selectAccount) {
+                    this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(query);
+                    this.selectAccount({ label: "", value: query });
                 }
             }
             this.accountSearchRequest.isLoading = false;
@@ -1641,6 +1809,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.getExchangeRate(this.account.baseCurrency, this.company.baseCurrency, this.invoiceForm.get('date')?.value);
         }
 
+        this.invoiceForm.controls["account"].get("customerName")?.patchValue(accountData?.name);
         this.invoiceForm.controls["account"].get("attentionTo").setValue(accountData?.attentionTo);
         this.invoiceForm.controls["account"].get("email").setValue(accountData?.email);
         this.invoiceForm.controls["account"].get("mobileNumber").setValue(accountData?.mobileNo);
@@ -3362,7 +3531,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      *
      * @memberof VoucherCreateComponent
      */
-    public resetVoucherForm(openAccountDropdown: boolean = true): void {
+    public resetVoucherForm(openAccountDropdown: boolean = true, initialLoad: boolean = false): void {
         const exchangeRate = this.invoiceForm.get('exchangeRate')?.value;
         const entriesFormArray = this.invoiceForm.get('entries') as FormArray;
         entriesFormArray.clear();
@@ -3443,7 +3612,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.componentStore.resetAll();
         this.resetVoucherListForCreditDebitNote();
 
-        this.searchAccount();
+        if (!initialLoad) {
+            this.searchAccount();
+        }
 
         setTimeout(() => {
             this.openAccountDropdown = openAccountDropdown;

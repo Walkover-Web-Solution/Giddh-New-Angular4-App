@@ -46,6 +46,7 @@ export interface VoucherState {
     voucherListForCreditDebitNote: any;
     pendingPurchaseOrders: any[];
     countryList: any[];
+    ledgerEntries: any[];
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -74,7 +75,8 @@ const DEFAULT_STATE: VoucherState = {
     vouchersForAdjustment: null,
     voucherListForCreditDebitNote: null,
     pendingPurchaseOrders: null,
-    countryList: null
+    countryList: null,
+    ledgerEntries: null
 };
 
 @Injectable()
@@ -117,6 +119,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public pendingPurchaseOrders$ = this.select((state) => state.pendingPurchaseOrders);
     public countryList$ = this.select((state) => state.countryList);
     public deleteAttachmentIsSuccess$ = this.select((state) => state.deleteAttachmentIsSuccess);
+    public ledgerEntries$ = this.select((state) => state.ledgerEntries);
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
@@ -691,6 +694,29 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 countryList: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getEntriesByEntryUniqueNames = this.effect((data: Observable<{ accountUniqueName: any, payload: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.getEntriesByEntryUniqueNames(req.accountUniqueName, req.payload).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                ledgerEntries: res.body?.entries
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                ledgerEntries: null
                             });
                         }
                     ),
