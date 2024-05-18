@@ -137,10 +137,9 @@
                     <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
                     <span class="icon-advance-filter"></span>
                 </div>
-                <div class="btn-group ml-auto">
+                <div class="btn-group ml-auto" *ngIf="selectedReceipts?.length > 0 || allReceipts?.length > 0">
                     <button
                         class="btn btn-primary"
-                        *ngIf="selectedReceipts?.length > 0 || allReceipts?.length > 0"
                         (click)="openBulkExport(bulkExport)"
                     >
                         {{ commonLocaleData?.app_export }}

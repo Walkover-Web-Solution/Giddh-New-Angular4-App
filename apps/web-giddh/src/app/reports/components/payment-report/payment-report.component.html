@@ -138,10 +138,9 @@
                         <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
                         <span class="icon-advance-filter"></span>
                     </div>
-                    <div class="btn-group ml-3">
+                    <div class="btn-group ml-3" *ngIf="selectedPayments?.length > 0 || allPayments?.length > 0">
                         <button
                             class="btn btn-primary"
-                            *ngIf="selectedPayments?.length > 0 || allPayments?.length > 0"
                             (click)="openBulkExport(bulkExport)"
                         >
                             {{ commonLocaleData?.app_export }}

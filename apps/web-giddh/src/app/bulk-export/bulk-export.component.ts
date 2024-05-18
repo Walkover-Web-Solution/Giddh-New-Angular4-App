@@ -9,7 +9,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { saveAs } from 'file-saver';
 
-type bulkExportVoucherType = 'sales' | 'debit note' | 'credit note' | 'purchase' | 'payment' | 'receipt';
+type bulkExportVoucherTypes = 'sales' | 'debit note' | 'credit note' | 'purchase' | 'payment' | 'receipt';
 
 @Component({
     selector: 'invoice-bulk-export',
@@ -19,7 +19,7 @@ type bulkExportVoucherType = 'sales' | 'debit note' | 'credit note' | 'purchase'
 
 export class BulkExportComponent implements OnDestroy {
     /** Type of voucher */
-    @Input() public type: bulkExportVoucherType = "sales";
+    @Input() public type: bulkExportVoucherTypes = "sales";
     /** Selected Vouchers */
     @Input() public voucherUniqueNames: any[] = [];
     /** Advance Search Parameters */
