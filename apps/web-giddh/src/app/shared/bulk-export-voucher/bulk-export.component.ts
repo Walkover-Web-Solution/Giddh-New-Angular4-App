@@ -12,7 +12,7 @@ import { saveAs } from 'file-saver';
 type bulkExportVoucherTypes = 'sales' | 'debit note' | 'credit note' | 'purchase' | 'payment' | 'receipt';
 
 @Component({
-    selector: 'invoice-bulk-export',
+    selector: 'bulk-export-voucher',
     templateUrl: './bulk-export.component.html',
     styleUrls: [`./bulk-export.component.scss`]
 })
