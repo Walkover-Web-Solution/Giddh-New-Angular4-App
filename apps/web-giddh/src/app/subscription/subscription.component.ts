@@ -187,7 +187,11 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 if (response.dueAmount > 0) {
                     this.initializePayment(response);
                 } else {
-                    this.router.navigate(['/pages/subscription/buy-plan']);
+                    if (response.status === 'trial') {
+                        this.router.navigate(['/pages/subscription/buy-plan']);
+                    } else {
+                        this.router.navigate(['/pages/subscription/buy-plan/' + response.subscriptionId]);
+                    }
                 }
             }
         });
