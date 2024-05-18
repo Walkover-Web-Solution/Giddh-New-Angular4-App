@@ -615,7 +615,7 @@
         [totalItems]="
             selectedPayments && selectedPayments.length > 0
                 ? selectedPayments.length
-                : allPayments && pageConfiguration.totalItems
+                : allPayments && allPayments.length
         "
         (closeModelEvent)="bulkExportModalRef.hide()"
     >

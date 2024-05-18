@@ -760,7 +760,7 @@
         [totalItems]="
             selectedReceipts && selectedReceipts.length > 0
                 ? selectedReceipts.length
-                : allReceipts && pageConfiguration.totalItems
+                : allReceipts && allReceipts.length
         "
         (closeModelEvent)="bulkExportModalRef.hide()"
     >
