@@ -77,7 +77,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { MatTabsModule } from '@angular/material/tabs';
-import { BulkExportModule } from '../bulk-export/bulk-export.module';
+import { BulkExportModule } from '../shared/bulk-export/bulk-export.module';
 
 @NgModule({
     declarations: [
