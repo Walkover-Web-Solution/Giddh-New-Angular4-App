@@ -866,7 +866,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 taxAmount = 0;
             }
             taxEntryControl?.get('amount')?.patchValue(taxAmount);
-            toEntryControl.get('amount')?.patchValue(amount + taxAmount);
+            toEntryControl.get('amount')?.patchValue(amount);
             byEntryControl.get('amount')?.patchValue(amount + taxAmount);
         } else {
             taxAmount = 0;
@@ -1365,9 +1365,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             if (control.get('type').value.toLowerCase() === 'to') {
                 if (!control.get('isDiscountApplied')?.value) {
                     totalCredit += control.get('amount').value;
-                }
-                if (control.get('isTaxApplied').value) {
-                    totalCredit -= control.get('amount').value;
                 }
             } else {
                 if (!control.get('isDiscountApplied')?.value) {
