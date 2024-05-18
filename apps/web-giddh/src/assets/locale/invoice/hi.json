@@ -115,10 +115,6 @@
         "attachment": "संलग्नक"
     },
     "invalid_email": "[EMAIL] अमान्य ईमेल है!",
-    "select_copy": "कॉपी का चयन करें",
-    "select_order": "आदेश चुनें",
-    "add_multiple_email": "आप अलग से कई आईडी का अल्पविराम जोड़ सकते हैं",
-    "recipients_email": "प्राप्तकर्ता ईमेल आईडी",
     "generate_multiple": "एकाधिक उत्पन्न करें",
     "generate_compound": "यौगिक उत्पन्न करें",
     "preview_generate": "पूर्वावलोकन और उत्पन्न करें",
