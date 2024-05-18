@@ -799,7 +799,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             const transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
             transactionsFormArray.removeAt(index);
 
-            this.calculateTaxDiscount();
             const { totalCredit, totalDebit } = this.calculateTotalCreditAndDebit();
             this.totalCreditAmount = totalCredit;
             this.totalDebitAmount = totalDebit;
@@ -868,7 +867,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
             taxEntryControl?.get('amount')?.patchValue(taxAmount);
             toEntryControl.get('amount')?.patchValue(amount + taxAmount);
-            byEntryControl.get('amount')?.patchValue(byEntryControl?.value?.actualAmount + taxAmount);
+            byEntryControl.get('amount')?.patchValue(amount + taxAmount);
         } else {
             taxAmount = 0;
         }
@@ -1095,8 +1094,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
                     // Update transaction form group with received data
                     transactionAtIndex?.patchValue({
-                        amount: this.calculateDiffAmount(transactionAtIndex.get('type')?.value?.toLowerCase()),
-                        actualAmount: this.calculateDiffAmount(transactionAtIndex.get('type')?.value?.toLowerCase()),
+                        amount: !this.isSalesEntry ? this.calculateDiffAmount(transactionAtIndex.get('type')?.value?.toLowerCase()) : 0,
+                        actualAmount: !this.isSalesEntry ? this.calculateDiffAmount(transactionAtIndex.get('type')?.value?.toLowerCase()) : 0,
                         particular: accModel?.UniqueName,
                         currentBalance: '',
                         selectedAccount: {
@@ -1267,10 +1266,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public calculateAmount(amount: any, transactionObj: any, indx: number): any {
-        if (this.isSalesEntry) { 
-            this.calculateTaxDiscount();
-        }
-
         let lastIndx = (this.journalVoucherForm.get('transactions') as FormArray).length - 1;
         // Update amount in transaction object
         transactionObj.get('amount').setValue(Number(amount));
@@ -1359,6 +1354,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public calculateTotalCreditAndDebit(): { totalCredit: number, totalDebit: number } {
+        if (this.isSalesEntry) { 
+            this.calculateTaxDiscount();
+        }
+        
         let totalCredit = 0;
         let totalDebit = 0;
 
