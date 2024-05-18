@@ -77,7 +77,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { MatTabsModule } from '@angular/material/tabs';
-import { BulkExportModule } from '../shared/bulk-export-voucher/bulk-export.module';
+import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
 
 @NgModule({
     declarations: [
@@ -166,7 +166,7 @@ import { BulkExportModule } from '../shared/bulk-export-voucher/bulk-export.modu
         MatDialogModule,
         WatchVideoModule,
         MatTabsModule,
-        BulkExportModule
+        BulkExportVoucherModule
     ],
     exports: [
         InvoiceRoutingModule,
