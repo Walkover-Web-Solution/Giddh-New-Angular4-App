@@ -606,7 +606,7 @@
 
 <!-- Bulk export modal -->
 <ng-template #bulkExport>
-    <invoice-bulk-export
+    <bulk-export-voucher
         [type]="'payment'"
         [dateRange]="{ from: fromDate, to: toDate}"
         [advanceSearch]="lastListingFilters"
@@ -618,5 +618,5 @@
         "
         (closeModelEvent)="bulkExportModalRef.hide()"
     >
-    </invoice-bulk-export>
+    </bulk-export-voucher>
 </ng-template>

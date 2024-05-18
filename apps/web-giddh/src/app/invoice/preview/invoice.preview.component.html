@@ -2108,7 +2108,7 @@
 
         <!-- Bulk export modal -->
         <ng-template #bulkExport>
-            <invoice-bulk-export
+            <bulk-export-voucher
                 [type]="selectedVoucher"
                 [dateRange]="invoiceSearchRequest"
                 [advanceSearch]="lastListingFilters"
@@ -2120,7 +2120,7 @@
                 "
                 (closeModelEvent)="modalRef.hide()"
             >
-            </invoice-bulk-export>
+            </bulk-export-voucher>
         </ng-template>
     </div>
 </ng-container>
