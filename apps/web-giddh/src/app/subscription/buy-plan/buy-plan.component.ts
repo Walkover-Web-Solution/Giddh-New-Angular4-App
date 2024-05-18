@@ -448,11 +448,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                 this.activeCompany = response;
                 this.newUserSelectCountry({
-                    "label": this.activeCompany?.subscription.country?.countryCode + " - " + this.activeCompany?.subscription.country?.countryName,
-                    "value": this.activeCompany?.subscription.country?.countryCode,
+                    "label": this.activeCompany?.subscription.country?.alpha3CountryCode + " - " + this.activeCompany?.subscription.country?.countryName,
+                    "value": this.activeCompany?.subscription.country?.alpha3CountryCode,
                     "additional": {
-                        "value": this.activeCompany?.subscription.country?.countryCode,
-                        "label": this.activeCompany?.subscription.country?.countryCode + " - " + this.activeCompany?.subscription.country?.countryName
+                        "value": this.activeCompany?.subscription.country?.alpha3CountryCode,
+                        "label": this.activeCompany?.subscription.country?.alpha3CountryCode + " - " + this.activeCompany?.subscription.country?.countryName
                     }
                 });
                 this.company.addresses = response.addresses;
@@ -839,6 +839,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public getAllPlans(): void {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length) {
+                this.monthlyPlans = response?.filter(plan => plan?.monthlyAmount);
+                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmount);
                 this.monthlyPlans = this.monthlyPlans.sort((a, b) => a.monthlyAmount - b.monthlyAmount);
                 this.yearlyPlans = this.yearlyPlans.sort((a, b) => a.yearlyAmount - b.yearlyAmount);
                 if (this.yearlyPlans?.length) {
