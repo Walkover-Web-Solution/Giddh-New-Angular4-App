@@ -152,7 +152,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
      * @memberof ViewSubscriptionComponent
      */
     public back(): void {
-        this.location.back();
+        this.router.navigate(['/pages/subscription']);
     }
 
     /**
