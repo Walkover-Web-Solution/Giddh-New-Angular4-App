@@ -59,7 +59,7 @@ export class BulkExportComponent implements OnDestroy {
      * Callback for translation response complete
      *
      * @param {boolean} event
-     * @memberof BulkExportModal
+     * @memberof BulkExportComponent
      */
     public translationComplete(event: boolean): void {
         if (event) {
@@ -75,7 +75,7 @@ export class BulkExportComponent implements OnDestroy {
     /**
      * Get company email
      *
-     * @memberof BulkExportModal
+     * @memberof BulkExportComponent
      */
     public getRecipientEmail(): void {
         this.store.pipe(select(appState => appState.session.user), take(1)).subscribe(result => {
@@ -89,7 +89,7 @@ export class BulkExportComponent implements OnDestroy {
      * Export the vouchers
      *
      * @param {boolean} event
-     * @memberof BulkExportModal
+     * @memberof BulkExportComponent
      */
     public exportVouchers(event: boolean): void {
         if (this.isLoading) {
@@ -178,7 +178,7 @@ export class BulkExportComponent implements OnDestroy {
     /**
      * Emit the close modal event
      *
-     * @memberof BulkExportModal
+     * @memberof BulkExportComponent
      */
     public closeModal(): void {
         this.closeModelEvent.emit(true);
@@ -187,7 +187,7 @@ export class BulkExportComponent implements OnDestroy {
     /**
      * Releases memory
      *
-     * @memberof BulkExportModal
+     * @memberof BulkExportComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
