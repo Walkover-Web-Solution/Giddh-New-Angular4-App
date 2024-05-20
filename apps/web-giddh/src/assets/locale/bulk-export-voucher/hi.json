@@ -1,0 +1,12 @@
+{
+    "select_copy": "कॉपी का चयन करें",
+    "select_order": "आदेश चुनें",
+    "add_multiple_email": "आप अलग से कई आईडी का अल्पविराम जोड़ सकते हैं",
+    "recipients_email": "प्राप्तकर्ता ईमेल आईडी",
+    "invoice_copy_options": {
+        "original": "मूल",
+        "customer": "ग्राहक",
+        "transport": "ट्रांसपोर्ट",
+        "attachment": "संलग्नक"
+    }
+}
