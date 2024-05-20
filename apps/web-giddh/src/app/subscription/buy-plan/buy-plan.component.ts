@@ -207,9 +207,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-
-
-
         this.createSubscriptionResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.responseSubscriptionId = response.subscriptionId;

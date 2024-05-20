@@ -437,7 +437,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     /**
-     *Redirection to new buy plan page
+    * Redirection to new buy plan page
      *
      * @memberof SubscriptionComponent
      */
