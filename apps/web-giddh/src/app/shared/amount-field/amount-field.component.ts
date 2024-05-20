@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { GeneralService } from '../../services/general.service';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
     selector: 'amount-field',
@@ -21,7 +22,7 @@ export class AmountFieldComponent implements OnInit, OnChanges {
     /** this will store direction */
     public direction: string = "ltr";
 
-    constructor(private generalService: GeneralService) {
+    constructor(private generalService: GeneralService, private decimalPipe: DecimalPipe) {
 
     }
 
@@ -57,5 +58,16 @@ export class AmountFieldComponent implements OnInit, OnChanges {
                 this.direction = "rtl";
             }
         }
+    }
+
+    /**
+     * Format number with comma separated 
+     *
+     * @param {number} value
+     * @returns {(string | null)}
+     * @memberof AmountFieldComponent
+     */
+    public formatNumber(value: number): string {
+        return this.decimalPipe.transform(value, '1.0-0', 'en-US');
     }
 }
