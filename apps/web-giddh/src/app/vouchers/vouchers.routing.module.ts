@@ -31,11 +31,13 @@ const routes: Routes = [
             },
             {
                 path: ":voucherType/:accountUniqueName/create",
-                component: VoucherCreateComponent
+                component: VoucherCreateComponent,
+                canDeactivate: [PageLeaveConfirmationGuard]
             },
             {
                 path: ":voucherType/:accountUniqueName/:uniqueName/edit",
-                component: VoucherCreateComponent
+                component: VoucherCreateComponent,
+                canDeactivate: [PageLeaveConfirmationGuard]
             }
         ]
     }
