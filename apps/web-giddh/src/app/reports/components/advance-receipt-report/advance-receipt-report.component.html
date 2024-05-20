@@ -129,21 +129,23 @@
                         </ul>
                     </ng-container>
                 </div>
-                <div
-                    class="advance-icon cursor-pointer btn btn-primary mr-0"
-                    [tooltip]="commonLocaleData?.app_advance_search"
-                    (click)="openModal()"
-                >
-                    <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
-                    <span class="icon-advance-filter"></span>
-                </div>
-                <div class="btn-group ml-auto" *ngIf="selectedReceipts?.length > 0 || allReceipts?.length > 0">
-                    <button
-                        class="btn btn-primary"
-                        (click)="openBulkExport(bulkExport)"
+                <div>
+                    <div
+                        class="advance-icon cursor-pointer btn btn-primary mr-0"
+                        [tooltip]="commonLocaleData?.app_advance_search"
+                        (click)="openModal()"
                     >
-                        {{ commonLocaleData?.app_export }}
-                    </button>
+                        <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
+                        <span class="icon-advance-filter"></span>
+                    </div>
+                    <div class="btn-group ml-3" *ngIf="selectedReceipts?.length > 0 || allReceipts?.length > 0">
+                        <button
+                            class="btn btn-primary"
+                            (click)="openBulkExport(bulkExport)"
+                        >
+                            {{ commonLocaleData?.app_export }}
+                        </button>
+                    </div>
                 </div>
                 <!-- Invoice filter section ends -->
             </div>
@@ -263,7 +265,7 @@
                         "
                     >
                         <tr>
-                            <th>
+                            <th width="50px">
                                 <div
                                     *ngIf="
                                         (voucherApiVersion === 2 &&
@@ -481,7 +483,7 @@
                             *ngFor="let receipt of allReceipts; let i = index"
                             (mouseover)="hoveredReceiptUniqueName = receipt?.uniqueName"
                         >
-                            <td data-title="#">
+                            <td data-title="#" width="50px">
                                 <div
                                     *ngIf="
                                         (voucherApiVersion === 2 &&

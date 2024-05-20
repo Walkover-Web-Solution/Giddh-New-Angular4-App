@@ -348,7 +348,7 @@
                             *ngFor="let payment of allPayments; let i = index"
                             (mouseover)="hoveredPaymentUniqueName = payment?.uniqueName"
                         >
-                            <td data-title="#">
+                            <td data-title="#" width="50px">
                                 <div
                                     *ngIf="
                                         hoveredPaymentUniqueName !== payment?.uniqueName &&
