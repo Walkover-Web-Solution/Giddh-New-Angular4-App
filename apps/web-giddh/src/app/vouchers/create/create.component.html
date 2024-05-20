@@ -349,7 +349,7 @@
                                         formGroupName="warehouse">
                                         <reactive-dropdown-field [cssClass]="'border-0'" [name]="'warehouse'"
                                             formControlName="uniqueName" [label]="localeData?.select_warehouse_placeholder" [placeholder]="commonLocaleData?.app_select"
-                                            [options]="warehouses"></reactive-dropdown-field>
+                                            [options]="warehouses" [labelValue]="invoiceForm.controls['warehouse']?.get('name')?.value"></reactive-dropdown-field>
                                     </div>
                                 </div>
 
@@ -1314,7 +1314,7 @@
                                             <div class="container px-0">
                                                 <div class="row">
                                                     <div class="col-12"
-                                                        *ngIf="!invoiceType.isPurchaseOrder && (currentVoucherFormDetails?.depositAllowed || ((invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote) && vouchersForAdjustment?.length)) && (isUpdateMode && vouchersForAdjustment?.length)">
+                                                        *ngIf="!invoiceType.isPurchaseOrder && (currentVoucherFormDetails?.depositAllowed || ((invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote) && vouchersForAdjustment?.length)) && (!isUpdateMode || (isUpdateMode && (vouchersForAdjustment?.length || isAdjustAmount)))">
                                                         <mat-card>
                                                             <mat-card-header>
                                                                 <mat-card-title>
@@ -1349,7 +1349,7 @@
                                                                             </div>
                                                                         </ng-container>
                                                                         <div class="col"
-                                                                            *ngIf="(invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote) && vouchersForAdjustment?.length">
+                                                                            *ngIf="(invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote) && (vouchersForAdjustment?.length || isAdjustAmount)">
                                                                             <div
                                                                                 class="d-flex align-items-center column-gap1">
                                                                                 <span>{{ localeData?.adjust_amount }}</span>

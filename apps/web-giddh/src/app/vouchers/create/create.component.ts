@@ -739,6 +739,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.selectedFileName = response.attachedFileName;
                 }
 
+                if (response?.adjustments?.length) {
+                    this.advanceReceiptAdjustmentData = { adjustments: response?.adjustments };
+                    this.calculateAdjustedVoucherTotal(response?.adjustments);
+                }
+
                 console.log(this.invoiceForm?.value);
 
                 const entriesFormArray = this.invoiceForm.get('entries') as FormArray;
@@ -1978,7 +1983,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             date: [!this.invoiceType.isPurchaseOrder && !this.invoiceType.isEstimateInvoice && !this.invoiceType.isProformaInvoice ? voucherDate || this.universalDate || dayjs().format(GIDDH_DATE_FORMAT) : null],
             description: [entryData ? entryData?.description : ''],
             voucherType: [this.voucherType],
-            uniqueName: [''],
+            uniqueName: [entryData ? entryData?.uniqueName : ''],
             showCodeType: [entryData && entryData?.hsnNumber ? 'hsn' : 'sac'], //temp
             hsnNumber: [entryData ? entryData?.hsnNumber : ''],
             sacNumber: [entryData ? entryData?.sacNumber : ''],
@@ -3798,12 +3803,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             });
         }
         this.adjustPaymentData = advanceReceiptsAdjustEvent.adjustPaymentData;
-        if (this.adjustPaymentData.totalAdjustedAmount) {
-            this.isAdjustAmount = true;
-        } else {
-            this.isAdjustAmount = false;
-        }
-
         this.calculateAdjustedVoucherTotal(advanceReceiptsAdjustEvent.adjustVoucherData.adjustments)
         this.adjustPaymentBalanceDueData = this.getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment();
         this.calculateBalanceDue();
@@ -3829,14 +3828,23 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         (this.voucherType === AdjustedVoucherType.CreditNote && item?.voucherType === AdjustedVoucherType.OpeningBalance && item.voucherBalanceType === "cr") ||
                         ((this.voucherType === AdjustedVoucherType.CreditNote || this.voucherType === AdjustedVoucherType.Purchase || this.voucherType === AdjustedVoucherType.Receipt || this.voucherType === AdjustedVoucherType.AdvanceReceipt) && (item?.voucherType === AdjustedVoucherType.Journal || item?.voucherType === AdjustedVoucherType.JournalVoucher) && item?.voucherBalanceType === "cr") ||
                         ((this.voucherType === AdjustedVoucherType.Purchase || this.voucherType === AdjustedVoucherType.PurchaseInvoice) && (item?.voucherType === AdjustedVoucherType.Journal || item?.voucherType === AdjustedVoucherType.JournalVoucher) && item?.voucherBalanceType === "cr"))) {
-                        totalAmount -= Number(item.adjustmentAmount ? item.adjustmentAmount.amountForAccount : 0);
+                        if (item?.amount?.amountForAccount) {
+                            totalAmount -= Number(item?.amount?.amountForAccount);
+                        } else {
+                            totalAmount -= Number(item.adjustmentAmount ? item.adjustmentAmount.amountForAccount : 0);
+                        }
                     } else {
-                        totalAmount += Number(item.adjustmentAmount ? item.adjustmentAmount.amountForAccount : 0);
+                        if (item?.amount?.amountForAccount) {
+                            totalAmount += Number(item?.amount?.amountForAccount);
+                        } else {
+                            totalAmount += Number(item.adjustmentAmount ? item.adjustmentAmount.amountForAccount : 0);
+                        }
                     }
                 });
             }
             this.totalAdvanceReceiptsAdjustedAmount = totalAmount;
             this.adjustPaymentData.totalAdjustedAmount = this.totalAdvanceReceiptsAdjustedAmount;
+            console.log(this.adjustPaymentData);
             if (this.adjustPaymentData.totalAdjustedAmount > 0) {
                 this.isAdjustAmount = true;
             } else {
