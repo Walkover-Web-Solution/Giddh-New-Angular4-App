@@ -1957,11 +1957,11 @@ export class GeneralService {
     /**
      * Get Country Flag Image Url by 2 digit country code
      *
-     * @param {*} alpha2CountryCode
+     * @param {*} countryCode
      * @returns {string}
      * @memberof GeneralService
      */
-    public getCountryFlagUrl(alpha2CountryCode): string {
-        return alpha2CountryCode ? `https://giddh-uploads-2.s3.ap-south-1.amazonaws.com/flags/${alpha2CountryCode?.toLowerCase()}.svg` : '';
+    public getCountryFlagUrl(countryCode): string {
+        return countryCode ? `https://giddh-uploads-2.s3.ap-south-1.amazonaws.com/flags/${countryCode?.toLowerCase()}.svg` : '';
     }
 }
