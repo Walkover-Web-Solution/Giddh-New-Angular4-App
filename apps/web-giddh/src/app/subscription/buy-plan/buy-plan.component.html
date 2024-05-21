@@ -24,7 +24,9 @@
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <div class="width-100 dropdown-wrapper" *ngIf="!(planListInProgress$ | async) && !isLoading && !isChangePlan">
                                         <div class="country-dropdown d-flex flex-column" [ngClass]="{ 'mx-auto': !inputData?.length }">
+                                           
                                             <img [src]="getFlagUrl(currentCountry.value?.additional?.alpha2CountryCode ? currentCountry.value?.additional?.alpha2CountryCode : currentCountry.value?.additional?.alpha3CountryCode)" [alt]="'IN -Inida'" width="32" height="32" class="flag cursor-pointer" (click)="countryList.open()">
+
                                             <mat-select [name]="'country'" [formControl]="currentCountry" #countryList  (selectionChange)="newUserSelectCountry($event.value, false)"  panelClass="country-dropdown-list" [placeholder]="
                                             commonLocaleData?.app_select + ' ' + commonLocaleData?.app_country">
                                                 <!-- <mat-select-trigger class="pr-2">
@@ -33,7 +35,7 @@
                                                 <ng-container *ngFor="let country of countrySource">
                                                     <mat-option [value]="country">
                                                        <div class="d-flex w-100 align-items-center column-gap1">
-                                                            <img [src]="getFlagUrl(country.additional?.alpha2CountryCode ? country.value : country.additional?.alpha3CountryCode )" [alt]="country.label" width="24" height="16">
+                                                            <img [src]="getFlagUrl(country.additional?.alpha2CountryCode ? country.additional?.alpha2CountryCode : country.additional?.alpha3CountryCode )" [alt]="country.label" width="24" height="16">
                                                             <span>{{country.label}}</span>
                                                        </div>
                                                     </mat-option>
@@ -168,7 +170,7 @@
                                                                     </span>
                                                                 </s>
                                                             </p>
-                                                            <p class="mb-3">
+                                                            <p class="mb-3 mt-2">
                                                                 <span class="font-24">
                                                                     <span class="strong">
                                                                     <amount-field

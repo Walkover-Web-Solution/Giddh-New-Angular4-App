@@ -267,8 +267,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.countrySource = [];
                 Object.keys(response).forEach(key => {
                     this.countrySource.push({
-                        value: response[key]?.alpha2CountryCode ? response[key].alpha2CountryCode : response[key].alpha3CountryCode,
-                        label: (response[key]?.alpha2CountryCode ? response[key].alpha2CountryCode : response[key].alpha3CountryCode) + ' - ' + response[key].countryName,
+                        value: response[key].alpha3CountryCode,
+                        label: response[key].alpha3CountryCode + ' - ' + response[key].countryName,
                         additional: response[key]
                     });
                 });
@@ -290,8 +290,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.commonCountrySource = [];
                 Object.keys(response).forEach(key => {
                     this.commonCountrySource.push({
-                        value: response[key]?.alpha2CountryCode ? response[key].alpha2CountryCode : response[key].alpha3CountryCode,
-                        label: (response[key]?.alpha2CountryCode ? response[key].alpha2CountryCode : response[key].alpha3CountryCode) + ' - ' + response[key].countryName
+                        value: response[key].alpha3CountryCode,
+                        label: response[key].alpha3CountryCode + ' - ' + response[key].countryName
                     });
                 });
                 this.commonCountrySource$ = observableOf(this.commonCountrySource);
@@ -457,43 +457,43 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                 this.activeCompany = response;
                 this.newUserSelectCountry({
-                    "label": this.activeCompany?.countryV2?.alpha2CountryCode + " - " + this.activeCompany?.countryV2?.countryName,
-                    "value": this.activeCompany?.countryV2?.alpha2CountryCode,
+                    "label": this.activeCompany?.subscription.country?.alpha3CountryCode + " - " + this.activeCompany?.subscription.country?.countryName,
+                    "value": this.activeCompany?.subscription.country?.alpha3CountryCode,
                     "additional": {
-                        "value": this.activeCompany?.countryV2?.alpha2CountryCode,
-                        "label": this.activeCompany?.countryV2?.alpha2CountryCode + " - " + this.activeCompany?.countryV2?.countryName
+                        "value": this.activeCompany?.subscription.country?.alpha3CountryCode,
+                        "label": this.activeCompany?.subscription.country?.alpha3CountryCode + " - " + this.activeCompany?.subscription.country?.countryName
                     }
-                }, false);
+                });
                 this.company.addresses = response.addresses;
             } else {
                 if (localStorage.getItem('Country-Region') === 'IN') {
                     this.newUserSelectCountry({
-                        "label": "IN - India",
-                        "value": "IN",
+                        "label": "IND - India",
+                        "value": "IND",
                         "additional": {
-                            "value": "IN",
-                            "label": "IN - India"
+                            "value": "IND",
+                            "label": "IND - India"
                         }
-                    }, false);
+                    });
                 } else if (localStorage.getItem('Country-Region') === 'GB') {
                     this.newUserSelectCountry({
-                        "label": "GB - United Kingdom",
-                        "value": "GB",
+                        "label": "GBR - United Kingdom",
+                        "value": "GBR",
                         "additional": {
-                            "value": "GB",
-                            "label": "GB - United Kingdom"
+                            "value": "GBR",
+                            "label": "GBR - United Kingdom"
                         }
-                    }, false);
+                    });
                 } else if (localStorage.getItem('Country-Region') === 'AE') {
                     this.newUserSelectCountry({
-                        "label": "AE - United Arab Emirates",
-                        "value": "AE",
+                        "label": "ARE - United Arab Emirates",
+                        "value": "ARE",
                         "additional": {
-                            "value": "AE",
-                            "label": "AE - United Arab Emirates"
+                            "value": "ARE",
+                            "label": "ARE - United Arab Emirates"
                         }
 
-                    }, false);
+                    });
                 } else if (!this.isChangePlan && localStorage.getItem('Country-Region') === 'GL') {
                     this.newUserSelectCountry({
                         "label": "GLB - Global",
@@ -502,7 +502,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                             "value": "GLB",
                             "label": "GLB - Global"
                         }
-                    }, true);
+                    });
                 }
             }
         });
@@ -928,30 +928,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof BuyPlanComponent
      */
-    public newUserSelectCountry(event: any, initialCall: boolean): void {
-        let data;
-        if (initialCall) {
-            if (localStorage.getItem('Country-Region') === 'GL') {
-                data = {
-                    region: event?.value
-                }
-            } else {
-                data = {
-                    countryCode: event?.value
-                }
-            }
-        } else {
-            if (event?.additional?.entity === 'region') {
-                data = {
-                    region: event?.value
-                }
-            } else {
-                data = {
-                    countryCode: event?.value
-                }
-            }
-        }
-        this.componentStore.getAllPlans({ params: data });
+    public newUserSelectCountry(event: any): void {
+        this.componentStore.getAllPlans({ params: { regionCode: event?.value } });
         this.newUserSelectedCountry = event.label;
     }
 
