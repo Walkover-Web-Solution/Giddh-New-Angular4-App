@@ -1962,7 +1962,7 @@ export class GeneralService {
      * @returns {string}
      * @memberof GeneralService
      */
-    public getCountryFlagUrl(countryCode): string {
+    public getCountryFlagUrl(countryCode: string): string {
         return countryCode ? `https://giddh-uploads-2.s3.ap-south-1.amazonaws.com/flags/${countryCode?.toLowerCase()}.svg` : '';
     }
 }
