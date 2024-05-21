@@ -1953,4 +1953,15 @@ export class GeneralService {
     public getClientIp(): any {
         return this.http.get<any>(MOBILE_NUMBER_SELF_URL);
     }
+
+    /**
+     * Get Country Flag Image Url by 2 digit country code
+     *
+     * @param {*} alpha2CountryCode
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getCountryFlagUrl(alpha2CountryCode): string {
+        return alpha2CountryCode ? `https://giddh-uploads-2.s3.ap-south-1.amazonaws.com/flags/${alpha2CountryCode?.toLowerCase()}.svg` : '';
+    }
 }

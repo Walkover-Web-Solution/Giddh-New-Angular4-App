@@ -256,6 +256,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isSubscriptionPage: boolean = false;
     /** Hold plan version  */
     public planVersion: number;
+    /** True if it's a subscription get all plans page */
+    public isSubscriptionGetAllPlansPage: boolean = false;
 
 
     /**
@@ -328,13 +330,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (!this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details") && !this.router.url.includes("/billing-detail")) {
                     this.currentPageUrl = this.router.url;
                 }
-
-                if (this.router.url.includes("/pages/subscription")) {
-                    this.isSubscriptionPage = true;
-                } else {
-                    this.isSubscriptionPage = false;
-                }
-
+              
+                this.isSubscriptionPage = this.router.url.includes("/pages/subscription");
+                this.isSubscriptionGetAllPlansPage = this.router.url.includes("/pages/subscription/buy-plan");
+                
                 this.setCurrentPage();
                 this.addClassInBodyIfPageHasTabs();
                 this.checkIfPageHasTabs();
@@ -2106,5 +2105,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public removeDepreciationMessage(): void {
         document.body?.classList?.remove("depreciation-message");
         this.showDepreciationMessage = false;
+    }
+
+    /**
+     * Navigates back to the previous page.
+     *
+     * @memberof HeaderComponent
+     */
+    public back(): void {
+        this.location.back();
     }
 }
