@@ -15,6 +15,7 @@ export interface SubscriptionState {
     cancelSubscription: any;
     transferSubscriptionInProgress: boolean;
     transferSubscriptionSuccess: boolean;
+    buyPlanSuccess: any;
     verifyOwnershipInProgress: boolean;
     verifyOwnershipSuccess: any;
     subscribedCompaniesInProgress: boolean;
@@ -24,6 +25,7 @@ export interface SubscriptionState {
 export const DEFAULT_SUBSCRIPTION_STATE: SubscriptionState = {
     subscriptionListInProgress: null,
     subscriptionList: [],
+    buyPlanSuccess: [],
     cancelSubscriptionInProgress: null,
     cancelSubscription: null,
     transferSubscriptionInProgress: null,
@@ -248,6 +250,45 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                             return this.patchState({
                                 subscribedCompanies: null,
                                 subscribedCompaniesInProgress: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+    *  Buy plan by Go cardless for UK companies
+    *
+    * @memberof SubscriptionComponentStore
+    */
+    readonly buyPlanByGoCardless = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                console.log(req);
+                return this.subscriptionService.buyPlanByGoCardless(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    buyPlanSuccess: res?.body ?? null,
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    buyPlanSuccess: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
+
+                            return this.patchState({
+                                buyPlanSuccess: null
                             });
                         }
                     ),
