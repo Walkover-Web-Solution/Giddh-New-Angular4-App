@@ -89,12 +89,18 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public zwDisplayedHeaderColumns = ['section', 'office-use', 'value-of-supply', 'output-tax'];
     /** Hold Zimbabwe table displayed columns for last section */
     public zwDisplayedColumnsForLastSection: string[] = ['name', 'amount', 'decimal'];
+    /** Hold Kenya table displayed columns */
+    public kenyaDisplayedColumns: string[] = ['number', 'description', 'amount', 'rate', 'ot-amount'];
+    /** Hold Kenya table displayed columns */
+    public kenyaDisplayedColumnsForLastSection: string[] = ['number', 'description', 'vat-amount'];
     /** Holds Section Number which  show Total Output Tax Row */
     public showTotalOutputTaxIn: number[] = [9, 19, 20, 21, 22, 23];
     /** True if active country is UK */
     public isUKCompany: boolean = false;
     /** True if active country is Zimbabwe */
     public isZimbabweCompany: boolean = false;
+    /** True if active country is Kenya */
+    public isKenyaCompany: boolean = false;
     /** Hold static months array */
     public months: any[] = [
         { label: 'January', value: 1 },
@@ -102,7 +108,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         { label: 'March', value: 3 },
         { label: 'April', value: 4 },
         { label: 'May', value: 5 },
-        { label: 'June', value: 61 },
+        { label: 'June', value: 6 },
         { label: 'July', value: 7 },
         { label: 'August', value: 8 },
         { label: 'September', value: 9 },
@@ -134,6 +140,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public vatReportCurrencySymbol: string = this.vatReportCurrencyList[0].additional.symbol;
     /** Holds Current Currency Map Amount Decimal currency wise for Zimbabwe report */
     public vatReportCurrencyMap: string[];
+    /** True if Current branch has Tax Number */
+    public hasTaxNumber: boolean = false;
 
     constructor(
         private gstReconcileService: GstReconcileService,
@@ -153,10 +161,11 @@ export class VatReportComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany && !this.activeCompany) {
+            if (activeCompany && this.activeCompany?.uniqueName !== activeCompany.uniqueName) {
                 this.activeCompany = activeCompany;
                 this.isUKCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'GB';
                 this.isZimbabweCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'ZW';
+                this.isKenyaCompany = this.activeCompany?.countryV2?.alpha2CountryCode === 'KE';
                 if (this.isUKCompany) {
                     this.getURLHMRCAuthorization();
                 }
@@ -206,6 +215,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                         this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
+                        this.hasTaxNumber = this.currentBranch?.addresses?.filter(address => address?.taxNumber?.length > 0)?.length > 0;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -213,6 +223,9 @@ export class VatReportComponent implements OnInit, OnDestroy {
                             alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
                         };
+                    }
+                    if (this.hasTaxNumber || this.currentOrganizationType === OrganizationType.Company) {
+                        this.loadTaxDetails();
                     }
                 }
             } else {
@@ -232,7 +245,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 this.selectedMonth = "";
                 this.selectedYear = "";
                 this.year = null;
-                this.loadTaxDetails();
             }
         });
     }
@@ -266,12 +278,15 @@ export class VatReportComponent implements OnInit, OnDestroy {
             if (this.isZimbabweCompany) {
                 vatReportRequest.currencyCode = this.vatReportCurrencyCode;
                 countryCode = 'ZW';
+            } else if (this.isKenyaCompany) {
+                vatReportRequest.currencyCode = this.vatReportCurrencyCode;
+                countryCode = 'KE';
             } else {
                 countryCode = 'UK';
             }
             this.vatReport = [];
             this.isLoading = true;
-            if (!this.isUKCompany && !this.isZimbabweCompany) {
+            if (!this.isUKCompany && !this.isZimbabweCompany && !this.isKenyaCompany) {
                 this.vatService.getVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (res) {
                         this.isLoading = false;
@@ -316,6 +331,9 @@ export class VatReportComponent implements OnInit, OnDestroy {
         if (this.activeCompany?.countryV2?.alpha2CountryCode === 'ZW') {
             vatReportRequest.currencyCode = this.vatReportCurrencyCode;
             countryCode = 'ZW';
+        } else if (this.isKenyaCompany) {
+            vatReportRequest.currencyCode = this.vatReportCurrencyCode;
+            countryCode = 'KE';
         } else {
             countryCode = 'UK';
         }
@@ -323,7 +341,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.vatService.downloadVatReport(vatReportRequest, countryCode).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res?.status === "success") {
                 let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
-                return saveAs(blob, `VatReport.xlsx`);
+                return saveAs(blob, `VatReport${this.isKenyaCompany ? '.csv' : '.xlsx'}`);
             } else {
                 this.toasty.clearAllToaster();
                 this.toasty.errorToast(res?.message);
@@ -407,7 +425,9 @@ export class VatReportComponent implements OnInit, OnDestroy {
             }
             this.isTaxApiInProgress = false;
             this.taxNumber = this.taxes[0]?.value;
-            this.getVatReport();
+            setTimeout(() => {
+                this.getVatReport();
+            },100);
         });
     }
 

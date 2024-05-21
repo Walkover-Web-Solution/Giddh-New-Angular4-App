@@ -213,46 +213,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.isChangePlan = true;
             }
         });
-        if (localStorage.getItem('Country-Region') === 'IN') {
-            this.newUserSelectCountry({
-                "label": "IN - India",
-                "value": "IN",
-                "additional": {
-                    "value": "IN",
-                    "label": "IN - India"
-                }
-            }, false);
-        } else if (localStorage.getItem('Country-Region') === 'GB') {
-            this.newUserSelectCountry({
-                "label": "GB - United Kingdom",
-                "value": "GB",
-                "additional": {
-                    "value": "GB",
-                    "label": "GB - United Kingdom"
-                }
-            }, false);
-        } else if (localStorage.getItem('Country-Region') === 'AE') {
-            this.newUserSelectCountry({
-                "label": "AE - United Arab Emirates",
-                "value": "AE",
-                "additional": {
-                    "value": "AE",
-                    "label": "AE - United Arab Emirates"
-                }
-
-            }, false);
-        } else if (!this.isChangePlan && localStorage.getItem('Country-Region') === 'GL') {
-            this.newUserSelectCountry({
-                "label": "GLB - Global",
-                "value": "GLB",
-                "additional": {
-                    "value": "GLB",
-                    "label": "GLB - Global"
-                }
-            }, true);
-        }
-
-
 
         this.createSubscriptionResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -494,7 +454,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     private getActiveCompany(): void {
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                 this.activeCompany = response;
                 this.newUserSelectCountry({
                     "label": this.activeCompany?.countryV2?.alpha2CountryCode + " - " + this.activeCompany?.countryV2?.countryName,
@@ -505,6 +465,45 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     }
                 }, false);
                 this.company.addresses = response.addresses;
+            } else {
+                if (localStorage.getItem('Country-Region') === 'IN') {
+                    this.newUserSelectCountry({
+                        "label": "IN - India",
+                        "value": "IN",
+                        "additional": {
+                            "value": "IN",
+                            "label": "IN - India"
+                        }
+                    }, false);
+                } else if (localStorage.getItem('Country-Region') === 'GB') {
+                    this.newUserSelectCountry({
+                        "label": "GB - United Kingdom",
+                        "value": "GB",
+                        "additional": {
+                            "value": "GB",
+                            "label": "GB - United Kingdom"
+                        }
+                    }, false);
+                } else if (localStorage.getItem('Country-Region') === 'AE') {
+                    this.newUserSelectCountry({
+                        "label": "AE - United Arab Emirates",
+                        "value": "AE",
+                        "additional": {
+                            "value": "AE",
+                            "label": "AE - United Arab Emirates"
+                        }
+
+                    }, false);
+                } else if (!this.isChangePlan && localStorage.getItem('Country-Region') === 'GL') {
+                    this.newUserSelectCountry({
+                        "label": "GLB - Global",
+                        "value": "GLB",
+                        "additional": {
+                            "value": "GLB",
+                            "label": "GLB - Global"
+                        }
+                    }, true);
+                }
             }
         });
     }
@@ -850,7 +849,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length) {
                 this.monthlyPlans = response?.filter(plan => plan?.monthlyAmount > 0);
-                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmount > 0);
+                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmount >= 0);
                 this.monthlyPlans = this.monthlyPlans.sort((a, b) => a.monthlyAmount - b.monthlyAmount);
                 this.yearlyPlans = this.yearlyPlans.sort((a, b) => a.yearlyAmount - b.yearlyAmount);
                 if (this.yearlyPlans?.length) {
