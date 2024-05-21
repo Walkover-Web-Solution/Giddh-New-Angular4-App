@@ -331,8 +331,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.changePlanDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response && response.dueAmoun > 0) {
                 this.initializePayment(response);
+            } else {
+                this.updateSubscriptionPayment(response, true)
             }
         });
     }
@@ -444,14 +446,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                 this.activeCompany = response;
-                    this.newUserSelectCountry({
-                        "label": this.activeCompany?.countryV2?.alpha2CountryCode + " - " + this.activeCompany?.countryV2?.countryName,
+                this.newUserSelectCountry({
+                    "label": this.activeCompany?.countryV2?.alpha2CountryCode + " - " + this.activeCompany?.countryV2?.countryName,
+                    "value": this.activeCompany?.countryV2?.alpha2CountryCode,
+                    "additional": {
                         "value": this.activeCompany?.countryV2?.alpha2CountryCode,
-                        "additional": {
-                            "value": this.activeCompany?.countryV2?.alpha2CountryCode,
-                            "label": this.activeCompany?.countryV2?.alpha2CountryCode + " - " + this.activeCompany?.countryV2?.countryName
-                        }
-                    }, false);
+                        "label": this.activeCompany?.countryV2?.alpha2CountryCode + " - " + this.activeCompany?.countryV2?.countryName
+                    }
+                }, false);
                 this.company.addresses = response.addresses;
             } else {
                 if (localStorage.getItem('Country-Region') === 'IN') {
@@ -1136,15 +1138,15 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @param {*} razorPayResponse
      * @memberof BuyPlanComponent
      */
-    public updateSubscriptionPayment(razorPayResponse: any): void {
+    public updateSubscriptionPayment(razorPayResponse: any, zeroAmount: boolean = false): void {
         let request;
         if (razorPayResponse) {
             request = {
-                paymentId: razorPayResponse.razorpay_payment_id,
-                razorpaySignature: razorPayResponse.razorpay_signature,
-                amountPaid: this.subscriptionResponse?.dueAmount,
+                paymentId: !zeroAmount ? razorPayResponse.razorpay_payment_id : null,
+                razorpaySignature: !zeroAmount ? razorPayResponse.razorpay_signature : null,
+                amountPaid: !zeroAmount ? this.subscriptionResponse?.dueAmount : 0,
                 callNewPlanApi: true,
-                razorpayOrderId: razorPayResponse?.razorpay_order_id
+                razorpayOrderId: !zeroAmount ? razorPayResponse?.razorpay_order_id : null
             };
             let data = { ...request, ...this.subscriptionRequest };
             this.componentStore.changePlan(data);
