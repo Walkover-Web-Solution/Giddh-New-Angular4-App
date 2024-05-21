@@ -144,5 +144,6 @@
     "expected_delivery": "अपेक्षित वितरण",
     "vendor_name": "विक्रेता नाव",
     "sales_as_receipt_voucher": "पावती व्हाउचर म्हणून विक्री",
-    "purchase_as_payment_voucher": "पेमेंट व्हाउचर म्हणून खरेदी करा"
+    "purchase_as_payment_voucher": "पेमेंट व्हाउचर म्हणून खरेदी करा",
+    "po_updated": "खरेदी ऑर्डर यशस्वीरित्या अद्यतनित केले"
 }

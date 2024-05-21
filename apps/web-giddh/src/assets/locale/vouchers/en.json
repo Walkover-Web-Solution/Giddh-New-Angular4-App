@@ -144,5 +144,6 @@
     "expected_delivery": "Expected Delivery",
     "vendor_name": "Vendor Name",
     "sales_as_receipt_voucher": "Sales as Receipt Voucher",
-    "purchase_as_payment_voucher": "Purchase as Payment Voucher"
+    "purchase_as_payment_voucher": "Purchase as Payment Voucher",
+    "po_updated": "Purchase order updated succesfully"
 }
