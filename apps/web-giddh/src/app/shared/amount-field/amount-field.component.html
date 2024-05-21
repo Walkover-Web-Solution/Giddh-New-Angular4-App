@@ -2,7 +2,9 @@
     <p class="d-flex" [dir]="direction">
         <ng-container *ngIf="currencySymbol">
             <span>{{ currencySymbol }}</span>
+            <ng-container *ngIf="spaceAfterCurrencySymbol">
             &nbsp;
+            </ng-container>
         </ng-container>
         <span dir="ltr" *ngIf="useGiddhCurrencyPipe">{{ amount | giddhCurrency }} </span>
         <span dir="ltr" *ngIf="!useGiddhCurrencyPipe">{{ formatNumber(amount) }} </span>

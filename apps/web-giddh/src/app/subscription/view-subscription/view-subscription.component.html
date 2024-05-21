@@ -4,8 +4,8 @@
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
 >
-    <div class="view-subscription-wrap pd-15 d-flex w-100 column-gap15">
-        <div class="view-box mx-auto">
+    <div class="view-subscription-wrap pd-15 d-flex justify-content-center w-100 column-gap15 row-gap15 flex-wrap">
+        <div class="view-box mx-auto w-100">
             <mat-card class="outline-card">
                 <div *ngIf="viewSubscriptionDataInProgress$ | async">
                     <giddh-page-loader></giddh-page-loader>
@@ -104,7 +104,13 @@
                         <div class="d-flex justify-content-between my-3">
                             <p class="strong mb-1 font-16">{{ viewSubscriptionData?.planName }}</p>
                             <span class="font-20">
-                                {{ viewSubscriptionData?.planCurrency?.symbol }} {{ viewSubscriptionData?.amount }}
+                                <amount-field
+                                    class="d-inline-block"
+                                    [amount]="viewSubscriptionData?.amount"
+                                    [currencySymbol]="viewSubscriptionData?.planCurrency?.symbol"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
                             </span>
                         </div>
                         <h4 class="border-bottom pb-3 font-16 mr-t2">Total</h4>
@@ -112,19 +118,40 @@
                             <div>
                                 <p class="light-gray mb-1 font-12">{{ commonLocaleData?.app_company }}</p>
                                 <span class="font-20">
-                                    {{ viewSubscriptionData?.totalCompaniesAllowed }}
+                                    <amount-field
+                                        class="d-inline-block"
+                                        [useGiddhCurrencyPipe]="false"
+                                        [amount]="viewSubscriptionData?.totalCompaniesAllowed"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
+                                    </amount-field>
                                 </span>
                             </div>
                             <div>
                                 <p class="light-gray mb-1 font-12">{{ commonLocaleData?.app_invoice }}</p>
                                 <span class="font-20">
-                                    {{ viewSubscriptionData?.totalInvoices }}
+                                    <amount-field
+                                        class="d-inline-block"
+                                        [useGiddhCurrencyPipe]="false"
+                                        [amount]="viewSubscriptionData?.totalInvoices"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
+                                    </amount-field>
                                 </span>
                             </div>
                             <div class="view-right d-flex align-items-end">
                                 <p class="light-gray mb-1 font-12">{{ localeData?.bill }}</p>
                                 <span class="font-20">
-                                    {{ viewSubscriptionData?.totalBills }}
+                                    <amount-field
+                                        class="d-inline-block"
+                                        [useGiddhCurrencyPipe]="false"
+                                        [amount]="viewSubscriptionData?.totalBills"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
+                                    </amount-field>
                                 </span>
                             </div>
                         </div>
@@ -134,19 +161,40 @@
                             <div>
                                 <p class="light-gray mb-1 font-12">{{ commonLocaleData?.app_company }}</p>
                                 <span class="font-20">
-                                    {{ viewSubscriptionData?.usageCompanyCount }}
+                                    <amount-field
+                                        class="d-inline-block"
+                                        [useGiddhCurrencyPipe]="false"
+                                        [amount]="viewSubscriptionData?.usageCompanyCount"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
+                                    </amount-field>
                                 </span>
                             </div>
                             <div>
                                 <p class="light-gray mb-1 font-12">{{ commonLocaleData?.app_invoice }}</p>
                                 <span class="font-20">
-                                    {{ viewSubscriptionData?.usageInvoiceCount }}
+                                    <amount-field
+                                        class="d-inline-block"
+                                        [useGiddhCurrencyPipe]="false"
+                                        [amount]="viewSubscriptionData?.usageInvoiceCount"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
+                                    </amount-field>
                                 </span>
                             </div>
                             <div class="view-right d-flex align-items-end">
                                 <p class="light-gray mb-1 font-12">{{ localeData?.bill }}</p>
                                 <span class="font-20">
-                                    {{ viewSubscriptionData?.usageBillCount }}
+                                    <amount-field
+                                        class="d-inline-block"
+                                        [useGiddhCurrencyPipe]="false"
+                                        [amount]="viewSubscriptionData?.usageBillCount"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
+                                    </amount-field>
                                 </span>
                             </div>
                         </div>

@@ -19,6 +19,8 @@ export class AmountFieldComponent implements OnInit, OnChanges {
     @Input() public ratePrecision: boolean = true;
     /** this will store giddhCurrency pipe value */
     @Input() public useGiddhCurrencyPipe: boolean = true;
+    /** True to add space between currency symbol and amount */
+    @Input() public spaceAfterCurrencySymbol: boolean = true;
     /** this will store direction */
     public direction: string = "ltr";
 
@@ -68,6 +70,6 @@ export class AmountFieldComponent implements OnInit, OnChanges {
      * @memberof AmountFieldComponent
      */
     public formatNumber(value: number): string {
-        return this.decimalPipe.transform(value, '1.0-0', 'en-US');
+        return this.decimalPipe.transform(value, '1.0-0');
     }
 }

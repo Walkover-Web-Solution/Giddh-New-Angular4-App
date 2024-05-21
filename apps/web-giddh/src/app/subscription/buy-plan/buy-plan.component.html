@@ -4,12 +4,6 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <!-- <div class="w-100 float-left pd-15" *ngIf="!isNewUserLoggedIn">
-        <button mat-stroked-button class="mb-3" (click)="back()">
-            <i class="icon-left back-left"></i>
-            {{ commonLocaleData?.app_back }}
-        </button>
-    </div> -->
     <div class="float-left w-100">
         <div class="buy-plan-wrapper pd-15 w-100">
             <mat-stepper
@@ -28,8 +22,7 @@
                             <div class="plan-width">
                                 <ng-template matStepLabel>{{ localeData?.all_plans }}</ng-template>
                                 <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <!-- <h2 class="font-16 strong mr-3">{{ localeData?.choose_plans }}</h2> -->
-                                    <div class="width-100 dropdown-wrapper" *ngIf="!isChangePlan">
+                                    <div class="width-100 dropdown-wrapper" *ngIf="!(planListInProgress$ | async) && !isLoading && !isChangePlan">
                                         <div class="country-dropdown d-flex flex-column" [ngClass]="{ 'mx-auto': !inputData?.length }">
                                             <img [src]="getFlagUrl(currentCountry.value?.additional?.alpha2CountryCode ? currentCountry.value?.additional?.alpha2CountryCode : currentCountry.value?.additional?.alpha3CountryCode)" [alt]="'IN -Inida'" width="32" height="32" class="flag cursor-pointer" (click)="countryList.open()">
                                             <mat-select [name]="'country'" [formControl]="currentCountry" #countryList  (selectionChange)="newUserSelectCountry($event.value, false)"  panelClass="country-dropdown-list" [placeholder]="
@@ -93,20 +86,6 @@
                                                         'active-plan': selectedPlan?.uniqueName === plan?.uniqueName
                                                     }"
                                                 >
-                                                    <!-- <ng-container *ngIf="popularPlan?.uniqueName === plan?.uniqueName">
-                                                        <div
-                                                            class="d-flex justify-content-center align-items-center"
-                                                            [ngClass]="{
-                                                                'popular-txt':
-                                                                    popularPlan?.uniqueName === plan?.uniqueName
-                                                            }"
-                                                        >
-                                                        </div>
-                                                    </ng-container> -->
-                                                    <!-- <ng-container
-                                                        *ngIf="!(popularPlan?.uniqueName === plan?.uniqueName)"
-                                                    >
-                                                    </ng-container> -->
                                                     <div class="plan-content d-flex flex-column">
                                                         <h2 class="font-20 plan-title d-flex align-items-center justify-content-center">
                                                             {{ plan?.name }}
@@ -124,27 +103,23 @@
                                                                     'feature-txt': !plan?.yearlyDiscountAmount > 0
                                                                 }"
                                                             >
-                                                                <s>
-                                                                    <span class="strong">
-                                                                        <!-- {{ plan?.currency?.symbol }}
-                                                                        {{ plan?.yearlyAmount }} -->
-                                                                        <amount-field
-                                                                            [useGiddhCurrencyPipe]="false"
-                                                                            [amount]="plan?.yearlyAmount"
-                                                                            [currencySymbol]="plan?.currency?.symbol"
-                                                                            [currencyCode]="false"
-                                                                        >
-                                                                        </amount-field>
-                                                                    </span>
+                                                                <s class="strong">
+                                                                    <amount-field
+                                                                        [useGiddhCurrencyPipe]="false"
+                                                                        [spaceAfterCurrencySymbol]="false"
+                                                                        [amount]="plan?.yearlyAmount"
+                                                                        [currencySymbol]="plan?.currency?.symbol"
+                                                                        [currencyCode]="false"
+                                                                    >
+                                                                    </amount-field>
                                                                 </s>
                                                             </p>
                                                             <p class="mb-3 mt-2">
                                                                 <span class="font-24">
                                                                     <span class="strong">
-                                                                        <!-- {{ plan?.currency?.symbol}}
-                                                                        {{ plan?.yearlyAmountAfterDiscount }} -->
                                                                         <amount-field
                                                                             [useGiddhCurrencyPipe]="false"
+                                                                            [spaceAfterCurrencySymbol]="false"
                                                                             [amount]="plan?.yearlyAmountAfterDiscount"
                                                                             [currencySymbol]="plan?.currency?.symbol"
                                                                             [currencyCode]="false"
@@ -160,13 +135,12 @@
                                                                     {{ localeData?.save }}
                                                                     <amount-field
                                                                         [useGiddhCurrencyPipe]="false"
+                                                                        [spaceAfterCurrencySymbol]="false"
                                                                         [amount]="plan?.yearlyDiscountAmount"
                                                                         [currencySymbol]="plan?.currency?.symbol"
                                                                         [currencyCode]="false"
                                                                     >
                                                                     </amount-field>
-                                                                    <!-- {{ plan?.currency?.symbol
-                                                                    }}{{ plan?.yearlyDiscountAmount }} -->
                                                                     {{ localeData?.for }}
                                                                     {{
                                                                         plan?.yearlyDiscount?.duration
@@ -183,10 +157,9 @@
                                                             <p class="mb-2" *ngIf="plan?.monthlyDiscountAmount > 0">
                                                                 <s>
                                                                     <span class="strong">
-                                                                        <!-- {{ plan?.currency?.symbol
-                                                                        }}{{ plan?.monthlyDiscountAmount }} -->
                                                                     <amount-field
                                                                         [useGiddhCurrencyPipe]="false"
+                                                                        [spaceAfterCurrencySymbol]="false"
                                                                         [amount]="plan?.monthlyDiscountAmount"
                                                                         [currencySymbol]="plan?.currency?.symbol"
                                                                         [currencyCode]="false"
@@ -198,11 +171,17 @@
                                                             <p class="mb-3">
                                                                 <span class="font-24">
                                                                     <span class="strong">
-                                                                        {{ plan?.currency?.symbol }}
-                                                                        {{ plan?.monthlyAmount }} /
+                                                                    <amount-field
+                                                                        [useGiddhCurrencyPipe]="false"
+                                                                        [spaceAfterCurrencySymbol]="false"
+                                                                        [amount]="plan?.monthlyAmount"
+                                                                        [currencySymbol]="plan?.currency?.symbol"
+                                                                        [currencyCode]="false"
+                                                                    >
+                                                                    </amount-field>
                                                                     </span>
                                                                     <span class="font-12">
-                                                                        {{
+                                                                        /{{
                                                                         commonLocaleData?.app_duration?.month
                                                                     }}
                                                                     </span>
@@ -211,8 +190,14 @@
                                                             <p *ngIf="plan?.monthlyDiscountAmount > 0">
                                                                 <span class="strong">
                                                                     {{ localeData?.save }}
-                                                                    {{ plan?.currency?.symbol }}
-                                                                    {{ plan?.monthlyDiscountAmount }}
+                                                                    <amount-field
+                                                                        [useGiddhCurrencyPipe]="false"
+                                                                        [spaceAfterCurrencySymbol]="false"
+                                                                        [amount]="plan?.monthlyDiscountAmount"
+                                                                        [currencySymbol]="plan?.currency?.symbol"
+                                                                        [currencyCode]="false"
+                                                                    >
+                                                                    </amount-field>
                                                                     {{ localeData?.for }}
                                                                     {{ plan?.monthlyDiscount?.duration }}
                                                                     {{
@@ -271,7 +256,14 @@
                                                         'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
                                                     }"
                                                 >
-                                                    <span class="sub-plan-name">{{ plan?.invoicesAllowed }}</span>
+                                                    <span class="sub-plan-name">
+                                                        <amount-field
+                                                            [useGiddhCurrencyPipe]="false"
+                                                            [amount]="plan?.invoicesAllowed"
+                                                            [currencySymbol]="false"
+                                                            [currencyCode]="false"
+                                                        >
+                                                        </amount-field></span>
                                                 </div>
                                             </ng-container>
                                         </div>
@@ -289,7 +281,15 @@
                                                         'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
                                                     }"
                                                 >
-                                                    <span>{{ plan?.billsAllowed }}</span>
+                                                    <span>
+                                                        <amount-field
+                                                            [useGiddhCurrencyPipe]="false"
+                                                            [amount]="plan?.billsAllowed"
+                                                            [currencySymbol]="false"
+                                                            [currencyCode]="false"
+                                                        >
+                                                        </amount-field>
+                                                    </span>
                                                 </div>
                                             </ng-container>
                                         </div>
@@ -306,7 +306,15 @@
                                                         'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
                                                     }"
                                                 >
-                                                    <span>{{ plan?.companiesLimit }}</span>
+                                                    <span>
+                                                        <amount-field
+                                                            [useGiddhCurrencyPipe]="false"
+                                                            [amount]="plan?.companiesLimit"
+                                                            [currencySymbol]="false"
+                                                            [currencyCode]="false"
+                                                        >
+                                                        </amount-field>
+                                                    </span>
                                                 </div>
                                             </ng-container>
                                         </div>
@@ -801,7 +809,7 @@
                                         <input matInput [name]="'code'" [placeholder]="localeData?.promo_code" formControlName="promoCode">
                                         <div matSuffix>
                                             <span
-                                                *ngIf="promoCodeResponse[0]?.discountValue"
+                                                *ngIf="!promoCodeResponse[0]?.discountValue"
                                                 [ngClass]="{
                                                     'promocode-button': promoCodeResponse[0]?.discountValue
                                                 }"
@@ -812,7 +820,7 @@
                                                 {{ commonLocaleData?.app_apply }}
                                             </span>
                                             <span
-                                                *ngIf="!promoCodeResponse[0]?.discountValue"
+                                                *ngIf="promoCodeResponse[0]?.discountValue"
                                                 aria-label="Clear"
                                                 class="text-primary cursor-pointer d-block px-1 py-3"
                                                 (click)="applyPromoCode('remove')"
