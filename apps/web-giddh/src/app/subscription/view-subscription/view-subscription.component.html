@@ -4,6 +4,12 @@
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
 >
+    <div class="w-100 float-left pd-15">
+        <button aria-label="back" mat-stroked-button class="mb-3" (click)="back()">
+            <i class="icon-left back-left"></i>
+            {{ commonLocaleData?.app_back }}
+        </button>
+    </div>
     <div class="view-subscription-wrap pd-15 d-flex justify-content-center w-100 column-gap15 row-gap15 flex-wrap">
         <div class="view-box mx-auto w-100">
             <mat-card class="outline-card">
