@@ -25,7 +25,7 @@
                                     <div class="width-100 dropdown-wrapper" *ngIf="!(planListInProgress$ | async) && !isLoading && !isChangePlan">
                                         <div class="country-dropdown d-flex flex-column" [ngClass]="{ 'mx-auto': !inputData?.length }">
                                            
-                                            <img [src]="getFlagUrl(currentCountry.value?.additional?.alpha2CountryCode ? currentCountry.value?.additional?.alpha2CountryCode : currentCountry.value?.additional?.alpha3CountryCode)" [alt]="'IN -Inida'" width="32" height="32" class="flag cursor-pointer" (click)="countryList.open()">
+                                            <img [src]="getFlagUrl(currentCountry.value?.additional?.alpha2CountryCode ? currentCountry.value?.additional?.alpha2CountryCode : currentCountry.value?.additional?.alpha3CountryCode)" [alt]="currentCountry.value?.additional?.countryName" width="32" height="32" class="flag cursor-pointer" (click)="countryList.open()">
 
                                             <mat-select [name]="'country'" [formControl]="currentCountry" #countryList  (selectionChange)="newUserSelectCountry($event.value, false)"  panelClass="country-dropdown-list" [placeholder]="
                                             commonLocaleData?.app_select + ' ' + commonLocaleData?.app_country">
