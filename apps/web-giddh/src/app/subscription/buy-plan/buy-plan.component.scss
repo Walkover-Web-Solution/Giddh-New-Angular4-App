@@ -3,9 +3,23 @@
         border: 1px solid var(--color-red-border) !important;
     }
 
-    .country-dropdown {
-        min-width: 274px;
-        width: 274px;
+    .dropdown-wrapper {
+        .country-dropdown {
+            width: max-content;
+            img {
+                &.flag {
+                    border-radius: 50%;
+                    object-fit: cover;
+                    object-position: center;
+                }
+            }
+            mat-select {
+                 visibility: hidden;
+                 width: 0;
+                 height: 0;
+                 transform: translateY(-10px);
+            }
+        }
     }
 
     .plan-content {
@@ -14,6 +28,7 @@
 
         .plan-title {
             min-height: 72px;
+            font-weight: 400;
         }
 
         h2,
@@ -115,36 +130,24 @@
     }
 
     .active-plan {
-        border-top: 2px solid var(--color-primary-header-background);
-        border-left: 2px solid var(--color-primary-header-background);
-        border-right: 2px solid var(--color-primary-header-background);
+        border-top: 2px solid var(--color-primary-common);
+        border-left: 2px solid var(--color-primary-common);
+        border-right: 2px solid var(--color-primary-common);
     }
 
     .selected-plan-button {
         min-width: 160px;
+        min-height: 36px;
         width: 160px;
         margin: 0 auto;
     }
 
-    .popular-txt {
-        height: 36px;
-        background-color: var(--color-giddh-blue);
-
-        span {
-            color: var(--color-white);
-        }
-    }
-
     .selected-plan {
-        background-color: var(--color-giddh-blue);
+        background-color: var(--color-primary-common);
 
         span {
             color: var(--color-white);
         }
-    }
-
-    .popular-txt-height {
-        height: 36px;
     }
 
     .active-plan-td {
@@ -189,6 +192,10 @@
             height: 38px;
         }
     }
+    amount-field {
+        display: inline-block;
+        text-decoration: inherit;
+    }
 }
 
 .plan-table-wrapper {
@@ -232,6 +239,12 @@
                 }
             }
         }
+    }
+}
+
+.custom-tab {
+    .mat-button-toggle {
+        min-width: 70px;
     }
 }
 

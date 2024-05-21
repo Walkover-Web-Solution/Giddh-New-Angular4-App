@@ -138,12 +138,12 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         });
     }
 
-/**
-* This function will refresh the subscribed companies if move company was succesful and will close the popup
-*
-* @param {*} event
-* @memberof ViewSubscriptionComponent
-*/
+    /**
+    * This function will refresh the subscribed companies if move company was succesful and will close the popup
+    *
+    * @param {*} event
+    * @memberof ViewSubscriptionComponent
+    */
     public addOrMoveCompanyCallback(event: boolean): void {
         if (event) {
             this.selectedMoveCompany = true;
@@ -237,7 +237,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
      * @memberof ViewSubscriptionComponent
      */
     public changePlan(): void {
-        this.router.navigate([`/pages/subscription/buy-plan/`+this.subscriptionId]);
+        this.router.navigate([`/pages/subscription/buy-plan/` + this.subscriptionId]);
     }
 
     /**
