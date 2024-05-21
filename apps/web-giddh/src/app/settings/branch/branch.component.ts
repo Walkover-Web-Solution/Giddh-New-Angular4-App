@@ -133,8 +133,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public ngOnInit() {
         this.getOnboardingForm();
         this.searchBranchQuery.valueChanges.pipe(debounceTime(700),distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe( query => {
-            if(query !== undefined) {
-                if(query.length) {
+            if(query !== undefined && query !== null) {
+                if(query) {
                     this.handleBranchSearch(query);
                 } else {
                     this.resetFilter();
@@ -227,9 +227,14 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.branches$ = observableOf(branches);
     }
 
-    public ngAfterViewInit() {
+    /**
+     * This hook will be use for component after initialization
+     *
+     * @memberof BranchComponent
+     */
+    public ngAfterViewInit(): void {
         if (this.isBranch) {
-            this.openCreateCompanyDialog()
+            this.openCreateCompanyDialog();
         }
     }
 

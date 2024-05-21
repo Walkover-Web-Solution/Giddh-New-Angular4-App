@@ -66,14 +66,14 @@
                             >×</a
                         >
                     </div>
-                    <table mat-table [dataSource]="page.permissions" class="w-100 permission-table">
+                    <table mat-table [dataSource]="page.permissions" class="w-100 mr-b4">
                         <ng-container matColumnDef="admin">
                             <th mat-header-cell *matHeaderCellDef>{{ newRole.name }}</th>
                             <td mat-cell *matCellDef="let element, let i = index">
                                 <ng-container *ngIf="element.code === 'SELECT-ALL'">
                                     <mat-checkbox
                                         color="primary"
-                                        [checked]="true"
+                                        [checked]="element.isSelected"
                                         id="{{page.name}}+_{{idx}}"
                                         [disabled]="newRole.isFixed"
                                         (change)="toggleItems(page.name, $event)"
@@ -86,7 +86,7 @@
                                 <ng-container *ngIf="element.code !== 'SELECT-ALL'">
                                     <mat-checkbox
                                         color="primary"
-                                        [checked]="true"
+                                        [checked]="element.isSelected"
                                         id="{{page.name}}+_{{idx}}"
                                         [disabled]="newRole.isFixed"
                                         (change)="toggleItem(page.name,element ,$event)"

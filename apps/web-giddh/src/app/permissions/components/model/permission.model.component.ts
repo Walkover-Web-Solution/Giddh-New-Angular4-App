@@ -35,19 +35,6 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     public selectedValues: any;
 
     constructor(private store: Store<AppState>, private permissionActions: PermissionActions) {
-        setTimeout(() => {
-            if (this.localeData) {
-                this.isFreshOptions = [{
-                    label: this.localeData?.fresh_start,
-                    value: true
-                },
-                {
-                    label: this.localeData?.copy_other_role,
-                    value: false
-                }];
-            }
-        }, 200);
-
     }
 
     get isFormValid() {
@@ -61,6 +48,20 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        setTimeout(() => {
+            if (this.localeData) {
+                this.isFreshOptions = [{
+                    label: this.localeData?.fresh_start,
+                    value: true
+                },
+                {
+                    label: this.localeData?.copy_other_role,
+                    value: false
+                }];
+                this.dropdownHeading = this.localeData?.select_pages;
+                console.log(this.localeData);
+            }
+        }, 200);
         this.store.pipe(select(p => p.permission), takeUntil(this.destroyed$)).subscribe((p: PermissionState) => {
             if (p.roles && p.roles.length) {
                 this.allRoles = [];
@@ -75,15 +76,9 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
                 });
             }
         });
-
-        this.dropdownHeading = this.localeData?.select_pages;
-
+    
         this.store.dispatch(this.permissionActions.GetAllPages());
         this.newRoleObj.isFresh = true;
-    }
-
-    public ngAfterViewInit(): void {
-
     }
 
     public ngOnDestroy() {
@@ -144,7 +139,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
         return count;
     }
 
-    public selectPage(index) {
+    public selectPage(index): void {
         this.newRoleObj.pageList[index].isSelected = !this.newRoleObj.pageList[index].isSelected;
         if (this.makeCount() === this.newRoleObj.pageList?.length) {
             this.newRoleObj.isSelectedAllPages = true;

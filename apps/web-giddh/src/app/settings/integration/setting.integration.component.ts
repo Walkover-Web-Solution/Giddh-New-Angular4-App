@@ -34,8 +34,7 @@ import { AccountCreateEditComponent } from './payment/icici/account-create-edit/
 @Component({
     selector: 'setting-integration',
     templateUrl: './setting.integration.component.html',
-    styleUrls: ['./setting.integration.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    styleUrls: ['./setting.integration.component.scss']
 })
 export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public auth2: any;
@@ -203,9 +202,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         private settingsIntegrationService: SettingsIntegrationService,
         private searchService: SearchService,
         private salesService: SalesService,
-        private route: ActivatedRoute,
         public dialog: MatDialog,
-        private plaidLinkService: NgxPlaidLinkService,
         private activateRoute: ActivatedRoute,
         private commonAction: CommonActions,
         private changeDetectionRef: ChangeDetectorRef
@@ -1120,7 +1117,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      *
      * @memberof SettingIntegrationComponent
      */
-    public openCreateNewAccountModal() {
+    public openCreateNewAccountModal(): void {
         this.createNewAccountDialogRef = this.dialog.open(this.createNewAccountModal, {
             width: '630px',
             disableClose: true

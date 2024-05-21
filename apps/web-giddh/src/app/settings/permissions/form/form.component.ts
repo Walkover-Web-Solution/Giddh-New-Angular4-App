@@ -25,8 +25,7 @@ const CIDR_RANGE = 'cidr_range';
 @Component({
     selector: 'setting-permission-form',
     templateUrl: './form.component.html',
-    styleUrls: ['./form.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    styleUrls: ['./form.component.scss']
 })
 export class SettingPermissionFormComponent implements OnInit, OnDestroy {
 
@@ -70,7 +69,6 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public isSuperAdminCompany: boolean = false;
     // private methods
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public resetForm: string = null;
 
     constructor(
         private _settingsPermissionService: SettingsPermissionService,
@@ -207,7 +205,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public initAcForm(data?: ShareRequestForm): void {
         if (data) {
             let fromDate = null;
-            let toDate = null
+            let toDate = null;
             if(data.to && data.from) {
                 const fromDateParts = data.from.split('-').map(Number); // If Date in DD-MM-YYY
                 const toDateParts = data.to.split('-').map(Number); // If Date in DD-MM-YYY
@@ -383,8 +381,6 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             this._settingsPermissionService.UpdatePermission(form).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res?.status === 'success') {
                     this.hasUnsavedChanges.emit(false);
-                    this.resetForm = '';
-                    setTimeout(() => { this.resetForm = null }, 100);
                     this._toasty.successToast(this.localeData?.permission_updated_success);
                 } else {
                     this._toasty.warningToast(res?.message, res?.code);

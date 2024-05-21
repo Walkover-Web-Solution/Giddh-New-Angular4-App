@@ -110,7 +110,7 @@
                                         [label]="localeData?.theme"
                                         [cssClass]="'theme-selection'"
                                         [options]="availableThemes"
-                                        [defaultValue]="activeTheme === 'default-theme' ? 'Default' : 'Dark'"
+                                        [defaultValue]="currentThemeLabel"
                                         [placeholder]="localeData?.select_theme"
                                         [isFilterEnabled]="true"
                                         [name]="'activeTheme'"
@@ -127,7 +127,7 @@
                                         [defaultValue]="getExportTypeLabel()"
                                         [placeholder]="localeData?.select_export_type"
                                         [isFilterEnabled]="true"
-                                        [name]="exportType"
+                                        [name]="'exportType'"
                                         (selectedOption)="setExportType($event)"
                                     ></dropdown-field>
                                 </div>

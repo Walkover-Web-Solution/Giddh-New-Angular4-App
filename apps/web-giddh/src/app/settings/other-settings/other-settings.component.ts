@@ -78,6 +78,8 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public exportTypes: IOption[] = [];
     /** Holds export type */
     public exportType: string = '';
+    /** Holds Current Theme Label  */
+    public currentThemeLabel: string;
 
     constructor(private commonActions: CommonActions, private generalService: GeneralService, private store: Store<AppState>, private toasterService: ToasterService) { }
 
@@ -103,6 +105,7 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
 
         this.translationLocales = this.generalService.getSupportedLocales();
         this.availableThemes = this.generalService.getAvailableThemes();
+        
         this.voucherApiVersion = this.generalService.voucherApiVersion;
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
@@ -110,7 +113,10 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.activeTheme), takeUntil(this.destroyed$)).subscribe(response => {
-            this.activeTheme = response?.value;
+            if(response) {
+                this.activeTheme = response?.value;
+                this.currentThemeLabel = this.availableThemes.find(theme => theme.value === this.activeTheme)?.label;
+            }
         });
 
         this.store.pipe(select(state => state.session.commonLocaleData), takeUntil(this.destroyed$)).subscribe((response) => {

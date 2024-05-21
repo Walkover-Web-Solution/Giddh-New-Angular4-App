@@ -61,7 +61,7 @@
                                                     <input-field *ngIf="user.ipsStr" [label]="localeData?.ip_address"
                                                         [defaultValue]="user.ipsStr" [disabled]="true"
                                                         [readonly]="true"></input-field>
-                                                    <input-field *ngIf="user.period && user.duration"
+                                                    <input-field *ngIf="user.cidrsStr"
                                                         [label]="localeData?.cidr_range" [defaultValue]="user.cidrsStr"
                                                         [disabled]="true" [readonly]="true"></input-field>
                                                 </div>

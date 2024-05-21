@@ -167,7 +167,7 @@
                                                     <dropdown-field
                                                         class="linked-account"
                                                         [name]="'account'"
-                                                        [scrollableElementId]="'finishedStockDropdown'"
+                                                        [scrollableElementId]="'linkedAccount'"
                                                         [label]="localeData?.collection?.link_account_label"
                                                         [placeholder]="localeData?.collection?.link_account_placeholder"
                                                         [options]="accounts"
@@ -250,7 +250,7 @@
                                                 [label]="localeData?.collection?.email_id_label"
                                                 [placeholder]="localeData?.collection?.email_id_placeholder"
                                                 [(ngModel)]="paypalObj.email"
-                                                [name]="'name'"
+                                                [name]="'collection_email'"
                                                 [required]="true"
                                             ></input-field>
                                         </div>
@@ -259,7 +259,7 @@
                                                 <dropdown-field
                                                         class="linked-account"
                                                         [name]="'account'"
-                                                        [scrollableElementId]="'finishedStockDropdown'"
+                                                        [scrollableElementId]="'linkedAccount'"
                                                         [label]="localeData?.collection?.link_account_label"
                                                         [placeholder]="localeData?.collection?.link_account_placeholder"
                                                         [options]="paypalAccounts"
@@ -294,7 +294,7 @@
                                         <div class="col-sm-12 form-group">
                                             <button
                                                 aria-label="save"
-                                                type="submit"
+                                                type="button"
                                                 *ngIf="!updatePaypal"
                                                 mat-stroked-button
                                                 color="primary"
@@ -306,7 +306,7 @@
                                             <button
                                                 aria-label="update"
                                                 *ngIf="updatePaypal"
-                                                type="submit"
+                                                type="button"
                                                 mat-stroked-button
                                                 color="primary"
                                                 [disabled]="paypalForm.invalid"

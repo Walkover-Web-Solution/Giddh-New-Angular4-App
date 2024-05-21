@@ -98,7 +98,7 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
             return { label: item, value: item, additional: { isDisabled: this.checkForAlreadyExistInPageArray(String(item)) } }
         });
 
-        if (this.roleObj.scopes) {
+        if (this.roleObj?.scopes) {
             this.roleObj.scopes = this.roleObj?.scopes.map(item => {
                 item.permissions.unshift({ code: 'SELECT-ALL', isSelected: false });
                 return item;

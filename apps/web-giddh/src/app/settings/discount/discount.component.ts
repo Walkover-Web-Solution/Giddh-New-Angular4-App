@@ -42,7 +42,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold local JSON data */
     public localeData: any = {};
-    /** 8 This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** True if get all discounts api call in progress */
     public isLoading: boolean = false;
@@ -249,7 +249,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
     public getDropdownLabelByValue(source: any, value: string): string {
         if (value?.length && source?.length) {
             let filteredArray = source?.filter(item => item.value === value);
-            return filteredArray[0].label;
+            return filteredArray?.length ? filteredArray[0].label : "";
         }
     }
 
