@@ -836,8 +836,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public getAllPlans(): void {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length) {
-                this.monthlyPlans = response?.filter(plan => plan?.monthlyAmount);
-                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmount);
+                this.monthlyPlans = response?.filter(plan => plan?.monthlyAmount > 0);
+                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmount >= 0);
                 this.monthlyPlans = this.monthlyPlans.sort((a, b) => a.monthlyAmount - b.monthlyAmount);
                 this.yearlyPlans = this.yearlyPlans.sort((a, b) => a.yearlyAmount - b.yearlyAmount);
                 if (this.yearlyPlans?.length) {
