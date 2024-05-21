@@ -27,64 +27,57 @@
                 <div class="menu-two-list" [ngClass]="{ 'skeleton-common-class': showLoader }">
                     <div class="menu-two-list-items">
                         <span class="mat-body-1 plan">{{ localeData?.subscription?.plan }}</span>
-                            <mat-form-field
-                                floatLabel="never"
-                                class="select-subscription subscription-form-select"
+                        <mat-form-field floatLabel="never" class="select-subscription subscription-form-select">
+                            <mat-select
+                                [placeholder]="commonLocaleData?.app_select"
+                                (selectionChange)="filterSubscriptions()"
+                                [(ngModel)]="filters.plan"
                             >
-                                <mat-select
-                                    [placeholder]="commonLocaleData?.app_select"
-                                    (selectionChange)="filterSubscriptions()"
-                                    [(ngModel)]="filters.plan"
-                                >
-                                    <mat-option value="">{{ commonLocaleData?.app_select }}</mat-option>
-                                    <mat-option *ngFor="let plan of plansList" [value]="plan?.uniqueName">
-                                        {{ plan?.name }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                                <mat-option value="">{{ commonLocaleData?.app_select }}</mat-option>
+                                <mat-option *ngFor="let plan of plansList" [value]="plan?.uniqueName">
+                                    {{ plan?.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
                     <div class="menu-two-list-items" *ngIf="!showLoader">
                         <span class="mat-body-1 expiring-within">{{ localeData?.subscription?.expiring_within }}</span>
-                            <mat-form-field floatLabel="never" class="select-subscription">
-                                <mat-select
-                                    [placeholder]="commonLocaleData?.app_select"
-                                    [(ngModel)]="filters.expiration"
-                                    (selectionChange)="filterSubscriptions()"
-                                >
-                                    <mat-option value="">{{ commonLocaleData?.app_select }}</mat-option>
-                                    <mat-option *ngFor="let expiring of expiringList" [value]="expiring?.value">
-                                        {{ expiring?.name }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                        <mat-form-field floatLabel="never" class="select-subscription">
+                            <mat-select
+                                [placeholder]="commonLocaleData?.app_select"
+                                [(ngModel)]="filters.expiration"
+                                (selectionChange)="filterSubscriptions()"
+                            >
+                                <mat-option value="">{{ commonLocaleData?.app_select }}</mat-option>
+                                <mat-option *ngFor="let expiring of expiringList" [value]="expiring?.value">
+                                    {{ expiring?.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
                     <div class="menu-two-list-items transaction-box" *ngIf="!showLoader">
                         <span class="mat-body-1 transaction-balance">{{
                             localeData?.subscription?.transaction_balance
                         }}</span>
-                            <mat-form-field floatLabel="never" class="select-subscription">
-                                <mat-select
-                                    [placeholder]="commonLocaleData?.app_select"
-                                    class="transaction-select"
-                                    [(ngModel)]="filters.transactionBalance"
-                                    (selectionChange)="filterSubscriptions()"
-                                >
-                                    <mat-option value="">{{ commonLocaleData?.app_select }}</mat-option>
-                                    <mat-option
-                                        *ngFor="let transactionBalance of transactionBalanceList"
-                                        [value]="transactionBalance?.value"
-                                        >{{ transactionBalance?.name }}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                        <mat-form-field floatLabel="never" class="select-subscription">
+                            <mat-select
+                                [placeholder]="commonLocaleData?.app_select"
+                                class="transaction-select"
+                                [(ngModel)]="filters.transactionBalance"
+                                (selectionChange)="filterSubscriptions()"
+                            >
+                                <mat-option value="">{{ commonLocaleData?.app_select }}</mat-option>
+                                <mat-option
+                                    *ngFor="let transactionBalance of transactionBalanceList"
+                                    [value]="transactionBalance?.value"
+                                    >{{ transactionBalance?.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
                     </div>
                 </div>
                 <div class="menu-two-button" [ngClass]="{ 'skeleton-common-class': showLoader }">
-                    <a
-                        class="mat-body-2"
-                        (click)="clearFilters()"
-                        >{{ commonLocaleData?.app_clear }}</a
-                    >
+                    <a class="mat-body-2" (click)="clearFilters()">{{ commonLocaleData?.app_clear }}</a>
                 </div>
             </mat-grid-tile>
 

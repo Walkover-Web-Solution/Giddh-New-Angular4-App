@@ -2,7 +2,12 @@
 <div class="message-wrapper" *ngIf="showDepreciationMessage">
     <p class="text-center py-2">
         {{ localeData?.depreciation_message }}
-        <a href="mailto:support@giddh.com" aria-label="email" class="text-underline">support@giddh.com</a>
+        <a href="mailto:support@giddh.com" aria-label="email" class="text-underline">
+            support
+            <span>&#64;</span> <!-- This &#64; Html Code for @ symbol  -->
+            giddh.com
+        </a>
+        
         {{ localeData?.depreciation_data_message }} &nbsp;
         <a
             href="javascript:void(0);"
@@ -51,20 +56,34 @@
             [ngClass]="{ 'open': sideMenu.isopen, 'unvisible': companyList?.length === 0 && !isSubscriptionPage }"
         >
             <div class="d-flex justify-content-between align-items-center h-100">
-                <button
-                    *ngIf="companyList?.length && isSubscriptionPage"
-                    class="min160 company-button"
-                    color="primary"
-                    mat-stroked-button
-                    (click)="backToCompany()"
-                    [matTooltip]="activeCompany?.name"
-                    [matTooltipPosition]="'below'"
-                    matTooltipClass="tooltip-black"
-                >
-                    <i class="icon-left back-left"></i>
-                    {{ commonLocaleData?.app_back }} {{ commonLocaleData?.app_to }}
-                    <span class="word-wrap-dots">{{ activeCompany?.name }}</span>
-                </button>
+                <div>
+                    <button
+                        *ngIf="companyList?.length && isSubscriptionPage"
+                        class="min160 company-button"
+                        color="primary"
+                        mat-stroked-button
+                        (click)="backToCompany()"
+                        [matTooltip]="activeCompany?.name"
+                        [matTooltipPosition]="'below'"
+                        matTooltipClass="tooltip-black"
+                    >
+                        <i class="icon-left back-left"></i>
+                        {{ commonLocaleData?.app_back }} {{ commonLocaleData?.app_to }}
+                        <span class="word-wrap-dots">{{ activeCompany?.name }}</span>
+                    </button>
+                    <button
+                        *ngIf="companyList?.length && isSubscriptionGetAllPlansPage"
+                        class="min160 company-button ml-3"
+                        color="primary"
+                        mat-stroked-button
+                        (click)="back()"
+                        aria-label="back"
+                    >
+                        <i class="icon-left back-left"></i>
+                        {{ commonLocaleData?.app_back }} {{ commonLocaleData?.app_to }}
+                        <span class="word-wrap-dots">{{ localeData?.subscription }}</span>
+                    </button>
+                </div>
                 <div class="logo-wrapper pd-l4">
                     <img
                         src="{{ imgPath }}giddh-white-logo.svg"
