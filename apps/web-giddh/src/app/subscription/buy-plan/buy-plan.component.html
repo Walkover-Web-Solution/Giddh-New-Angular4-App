@@ -29,14 +29,11 @@
 
                                             <mat-select [name]="'country'" [formControl]="currentCountry" #countryList  (selectionChange)="newUserSelectCountry($event.value, false)"  panelClass="country-dropdown-list" [placeholder]="
                                             commonLocaleData?.app_select + ' ' + commonLocaleData?.app_country">
-                                                <!-- <mat-select-trigger class="pr-2">
-                                                    {{ currentCountry.value?.additional?.countryName || newUserSelectedCountry || ''}}
-                                                </mat-select-trigger> -->
                                                 <ng-container *ngFor="let country of countrySource">
                                                     <mat-option [value]="country">
                                                        <div class="d-flex w-100 align-items-center column-gap1">
                                                             <img [src]="getFlagUrl(country.additional?.alpha2CountryCode ? country.additional?.alpha2CountryCode : country.additional?.alpha3CountryCode )" [alt]="country.label" width="24" height="16">
-                                                            <span>{{country.label}}</span>
+                                                            <span>{{country?.label}}</span>
                                                        </div>
                                                     </mat-option>
                                                 </ng-container>

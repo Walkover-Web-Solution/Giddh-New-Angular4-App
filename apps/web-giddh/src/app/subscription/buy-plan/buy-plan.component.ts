@@ -290,8 +290,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.commonCountrySource = [];
                 Object.keys(response).forEach(key => {
                     this.commonCountrySource.push({
-                        value: response[key].alpha3CountryCode,
-                        label: response[key].alpha3CountryCode + ' - ' + response[key].countryName
+                        value: response[key].alpha2CountryCode,
+                        label: response[key].alpha2CountryCode + ' - ' + response[key].countryName
                     });
                 });
                 this.commonCountrySource$ = observableOf(this.commonCountrySource);
