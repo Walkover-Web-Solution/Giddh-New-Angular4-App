@@ -162,6 +162,16 @@
                                                             '/pages/purchase-management/purchase-order/edit/' +
                                                                 purchaseOrderUniqueName
                                                         ]"
+                                                        *ngIf="voucherApiVersion === 1"
+                                                        ><i class="icon-edit-pencil"></i
+                                                    ></a>
+                                                    <a
+                                                        href="javascript:;"
+                                                        [tooltip]="commonLocaleData?.app_edit"
+                                                        placement="top"
+                                                        [routerLink]="[
+                                                            '/pages/vouchers/purchase-order/' + purchaseOrder?.account?.uniqueName + '/' + purchaseOrderUniqueName + '/edit']"
+                                                        *ngIf="voucherApiVersion === 2"
                                                         ><i class="icon-edit-pencil"></i
                                                     ></a>
                                                 </span>

@@ -90,14 +90,14 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
-        .observe(['(max-width: 767px)'])
-        .pipe(takeUntil(this.destroyed$))
-        .subscribe((state: BreakpointState) => {
-            this.isMobileScreen = state.matches;
-            if (!this.isMobileScreen) {
-                this.asideGstSidebarMenuState = 'in';
-            }
-        });
+            .observe(['(max-width: 767px)'])
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((state: BreakpointState) => {
+                this.isMobileScreen = state.matches;
+                if (!this.isMobileScreen) {
+                    this.asideGstSidebarMenuState = 'in';
+                }
+            });
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.vatReportTransactionsRequest.from = params['from'];
@@ -186,15 +186,19 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public onSelectInvoice(invoice): void {
         const uniqueName = (this.voucherApiVersion !== 2) ? invoice.purchaseRecordUniqueName : invoice.voucherUniqueName;
         if (invoice.voucherType === VoucherTypeEnum.purchase) {
-            if(uniqueName) {
-                this.router.navigate(['pages', 'proforma-invoice', 'invoice', 'purchase', invoice.accountUniqueName, uniqueName, 'edit']);
+            if (uniqueName) {
+                if (this.voucherApiVersion !== 2) {
+                    this.router.navigate(['pages', 'proforma-invoice', 'invoice', 'purchase', invoice.accountUniqueName, uniqueName, 'edit']);
+                } else {
+                    this.router.navigate(['pages', 'vouchers', 'purchase', invoice.accountUniqueName, uniqueName, 'edit']);
+                }
             }
         } else {
             if (invoice.voucherNumber) {
                 this.selectedInvoice = invoice;
                 this.selectedInvoice.uniqueName = uniqueName;
 
-                if(this.voucherApiVersion !== 2) {
+                if (this.voucherApiVersion !== 2) {
                     let downloadVoucherRequestObject = {
                         voucherNumber: [invoice.voucherNumber],
                         voucherType: invoice.voucherType,
@@ -293,7 +297,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @memberof VatReportTransactionsComponent
      */
     public ondownloadInvoiceEvent(invoiceCopy): void {
-        if(this.voucherApiVersion === 2) {
+        if (this.voucherApiVersion === 2) {
             let dataToSend = {
                 voucherType: this.selectedInvoice?.voucherType,
                 voucherNumber: [this.selectedInvoice?.voucherNumber],
@@ -358,7 +362,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      *
      * @memberof VatReportTransactionsComponent
      */
-     public handleNavigation(): void {
+    public handleNavigation(): void {
         this.router.navigate(['pages', 'gstfiling']);
     }
 }
