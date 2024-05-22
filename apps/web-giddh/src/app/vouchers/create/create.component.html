@@ -1,5 +1,5 @@
 <ng-container appTranslate [file]="'vouchers'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="getVoucherDateLabelPlaceholder()">
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete()">
     <hamburger-menu class="position-absolute"></hamburger-menu>
     <div class="vouchers">
         <mat-card class="container-lg">
@@ -1455,7 +1455,7 @@
                                                                         </ng-container>
                                                                     </div>
                                                                     <div class="col-12 px-2"
-                                                                        *ngIf="!invoiceType.isPurchaseOrder && invoiceType.isEstimateInvoice && invoiceType.isProformaInvoice">
+                                                                        *ngIf="!invoiceType.isPurchaseOrder && !invoiceType.isEstimateInvoice && !invoiceType.isProformaInvoice">
                                                                         <ng-container *ngIf="!selectedFileName">
                                                                             <div class="vouchers-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2"
                                                                                 [matTooltip]="'No file chosen'"
@@ -1683,7 +1683,7 @@
                                     </ng-container>
                                     <ng-container *ngIf="isUpdateMode">
                                         <button mat-stroked-button color="primary" (click)="cancelUpdateVoucher()">{{ commonLocaleData?.app_cancel }}</button>
-                                        <button mat-stroked-button color="primary" (click)="updateVoucher()">{{ commonLocaleData?.app_update }}</button>
+                                        <button mat-stroked-button color="primary" (click)="updateVoucher()">{{ updateVoucherText }}</button>
                                     </ng-container>
                                 </div>
                             </div>
