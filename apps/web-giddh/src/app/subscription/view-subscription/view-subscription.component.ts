@@ -251,7 +251,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     public buyPlan(subscription: any): void {
         if (this.activeCompany.subscription?.country?.countryCode === 'GB') {
             let model = {
-                planUniqueName: subscription?.plan?.uniqueName,
+                planUniqueName: subscription?.planUniqueName,
                 paymentProvider: "GOCARDLESS",
                 subscriptionId: this.subscriptionId,
                 duration: subscription?.period
@@ -339,11 +339,11 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     }
 
     /**
- * This will be open window by url
- *
- * @param {string} returnUrl
- * @memberof ViewSubscriptionComponent
- */
+     * This will be open window by url
+     *
+     * @param {string} returnUrl
+     * @memberof ViewSubscriptionComponent
+     */
     public openWindow(returnUrl: string): void {
         const url = returnUrl;
         const width = 700;
