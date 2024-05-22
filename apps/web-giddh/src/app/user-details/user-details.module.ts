@@ -53,7 +53,7 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
         SubscriptionComponent,
         AddOnsComponent
     ],
-    exports: [],
+    exports: [MoveCompanyComponent],
     imports: [
         CommonModule,
         FormsModule,

@@ -32,7 +32,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     /** True If Auth key copied and used toggle Copy text */
     public isCopied: boolean = false;
     public userAuthKey: string = '';
-    public expandLongCode: boolean = false;
     public twoWayAuth: boolean = false;
     public phoneNumber: string = '';
     public oneTimePassword: string = '';

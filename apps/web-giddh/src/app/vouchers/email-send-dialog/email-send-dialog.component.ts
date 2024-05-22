@@ -11,6 +11,8 @@ import { ToasterService } from '../../services/toaster.service';
     styleUrls: ['./email-send-dialog.component.scss']
 })
 export class EmailSendDialogComponent implements OnInit, OnDestroy {
+    /** Holds invoice type */
+    @Input() public invoiceType: any;
     /** Voucher data */
     @Input() selectedItem: any;
     /** Success event emitter */

@@ -17,7 +17,7 @@ export class VouchersUtilityService {
                 return TaxType.GST;
             } else if (countryCode === TaxSupportedCountries.UAE) {
                 return TaxType.TRN;
-            } else if (countryCode === TaxSupportedCountries.UK) {
+            } else if (countryCode === TaxSupportedCountries.GB || countryCode === TaxSupportedCountries.ZW || countryCode === TaxSupportedCountries.KE) {
                 return TaxType.VAT;
             }
         } else {
@@ -278,6 +278,7 @@ export class VouchersUtilityService {
         delete invoiceForm.account.shippingDetails.index;
         delete invoiceForm.company.billingDetails.index;
         delete invoiceForm.company.shippingDetails.index;
+        delete invoiceForm.salesPurchaseAsReceiptPayment;
 
         invoiceForm?.entries?.forEach(entry => {
             delete entry.showCodeType;
@@ -318,27 +319,29 @@ export class VouchersUtilityService {
         return invoiceForm;
     }
 
+    private getAddress(address: any): string {
+        return (typeof address === "string") ? address : address[0];
+    }
+
     public formatBillingShippingAddress(invoiceForm: any): any {
-        if (invoiceForm?.account?.shippingDetails?.address?.length && invoiceForm?.account?.shippingDetails?.address[0]?.length > 0) {
-            invoiceForm.account.shippingDetails.address[0] = invoiceForm.account.shippingDetails.address[0]?.trim();
-            invoiceForm.account.shippingDetails.address[0] = invoiceForm.account.shippingDetails.address[0]?.replace(/\n/g, '<br />');
-            invoiceForm.account.shippingDetails.address = invoiceForm.account.shippingDetails.address[0]?.split('<br />');
-        }
-        if (invoiceForm?.account?.billingDetails?.address?.length && invoiceForm?.account?.billingDetails?.address[0]?.length > 0) {
-            invoiceForm.account.billingDetails.address[0] = invoiceForm.account.billingDetails.address[0]?.trim();
-            invoiceForm.account.billingDetails.address[0] = invoiceForm.account.billingDetails.address[0]?.replace(/\n/g, '<br />');
+        if (invoiceForm?.account?.billingDetails?.address?.length) {
+            invoiceForm.account.billingDetails.address = [this.getAddress(invoiceForm.account.billingDetails.address)?.trim()?.replace(/\n/g, '<br />')];
             invoiceForm.account.billingDetails.address = invoiceForm.account.billingDetails.address[0]?.split('<br />');
         }
 
-        if (invoiceForm?.company?.shippingDetails?.address?.length && invoiceForm?.company?.shippingDetails?.address[0]?.length > 0) {
-            invoiceForm.company.shippingDetails.address[0] = invoiceForm.company.shippingDetails.address[0]?.trim();
-            invoiceForm.company.shippingDetails.address[0] = invoiceForm.company.shippingDetails.address[0]?.replace(/\n/g, '<br />');
-            invoiceForm.company.shippingDetails.address = invoiceForm.company.shippingDetails.address[0]?.split('<br />');
+        if (invoiceForm?.account?.shippingDetails?.address?.length) {
+            invoiceForm.account.shippingDetails.address = [this.getAddress(invoiceForm.account.shippingDetails.address)?.trim()?.replace(/\n/g, '<br />')];
+            invoiceForm.account.shippingDetails.address = invoiceForm.account.shippingDetails.address[0]?.split('<br />');
         }
-        if (invoiceForm?.company?.billingDetails?.address?.length && invoiceForm?.company?.billingDetails?.address[0]?.length > 0) {
-            invoiceForm.company.billingDetails.address[0] = invoiceForm.company.billingDetails.address[0]?.trim();
-            invoiceForm.company.billingDetails.address[0] = invoiceForm.company.billingDetails.address[0]?.replace(/\n/g, '<br />');
+
+        if (invoiceForm?.company?.billingDetails?.address?.length) {
+            invoiceForm.company.billingDetails.address = [this.getAddress(invoiceForm.company.billingDetails.address)?.trim()?.replace(/\n/g, '<br />')];
             invoiceForm.company.billingDetails.address = invoiceForm.company.billingDetails.address[0]?.split('<br />');
+        }
+
+        if (invoiceForm?.company?.shippingDetails?.address?.length) {
+            invoiceForm.company.shippingDetails.address = [this.getAddress(invoiceForm.company.shippingDetails.address)?.trim()?.replace(/\n/g, '<br />')];
+            invoiceForm.company.shippingDetails.address = invoiceForm.company.shippingDetails.address[0]?.split('<br />');
         }
 
         return invoiceForm;
@@ -386,14 +389,14 @@ export class VouchersUtilityService {
     }
 
     public copyAccountStateToCounty(invoiceForm: any): any {
-        if (invoiceForm.account.billingDetails.state?.code) {
+        if (invoiceForm.account?.billingDetails?.state?.code) {
             invoiceForm.account.billingDetails.county = {
                 name: invoiceForm.account.billingDetails.state?.name,
                 code: invoiceForm.account.billingDetails.state?.code
             };
         }
 
-        if (invoiceForm.account.shippingDetails.state?.code) {
+        if (invoiceForm.account?.shippingDetails?.state?.code) {
             invoiceForm.account.shippingDetails.county = {
                 name: invoiceForm.account.shippingDetails.state?.name,
                 code: invoiceForm.account.shippingDetails.state?.code
@@ -404,14 +407,14 @@ export class VouchersUtilityService {
     }
 
     public copyCompanyStateToCounty(invoiceForm: any): any {
-        if (invoiceForm.company.billingDetails.state?.code) {
+        if (invoiceForm.company?.billingDetails?.state?.code) {
             invoiceForm.company.billingDetails.county = {
                 name: invoiceForm.company.billingDetails.state?.name,
                 code: invoiceForm.company.billingDetails.state?.code
             };
         }
 
-        if (invoiceForm.company.shippingDetails.state?.code) {
+        if (invoiceForm.company?.shippingDetails?.state?.code) {
             invoiceForm.company.shippingDetails.county = {
                 name: invoiceForm.company.shippingDetails.state?.name,
                 code: invoiceForm.company.shippingDetails.state?.code

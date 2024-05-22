@@ -9,12 +9,14 @@ import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { Router } from '@angular/router';
-import { AdjustedVoucherType, BROADCAST_CHANNELS, JOURNAL_VOUCHER_ALLOWED_DOMAINS, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
+import { AdjustedVoucherType, JOURNAL_VOUCHER_ALLOWED_DOMAINS, MOBILE_NUMBER_SELF_URL, SUPPORTED_OPERATING_SYSTEMS } from '../app.constant';
 import { SalesOtherTaxesCalculationMethodEnum, VoucherTypeEnum } from '../models/api-models/Sales';
 import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfaces/tax.interface';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
+import { HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class GeneralService {
@@ -85,7 +87,8 @@ export class GeneralService {
     private _sessionId: string;
 
     constructor(
-        private router: Router
+        private router: Router,
+        private http: HttpClient
     ) { }
 
     public SetIAmLoaded(iAmLoaded: boolean) {
@@ -850,7 +853,7 @@ export class GeneralService {
 
             menuItem.items?.forEach(item => {
                 const isValidItem = apiItems.find(apiItem => apiItem?.uniqueName === item.link);
-                if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.countrySpecific?.length || item.additional?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.queryParams?.voucherVersion || item.additional?.queryParams?.voucherVersion === this.voucherApiVersion)) {
+                if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.queryParams?.countrySpecific?.length || item.additional?.queryParams?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.queryParams?.voucherVersion || item.additional?.queryParams?.voucherVersion === this.voucherApiVersion)) {
                     // If items returned from API have the current item which can be shown in branch/company mode, add it
                     visibleMenuItems[menuIndex].items.push(item);
                 }
@@ -1678,7 +1681,7 @@ export class GeneralService {
     }
 
     /**
-     * Check if a given country name is included in the array of supported countries for Plaid, and return a boolean value 
+     * Check if a given country name is included in the array of supported countries for Plaid, and return a boolean value
      * indicating whether the country is supported or not.
      *
      * @param {string} countryName
@@ -1689,5 +1692,266 @@ export class GeneralService {
         const plaidSupportedCountryList = ['UNITED KINGDOM', 'GERMANY', 'FRANCE', 'NETHERLANDS', 'IRELAND', 'SPAIN', 'SWEDEN', 'DENMARK', 'POLAND', 'PORTUGAL', 'ITALY', 'LITHUANIA', 'LATVIA', 'ESTONIA', 'NORWAY', 'BELGIUM', 'UNITED STATES OF AMERICA', 'CANADA'];
 
         return plaidSupportedCountryList.includes(countryName.toUpperCase());
+    }
+
+    /**
+     * This will return the system current user time zone
+     *
+     * @return {*}
+     * @memberof GeneralService
+     */
+    public getUserTimeZone(): any {
+        let offset = new Date().getTimezoneOffset(), o = Math.abs(offset);
+        return (offset < 0 ? "+" : "-") + ("00" + Math.floor(o / 60)).slice(-2) + ":" + ("00" + (o % 60)).slice(-2);
+    }
+
+    /**
+     * Retrieves the operating system configuration based on the user agent string.
+     *
+     * @returns {string} The name of the operating system.
+     * @memberof GeneralService
+     */
+    public getOsConfiguration(): string {
+        const userAgent = window.navigator.userAgent;
+        let osName;
+
+        if (userAgent.indexOf("Win") !== -1) {
+            osName = "Windows";
+        } else if (userAgent.indexOf("Mac") !== -1) {
+            osName = "Macintosh";
+        } else if (userAgent.indexOf("Linux") !== -1) {
+            osName = "Linux";
+        } else if (userAgent.indexOf("Android") !== -1) {
+            osName = "Android";
+        } else if (userAgent.indexOf("iOS") !== -1) {
+            osName = "iOS";
+        } else {
+            osName = "Unknown";
+        }
+
+        return osName;
+    }
+
+    /**
+     * Retrieves the device manufacturer based on the user agent string.
+     *
+     * @returns {string} The device manufacturer.
+     * @memberof GeneralService
+     */
+    public getDeviceManufacture(): string {
+        const userAgent = window.navigator.userAgent;
+        let deviceManufacture = 'Unknown';
+
+        if (userAgent.indexOf('iPhone') !== -1 || userAgent.indexOf('iPad') !== -1) {
+            deviceManufacture = 'Apple';
+        } else if (userAgent.indexOf('Android') !== -1) {
+            deviceManufacture = 'Samsung'; // Assuming Samsung for Android, could be any Android device manufacturer
+        } // Add additional checks for other common devices if needed
+
+        return deviceManufacture;
+    }
+
+    /**
+     * Retrieves the current timestamp in ISO format.
+     *
+     * @returns {string} The current timestamp.
+     * @memberof GeneralService
+     */
+    public getTimesStamp(): any {
+        const timestamp = new Date().toISOString();
+        return timestamp;
+    }
+
+    /**
+     * Retrieves the device model based on the user agent string.
+     *
+     * @returns {string} The device model.
+     * @memberof GeneralService
+     */
+    public getDeviceModel(): string {
+        const userAgent = window.navigator.userAgent;
+        let deviceModel = 'Unknown';
+
+        if (userAgent.indexOf('iPhone') !== -1) {
+            // Extracting iPhone model from user agent string (Example: "iPhone12,1")
+            const match = userAgent.match(/iPhone([\d,_]+)/);
+            if (match && match.length > 1) {
+                deviceModel = match[1].replace(/_/g, '.'); // Replacing underscores with dots
+            }
+        } else if (userAgent.indexOf('iPad') !== -1) {
+            // Extracting iPad model from user agent string (Example: "iPad11,1")
+            const match = userAgent.match(/iPad([\d,_]+)/);
+            if (match && match.length > 1) {
+                deviceModel = match[1].replace(/_/g, '.'); // Replacing underscores with dots
+            }
+        } else if (userAgent.indexOf('Android') !== -1) {
+            // Example of assuming device model for Android devices
+            deviceModel = 'Unknown'; // This might vary significantly
+        } // Add additional checks for other common devices if needed
+
+        return deviceModel;
+    }
+
+    /**
+     * Retrieves the operating system family based on the user agent string.
+     *
+     * @returns {string} The operating system family.
+     * @memberof GeneralService
+     */
+    public getOSFamily(): string {
+        const userAgent = window.navigator.userAgent;
+        let osFamily = 'Unknown';
+
+        if (userAgent.indexOf('Windows') !== -1) {
+            osFamily = 'Windows';
+        } else if (userAgent.indexOf('Macintosh') !== -1) {
+            osFamily = 'Macintosh';
+        } else if (userAgent.indexOf('Linux') !== -1) {
+            osFamily = 'Linux';
+        } else if (userAgent.indexOf('Android') !== -1) {
+            osFamily = 'Android';
+        } else if (userAgent.indexOf('iPhone') !== -1 || userAgent.indexOf('iPad') !== -1) {
+            osFamily = 'iOS';
+        } // Add additional checks for other OS families if needed
+
+        return osFamily;
+    }
+
+    /**
+     * Retrieves the operating system version based on the user agent string.
+     *
+     * @returns {string} The operating system version.
+     * @memberof GeneralService
+     */
+    public getOSVersion(): string {
+        const userAgent = window.navigator.userAgent;
+        let osVersion = 'Unknown';
+
+        if (userAgent.indexOf('Windows NT') !== -1) {
+            osVersion = this.extractWindowsVersion(userAgent);
+        } else if (userAgent.indexOf('Mac OS X') !== -1) {
+            osVersion = this.extractMacOSVersion(userAgent);
+        } else if (userAgent.indexOf('Android') !== -1) {
+            osVersion = this.extractAndroidVersion(userAgent);
+        } else if (userAgent.indexOf('iPhone') !== -1 || userAgent.indexOf('iPad') !== -1) {
+            osVersion = this.extractiOSVersion(userAgent);
+        } // Add additional checks for Linux, etc. if needed
+
+        return osVersion;
+    }
+
+    /**
+     * Extracts the Windows version from the user agent string.
+     *
+     * @param {string} userAgent - The user agent string.
+     * @returns {string} The Windows version.
+     * @memberof GeneralService
+     */
+    public extractWindowsVersion(userAgent: string): string {
+        // Example: "Windows NT 10.0"
+        const startIndex = userAgent.indexOf('Windows NT');
+        if (startIndex !== -1) {
+            return userAgent.substring(startIndex + 11, userAgent.indexOf(';', startIndex));
+        } else {
+            return 'Unknown';
+        }
+    }
+
+    /**
+     * Extracts the macOS version from the user agent string.
+     *
+     * @param {string} userAgent - The user agent string.
+     * @returns {string} The macOS version.
+     * @memberof GeneralService
+     */
+    public extractMacOSVersion(userAgent: string): string {
+        // Example: "Mac OS X 10_15_7"
+        const startIndex = userAgent.indexOf('Mac OS X');
+        if (startIndex !== -1) {
+            return userAgent.substring(startIndex + 9, userAgent.indexOf(')', startIndex)).replace(/_/g, '.');
+        } else {
+            return 'Unknown';
+        }
+    }
+
+    /**
+     * Extracts the Android version from the user agent string.
+     *
+     * @param {string} userAgent - The user agent string.
+     * @returns {string} The Android version.
+     * @memberof GeneralService
+     */
+    public extractAndroidVersion(userAgent: string): string {
+        // Example: "Android 10"
+        const startIndex = userAgent.indexOf('Android');
+        if (startIndex !== -1) {
+            return userAgent.substring(startIndex + 8, userAgent.indexOf(';', startIndex));
+        } else {
+            return 'Unknown';
+        }
+    }
+
+    /**
+    * Extracts the OS version from the user agent string.
+    *
+    * @param {string} userAgent - The user agent string.
+    * @returns {string} The Android version.
+    * @memberof GeneralService
+    */
+    public extractiOSVersion(userAgent: string): string {
+        // Example: "iPhone OS 14_4"
+        const startIndex = userAgent.indexOf('iPhone OS');
+        if (startIndex !== -1) {
+            return userAgent.substring(startIndex + 10, userAgent.indexOf(';', startIndex)).replace(/_/g, '.');
+        } else {
+            return 'Unknown';
+        }
+    }
+
+    /**
+     * Get Client Screen Size (width, height,scaling-factor 
+     * and colour-depth) in single string
+     *
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getClientScreens(): string {
+        const screen = window.screen;
+        return `width=${screen.width}&height=${screen.height}&scaling-factor=${window.devicePixelRatio}&colour-depth=${screen.colorDepth}`;
+    }
+
+    /**
+     * Get Client Window Size (width and height) in single string
+     *
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getClientWindowSize(): string {
+         return `width=${window.innerWidth}&height=${window.innerHeight}`;
+    }
+
+    /**
+     * This will be use for get user agent
+     *
+     * @param {*} clientIp
+     * @return {*}
+     * @memberof GeneralService
+     */
+    public getUserAgentData(): any {
+        let args: any = {};
+        args["timestamp"] = this.getTimesStamp();
+        args["Gov-Client-Timezone"] = 'UTC' + this.getUserTimeZone();
+        args["Gov-client-screens"] = this.getClientScreens();
+        args["Gov-client-window-size"] = this.getClientWindowSize();
+        return args;
+    }
+
+    /**
+     *This will return the client IP address
+     *
+     * @memberof GeneralService
+     */
+    public getClientIp(): any {
+        return this.http.get<any>(MOBILE_NUMBER_SELF_URL);
     }
 }

@@ -33,7 +33,6 @@ export class FileReturnComponent implements OnInit, OnDestroy {
     /** File Return confirmation popup configuration */
     public fileReturnConfirmationConfiguration: ConfirmationModalConfiguration;
 
-
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData: any,
         public dialogRef: MatDialogRef<any>,
@@ -75,7 +74,7 @@ export class FileReturnComponent implements OnInit, OnDestroy {
         vatReportRequest.branchUniqueName = this.inputData.branchUniqueName;
 
         this.isLoading = true;
-        this.vatService.getUKVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this.vatService.getCountryWiseVatReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.isLoading = false;
             if (res.status === 'success' && res.body?.sections) {
                 this.vatReport = res.body?.sections;
@@ -102,7 +101,7 @@ export class FileReturnComponent implements OnInit, OnDestroy {
             branchUniqueName: this.inputData.branchUniqueName
         };
 
-        this.fileReturnConfirmationConfiguration = this.generalService.fileReturnConfiguration(this.localeData, this.commonLocaleData,);
+        this.fileReturnConfirmationConfiguration = this.generalService.fileReturnConfiguration(this.localeData, this.commonLocaleData);
 
         let confirnationDialogRef = this.dialog.open(NewConfirmationModalComponent, {
             width: '630px',

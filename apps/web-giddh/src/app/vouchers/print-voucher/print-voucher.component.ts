@@ -19,6 +19,8 @@ import { VoucherComponentStore } from '../utility/vouchers.store';
 export class PrintVoucherComponent implements OnInit {
     /** Emit the cancel dialog event */
     @Output() public cancelEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
+    /** Hold invoice type */
+    @Input() public invoiceType: any;
     /** Hold voucher type */
     @Input() public voucherType: any;
     /** Hold selected item from voucher */
@@ -82,9 +84,9 @@ export class PrintVoucherComponent implements OnInit {
         this.setLoadingState(true);
         this.isVoucherDownloadError = false;
 
-        if (!this.voucherType.isEstimateInvoice && !this.voucherType.isProformaInvoice) {
+        if (!this.invoiceType.isEstimateInvoice && !this.invoiceType.isProformaInvoice) {
             this.downloadVoucherType1();
-        } else if (this.voucherType.isSalesInvoice) {
+        } else if (this.invoiceType.isSalesInvoice) {
             this.downloadVoucherType2();
         } else {
             this.downloadVoucherType3(fileType);
@@ -178,7 +180,7 @@ export class PrintVoucherComponent implements OnInit {
 
         let voucherType = "";
 
-        if (this.voucherType.isProformaInvoice) {
+        if (this.invoiceType.isProformaInvoice) {
             voucherType = VoucherTypeEnum.generateProforma;
             request.proformaNumber = this.selectedItem?.voucherNumber;
         } else {

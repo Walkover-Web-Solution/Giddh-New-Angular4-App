@@ -5,6 +5,7 @@ import { ReplaySubject, takeUntil } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ToasterService } from '../../services/toaster.service';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'view-return',
@@ -33,7 +34,8 @@ export class ViewReturnComponent implements OnInit {
         public dialogRef: MatDialogRef<any>,
         private vatService: VatService,
         private store: Store<AppState>,
-        private toaster: ToasterService
+        private toaster: ToasterService,
+        private generalService: GeneralService
     ) {
         this.localeData = inputData.localeData;
         this.commonLocaleData = inputData.commonLocaleData;

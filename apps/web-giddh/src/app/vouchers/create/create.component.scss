@@ -15,6 +15,9 @@
         border-bottom: 1px solid var(--color-grey-bootstrap-border);
 
         h1 {
+            font-size: var(--font-size-15);
+        }
+        .voucher-heading {
             font-size: var(--font-size-24);
             color: var(--color-giddh-blue);
         }
@@ -123,6 +126,13 @@
                     background: var(--color-dark-fog);
                     opacity: 0.7;
                     pointer-events: none;
+                }
+
+                &.without-taxnumber {
+                    grid-template-areas:
+                        'address address'
+                        'country state'
+                        'pincode pincode' !important;
                 }
             }
 

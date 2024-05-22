@@ -319,7 +319,6 @@ export class SubscriptionsPlansComponent implements OnInit, OnDestroy {
             allPlans?.forEach(plan => {
                 this.inputData.push(plan);
             });
-
             this.showLoader = false;
             this.changeDetectionRef.detectChanges();
         });

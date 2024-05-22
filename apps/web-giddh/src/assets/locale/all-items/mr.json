@@ -1,570 +1,693 @@
 {
-  "page_heading": "सर्व आयटम",
-  "items": [
-    {
-      "label": "ग्राहक",
-      "icon": "icon-customer",
-      "items": [
+    "page_heading": "सर्व आयटम",
+    "items": [
         {
-          "label": "एजिंग रिपोर्ट",
-          "link": "/pages/contact/aging-report",
-          "icon": "icon-aging-report-new",
-          "description": "मागील दिवस आणि आगामी काळात देय रक्कम",
-          "additional": {
-            "queryParams": {
-                "tab": "aging-report",
-                "tabIndex": 1
-            }
-          }
+            "label": "ग्राहक",
+            "icon": "icon-customer",
+            "items": [
+                {
+                    "label": "एजिंग रिपोर्ट",
+                    "link": "/pages/contact/aging-report",
+                    "icon": "icon-aging-report-new",
+                    "description": "मागील दिवस आणि आगामी काळात देय रक्कम",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "aging-report",
+                            "tabIndex": 1
+                        }
+                    }
+                },
+                {
+                    "label": "ग्राहक",
+                    "link": "/pages/contact/customer",
+                    "icon": "icon-customer",
+                    "description": "ग्राहक व्यवस्थापित करा, एसएमएस / ईमेलद्वारे स्मरणपत्रे पाठवा"
+                },
+                {
+                    "label": "नवीन चालान",
+                    "link": "/pages/proforma-invoice/invoice/cash",
+                    "icon": "icon-invoice-new",
+                    "description": "ग्राहकांसाठी रोख/क्रेडिट बीजक व्युत्पन्न करा.",
+                    "submenu": [
+                        {
+                            "label": "नकद चालान",
+                            "link": "/pages/proforma-invoice/invoice/cash",
+                            "icon": "icon-invoice-new",
+                            "description": "बीजक व्युत्पन्न करा आणि ग्राहक व्यवस्थापित करा (ग्राहक खाती/लेजर स्वतंत्रपणे)."
+                        },
+                        {
+                            "label": "क्रेडिट चालान",
+                            "link": "/pages/proforma-invoice/invoice/sales",
+                            "icon": "icon-invoice-new",
+                            "description": "चलन तयार करा आणि खाती/लेजर स्वतंत्रपणे व्यवस्थापित करा."
+                        }
+                    ],
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "नवीन चालान",
+                    "link": "/pages/vouchers/cash/create",
+                    "icon": "icon-invoice-new",
+                    "description": "ग्राहकांसाठी रोख/क्रेडिट बीजक व्युत्पन्न करा.",
+                    "submenu": [
+                        {
+                            "label": "नकद चालान",
+                            "link": "/pages/vouchers/cash/create",
+                            "icon": "icon-invoice-new",
+                            "description": "बीजक व्युत्पन्न करा आणि ग्राहक व्यवस्थापित करा (ग्राहक खाती/लेजर स्वतंत्रपणे)."
+                        },
+                        {
+                            "label": "क्रेडिट चालान",
+                            "link": "/pages/vouchers/sales/create",
+                            "icon": "icon-invoice-new",
+                            "description": "चलन तयार करा आणि खाती/लेजर स्वतंत्रपणे व्यवस्थापित करा."
+                        }
+                    ],
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "बीजक",
+                    "link": "/pages/invoice/preview/sales",
+                    "icon": "icon-invoice-new",
+                    "description": "मल्टीक्युरन्सी, आवर्ती चलन, रोख चलन"
+                },
+                {
+                    "label": "अंदाज (बीटा)",
+                    "link": "/pages/invoice/preview/estimates",
+                    "icon": "icon-sales-order1",
+                    "description": "अंतिम विक्री ऑर्डर"
+                },
+                {
+                    "label": "नवीन क्रेडिट नोट",
+                    "link": "/pages/proforma-invoice/invoice/cash",
+                    "icon": "icon-credit-note-new",
+                    "description": "क्रेडिट नोट व्हाउचर व्युत्पन्न करा.",
+                    "submenu": [
+                        {
+                            "label": "नकद क्रेडिट नोट",
+                            "link": "/pages/proforma-invoice/invoice/cash credit note",
+                            "icon": "icon-invoice-new",
+                            "description": "विक्रेताओं को प्रबंधित किए बिना तत्काल भुगतान किए गए क्रेडिट नोट जेनरेट करें (अलग खाते/खाता के बिना)"
+                        },
+                        {
+                            "label": "क्रेडिट टीप",
+                            "link": "/pages/proforma-invoice/invoice/credit note",
+                            "icon": "icon-credit-note-new",
+                            "description": "क्रेडिट नोट बनाएं और ग्राहकों को प्रबंधित करें (ग्राहक खाते/खाता अलग से)"
+                        }
+                    ],
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "नवीन क्रेडिट नोट",
+                    "link": "/pages/vouchers/credit-note/create",
+                    "icon": "icon-credit-note-new",
+                    "description": "क्रेडिट नोट व्हाउचर व्युत्पन्न करा.",
+                    "submenu": [
+                        {
+                            "label": "नकद क्रेडिट नोट",
+                            "link": "/pages/vouchers/cash-credit-note/create",
+                            "icon": "icon-invoice-new",
+                            "description": "विक्रेताओं को प्रबंधित किए बिना तत्काल भुगतान किए गए क्रेडिट नोट जेनरेट करें (अलग खाते/खाता के बिना)"
+                        },
+                        {
+                            "label": "क्रेडिट टीप",
+                            "link": "/pages/vouchers/credit-note/create",
+                            "icon": "icon-credit-note-new",
+                            "description": "क्रेडिट नोट बनाएं और ग्राहकों को प्रबंधित करें (ग्राहक खाते/खाता अलग से)"
+                        }
+                    ],
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "क्रेडिट टीप",
+                    "link": "/pages/invoice/preview/credit note",
+                    "icon": "icon-credit-note-new",
+                    "description": "क्रेडिट नोट व्युत्पन्न करा आणि अद्यतनित करा"
+                },
+                {
+                    "label": "बीजक सेटिंग्ज",
+                    "link": "/pages/invoice/preview/settings/sales",
+                    "icon": "icon-settings-cog",
+                    "description": "बीजक सेटिंग्ज"
+                },
+                {
+                    "label": "पावती",
+                    "link": "/pages/reports/receipt",
+                    "icon": "icon-reciept-new",
+                    "description": "आगाऊ, सामान्य, एकूण आणि न वापरलेल्या पावत्या"
+                },
+                {
+                    "label": "विक्री नोंदणी",
+                    "link": "/pages/reports/sales-register",
+                    "icon": "icon-register-new",
+                    "description": "निव्वळ व संचयी विक्री",
+                    "additionalRoutes": [
+                        "/pages/reports/sales-detailed-expand"
+                    ]
+                },
+                {
+                    "label": "टेम्पलेट",
+                    "link": "/pages/invoice/preview/templates/sales",
+                    "icon": "icon-template",
+                    "description": "टेम्पलेटची रचना आणि सामग्री संपादित करा",
+                    "alwaysPresent": "True"
+                }
+            ]
         },
         {
-          "label": "ग्राहक",
-          "link": "/pages/contact/customer",
-          "icon": "icon-customer",
-          "description": "ग्राहक व्यवस्थापित करा, एसएमएस / ईमेलद्वारे स्मरणपत्रे पाठवा"
+            "label": "विक्रेता",
+            "icon": "icon-vendor",
+            "items": [
+                {
+                    "label": "विक्रेता",
+                    "link": "/pages/contact/vendor",
+                    "icon": "icon-vendor",
+                    "description": "बल्क एसएमएस / ईमेल पाठवा, स्मरणपत्रे सेट करा"
+                },
+                {
+                    "label": "नवीन विधेयक",
+                    "link": "/pages/proforma-invoice/invoice/cash",
+                    "icon": "icon-invoice-new",
+                    "description": "विक्रेत्यांसाठी रोख/क्रेडिट बिल जोडा.",
+                    "submenu": [
+                        {
+                            "label": "नकद बिल",
+                            "link": "/pages/proforma-invoice/invoice/cash bill",
+                            "icon": "icon-invoice-new",
+                            "description": "विक्रेते व्यवस्थापित न करता (वेगळे खाते/लेजरशिवाय) त्वरित पेड बिल तयार करा."
+                        },
+                        {
+                            "label": "क्रेडिट बिल",
+                            "link": "/pages/proforma-invoice/invoice/purchase",
+                            "icon": "icon-invoice-new",
+                            "description": "बिल तयार करा आणि विक्रेते व्यवस्थापित करा (विक्रेता खाती/लेजर स्वतंत्रपणे)."
+                        }
+                    ],
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "नवीन विधेयक",
+                    "link": "/pages/vouchers/purchase/create",
+                    "icon": "icon-invoice-new",
+                    "description": "विक्रेत्यांसाठी रोख/क्रेडिट बिल जोडा.",
+                    "submenu": [
+                        {
+                            "label": "नकद बिल",
+                            "link": "/pages/vouchers/cash-bill/create",
+                            "icon": "icon-invoice-new",
+                            "description": "विक्रेते व्यवस्थापित न करता (वेगळे खाते/लेजरशिवाय) त्वरित पेड बिल तयार करा."
+                        },
+                        {
+                            "label": "क्रेडिट बिल",
+                            "link": "/pages/vouchers/purchase/create",
+                            "icon": "icon-invoice-new",
+                            "description": "बिल तयार करा आणि विक्रेते व्यवस्थापित करा (विक्रेता खाती/लेजर स्वतंत्रपणे)."
+                        }
+                    ],
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "बिले",
+                    "link": "/pages/purchase-management/purchase/bill",
+                    "icon": "icon-purchase-management1",
+                    "description": "खरेदी विनंती, खरेदी बिल, पीओ सुधारित करा"
+                },
+                {
+                    "label": "बिल सेटिंग्ज",
+                    "link": "/pages/purchase-management/purchase/settings",
+                    "icon": "icon-settings-cog",
+                    "description": "बिल सेटिंग्ज"
+                },
+                {
+                    "label": "नवीन खरेदी ऑर्डर",
+                    "link": "/pages/purchase-management/purchase-order/new",
+                    "icon": "icon-purchase-order",
+                    "description": "खरेदी विनंती, खरेदी बिल, पीओ सुधारित करा"
+                },
+                {
+                    "label": "नवीन डेबिट नोट",
+                    "link": "/pages/proforma-invoice/invoice/cash",
+                    "icon": "icon-debit-note-new",
+                    "description": "डेबिट नोट व्हाउचर जोडा",
+                    "submenu": [
+                        {
+                            "label": "नकद डेबिट नोट",
+                            "link": "/pages/proforma-invoice/invoice/cash debit note",
+                            "icon": "icon-invoice-new",
+                            "description": "विक्रेते व्यवस्थापित न करता झटपट सशुल्क डेबिट नोट जोडा (वेगळे खाते/लेजरशिवाय)."
+                        },
+                        {
+                            "label": "डेबिट नोट",
+                            "link": "/pages/invoice/preview/debit note",
+                            "icon": "icon-debit-note-new",
+                            "description": "डेबिट नोट जोडा आणि विक्रेते व्यवस्थापित करा (विक्रेता खाती/लेजर स्वतंत्रपणे)."
+                        }
+                    ],
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "नवीन डेबिट नोट",
+                    "link": "/pages/vouchers/debit-note/create",
+                    "icon": "icon-debit-note-new",
+                    "description": "डेबिट नोट व्हाउचर जोडा",
+                    "submenu": [
+                        {
+                            "label": "नकद डेबिट नोट",
+                            "link": "/pages/vouchers/cash-debit-note/create",
+                            "icon": "icon-invoice-new",
+                            "description": "विक्रेते व्यवस्थापित न करता झटपट सशुल्क डेबिट नोट जोडा (वेगळे खाते/लेजरशिवाय)."
+                        },
+                        {
+                            "label": "डेबिट नोट",
+                            "link": "/pages/vouchers/debit-note/create",
+                            "icon": "icon-debit-note-new",
+                            "description": "डेबिट नोट जोडा आणि विक्रेते व्यवस्थापित करा (विक्रेता खाती/लेजर स्वतंत्रपणे)."
+                        }
+                    ],
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "डेबिट नोट",
+                    "link": "/pages/invoice/preview/debit note",
+                    "icon": "icon-debit-note-new",
+                    "description": "डेबिट नोट रेकॉर्ड करा आणि अद्यतनित करा"
+                },
+                {
+                    "label": "फेड",
+                    "link": "/pages/reports/payment",
+                    "icon": "icon-reciept-new",
+                    "description": "एकूण, आणि न वापरलेली देयके",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "खरेदी नोंदणी",
+                    "link": "/pages/reports/purchase-register",
+                    "icon": "icon-register-new",
+                    "description": "निव्वळ आणि संचयी खरेदी",
+                    "additionalRoutes": [
+                        "/pages/reports/purchase-detailed-expand"
+                    ]
+                }
+            ]
         },
         {
-          "label": "नवीन चालान",
-          "link": "/pages/proforma-invoice/invoice/cash",
-          "icon": "icon-invoice-new",
-          "description": "ग्राहकांसाठी रोख/क्रेडिट बीजक व्युत्पन्न करा.",
-          "submenu": [
-            {
-              "label": "नकद चालान",
-              "link": "/pages/proforma-invoice/invoice/cash",
-              "icon": "icon-invoice-new",
-              "description": "बीजक व्युत्पन्न करा आणि ग्राहक व्यवस्थापित करा (ग्राहक खाती/लेजर स्वतंत्रपणे)."
-            },
-            {
-              "label": "क्रेडिट चालान",
-              "link": "/pages/proforma-invoice/invoice/sales",
-              "icon": "icon-invoice-new",
-              "description": "चलन तयार करा आणि खाती/लेजर स्वतंत्रपणे व्यवस्थापित करा."
-            }
-          ]
+            "label": "कर",
+            "icon": "icon-tax-new",
+            "items": [
+                {
+                    "label": "जीएसटीआर 1",
+                    "icon": "icon-GSTR",
+                    "description": "जीएसटीआर 1 फाइल करा आणि पहा",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "isGstMenu": true,
+                            "type": "gstr1",
+                            "countrySpecific": [
+                                "IN"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "जीएसटीआर 2",
+                    "icon": "icon-GSTR",
+                    "description": "जीएसटीआर 2 फाइल करा आणि पहा",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "isGstMenu": true,
+                            "type": "gstr2",
+                            "countrySpecific": [
+                                "IN"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "जीएसटीआर 3B",
+                    "icon": "icon-GSTR",
+                    "description": "जीएसटीआर 3B फाइल करा आणि पहा",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "isGstMenu": true,
+                            "type": "gstr3b",
+                            "countrySpecific": [
+                                "IN"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "ई-वे बिल",
+                    "link": "/pages/invoice/ewaybill",
+                    "icon": "icon-eway-bill-new",
+                    "description": "नंतर थेट गीधमधून व्युत्पन्न करा",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "countrySpecific": [
+                                "IN"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "युनिट मॅपिंग",
+                    "link": "/pages/gstfiling/unit-mapping",
+                    "icon": "unit-mapping-icon",
+                    "description": "युनिट मॅपिंग",
+                    "alwaysPresent": true,
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "countrySpecific": [
+                                "IN"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "सेटिंग्ज",
+                    "link": "/pages/settings/taxes",
+                    "icon": "icon-settings-cog",
+                    "description": "कर सेटिंग्ज",
+                    "hide": "sidebar"
+                },
+                {
+                    "label": "उलट शुल्क",
+                    "link": "/pages/reports/reverse-charge",
+                    "icon": "icon-reverse-charge",
+                    "description": "एकूण करपात्र मूल्य आणि कराच्या एकूण रकमेचा अहवाल",
+                    "alwaysPresent": true,
+                    "hide": "sidebar"
+                },
+                {
+                    "label": "व्हॅट अहवाल",
+                    "link": "/pages/vat-report",
+                    "icon": "icon-vat1",
+                    "description": "व्हॅट फाइल आणि पुनरावलोकन करा",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "countrySpecific": [
+                                "AE",
+                                "GB",
+                                "ZW",
+                                "KE"
+                            ]
+                        }
+                    }
+                }
+            ]
         },
         {
-          "label": "बीजक",
-          "link": "/pages/invoice/preview/sales",
-          "icon": "icon-invoice-new",
-          "description": "मल्टीक्युरन्सी, आवर्ती चलन, रोख चलन"
+            "label": "अहवाल",
+            "icon": "icon-reports",
+            "items": [
+                {
+                    "label": "ताळेबंद",
+                    "link": "/pages/trial-balance-and-profit-loss",
+                    "icon": "icon-balance-sheet-new",
+                    "description": "एक्सेलमध्ये बीएस डाउनलोड करा, एकाधिक प्रकारची निर्याती",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "balance-sheet",
+                            "tabIndex": 2
+                        }
+                    }
+                },
+                {
+                    "label": "डेबुक",
+                    "link": "/pages/daybook",
+                    "icon": "icon-daybook-new",
+                    "description": "दररोजच्या नोंदी निर्यात केल्या जाऊ शकतात"
+                },
+                {
+                    "label": "नफा व तोटा",
+                    "link": "/pages/trial-balance-and-profit-loss",
+                    "icon": "icon-proft-loss-new",
+                    "description": "एक्सेल मध्ये डेटा डाउनलोड करा, प्रकल्प निहाय अहवाल",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "profit-loss",
+                            "tabIndex": 1
+                        }
+                    }
+                },
+                {
+                    "label": "विक्री दुभाजक",
+                    "link": "/pages/new-vs-old-invoices",
+                    "icon": "icon-sale-bifurcation",
+                    "description": "नवीन विरूद्ध जुन्या पावत्या तुलना करा"
+                },
+                {
+                    "label": "चाचणी शिल्लक",
+                    "link": "/pages/trial-balance-and-profit-loss",
+                    "icon": "icon-trial-balance-new",
+                    "description": "सर्व क्रेडिट आणि डेबिट शिल्लक डाउनलोड करा",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "trial-balance",
+                            "tabIndex": 0
+                        }
+                    }
+                },
+                {
+                    "label": "स्तंभीय अहवाल",
+                    "link": "/pages/reports/monthly-columnar-report",
+                    "icon": "icon-monthly-columnar-report",
+                    "description": "प्रत्येक गटाचा मासिक तपशीलवार अहवाल"
+                }
+            ]
         },
         {
-          "label": "अंदाज (बीटा)",
-          "link": "/pages/invoice/preview/estimates",
-          "icon": "icon-sales-order1",
-          "description": "अंतिम विक्री ऑर्डर"
+            "label": "यादी",
+            "icon": "icon-inventory",
+            "items": [
+                {
+                    "label": "यादी",
+                    "link": "/pages/inventory",
+                    "icon": "icon-inventory",
+                    "description": "स्टॉक / गट आणि युनिट आयात / तयार करा",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "यादी",
+                    "link": "/pages/inventory/v2/reports/product/stock",
+                    "icon": "icon-inventory",
+                    "description": "स्टॉक / गट आणि युनिट आयात / तयार करा",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "उत्पादन",
+                    "link": "/pages/inventory/manufacturing",
+                    "icon": "icon-manufacturing1",
+                    "description": "उत्पादन यादीची स्थिती शोधा",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "उत्पादन",
+                    "link": "/pages/inventory/v2/manufacturing/list",
+                    "icon": "icon-manufacturing1",
+                    "description": "उत्पादन यादीची स्थिती शोधा",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "शाखा हस्तांतरण",
+                    "link": "/pages/inventory/v2/branch-transfer/list",
+                    "icon": "icon-branch-transfer",
+                    "description": "यादी व्यवस्थापित करा आणि हस्तांतरण यादी",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "शाखा हस्तांतरण",
+                    "link": "/pages/inventory/report",
+                    "icon": "icon-branch-transfer",
+                    "description": "यादी व्यवस्थापित करा आणि हस्तांतरण यादी",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "कोठार",
+                    "link": "/pages/settings/warehouse",
+                    "icon": "icon-warehouse1",
+                    "description": "सर्व गोदामे पहा"
+                }
+            ]
         },
         {
-          "label": "नवीन क्रेडिट नोट",
-          "link": "/pages/proforma-invoice/invoice/cash",
-          "icon": "icon-credit-note-new",
-          "description": "क्रेडिट नोट व्हाउचर व्युत्पन्न करा.",
-          "submenu": [
-            {
-              "label": "नकद क्रेडिट नोट",
-              "link": "/pages/proforma-invoice/invoice/cash credit note",
-              "icon": "icon-invoice-new",
-              "description": "विक्रेताओं को प्रबंधित किए बिना तत्काल भुगतान किए गए क्रेडिट नोट जेनरेट करें (अलग खाते/खाता के बिना)"
-            },
-            {
-              "label": "क्रेडिट टीप",
-              "link": "/pages/proforma-invoice/invoice/credit note",
-              "icon": "icon-credit-note-new",
-              "description": "क्रेडिट नोट बनाएं और ग्राहकों को प्रबंधित करें (ग्राहक खाते/खाता अलग से)"
-            }
-          ]
-        },
-        {
-          "label": "क्रेडिट टीप",
-          "link": "/pages/invoice/preview/credit note",
-          "icon": "icon-credit-note-new",
-          "description": "क्रेडिट नोट व्युत्पन्न करा आणि अद्यतनित करा"
-        },
-        {
-            "label": "बीजक सेटिंग्ज",
-            "link": "/pages/invoice/preview/settings/sales",
-            "icon": "icon-settings-cog",
-            "description": "बीजक सेटिंग्ज"
-        },
-        {
-          "label": "पावती",
-          "link": "/pages/reports/receipt",
-          "icon": "icon-reciept-new",
-          "description": "आगाऊ, सामान्य, एकूण आणि न वापरलेल्या पावत्या"
-        },
-        {
-          "label": "विक्री नोंदणी",
-          "link": "/pages/reports/sales-register",
-          "icon": "icon-register-new",
-          "description": "निव्वळ व संचयी विक्री",
-          "additionalRoutes": [
-            "/pages/reports/sales-detailed-expand"
-          ]
-        },
-        {
-          "label": "टेम्पलेट",
-          "link": "/pages/invoice/preview/templates/sales",
-          "icon": "icon-template",
-          "description": "टेम्पलेटची रचना आणि सामग्री संपादित करा",
-          "alwaysPresent": "True"
+            "label": "इतर",
+            "icon": "icon-other",
+            "items": [
+                {
+                    "label": "डॅशबोर्ड",
+                    "link": "/pages/home",
+                    "icon": "icon-dashboard-new",
+                    "description": "ओव्हरड्यूज, पी अँड एल, बँक खाते, प्रमाण विश्लेषण"
+                },
+                {
+                    "label": "तपासणीचे सूत्र",
+                    "link": "/pages/audit-logs/new",
+                    "icon": "icon-audit-log",
+                    "description": "प्रविष्टींचा कालक्रमानुसार डेटा",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "तपासणीचे सूत्र",
+                    "link": "/pages/activity-logs",
+                    "icon": "icon-audit-log",
+                    "description": "प्रविष्टींचा कालक्रमानुसार डेटा",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
+                },
+                {
+                    "label": "रोख प्रवाह",
+                    "link": "/pages/reports/cash-flow-statement",
+                    "icon": "icon-cash-flow-statement",
+                    "description": "रोख प्रवाह अहवाल डाउनलोड करा"
+                },
+                {
+                    "label": "जर्नल प्रविष्टियां *",
+                    "link": "/pages/journal-voucher",
+                    "icon": "icon-journal-voucher-new",
+                    "description": "जर्नल व्हाउचरच्या नोंदी"
+                },
+                {
+                    "label": "ऑनबोर्डिंग",
+                    "link": "/pages/onboarding",
+                    "icon": "icon-onboarding-new",
+                    "description": "टॅली, सीएसव्ही / एक्सेल वरून डेटा आयात करा"
+                },
+                {
+                    "label": "किरकोळ रोकड",
+                    "link": "/pages/expenses-manager",
+                    "icon": "icon-petty-cash",
+                    "description": "क्षुल्लक रोख आणि व्यवहार व्यवस्थापित करा",
+                    "additional": {
+                        "queryParams": {
+                            "tab": "pending",
+                            "tabIndex": 0
+                        }
+                    }
+                },
+                {
+                    "label": "शोधा",
+                    "link": "/pages/search",
+                    "icon": "icon-search",
+                    "description": "गट निवडा आणि कालावधीसाठी शोधा"
+                },
+                {
+                    "label": "डाउनलोड करा",
+                    "link": "/pages/downloads",
+                    "icon": "icon-download-circle"
+                },
+                {
+                    "label": "सानुकूल फील्ड",
+                    "link": "/pages/custom-fields/list",
+                    "icon": "icon-custom-field"
+                },
+                {
+                    "label": "आयात करतो",
+                    "link": "/pages/import/select-type",
+                    "icon": "icon-tally-import1"
+                }
+            ]
         }
-      ]
-    },
-    {
-      "label": "विक्रेता",
-      "icon": "icon-vendor",
-      "items": [
-        {
-          "label": "विक्रेता",
-          "link": "/pages/contact/vendor",
-          "icon": "icon-vendor",
-          "description": "बल्क एसएमएस / ईमेल पाठवा, स्मरणपत्रे सेट करा"
-        },
-        {
-          "label": "नवीन विधेयक",
-          "link": "/pages/proforma-invoice/invoice/cash",
-          "icon": "icon-invoice-new",
-          "description": "विक्रेत्यांसाठी रोख/क्रेडिट बिल जोडा.",
-          "submenu": [
-            {
-              "label": "नकद बिल",
-              "link": "/pages/proforma-invoice/invoice/cash bill",
-              "icon": "icon-invoice-new",
-              "description": "विक्रेते व्यवस्थापित न करता (वेगळे खाते/लेजरशिवाय) त्वरित पेड बिल तयार करा."
-            },
-            {
-              "label": "क्रेडिट बिल",
-              "link": "/pages/proforma-invoice/invoice/purchase",
-              "icon": "icon-invoice-new",
-              "description": "बिल तयार करा आणि विक्रेते व्यवस्थापित करा (विक्रेता खाती/लेजर स्वतंत्रपणे)."
-            }
-          ]
-        },
-        {
-          "label": "बिले",
-          "link": "/pages/purchase-management/purchase/bill",
-          "icon": "icon-purchase-management1",
-          "description": "खरेदी विनंती, खरेदी बिल, पीओ सुधारित करा"
-        },
-        {
-            "label": "बिल सेटिंग्ज",
-            "link": "/pages/purchase-management/purchase/settings",
-            "icon": "icon-settings-cog",
-            "description": "बिल सेटिंग्ज"
-        },
-        {
-          "label": "नवीन खरेदी ऑर्डर",
-          "link": "/pages/purchase-management/purchase-order/new",
-          "icon": "icon-purchase-order",
-          "description": "खरेदी विनंती, खरेदी बिल, पीओ सुधारित करा"
-        },
-        {
-          "label": "नवीन डेबिट नोट",
-          "link": "/pages/proforma-invoice/invoice/cash",
-          "icon": "icon-debit-note-new",
-          "description": "डेबिट नोट व्हाउचर जोडा",
-          "submenu": [
-            {
-              "label": "नकद डेबिट नोट",
-              "link": "/pages/proforma-invoice/invoice/cash debit note",
-              "icon": "icon-invoice-new",
-              "description": "विक्रेते व्यवस्थापित न करता झटपट सशुल्क डेबिट नोट जोडा (वेगळे खाते/लेजरशिवाय)."
-            },
-            {
-              "label": "डेबिट नोट",
-              "link": "/pages/invoice/preview/debit note",
-              "icon": "icon-debit-note-new",
-              "description": "डेबिट नोट जोडा आणि विक्रेते व्यवस्थापित करा (विक्रेता खाती/लेजर स्वतंत्रपणे)."
-            }
-          ]
-        },
-        {
-          "label": "डेबिट नोट",
-          "link": "/pages/invoice/preview/debit note",
-          "icon": "icon-debit-note-new",
-          "description": "डेबिट नोट रेकॉर्ड करा आणि अद्यतनित करा"
-        },
-        {
-          "label": "फेड",
-          "link": "/pages/reports/payment",
-          "icon": "icon-reciept-new",
-          "description": "एकूण, आणि न वापरलेली देयके",
-          "additional": {
-            "queryParams": {
-                "voucherVersion": 2
-            }
-          }
-        },
-        {
-          "label": "खरेदी नोंदणी",
-          "link": "/pages/reports/purchase-register",
-          "icon": "icon-register-new",
-          "description": "निव्वळ आणि संचयी खरेदी",
-          "additionalRoutes": [
-            "/pages/reports/purchase-detailed-expand"
-          ]
-        }
-      ]
-    },
-    {
-      "label": "कर",
-      "icon": "icon-tax-new",
-      "items": [
-        {
-          "label": "जीएसटीआर 1",
-          "icon": "icon-GSTR",
-          "description": "जीएसटीआर 1 फाइल करा आणि पहा",
-          "hide": "sidebar",
-          "additional": {
-            "queryParams": {
-                "isGstMenu": true,
-                "type": "gstr1",
-                "countrySpecific": [
-                "IN"
-                ]
-            }
-          }
-        },
-        {
-          "label": "जीएसटीआर 2",
-          "icon": "icon-GSTR",
-          "description": "जीएसटीआर 2 फाइल करा आणि पहा",
-          "hide": "sidebar",
-          "additional": {
-            "queryParams": {
-                "isGstMenu": true,
-                "type": "gstr2",
-                "countrySpecific": [
-                "IN"
-                ]
-            }
-          }
-        },
-        {
-          "label": "जीएसटीआर 3B",
-          "icon": "icon-GSTR",
-          "description": "जीएसटीआर 3B फाइल करा आणि पहा",
-          "hide": "sidebar",
-          "additional": {
-            "queryParams": {
-                "isGstMenu": true,
-                "type": "gstr3b",
-                "countrySpecific": [
-                "IN"
-                ]
-            }
-          }
-        },
-        {
-          "label": "ई-वे बिल",
-          "link": "/pages/invoice/ewaybill",
-          "icon": "icon-eway-bill-new",
-          "description": "नंतर थेट गीधमधून व्युत्पन्न करा",
-          "hide": "sidebar",
-          "additional": {
-            "queryParams": {
-                "countrySpecific": [
-                "IN"
-                ]
-            }
-          }
-        },
-        {
-          "label": "युनिट मॅपिंग",
-          "link": "/pages/gstfiling/unit-mapping",
-          "icon": "unit-mapping-icon",
-          "description": "युनिट मॅपिंग",
-          "alwaysPresent": true,
-          "hide": "sidebar",
-          "additional": {
-            "queryParams": {
-                "countrySpecific": [
-                "IN"
-                ]
-            }
-          }
-        },
-        {
-          "label": "सेटिंग्ज",
-          "link": "/pages/settings/taxes",
-          "icon": "icon-settings-cog",
-          "description": "कर सेटिंग्ज",
-          "hide": "sidebar"
-        },
-        {
-          "label": "उलट शुल्क",
-          "link": "/pages/reports/reverse-charge",
-          "icon": "icon-reverse-charge",
-          "description": "एकूण करपात्र मूल्य आणि कराच्या एकूण रकमेचा अहवाल",
-          "alwaysPresent": true,
-          "hide": "sidebar"
-        },
-        {
-          "label": "व्हॅट अहवाल",
-          "link": "/pages/vat-report",
-          "icon": "icon-vat1",
-          "description": "व्हॅट फाइल आणि पुनरावलोकन करा",
-          "hide": "sidebar",
-          "additional": {
-            "queryParams": {
-                "countrySpecific": [
-                "AE", "GB"
-                ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "label": "अहवाल",
-      "icon": "icon-reports",
-      "items": [
-        {
-          "label": "ताळेबंद",
-          "link": "/pages/trial-balance-and-profit-loss",
-          "icon": "icon-balance-sheet-new",
-          "description": "एक्सेलमध्ये बीएस डाउनलोड करा, एकाधिक प्रकारची निर्याती",
-          "additional": {
-            "queryParams": {
-                "tab": "balance-sheet",
-                "tabIndex": 2
-            }
-          }
-        },
-        {
-          "label": "डेबुक",
-          "link": "/pages/daybook",
-          "icon": "icon-daybook-new",
-          "description": "दररोजच्या नोंदी निर्यात केल्या जाऊ शकतात"
-        },
-        {
-          "label": "नफा व तोटा",
-          "link": "/pages/trial-balance-and-profit-loss",
-          "icon": "icon-proft-loss-new",
-          "description": "एक्सेल मध्ये डेटा डाउनलोड करा, प्रकल्प निहाय अहवाल",
-          "additional": {
-            "queryParams": {
-                "tab": "profit-loss",
-                "tabIndex": 1
-            }
-          }
-        },
-        {
-          "label": "विक्री दुभाजक",
-          "link": "/pages/new-vs-old-invoices",
-          "icon": "icon-sale-bifurcation",
-          "description": "नवीन विरूद्ध जुन्या पावत्या तुलना करा"
-        },
-        {
-          "label": "चाचणी शिल्लक",
-          "link": "/pages/trial-balance-and-profit-loss",
-          "icon": "icon-trial-balance-new",
-          "description": "सर्व क्रेडिट आणि डेबिट शिल्लक डाउनलोड करा",
-          "additional": {
-            "queryParams": {
-                "tab": "trial-balance",
-                "tabIndex": 0
-            }
-          }
-        },
-        {
-          "label": "स्तंभीय अहवाल",
-          "link": "/pages/reports/monthly-columnar-report",
-          "icon": "icon-monthly-columnar-report",
-          "description": "प्रत्येक गटाचा मासिक तपशीलवार अहवाल"
-        }
-      ]
-    },
-    {
-      "label": "यादी",
-      "icon": "icon-inventory",
-      "items": [
-          {
-              "label": "यादी",
-              "link": "/pages/inventory",
-              "icon": "icon-inventory",
-              "description": "स्टॉक / गट आणि युनिट आयात / तयार करा",
-              "additional": {
-                "queryParams": {
-                  "voucherVersion": 1
-                }
-              }
-          },
-          {
-              "label": "यादी",
-              "link": "/pages/inventory/v2/reports/product/stock",
-              "icon": "icon-inventory",
-              "description": "स्टॉक / गट आणि युनिट आयात / तयार करा",
-              "additional": {
-                "queryParams": {
-                  "voucherVersion": 2
-                }
-              }
-          },
-          {
-              "label": "उत्पादन",
-              "link": "/pages/inventory/manufacturing",
-              "icon": "icon-manufacturing1",
-              "description": "उत्पादन यादीची स्थिती शोधा",
-              "additional": {
-                "queryParams": {
-                  "voucherVersion": 1
-                }
-              }
-          },
-          {
-              "label": "उत्पादन",
-              "link": "/pages/inventory/v2/manufacturing/list",
-              "icon": "icon-manufacturing1",
-              "description": "उत्पादन यादीची स्थिती शोधा",
-              "additional": {
-                "queryParams": {
-                  "voucherVersion": 2
-                }
-              }
-          },
-          {
-              "label": "शाखा हस्तांतरण",
-              "link": "/pages/inventory/v2/branch-transfer/list",
-              "icon": "icon-branch-transfer",
-              "description": "यादी व्यवस्थापित करा आणि हस्तांतरण यादी",
-              "additional": {
-                "queryParams": {
-                  "voucherVersion": 2
-                }
-              }
-          },
-          {
-              "label": "शाखा हस्तांतरण",
-              "link": "/pages/inventory/report",
-              "icon": "icon-branch-transfer",
-              "description": "यादी व्यवस्थापित करा आणि हस्तांतरण यादी",
-              "additional": {
-                "queryParams": {
-                  "voucherVersion": 1
-                }
-              }
-          },
-          {
-              "label": "कोठार",
-              "link": "/pages/settings/warehouse",
-              "icon": "icon-warehouse1",
-              "description": "सर्व गोदामे पहा"
-          }
-      ]
-    },
-    {
-      "label": "इतर",
-      "icon": "icon-other",
-      "items": [
-        {
-          "label": "डॅशबोर्ड",
-          "link": "/pages/home",
-          "icon": "icon-dashboard-new",
-          "description": "ओव्हरड्यूज, पी अँड एल, बँक खाते, प्रमाण विश्लेषण"
-        },
-        {
-          "label": "तपासणीचे सूत्र",
-          "link": "/pages/audit-logs/new",
-          "icon": "icon-audit-log",
-          "description": "प्रविष्टींचा कालक्रमानुसार डेटा",
-          "additional": {
-            "queryParams": {
-                "voucherVersion": 1
-            }
-          }
-        },
-        {
-          "label": "तपासणीचे सूत्र",
-          "link": "/pages/activity-logs",
-          "icon": "icon-audit-log",
-          "description": "प्रविष्टींचा कालक्रमानुसार डेटा",
-          "additional": {
-            "queryParams": {
-                "voucherVersion": 2
-            }
-          }
-        },
-        {
-          "label": "रोख प्रवाह",
-          "link": "/pages/reports/cash-flow-statement",
-          "icon": "icon-cash-flow-statement",
-          "description": "रोख प्रवाह अहवाल डाउनलोड करा"
-        },
-        {
-          "label": "जर्नल प्रविष्टियां *",
-          "link": "/pages/journal-voucher",
-          "icon": "icon-journal-voucher-new",
-          "description": "जर्नल व्हाउचरच्या नोंदी"
-        },
-        {
-          "label": "ऑनबोर्डिंग",
-          "link": "/pages/onboarding",
-          "icon": "icon-onboarding-new",
-          "description": "टॅली, सीएसव्ही / एक्सेल वरून डेटा आयात करा"
-        },
-        {
-          "label": "किरकोळ रोकड",
-          "link": "/pages/expenses-manager",
-          "icon": "icon-petty-cash",
-          "description": "क्षुल्लक रोख आणि व्यवहार व्यवस्थापित करा",
-          "additional": {
-            "queryParams": {
-                "tab": "pending",
-                "tabIndex": 0
-            }
-          }
-        },
-        {
-          "label": "शोधा",
-          "link": "/pages/search",
-          "icon": "icon-search",
-          "description": "गट निवडा आणि कालावधीसाठी शोधा"
-        },
-        {
-          "label": "डाउनलोड करा",
-          "link": "/pages/downloads",
-          "icon": "icon-download-circle"
-        },
-        {
-          "label": "सानुकूल फील्ड",
-          "link": "/pages/custom-fields/list",
-          "icon": "icon-custom-field"
-        },
-        {
-          "label": "आयात करतो",
-          "link": "/pages/import/select-type",
-          "icon": "icon-tally-import1"
-        }
-      ]
-    }
-  ],
-  "switch_branch": "स्विच शाखा",
-  "sb": "SB",
-  "search_branch": "शोध शाखा",
-  "goto_company": "कंपनीकडे जा",
-  "create_branch": "शाखा तयार करा",
-  "accounts": "खाती",
-  "show_more": "अजून दाखवा",
-  "menu": "मेनू",
-  "import_export_backup": "आयात / निर्यात डेटा (बॅकअप)",
-  "switch_company": "कंपनी स्विच करा",
-  "search_company": "शोध कंपनी",
-  "create_company": "कंपनी तयार करा",
-  "profile": "प्रोफाइल",
-  "user_profile": "वापरकर्ता प्रोफाइल",
-  "logout": "लॉग आउट",
-  "to_navigate": "नॅव्हिगेट करण्यासाठी",
-  "to_select": "निवडण्यासाठी",
-  "to_dismiss": "डिसमिस करणे",
-  "settings_permission": "सेटिंग्ज > परवानगी",
-  "user_details": "वापरकर्त्याचा तपशील",
-  "inventory_inout": "यादी इन / आउट",
-  "import_data": "डेटा आयात करा",
-  "companies": "कंपन्या",
-  "refresh_manually": "रीफ्रेश",
-  "branches": "शाखा",
-  "company_consolidated_data": "एकत्रित",
-  "no_branches_found": "शाखा उपलब्ध नाहीत"
+    ],
+    "switch_branch": "स्विच शाखा",
+    "sb": "SB",
+    "search_branch": "शोध शाखा",
+    "goto_company": "कंपनीकडे जा",
+    "create_branch": "शाखा तयार करा",
+    "accounts": "खाती",
+    "show_more": "अजून दाखवा",
+    "menu": "मेनू",
+    "import_export_backup": "आयात / निर्यात डेटा (बॅकअप)",
+    "switch_company": "कंपनी स्विच करा",
+    "search_company": "शोध कंपनी",
+    "create_company": "कंपनी तयार करा",
+    "profile": "प्रोफाइल",
+    "user_profile": "वापरकर्ता प्रोफाइल",
+    "logout": "लॉग आउट",
+    "to_navigate": "नॅव्हिगेट करण्यासाठी",
+    "to_select": "निवडण्यासाठी",
+    "to_dismiss": "डिसमिस करणे",
+    "settings_permission": "सेटिंग्ज > परवानगी",
+    "user_details": "वापरकर्त्याचा तपशील",
+    "inventory_inout": "यादी इन / आउट",
+    "import_data": "डेटा आयात करा",
+    "companies": "कंपन्या",
+    "refresh_manually": "रीफ्रेश",
+    "branches": "शाखा",
+    "company_consolidated_data": "एकत्रित",
+    "no_branches_found": "शाखा उपलब्ध नाहीत"
 }

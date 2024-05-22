@@ -5,6 +5,7 @@ import { VatService } from '../services/vat.service';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
 import { ToasterService } from '../services/toaster.service';
+import { GeneralService } from '../services/general.service';
 
 @Component({
     selector: 'auth-hmrc-component',
@@ -24,6 +25,7 @@ export class AuthHMRCComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private vatService: VatService,
+        private generalService: GeneralService,
         private store: Store<AppState>,
         private toaster: ToasterService
     ) {

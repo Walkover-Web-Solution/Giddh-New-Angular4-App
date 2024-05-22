@@ -1,0 +1,143 @@
+<div class="modal-header d-flex align-items-center activity-header">
+    <h3>{{ localeData?.company_list }}</h3>
+    <button aria-hidden="true" class="close" mat-dialog-close>×</button>
+</div>
+<mat-dialog-content class="w-100">
+    <div #companyList class="logs-content">
+        <div class="col-lg-12">
+            <div class="d-flex pd-t15 pd-b15 align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <form [formGroup]="companyListForm">
+                        <input-field
+                            [name]="'name'"
+                            [label]="localeData?.company_name"
+                            [placeholder]="localeData?.company_name"
+                            [type]="'text'"
+                            formControlName="name"
+                        >
+                        </input-field>
+                    </form>
+                    <button
+                        *ngIf="showClearFilter"
+                        mat-stroked-button
+                        class="min160 mr-l1"
+                        color="primary"
+                        (click)="clearFilter()"
+                        aria-label="clear"
+                    >
+                        {{ commonLocaleData?.app_clear }}
+                    </button>
+                </div>
+                <button
+                    *ngIf="
+                        inputData?.isOwner && inputData.rowData?.companies?.length < inputData.rowData?.totalCompanies
+                    "
+                    (click)="createCompanyInSubscription()"
+                    mat-stroked-button
+                    [matTooltip]="localeData?.add_company_subscription"
+                    [matTooltipPosition]="'above'"
+                    matTooltipClass="tooltip-black"
+                    color="primary"
+                    aria-label="back"
+                >
+                    {{ localeData?.add_company }}
+                </button>
+            </div>
+            <div *ngIf="companyListInProgress$ | async">
+                <giddh-page-loader></giddh-page-loader>
+            </div>
+            <section *ngIf="!(companyListInProgress$ | async)">
+                <table
+                    mat-table
+                    [dataSource]="dataSource"
+                    matSort
+                    (matSortChange)="sortChange($event)"
+                    [matSortActive]="companyListRequest.sortBy"
+                    [matSortDirection]="companyListRequest.sort"
+                    class="subscription-report-table giddh-table table"
+                >
+                    <ng-container matColumnDef="NAME">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header width="25%">
+                            {{ commonLocaleData?.app_name }}
+                        </th>
+                        <td mat-cell *matCellDef="let element" width="25%">{{ element.name }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="TOTAL_INVOICES">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header width="25%">
+                            {{ localeData?.invoice_count }}
+                        </th>
+                        <td mat-cell *matCellDef="let element" width="25%">{{ element.totalInvoices }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="TOTAL_BILLS">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header width="25%">
+                            {{ localeData?.bill_count }}
+                        </th>
+                        <td mat-cell *matCellDef="let element" width="25%">{{ element.totalBills }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="STATUS">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header width="25%">
+                            {{ commonLocaleData?.app_status }}
+                        </th>
+                        <td mat-cell *matCellDef="let element" width="25%" class="position-relative word-wrap">
+                            <div class="d-flex align-items-center">
+                                <div class="d-flex align-items-center">
+                                    {{ element.status }}
+                                    <button
+                                        *ngIf="inputData?.isOwner"
+                                        mat-icon-button
+                                        id="edit-model-basic"
+                                        class="table-menu-first-td"
+                                        [matMenuTriggerFor]="editModelBasic"
+                                        aria-label="edit"
+                                        #trigger="matMenuTrigger"
+                                    >
+                                        <span class="icon-dots-three-vertical"></span>
+                                    </button>
+                                </div>
+                                <mat-menu #editModelBasic="matMenu">
+                                    <div class="account-detail-custom-header">
+                                        <button
+                                            mat-menu-item
+                                            *ngIf="element?.status === 'UNARCHIVED'"
+                                            (click)="archiveCompany(element, 'USER_ARCHIVED')"
+                                            aria-label="details"
+                                        >
+                                            {{ commonLocaleData?.app_archive }}
+                                        </button>
+                                        <button
+                                            *ngIf="element?.status === 'UNARCHIVED'"
+                                            aria-label="move"
+                                            mat-menu-item
+                                            (click)="openModalMove(element, $event)"
+                                        >
+                                            {{ localeData?.move }}
+                                        </button>
+                                    </div>
+                                </mat-menu>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+            </section>
+            <div class="no-data" *ngIf="!dataSource?.filteredData?.length">
+                <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
+<!-- MoveCompany Modal -->
+<ng-template #moveCompany>
+    <move-company
+        [moveSelectedCompany]="selectedCompany"
+        [localeData]="localeData"
+        [subscriptionMove]="subscriptionMove"
+        [commonLocaleData]="commonLocaleData"
+    >
+    </move-company>
+</ng-template>
