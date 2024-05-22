@@ -540,6 +540,31 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             })
         );
     });
+
+    readonly getEstimateProformaDetails = this.effect((data: Observable<{ voucherType: string, payload: any}>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.getEstimateProforma(req.payload, req.voucherType).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            let voucherDetails = res?.body ?? {};
+                            voucherDetails.isCopyVoucher = false;
+                            return this.patchState({
+                                voucherDetails: voucherDetails
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                voucherDetails: {}
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
     
     readonly getVoucherDetails = this.effect((data: Observable<{ isCopyVoucher: boolean, accountUniqueName: string, payload: any }>) => {
         return data.pipe(

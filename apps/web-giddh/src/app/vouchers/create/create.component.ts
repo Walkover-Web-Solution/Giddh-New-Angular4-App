@@ -392,6 +392,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public copyCompanyBillingInShippingAddress: boolean = true;
     /** True if we need to fill default account details in voucher */
     private useDefaultAccountDetails: boolean = true;
+    /** Holds redirect url to redirect after voucher update */
+    private redirectUrl: string = "";
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -517,6 +519,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 let params = response[0];
                 let queryParams = response[1];
 
+                if (queryParams?.redirect) {
+                    this.redirectUrl = queryParams?.redirect;
+                }
+
                 this.company.countryName = "";
                 this.openAccountDropdown = false;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
@@ -525,7 +531,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.router.navigate(["/pages/proforma-invoice/invoice/" + this.voucherType]);
                 }
 
-                this.resetVoucherForm(true, true);
+                this.resetVoucherForm(!params?.uniqueName, true);
 
                 /** Open account dropdown on create */
                 if (params?.uniqueName) {
@@ -533,7 +539,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
 
                 this.getVoucherType();
-                this.getVoucherDateLabelPlaceholder();
 
                 if (params?.accountUniqueName && !params?.uniqueName) {
                     this.searchAccount(params?.accountUniqueName, 1, true);
@@ -707,7 +712,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         /** Voucher details */
         this.componentStore.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.getAccountDetails(response?.account.uniqueName);
+                this.getAccountDetails(response?.account?.uniqueName);
 
                 this.fillBillingShippingAddress("account", "billingDetails", response?.account?.billingDetails, 0);
                 this.fillBillingShippingAddress("account", "shippingDetails", response?.account?.shippingDetails, 0);
@@ -733,8 +738,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.invoiceForm.get("date").patchValue(response?.date);
                 this.invoiceForm.get("dueDate").patchValue(response?.dueDate);
 
-                this.invoiceForm.controls["warehouse"].get("name").patchValue(response?.warehouse?.name);
-                this.invoiceForm.controls["warehouse"].get("uniqueName").patchValue(response?.warehouse?.uniqueName);
+                if (response?.warehouse) {
+                    this.invoiceForm.controls["warehouse"].get("name").patchValue(response?.warehouse?.name);
+                    this.invoiceForm.controls["warehouse"].get("uniqueName").patchValue(response?.warehouse?.uniqueName);
+                }
 
                 this.invoiceForm.get("templateDetails.other.customField1")?.patchValue(response?.templateDetails?.other?.customField1);
                 this.invoiceForm.get("templateDetails.other.customField2")?.patchValue(response?.templateDetails?.other?.customField2);
@@ -1143,7 +1150,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @private
      * @memberof VoucherCreateComponent
      */
-    private getVoucherDateLabelPlaceholder(): void {
+    public getVoucherDateLabelPlaceholder(): void {
         if (this.invoiceType.isProformaInvoice || this.invoiceType.isEstimateInvoice) {
             this.voucherDateLabel = this.invoiceType.isProformaInvoice ? this.localeData?.proforma_date : this.localeData?.estimate_date;
             this.voucherDueDateLabel = this.localeData?.expiry_date;
@@ -1242,10 +1249,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getDiscountsList(): void {
+        this.componentStore.getDiscountsList();
+
         this.discountsList$.pipe(takeUntil(this.destroyed$)).subscribe(discountsList => {
-            if (!discountsList) {
-                this.componentStore.getDiscountsList();
-            } else {
+            if (discountsList) {
                 this.discountsList = discountsList;
             }
         });
@@ -1397,10 +1404,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getCompanyTaxes(): void {
+        this.store.dispatch(this.companyActions.getTax());
+
         this.componentStore.companyTaxes$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (!response) {
-                this.store.dispatch(this.companyActions.getTax());
-            } else {
+            if (response) {
                 this.allCompanyTaxes = response;
                 this.companyTaxes = response?.filter(tax => !this.otherTaxTypes.includes(tax.taxType));
             }
@@ -1421,7 +1428,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 let warehouseResults = response.results?.filter(warehouse => !warehouse.isArchived);
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 this.warehouses = warehouseData.formattedWarehouses;
-                this.showWarehouse = this.warehouses?.length ? true : false;
+                this.checkIfEntriesHasStock();
             }
         });
     }
@@ -3218,12 +3225,32 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.saveVoucher();
     }
 
+    /**
+     * Cancel update voucher and return to get all vouchers
+     *
+     * @memberof VoucherCreateComponent
+     */
     public cancelUpdateVoucher(): void {
-
+        if (this.invoiceType.isPurchaseOrder) {
+            this.router.navigate(['/pages/purchase-management/purchase/order']);
+        } else {
+            this.router.navigate(['/pages/invoice/preview/' + this.voucherType]);
+        }
     }
 
+    /**
+     * Updates voucher
+     *
+     * @memberof VoucherCreateComponent
+     */
     public updateVoucher(): void {
-        this.saveVoucher();
+        if (this.redirectUrl) {
+            this.saveVoucher(() => {
+                this.router.navigateByUrl(this.redirectUrl);
+            });
+        } else {
+            this.saveVoucher();
+        }
     }
 
     /**
@@ -3451,7 +3478,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.startLoader(false);
                     if (response && response.status === "success") {
                         this.toasterService.showSnackBar("success", this.localeData?.po_updated);
-                        this.router.navigate(['/pages/purchase-management/purchase/order']);
+                        if (callback) {
+                            callback(response);
+                        } else {
+                            this.router.navigate(['/pages/purchase-management/purchase/order']);
+                        }
                     } else {
                         this.toasterService.showSnackBar("error", response.message);
                     }
@@ -3501,7 +3532,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.startLoader(false);
                     if (response?.status === "success") {
                         this.toasterService.showSnackBar("success", this.localeData?.voucher_updated);
-                        this.router.navigate(['/pages/invoice/preview/' + this.voucherType]);
+                        if (callback) {
+                            callback(response);
+                        } else {
+                            this.router.navigate(['/pages/invoice/preview/' + this.voucherType]);
+                        }
                     } else {
                         this.toasterService.showSnackBar("error", response?.message, response?.code);
                     }
@@ -3554,7 +3589,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.startLoader(false);
                     if (response?.status === "success") {
                         this.toasterService.showSnackBar("success", this.localeData?.voucher_updated);
-                        this.router.navigate(['/pages/invoice/preview/sales']);
+                        if (callback) {
+                            callback(response);
+                        } else {
+                            this.router.navigate(['/pages/invoice/preview/sales']);
+                        }
                     } else {
                         this.toasterService.showSnackBar("error", response?.message, response?.code);
                     }
@@ -4336,7 +4375,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.hasStock = true;
             }
         });
-        this.showWarehouse = this.hasStock;
+        this.showWarehouse = this.warehouses?.length && this.hasStock;
     }
 
     /**
@@ -4727,6 +4766,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.startLoader(true);
         if (this.invoiceType.isPurchaseOrder) {
             this.componentStore.getPurchaseOrderDetails(params?.uniqueName);
+        } else if (this.invoiceType.isEstimateInvoice) {
+            this.componentStore.getEstimateProformaDetails({ voucherType: this.voucherType, payload: { accountUniqueName: params?.accountUniqueName, estimateNumber: params?.uniqueName, voucherType: this.voucherType } });
+        } else if (this.invoiceType.isProformaInvoice) {
+            this.componentStore.getEstimateProformaDetails({ voucherType: this.voucherType, payload: { accountUniqueName: params?.accountUniqueName, proformaNumber: params?.uniqueName, voucherType: this.voucherType } });
         } else {
             this.componentStore.getVoucherDetails({ isCopyVoucher: false, accountUniqueName: params?.accountUniqueName, payload: { uniqueName: params?.uniqueName, voucherType: this.voucherType } });
         }

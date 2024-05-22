@@ -364,4 +364,29 @@ export class VoucherService {
 
         return this.http.get(url).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, poUniqueName)));
     }
+
+    /**
+     * This will get the estimate/proforma details
+     *
+     * @param {*} request
+     * @param {string} voucherType
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public getEstimateProforma(request: any, voucherType: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + PROFORMA_API.base
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':vouchers', voucherType)
+            ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
+            request
+        ).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.queryString = voucherType;
+                data.request = request;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
+    }
 }
