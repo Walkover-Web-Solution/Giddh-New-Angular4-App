@@ -416,7 +416,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                         value: address?.uniqueName
                     }));
                 this.addresses.addressToShow = modifiedAddresses;
-                this.addresses.address = modifiedAddresses
+                this.addresses.address = modifiedAddresses;
                 this.checkLinkEntity();
             }
         });

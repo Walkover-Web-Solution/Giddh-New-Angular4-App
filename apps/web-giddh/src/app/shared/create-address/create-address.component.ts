@@ -220,7 +220,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public selectState(event: any): void {
-        this.addressForm.get('state')?.patchValue(event.value);
+        this.addressForm.get('state')?.patchValue(event?.value);
     }
 
     /**

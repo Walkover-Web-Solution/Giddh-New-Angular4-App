@@ -121,8 +121,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public selectedState: any = '';
     public stateGstCode: any[] = [];
     public formFields: any[] = [];
-    /** Holds Snackbar status */
-    public snackOpen : boolean = true;
 
     /** Observer to track get company profile API call in process */
     public getCompanyProfileInProgress$: Observable<boolean>;
@@ -261,7 +259,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             .pipe(debounceTime(5000), distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((event: any) => {
                 this.patchProfile(this.dataToSave);
-                
+
             });
 
         this.gstKeyDownSubject$
@@ -280,10 +278,10 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         });
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            this.currentTab = (params['referrer']) ? params['referrer'] : this.router.navigate(['/pages/settings/profile/personal']);
-            if((params['referrer']) === 'personal') { this.activeTabIndex = 0; }
-            if((params['referrer']) === 'address') { this.activeTabIndex = 1; }
-            if((params['referrer']) === 'other') { this.activeTabIndex = 2; }
+            this.currentTab = (params['referrer']) ? params['referrer'] : "personal";;
+            if ((params['referrer']) === 'personal') { this.activeTabIndex = 0; }
+            else if ((params['referrer']) === 'address') { this.activeTabIndex = 1; }
+            else if ((params['referrer']) === 'other') { this.activeTabIndex = 2; }
         });
 
         this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
@@ -390,11 +388,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     public onTabChange(event: any): void {
         this.activeTabIndex = event?.index;
-        if(event.index === 0){
+        if (event.index === 0) {
             this.handleTabChanged("personal");
-        }else if(event.index === 1){
+        } else if (event.index === 1) {
             this.handleTabChanged("address");
-        }else{
+        } else {
             this.handleTabChanged("other");
         }
     }
@@ -847,8 +845,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             .subscribe(response => {
                 if (response) {
                     if (response.status === 'success') {
-                        this._toasty.successToast('Profile Updated Successfully.');
-                        this.snackOpen = false;
+                        this._toasty.showSnackBar("success",this.localeService.translate("app_messages.profile_updated"));
                     } else {
                         this._toasty.errorToast(response.message);
                     }
@@ -934,6 +931,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public loadTaxDetails(countryCode: string): void {
+        console.log("loadTaxDetails", countryCode);
+        
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = 'onboarding';
         onboardingFormRequest.country = countryCode;

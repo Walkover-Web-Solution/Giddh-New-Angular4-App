@@ -79,7 +79,7 @@
                                                     <input-field [label]="commonLocaleData?.app_pin_code"
                                                         [type]="'text'" [autocomplete]="'false'" [name]="'pinCodeNum'"
                                                         [placeholder]="commonLocaleData?.app_enter_pin_code"
-                                                        formControlName="pincode" decimalDigitsDirective
+                                                        formControlName="pincode" [allowDecimalDigitsOnly]="true"
                                                         [preventDecimal]="true"></input-field>
                                                 </div>
                                             </div>

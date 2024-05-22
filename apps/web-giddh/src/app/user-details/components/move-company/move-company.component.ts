@@ -160,7 +160,5 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      */
     public onSearchClear(): void {
             this.availablePlansOption = this.availablePlansOptionList;
-            this.availablePlansOption = this.availablePlansOption;
-            ;
     }
 }

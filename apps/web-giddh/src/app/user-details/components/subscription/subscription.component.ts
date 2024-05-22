@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, OnChanges } from "@angular/core";
+import { Component, OnInit, ViewChild, Input, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, OnChanges, Output, EventEmitter } from "@angular/core";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import { MatAccordion } from "@angular/material/expansion";
 import { MatDialog } from "@angular/material/dialog";
@@ -45,7 +45,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public localeData: any = {};
     /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    /**  This will use for companies list expansion in accordian */
+    /** Holds Mat Input Label */
+    @Output() public isSubscriptionLoading: EventEmitter<boolean> = new EventEmitter<boolean>();
+     /**  This will use for companies list expansion in accordian */
     @ViewChild(MatAccordion) accordion: MatAccordion;
     /** This will use for move company in to another company  */
     @ViewChild("moveCompany", { static: false }) public moveCompany: any;
@@ -108,8 +110,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     public isExpand: boolean = false;
     /** This will use for active company */
     public activeCompany: any = {};
-    /** Used to reset Dropdown-field default value */
-    public resetSubscription: string = null;
+    /** True if subscription will move */
+    public subscriptionMove: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -212,10 +214,12 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
      */
     public getCompanies(): void {
         this.showLoader = true;
+        this.isSubscriptionLoading.emit(true);
 
         //This service will use for get subscribed companies
         this.subscriptionService.getSubScribedCompanies().pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.showLoader = false;
+            this.isSubscriptionLoading.emit(false);
             if (res && res.status === "success") {
                 if (!res.body || !res.body[0]) {
                     this.isPlanShow = true;
@@ -249,7 +253,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         event.preventDefault();
         event.stopPropagation();
         this.selectedCompany = company;
-        this.dialog.open(this.moveCompany, { width: '600px' });
+        this.subscriptionMove = true;
+        this.dialog.open(this.moveCompany, { width: '500px' });
     }
 
     /**
@@ -281,7 +286,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         this.subscriptions$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             let subscriptions = [];
             this.subscriptions = [];
-            
+
             if (response?.length) {
                 response.forEach(subscription => {
                     let subscriptionDetails = cloneDeep(subscription);
@@ -306,10 +311,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
                     if (flag) {
                         subscriptions.push(subscriptionDetails);
                     }
-                });                
+                });
 
-                this.plansList = uniqBy(response.map(subscription => { return { label: subscription.planDetails?.name, value: subscription.planDetails?.uniqueName } }), "value");
-
+                this.plansList = uniqBy(response.map(subscription => { return { name: subscription.planDetails?.name, uniqueName: subscription.planDetails?.uniqueName } }), "uniqueName");
                 if (subscriptions?.length > 0) {
                     this.subscriptions = subscriptions;
                     let loop = 0;
@@ -342,7 +346,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         this.filters.plan = '';
         this.filters.expiration = '';
         this.filters.transactionBalance = '';
-        this.resetSubscription = '';
         this.filterSubscriptions();
     }
 
@@ -423,17 +426,17 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
      */
     public translationComplete(): void {
         this.expiringList = [
-            { label: this.localeData?.expiring_list?.seven_days, value: 7 },
-            { label: this.localeData?.expiring_list?.fifteen_days, value: 15 },
-            { label: this.localeData?.expiring_list?.one_month, value: 31 },
-            { label: this.localeData?.expiring_list?.six_months, value: 180 },
-            { label: this.localeData?.expiring_list?.one_year, value: 365 }
+            { name: this.localeData?.expiring_list?.seven_days, value: 7 },
+            { name: this.localeData?.expiring_list?.fifteen_days, value: 15 },
+            { name: this.localeData?.expiring_list?.one_month, value: 31 },
+            { name: this.localeData?.expiring_list?.six_months, value: 180 },
+            { name: this.localeData?.expiring_list?.one_year, value: 365 }
         ];
         this.transactionBalanceList = [
-            { label: this.localeData?.transaction_balance_list?.less_than_1k, value: 1000 },
-            { label: this.localeData?.transaction_balance_list?.less_than_5k, value: 5000 },
-            { label: this.localeData?.transaction_balance_list?.less_than_10k, value: 10000 },
-            { label: this.localeData?.transaction_balance_list?.less_than_50k, value: 50000 }
+            { name: this.localeData?.transaction_balance_list?.less_than_1k, value: 1000 },
+            { name: this.localeData?.transaction_balance_list?.less_than_5k, value: 5000 },
+            { name: this.localeData?.transaction_balance_list?.less_than_10k, value: 10000 },
+            { name: this.localeData?.transaction_balance_list?.less_than_50k, value: 50000 }
         ];
     }
 }
