@@ -745,8 +745,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @param {string} returnUrl
      * @memberof SubscriptionComponent
      */
-    public openWindow(returnUrl: string): void {
-        const url = returnUrl;
+    public openWindow(url: string): void {
         const width = 700;
         const height = 900;
 
