@@ -459,11 +459,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                 this.activeCompany = response;
                 this.newUserSelectCountry({
-                    "label": this.activeCompany?.subscription.country?.alpha3CountryCode + " - " + this.activeCompany?.subscription.country?.countryName,
-                    "value": this.activeCompany?.subscription.country?.alpha3CountryCode,
+                    "label": this.activeCompany?.subscription.region?.code + " - " + this.activeCompany?.subscription.region?.name,
+                    "value": this.activeCompany?.subscription.region?.code,
                     "additional": {
-                        "value": this.activeCompany?.subscription.country?.alpha3CountryCode,
-                        "label": this.activeCompany?.subscription.country?.alpha3CountryCode + " - " + this.activeCompany?.subscription.country?.countryName
+                        "value": this.activeCompany?.subscription.region?.code,
+                        "label": this.activeCompany?.subscription.region?.code + " - " + this.activeCompany?.subscription.region?.name
                     }
                 });
                 this.company.addresses = response.addresses;
