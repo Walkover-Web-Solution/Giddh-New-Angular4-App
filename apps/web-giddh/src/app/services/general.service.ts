@@ -1908,7 +1908,7 @@ export class GeneralService {
     }
 
     /**
-     * Get Client Screen Size (width, height,scaling-factor 
+     * Get Client Screen Size (width, height,scaling-factor
      * and colour-depth) in single string
      *
      * @returns {string}
@@ -1926,7 +1926,7 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public getClientWindowSize(): string {
-         return `width=${window.innerWidth}&height=${window.innerHeight}`;
+        return `width=${window.innerWidth}&height=${window.innerHeight}`;
     }
 
     /**
@@ -1952,5 +1952,38 @@ export class GeneralService {
      */
     public getClientIp(): any {
         return this.http.get<any>(MOBILE_NUMBER_SELF_URL);
+    }
+
+    /**
+     * Get Country Flag Image Url by 2 digit country code
+     *
+     * @param {*} countryCode
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getCountryFlagUrl(countryCode: string): string {
+        return countryCode ? `https://giddh-uploads-2.s3.ap-south-1.amazonaws.com/flags/${countryCode?.toLowerCase()}.svg` : '';
+    }
+
+    /**
+     * This will be use for open window in center
+     *
+     * @param {string} url
+     * @param {string} title
+     * @param {number} width
+     * @param {number} height
+     * @return {*}  {(Window | null)}
+     * @memberof GeneralService
+     */
+    public openCenteredWindow(url: string, title: string, width: number, height: number): Window | null {
+        const left = (window.screen.width / 2) - (width / 2);
+        const top = (window.screen.height / 2) - (height / 2);
+
+        // Open the window and return the reference
+        return window.open(
+            url,
+            title,
+            `width=${width},height=${height},top=${top},left=${left}`
+        );
     }
 }

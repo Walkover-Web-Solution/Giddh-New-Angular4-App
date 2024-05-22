@@ -131,6 +131,7 @@
                                                 (keydown.Shift.Tab)="
                                                     showLedgerAccountList = false; changeTab('shift', 'account')
                                                 "
+                                                (change)="removeAmountIfAccountRemoved(transaction, i)"
                                             ></text-field>
                                         </td>
                                         <td
@@ -142,7 +143,10 @@
                                             }"
                                         >
                                             <text-field
-                                                [readonly]="transaction?.get('isDiscountApplied')?.value"
+                                                [readonly]="
+                                                    transaction?.get('isDiscountApplied')?.value ||
+                                                    transaction?.get('isTaxApplied')?.value
+                                                "
                                                 [id]="'transactionAmount_' + i"
                                                 (keydown.Tab)="changeTab('tab', 'amount')"
                                                 (keydown.Shift.Tab)="changeTab('shift', 'amount')"
@@ -162,6 +166,7 @@
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                                 (change)="
+                                                    updateTransactionActualAmount(transaction); 
                                                     calculateAmount(transaction.get('amount')?.value, transaction, i)
                                                 "
                                             ></text-field>
@@ -175,7 +180,10 @@
                                             }"
                                         >
                                             <text-field
-                                                [readonly]="transaction?.get('isDiscountApplied')?.value"
+                                                [readonly]="
+                                                    transaction?.get('isDiscountApplied')?.value ||
+                                                    transaction?.get('isTaxApplied')?.value
+                                                "
                                                 *ngIf="transaction.get('type')?.value?.toLowerCase() === 'to'"
                                                 [autoFocus]="activeRowIndex === i && activeRowType === 'amount'"
                                                 [autocomplete]="'off'"
@@ -195,6 +203,7 @@
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                                 (change)="
+                                                    updateTransactionActualAmount(transaction); 
                                                     calculateAmount(transaction.get('amount')?.value, transaction, i)
                                                 "
                                             ></text-field>
@@ -332,7 +341,7 @@
     </div>
     <div class="sidebar-list form-control" [hidden]="!showDiscountSidebar">
         <div class="bd-rb d-flex justify-content-between align-items-center discount-sidebar-section">
-            <h3 class="primary-color">{{ localeData?.discount_list}}</h3>
+            <h3 class="primary-color">{{ localeData?.discount_list }}</h3>
             <i class="fa fa-close pdR-5 cursor-pointer" (click)="closeDiscountSidebar()"></i>
         </div>
         <div [style.width]="width" class="h-100">
@@ -387,7 +396,7 @@
     </div>
     <div class="sidebar-list form-control" [hidden]="!showTaxSidebar">
         <div class="bd-rb d-flex justify-content-between align-items-center discount-sidebar-section">
-            <h3 class="primary-color">{{ localeData?.tax_list}}</h3>
+            <h3 class="primary-color">{{ localeData?.tax_list }}</h3>
             <i class="fa fa-close pdR-5 cursor-pointer" (click)="closeTaxSidebar()"></i>
         </div>
         <div [style.width]="width" class="h-100">

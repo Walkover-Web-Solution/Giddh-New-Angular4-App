@@ -88,6 +88,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Input() public isBankAccount: boolean = true;
     /** True if account creation is from command k */
     @Input() public fromCommandK: boolean = false;
+    @Input() public includeSearchedGroup: boolean = false;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
     /** Emiting true if account modal needs to be closed */
@@ -1298,6 +1299,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 requestObject.group = this.activeGroupUniqueName;
                 // Include the parent group provided in 'group' param in fetched results
                 // The result will include this group and its children
+                requestObject.includeSearchedGroup = true;
+            }
+            if (this.includeSearchedGroup) {
                 requestObject.includeSearchedGroup = true;
             }
             let activeGroup;
