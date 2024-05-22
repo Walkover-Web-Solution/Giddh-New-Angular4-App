@@ -344,8 +344,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
      * @param {string} returnUrl
      * @memberof ViewSubscriptionComponent
      */
-    public openWindow(returnUrl: string): void {
-        const url = returnUrl;
+    public openWindow(url: string): void {
         const width = 700;
         const height = 900;
 

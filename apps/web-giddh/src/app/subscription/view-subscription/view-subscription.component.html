@@ -47,8 +47,7 @@
                                 *ngIf="
                                     viewSubscriptionData?.isOwner &&
                                     viewSubscriptionData?.status?.toLowerCase() === 'expired' &&
-                                    (activeCompany.subscription?.country?.countryCode !== 'GB' ||
-                                        localStorage.getItem('Country-Region') !== 'GB')
+                                    activeCompany.subscription?.country?.countryCode !== 'GB'
                                 "
                             >
                                 {{ localeData?.renew }}

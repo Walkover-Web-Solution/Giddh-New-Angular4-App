@@ -243,8 +243,7 @@
                                         *ngIf="
                                             element?.status?.toLowerCase() === 'expired' &&
                                             element?.isOwner &&
-                                            (activeCompany.subscription?.country?.countryCode !== 'GB' ||
-                                                localStorage.getItem('Country-Region') !== 'GB')
+                                            activeCompany.subscription?.country?.countryCode !== 'GB'
                                         "
                                         mat-menu-item
                                         (click)="buyPlan(element)"
