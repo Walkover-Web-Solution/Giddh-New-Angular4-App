@@ -742,7 +742,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     /**
      * This will be open window by url
      *
-     * @param {string} returnUrl
+     * @param {string} url
      * @memberof SubscriptionComponent
      */
     public openWindow(url: string): void {

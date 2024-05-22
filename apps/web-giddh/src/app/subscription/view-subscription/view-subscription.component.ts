@@ -341,7 +341,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     /**
      * This will be open window by url
      *
-     * @param {string} returnUrl
+     * @param {string} url
      * @memberof ViewSubscriptionComponent
      */
     public openWindow(url: string): void {
