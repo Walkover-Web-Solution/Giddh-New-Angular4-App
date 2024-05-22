@@ -931,8 +931,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public loadTaxDetails(countryCode: string): void {
-        console.log("loadTaxDetails", countryCode);
-        
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = 'onboarding';
         onboardingFormRequest.country = countryCode;
