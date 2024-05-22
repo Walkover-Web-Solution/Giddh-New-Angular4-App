@@ -37,7 +37,6 @@ import { MatCardModule } from '@angular/material/card';
 import { SafePipeModule } from '../shared/helpers/pipes/safePipe/safePipe.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { ClipboardModule } from 'ngx-clipboard';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
@@ -91,7 +90,6 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
         GiddhPageLoaderModule,
         NoDataModule,
         MatSlideToggleModule,
-        ClipboardModule,
         MatTooltipModule,
         FormFieldsModule,
         WatchVideoModule

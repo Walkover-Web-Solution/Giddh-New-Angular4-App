@@ -10,8 +10,7 @@ import { ClipboardService } from 'ngx-clipboard';
 @Component({
     selector: 'personal-information',
     templateUrl: './personal-information.component.html',
-    styleUrls: ['./personal-information.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    styleUrls: ['./personal-information.component.scss']
 })
 
 export class PersonalInformationComponent implements OnInit, OnDestroy {
@@ -72,9 +71,9 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.tempProfileData = this.profileData;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(this.profileData.portalDomain)
-        this.saveProfileSubject.pipe( takeUntil(this.destroyed$)).subscribe((res) => {
-            if(res){
+        this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(this.profileData.portalDomain);
+        this.saveProfileSubject.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res) {
                 this.saveProfile.emit(this.updatedData);
             }
         });
@@ -97,11 +96,9 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
      * @memberof PersonalInformationComponent
      */
     public profileUpdated(keyName: string): void {
-        if(this.profileData[keyName] && (this.tempProfileData[keyName] !== this.profileData[keyName])){
-            this.tempProfileData[keyName] = this.profileData[keyName];
-            this.updatedData[keyName] = this.profileData[keyName];
-            this.saveProfileSubject.next(true);
-        }
+        this.tempProfileData[keyName] = this.profileData[keyName];
+        this.updatedData[keyName] = this.profileData[keyName];
+        this.saveProfileSubject.next(true);
     }
 
     /**
@@ -112,7 +109,7 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
      * @memberof PersonalInformationComponent
      */
     public checkPortalDomain(keyName: any): void {
-        if(keyName) {
+        if (keyName) {
             this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(keyName);
             if (this.isValidDomain) {
                 this.profileUpdated('portalDomain');

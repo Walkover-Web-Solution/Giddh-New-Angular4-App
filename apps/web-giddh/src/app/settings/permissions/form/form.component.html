@@ -102,12 +102,12 @@
                                                         <mat-date-range-input [rangePicker]="picker">
                                                             <input
                                                                 matStartDate
-                                                                placeholder="Start date"
+                                                                [placeholder]="commonLocaleData?.app_start_date"
                                                                 formControlName="from"
                                                             />
                                                             <input
                                                                 matEndDate
-                                                                placeholder="End date"
+                                                                [placeholder]="commonLocaleData?.app_end_date"
                                                                 formControlName="to"
                                                             />
                                                         </mat-date-range-input>
@@ -126,7 +126,6 @@
                                             <div class="col-sm-12">
                                                 <div class="date-range-wrapper">
                                                     <input-field
-                                                        class=""
                                                         [label]="localeData?.select_past_period_label"
                                                         [name]="'duration'"
                                                         [allowDigitsOnly]="true"

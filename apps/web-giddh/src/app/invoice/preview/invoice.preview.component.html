@@ -52,8 +52,7 @@
                                             aria-label="invoice"
                                             [routerLink]="['/pages/vouchers/cash/create']"
                                             *ngIf="voucherApiVersion === 2"
-                                            >{{ localeData?.cash_invoice }}</a
-                                        >
+                                            >{{ localeData?.cash_invoice }}</a>
                                     </li>
                                     <li role="menuitem">
                                         <a
@@ -354,7 +353,7 @@
                             </div>
                             <div
                                 class="export-button-wrap"
-                                *ngIf="selectedVoucher === 'sales' && voucherData?.items?.length"
+                                *ngIf="voucherData?.items?.length"
                             >
                                 <button
                                     class="btn btn-primary mr-0"
@@ -2099,7 +2098,8 @@
 
         <!-- Bulk export modal -->
         <ng-template #bulkExport>
-            <invoice-bulk-export
+            <bulk-export-voucher
+                [type]="selectedVoucher"
                 [dateRange]="invoiceSearchRequest"
                 [advanceSearch]="lastListingFilters"
                 [voucherUniqueNames]="selectedInvoices"
@@ -2108,11 +2108,9 @@
                         ? selectedInvoices.length
                         : voucherData && voucherData.totalItems
                 "
-                [localeData]="localeData"
-                [commonLocaleData]="commonLocaleData"
                 (closeModelEvent)="modalRef.hide()"
             >
-            </invoice-bulk-export>
+            </bulk-export-voucher>
         </ng-template>
     </div>
 </ng-container>

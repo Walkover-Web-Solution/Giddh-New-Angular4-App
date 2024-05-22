@@ -114,7 +114,7 @@
                         [label]="localeData?.business_type"
                         [placeholder]="localeData?.business_type_placeholder"
                         [name]="'businessType'"
-                        [id]="businessType"
+                        [id]="'businessType'"
                         [readonlyInput]="true"
                         (selected)="profileData.businessType = $event.value; profileUpdated('businessType')"
                         [options]="profileData.businessTypes"

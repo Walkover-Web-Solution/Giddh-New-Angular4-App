@@ -479,13 +479,13 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchComponent
      */
     public removeItem(element: any): void { 
-        this.branchForm.get('address')?.patchValue(this.branchForm.get('address').value.filter(i => i !== element));
+        this.branchForm.get('address')?.patchValue(this.branchForm.get('address').value.filter(address => address !== element));
 
         this.addresses = this.addresses.map(address => {
             if(address?.uniqueName === element?.uniqueName){
                 address.isDefault = false;
             }
-            return address
+            return address;
         });
     }
 

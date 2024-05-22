@@ -115,6 +115,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                                 this.availablePlans[plan.planDetails?.uniqueName] = [];
                             }
                             this.availablePlans[plan.planDetails?.uniqueName] = plan;
+                            this.availablePlansOptionList = this.availablePlansOption;
                         }
                     });
                 }
@@ -164,7 +165,5 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      */
     public onSearchClear(): void {
             this.availablePlansOption = this.availablePlansOptionList;
-            this.availablePlansOption = this.availablePlansOption;
-            ;
     }
 }

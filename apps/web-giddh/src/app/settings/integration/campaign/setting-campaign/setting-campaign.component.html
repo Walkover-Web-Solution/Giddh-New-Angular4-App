@@ -58,13 +58,9 @@
         <div class="d-flex align-items-center verify-form mr-t15">
             <div class="input-field">
                 <input-field
-                    [label]="
-                        communicationPlatforms?.MSG91?.fields?.auth_key?.mandatory
-                            ? communicationPlatforms?.MSG91?.fields?.auth_key?.label
-                            : communicationPlatforms?.MSG91?.fields?.auth_key?.label
-                    "
+                    [label]="communicationPlatforms?.MSG91?.fields?.auth_key?.label"
                     [type]="'text'"
-                    [cssClass]="'auth_key_input'"
+                    [cssClass]="'auth-key-input'"
                     [name]="'title'"
                     [placeholder]="localeData?.communication?.auth_key"
                     [(ngModel)]="communicationPlatformAuthModel.authFields[0].value"
@@ -260,6 +256,7 @@
                 <mat-form-field appearance="outline" class="w-100">
                     <mat-label>{{ localeData?.communication?.sub_entity }}</mat-label>
                     <mat-select
+                        required="true"
                         [name]="'subentity'"
                         [placeholder]="localeData?.communication?.select_sub_entity"
                         multiple
@@ -289,7 +286,7 @@
                     [ngClass]="{ 'fields-error': mandatoryFields.campaignSlug }"
                     [allowValueReset]="true"
                     (onClear)="createTrigger.campaignDetails.campaignName = ''"
-                    [require]="true"
+                    [required]="true"
                 ></dropdown-field>
             </div>
             <button

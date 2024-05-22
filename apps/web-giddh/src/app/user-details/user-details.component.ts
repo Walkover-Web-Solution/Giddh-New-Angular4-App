@@ -33,7 +33,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     /** True If Auth key copied and used toggle Copy text */
     public isCopied: boolean = false;
     public userAuthKey: string = '';
-    public expandLongCode: boolean = false;
     public twoWayAuth: boolean = false;
     public phoneNumber: string = '';
     public oneTimePassword: string = '';
@@ -85,6 +84,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     public activeTabIndex: number = 0;
     /** Holds Tab Name */
     private tabName = ['auth-key','mobile-number', 'session', 'subscription'];
+    /** Holds True if API calling in progress in old subscription page */
+    public isSubscriptionLoading: boolean = false;
 
     constructor(private store: Store<AppState>,
         private toasty: ToasterService,

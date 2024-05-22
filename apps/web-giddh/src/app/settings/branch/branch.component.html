@@ -179,7 +179,7 @@
         <br />
         <br />
         <div class="branch-vector">
-            <img src="/assets/images/warehouse-vector.svg" [alt]="localeData?.branch_image" />
+            <img [src]="imgPath" [alt]="localeData?.branch_image" />
         </div>
         <!-- add branch modal -->
         <div
@@ -278,8 +278,7 @@
         </ng-template>
 
         <!-- add branch modal -->
-        <ng-template #confirmationModal2>
-            Hello
+        <ng-template #confirmationModal>
             <!-- not show content -->
             <div class="modal-dialog modal-md">
                 <div class="modal-content">

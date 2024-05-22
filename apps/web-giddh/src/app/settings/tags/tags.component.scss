@@ -1,24 +1,4 @@
 .aside-pane {
-    position: fixed;
-    left: auto;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    max-width: 760px;
-    width: 100%;
-    z-index: 99999999;
-    padding: 0 !important;
-    #close {
-        display: block;
-        position: absolute;
-        right: 12px;
-        top: 16px;
-        z-index: 5;
-        border: 0;
-        border-radius: 0;
-        background: transparent;
-        color: var(--color-primary-right-side-popup-header-text);
-    }
     mat-dialog-content {
         overflow: inherit;
     }

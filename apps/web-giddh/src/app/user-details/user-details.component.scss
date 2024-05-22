@@ -24,6 +24,11 @@
     line-height: 54px;
 }
 
+.buy-plan-btn {
+    right: 15px;
+    top: 8px;
+    z-index: 10;
+}
 @media (max-width: 575px) {
     .wrap-tab-content-pd-15 {
         form {

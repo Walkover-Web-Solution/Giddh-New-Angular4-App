@@ -1,9 +1,7 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import {
     AfterViewInit,
     Component,
     ComponentFactoryResolver,
-    ElementRef,
     OnDestroy,
     OnInit,
     TemplateRef,
@@ -44,8 +42,7 @@ import { WarehouseState } from './reducer/warehouse.reducer';
 @Component({
     selector: 'setting-warehouse',
     templateUrl: './warehouse.component.html',
-    styleUrls: ['./warehouse.component.scss'],
-    providers: [{ provide: BsDropdownConfig, useValue: { autoClose: true } }]
+    styleUrls: ['./warehouse.component.scss']
 })
 export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
 

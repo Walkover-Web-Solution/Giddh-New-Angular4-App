@@ -18,6 +18,7 @@
                 <div class="aside-pane-form">
                     <account-add-new-details
                         #addAccountNewComponent
+                        *ngIf="activeGroupUniqueName && !isUpdateAccount"
                         class="mr-t4"
                         [activeGroupUniqueName]="activeGroupUniqueName"
                         [isDebtorCreditor]="isDebtorCreditor"

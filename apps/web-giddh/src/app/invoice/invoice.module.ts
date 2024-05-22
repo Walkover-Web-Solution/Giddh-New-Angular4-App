@@ -9,7 +9,6 @@ import { InvoiceComponent } from './invoice.component';
 import { InvoiceRendererComponent } from './invoice.renderer.component';
 import { InvoicePreviewComponent } from './preview/invoice.preview.component';
 import { InvoiceAdvanceSearchComponent } from './preview/models/advanceSearch/invoiceAdvanceSearch.component';
-import { BulkExportModal } from './preview/models/bulk-export-modal/bulk-export.component';
 import { InvoiceBulkUpdateModalComponent } from './preview/models/bulkUpdateModal/invoiceBulkUpdateModal.component';
 import { DownloadOrSendInvoiceOnMailComponent } from './preview/models/download-or-send-mail/download-or-send-mail.component';
 import { DownloadVoucherComponent } from './preview/models/download-voucher/download-voucher.component';
@@ -78,6 +77,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { MatTabsModule } from '@angular/material/tabs';
+import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
 
 @NgModule({
     declarations: [
@@ -96,7 +96,6 @@ import { MatTabsModule } from '@angular/material/tabs';
         RecurringComponent,
         WebviewDirective,
         InvoiceAdvanceSearchComponent,
-        BulkExportModal,
         InvoiceRendererComponent,
         InvoiceBulkUpdateModalComponent,
         GenerateEWayBillComponent,
@@ -166,7 +165,8 @@ import { MatTabsModule } from '@angular/material/tabs';
         DeleteTemplateConfirmationModalModule,
         MatDialogModule,
         WatchVideoModule,
-        MatTabsModule
+        MatTabsModule,
+        BulkExportVoucherModule
     ],
     exports: [
         InvoiceRoutingModule,

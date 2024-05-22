@@ -21,7 +21,7 @@
                     <dropdown-field
                         [label]="localeData?.role_type_label"
                         [required]="true"
-                        (selectedOption)="$event.value && newRoleObj.isFresh = $event.value"
+                        (selectedOption)="newRoleObj.isFresh = $event?.value"
                         [name]="'isFresh'"
                         [options]="isFreshOptions"
                     ></dropdown-field>
@@ -29,7 +29,7 @@
                 <div class="form-group" *ngIf="newRoleObj.isFresh">
                     <mat-form-field class="w-100" appearance="outline">
                         <mat-label>{{ dropdownHeading }}</mat-label>
-                        <mat-select [(ngModel)]="selectedValues" [ngModelOptions]="{ standalone: true }" multiple>
+                        <mat-select [(ngModel)]="selectedValues" name="page-list" multiple>
                             <div class="custom-select-all-option">
                                 <mat-checkbox
                                     color="primary"
@@ -50,7 +50,7 @@
                 <div *ngIf="!newRoleObj.isFresh">
                     <mat-form-field class="w-100" appearance="outline">
                         <mat-label>{{ localeData?.copy_permission }}</mat-label>
-                        <mat-select [(ngModel)]="newRoleObj.uniqueName" [ngModelOptions]="{ standalone: true }">
+                        <mat-select [(ngModel)]="newRoleObj.uniqueName" name="roles">
                             <mat-option [value]="">
                                 {{ commonLocaleData?.app_please_select }}
                             </mat-option>

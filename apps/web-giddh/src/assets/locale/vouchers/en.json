@@ -155,6 +155,6 @@
     "clearance_date": "Clearance Date",
     "receipt_mode": "Receipt Mode",
     "payment_mode": "Payment Mode",
-    "sales_as_receipt": "Sales as Receipt",
-    "purchase_as_payment": "Purchase as Payment"
+    "sales_as_receipt_voucher": "Sales as Receipt Voucher",
+    "purchase_as_payment_voucher": "Purchase as Payment Voucher"
 }

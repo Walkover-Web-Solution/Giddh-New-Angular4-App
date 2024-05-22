@@ -35,7 +35,7 @@ import { PayorCreateEditComponent } from "./icici/payor-create-edit/payor-create
     ],
     exports: [
         AccountCreateEditComponent,
-        PayorCreateEditComponent,
+        PayorCreateEditComponent
     ]
 })
 

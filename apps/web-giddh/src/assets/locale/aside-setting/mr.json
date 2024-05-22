@@ -82,7 +82,7 @@
                     "link": "/pages/invoice/preview/settings/sales",
                     "icon": "<i class='icon-invoice-management'></i>"
                 },
-                {
+                 {
                     "label": "सदस्यता",
                     "link": "/pages/user-details/subscription",
                     "icon": "<i class='icon-subscription2'></i>"
