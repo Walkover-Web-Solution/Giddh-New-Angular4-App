@@ -4,6 +4,7 @@
     }
 
     .dropdown-wrapper {
+        height: 50px;
         .country-dropdown {
             width: max-content;
             img {
@@ -23,8 +24,7 @@
     }
 
     .plan-content {
-        padding: 10px 8px 20px 8px;
-        height: calc(100% - 36px);
+        padding: 8px 8px 36px 8px;
 
         .plan-title {
             min-height: 72px;
@@ -80,25 +80,24 @@
         min-width: 230px;
         font-weight: 500;
         font-size: var(--font-size-15);
-        border-right: 1px solid var(--color-iron);
         border-left: 1px solid var(--color-iron);
     }
 
     .plan-table {
         width: min-content;
         float: left !important;
-
         overflow: hidden;
         white-space: nowrap;
         box-shadow: none !important;
         border: 1px solid var(--color-iron);
+        border-radius: 4px;
     }
 
     .plan-table {
         .grid-list-div {
             display: inline-flex;
             float: left;
-            height: 47px;
+            height: 50px;
         }
     }
 
@@ -166,7 +165,7 @@
     }
 
     .plan-summary-heading {
-        height: 47px;
+        height: 50px;
     }
 
     .plan-summary {
