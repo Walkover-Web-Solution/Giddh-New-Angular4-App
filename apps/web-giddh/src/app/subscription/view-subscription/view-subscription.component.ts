@@ -9,6 +9,7 @@ import { SubscriptionComponentStore } from '../utility/subscription.store';
 import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.component';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { BuyPlanComponentStore } from '../buy-plan/utility/buy-plan.store';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'view-subscription',
@@ -51,6 +52,12 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     public selectedMoveCompany: boolean = false;
     /** Razorpay instance */
     public razorpay: any;
+    /** Holds Store Buy Plan Success observable*/
+    public buyPlanSuccess$ = this.subscriptionComponentStore.select(state => state.buyPlanSuccess);
+    /** This will use for open window */
+    private openedWindow: Window | null = null;
+    /** This will use for active company */
+    public activeCompany: any = {};
 
     constructor(
         public dialog: MatDialog,
@@ -59,7 +66,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         private componentStore: ViewSubscriptionComponentStore,
         private readonly componentStoreBuyPlan: BuyPlanComponentStore,
         private subscriptionComponentStore: SubscriptionComponentStore,
-        private location: Location
+        private generalService: GeneralService
     ) {
     }
 
@@ -77,8 +84,20 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.subscriptionComponentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
+                this.activeCompany = response;
+            }
+        });
+
         this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.viewSubscriptionData = response;
+        });
+
+        this.buyPlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.redirectLink) {
+                this.openWindow(response?.redirectLink);
+            }
         });
 
         this.cancelSubscription$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -115,6 +134,12 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
             }
         });
 
+        window.addEventListener('message', event => {
+            if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
+                this.closeWindow();
+                this.getSubscriptionData(this.subscriptionId);
+            }
+        });
     }
 
     /**
@@ -227,8 +252,18 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
      *
      * @memberof ViewSubscriptionComponent
      */
-    public buyPlan(): void {
-        this.componentStoreBuyPlan.generateOrderBySubscriptionId(this.subscriptionId);
+    public buyPlan(subscription: any): void {
+        if (this.activeCompany.subscription?.country?.countryCode === 'GB') {
+            let model = {
+                planUniqueName: subscription?.planUniqueName,
+                paymentProvider: "GOCARDLESS",
+                subscriptionId: this.subscriptionId,
+                duration: subscription?.period
+            }
+            this.subscriptionComponentStore.buyPlanByGoCardless(model);
+        } else {
+            this.componentStoreBuyPlan.generateOrderBySubscriptionId(this.subscriptionId);
+        }
     }
 
     /**
@@ -304,6 +339,31 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
             };
 
             this.componentStoreBuyPlan.updateNewLoginSubscriptionPayment({ request: request });
+        }
+    }
+
+    /**
+     * This will be open window by url
+     *
+     * @param {string} url
+     * @memberof ViewSubscriptionComponent
+     */
+    public openWindow(url: string): void {
+        const width = 700;
+        const height = 900;
+
+        this.openedWindow = this.generalService.openCenteredWindow(url, '', width, height);
+    }
+
+    /**
+     * This will close the current window
+     *
+     * @memberof ViewSubscriptionComponent
+     */
+    public closeWindow(): void {
+        if (this.openedWindow) {
+            this.openedWindow.close();
+            this.openedWindow = null;
         }
     }
 }

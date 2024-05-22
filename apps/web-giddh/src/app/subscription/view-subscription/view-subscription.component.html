@@ -19,9 +19,7 @@
                 <mat-card-content *ngIf="!(viewSubscriptionDataInProgress$ | async)">
                     <div class="d-flex justify-content-between column-gap1 align-items-center border-bottom pb-2">
                         <div class="d-flex column-gap1">
-                            <h4 class="font-16">
-                                {{ commonLocaleData?.app_view }} {{ localeData?.tab_heading }}
-                            </h4>
+                            <h4 class="font-16">{{ commonLocaleData?.app_view }} {{ localeData?.tab_heading }}</h4>
                             <span class="badge btn-success cp font-12">{{
                                 viewSubscriptionData?.status | uppercase
                             }}</span>
@@ -31,7 +29,7 @@
                                 aria-label="buy"
                                 mat-stroked-button
                                 color="primary"
-                                (click)="buyPlan()"
+                                (click)="buyPlan(viewSubscriptionData)"
                                 *ngIf="
                                     viewSubscriptionData?.isOwner &&
                                     viewSubscriptionData?.status?.toLowerCase() === 'trial'
@@ -43,10 +41,11 @@
                                 aria-label="buy"
                                 mat-stroked-button
                                 color="primary"
-                                (click)="buyPlan()"
+                                (click)="buyPlan(viewSubscriptionData)"
                                 *ngIf="
                                     viewSubscriptionData?.isOwner &&
-                                    viewSubscriptionData?.status?.toLowerCase() === 'expired'
+                                    viewSubscriptionData?.status?.toLowerCase() === 'expired' &&
+                                    activeCompany.subscription?.country?.countryCode !== 'GB'
                                 "
                             >
                                 {{ localeData?.renew }}
@@ -65,7 +64,7 @@
                             <button
                                 aria-label="plan"
                                 mat-menu-item
-                                (click)="buyPlan()"
+                                (click)="buyPlan(viewSubscriptionData)"
                                 *ngIf="viewSubscriptionData?.status?.toLowerCase() === 'trial'"
                             >
                                 {{ commonLocaleData?.app_buy_plan }}
@@ -73,8 +72,11 @@
                             <button
                                 aria-label="plan"
                                 mat-menu-item
-                                (click)="buyPlan()"
-                                *ngIf="viewSubscriptionData?.status?.toLowerCase() === 'expired'"
+                                (click)="buyPlan(viewSubscriptionData)"
+                                *ngIf="
+                                    viewSubscriptionData?.status?.toLowerCase() === 'expired' &&
+                                    activeCompany.subscription?.country?.countryCode !== 'GB'
+                                "
                             >
                                 {{ localeData?.renew }}
                             </button>
