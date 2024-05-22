@@ -343,10 +343,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.changePlanDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.dueAmoun > 0) {
+            if (response && response.dueAmount > 0) {
                 this.initializePayment(response);
             } else {
-                this.updateSubscriptionPayment(response, true)
+                this.updateSubscriptionPayment(response, true);
             }
         });
     }
