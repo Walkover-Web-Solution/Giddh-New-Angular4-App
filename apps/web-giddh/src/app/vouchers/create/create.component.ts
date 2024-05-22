@@ -48,6 +48,7 @@ import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustmen
 import { SettingsTaxesActions } from "../../actions/settings/taxes/settings.taxes.action";
 import { ProformaService } from "../../services/proforma.service";
 import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
+import { TitleCasePipe } from "@angular/common";
 
 @Component({
     selector: "create",
@@ -396,6 +397,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private useDefaultAccountDetails: boolean = true;
     /** Holds redirect url to redirect after voucher update */
     private redirectUrl: string = "";
+    /** Holds text for update voucher button */
+    public updateVoucherText: string = "";
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -501,7 +504,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private adjustmentUtilityService: AdjustmentUtilityService,
         private settingsTaxesAction: SettingsTaxesActions,
         private proformaService: ProformaService,
-        private settingsProfileActions: SettingsProfileActions
+        private settingsProfileActions: SettingsProfileActions,
+        private titleCasePipe: TitleCasePipe
     ) {
 
     }
@@ -4937,5 +4941,34 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private updateProfileSetting(keyToUpdate: any): void {
         this.store.dispatch(this.settingsProfileActions.PatchProfile(keyToUpdate));
+    }
+
+    /**
+     * Assigns update voucher button text
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private getUpdateVoucherText(): void {
+        let updateVoucherText = this.localeData?.update_invoice;
+        let invoiceType = (this.invoiceType.isProformaInvoice ? this.localeData?.invoice_types?.proforma
+            : this.invoiceType.isEstimateInvoice ? this.localeData?.invoice_types?.estimate
+                : this.invoiceType.isSalesInvoice && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.invoice : this.invoiceType.isCreditNote && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.credit_note : this.invoiceType.isDebitNote && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.debit_note : this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.purchase : this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_invoice
+                    : this.invoiceType.isPurchaseInvoice && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_bill : this.invoiceType.isCreditNote && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_credit_note : this.invoiceType.isDebitNote && this.invoiceType.isCashInvoice ? this.localeData?.invoice_types?.cash_debit_note : this.invoiceType);
+
+        invoiceType = this.titleCasePipe.transform(invoiceType);
+        this.updateVoucherText = updateVoucherText?.replace("[INVOICE_TYPE]", invoiceType);
+    }
+
+    /**
+     * Callback for translation complete event
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public translationComplete(): void {
+        this.getVoucherDateLabelPlaceholder();
+        if (this.isUpdateMode) {
+            this.getUpdateVoucherText();
+        }
     }
 }
