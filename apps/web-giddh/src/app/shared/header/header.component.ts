@@ -264,10 +264,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public showDepreciationMessage: boolean = false;
     /* True if we need to show header according to has subscription permission */
     public hasSubscriptionPermission: boolean = false;
-    /** True if it's a subscription page */
+    /** True if it's a subscription module */
+    public isSubscriptionModule: boolean = false;
+    /** True if it's a subscription get all plans or view subscription page */
     public isSubscriptionPage: boolean = false;
-    /** True if it's a subscription get all plans page */
-    public isSubscriptionGetAllPlansPage: boolean = false;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -340,8 +340,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.currentPageUrl = this.router.url;
                 }
               
-                this.isSubscriptionPage = this.router.url.includes("/pages/subscription");
-                this.isSubscriptionGetAllPlansPage = this.router.url.includes("/pages/subscription/buy-plan");
+                this.isSubscriptionModule = this.router.url.includes("/pages/subscription");
+                this.isSubscriptionPage = this.router.url.includes("/pages/subscription/buy-plan") || this.router.url.includes("/pages/subscription/view-subscription");
                 
                 this.setCurrentPage();
                 this.addClassInBodyIfPageHasTabs();
@@ -2113,11 +2113,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
-     * Navigates back to the previous page.
+     * Navigates back to the get all subscription page.
      *
      * @memberof HeaderComponent
      */
-    public back(): void {
-        this.location.back();
+    public backToSubscription(): void {
+        this.router.navigate(['/pages/subscription']);
     }
 }
