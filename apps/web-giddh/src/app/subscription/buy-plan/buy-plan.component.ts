@@ -1135,18 +1135,18 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /**
      * Updates payment in subscription
      *
-     * @param {*} razorPayResponse
+     * @param {*} payResponse
      * @memberof BuyPlanComponent
      */
-    public updateSubscriptionPayment(razorPayResponse: any, zeroAmount: boolean = false): void {
+    public updateSubscriptionPayment(payResponse: any, zeroAmount: boolean = false): void {
         let request;
-        if (razorPayResponse) {
+        if (payResponse) {
             request = {
-                paymentId: !zeroAmount ? razorPayResponse.razorpay_payment_id : null,
-                razorpaySignature: !zeroAmount ? razorPayResponse.razorpay_signature : null,
+                paymentId: !zeroAmount ? payResponse.razorpay_payment_id : null,
+                razorpaySignature: !zeroAmount ? payResponse.razorpay_signature : null,
                 amountPaid: !zeroAmount ? this.subscriptionResponse?.dueAmount : 0,
                 callNewPlanApi: true,
-                razorpayOrderId: !zeroAmount ? razorPayResponse?.razorpay_order_id : null
+                razorpayOrderId: !zeroAmount ? payResponse?.razorpay_order_id : payResponse?.razorpayOrderId
             };
             let data = { ...request, ...this.subscriptionRequest };
             this.componentStore.changePlan(data);
