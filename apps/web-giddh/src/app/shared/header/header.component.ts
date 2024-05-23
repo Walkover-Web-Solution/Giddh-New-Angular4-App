@@ -264,7 +264,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public showDepreciationMessage: boolean = false;
     /* True if we need to show header according to has subscription permission */
     public hasSubscriptionPermission: boolean = false;
-    /** True if it's a subscription page */
+    /** True if it's a subscription module */
+    public isSubscriptionModule: boolean = false;
+    /** True if it's a subscription get all plans or view subscription page */
     public isSubscriptionPage: boolean = false;
 
     /**
@@ -337,13 +339,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (!this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details") && !this.router.url.includes("/billing-detail")) {
                     this.currentPageUrl = this.router.url;
                 }
-
-                if (this.router.url.includes("/pages/subscription")) {
-                    this.isSubscriptionPage = true;
-                } else {
-                    this.isSubscriptionPage = false;
-                }
-
+              
+                this.isSubscriptionModule = this.router.url.includes("/pages/subscription");
+                this.isSubscriptionPage = this.router.url.includes("/pages/subscription/buy-plan") || this.router.url.includes("/pages/subscription/view-subscription");
+                
                 this.setCurrentPage();
                 this.addClassInBodyIfPageHasTabs();
                 this.checkIfPageHasTabs();
@@ -2111,5 +2110,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public removeDepreciationMessage(): void {
         document.body?.classList?.remove("depreciation-message");
         this.showDepreciationMessage = false;
+    }
+
+    /**
+     * Navigates back to the get all subscription page.
+     *
+     * @memberof HeaderComponent
+     */
+    public backToSubscription(): void {
+        this.router.navigate(['/pages/subscription']);
     }
 }
