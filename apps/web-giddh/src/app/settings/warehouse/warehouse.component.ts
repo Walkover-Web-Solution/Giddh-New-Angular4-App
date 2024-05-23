@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { select, Store } from '@ngrx/store';
-import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { BsModalRef, BsModalService, ModalDirective, ModalOptions } from 'ngx-bootstrap/modal';
 import { PageChangedEvent, PaginationComponent } from 'ngx-bootstrap/pagination';
 import { fromEvent, Observable, Subject } from 'rxjs';

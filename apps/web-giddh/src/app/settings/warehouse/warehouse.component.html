@@ -22,7 +22,7 @@
                             *ngIf="searchWarehouseQuery"
                             href="javascript:;"
                             (click)="resetFilter()"
-                            [tooltip]="localeData?.reset_search"
+                            [matTooltip]="localeData?.reset_search"
                         >
                             <i aria-hidden="true" class="icon-refresh"></i> {{ commonLocaleData?.app_clear_filter }}
                         </a>

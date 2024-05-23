@@ -95,7 +95,7 @@
                                 <i
                                     class="icon-copy-file"
                                     (click)="copyUrl()"
-                                    [tooltip]="commonLocaleData?.app_copy"
+                                    [matTooltip]="commonLocaleData?.app_copy"
                                 ></i>
                             </span>
                             <span class="success copied-url copy-text-position" *ngIf="isCopied">{{ commonLocaleData?.app_copied}}</span>
