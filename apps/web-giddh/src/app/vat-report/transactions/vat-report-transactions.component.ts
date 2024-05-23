@@ -183,7 +183,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @param {*} invoice
      * @memberof VatReportTransactionsComponent
      */
-    public onSelectInvoice(invoice): void {
+    public onSelectInvoice(invoice: any): void {
         const uniqueName = (this.voucherApiVersion !== 2) ? invoice.purchaseRecordUniqueName : invoice.voucherUniqueName;
         if (invoice.voucherType === VoucherTypeEnum.purchase) {
             if (uniqueName) {
@@ -296,7 +296,7 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
      * @param {*} invoiceCopy
      * @memberof VatReportTransactionsComponent
      */
-    public ondownloadInvoiceEvent(invoiceCopy): void {
+    public ondownloadInvoiceEvent(invoiceCopy: any): void {
         if (this.voucherApiVersion === 2) {
             let dataToSend = {
                 voucherType: this.selectedInvoice?.voucherType,
