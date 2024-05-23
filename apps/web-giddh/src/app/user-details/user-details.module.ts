@@ -59,7 +59,6 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
         FormsModule,
         ReactiveFormsModule,
         UserDetailsRoutingModule,
-        TabsModule.forRoot(),
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
@@ -67,9 +66,6 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
         DecimalDigitsModule,
         SharedModule,
         ElementViewChildModule,
-        ModalModule.forRoot(),
-        BsDropdownModule.forRoot(),
-        TooltipModule.forRoot(),
         ScrollingModule,
         NoDataModule,
         MatToolbarModule,
@@ -83,7 +79,6 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
         MatDividerModule,
         MatTableModule,
         MatDialogModule,
-        ShSelectModule,
         MatSliderModule,
         MatCardModule,
         SafePipeModule,

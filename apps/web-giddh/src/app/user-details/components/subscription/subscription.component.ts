@@ -47,7 +47,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public commonLocaleData: any = {};
     /** Holds Mat Input Label */
     @Output() public isSubscriptionLoading: EventEmitter<boolean> = new EventEmitter<boolean>();
-     /**  This will use for companies list expansion in accordian */
+    /**  This will use for companies list expansion in accordian */
     @ViewChild(MatAccordion) accordion: MatAccordion;
     /** This will use for move company in to another company  */
     @ViewChild("moveCompany", { static: false }) public moveCompany: any;
@@ -438,5 +438,15 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
             { name: this.localeData?.transaction_balance_list?.less_than_10k, value: 10000 },
             { name: this.localeData?.transaction_balance_list?.less_than_50k, value: 50000 }
         ];
+    }
+
+
+    /**
+     * Redirection to new buy plan page
+     *
+     * @memberof SubscriptionComponent
+     */
+    public goToBuyNow(): void {
+        this.route.navigate(['/pages/subscription/buy-plan']);
     }
 }
