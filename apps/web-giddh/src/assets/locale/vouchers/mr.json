@@ -11,6 +11,7 @@
         "cash_bill": "रोख बिल",
         "cash_credit_note": "रोख क्रेडिट नोट",
         "cash_debit_note": "कॅश डेबिट नोट",
+        "purchase_order": "खरेदी ऑर्डर",
         "receipt": "पावती",
         "payment": "पेमेंट"
     },
