@@ -252,7 +252,11 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     }
 
     public editVoucher() {
-        this._router.navigate(['/pages/proforma-invoice/invoice', this.selectedVoucherType, this.accountUniqueName, this.selectedInvoiceNo], { queryParams:  { uniqueName: this.selectedVoucherUniqueName } } );
+        if (this.voucherApiVersion === 2) {
+            this._router.navigate(['/pages/vouchers/' + this.selectedVoucherType?.toString()?.replace(/-/g, " ") + '/' + this.accountUniqueName + '/' + this.selectedVoucherUniqueName + '/edit'], { queryParams: { redirect: this._router.url } } );
+        } else {
+            this._router.navigate(['/pages/proforma-invoice/invoice', this.selectedVoucherType, this.accountUniqueName, this.selectedInvoiceNo], { queryParams:  { uniqueName: this.selectedVoucherUniqueName } } );
+        }
     }
 
     /**

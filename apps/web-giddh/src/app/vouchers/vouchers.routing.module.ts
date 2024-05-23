@@ -30,8 +30,14 @@ const routes: Routes = [
                 canDeactivate: [PageLeaveConfirmationGuard]
             },
             {
+                path: ":voucherType/:accountUniqueName/create",
+                component: VoucherCreateComponent,
+                canDeactivate: [PageLeaveConfirmationGuard]
+            },
+            {
                 path: ":voucherType/:accountUniqueName/:uniqueName/edit",
-                component: VoucherCreateComponent
+                component: VoucherCreateComponent,
+                canDeactivate: [PageLeaveConfirmationGuard]
             }
         ]
     }
