@@ -10,7 +10,8 @@
         "estimate": "Estimate",
         "cash_bill": "Cash Bill",
         "cash_credit_note": "Cash Credit Note",
-        "cash_debit_note": "Cash Debit Note"
+        "cash_debit_note": "Cash Debit Note",
+        "purchase_order": "Purchase Order"
     },
     "customer_name": "Customer Name",
     "enter_customer_name": "Enter Customer Name",

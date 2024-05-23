@@ -10,7 +10,8 @@
         "estimate": "अनुमान",
         "cash_bill": "नकद बिल",
         "cash_credit_note": "कैश क्रेडिट नोट",
-        "cash_debit_note": "नकद डेबिट नोट"
+        "cash_debit_note": "नकद डेबिट नोट",
+        "purchase_order": "क्रय आदेश"
     },
     "customer_name": "ग्राहक का नाम",
     "enter_customer_name": "Enter Customer Name",

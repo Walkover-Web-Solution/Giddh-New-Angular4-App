@@ -148,7 +148,7 @@ export class VouchersUtilityService {
                 break;
 
             case VoucherTypeEnum.purchaseOrder:
-                voucherName = "Purchase Order";
+                voucherName = localeData?.invoice_types?.purchase_order;
                 break;
 
             default:
