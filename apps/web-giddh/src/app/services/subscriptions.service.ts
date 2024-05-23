@@ -89,7 +89,7 @@ export class SubscriptionsService {
      */
     public getAllPlans(params: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_ALL_PLANS
-            ?.replace(':countryCode', encodeURIComponent(params?.countryCode || ''))?.replace(':region', encodeURIComponent(params?.region || ''))
+            ?.replace(':regionCode', encodeURIComponent(params?.regionCode || ''))
         ).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = '';

@@ -1909,22 +1909,40 @@ export class GeneralService {
     }
 
     /**
+     * Get Client Screen Size (width, height,scaling-factor 
+     * and colour-depth) in single string
+     *
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getClientScreens(): string {
+        const screen = window.screen;
+        return `width=${screen.width}&height=${screen.height}&scaling-factor=${window.devicePixelRatio}&colour-depth=${screen.colorDepth}`;
+    }
+
+    /**
+     * Get Client Window Size (width and height) in single string
+     *
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getClientWindowSize(): string {
+         return `width=${window.innerWidth}&height=${window.innerHeight}`;
+    }
+
+    /**
      * This will be use for get user agent
      *
      * @param {*} clientIp
      * @return {*}
      * @memberof GeneralService
      */
-    public getUserAgentData(clientIp: any): any {
+    public getUserAgentData(): any {
         let args: any = {};
-        args['os'] = this.getOsConfiguration();
-        args['os-family'] = this.getOSFamily();
-        args['os-version'] = this.getOSVersion();
-        args['device-manufacturer'] = this.getDeviceManufacture();
-        args['device-model'] = this.getDeviceModel();
-        args['timestamp'] = this.getTimesStamp();
-        args['client-ip'] = clientIp;
-        args['Gov-Client-Timezone'] = 'UTC' + this.getUserTimeZone();
+        args["timestamp"] = this.getTimesStamp();
+        args["Gov-Client-Timezone"] = 'UTC' + this.getUserTimeZone();
+        args["Gov-client-screens"] = this.getClientScreens();
+        args["Gov-client-window-size"] = this.getClientWindowSize();
         return args;
     }
 
@@ -1935,5 +1953,16 @@ export class GeneralService {
      */
     public getClientIp(): any {
         return this.http.get<any>(MOBILE_NUMBER_SELF_URL);
+    }
+
+    /**
+     * Get Country Flag Image Url by 2 digit country code
+     *
+     * @param {*} countryCode
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getCountryFlagUrl(countryCode: string): string {
+        return countryCode ? `https://giddh-uploads-2.s3.ap-south-1.amazonaws.com/flags/${countryCode?.toLowerCase()}.svg` : '';
     }
 }

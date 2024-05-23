@@ -27,8 +27,6 @@ export class ViewReturnComponent implements OnInit {
     public ukDisplayedColumns: string[] = ['number', 'name', 'aed_amt'];
     /** Holds Active Company Info from store */
     public activeCompany: any;
-    /** Holds client ip address */
-    public clientIp: string = "";
 
 
     constructor(
@@ -54,11 +52,6 @@ export class ViewReturnComponent implements OnInit {
     * @memberof ViewReturnComponent
     */
     public ngOnInit(): void {
-        this.generalService.getClientIp().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.ipAddress) {
-                this.clientIp = response.ipAddress;
-            }
-        });
         this.viewVatReturn();
     }
 
@@ -77,7 +70,7 @@ export class ViewReturnComponent implements OnInit {
         };
 
         this.isLoading = true;
-        this.vatService.viewVatReturn(this.inputData.companyUniqueName, model, this.clientIp).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this.vatService.viewVatReturn(this.inputData.companyUniqueName, model).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.isLoading = false;
             if (res?.status === 'success' && res.body?.sections) {
                 this.vatReport = res.body?.sections;

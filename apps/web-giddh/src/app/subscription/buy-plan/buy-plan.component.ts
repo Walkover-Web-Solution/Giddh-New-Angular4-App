@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivateDialogComponent } from '../activate-dialog/activate-dialog.component';
 import { BuyPlanComponentStore } from './utility/buy-plan.store';
@@ -18,6 +18,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { userLoginStateEnum } from '../../models/user-login-state';
 import { ChangeBillingComponentStore } from '../change-billing/utility/change-billing.store';
+import { GeneralService } from '../../services/general.service';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
     selector: 'buy-plan',
@@ -31,6 +33,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     @ViewChild('stepper') stepperIcon: any;
     /** This will use for table content scroll in mobile */
     @ViewChild('tableContent', { read: ElementRef }) public tableContent: ElementRef<any>;
+    /** Holds Country list Mat Trigger Reference  */
+    @ViewChild('countryList', { static: false }) public countryList: MatSelect;
     /** This will use for hold table data */
     public inputData: any[] = [];
     /* This will hold local JSON data */
@@ -147,6 +151,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public yearlyPlans: any[] = [];
     /** Hold new user selected country */
     public newUserSelectedCountry: string = '';
+    /** Hold new user selected country */
+    public currentCountry: FormControl = new FormControl(null);
     /** Hold subscription id */
     public subscriptionId: string = '';
     /** True if api call in progress */
@@ -178,7 +184,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private location: Location,
-        private elementRef: ElementRef
+        private elementRef: ElementRef,
+        private generalService: GeneralService
     ) {
         this.session$ = this.store.pipe(select(p => p.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
         this.store.dispatch(this.generalActions.openSideMenu(false));
@@ -206,46 +213,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.isChangePlan = true;
             }
         });
-        if (localStorage.getItem('Country-Region') === 'IN') {
-            this.newUserSelectCountry({
-                "label": "IN - India",
-                "value": "IN",
-                "additional": {
-                    "value": "IN",
-                    "label": "IN - India"
-                }
-            }, false);
-        } else if (localStorage.getItem('Country-Region') === 'GB') {
-            this.newUserSelectCountry({
-                "label": "GB - United Kingdom",
-                "value": "GB",
-                "additional": {
-                    "value": "GB",
-                    "label": "GB - United Kingdom"
-                }
-            }, false);
-        } else if (localStorage.getItem('Country-Region') === 'AE') {
-            this.newUserSelectCountry({
-                "label": "AE - United Arab Emirates",
-                "value": "AE",
-                "additional": {
-                    "value": "AE",
-                    "label": "AE - United Arab Emirates"
-                }
-
-            }, false);
-        } else if (!this.isChangePlan && localStorage.getItem('Country-Region') === 'GL') {
-            this.newUserSelectCountry({
-                "label": "GL - Global",
-                "value": "GL",
-                "additional": {
-                    "value": "GL",
-                    "label": "GL - Global"
-                }
-            }, true);
-        }
-
-
 
         this.createSubscriptionResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -300,12 +267,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.countrySource = [];
                 Object.keys(response).forEach(key => {
                     this.countrySource.push({
-                        value: response[key].alpha2CountryCode,
-                        label: response[key].alpha2CountryCode + ' - ' + response[key].countryName,
+                        value: response[key].alpha3CountryCode,
+                        label: response[key].alpha3CountryCode + ' - ' + response[key].countryName,
                         additional: response[key]
                     });
                 });
                 this.countrySource$ = observableOf(this.countrySource);
+
+                if (this.countrySource?.length) {
+                    this.currentCountry.patchValue(this.countrySource.find(country => country.label === this.newUserSelectedCountry));
+                }
+
             } else {
                 let countryRequest = new CountryRequest();
                 countryRequest.formName = 'onboarding';
@@ -371,8 +343,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.changePlanDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response && response.dueAmount > 0) {
                 this.initializePayment(response);
+            } else {
+                this.updateSubscriptionPayment(response, true);
             }
         });
     }
@@ -482,17 +456,56 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     private getActiveCompany(): void {
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                 this.activeCompany = response;
-                    this.newUserSelectCountry({
-                        "label": this.activeCompany?.countryV2?.alpha2CountryCode + " - " + this.activeCompany?.countryV2?.countryName,
-                        "value": this.activeCompany?.countryV2?.alpha2CountryCode,
-                        "additional": {
-                            "value": this.activeCompany?.countryV2?.alpha2CountryCode,
-                            "label": this.activeCompany?.countryV2?.alpha2CountryCode + " - " + this.activeCompany?.countryV2?.countryName
-                        }
-                    }, false);
+                this.newUserSelectCountry({
+                    "label": this.activeCompany?.subscription.country?.alpha3CountryCode + " - " + this.activeCompany?.subscription.country?.countryName,
+                    "value": this.activeCompany?.subscription.country?.alpha3CountryCode,
+                    "additional": {
+                        "value": this.activeCompany?.subscription.country?.alpha3CountryCode,
+                        "label": this.activeCompany?.subscription.country?.alpha3CountryCode + " - " + this.activeCompany?.subscription.country?.countryName
+                    }
+                });
                 this.company.addresses = response.addresses;
+            } else {
+                if (localStorage.getItem('Country-Region') === 'IN') {
+                    this.newUserSelectCountry({
+                        "label": "IND - India",
+                        "value": "IND",
+                        "additional": {
+                            "value": "IND",
+                            "label": "IND - India"
+                        }
+                    });
+                } else if (localStorage.getItem('Country-Region') === 'GB') {
+                    this.newUserSelectCountry({
+                        "label": "GBR - United Kingdom",
+                        "value": "GBR",
+                        "additional": {
+                            "value": "GBR",
+                            "label": "GBR - United Kingdom"
+                        }
+                    });
+                } else if (localStorage.getItem('Country-Region') === 'AE') {
+                    this.newUserSelectCountry({
+                        "label": "ARE - United Arab Emirates",
+                        "value": "ARE",
+                        "additional": {
+                            "value": "ARE",
+                            "label": "ARE - United Arab Emirates"
+                        }
+
+                    });
+                } else if (!this.isChangePlan && localStorage.getItem('Country-Region') === 'GL') {
+                    this.newUserSelectCountry({
+                        "label": "GLB - Global",
+                        "value": "GLB",
+                        "additional": {
+                            "value": "GLB",
+                            "label": "GLB - Global"
+                        }
+                    });
+                }
             }
         });
     }
@@ -838,7 +851,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length) {
                 this.monthlyPlans = response?.filter(plan => plan?.monthlyAmount > 0);
-                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmount > 0);
+                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmount >= 0);
                 this.monthlyPlans = this.monthlyPlans.sort((a, b) => a.monthlyAmount - b.monthlyAmount);
                 this.yearlyPlans = this.yearlyPlans.sort((a, b) => a.yearlyAmount - b.yearlyAmount);
                 if (this.yearlyPlans?.length) {
@@ -850,6 +863,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.setPlans();
             } else {
                 this.inputData = [];
+                this.countryList?.open();
             }
         });
     }
@@ -916,30 +930,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof BuyPlanComponent
      */
-    public newUserSelectCountry(event: any, initialCall: boolean): void {
-        let data;
-        if (initialCall) {
-            if (localStorage.getItem('Country-Region') === 'GL') {
-                data = {
-                    region: event?.value
-                }
-            } else {
-                data = {
-                    countryCode: event?.value
-                }
-            }
-        } else {
-            if (event?.additional?.entity === 'region') {
-                data = {
-                    region: event?.value
-                }
-            } else {
-                data = {
-                    countryCode: event?.value
-                }
-            }
-        }
-        this.componentStore.getAllPlans({ params: data });
+    public newUserSelectCountry(event: any): void {
+        this.componentStore.getAllPlans({ params: { regionCode: event?.value } });
         this.newUserSelectedCountry = event.label;
     }
 
@@ -1134,18 +1126,18 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /**
      * Updates payment in subscription
      *
-     * @param {*} razorPayResponse
+     * @param {*} payResponse
      * @memberof BuyPlanComponent
      */
-    public updateSubscriptionPayment(razorPayResponse: any): void {
+    public updateSubscriptionPayment(payResponse: any, zeroAmount: boolean = false): void {
         let request;
-        if (razorPayResponse) {
+        if (payResponse) {
             request = {
-                paymentId: razorPayResponse.razorpay_payment_id,
-                razorpaySignature: razorPayResponse.razorpay_signature,
-                amountPaid: this.subscriptionResponse?.dueAmount,
+                paymentId: !zeroAmount ? payResponse.razorpay_payment_id : null,
+                razorpaySignature: !zeroAmount ? payResponse.razorpay_signature : null,
+                amountPaid: !zeroAmount ? this.subscriptionResponse?.dueAmount : 0,
                 callNewPlanApi: true,
-                razorpayOrderId: razorPayResponse?.razorpay_order_id
+                razorpayOrderId: !zeroAmount ? payResponse?.razorpay_order_id : payResponse?.razorpayOrderId
             };
             let data = { ...request, ...this.subscriptionRequest };
             this.componentStore.changePlan(data);
@@ -1179,5 +1171,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.selectState({ label: data.state.name, value: data.state.code, additional: data.state })
         this.secondStepForm.controls['address'].setValue(data?.address);
         this.initIntl(this.secondStepForm.get('mobileNumber')?.value);
+    }
+
+    /**
+     * Get country flag image url by alpha2country code and if region get by alpha3code 
+     *
+     * @param {string} countryRegionCode
+     * @returns {string}
+     * @memberof BuyPlanComponent
+     */
+    public getFlagUrl(countryRegionCode: string): string {
+        return this.generalService.getCountryFlagUrl(countryRegionCode);
     }
 }

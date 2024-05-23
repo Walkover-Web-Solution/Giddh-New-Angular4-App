@@ -1,0 +1,12 @@
+{
+    "select_copy": "कॉपी निवडा",
+	"select_order": "ऑर्डर निवडा",
+	"add_multiple_email": "आपण एकाधिक आयडीचा स्वल्पविराम विभक्त जोडू शकता",
+	"recipients_email": "प्राप्तकर्ता ईमेल आयडी",
+    "invoice_copy_options": {
+		"original": "मूळ",
+		"customer": "ग्राहक",
+		"transport": "वाहतूक",
+        "attachment": "संलग्नक"
+	}
+}
