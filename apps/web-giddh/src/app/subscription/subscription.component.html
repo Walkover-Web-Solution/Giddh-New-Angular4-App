@@ -240,7 +240,11 @@
                                         {{ commonLocaleData?.app_buy_plan }}
                                     </button>
                                     <button
-                                        *ngIf="element?.status?.toLowerCase() === 'expired' && element?.isOwner"
+                                        *ngIf="
+                                            element?.status?.toLowerCase() === 'expired' &&
+                                            element?.isOwner &&
+                                            activeCompany.subscription?.country?.countryCode !== 'GB'
+                                        "
                                         mat-menu-item
                                         (click)="buyPlan(element)"
                                     >
@@ -301,7 +305,10 @@
         <div class="no-data" *ngIf="!dataSource?.filteredData?.length && !(subscriptionListInProgress$ | async)">
             <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
         </div>
-        <div class="pagination-wrapper justify-content-end" *ngIf="subscriptionRequestParams.totalItems > 20 && showData && !(subscriptionListInProgress$ | async)">
+        <div
+            class="pagination-wrapper justify-content-end"
+            *ngIf="subscriptionRequestParams.totalItems > 20 && showData && !(subscriptionListInProgress$ | async)"
+        >
             <mat-paginator
                 (page)="handlePageChange($event)"
                 [length]="subscriptionRequestParams.totalItems"

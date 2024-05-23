@@ -128,13 +128,23 @@
                         </ul>
                     </ng-container>
                 </div>
-                <div
-                    class="advance-icon cursor-pointer btn btn-primary mr-0"
-                    [tooltip]="commonLocaleData?.app_advance_search"
-                    (click)="openModal()"
-                >
-                    <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
-                    <span class="icon-advance-filter"></span>
+                <div>
+                    <div
+                        class="advance-icon cursor-pointer btn btn-primary mr-0"
+                        [tooltip]="commonLocaleData?.app_advance_search"
+                        (click)="openModal()"
+                    >
+                        <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
+                        <span class="icon-advance-filter"></span>
+                    </div>
+                    <div class="btn-group ml-3" *ngIf="selectedPayments?.length > 0 || allPayments?.length > 0">
+                        <button
+                            class="btn btn-primary"
+                            (click)="openBulkExport(bulkExport)"
+                        >
+                            {{ commonLocaleData?.app_export }}
+                        </button>
+                    </div>
                 </div>
                 <!-- Invoice filter section ends -->
             </div>
@@ -206,7 +216,7 @@
                         "
                     >
                         <tr>
-                            <th>
+                            <th width="50px">
                                 <div *ngIf="!hoveredPaymentTable && !allPaymentsSelected && !selectedPayments?.length">
                                     #
                                 </div>
@@ -337,7 +347,7 @@
                             *ngFor="let payment of allPayments; let i = index"
                             (mouseover)="hoveredPaymentUniqueName = payment?.uniqueName"
                         >
-                            <td data-title="#">
+                            <td data-title="#" width="50px">
                                 <div
                                     *ngIf="
                                         hoveredPaymentUniqueName !== payment?.uniqueName &&
@@ -593,3 +603,20 @@
     [voucherType]="'payment'"
     [allVouchers]="allPayments"
 ></preview>
+
+<!-- Bulk export modal -->
+<ng-template #bulkExport>
+    <bulk-export-voucher
+        [type]="'payment'"
+        [dateRange]="{ from: fromDate, to: toDate}"
+        [advanceSearch]="lastListingFilters"
+        [voucherUniqueNames]="selectedPayments"
+        [totalItems]="
+            selectedPayments && selectedPayments.length > 0
+                ? selectedPayments.length
+                : allPayments && allPayments.length
+        "
+        (closeModelEvent)="bulkExportModalRef.hide()"
+    >
+    </bulk-export-voucher>
+</ng-template>

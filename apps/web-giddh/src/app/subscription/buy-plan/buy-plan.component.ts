@@ -19,12 +19,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { userLoginStateEnum } from '../../models/user-login-state';
 import { ChangeBillingComponentStore } from '../change-billing/utility/change-billing.store';
+import { SubscriptionComponentStore } from '../utility/subscription.store';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'buy-plan',
     templateUrl: './buy-plan.component.html',
     styleUrls: ['./buy-plan.component.scss'],
-    providers: [BuyPlanComponentStore, ChangeBillingComponentStore, ViewSubscriptionComponentStore]
+    providers: [BuyPlanComponentStore, ChangeBillingComponentStore, ViewSubscriptionComponentStore, SubscriptionComponentStore]
 })
 
 export class BuyPlanComponent implements OnInit, OnDestroy {
@@ -166,11 +168,20 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public subscriptionRequest: any;
     /** Holds View Subscription list observable*/
     public viewSubscriptionData$ = this.viewSubscriptionComponentStore.select(state => state.viewSubscription);
+    /** Hold pay type*/
+    public payType: string = '';
+    /** Holds Store Buy Plan Success observable*/
+    public buyPlanSuccess$ = this.subscriptionComponentStore.select(state => state.buyPlanSuccess);
+    /** This will use for open window */
+    private openedWindow: Window | null = null;
+    /** Holds Store Plan list API success state as observable*/
+    public subscriptionRazorpayOrderDetails$ = this.componentStore.select(state => state.subscriptionRazorpayOrderDetails);
 
     constructor(
         public dialog: MatDialog,
         private readonly componentStore: BuyPlanComponentStore,
         private readonly changeBillingComponentStore: ChangeBillingComponentStore,
+        private readonly subscriptionComponentStore: SubscriptionComponentStore,
         private toasterService: ToasterService,
         private commonActions: CommonActions,
         private store: Store<AppState>,
@@ -182,7 +193,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private location: Location,
         private elementRef: ElementRef,
-        private viewSubscriptionComponentStore: ViewSubscriptionComponentStore
+        private viewSubscriptionComponentStore: ViewSubscriptionComponentStore,
+        private generalService: GeneralService
     ) {
         this.session$ = this.store.pipe(select(p => p.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
         this.store.dispatch(this.generalActions.openSideMenu(false));
@@ -212,7 +224,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.buyPlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.redirectLink) {
+                this.openWindow(response?.redirectLink);
+            }
+        });
+
         this.createSubscriptionResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response, this.payType);
             if (response) {
                 this.responseSubscriptionId = response.subscriptionId;
                 // if (response.duration === "YEARLY") {
@@ -225,8 +244,36 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 if (this.isChangePlan) {
                     this.router.navigate(['/pages/subscription']);
                 } else {
-                    this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId])
+                    if (this.payType === 'trial') {
+                        this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId])
+                    } else {
+                        if (this.activeCompany.subscription?.country?.countryCode === 'GB') {
+                            let model = {
+                                planUniqueName: response?.planDetails?.uniqueName,
+                                paymentProvider: "GOCARDLESS",
+                                subscriptionId: response.subscriptionId,
+                                duration: response?.duration
+                            }
+                            this.subscriptionComponentStore.buyPlanByGoCardless(model);
+                        } else {
+                            this.componentStore.generateOrderBySubscriptionId(response.subscriptionId);
+                        }
+                    }
                 };
+            }
+        });
+
+        this.subscriptionRazorpayOrderDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                if (response.dueAmount > 0) {
+                    this.initializePayment(response);
+                } else {
+                    if (response.status === 'trial') {
+                        this.router.navigate(['/pages/subscription/buy-plan']);
+                    } else {
+                        this.router.navigate(['/pages/subscription/buy-plan/' + response.subscriptionId]);
+                    }
+                }
             }
         });
 
@@ -352,6 +399,31 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (event) {
             this.firstStepForm.get('duration').setValue(event?.value);
             this.setPlans();
+        }
+    }
+
+    /**
+   * This will be open window by url
+   *
+   * @param {string} url
+   * @memberof BuyPlanComponent
+   */
+    public openWindow(url: string): void {
+        const width = 700;
+        const height = 900;
+
+        this.openedWindow = this.generalService.openCenteredWindow(url, '', width, height);
+    }
+
+    /**
+     * This will close the current window
+     *
+     * @memberof BuyPlanComponent
+     */
+    public closeWindow(): void {
+        if (this.openedWindow) {
+            this.openedWindow.close();
+            this.openedWindow = null;
         }
     }
 
@@ -975,7 +1047,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @return {*}  {void}
      * @memberof BuyPlanComponent
      */
-    public onSubmit(): void {
+    public onSubmit(type: string): void {
+        console.log(type);
+        this.payType = type;
         this.isFormSubmitted = false;
         if (this.subscriptionForm.invalid) {
             this.isFormSubmitted = true;
@@ -1014,6 +1088,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 name: this.subscriptionForm.value.secondStepForm.state.label ? this.subscriptionForm.value.secondStepForm.state.label : this.subscriptionForm.value.secondStepForm.state.name,
                 code: this.subscriptionForm.value.secondStepForm.state.value ? this.subscriptionForm.value.secondStepForm.state.value : this.subscriptionForm.value.secondStepForm.state.code
             };
+        }
+        if (type === 'trial') {
+            request['payNow'] = false;
+        } else {
+            request['payNow'] = true;
         }
         if (this.isChangePlan) {
             request.subscriptionId = this.subscriptionId;
