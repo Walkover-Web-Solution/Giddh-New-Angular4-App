@@ -3636,10 +3636,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (this.invoiceType.isCashInvoice) {
                 invoiceForm.type = this.invoiceType.isPurchaseInvoice ? "purchase" : this.invoiceType.isCreditNote ? "credit note" : this.invoiceType.isDebitNote ? "debit note" : "sales";
 
-                if (this.invoiceType.isPurchaseInvoice) {
-                    invoiceForm.type = VoucherTypeEnum.payment;
-                } else if (!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote) {
-                    invoiceForm.type = VoucherTypeEnum.receipt;
+                if (this.invoiceForm.get('salesPurchaseAsReceiptPayment').value) {
+                    if (this.invoiceType.isPurchaseInvoice) {
+                        invoiceForm.type = VoucherTypeEnum.payment;
+                    } else if (!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote) {
+                        invoiceForm.type = VoucherTypeEnum.receipt;
+                    }
                 }
 
                 invoiceForm.entries = invoiceForm.entries?.map(entry => {
