@@ -4,7 +4,6 @@
     }
 
     .dropdown-wrapper {
-        height: 50px;
         .country-dropdown {
             width: max-content;
             img {
@@ -175,6 +174,9 @@
 
         .plan-width {
             min-width: 500px;
+            .plan-header{
+                height: 50px;
+            }
         }
     }
 
