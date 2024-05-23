@@ -1,3 +1,4 @@
+import { ViewSubscriptionComponentStore } from './../view-subscription/utility/view-subscription.store';
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -25,7 +26,7 @@ import { MatSelect } from '@angular/material/select';
     selector: 'buy-plan',
     templateUrl: './buy-plan.component.html',
     styleUrls: ['./buy-plan.component.scss'],
-    providers: [BuyPlanComponentStore, ChangeBillingComponentStore]
+    providers: [BuyPlanComponentStore, ChangeBillingComponentStore, ViewSubscriptionComponentStore]
 })
 
 export class BuyPlanComponent implements OnInit, OnDestroy {
@@ -169,6 +170,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public getCountryList$ = this.componentStore.select(state => state.countryList);
     /** Holds subscription request */
     public subscriptionRequest: any;
+    /** Holds View Subscription list observable*/
+    public viewSubscriptionData$ = this.viewSubscriptionComponentStore.select(state => state.viewSubscription);
 
     constructor(
         public dialog: MatDialog,
@@ -185,7 +188,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private location: Location,
         private elementRef: ElementRef,
-        private generealService: GeneralService
+        private generalService: GeneralService,
+        private viewSubscriptionComponentStore: ViewSubscriptionComponentStore
     ) {
         this.session$ = this.store.pipe(select(p => p.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
         this.store.dispatch(this.generalActions.openSideMenu(false));
@@ -210,6 +214,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
             if (params?.id) {
                 this.subscriptionId = params.id;
+                this.viewSubscriptionComponentStore.viewSubscriptionsById(this.subscriptionId);
                 this.isChangePlan = true;
             }
         });
@@ -457,16 +462,20 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     private getActiveCompany(): void {
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
+                this.company.addresses = response.addresses;
                 this.activeCompany = response;
-                this.newUserSelectCountry({
-                    "label": this.activeCompany?.subscription?.region?.code + " - " + this.activeCompany?.subscription?.region?.name,
-                    "value": this.activeCompany?.subscription?.region?.code,
-                    "additional": {
-                        "value": this.activeCompany?.subscription?.region?.code,
-                        "label": this.activeCompany?.subscription?.region?.code + " - " + this.activeCompany?.subscription?.region?.name
+                this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response) {
+                        this.newUserSelectCountry({
+                            "label": response.region?.code + " - " + response.region?.name,
+                            "value": response.region?.code,
+                            "additional": {
+                                "value": response.region?.code,
+                                "label": response.region?.code + " - " + response.region?.name
+                            }
+                        });
                     }
                 });
-                this.company.addresses = response.addresses;
             } else {
                 if (localStorage.getItem('Country-Region') === 'IN') {
                     this.newUserSelectCountry({
@@ -1181,6 +1190,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public getFlagUrl(countryRegionCode: string): string {
-        return this.generealService.getCountryFlagUrl(countryRegionCode);
+        return this.generalService.getCountryFlagUrl(countryRegionCode);
     }
 }
