@@ -295,7 +295,12 @@
                                                         'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
                                                     }"
                                                 >
-                                                    <i class="icon-tick"></i>
+                                                    <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
+                                                        <i class="icon-tick"></i
+                                                    ></span>
+                                                    <span *ngIf="plan?.monthlyAmount === 0 && plan?.yearlyAmount === 0">
+                                                        <i class="icon-cross"></i
+                                                    ></span>
                                                 </div>
                                             </ng-container>
                                         </div>
@@ -329,7 +334,12 @@
                                                         'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
                                                     }"
                                                 >
-                                                    <i class="icon-tick"></i>
+                                                    <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0"
+                                                        ><i class="icon-tick"></i
+                                                    ></span>
+                                                    <span *ngIf="plan?.monthlyAmount === 0 && plan?.yearlyAmount === 0">
+                                                        1</span
+                                                    >
                                                 </div>
                                             </ng-container>
                                         </div>
@@ -350,11 +360,26 @@
                                                 </div>
                                             </ng-container>
                                         </div>
-                                        <div class="grid-list-div list-grid bottom-grid-list-div">
+                                        <div class="grid-list-div list-grid">
                                             <div class="grid-title-left">
                                                 <span class="inner-name mat-table-sticky">{{
                                                     localeData?.security
                                                 }}</span>
+                                            </div>
+                                            <ng-container *ngFor="let plan of inputData">
+                                                <div
+                                                    class="grid-title-list list-grid-title plan-row-height"
+                                                    [ngClass]="{
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                    }"
+                                                >
+                                                    <i class="icon-tick"></i>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                        <div class="grid-list-div list-grid">
+                                            <div class="grid-title-left">
+                                                <span class="inner-name mat-table-sticky"> {{localeData?.chat_voice}} </span>
                                             </div>
                                             <ng-container *ngFor="let plan of inputData">
                                                 <div
@@ -365,7 +390,12 @@
                                                             selectedPlan?.uniqueName === plan?.uniqueName
                                                     }"
                                                 >
-                                                    <i class="icon-tick"></i>
+                                                    <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0"
+                                                        >{{localeData?.chat_voice}}</span
+                                                    >
+                                                    <span *ngIf="plan?.monthlyAmount === 0 && plan?.yearlyAmount === 0">
+                                                        <i class="icon-cross"></i>
+                                                    </span>
                                                 </div>
                                             </ng-container>
                                         </div>
@@ -828,7 +858,7 @@
                                 mat-stroked-button
                                 color="primary"
                                 class="w-100"
-                                *ngIf="selectedStep === 2"
+                                *ngIf="selectedStep === 2 && !isChangePlan"
                                 (click)="onSubmit('trial')"
                             >
                                 {{ localeData?.start_trial }}

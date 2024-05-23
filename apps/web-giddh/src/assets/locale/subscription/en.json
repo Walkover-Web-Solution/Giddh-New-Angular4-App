@@ -109,5 +109,7 @@
         "account_holder":"Account holder",
         "for":"for",
         "save":"Save",
-        "companies_allowed":"Companies allowed"
+        "companies_allowed":"Companies allowed",
+        "support":"Support",
+        "chat_voice":"Chat/Voice"
     }
