@@ -5,8 +5,8 @@
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="subscription-container pd-15">
-        <div class="button-wrapper d-flex w-100 pd-l1 justify-content-between pd-r1 pd-t1">
+    <div class="subscription-container mx-auto pd-15">
+        <div class="button-wrapper d-flex w-100 pd-l1 justify-content-between pd-t1">
             <button
                 *ngIf="
                     showClearFilter ||
@@ -33,7 +33,7 @@
         <div *ngIf="subscriptionListInProgress$ | async">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <section *ngIf="showData && !(subscriptionListInProgress$ | async)">
+        <section *ngIf="showData && !(subscriptionListInProgress$ | async)" class="mt-4">
             <form
                 class="table-responsive"
                 name="subscriptionListForm"
@@ -64,10 +64,10 @@
                         </th>
                         <td class="subscription-td" mat-cell *matCellDef="let element" width="15%">
                             <a
-                                class="cursor-pointer"
+                                class="cursor-pointer underline"
                                 *ngIf="element?.companies?.length > 1"
                                 (click)="openCompanyDialog(element)"
-                                >{{ element?.companies?.length }}</a
+                                >{{ element?.companies?.length }} -  {{ commonLocaleData?.app_company }}</a
                             >
                             <span *ngIf="element?.companies?.length === 1">{{ element?.companies[0]?.name }}</span>
                         </td>
