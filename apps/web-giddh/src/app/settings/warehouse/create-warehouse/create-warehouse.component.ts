@@ -383,7 +383,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     *
     * @memberof CreateWarehouseComponent
     */
-    public handleShortcutPress() {
+    public handleShortcutPress(): void  {
         this.loadLinkedEntities(() => {
             this.asideAccountAsidePaneDialogRef = this.dialog.open(this.asideAccountAsidePane, {
                 width: '760px',

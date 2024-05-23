@@ -88,11 +88,11 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
         }
     }
 
-     /**
-     * This hook will be use for component after initialization
-     *
-     * @memberof PermissionDetailsComponent
-     */
+    /**
+    * This hook will be use for component after initialization
+    *
+    * @memberof PermissionDetailsComponent
+    */
     public ngAfterViewInit(): void {
         this.pageList = this.pageList.map(item => {
             return { label: item, value: item, additional: { isDisabled: this.checkForAlreadyExistInPageArray(String(item)) } }
@@ -132,7 +132,7 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
             let pageObj = find(this.singlePageForFreshStart?.scopes, (o: Scope) => o.name === page);
             pageObj.permissions = pageObj.permissions.map((o: Permission) => {
                 return o = new NewPermissionObj(o.code, false);
-            });            
+            });
             pageObj.permissions.unshift({ code: 'SELECT-ALL', isSelected: false });
             this.roleObj?.scopes?.push(pageObj);
         }
@@ -160,8 +160,7 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
     public getScopeDataReadyForAPI(data): Scope[] {
         let arr: Scope[];
         arr = forEach(data?.scopes, (page: Scope) => {
-            remove(page.permissions, (o: Permission) => o.code === 'SELECT-ALL');
-            remove(page.permissions, (o: Permission) => !o.isSelected);
+            remove(page.permissions, (o: Permission) => !o.isSelected || o.code === 'SELECT-ALL');
         });
         return filter(arr, (o: Scope) => o.permissions?.length > 0);
     }
@@ -198,23 +197,21 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
             // copy role scenario
             response = this.generateUIFromExistedRole();;
         }
-        setTimeout(() => {
-            if (response) {
-                response.forEach(item => {
-                    let count = 0;
-                    item.permissions.forEach(item => {
-                        if (item.code !== 'SELECT-ALL' && item.isSelected) {
-                            count++;
-                        }
-                    });
-                    if ((item.permissions.length - 1) === count) {
-                        item.permissions[0].isSelected = true;
+
+        if (response) {
+            response.forEach(item => {
+                let count = 0;
+                item.permissions.forEach(item => {
+                    if (item.code !== 'SELECT-ALL' && item.isSelected) {
+                        count++;
                     }
                 });
-            }
-        }, 100);
-
-        return response;
+                if ((item.permissions.length - 1) === count) {
+                    item.permissions[0].isSelected = true;
+                }
+            });
+            return response;
+        }
     }
 
     public generateUIFromExistedRole() {

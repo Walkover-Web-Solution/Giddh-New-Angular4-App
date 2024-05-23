@@ -92,7 +92,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         this.selectedTimeSpan = this.commonLocaleData?.app_date_range;
         this.selectedIPRange = this.localeData?.cidr_range;
         this._accountsAction.resetShareEntity();
-        
+
         if (this.userdata) {
             if (this.userdata.from && this.userdata.to) {
                 let from: any = dayjs(this.userdata.from, GIDDH_DATE_FORMAT);
@@ -177,7 +177,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     }
 
     public getPeriodFromData(data: ShareRequestForm) {
-        if(data) {
+        if (data) {
             if (data.from && data.to) {
                 this.togglePeriodOptionsVal(DATE_RANGE);
                 return [DATE_RANGE];
@@ -206,14 +206,14 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         if (data) {
             let fromDate = null;
             let toDate = null;
-            if(data.to && data.from) {
+            if (data.to && data.from) {
                 const fromDateParts = data.from.split('-').map(Number); // If Date in DD-MM-YYY
                 const toDateParts = data.to.split('-').map(Number); // If Date in DD-MM-YYY
-                
-                 fromDate = new Date(fromDateParts[2], fromDateParts[1] - 1, fromDateParts[0]);
-                 toDate = new Date(toDateParts[2], toDateParts[1] - 1, toDateParts[0]);
+
+                fromDate = new Date(fromDateParts[2], fromDateParts[1] - 1, fromDateParts[0]);
+                toDate = new Date(toDateParts[2], toDateParts[1] - 1, toDateParts[0]);
             }
-            
+
             this.permissionForm = this._fb.group({
                 uniqueName: [data.uniqueName],
                 emailId: [data.emailId, Validators.compose([Validators.required, Validators.maxLength(150)])],
@@ -437,7 +437,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public handleTimeSpanChange(value: string): void {
         this.permissionForm.get('periodOptions')?.patchValue(value, { onlySelf: true });
     }
-    
+
     /**
      * Handle Role search Query
      *
@@ -456,6 +456,6 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
      * @memberof SettingPermissionFormComponent
      */
     public onSearchClear(): void {
-            this.allRoles = this.allRolesConstantList;
+        this.allRoles = this.allRolesConstantList;
     }
 }

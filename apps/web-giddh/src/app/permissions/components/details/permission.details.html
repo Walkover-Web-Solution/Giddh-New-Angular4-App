@@ -39,7 +39,7 @@
                             [required]="true"
                             [name]="'pageName'"
                             [options]="pageList"
-                            (selectedOption)="pageName = $event.value"
+                            (selectedOption)="pageName = $event?.value"
                         ></dropdown-field>
                     </div>
                     <div class="form-group">
@@ -74,28 +74,28 @@
                                     <mat-checkbox
                                         color="primary"
                                         [checked]="element.isSelected"
-                                        id="{{page.name}}+_{{idx}}"
+                                        [id]="page.name + '_ ' + idx"
                                         [disabled]="newRole.isFixed"
                                         (change)="toggleItems(page.name, $event)"
                                         [(ngModel)]="element.isSelected"
                                         class="mr-2"
                                     >
                                     </mat-checkbox>
-                                    <label for="{{page.name}}+_{{idx}}"> {{commonLocaleData?.app_select_all}}</label>
+                                    <label [for]="page.name + '_' + idx"> {{commonLocaleData?.app_select_all}}</label>
                                 </ng-container>
                                 <ng-container *ngIf="element.code !== 'SELECT-ALL'">
                                     <mat-checkbox
                                         color="primary"
                                         [checked]="element.isSelected"
-                                        id="{{page.name}}+_{{idx}}"
+                                        [id]="page.name + '_' + idx"
                                         [disabled]="newRole.isFixed"
                                         (change)="toggleItem(page.name,element ,$event)"
-                                        name="{{element.code}}_{{i}}"
+                                        [name]="element.code + '_' + idx"
                                         [(ngModel)]="element.isSelected"
                                         class="mr-2"
                                     >
                                     </mat-checkbox>
-                                    <label for="{{element.code}}+_{{idx}}"> {{getNameByCode(element.code)}} </label>
+                                    <label [for]="element.code + '_' + idx"> {{getNameByCode(element.code)}} </label>
                                 </ng-container>
                             </td>
                         </ng-container>
