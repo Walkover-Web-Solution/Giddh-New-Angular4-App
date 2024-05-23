@@ -182,7 +182,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private location: Location,
         private elementRef: ElementRef,
-        private viewSubscriptionComponentStore: ViewSubscriptionComponentStore,
+        private viewSubscriptionComponentStore: ViewSubscriptionComponentStore
     ) {
         this.session$ = this.store.pipe(select(p => p.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
         this.store.dispatch(this.generalActions.openSideMenu(false));
