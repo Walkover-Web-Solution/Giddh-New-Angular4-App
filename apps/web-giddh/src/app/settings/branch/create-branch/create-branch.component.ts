@@ -398,7 +398,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      *
      * @memberof CreateBranchComponent
      */
-    public handleShortcutPress() {
+    public handleShortcutPress(): void  {
         this.asideAccountAsidePaneRef = this.dialog.open(this.asideAccountAsidePane, {
             width: '760px',
             height: '100vh !important',
