@@ -59,7 +59,7 @@
                                 <div class="pull-left d-flex">
                                     <i
                                         class="cursor-pointer icon-branch-icon"
-                                        [tooltip]="commonLocaleData?.app_branch"
+                                        [matTooltip]="commonLocaleData?.app_branch"
                                     ></i>
                                     <div>
                                         <h2>{{ branch.alias }}</h2>
@@ -79,7 +79,7 @@
                                                 : commonLocaleData?.app_unarchived
                                         }}</span
                                     >
-                                    <div class="btn-group align-items-center" dropdown [autoClose]="true">
+                                    <div class="btn-group align-items-center">
                                         <button
                                             mat-button
                                             [matMenuTriggerFor]="menu"
@@ -181,94 +181,8 @@
         <div class="branch-vector">
             <img [src]="imgPath" [alt]="localeData?.branch_image" />
         </div>
-        <!-- add branch modal -->
-        <div
-            bsModal
-            #branchModal="bs-modal"
-            [config]="{ backdrop: 'static', keyboard: true }"
-            tabindex="-1"
-            class="modal fade"
-            role="dialog"
-        >
-            <div class="modal-dialog modal-md">
-                <div class="modal-content">
-                    <div class="modal-header clearfix">
-                        <h3>{{ localeData?.create_new_branch }}</h3>
-                        <button aria-hidden="true" class="close" (click)="hideAddBranchModal()" data-dismiss="modal">
-                            ×
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div>
-                            <label class="select-companies">{{ localeData?.select_companies }}</label>
-                            <div class="btn-group btn-block" dropdown>
-                                <button
-                                    dropdownToggle
-                                    (click)="getAllBranches()"
-                                    type="button"
-                                    class="form-control text-left btn-block dropdown-toggle"
-                                >
-                                    <span *ngIf="!selectedCompaniesUniquename?.length">
-                                        {{ commonLocaleData?.app_select_branch }} </span
-                                    ><span *ngIf="selectedCompaniesUniquename?.length"
-                                        >{{ selectedCompaniesUniquename?.length }} {{ localeData?.selected }}</span
-                                    ><span class="select_drop pull-right mr-t1"><i class="fa fa-caret-down"></i></span>
-                                </button>
-                                <ul *dropdownMenu class="dropdown-menu width-100" role="menu">
-                                    <li>
-                                        <input
-                                            type="checkbox"
-                                            (click)="selectAllCompanies($event)"
-                                            [checked]="isAllSelected$ | async"
-                                        />
-                                        {{ commonLocaleData?.app_select_all }}
-                                    </li>
-                                    <li *ngFor="let cmp of companies$ | async">
-                                        <input
-                                            type="checkbox"
-                                            [checked]="selectedCompaniesUniquename?.indexOf(cmp?.uniqueName) !== -1"
-                                            (click)="checkUncheckMe(cmp, $event)"
-                                        />
-                                        {{ cmp.name }} <span *ngIf="cmp.nameAlias"> ({{ cmp.nameAlias }})</span>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="mr-t05">
-                            <ul class="list-inline custom-multi-select">
-                                <li *ngFor="let cmp of selectedCompaniesName">
-                                    <a>
-                                        {{ cmp.name }} <span *ngIf="cmp.nameAlias"> ({{ cmp.nameAlias }})</span
-                                        ><span class="pd-l05" (click)="checkUncheckMe(cmp, $event)">×</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div>
-                            <br />
-                            <span>{{ localeData?.or }}</span>
-                            <button class="btn-link" (click)="openCreateCompanyDialog()">
-                                {{ localeData?.create_new_branch }}
-                            </button>
-                        </div>
-
-                        <div class="button-yes-cancel">
-                            <button (click)="hideAddBranchModal()" class="btn btn-sm btn-danger">
-                                {{ commonLocaleData?.app_cancel }}
-                            </button>
-                            <button (click)="createBranches()" class="btn btn-sm btn-success">
-                                {{ commonLocaleData?.app_yes }}
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- modal footer -->
-                </div>
-            </div>
-        </div>
 
         <!--add company modal  -->
-
         <ng-template #addCompanyModal>
             <div class="modal-dialog modal-xl modal-width">
                 <div class="modal-content">

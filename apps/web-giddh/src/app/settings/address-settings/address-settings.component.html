@@ -11,7 +11,7 @@
                     *ngIf="searchStateInput?.value || searchAddressInput?.value || searchAddressNameInput?.value"
                     href="javascript:;"
                     (click)="resetFilter()"
-                    [tooltip]="localeData?.reset_search"
+                    [matTooltip]="localeData?.reset_search"
                     aria-label="filter"
                 >
                     <i aria-hidden="true" class="icon-refresh"></i> {{ commonLocaleData?.app_clear_filter }}
@@ -180,12 +180,12 @@
                                 <div class="d-flex flex-column linked-with w-100">
                                     <span *ngFor="let entity of element.linkedEntities" class="pb-1">
                                         <i
-                                            [tooltip]="commonLocaleData?.app_branch"
+                                            [matTooltip]="commonLocaleData?.app_branch"
                                             *ngIf="entity.isBranch"
                                             class="icon-branch-icon"
                                         ></i>
                                         <i
-                                            [tooltip]="commonLocaleData?.app_warehouse"
+                                            [matTooltip]="commonLocaleData?.app_warehouse"
                                             *ngIf="entity.isWarehouse"
                                             class="icon-warehouse-icon"
                                         ></i>
