@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { Store } from "@ngrx/store";
-import { Observable, switchMap, catchError, EMPTY, of } from "rxjs";
+import { Observable, switchMap, catchError, EMPTY, of, mergeMap } from "rxjs";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { CustomTemplateResponse } from "../../models/api-models/Invoice";
 import { IDiscountList } from "../../models/api-models/SettingsDiscount";
@@ -260,7 +260,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getStockVariants = this.effect((data: Observable<{ q: any, index: number, autoSelectVariant: boolean }>) => {
         return data.pipe(
-            switchMap((req) => {
+            mergeMap((req) => {
                 return this.ledgerService.loadStockVariants(req.q).pipe(
                     tapResponse(
                         (res: Array<IVariant>) => {
