@@ -20,8 +20,6 @@ export interface ITransactions {
 // New Subscription model
 
 export interface SubscriptionsUser {
-    plan: any;
-    planCountries: any;
     companies?: any;
     companiesWithTransactions: CompaniesWithTransaction[];
     totalTransactions: number;
