@@ -716,44 +716,44 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         /** Voucher details */
         this.componentStore.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.getAccountDetails(response?.account?.uniqueName);
+                this.getAccountDetails(response.account?.uniqueName);
 
-                this.fillBillingShippingAddress("account", "billingDetails", response?.account?.billingDetails, 0);
-                this.fillBillingShippingAddress("account", "shippingDetails", response?.account?.shippingDetails, 0);
+                this.fillBillingShippingAddress("account", "billingDetails", response.account?.billingDetails, 0);
+                this.fillBillingShippingAddress("account", "shippingDetails", response.account?.shippingDetails, 0);
 
-                this.copyAccountBillingInShippingAddress = isEqual(response?.account?.billingDetails, response?.account?.shippingDetails);
+                this.copyAccountBillingInShippingAddress = isEqual(response.account?.billingDetails, response.account?.shippingDetails);
 
                 if (this.invoiceType.isPurchaseOrder || (this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice)) {
-                    this.fillBillingShippingAddress("company", "billingDetails", response?.company?.billingDetails, 0);
-                    this.fillBillingShippingAddress("company", "shippingDetails", response?.company?.shippingDetails, 0);
+                    this.fillBillingShippingAddress("company", "billingDetails", response.company?.billingDetails, 0);
+                    this.fillBillingShippingAddress("company", "shippingDetails", response.company?.shippingDetails, 0);
 
-                    this.copyCompanyBillingInShippingAddress = isEqual(response?.company?.billingDetails, response?.company?.shippingDetails);
+                    this.copyCompanyBillingInShippingAddress = isEqual(response.company?.billingDetails, response.company?.shippingDetails);
                 }
 
-                this.invoiceForm.controls["account"].get("customerName")?.patchValue(response?.account?.name);
-                this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response?.account?.uniqueName);
-                this.invoiceForm.controls["account"].get("attentionTo").patchValue(response?.account?.attentionTo);
-                this.invoiceForm.controls["account"].get("email").patchValue(response?.account?.email);
-                this.invoiceForm.controls["account"].get("mobileNumber").patchValue(response?.account?.mobileNumber);
+                this.invoiceForm.controls["account"].get("customerName")?.patchValue(response.account?.name);
+                this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response.account?.uniqueName);
+                this.invoiceForm.controls["account"].get("attentionTo").patchValue(response.account?.attentionTo);
+                this.invoiceForm.controls["account"].get("email").patchValue(response.account?.email);
+                this.invoiceForm.controls["account"].get("mobileNumber").patchValue(response.account?.mobileNumber);
 
-                this.invoiceForm.get('exchangeRate')?.patchValue(response?.exchangeRate);
-                this.invoiceForm.get('number')?.patchValue(response?.number);
+                this.invoiceForm.get('exchangeRate')?.patchValue(response.exchangeRate);
+                this.invoiceForm.get('number')?.patchValue(response.number);
 
-                this.invoiceForm.get("date").patchValue(response?.date);
-                this.invoiceForm.get("dueDate").patchValue(response?.dueDate);
+                this.invoiceForm.get("date").patchValue(response.date);
+                this.invoiceForm.get("dueDate").patchValue(response.dueDate);
 
-                if (response?.warehouse) {
-                    this.invoiceForm.controls["warehouse"].get("name").patchValue(response?.warehouse?.name);
-                    this.invoiceForm.controls["warehouse"].get("uniqueName").patchValue(response?.warehouse?.uniqueName);
+                if (response.warehouse) {
+                    this.invoiceForm.controls["warehouse"].get("name").patchValue(response.warehouse?.name);
+                    this.invoiceForm.controls["warehouse"].get("uniqueName").patchValue(response.warehouse?.uniqueName);
                 }
 
-                this.invoiceForm.get("templateDetails.other.customField1")?.patchValue(response?.templateDetails?.other?.customField1);
-                this.invoiceForm.get("templateDetails.other.customField2")?.patchValue(response?.templateDetails?.other?.customField2);
-                this.invoiceForm.get("templateDetails.other.customField3")?.patchValue(response?.templateDetails?.other?.customField3);
-                this.invoiceForm.get("templateDetails.other.message2")?.patchValue(response?.templateDetails?.other?.message2);
-                this.invoiceForm.get("templateDetails.other.shippedVia")?.patchValue(response?.templateDetails?.other?.shippedVia);
-                this.invoiceForm.get("templateDetails.other.shippingDate")?.patchValue(response?.templateDetails?.other?.shippingDate);
-                this.invoiceForm.get("templateDetails.other.trackingNumber")?.patchValue(response?.templateDetails?.other?.trackingNumber);
+                this.invoiceForm.get("templateDetails.other.customField1")?.patchValue(response.templateDetails?.other?.customField1);
+                this.invoiceForm.get("templateDetails.other.customField2")?.patchValue(response.templateDetails?.other?.customField2);
+                this.invoiceForm.get("templateDetails.other.customField3")?.patchValue(response.templateDetails?.other?.customField3);
+                this.invoiceForm.get("templateDetails.other.message2")?.patchValue(response.templateDetails?.other?.message2);
+                this.invoiceForm.get("templateDetails.other.shippedVia")?.patchValue(response.templateDetails?.other?.shippedVia);
+                this.invoiceForm.get("templateDetails.other.shippingDate")?.patchValue(response.templateDetails?.other?.shippingDate);
+                this.invoiceForm.get("templateDetails.other.trackingNumber")?.patchValue(response.templateDetails?.other?.trackingNumber);
 
                 if (response.attachedFiles) {
                     this.invoiceForm.get("attachedFiles")?.patchValue(response.attachedFiles);
@@ -762,19 +762,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                 this.invoiceForm.get('isRcmEntry').patchValue((response.subVoucher === SubVoucher.ReverseCharge) ? true : false);
 
-                if (response?.adjustments?.length) {
+                if (response.adjustments?.length) {
                     response.adjustments = response.adjustments?.map(adjustment => {
                         adjustment.adjustmentAmount = adjustment.amount;
                         return adjustment;
                     });
-                    this.advanceReceiptAdjustmentData = { adjustments: response?.adjustments };
-                    this.calculateAdjustedVoucherTotal(response?.adjustments);
+                    this.advanceReceiptAdjustmentData = { adjustments: response.adjustments };
+                    this.calculateAdjustedVoucherTotal(response.adjustments);
                 }
 
                 const entriesFormArray = this.invoiceForm.get('entries') as FormArray;
                 entriesFormArray.clear();
 
-                response?.entries?.forEach((entry: any, index: number) => {
+                response.entries?.forEach((entry: any, index: number) => {
                     if (entry.transactions[0]?.stock) {
                         this.stockUnits[index] = observableOf(entry.transactions[0]?.stock.unitRates);
                         this.componentStore.getStockVariants({ q: entry.transactions[0]?.stock?.uniqueName, index: index, autoSelectVariant: false });
