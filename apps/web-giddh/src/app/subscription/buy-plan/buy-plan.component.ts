@@ -450,18 +450,29 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                 this.company.addresses = response.addresses;
                 this.activeCompany = response;
-                this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    if (response) {
-                        this.newUserSelectCountry({
-                            "label": response.region?.code + " - " + response.region?.name,
-                            "value": response.region?.code,
-                            "additional": {
+                if (this.subscriptionId) {
+                    this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                        if (response) {
+                            this.newUserSelectCountry({
+                                "label": response.region?.code + " - " + response.region?.name,
                                 "value": response.region?.code,
-                                "label": response.region?.code + " - " + response.region?.name
-                            }
-                        });
-                    }
-                });
+                                "additional": {
+                                    "value": response.region?.code,
+                                    "label": response.region?.code + " - " + response.region?.name
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    this.newUserSelectCountry({
+                        "label": this.activeCompany?.subscription?.region?.code + " - " + this.activeCompany?.subscription?.region?.name,
+                        "value": this.activeCompany?.subscription?.region?.code,
+                        "additional": {
+                            "value": this.activeCompany?.subscription?.region?.code,
+                            "label": this.activeCompany?.subscription?.region?.code + " - " + this.activeCompany?.subscription?.region?.name
+                        }
+                    });
+                }
             } else {
                 if (localStorage.getItem('Country-Region') === 'IN') {
                     this.newUserSelectCountry({
