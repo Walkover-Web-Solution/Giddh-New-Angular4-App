@@ -1425,10 +1425,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getWarehouses(): void {
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
+
         this.componentStore.warehouseList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (!response) {
-                this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
-            } else {
+            if (response) {
                 let warehouseResults = response.results?.filter(warehouse => !warehouse.isArchived);
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 this.warehouses = warehouseData.formattedWarehouses;
@@ -1444,10 +1444,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getCompanyBranches(): void {
+        this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+
         this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (!response) {
-                this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
-            } else {
+            if (response) {
                 this.branches = response;
                 this.company.isActive = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
 
