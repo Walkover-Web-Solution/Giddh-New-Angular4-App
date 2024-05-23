@@ -188,7 +188,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private location: Location,
         private elementRef: ElementRef,
-        private generealService: GeneralService,
+        private generalService: GeneralService,
         private viewSubscriptionComponentStore: ViewSubscriptionComponentStore
     ) {
         this.session$ = this.store.pipe(select(p => p.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
@@ -1190,6 +1190,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public getFlagUrl(countryRegionCode: string): string {
-        return this.generealService.getCountryFlagUrl(countryRegionCode);
+        return this.generalService.getCountryFlagUrl(countryRegionCode);
     }
 }
