@@ -226,9 +226,7 @@
                                                                     firstStepForm.get("planUniqueName").value ===
                                                                     plan.uniqueName
                                                                         ? localeData?.selected
-                                                                        : isChangePlan
-                                                                        ? localeData?.select_plan
-                                                                        : localeData?.start_trial
+                                                                        : localeData?.select_plan
                                                                 }}
                                                             </span>
                                                         </button>
@@ -631,7 +629,7 @@
                                                 <p class="light-gray font-14">
                                                     {{ secondStepForm.get("mobileNumber")?.value }}
                                                 </p>
-                                                   <p class="light-gray font-14">
+                                                <p class="light-gray font-14">
                                                     {{ secondStepForm.get("address")?.value }}
                                                 </p>
                                             </div>
@@ -858,9 +856,19 @@
                                 color="primary"
                                 class="w-100"
                                 *ngIf="selectedStep === 2"
-                                (click)="onSubmit()"
+                                (click)="onSubmit('trial')"
                             >
-                                {{ localeData?.confirm_purchase }}
+                                {{ localeData?.start_trial }}
+                            </button>
+                            <button
+                                aria-label="submit"
+                                mat-stroked-button
+                                color="primary"
+                                class="w-100 mt-2"
+                                *ngIf="selectedStep === 2"
+                                (click)="onSubmit('buy')"
+                            >
+                                {{ localeData?.buy_plan }}
                             </button>
                             <button
                                 aria-label="back"
