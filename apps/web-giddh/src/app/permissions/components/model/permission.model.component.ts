@@ -59,7 +59,6 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
                     value: false
                 }];
                 this.dropdownHeading = this.localeData?.select_pages;
-                console.log(this.localeData);
             }
         }, 200);
         this.store.pipe(select(p => p.permission), takeUntil(this.destroyed$)).subscribe((p: PermissionState) => {
@@ -69,6 +68,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
                     this.allRoles.push({ name: role?.name, uniqueName: role?.uniqueName });
                 });
             }
+            this.newRoleObj.isSelectedAllPages = false;
             this.newRoleObj.pageList = [];
             if (p.pages && p.pages.length) {
                 p.pages.forEach((page: IPageStr) => {
