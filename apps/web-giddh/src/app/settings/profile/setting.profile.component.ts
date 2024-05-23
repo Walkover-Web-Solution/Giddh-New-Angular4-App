@@ -845,7 +845,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             .subscribe(response => {
                 if (response) {
                     if (response.status === 'success') {
-                        this._toasty.showSnackBar("success",this.localeService.translate("app_messages.profile_updated"));
+                        this._toasty.showSnackBar("success", this.commonLocaleData?.app_messages.profile_updated);
                     } else {
                         this._toasty.errorToast(response.message);
                     }
