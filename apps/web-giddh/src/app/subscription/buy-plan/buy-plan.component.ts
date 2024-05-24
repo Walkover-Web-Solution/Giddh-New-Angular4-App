@@ -1110,11 +1110,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 code: this.subscriptionForm.value.secondStepForm.state.value ? this.subscriptionForm.value.secondStepForm.state.value : this.subscriptionForm.value.secondStepForm.state.code
             };
         }
-        if (type === 'trial') {
-            request['payNow'] = false;
-        } else {
-            request['payNow'] = true;
-        }
+        request['payNow'] = (type === 'trial') ? false : true;
         if (this.isChangePlan) {
             request.subscriptionId = this.subscriptionId;
             this.subscriptionRequest = request;
@@ -1271,13 +1267,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.initIntl(this.secondStepForm.get('mobileNumber')?.value);
     }
 
-/**
- * Get country flag image url by alpha2country code and if region get by alpha3code
- *
- * @param {string} countryRegionCode
- * @returns {string}
- * @memberof BuyPlanComponent
- */
+    /**
+     * Get country flag image url by alpha2country code and if region get by alpha3code
+     *
+     * @param {string} countryRegionCode
+     * @returns {string}
+     * @memberof BuyPlanComponent
+     */
     public getFlagUrl(countryRegionCode: string): string {
         return this.generalService.getCountryFlagUrl(countryRegionCode);
     }
