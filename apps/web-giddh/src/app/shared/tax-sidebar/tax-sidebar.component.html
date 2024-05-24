@@ -150,6 +150,20 @@
                             <span>{{ localeData?.vat_report }}</span>
                         </a>
                     </li>
+                    <li *ngIf="showVatMenus && isZimbabweCompany">
+                        <a
+                            href="javascript:;"
+                            class="d-block clearfix"
+                            routerLinkActive
+                            #vatReport="routerLinkActive"
+                            [class.active]="vatReport.isActive"
+                            [routerLink]="['/pages/vat-report/liability-report']"
+                            [routerLinkActiveOptions]="{exact: true}"
+                        >
+                            <span><i class="icon-vat1"></i></span>
+                            <span>{{ localeData?.liability_report }}</span>
+                        </a>
+                    </li>
                     <li>
                         <a
                             href="javascript:;"
