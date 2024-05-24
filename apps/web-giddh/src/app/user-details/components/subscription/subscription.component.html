@@ -1,7 +1,12 @@
 <div *ngIf="!isPlanShow">
     <div class="main-content-subscription">
         <div class="menu-one-button">
-   <button mat-stroked-button color="primary" (click)="goToBuyNow(selectedSubscription?.subscriptionId)" *ngIf="!showLoader">
+            <button
+                mat-stroked-button
+                color="primary"
+                (click)="goToBuyNow(selectedSubscription?.subscriptionId)"
+                *ngIf="!showLoader"
+            >
                 {{ commonLocaleData?.app_buy_new_plan }}
             </button>
         </div>
@@ -218,7 +223,7 @@
                                     color="primary"
                                     class="right-side-btn"
                                     *ngIf="selectedSubscription?.status !== 'trial'"
-                                     (click)="goToBuyNow(selectedSubscription?.subscriptionId)"
+                                    (click)="goToBuyNow(selectedSubscription?.subscriptionId)"
                                 >
                                     {{ commonLocaleData?.app_renew }}
                                 </button>
@@ -249,24 +254,24 @@
                                             </p>
                                         </div>
                                         <!-- <div class="box item-2">
-                                    <div class="box-heading">
-                                        <img class="set-height" src="{{ imgPath }}branch.png" alt="" /> <span>Branch</span>
-                                    </div>
-                                    <p>
-                                        Active <span>10</span> <img src="{{ imgPath }}dot.png" alt="" />Balance
-                                        <span class="balance">-2</span>
-                                    </p>
-                                </div> -->
+                                                <div class="box-heading">
+                                                    <img class="set-height" src="{{ imgPath }}branch.png" alt="" /> <span>Branch</span>
+                                                </div>
+                                                <p>
+                                                    Active <span>10</span> <img src="{{ imgPath }}dot.png" alt="" />Balance
+                                                    <span class="balance">-2</span>
+                                                </p>
+                                             </div> -->
                                         <!-- <div class="box item-3">
-                                    <div class="box-heading">
-                                        <img class="set-height" src="{{ imgPath }}warehouse.png" alt="" />
-                                        <span>Warehouse</span>
-                                    </div>
-                                    <p>
-                                        Active <span>10</span> <img src="{{ imgPath }}dot.png" alt="" />Balance
-                                        <span class="balance">-2</span>
-                                    </p>
-                                </div> -->
+                                            <div class="box-heading">
+                                                <img class="set-height" src="{{ imgPath }}warehouse.png" alt="" />
+                                                <span>Warehouse</span>
+                                            </div>
+                                            <p>
+                                                Active <span>10</span> <img src="{{ imgPath }}dot.png" alt="" />Balance
+                                                <span class="balance">-2</span>
+                                            </p>
+                                            </div> -->
                                         <div class="box item-4">
                                             <div class="box-heading">
                                                 <img src="{{ imgPath }}companies.png" alt="" />
@@ -279,11 +284,6 @@
                                         </div>
                                     </div>
                                 </mat-grid-tile>
-                                <!-- <mat-grid-tile colspan="2" [rowspan]="overallSummaryBottomRow">
-                            <div class="overall-summary-bar-two">
-                                <p>Total dues <span class="tomato">₹5,200 </span> <span class="grey">Settle now</span></p>
-                            </div>
-                        </mat-grid-tile> -->
                             </mat-grid-list>
                         </div>
                         <div class="expand-button">

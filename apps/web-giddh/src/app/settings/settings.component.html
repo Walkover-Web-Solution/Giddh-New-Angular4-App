@@ -1,130 +1,111 @@
-<ng-container
-    appTranslate
-    [file]="'settings'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
-    <div
-        class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-        *ngIf="asideGstSidebarMenuState === 'in'"
-    >
-        <tax-sidebar
-            (navigateEvent)="handleNavigation()"
-            (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
-            [exclude]="'#primary-new-header'"
-            class="gst-sidebar"
-        ></tax-sidebar>
+<ng-container appTranslate [file]="'settings'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+        *ngIf="asideGstSidebarMenuState === 'in'">
+        <tax-sidebar (navigateEvent)="handleNavigation()"
+            (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''" [exclude]="'#primary-new-header'"
+            class="gst-sidebar"></tax-sidebar>
     </div>
 
     <div class="container-fluid settings-bg setting-data">
         <div class="row">
-            <div class="invoice-control w-100">
-                <div id="setting-tab">
-                    <div class="relative">
-                        <div *ngIf="activeTab === 'taxes'">
-                            <hamburger-menu [pageHeading]="localeData?.setting_taxes"> </hamburger-menu>
-                            <div class="setting-container">
-                                <setting-taxes></setting-taxes>
+            <div class="col-lg-12 px-0">
+                <div class="invoice-control w-100">
+                    <div id="setting-tab">
+                        <div class="relative">
+                            <div *ngIf="activeTab === 'taxes'">
+                                <hamburger-menu [pageHeading]="localeData?.setting_taxes"> </hamburger-menu>
+                                <div class="setting-container">
+                                    <setting-taxes></setting-taxes>
+                                </div>
                             </div>
-                        </div>
-                        <div *ngIf="activeTab === 'integration'" class="position-relative">
-                            <hamburger-menu [pageHeading]="localeData?.setting_integration"></hamburger-menu>
-                            <ng-container *ngIf="integrationtab === 'e-comm'">
-                                <span class="video-link position-absolute">
-                                    <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'ECOMM_INTEGRATION'"></watch-video>
-                                </span>
-                            </ng-container>
-                            <div class="setting-container m-0">
-                                <setting-integration #integrationComponent [selectedTabParent]="selectedChildTab">
-                                </setting-integration>
+                            <div *ngIf="activeTab === 'integration'" class="position-relative">
+                                <hamburger-menu [pageHeading]="localeData?.setting_integration"></hamburger-menu>
+                                <ng-container *ngIf="integrationtab === 'e-comm'">
+                                    <span class="video-link position-absolute">
+                                        <watch-video [cssClass]="'text-primary pd-r15'"
+                                            [moduleName]="'ECOMM_INTEGRATION'"></watch-video>
+                                    </span>
+                                </ng-container>
+                                <div class="setting-container m-0">
+                                    <setting-integration #integrationComponent [selectedTabParent]="selectedChildTab">
+                                    </setting-integration>
+                                </div>
                             </div>
-                        </div>
 
-                        <div *ngIf="activeTab === 'linked-accounts'">
-                            <hamburger-menu [pageHeading]="localeData?.setting_linked_accounts"></hamburger-menu>
-                            <div class="setting-container">
-                                <setting-linked-accounts #eBankComp></setting-linked-accounts>
+                            <div *ngIf="activeTab === 'linked-accounts'">
+                                <hamburger-menu [pageHeading]="localeData?.setting_linked_accounts"></hamburger-menu>
+                                <div class="setting-container">
+                                    <setting-linked-accounts #eBankComp></setting-linked-accounts>
+                                </div>
                             </div>
-                        </div>
-
-                        <div *ngIf="activeTab === 'profile'">
-                            <hamburger-menu [pageHeading]="profileTabHeading"></hamburger-menu>
-                            <div class="setting-container">
-                                <setting-profile
-                                    (pageHeading)="profileTabHeading = $event"
-                                    #profileComponent
-                                ></setting-profile>
-                                <span
-                                    *ngIf="isCompanyProfileUpdated && (isUpdateCompanyInProgress$ | async)"
-                                    class="auto-save float-right"
-                                >
-                                    <i class="icon-refresh mr-r05 font-15 rotate"></i>{{ commonLocaleData?.app_saving }}
-                                </span>
-                                <span
-                                    *ngIf="isCompanyProfileUpdated && !(isUpdateCompanyInProgress$ | async)"
-                                    class="auto-save float-right"
-                                >
-                                    <i class="glyphicon glyphicon-check mr-r05 font-15"></i
-                                    >{{ commonLocaleData?.app_saved }}
-                                </span>
+                            <div *ngIf="activeTab === 'profile'">
+                                <hamburger-menu [pageHeading]="profileTabHeading"></hamburger-menu>
+                                <div class="setting-container">
+                                    <setting-profile (pageHeading)="profileTabHeading = $event"
+                                        #profileComponent></setting-profile>
+                                    <span *ngIf="isCompanyProfileUpdated && (isUpdateCompanyInProgress$ | async)"
+                                        class="auto-save float-right">
+                                        <i class="icon-refresh mr-r05 font-15 rotate"></i>{{
+                                        commonLocaleData?.app_saving }}
+                                    </span>
+                                    <span *ngIf="
+                                            isCompanyProfileUpdated &&
+                                            !(isUpdateCompanyInProgress$ | async)
+                                        " class="auto-save float-right">
+                                        <i class="glyphicon glyphicon-check mr-r05 font-15"></i>{{
+                                        commonLocaleData?.app_saved }}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                        <div *ngIf="activeTab === 'addresses'">
-                            <hamburger-menu [pageHeading]="profileTabHeading"></hamburger-menu>
-                            <div class="setting-container">
-                                <setting-profile
-                                    [addressOnly]="true"
-                                    (pageHeading)="profileTabHeading = $event"
-                                    #profileComponent
-                                ></setting-profile>
+                            <div *ngIf="activeTab === 'addresses'">
+                                <hamburger-menu [pageHeading]="profileTabHeading"></hamburger-menu>
+                                <div class="setting-container">
+                                    <setting-profile [addressOnly]="true" (pageHeading)="profileTabHeading = $event"
+                                        #profileComponent></setting-profile>
+                                </div>
                             </div>
-                        </div>
-                        <div *ngIf="activeTab === 'financial-year'">
-                            <hamburger-menu [pageHeading]="localeData?.setting_financial_year"></hamburger-menu>
-                            <div class="setting-container">
-                                <financial-year #financialYearComp></financial-year>
+                            <div *ngIf="activeTab === 'financial-year'">
+                                <hamburger-menu [pageHeading]="localeData?.setting_financial_year"></hamburger-menu>
+                                <div class="setting-container">
+                                    <financial-year #financialYearComp></financial-year>
+                                </div>
                             </div>
-                        </div>
-
-                        <div *ngIf="activeTab === 'permission'">
-                            <hamburger-menu [pageHeading]="localeData?.setting_permission"></hamburger-menu>
-                            <div class="setting-container">
-                                <setting-permission #permissionComp></setting-permission>
+                            <div *ngIf="activeTab === 'permission'">
+                                <hamburger-menu [pageHeading]="localeData?.setting_permission"></hamburger-menu>
+                                <div class="setting-container">
+                                    <setting-permission #permissionComp></setting-permission>
+                                </div>
                             </div>
-                        </div>
-
-                        <div *ngIf="activeTab === 'branch'">
-                            <hamburger-menu [pageHeading]="localeData?.setting_branch"></hamburger-menu>
-                            <div class="setting-container">
-                                <setting-branch></setting-branch>
+                            <div *ngIf="activeTab === 'branch'">
+                                <hamburger-menu [pageHeading]="localeData?.setting_branch"></hamburger-menu>
+                                <div class="setting-container">
+                                    <setting-branch></setting-branch>
+                                </div>
                             </div>
-                        </div>
-
-                        <div *ngIf="activeTab === 'tag'">
-                            <hamburger-menu [pageHeading]="localeData?.setting_tag"></hamburger-menu>
-                            <div class="setting-container">
-                                <setting-tags #tagComp></setting-tags>
+                            <div *ngIf="activeTab === 'tag'">
+                                <hamburger-menu [pageHeading]="localeData?.setting_tag"></hamburger-menu>
+                                <div class="setting-container">
+                                    <setting-tags #tagComp></setting-tags>
+                                </div>
                             </div>
-                        </div>
-
-                        <div *ngIf="activeTab === 'trigger'">
-                            <hamburger-menu [pageHeading]="localeData?.setting_trigger"></hamburger-menu>
-                            <div class="setting-container">
-                                <setting-trigger></setting-trigger>
+                            <div *ngIf="activeTab === 'trigger'">
+                                <hamburger-menu [pageHeading]="localeData?.setting_trigger"></hamburger-menu>
+                                <div class="setting-container">
+                                    <setting-trigger></setting-trigger>
+                                </div>
                             </div>
-                        </div>
-
-                        <div *ngIf="activeTab === 'discount'">
-                            <hamburger-menu [pageHeading]="localeData?.setting_discount"></hamburger-menu>
-                            <div class="setting-container">
-                                <setting-discount></setting-discount>
+                            <div *ngIf="activeTab === 'discount'">
+                                <hamburger-menu [pageHeading]="localeData?.setting_discount"></hamburger-menu>
+                                <div class="setting-container">
+                                    <setting-discount></setting-discount>
+                                </div>
                             </div>
-                        </div>
-
-                        <div *ngIf="activeTab === 'warehouse'">
-                            <hamburger-menu [pageHeading]="localeData?.setting_warehouse"></hamburger-menu>
-                            <div class="setting-container">
-                                <setting-warehouse></setting-warehouse>
+                            <div *ngIf="activeTab === 'warehouse'">
+                                <hamburger-menu [pageHeading]="localeData?.setting_warehouse"></hamburger-menu>
+                                <div class="setting-container">
+                                    <setting-warehouse></setting-warehouse>
+                                </div>
                             </div>
                         </div>
                     </div>
