@@ -251,17 +251,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     if (this.payType === 'trial') {
                         this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId])
                     } else {
-                        if (this.activeCompany.subscription?.country?.countryCode === 'GB') {
-                            let model = {
-                                planUniqueName: response?.planDetails?.uniqueName,
-                                paymentProvider: "GOCARDLESS",
-                                subscriptionId: response.subscriptionId,
-                                duration: response?.duration
-                            }
-                            this.subscriptionComponentStore.buyPlanByGoCardless(model);
-                        } else {
+                        // if (this.activeCompany.subscription?.country?.countryCode === 'GB') {
+                        //     let model = {
+                        //         planUniqueName: response?.planDetails?.uniqueName,
+                        //         paymentProvider: "GOCARDLESS",
+                        //         subscriptionId: response.subscriptionId,
+                        //         duration: response?.duration
+                        //     }
+                        //     this.subscriptionComponentStore.buyPlanByGoCardless(model);
+                        // } else {
                             this.componentStore.generateOrderBySubscriptionId(response.subscriptionId);
-                        }
+                        // }
                     }
                 };
             }
