@@ -272,11 +272,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 if (response.dueAmount > 0) {
                     this.initializePayment(response);
                 } else {
-                    if (response.status === 'trial') {
-                        this.router.navigate(['/pages/subscription/buy-plan']);
+                    if (this.isChangePlan) {
+                        this.router.navigate(['/pages/subscription']);
                     } else {
-                        this.router.navigate(['/pages/subscription/buy-plan/' + response.subscriptionId]);
-                    }
+                        this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId])
+                    };
                 }
             }
         });
