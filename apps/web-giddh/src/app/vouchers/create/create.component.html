@@ -5,7 +5,7 @@
         <mat-card class="container-lg">
             <form autocomplete="off" novalidate name="invoiceForm" [formGroup]="invoiceForm">
                 <mat-card-content>
-                    <!-- Voucher Page Heading -->
+                        
                     <div class="vouchers-title d-flex align-items-center">
                         <div class="d-flex align-items-center">
                             <h1 [ngClass]="{'voucher-heading': !(invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) || ((invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) && !invoiceForm.get('salesPurchaseAsReceiptPayment')?.value), 'cursor-pointer': invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote}" (click)="invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote ? invoiceForm.get('salesPurchaseAsReceiptPayment')?.patchValue(!invoiceForm.get('salesPurchaseAsReceiptPayment')?.value) : ''">{{ voucherType | voucherName: localeData | titlecase }}</h1>

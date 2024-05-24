@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { OrganizationType } from '../../models/user-login-state';
@@ -58,6 +58,8 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
     public isCopied: boolean = false;
     /** This will hold portal url */
     public portalUrl: any = PORTAL_URL;
+    /** Holds Last Portal Domain */
+    private tempProfileData: any = null;
 
     constructor(private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService) { }
 
@@ -67,11 +69,14 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
      * @memberof PersonalInformationComponent
      */
     public ngOnInit(): void {
+        this.tempProfileData = this.profileData;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.saveProfileSubject.pipe(debounceTime(5000), takeUntil(this.destroyed$)).subscribe(() => {
-            this.saveProfile.emit(this.updatedData);
+        this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(this.profileData.portalDomain);
+        this.saveProfileSubject.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res) {
+                this.saveProfile.emit(this.updatedData);
+            }
         });
-        this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(this.profileData.portalDomain)
     }
 
     /**
@@ -91,6 +96,7 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
      * @memberof PersonalInformationComponent
      */
     public profileUpdated(keyName: string): void {
+        this.tempProfileData[keyName] = this.profileData[keyName];
         this.updatedData[keyName] = this.profileData[keyName];
         this.saveProfileSubject.next(true);
     }
@@ -103,11 +109,13 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
      * @memberof PersonalInformationComponent
      */
     public checkPortalDomain(keyName: any): void {
-        this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(keyName);
-        if (this.isValidDomain) {
-            this.profileUpdated('portalDomain');
-        } else {
-            this.toasty.errorToast(this.localeData.domain_error_message);
+        if (keyName) {
+            this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(keyName);
+            if (this.isValidDomain) {
+                this.profileUpdated('portalDomain');
+            } else {
+                this.toasty.errorToast(this.localeData.domain_error_message);
+            }
         }
     }
 

@@ -134,7 +134,6 @@
     }
 
     .mat-tab-label-active {
-        background-color: #f0f4ff;
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
     }
@@ -508,4 +507,22 @@
             width: 14% !important;
         }
     }
+}
+
+.account-dropdown {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+    .delete-account {
+        padding: 11px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        border: 1px solid var(--color-common-secondary-border);
+        border-radius: 5px;
+    }
+}
+.link-color {
+    color: var(--color-ledger-heading);
 }

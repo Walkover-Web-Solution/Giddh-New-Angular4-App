@@ -120,6 +120,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public selectedState: any = '';
     public stateGstCode: any[] = [];
     public formFields: any[] = [];
+
     /** Observer to track get company profile API call in process */
     public getCompanyProfileInProgress$: Observable<boolean>;
     /** Stores the current organization type */
@@ -180,6 +181,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public showTaxColumn: boolean;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    /** Holds Active Tab Index */
+    public activeTabIndex: number = 0;
 
     constructor(
         private commonService: CommonService,
@@ -252,6 +255,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             .pipe(debounceTime(5000), distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((event: any) => {
                 this.patchProfile(this.dataToSave);
+
             });
 
         this.gstKeyDownSubject$
@@ -270,7 +274,10 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         });
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            this.currentTab = (params['referrer']) ? params['referrer'] : "personal";
+            this.currentTab = (params['referrer']) ? params['referrer'] : "personal";;
+            if ((params['referrer']) === 'personal') { this.activeTabIndex = 0; }
+            else if ((params['referrer']) === 'address') { this.activeTabIndex = 1; }
+            else if ((params['referrer']) === 'other') { this.activeTabIndex = 2; }
         });
 
         this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
@@ -366,6 +373,23 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             }
         });
 
+    }
+
+    /**
+     * This will use for on tab changes
+     *
+     * @param {*} event
+     * @memberof SettingProfileComponent
+     */
+    public onTabChange(event: any): void {
+        this.activeTabIndex = event?.index;
+        if (event.index === 0) {
+            this.handleTabChanged("personal");
+        } else if (event.index === 1) {
+            this.handleTabChanged("address");
+        } else {
+            this.handleTabChanged("other");
+        }
     }
 
     public addGst() {
@@ -550,6 +574,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 ele.classList.remove('error-box');
                 this.isPANValid = true;
                 this.patchProfile({ panNumber: ele.value });
+
             } else {
                 this.isPANValid = false;
                 this._toasty.errorToast('Invalid PAN number');
@@ -630,6 +655,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             delete obj['contactNo'];
         }
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
+
     }
 
     public typeaheadOnSelect(e: TypeaheadMatch): void {
@@ -660,6 +686,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             return;
         }
         this.patchProfile({ balanceDecimalPlaces: this.companyProfileObj.balanceDecimalPlaces });
+
     }
 
     public nameAlisPush(event) {
@@ -668,6 +695,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
 
         this.patchProfile({ nameAlias: this.companyProfileObj.nameAlias });
+
     }
 
     public savePincode(event) {
@@ -805,7 +833,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             .subscribe(response => {
                 if (response) {
                     if (response.status === 'success') {
-                        this._toasty.successToast('Profile Updated Successfully.');
+                        this._toasty.showSnackBar("success", this.commonLocaleData?.app_messages.profile_updated);
                     } else {
                         this._toasty.errorToast(response.message);
                     }

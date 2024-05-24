@@ -1,8 +1,8 @@
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { TagRequest } from '../../models/api-models/settingsTags';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { cloneDeep, filter, map, orderBy } from '../../lodash-optimized';
 import { SettingsTagService } from '../../services/settings.tag.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -13,9 +13,6 @@ import { ToasterService } from '../../services/toaster.service';
     styleUrls: ['./tags.component.scss'],
 })
 export class SettingsTagsComponent implements OnInit, OnDestroy {
-
-    @ViewChild('confirmationModal', { static: true }) public confirmationModal: ModalDirective;
-
     public newTag: TagRequest = new TagRequest();
     public tags: TagRequest[] = [];
     public tagsBackup: TagRequest[];
@@ -29,10 +26,19 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Create Tag Form template reference */
+    @ViewChild('createTagForm', { static: true }) public createTagForm: TemplateRef<any>;
+    /** Create Confirmation Dialog template reference */
+    @ViewChild('confirmationModal', { static: true }) public confirmationModal: TemplateRef<any>;
+    /** Holds Table Display Columns */
+    public displayedColumns: string[] = ['number', 'name', 'description', 'action'];
+    /** Holds Create Tag Dialog reference */
+    public createTagFormRef: MatDialogRef<any>;
 
     constructor(
         private settingsTagService: SettingsTagService,
-        private toaster: ToasterService
+        private toaster: ToasterService,
+        public dialog: MatDialog,
     ) {
     }
 
@@ -59,6 +65,7 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
 
     public createTag(tag: TagRequest) {
         this.settingsTagService.CreateTag(tag).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.createTagFormRef.close();
             this.showToaster(this.commonLocaleData?.app_messages?.tag_created, response);
         });
         this.newTag = new TagRequest();
@@ -71,14 +78,6 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
         this.updateIndex = null;
     }
 
-    public deleteTag(tag: TagRequest) {
-        this.newTag = tag;
-        let message = this.localeData?.remove_tag;
-        message = message?.replace("[TAG_NAME]", tag.name);
-        this.confirmationMessage = message;
-        this.confirmationModal?.show();
-    }
-
     public setUpdateIndex(indx: number) {
         this.updateIndex = indx;
     }
@@ -89,7 +88,6 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
     }
 
     public onUserConfirmation(yesOrNo: boolean) {
-        this.confirmationModal.hide();
         if (yesOrNo) {
             let data = cloneDeep(this.newTag);
             this.settingsTagService.DeleteTag(data).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -131,5 +129,40 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
         } else {
             this.toaster.errorToast(response?.message, response?.code);
         }
+    }
+
+    /**
+    * Open Create Tag Dialog
+    *
+    * @param {TagRequest} tag
+    * @memberof SettingsTagsComponent
+    */
+    public showCreateTag(): void {
+        this.createTagFormRef = this.dialog.open(this.createTagForm, {
+            panelClass: 'openform',
+            width: '1000px',
+            height: '100vh !important',
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
+    }
+
+    /**
+     * Open Delete Tag Confirmation Dialog
+     *
+     * @param {TagRequest} tag
+     * @memberof SettingsTagsComponent
+     */
+    public deleteTag(tag: TagRequest): void {
+        this.newTag = tag;
+        let message = this.localeData?.remove_tag;
+        message = message?.replace("[TAG_NAME]", tag.name);
+        this.confirmationMessage = message;
+        this.dialog.open(this.confirmationModal, {
+            panelClass: 'modal-dialog',
+            width: '1000px',
+        });
     }
 }

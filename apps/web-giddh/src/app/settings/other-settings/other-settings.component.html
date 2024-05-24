@@ -20,37 +20,39 @@
         </div>
     </div>
     <div *ngIf="organizationType === 'COMPANY'" class="row pb-2">
-        <div class="col-lg-12 col-xl-7 other-information mr-t4">
+        <div class="col-lg-12 col-xl-7 other-information mr-t2">
             <div class="clearfix">
                 <div class="form-group row">
                     <div class="col-md-12 col-lg-6 col-12">
                         <div class="row">
-                            <div class="col-12 col-sm-6">
+                            <div class="col-12 col-sm-6 pd-r05">
                                 <div class="form-group">
-                                    <label>{{ localeData?.digits_after_decimal }}</label>
-                                    <sh-select
+                                    <dropdown-field
+                                        [label]="localeData?.digits_after_decimal"
                                         [options]="decimalDigitSource"
                                         [placeholder]="commonLocaleData?.app_select_type"
-                                        (selected)="profileUpdated('balanceDecimalPlaces')"
+                                        (selectedOption)="
+                                            profileData.balanceDecimalPlaces = $event.value;
+                                            profileUpdated('balanceDecimalPlaces')
+                                        "
                                         [isFilterEnabled]="true"
-                                        name="balanceDecimalPlaces"
-                                        [(ngModel)]="profileData.balanceDecimalPlaces"
-                                    >
-                                    </sh-select>
+                                        [name]="'balanceDecimalPlaces'"
+                                    ></dropdown-field>
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-6">
+                            <div class="col-12 col-sm-6 pd-l05">
                                 <div class="form-group">
-                                    <label>{{ localeData?.number_system_label }}</label>
-                                    <sh-select
+                                    <dropdown-field
+                                        [label]="localeData?.number_system_label"
                                         [options]="numberSystemSource"
                                         [placeholder]="commonLocaleData?.app_select_type"
-                                        (selected)="profileUpdated('balanceDisplayFormat')"
+                                        (selectedOption)="
+                                            profileData.balanceDisplayFormat = $event.value;
+                                            profileUpdated('balanceDisplayFormat')
+                                        "
                                         [isFilterEnabled]="true"
-                                        name="balanceDisplayFormat"
-                                        [(ngModel)]="profileData.balanceDisplayFormat"
-                                    >
-                                    </sh-select>
+                                        [name]="'balanceDisplayFormat'"
+                                    ></dropdown-field>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6" *ngIf="voucherApiVersion === 1">
@@ -89,50 +91,45 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-6">
+                            <div class="col-12 col-sm-6 pd-r05">
                                 <div class="form-group">
-                                    <label>{{ localeData?.language }}</label>
-                                    <sh-select
-                                        class="language-selection"
+                                    <dropdown-field
+                                        [label]="localeData?.language"
+                                        [cssClass]="'language-selection'"
                                         [options]="translationLocales"
                                         [placeholder]="localeData?.select_language"
-                                        (selected)="selectLocale($event)"
+                                        (selectedOption)="activeLocale = $event.value; selectLocale($event)"
                                         [isFilterEnabled]="true"
-                                        name="activeLocale"
-                                        [(ngModel)]="activeLocale"
-                                    >
-                                    </sh-select>
+                                        [name]="'activeLocale'"
+                                    ></dropdown-field>
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-6">
+                            <div class="col-12 col-sm-6 pd-l05">
                                 <div class="form-group">
-                                    <label>{{ localeData?.theme }}</label>
-                                    <sh-select
-                                        class="theme-selection"
+                                    <dropdown-field
+                                        [label]="localeData?.theme"
+                                        [cssClass]="'theme-selection'"
                                         [options]="availableThemes"
+                                        [defaultValue]="currentThemeLabel"
                                         [placeholder]="localeData?.select_theme"
-                                        (selected)="setActiveTheme($event)"
                                         [isFilterEnabled]="true"
-                                        name="activeTheme"
-                                        [(ngModel)]="activeTheme"
-                                    >
-                                    </sh-select>
+                                        [name]="'activeTheme'"
+                                        (selectedOption)="setActiveTheme($event)"
+                                    ></dropdown-field>
                                 </div>
                             </div>
                             <div class="col-12 col-sm-6" *ngIf="profileData?.country?.countryCode?.toUpperCase() === 'IN'">
                                 <div class="form-group">
-                                    <label>{{ localeData?.export_type }}</label>
-                                    <mat-select
-                                        class="form-control"
-                                        name="exportType"
+                                    <dropdown-field
+                                        [label]="localeData?.export_type"
+                                        [cssClass]="'theme-selection'"
+                                        [options]="exportTypes"
+                                        [defaultValue]="getExportTypeLabel()"
                                         [placeholder]="localeData?.select_export_type"
-                                        (selectionChange)="setExportType($event)"
-                                        [(value)]="exportType"
-                                    >
-                                        <mat-option *ngFor="let type of exportTypes" [value]="type?.value"
-                                            >{{ type?.label }}
-                                        </mat-option>
-                                    </mat-select>
+                                        [isFilterEnabled]="true"
+                                        [name]="'exportType'"
+                                        (selectedOption)="setExportType($event)"
+                                    ></dropdown-field>
                                 </div>
                             </div>
                         </div>

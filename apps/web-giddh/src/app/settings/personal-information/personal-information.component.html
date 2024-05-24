@@ -1,58 +1,54 @@
-<div>
-    <div class="row">
-        <div class="col-md-12 mr-t4 border-bottom pd-b15">
+<ng-container>
+    <div class="row mr-0">
+        <div class="col-12 col-lg-12 col-xl-9 col-xxl-8 mr-t2 border-bottom pd-b15">
             <div class="row pd-b1">
-                <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2 d-flex align-items-center">
-                    <label *ngIf="organizationType === 'COMPANY'" class="font-15">{{ localeData?.company_name }}</label>
-                    <label *ngIf="organizationType === 'BRANCH'" class="font-15">{{ localeData?.branch_name }}</label>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
+                <div class="col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-4">
                     <div class="form-group mb-0">
-                        <div class="input-group">
-                            <input
-                                *ngIf="organizationType === 'COMPANY'"
-                                [(ngModel)]="profileData.name"
-                                (ngModelChange)="profileUpdated('name')"
-                                type="text"
-                                name="companyName"
-                                class="form-control"
-                            />
-                            <input
-                                *ngIf="organizationType === 'BRANCH'"
-                                name="alias"
-                                [(ngModel)]="profileData.alias"
-                                (ngModelChange)="profileUpdated('alias')"
-                                type="text"
-                                class="form-control"
-                            />
-                        </div>
+                        <input-field
+                            *ngIf="organizationType === 'COMPANY'"
+                            [(ngModel)]="profileData.name"
+                            (ngModelChange)="profileUpdated('name')"
+                            [type]="'text'"
+                            [name]="'companyName'"
+                            [label]="localeData?.company_name"
+                        >
+                        </input-field>
+                        <input-field
+                            *ngIf="organizationType === 'BRANCH'"
+                            [name]="'alias'"
+                            [(ngModel)]="profileData.alias"
+                            (ngModelChange)="profileUpdated('alias')"
+                            [type]="'text'"
+                            [label]="localeData?.branch_name"
+                        >
+                        </input-field>
                     </div>
                 </div>
             </div>
-            <div class="row pd-b1 unique-name">
-                <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2">
+            <div class="row pd-b1 mt-3 unique-name">
+                <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2">
                     <label class="font-15">{{ commonLocaleData?.app_unique_name }}:</label>
                 </div>
-                <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
+                <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2 view-txt">
                     <div class="font-15">{{ profileData?.uniqueName }}</div>
                 </div>
             </div>
-            <div *ngIf="organizationType === 'BRANCH'" class="row pb-1 parent-name">
-                <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2">
+            <div *ngIf="organizationType === 'BRANCH'" class="row pb-1 mt-3 parent-name">
+                <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2">
                     <label class="font-15">{{ localeData?.parent }}:</label>
                 </div>
-                <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
+                <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2 view-txt">
                     <div *ngIf="profileData?.parent?.name" class="font-15">
                         {{ profileData?.parent?.name }} ({{ profileData?.parent?.businessType }})
                     </div>
                     <div *ngIf="!profileData?.parent?.name" class="font-15">{{ profileData?.companyName }}</div>
                 </div>
             </div>
-            <div class="row country-name pd-b1">
-                <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2">
+            <div class="row country-name pd-b1 mt-3">
+                <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2">
                     <label class="font-15">{{ localeData?.country_currency }}:</label>
                 </div>
-                <div class="country-info col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
+                <div class="country-info col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2 view-txt">
                     <img
                         class="country-flag"
                         *ngIf="profileData?.country?.countryCode"
@@ -67,37 +63,31 @@
                     </div>
                 </div>
             </div>
-            <div class="row pd-b1" *ngIf="organizationType === 'COMPANY' && voucherApiVersion === 2">
-                <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2 d-flex align-items-center">
-                    <label class="font-15">{{ localeData?.portal_domain }}</label>
-                </div>
-                <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
-                    <div class="form-group mb-0">
-                        <div class="input-group">
-                            <input
-                                #domain
-                                [(ngModel)]="profileData.portalDomain"
-                                (ngModelChange)="checkPortalDomain(profileData.portalDomain)"
-                                type="text"
-                                name="portalDomain"
-                                class="form-control"
-                                maxlength="50"
-                                [ngClass]="{
-                                    'has-error': !isValidDomain,
-                                    'has-success': isValidDomain
-                                }"
-                            />
-                        </div>
-                    </div>
+            <div class="row pd-b1 mt-3" *ngIf="organizationType === 'COMPANY' && voucherApiVersion === 2">
+                <div class="col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-4">
+                    <input-field
+                        [name]="'portalDomain'"
+                        [cssClass]="{
+                            'has-error': !isValidDomain,
+                            'has-success': isValidDomain
+                        }"
+                        [max]="50"
+                        [(ngModel)]="profileData.portalDomain"
+                        (onChange)="checkPortalDomain(profileData.portalDomain)"
+                        [type]="'text'"
+                        [label]="localeData?.portal_domain"
+                        #domain
+                    >
+                    </input-field>
                 </div>
             </div>
-            <div class="row" *ngIf="organizationType === 'COMPANY' && voucherApiVersion === 2">
-                <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-2 d-flex align-items-center">
+            <div class="row mt-3" *ngIf="organizationType === 'COMPANY' && voucherApiVersion === 2">
+                <div class="col-lg-3 col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2 d-flex align-items-center">
                     <label class="font-15">{{localeData?.portal_url}}</label>
                 </div>
-                <div class="col-lg-4 col-md-6 col-sm-12 col-lg-4 col-xl-3">
+                <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2">
                     <div class="form-group mb-0">
-                        <div class="input-group align-items-center">
+                        <div class="d-flex align-items-start">
                             <a class="portal-url" [href]="portalUrl + profileData.portalDomain" target="_blank"
                                 >{{ portalUrl }}{{ profileData.portalDomain }}</a
                             >
@@ -105,10 +95,10 @@
                                 <i
                                     class="icon-copy-file"
                                     (click)="copyUrl()"
-                                    [tooltip]="commonLocaleData?.app_copy"
+                                    [matTooltip]="commonLocaleData?.app_copy"
                                 ></i>
                             </span>
-                            <span class="success copied-url" *ngIf="isCopied">Copied</span>
+                            <span class="success copied-url copy-text-position" *ngIf="isCopied">{{ commonLocaleData?.app_copied}}</span>
                         </div>
                     </div>
                 </div>
@@ -116,50 +106,46 @@
         </div>
     </div>
     <div class="personal-other-details">
-        <div class="row" *ngIf="organizationType === 'COMPANY'">
-            <div class="col-md-4 col-lg-4 col-xl-3 mt-3">
+        <div class="row mr-0 mt-3" *ngIf="organizationType === 'COMPANY'">
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 pd-r05">
                 <div class="form-group">
-                    <label>{{ localeData?.business_type }}</label>
-                    <sh-select
-                        disabled
+                    <dropdown-field
+                        [readonly]="true"
+                        [label]="localeData?.business_type"
                         [placeholder]="localeData?.business_type_placeholder"
-                        name="businessType"
-                        id="businessType"
-                        autocomplete="false"
+                        [name]="'businessType'"
+                        [id]="'businessType'"
                         [readonlyInput]="true"
-                        (selected)="profileUpdated('businessType')"
-                        [(ngModel)]="profileData.businessType"
+                        (selected)="profileData.businessType = $event.value; profileUpdated('businessType')"
                         [options]="profileData.businessTypes"
                         [ItemHeight]="33"
                         [defaultValue]="profileData.businessType"
                     >
-                    </sh-select>
+                    </dropdown-field>
                 </div>
             </div>
-            <div class="col-md-4 col-lg-4 col-xl-3 mt-3">
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 pd-l05 pd-r05">
                 <div class="form-group">
-                    <label>{{ localeData?.company_alias }}</label>
-                    <input
-                        name="companyAlias"
+                    <input-field
+                        [label]="localeData?.company_alias"
+                        [name]="'companyAlias'"
                         [(ngModel)]="profileData.nameAlias"
                         (ngModelChange)="profileUpdated('nameAlias')"
-                        type="text"
-                        class="form-control"
-                    />
+                        [type]="'text'"
+                    ></input-field>
                 </div>
             </div>
-            <div class="col-md-4 col-lg-4 col-xl-3 mt-3">
+            <div class="col-md-4 col-lg-4 col-xl-3 mt-3 pd-l05">
                 <div class="form-group">
-                    <label>{{ localeData?.headquarter_name }}</label>
-                    <input
-                        name="headQuarterAlias"
+                    <input-field
+                        [label]="localeData?.headquarter_name"
+                        [name]="'headQuarterAlias'"
                         [(ngModel)]="profileData.headQuarterAlias"
                         (ngModelChange)="profileUpdated('headQuarterAlias')"
-                        type="text"
-                        class="form-control"
-                    />
+                        [type]="'text'"
+                    ></input-field>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</ng-container>

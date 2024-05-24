@@ -48,6 +48,7 @@
                         [value]="option"
                         [ngClass]="hasMoreValue ? 'options-line-value' : 'options-line'"
                         [matTooltip]="option?.label"
+                        [disabled]="option?.additional?.isDisabled"
                         matTooltipPosition="right"
                     >
                         <ng-template
@@ -69,6 +70,7 @@
                         *ngIf="fieldFilteredOptions?.length === 0 && showCreateNew"
                         (click)="createNewRecord()"
                         [matTooltip]="option?.label"
+                        [disabled]="option?.additional?.isDisabled"
                         matTooltipPosition="right"
                     >
                         <a href="javascript:;" class="options-class-create">
@@ -105,6 +107,7 @@
                                 [value]="option"
                                 [ngClass]="hasMoreValue ? 'options-line-value' : 'options-line'"
                                 [matTooltip]="option?.label"
+                                [disabled]="option?.additional?.isDisabled"
                                 matTooltipPosition="right"
                             >
                                 <ng-template

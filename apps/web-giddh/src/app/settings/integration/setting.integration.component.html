@@ -62,65 +62,66 @@
                     <h3 class="section-head">{{ localeData?.email?.gmail_integration }}</h3>
                     <div class="d-flex gmail-integration-message">
                         <ng-container *ngIf="!(isGmailIntegrated$ | async)">
-                            <a *ngIf="!isElectron" class="btn btn-primary" [href]="gmailAuthCodeUrl$ | async">{{
-                                localeData?.email?.connect_gmail
-                            }}</a>
+                            <a
+                                *ngIf="!isElectron"
+                                mat-stroked-button
+                                color="primary"
+                                [href]="gmailAuthCodeUrl$ | async"
+                            >
+                                {{ localeData?.email?.connect_gmail }}
+                            </a>
 
                             <a
                                 *ngIf="isElectron"
-                                class="btn btn-primary"
-                                href="javascript:void(0);"
+                                mat-stroked-button
+                                color="primary"
                                 (click)="gmailIntegration('google')"
-                                >{{ localeData?.email?.connect_gmail }}</a
                             >
+                                {{ localeData?.email?.connect_gmail }}
+                            </a>
                         </ng-container>
-
-                        <h4 *ngIf="isGmailIntegrated$ | async" class="text-success align-self-center">
-                            {{ localeData?.email?.gmail_connected }}
-                        </h4>
-                        <button
-                            aria-label="remove account"
-                            *ngIf="isGmailIntegrated$ | async"
-                            class="btn btn-danger mr-l2"
-                            (click)="removegmailintegration.toggle()"
-                        >
-                            {{ localeData?.email?.remove_account }}
-                        </button>
+                        <ng-container *ngIf="isGmailIntegrated$ | async">
+                            <h4 class="text-success align-self-center">
+                                {{ localeData?.email?.gmail_connected }}
+                            </h4>
+                            <button
+                                mat-stroked-button
+                                color="warn"
+                                aria-label="remove account"
+                                class="btn mr-l2"
+                                (click)="removegmailintegration.toggle()"
+                            >
+                                {{ localeData?.email?.remove_account }}
+                            </button>
+                        </ng-container>
                     </div>
                 </div>
 
                 <div class="box clearfix">
                     <h3 class="font-16 bold mb-2">{{ localeData?.email?.form_heading }}</h3>
                     <form #emailform="ngForm" (ngSubmit)="onSubmitEmailform(emailform)">
-                        <div class="row">
-                            <div class="form-group col-md-5 col-lg-3">
-                                <label>{{ localeData?.email?.auth_key_label }}</label>
-                                <br />
-                                <input
-                                    type="text"
+                        <div class="row align-items-center">
+                            <div class="form-group col-md-5 col-lg-3 pd-r05">
+                                <input-field
+                                    [label]="localeData?.email?.auth_key_label"
+                                    [type]="'text'"
                                     [placeholder]="localeData?.email?.auth_key_placeholder"
-                                    class="form-control"
                                     [ngModel]="emailFormObj.authKey"
-                                    name="authKey"
-                                    required
-                                />
+                                    [name]="'authKey'"
+                                    [required]="true"
+                                ></input-field>
                             </div>
-                            <div class="form-group col-md-5 col-lg-3">
-                                <label>{{ localeData?.email?.email_subject_label }}</label>
-                                <br />
-                                <input
-                                    type="text"
+                            <div class="form-group col-md-5 col-lg-3 pd-l05 pd-r05">
+                                <input-field
+                                    [type]="'text'"
                                     [placeholder]="localeData?.email?.email_subject_placeholder"
-                                    class="form-control"
                                     [ngModel]="emailFormObj.subject"
-                                    name="subject"
-                                    required
-                                />
+                                    [name]="'subject'"
+                                    [required]="true"
+                                ></input-field>
                             </div>
-                            <div class="form-group col-md-2 col-lg-3 empty-label">
-                                <label>&nbsp;</label>
-                                <br />
-                                <button aria-label="save" type="submit" class="btn btn-success mr-r1" [disabled]="emailform.invalid">
+                            <div class="form-group col-md-2 col-lg-3 empty-label pd-l05">
+                                <button aria-label="save" mat-stroked-button color="primary" type="submit" [disabled]="emailform.invalid">
                                     {{ commonLocaleData?.app_save }}
                                 </button>
                             </div>
@@ -135,76 +136,53 @@
                     <mat-tab-group mat-stretch-tabs="false" animationDuration="0ms" [disableRipple]="true">
                         <mat-tab [label]="localeData?.collection?.razorpay_tab_heading">
                             <div class="box clearfix mb-2">
-                                <h3 class="font-16 bold mb-2">{{ localeData?.collection?.razorpay_form_heading }}</h3>
+                                <h3 class="font-16 bold mb-3">{{ localeData?.collection?.razorpay_form_heading }}</h3>
                                 <form #razorPayform="ngForm" novalidate>
                                     <div class="row">
                                         <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                                            <label
-                                                >{{ localeData?.collection?.key_id_label }}
-                                                <span class="required">*</span>
-                                            </label>
-                                            <input
-                                                class="form-control"
-                                                type="text"
+                                            <input-field
+                                                [type]="'text'"
+                                                [label]="localeData?.collection?.key_id_label"
                                                 [placeholder]="localeData?.collection?.key_id_placeholder"
-                                                name="razorPayObj.userName"
                                                 [(ngModel)]="razorPayObj.userName"
-                                                required
-                                                autocomplete="off"
-                                            />
+                                                [name]="'username'"
+                                                [required]="true"
+                                            ></input-field>
                                         </div>
                                         <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                                            <label
-                                                >{{ localeData?.collection?.secret_key_label }}
-                                                <span class="required">*</span>
-                                            </label>
-                                            <input
-                                                class="form-control"
-                                                type="password"
+                                            <input-field
+                                                [type]="'password'"
+                                                [label]="localeData?.collection?.secret_key_label"
                                                 [placeholder]="localeData?.collection?.secret_key_placeholder"
-                                                name="razorPayObj.password"
                                                 [(ngModel)]="razorPayObj.password"
-                                                required
-                                                autocomplete="off"
-                                            />
+                                                [name]="'password'"
+                                                [required]="true"
+                                            ></input-field>
                                         </div>
                                     </div>
                                     <div>
                                         <div class="row">
                                             <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                                                <div>
-                                                    <label>{{ localeData?.collection?.link_account_label }}</label>
-                                                    <div class="input-group">
-                                                        <sh-select
-                                                            class="linked-account"
-                                                            [placeholder]="
-                                                                localeData?.collection?.link_account_placeholder
-                                                            "
-                                                            name="razorPayObj.account"
-                                                            [(ngModel)]="razorPayObj.account.uniqueName"
-                                                            [options]="accounts"
-                                                            (selected)="selectAccount($event)"
-                                                            [forceClearReactive]="forceClearLinkAccount$ | async"
-                                                            [enableDynamicSearch]="true"
-                                                            [isPaginationEnabled]="true"
-                                                            (scrollEnd)="handleScrollEnd()"
-                                                            (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                                            [fixedValue]="razorPayObj?.account?.name"
-                                                            [defaultValue]="razorPayObj?.account?.name"
-                                                        >
-                                                        </sh-select>
-                                                        <div
-                                                            class="input-group-addon cp"
-                                                            *ngIf="
-                                                                razorPayObj?.account?.uniqueName &&
-                                                                razorPayObj?.account?.name
-                                                            "
-                                                        >
-                                                            <span
-                                                                (click)="unlinkAccountFromRazorPay()"
-                                                                class="icon-trash"
-                                                            ></span>
-                                                        </div>
+                                                <div class="input-group align-items-center column-gap1 flex-nowrap">
+                                                    <dropdown-field
+                                                        class="linked-account"
+                                                        [name]="'account'"
+                                                        [scrollableElementId]="'linkedAccount'"
+                                                        [label]="localeData?.collection?.link_account_label"
+                                                        [placeholder]="localeData?.collection?.link_account_placeholder"
+                                                        [options]="accounts"
+                                                        (selectedOption)="selectAccount($event)"
+                                                        [defaultValue]="razorPayObj?.account?.name"
+                                                        [enableDynamicSearch]="true"
+                                                        [isPaginationEnabled]="true"
+                                                        (scrollEnd)="handleScrollEnd()"
+                                                        (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                                                        [allowValueReset]="true"
+                                                        (onClear)="razorPayObj.account.name = null; razorPayObj.account.uniqueName = null"
+                                                    >
+                                                    </dropdown-field>
+                                                    <div class="input-group-addon cursor-pointer" *ngIf="razorPayObj?.account?.uniqueName && razorPayObj?.account?.name">
+                                                        <span (click)="unlinkAccountFromRazorPay()" class="icon-trash"></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -212,8 +190,6 @@
                                                 class="form-group col-lg-4 col-md-6 col-xs-12 mr-t1 empty-label"
                                                 id="inlnImg"
                                             >
-                                                <label>&nbsp;</label>
-                                                <br />
                                                 <mat-slide-toggle
                                                     [(ngModel)]="razorPayObj.autoCapturePayment"
                                                     name="autoCapturePayment"
@@ -231,27 +207,29 @@
                                     <div class="row">
                                         <div class="col-sm-12 form-group">
                                             <button
+                                                mat-stroked-button
+                                                color="primary"
                                                 aria-label="save"
                                                 *ngIf="!updateRazor"
-                                                class="btn btn-success"
                                                 [disabled]="razorPayform.invalid"
                                                 (click)="saveRazorPayDetails()"
                                             >
                                                 {{ commonLocaleData?.app_save }}
                                             </button>
                                             <button
+                                                mat-stroked-button
+                                                color="primary"
                                                 aria-label="update"
                                                 *ngIf="updateRazor"
-                                                class="btn btn-success"
                                                 [disabled]="razorPayform.invalid"
                                                 (click)="updateRazorPayDetails()"
                                             >
                                                 {{ commonLocaleData?.app_update }}
                                             </button>
                                             <button
+                                                mat-stroked-button
                                                 aria-label="delete"
                                                 *ngIf="updateRazor"
-                                                class="btn btn-danger"
                                                 (click)="deleteRazorPayDetails()"
                                             >
                                                 {{ commonLocaleData?.app_delete }}
@@ -263,63 +241,50 @@
                         </mat-tab>
                         <mat-tab [label]="localeData?.collection?.paypal_tab_heading">
                             <div class="box clearfix mb-2">
-                                <h3 class="font-16 bold mb-2">{{ localeData?.collection?.paypal_form_heading }}</h3>
-                                <form #paypalForm="ngForm" novalidate class="">
+                                <h3 class="font-16 bold mb-3">{{ localeData?.collection?.paypal_form_heading }}</h3>
+                                <form #paypalForm="ngForm" novalidate>
                                     <div class="row">
                                         <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                                            <label
-                                                >{{ localeData?.collection?.email_id_label }}
-                                                <span class="required">*</span>
-                                            </label>
-                                            <input
-                                                class="form-control"
-                                                type="text"
+                                            <input-field
+                                                [type]="'text'"
+                                                [label]="localeData?.collection?.email_id_label"
                                                 [placeholder]="localeData?.collection?.email_id_placeholder"
-                                                name="paypalObj.email"
                                                 [(ngModel)]="paypalObj.email"
-                                                required
-                                                autocomplete="off"
-                                            />
+                                                [name]="'collection_email'"
+                                                [required]="true"
+                                            ></input-field>
                                         </div>
                                         <div class="form-group col-lg-4 col-md-6 col-xs-12">
                                             <div>
-                                                <label>{{ localeData?.collection?.link_account_label }}</label>
-                                                <div class="input-group">
-                                                    <div class="d-flex w-100">
-                                                        <sh-select
-                                                            class="linked-account"
-                                                            [placeholder]="
-                                                                localeData?.collection?.link_account_placeholder
-                                                            "
-                                                            name="paypalObj.account"
-                                                            [(ngModel)]="paypalObj.account.uniqueName"
-                                                            [options]="paypalAccounts"
-                                                            (selected)="selectLinkedAccount($event)"
-                                                            [forceClearReactive]="paypalForceClearLinkAccount$ | async"
-                                                            [enableDynamicSearch]="true"
-                                                            [isPaginationEnabled]="true"
-                                                            (scrollEnd)="paypalHandleScrollEnd()"
-                                                            (dynamicSearchedQuery)="
-                                                                paypalOnAccountSearchQueryChanged($event)
-                                                            "
-                                                            [fixedValue]="paypalObj?.account?.name"
-                                                            [defaultValue]="paypalObj?.account?.name"
-                                                        >
-                                                        </sh-select>
-                                                        <div
-                                                            class="input-group-addon cp ml-2"
-                                                            *ngIf="
-                                                                paypalObj?.account?.uniqueName &&
-                                                                paypalObj?.account?.name
-                                                            "
-                                                        >
-                                                            <span
-                                                                (click)="unlinkAccountFromPaypal()"
-                                                                class="icon-trash"
-                                                            ></span>
-                                                        </div>
+                                                <dropdown-field
+                                                        class="linked-account"
+                                                        [name]="'account'"
+                                                        [scrollableElementId]="'linkedAccount'"
+                                                        [label]="localeData?.collection?.link_account_label"
+                                                        [placeholder]="localeData?.collection?.link_account_placeholder"
+                                                        [options]="paypalAccounts"
+                                                        (selectedOption)="selectLinkedAccount($event)"
+                                                        [defaultValue]="paypalObj?.account?.name"
+                                                        [enableDynamicSearch]="true"
+                                                        [isPaginationEnabled]="true"
+                                                        (scrollEnd)="paypalHandleScrollEnd()"
+                                                        (dynamicSearchedQuery)="paypalOnAccountSearchQueryChanged($event)"
+                                                        [allowValueReset]="true"
+                                                        (onClear)="paypalObj.account.name = null; paypalObj.account.uniqueName = null"
+                                                    >
+                                                    </dropdown-field>
+                                                    <div
+                                                        class="input-group-addon cursor-pointer ml-2"
+                                                        *ngIf="
+                                                            paypalObj?.account?.uniqueName &&
+                                                            paypalObj?.account?.name
+                                                        "
+                                                    >
+                                                        <span
+                                                            (click)="unlinkAccountFromPaypal()"
+                                                            class="icon-trash"
+                                                        ></span>
                                                     </div>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -329,8 +294,10 @@
                                         <div class="col-sm-12 form-group">
                                             <button
                                                 aria-label="save"
+                                                type="button"
                                                 *ngIf="!updatePaypal"
-                                                class="btn btn-success"
+                                                mat-stroked-button
+                                                color="primary"
                                                 [disabled]="paypalForm.invalid"
                                                 (click)="savePaypalDetails()"
                                             >
@@ -339,7 +306,9 @@
                                             <button
                                                 aria-label="update"
                                                 *ngIf="updatePaypal"
-                                                class="btn btn-success"
+                                                type="button"
+                                                mat-stroked-button
+                                                color="primary"
                                                 [disabled]="paypalForm.invalid"
                                                 (click)="updatePaypalDetails()"
                                             >
@@ -348,7 +317,9 @@
                                             <button
                                                 aria-label="delete"
                                                 *ngIf="updatePaypal"
-                                                class="btn btn-danger"
+                                                mat-stroked-button
+                                                color="warn"
+                                                type="button"
                                                 (click)="deletePaypalDetails()"
                                             >
                                                 {{ commonLocaleData?.app_delete }}
@@ -373,6 +344,7 @@
                         href="https://apps.shopify.com/giddh-accounting"
                         target="_blank"
                         *ngIf="!isEcommerceShopifyUserVerified"
+                        class="link-color"
                     >
                         <span>{{ localeData?.ecommerce?.connect_shopify }}</span></a
                     >
@@ -392,7 +364,9 @@
                             <div class="form-group mr-l2">
                                 <button
                                     type="button"
-                                    class="btn btn-sky-blue mr-r2"
+                                    mat-stroked-button
+                                    color="primary"
+                                    class="mr-r2"
                                     (click)="openCreateNewAccountModal()"
                                 >
                                     {{ localeData?.payment?.connect_new_account }}
@@ -439,7 +413,7 @@
                                 class="account-wrapper"
                                 *ngFor="let bankAccount of connectedBankAccounts; trackBy: trackByAccountUniqueName"
                             >
-                                <div class="account-info-background width-100 font-15 row">
+                                <div class="account-info-background width-100 font-15 row align-items-end">
                                     <div class="col-md-4">
                                         <span class="field-label">{{ bankAccount?.bankName }}</span
                                         ><br />
@@ -453,25 +427,25 @@
                                         >
                                     </div>
                                     <div class="col-md-4">
-                                        <span class="field-label">{{ localeData?.payment?.linked_account }}</span
-                                        ><br />
                                         <span
                                             *ngIf="isIciciBankSupportedCountry"
                                             class="width-100 view-only-field inline"
                                             >{{ bankAccount?.account?.name }}</span
                                         >
-                                        <sh-select
+                                        <dropdown-field
+                                            [label]="localeData?.payment?.linked_account"
                                             *ngIf="!isIciciBankSupportedCountry"
-                                            class="linked-account"
-                                            name="bankAccountUniqueName"
+                                            [cssClass]="'input-background'"
+                                            [name]="'bankAccountUniqueName'"
                                             [placeholder]="localeData?.payment?.link_account_placeholder"
                                             [options]="bankAccounts$ | async"
-                                            (selected)="selectBankAccount($event, bankAccount)"
-                                            [(ngModel)]="bankAccount?.account.uniqueName"
-                                        >
-                                        </sh-select>
+                                            (selectedOption)="
+                                                bankAccount?.account.uniqueName = $event.value;
+                                                selectBankAccount($event, bankAccount)
+                                            "
+                                        ></dropdown-field>
                                     </div>
-                                    <span class="mr-l1 action-div mr-t3" *ngIf="!isIciciBankSupportedCountry">
+                                    <span class="mr-l1 action-div" *ngIf="!isIciciBankSupportedCountry">
                                         <a
                                             href="javascript:;"
                                             class="icon-edit-pencil"
@@ -493,7 +467,7 @@
                                             </mat-menu>
                                         </ng-container>
                                     </span>
-                                    <div class="col-md-4" *ngIf="isIciciBankSupportedCountry">
+                                    <div class="col-md-4 d-flex flex-column" *ngIf="isIciciBankSupportedCountry">
                                         <span class="field-label"
                                             >{{ localeData?.payment?.payment_updates }}<br
                                         /></span>
@@ -616,7 +590,9 @@
                                         <button
                                             aria-label="users"
                                             type="button"
-                                            class="btn btn-light-blue bold font-15 mt-2 mr-l15"
+                                            mat-stroked-button
+                                            color="primary"
+                                            class="bold font-15 mt-2 mr-l15"
                                             (click)="openCreateNewAccountUserModal(bankAccount)"
                                         >
                                             {{ localeData?.payment?.add_more_users }}
@@ -649,7 +625,8 @@
                                 class="icon-copy-file"
                                 (click)="copyUrl()"
                                 [ngxClipboard]="apiUrlInput"
-                                [tooltip]="commonLocaleData?.app_copy"
+                                [matTooltip]="commonLocaleData?.app_copy"
+                                [matTooltipPosition]="'above'"
                             ></i>
                         </span>
                         <span class="success copied-url" *ngIf="isCopied">{{ localeData?.tally?.copied }}</span>
@@ -659,7 +636,7 @@
                             <li>
                                 <a
                                     target="_blank"
-                                    class="btn btn-link"
+                                    class="btn link-color"
                                     [routerLink]="['/pages/user-details/auth-key']"
                                     >{{ localeData?.email?.auth_key_label }}</a
                                 >
@@ -667,7 +644,7 @@
                             <li>
                                 <a
                                     target="_blank"
-                                    class="btn btn-link"
+                                    class="btn link-color"
                                     href="https://giddh.com/help/sync-with-tally-1591360375828781"
                                     >{{ localeData?.tally?.help_documentation }}</a
                                 >
@@ -679,8 +656,8 @@
         </mat-tab-group>
     </div>
     <!--remove account integration confirmation modal-->
-    <div bsModal #removegmailintegration="bs-modal" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-xl">
+    <ng-template #removegmailintegration>
+        <div class="modal-xl">
             <div class="modal-content">
                 <confirm-modal
                     [title]="localeData?.email?.remove_account_title"
@@ -691,75 +668,74 @@
                 </confirm-modal>
             </div>
         </div>
-    </div>
-    <div bsModal #createNewAccountModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
-        <div class="modal-dialog account-modal" *ngIf="createNewAccountModal?.isShown">
+    </ng-template>
+
+    <ng-template #createNewAccountModal>
+        <div class="account-modal">
             <div class="modal-content">
                 <icici-account-create-edit
                     [commonLocaleData]="commonLocaleData"
                     (getAllBankAccounts)="getAllBankAccounts()"
-                    (closeModalEvent)="closeCreateNewAccountModal()"
+                    (closeModalEvent)="createNewAccountDialogRef.close()"
                 >
                 </icici-account-create-edit>
             </div>
         </div>
-    </div>
-    <div bsModal #editAccountModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
-        <div class="modal-dialog account-modal" *ngIf="editAccountModal?.isShown">
+    </ng-template>
+
+    <ng-template #editAccountModal>
+        <div class="account-modal">
             <div class="modal-content">
                 <icici-account-create-edit
                     [commonLocaleData]="commonLocaleData"
                     [activeBankAccount]="activeBankAccount"
                     (getAllBankAccounts)="getAllBankAccounts()"
-                    (closeModalEvent)="closeEditAccountModal()"
+                    (closeModalEvent)="editAccountModalRef.close()"
                     [isIciciBankSupportedCountry]="isIciciBankSupportedCountry"
                 >
                 </icici-account-create-edit>
             </div>
         </div>
-    </div>
-    <div bsModal #createNewAccountUserModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
-        <div class="modal-dialog user-modal" *ngIf="createNewAccountUserModal?.isShown">
+    </ng-template>
+
+    <ng-template #createNewAccountUserModal>
+        <div class="user-modal">
             <div class="modal-content">
                 <icici-payor-account-create-edit
                     [commonLocaleData]="commonLocaleData"
                     [activeBankAccount]="activeBankAccount"
                     (getAllBankAccounts)="getAllBankAccounts()"
-                    (closeModalEvent)="closeCreateNewAccountUserModal()"
+                    (closeModalEvent)="createNewAccountUserModalRef.close()"
                 ></icici-payor-account-create-edit>
             </div>
         </div>
-    </div>
-    <div bsModal #editAccountUserModal="bs-modal" [config]="{ backdrop: 'static' }" class="modal" role="dialog">
-        <div class="modal-dialog user-modal" *ngIf="editAccountUserModal?.isShown">
+    </ng-template>
+
+    <ng-template #editAccountUserModal>
+        <div class="user-modal">
             <div class="modal-content">
                 <icici-payor-account-create-edit
                     [commonLocaleData]="commonLocaleData"
                     [activeBankAccount]="activeBankAccount"
                     [activePayorAccount]="activePayorAccount"
                     (getAllBankAccounts)="getAllBankAccounts()"
-                    (closeModalEvent)="closeEditAccountUserModal()"
+                    (closeModalEvent)="editAccountUserModalRef.close()"
                 >
                 </icici-payor-account-create-edit>
             </div>
         </div>
-    </div>
-    <div
-        bsModal
-        #confirmationModal="bs-modal"
-        [config]="{ backdrop: 'static', keyboard: false }"
-        class="modal fade"
-        role="dialog"
-    >
-        <div class="modal-dialog modal-md" *ngIf="confirmationModal?.isShown">
+    </ng-template>
+
+    <ng-template #confirmationModal>
+        <div class="modal-md">
             <div class="modal-content">
                 <confirm-modal
                     [body]="localeData?.payment?.delete_login | replace : '[LOGIN_ID]' : activeBankAccount?.loginId"
-                    (cancelCallBack)="confirmationModal?.hide()"
+                    (cancelCallBack)="confirmationModalRef.close()"
                     (successCallBack)="deleteBankAccountLogin(true)"
                 >
                 </confirm-modal>
             </div>
         </div>
-    </div>
+    </ng-template>
 </ng-container>
