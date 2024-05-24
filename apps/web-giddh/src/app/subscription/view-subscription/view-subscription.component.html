@@ -25,7 +25,7 @@
                                 aria-label="buy"
                                 mat-stroked-button
                                 color="primary"
-                                (click)="buyPlan()"
+                                (click)="buyPlan(viewSubscriptionData)"
                                 *ngIf="
                                     viewSubscriptionData?.isOwner &&
                                     viewSubscriptionData?.status?.toLowerCase() === 'trial'
@@ -37,10 +37,11 @@
                                 aria-label="buy"
                                 mat-stroked-button
                                 color="primary"
-                                (click)="buyPlan()"
+                                (click)="buyPlan(viewSubscriptionData)"
                                 *ngIf="
                                     viewSubscriptionData?.isOwner &&
-                                    viewSubscriptionData?.status?.toLowerCase() === 'expired'
+                                    viewSubscriptionData?.status?.toLowerCase() === 'expired' &&
+                                    activeCompany.subscription?.country?.countryCode !== 'GB'
                                 "
                             >
                                 {{ localeData?.renew }}
@@ -59,7 +60,7 @@
                             <button
                                 aria-label="plan"
                                 mat-menu-item
-                                (click)="buyPlan()"
+                                (click)="buyPlan(viewSubscriptionData)"
                                 *ngIf="viewSubscriptionData?.status?.toLowerCase() === 'trial'"
                             >
                                 {{ commonLocaleData?.app_buy_plan }}
@@ -67,8 +68,11 @@
                             <button
                                 aria-label="plan"
                                 mat-menu-item
-                                (click)="buyPlan()"
-                                *ngIf="viewSubscriptionData?.status?.toLowerCase() === 'expired'"
+                                (click)="buyPlan(viewSubscriptionData)"
+                                *ngIf="
+                                    viewSubscriptionData?.status?.toLowerCase() === 'expired' &&
+                                    activeCompany.subscription?.country?.countryCode !== 'GB'
+                                "
                             >
                                 {{ localeData?.renew }}
                             </button>

@@ -1909,7 +1909,7 @@ export class GeneralService {
     }
 
     /**
-     * Get Client Screen Size (width, height,scaling-factor 
+     * Get Client Screen Size (width, height,scaling-factor
      * and colour-depth) in single string
      *
      * @returns {string}
@@ -1927,7 +1927,7 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public getClientWindowSize(): string {
-         return `width=${window.innerWidth}&height=${window.innerHeight}`;
+        return `width=${window.innerWidth}&height=${window.innerHeight}`;
     }
 
     /**
@@ -1956,10 +1956,32 @@ export class GeneralService {
     }
 
     /**
-     * Get Country Flag Image Url by 2 digit country code
+     * This will be use for open window in center
      *
-     * @param {*} countryCode
-     * @returns {string}
+     * @param {string} url
+     * @param {string} title
+     * @param {number} width
+     * @param {number} height
+     * @return {*}  {(Window | null)}
+     * @memberof GeneralService
+     */
+    public openCenteredWindow(url: string, title: string, width: number, height: number): Window | null {
+        const left = (window.screen.width / 2) - (width / 2);
+        const top = (window.screen.height / 2) - (height / 2);
+
+        // Open the window and return the reference
+        return window.open(
+            url,
+            title,
+            `width=${width},height=${height},top=${top},left=${left}`
+        );
+    }
+
+    /**
+     *Get Country Flag Image Url by 2 digit country code
+     *
+     * @param {string} countryCode
+     * @return {*}  {string}
      * @memberof GeneralService
      */
     public getCountryFlagUrl(countryCode: string): string {
