@@ -119,6 +119,11 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     public activeCompany: any = {};
     /** True if subscription will move */
     public subscriptionMove: boolean = false;
+    /** Holds Store Buy Plan Success observable*/
+    public buyPlanSuccess$ = this.componentStore.select(state => state.buyPlanSuccess);
+    /** This will use for open window */
+    private openedWindow: Window | null = null;
+
 
     constructor(public dialog: MatDialog,
         private changeDetection: ChangeDetectorRef,
@@ -171,7 +176,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                 this.activeCompany = response;
             }
         });
@@ -179,6 +184,19 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.cancelSubscription$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.router.navigate(['/pages/subscription']);
+            }
+        });
+
+        this.buyPlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.redirectLink) {
+                this.openWindow(response?.redirectLink);
+            }
+        });
+
+        window.addEventListener('message', event => {
+            if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
+                this.closeWindow();
+                this.getAllSubscriptions(false);
             }
         });
 
@@ -621,7 +639,17 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public buyPlan(subscription: any): void {
-        this.componentStoreBuyPlan.generateOrderBySubscriptionId(subscription?.subscriptionId);
+        // if (this.activeCompany.subscription?.country?.countryCode === 'GB') {
+        //     let model = {
+        //         planUniqueName: subscription?.plan?.uniqueName,
+        //         paymentProvider: "GOCARDLESS",
+        //         subscriptionId: subscription?.subscriptionId,
+        //         duration: subscription?.period
+        //     }
+        //     this.componentStore.buyPlanByGoCardless(model);
+        // } else {
+            this.componentStoreBuyPlan.generateOrderBySubscriptionId(subscription?.subscriptionId);
+        // }
     }
 
     /**
@@ -708,6 +736,31 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             };
 
             this.componentStoreBuyPlan.updateNewLoginSubscriptionPayment({ request: request });
+        }
+    }
+
+    /**
+     * This will be open window by url
+     *
+     * @param {string} url
+     * @memberof SubscriptionComponent
+     */
+    public openWindow(url: string): void {
+        const width = 700;
+        const height = 900;
+
+        this.openedWindow = this.generalService.openCenteredWindow(url, '',width, height);
+    }
+
+    /**
+     * This will close the current window
+     *
+     * @memberof SubscriptionComponent
+     */
+    public closeWindow(): void {
+        if (this.openedWindow) {
+            this.openedWindow.close();
+            this.openedWindow = null;
         }
     }
 }

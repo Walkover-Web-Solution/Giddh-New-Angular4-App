@@ -112,7 +112,6 @@
         "reconcile_bank": "बँक संमती करा",
         "reconcile_message": "मेल्सवर त्यांना डेटा विनिमय करण्यासाठी Giddh सॉफ्टवेअर किंवा अ‍ॅपवर समाधान करा.",
         "transactions": "लेन-देन",
-        "popular": "लोकप्रिय",
         "selected": "निवडलेले",
         "security": "सुरक्षा",
         "county": "काउंटी",
@@ -126,7 +125,7 @@
         "final_amount": "अंतिम रक्कम",
         "plan_summary": "योजना सारांश",
         "continue_billing_account": "बिलिंग खात्यावर चालू ठेवा",
-        "continue_review": "समीक्षा आणि भुगतान खाते पुढे चालू ठेवा",
+        "continue_review": "पुनरावलोकन करणे सुरू ठेवा",
         "confirm_purchase": "क्रय पुष्टी करा",
         "back_plan": "योजनेत परत जा",
         "back_billing": "बिलिंग खात्यात परत जा",
@@ -140,5 +139,9 @@
         "account_holder":"खातेधारक",
         "for":"च्या साठी",
 		"save":"बचत",
-        "companies_allowed":"कंपन्यांना परवानगी आहे"
+        "companies_allowed":"कंपन्यांना परवानगी आहे",
+        "support":"सपोर्ट",
+        "chat_voice":"चॅट/व्हॉइस",
+        "gst_direct":"जीएसटी थेट भरणे",
+        "e_invoice":"ई-चालन"
 	}
