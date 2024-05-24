@@ -1,9 +1,10 @@
+import { ViewSubscriptionComponentStore } from './../view-subscription/utility/view-subscription.store';
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivateDialogComponent } from '../activate-dialog/activate-dialog.component';
 import { BuyPlanComponentStore } from './utility/buy-plan.store';
-import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime } from 'rxjs';
+import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime, take } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { CountryRequest, OnboardingFormRequest } from '../../models/api-models/Common';
@@ -25,7 +26,7 @@ import { MatSelect } from '@angular/material/select';
     selector: 'buy-plan',
     templateUrl: './buy-plan.component.html',
     styleUrls: ['./buy-plan.component.scss'],
-    providers: [BuyPlanComponentStore, ChangeBillingComponentStore]
+    providers: [BuyPlanComponentStore, ChangeBillingComponentStore, ViewSubscriptionComponentStore]
 })
 
 export class BuyPlanComponent implements OnInit, OnDestroy {
@@ -169,6 +170,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public getCountryList$ = this.componentStore.select(state => state.countryList);
     /** Holds subscription request */
     public subscriptionRequest: any;
+    /** Holds View Subscription list observable*/
+    public viewSubscriptionData$ = this.viewSubscriptionComponentStore.select(state => state.viewSubscription);
 
     constructor(
         public dialog: MatDialog,
@@ -185,6 +188,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private location: Location,
         private elementRef: ElementRef,
+        private viewSubscriptionComponentStore: ViewSubscriptionComponentStore,
         private generalService: GeneralService
     ) {
         this.session$ = this.store.pipe(select(p => p.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
@@ -210,6 +214,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params: any) => {
             if (params?.id) {
                 this.subscriptionId = params.id;
+                this.viewSubscriptionComponentStore.viewSubscriptionsById(this.subscriptionId);
                 this.isChangePlan = true;
             }
         });
@@ -349,7 +354,72 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.updateSubscriptionPayment(response, true);
             }
         });
+
+        if (this.subscriptionId) {
+            this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response) {
+                    this.newUserSelectCountry({
+                        "label": response.region?.code + " - " + response.region?.name,
+                        "value": response.region?.code,
+                        "additional": {
+                            "value": response.region?.code,
+                            "label": response.region?.code + " - " + response.region?.name
+                        }
+                    });
+                }
+            });
+        } else if (this.activeCompany) {
+            this.newUserSelectCountry({
+                "label": this.activeCompany?.subscription?.region?.code + " - " + this.activeCompany?.subscription?.region?.name,
+                "value": this.activeCompany?.subscription?.region?.code,
+                "additional": {
+                    "value": this.activeCompany?.subscription?.region?.code,
+                    "label": this.activeCompany?.subscription?.region?.code + " - " + this.activeCompany?.subscription?.region?.name
+                }
+            });
+        } else {
+            if (localStorage.getItem('Country-Region') === 'IN') {
+                this.newUserSelectCountry({
+                    "label": "IND - India",
+                    "value": "IND",
+                    "additional": {
+                        "value": "IND",
+                        "label": "IND - India"
+                    }
+                });
+            } else if (localStorage.getItem('Country-Region') === 'GB') {
+                this.newUserSelectCountry({
+                    "label": "GBR - United Kingdom",
+                    "value": "GBR",
+                    "additional": {
+                        "value": "GBR",
+                        "label": "GBR - United Kingdom"
+                    }
+                });
+            } else if (localStorage.getItem('Country-Region') === 'AE') {
+                this.newUserSelectCountry({
+                    "label": "ARE - United Arab Emirates",
+                    "value": "ARE",
+                    "additional": {
+                        "value": "ARE",
+                        "label": "ARE - United Arab Emirates"
+                    }
+
+                });
+            } else if (!this.isChangePlan && localStorage.getItem('Country-Region') === 'GL') {
+                this.newUserSelectCountry({
+                    "label": "GLB - Global",
+                    "value": "GLB",
+                    "additional": {
+                        "value": "GLB",
+                        "label": "GLB - Global"
+                    }
+                });
+            }
+        }
     }
+
+
 
     /**
      * This will be use for toggle duration event
@@ -457,55 +527,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     private getActiveCompany(): void {
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
-                this.activeCompany = response;
-                this.newUserSelectCountry({
-                    "label": this.activeCompany?.subscription.country?.alpha3CountryCode + " - " + this.activeCompany?.subscription.country?.countryName,
-                    "value": this.activeCompany?.subscription.country?.alpha3CountryCode,
-                    "additional": {
-                        "value": this.activeCompany?.subscription.country?.alpha3CountryCode,
-                        "label": this.activeCompany?.subscription.country?.alpha3CountryCode + " - " + this.activeCompany?.subscription.country?.countryName
-                    }
-                });
                 this.company.addresses = response.addresses;
-            } else {
-                if (localStorage.getItem('Country-Region') === 'IN') {
-                    this.newUserSelectCountry({
-                        "label": "IND - India",
-                        "value": "IND",
-                        "additional": {
-                            "value": "IND",
-                            "label": "IND - India"
-                        }
-                    });
-                } else if (localStorage.getItem('Country-Region') === 'GB') {
-                    this.newUserSelectCountry({
-                        "label": "GBR - United Kingdom",
-                        "value": "GBR",
-                        "additional": {
-                            "value": "GBR",
-                            "label": "GBR - United Kingdom"
-                        }
-                    });
-                } else if (localStorage.getItem('Country-Region') === 'AE') {
-                    this.newUserSelectCountry({
-                        "label": "ARE - United Arab Emirates",
-                        "value": "ARE",
-                        "additional": {
-                            "value": "ARE",
-                            "label": "ARE - United Arab Emirates"
-                        }
-
-                    });
-                } else if (!this.isChangePlan && localStorage.getItem('Country-Region') === 'GL') {
-                    this.newUserSelectCountry({
-                        "label": "GLB - Global",
-                        "value": "GLB",
-                        "additional": {
-                            "value": "GLB",
-                            "label": "GLB - Global"
-                        }
-                    });
-                }
+                this.activeCompany = response;
             }
         });
     }
@@ -1174,7 +1197,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Get country flag image url by alpha2country code and if region get by alpha3code 
+     * Get country flag image url by alpha2country code and if region get by alpha3code
      *
      * @param {string} countryRegionCode
      * @returns {string}
