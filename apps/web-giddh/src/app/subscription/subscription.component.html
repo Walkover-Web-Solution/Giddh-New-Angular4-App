@@ -242,12 +242,13 @@
                                     <button
                                         *ngIf="
                                             element?.status?.toLowerCase() === 'expired' &&
-                                            element?.isOwner &&
-                                            activeCompany.subscription?.country?.countryCode !== 'GB'
+                                            element?.isOwner
                                         "
                                         mat-menu-item
                                         (click)="buyPlan(element)"
                                     >
+                                    <!-- &&
+                                            activeCompany.subscription?.country?.countryCode !== 'GB' -->
                                         {{ localeData?.renew }}
                                     </button>
                                     <button mat-menu-item (click)="viewSubscription(element)">

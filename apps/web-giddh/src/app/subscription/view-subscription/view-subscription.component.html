@@ -40,10 +40,11 @@
                                 (click)="buyPlan(viewSubscriptionData)"
                                 *ngIf="
                                     viewSubscriptionData?.isOwner &&
-                                    viewSubscriptionData?.status?.toLowerCase() === 'expired' &&
-                                    activeCompany.subscription?.country?.countryCode !== 'GB'
+                                    viewSubscriptionData?.status?.toLowerCase() === 'expired'
                                 "
                             >
+                            <!-- &&
+                                    activeCompany.subscription?.country?.countryCode !== 'GB' -->
                                 {{ localeData?.renew }}
                             </button>
                             <button
@@ -70,10 +71,11 @@
                                 mat-menu-item
                                 (click)="buyPlan(viewSubscriptionData)"
                                 *ngIf="
-                                    viewSubscriptionData?.status?.toLowerCase() === 'expired' &&
-                                    activeCompany.subscription?.country?.countryCode !== 'GB'
+                                    viewSubscriptionData?.status?.toLowerCase() === 'expired'
                                 "
                             >
+                                <!--   &&
+                                     activeCompany.subscription?.country?.countryCode !== 'GB' -->
                                 {{ localeData?.renew }}
                             </button>
                             <button aria-label="change" mat-menu-item (click)="changeBilling()">
