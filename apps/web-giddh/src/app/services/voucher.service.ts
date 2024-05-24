@@ -389,4 +389,34 @@ export class VoucherService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
+
+    /**
+     * Get voucher balances
+     *
+     * @param {*} payload
+     * @param {string} requestType
+     * @return {*}  {Observable<BaseResponse<ReciptResponse, any>>}
+     * @memberof VoucherService
+     */
+    public getVoucherBalances(payload: any, requestType: string): Observable<BaseResponse<ReciptResponse, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.generalService.createQueryString(this.config.apiUrl + RECEIPT_API.GET_ALL_BAL_SALE_DUE, {
+            page: payload?.page, count: payload?.count, from: payload?.from, to: payload?.to, type: requestType, q: payload?.q ? encodeURIComponent(payload?.q) : payload?.q, sort: payload?.sort, sortBy: payload?.sortBy
+        });
+
+        url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+
+        delete payload.from;
+        delete payload.to;
+
+        return this.http.post(url
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), payload).pipe(
+                map((res) => {
+                    let data: BaseResponse<ReciptResponse, any> = res;
+                    data.queryString = { page: payload?.page, count: payload?.count, from: payload?.from, to: payload?.to };
+                    data.request = payload;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<ReciptResponse, any>(e, payload)));
+    }
 }

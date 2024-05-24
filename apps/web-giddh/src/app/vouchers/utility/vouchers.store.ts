@@ -47,6 +47,7 @@ export interface VoucherState {
     pendingPurchaseOrders: any[];
     countryList: any[];
     ledgerEntries: any[];
+    voucherBalances: any[];
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -76,7 +77,8 @@ const DEFAULT_STATE: VoucherState = {
     voucherListForCreditDebitNote: null,
     pendingPurchaseOrders: null,
     countryList: null,
-    ledgerEntries: null
+    ledgerEntries: null,
+    voucherBalances: null
 };
 
 @Injectable()
@@ -120,6 +122,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public countryList$ = this.select((state) => state.countryList);
     public deleteAttachmentIsSuccess$ = this.select((state) => state.deleteAttachmentIsSuccess);
     public ledgerEntries$ = this.select((state) => state.ledgerEntries);
+    public voucherBalances$ = this.select((state) => state.voucherBalances);
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
@@ -767,6 +770,29 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 ledgerEntries: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getVoucherBalances = this.effect((data: Observable<{ requestType: any, payload: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.getVoucherBalances(req.payload, req.requestType).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                voucherBalances: res.body
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                voucherBalances: null
                             });
                         }
                     ),
