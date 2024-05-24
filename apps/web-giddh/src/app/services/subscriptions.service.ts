@@ -89,7 +89,7 @@ export class SubscriptionsService {
      */
     public getAllPlans(params: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_ALL_PLANS
-            ?.replace(':countryCode', encodeURIComponent(params?.countryCode || ''))?.replace(':region', encodeURIComponent(params?.region || ''))
+            ?.replace(':regionCode', encodeURIComponent(params?.regionCode || ''))
         ).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.request = '';
@@ -426,6 +426,27 @@ export class SubscriptionsService {
      */
     public updatePlan(request: any): Observable<BaseResponse<any, any>> {
         return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.UPDATE_PLAN, request)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    data.queryString = {};
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
+    }
+
+    /**
+    * This will be use for buy plan by gocardless
+    *
+    * @param {*} model
+    * @return {*}  {Observable<BaseResponse<any, any>>}
+    * @memberof SubscriptionsService
+    */
+    public buyPlanByGoCardless(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.BUY_PLAN_BY_GOCARDLESS,
+            model)
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;

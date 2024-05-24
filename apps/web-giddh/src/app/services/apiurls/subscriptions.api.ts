@@ -6,7 +6,7 @@ export const SUBSCRIPTIONS_API = {
 };
 
 export const SUBSCRIPTION_V2_API = {
-    GET_ALL_PLANS: 'v2/subscription/plans/all?countryCode=:countryCode&region=:region',
+    GET_ALL_PLANS: 'v2/subscription/plans/all?regionCode=:regionCode',
     GET_COUNTRY_LIST: 'country/country-list',
     CREATE_SUBSCRIPTION: 'v2/subscription',
     UPDATE_SUBSCRIPTION: 'v2/subscription?company=:company',
@@ -21,5 +21,6 @@ export const SUBSCRIPTION_V2_API = {
     GET_COMPANIES_LIST_BY_SUBSCRIPTION_ID: 'v2/subscription/company-list/:subscriptionId?sort=:sort&sortBy=:sortBy&page=:page&count=:count&q=:query',
     GENERATE_ORDER_BY_SUBSCRIPTION_ID: 'v2/subscription/:subscriptionId/generate-order',
     GET_CHANGE_PLAN_DETAILS: 'v2/subscription/change-plan',
-    UPDATE_PLAN: 'v2/subscription/update'
+    UPDATE_PLAN: 'v2/subscription/update',
+    BUY_PLAN_BY_GOCARDLESS: 'v2/subscription/buy-plan',
 };
