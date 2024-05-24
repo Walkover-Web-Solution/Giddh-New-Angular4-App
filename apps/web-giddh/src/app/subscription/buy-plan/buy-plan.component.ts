@@ -275,7 +275,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     if (this.isChangePlan) {
                         this.router.navigate(['/pages/subscription']);
                     } else {
-                        this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId])
+                        this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
                     };
                 }
             }
@@ -294,7 +294,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 if (this.isChangePlan) {
                     this.router.navigate(['/pages/subscription']);
                 } else {
-                    this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId])
+                    this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
                 };
             }
         });
@@ -306,7 +306,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 if (this.isChangePlan) {
                     this.router.navigate(['/pages/subscription']);
                 } else {
-                    this.router.navigate(['/pages/new-company/' + this.subscriptionId])
+                    this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
                 };
             }
         });
