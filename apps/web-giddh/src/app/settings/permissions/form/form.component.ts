@@ -1,5 +1,5 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { GIDDH_DATE_FORMAT } from './../../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from './../../../shared/helpers/defaultDateFormat';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
@@ -207,11 +207,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             let fromDate = null;
             let toDate = null;
             if (data.to && data.from) {
-                const fromDateParts = data.from.split('-').map(Number); // If Date in DD-MM-YYY
-                const toDateParts = data.to.split('-').map(Number); // If Date in DD-MM-YYY
-
-                fromDate = new Date(fromDateParts[2], fromDateParts[1] - 1, fromDateParts[0]);
-                toDate = new Date(toDateParts[2], toDateParts[1] - 1, toDateParts[0]);
+                fromDate = dayjs(data?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD);
+                toDate = dayjs(data?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD);
             }
 
             this.permissionForm = this._fb.group({
