@@ -1099,11 +1099,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 code: this.subscriptionForm.value.secondStepForm.state.value ? this.subscriptionForm.value.secondStepForm.state.value : this.subscriptionForm.value.secondStepForm.state.code
             };
         }
-        if (type === 'trial') {
-            request['payNow'] = false;
-        } else {
-            request['payNow'] = true;
-        }
+        request['payNow'] = (type === 'trial') ? false : true;
         if (this.isChangePlan) {
             request.subscriptionId = this.subscriptionId;
             this.subscriptionRequest = request;
