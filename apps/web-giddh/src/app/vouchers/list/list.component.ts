@@ -15,8 +15,10 @@ import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
 import * as dayjs from "dayjs";
-import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
 import { VoucherTypeEnum } from "../utility/vouchers.const";
+import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from "../../app.constant";
 
 // invoice-table
 export interface PeriodicElement {
@@ -150,12 +152,6 @@ const BILL_DATA: PeriodicElementBill[] = [
 })
 export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
     public moduleType: string = "";
-    // This will store selected date range to use in api
-    public selectedDateRange: any;
-    // This will store selected date range to show on UI
-    public selectedDateRangeUi: any;
-    // Selected range label
-    public selectedRangeLabel: any = "";
     // invoice table data
     displayedColumns: string[] = ['position', 'invoice', 'customer', 'invoicedate', 'amount', 'balance', 'duedate', 'invoicestatus', 'status'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
@@ -206,10 +202,26 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
     public commonLocaleData: any = {};
     /* Hold invoice  type*/
     public voucherType: any = '';
-
+    public dayjs = dayjs;
+    public modalRef: BsModalRef;
+    /** directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    public selectedDateRange: any;
+    /** This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /** This will store available date ranges */
+    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /** Selected range label */
+    public selectedRangeLabel: any = "";
+    /** This will store the x/y position of the field to show datepicker under it */
+    public dateFieldPosition: any = { x: 0, y: 0 };
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
+    public invoiceSelectedDate: any = {
+        fromDates: '',
+        toDates: ''
+    };
+    public isUniversalDateApplicable: boolean = false;
     public activeTabGroup: number = 0;
     public activeModule: string = "list";
     public tabsGroups: any[][] = [
@@ -239,7 +251,8 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
         private componentStore: VoucherComponentStore,
         private store: Store<AppState>,
         private generalService: GeneralService,
-        private vouchersUtilityService: VouchersUtilityService
+        private vouchersUtilityService: VouchersUtilityService,
+        private modalService: BsModalService
 
     ) {
 
@@ -258,7 +271,7 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
             this.getSelectedTabIndex();
 
             if (this.universalDate) {
-                this.getVoucherBalances();
+                this.getVouchers(true);
             }
         });
 
@@ -266,10 +279,53 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 try {
-                    this.universalDate = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
-                    this.advanceFilters.from = dayjs(response[0]).format(GIDDH_DATE_FORMAT);
-                    this.advanceFilters.to = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
-                    this.getVoucherBalances();
+                    if (localStorage.getItem('universalSelectedDate')) {
+                        let universalStorageData = localStorage.getItem('universalSelectedDate').split(',');
+                        if ((dayjs(universalStorageData[0]).format(GIDDH_DATE_FORMAT) === dayjs(response[0]).format(GIDDH_DATE_FORMAT)) && (dayjs(universalStorageData[1]).format(GIDDH_DATE_FORMAT) === dayjs(response[1]).format(GIDDH_DATE_FORMAT))) {
+                            if (window.localStorage && localStorage.getItem('invoiceSelectedDate')) {
+                                let storedSelectedDate = JSON.parse(localStorage.getItem('invoiceSelectedDate'));
+                                let dateRange = { fromDate: '', toDate: '' };
+                                dateRange = this.generalService.dateConversionToSetComponentDatePicker(storedSelectedDate.fromDates, storedSelectedDate.toDates);
+                                this.selectedDateRange = { startDate: dayjs(dateRange.fromDate), endDate: dayjs(dateRange.toDate) };
+                                this.selectedDateRangeUi = dayjs(dateRange.fromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+                                // assign dates
+                                if (storedSelectedDate.fromDates && storedSelectedDate.toDates) {
+                                    this.advanceFilters.from = storedSelectedDate.fromDates;
+                                    this.advanceFilters.to = storedSelectedDate.toDates;
+                                    this.isUniversalDateApplicable = false;
+                                }
+                            } else {
+                                this.selectedDateRange = { startDate: dayjs(response[0]), endDate: dayjs(response[1]) };
+                                this.selectedDateRangeUi = dayjs(response[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                                // assign dates
+    
+                                this.advanceFilters.from = dayjs(response[0]).format(GIDDH_DATE_FORMAT);
+                                this.advanceFilters.to = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
+                                this.isUniversalDateApplicable = true;
+                            }
+                        } else {
+                            this.selectedDateRangeUi = dayjs(response[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            this.selectedDateRange = { startDate: dayjs(response[0]), endDate: dayjs(response[1]) };
+                            // assign dates
+    
+                            this.advanceFilters.from = dayjs(response[0]).format(GIDDH_DATE_FORMAT);
+                            this.advanceFilters.to = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
+                            this.isUniversalDateApplicable = true;
+                        }
+                    } else {
+                        this.selectedDateRange = { startDate: dayjs(response[0]), endDate: dayjs(response[1]) };
+                        this.selectedDateRangeUi = dayjs(response[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        // assign dates
+    
+                        this.advanceFilters.from = dayjs(response[0]).format(GIDDH_DATE_FORMAT);
+                        this.advanceFilters.to = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
+                        this.isUniversalDateApplicable = true;
+    
+                        if (window.localStorage) {
+                            localStorage.setItem('universalSelectedDate', response);
+                        }
+                    }
+                    this.getVouchers(true);
                 } catch (e) {
                     this.universalDate = dayjs().format(GIDDH_DATE_FORMAT);
                 }
@@ -390,13 +446,77 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
         this.redirectToSelectedTab(selectedTabIndex);
     }
 
+    public getVouchers(isUniversalDateApplicable: boolean): void {
+
+        this.getVoucherBalances();
+    }
+
     public getVoucherBalances(): void {
         if (this.voucherType === VoucherTypeEnum.sales) {
             this.componentStore.getVoucherBalances({ requestType: this.voucherType, payload: this.advanceFilters });
         }
     }
 
+    /**
+    * To show the datepicker
+    *
+    * @param {*} element
+    * @memberof VoucherListComponent
+    */
+    public showGiddhDatepicker(element: any): void {
+        if (element) {
+            this.dateFieldPosition = this.generalService.getPosition(element.target);
+        }
+        this.modalRef = this.modalService.show(
+            this.datepickerTemplate,
+            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
+        );
+    }
+
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof VoucherListComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof VoucherListComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.advanceFilters.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.advanceFilters.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+
+            if (window.localStorage) {
+                localStorage.setItem('invoiceSelectedDate', JSON.stringify(this.invoiceSelectedDate));
+            }
+            this.getVouchers(this.isUniversalDateApplicable);
+        }
+    }
+
     public ngOnDestroy(): void {
+        if (window.localStorage) {
+            localStorage.removeItem('universalSelectedDate');
+            localStorage.removeItem('invoiceSelectedDate');
+        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

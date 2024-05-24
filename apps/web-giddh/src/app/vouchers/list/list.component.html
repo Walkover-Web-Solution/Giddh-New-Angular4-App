@@ -380,9 +380,13 @@
                                 <button mat-menu-item [routerLink]="['/pages/vouchers/sales/create']">Sales Invoice</button>
                             </mat-menu>
                             <div class="custom-datepicker-wrapper">
-                                <div class="custom-datepicker">
-                                    <input type="text" name="selectedDateRange"
-                                        class="giddh-datepicker date-range-picker" />
+                                <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                    <input
+                                        type="text"
+                                        name="selectedDateRange"
+                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                        class="giddh-datepicker date-range-picker border-radius-2"
+                                    />
                                 </div>
                             </div>
                         </div>
