@@ -1976,4 +1976,15 @@ export class GeneralService {
             `width=${width},height=${height},top=${top},left=${left}`
         );
     }
+
+    /**
+     *Get Country Flag Image Url by 2 digit country code
+     *
+     * @param {string} countryCode
+     * @return {*}  {string}
+     * @memberof GeneralService
+     */
+    public getCountryFlagUrl(countryCode: string): string {
+        return countryCode ? `https://giddh-uploads-2.s3.ap-south-1.amazonaws.com/flags/${countryCode?.toLowerCase()}.svg` : '';
+    }
 }
