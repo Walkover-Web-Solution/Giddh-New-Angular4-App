@@ -1,0 +1,77 @@
+<ng-container appTranslate [file]="'bulk-export-voucher'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">
+            {{ commonLocaleData?.app_bulk_export }} - {{ commonLocaleData?.app_total }} {{ totalItems }}
+        </h4>
+        <button type="button" class="close pull-right" [attr.aria-label]="commonLocaleData?.app_close"
+            (click)="closeModal()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="export-modal-wrapper" *ngIf="isLoading">
+            <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+        </div>
+        <div class="export-modal-wrapper" *ngIf="!isLoading">
+            <ng-container *ngIf="type === 'sales'">
+                <div class="row mr-b1">
+                    <div class="col-sm-4">
+                        <label>{{ localeData?.select_copy }}</label>
+                    </div>
+                    <div class="col-sm-8">
+                        <sh-select [options]="downloadCopyOptions" [placeholder]="localeData?.select_order"
+                            [multiple]="true" name="downloadCopy" [(ngModel)]="copyTypes" [isFilterEnabled]="true"
+                            [useInBuiltFilterForIOptionTypeItems]="true">
+                            <ng-template #optionTemplate let-option="option">
+                                <ng-container>
+                                    <a href="javascript:void(0)" class="list-item d-flex">
+                                        <span class="min-width-auto"><input type="checkbox"
+                                                [checked]="copyTypes.includes(option?.value)"
+                                                [value]="option?.value" /></span>&nbsp;
+                                        <span>
+                                            <div class="item">{{ option.label }}</div>
+                                        </span>
+                                    </a>
+                                </ng-container>
+                            </ng-template>
+                        </sh-select>
+                    </div>
+                </div>
+                <div class="row mr-b15">
+                    <div class="col-sm-12">
+                        <button class="btn btn-success"
+                            [disabled]="(type === 'sales' && (!copyTypes || copyTypes?.length === 0)) || isLoading"
+                            (click)="exportVouchers(false)">
+                            {{ commonLocaleData?.app_download }}
+                        </button>
+                    </div>
+                </div>
+
+                {{ commonLocaleData?.app_or }}
+                <br />
+                <br />
+            </ng-container>
+            <div class="row mr-b15">
+                <div class="col-sm-12">
+                    <label class="mb-1">{{ localeData?.add_multiple_email }}</label>
+                </div>
+                <div class="col-sm-12">
+                    <!-- Email id could be mulitiple   -->
+                    <textarea type="text" [placeholder]="localeData?.recipients_email"
+                        class="form-control mr-b15 multiple-email" name="recipients"
+                        [(ngModel)]="recipients"></textarea>
+                    <button class="btn btn-success" [disabled]="
+                        !recipients || recipients?.length === 0 || (type === 'sales' && (!copyTypes || copyTypes?.length === 0)) || isLoading
+                    " (click)="exportVouchers(true)">
+                        {{ commonLocaleData?.app_send_email }}
+                    </button>
+
+                    <button *ngIf="type !== 'sales'" class="btn btn-success" (click)="exportVouchers(false)">
+                        {{ commonLocaleData?.app_download }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -34,6 +34,7 @@ import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.compo
 import { VerifyOwnershipDialogComponent } from './verify-ownership-dilaog/verify-ownership-dilaog.component';
 import { MoveCompanyComponent } from './move-company/move-company.component';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
     imports: [
@@ -64,7 +65,8 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
         MatButtonToggleModule,
         AmountFieldComponentModule,
         ClickOutsideModule,
-        ShSelectModule
+        ShSelectModule,
+        MatSelectModule
     ],
     exports: [
     ],

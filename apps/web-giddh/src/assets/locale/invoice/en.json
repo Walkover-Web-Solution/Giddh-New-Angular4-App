@@ -115,10 +115,6 @@
         "attachment": "Attachment"
     },
     "invalid_email": "[EMAIL] is invalid email!",
-    "select_copy": "Select Copy",
-    "select_order": "Select Order",
-    "add_multiple_email": "You can add multiple id's comma separated",
-    "recipients_email": "Recipient Email Id's",
     "generate_multiple": "Generate Multiple",
     "generate_compound": "Generate Compound",
     "preview_generate": "Preview & Generate",
