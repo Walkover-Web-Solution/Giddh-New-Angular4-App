@@ -44,6 +44,7 @@ import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module'
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SelectTableColumnModule } from '../shared/select-table-column/select-table-column.module';
 import { SalesPurchaseRegisterExportComponent } from './sales-purchase-register-export/sales-purchase-register-export.component';
+import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
 
 @NgModule({
     declarations: [
@@ -102,7 +103,8 @@ import { SalesPurchaseRegisterExportComponent } from './sales-purchase-register-
         SendEmailModule,
         ConfirmModalModule,
         MatSlideToggleModule,
-        SelectTableColumnModule
+        SelectTableColumnModule,
+        BulkExportVoucherModule
     ]
 })
 
