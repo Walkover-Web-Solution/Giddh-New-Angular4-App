@@ -24,7 +24,6 @@
                                 <div class="plan-header d-flex justify-content-between align-items-center mb-3">
                                     <div class="width-100 dropdown-wrapper" *ngIf="!(planListInProgress$ | async) && !isLoading && !isChangePlan">
                                         <div class="country-dropdown d-flex flex-column" [ngClass]="{ 'mx-auto': !inputData?.length }">
-                                           
                                             <img [src]="getFlagUrl(currentCountry.value?.additional?.alpha2CountryCode ? currentCountry.value?.additional?.alpha2CountryCode : currentCountry.value?.additional?.alpha3CountryCode)" [alt]="currentCountry.value?.additional?.countryName" width="32" height="32" class="flag cursor-pointer" (click)="countryList.open()">
 
                                             <mat-select [name]="'country'" [formControl]="currentCountry" #countryList  (selectionChange)="newUserSelectCountry($event.value, false)"  panelClass="country-dropdown-list" [placeholder]="
@@ -40,7 +39,7 @@
                                             </mat-select>
                                         </div>
                                     </div>
-                                    <div class="d-flex column-gap15 align-items-center" *ngIf="inputData?.length">
+                                    <div class="d-flex column-gap15 align-items-center ml-auto" *ngIf="inputData?.length">
                                         <!-- <button mat-stroked-button color="primary" class="w-100" (click)="activateDialog()">
                                         Activate Via Key
                                     </button> -->
@@ -125,7 +124,7 @@
                                                                         >
                                                                         </amount-field>
                                                                     </span>
-                                                                    <span class="font-14">/{{ commonLocaleData?.app_duration?.year }}</span> 
+                                                                    <span class="font-14">/{{ commonLocaleData?.app_duration?.year }}</span>
                                                                 </span
                                                                 >
                                                             </p>
