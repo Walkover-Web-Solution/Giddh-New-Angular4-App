@@ -42,3 +42,8 @@ export class VatReportTransactionsRequest {
     page: any;
     count: any;
 }
+
+export class VatDetailedReportRequest extends VatReportTransactionsRequest {
+    currencyCode?: string;
+    branchUniqueName?: string;
+}
