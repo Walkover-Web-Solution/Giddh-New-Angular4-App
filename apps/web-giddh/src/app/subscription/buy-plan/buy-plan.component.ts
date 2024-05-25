@@ -953,7 +953,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.setPlans();
             } else {
                 this.inputData = [];
-                this.countryList?.open();
+                setTimeout(() => {
+                    this.countryList?.open();
+                }, 100);
             }
         });
     }
