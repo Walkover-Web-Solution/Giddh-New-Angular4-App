@@ -44,6 +44,6 @@ export class VatReportTransactionsRequest {
 }
 
 export class VatDetailedReportRequest extends VatReportTransactionsRequest {
-    currencyCode?: string;
+    currencyCode?: 'BWP' | 'USD' | 'GBP' | 'INR' | 'EUR';
     branchUniqueName?: string;
 }

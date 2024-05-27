@@ -9,8 +9,11 @@
             [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
     </div>
-    <div class="obligations pd-15">
-        <div class="container-fluid ml-0">
+    <div class="liability-report mx-auto pd-15" >
+        <div class="mt-5" *ngIf="isLoading">
+            <giddh-page-loader></giddh-page-loader>
+        </div>
+        <div class="container-fluid ml-0" *ngIf="!isLoading">
             <div class="row align-items-center row-gap">
                 <div class="col flex-grow-0">
                     <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
@@ -20,7 +23,7 @@
                     </div>
                 </div>
                 <div class="col flex-grow-0">
-                    <dropdown-field [label]="commonLocaleData?.app_tax_number" [options]="taxesList"
+                    <dropdown-field [label]="commonLocaleData?.app_tax_number" [options]="taxesList" [defaultValue]="taxesList[0]?.label"
                         (selectedOption)="taxNumberSelected($event)" [placeholder]="localeData?.select_tax_number">
                     </dropdown-field>
                 </div>
@@ -30,14 +33,57 @@
                         [placeholder]="commonLocaleData?.app_select_branch"></dropdown-field>
                 </div>
                 <div class="col flex-grow-0">
-                    <button mat-stroked-button color="primary" (click)="getVatObligations()">{{
+                    <button mat-stroked-button color="primary" (click)="getVatLiabilityReport()">{{
                         commonLocaleData?.app_search }}</button>
+                </div>
+                <div class="col ml-auto flex-grow-0">
+                    <div class="d-flex align-items-center column-gap1">
+                        <div class="currency-width">
+                            <dropdown-field [label]="commonLocaleData?.app_currency"
+                                [options]="vatReportCurrencyList"
+                                (selectedOption)="onCurrencyChange($event)"
+                                [placeholder]="commonLocaleData?.app_select"
+                                [defaultValue]="getFormControl('currencyCode').value"
+                                [required]="true"></dropdown-field>
+                        </div>
+                        <div *ngIf="hasTaxNumber"
+                            class="export-btn w100">
+                            <button mat-stroked-button color="primary" (click)="downloadVatReport()">
+                                <i class="icon-download1"></i>
+                                {{ commonLocaleData?.app_export }}
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="mt-5" *ngIf="isLoading">
-                <giddh-page-loader></giddh-page-loader>
+            <div class="row mt-5" *ngIf="vatLiabilityOverviewReport && !isLoading">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <tr *ngFor="let vatReport of vatLiabilityOverviewReport">
+                            <td width="80%">
+                                <span *ngIf="vatReport?.order === 3; else clickableItem">
+                                    {{ vatReport?.section }}
+                                </span>
+                                <ng-template #clickableItem>
+                                    <a href="javascript:;" (click)="viewDetailedReport(vatReport)"> {{ vatReport?.section }}</a>
+                                </ng-template>
+                            </td>
+                            <td width="20%" class="text-right">
+                                <amount-field
+                                    class="d-inline-block"
+                                    [amount]="vatReport?.vattotal"
+                                    [currencySymbol]="vatReportCurrencySymbol"
+                                    [currencyCode]="false"
+                                    >
+                                </amount-field>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
             </div>
+
+            
             <div class="row mt-5" *ngIf="tableDataSource.length && !isLoading">
                 <div class="table-responsive">
                     <table mat-table [dataSource]="tableDataSource" class="w-100">
@@ -98,6 +144,10 @@
                         </div>
                     </section>
                 </div>
+            </div>
+            <div *ngIf="!isTaxApiInProgress && !tableDataSource?.length && !taxesList?.length"
+                class="no-data no-report">
+                <h1>{{ isKenyaCompany ? localeData?.no_vat_available : localeData?.no_trn_available }}</h1>
             </div>
         </div>
     </div>

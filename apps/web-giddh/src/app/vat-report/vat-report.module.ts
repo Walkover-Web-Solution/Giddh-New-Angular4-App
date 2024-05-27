@@ -33,6 +33,7 @@ import { FileReturnComponent } from './file-return/file-return.component';
 import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
 import { WithHeldSettingComponent } from './with-held-setting/with-held-setting.component';
 import { LiabilityReportComponent } from './liability-report/liability-report.component';
+import { LiabilityDetailedReportComponent } from './liability-detailed-report/liability-detailed-report.component';
 
 @NgModule({
     declarations: [
@@ -42,7 +43,8 @@ import { LiabilityReportComponent } from './liability-report/liability-report.co
         ViewReturnComponent,
         FileReturnComponent,
         WithHeldSettingComponent,
-        LiabilityReportComponent
+        LiabilityReportComponent,
+        LiabilityDetailedReportComponent
     ],
     imports: [
         VatReportRoutingModule,
