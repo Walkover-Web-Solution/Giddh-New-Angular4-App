@@ -660,11 +660,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.addNewAccount();
             }
         }
-        if (changes?.showDiscount?.currentValue) {
-            this.showDiscountSidebar = true;
+        if ('showDiscount' in changes && changes?.showDiscount?.currentValue !== changes?.showDiscount?.previousValue) {
+            this.showDiscountSidebar = changes?.showDiscount?.currentValue;
         }
-        if (changes?.showTax?.currentValue) {
-            this.showTaxSidebar = true;
+        if ('showTax' in changes && changes?.showTax?.currentValue !== changes?.showTax?.previousValue) {
+            this.showTaxSidebar = changes?.showTax?.currentValue;
         }
     }
 
@@ -806,7 +806,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     public calculateTaxDiscount(): void {
-        this.calculateDiscount(); 
+        this.calculateDiscount();
         this.calculateTax();
     }
 
@@ -1354,10 +1354,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public calculateTotalCreditAndDebit(): { totalCredit: number, totalDebit: number } {
-        if (this.isSalesEntry) { 
+        if (this.isSalesEntry) {
             this.calculateTaxDiscount();
         }
-        
+
         let totalCredit = 0;
         let totalDebit = 0;
 
@@ -2507,8 +2507,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
             this.changeTab('enter', 'account', true);
             this.closeDiscountSidebar();
-            this.changeDetectionRef.detectChanges();
         }
+        this.changeDetectionRef.detectChanges();
     }
 
     /**
