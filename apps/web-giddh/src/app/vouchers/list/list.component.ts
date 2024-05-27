@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
@@ -16,9 +16,10 @@ import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
-import { VoucherTypeEnum } from "../utility/vouchers.const";
+import { MULTI_CURRENCY_MODULES, PAGE_SIZE_OPTIONS, VoucherTypeEnum } from "../utility/vouchers.const";
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from "../../app.constant";
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../../app.constant";
+import { cloneDeep } from "../../lodash-optimized";
 
 // invoice-table
 export interface PeriodicElement {
@@ -32,15 +33,6 @@ export interface PeriodicElement {
     invoicestatus: string;
     status: string;
 }
-// invoice-table
-const ELEMENT_DATA: PeriodicElement[] = [
-    { position: 1, invoice: 'Hydrogen', customer: '1.0079', invoicedate: 'H', amount: 'H', balance: '', duedate: '', invoicestatus: '', status: '' },
-    { position: 2, invoice: 'Helium', customer: '4.0026', invoicedate: 'He', amount: 'H', balance: '', duedate: '', invoicestatus: '', status: '' },
-    { position: 3, invoice: 'Helium', customer: '4.0026', invoicedate: 'He', amount: 'H', balance: '', duedate: '', invoicestatus: '', status: '' },
-    { position: 4, invoice: 'Helium', customer: '4.0026', invoicedate: 'He', amount: 'H', balance: '', duedate: '', invoicestatus: '', status: '' },
-    { position: 5, invoice: 'Helium', customer: '4.0026', invoicedate: 'He', amount: 'H', balance: '', duedate: '', invoicestatus: '', status: '' },
-    { position: 6, invoice: 'Helium', customer: '4.0026', invoicedate: 'He', amount: 'H', balance: '', duedate: '', invoicestatus: '', status: '' },
-];
 
 // estimate-table
 export interface PeriodicElementEstimate {
@@ -150,11 +142,12 @@ const BILL_DATA: PeriodicElementBill[] = [
     styleUrls: ["./list.component.scss"],
     providers: [VoucherComponentStore]
 })
-export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
+export class VoucherListComponent implements OnInit, OnDestroy {
     public moduleType: string = "";
     // invoice table data
-    displayedColumns: string[] = ['position', 'invoice', 'customer', 'invoicedate', 'amount', 'balance', 'duedate', 'invoicestatus', 'status'];
-    dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+    public displayedColumns: string[] = ['index', 'invoice', 'customer', 'voucherDate', 'grandTotal', 'balanceDue', 'dueDate', 'invoicestatus', 'status'];
+    public dataSource: any[] = [];
+
     // estimate-table
     displayedColumnEstimate: string[] = ['position', 'estimate', 'customer', 'estimatedate', 'amount', 'expirydate', 'status', 'action'];
     dataSourceEstimate = new MatTableDataSource<PeriodicElementEstimate>(ESTIMATE_DATA);
@@ -190,9 +183,6 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('convertBill', { static: true }) public convertBill: TemplateRef<any>;
     // table sorting
     @ViewChild(MatSort) sort: MatSort;
-    ngAfterViewInit() {
-        this.dataSource.paginator = this.paginator;
-    }
     public showNameSearch: boolean;
     /** Invoice confirmation popup configuration */
     public InvoiceConfirmationConfiguration: ConfirmationModalConfiguration;
@@ -232,7 +222,15 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
     public selectedTabIndex: number = 2;
     /** Holds universal date */
     public universalDate: any;
-    public advanceFilters: any = {};
+    public advanceFilters: any = {
+        sortBy: 'voucherDate',
+        sort: 'desc',
+        type: 'sales',
+        from: '',
+        to: '',
+        page: 1,
+        count: PAGINATION_LIMIT
+    };
     public voucherBalances: any = {
         grandTotal: 0,
         totalDue: 0
@@ -241,8 +239,13 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
     public company: any = {
         baseCurrency: '',
         baseCurrencySymbol: '',
-        inputMaskFormat: ''
+        inputMaskFormat: '',
+        giddhBalanceDecimalPlaces: 0
     };
+    /** True, if user has enable GST E-invoice */
+    public isEInvoiceEnabled: boolean;
+    public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
+    public totalResults: number = 0;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -259,9 +262,21 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngOnInit(): void {
+        this.getInvoiceSettings();
+
+        this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.company.baseCurrency = response.baseCurrency;
+                this.company.baseCurrencySymbol = response.baseCurrencySymbol;
+                this.company.inputMaskFormat = response.balanceDisplayFormat?.toLowerCase() || '';
+                this.company.giddhBalanceDecimalPlaces = response.balanceDecimalPlaces;
+            }
+        });
+
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
             this.activeModule = params.module;
+            this.advanceFilters.type = this.voucherType;
 
             this.activeTabGroup = this.tabsGroups.findIndex(group => group.includes(this.voucherType));
             if (this.activeTabGroup === -1) {
@@ -272,77 +287,89 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
 
             if (this.universalDate) {
                 this.getVouchers(true);
+                this.getVoucherBalances();
             }
         });
 
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                try {
-                    if (localStorage.getItem('universalSelectedDate')) {
-                        let universalStorageData = localStorage.getItem('universalSelectedDate').split(',');
-                        if ((dayjs(universalStorageData[0]).format(GIDDH_DATE_FORMAT) === dayjs(response[0]).format(GIDDH_DATE_FORMAT)) && (dayjs(universalStorageData[1]).format(GIDDH_DATE_FORMAT) === dayjs(response[1]).format(GIDDH_DATE_FORMAT))) {
-                            if (window.localStorage && localStorage.getItem('invoiceSelectedDate')) {
-                                let storedSelectedDate = JSON.parse(localStorage.getItem('invoiceSelectedDate'));
-                                let dateRange = { fromDate: '', toDate: '' };
-                                dateRange = this.generalService.dateConversionToSetComponentDatePicker(storedSelectedDate.fromDates, storedSelectedDate.toDates);
-                                this.selectedDateRange = { startDate: dayjs(dateRange.fromDate), endDate: dayjs(dateRange.toDate) };
-                                this.selectedDateRangeUi = dayjs(dateRange.fromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-                                // assign dates
-                                if (storedSelectedDate.fromDates && storedSelectedDate.toDates) {
-                                    this.advanceFilters.from = storedSelectedDate.fromDates;
-                                    this.advanceFilters.to = storedSelectedDate.toDates;
-                                    this.isUniversalDateApplicable = false;
-                                }
-                            } else {
-                                this.selectedDateRange = { startDate: dayjs(response[0]), endDate: dayjs(response[1]) };
-                                this.selectedDateRangeUi = dayjs(response[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                                // assign dates
-    
-                                this.advanceFilters.from = dayjs(response[0]).format(GIDDH_DATE_FORMAT);
-                                this.advanceFilters.to = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
-                                this.isUniversalDateApplicable = true;
+                if (localStorage.getItem('universalSelectedDate')) {
+                    let universalStorageData = localStorage.getItem('universalSelectedDate').split(',');
+                    if ((dayjs(universalStorageData[0]).format(GIDDH_DATE_FORMAT) === dayjs(response[0]).format(GIDDH_DATE_FORMAT)) && (dayjs(universalStorageData[1]).format(GIDDH_DATE_FORMAT) === dayjs(response[1]).format(GIDDH_DATE_FORMAT))) {
+                        if (window.localStorage && localStorage.getItem('invoiceSelectedDate')) {
+                            let storedSelectedDate = JSON.parse(localStorage.getItem('invoiceSelectedDate'));
+                            let dateRange = { fromDate: '', toDate: '' };
+                            dateRange = this.generalService.dateConversionToSetComponentDatePicker(storedSelectedDate.fromDates, storedSelectedDate.toDates);
+                            this.selectedDateRange = { startDate: dayjs(dateRange.fromDate), endDate: dayjs(dateRange.toDate) };
+                            this.selectedDateRangeUi = dayjs(dateRange.fromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+                            // assign dates
+                            if (storedSelectedDate.fromDates && storedSelectedDate.toDates) {
+                                this.advanceFilters.from = storedSelectedDate.fromDates;
+                                this.advanceFilters.to = storedSelectedDate.toDates;
+                                this.isUniversalDateApplicable = false;
                             }
                         } else {
-                            this.selectedDateRangeUi = dayjs(response[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                             this.selectedDateRange = { startDate: dayjs(response[0]), endDate: dayjs(response[1]) };
+                            this.selectedDateRangeUi = dayjs(response[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                             // assign dates
-    
+
                             this.advanceFilters.from = dayjs(response[0]).format(GIDDH_DATE_FORMAT);
                             this.advanceFilters.to = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
                             this.isUniversalDateApplicable = true;
                         }
                     } else {
-                        this.selectedDateRange = { startDate: dayjs(response[0]), endDate: dayjs(response[1]) };
                         this.selectedDateRangeUi = dayjs(response[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                        this.selectedDateRange = { startDate: dayjs(response[0]), endDate: dayjs(response[1]) };
                         // assign dates
-    
+
                         this.advanceFilters.from = dayjs(response[0]).format(GIDDH_DATE_FORMAT);
                         this.advanceFilters.to = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
                         this.isUniversalDateApplicable = true;
-    
-                        if (window.localStorage) {
-                            localStorage.setItem('universalSelectedDate', response);
-                        }
                     }
-                    this.getVouchers(true);
-                } catch (e) {
-                    this.universalDate = dayjs().format(GIDDH_DATE_FORMAT);
-                }
-            }
-        });
+                } else {
+                    this.selectedDateRange = { startDate: dayjs(response[0]), endDate: dayjs(response[1]) };
+                    this.selectedDateRangeUi = dayjs(response[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                    // assign dates
 
-        this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.company.baseCurrency = response.baseCurrency;
-                this.company.baseCurrencySymbol = response.baseCurrencySymbol;
-                this.company.inputMaskFormat = response.balanceDisplayFormat?.toLowerCase() || '';
+                    this.advanceFilters.from = dayjs(response[0]).format(GIDDH_DATE_FORMAT);
+                    this.advanceFilters.to = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
+                    this.isUniversalDateApplicable = true;
+
+                    if (window.localStorage) {
+                        localStorage.setItem('universalSelectedDate', response);
+                    }
+                }
+                this.universalDate = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
+                this.getVouchers(true);
+                this.getVoucherBalances();
             }
         });
 
         this.componentStore.voucherBalances$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.voucherBalances = response;
+            }
+        });
+
+        this.componentStore.lastVouchers$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.dataSource = [];
+                this.totalResults = response?.totalItems;
+                response.items?.forEach((item: any, index: number) => {
+                    item.index = index + 1;
+
+                    if (MULTI_CURRENCY_MODULES?.indexOf(this.voucherType) > -1) {
+                        // For CR/DR note and Cash/Sales invoice
+                        item = this.generalService.addToolTipText(this.voucherType, this.company.baseCurrency, item, this.localeData, this.commonLocaleData, this.company.giddhBalanceDecimalPlaces);
+
+                        if (this.isEInvoiceEnabled) {
+                            item.eInvoiceStatusTooltip = this.vouchersUtilityService.getEInvoiceTooltipText(item, this.localeData);
+                        }
+                    }
+
+                    this.dataSource.push(item);
+                });
             }
         });
     }
@@ -407,7 +434,7 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
             } else if (selectedTabIndex === 5) {
                 voucherType = "sales";
                 activeModule = "templates";
-            } 
+            }
         } else if (this.activeTabGroup === 1) {
             if (selectedTabIndex === 0) {
                 voucherType = "debit-note";
@@ -424,7 +451,7 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
             } else if (selectedTabIndex === 4) {
                 voucherType = "debit-note";
                 activeModule = "templates";
-            } 
+            }
         } else if (this.activeTabGroup === 2) {
             if (selectedTabIndex === 0) {
                 voucherType = "purchase-order";
@@ -447,14 +474,63 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public getVouchers(isUniversalDateApplicable: boolean): void {
+        if (this.voucherType === VoucherTypeEnum.generateProforma || this.voucherType === VoucherTypeEnum.generateEstimate) {
 
-        this.getVoucherBalances();
+        } else {
+            this.getAllVouchers();
+        }
     }
 
     public getVoucherBalances(): void {
         if (this.voucherType === VoucherTypeEnum.sales) {
-            this.componentStore.getVoucherBalances({ requestType: this.voucherType, payload: this.advanceFilters });
+            this.componentStore.getVoucherBalances({ requestType: this.voucherType, payload: cloneDeep(this.advanceFilters) });
         }
+    }
+
+    private getAllVouchers(): void {
+        this.componentStore.getPreviousVouchers({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
+    }
+
+    public sortChange(event: any): void {
+        this.advanceFilters.sort = event?.direction ? event?.direction : 'asc';
+        this.advanceFilters.sortBy = event?.active;
+        this.advanceFilters.page = 1;
+        this.getVouchers(false);
+    }
+
+    public handlePageChange(event: any): void {
+        this.advanceFilters.count = event.pageSize;
+        this.advanceFilters.page = event.pageIndex + 1;
+        this.getVouchers(false);
+    }
+
+    /**
+     * Returns the overdue days text
+     *
+     * @param {*} days
+     * @returns {string}
+     * @memberof InvoicePreviewComponent
+     */
+    public getOverdueDaysText(days: any): string {
+        let overdueDays = this.localeData?.overdue_days;
+        overdueDays = overdueDays?.replace("[DAYS]", days);
+        return overdueDays;
+    }
+
+    /**
+     * Gets invoice settings
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private getInvoiceSettings(): void {
+        this.componentStore.invoiceSettings$.pipe(takeUntil(this.destroyed$)).subscribe(settings => {
+            if (!settings) {
+                this.componentStore.getInvoiceSettings();
+            } else {
+                this.isEInvoiceEnabled = settings.invoiceSettings?.gstEInvoiceEnable;
+            }
+        });
     }
 
     /**
@@ -509,6 +585,7 @@ export class VoucherListComponent implements OnInit, OnDestroy, AfterViewInit {
                 localStorage.setItem('invoiceSelectedDate', JSON.stringify(this.invoiceSelectedDate));
             }
             this.getVouchers(this.isUniversalDateApplicable);
+            this.getVoucherBalances();
         }
     }
 

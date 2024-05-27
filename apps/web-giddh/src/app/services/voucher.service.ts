@@ -87,7 +87,6 @@ export class VoucherService {
     public getAllVouchers(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         const requestPayload = body;
-        const contextPath = RECEIPT_API.GET_ALL;
         const requestParameter = {
             page: body?.page, count: body?.count, from: body?.from, to: body?.to, q: (body?.q) ? encodeURIComponent(body?.q) : body?.q, sort: body?.sort, sortBy: body?.sortBy
         };
@@ -95,7 +94,9 @@ export class VoucherService {
         delete body.from;
         delete body.to;
 
-        let url = this.vouchersUtilityService.createQueryString(this.config.apiUrl + contextPath, (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? requestParameter : { ...requestParameter, type });
+        let contextPath = RECEIPT_API.GET_ALL?.replace("?", "");
+
+        let url = this.vouchersUtilityService.createQueryString(this.config.apiUrl + contextPath, { ...requestParameter, type });
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
 
         return this.http.post(url
@@ -400,7 +401,8 @@ export class VoucherService {
      */
     public getVoucherBalances(payload: any, requestType: string): Observable<BaseResponse<ReciptResponse, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.generalService.createQueryString(this.config.apiUrl + RECEIPT_API.GET_ALL_BAL_SALE_DUE, {
+        let contextPath = RECEIPT_API.GET_ALL_BAL_SALE_DUE?.replace("?", "");
+        let url = this.generalService.createQueryString(this.config.apiUrl + contextPath, {
             page: payload?.page, count: payload?.count, from: payload?.from, to: payload?.to, type: requestType, q: payload?.q ? encodeURIComponent(payload?.q) : payload?.q, sort: payload?.sort, sortBy: payload?.sortBy
         });
 

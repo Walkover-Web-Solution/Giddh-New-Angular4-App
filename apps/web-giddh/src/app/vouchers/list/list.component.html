@@ -1,4 +1,9 @@
-<ng-container>
+<ng-container 
+    appTranslate
+    [file]="'vouchers/preview'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <div class="position-relative invoice-list">
         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" [selectedIndex]="selectedTabIndex" (selectedIndexChange)="tabChanged($event)">
@@ -438,8 +443,8 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table mat-table [dataSource]="dataSource" matSort class="w-100">
-                            <ng-container matColumnDef="position">
+                        <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
+                            <ng-container matColumnDef="index">
                                 <th mat-header-cell *matHeaderCellDef> #
                                     <!-- <span>
                                         <mat-checkbox
@@ -450,7 +455,7 @@
                                 <td mat-cell *matCellDef="let element">
                                     <div class="d-flex align-items-center">
                                         <div class="invoice-number">
-                                            {{element.position}}
+                                            {{element.index}}
                                         </div>
                                         <div class="checkbox-hide">
                                             <mat-checkbox
@@ -478,8 +483,10 @@
                                     </div>
                                     </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <a href="javascript:;" class="btn-link-2">240122-1</a>
-                                    <small class="text-danger d-block">Overdue By 4 Days</small>
+                                    <a href="javascript:;" class="btn-link-2">{{ element.voucherNumber ? element.voucherNumber : commonLocaleData?.app_not_available }}</a>
+                                    <small class="text-danger d-block" *ngIf="element.overdueDays">
+                                        {{ element.overdueDays }}
+                                    </small>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="customer">
@@ -500,11 +507,10 @@
                                     </div>    
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cp">00000000</div>
-                                    <!-- account-detail-double-click -->
-                                    <!-- <mat-card class="outline-card account-detail-wrapper">
+                                    <div class="cp" (dblclick)="element.showAccountDetails = true">{{ element.account?.name }}</div>
+                                    <mat-card class="outline-card account-detail-wrapper" *ngIf="element.showAccountDetails" (clickOutside)="element.showAccountDetails = false">
                                         <div class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
-                                            <h3>00000000</h3>
+                                            <h3>{{ element.account?.name }}</h3>
                                             <span class="cp">
                                                 <img src="./assets/images/path.svg" />
                                             </span>
@@ -515,41 +521,51 @@
                                                 <li class="text-left mr-t05"><a href="javascript:;" class="default-color">Generate Invoice</a></li>
                                             </ul>
                                         </mat-card-content>
-                                    </mat-card> -->
+                                    </mat-card>
                                 </td>
                             </ng-container>
-                            <ng-container matColumnDef="invoicedate">
+                            <ng-container matColumnDef="voucherDate">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
                                     Invoice Date
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
-                                    22-01-2024
+                                    {{ element.voucherDate }}
                                 </td>
                             </ng-container>
-                            <ng-container matColumnDef="amount">
+                            <ng-container matColumnDef="grandTotal">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
                                     Amount
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-right" matTooltip="In INR: 1.239 (Conversion Rate: 0.005)"
+                                <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element.grandTotalTooltipText"
                                 matTooltipPosition="above"> 
-                                    Rp233.00
+                                    <amount-field
+                                        [amount]="element.grandTotal?.amountForAccount"
+                                        [currencySymbol]="element.account?.currency?.symbol"
+                                        [currencyCode]="element.account?.currency?.code"
+                                    >
+                                    </amount-field>
                                 </td>
                             </ng-container>
-                            <ng-container matColumnDef="balance">
+                            <ng-container matColumnDef="balanceDue">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
                                     Balance Due
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-right" matTooltip="In INR: 1.239 (Conversion Rate: 0.005)"
+                                <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element.balanceDueTooltipText"
                                 matTooltipPosition="above"> 
-                                    Rp233.00
+                                    <amount-field
+                                        [amount]="element.totalBalance?.amountForAccount"
+                                        [currencySymbol]="element.account?.currency?.symbol"
+                                        [currencyCode]="element.account?.currency?.code"
+                                    >
+                                    </amount-field>
                                 </td>
                             </ng-container>
-                            <ng-container matColumnDef="duedate">
+                            <ng-container matColumnDef="dueDate">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
                                     Due Date
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
-                                    06-02-2024
+                                    {{ element.dueDate }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="invoicestatus">
@@ -557,8 +573,8 @@
                                     E-invoice Status
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <div [matTooltip]="'Credential are Invalid, please add valid credentials.'" [matTooltipPosition]="'above'">
-                                        Failed
+                                    <div [matTooltip]="element.eInvoiceStatusTooltip" [matTooltipPosition]="'above'">
+                                        {{ element.status }}
                                     </div>
                                 </td>
                             </ng-container>
@@ -568,7 +584,7 @@
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
-                                        <p>Cancel</p>
+                                        <p>{{ element.balanceStatus }}</p>
                                         <span [matMenuTriggerFor]="menu" class="cp">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
@@ -586,10 +602,15 @@
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="checkbox-show"></tr>
                         </table>
-                        <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                            showFirstLastButtons
-                            aria-label="Select page of periodic elements">
-                        </mat-paginator>
+                        <mat-paginator
+                            (page)="handlePageChange($event)"
+                            [length]="totalResults"
+                            [pageSize]="advanceFilters.count"
+                            [showFirstLastButtons]="true"
+                            [pageSizeOptions]="pageSizeOptions"
+                            [hidePageSize]="false"
+                            [pageIndex]="advanceFilters.page - 1"
+                        ></mat-paginator>
                     </div>
                 </div>
             </mat-tab>
