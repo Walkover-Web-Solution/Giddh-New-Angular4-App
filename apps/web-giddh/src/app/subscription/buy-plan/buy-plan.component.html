@@ -77,7 +77,10 @@
                                             </mat-select>
                                         </div>
                                     </div>
-                                    <div class="d-flex column-gap15 align-items-center ml-auto" *ngIf="inputData?.length">
+                                    <div
+                                        class="d-flex column-gap15 align-items-center ml-auto"
+                                        *ngIf="inputData?.length"
+                                    >
                                         <!-- <button mat-stroked-button color="primary" class="w-100" (click)="activateDialog()">
                                         Activate Via Key
                                     </button> -->
@@ -446,7 +449,7 @@
                                             </div>
                                             <ng-container *ngFor="let plan of inputData">
                                                 <div
-                                                    class="grid-title-list bottom-buy-button plan-row-height"
+                                                    class="grid-title-list list-grid-title plan-row-height"
                                                     [ngClass]="{
                                                         'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
                                                     }"
@@ -465,14 +468,58 @@
                                                 <div
                                                     class="grid-title-list bottom-buy-button plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
-                                                        'active-plan-td-bottom':
-                                                            selectedPlan?.uniqueName === plan?.uniqueName
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
                                                     }"
                                                 >
                                                     <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">{{
                                                         localeData?.chat_voice
                                                     }}</span>
+                                                    <span *ngIf="plan?.monthlyAmount === 0 && plan?.yearlyAmount === 0">
+                                                        <i class="icon-cross"></i>
+                                                    </span>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                        <div class="grid-list-div list-grid">
+                                            <div class="grid-title-left">
+                                                <span class="inner-name mat-table-sticky">
+                                                    {{ localeData?.e_invoice }}
+                                                </span>
+                                            </div>
+                                            <ng-container *ngFor="let plan of inputData">
+                                                <div
+                                                    class="grid-title-list bottom-buy-button plan-row-height"
+                                                    [ngClass]="{
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                    }"
+                                                >
+                                                    <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
+                                                        <i class="icon-tick"></i
+                                                    ></span>
+                                                    <span *ngIf="plan?.monthlyAmount === 0 && plan?.yearlyAmount === 0">
+                                                        <i class="icon-cross"></i>
+                                                    </span>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                        <div class="grid-list-div list-grid">
+                                            <div class="grid-title-left">
+                                                <span class="inner-name mat-table-sticky">
+                                                    {{ localeData?.gst_direct }}
+                                                </span>
+                                            </div>
+                                            <ng-container *ngFor="let plan of inputData">
+                                                <div
+                                                    class="grid-title-list bottom-buy-button plan-row-height"
+                                                    [ngClass]="{
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
+                                                        'active-plan-td-bottom':
+                                                            selectedPlan?.uniqueName === plan?.uniqueName
+                                                    }"
+                                                >
+                                                    <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
+                                                        <i class="icon-tick"></i
+                                                    ></span>
                                                     <span *ngIf="plan?.monthlyAmount === 0 && plan?.yearlyAmount === 0">
                                                         <i class="icon-cross"></i>
                                                     </span>

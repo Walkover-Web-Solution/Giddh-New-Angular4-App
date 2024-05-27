@@ -329,10 +329,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (!this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details") && !this.router.url.includes("/billing-detail")) {
                     this.currentPageUrl = this.router.url;
                 }
-              
+
                 this.isSubscriptionModule = this.router.url.includes("/pages/subscription");
                 this.isSubscriptionPage = this.router.url.includes("/pages/subscription/buy-plan") || this.router.url.includes("/pages/subscription/view-subscription");
-                
+
                 this.setCurrentPage();
                 this.addClassInBodyIfPageHasTabs();
                 this.checkIfPageHasTabs();
