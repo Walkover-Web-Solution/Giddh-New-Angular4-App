@@ -234,8 +234,8 @@ export class VatService {
         url = url?.replace(':from', request.from);
         url = url?.replace(':to', request.to);
         url = url?.replace(':taxNumber', request.taxNumber);
-        url = url?.replace(':section', request.section);
-        url = url?.replace(':currencyCode', request.currencyCode);
+        url = url?.replace(':section', request.section ?? '');
+        url = url?.replace(':currencyCode', request.currencyCode ?? 'BWP');
         url = url?.replace(':page', request.page ?? '');
         url = url?.replace(':count', request.count ?? '');
         if (request.branchUniqueName) {
@@ -246,6 +246,34 @@ export class VatService {
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
+    }
+
+    /**
+     * Download Detailed Vat liability report
+     *
+     * @param {VatReportRequest} request
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof VatService
+     */
+    public downloadVatLiabilityReport(request: VatReportRequest): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        // const url = countryCode === 'ZW' ? VAT_API.DOWNLOAD_ZW_REPORT : (countryCode === 'KE' ? VAT_API.DOWNLOAD_KENYA_REPORT : VAT_API.DOWNLOAD_REPORT);
+
+        let url = this.config.apiUrl + VAT_API.DOWNLOAD_ZW_TRANSACTIONS_REPORT;
+        url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        url = url?.replace(':from', request.from);
+        url = url?.replace(':to', request.to);
+        url = url?.replace(':taxNumber', request.taxNumber);
+        url = url?.replace(':currencyCode', request.currencyCode ?? 'BWP');
+        if (request.branchUniqueName) {
+            request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);
+        }
+
+        return this.http.get(url).pipe(
+            map((res) => {
+                return res;
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
 }

@@ -6,6 +6,7 @@ import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { ObligationsComponent } from './obligations/obligations.component';
 import { WithHeldSettingComponent } from './with-held-setting/with-held-setting.component';
 import { LiabilityReportComponent } from './liability-report/liability-report.component';
+import { LiabilityDetailedReportComponent } from './liability-detailed-report/liability-detailed-report.component';
 
 @NgModule({
     imports: [
@@ -37,6 +38,11 @@ import { LiabilityReportComponent } from './liability-report/liability-report.co
             {
                 path: 'liability-report',
                 component: LiabilityReportComponent,
+                canActivate: [NeedsAuthentication]
+            },
+            {
+                path: 'liability-report/detailed',
+                component: LiabilityDetailedReportComponent,
                 canActivate: [NeedsAuthentication]
             },
         ])

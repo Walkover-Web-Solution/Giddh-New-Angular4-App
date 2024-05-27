@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, MOBILE_NUMBER_SELF_URL } from '../../app.constant';
+import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
@@ -12,10 +12,9 @@ import { GstReconcileService } from '../../services/gst-reconcile.service';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { VatService } from '../../services/vat.service';
 import { ToasterService } from '../../services/toaster.service';
-import { FileReturnComponent } from '../file-return/file-return.component';
-import { ViewReturnComponent } from '../view-return/view-return.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import * as saveAs from 'file-saver';
 
 @Component({
     selector: 'liability-report-component',
@@ -55,7 +54,7 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     /** Holds true if multiple branches in the company */
     public isMultipleBranch: boolean;
     /** Holds Obligations Fromgroup  */
-    public obligationsForm: UntypedFormGroup
+    public liabilityReportForm: UntypedFormGroup
     /** Holds Obligations table data */
     public tableDataSource: any[] = [];
     /** Holds Obligations table columns */
@@ -64,6 +63,22 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     public isLoading: boolean;
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
+    /** Holds Currency List for Zimbabwe Amount exchange rate */
+    public vatReportCurrencyList: any[] = [
+        { label: 'BWP', value: 'BWP', additional: { symbol: 'P' } },
+        { label: 'USD', value: 'USD', additional: { symbol: '$' } },
+        { label: 'GBP', value: 'GBP', additional: { symbol: '£' } },
+        { label: 'INR', value: 'INR', additional: { symbol: '₹' } },
+        { label: 'EUR', value: 'EUR', additional: { symbol: '€' } }
+    ];
+    /** Holds Current Currency Symbol for Zimbabwe report */
+    public vatReportCurrencySymbol: string = this.vatReportCurrencyList[0].additional.symbol;
+    /** True if Current branch has Tax Number */
+    public hasTaxNumber: boolean = false;
+    /** True, if API is in progress */
+    public isTaxApiInProgress: boolean;
+    /** Holds Table Data  */
+    public vatLiabilityOverviewReport: any[];
 
     constructor(
         private gstReconcileService: GstReconcileService,
@@ -75,16 +90,18 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
         private modalService: BsModalService,
         public dialog: MatDialog,
         private route: Router
-    ) { }
+    ) {
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+    }
 
     /**
     * Lifecycle hook for initialization
     *
-    * @memberof ObligationsComponent
+    * @memberof LiabilityReportComponent
     */
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
-        this.iniObligationsForm();
+        this.initLiabilityReport();
         this.getUniversalDatePickerDate();
         this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
         this.loadTaxDetails();
@@ -118,20 +135,18 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     /**
     * VAT Obligations API Call
     *
-    * @memberof ObligationsComponent
+    * @memberof LiabilityReportComponent
     */
-    public getVatObligations(): void {
+    public getVatLiabilityReport(): void {
         this.isLoading = true;
-        this.vatService.getVatLiabilityReport(this.obligationsForm.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.vatService.getVatLiabilityReport(this.liabilityReportForm.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
-            if (response?.status === "success" && response?.body?.obligations) {
-                this.tableDataSource = response?.body?.obligations.map(item => {
-                    item.start = dayjs(item.start).format(GIDDH_DATE_FORMAT);
-                    item.end = dayjs(item.end).format(GIDDH_DATE_FORMAT);
-                    item.due = dayjs(item.due).format(GIDDH_DATE_FORMAT);
+            if (response && response.status === "success" && response.body?.sections) {
+                this.vatLiabilityOverviewReport = response.body.sections
 
-                    return item;
-                });
+                this.getFormControl('currencyCode').patchValue(response.body?.currency?.code);
+                this.vatReportCurrencySymbol = this.vatReportCurrencyList.filter(item => item.label === response.body?.currency?.code).map(item => item.additional.symbol).join();
+
             } else if (response?.body?.message) {
                 this.toaster.showSnackBar('error', response?.body?.message);
             } else if (response?.message) {
@@ -140,11 +155,20 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
         });
     }
 
+    public viewDetailedReport(report): void {
+        if (report) {
+            let formValue = this.liabilityReportForm.value;
+            let section = report?.section === "Input VAT Total" ? 'inputVat' : 'outputVat';
+
+            this.route.navigate(['pages', 'vat-report', 'liability-report', 'detailed'], { queryParams: { from: formValue.from, to: formValue.to, taxNumber: formValue.taxNumber, currencyCode: formValue.currencyCode, section: section } });
+        }
+    }
+
     /**
     * Translation Complete Callback
     *
     * @param {*} event
-    * @memberof ObligationsComponent
+    * @memberof LiabilityReportComponent
     */
     public translationComplete(event: any): void {
         if (event) {
@@ -155,50 +179,39 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     * Handle Dropdown callback for Tax Number and save value to form
     *
     * @param {*} event
-    * @memberof ObligationsComponent
+    * @memberof LiabilityReportComponent
     */
     public taxNumberSelected(event: any): void {
         if (event?.value) {
             this.getFormControl('taxNumber').setValue(event.value);
+            this.getVatLiabilityReport();
         }
     }
-
-    /**
-    * Handle Dropdown callback for Status and save value to form
-    *
-    * @param {*} event
-    * @memberof ObligationsComponent
-    */
-    // public statusSelected(event: any): void {
-    //     if (event?.value || event?.value === '') {
-    //         this.getFormControl('status').setValue(event.value);
-    //     }
-    // }
 
     /**
     * Handle Dropdown callback for Branch and save value to form
     *
     * @param {*} event
-    * @memberof ObligationsComponent
+    * @memberof LiabilityReportComponent
     */
-    // public branchSelected(event: any): void {
-    //     if (event?.value) {
-    //         this.getFormControl('branchUniqueName').setValue(event.value);
-    //     }
-    // }
+    public branchSelected(event: any): void {
+        if (event?.value) {
+            this.getFormControl('branchUniqueName').setValue(event.value);
+        }
+    }
 
 
     /**
     * This will use for init main formgroup
     *
     * @private
-    * @memberof ObligationsComponent
+    * @memberof LiabilityReportComponent
     */
-    private iniObligationsForm(): void {
-        this.obligationsForm = this.formBuilder.group({
+    private initLiabilityReport(): void {
+        this.liabilityReportForm = this.formBuilder.group({
             branchUniqueName: [''],
+            currencyCode: ['BWP'],
             taxNumber: [''],
-            status: [''],
             from: [''],
             to: ['']
         });
@@ -208,7 +221,7 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     * Get Universal Date Observable from Store and subscribed
     *
     * @private
-    * @memberof ObligationsComponent
+    * @memberof LiabilityReportComponent
     */
     private getUniversalDatePickerDate(): void {
         this.store.pipe(select(stateStore => stateStore.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
@@ -225,15 +238,21 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     * Loads the tax details of a company
     *
     * @private
-    * @memberof ObligationsComponent
+    * @memberof LiabilityReportComponent
     */
     private loadTaxDetails(): void {
+        this.isTaxApiInProgress = true;
         this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.body?.length) {
                 this.taxesList = response.body.map(tax => ({
                     label: tax,
                     value: tax
                 }));
+                this.isTaxApiInProgress = false;
+                this.hasTaxNumber = true;
+                this.getVatLiabilityReport();
+            } else {
+                this.hasTaxNumber = false;
             }
         });
     }
@@ -242,7 +261,7 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     * This will be use for show datepicker
     *
     * @param {*} element
-    * @memberof ObligationsComponent
+    * @memberof LiabilityReportComponent
     */
     public showGiddhDatepicker(element: any): void {
         if (element) {
@@ -257,7 +276,7 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     /**
     * This will be use for hide datepicker
     *
-    * @memberof ObligationsComponent
+    * @memberof LiabilityReportComponent
     */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
@@ -267,7 +286,7 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     * Call back function for date/range selection in datepicker
     *
     * @param {*} value
-    * @memberof ObligationsComponent
+    * @memberof LiabilityReportComponent
     */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
@@ -293,26 +312,61 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     *
     * @param {string} control
     * @returns {*}
-    * @memberof ObligationsComponent
+    * @memberof LiabilityReportComponent
     */
     public getFormControl(control: string): any {
-        return this.obligationsForm.get(control)
+        return this.liabilityReportForm.get(control)
     }
 
     /**
     * Handles GST Sidebar Navigation
     *
-    * @memberof ObligationsComponent
+    * @memberof LiabilityReportComponent
     */
     public handleNavigation(): void {
         this.route.navigate(['pages', 'gstfiling']);
     }
 
+    /**
+     * Handle Currency change dropdown and call VAT Report API
+     *
+     * @param {*} event
+     * @memberof LiabilityReportComponent
+     */
+    public onCurrencyChange(event: any): void {
+        if (event) {
+            this.getFormControl('currencyCode').patchValue(event.value);
+            this.getVatLiabilityReport();
+        }
+    }
+
+    /**
+     * Export Liability report based on currency and tax number
+     *
+     * @memberof LiabilityReportComponent
+     */
+    public downloadVatReport(): void {
+        this.liabilityReportForm.value
+        let vatReportRequest = this.liabilityReportForm.value;
+
+        delete vatReportRequest.section;
+        delete vatReportRequest.page;
+        delete vatReportRequest.count;
+
+        this.vatService.downloadVatLiabilityReport(vatReportRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res?.status === "success") {
+                let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
+                return saveAs(blob, 'VatLiabilityReport.xlsx');
+            } else {
+                this.toaster.showSnackBar('error', res?.message);
+            }
+        });
+    }
 
     /**
     * Lifecycle hook for destroy
     *
-    * @memberof ObligationsComponent
+    * @memberof LiabilityReportComponent
     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
