@@ -514,10 +514,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         } else if (event.key === 'F7') {
             event.preventDefault(); // Prevent default F7 behavior
             this.customFunctionForF7();
-        } else if (event.key === 'ð') {
+        } else if (event.key === 'ð' || (event.altKey && event.key === 'd')) {
             event.preventDefault();
             this.customFunctionForDiscountSidebar();
-        } else if (event.key === 'þ') {
+        } else if (event.key === 'þ' || (event.altKey && event.key === 't')) {
             event.preventDefault();
             this.customFunctionForTaxSidebar();
         }
@@ -825,14 +825,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 discountValue = control.value.discountValue;
             }
         });
-
         if (amount) {
             discountAmount = (discountType === 'PERCENTAGE') ? discountValue / 100 * amount : discountValue;
             discountEntryControl?.get('amount')?.patchValue(discountAmount);
         } else {
-            discountAmount = 0;
+            discountAmount = discountType === 'PERCENTAGE' ? 0 : discountValue;
+            discountEntryControl?.get('amount')?.patchValue(discountAmount);
         }
-
         return discountAmount;
     }
 
@@ -859,15 +858,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         });
 
-        if (amount) {
+        if (amount > 0) {
             if (taxAmount) {
                 taxAmount = taxAmount / 100 * amount;
             } else {
                 taxAmount = 0;
             }
             taxEntryControl?.get('amount')?.patchValue(taxAmount);
-            toEntryControl.get('amount')?.patchValue(amount);
-            byEntryControl.get('amount')?.patchValue(amount + taxAmount);
+            toEntryControl?.get('amount')?.patchValue(amount);
+            byEntryControl?.get('amount')?.patchValue(amount + taxAmount);
         } else {
             taxAmount = 0;
         }
@@ -1354,7 +1353,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public calculateTotalCreditAndDebit(): { totalCredit: number, totalDebit: number } {
-        if (this.isSalesEntry) {
+        const voucherTypeControl = this.journalVoucherForm.get('voucherType');
+        if (voucherTypeControl.value === VOUCHERS.SALES) {
             this.calculateTaxDiscount();
         }
 
@@ -1545,7 +1545,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     });
                     data.transactions = filteredWithoutTaxDiscountData;
                 }
-
+                if (data.transactions?.length) {
+                    data.transactions[0].amount = data.transactions[0].actualAmount;
+                }
                 this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
             } else {
                 const byOrTo = data.voucherType === 'Payment' ? 'by' : 'to';
