@@ -512,7 +512,9 @@
                                                 <div
                                                     class="grid-title-list bottom-buy-button plan-row-height"
                                                     [ngClass]="{
-                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
+                                                        'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName,
+                                                        'active-plan-td-bottom':
+                                                            selectedPlan?.uniqueName === plan?.uniqueName
                                                     }"
                                                 >
                                                     <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
