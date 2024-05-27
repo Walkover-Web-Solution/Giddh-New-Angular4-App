@@ -4,12 +4,12 @@ import { AccountsAction } from '../../actions/accounts.actions';
 import { PermissionActions } from '../../actions/permission/permission.action';
 import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { select, Store } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs';
 import { ShareRequestForm } from '../../models/api-models/Permission';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { forIn } from 'apps/web-giddh/src/app/lodash-optimized';
+import { MatDialog } from '@angular/material/dialog';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 
@@ -19,13 +19,13 @@ import { SettingsProfileActions } from '../../actions/settings/profile/settings.
     styleUrls: ['./setting.permission.component.scss']
 })
 export class SettingPermissionComponent implements OnInit, OnDestroy {
-    @ViewChild('editUserModal', { static: false }) public editUserModal: ModalDirective;
+    /** Edit User Dialog Reference */
+    @ViewChild('editUserModal', { static: true }) public editUserModal: TemplateRef<any>;
     public sharedWith: object[] = [];
     public usersList: any;
     public selectedCompanyUniqueName: string;
     public selectedUser: ShareRequestForm;
     public currentUser: any;
-    // modals related
     public showEditUserModal: boolean = false;
     public modalConfig = {
         animated: true,
@@ -42,12 +42,15 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if permission form has unsaved changes */
     public hasUnsavedChanges: boolean = false;
+    /** Instance of advance search modal dialog */
+    public editDialogRef: any;
 
     constructor(
         private settingsPermissionActions: SettingsPermissionActions,
         private permissionActions: PermissionActions,
         private accountsAction: AccountsAction,
         private store: Store<AppState>,
+        public dialog: MatDialog,
         private generalService: GeneralService,
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private settingsProfileActions: SettingsProfileActions
@@ -118,28 +121,30 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         }
     }
 
-    public showModalForEdit(user?: any) {
-        this.selectedUser = user ? user : '';
-        this.hasUnsavedChanges = false;
-        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
-        this.showEditUserModal = true;
-        setTimeout(() => this.editUserModal?.show(), 700);
-    }
 
+    public showModalForEdit(user?: any): void {
+        this.selectedUser = user ? user : '';
+        this.editDialogRef = this.dialog.open(this.editUserModal, { 
+            width: '800px', 
+            position: {
+                top: '75px'
+            }
+        });
+    }
     public closeEditUserModal(event?: any): void {
         if (event && this.hasUnsavedChanges) {
             this.pageLeaveUtilityService.confirmPageLeave((action) => {
                 if (action) {
                     this.hasUnsavedChanges = false;
                     this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
-                    this.editUserModal.hide();
+                    this.editDialogRef.close();
                     setTimeout(() => this.showEditUserModal = false, 700);
                 }
             });
         } else {
             this.hasUnsavedChanges = false;
             this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
-            this.editUserModal.hide();
+            this.editDialogRef.close();
             setTimeout(() => this.showEditUserModal = false, 700);
         }
     }

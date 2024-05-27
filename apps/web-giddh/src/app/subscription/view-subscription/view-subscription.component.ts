@@ -244,17 +244,17 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
      * @memberof ViewSubscriptionComponent
      */
     public buyPlan(subscription: any): void {
-        // if (this.activeCompany.subscription?.country?.countryCode === 'GB') {
-        //     let model = {
-        //         planUniqueName: subscription?.planUniqueName,
-        //         paymentProvider: "GOCARDLESS",
-        //         subscriptionId: this.subscriptionId,
-        //         duration: subscription?.period
-        //     }
-        //     this.subscriptionComponentStore.buyPlanByGoCardless(model);
-        // } else {
+        if (this.activeCompany.subscription?.country?.countryCode === 'GB') {
+            let model = {
+                planUniqueName: subscription?.planUniqueName,
+                paymentProvider: "GOCARDLESS",
+                subscriptionId: this.subscriptionId,
+                duration: subscription?.period
+            }
+            this.subscriptionComponentStore.buyPlanByGoCardless(model);
+        } else {
             this.componentStoreBuyPlan.generateOrderBySubscriptionId(this.subscriptionId);
-        // }
+        }
     }
 
     /**

@@ -9,6 +9,7 @@ import { IFlattenAccountsResultItem } from '../../models/interfaces/flatten-acco
 import { AccountService } from '../../services/account.service';
 import { CompanyService } from '../../services/company.service';
 import { ToasterService } from '../../services/toaster.service';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: '[account-detail-modal-component]',
@@ -82,7 +83,8 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
         private _companyServices: CompanyService,
         private _toaster: ToasterService,
         private _accountService: AccountService,
-        private changeDetectorRef: ChangeDetectorRef
+        private changeDetectorRef: ChangeDetectorRef,
+        private generalService: GeneralService
     ) {
     }
 
@@ -134,10 +136,22 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
                 if (this.voucherType === VoucherTypeEnum.sales) {
                     // special case, because we don't have cash invoice as voucher type at api side so we are handling it ui side
                     let isCashInvoice = this.accountUniqueName === 'cash';
-                    this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? 'cash' : 'sales'}`);
+                    if (this.generalService.voucherApiVersion === 2) {
+                        if (isCashInvoice) {
+                            this.goToRoute(`/pages/vouchers/cash/create`);
+                        } else {
+                            this.goToRoute(`/pages/vouchers/sales/${this.accountUniqueName}/create`);
+                        }
+                    } else {
+                        this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? 'cash' : 'sales'}`);
+                    }
                 } else {
                     // for purchase/ debit and credit note
-                    this.goToRoute('proforma-invoice/invoice/' + this.voucherType);
+                    if (this.generalService.voucherApiVersion === 2) {
+                        this.goToRoute('/pages/vouchers/' + this.voucherType.toString().replace(/-/g, " ") + '/' + this.accountUniqueName + '/create');
+                    } else {
+                        this.goToRoute('proforma-invoice/invoice/' + this.voucherType);
+                    }
                 }
                 break;
             case 3: // send sms
@@ -242,15 +256,20 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
      * @memberof AccountDetailModalComponent
      */
     public goToRoute(part: string, additionalParams: string = ''): void {
-        let url = location.href + `?returnUrl=${part}/${this.accountUniqueName}`;
+        let url = (this.generalService.voucherApiVersion === 2) ? part : location.href + `?returnUrl=${part}/${this.accountUniqueName}`;
 
         if (additionalParams) {
             url = `${url}${additionalParams}`;
         }
+
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + `#./pages/${part}/${this.accountUniqueName}`;
-            console.log(ipcRenderer.send('open-url', url));
+            if (this.generalService.voucherApiVersion === 2) {
+                url = location.origin + location.pathname + `#./pages/${part}`;
+            } else {
+                url = location.origin + location.pathname + `#./pages/${part}/${this.accountUniqueName}`;
+            }
+            ipcRenderer.send('open-url', url);
         } else {
             (window as any).open(url);
         }

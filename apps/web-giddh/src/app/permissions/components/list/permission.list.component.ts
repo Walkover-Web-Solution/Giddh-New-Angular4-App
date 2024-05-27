@@ -1,9 +1,8 @@
 import { takeUntil } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, AfterViewInit, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { PermissionActions } from '../../../actions/permission/permission.action';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
@@ -11,6 +10,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { NewRoleClass } from '../../permission.utility';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
     templateUrl: './permission-list.html',
@@ -19,8 +19,10 @@ import { GeneralService } from '../../../services/general.service';
 export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     @ViewChild(ElementViewContainerRef, { static: true }) public elementViewContainerRef: ElementViewContainerRef;
-    @ViewChild('permissionModel', { static: true }) public permissionModel: ModalDirective;
-    @ViewChild('permissionConfirmationModel', { static: true }) public permissionConfirmationModel: ModalDirective;
+    /** Hold Permission Dialog Template Reference */
+    @ViewChild('permissiomDialog', { static: true }) public permissiomDialog: TemplateRef<any>;
+    /** Hold Permission Confirmation Dialog Template Reference */
+    @ViewChild('permissionConfirmationDialog', { static: true }) public permissionConfirmationDialog: TemplateRef<any>;
 
     public localState: any;
     public allRoles: IRoleCommonResponseAndRequest[] = [];
@@ -35,6 +37,10 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /* Holds Permission Dialog Reference */
+    private permissionDialogRef: MatDialogRef<any>; 
+    /* Holds Permission Confirmation Dialog Reference */
+    public permissionConfirmationDialogRef: MatDialogRef<any>;
 
     constructor(
         private store: Store<AppState>,
@@ -42,7 +48,8 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
         private router: Router,
         private permissionActions: PermissionActions,
         private _toasty: ToasterService,
-        private _generalService: GeneralService
+        private _generalService: GeneralService,
+        public dialog: MatDialog
     ) {
     }
 
@@ -87,7 +94,7 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
      */
     public ngAfterViewInit(): void {
         if (this.showPopup) {
-            this.openPermissionModal();
+            this.openPermissionDialog();
         }
     }
 
@@ -104,9 +111,14 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
         });
     }
 
+    /**
+     * Close Permission Dialog
+     *
+     * @memberof PermissionListComponent
+     */
     public closePopupEvent(userAction) {
         this.showPopup = false;
-        this.permissionModel.hide();
+        this.permissionDialogRef.close();
         if (userAction === 'save') {
             this.router.navigate(['/pages', 'permissions', 'details']);
         }
@@ -118,25 +130,38 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
         this.router.navigate(['/pages/permissions/details']);
     }
 
-    public deleteRole(role: IRoleCommonResponseAndRequest) {
+    public deleteRole(role: IRoleCommonResponseAndRequest): void {
         this.selectedRoleForDelete = role;
-        this.permissionConfirmationModel?.show();
+       this.permissionConfirmationDialogRef =  this.dialog.open(this.permissionConfirmationDialog, {
+            panelClass: 'modal-dialog',
+            width: '600px'
+        });
     }
 
+    
     public deleteConfirmedRole() {
-        this.permissionConfirmationModel.hide();
+        this.permissionConfirmationDialogRef.close();
         this.store.dispatch(this.permissionActions.DeleteRole(this.selectedRoleForDelete?.uniqueName));
     }
 
+    /**
+     * Close Permission Confirmation Dialog
+     *
+     * @memberof PermissionListComponent
+     */
     public closeConfirmationPopup() {
-        this.permissionConfirmationModel.hide();
+        this.permissionConfirmationDialogRef.close();
     }
 
-    public openPermissionModal() {
-        this.permissionModel?.show();
-    }
-
-    public hidePermissionModel() {
-        this.permissionModel.hide();
+    /**
+     * Open Permission Dialog
+     *
+     * @memberof PermissionListComponent
+     */
+    public openPermissionDialog(): void {
+        this.permissionDialogRef = this.dialog.open(this.permissiomDialog, {
+            panelClass: 'modal-dialog',
+            width: '650px'
+        });
     }
 }

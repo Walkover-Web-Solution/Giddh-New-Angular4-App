@@ -33,7 +33,6 @@ export interface IGstObj {
     newaddress: string;
     isDefault: boolean;
 }
-
 @Component({
     selector: 'setting-profile',
     templateUrl: './setting.profile.component.html',
@@ -158,9 +157,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public isAddressChangeInProgress: boolean;
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
-
     public imgPath: string = '';
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -184,6 +181,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public showTaxColumn: boolean;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    /** Holds Active Tab Index */
+    public activeTabIndex: number = 0;
 
     constructor(
         private commonService: CommonService,
@@ -219,7 +218,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.getCountry();
         this.getCurrency();
-
         currencyNumberSystems.map(currency => {
             this.numberSystemSource.push({ value: currency?.value, label: `${currency.name}`, additional: currency });
         });
@@ -257,6 +255,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             .pipe(debounceTime(5000), distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((event: any) => {
                 this.patchProfile(this.dataToSave);
+
             });
 
         this.gstKeyDownSubject$
@@ -275,13 +274,16 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         });
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            this.currentTab = (params['referrer']) ? params['referrer'] : "personal";
+            this.currentTab = (params['referrer']) ? params['referrer'] : "personal";;
+            if ((params['referrer']) === 'personal') { this.activeTabIndex = 0; }
+            else if ((params['referrer']) === 'address') { this.activeTabIndex = 1; }
+            else if ((params['referrer']) === 'other') { this.activeTabIndex = 2; }
         });
 
         this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
-            if (this.activeLocale && this.activeLocale !== response?.value) {
+            if(this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('settings/profile', response?.value).subscribe(response => {
                     this.localeData = response;
                     this.translationComplete(true);
@@ -324,7 +326,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.isMobileNumberValid = true;
 
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
-
         this.store.pipe(select(p => p.settings.inventory), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.profileRequest || 1 === 1) {
                 let inventorySetting = cloneDeep(o);
@@ -374,6 +375,23 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     }
 
+    /**
+     * This will use for on tab changes
+     *
+     * @param {*} event
+     * @memberof SettingProfileComponent
+     */
+    public onTabChange(event: any): void {
+        this.activeTabIndex = event?.index;
+        if (event.index === 0) {
+            this.handleTabChanged("personal");
+        } else if (event.index === 1) {
+            this.handleTabChanged("address");
+        } else {
+            this.handleTabChanged("other");
+        }
+    }
+
     public addGst() {
         let addresses = cloneDeep(this.companyProfileObj.addresses);
         let gstNumber;
@@ -395,7 +413,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         } else {
             isValid = true;
         }
-
         if (isValid) {
             let companyDetails = cloneDeep(this.companyProfileObj);
             let newGstObj = {
@@ -441,7 +458,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
 
         this.store.dispatch(this.settingsProfileActions.UpdateProfile(dataToSave));
-
     }
 
     public updateInventorySetting(data) {
@@ -530,7 +546,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 uniqBy(s, 'value');
                 if (s) {
                     this.companyProfileObj.addresses[index].stateCode = s.value;
-                } else {
                     this.companyProfileObj.addresses[index].stateCode = '';
                 }
             });
@@ -559,6 +574,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 ele.classList.remove('error-box');
                 this.isPANValid = true;
                 this.patchProfile({ panNumber: ele.value });
+
             } else {
                 this.isPANValid = false;
                 this._toasty.errorToast('Invalid PAN number');
@@ -639,6 +655,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             delete obj['contactNo'];
         }
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
+
     }
 
     public typeaheadOnSelect(e: TypeaheadMatch): void {
@@ -669,6 +686,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             return;
         }
         this.patchProfile({ balanceDecimalPlaces: this.companyProfileObj.balanceDecimalPlaces });
+
     }
 
     public nameAlisPush(event) {
@@ -677,6 +695,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
 
         this.patchProfile({ nameAlias: this.companyProfileObj.nameAlias });
+
     }
 
     public savePincode(event) {
@@ -705,7 +724,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     public getStates(countryCode) {
         this.store.dispatch(this._generalActions.resetStatesList());
-
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.states = [];
@@ -768,9 +786,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             }
         });
     }
-
-
-
     /**
      * This will return the state code/name if available
      *
@@ -818,7 +833,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             .subscribe(response => {
                 if (response) {
                     if (response.status === 'success') {
-                        this._toasty.successToast('Profile Updated Successfully.');
+                        this._toasty.showSnackBar("success", this.commonLocaleData?.app_messages.profile_updated);
                     } else {
                         this._toasty.errorToast(response.message);
                     }
@@ -848,7 +863,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     /**
      * Loads all the entities of an company
-     *
      * @memberof SettingProfileComponent
      */
     public loadLinkedEntities(): void {
@@ -866,7 +880,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     /**
      * Loads all the states of a country
-     *
      * @param {string} countryCode Country code
      * @memberof SettingProfileComponent
      */
@@ -964,7 +977,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
         }));
-
         const requestObj = {
             taxNumber: addressDetails.formValue.taxNumber,
             stateCode: addressDetails.formValue.state,
@@ -1130,7 +1142,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             if (profileObj.countryV2 !== undefined && profileObj.countryV2.alpha2CountryCode !== undefined) {
                 profileObj.country = profileObj.countryV2.alpha2CountryCode;
             }
-
             this.companyProfileObj = {
                 ...this.companyProfileObj,
                 name: profileObj.name,
