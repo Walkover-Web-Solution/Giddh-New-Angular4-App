@@ -249,7 +249,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     this.router.navigate(['/pages/subscription']);
                 } else {
                     if (this.payType === 'trial') {
-                        this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId])
+                        this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
                     } else {
                         if (this.activeCompany.subscription?.country?.countryCode === 'GB') {
                             let model = {
@@ -275,7 +275,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     if (this.isChangePlan) {
                         this.router.navigate(['/pages/subscription']);
                     } else {
-                        this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId])
+                        this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
                     };
                 }
             }
@@ -294,7 +294,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 if (this.isChangePlan) {
                     this.router.navigate(['/pages/subscription']);
                 } else {
-                    this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId])
+                    this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
                 };
             }
         });
@@ -306,7 +306,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 if (this.isChangePlan) {
                     this.router.navigate(['/pages/subscription']);
                 } else {
-                    this.router.navigate(['/pages/new-company/' + this.subscriptionId])
+                    this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
                 };
             }
         });
