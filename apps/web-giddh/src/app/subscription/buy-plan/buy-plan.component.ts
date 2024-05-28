@@ -249,19 +249,19 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     this.router.navigate(['/pages/subscription']);
                 } else {
                     if (this.payType === 'trial') {
-                        this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId])
+                        this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
                     } else {
-                        if (this.activeCompany.subscription?.country?.countryCode === 'GB') {
-                            let model = {
-                                planUniqueName: response?.planDetails?.uniqueName,
-                                paymentProvider: "GOCARDLESS",
-                                subscriptionId: response.subscriptionId,
-                                duration: response?.duration
-                            }
-                            this.subscriptionComponentStore.buyPlanByGoCardless(model);
-                        } else {
+                        // if (this.activeCompany.subscription?.country?.countryCode === 'GB') {
+                        //     let model = {
+                        //         planUniqueName: response?.planDetails?.uniqueName,
+                        //         paymentProvider: "GOCARDLESS",
+                        //         subscriptionId: response.subscriptionId,
+                        //         duration: response?.duration
+                        //     }
+                        //     this.subscriptionComponentStore.buyPlanByGoCardless(model);
+                        // } else {
                             this.componentStore.generateOrderBySubscriptionId(response.subscriptionId);
-                        }
+                        // }
                     }
                 };
             }
@@ -272,11 +272,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 if (response.dueAmount > 0) {
                     this.initializePayment(response);
                 } else {
-                    if (response.status === 'trial') {
-                        this.router.navigate(['/pages/subscription/buy-plan']);
+                    if (this.isChangePlan) {
+                        this.router.navigate(['/pages/subscription']);
                     } else {
-                        this.router.navigate(['/pages/subscription/buy-plan/' + response.subscriptionId]);
-                    }
+                        this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
+                    };
                 }
             }
         });
@@ -294,7 +294,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 if (this.isChangePlan) {
                     this.router.navigate(['/pages/subscription']);
                 } else {
-                    this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId])
+                    this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
                 };
             }
         });
@@ -306,7 +306,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 if (this.isChangePlan) {
                     this.router.navigate(['/pages/subscription']);
                 } else {
-                    this.router.navigate(['/pages/new-company/' + this.subscriptionId])
+                    this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
                 };
             }
         });
