@@ -189,7 +189,7 @@ export class VouchersUtilityService {
                 code: defaultAddress.stateCode,
                 name: defaultAddress.stateName
             };
-        } 
+        }
 
         return { defaultAddress, defaultAddressIndex };
     }
@@ -452,6 +452,25 @@ export class VouchersUtilityService {
                 // When invoice is B2C or B2B cancelled invoice
                 return item.errorMessage ?? localeData?.e_invoice_statuses.na;
             default: return '';
+        }
+    }
+
+    /**
+     * Get Translated file name respect to given voucher
+     *
+     * @private
+     * @param {string} type
+     * @param {boolean} isAllItemsSelected
+     * @param {*} localeData
+     * @returns {string}
+     * @memberof VouchersUtilityService
+     */
+    public getExportFileNameByVoucherType(type: string, isAllItemsSelected: boolean, localeData: any): string {
+        switch (type) {
+            case 'sales': return isAllItemsSelected ? localeData?.all_invoices : localeData?.invoices;
+            case 'purchase': return isAllItemsSelected ? localeData?.all_purchases : localeData?.purchases;
+            case 'credit note': return isAllItemsSelected ? localeData?.all_credit_notes : localeData?.credit_notes;
+            case 'debit note': return isAllItemsSelected ? localeData?.all_debit_notes : localeData?.debit_notes;
         }
     }
 }

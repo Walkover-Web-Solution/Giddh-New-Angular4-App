@@ -18,6 +18,7 @@ import { CommonService } from "../../services/common.service";
 import { LastVouchersResponse } from "../../models/api-models/Voucher";
 import { AccountService } from "../../services/account.service";
 import { SearchService } from "../../services/search.service";
+import { InvoiceBulkUpdateService } from "../../services/invoice.bulkupdate.service";
 
 export interface VoucherState {
     isLoading: boolean;
@@ -48,6 +49,8 @@ export interface VoucherState {
     countryList: any[];
     ledgerEntries: any[];
     voucherBalances: any[];
+    exportVouchersFile: any;
+    eInvoiceGenerated: boolean;
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -78,7 +81,9 @@ const DEFAULT_STATE: VoucherState = {
     pendingPurchaseOrders: null,
     countryList: null,
     ledgerEntries: null,
-    voucherBalances: null
+    voucherBalances: null,
+    exportVouchersFile: null,
+    eInvoiceGenerated: null
 };
 
 @Injectable()
@@ -92,7 +97,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         private ledgerService: LedgerService,
         private commonService: CommonService,
         private accountService: AccountService,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private bulkUpdateInvoiceService: InvoiceBulkUpdateService
     ) {
         super(DEFAULT_STATE);
     }
@@ -123,6 +129,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public deleteAttachmentIsSuccess$ = this.select((state) => state.deleteAttachmentIsSuccess);
     public ledgerEntries$ = this.select((state) => state.ledgerEntries);
     public voucherBalances$ = this.select((state) => state.voucherBalances);
+    public exportVouchersFile$ = this.select((state) => state.exportVouchersFile);
+    public eInvoiceGenerated$ = this.select((state) => state.eInvoiceGenerated);
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
@@ -544,7 +552,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
-    readonly getEstimateProformaDetails = this.effect((data: Observable<{ voucherType: string, payload: any}>) => {
+    readonly getEstimateProformaDetails = this.effect((data: Observable<{ voucherType: string, payload: any }>) => {
         return data.pipe(
             switchMap((req) => {
                 return this.voucherService.getEstimateProforma(req.payload, req.voucherType).pipe(
@@ -568,7 +576,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             })
         );
     });
-    
+
     readonly getVoucherDetails = this.effect((data: Observable<{ isCopyVoucher: boolean, accountUniqueName: string, payload: any }>) => {
         return data.pipe(
             switchMap((req) => {
@@ -802,6 +810,60 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
+    readonly exportVouchers = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.exportVouchers(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                exportVouchersFile: res.body
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                exportVouchersFile: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly generateEInvoice = this.effect((data: Observable<{ payload: any, actionType: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.bulkUpdateInvoiceService.bulkUpdateInvoice(req.payload, req.actionType).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                this.toaster.showSnackBar("success", res.body);
+                                return this.patchState({
+                                    eInvoiceGenerated: true
+                                });
+                            } else {
+                                this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    eInvoiceGenerated: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                eInvoiceGenerated: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
     readonly resetAll = this.effect((data: Observable<void>) => {
         return data.pipe(
             switchMap((req) => {
@@ -827,6 +889,17 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({
                     deleteAttachmentIsSuccess: null
+                });
+                return of(null);
+            })
+        );
+    });
+
+    readonly resetGenerateEInvoice = this.effect((data: Observable<void>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    eInvoiceGenerated: null
                 });
                 return of(null);
             })

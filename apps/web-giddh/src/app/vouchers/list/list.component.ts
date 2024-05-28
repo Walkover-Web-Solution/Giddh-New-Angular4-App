@@ -9,7 +9,7 @@ import { ConfirmationModalConfiguration } from "../../theme/confirmation-modal/c
 import { GeneralService } from "../../services/general.service";
 import { TemplatePreviewDialogComponent } from "../template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "../template-edit-dialog/template-edit-dialog.component";
-import { ReplaySubject, delay, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, takeUntil } from "rxjs";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -20,6 +20,8 @@ import { MULTI_CURRENCY_MODULES, PAGE_SIZE_OPTIONS, VoucherTypeEnum } from "../u
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../../app.constant";
 import { cloneDeep } from "../../lodash-optimized";
+import { FormControl } from "@angular/forms";
+import * as saveAs from "file-saver";
 
 // invoice-table
 export interface PeriodicElement {
@@ -183,7 +185,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     @ViewChild('convertBill', { static: true }) public convertBill: TemplateRef<any>;
     // table sorting
     @ViewChild(MatSort) sort: MatSort;
-    public showNameSearch: boolean;
+    public showCustomerSearch: boolean = false;
+    public showInvoiceNoSearch: boolean = false;
+    public voucherNumberInput: FormControl = new FormControl();
+    public accountUniqueNameInput: FormControl = new FormControl();
     /** Invoice confirmation popup configuration */
     public InvoiceConfirmationConfiguration: ConfirmationModalConfiguration;
     /** This will hold local JSON data */
@@ -207,6 +212,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Last vouchers get in progress Observable */
+    public getVouchersInProgress$: Observable<any> = this.componentStore.getLastVouchersInProgress$;
     public invoiceSelectedDate: any = {
         fromDates: '',
         toDates: ''
@@ -229,7 +236,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         from: '',
         to: '',
         page: 1,
-        count: PAGINATION_LIMIT
+        count: PAGINATION_LIMIT,
+        q: ''
     };
     public voucherBalances: any = {
         grandTotal: 0,
@@ -246,6 +254,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public isEInvoiceEnabled: boolean;
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
     public totalResults: number = 0;
+    public selectedVouchers: any[] = [];
+    /** Holds Voucher Name that suports csv file export */
+    public csvSupportVoucherType: string[] = ['sales', 'debit note', 'credit note','purchase'];
+    public allVouchersSelected: boolean = false;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -370,6 +382,37 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
                     this.dataSource.push(item);
                 });
+            }
+        });
+
+        this.componentStore.exportVouchersFile$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.selectedVouchers = [];
+                this.allVouchersSelected = false;
+                let blob = this.generalService.base64ToBlob(response, 'application/xls', 512);
+                const fileName  = `${this.vouchersUtilityService.getExportFileNameByVoucherType(this.voucherType, this.allVouchersSelected, this.localeData)}.xls`
+                return saveAs(blob, fileName);
+            }
+        });
+
+        this.componentStore.eInvoiceGenerated$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.componentStore.resetGenerateEInvoice();
+                this.getVouchers(this.isUniversalDateApplicable);
+            }
+        });
+
+        this.voucherNumberInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
+            if (search !== null && search !== undefined) {
+                this.advanceFilters.q = search;
+                this.getVouchers(this.isUniversalDateApplicable);
+            }
+        });
+
+        this.accountUniqueNameInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
+            if (search !== null && search !== undefined) {
+                this.advanceFilters.q = search;
+                this.getVouchers(this.isUniversalDateApplicable);
             }
         });
     }
@@ -502,6 +545,40 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.advanceFilters.count = event.pageSize;
         this.advanceFilters.page = event.pageIndex + 1;
         this.getVouchers(false);
+    }
+
+    public selectVoucher(event: any, voucher: any): void {
+        if (event?.checked) {
+            this.selectedVouchers.push(voucher?.uniqueName);
+        } else {
+            this.selectedVouchers = this.selectedVouchers?.filter(selectedVoucher => selectedVoucher !== voucher?.uniqueName);
+        }
+    }
+
+    public selectAllVouchers(event: any): void {
+        this.selectedVouchers = [];
+        this.allVouchersSelected = event?.checked;
+        if (event?.checked) {
+            this.dataSource?.forEach(voucher => {
+                this.selectedVouchers.push(voucher?.uniqueName);
+            });
+        }
+    }
+
+    public exportCsvDownload(): any {
+        let exportCsvRequest = { from: '', to: '', dataToSend: null};
+        exportCsvRequest.from = this.advanceFilters.from;
+        exportCsvRequest.to = this.advanceFilters.to;
+        let dataTosend = { uniqueNames: [], type: this.voucherType };
+        if (this.selectedVouchers?.length) {
+            dataTosend.uniqueNames = this.selectedVouchers;
+            exportCsvRequest.dataToSend = dataTosend;
+            this.componentStore.exportVouchers(exportCsvRequest);
+        }
+    }
+
+    public generateEInvoice(): void {
+        this.componentStore.generateEInvoice({ payload: { voucherUniqueNames: this.selectedVouchers, voucherType: this.voucherType }, actionType: 'einvoice'});
     }
 
     /**
@@ -652,10 +729,18 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
     }
 
-    public toggleSearch(fieldName: string): void {
-        if (fieldName === "name") {
-            this.showNameSearch = true;
+    public toggleSearch(event: any, fieldName: string): void {
+        if (fieldName === "accountUniqueName") {
+            this.showCustomerSearch = true;
+        } else if (fieldName === "invoiceNumber") {
+            this.showInvoiceNoSearch = true;
         }
+        event.stopPropagation();
+    }
+
+    public hideSearchFields(): void {
+        this.showCustomerSearch = false;
+        this.showInvoiceNoSearch = false;
     }
 
     // convert bill dialog

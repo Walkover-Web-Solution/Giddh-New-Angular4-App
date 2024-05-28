@@ -66,7 +66,7 @@
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
-                                                    $implicit: showNameSearch,
+                                                    $implicit: showCustomerSearch,
                                                     fieldName: 'name',
                                                     formControl: searchedName,
                                                     title: name
@@ -89,7 +89,7 @@
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
-                                                    $implicit: showNameSearch,
+                                                    $implicit: showCustomerSearch,
                                                     fieldName: 'name',
                                                     formControl: searchedName,
                                                     title: name
@@ -248,7 +248,7 @@
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
-                                                    $implicit: showNameSearch,
+                                                    $implicit: showCustomerSearch,
                                                     fieldName: 'name',
                                                     formControl: searchedName,
                                                     title: name
@@ -271,7 +271,7 @@
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
-                                                    $implicit: showNameSearch,
+                                                    $implicit: showCustomerSearch,
                                                     fieldName: 'name',
                                                     formControl: searchedName,
                                                     title: name
@@ -400,16 +400,17 @@
                                 <watch-video [cssClass]="'text-blue'" [moduleName]="'SALES_PREVIEW'"></watch-video>
                             </button>
                             <button mat-stroked-button colo="primary" [matTooltip]="'Export'"
-                            [matTooltipPosition]="'above'">
+                            [matTooltipPosition]="'above'" *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length" [tooltip]="commonLocaleData?.app_export" (click)="exportCsvDownload()">
                                 <i class="icon-export-icon"></i>
                             </button>
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreInvoice">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreInvoice" *ngIf="selectedVouchers?.length">
                                 <span>More</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
                             <mat-menu #moreInvoice="matMenu">
                                 <button mat-menu-item (click)="bulkUpdateDialog()">Bulk Update</button>
-                                <button mat-menu-item>Create E-invoice</button>
+                                <button mat-menu-item *ngIf="selectedVouchers?.length === 1">{{ localeData?.generate_eway_bill }}</button>
+                                <button mat-menu-item *ngIf="isEInvoiceEnabled && (voucherType === 'credit note' || voucherType === 'debit note' || voucherType === 'sales')" (click)="generateEInvoice()">Create E-invoice</button>
                                 <button mat-menu-item (click)="deleteVoucherDialog()">Delete</button>
                             </mat-menu>
                             <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">Filter
@@ -443,45 +444,50 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
+                        <giddh-page-loader *ngIf="(getVouchersInProgress$ | async)"></giddh-page-loader>
+                        <table mat-table *ngIf="!(getVouchersInProgress$ | async)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef> #
-                                    <!-- <span>
+                                <th mat-header-cell *matHeaderCellDef> <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
+                                    <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
                                             color="primary"
+                                            [value]="true"
+                                            (change)="selectAllVouchers($event)"
                                         ></mat-checkbox>
-                                    </span> -->
+                                    </span>
                                 </th>
                                 <td mat-cell *matCellDef="let element">
                                     <div class="d-flex align-items-center">
-                                        <div class="invoice-number">
+                                        <div class="invoice-number" *ngIf="!selectedVouchers?.length">
                                             {{element.index}}
                                         </div>
-                                        <div class="checkbox-hide">
+                                        <div [ngClass]="{'checkbox-hide': !selectedVouchers?.length }">
                                             <mat-checkbox
                                                 color="primary"
+                                                [checked]="selectedVouchers.includes(element.uniqueName)"
+                                                [value]="element.uniqueName"
+                                                (change)="selectVoucher($event, element)"
                                             ></mat-checkbox>
                                         </div>
                                     </div>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="invoice">
-                                <th mat-header-cell *matHeaderCellDef>
+                                <th mat-header-cell *matHeaderCellDef (clickOutside)="hideSearchFields()">
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
-                                                    $implicit: showNameSearch,
-                                                    fieldName: 'name',
-                                                    formControl: searchedName,
-                                                    title: name
+                                                    $implicit: showInvoiceNoSearch,
+                                                    fieldName: 'invoiceNumber',
+                                                    formControl: voucherNumberInput,
+                                                    title: 'Invoice No.'
                                                 }
                                             "
                                         ></ng-container>
-                                        Invoice No.
                                     </div>
-                                    </th>
+                                </th>
                                 <td mat-cell *matCellDef="let element">
                                     <a href="javascript:;" class="btn-link-2">{{ element.voucherNumber ? element.voucherNumber : commonLocaleData?.app_not_available }}</a>
                                     <small class="text-danger d-block" *ngIf="element.overdueDays">
@@ -490,20 +496,19 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="customer">
-                                <th mat-header-cell *matHeaderCellDef> 
+                                <th mat-header-cell *matHeaderCellDef (clickOutside)="hideSearchFields()"> 
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
-                                                    $implicit: showNameSearch,
-                                                    fieldName: 'name',
-                                                    formControl: searchedName,
-                                                    title: name
+                                                    $implicit: showCustomerSearch,
+                                                    fieldName: 'accountUniqueName',
+                                                    formControl: accountUniqueNameInput,
+                                                    title: 'Customer'
                                                 }
                                             "
                                         ></ng-container>
-                                        Customer
                                     </div>    
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
@@ -603,6 +608,7 @@
                             <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="checkbox-show"></tr>
                         </table>
                         <mat-paginator
+                            *ngIf="!(getVouchersInProgress$ | async)"
                             (page)="handlePageChange($event)"
                             [length]="totalResults"
                             [pageSize]="advanceFilters.count"
@@ -682,7 +688,7 @@
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
-                                                    $implicit: showNameSearch,
+                                                    $implicit: showCustomerSearch,
                                                     fieldName: 'name',
                                                     formControl: searchedName,
                                                     title: name
@@ -703,7 +709,7 @@
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
-                                                    $implicit: showNameSearch,
+                                                    $implicit: showCustomerSearch,
                                                     fieldName: 'name',
                                                     formControl: searchedName,
                                                     title: name
@@ -861,7 +867,7 @@
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
-                                                    $implicit: showNameSearch,
+                                                    $implicit: showCustomerSearch,
                                                     fieldName: 'name',
                                                     formControl: searchedName,
                                                     title: name
@@ -882,7 +888,7 @@
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
-                                                    $implicit: showNameSearch,
+                                                    $implicit: showCustomerSearch,
                                                     fieldName: 'name',
                                                     formControl: searchedName,
                                                     title: name
@@ -1155,7 +1161,7 @@
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
-                                                    $implicit: showNameSearch,
+                                                    $implicit: showCustomerSearch,
                                                     fieldName: 'name',
                                                     formControl: searchedName,
                                                     title: name
@@ -1176,7 +1182,7 @@
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
-                                                    $implicit: showNameSearch,
+                                                    $implicit: showCustomerSearch,
                                                     fieldName: 'name',
                                                     formControl: searchedName,
                                                     title: name
@@ -1304,7 +1310,7 @@
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
-                                                    $implicit: showNameSearch,
+                                                    $implicit: showCustomerSearch,
                                                     fieldName: 'name',
                                                     formControl: searchedName,
                                                     title: name
@@ -1325,7 +1331,7 @@
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
-                                                    $implicit: showNameSearch,
+                                                    $implicit: showCustomerSearch,
                                                     fieldName: 'name',
                                                     formControl: searchedName,
                                                     title: name
@@ -1354,7 +1360,7 @@
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
-                                                    $implicit: showNameSearch,
+                                                    $implicit: showCustomerSearch,
                                                     fieldName: 'name',
                                                     formControl: searchedName,
                                                     title: name
@@ -2007,11 +2013,11 @@
         #searchTemplate
         let-show
         let-title="title"
-        let-placeholder="placeholder"
         let-fieldName="fieldName"
+        let-formControl="formControl"
     >
         <div class="align-items-center d-flex" [hidden]="show">
-            <span (click)="toggleSearch(fieldName)">
+            <span (click)="toggleSearch($event, fieldName)">
                 <i class="icon-search icon-font-16"></i>
             </span>
             <span>{{ title }}</span>
@@ -2022,10 +2028,11 @@
                 [placeholder]="'Search'"
                 [cssClass]="'form-control search-table mat-field-border'"
                 [autoFocus]="show"
+                
             ></text-field>
         </div>
     </ng-template>
-
+    <!-- [formControl]="formControl" -->
     <!-- datepicker field -->
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">

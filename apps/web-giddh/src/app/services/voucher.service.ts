@@ -421,4 +421,21 @@ export class VoucherService {
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<ReciptResponse, any>(e, payload)));
     }
+
+    public exportVouchers(model: any): Observable<BaseResponse<string, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + INVOICE_API.DOWNLOAD_INVOICE_EXPORT_CSV?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':from', encodeURIComponent(model.from))?.replace(':to', encodeURIComponent(model.to));
+
+        delete model.dataToSend.from;
+        delete model.dataToSend.to;
+        url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+
+        return this.http.post(url, model.dataToSend).pipe(
+            map((res) => {
+                let data: BaseResponse<string, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, any>(model)));
+    }
 }
