@@ -1,64 +1,42 @@
 <ng-container appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+    (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu></hamburger-menu>
     <div class="relative w-100">
         <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-        *ngIf="asideGstSidebarMenuState === 'in'">
-        <tax-sidebar (navigateEvent)="handleNavigation()"
-            (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
-            [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
+            *ngIf="asideGstSidebarMenuState === 'in'">
+            <tax-sidebar (navigateEvent)="handleNavigation()"
+                (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
+                [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
     </div>
-    <div class="liability-report mx-auto pd-15" >
-        <div class="mt-5" *ngIf="isLoading">
-            <giddh-page-loader></giddh-page-loader>
-        </div>
-        <div class="container-fluid ml-0" *ngIf="!isLoading">
+    <div class="liability-report mx-auto pd-15">
+        <div class="container-fluid ml-0">
             <div class="row align-items-center row-gap">
-                <div class="col flex-grow-0">
-                    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                        <input type="text" name="selectedDateRange"
-                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker" />
-                    </div>
-                </div>
-                <div class="col flex-grow-0">
-                    <dropdown-field [label]="commonLocaleData?.app_tax_number" [options]="taxesList" [defaultValue]="taxesList[0]?.label"
-                        (selectedOption)="taxNumberSelected($event)" [placeholder]="localeData?.select_tax_number">
-                    </dropdown-field>
-                </div>
-                <div class="col flex-grow-0" *ngIf="isCompanyMode && isMultipleBranch">
-                    <dropdown-field [label]="commonLocaleData?.app_branch" [options]="branchList"
-                        (selectedOption)="branchSelected($event)"
-                        [placeholder]="commonLocaleData?.app_select_branch"></dropdown-field>
-                </div>
-                <div class="col flex-grow-0">
-                    <button mat-stroked-button color="primary" (click)="getVatLiabilityReport()">{{
-                        commonLocaleData?.app_search }}</button>
-                </div>
-                <div class="col ml-auto flex-grow-0">
-                    <div class="d-flex align-items-center column-gap1">
-                        <div class="currency-width">
-                            <dropdown-field [label]="commonLocaleData?.app_currency"
-                                [options]="vatReportCurrencyList"
-                                (selectedOption)="onCurrencyChange($event)"
-                                [placeholder]="commonLocaleData?.app_select"
-                                [defaultValue]="getFormControl('currencyCode').value"
-                                [required]="true"></dropdown-field>
-                        </div>
-                        <div *ngIf="hasTaxNumber"
-                            class="export-btn w100">
-                            <button mat-stroked-button color="primary" (click)="downloadVatReport()">
-                                <i class="icon-download1"></i>
-                                {{ commonLocaleData?.app_export }}
-                            </button>
-                        </div>
-                    </div>
+                <div class="w-100">
+                    <vat-report-filters 
+                        [localeData]="localeData" 
+                        [commonLocaleData]="commonLocaleData"
+                        [activeCompany]="activeCompany" 
+                        [isZimbabweCompany]="true" 
+                        [localeData]="localeData"
+                        [vatReportCurrencyCode]="getFormControl('currencyCode')?.value"
+                        (getReport)="getVatLiabilityReport()" 
+                        (exportReport)="downloadVatLiabilityReport()"
+                        (isTaxApiInProgress)="isTaxApiInProgress = $event"
+                        (currentCurrencyCode)="getFormControl('currencyCode')?.patchValue($event)"
+                        (currentCurrencySymbol)="vatReportCurrencySymbol = $event"
+                        (currentTaxNumber)="getFormControl('taxNumber')?.patchValue($event)"
+                        (fromDate)="getFormControl('from')?.patchValue($event)"
+                        (toDate)="getFormControl('to')?.patchValue($event)"
+                        (currentBranchChange)="getFormControl('branchUniqueName')?.patchValue($event)">
+                    </vat-report-filters>
                 </div>
             </div>
-
-            <div class="row mt-5" *ngIf="vatLiabilityOverviewReport && !isLoading">
-                <div class="table-responsive">
+            <div class="mt-5" *ngIf="isLoading">
+                <giddh-page-loader></giddh-page-loader>
+            </div>
+            <div class="row mt-5">
+                <div class="table-responsive" *ngIf="vatLiabilityOverviewReport && !isLoading">
                     <table class="table table-bordered">
                         <tr *ngFor="let vatReport of vatLiabilityOverviewReport">
                             <td width="80%">
@@ -66,88 +44,26 @@
                                     {{ vatReport?.section }}
                                 </span>
                                 <ng-template #clickableItem>
-                                    <a href="javascript:;" (click)="viewDetailedReport(vatReport)"> {{ vatReport?.section }}</a>
+                                    <a href="javascript:;" (click)="viewDetailedReport(vatReport)"> 
+                                        {{vatReport?.section }}
+                                    </a>
                                 </ng-template>
                             </td>
                             <td width="20%" class="text-right">
-                                <amount-field
-                                    class="d-inline-block"
+                                <amount-field 
+                                    class="d-inline-block" 
                                     [amount]="vatReport?.vattotal"
-                                    [currencySymbol]="vatReportCurrencySymbol"
+                                    [currencySymbol]="vatReportCurrencySymbol" 
                                     [currencyCode]="false"
-                                    >
+                                >
                                 </amount-field>
                             </td>
                         </tr>
                     </table>
                 </div>
-            </div>
-
-            
-            <div class="row mt-5" *ngIf="tableDataSource.length && !isLoading">
-                <div class="table-responsive">
-                    <table mat-table [dataSource]="tableDataSource" class="w-100">
-                        <ng-container matColumnDef="start">
-                            <th mat-header-cell *matHeaderCellDef>
-                                {{ commonLocaleData?.app_start_date }}
-                            </th>
-                            <td mat-cell *matCellDef="let element">
-                                {{ element?.start }}
-                            </td>
-                        </ng-container>
-                        <ng-container matColumnDef="end">
-                            <th mat-header-cell *matHeaderCellDef>
-                                {{ commonLocaleData?.app_end_date }}
-                            </th>
-                            <td mat-cell *matCellDef="let element">
-                                {{ element?.end }}
-                            </td>
-                        </ng-container>
-                        <ng-container matColumnDef="due">
-                            <th mat-header-cell *matHeaderCellDef>
-                                {{ commonLocaleData?.app_due }}
-                            </th>
-                            <td mat-cell *matCellDef="let element">
-                                {{ element?.due }}
-                            </td>
-                        </ng-container>
-                        <ng-container matColumnDef="status">
-                            <th mat-header-cell *matHeaderCellDef>
-                                {{ commonLocaleData?.app_status }}
-                            </th>
-                            <td mat-cell *matCellDef="let element">
-                                <ng-container *ngIf="element?.status === 'F'">{{ localeData?.status_fulfilled
-                                    }}</ng-container>
-                                <ng-container *ngIf="element?.status === 'O'">{{
-                                    localeData?.status_open}}</ng-container>
-                            </td>
-                        </ng-container>
-                        <ng-container matColumnDef="action">
-                            <th mat-header-cell *matHeaderCellDef>
-                                {{ commonLocaleData?.app_action }}
-                            </th>
-                            <td mat-cell *matCellDef="let element">
-                                <button class="action-btn" *ngIf="element.status ===  'F'" mat-stroked-button
-                                    (click)="openViewReturnDialog(element?.start, element?.end, element?.periodKey)">{{
-                                    localeData?.view_return }}</button>
-                                <button class="action-btn" *ngIf="element.status ===  'O'" mat-stroked-button
-                                    (click)="openFileReturnDialog(element?.start, element?.end, element?.periodKey)">
-                                    {{ localeData?.file_return }}</button>
-                            </td>
-                        </ng-container>
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                    </table>
-                    <section *ngIf="!tableDataSource?.length">
-                        <div class="no-data">
-                            <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
-                        </div>
-                    </section>
+                <div *ngIf="!isTaxApiInProgress && !vatLiabilityOverviewReport?.length" class="no-data no-report">
+                    <h1>{{ localeData?.no_vat_available }}</h1>
                 </div>
-            </div>
-            <div *ngIf="!isTaxApiInProgress && !tableDataSource?.length && !taxesList?.length"
-                class="no-data no-report">
-                <h1>{{ isKenyaCompany ? localeData?.no_vat_available : localeData?.no_trn_available }}</h1>
             </div>
         </div>
     </div>

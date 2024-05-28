@@ -34,6 +34,7 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
 import { WithHeldSettingComponent } from './with-held-setting/with-held-setting.component';
 import { LiabilityReportComponent } from './liability-report/liability-report.component';
 import { LiabilityDetailedReportComponent } from './liability-detailed-report/liability-detailed-report.component';
+import { VatReportFiltersComponent } from './vat-report-filters/vat-report-filters.component';
 
 @NgModule({
     declarations: [
@@ -44,7 +45,8 @@ import { LiabilityDetailedReportComponent } from './liability-detailed-report/li
         FileReturnComponent,
         WithHeldSettingComponent,
         LiabilityReportComponent,
-        LiabilityDetailedReportComponent
+        LiabilityDetailedReportComponent,
+        VatReportFiltersComponent
     ],
     imports: [
         VatReportRoutingModule,
