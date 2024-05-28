@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, OnChanges } from "@angular/core";
+import { Component, OnInit, ViewChild, Input, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, OnChanges, Output, EventEmitter } from "@angular/core";
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import { MatAccordion } from "@angular/material/expansion";
 import { MatDialog } from "@angular/material/dialog";
@@ -45,6 +45,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public localeData: any = {};
     /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** Holds Mat Input Label */
+    @Output() public isSubscriptionLoading: EventEmitter<boolean> = new EventEmitter<boolean>();
     /**  This will use for companies list expansion in accordian */
     @ViewChild(MatAccordion) accordion: MatAccordion;
     /** This will use for move company in to another company  */
@@ -212,10 +214,12 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
      */
     public getCompanies(): void {
         this.showLoader = true;
+        this.isSubscriptionLoading.emit(true);
 
         //This service will use for get subscribed companies
         this.subscriptionService.getSubScribedCompanies().pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.showLoader = false;
+            this.isSubscriptionLoading.emit(false);
             if (res && res.status === "success") {
                 if (!res.body || !res.body[0]) {
                     this.isPlanShow = true;
@@ -250,7 +254,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
         event.stopPropagation();
         this.selectedCompany = company;
         this.subscriptionMove = true;
-        this.dialog.open(this.moveCompany, { width: '40%' });
+        this.dialog.open(this.moveCompany, { width: '500px' });
     }
 
     /**
@@ -294,10 +298,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
                     let flag = true;
                     if (
                         (this.searchSubscription?.value && (subscriptionDetails?.subscriptionId?.toLowerCase()?.indexOf(this.searchSubscription?.value?.toLowerCase()) === -1 && !(subscriptionDetails?.companiesWithTransactions?.filter(company => company?.name?.toLowerCase()?.indexOf(this.searchSubscription?.value?.toLowerCase()) > -1)?.length)) ||
-                        (this.filters?.plan && subscriptionDetails?.planDetails?.uniqueName !== this.filters?.plan) ||
-                        (this.filters?.expiration && (subscriptionDetails?.remainingDays < 0 || subscriptionDetails?.remainingDays > this.filters?.expiration)) ||
-                        (this.filters?.transactionBalance && (subscriptionDetails?.remainingTransactions < 0 || subscriptionDetails?.remainingTransactions > this.filters?.transactionBalance))
-                    ) ||
+                            (this.filters?.plan && subscriptionDetails?.planDetails?.uniqueName !== this.filters?.plan) ||
+                            (this.filters?.expiration && (subscriptionDetails?.remainingDays < 0 || subscriptionDetails?.remainingDays > this.filters?.expiration)) ||
+                            (this.filters?.transactionBalance && (subscriptionDetails?.remainingTransactions < 0 || subscriptionDetails?.remainingTransactions > this.filters?.transactionBalance))
+                        ) ||
                         (this.filters?.plan && subscriptionDetails?.planDetails?.uniqueName !== this.filters?.plan) ||
                         (this.filters?.expiration && (subscriptionDetails?.remainingDays < 0 || subscriptionDetails?.remainingDays > this.filters?.expiration)) ||
                         (this.filters?.transactionBalance && (subscriptionDetails?.remainingTransactions < 0 || subscriptionDetails?.remainingTransactions > this.filters?.transactionBalance))
@@ -434,5 +438,15 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
             { name: this.localeData?.transaction_balance_list?.less_than_10k, value: 10000 },
             { name: this.localeData?.transaction_balance_list?.less_than_50k, value: 50000 }
         ];
+    }
+
+
+    /**
+     * Redirection to new buy plan page
+     *
+     * @memberof SubscriptionComponent
+     */
+    public goToBuyNow(subscriptionId: any): void {
+        this.route.navigate(['/pages/subscription/buy-plan/' + subscriptionId]);
     }
 }

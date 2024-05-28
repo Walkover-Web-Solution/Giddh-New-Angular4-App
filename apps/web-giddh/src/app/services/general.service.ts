@@ -15,7 +15,6 @@ import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfac
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { HttpHeaders } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable()
@@ -1588,24 +1587,6 @@ export class GeneralService {
     };
 
     /**
-     * This will be use for generating random URLs
-     *
-     * @param {string} value
-     * @return {*}  {string}
-     * @memberof GeneralService
-     */
-    public generateRandomString(value: string): string {
-        const randomLength = 8; // Adjust the length of the random string as needed
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let result = '';
-        for (let i = 0; i < randomLength; i++) {
-            const randomIndex = Math.floor(Math.random() * characters.length);
-            result += characters.charAt(randomIndex);
-        }
-        return result + '.' + value;
-    }
-
-    /**
      * Get current date/time in this format - 06-11-2023 02:08:45
      *
      * @returns {string}
@@ -1622,6 +1603,24 @@ export class GeneralService {
         const seconds = String(now.getSeconds()).padStart(2, '0');
 
         return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+    }
+
+    /**
+     * This will be use for generating random URLs
+     *
+     * @param {string} value
+     * @return {*}  {string}
+     * @memberof GeneralService
+     */
+    public generateRandomString(value: string): string {
+        const randomLength = 8; // Adjust the length of the random string as needed
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        for (let i = 0; i < randomLength; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            result += characters.charAt(randomIndex);
+        }
+        return result + '.' + value;
     }
 
     /**
@@ -1909,22 +1908,40 @@ export class GeneralService {
     }
 
     /**
+     * Get Client Screen Size (width, height,scaling-factor
+     * and colour-depth) in single string
+     *
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getClientScreens(): string {
+        const screen = window.screen;
+        return `width=${screen.width}&height=${screen.height}&scaling-factor=${window.devicePixelRatio}&colour-depth=${screen.colorDepth}`;
+    }
+
+    /**
+     * Get Client Window Size (width and height) in single string
+     *
+     * @returns {string}
+     * @memberof GeneralService
+     */
+    public getClientWindowSize(): string {
+        return `width=${window.innerWidth}&height=${window.innerHeight}`;
+    }
+
+    /**
      * This will be use for get user agent
      *
      * @param {*} clientIp
      * @return {*}
      * @memberof GeneralService
      */
-    public getUserAgentData(clientIp: any): any {
+    public getUserAgentData(): any {
         let args: any = {};
-        args['os'] = this.getOsConfiguration();
-        args['os-family'] = this.getOSFamily();
-        args['os-version'] = this.getOSVersion();
-        args['device-manufacturer'] = this.getDeviceManufacture();
-        args['device-model'] = this.getDeviceModel();
-        args['timestamp'] = this.getTimesStamp();
-        args['client-ip'] = clientIp;
-        args['Gov-Client-Timezone'] = 'UTC' + this.getUserTimeZone();
+        args["timestamp"] = this.getTimesStamp();
+        args["Gov-Client-Timezone"] = 'UTC' + this.getUserTimeZone();
+        args["Gov-client-screens"] = this.getClientScreens();
+        args["Gov-client-window-size"] = this.getClientWindowSize();
         return args;
     }
 
@@ -1935,5 +1952,38 @@ export class GeneralService {
      */
     public getClientIp(): any {
         return this.http.get<any>(MOBILE_NUMBER_SELF_URL);
+    }
+
+    /**
+    * This will be use for open window in center
+    *
+    * @param {string} url
+    * @param {string} title
+    * @param {number} width
+    * @param {number} height
+    * @return {*}  {(Window | null)}
+    * @memberof GeneralService
+    */
+    public openCenteredWindow(url: string, title: string, width: number, height: number): Window | null {
+        const left = (window.screen.width / 2) - (width / 2);
+        const top = (window.screen.height / 2) - (height / 2);
+
+        // Open the window and return the reference
+        return window.open(
+            url,
+            title,
+            `width=${width},height=${height},top=${top},left=${left}`
+        );
+    }
+
+    /**
+    * Get Country Flag Image Url by 2 digit country code
+    *
+    * @param {string} countryCode
+    * @return {*}  {string}
+    * @memberof GeneralService
+    */
+    public getCountryFlagUrl(countryCode: string): string {
+        return countryCode ? `https://giddh-uploads-2.s3.ap-south-1.amazonaws.com/flags/${countryCode?.toLowerCase()}.svg` : '';
     }
 }

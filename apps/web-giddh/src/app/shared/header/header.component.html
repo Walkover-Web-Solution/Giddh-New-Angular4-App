@@ -2,7 +2,12 @@
 <div class="message-wrapper" *ngIf="showDepreciationMessage">
     <p class="text-center py-2">
         {{ localeData?.depreciation_message }}
-        <a href="mailto:support@giddh.com" aria-label="email" class="text-underline">support@giddh.com</a>
+        <a href="mailto:support@giddh.com" aria-label="email" class="text-underline">
+            support
+            <span>&#64;</span> <!-- This &#64; Html Code for @ symbol  -->
+            giddh.com
+        </a>
+        
         {{ localeData?.depreciation_data_message }} &nbsp;
         <a
             href="javascript:void(0);"
@@ -25,8 +30,8 @@
         class="nav-left-bar"
         [ngClass]="{
             'open': isSidebarExpanded,
-            'unvisible': companyList?.length === 0 && !isSubscriptionPage,
-            'hide-sidebar': isSubscriptionPage
+            'unvisible': companyList?.length === 0 && !isSubscriptionModule,
+            'hide-sidebar': isSubscriptionModule
         }"
         (clickOutside)="closeSidebarMobile($event)"
     >
@@ -48,23 +53,37 @@
         <div
             class="primary-main-header"
             id="primary-new-header"
-            [ngClass]="{ 'open': sideMenu.isopen, 'unvisible': companyList?.length === 0 && !isSubscriptionPage }"
+            [ngClass]="{ 'open': sideMenu.isopen, 'unvisible': companyList?.length === 0 && !isSubscriptionModule }"
         >
             <div class="d-flex justify-content-between align-items-center h-100">
-                <button
-                    *ngIf="companyList?.length && isSubscriptionPage"
-                    class="min160 company-button"
-                    color="primary"
-                    mat-stroked-button
-                    (click)="backToCompany()"
-                    [matTooltip]="activeCompany?.name"
-                    [matTooltipPosition]="'below'"
-                    matTooltipClass="tooltip-black"
-                >
-                    <i class="icon-left back-left"></i>
-                    {{ commonLocaleData?.app_back }} {{ commonLocaleData?.app_to }}
-                    <span class="word-wrap-dots">{{ activeCompany?.name }}</span>
-                </button>
+                <div *ngIf="companyList?.length && (isSubscriptionModule || isSubscriptionPage)">
+                    <button
+                        *ngIf="companyList?.length && isSubscriptionModule"
+                        class="min160 company-button"
+                        color="primary"
+                        mat-stroked-button
+                        (click)="backToCompany()"
+                        [matTooltip]="activeCompany?.name"
+                        [matTooltipPosition]="'below'"
+                        matTooltipClass="tooltip-black"
+                    >
+                        <i class="icon-left back-left"></i>
+                        {{ commonLocaleData?.app_back }} {{ commonLocaleData?.app_to }}
+                        <span class="word-wrap-dots">{{ activeCompany?.name }}</span>
+                    </button>
+                    <button
+                        *ngIf="companyList?.length && isSubscriptionPage"
+                        class="min160 company-button ml-3"
+                        color="primary"
+                        mat-stroked-button
+                        (click)="backToSubscription()"
+                        aria-label="back"
+                    >
+                        <i class="icon-left back-left"></i>
+                        {{ commonLocaleData?.app_back }} {{ commonLocaleData?.app_to }}
+                        <span class="word-wrap-dots">{{ localeData?.subscription }}</span>
+                    </button>
+                </div>
                 <div class="logo-wrapper pd-l4">
                     <img
                         src="{{ imgPath }}giddh-white-logo.svg"
@@ -74,7 +93,7 @@
                     />
                 </div>
                 <ul class="nav universal-date h-100" *ngIf="selectedCompany | async">
-                    <ng-container *ngIf="!isSubscriptionPage">
+                    <ng-container *ngIf="!isSubscriptionModule">
                         <li>
                             <button
                                 mat-icon-button
@@ -379,6 +398,32 @@
                                             </div>
                                             <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
                                                 <span class="d-flex">
+                                                    <i class="icon-invoice-new mr-r1"></i>
+                                                </span>
+                                                <span>
+                                                    <a
+                                                        class="cursor-pointer"
+                                                        (click)="navigateToSubItemLink('/vouchers/receipt/create')"
+                                                    >
+                                                        {{ commonLocaleData?.app_voucher_types?.receipt }}
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                                <span class="d-flex">
+                                                    <i class="icon-invoice-new mr-r1"></i>
+                                                </span>
+                                                <span>
+                                                    <a
+                                                        class="cursor-pointer"
+                                                        (click)="navigateToSubItemLink('/vouchers/payment/create')"
+                                                    >
+                                                        {{ commonLocaleData?.app_voucher_types?.payment }}
+                                                    </a>
+                                                </span>
+                                            </div>
+                                            <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                                <span class="d-flex">
                                                     <i class="icon-manufacturing1 mr-r1"></i>
                                                 </span>
                                                 <span>
@@ -515,7 +560,7 @@
             remainingSubscriptionDays !== false &&
             remainingSubscriptionDays <= 7
         "
-        [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionPage }"
+        [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
         <div class="white-row plan-issue">
             <p>
@@ -530,7 +575,7 @@
     <div
         class="plan-wrapper"
         *ngIf="subscribedPlan !== undefined && subscribedPlan?.status === 'expired'"
-        [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionPage }"
+        [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
         <div class="white-row plan-issue">
             <p>
@@ -545,7 +590,7 @@
     <div
         class="plan-wrapper"
         *ngIf="subscribedPlan !== undefined && subscribedPlan.additionalCharges"
-        [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionPage }"
+        [ngClass]="{ 'menu_open': isSidebarExpanded && !isSubscriptionModule }"
     >
         <div class="white-row plan-issue">
             <p>
@@ -697,6 +742,13 @@
             }"
             (closeAsideEvent)="toggleSidebarPane(false, false)"
         ></aside-setting>
+    </div>
+    <div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideInventorySidebarMenuState === 'in'">
+        <inventory-sidebar
+            class="inventory-sidebar"
+            [ngClass]="{ 'inventory-sidebar': isMobileSidebar }"
+            (closeAsideEvent)="toggleSidebarPane(false, false)"
+        ></inventory-sidebar>
     </div>
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">

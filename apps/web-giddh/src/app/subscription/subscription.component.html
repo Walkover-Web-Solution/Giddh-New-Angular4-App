@@ -5,8 +5,8 @@
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="subscription-container pd-15">
-        <div class="button-wrapper d-flex w-100 pd-l1 justify-content-between pd-r1 pd-t1">
+    <div class="subscription-container mx-auto pd-15">
+        <div class="button-wrapper d-flex w-100 pd-l1 justify-content-between pd-t1">
             <button
                 *ngIf="
                     showClearFilter ||
@@ -33,7 +33,7 @@
         <div *ngIf="subscriptionListInProgress$ | async">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <section *ngIf="showData && !(subscriptionListInProgress$ | async)">
+        <section *ngIf="showData && !(subscriptionListInProgress$ | async)" class="mt-4">
             <form
                 class="table-responsive"
                 name="subscriptionListForm"
@@ -64,10 +64,10 @@
                         </th>
                         <td class="subscription-td" mat-cell *matCellDef="let element" width="15%">
                             <a
-                                class="cursor-pointer"
+                                class="cursor-pointer underline"
                                 *ngIf="element?.companies?.length > 1"
                                 (click)="openCompanyDialog(element)"
-                                >{{ element?.companies?.length }}</a
+                                >{{ element?.companies?.length }} -  {{ commonLocaleData?.app_company }}</a
                             >
                             <span *ngIf="element?.companies?.length === 1">{{ element?.companies[0]?.name }}</span>
                         </td>
@@ -212,9 +212,11 @@
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="renewalDate">
-                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.renewal_date }}</th>
+                        <th mat-header-cell *matHeaderCellDef class="text-center">{{ localeData?.renewal_date }}</th>
                         <td mat-cell *matCellDef="let element" class="position-relative word-wrap">
-                            <div class="d-flex align-items-center justify-content-center column-gap1">
+                            <div
+                                class="renewal-date-column d-flex align-items-center justify-content-center column-gap1"
+                            >
                                 {{ element?.renewalDate }}
                                 <button
                                     mat-icon-button
@@ -240,7 +242,11 @@
                                         {{ commonLocaleData?.app_buy_plan }}
                                     </button>
                                     <button
-                                        *ngIf="element?.status?.toLowerCase() === 'expired' && element?.isOwner"
+                                        *ngIf="
+                                            element?.status?.toLowerCase() === 'expired' &&
+                                            element?.isOwner &&
+                                            activeCompany.subscription?.country?.countryCode !== 'GB'
+                                        "
                                         mat-menu-item
                                         (click)="buyPlan(element)"
                                     >
@@ -301,7 +307,10 @@
         <div class="no-data" *ngIf="!dataSource?.filteredData?.length && !(subscriptionListInProgress$ | async)">
             <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
         </div>
-        <div class="pagination-wrapper justify-content-end" *ngIf="subscriptionRequestParams.totalItems > 20 && showData && !(subscriptionListInProgress$ | async)">
+        <div
+            class="pagination-wrapper justify-content-end"
+            *ngIf="subscriptionRequestParams.totalItems > 20 && showData && !(subscriptionListInProgress$ | async)"
+        >
             <mat-paginator
                 (page)="handlePageChange($event)"
                 [length]="subscriptionRequestParams.totalItems"
@@ -318,8 +327,8 @@
 </ng-container>
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
     <div [hidden]="show">
-        <i class="icon-search" (click)="toggleSearch(fieldName)"></i>
         <span> {{ title }}</span>
+        <i class="icon-search" (click)="toggleSearch(fieldName)"></i>
     </div>
     <div class="input-container" [hidden]="!show">
         <text-field

@@ -648,7 +648,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="text-right" *ngIf="fieldsAndVisibility.table.previousDue?.display">
+                            <tr
+                                class="text-right"
+                                *ngIf="fieldsAndVisibility.table.previousDue?.display && voucherType === 'sales'"
+                            >
                                 <td [attr.colspan]="columnsVisibled">
                                     {{
                                         fieldsAndVisibility.table.previousDue?.label?.length > 0

@@ -14,6 +14,7 @@
         align-items: center;
         justify-content: center;
         background-color: var(--color-white);
+        height: 40px;
         i {
             font-size: var(--font-size-12);
             padding-right: 8px;
@@ -55,9 +56,10 @@
 }
 .warehouse-options {
     text-align: right;
+    display: flex;
+    align-items: center;
     .warehouse-status {
         float: left;
-        margin-right: -8px;
 
         &.warehouse-active {
             color: var(--color-teal);
@@ -215,6 +217,17 @@ span.set-as-default {
     bottom: -70px;
     right: 90px;
 }
+
+button {
+    &.mat-menu-item {
+        line-height: 32px;
+        height: 30px;
+        &:hover {
+            color: var(--color-blue);
+        }
+    }
+}
+
 @media only screen and (max-width: 991px) {
     .warehouse-card h3 {
         float: none;

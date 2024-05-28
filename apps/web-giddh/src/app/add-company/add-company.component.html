@@ -24,7 +24,13 @@
                 class="bg-transparent"
             >
                 <mat-step [stepControl]="firstStepForm" role="tabpanel">
-                    <form [formGroup]="firstStepForm" name="firstStepForm" autocomplete="off" novalidate>
+                    <form
+                        [formGroup]="firstStepForm"
+                        name="firstStepForm"
+                        [autocomplete]="'disabled'"
+                        autofill="off"
+                        novalidate
+                    >
                         <ng-template matStepLabel>{{ commonLocaleData?.app_company_name }}</ng-template>
                         <div class="row row-gap">
                             <div class="col-lg-12">
@@ -42,6 +48,7 @@
                             <div class="col-6 country-space">
                                 <dropdown-field
                                     [name]="'country'"
+                                    [autocomplete]="'disabled'"
                                     [label]="commonLocaleData?.app_country + '*'"
                                     [placeholder]="localeData?.enter_country_name"
                                     [options]="countries"

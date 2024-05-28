@@ -82,7 +82,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         if (!(this._generalService.user && this._generalService.sessionId)) {
             if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download') && !window.location.href.includes('verify-subscription-ownership')  && !window.location.href.includes('dns')) {
                 if (PRODUCTION_ENV && !isElectron) {
-                    window.location.href = 'https://giddh.com/login/';
+                    window.location.href = 'https://test.giddh.com/login/';
                 } else {
                     this.router.navigate(['/login']);
                 }
@@ -209,6 +209,12 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._generalService.setParameterInLocalStorage("Country-Region", "IN");
         } else {
             this._generalService.setParameterInLocalStorage("Country-Region", "GL");
+        }
+
+        if (this._generalService.getUrlParameter("region") === "uk") {
+            this._generalService.setParameterInLocalStorage("X-Tenant", "GB");
+        } else {
+            this._generalService.setParameterInLocalStorage("X-Tenant", "GL");
         }
     }
 

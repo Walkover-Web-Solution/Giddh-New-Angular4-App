@@ -693,9 +693,9 @@ body.dark-theme {
     --color-image-filter: invert(1);
     --color-image-filter-secondary: invert(0.8);
     --color-image-filter-tertiary: invert(0.9);
-    --color-image-filter-quinary: invert(0.4);
     --color-image-filter-quaternary: invert(100%) sepia(1%) saturate(2%) hue-rotate(1deg) brightness(135%)
         contrast(100%);
+    --color-image-filter-quinary: invert(0.4);
     --color-image-filter-senary: invert(0%) sepia(100%) saturate(0%) hue-rotate(35deg) brightness(102%) contrast(102%);
     --color-caret-image: url("../../images/caret-dark.svg");
     --color-image-filter-white: brightness(0) invert(1);
@@ -741,5 +741,7 @@ body.dark-theme {
     --color-border-focus: #3f51b5;
     --color-transparent-background: #00000000;
     --color-header-icon-background: #11185c;
+    --color-primary-common : #3f51b5;
+    --color-mat-option: #0000000a;
     --color-list: #ffffff;
 }

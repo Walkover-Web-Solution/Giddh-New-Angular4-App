@@ -15,14 +15,14 @@
             >
                 <!-- Invoice filter section -->
                 <div class="mr-r1 d-flex flex-sm-row flex-column">
-                    <!-- <button
+                    <button
                         type="button"
                         class="btn btn-sky-blue dropdown-btn-new"
-                        [routerLink]="'/pages/voucher/receipt/create'"
+                        [routerLink]="'/pages/vouchers/receipt/create'"
                         *ngIf="voucherApiVersion === 2"
                     >
                         {{ localeData?.new_voucher }}
-                    </button> -->
+                    </button>
                     <div
                         class="input-group linked-entities mr-r15"
                         *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
@@ -129,13 +129,23 @@
                         </ul>
                     </ng-container>
                 </div>
-                <div
-                    class="advance-icon cursor-pointer btn btn-primary mr-0"
-                    [tooltip]="commonLocaleData?.app_advance_search"
-                    (click)="openModal()"
-                >
-                    <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
-                    <span class="icon-advance-filter"></span>
+                <div>
+                    <div
+                        class="advance-icon cursor-pointer btn btn-primary mr-0"
+                        [tooltip]="commonLocaleData?.app_advance_search"
+                        (click)="openModal()"
+                    >
+                        <span class="pd-r05 d-sm-flex d-none">{{ commonLocaleData?.app_filter }}</span>
+                        <span class="icon-advance-filter"></span>
+                    </div>
+                    <div class="btn-group ml-3" *ngIf="selectedReceipts?.length > 0 || allReceipts?.length > 0">
+                        <button
+                            class="btn btn-primary"
+                            (click)="openBulkExport(bulkExport)"
+                        >
+                            {{ commonLocaleData?.app_export }}
+                        </button>
+                    </div>
                 </div>
                 <!-- Invoice filter section ends -->
             </div>
@@ -255,7 +265,7 @@
                         "
                     >
                         <tr>
-                            <th>
+                            <th width="50px">
                                 <div
                                     *ngIf="
                                         (voucherApiVersion === 2 &&
@@ -473,7 +483,7 @@
                             *ngFor="let receipt of allReceipts; let i = index"
                             (mouseover)="hoveredReceiptUniqueName = receipt?.uniqueName"
                         >
-                            <td data-title="#">
+                            <td data-title="#" width="50px">
                                 <div
                                     *ngIf="
                                         (voucherApiVersion === 2 &&
@@ -510,7 +520,7 @@
                             </td>
                             <td
                                 width="13%"
-                                class="text-break"
+                                class="text-break cursor-pointer"
                                 [attr.data-title]="localeData?.receipt_no_label"
                                 (click)="previewVoucher(receipt)"
                             >
@@ -741,3 +751,20 @@
     [voucherType]="'receipt'"
     [allVouchers]="allReceipts"
 ></preview>
+
+<!-- Bulk export modal -->
+<ng-template #bulkExport>
+    <bulk-export-voucher
+        [type]="'receipt'"
+        [dateRange]="{ from: fromDate, to: toDate}"
+        [advanceSearch]="lastListingFilters"
+        [voucherUniqueNames]="selectedReceipts"
+        [totalItems]="
+            selectedReceipts && selectedReceipts.length > 0
+                ? selectedReceipts.length
+                : allReceipts && allReceipts.length
+        "
+        (closeModelEvent)="bulkExportModalRef.hide()"
+    >
+    </bulk-export-voucher>
+</ng-template>

@@ -48,6 +48,8 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
     public dayjs = dayjs;
     /** Modal reference */
     public modalRef: BsModalRef;
+    /** Modal bulk export reference */
+    public bulkExportModalRef: BsModalRef;
     /** Stores the list of all payments */
     public allPayments: Array<any>;
     /** Stores summary data of all payments based on filters applied */
@@ -157,6 +159,8 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
         to: '',
         dataToSend: {}
     };
+    /** Holds last filters applyed */
+    public lastListingFilters: any;
 
     /** @ignore */
     constructor(
@@ -517,7 +521,8 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                 }
             }
             requestObject = { ...requestObject, ...optionalParams };
-        }
+        }   
+        this.lastListingFilters = requestObject;
         return this.receiptService.GetAllReceipt(requestObject, 'payment');
     }
 
@@ -685,9 +690,9 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      * @memberof PaymentReportComponent
      */
     public previewVoucher(payment: any): void {
-        // if (this.voucherApiVersion === 2) {
-        //     this.router.navigate(['/pages/voucher/payment/preview/' + payment.uniqueName + '/' + payment.account?.uniqueName]);
-        // }
+        if (this.voucherApiVersion === 2) {
+            this.router.navigate(['/pages/voucher/payment/preview/' + payment.uniqueName + '/' + payment.account?.uniqueName]);
+        }
     }
 
     /**
@@ -816,5 +821,15 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                 }
             }
         });
+    }
+
+    /**
+    * This will open the bulk export modal
+    *
+    * @param {TemplateRef<any>} template
+    * @memberof PaymentReportComponent
+    */
+    public openBulkExport(template: TemplateRef<any>): void {
+        this.bulkExportModalRef = this.modalService.show(template);
     }
 }

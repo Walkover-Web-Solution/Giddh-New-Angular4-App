@@ -28,11 +28,13 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     public allRoles: INameUniqueName[] = [];
     public newRoleObj: INewRoleFormObj = new NewRoleFormClass();
     public dropdownHeading: string = '';
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Holds Fresh options list */
+    public isFreshOptions = [];
+    /** Holds Selected permissions */
+    public selectedValues: any;
 
     constructor(private store: Store<AppState>, private permissionActions: PermissionActions) {
-
     }
 
     get isFormValid() {
@@ -46,6 +48,19 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        setTimeout(() => {
+            if (this.localeData) {
+                this.isFreshOptions = [{
+                    label: this.localeData?.fresh_start,
+                    value: true
+                },
+                {
+                    label: this.localeData?.copy_other_role,
+                    value: false
+                }];
+                this.dropdownHeading = this.localeData?.select_pages;
+            }
+        }, 200);
         this.store.pipe(select(p => p.permission), takeUntil(this.destroyed$)).subscribe((p: PermissionState) => {
             if (p.roles && p.roles.length) {
                 this.allRoles = [];
@@ -53,6 +68,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
                     this.allRoles.push({ name: role?.name, uniqueName: role?.uniqueName });
                 });
             }
+            this.newRoleObj.isSelectedAllPages = false;
             this.newRoleObj.pageList = [];
             if (p.pages && p.pages.length) {
                 p.pages.forEach((page: IPageStr) => {
@@ -60,9 +76,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
                 });
             }
         });
-
-        this.dropdownHeading = this.localeData?.select_pages;
-
+    
         this.store.dispatch(this.permissionActions.GetAllPages());
         this.newRoleObj.isFresh = true;
     }
@@ -101,12 +115,17 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     }
 
     public selectAllPages(event) {
-        if (event.target?.checked) {
+        if (event.checked) {
+            this.selectedValues = [];
+            this.newRoleObj.pageList.forEach((item: IPage) => {
+                item.isSelected = true;
+                this.selectedValues.push(item)
+            });
             this.newRoleObj.isSelectedAllPages = true;
-            this.newRoleObj.pageList.forEach((item: IPage) => item.isSelected = true);
         } else {
-            this.newRoleObj.isSelectedAllPages = false;
+            this.selectedValues = [];
             this.newRoleObj.pageList.forEach((item: IPage) => item.isSelected = false);
+            this.newRoleObj.isSelectedAllPages = false;
         }
     }
 
@@ -120,15 +139,12 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
         return count;
     }
 
-    public selectPage(event) {
-        if (event.target?.checked) {
-            if (this.makeCount() === this.newRoleObj.pageList?.length) {
-                this.newRoleObj.isSelectedAllPages = true;
-            }
+    public selectPage(index): void {
+        this.newRoleObj.pageList[index].isSelected = !this.newRoleObj.pageList[index].isSelected;
+        if (this.makeCount() === this.newRoleObj.pageList?.length) {
+            this.newRoleObj.isSelectedAllPages = true;
         } else {
-            if (this.makeCount() === this.newRoleObj.pageList?.length) {
-                this.newRoleObj.isSelectedAllPages = false;
-            }
+            this.newRoleObj.isSelectedAllPages = false;
         }
     }
 }
