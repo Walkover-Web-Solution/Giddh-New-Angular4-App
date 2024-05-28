@@ -790,10 +790,23 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.calculateAmount(Number(newTransactionFormGroup.get('amount').value), newTransactionFormGroup, index);
     }
 
+    /**
+     * This will be use for update transaction actual amount
+     *
+     * @param {FormGroup} transaction
+     * @memberof AccountAsVoucherComponent
+     */
     public updateTransactionActualAmount(transaction: FormGroup): void {
         transaction.get('actualAmount')?.patchValue(Number(transaction.get('amount')?.value));
     }
 
+    /**
+     * This will be use for remove amount if account removed
+     *
+     * @param {FormGroup} transaction
+     * @param {number} index
+     * @memberof AccountAsVoucherComponent
+     */
     public removeAmountIfAccountRemoved(transaction: FormGroup, index: number): void {
         if (!transaction.get('account')?.value && (transaction?.get('isDiscountApplied')?.value || transaction?.get('isTaxApplied')?.value)) {
             const transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
@@ -805,11 +818,24 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
     }
 
+    /**
+     * This will be use for calculating tax and discount amounts
+     *
+     * @memberof AccountAsVoucherComponent
+     */
     public calculateTaxDiscount(): void {
         this.calculateDiscount();
         this.calculateTax();
     }
 
+    /**
+     * This will be calculate discount amount
+     *
+     * @param {string} [discountType]
+     * @param {number} [discountValue]
+     * @return {*}  {number}
+     * @memberof AccountAsVoucherComponent
+     */
     public calculateDiscount(discountType?: string, discountValue?: number): number {
         let discountAmount = 0;
         let discountEntryControl;
@@ -835,6 +861,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         return discountAmount;
     }
 
+    /**
+     *This will be use for calculating the tax amount
+     *
+     * @param {number} [taxAmount]
+     * @return {*}
+     * @memberof AccountAsVoucherComponent
+     */
     public calculateTax(taxAmount?: number) {
         let amount = 0;
         let toEntryControl;
@@ -1219,7 +1252,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
             let parentGroups = ['revenuefromoperations', 'otherincome', 'fixedassets'];
             (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
-                if (control.get('selectedAccount.parentGroup')?.value?.some(group => parentGroups.includes(group))) {
+                if (control?.get('selectedAccount.parentGroup')?.value?.some(group => parentGroups.includes(group))) {
                     this.salesEntry.emit(true);
                     this.isSalesEntry = true;
                 } else {
