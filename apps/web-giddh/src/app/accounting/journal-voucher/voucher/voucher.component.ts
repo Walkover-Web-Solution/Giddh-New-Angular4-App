@@ -1068,12 +1068,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 if (acc && acc.parentGroups.find((pg) => pg?.uniqueName === 'bankaccounts')) {
                     this.openChequeDetailForm();
                 } else {
-                    let parentGroups = ['revenuefromoperations', 'otherincome', 'fixedassets'];
-                    let matchedGroup = response?.body?.parentGroups.some((group: string) => parentGroups.includes(group));
-                    if (matchedGroup) {
-                        this.salesEntry.emit(true);
-                        this.isSalesEntry = true;
-                    }
                 }
 
                 if (acc) {
@@ -1223,6 +1217,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     }
                 });
             }
+            let parentGroups = ['revenuefromoperations', 'otherincome', 'fixedassets'];
+            (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
+                if (control.get('selectedAccount.parentGroup')?.value?.some(group => parentGroups.includes(group))) {
+                    this.salesEntry.emit(true);
+                    this.isSalesEntry = true;
+                } else {
+                    this.salesEntry.emit(false);
+                    this.isSalesEntry = false;
+                }
+            });
         });
     }
 

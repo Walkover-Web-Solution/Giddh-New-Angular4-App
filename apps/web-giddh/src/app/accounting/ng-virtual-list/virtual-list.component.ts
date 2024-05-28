@@ -305,7 +305,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
             } else if (key === this.KEYS.ENTER) {
                 const selectedElement = elements[this.selectedIndex];
                 const anchorElement = selectedElement?.firstChild as HTMLElement;
-                anchorElement.click();
+                anchorElement?.click();
             } else if (key === this.KEYS.UP) {
                 event.preventDefault();
                 this.selectedIndex = Math.max(this.selectedIndex - 1, 0);
