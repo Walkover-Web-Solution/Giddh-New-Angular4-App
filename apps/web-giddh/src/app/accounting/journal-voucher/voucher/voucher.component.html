@@ -166,7 +166,7 @@
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                                 (change)="
-                                                    updateTransactionActualAmount(transaction); 
+                                                    updateTransactionActualAmount(transaction);
                                                     calculateAmount(transaction.get('amount')?.value, transaction, i)
                                                 "
                                             ></text-field>
@@ -203,7 +203,7 @@
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                                 (change)="
-                                                    updateTransactionActualAmount(transaction); 
+                                                    updateTransactionActualAmount(transaction);
                                                     calculateAmount(transaction.get('amount')?.value, transaction, i)
                                                 "
                                             ></text-field>
@@ -244,7 +244,7 @@
             </div>
 
             <div class="clearfix row">
-                <div class="col-xs-10 col-sm-10">
+                <div class="col-xs-9 col-sm-9">
                     <div class="form-group custom-textarea">
                         <label>{{ localeData?.narration }}:</label>
                         <textarea
@@ -258,7 +258,7 @@
                         ></textarea>
                     </div>
                 </div>
-                <div class="col-xs-2 col-sm-2">
+                <div class="col-xs-3 col-sm-3">
                     <div [hidden]="!showConfirmationBox" class="confirmation-box bdr text-center pd-2">
                         <div>
                             <h1>{{ localeData?.accept }}</h1>
@@ -301,15 +301,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="total-box text-right pull-right">
-                        <span
-                            ><strong>{{ totalDebitAmount | giddhCurrency }}</strong></span
-                        >
-                        <span
-                            ><strong>{{ totalCreditAmount | giddhCurrency }}</strong></span
-                        >
+                    <div class="d-inline-block float-right min-150">
+                        <div class="d-flex flex-column">
+                            <div class="total-box text-right pull-right d-flex justify-content-end">
+                                <span
+                                    ><strong>{{ totalDebitAmount | giddhCurrency }}</strong></span
+                                >
+                                <span
+                                    ><strong>{{ totalCreditAmount | giddhCurrency }}</strong></span
+                                >
+                            </div>
+                            <span class="border-bottom custom-border float-right"></span>
+                        </div>
                     </div>
-                    <span class="border-bottom custom-border float-right"></span>
                 </div>
             </div>
         </div>

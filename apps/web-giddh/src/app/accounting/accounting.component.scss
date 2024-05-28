@@ -87,10 +87,13 @@
     border-top: 1px solid;
     border-bottom: 1px solid;
     margin: 10px 0;
-    width: 100%;
     font-size: var(--font-size-15);
     border-color: var(--color-table-primary-content-bar-border);
     margin-bottom: 3px;
+}
+
+.min-150 {
+    min-width: 150px;
 }
 
 .custom-border {

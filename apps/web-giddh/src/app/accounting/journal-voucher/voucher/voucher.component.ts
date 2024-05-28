@@ -514,10 +514,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         } else if (event.key === 'F7') {
             event.preventDefault(); // Prevent default F7 behavior
             this.customFunctionForF7();
-        } else if (event.key === 'ð') {
+        } else if (event.key === 'ð' || (event.altKey && event.key === 'd')) {
             event.preventDefault();
             this.customFunctionForDiscountSidebar();
-        } else if (event.key === 'þ') {
+        } else if (event.key === 'þ' || (event.altKey && event.key === 't')) {
             event.preventDefault();
             this.customFunctionForTaxSidebar();
         }
@@ -660,11 +660,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.addNewAccount();
             }
         }
-        if (changes?.showDiscount?.currentValue) {
-            this.showDiscountSidebar = true;
+        if ('showDiscount' in changes && changes?.showDiscount?.currentValue !== changes?.showDiscount?.previousValue) {
+            this.showDiscountSidebar = changes?.showDiscount?.currentValue;
         }
-        if (changes?.showTax?.currentValue) {
-            this.showTaxSidebar = true;
+        if ('showTax' in changes && changes?.showTax?.currentValue !== changes?.showTax?.previousValue) {
+            this.showTaxSidebar = changes?.showTax?.currentValue;
         }
     }
 
@@ -790,10 +790,23 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.calculateAmount(Number(newTransactionFormGroup.get('amount').value), newTransactionFormGroup, index);
     }
 
+    /**
+     * This will be use for update transaction actual amount
+     *
+     * @param {FormGroup} transaction
+     * @memberof AccountAsVoucherComponent
+     */
     public updateTransactionActualAmount(transaction: FormGroup): void {
         transaction.get('actualAmount')?.patchValue(Number(transaction.get('amount')?.value));
     }
 
+    /**
+     * This will be use for remove amount if account removed
+     *
+     * @param {FormGroup} transaction
+     * @param {number} index
+     * @memberof AccountAsVoucherComponent
+     */
     public removeAmountIfAccountRemoved(transaction: FormGroup, index: number): void {
         if (!transaction.get('account')?.value && (transaction?.get('isDiscountApplied')?.value || transaction?.get('isTaxApplied')?.value)) {
             const transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
@@ -805,11 +818,24 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
     }
 
+    /**
+     * This will be use for calculating tax and discount amounts
+     *
+     * @memberof AccountAsVoucherComponent
+     */
     public calculateTaxDiscount(): void {
-        this.calculateDiscount(); 
+        this.calculateDiscount();
         this.calculateTax();
     }
 
+    /**
+     * This will be calculate discount amount
+     *
+     * @param {string} [discountType]
+     * @param {number} [discountValue]
+     * @return {*}  {number}
+     * @memberof AccountAsVoucherComponent
+     */
     public calculateDiscount(discountType?: string, discountValue?: number): number {
         let discountAmount = 0;
         let discountEntryControl;
@@ -825,17 +851,23 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 discountValue = control.value.discountValue;
             }
         });
-
         if (amount) {
             discountAmount = (discountType === 'PERCENTAGE') ? discountValue / 100 * amount : discountValue;
             discountEntryControl?.get('amount')?.patchValue(discountAmount);
         } else {
-            discountAmount = 0;
+            discountAmount = discountType === 'PERCENTAGE' ? 0 : discountValue;
+            discountEntryControl?.get('amount')?.patchValue(discountAmount);
         }
-
         return discountAmount;
     }
 
+    /**
+     *This will be use for calculating the tax amount
+     *
+     * @param {number} [taxAmount]
+     * @return {*}
+     * @memberof AccountAsVoucherComponent
+     */
     public calculateTax(taxAmount?: number) {
         let amount = 0;
         let toEntryControl;
@@ -859,15 +891,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         });
 
-        if (amount) {
+        if (amount > 0) {
             if (taxAmount) {
                 taxAmount = taxAmount / 100 * amount;
             } else {
                 taxAmount = 0;
             }
             taxEntryControl?.get('amount')?.patchValue(taxAmount);
-            toEntryControl.get('amount')?.patchValue(amount);
-            byEntryControl.get('amount')?.patchValue(amount + taxAmount);
+            toEntryControl?.get('amount')?.patchValue(amount);
+            byEntryControl?.get('amount')?.patchValue(amount + taxAmount);
         } else {
             taxAmount = 0;
         }
@@ -1069,12 +1101,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 if (acc && acc.parentGroups.find((pg) => pg?.uniqueName === 'bankaccounts')) {
                     this.openChequeDetailForm();
                 } else {
-                    let parentGroups = ['revenuefromoperations', 'otherincome', 'fixedassets'];
-                    let matchedGroup = response?.body?.parentGroups.some((group: string) => parentGroups.includes(group));
-                    if (matchedGroup) {
-                        this.salesEntry.emit(true);
-                        this.isSalesEntry = true;
-                    }
                 }
 
                 if (acc) {
@@ -1224,6 +1250,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     }
                 });
             }
+            let parentGroups = ['revenuefromoperations', 'otherincome', 'fixedassets'];
+            (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
+                if (control?.get('selectedAccount.parentGroup')?.value?.some(group => parentGroups.includes(group))) {
+                    this.salesEntry.emit(true);
+                    this.isSalesEntry = true;
+                } else {
+                    this.salesEntry.emit(false);
+                    this.isSalesEntry = false;
+                }
+            });
         });
     }
 
@@ -1354,10 +1390,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public calculateTotalCreditAndDebit(): { totalCredit: number, totalDebit: number } {
-        if (this.isSalesEntry) { 
+        const voucherTypeControl = this.journalVoucherForm.get('voucherType');
+        if (voucherTypeControl.value === VOUCHERS.SALES) {
             this.calculateTaxDiscount();
         }
-        
+
         let totalCredit = 0;
         let totalDebit = 0;
 
@@ -1545,7 +1582,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     });
                     data.transactions = filteredWithoutTaxDiscountData;
                 }
-
+                if (data.transactions?.length) {
+                    data.transactions[0].amount = data.transactions[0].actualAmount;
+                }
                 this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
             } else {
                 const byOrTo = data.voucherType === 'Payment' ? 'by' : 'to';
@@ -2507,8 +2546,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
             this.changeTab('enter', 'account', true);
             this.closeDiscountSidebar();
-            this.changeDetectionRef.detectChanges();
         }
+        this.changeDetectionRef.detectChanges();
     }
 
     /**
