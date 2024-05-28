@@ -1,11 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AppState } from '../../store';
-import { Store } from '@ngrx/store';
 import { VatService } from '../../services/vat.service';
 import { ToasterService } from '../../services/toaster.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { VatDetailedReportRequest } from '../../models/api-models/Vat';
-import { ReplaySubject, delay, takeUntil } from 'rxjs';
+import { ReplaySubject, takeUntil } from 'rxjs';
 import { PAGINATION_LIMIT } from '../../app.constant';
 
 @Component({
@@ -14,8 +12,11 @@ import { PAGINATION_LIMIT } from '../../app.constant';
     styleUrls: ['./liability-detailed-report.component.scss']
 })
 export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Holds Vat Liability Detailed Report data */
     public vatLiabilityDetailedReport: any = {};
+    /** Holds Vat Liability Detailed Report request object */
     public vatLiabilityReportRequest: VatDetailedReportRequest = {
         from: '',
         to: '',
@@ -25,12 +26,13 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
         section: '',
         currencyCode: 'BWP'
     };
+    /** True if API is calling in progress */
     public isLoading: boolean = false;
-    /* This will hold local JSON data */
+    /** This will hold local JSON data */
     public localeData: any = {};
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /* This will hold the value out/in to open/close setting sidebar popup */
+    /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /** Hold table display columns */
     public displayedColumns: string[] = ['date', 'type', 'rate', 'reference', 'accountName', 'description', 'period', 'exclusive', 'inclusive', 'vat'];
@@ -48,14 +50,16 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
     public vatReportCurrencySymbol: string = this.vatReportCurrencyList[0].symbol;
 
     constructor(
-        private store: Store<AppState>,
         private vatService: VatService,
         private toaster: ToasterService,
-        public route: ActivatedRoute,
-        private router: Router
-    ) {
-    }
+        public route: ActivatedRoute
+    ) { }
 
+    /**
+     * This will be use for component initialization
+     *
+     * @memberof LiabilityDetailedReportComponent
+     */
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
 
@@ -76,14 +80,11 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
      * @memberof LiabilityDetailedReportComponent
      */
     public getVatLiabilityReport(): void {
-        console.log("getVatLiabilityReport", this.vatLiabilityReportRequest);
-
         this.isLoading = true;
         this.vatService.getVatLiabilityReport(this.vatLiabilityReportRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response && response.status === "success" && response.body?.sections) {
                 this.vatLiabilityDetailedReport = response.body;
-
                 this.vatLiabilityReportRequest.currencyCode = response.body?.currency?.code;
                 this.vatReportCurrencySymbol = this.vatReportCurrencyList.filter(item => item.code === response.body?.currency?.code).map(item => item.symbol).join();
                 this.vatReportCurrencyMap = response.body?.currencyList;
@@ -100,7 +101,7 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
      * This function will change the page of vat report
      *
      * @param {*} event
-     * @memberof VatReportTransactionsComponent
+     * @memberof LiabilityDetailedReportComponent
      */
     public pageChanged(event: any): void {
         if (this.vatLiabilityReportRequest.page !== event.page) {
@@ -121,5 +122,4 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
         document.querySelector('body').classList.remove('gst-sidebar-open');
         this.asideGstSidebarMenuState === 'out'
     }
-
 }
