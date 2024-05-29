@@ -1,4 +1,4 @@
-<div class="advance-search-by-date date-advance-search justify-content-center row-gap">
+<div class="advance-search-by-date date-advance-search d-flex justify-content-center row-gap column-gap15">
     <dropdown-field [options]="financialYears" (selectedOption)="getYearStartAndEndDate($event)"
         [placeholder]="localeData?.select_year_label" [defaultValue]="selectedYear"></dropdown-field>
 
@@ -27,13 +27,13 @@
     </div>
 
     <div class="ml-auto d-flex justify-content-center column-gap1 align-items-center">
-        <div *ngIf="isZimbabweCompany && taxNumber" class="currency-width">
+        <div *ngIf="isZimbabweCompany && taxNumber" class="min-width-100">
             <dropdown-field [label]="commonLocaleData?.app_currency" [options]="vatReportCurrencyList"
                 (selectedOption)="onCurrencyChange($event)" [placeholder]="commonLocaleData?.app_select"
                 [defaultValue]="vatReportCurrencyCode" [required]="true">
             </dropdown-field>
         </div>
-        <div *ngIf="taxNumber && (isZimbabweCompany || isKenyaCompany)" class="export-btn w100">
+        <div *ngIf="taxNumber && (isZimbabweCompany || isKenyaCompany)" class="export-btn d-flex justify-content-end w100">
             <button mat-stroked-button color="primary" (click)="downloadVatReport()">
                 <i class="icon-download1"></i>
                 {{ commonLocaleData?.app_export }}

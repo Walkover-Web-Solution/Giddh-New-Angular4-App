@@ -1,24 +1,6 @@
 .advance-search-by-date {
-    display: flex;
-    column-gap: 15px;
-
-    .input-wrapper {
-        display: flex;
-
-        .btn-group {
-            button {
-                margin: 0 !important;
-                height: 100%;
-            }
-        }
-    }
-
     .input-width {
         min-width: 220px;
-    }
-
-    .currency-width {
-        min-width: 100px;
     }
 
     .custom-datepicker {
@@ -28,10 +10,5 @@
                 max-width: 240px;
             }
         }
-    }
-
-    .export-btn {
-        display: flex;
-        justify-content: flex-end;
     }
 }

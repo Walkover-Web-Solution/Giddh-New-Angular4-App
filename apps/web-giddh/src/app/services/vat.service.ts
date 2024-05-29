@@ -227,6 +227,13 @@ export class VatService {
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
+    /**
+     * Get Vat Liability overview and detailed report
+     *
+     * @param {VatDetailedReportRequest} request
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof VatService
+     */
     public getVatLiabilityReport(request: VatDetailedReportRequest): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + VAT_API.VIEW_ZW_TRANSACTIONS_REPORT;
@@ -258,8 +265,6 @@ export class VatService {
      */
     public downloadVatLiabilityReport(request: VatReportRequest): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        // const url = countryCode === 'ZW' ? VAT_API.DOWNLOAD_ZW_REPORT : (countryCode === 'KE' ? VAT_API.DOWNLOAD_KENYA_REPORT : VAT_API.DOWNLOAD_REPORT);
-
         let url = this.config.apiUrl + VAT_API.DOWNLOAD_ZW_TRANSACTIONS_REPORT;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         url = url?.replace(':from', request.from);

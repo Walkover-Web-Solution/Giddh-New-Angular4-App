@@ -4,9 +4,11 @@
     <div class="relative w-100">
         <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
             *ngIf="asideGstSidebarMenuState === 'in'">
-            <tax-sidebar (navigateEvent)="handleNavigation()"
-                (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
-                [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
+            <tax-sidebar 
+                (navigateEvent)="handleNavigation()"
+                [exclude]="'#primary-new-header'" 
+                class="gst-sidebar"
+            ></tax-sidebar>
         </div>
     </div>
     <div class="detailed-liability-report mx-auto pd-15">
@@ -90,7 +92,7 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
-            <section class="no-logs" *ngIf="!vatLiabilityDetailedReport?.sections?.length && !isLoading">
+            <section *ngIf="!vatLiabilityDetailedReport?.sections?.length && !isLoading">
                 <div class="no-data">
                     <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
                 </div>

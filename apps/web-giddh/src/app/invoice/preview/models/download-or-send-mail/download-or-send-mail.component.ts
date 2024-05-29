@@ -95,8 +95,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        console.log(this.selectedVoucher);
-        
         this.voucherApiVersion = this.generalService.voucherApiVersion;
 
         if(this.voucherApiVersion === 2 && ![VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma].includes(this.selectedVoucher?.voucherType)) {

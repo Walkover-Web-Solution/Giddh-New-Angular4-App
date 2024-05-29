@@ -56,7 +56,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     /** Emits true when tax api call inprogress */
     @Output() public isTaxApiInProgress: EventEmitter<any> = new EventEmitter<any>();
 
-    /** directive to get reference of element */
+    /** Universal Datepicker template reference */
     @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
