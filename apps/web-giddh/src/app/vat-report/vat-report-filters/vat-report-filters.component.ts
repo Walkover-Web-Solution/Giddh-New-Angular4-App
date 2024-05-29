@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { GeneralService } from '../../services/general.service';
@@ -17,10 +17,9 @@ import { GstReconcileService } from '../../services/gst-reconcile.service';
 @Component({
     selector: 'vat-report-filters',
     templateUrl: './vat-report-filters.component.html',
-    styleUrls: ['./vat-report-filters.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    styleUrls: ['./vat-report-filters.component.scss']
 })
-export class VatReportFiltersComponent implements OnInit, OnChanges {
+export class VatReportFiltersComponent implements OnInit {
     /** This will hold local JSON data */
     @Input() public localeData: any = {};
     /** This will hold common JSON data */
@@ -37,8 +36,6 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     @Input() public connectToHMRCUrl: string = null;
     /** Holds Current Currency Code for Zimbabwe report */
     @Input() public vatReportCurrencyCode: 'BWP' | 'USD' | 'GBP' | 'INR' | 'EUR' = 'BWP';
-    /** Emits Current currency symbol */
-    @Output() public currentCurrencySymbol: EventEmitter<any> = new EventEmitter<any>();
     /** Emits Current currency code */
     @Output() public currentCurrencyCode: EventEmitter<any> = new EventEmitter<any>();
     /** Emits selected from date */
@@ -217,19 +214,6 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     }
 
     /**
-    * Lifecycle hook which detects any changes in values
-    *
-    * @param {SimpleChanges} changes
-    * @memberof VatReportFiltersComponent
-    */
-    public ngOnChanges(changes: SimpleChanges): void {
-        if (changes && this.isZimbabweCompany && changes.vatReportCurrencyCode) {
-            // Extract Currency symbol by currency code and emits
-            this.currentCurrencySymbol.emit(this.vatReportCurrencyList.filter(item => item.label === changes.vatReportCurrencyCode.currentValue).map(item => item.additional.symbol).join());
-        }
-    }
-
-    /**
      * Loads the tax details of a company
      *
      * @private
@@ -243,10 +227,10 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
                     label: tax,
                     value: tax
                 }));
+                this.taxNumber = this.taxes[0]?.value;
+                this.currentTaxNumber.emit(this.taxNumber);
             }
             this.isTaxApiInProgress.emit(false);
-            this.taxNumber = this.taxes[0]?.value;
-            this.currentTaxNumber.emit(this.taxNumber);
             setTimeout(() => {
                 this.getVatReport();
             }, 100);
@@ -421,7 +405,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      * @memberof VatReportFiltersComponent
      */
     public downloadVatReport(): void {
-            this.exportReport.emit(true);
+        this.exportReport.emit(true);
     }
 
     /**

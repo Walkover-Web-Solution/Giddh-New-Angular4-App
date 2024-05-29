@@ -62,7 +62,7 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany && this.activeCompany?.uniqueName !== activeCompany.uniqueName) {
+            if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
         });
@@ -83,6 +83,7 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
                 this.isLoading = false;
                 if (response && response.status === "success" && response.body?.sections) {
                     this.vatLiabilityOverviewReport = response.body.sections;
+                    this.vatReportCurrencySymbol = response.body?.currency?.symbol;
                 } else if (response?.message) {
                     this.toaster.showSnackBar('error', response?.message);
                 }

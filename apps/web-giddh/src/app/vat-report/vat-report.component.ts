@@ -170,6 +170,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
                             this.vatReport = res.body?.sections;
                             if (this.isZimbabweCompany) {
                                 this.vatReportCurrencyMap = res.body?.currencyMap;
+                                this.vatReportCurrencySymbol = res.body?.currency?.symbol;
                             }
 
                             this.cdRef.detectChanges();
