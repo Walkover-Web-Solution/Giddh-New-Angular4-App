@@ -39,6 +39,7 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     public isTaxApiInProgress: boolean;
     /** Holds Table Data  */
     public vatLiabilityOverviewReport: any[];
+    /** Holds Active company details */
     public activeCompany: any = null;
     /** Stores the current branch */
     public currentBranch: any = { name: '', uniqueName: '' };
@@ -75,13 +76,13 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     * @memberof LiabilityReportComponent
     */
     public getVatLiabilityReport(): void {
-        if (this.getFormControl('taxNumber').value) {
+        if (this.getFormControl('taxNumber')?.value) {
             this.isLoading = true;
             this.vatService.getVatLiabilityReport(this.liabilityReportForm.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
 
                 this.isLoading = false;
                 if (response && response.status === "success" && response.body?.sections) {
-                    this.vatLiabilityOverviewReport = response.body.sections
+                    this.vatLiabilityOverviewReport = response.body.sections;
                 } else if (response?.message) {
                     this.toaster.showSnackBar('error', response?.message);
                 }
@@ -95,7 +96,7 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
      * @param {*} report
      * @memberof LiabilityReportComponent
      */
-    public viewDetailedReport(report): void {
+    public viewDetailedReport(report: any): void {
         if (report) {
             let formValue = this.liabilityReportForm.value;
             let section = report?.section === "Input VAT Total" ? 'inputVat' : 'outputVat';
@@ -153,7 +154,7 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     * @memberof LiabilityReportComponent
     */
     public getFormControl(control: string): any {
-        return this.liabilityReportForm.get(control)
+        return this.liabilityReportForm.get(control);
     }
 
     /**
@@ -184,7 +185,6 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
      * @memberof LiabilityReportComponent
      */
     public downloadVatLiabilityReport(): void {
-        this.liabilityReportForm.value
         let vatReportRequest = this.liabilityReportForm.value;
 
         delete vatReportRequest.section;
