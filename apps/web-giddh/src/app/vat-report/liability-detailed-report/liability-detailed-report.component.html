@@ -1,0 +1,117 @@
+<ng-container appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+    <hamburger-menu></hamburger-menu>
+    <div class="relative w-100">
+        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+            *ngIf="asideGstSidebarMenuState === 'in'">
+            <tax-sidebar 
+                (navigateEvent)="handleNavigation()"
+                [exclude]="'#primary-new-header'" 
+                class="gst-sidebar"
+            ></tax-sidebar>
+        </div>
+    </div>
+    <div class="detailed-liability-report mx-auto pd-15">
+        <div class="mt-2">
+            <button mat-stroked-button [routerLink]="['/pages/vat-report/liability-report']">{{
+                commonLocaleData?.app_back }}</button>
+        </div>
+        <div class="table-responsive mt-4">
+            <table mat-table [dataSource]="vatLiabilityDetailedReport.sections"
+                class="table basic table-bordered mt-2 invoice-table desktop-table">
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_date }}</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element?.date }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="type">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_type }}</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element?.type }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="rate">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_rate }}</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element?.rate }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="reference">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_reference_invoice }}</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element?.reference }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="accountName">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_account_name }}</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element?.accountName }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="description">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_description }}</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element?.description }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="period">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_period }}</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element?.vatPeriod }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="exclusive">
+                    <th class="text-right" width="10%" mat-header-cell *matHeaderCellDef>{{ localeData?.exclusive }}
+                    </th>
+                    <td class="text-right" width="10%" mat-cell *matCellDef="let element">
+                        <amount-field class="d-inline-block" [amount]="element?.exclusive"
+                            [currencySymbol]="vatReportCurrencySymbol" [currencyCode]="false">
+                        </amount-field>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="inclusive">
+                    <th class="text-right" width="10%" mat-header-cell *matHeaderCellDef>{{ localeData?.inclusive }}
+                    </th>
+                    <td class="text-right" width="10%" mat-cell *matCellDef="let element">
+                        <amount-field class="d-inline-block" [amount]="element?.inclusive"
+                            [currencySymbol]="vatReportCurrencySymbol" [currencyCode]="false">
+                        </amount-field>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="vat">
+                    <th class="text-right" width="10%" mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_vat }}
+                    </th>
+                    <td class="text-right" width="10%" mat-cell *matCellDef="let element">
+                        <amount-field class="d-inline-block" [amount]="element?.vat"
+                            [currencySymbol]="vatReportCurrencySymbol" [currencyCode]="false">
+                        </amount-field>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+            <section *ngIf="!vatLiabilityDetailedReport?.sections?.length && !isLoading">
+                <div class="no-data">
+                    <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
+                </div>
+            </section>
+        </div>
+        <div class="pagination-wrapper" *ngIf="vatLiabilityDetailedReport?.totalPages > 1">
+            <pagination 
+                [totalItems]="vatLiabilityDetailedReport?.totalItems" 
+                [(ngModel)]="vatLiabilityDetailedReport.page"
+                (pageChanged)="pageChanged($event)" 
+                [maxSize]="vatLiabilityDetailedReport?.totalPages >= 5 ? 5 : vatLiabilityDetailedReport?.totalPages" 
+                [boundaryLinks]="true" 
+                [itemsPerPage]="vatLiabilityReportRequest.count"
+                [rotate]="false" 
+                [firstText]="commonLocaleData?.app_first"
+                [previousText]="commonLocaleData?.app_previous" 
+                [nextText]="commonLocaleData?.app_next"
+                [lastText]="commonLocaleData?.app_last" class="pagination-sm"
+            ></pagination>
+        </div>
+    </div>
+</ng-container>
