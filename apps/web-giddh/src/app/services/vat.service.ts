@@ -242,7 +242,7 @@ export class VatService {
         url = url?.replace(':to', request.to);
         url = url?.replace(':taxNumber', request.taxNumber);
         url = url?.replace(':section', request.section ?? '');
-        url = url?.replace(':currencyCode', request.currencyCode ?? 'BWP');
+        url = url?.replace(':currencyCode', request.currencyCode);
         url = url?.replace(':page', request.page ?? '');
         url = url?.replace(':count', request.count ?? '');
         if (request.branchUniqueName) {
@@ -270,7 +270,7 @@ export class VatService {
         url = url?.replace(':from', request.from);
         url = url?.replace(':to', request.to);
         url = url?.replace(':taxNumber', request.taxNumber);
-        url = url?.replace(':currencyCode', request.currencyCode ?? 'BWP');
+        url = url?.replace(':currencyCode', request.currencyCode);
         if (request.branchUniqueName) {
             request.branchUniqueName = request.branchUniqueName !== this.companyUniqueName ? request.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(request.branchUniqueName)}`);

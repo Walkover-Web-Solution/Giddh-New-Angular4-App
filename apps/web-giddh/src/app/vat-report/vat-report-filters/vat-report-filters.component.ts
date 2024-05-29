@@ -55,7 +55,6 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     @Output() public exportReport: EventEmitter<any> = new EventEmitter<any>();
     /** Emits true when tax api call inprogress */
     @Output() public isTaxApiInProgress: EventEmitter<any> = new EventEmitter<any>();
-
     /** Universal Datepicker template reference */
     @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -276,7 +275,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      * @memberof VatReportFiltersComponent
      */
     public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
+        this.modalRef?.hide();
     }
 
     /**
@@ -318,7 +317,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     private getFinancialYears(): void {
         this.settingsFinancialYearService.getFinancialYearLimits().pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res.body.startDate && res.body.endDate) {
-                this.createFinancialYearsList(res.body.startDate, res.body.endDate)
+                this.createFinancialYearsList(res.body.startDate, res.body.endDate);
             }
         });
     }
