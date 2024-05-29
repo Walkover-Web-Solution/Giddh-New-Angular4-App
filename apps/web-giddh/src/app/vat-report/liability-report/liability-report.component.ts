@@ -23,11 +23,11 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Holds Obligations Fromgroup  */
+    /** Holds Fromgroup  */
     public liabilityReportForm: UntypedFormGroup
-    /** Holds Obligations table data */
+    /** Holds table data */
     public tableDataSource: any[] = [];
-    /** Holds Obligations table columns */
+    /** Holds table columns */
     public displayedColumns = ['start', 'end', 'due', 'status', 'action'];
     /** True if API Call is in progress */
     public isLoading: boolean;

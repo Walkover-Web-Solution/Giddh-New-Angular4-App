@@ -7,7 +7,7 @@ import { ReplaySubject, takeUntil } from 'rxjs';
 import { PAGINATION_LIMIT } from '../../app.constant';
 
 @Component({
-    selector: 'app-liability-detailed-report',
+    selector: 'liability-detailed-report',
     templateUrl: './liability-detailed-report.component.html',
     styleUrls: ['./liability-detailed-report.component.scss']
 })
@@ -52,7 +52,7 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
     constructor(
         private vatService: VatService,
         private toaster: ToasterService,
-        public route: ActivatedRoute
+        private route: ActivatedRoute
     ) { }
 
     /**
@@ -86,11 +86,8 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
             if (response && response.status === "success" && response.body?.sections) {
                 this.vatLiabilityDetailedReport = response.body;
                 this.vatLiabilityReportRequest.currencyCode = response.body?.currency?.code;
-                this.vatReportCurrencySymbol = this.vatReportCurrencyList.filter(item => item.code === response.body?.currency?.code).map(item => item.symbol).join();
+                this.vatReportCurrencySymbol = this.vatReportCurrencyList.filter(currency => currency.code === response.body?.currency?.code).map(currency => currency.symbol).join();
                 this.vatReportCurrencyMap = response.body?.currencyList;
-
-            } else if (response?.body?.message) {
-                this.toaster.showSnackBar('error', response?.body?.message);
             } else if (response?.message) {
                 this.toaster.showSnackBar('error', response?.message);
             }
@@ -104,7 +101,7 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
      * @memberof LiabilityDetailedReportComponent
      */
     public pageChanged(event: any): void {
-        if (this.vatLiabilityReportRequest.page !== event.page) {
+        if (event && this.vatLiabilityReportRequest.page !== event.page) {
             this.vatLiabilityDetailedReport.results = [];
             this.vatLiabilityReportRequest.page = event.page;
             this.getVatLiabilityReport();
