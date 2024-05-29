@@ -1196,10 +1196,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getCompanyTaxes(): void {
+        this.store.dispatch(this.companyActions.getTax());
+
         this.componentStore.companyTaxes$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (!response) {
-                this.store.dispatch(this.companyActions.getTax());
-            } else {
+            if (response) {
                 this.allCompanyTaxes = response;
                 this.companyTaxes = response?.filter(tax => !this.otherTaxTypes.includes(tax.taxType));
             }
@@ -1213,10 +1213,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getWarehouses(): void {
+        this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
+
         this.componentStore.warehouseList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (!response) {
-                this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
-            } else {
+            if (response) {
                 let warehouseResults = response.results?.filter(warehouse => !warehouse.isArchived);
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 this.warehouses = warehouseData.formattedWarehouses;
@@ -1232,10 +1232,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getCompanyBranches(): void {
+        this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+        
         this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (!response) {
-                this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
-            } else {
+            if (response) {
                 this.branches = response;
                 this.company.isActive = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
 
@@ -3281,10 +3281,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (this.invoiceType.isCashInvoice) {
                 invoiceForm.type = this.invoiceType.isPurchaseInvoice ? "purchase" : this.invoiceType.isCreditNote ? "credit note" : this.invoiceType.isDebitNote ? "debit note" : "sales";
 
-                if (this.invoiceType.isPurchaseInvoice) {
-                    invoiceForm.type = VoucherTypeEnum.payment;
-                } else if (!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote) {
-                    invoiceForm.type = VoucherTypeEnum.receipt;
+                if (this.invoiceForm.get('salesPurchaseAsReceiptPayment').value) {
+                    if (this.invoiceType.isPurchaseInvoice) {
+                        invoiceForm.type = VoucherTypeEnum.payment;
+                    } else if (!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote) {
+                        invoiceForm.type = VoucherTypeEnum.receipt;
+                    }
                 }
 
                 invoiceForm.entries = invoiceForm.entries?.map(entry => {

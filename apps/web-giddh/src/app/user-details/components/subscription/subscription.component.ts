@@ -446,7 +446,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
      *
      * @memberof SubscriptionComponent
      */
-    public goToBuyNow(): void {
-        this.route.navigate(['/pages/subscription/buy-plan']);
+    public goToBuyNow(subscriptionId: any): void {
+        this.route.navigate(['/pages/subscription/buy-plan/' + subscriptionId]);
     }
 }

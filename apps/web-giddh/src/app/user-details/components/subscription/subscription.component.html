@@ -213,7 +213,7 @@
                                     color="primary"
                                     class="right-side-btn"
                                     *ngIf="selectedSubscription?.status !== 'trial'"
-                                    (click)="goToBuyNow()"
+                                    (click)="goToBuyNow(selectedSubscription?.subscriptionId)"
                                 >
                                     {{ commonLocaleData?.app_renew }}
                                 </button>

@@ -1691,6 +1691,9 @@ ul.pills li {
 }
 .underline {
     text-decoration: underline;
+    &:hover {
+        text-decoration: underline;
+    }
 }
 .tbpl-list .list-inline {
     line-height: normal;
