@@ -39,7 +39,8 @@
                                 *ngIf="
                                     viewSubscriptionData?.isOwner &&
                                     viewSubscriptionData?.status?.toLowerCase() === 'expired' &&
-                                    activeCompany.subscription?.country?.countryCode !== 'GB'
+                                    activeCompany.subscription?.country?.countryCode !== 'GB' &&
+                                    activeCompany?.planVersion === 2
                                 "
                             >
                                 {{ localeData?.renew }}
@@ -63,13 +64,15 @@
                             >
                                 {{ commonLocaleData?.app_buy_plan }}
                             </button>
+
                             <button
                                 aria-label="plan"
                                 mat-menu-item
                                 (click)="buyPlan(viewSubscriptionData)"
                                 *ngIf="
                                     viewSubscriptionData?.status?.toLowerCase() === 'expired' &&
-                                    activeCompany.subscription?.country?.countryCode !== 'GB'
+                                    activeCompany.subscription?.country?.countryCode !== 'GB' &&
+                                    activeCompany?.planVersion === 2
                                 "
                             >
                                 {{ localeData?.renew }}

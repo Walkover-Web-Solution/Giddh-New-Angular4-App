@@ -67,7 +67,7 @@
                                 class="cursor-pointer underline"
                                 *ngIf="element?.companies?.length > 1"
                                 (click)="openCompanyDialog(element)"
-                                >{{ element?.companies?.length }} -  {{ commonLocaleData?.app_company }}</a
+                                >{{ element?.companies?.length }} - {{ commonLocaleData?.app_company }}</a
                             >
                             <span *ngIf="element?.companies?.length === 1">{{ element?.companies[0]?.name }}</span>
                         </td>
@@ -245,7 +245,8 @@
                                         *ngIf="
                                             element?.status?.toLowerCase() === 'expired' &&
                                             element?.isOwner &&
-                                            activeCompany.subscription?.country?.countryCode !== 'GB'
+                                            activeCompany.subscription?.country?.countryCode !== 'GB' &&
+                                            activeCompany?.planVersion === 2
                                         "
                                         mat-menu-item
                                         (click)="buyPlan(element)"
