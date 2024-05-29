@@ -19,6 +19,7 @@ import { LastVouchersResponse } from "../../models/api-models/Voucher";
 import { AccountService } from "../../services/account.service";
 import { SearchService } from "../../services/search.service";
 import { InvoiceBulkUpdateService } from "../../services/invoice.bulkupdate.service";
+import { BulkVoucherExportService } from "../../services/bulkvoucherexport.service";
 
 export interface VoucherState {
     isLoading: boolean;
@@ -51,6 +52,9 @@ export interface VoucherState {
     voucherBalances: any[];
     exportVouchersFile: any;
     eInvoiceGenerated: boolean;
+    bulkUpdateVoucherIsSuccess: boolean;
+    bulkExportVoucherInProgress: boolean;
+    bulkExportVoucherResponse: any;
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -83,7 +87,10 @@ const DEFAULT_STATE: VoucherState = {
     ledgerEntries: null,
     voucherBalances: null,
     exportVouchersFile: null,
-    eInvoiceGenerated: null
+    eInvoiceGenerated: null,
+    bulkUpdateVoucherIsSuccess: null,
+    bulkExportVoucherInProgress: null,
+    bulkExportVoucherResponse: null
 };
 
 @Injectable()
@@ -98,7 +105,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         private commonService: CommonService,
         private accountService: AccountService,
         private searchService: SearchService,
-        private bulkUpdateInvoiceService: InvoiceBulkUpdateService
+        private bulkUpdateInvoiceService: InvoiceBulkUpdateService,
+        private bulkVoucherExportService: BulkVoucherExportService
     ) {
         super(DEFAULT_STATE);
     }
@@ -131,6 +139,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public voucherBalances$ = this.select((state) => state.voucherBalances);
     public exportVouchersFile$ = this.select((state) => state.exportVouchersFile);
     public eInvoiceGenerated$ = this.select((state) => state.eInvoiceGenerated);
+    public bulkUpdateVoucherIsSuccess$ = this.select((state) => state.bulkUpdateVoucherIsSuccess);
+    public bulkExportVoucherInProgress$ = this.select((state) => state.bulkExportVoucherInProgress);
+    public bulkExportVoucherResponse$ = this.select((state) => state.bulkExportVoucherResponse);
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
@@ -144,6 +155,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public newAccountDetails$: Observable<any> = this.select(this.store.select(state => state.sales.createdAccountDetails), (response) => response);
     public updatedAccountDetails$: Observable<any> = this.select(this.store.select(state => state.sales.updatedAccountDetails), (response) => response);
     public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
+    public createEwayBill$: Observable<any> = this.select(this.store.select(state => state.receipt.voucher), (response) => response);
 
     readonly getDiscountsList = this.effect((data: Observable<void>) => {
         return data.pipe(
@@ -855,6 +867,79 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 eInvoiceGenerated: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly bulkUpdateInvoice = this.effect((data: Observable<{ payload: any, actionType: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ bulkUpdateVoucherIsSuccess: false });
+                return this.bulkUpdateInvoiceService.bulkUpdateInvoice(req.payload, req.actionType).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                this.toaster.showSnackBar("success", res.body);
+                                return this.patchState({
+                                    bulkUpdateVoucherIsSuccess: true
+                                });
+                            } else {
+                                this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    bulkUpdateVoucherIsSuccess: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                bulkUpdateVoucherIsSuccess: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly bulkExportVoucher = this.effect((data: Observable<{ getRequest: any, postRequest: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    bulkExportVoucherInProgress: true,
+                    bulkExportVoucherResponse: null
+                });
+                return this.bulkVoucherExportService.bulkExport(req.getRequest, req.postRequest).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                if (res.body.type !== "base64") {
+                                    this.toaster.showSnackBar("success", res.body.file);
+                                }
+
+                                this.patchState({
+                                    bulkExportVoucherInProgress: false,
+                                    bulkExportVoucherResponse: res.body
+                                });
+                            } else {
+                                this.toaster.showSnackBar("error", res.message);
+                                this.patchState({
+                                    bulkExportVoucherInProgress: false,
+                                    bulkExportVoucherResponse: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            this.patchState({
+                                bulkExportVoucherInProgress: false,
+                                bulkExportVoucherResponse: null
                             });
                         }
                     ),

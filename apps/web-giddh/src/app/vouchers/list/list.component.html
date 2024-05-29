@@ -409,14 +409,14 @@
                             </button>
                             <mat-menu #moreInvoice="matMenu">
                                 <button mat-menu-item (click)="bulkUpdateDialog()">Bulk Update</button>
-                                <button mat-menu-item *ngIf="selectedVouchers?.length === 1">{{ localeData?.generate_eway_bill }}</button>
+                                <button mat-menu-item *ngIf="selectedVouchers?.length === 1" (click)="showEwayBillDialog()">{{ localeData?.generate_eway_bill }}</button>
                                 <button mat-menu-item *ngIf="isEInvoiceEnabled && (voucherType === 'credit note' || voucherType === 'debit note' || voucherType === 'sales')" (click)="generateEInvoice()">Create E-invoice</button>
                                 <button mat-menu-item (click)="deleteVoucherDialog()">Delete</button>
                             </mat-menu>
-                            <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">Filter
+                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">Filter
                                 <i class="icon-advance-filter"></i>
                             </button>
-                            <button mat-stroked-button colo="primary" (click)="exportDialog()">Export</button>
+                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">Export</button>
                         </div>
                     </div>
                     <div class="total-wrapper d-flex column-gap5 w-100">
@@ -464,7 +464,7 @@
                                         <div [ngClass]="{'checkbox-hide': !selectedVouchers?.length }">
                                             <mat-checkbox
                                                 color="primary"
-                                                [checked]="selectedVouchers.includes(element.uniqueName)"
+                                                [checked]="isVoucherSelected(element)"
                                                 [value]="element.uniqueName"
                                                 (change)="selectVoucher($event, element)"
                                             ></mat-checkbox>
@@ -2059,15 +2059,20 @@
     </ng-template>
     
     <!-- advance-search-dialog -->
-    <ng-template #advancesearch>
+    <ng-template #advanceSearch>
         <app-advance-search
+            [type]="voucherType === 'debit note' || voucherType === 'credit note' ? 'drcr' : voucherType === 'purchase' ? 'purchase' : 'invoice'"
+            [request]="advanceFilters"
             [localeData]="localeData"
+            [isEInvoiceEnabled]="isEInvoiceEnabled"
             [commonLocaleData]="commonLocaleData"
+            (applyFilterEvent)="applyAdvanceSearch($event)"
+            (closeModelEvent)="closeAdvanceSearchDialog(true)"
         ></app-advance-search>
     </ng-template>
         
     <!-- export-dialog -->
-    <ng-template #export>
+    <ng-template #bulkExport>
         <app-bulk-export></app-bulk-export>
     </ng-template>
 
@@ -2104,6 +2109,15 @@
         <app-convert-bill-dialog></app-convert-bill-dialog>
     </ng-template>
     
+    <ng-template #ewayBill>
+        <app-generate-ewaybill-modal
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+            (closeModelEvent)="ewayBillDialogRef?.close()"
+            (createEWayBillEvent)="createEwayBill()"
+        >
+        </app-generate-ewaybill-modal>
+    </ng-template>
     
     
 </ng-container>

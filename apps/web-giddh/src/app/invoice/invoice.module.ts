@@ -13,7 +13,6 @@ import { InvoiceBulkUpdateModalComponent } from './preview/models/bulkUpdateModa
 import { DownloadOrSendInvoiceOnMailComponent } from './preview/models/download-or-send-mail/download-or-send-mail.component';
 import { DownloadVoucherComponent } from './preview/models/download-voucher/download-voucher.component';
 import { EsignModalComponent } from './preview/models/e-Sign/e-Sign.component';
-import { GenerateEWayBillComponent } from './preview/models/generateEWayBill/generateEWayBill.component';
 import { InvoicePreviewDetailsComponent } from './preview/models/invoice-preview-details/invoice-preview-details.component';
 import { InvoicePaymentModelComponent } from './preview/models/invoicePayment/invoice.payment.model.component';
 import { ProformaListComponent } from './proforma/proforma-list.component';
@@ -78,6 +77,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { MatTabsModule } from '@angular/material/tabs';
 import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
+import { GenerateEWayBillModule } from './preview/models/generateEWayBill/generateEWayBill.module';
 
 @NgModule({
     declarations: [
@@ -98,7 +98,6 @@ import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-expo
         InvoiceAdvanceSearchComponent,
         InvoiceRendererComponent,
         InvoiceBulkUpdateModalComponent,
-        GenerateEWayBillComponent,
         EWayBillCreateComponent,
         EWayBillComponent,
         EWayBillCredentialsComponent,
@@ -166,7 +165,8 @@ import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-expo
         MatDialogModule,
         WatchVideoModule,
         MatTabsModule,
-        BulkExportVoucherModule
+        BulkExportVoucherModule,
+        GenerateEWayBillModule
     ],
     exports: [
         InvoiceRoutingModule,

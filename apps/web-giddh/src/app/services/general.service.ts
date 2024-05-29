@@ -1987,4 +1987,35 @@ export class GeneralService {
     public getCountryFlagUrl(countryCode: string): string {
         return countryCode ? `https://giddh-uploads-2.s3.ap-south-1.amazonaws.com/flags/${countryCode?.toLowerCase()}.svg` : '';
     }
+
+    /**
+     * This will use for confirmation delete vocher
+     *
+     * @param {*} localeData
+     * @param {*} commonLocaleData
+     * @param {boolean} isVoucherDateSelected
+     * @return {*}  {ConfirmationModalConfiguration}
+     * @memberof GeneralService
+     */
+    public getVoucherDeleteConfiguration(headerText: string, messageText: string, footerText: string, commonLocaleData: any): ConfirmationModalConfiguration {
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: commonLocaleData?.app_yes,
+            color: 'primary'
+        },
+        {
+            text: commonLocaleData?.app_no
+        }];
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
+        return {
+            headerText,
+            headerCssClass,
+            messageText: messageText,
+            messageCssClass,
+            footerText: footerText,
+            footerCssClass,
+            buttons
+        };
+    }
 }

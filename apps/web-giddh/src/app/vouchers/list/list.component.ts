@@ -9,7 +9,7 @@ import { ConfirmationModalConfiguration } from "../../theme/confirmation-modal/c
 import { GeneralService } from "../../services/general.service";
 import { TemplatePreviewDialogComponent } from "../template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "../template-edit-dialog/template-edit-dialog.component";
-import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, take, takeUntil } from "rxjs";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -22,6 +22,9 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../../app.cons
 import { cloneDeep } from "../../lodash-optimized";
 import { FormControl } from "@angular/forms";
 import * as saveAs from "file-saver";
+import { ToasterService } from "../../services/toaster.service";
+import { InvoiceReceiptActions } from "../../actions/invoice/receipt/receipt.actions";
+import { InvoiceService } from "../../services/invoice.service";
 
 // invoice-table
 export interface PeriodicElement {
@@ -170,9 +173,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     dataSourceBill = new MatTableDataSource<PeriodicElementBill>(BILL_DATA);
 
     // advance search dialog
-    @ViewChild('advancesearch', { static: true }) public advancesearch: TemplateRef<any>;
+    @ViewChild('advanceSearch', { static: true }) public advanceSearch: TemplateRef<any>;
     // export dialog
-    @ViewChild('export', { static: true }) public export: TemplateRef<any>;
+    @ViewChild('bulkExport', { static: true }) public bulkExport: TemplateRef<any>;
     // export dialog
     @ViewChild('paidDialog', { static: true }) public paidDialog: TemplateRef<any>;
     // adjust payment dialog
@@ -183,14 +186,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     // convert bill dialog
     @ViewChild('convertBill', { static: true }) public convertBill: TemplateRef<any>;
+    // E-way bill dialog
+    @ViewChild('ewayBill', { static: true }) public ewayBill: TemplateRef<any>;
     // table sorting
     @ViewChild(MatSort) sort: MatSort;
     public showCustomerSearch: boolean = false;
     public showInvoiceNoSearch: boolean = false;
     public voucherNumberInput: FormControl = new FormControl();
     public accountUniqueNameInput: FormControl = new FormControl();
-    /** Invoice confirmation popup configuration */
-    public InvoiceConfirmationConfiguration: ConfirmationModalConfiguration;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
@@ -256,8 +259,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public totalResults: number = 0;
     public selectedVouchers: any[] = [];
     /** Holds Voucher Name that suports csv file export */
-    public csvSupportVoucherType: string[] = ['sales', 'debit note', 'credit note','purchase'];
+    public csvSupportVoucherType: string[] = ['sales', 'debit note', 'credit note', 'purchase'];
     public allVouchersSelected: boolean = false;
+    public ewayBillDialogRef: any;
+    public advanceSearchDialogRef: any;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -267,8 +272,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private generalService: GeneralService,
         private vouchersUtilityService: VouchersUtilityService,
-        private modalService: BsModalService
-
+        private modalService: BsModalService,
+        private toasterService: ToasterService,
+        private invoiceReceiptActions: InvoiceReceiptActions,
+        private invoiceService: InvoiceService
     ) {
 
     }
@@ -390,7 +397,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
                 let blob = this.generalService.base64ToBlob(response, 'application/xls', 512);
-                const fileName  = `${this.vouchersUtilityService.getExportFileNameByVoucherType(this.voucherType, this.allVouchersSelected, this.localeData)}.xls`
+                const fileName = `${this.vouchersUtilityService.getExportFileNameByVoucherType(this.voucherType, this.allVouchersSelected, this.localeData)}.xls`
                 return saveAs(blob, fileName);
             }
         });
@@ -398,6 +405,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.componentStore.eInvoiceGenerated$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.componentStore.resetGenerateEInvoice();
+                this.getVouchers(this.isUniversalDateApplicable);
+            }
+        });
+
+        this.componentStore.bulkUpdateVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.selectedVouchers = [];
+                this.allVouchersSelected = false;
                 this.getVouchers(this.isUniversalDateApplicable);
             }
         });
@@ -549,9 +564,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
     public selectVoucher(event: any, voucher: any): void {
         if (event?.checked) {
-            this.selectedVouchers.push(voucher?.uniqueName);
+            this.selectedVouchers.push(voucher);
         } else {
-            this.selectedVouchers = this.selectedVouchers?.filter(selectedVoucher => selectedVoucher !== voucher?.uniqueName);
+            this.selectedVouchers = this.selectedVouchers?.filter(selectedVoucher => selectedVoucher?.uniqueName !== voucher?.uniqueName);
         }
     }
 
@@ -560,25 +575,25 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.allVouchersSelected = event?.checked;
         if (event?.checked) {
             this.dataSource?.forEach(voucher => {
-                this.selectedVouchers.push(voucher?.uniqueName);
+                this.selectedVouchers.push(voucher);
             });
         }
     }
 
     public exportCsvDownload(): any {
-        let exportCsvRequest = { from: '', to: '', dataToSend: null};
+        let exportCsvRequest = { from: '', to: '', dataToSend: null };
         exportCsvRequest.from = this.advanceFilters.from;
         exportCsvRequest.to = this.advanceFilters.to;
         let dataTosend = { uniqueNames: [], type: this.voucherType };
         if (this.selectedVouchers?.length) {
-            dataTosend.uniqueNames = this.selectedVouchers;
+            dataTosend.uniqueNames = this.selectedVouchers?.map(voucher => { return voucher?.uniqueName });
             exportCsvRequest.dataToSend = dataTosend;
             this.componentStore.exportVouchers(exportCsvRequest);
         }
     }
 
     public generateEInvoice(): void {
-        this.componentStore.generateEInvoice({ payload: { voucherUniqueNames: this.selectedVouchers, voucherType: this.voucherType }, actionType: 'einvoice'});
+        this.componentStore.generateEInvoice({ payload: { voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }), voucherType: this.voucherType }, actionType: 'einvoice' });
     }
 
     /**
@@ -677,16 +692,24 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
     // filter dialog 
     public advanceSearchDialog(): void {
-        this.dialog.open(this.advancesearch, {
+        this.advanceSearchDialogRef = this.dialog.open(this.advanceSearch, {
             panelClass: ['mat-dialog-md']
         });
     }
+
     // export dialog
-    public exportDialog(): void {
-        this.dialog.open(this.export, {
-            width: '600px'
+    public showBulkExportDialog(): void {
+        this.dialog.open(this.bulkExport, {
+            width: '600px',
+            data: {
+                voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
+                voucherType: this.voucherType,
+                advanceFilters: this.advanceFilters,
+                totalItems: this.selectedVouchers?.length || this.totalResults
+            }
         });
     }
+
     // paid dialog
     public onPerformAction(): void {
         this.dialog.open(this.paidDialog, {
@@ -707,11 +730,28 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
     // delete confirmation dialog
     public deleteVoucherDialog(): void {
-        this.InvoiceConfirmationConfiguration = this.generalService.getDeleteBranchTransferConfiguration(this.localeData, this.commonLocaleData, this.voucherType,);
-        this.dialog.open(NewConfirmationModalComponent, {
+        let confirmationMessages = [];
+        this.localeData?.confirmation_messages?.map(message => {
+            confirmationMessages[message.module] = message;
+        });
+
+        const configuration = this.generalService.getVoucherDeleteConfiguration(confirmationMessages[this.voucherType]?.title, confirmationMessages[this.voucherType]?.message1, confirmationMessages[this.voucherType]?.message2, this.commonLocaleData);
+
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             panelClass: ['mat-dialog-md'],
             data: {
-                configuration: this.InvoiceConfirmationConfiguration
+                configuration: configuration
+            }
+        });
+
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response === this.commonLocaleData?.app_yes) {
+                let payload = {
+                    voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
+                    voucherType: this.voucherType
+                };
+
+                this.componentStore.bulkUpdateInvoice({ payload: payload, actionType: 'delete' });
             }
         });
     }
@@ -748,5 +788,75 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.dialog.open(this.convertBill, {
             width: '600px'
         })
+    }
+
+    public showEwayBillDialog(): void {
+        if (this.voucherType === VoucherTypeEnum.sales) {
+            this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+            // To get re-assign receipts voucher store
+            if (this.selectedVouchers[0]?.account?.uniqueName) {
+                this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.selectedVouchers[0]?.account?.uniqueName, {
+                    invoiceNumber: this.selectedVouchers[0]?.voucherNumber,
+                    voucherType: VoucherTypeEnum.sales,
+                    uniqueName: this.selectedVouchers[0]?.uniqueName
+                }));
+            }
+
+            this.invoiceService.selectedInvoicesLists = [];
+            this.invoiceService.VoucherType = this.voucherType;
+            this.invoiceService.setSelectedInvoicesList(this.selectedVouchers);
+        }
+
+        this.ewayBillDialogRef = this.dialog.open(this.ewayBill, {
+            width: '600px'
+        });
+    }
+
+    public createEwayBill(): void {
+        this.componentStore.createEwayBill$.pipe(take(1)).subscribe(response => {
+            if (!response?.account?.billingDetails?.pincode) {
+                this.toasterService.showSnackBar("error", this.localeData?.pincode_required);
+            } else {
+                this.router.navigate(['pages', 'invoice', 'ewaybill', 'create']);
+            }
+        });
+    }
+
+    public isVoucherSelected(voucher: any): boolean {
+        const isSelected = this.selectedVouchers?.filter(selectedVoucher => selectedVoucher?.uniqueName === voucher?.uniqueName);
+        return isSelected?.length ? true : false;
+    }
+
+    public applyAdvanceSearch(event: any): void {
+        let advanceFilters = {
+            sortBy: this.advanceFilters.sortBy,
+            sort: this.advanceFilters.sort,
+            type: this.advanceFilters.type,
+            from: this.advanceFilters.from,
+            to: this.advanceFilters.to,
+            page: 1,
+            count: PAGINATION_LIMIT,
+            q: this.advanceFilters.q
+        };
+
+        this.advanceFilters = event;
+        this.advanceFilters.sortBy = advanceFilters.sortBy;
+        this.advanceFilters.sort = advanceFilters.sort;
+        this.advanceFilters.type = advanceFilters.type;
+        this.advanceFilters.from = advanceFilters.from;
+        this.advanceFilters.to = advanceFilters.to;
+        this.advanceFilters.page = advanceFilters.page;
+        this.advanceFilters.count = advanceFilters.count;
+        this.advanceFilters.q = advanceFilters.q;
+
+        this.getVouchers(false);
+        this.getVoucherBalances();
+    }
+
+    public closeAdvanceSearchDialog(isClosed: boolean): void {
+        if (isClosed) {
+            this.selectAllVouchers({ checked: false });
+        }
+        this.advanceSearchDialogRef?.close();
     }
 }

@@ -75,6 +75,7 @@ import { EntryOtherTaxModule } from "./utility/directives/entry-other-tax/entry-
 import { PurchaseOrderPreviewModule } from "../shared/purchase-order-preview/purchase-order-preview.module";
 import { DecimalDigitsModule } from "../shared/helpers/directives/decimalDigits/decimalDigits.module";
 import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
+import { GenerateEWayBillModule } from "../invoice/preview/models/generateEWayBill/generateEWayBill.module";
 
 @NgModule({
     declarations: [
@@ -156,7 +157,8 @@ import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
         ConfirmationModalModule,
         PurchaseOrderPreviewModule,
         DecimalDigitsModule,
-        NgxMaskModule
+        NgxMaskModule,
+        GenerateEWayBillModule
     ],
     exports: [
 
