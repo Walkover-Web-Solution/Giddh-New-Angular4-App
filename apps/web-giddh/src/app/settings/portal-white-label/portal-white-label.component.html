@@ -47,7 +47,9 @@
                 <button mat-stroked-button (click)="deleteConfirmationDialog()">
                     {{ commonLocaleData?.app_delete }}
                 </button>
-                <button mat-stroked-button color="primary" *ngIf="!allVerifiedDomain" (click)="verifyDomain()">{{ commonLocaleData?.app_verify }}</button>
+                <button mat-stroked-button color="primary" *ngIf="!allVerifiedDomain" (click)="verifyDomain()">
+                    {{ commonLocaleData?.app_verify }}
+                </button>
                 <button mat-stroked-button color="primary" (click)="openShareDomainDialog()">
                     {{ commonLocaleData?.app_share }}
                 </button>
@@ -68,7 +70,7 @@
                                 <i
                                     class="icon-copy-file cursor-pointer"
                                     (click)="copyUrl(element.hostName, element, 'host')"
-                                    [tooltip]="commonLocaleData?.app_copy"
+                                    [matTooltip]="commonLocaleData?.app_copy"
                                 ></i>
                             </span>
                             <span class="success mr-l05 copied-url" *ngIf="element.isCopiedHostName">{{
@@ -85,7 +87,7 @@
                             <i
                                 class="icon-copy-file cursor-pointer"
                                 (click)="copyUrl(element.value, element, 'value')"
-                                [tooltip]="commonLocaleData?.app_copy"
+                                [matTooltip]="commonLocaleData?.app_copy"
                             ></i>
                         </span>
                         <span class="success mr-l05 copied-url" *ngIf="element.isCopiedValue">{{
@@ -172,7 +174,7 @@
                 <div>
                     <input-field
                         formControlName="url"
-                       [type]="'text'"
+                        [type]="'text'"
                         [name]="'companyName'"
                         (input)="onInputChange()"
                         [autocomplete]="'off'"

@@ -616,7 +616,6 @@ app-cdk-scroll {
     &:not(.mdc-text-field--disabled) {
         .mdc-text-field__input {
             color: var(--color-common-primary-text);
-
             &::placeholder {
                 color: var(--color-gray) !important;
             }

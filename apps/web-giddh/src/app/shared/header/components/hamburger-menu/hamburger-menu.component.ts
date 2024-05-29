@@ -13,7 +13,6 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 })
 
 export class HamburgerMenuComponent implements OnInit, OnDestroy {
-    /* This inputs the heading which is needed to show */
     @Input() public pageHeading: string = '';
 
     /* This will show sidebar is open */
@@ -44,7 +43,7 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileView = result?.breakpoints['(max-width: 767px)'];
+            this.isMobileView = result?.matches;
         });
     }
 

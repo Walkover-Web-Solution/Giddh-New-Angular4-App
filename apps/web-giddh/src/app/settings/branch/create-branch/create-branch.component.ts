@@ -1,6 +1,7 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { FormControl, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { combineLatest, ReplaySubject } from 'rxjs';
@@ -19,6 +20,7 @@ import { SettingsAsideConfiguration, SettingsAsideFormType } from '../../constan
 import { SettingsUtilityService } from '../../services/settings-utility.service';
 import { WarehouseActions } from '../../warehouse/action/warehouse.action';
 import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
     selector: 'create-branch',
@@ -38,8 +40,8 @@ import { PageLeaveUtilityService } from '../../../services/page-leave-utility.se
     ]
 })
 export class CreateBranchComponent implements OnInit, OnDestroy {
-    /** Aside menu pane status */
-    public addressAsideMenuState: string = 'out';
+    /** Hold Mat Select Reference */
+    @ViewChild('trigger') trigger: MatSelect;
     /** Stores the current company details */
     public companyDetails: any = {
         name: '',
@@ -63,8 +65,12 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     };
     /** Branch form */
     public branchForm: UntypedFormGroup;
+    /** Search Address Control */
+    public addressQuery: UntypedFormControl =  new FormControl('');
+    /** Holds Addresses list used to reset */
+    public addressesConstantList: any[] = [];
     /** Stores all the addresses within a company */
-    public addresses: Array<any>;
+    public addresses: any;
     /** True, if new address is in progress in the side menu */
     public isAddressChangeInProgress: boolean = false;
     /** Stores the current organization uniqueName */
@@ -81,10 +87,14 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if need to hide link entity */
     public hideLinkEntity: boolean = true;
+    /** directive to get reference of element */
+    @ViewChild('asideAccountAsidePane', { static: true }) public asideAccountAsidePane: any;
     /** Returns true if form is dirty else false */
     public get showPageLeaveConfirmation(): boolean {
         return this.branchForm?.dirty;
     }
+    /** Holds Create Address Dialog Reference */
+    public asideAccountAsidePaneRef: MatDialogRef<any>;
 
     constructor(
         private commonService: CommonService,
@@ -99,6 +109,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         private toastService: ToasterService,
         private warehouseActions: WarehouseActions,
         private settingsBranchActions: SettingsBranchActions,
+        public dialog: MatDialog,
         private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         this.branchForm = this.formBuilder.group({
@@ -146,16 +157,14 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
         });
-    }
-
-    /**
-     * Toggles the aside menu
-     *
-     * @memberof CreateBranchComponent
-     */
-    public toggleAsidePane(): void {
-        this.addressAsideMenuState = this.addressAsideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+        this.addressQuery.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(query => {
+            if(query && query.length){
+                this.addresses = this.addressesConstantList?.filter(address => address.label.toUpperCase().indexOf(query.toUpperCase()) > -1);
+            }
+            if(query === ''){
+                this.addresses = this.addressesConstantList;
+            }
+        });
     }
 
     /**
@@ -164,7 +173,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchComponent
      */
     public openCreateAddressAside(): void {
-        this.toggleAddressAsidePane();
+        this.closeAddressAsidePane();
     }
 
     /**
@@ -173,26 +182,13 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      * @param {*} [event] Toggle Event
      * @memberof CreateBranchComponent
      */
-    public toggleAddressAsidePane(event?: any): void {
+    public closeAddressAsidePane(event?: any): void {
         if (event) {
             event.preventDefault();
         }
-        this.addressAsideMenuState = this.addressAsideMenuState === 'out' ? 'in' : 'out';
+        
+        this.asideAccountAsidePaneRef.close();
         this.isAddressChangeInProgress = false;
-        this.toggleBodyClass();
-    }
-
-    /**
-     * Adds fixed body class when aside menu is opened
-     *
-     * @memberof CreateBranchComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.addressAsideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
     }
 
     /**
@@ -239,11 +235,8 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
             });
         }
         option.isDefault = !option.isDefault;
-        if (option.isDefault) {
-            this.branchForm.get('address')?.patchValue([
-                ...(this.branchForm.get('address')?.value || []),
-                option?.value
-            ]);
+        if (option.isDefault &&( (this.branchForm.get('address')?.value === '') || (this.branchForm.get('address')?.value.findIndex(i => i.uniqueName === option.uniqueName) === -1))) {
+            this.branchForm.get('address')?.patchValue([...this.branchForm.get('address')?.value, option]);
         }
     }
 
@@ -287,15 +280,6 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         });
         this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
         this.branchForm.markAsPristine();
-    }
-
-    /**
-     * Add new address
-     *
-     * @memberof CreateBranchComponent
-     */
-    public addNewAddress(): void {
-        this.addressAsideMenuState = 'in';
     }
 
     /**
@@ -349,7 +333,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
 
         this.settingsProfileService.createNewAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === 'success' && response?.body) {
-                this.toggleAddressAsidePane();
+                this.closeAddressAsidePane();
                 this.addresses.push({
                     ...response.body,
                     label: response.body.name,
@@ -414,16 +398,16 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      *
      * @memberof CreateBranchComponent
      */
-    public handleShortcutPress(): void {
-        if (this.addressAsideMenuState === 'out') {
-            this.loadLinkedEntities(() => {
-                this.toggleAsidePane();
-            });
-        } else {
-            this.toggleAsidePane();
-        }
+    public handleShortcutPress(): void  {
+        this.asideAccountAsidePaneRef = this.dialog.open(this.asideAccountAsidePane, {
+            width: '760px',
+            height: '100vh !important',
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
     }
-
     /**
      * Loads all the addresses within a company
      *
@@ -443,6 +427,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                         value: address?.uniqueName
                     }));
                 this.checkLinkEntity();
+                this.addressesConstantList = this.addresses;
             }
         });
     }
@@ -483,6 +468,36 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                     }
                 }
             });
+        }
+    }
+
+    /**
+     * Handle Remove Item from Mat Chip and 
+     * remove item form linkedEntity
+     *
+     * @param {*} element
+     * @memberof CreateBranchComponent
+     */
+    public removeItem(element: any): void { 
+        this.branchForm.get('address')?.patchValue(this.branchForm.get('address').value.filter(address => address !== element));
+
+        this.addresses = this.addresses.map(address => {
+            if(address?.uniqueName === element?.uniqueName){
+                address.isDefault = false;
+            }
+            return address;
+        });
+    }
+
+    /**
+     * Selects entity
+     *
+     * @param {*} option Selected entity
+     * @memberof CreateBranchComponent
+     */
+    public selectEntity(option: any): void {
+        if (option?.isDefault) {
+            option.isDefault = false;
         }
     }
 }

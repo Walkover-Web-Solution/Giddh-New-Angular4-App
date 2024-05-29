@@ -191,6 +191,16 @@
                                             >
                                         </li>
                                     </ul>
+                                    <ul class="social-login" *ngIf="showAppleLogin">
+                                        <li class="google-ico">
+                                            <a href="javascript:void(0);" (click)="appleLogin()">
+                                                <i class="ico-google ico-apple">
+                                                    <img src="./assets/images/new/apple-icon.svg" alt="apple img" />
+                                                </i>
+                                                <span>Login with Apple</span></a
+                                            >
+                                        </li>
+                                    </ul>
                                     <ul class="social-login">
                                         <li class="google-ico msg91-ico">
                                             <a href="javascript:void(0);" (click)="signInWithOtp()">

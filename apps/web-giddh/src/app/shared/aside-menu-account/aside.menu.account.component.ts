@@ -7,11 +7,10 @@ import { AccountRequestV2, AccountResponseV2 } from '../../models/api-models/Acc
 import { AccountsAction } from '../../actions/accounts.actions';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { GroupResponse } from '../../models/api-models/Group';
-import { ModalDirective } from 'ngx-bootstrap/modal';
 import { AccountAddNewDetailsComponent } from '../header/components';
 import { AccountService } from '../../services/account.service';
-import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { MatDialog } from '@angular/material/dialog';
+import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 
 @Component({
     selector: 'aside-menu-account',
@@ -69,7 +68,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         this.deleteAccountSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.isDeleteAccSuccess)).pipe(takeUntil(this.destroyed$));
     }
 
-    public ngOnInit() {
+    public ngOnInit() { 
         if (this.isUpdateAccount && this.activeAccountDetails) {
             this.accountDetails = this.activeAccountDetails;
             this.store.dispatch(this.accountsAction.getAccountDetails(this.activeAccountDetails.uniqueName));
@@ -153,12 +152,12 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
         }
     }
 
-    public showDeleteAccountModal() {
+    public showDeleteAccountModal(): void {
         this.deleteAccountmodalRef = this.dialog.open(this.deleteAccountModal);
     }
 
-    public hideDeleteAccountModal() {
-        this.deleteAccountmodalRef?.close()
+    public hideDeleteAccountModal(): void {
+        this.deleteAccountmodalRef.close()
     }
 
     public deleteAccount() {

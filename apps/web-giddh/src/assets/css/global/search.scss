@@ -3,6 +3,7 @@ body {
         .cdk-overlay-container {
             .cdk-overlay-connected-position-bounding-box {
                 .cdk-overlay-pane {
+                    transform: unset !important;
                     .mat-mdc-menu-panel {
                         max-width: 550px !important;
                     }
