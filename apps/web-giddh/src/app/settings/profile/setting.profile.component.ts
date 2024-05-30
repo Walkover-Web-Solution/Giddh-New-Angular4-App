@@ -808,6 +808,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public handleSaveProfile(value: any): void {
+        console.log("handleSaveProfile");
+        
         if (this.currentOrganizationType === OrganizationType.Company) {
             if ('manageInventory' in value) {
                 this.updateInventorySetting(value.manageInventory);

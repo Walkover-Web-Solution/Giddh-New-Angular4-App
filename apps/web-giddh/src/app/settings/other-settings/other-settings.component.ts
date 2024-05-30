@@ -166,6 +166,17 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
+     * Get Dropdown field label by value
+     *
+     * @returns {string}
+     * @memberof OtherSettingsComponent
+     */
+    public getDropdownLabel(options: IOption[], currentValue: string | number): string {
+        const listItem = options.find(item => item.value === currentValue);
+        return listItem ? listItem.label : '';
+    }
+
+    /**
      * Unsubscribes from the listeners
      *
      * @memberof OtherSettingsComponent

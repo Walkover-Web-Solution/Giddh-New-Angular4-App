@@ -47,33 +47,34 @@
             <form [formGroup]="warehouseForm" novalidate (ngSubmit)="handleFormSubmit()">
                 <div class="warehouse-form">
                     <div class="warehouse-form-field">
-                        <input-field
-                            [label]="localeData?.warehouse_name"
-                            [cssClass]="warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.invalid ? 'error-box' : ''"
-                            [type]="'text'"
-                            [maxlength]="100"
-                            [required]="true"
-                            formControlName="name"
-                        ></input-field>
+                        <div class="form-group mb-0">
+                            <input-field
+                                [label]="localeData?.warehouse_name"
+                                [cssClass]="warehouseForm?.get('name')?.touched && warehouseForm?.get('name')?.invalid ? 'error-box' : ''"
+                                [type]="'text'"
+                                [maxlength]="100"
+                                [required]="true"
+                                formControlName="name"
+                            ></input-field>
+                        </div>
                     </div>
                     <div class="warehouse-form-field">
-                        <div class="address-dropdown form-group mb-0">
-                           
-                            <dropdown-field
+                        <div class="form-group mb-0"> 
+                            <reactive-dropdown-field
                                 #address
                                 [options]="addresses.addressToShow"
-                                (selectedOption)="warehouseForm?.get('address').patchValue($event.value)"
+                                formControlName="address"
                                 [required]="true"
                                 [placeholder]="localeData?.select_address"
                                 [label]="localeData?.addresses"
+                                [createNewText]="localeData?.add_address"
                                 [showCreateNew]="true"
-                                [createNewOptionsText]="localeData?.add_address"
                                 (dynamicSearchedQuery)="onSearchQueryChanged($event)"
                                 (createOption)="handleShortcutPress()"
                                 (onClear)="onSearchClear()"
-                                [allowValueReset]="true"
+                                [labelValue]="warehouseForm?.get('address')?.value === null ? '' : null"
                             >
-                            </dropdown-field>
+                            </reactive-dropdown-field>
                         </div>
                     </div>
                 </div>

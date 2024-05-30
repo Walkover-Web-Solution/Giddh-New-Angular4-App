@@ -8,7 +8,7 @@
         <div class="warehouse-card-view mt-4">
             <div class="row">
                 <div class="mr-b15 col-sm-12 mr-0 d-flex justify-content-between warehouse-header">
-                    <div class="search-container align-items-center">
+                    <div class="d-flex align-items-center">
                         <div class="search-warehouse-box">
                             <input-field
                                 #searchWarehouse
@@ -17,15 +17,17 @@
                                 [placeholder]="localeData?.search_warehouse"
                             ></input-field>
                         </div>
-                        <a
-                            class="cp mr-l1 clear-filter-btn"
+                        <button
                             *ngIf="searchWarehouseQuery"
-                            href="javascript:;"
+                            class="mr-l1"
+                            mat-stroked-button
                             (click)="resetFilter()"
+                            aria-label="cross icon"
                             [matTooltip]="localeData?.reset_search"
                         >
-                            <i aria-hidden="true" class="icon-refresh"></i> {{ commonLocaleData?.app_clear_filter }}
-                        </a>
+                            <i aria-hidden="true"  class="icon-cross d-inline-block font-12 mr-1"></i> 
+                            <span>{{ commonLocaleData?.app_clear_filter }}</span>
+                        </button>
                     </div>
                     <button
                         aria-label="create warehouse"

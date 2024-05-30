@@ -22,18 +22,14 @@
                 </div>
                 <div class="col-xl-3 col-md-6 col-sm-4 pl-0">
                     <div class="form-group">
-                        <dropdown-field
+                        <reactive-dropdown-field
                             [label]="isLblShow ? localeData?.role_name_label : ''"
+                            [name]="'roles'"
                             [placeholder]="localeData?.role_name_placeholder"
                             [options]="allRoles"
-                            (selectedOption)="permissionForm.get('roleUniqueName')?.patchValue($event.value)"
-                            [defaultValue]="userdata?.roleName"
+                            formControlName="roleUniqueName"
                             [required]="true"
-                            (onClear)="onSearchClear()"
-                            [allowValueReset]="true"
-                            (dynamicSearchedQuery)="onRoleSearchQueryChange($event)"
-                            [enableDynamicSearch]="true"
-                        ></dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
                 </div>
                 <div class="col-xl-2 col-md-6 col-sm-4 pl-0">

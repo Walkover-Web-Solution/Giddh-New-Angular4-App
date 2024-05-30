@@ -60,7 +60,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
                 }];
                 this.dropdownHeading = this.localeData?.select_pages;
             }
-        }, 200);
+        }, 400);
         this.store.pipe(select(p => p.permission), takeUntil(this.destroyed$)).subscribe((p: PermissionState) => {
             if (p.roles && p.roles.length) {
                 this.allRoles = [];

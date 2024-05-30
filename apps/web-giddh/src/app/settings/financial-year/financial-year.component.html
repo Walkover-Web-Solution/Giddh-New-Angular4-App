@@ -82,7 +82,7 @@
                                             <mat-slide-toggle
                                                 color="primary"
                                                 name="lockedUnlockedFinancial"
-                                                [(ngModel)]="!element.isLocked"
+                                                [checked]="element.isLocked"
                                                 (change)="lockUnlockFinancialYear(element)"
                                             >
                                                 {{ element.isLocked ? localeData?.locked : localeData?.unlocked }}

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { IForceClear } from '../../models/api-models/Sales';
 import { ToasterService } from '../../services/toaster.service';
 import { ShSelectComponent } from '../../theme/ng-virtual-select/sh-select.component';
@@ -185,7 +185,10 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             });
         }
 
-        this.addressForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+        this.addressForm.valueChanges.pipe(takeUntil(this.destroyed$), debounceTime(400)).subscribe(result => {
+            if(result){
+                console.log("result- ", result);   
+            }
             if (this.addressForm?.dirty) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
@@ -279,12 +282,11 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     /**
      * Sets the state based on GST number provided
      *
-     * @param {ShSelectComponent} statesEle State sh select component
      * @param {KeyboardEvent} event Keyboard Event
      * @returns {void}
      * @memberof CreateAddressComponent
      */
-    public getStateCode(statesEle: ShSelectComponent, event: KeyboardEvent): void {
+    public getStateCode(event: KeyboardEvent): void {
         if (this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN') {
             const keyAvoid = ['Tab', 'ArrowLeft', 'ArrowUp', 'ArrowRight', 'ArrowDown'];
             if (keyAvoid.findIndex(key => key === event.key) > -1) {
@@ -293,12 +295,13 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             let gstVal: string = this.addressForm.get('taxNumber')?.value?.trim();
             this.addressForm.get('taxNumber').setValue(gstVal);
             if (gstVal?.length) {
-
                 if (gstVal.length >= 2) {
                     let currentState = this.addressConfiguration.stateList.find(state => state.code === gstVal.substring(0, 2));
+                    console.log("currentState", currentState);
+                    
                     if (currentState) {
                         this.addressForm.get('state')?.patchValue(currentState?.value);
-                        this.addressForm.get('state').disable();
+                        // this.addressForm.get('state').disable();
                     } else {
                         this.addressForm.get('state')?.patchValue(null);
                         this.addressForm.get('state').enable();
@@ -309,18 +312,18 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                         }
                     }
                 } else {
-                    if (statesEle) {
-                        statesEle.forceClearReactive.status = true;
-                        statesEle.clear();
-                    }
+                    // if (statesEle) {
+                    //     statesEle.forceClearReactive.status = true;
+                    //     statesEle.clear();
+                    // }
                     this.addressForm.get('state')?.patchValue(null);
                     this.addressForm.get('state').enable();
                 }
             } else {
-                if (statesEle) {
-                    statesEle.forceClearReactive.status = true;
-                    statesEle.clear();
-                }
+                // if (statesEle) {
+                //     statesEle.forceClearReactive.status = true;
+                //     statesEle.clear();
+                // }
                 this.addressForm.get('state')?.patchValue(null);
                 this.addressForm.get('state').enable();
             }

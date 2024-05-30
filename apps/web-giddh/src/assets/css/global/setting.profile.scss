@@ -50,14 +50,16 @@ body {
 
 body {
     &.on-setting-page {
-        .mat-mdc-option {
-            &.mdc-list-item {
-                align-items: flex-start;
+        .linked-entities-options {
+            .mat-mdc-option {
+                &.mdc-list-item {
+                    align-items: flex-start;
+                }
             }
-        }
-
-        .mdc-list-item__primary-text {
-            width: 100%;
+    
+            .mdc-list-item__primary-text {
+                width: 100%;
+            }
         }
     }
 }

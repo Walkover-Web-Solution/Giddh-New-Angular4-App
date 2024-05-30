@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ReplaySubject, Subject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { OrganizationType } from '../../models/user-login-state';
 import { OrganizationProfile } from '../constants/settings.constant';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ClipboardService } from 'ngx-clipboard';
+import { skip } from 'rxjs';
 
 @Component({
     selector: 'personal-information',
@@ -72,7 +73,7 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
         this.tempProfileData = this.profileData;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(this.profileData.portalDomain);
-        this.saveProfileSubject.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this.saveProfileSubject.pipe(takeUntil(this.destroyed$), skip(2)).subscribe((res) => {
             if (res) {
                 this.saveProfile.emit(this.updatedData);
             }
