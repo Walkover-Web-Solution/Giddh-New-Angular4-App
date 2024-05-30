@@ -251,13 +251,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     if (this.payType === 'trial') {
                         this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
                     } else {
-                        if (this.activeCompany.subscription?.country?.countryCode === 'GB') {
+                        if (response?.region?.code === 'GBR') {
                             let model = {
                                 planUniqueName: response?.planDetails?.uniqueName,
                                 paymentProvider: "GOCARDLESS",
                                 subscriptionId: response.subscriptionId,
                                 duration: response?.duration
-                            }
+                            };
                             this.subscriptionComponentStore.buyPlanByGoCardless(model);
                         } else {
                             this.componentStore.generateOrderBySubscriptionId(response.subscriptionId);
@@ -369,7 +369,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         window.addEventListener('message', event => {
             if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
-                this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
+                this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
             }
         });
 
@@ -393,7 +393,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.changePlanDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.dueAmount > 0) {
-                this.initializePayment(response);
+                if (response?.region?.code === 'GBR') {
+                    let model = {
+                        planUniqueName: response?.planDetails?.uniqueName,
+                        paymentProvider: "GOCARDLESS",
+                        subscriptionId: response.subscriptionId,
+                        duration: response?.duration
+                    };
+                    this.subscriptionComponentStore.buyPlanByGoCardless(model);
+                } else {
+                    this.initializePayment(response);
+                }
             } else {
                 this.updateSubscriptionPayment(response, true);
             }
@@ -1225,7 +1235,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @param {*} payResponse
      * @memberof BuyPlanComponent
      */
-    public updateSubscriptionPayment(payResponse: any, zeroAmount: boolean = false, subscription?:any): void {
+    public updateSubscriptionPayment(payResponse: any, zeroAmount: boolean = false, subscription?: any): void {
         let request;
         if (payResponse) {
             request = {
@@ -1233,7 +1243,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 razorpaySignature: !zeroAmount ? payResponse.razorpay_signature : null,
                 amountPaid: !zeroAmount ? this.subscriptionResponse?.dueAmount : 0,
                 callNewPlanApi: true,
-                razorpayOrderId: !zeroAmount ? payResponse?.razorpay_order_id : payResponse?.razorpayOrderId
+                duration: subscription?.duration,
+                razorpayOrderId: !zeroAmount ? payResponse?.razorpay_order_id : payResponse?.razorpayOrderId,
+                subscriptionId: subscription?.subscriptionId,
+                planUniqueName: subscription?.planDetails?.uniqueName
             };
             this.subscriptionId = subscription?.subscriptionId;
             let data = { ...request, ...this.subscriptionRequest };
