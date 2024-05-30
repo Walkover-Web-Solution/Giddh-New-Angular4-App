@@ -190,6 +190,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.buyPlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.redirectLink) {
                 this.openWindow(response?.redirectLink);
+            } else if (response?.subscriptionId) {
+                this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
             }
         });
 
@@ -749,7 +751,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         const width = 700;
         const height = 900;
 
-        this.openedWindow = this.generalService.openCenteredWindow(url, '',width, height);
+        this.openedWindow = this.generalService.openCenteredWindow(url, '', width, height);
     }
 
     /**

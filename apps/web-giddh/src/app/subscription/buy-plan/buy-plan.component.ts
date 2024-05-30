@@ -232,6 +232,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.buyPlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.redirectLink) {
                 this.openWindow(response?.redirectLink);
+            } else if (response?.subscriptionId) {
+                this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
             }
         });
 
@@ -258,7 +260,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                                 subscriptionId: response.subscriptionId,
                                 duration: response?.duration
                             };
-                            this.subscriptionComponentStore.buyPlanByGoCardless(model);
+                            if (response?.status?.toLowerCase() === 'active') {
+                                this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
+                            } else {
+                                this.subscriptionComponentStore.buyPlanByGoCardless(model);
+                            }
                         } else {
                             this.componentStore.generateOrderBySubscriptionId(response.subscriptionId);
                         }
@@ -1109,7 +1115,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 address: this.subscriptionForm.value.secondStepForm.address
             },
             promoCode: this.subscriptionForm.value.firstStepForm.promoCode ? this.subscriptionForm.value.firstStepForm.promoCode : null,
-            paymentProvider: this.subscriptionForm.value.firstStepForm.duration === "YEARLY" ? "RAZORPAY" : "CASHFREE",
+            paymentProvider: 'RAZORPAY',
             subscriptionId: null
         }
 
