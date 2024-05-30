@@ -903,7 +903,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 taxAmount = 0;
             }
         }
-        this.changeDetectionRef.detectChanges();
         return taxAmount;
     }
 
@@ -1147,42 +1146,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     this.calculateAmount(Number(transactionAtIndex.get('amount').value), transactionAtIndex, idx);
 
                     if (response.body.applicableDiscounts?.length) {
-                        // let index = transactionsFormArray?.value?.findIndex(obj => obj.particular === '');
-                        transactionAtIndex = transactionsFormArray.at(idx) as FormGroup;
                         response.body.applicableDiscounts.forEach(discount => {
                             let discountArray = this.discountsList?.filter(response => response?.additional?.uniqueName === discount?.uniqueName);
-                            // if (idx !== -1) {
-                            //     let discountObj = discountArray[0];
-                            //     transactionAtIndex = transactionsFormArray.at(idx) as FormGroup;
-                            //     transactionAtIndex.patchValue({
-                            //         amount: this.calculateDiscount(discountObj?.additional?.discountType, discountObj?.additional?.discountValue ?? 0),
-                            //         particular: discountObj?.additional?.uniqueName ? discountObj?.additional?.uniqueName : discount?.uniqueName,
-                            //         currentBalance: '',
-                            //         applyApplicableTaxes: false,
-                            //         isDiscountApplied: true,
-                            //         isTaxApplied: false,
-                            //         isInclusiveTax: false,
-                            //         type: 'by',
-                            //         taxes: [],
-                            //         total: null,
-                            //         discounts: [],
-                            //         inventory: null,
-                            //         selectedAccount: {
-                            //             name: discountObj?.additional?.name ? (discountObj?.additional?.name + ' (' + discountObj?.additional?.discountType + ')') : discountObj?.name,
-                            //             UniqueName: discountObj?.additional?.uniqueName ? discountObj?.additional?.uniqueName : discountObj?.unqiueName,
-                            //             groupUniqueName: '',
-                            //             account: discountObj?.additional?.name ? (discountObj?.additional?.name + ' (' + discountObj?.additional?.discountType + ')') : discountObj?.name,
-                            //             type: discountObj?.additional?.discountType,
-                            //             parentGroup: ''
-                            //         },
-                            //         discountType: discountObj?.additional?.discountType,
-                            //         discountValue: discountObj?.additional?.discountValue ?? 0
-                            //     });
-                            //     this.selectAccUnqName = discountObj?.additional?.uniqueName ? discountObj?.additional?.uniqueName : discount?.uniqueName;
-                            //     this.calculateAmount(Number(transactionAtIndex.get('amount').value), transactionAtIndex, idx);
-                            // } else {
                             this.newEntryObj('by', discountArray[0], 'discount');
-                            // }
                         });
                     }
                     if (response.body.applicableTaxes?.length) {
