@@ -257,7 +257,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                                 paymentProvider: "GOCARDLESS",
                                 subscriptionId: response.subscriptionId,
                                 duration: response?.duration
-                            }
+                            };
                             this.subscriptionComponentStore.buyPlanByGoCardless(model);
                         } else {
                             this.componentStore.generateOrderBySubscriptionId(response.subscriptionId);
@@ -399,7 +399,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                         paymentProvider: "GOCARDLESS",
                         subscriptionId: response.subscriptionId,
                         duration: response?.duration
-                    }
+                    };
                     this.subscriptionComponentStore.buyPlanByGoCardless(model);
                 } else {
                     this.initializePayment(response);
