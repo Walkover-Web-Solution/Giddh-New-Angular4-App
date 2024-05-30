@@ -141,5 +141,7 @@
 		"save":"बचत",
         "companies_allowed":"कंपनियों को अनुमति",
         "support":"सहायता",
-        "chat_voice":"चैट/आवाज"
+        "chat_voice":"चैट/आवाज",
+        "gst_direct":"जीएसटी डायरेक्ट फिलिंग",
+        "e_invoice":"ई-चालान"
 	}
