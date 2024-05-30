@@ -97,6 +97,8 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         this.buyPlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.redirectLink) {
                 this.openWindow(response?.redirectLink);
+            } else if (response?.subscriptionId) {
+                this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
             }
         });
 
