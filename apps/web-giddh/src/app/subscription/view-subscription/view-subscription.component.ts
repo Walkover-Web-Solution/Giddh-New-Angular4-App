@@ -250,7 +250,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
                 paymentProvider: "GOCARDLESS",
                 subscriptionId: this.subscriptionId,
                 duration: subscription?.period
-            }
+            };
             this.subscriptionComponentStore.buyPlanByGoCardless(model);
         } else {
             this.componentStoreBuyPlan.generateOrderBySubscriptionId(this.subscriptionId);
