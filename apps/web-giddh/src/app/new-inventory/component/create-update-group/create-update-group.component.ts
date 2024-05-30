@@ -74,8 +74,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public get showPageLeaveConfirmation(): boolean {
         return this.groupForm?.dirty;
     }
-    /** Holds if group is sub group */
-    public isSubGroup: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -318,9 +316,8 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                         this.getStockGroups();
                         this.backClicked();
                     } else {
-                        this.groupForm.markAsPristine();
-                        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
-                        this.closeAsideEvent.emit(this.isSubGroup === this.groupForm.get('isSubGroup').value);
+                        this.resetGroupForm();
+                        this.closeAsideEvent.emit();
                     }
                 } else {
                     this.toggleLoader(false);
@@ -342,7 +339,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                         this.resetTaxes();
                     } else {
                         this.resetGroupForm();
-                        this.closeAsideEvent.emit(false);
+                        this.closeAsideEvent.emit();
                     }
                 } else {
                     this.toggleLoader(false);
@@ -503,7 +500,6 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     isSubGroup: (response.body.parentStockGroup?.uniqueName) ? true : false,
                     taxes: response.body.taxes
                 });
-                this.isSubGroup = (response.body.parentStockGroup?.uniqueName) ? true : false;
                 this.groupForm.updateValueAndValidity();
                 this.changeDetection.detectChanges();
             } else {
@@ -521,7 +517,11 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      * @memberof CreateUpdateGroupComponent
      */
     public cancelEdit(): void {
-        this.backClicked();
+        if (this.addGroup) {
+            this.closeAsideEvent.emit(true);
+        } else {
+            this.backClicked();
+        }
     }
 
     /**
@@ -549,7 +549,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                     if (response?.status === "success") {
                         this.toaster.showSnackBar("success", this.localeData?.group_delete);
                         if (this.addGroup) {
-                            this.closeAsideEvent.emit(false);
+                            this.closeAsideEvent.emit();
                         } else {
                             this.cancelEdit();
                         }

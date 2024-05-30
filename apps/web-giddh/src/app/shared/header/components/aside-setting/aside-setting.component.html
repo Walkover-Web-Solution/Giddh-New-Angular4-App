@@ -1,4 +1,4 @@
-<cdk-virtual-scroll-viewport [itemSize]="100" class="setting-scroll">
+<cdk-virtual-scroll-viewport [itemSize]="100" class="h-100">
     <ng-container
     appTranslate
     [file]="'aside-setting'"
@@ -20,6 +20,8 @@
                         class="d-flex align-items-center"
                         *ngIf="!isMobileScreen && !showSettingHeading"
                         (click)="goToPreviousPage()"
+                        aria-label="back"
+                        role="button"
                     >
                         <i class="icon-left font-22"></i>
                         <span>{{ commonLocaleData?.app_back }}</span>
@@ -31,17 +33,16 @@
                 </a>
             </div>
             <div class="setting-items">
-                <ul class="mb-3" *ngFor="let section of filteredSettingsPageTabs">
-                    <li
-                        *ngFor="let tab of section"
-                        [ngClass]="{ 'active-link': tab.link === routerUrl || tab?.linked_pages?.includes(routerUrl) }"
-                    >
-                        <a href="javascript:;" aria-label="icon" class="d-block clearfix" [routerLink]="[tab.link]">
-                            <span [innerHTML]="tab.icon"></span>
-                            <span>{{ tab.label }}</span>
-                        </a>
-                    </li>
-                </ul>
+                <mat-list class="mb-3" role="list" *ngFor="let section of filteredSettingsPageTabs">
+                    <ng-container *ngFor="let tab of section">
+                        <mat-list-item role="listitem" [ngClass]="{ 'active-link': tab.link === routerUrl || tab?.linked_pages?.includes(routerUrl) }">
+                            <a href="javascript:;" aria-label="icon" class="d-block clearfix" [routerLink]="[tab.link]">
+                                <span [innerHTML]="tab.icon"></span>
+                                <span>{{ tab.label }}</span>
+                            </a>
+                        </mat-list-item>
+                    </ng-container>
+                </mat-list>
             </div>
         </div>
     </div>

@@ -1,11 +1,35 @@
+.aside-pane {
+    mat-dialog-content {
+        overflow: inherit;
+    }
+}
+.aside-body {
+    padding: 15px;
+    .aside-pane-form {
+        background-color: var(--color-white);
+        box-shadow: 0 3px 6px var(--color-iron);
+        padding: 0 15px;
+        height: calc(100vh - 90px);
+        overflow: auto;
+        scroll-behavior: smooth;
+        position: relative;
+    }
+}
+
 .tags-table {
-    max-width: 600px;
+    max-width: 900px;
     width: 100%;
 }
 
 .tags-table td:nth-child(3) {
     white-space: inherit !important;
 }
+
+.create-tag {
+    display: flex;
+    justify-content: flex-end;
+}
+
 @media (max-width: 991px) {
     .tags-table {
         max-width: 100%;

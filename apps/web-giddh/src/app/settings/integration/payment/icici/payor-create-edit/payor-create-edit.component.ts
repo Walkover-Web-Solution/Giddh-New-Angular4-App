@@ -174,7 +174,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
      */
     private loadUsersWithCompanyPermissions(): void {
         this.store.pipe(select(state => state.settings.usersWithCompanyPermissions), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response) { 
                 this.usersList = [];
                 let index = 0;
                 response.forEach(user => {

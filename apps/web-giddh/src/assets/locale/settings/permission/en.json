@@ -18,7 +18,6 @@
     "from_to_placeholder": "Select Date Range",
     "select_past_period_label": "Select Past Period",
     "select_past_period_placeholder": "Number in Days",
-    "ip_addresses": "IP Addresses",
     "cidr_example": "192.168.1.0/24",
     "ip_example": "192.168.1.0",
     "create_user_permission": "Create User Permission",
