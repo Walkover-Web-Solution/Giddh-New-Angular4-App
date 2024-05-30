@@ -172,6 +172,10 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (changes.openDropdown?.currentValue && !changes?.openDropdown?.previousValue) {
             this.openDropdownPanel();
         }
+
+        if (changes.labelValue) {
+            this.labelValue = changes.labelValue.currentValue;
+        }
     }
 
     /**

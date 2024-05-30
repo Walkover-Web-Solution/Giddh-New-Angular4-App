@@ -33,7 +33,7 @@
                 </a>
             </div>
             <div class="setting-items">
-                <mat-list class="mb-3" role="list" *ngFor="let section of filteredSettingsPageTabs">
+                <mat-list role="list" *ngFor="let section of filteredSettingsPageTabs">
                     <ng-container *ngFor="let tab of section">
                         <mat-list-item role="listitem" [ngClass]="{ 'active-link': tab.link === routerUrl || tab?.linked_pages?.includes(routerUrl) }">
                             <a href="javascript:;" aria-label="icon" class="d-block clearfix" [routerLink]="[tab.link]">

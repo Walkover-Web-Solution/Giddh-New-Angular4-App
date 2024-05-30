@@ -434,25 +434,4 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     public handleTimeSpanChange(value: string): void {
         this.permissionForm.get('periodOptions')?.patchValue(value, { onlySelf: true });
     }
-
-    /**
-     * Handle Role search Query
-     *
-     * @param {*} event
-     * @memberof SettingPermissionFormComponent
-     */
-    public onRoleSearchQueryChange(event: any): void {
-        if (event) {
-            this.allRoles = this.allRoles?.filter(role => role.label.toUpperCase().indexOf(event.toUpperCase()) > -1);
-        }
-    }
-
-    /**
-     * Handle Role Search Clear
-     *
-     * @memberof SettingPermissionFormComponent
-     */
-    public onSearchClear(): void {
-        this.allRoles = this.allRolesConstantList;
-    }
 }

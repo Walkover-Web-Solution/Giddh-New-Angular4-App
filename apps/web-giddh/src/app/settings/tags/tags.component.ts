@@ -139,9 +139,8 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
     */
     public showCreateTag(): void {
         this.createTagFormRef = this.dialog.open(this.createTagForm, {
-            panelClass: 'openform',
-            width: '1000px',
             height: '100vh !important',
+            width: 'var(--aside-pane-width)',
             position: {
                 right: '0',
                 top: '0'

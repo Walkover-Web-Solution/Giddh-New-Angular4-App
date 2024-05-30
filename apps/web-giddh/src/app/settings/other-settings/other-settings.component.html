@@ -35,6 +35,7 @@
                                             profileData.balanceDecimalPlaces = $event.value;
                                             profileUpdated('balanceDecimalPlaces')
                                         "
+                                        [defaultValue]="getDropdownLabel(decimalDigitSource, profileData.balanceDecimalPlaces)"
                                         [isFilterEnabled]="true"
                                         [name]="'balanceDecimalPlaces'"
                                     ></dropdown-field>
@@ -50,6 +51,7 @@
                                             profileData.balanceDisplayFormat = $event.value;
                                             profileUpdated('balanceDisplayFormat')
                                         "
+                                        [defaultValue]="getDropdownLabel(numberSystemSource, profileData.balanceDisplayFormat)"
                                         [isFilterEnabled]="true"
                                         [name]="'balanceDisplayFormat'"
                                     ></dropdown-field>
@@ -58,36 +60,24 @@
                             <div class="col-12 col-sm-6" *ngIf="voucherApiVersion === 1">
                                 <div class="form-group">
                                     <label>{{ localeData?.inventory_type }}</label>
-                                    <div class="mr-t1">
-                                        <span class="p-0 mr-r3">
-                                            <input
-                                                id="radio-1"
-                                                class="radio-custom cp ml-0"
-                                                name="radio-group"
-                                                type="radio"
+                                    <div>
+                                        <mat-radio-group name="radio-group" formControlName="creatorSuperAdmin">
+                                            <mat-radio-button
+                                                color="primary"
+                                                value="true"
                                                 [checked]="profileData?.manageInventory"
                                                 (change)="inventoryTypeUpdated(true)"
-                                                name="inventoryType"
-                                                checked
-                                            />
-                                            <label for="radio-1" class="radio-custom-label">{{
-                                                commonLocaleData?.app_product
-                                            }}</label>
-                                        </span>
-                                        <span class="p-0">
-                                            <input
-                                                id="radio-2"
-                                                class="radio-custom cp ml-0"
-                                                name="radio-group"
-                                                type="radio"
+                                                >{{ commonLocaleData?.app_product }}
+                                            </mat-radio-button>
+                                            <mat-radio-button
+                                                color="primary"
+                                                value="false"
                                                 [checked]="!profileData?.manageInventory"
                                                 (change)="inventoryTypeUpdated(false)"
-                                                name="inventoryType"
-                                            />
-                                            <label for="radio-2" class="radio-custom-label">{{
-                                                commonLocaleData?.app_service
-                                            }}</label>
-                                        </span>
+                                            >
+                                                {{ commonLocaleData?.app_service }}
+                                            </mat-radio-button>
+                                        </mat-radio-group>
                                     </div>
                                 </div>
                             </div>
@@ -99,6 +89,7 @@
                                         [options]="translationLocales"
                                         [placeholder]="localeData?.select_language"
                                         (selectedOption)="activeLocale = $event.value; selectLocale($event)"
+                                        [defaultValue]="getDropdownLabel(translationLocales ,activeLocale)"
                                         [isFilterEnabled]="true"
                                         [name]="'activeLocale'"
                                     ></dropdown-field>

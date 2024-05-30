@@ -79,11 +79,11 @@
                                                 : commonLocaleData?.app_unarchived
                                         }}</span
                                     >
-                                    <div class="btn-group align-items-center">
+                                    <div class="btn-group align-items-center ml-1">
                                         <button
                                             mat-button
                                             [matMenuTriggerFor]="menu"
-                                            class="icon-dots-three-vertical dropdown-toggle cursor-pointer mr-0"
+                                            class="icon-dots-three-vertical dropdown-toggle cursor-pointer mr-0 min-width-unset"
                                             role="button"
                                             aria-label="dropdown button"
                                         ></button>
@@ -91,7 +91,7 @@
                                             <button mat-menu-item (click)="updateBranch(branch)">
                                                 {{ commonLocaleData?.app_edit }}
                                             </button>
-                                            <button mat-menu-item (click)="confirmStatusUpdate()">
+                                            <button mat-menu-item (click)="confirmStatusUpdate(branch)">
                                                 {{
                                                     branch?.isArchived
                                                         ? commonLocaleData?.app_unarchive

@@ -1,6 +1,6 @@
 <ng-container>
-    <div class="row mr-0">
-        <div class="col-12 col-lg-12 col-xl-9 col-xxl-8 mr-t2 border-bottom pd-b15">
+    <div class="row mr-0 border-bottom">
+        <div class="col-12 col-lg-12 col-xl-9 col-xxl-8 mr-t2 pd-b15">
             <div class="row pd-b1">
                 <div class="col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-4">
                     <div class="form-group mb-0">
@@ -67,13 +67,10 @@
                 <div class="col-md-12 col-sm-12 col-lg-6 col-xl-6 col-xxl-4">
                     <input-field
                         [name]="'portalDomain'"
-                        [cssClass]="{
-                            'has-error': !isValidDomain,
-                            'has-success': isValidDomain
-                        }"
+                        [showError]="!isValidDomain"
                         [max]="50"
                         [(ngModel)]="profileData.portalDomain"
-                        (onChange)="checkPortalDomain(profileData.portalDomain)"
+                        (ngModelChange)="checkPortalDomain(profileData.portalDomain)"
                         [type]="'text'"
                         [label]="localeData?.portal_domain"
                         #domain

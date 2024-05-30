@@ -58,19 +58,24 @@
                                                     [class.error-box]="
                                                         addressForm?.get('taxNumber')?.touched &&
                                                         addressForm?.get('taxNumber')?.invalid
-                                                    " [type]="'text'" (keyup)="getStateCode(states, $event)"
+                                                    " 
+                                                    [type]="'text'" 
+                                                    (keyup)="getStateCode($event)"
                                                     formControlName="taxNumber"
                                                     [placeholder]="getEnterTaxText(addressConfiguration?.tax?.name)"></input-field>
                                             </div>
                                             <div class="col-sm-4 form-group">
-                                                <dropdown-field [label]="commonLocaleData?.app_state" [disabled]="
+                                                <dropdown-field 
+                                                    [label]="commonLocaleData?.app_state" 
+                                                    [disabled]="
                                                         addressConfiguration?.type === 'editAddress' &&
                                                         addressToUpdate?.taxNumber &&
                                                         addressConfiguration?.tax?.name &&
                                                         addressConfiguration?.tax?.name === 'GSTIN'
-                                                    " [options]="addressConfiguration.stateList"
+                                                    " 
+                                                    [options]="addressConfiguration.stateList"
                                                     (selectedOption)="selectState($event)"
-                                                    [defaultValue]="addressToUpdate ? addressToUpdate?.stateCode + ' - ' + addressToUpdate?.stateName : ''"
+                                                    [defaultValue]="addressToUpdate ? addressToUpdate?.stateCode + ' - ' + addressToUpdate?.stateName : 'MP3'"
                                                     [cssClass]="w-100" [required]="true"></dropdown-field>
                                             </div>
                                             <!-- static code added for the pincode -->
@@ -125,7 +130,8 @@
                                               
                                                     <mat-select
                                                         [placeholder]="commonLocaleData?.app_select_entity"
-                                                        formControlName="linkedEntity" 
+                                                        formControlName="linkedEntity"
+                                                        panelClass="linked-entities-options"
                                                         multiple
                                                     >
                                                     <mat-select-trigger>
@@ -222,7 +228,9 @@
                                               
                                                     <mat-select
                                                         [placeholder]="commonLocaleData?.app_select_entity"
-                                                        formControlName="linkedEntity" 
+                                                        formControlName="linkedEntity"
+                                                        panelClass="linked-entities-options"
+                                                        class="d-none"
                                                         multiple
                                                     >
                                                     <mat-select-trigger>
@@ -297,7 +305,8 @@
                                               
                                                     <mat-select
                                                         [placeholder]="commonLocaleData?.app_select_entity"
-                                                        formControlName="linkedEntity" 
+                                                        formControlName="linkedEntity"
+                                                        panelClass="linked-entities-options"
                                                         multiple
                                                     >
                                                     <mat-select-trigger>
