@@ -244,17 +244,17 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
      * @memberof ViewSubscriptionComponent
      */
     public buyPlan(subscription: any): void {
-        // if (this.activeCompany.subscription?.country?.countryCode === 'GB') {
-        //     let model = {
-        //         planUniqueName: subscription?.planUniqueName,
-        //         paymentProvider: "GOCARDLESS",
-        //         subscriptionId: this.subscriptionId,
-        //         duration: subscription?.period
-        //     }
-        //     this.subscriptionComponentStore.buyPlanByGoCardless(model);
-        // } else {
+        if (subscription?.region?.code === 'GBR') {
+            let model = {
+                planUniqueName: subscription?.planUniqueName,
+                paymentProvider: "GOCARDLESS",
+                subscriptionId: this.subscriptionId,
+                duration: subscription?.period
+            }
+            this.subscriptionComponentStore.buyPlanByGoCardless(model);
+        } else {
             this.componentStoreBuyPlan.generateOrderBySubscriptionId(this.subscriptionId);
-        // }
+        }
     }
 
     /**
@@ -319,14 +319,14 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         let request;
         if (razorPayResponse) {
             request = {
-                subscriptionRequest: {
-                    subscriptionId: subscription?.subscriptionId
-                },
                 paymentId: razorPayResponse.razorpay_payment_id,
                 razorpaySignature: razorPayResponse.razorpay_signature,
                 amountPaid: subscription?.dueAmount,
                 callNewPlanApi: true,
-                razorpayOrderId: razorPayResponse?.razorpay_order_id
+                razorpayOrderId: razorPayResponse?.razorpay_order_id,
+                duration: subscription?.duration,
+                subscriptionId: subscription?.subscriptionId,
+                planUniqueName: subscription?.planDetails?.uniqueName
             };
 
             this.componentStoreBuyPlan.updateNewLoginSubscriptionPayment({ request: request });
