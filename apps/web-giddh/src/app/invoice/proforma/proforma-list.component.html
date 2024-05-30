@@ -449,6 +449,7 @@
                                         *ngIf="selectedCustomerUniqueName === item?.uniqueName"
                                         account-detail-modal-component
                                         [accountUniqueName]="item.customerUniqueName"
+                                        [voucherType]="voucherType"
                                         [from]="this.advanceSearchFilter.from"
                                         [to]="this.advanceSearchFilter.to"
                                         [isModalOpen]="selectedCustomerUniqueName === item?.uniqueName"

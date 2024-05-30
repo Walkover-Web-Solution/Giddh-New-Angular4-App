@@ -255,7 +255,7 @@
                                 <div class="row empty-return-row">
                                     <div
                                         class="col-md-4 col-sm-4 col-xs-12 text-center filing-steps cursor-pointer"
-                                        [routerLink]="['/pages', 'proforma-invoice', 'invoice', 'sales']"
+                                        [routerLink]="[voucherApiVersion === 2 ? '/pages/vouchers/sales/create' : '/pages/proforma-invoice/invoice/sales']"
                                     >
                                         <svg
                                             id="Layer_1"
@@ -430,7 +430,7 @@
                                 <div class="row empty-return-row">
                                     <div
                                         class="col-md-4 col-sm-4 col-xs-12 text-center filing-steps cursor-pointer"
-                                        [routerLink]="['/pages', 'proforma-invoice', 'invoice', 'purchase']"
+                                        [routerLink]="[voucherApiVersion === 2 ? '/pages/vouchers/purchase/create' : '/pages/proforma-invoice/invoice/purchase']"
                                     >
                                         <svg
                                             id="Layer_1"

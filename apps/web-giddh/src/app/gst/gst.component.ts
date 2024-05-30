@@ -92,6 +92,8 @@ export class GstComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2 = 2;
 
     constructor(
         private store: Store<AppState>,
@@ -121,6 +123,7 @@ export class GstComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.breakpointObserver
             .observe(['(max-width: 767px)'])
