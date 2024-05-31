@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { ActivateDialogComponent } from '../activate-dialog/activate-dialog.component';
 import { BuyPlanComponentStore } from './utility/buy-plan.store';
-import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime, take } from 'rxjs';
+import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { CountryRequest, OnboardingFormRequest } from '../../models/api-models/Common';
@@ -22,6 +22,7 @@ import { ChangeBillingComponentStore } from '../change-billing/utility/change-bi
 import { SubscriptionComponentStore } from '../utility/subscription.store';
 import { GeneralService } from '../../services/general.service';
 import { MatSelect } from '@angular/material/select';
+import { gulfCountryCodes, regionCountriesCode } from '../../shared/helpers/countryWithCodes';
 
 @Component({
     selector: 'buy-plan',
@@ -181,6 +182,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     private openedWindow: Window | null = null;
     /** Holds Store Plan list API success state as observable*/
     public subscriptionRazorpayOrderDetails$ = this.componentStore.select(state => state.subscriptionRazorpayOrderDetails);
+    /** True if it is subscription region */
+    public isSubscriptionRegion: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -329,9 +332,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 });
                 this.countrySource$ = observableOf(this.countrySource);
 
-                if (this.countrySource?.length) {
-                    this.currentCountry.patchValue(this.countrySource.find(country => country.label === this.newUserSelectedCountry));
-                }
+                // if (this.countrySource?.length) {
+                //     this.currentCountry.patchValue(this.countrySource.find(country => country.label === this.newUserSelectedCountry));
+                // }
 
             } else {
                 let countryRequest = new CountryRequest();
@@ -417,7 +420,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         if (this.subscriptionId) {
             this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response) {
+                if (response.region?.code) {
                     this.newUserSelectCountry({
                         "label": response.region?.code + " - " + response.region?.name,
                         "value": response.region?.code,
@@ -428,7 +431,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     });
                 }
             });
-        } else if (this.activeCompany) {
+        } else if (this.activeCompany?.subscription?.region?.code) {
             this.newUserSelectCountry({
                 "label": this.activeCompany?.subscription?.region?.code + " - " + this.activeCompany?.subscription?.region?.name,
                 "value": this.activeCompany?.subscription?.region?.code,
@@ -437,49 +440,140 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     "label": this.activeCompany?.subscription?.region?.code + " - " + this.activeCompany?.subscription?.region?.name
                 }
             });
-        } else {
-            if (localStorage.getItem('Country-Region') === 'IN') {
-                this.newUserSelectCountry({
-                    "label": "IND - India",
+        } else if (localStorage.getItem('Country-Region') === 'IN') {
+            this.newUserSelectCountry({
+                "label": "IND - India",
+                "value": "IND",
+                "additional": {
                     "value": "IND",
-                    "additional": {
-                        "value": "IND",
-                        "label": "IND - India"
-                    }
-                });
-            } else if (localStorage.getItem('Country-Region') === 'GB') {
-                this.newUserSelectCountry({
-                    "label": "GBR - United Kingdom",
+                    "label": "IND - India"
+                }
+            });
+        } else if (localStorage.getItem('Country-Region') === 'GB') {
+            this.newUserSelectCountry({
+                "label": "GBR - United Kingdom",
+                "value": "GBR",
+                "additional": {
                     "value": "GBR",
-                    "additional": {
-                        "value": "GBR",
-                        "label": "GBR - United Kingdom"
-                    }
-                });
-            } else if (localStorage.getItem('Country-Region') === 'AE') {
-                this.newUserSelectCountry({
-                    "label": "ARE - United Arab Emirates",
+                    "label": "GBR - United Kingdom"
+                }
+            });
+        } else if (localStorage.getItem('Country-Region') === 'AE') {
+            this.newUserSelectCountry({
+                "label": "ARE - United Arab Emirates",
+                "value": "ARE",
+                "additional": {
                     "value": "ARE",
-                    "additional": {
-                        "value": "ARE",
-                        "label": "ARE - United Arab Emirates"
-                    }
+                    "label": "ARE - United Arab Emirates"
+                }
 
-                });
-            } else if (!this.isChangePlan && localStorage.getItem('Country-Region') === 'GL') {
-                this.newUserSelectCountry({
-                    "label": "GLB - Global",
+            });
+        } else if (!this.isChangePlan && localStorage.getItem('Country-Region') === 'GL') {
+            this.newUserSelectCountry({
+                "label": "GLB - Global",
+                "value": "GLB",
+                "additional": {
                     "value": "GLB",
-                    "additional": {
-                        "value": "GLB",
-                        "label": "GLB - Global"
-                    }
-                });
-            }
+                    "label": "GLB - Global"
+                }
+            });
+        } else {
+            this.isSubscriptionRegion = true;
+            this.setUserCountry();
         }
     }
 
+    /**
+     * This will be use for set user country
+     *
+     * @private
+     * @memberof BuyPlanComponent
+     */
+    private setUserCountry(): void {
+        this.generalService.getClientIp()
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(result => {
+                if (result) {
+                    const { alpha3CountryCode, alpha2CountryCode, countryName } = this.determineCountryCodes(result);
+                    const isRegionCode = this.isRegionCountryCode(alpha3CountryCode);
+                    this.newUserSelectCountry({
+                        label: `${!isRegionCode ? alpha3CountryCode : alpha2CountryCode}-${countryName}`,
+                        value: !isRegionCode ? alpha3CountryCode : alpha2CountryCode,
+                        additional: {
+                            value: !isRegionCode ? alpha3CountryCode : alpha2CountryCode,
+                            label: `${!isRegionCode ? alpha3CountryCode : alpha2CountryCode}-${countryName}`,
+                            alpha2CountryCode: alpha2CountryCode,
+                            alpha3CountryCode: alpha3CountryCode
+                        }
+                    });
+                }
+            });
+    }
 
+    /**
+     * This function checks if the provided country code is a regional country code.
+     *
+     * @param {string} countryCode - The country code to check.
+     * @returns {boolean} - Returns true if the code is a regional country code, false otherwise.
+     */
+    private isRegionCountryCode(countryCode: string): boolean {
+        return regionCountriesCode.includes(countryCode?.toLowerCase());
+    }
+
+    /**
+     * This function determines the country codes based on the provided IP address result.
+     *
+     * @param {any} result - The result object containing the country code, country name, and other relevant information.
+     * @returns {{ alpha3CountryCode: string, alpha2CountryCode: string, countryName: string }} - An object containing the determined alpha-3 country code, alpha-2 country code, and country name.
+     */
+    private determineCountryCodes(result: any): { alpha3CountryCode: string, alpha2CountryCode: string, countryName: string } {
+        let alpha3CountryCode = 'GLB';
+        let alpha2CountryCode = '';
+        let countryName = 'Global';
+
+        if (result) {
+            switch (result.countryCode) {
+                case 'IN':
+                    alpha3CountryCode = 'IND';
+                    alpha2CountryCode = 'IN';
+                    countryName = result.countryName;
+                    break;
+                case 'GB':
+                    alpha3CountryCode = 'GBR';
+                    alpha2CountryCode = 'GB';
+                    countryName = result.countryName;
+                    break;
+                case 'AE':
+                    alpha3CountryCode = 'ARE';
+                    alpha2CountryCode = 'AE';
+                    countryName = result.countryName;
+                    break;
+                default:
+                    if (this.isGulfCountry(result.countryCode)) {
+                        alpha3CountryCode = 'GLF';
+                        alpha2CountryCode = 'GL';
+                        countryName = 'Gulf';
+                    } else if (result.continentCode === 'EU' && result.countryCode !== 'GB') {
+                        alpha3CountryCode = 'EUR';
+                        alpha2CountryCode = 'EU';
+                        countryName = 'Europe';
+                    }
+                    break;
+            }
+        }
+
+        return { alpha3CountryCode, alpha2CountryCode, countryName };
+    }
+
+    /**
+     * This function checks if the provided country code is a Gulf country code.
+     *
+     * @param {string} code - The country code to check.
+     * @returns {boolean} - Returns true if the code is a Gulf country code, false otherwise.
+     */
+    private isGulfCountry(code: string): boolean {
+        return gulfCountryCodes.includes(code?.toLowerCase());
+    }
 
     /**
      * This will be use for toggle duration event
@@ -967,11 +1061,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 } else {
                     this.firstStepForm.get('duration').setValue('MONTHLY');
                 }
-
                 this.setPlans();
             } else {
                 this.inputData = [];
-                this.countryList?.open();
+                setTimeout(() => {
+                    this.countryList?.open();
+                }, 100);
             }
         });
     }
@@ -1039,8 +1134,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public newUserSelectCountry(event: any): void {
-        this.componentStore.getAllPlans({ params: { regionCode: event?.value } });
-        this.newUserSelectedCountry = event.label;
+        if (event?.value) {
+            this.componentStore.getAllPlans({ params: { regionCode: event?.value } });
+            this.newUserSelectedCountry = event.label;
+            this.currentCountry.patchValue(event);
+        }
     }
 
     /**
