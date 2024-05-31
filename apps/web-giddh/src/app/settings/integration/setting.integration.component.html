@@ -273,11 +273,6 @@
                                                     (onClear)="paypalObj.account.name = null; paypalObj.account.uniqueName = null"
                                                 >
                                                 </dropdown-field>
-                                                <!-- <div
-                                                    class="input-group-addon cursor-pointer"
-                                                   
-                                                >
-                                                </div> -->
                                                 <button mat-stroked-button class="min-width-unset" (click)="unlinkAccountFromPaypal()"  *ngIf="paypalObj?.account?.uniqueName && paypalObj?.account?.name">
                                                     <i class="icon-trash"></i>
                                                 </button>
