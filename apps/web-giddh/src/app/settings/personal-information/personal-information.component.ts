@@ -1,20 +1,19 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ReplaySubject, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { OrganizationType } from '../../models/user-login-state';
 import { OrganizationProfile } from '../constants/settings.constant';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ClipboardService } from 'ngx-clipboard';
-import { skip } from 'rxjs';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
     selector: 'personal-information',
     templateUrl: './personal-information.component.html',
     styleUrls: ['./personal-information.component.scss']
 })
-
-export class PersonalInformationComponent implements OnInit, OnDestroy {
+export class PersonalInformationComponent implements OnInit, OnChanges, OnDestroy {
 
     /** Decides when to emit the value for UPDATE operation */
     public saveProfileSubject: Subject<any> = new Subject();
@@ -59,10 +58,10 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
     public isCopied: boolean = false;
     /** This will hold portal url */
     public portalUrl: any = PORTAL_URL;
-    /** Holds Last Portal Domain */
-    private tempProfileData: any = null;
+    /** Holds Profile Form */
+    public profileForm: FormGroup;
 
-    constructor(private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService) { }
+    constructor(private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService, private formBuilder: FormBuilder) { }
 
     /**
      * Initializes the component
@@ -70,13 +69,84 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
      * @memberof PersonalInformationComponent
      */
     public ngOnInit(): void {
-        this.tempProfileData = this.profileData;
+        this.initProfileForm();
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(this.profileData.portalDomain);
-        this.saveProfileSubject.pipe(takeUntil(this.destroyed$), skip(2)).subscribe((res) => {
-            if (res) {
+        this.saveProfileSubject.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            if (res && this.profileForm.dirty) {
                 this.saveProfile.emit(this.updatedData);
             }
+        });
+    }
+
+    /**
+    *  Handle On Change of input properties
+    *
+    * @memberof PersonalInformationComponent
+    */
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes?.profileData) {
+            if (this.profileData?.alias || this.profileData?.name) {
+                this.initProfileForm(this.profileData);
+            }
+
+            if (this.organizationType === 'COMPANY') {
+                this.profileForm?.get('name')?.valueChanges?.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe((value) => {
+                    if (value) {
+                        this.profileUpdated('name');
+                    }
+                });
+                this.profileForm?.get('portalDomain')?.valueChanges?.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe((value) => {
+                    if (value) {
+                        this.profileUpdated('portalDomain');
+                    }
+                });
+                this.profileForm?.get('nameAlias')?.valueChanges?.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe((value) => {
+                    if (value) {
+                        this.profileUpdated('nameAlias');
+                    }
+                });
+                this.profileForm?.get('headQuarterAlias')?.valueChanges?.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe((value) => {
+                    if (value) {
+                        this.profileUpdated('headQuarterAlias');
+                    }
+                });
+            } else {
+                this.profileForm?.get('alias')?.valueChanges?.pipe(takeUntil(this.destroyed$), debounceTime(700)).subscribe((value) => {
+                    if (value) {
+                        this.profileUpdated('alias');
+                    }
+                });
+            }
+        }
+    }
+
+    /**
+     * Initialise Form
+     *
+     * @private
+     * @memberof PersonalInformationComponent
+     */
+    private initProfileForm(profileData?: any): void {
+        this.profileForm = this.formBuilder.group({
+            name: [profileData?.name ?? ''],
+            uniqueName: [profileData?.uniqueName ?? ''],
+            companyName: [profileData?.companyName ?? ''],
+            logo: [profileData?.logo ?? ''],
+            alias: [profileData?.alias ?? ''],
+            parent: [profileData?.parent ?? {}],
+            country: this.formBuilder.group({
+                countryName: [profileData?.country?.countryName ?? ''],
+                countryCode: [profileData?.country?.countryCode ?? ''],
+                currencyName: [profileData?.country?.currencyName ?? ''],
+                currencyCode: [profileData?.country?.currencyCode ?? '']
+            }),
+            businessTypes: [profileData?.businessTypes ?? []],
+            businessType: [profileData?.businessType ?? ''],
+            nameAlias: [profileData?.nameAlias ?? ''],
+            headQuarterAlias: [profileData?.headQuarterAlias ?? ''],
+            taxType: [profileData?.taxType ?? ''],
+            portalDomain: [profileData?.portalDomain ?? '']
         });
     }
 
@@ -97,9 +167,11 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
      * @memberof PersonalInformationComponent
      */
     public profileUpdated(keyName: string): void {
-        this.tempProfileData[keyName] = this.profileData[keyName];
-        this.updatedData[keyName] = this.profileData[keyName];
-        this.saveProfileSubject.next(true);
+        const value = this.profileForm?.get(keyName).value;
+        if (this.updatedData[keyName] !== value) {
+            this.updatedData[keyName] = value;
+            this.saveProfileSubject.next(true);
+        }
     }
 
     /**
@@ -133,5 +205,4 @@ export class PersonalInformationComponent implements OnInit, OnDestroy {
             this.isCopied = false;
         }, 3000);
     }
-
 }
