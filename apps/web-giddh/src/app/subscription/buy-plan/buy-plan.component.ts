@@ -22,7 +22,7 @@ import { ChangeBillingComponentStore } from '../change-billing/utility/change-bi
 import { SubscriptionComponentStore } from '../utility/subscription.store';
 import { GeneralService } from '../../services/general.service';
 import { MatSelect } from '@angular/material/select';
-import { gulfCountryCodes, regionCountriesCode } from '../../shared/helpers/countryWithCodes';
+import { gulfCountriesCode, regionCountriesCode } from '../../shared/helpers/countryWithCodes';
 
 @Component({
     selector: 'buy-plan',
@@ -331,11 +331,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.countrySource$ = observableOf(this.countrySource);
-
-                // if (this.countrySource?.length) {
-                //     this.currentCountry.patchValue(this.countrySource.find(country => country.label === this.newUserSelectedCountry));
-                // }
-
             } else {
                 let countryRequest = new CountryRequest();
                 countryRequest.formName = 'onboarding';
@@ -572,7 +567,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @returns {boolean} - Returns true if the code is a Gulf country code, false otherwise.
      */
     private isGulfCountry(code: string): boolean {
-        return gulfCountryCodes.includes(code?.toLowerCase());
+        return gulfCountriesCode.includes(code?.toLowerCase());
     }
 
     /**
