@@ -1,6 +1,6 @@
 <ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
     <div [ngClass]="{ 'readonly-field': readonly }">
-        <mat-form-field [ngClass]="{ 'mat-form-field-invalid': showError }" [appearance]="appearance">
+        <mat-form-field [ngClass]="{ 'mat-form-field-invalid': showError }" [appearance]="appearance" (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()">
             <mat-label>{{ label ? label : placeholder }}</mat-label>
             <input
                 type="text"
@@ -13,7 +13,6 @@
                 [name]="name"
                 [formControl]="searchFormControl"
                 [readonly]="readonly"
-                (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()"
                 [autocomplete]="autocomplete"
                 #trigger="matAutocompleteTrigger"
                 #selectField

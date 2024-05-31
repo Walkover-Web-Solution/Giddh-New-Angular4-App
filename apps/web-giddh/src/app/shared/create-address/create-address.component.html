@@ -53,30 +53,33 @@
                                         </div>
 
                                         <div class="row">
-                                            <div *ngIf="addressConfiguration?.tax?.name" class="col-sm-4 form-group">
+                                            <div *ngIf="isBusinessTypeRegistered" class="col-sm-4 form-group">
                                                 <input-field [label]="addressConfiguration?.tax?.name"
                                                     [class.error-box]="
                                                         addressForm?.get('taxNumber')?.touched &&
                                                         addressForm?.get('taxNumber')?.invalid
                                                     " 
-                                                    [type]="'text'" 
-                                                    (keyup)="getStateCode($event)"
+                                                    [type]="'text'"
                                                     formControlName="taxNumber"
-                                                    [placeholder]="getEnterTaxText(addressConfiguration?.tax?.name)"></input-field>
+                                                    [placeholder]="getEnterTaxText(addressConfiguration?.tax?.name)"
+                                                ></input-field>
                                             </div>
                                             <div class="col-sm-4 form-group">
-                                                <dropdown-field 
+                                                <reactive-dropdown-field 
                                                     [label]="commonLocaleData?.app_state" 
-                                                    [disabled]="
+                                                    [readonly]="
                                                         addressConfiguration?.type === 'editAddress' &&
                                                         addressToUpdate?.taxNumber &&
                                                         addressConfiguration?.tax?.name &&
-                                                        addressConfiguration?.tax?.name === 'GSTIN'
+                                                        addressConfiguration?.tax?.name === 'GSTIN' || (addressForm?.get('stateLabel')?.value && addressForm?.get('taxNumber')?.value)
                                                     " 
                                                     [options]="addressConfiguration.stateList"
-                                                    (selectedOption)="selectState($event)"
-                                                    [defaultValue]="addressToUpdate ? addressToUpdate?.stateCode + ' - ' + addressToUpdate?.stateName : 'MP3'"
-                                                    [cssClass]="w-100" [required]="true"></dropdown-field>
+                                                    formControlName="state"
+                                                    [labelValue]="addressForm?.get('stateLabel')?.value ? addressForm?.get('stateLabel')?.value : ''"
+                                                    [cssClass]="w-100" 
+                                                    [required]="true"
+                                                >
+                                                </reactive-dropdown-field>
                                             </div>
                                             <!-- static code added for the pincode -->
                                             <div class="col-sm-4">
@@ -138,7 +141,7 @@
                                                         
                                                     </mat-select-trigger>
                                                       <mat-option *ngFor="let item of addressConfiguration?.linkedEntities; let i = index" [value]="item" (click)="selectEntity(item)">
-                                                        <a href="javascript:void(0)" class="list-item d-flex column-gap1">
+                                                        <a href="javascript:;" class="list-item d-flex column-gap1">
                                                             <span class="entity-icon">
                                                                 <i class="icon-branch-icon pull-right"
                                                                     *ngIf="item?.entity === 'BRANCH'"
@@ -225,7 +228,6 @@
                                                         <span matChipRemove><i class="icon-cross"></i></span>
                                                       </mat-chip>
                                                     </mat-chip-list>
-                                              
                                                     <mat-select
                                                         [placeholder]="commonLocaleData?.app_select_entity"
                                                         formControlName="linkedEntity"

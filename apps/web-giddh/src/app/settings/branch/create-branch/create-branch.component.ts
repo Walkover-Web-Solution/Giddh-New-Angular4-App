@@ -399,6 +399,18 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchComponent
      */
     public handleShortcutPress(): void  {
+        this.loadLinkedEntities(() => {
+            this.openCreateBranchDialog();
+        });
+    }
+
+    /**
+     * Open Create branch dialog
+     *
+     * @private
+     * @memberof CreateBranchComponent
+     */
+    private openCreateBranchDialog(): void {
         this.asideAccountAsidePaneRef = this.dialog.open(this.asideAccountAsidePane, {
             width: '760px',
             height: '100vh !important',
@@ -408,6 +420,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
             }
         });
     }
+
     /**
      * Loads all the addresses within a company
      *
