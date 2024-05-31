@@ -639,17 +639,17 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public buyPlan(subscription: any): void {
-        if (this.activeCompany.subscription?.country?.countryCode === 'GB') {
-            let model = {
-                planUniqueName: subscription?.plan?.uniqueName,
-                paymentProvider: "GOCARDLESS",
-                subscriptionId: subscription?.subscriptionId,
-                duration: subscription?.period
-            }
-            this.componentStore.buyPlanByGoCardless(model);
-        } else {
+        // if (this.activeCompany.subscription?.country?.countryCode === 'GB') {
+        //     let model = {
+        //         planUniqueName: subscription?.plan?.uniqueName,
+        //         paymentProvider: "GOCARDLESS",
+        //         subscriptionId: subscription?.subscriptionId,
+        //         duration: subscription?.period
+        //     }
+        //     this.componentStore.buyPlanByGoCardless(model);
+        // } else {
             this.componentStoreBuyPlan.generateOrderBySubscriptionId(subscription?.subscriptionId);
-        }
+        // }
     }
 
     /**

@@ -110,5 +110,7 @@
         "save":"Save",
         "companies_allowed":"Companies allowed",
         "support":"Support",
-        "chat_voice":"Chat/Voice"
+        "chat_voice":"Chat/Voice",
+        "gst_direct":"GST Direct Filling",
+        "e_invoice":"E-invoice"
     }
