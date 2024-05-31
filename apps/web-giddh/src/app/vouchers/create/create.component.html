@@ -547,7 +547,7 @@
 
                                 <!-- Row 3 -->
                                 <div class="row row-gap mr-t15 mr-b15"
-                                    *ngIf="invoiceType.isPurchaseInvoice && (vendorPurchaseOrders$ | async)?.length">
+                                    *ngIf="invoiceType.isPurchaseInvoice && ((vendorPurchaseOrders$ | async)?.length || fieldFilteredOptions?.length)">
                                     <!-- Purchase Order -->
                                     <div class="col-6">
                                         <mat-select name="linkedPO" formControlName="linkedPo" [multiple]="true"
@@ -605,7 +605,7 @@
                                             [label]="voucherDateLabel"
                                             [placeholder]="voucherDateLabel" name="voucherDate" [showToggleIcon]="false"
                                             [appearance]="'outline'" formControlName="date"
-                                            (dateSelected)="onChangeVoucherDate()">
+                                            (dateSelected)="onChangeVoucherDate()" [disabled]="!invoiceType.isPurchaseInvoice && isUpdateMode ? 'disabled' : null" [cssClass]="!invoiceType.isPurchaseInvoice && isUpdateMode ? 'disable-bg cursor-disable' : null">
                                         </giddh-datepicker>
                                     </div>
 
@@ -936,9 +936,8 @@
                                                                                 (datepickerState)="openEntryDatepicker = $event"
                                                                                 [isOpened]="openEntryDatepicker">
                                                                             </giddh-datepicker>
+                                                                            <i class="icon-edit text-blue" (click)="openEntryDatepicker = true"></i>
                                                                         </ng-container>
-                                                                        <i class="icon-edit text-blue"
-                                                                            (click)="openEntryDatepicker = true"></i>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -1111,7 +1110,7 @@
                                                                             </ng-container>
                                                                             <mat-select
                                                                                 *ngIf="activeEntryIndex === entryIndex"
-                                                                                formControlName="code"
+                                                                                formControlName="uniqueName"
                                                                                 [placeholder]="commonLocaleData?.app_select"
                                                                                 class="form-control mt-2 bg"
                                                                                 name="transactionUnit{{entryIndex}}">
@@ -1408,7 +1407,7 @@
                                             <div class="container px-0">
                                                 <div class="row">
                                                     <div class="col-12"
-                                                        *ngIf="!invoiceType.isPurchaseOrder && (currentVoucherFormDetails?.depositAllowed || ((invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote) && vouchersForAdjustment?.length)) && (!isUpdateMode || (isUpdateMode && (vouchersForAdjustment?.length || isAdjustAmount)))">
+                                                        *ngIf="!invoiceType.isPurchaseOrder && (currentVoucherFormDetails?.depositAllowed || ((invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote) && (vouchersForAdjustment?.length || isAdjustAmount))) && (!isUpdateMode || (isUpdateMode && (vouchersForAdjustment?.length || isAdjustAmount)))">
                                                         <mat-card>
                                                             <mat-card-header
                                                                 *ngIf="!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
