@@ -94,11 +94,19 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
             this.viewSubscriptionData = response;
         });
 
+
         this.buyPlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.redirectLink) {
-                this.openWindow(response?.redirectLink);
-            } else if (response?.subscriptionId) {
-                this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
+            console.log(response);
+            if (response) {
+                if (response.dueAmount > 0) {
+                    this.openWindow(response?.redirectLink);
+                } else if (response.subscriptionId) {
+                    if (response.status === 'trial') {
+                        this.router.navigate(['/pages/subscription/buy-plan']);
+                    } else {
+                        this.router.navigate(['/pages/subscription/buy-plan/' + response.subscriptionId]);
+                    }
+                }
             }
         });
 
@@ -109,6 +117,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         });
 
         this.subscriptionRazorpayOrderDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response);
             if (response) {
                 if (response.dueAmount > 0) {
                     this.initializePayment(response);
