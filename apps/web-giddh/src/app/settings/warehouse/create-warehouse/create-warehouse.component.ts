@@ -257,8 +257,6 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         this.warehouseForm.reset();
         this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
         this.warehouseForm.markAsPristine();
-        console.log(this.warehouseForm.value);
-        
     }
 
     /**
