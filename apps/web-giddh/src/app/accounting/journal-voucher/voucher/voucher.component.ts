@@ -869,40 +869,51 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public calculateTax(taxAmount?: number) {
-        let amount = 0;
+        let toAmount = 0;
+        let byAmount = 0;
         let toEntryControl;
         let byEntryControl;
         let taxEntryControl;
+        let actualTaxAmount;
 
         (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
             if (control.value.particular && control.value.type === "to" && !control.value.isTaxApplied && !control.value.isDiscountApplied) {
                 toEntryControl = control;
-                amount += control.value.actualAmount;
+                toAmount += control.value.actualAmount;
             }
             if (control.value.particular && control.value.type === "by" && !control.value.isTaxApplied && !control.value.isDiscountApplied) {
                 byEntryControl = control;
             }
             if (control.value.particular && control.value.type === "by" && control.value.isDiscountApplied) {
-                amount -= control.value.amount;
+                byAmount += control.value.actualAmount;
             }
+
             if (!taxAmount && control.value.particular && control.value.type === "to" && control.value.isTaxApplied) {
                 taxEntryControl = control;
                 taxAmount = control.value.taxValue;
+                actualTaxAmount = control.value.taxValue;
             }
         });
-        taxEntryControl?.get('amount')?.patchValue(taxAmount);
-        toEntryControl?.get('amount')?.patchValue(taxAmount ? amount - taxAmount : amount);
+        console.log(toAmount, byAmount, taxAmount);
         if (toEntryControl?.get('type')?.value === 'to') {
-            if (amount > 0) {
-                if (taxAmount) {
-                    taxAmount = taxAmount / 100 * amount;
-                } else {
-                    taxAmount = 0;
-                }
+            if (toAmount > 0) {
+                let amountIncludingGST = toAmount;
+                let baseAmount: number = 0;
+                let gstAmount: number = 0;
+                let gstRate = taxAmount; // GST rate in percentage
+                const gstMultiplier = 1 + (gstRate / 100);
+                baseAmount = Math.round(amountIncludingGST / gstMultiplier);
+                gstAmount = Math.round(amountIncludingGST - baseAmount);
+                console.log(gstMultiplier, baseAmount, gstAmount);
+                toAmount = baseAmount;
+                taxAmount = gstAmount;
             } else {
                 taxAmount = 0;
             }
         }
+        taxEntryControl?.get('amount')?.patchValue(taxAmount);
+        toEntryControl?.get('amount')?.patchValue(toAmount);
+        byEntryControl?.get('amount')?.patchValue(byAmount + taxAmount);
         return taxAmount;
     }
 
@@ -1287,8 +1298,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public calculateAmount(amount: any, transactionObj: any, indx: number): any {
         let lastIndx = (this.journalVoucherForm.get('transactions') as FormArray).length - 1;
         // Update amount in transaction object
-        transactionObj.get('amount').setValue(Number(amount));
-        transactionObj.get('total').setValue(transactionObj.get('amount').value);
+        transactionObj.get('amount').patchValue(Number(amount));
+        transactionObj.get('total').patchValue(transactionObj.get('amount').value);
         const { totalCredit, totalDebit } = this.calculateTotalCreditAndDebit();
         this.totalCreditAmount = totalCredit;
         this.totalDebitAmount = totalDebit;
