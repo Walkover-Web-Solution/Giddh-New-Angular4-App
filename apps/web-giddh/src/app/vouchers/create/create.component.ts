@@ -435,6 +435,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             return true;
         }
 
+        if (this.invoiceForm.get('touristSchemeApplicable')?.value) {
+            return true;
+        }
+
         let accountPartyType = '';
         this.account?.addresses?.forEach(address => {
             if (address.isDefault) {
@@ -966,6 +970,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             takeUntil(this.destroyed$),
         ).subscribe(response => {
             this.calculateBalanceDue();
+        });
+
+        this.invoiceForm.get("exchangeRate")?.valueChanges.pipe(debounceTime(100), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
+            this.calculateVoucherTotals();
         });
 
         this.componentStore.lastVouchers$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -1937,7 +1945,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.fillBillingShippingAddress("account", "shippingDetails", defaultAddress, index);
             }
 
-            if (this.invoiceType.isPurchaseOrder) {
+            if (this.invoiceType.isPurchaseOrder || (this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice)) {
                 let companyDefaultAddress = this.vouchersUtilityService.getDefaultAddress(this.company?.branch);
                 defaultAddress = companyDefaultAddress.defaultAddress;
                 index = companyDefaultAddress.defaultAddressIndex;
@@ -1952,6 +1960,31 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.invoiceForm.controls["account"].get("attentionTo").setValue(accountData?.attentionTo);
             this.invoiceForm.controls["account"].get("email").setValue(accountData?.email);
             this.invoiceForm.controls["account"].get("mobileNumber").setValue(accountData?.mobileNo);
+        } else {
+            if (!this.invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled && !this.invoiceType.isCashInvoice) {
+                const accountBillingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(accountData.addresses, this.invoiceForm.controls["account"].get("billingDetails")?.value);
+                const accountShippingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(accountData.addresses, this.invoiceForm.controls["account"].get("shippingDetails")?.value);
+
+                if (accountBillingAddressIndex > -1) {
+                    this.invoiceForm.controls["account"].get("billingDetails").get("index").patchValue(accountBillingAddressIndex);
+                }
+
+                if (accountShippingAddressIndex > -1) {
+                    this.invoiceForm.controls["account"].get("shippingDetails").get("index").patchValue(accountShippingAddressIndex);
+                }
+
+                if (this.invoiceType.isPurchaseOrder || (this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice)) {
+                    const companyBillingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(this.company?.branch?.addresses, this.invoiceForm.controls["company"].get("billingDetails")?.value);
+                    const companyShippingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(this.company?.branch?.addresses, this.invoiceForm.controls["company"].get("shippingDetails")?.value);
+
+                    if (companyBillingAddressIndex > -1) {
+                        this.invoiceForm.controls["company"].get("billingDetails").get("index").patchValue(companyBillingAddressIndex);
+                    }
+                    if (companyShippingAddressIndex > -1) {
+                        this.invoiceForm.controls["company"].get("shippingDetails").get("index").patchValue(companyShippingAddressIndex);
+                    }
+                }
+            }
         }
     }
 
@@ -3904,6 +3937,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         if (!initialLoad) {
             this.searchAccount();
+        }
+
+        if (this.invoiceType.isCashInvoice) {
+            this.invoiceForm.get('account.uniqueName')?.patchValue("cash");
         }
 
         setTimeout(() => {
