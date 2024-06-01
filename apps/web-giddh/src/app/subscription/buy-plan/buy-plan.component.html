@@ -693,7 +693,7 @@
                                                 <div *ngIf="countyList?.length">
                                                     <dropdown-field
                                                         [name]="'county'"
-                                                        [label]="commonLocaleData?.app_region"
+                                                        [label]="commonLocaleData?.app_region + '*'"
                                                         [placeholder]="commonLocaleData?.app_select_region"
                                                         [options]="countyList"
                                                         [showError]="
