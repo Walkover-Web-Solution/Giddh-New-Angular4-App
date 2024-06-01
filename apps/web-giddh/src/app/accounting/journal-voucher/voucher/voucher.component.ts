@@ -883,6 +883,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
             if (control.value.particular && control.value.type === "by" && !control.value.isTaxApplied && !control.value.isDiscountApplied) {
                 byEntryControl = control;
+                byAmount += control.value.actualAmount;
             }
             if (control.value.particular && control.value.type === "by" && control.value.isDiscountApplied) {
                 byAmount += control.value.actualAmount;
@@ -894,26 +895,94 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 actualTaxAmount = control.value.taxValue;
             }
         });
-        console.log(toAmount, byAmount, taxAmount);
-        if (toEntryControl?.get('type')?.value === 'to') {
-            if (toAmount > 0) {
-                let amountIncludingGST = toAmount;
+
+        let transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
+        let transactionAtIndex = transactionsFormArray.at(this.selectedIdx) as FormGroup;
+        if (!transactionAtIndex?.get('isInclusiveTax')?.value && transactionAtIndex?.value.type === 'to') {
+            if (actualTaxAmount > 0 && toAmount > 0) {
+                let amountIncludingGST = byAmount;
                 let baseAmount: number = 0;
                 let gstAmount: number = 0;
-                let gstRate = taxAmount; // GST rate in percentage
+                let gstRate = actualTaxAmount; // GST rate in percentage
                 const gstMultiplier = 1 + (gstRate / 100);
                 baseAmount = Math.round(amountIncludingGST / gstMultiplier);
                 gstAmount = Math.round(amountIncludingGST - baseAmount);
-                console.log(gstMultiplier, baseAmount, gstAmount);
                 toAmount = baseAmount;
                 taxAmount = gstAmount;
+                toEntryControl?.get('amount')?.patchValue(toAmount);
+                setTimeout(() => {
+                    transactionAtIndex?.get('isInclusiveTax')?.patchValue(true);
+                }, 100);
             } else {
+                toAmount = toAmount;
+                taxAmount = 0;
+            }
+        }
+
+        if (transactionAtIndex?.get('isInclusiveTax')?.value && transactionAtIndex?.value.type === 'to') {
+            if (taxAmount > 0 && toAmount > 0) {
+                let amountIncludingGST = transactionAtIndex.value.actualAmount;
+                let baseAmount: number = 0;
+                let gstAmount: number = 0;
+                let gstRate = actualTaxAmount; // GST rate in percentage
+                baseAmount = Math.round(amountIncludingGST);
+                gstAmount = Math.round(baseAmount * (gstRate / 100));
+                toAmount = baseAmount;
+                taxAmount = gstAmount;
+                byEntryControl?.get('amount')?.patchValue(toAmount + (taxAmount ?? 0));
+                toEntryControl?.get('amount')?.patchValue(toAmount);
+                setTimeout(() => {
+                    transactionAtIndex?.get('isInclusiveTax')?.patchValue(true);
+                }, 100);
+            } else {
+                toAmount = toAmount;
+                taxAmount = 0;
+            }
+        }
+
+        if (!transactionAtIndex?.get('isInclusiveTax')?.value && transactionAtIndex?.value.type === 'by') {
+            if (actualTaxAmount > 0 && toAmount > 0) {
+                let amountIncludingGST = byAmount;
+                let baseAmount: number = 0;
+                let gstAmount: number = 0;
+                let gstRate = actualTaxAmount; // GST rate in percentage
+                const gstMultiplier = 1 + (gstRate / 100);
+                baseAmount = Math.round(amountIncludingGST / gstMultiplier);
+                gstAmount = Math.round(amountIncludingGST - baseAmount);
+                toAmount = baseAmount;
+                taxAmount = gstAmount;
+                toEntryControl?.get('amount')?.patchValue(toAmount);
+                setTimeout(() => {
+                    transactionAtIndex?.get('isInclusiveTax')?.patchValue(true);
+                }, 100);
+            } else {
+                toAmount = toAmount;
+                taxAmount = 0;
+            }
+        }
+
+        if (transactionAtIndex?.get('isInclusiveTax')?.value && transactionAtIndex?.value.type === 'by') {
+            if (taxAmount > 0 && toAmount > 0) {
+                let amountIncludingGST = transactionAtIndex.value.actualAmount;
+                let baseAmount: number = 0;
+                let gstAmount: number = 0;
+                let gstRate = actualTaxAmount; // GST rate in percentage
+                baseAmount = Math.round(amountIncludingGST);
+                gstAmount = Math.round(baseAmount * (gstRate / 100));
+                toAmount = baseAmount;
+                taxAmount = gstAmount;
+                byEntryControl?.get('amount')?.patchValue(toAmount + (taxAmount ?? 0));
+                toEntryControl?.get('amount')?.patchValue(toAmount);
+                setTimeout(() => {
+                    transactionAtIndex?.get('isInclusiveTax')?.patchValue(false);
+                }, 100);
+            } else {
+                toAmount = toAmount;
                 taxAmount = 0;
             }
         }
         taxEntryControl?.get('amount')?.patchValue(taxAmount);
-        toEntryControl?.get('amount')?.patchValue(toAmount);
-        byEntryControl?.get('amount')?.patchValue(byAmount + taxAmount);
+        this.changeDetectionRef.detectChanges();
         return taxAmount;
     }
 
