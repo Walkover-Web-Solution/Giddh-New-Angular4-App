@@ -421,7 +421,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         if (event?.value) {
             this.linkedAccountLabel = event.label;
             this.paypalAccounts$.subscribe((arr: IOption[]) => {
-                let res = find(arr, (o) => o?.value === event.value);
+                let res = find(arr, (account) => account?.value === event.value);
                 if (res) {
                     this.paypalObj.account.name = res.text;
                 }
