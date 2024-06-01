@@ -158,17 +158,14 @@
                                                 decimalDigitsDirective
                                                 [mask]="inputMaskFormat"
                                                 formControlName="amount"
-                                                (input)="selectRow(true, i)"
+                                                (input)="selectRow(true, i);
+                                                updateTransactionActualAmount(transaction)"
                                                 (keydown.Enter)="
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
                                                     changeTab('enter', 'amount')
                                                 "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
-                                                (change)="
-                                                    updateTransactionActualAmount(transaction);
-                                                    calculateAmount(transaction.get('amount')?.value, transaction, i)
-                                                "
                                             ></text-field>
                                         </td>
                                         <td
@@ -193,7 +190,8 @@
                                                 decimalDigitsDirective
                                                 [mask]="inputMaskFormat"
                                                 formControlName="amount"
-                                                (input)="selectRow(true, i)"
+                                                (input)="selectRow(true, i);
+                                                updateTransactionActualAmount(transaction);"
                                                 (keydown.Enter)="
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
                                                     changeTab('enter', 'amount')
@@ -202,10 +200,6 @@
                                                 (keydown.Shift.Tab)="changeTab('shift', 'amount')"
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
-                                                (change)="
-                                                    updateTransactionActualAmount(transaction);
-                                                    calculateAmount(transaction.get('amount')?.value, transaction, i)
-                                                "
                                             ></text-field>
                                         </td>
                                     </tr>
