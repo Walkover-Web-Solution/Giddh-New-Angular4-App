@@ -108,7 +108,6 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         });
 
         this.subscriptionRazorpayOrderDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
             if (response) {
                 if (response.dueAmount > 0) {
                     this.initializePayment(response);
