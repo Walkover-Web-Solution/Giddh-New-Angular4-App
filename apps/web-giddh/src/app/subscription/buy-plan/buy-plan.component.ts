@@ -234,7 +234,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.buyPlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.redirectLink) {
-                this.openWindow(response?.redirectLink);
+                this.openWindow(response.redirectLink);
             } else if (response?.subscriptionId) {
                 this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
             }
@@ -250,11 +250,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 // } else {
                 //     this.openCashfreeDialog(response?.redirectLink);
                 // }
+                this.subscriptionId = response.subscriptionId;
                 if (this.isChangePlan) {
                     this.router.navigate(['/pages/subscription']);
                 } else {
                     if (this.payType === 'trial') {
-                        this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
+                        this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
                     } else {
                         if (response?.region?.code === 'GBR') {
                             let model = {
@@ -264,12 +265,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                                 duration: response?.duration
                             };
                             if (response?.status?.toLowerCase() === 'active') {
-                                this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
+                                this.router.navigate(['/pages/new-company/' + response?.subscriptionId]);
                             } else {
                                 this.subscriptionComponentStore.buyPlanByGoCardless(model);
                             }
                         } else {
-                            this.componentStore.generateOrderBySubscriptionId(response.subscriptionId);
+                            this.componentStore.generateOrderBySubscriptionId(response?.subscriptionId);
                         }
                     }
                 };
@@ -370,7 +371,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                         this.getBillingData = true;
                         this.setFormValues(data);
                         this.selectedCountry = data.country?.name;
-                        this.selectedState = data.state?.name;
+                        this.selectedState = data?.state ? data.state?.name : data.county?.name;
                     }
                 });
             }
@@ -418,69 +419,69 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-        // if (this.subscriptionId) {
-        //     this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-        //         if (response.region?.code) {
-        //             this.newUserSelectCountry({
-        //                 "label": response.region?.code + " - " + response.region?.name,
-        //                 "value": response.region?.code,
-        //                 "additional": {
-        //                     "value": response.region?.code,
-        //                     "label": response.region?.code + " - " + response.region?.name,
-        //                 }
-        //             });
-        //         }
-        //     });
-        // } else if (this.activeCompany?.subscription?.region?.code) {
-        //     this.newUserSelectCountry({
-        //         "label": this.activeCompany?.subscription?.region?.code + " - " + this.activeCompany?.subscription?.region?.name,
-        //         "value": this.activeCompany?.subscription?.region?.code,
-        //         "additional": {
-        //             "value": this.activeCompany?.subscription?.region?.code,
-        //             "label": this.activeCompany?.subscription?.region?.code + " - " + this.activeCompany?.subscription?.region?.name
-        //         }
-        //     });
-        // } else if (localStorage.getItem('Country-Region') === 'IN') {
-        //     this.newUserSelectCountry({
-        //         "label": "IND - India",
-        //         "value": "IND",
-        //         "additional": {
-        //             "value": "IND",
-        //             "label": "IND - India"
-        //         }
-        //     });
-        // } else if (localStorage.getItem('Country-Region') === 'GB') {
-        //     this.newUserSelectCountry({
-        //         "label": "GBR - United Kingdom",
-        //         "value": "GBR",
-        //         "additional": {
-        //             "value": "GBR",
-        //             "label": "GBR - United Kingdom"
-        //         }
-        //     });
-        // } else if (localStorage.getItem('Country-Region') === 'AE') {
-        //     this.newUserSelectCountry({
-        //         "label": "ARE - United Arab Emirates",
-        //         "value": "ARE",
-        //         "additional": {
-        //             "value": "ARE",
-        //             "label": "ARE - United Arab Emirates"
-        //         }
+        if (this.subscriptionId) {
+            this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.region?.code) {
+                    this.newUserSelectCountry({
+                        "label": response.region?.code + " - " + response.region?.name,
+                        "value": response.region?.code,
+                        "additional": {
+                            "value": response.region?.code,
+                            "label": response.region?.code + " - " + response.region?.name,
+                        }
+                    });
+                }
+            });
+        } else if (this.activeCompany?.subscription?.region?.code) {
+            this.newUserSelectCountry({
+                "label": this.activeCompany?.subscription?.region?.code + " - " + this.activeCompany?.subscription?.region?.name,
+                "value": this.activeCompany?.subscription?.region?.code,
+                "additional": {
+                    "value": this.activeCompany?.subscription?.region?.code,
+                    "label": this.activeCompany?.subscription?.region?.code + " - " + this.activeCompany?.subscription?.region?.name
+                }
+            });
+        } else if (localStorage.getItem('Country-Region') === 'IN') {
+            this.newUserSelectCountry({
+                "label": "IND - India",
+                "value": "IND",
+                "additional": {
+                    "value": "IND",
+                    "label": "IND - India"
+                }
+            });
+        } else if (localStorage.getItem('Country-Region') === 'GB') {
+            this.newUserSelectCountry({
+                "label": "GBR - United Kingdom",
+                "value": "GBR",
+                "additional": {
+                    "value": "GBR",
+                    "label": "GBR - United Kingdom"
+                }
+            });
+        } else if (localStorage.getItem('Country-Region') === 'AE') {
+            this.newUserSelectCountry({
+                "label": "ARE - United Arab Emirates",
+                "value": "ARE",
+                "additional": {
+                    "value": "ARE",
+                    "label": "ARE - United Arab Emirates"
+                }
 
-        //     });
-        // } else if (!this.isChangePlan && localStorage.getItem('Country-Region') === 'GL') {
-        //     this.newUserSelectCountry({
-        //         "label": "GLB - Global",
-        //         "value": "GLB",
-        //         "additional": {
-        //             "value": "GLB",
-        //             "label": "GLB - Global"
-        //         }
-        //     });
-        // } else {
-        this.isSubscriptionRegion = true;
-        this.setUserCountry();
-        // }
+            });
+        } else if (!this.isChangePlan && localStorage.getItem('Country-Region') === 'GL') {
+            this.newUserSelectCountry({
+                "label": "GLB - Global",
+                "value": "GLB",
+                "additional": {
+                    "value": "GLB",
+                    "label": "GLB - Global"
+                }
+            });
+        } else {
+            this.isSubscriptionRegion = true;
+            this.setUserCountry();
+        }
     }
 
     /**
@@ -1217,11 +1218,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 address: this.subscriptionForm.value.secondStepForm.address
             },
             promoCode: this.subscriptionForm.value.firstStepForm.promoCode ? this.subscriptionForm.value.firstStepForm.promoCode : null,
-            paymentProvider: 'RAZORPAY',
+            paymentProvider: this.selectedPlan?.entityCode === 'GBR' ? 'GOCARDLESS' : 'RAZORPAY',
             subscriptionId: null
         }
 
-        if (this.subscriptionForm.value.secondStepForm.country.value === 'UK') {
+        if (this.subscriptionForm.value.secondStepForm.country.value === 'GB') {
             request.billingAccount['county'] = {
                 name: this.subscriptionForm.value.secondStepForm.state.label ? this.subscriptionForm.value.secondStepForm.state.label : this.subscriptionForm.value.secondStepForm.state.name,
                 code: this.subscriptionForm.value.secondStepForm.state.value ? this.subscriptionForm.value.secondStepForm.state.value : this.subscriptionForm.value.secondStepForm.state.code
@@ -1383,8 +1384,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.secondStepForm.controls['pincode'].setValue(data.pincode);
         this.secondStepForm.controls['taxNumber'].setValue(data.taxNumber);
         this.secondStepForm.controls['mobileNumber'].setValue(data.mobileNumber);
-        this.selectCountry({ label: data.country.name, value: data.country.code, additional: data.country })
-        this.selectState({ label: data.state.name, value: data.state.code, additional: data.state })
+        this.selectCountry({ label: data.country.name, value: data.country.code, additional: data.country });
+        if (data?.state) {
+            this.selectState({ label: data.state.name, value: data.state.code, additional: data.state });
+        } else {
+            this.selectState({ label: data.county.name, value: data.county.code, additional: data.county });
+        }
         this.secondStepForm.controls['address'].setValue(data?.address);
         this.initIntl(this.secondStepForm.get('mobileNumber')?.value);
     }

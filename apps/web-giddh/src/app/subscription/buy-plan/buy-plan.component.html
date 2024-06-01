@@ -22,24 +22,65 @@
                             <div class="plan-width">
                                 <ng-template matStepLabel>{{ localeData?.all_plans }}</ng-template>
                                 <div class="plan-header d-flex justify-content-between align-items-center mb-3">
-                                    <div class="width-100 dropdown-wrapper" *ngIf="!(planListInProgress$ | async) && !isLoading && !isChangePlan">
-                                        <div class="country-dropdown d-flex flex-column" [ngClass]="{ 'mx-auto': !inputData?.length }">
-                                            <img [src]="getFlagUrl(currentCountry.value?.additional?.alpha2CountryCode ? currentCountry.value?.additional?.alpha2CountryCode : currentCountry.value?.additional?.alpha3CountryCode)" [alt]="currentCountry.value?.additional?.countryName" width="32" height="32" class="flag cursor-pointer" (click)="countryList.open()">
+                                    <div
+                                        class="width-100 dropdown-wrapper"
+                                        *ngIf="!(planListInProgress$ | async) && !isLoading && !isChangePlan"
+                                    >
+                                        <div
+                                            class="country-dropdown d-flex flex-column"
+                                            [ngClass]="{ 'mx-auto': !inputData?.length }"
+                                        >
+                                            <img
+                                                [src]="
+                                                    getFlagUrl(
+                                                        currentCountry.value?.additional?.alpha2CountryCode
+                                                            ? currentCountry.value?.additional?.alpha2CountryCode
+                                                            : currentCountry.value?.additional?.alpha3CountryCode
+                                                    )
+                                                "
+                                                [alt]="currentCountry.value?.additional?.countryName"
+                                                width="32"
+                                                height="32"
+                                                class="flag cursor-pointer"
+                                                (click)="countryList.open()"
+                                            />
 
-                                            <mat-select [name]="'country'" [formControl]="currentCountry" #countryList  (selectionChange)="newUserSelectCountry($event.value, false)"  panelClass="country-dropdown-list" [placeholder]="
-                                            commonLocaleData?.app_select + ' ' + commonLocaleData?.app_country">
+                                            <mat-select
+                                                [name]="'country'"
+                                                [formControl]="currentCountry"
+                                                #countryList
+                                                (selectionChange)="newUserSelectCountry($event.value, false)"
+                                                panelClass="country-dropdown-list"
+                                                [placeholder]="
+                                                    commonLocaleData?.app_select + ' ' + commonLocaleData?.app_country
+                                                "
+                                            >
                                                 <ng-container *ngFor="let country of countrySource">
                                                     <mat-option [value]="country">
-                                                       <div class="d-flex w-100 align-items-center column-gap1">
-                                                            <img [src]="getFlagUrl(country.additional?.alpha2CountryCode ? country.additional?.alpha2CountryCode : country.additional?.alpha3CountryCode )" [alt]="country.label" width="24" height="16">
-                                                            <span>{{country?.label}}</span>
-                                                       </div>
+                                                        <div class="d-flex w-100 align-items-center column-gap1">
+                                                            <img
+                                                                [src]="
+                                                                    getFlagUrl(
+                                                                        country.additional?.alpha2CountryCode
+                                                                            ? country.additional?.alpha2CountryCode
+                                                                            : country.additional?.alpha3CountryCode
+                                                                    )
+                                                                "
+                                                                [alt]="country.label"
+                                                                width="24"
+                                                                height="16"
+                                                            />
+                                                            <span>{{ country?.label }}</span>
+                                                        </div>
                                                     </mat-option>
                                                 </ng-container>
                                             </mat-select>
                                         </div>
                                     </div>
-                                    <div class="d-flex column-gap15 align-items-center ml-auto" *ngIf="inputData?.length">
+                                    <div
+                                        class="d-flex column-gap15 align-items-center ml-auto"
+                                        *ngIf="inputData?.length"
+                                    >
                                         <!-- <button mat-stroked-button color="primary" class="w-100" (click)="activateDialog()">
                                         Activate Via Key
                                     </button> -->
@@ -85,7 +126,9 @@
                                                     }"
                                                 >
                                                     <div class="plan-content d-flex flex-column h-100">
-                                                        <h2 class="font-20 plan-title d-flex align-items-center justify-content-center">
+                                                        <h2
+                                                            class="font-20 plan-title d-flex align-items-center justify-content-center"
+                                                        >
                                                             {{ plan?.name }}
                                                         </h2>
                                                         <p *ngIf="plan?.description" class="font-15 feature-txt">
@@ -96,7 +139,8 @@
                                                         <ng-container
                                                             *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'"
                                                         >
-                                                            <p  *ngIf="plan?.yearlyDiscountAmount > 0"
+                                                            <p
+                                                                *ngIf="plan?.yearlyDiscountAmount > 0"
                                                                 [ngClass]="{
                                                                     'feature-txt': !plan?.yearlyDiscountAmount > 0
                                                                 }"
@@ -124,9 +168,12 @@
                                                                         >
                                                                         </amount-field>
                                                                     </span>
-                                                                    <span class="font-14">/{{ commonLocaleData?.app_duration?.year }}</span>
-                                                                </span
-                                                                >
+                                                                    <span class="font-14"
+                                                                        >/{{
+                                                                            commonLocaleData?.app_duration?.year
+                                                                        }}</span
+                                                                    >
+                                                                </span>
                                                             </p>
                                                             <p class="mb-3" *ngIf="plan?.yearlyDiscountAmount > 0">
                                                                 <span>
@@ -151,37 +198,37 @@
                                                                 </span>
                                                             </p>
                                                         </ng-container>
-                                                        <ng-container *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">
+                                                        <ng-container
+                                                            *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'"
+                                                        >
                                                             <p class="mb-2" *ngIf="plan?.monthlyDiscountAmount > 0">
                                                                 <s>
                                                                     <span class="strong">
-                                                                    <amount-field
-                                                                        [useGiddhCurrencyPipe]="false"
-                                                                        [spaceAfterCurrencySymbol]="false"
-                                                                        [amount]="plan?.monthlyDiscountAmount"
-                                                                        [currencySymbol]="plan?.currency?.symbol"
-                                                                        [currencyCode]="false"
-                                                                    >
-                                                                    </amount-field>
+                                                                        <amount-field
+                                                                            [useGiddhCurrencyPipe]="false"
+                                                                            [spaceAfterCurrencySymbol]="false"
+                                                                            [amount]="plan?.monthlyDiscountAmount"
+                                                                            [currencySymbol]="plan?.currency?.symbol"
+                                                                            [currencyCode]="false"
+                                                                        >
+                                                                        </amount-field>
                                                                     </span>
                                                                 </s>
                                                             </p>
                                                             <p class="mb-3 mt-2">
                                                                 <span class="font-24">
                                                                     <span class="strong">
-                                                                    <amount-field
-                                                                        [useGiddhCurrencyPipe]="false"
-                                                                        [spaceAfterCurrencySymbol]="false"
-                                                                        [amount]="plan?.monthlyAmount"
-                                                                        [currencySymbol]="plan?.currency?.symbol"
-                                                                        [currencyCode]="false"
-                                                                    >
-                                                                    </amount-field>
+                                                                        <amount-field
+                                                                            [useGiddhCurrencyPipe]="false"
+                                                                            [spaceAfterCurrencySymbol]="false"
+                                                                            [amount]="plan?.monthlyAmount"
+                                                                            [currencySymbol]="plan?.currency?.symbol"
+                                                                            [currencyCode]="false"
+                                                                        >
+                                                                        </amount-field>
                                                                     </span>
                                                                     <span class="font-12">
-                                                                        /{{
-                                                                        commonLocaleData?.app_duration?.month
-                                                                    }}
+                                                                        /{{ commonLocaleData?.app_duration?.month }}
                                                                     </span>
                                                                 </span>
                                                             </p>
@@ -199,7 +246,8 @@
                                                                     {{ localeData?.for }}
                                                                     {{ plan?.monthlyDiscount?.duration }}
                                                                     {{
-                                                                        commonLocaleData?.app_duration?.month | lowercase
+                                                                        commonLocaleData?.app_duration?.month
+                                                                            | lowercase
                                                                     }}
                                                                 </span>
                                                             </p>
@@ -259,7 +307,8 @@
                                                             [currencySymbol]="false"
                                                             [currencyCode]="false"
                                                         >
-                                                        </amount-field></span>
+                                                        </amount-field
+                                                    ></span>
                                                 </div>
                                             </ng-container>
                                         </div>
@@ -422,19 +471,19 @@
                                                         'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
                                                     }"
                                                 >
-                                                    <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0"
-                                                        >{{localeData?.chat_voice}}</span
-                                                    >
+                                                    <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">{{
+                                                        localeData?.chat_voice
+                                                    }}</span>
                                                     <span *ngIf="plan?.monthlyAmount === 0 && plan?.yearlyAmount === 0">
                                                         <i class="icon-cross"></i>
                                                     </span>
                                                 </div>
                                             </ng-container>
                                         </div>
-                                             <div class="grid-list-div list-grid">
+                                        <div class="grid-list-div list-grid">
                                             <div class="grid-title-left">
                                                 <span class="inner-name mat-table-sticky">
-                                            {{ localeData?.e_invoice }}
+                                                    {{ localeData?.e_invoice }}
                                                 </span>
                                             </div>
                                             <ng-container *ngFor="let plan of inputData">
@@ -444,19 +493,19 @@
                                                         'active-plan-td': selectedPlan?.uniqueName === plan?.uniqueName
                                                     }"
                                                 >
-                                                    <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0"
-                                                        >  <i class="icon-tick"></i></span
-                                                    >
+                                                    <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
+                                                        <i class="icon-tick"></i
+                                                    ></span>
                                                     <span *ngIf="plan?.monthlyAmount === 0 && plan?.yearlyAmount === 0">
                                                         <i class="icon-cross"></i>
                                                     </span>
                                                 </div>
                                             </ng-container>
                                         </div>
-                                             <div class="grid-list-div list-grid">
+                                        <div class="grid-list-div list-grid">
                                             <div class="grid-title-left">
                                                 <span class="inner-name mat-table-sticky">
-                                                 {{ localeData?.gst_direct }}
+                                                    {{ localeData?.gst_direct }}
                                                 </span>
                                             </div>
                                             <ng-container *ngFor="let plan of inputData">
@@ -468,9 +517,9 @@
                                                             selectedPlan?.uniqueName === plan?.uniqueName
                                                     }"
                                                 >
-                                                    <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0"
-                                                        >   <i class="icon-tick"></i></span
-                                                    >
+                                                    <span *ngIf="plan?.monthlyAmount > 0 || plan?.yearlyAmount > 0">
+                                                        <i class="icon-tick"></i
+                                                    ></span>
                                                     <span *ngIf="plan?.monthlyAmount === 0 && plan?.yearlyAmount === 0">
                                                         <i class="icon-cross"></i>
                                                     </span>
@@ -644,7 +693,7 @@
                                                 <div *ngIf="countyList?.length">
                                                     <dropdown-field
                                                         [name]="'county'"
-                                                        [label]="commonLocaleData?.app_region"
+                                                        [label]="commonLocaleData?.app_region + '*'"
                                                         [placeholder]="commonLocaleData?.app_select_region"
                                                         [options]="countyList"
                                                         [showError]="
@@ -878,7 +927,12 @@
                                 <div class="d-flex align-items-center justify-content-between custom-mat-form-field">
                                     <mat-form-field appearance="outline">
                                         <mat-label>{{ localeData?.promo_code }}</mat-label>
-                                        <input matInput [name]="'code'" [placeholder]="localeData?.promo_code" formControlName="promoCode">
+                                        <input
+                                            matInput
+                                            [name]="'code'"
+                                            [placeholder]="localeData?.promo_code"
+                                            formControlName="promoCode"
+                                        />
                                         <div matSuffix>
                                             <span
                                                 *ngIf="!promoCodeResponse[0]?.discountValue"
