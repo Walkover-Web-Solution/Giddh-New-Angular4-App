@@ -94,9 +94,10 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
             this.viewSubscriptionData = response;
         });
 
+
         this.buyPlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.redirectLink) {
-                this.openWindow(response?.redirectLink);
+                this.openWindow(response.redirectLink);
             }
         });
 
