@@ -415,7 +415,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     this.initializePayment(response);
                 }
             } else {
-                this.updateSubscriptionPayment(response, true);
+                if (response?.region?.code === 'GBR') {
+                    this.router.navigate(['/pages/subscription']);
+                } else {
+                    this.updateSubscriptionPayment(response, true);
+                }
             }
         });
 
