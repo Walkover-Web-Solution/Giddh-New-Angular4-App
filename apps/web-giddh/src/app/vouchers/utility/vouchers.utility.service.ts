@@ -52,8 +52,9 @@ export class VouchersUtilityService {
     }
 
     public createQueryString(url: string, model: any): string {
+        url += '?';
         Object.keys(model).forEach((key, index) => {
-            const delimiter = index === 0 ? '?' : '&'
+            const delimiter = index === 0 ? '' : '&'
             if (model[key] !== undefined) {
                 url += `${delimiter}${key}=${model[key]}`
             }
@@ -228,10 +229,19 @@ export class VouchersUtilityService {
         entries?.forEach(entry => {
             voucherTotals.totalAmount += (Number(entry.transactions[0]?.amount?.amountForAccount));
             voucherTotals.totalDiscount += (Number(entry.totalDiscount));
-            voucherTotals.totalTaxableValue += ((Number(entry.transactions[0]?.amount?.amountForAccount)) - (Number(entry.totalDiscount)));
-            voucherTotals.totalTaxWithoutCess += (Number(entry.totalTaxWithoutCess));
-            voucherTotals.totalCess += (Number(entry.totalCess));
-            voucherTotals.grandTotal += (Number(entry.total?.amountForAccount));
+            if (entry.transactions[0]?.taxableValue) {
+                voucherTotals.totalTaxableValue += Number(entry.transactions[0]?.taxableValue?.amountForAccount);
+            } else {
+                voucherTotals.totalTaxableValue += (Number(entry.transactions[0]?.amount?.amountForAccount)) - (Number(entry.totalDiscount));
+            }
+            voucherTotals.totalTaxWithoutCess += Number(entry.totalTaxWithoutCess);
+            voucherTotals.totalCess += Number(entry.totalCess);
+
+            if (entry.grandTotal) {
+                voucherTotals.grandTotal += Number(entry.grandTotal?.amountForAccount);
+            } else {
+                voucherTotals.grandTotal += Number(entry.total?.amountForAccount);
+            }
 
             if (entry.otherTax?.type === 'tcs') {
                 voucherTotals.tcsTotal += entry.otherTax?.amount;
@@ -313,11 +323,15 @@ export class VouchersUtilityService {
             delete entry.otherTax;
         });
 
-        invoiceForm = cleaner?.clean(invoiceForm, {
-            nullCleaner: true
-        });
+        invoiceForm = this.cleanObject(invoiceForm);
 
         return invoiceForm;
+    }
+
+    public cleanObject(object: any): any {
+        return cleaner?.clean(object, {
+            nullCleaner: true
+        });
     }
 
     private getAddress(address: any): string {

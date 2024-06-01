@@ -20,6 +20,7 @@ import { AccountService } from "../../services/account.service";
 import { SearchService } from "../../services/search.service";
 import { InvoiceBulkUpdateService } from "../../services/invoice.bulkupdate.service";
 import { BulkVoucherExportService } from "../../services/bulkvoucherexport.service";
+import { SalesService } from "../../services/sales.service";
 
 export interface VoucherState {
     isLoading: boolean;
@@ -55,6 +56,8 @@ export interface VoucherState {
     bulkUpdateVoucherIsSuccess: boolean;
     bulkExportVoucherInProgress: boolean;
     bulkExportVoucherResponse: any;
+    actionVoucherIsSuccess: boolean;
+    adjustVoucherIsSuccess: boolean;
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -90,7 +93,9 @@ const DEFAULT_STATE: VoucherState = {
     eInvoiceGenerated: null,
     bulkUpdateVoucherIsSuccess: null,
     bulkExportVoucherInProgress: null,
-    bulkExportVoucherResponse: null
+    bulkExportVoucherResponse: null,
+    actionVoucherIsSuccess: null,
+    adjustVoucherIsSuccess: null
 };
 
 @Injectable()
@@ -106,7 +111,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         private accountService: AccountService,
         private searchService: SearchService,
         private bulkUpdateInvoiceService: InvoiceBulkUpdateService,
-        private bulkVoucherExportService: BulkVoucherExportService
+        private bulkVoucherExportService: BulkVoucherExportService,
+        private salesService: SalesService
     ) {
         super(DEFAULT_STATE);
     }
@@ -142,6 +148,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public bulkUpdateVoucherIsSuccess$ = this.select((state) => state.bulkUpdateVoucherIsSuccess);
     public bulkExportVoucherInProgress$ = this.select((state) => state.bulkExportVoucherInProgress);
     public bulkExportVoucherResponse$ = this.select((state) => state.bulkExportVoucherResponse);
+    public actionVoucherIsSuccess$ = this.select((state) => state.actionVoucherIsSuccess);
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
@@ -940,6 +947,72 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             this.patchState({
                                 bulkExportVoucherInProgress: false,
                                 bulkExportVoucherResponse: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly actionVoucher = this.effect((data: Observable<{ voucherUniqueName: string, payload: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    actionVoucherIsSuccess: false
+                });
+                return this.voucherService.actionVoucher(req.voucherUniqueName, req.payload).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                this.patchState({
+                                    actionVoucherIsSuccess: true
+                                });
+                            } else {
+                                this.toaster.showSnackBar("error", res.message);
+                                this.patchState({
+                                    actionVoucherIsSuccess: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            this.patchState({
+                                actionVoucherIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly adjustVoucherWithAdvanceReceipts = this.effect((data: Observable<{ adjustments: any, voucherUniqueName: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    adjustVoucherIsSuccess: false
+                });
+                return this.salesService.adjustAnInvoiceWithAdvanceReceipts(req.adjustments, req.voucherUniqueName).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                this.patchState({
+                                    adjustVoucherIsSuccess: true
+                                });
+                            } else {
+                                this.toaster.showSnackBar("error", res.message);
+                                this.patchState({
+                                    adjustVoucherIsSuccess: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            this.patchState({
+                                adjustVoucherIsSuccess: null
                             });
                         }
                     ),

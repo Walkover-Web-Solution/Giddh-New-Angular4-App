@@ -141,14 +141,14 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile && Object.keys(profile).length) {
                 this.companyCurrency = profile?.baseCurrency || 'INR';
-                this.baseCurrencySymbol = profile.baseCurrencySymbol;
-                this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
+                this.baseCurrencySymbol = profile?.baseCurrencySymbol;
+                this.inputMaskFormat = profile?.balanceDisplayFormat ? profile?.balanceDisplayFormat?.toLowerCase() : '';
                 if (this.account.baseCurrencySymbol) {
                     this.currencySymbol = this.account.baseCurrencySymbol;
                 } else {
                     this.currencySymbol = this.baseCurrencySymbol;
                 }
-                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+                this.giddhBalanceDecimalPlaces = profile?.balanceDecimalPlaces;
             }
         });
 

@@ -21,6 +21,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Input() public type: 'invoice' | 'drcr' | 'receipt' | 'proforma' | 'purchase';
+    @Input() public advanceFilters: any;
     @Output() public applyFilterEvent: EventEmitter<InvoiceFilterClassForInvoicePreview> = new EventEmitter<InvoiceFilterClassForInvoicePreview>();
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
     /** Subject to release subscription memory */
@@ -55,6 +56,15 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     public dateFieldPosition: any = { x: 0, y: 0 };
     /** Stores the E-invoice status */
     public eInvoiceStatusDropdownOptions: IOption[] = [];
+    /** Holds field label values */
+    public fieldLabelValues: any = {
+        invoiceDateRange: '',
+        invoiceTotalAmount: '',
+        dueDateRange: '',
+        dueAmount: '',
+        dateRange: '',
+        amountFieldSelector: ''
+    };
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
@@ -66,36 +76,6 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        this.searchForm = this.formBuilder.group({
-            total: [''],
-            totalEqual: [''],
-            totalLessThan: [''],
-            totalMoreThan: [''],
-            amountEquals: [''],
-            amountExclude: [''],
-            amountGreaterThan: [''],
-            amountLessThan: [''],
-            balanceEqual: [''],
-            balanceLessThan: [''],
-            balanceMoreThan: [''],
-            voucherDateEqual: [''],
-            voucherDateAfter: [''],
-            voucherDateBefore: [''],
-            dueDateEqual: [''],
-            dueDateAfter: [''],
-            dueDateBefore: [''],
-            expireFrom: [''],
-            expireTo: [''],
-            voucherDate: [''],
-            dueDate: [''],
-            amountFieldSelector: [''],
-            balanceDue: [''],
-            balanceStatus: [''],
-            eInvoiceStatus: [''],
-            description: [''],
-            amount: ['']
-        });
-
         this.filtersForEntryTotal = [
             { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'greaterThan' },
             { label: this.commonLocaleData?.app_comparision_filters?.less_than, value: 'lessThan' },
@@ -116,6 +96,66 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             { label: this.commonLocaleData?.app_date_options?.after, value: 'after' },
             { label: this.commonLocaleData?.app_date_options?.before, value: 'before' },
         ];
+
+        this.searchForm = this.formBuilder.group({
+            total: [this.advanceFilters?.total || ''],
+            totalEqual: [this.advanceFilters?.totalEqual || ''],
+            totalLessThan: [this.advanceFilters?.totalLessThan || ''],
+            totalMoreThan: [this.advanceFilters?.totalMoreThan || ''],
+            amountEquals: [this.advanceFilters?.amountEquals || ''],
+            amountExclude: [this.advanceFilters?.amountExclude || ''],
+            amountGreaterThan: [this.advanceFilters?.amountGreaterThan || ''],
+            amountLessThan: [this.advanceFilters?.amountLessThan || ''],
+            balanceEqual: [this.advanceFilters?.balanceEqual || ''],
+            balanceLessThan: [this.advanceFilters?.balanceLessThan || ''],
+            balanceMoreThan: [this.advanceFilters?.balanceMoreThan || ''],
+            voucherDateEqual: [this.advanceFilters?.voucherDateEqual || ''],
+            voucherDateAfter: [this.advanceFilters?.voucherDateAfter || ''],
+            voucherDateBefore: [this.advanceFilters?.voucherDateBefore || ''],
+            dueDateEqual: [this.advanceFilters?.dueDateEqual || ''],
+            dueDateAfter: [this.advanceFilters?.dueDateAfter || ''],
+            dueDateBefore: [this.advanceFilters?.dueDateBefore || ''],
+            expireFrom: [this.advanceFilters?.expireFrom || ''],
+            expireTo: [this.advanceFilters?.expireTo || ''],
+            invoiceDateRange: [this.advanceFilters?.invoiceDateRange || ''],
+            voucherDate: [this.advanceFilters?.voucherDate || ''],
+            dueDate: [this.advanceFilters?.dueDate || ''],
+            amountFieldSelector: [this.advanceFilters?.amountFieldSelector || ''],
+            balanceDue: [this.advanceFilters?.balanceDue || ''],
+            balanceStatus: [this.advanceFilters?.balanceStatus || ''],
+            eInvoiceStatus: [this.advanceFilters?.eInvoiceStatus || ''],
+            description: [this.advanceFilters?.description || ''],
+            amount: [this.advanceFilters?.amount || ''],
+            invoiceTotalAmount: [this.advanceFilters?.invoiceTotalAmount || ''],
+            dueDateRange: [this.advanceFilters?.dueDateRange || ''],
+            dueAmount: [this.advanceFilters?.dueAmount || ''],
+            dateRange: [this.advanceFilters?.dateRange || ''],
+        });
+
+        const invoiceDateRange = this.dateOptions?.filter(option => option.value === this.advanceFilters?.invoiceDateRange);
+        if (invoiceDateRange?.length) {
+            this.fieldLabelValues.invoiceDateRange = invoiceDateRange[0]?.label;
+        }
+        const invoiceTotalAmount = this.filtersForEntryTotal?.filter(option => option.value === this.advanceFilters?.invoiceTotalAmount);
+        if (invoiceTotalAmount?.length) {
+            this.fieldLabelValues.invoiceTotalAmount = invoiceTotalAmount[0]?.label;
+        }
+        const dueDateRange = this.dateOptions?.filter(option => option.value === this.advanceFilters?.dueDateRange);
+        if (dueDateRange?.length) {
+            this.fieldLabelValues.dueDateRange = dueDateRange[0]?.label;
+        }
+        const dueAmount = this.filtersForEntryTotal?.filter(option => option.value === this.advanceFilters?.dueAmount);
+        if (dueAmount?.length) {
+            this.fieldLabelValues.dueAmount = dueAmount[0]?.label;
+        }
+        const dateRange = this.dateOptions?.filter(option => option.value === this.advanceFilters?.dateRange);
+        if (dateRange?.length) {
+            this.fieldLabelValues.dateRange = dateRange[0]?.label;
+        }
+        const amountFieldSelector = this.dateOptions?.filter(option => option.value === this.advanceFilters?.amountFieldSelector);
+        if (amountFieldSelector?.length) {
+            this.fieldLabelValues.amountFieldSelector = amountFieldSelector[0]?.label;
+        }
     }
 
     public ngOnDestroy(): void {
@@ -150,8 +190,6 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     }
 
     public amountRangeChanged(item: IOption) {
-        this.searchForm.get('amountFieldSelector').patchValue(item?.value);
-
         this.searchForm.get('amountEquals')?.patchValue(false);
         this.searchForm.get('amountExclude')?.patchValue(false);
         this.searchForm.get('amountGreaterThan')?.patchValue(false);

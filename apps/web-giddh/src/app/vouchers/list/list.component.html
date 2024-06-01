@@ -473,7 +473,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="invoice">
-                                <th mat-header-cell *matHeaderCellDef (clickOutside)="hideSearchFields()">
+                                <th mat-header-cell *matHeaderCellDef #invoiceNo (clickOutside)="handleClickOutside($event, invoiceNo, 'invoiceNumber')">
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -496,7 +496,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="customer">
-                                <th mat-header-cell *matHeaderCellDef (clickOutside)="hideSearchFields()"> 
+                                <th mat-header-cell *matHeaderCellDef #accountUniqueName (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')"> 
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -512,7 +512,7 @@
                                     </div>    
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cp" (dblclick)="element.showAccountDetails = true">{{ element.account?.name }}</div>
+                                    <div class="cp" (dblclick)="element.showAccountDetails = true">{{ element.account?.customerName }}</div>
                                     <mat-card class="outline-card account-detail-wrapper" *ngIf="element.showAccountDetails" (clickOutside)="element.showAccountDetails = false">
                                         <div class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                             <h3>{{ element.account?.name }}</h3>
@@ -595,11 +595,11 @@
                                         </span>
                                         <mat-menu #menu="matMenu">
                                             <button mat-menu-item (click)="onPerformAction()">Paid</button>
-                                            <button mat-menu-item (click)="adjustPayment()">Adjust Amount</button>
-                                            <button mat-menu-item>Unpaid</button>
-                                            <button mat-menu-item>Hold</button>
-                                            <button mat-menu-item>Cancel</button>
-                                            <button mat-menu-item (click)="eWayBillDialog()">Generate E-way Bill</button>
+                                            <button mat-menu-item (click)="showAdjustmentDialog(element)">Adjust Amount</button>
+                                            <button mat-menu-item (click)="actionVoucher(element, 'unpaid')">Unpaid</button>
+                                            <button mat-menu-item (click)="actionVoucher(element, 'hold')">Hold</button>
+                                            <button mat-menu-item (click)="actionVoucher(element, 'cancel')">Cancel</button>
+                                            <button mat-menu-item (click)="showEwayBillDialog(element)">Generate E-way Bill</button>
                                         </mat-menu>
                                     </div>
                                 </td>
@@ -2009,13 +2009,7 @@
         </div>
     </div>
     <!-- table-search -->
-    <ng-template
-        #searchTemplate
-        let-show
-        let-title="title"
-        let-fieldName="fieldName"
-        let-formControl="formControl"
-    >
+    <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
         <div class="align-items-center d-flex" [hidden]="show">
             <span (click)="toggleSearch($event, fieldName)">
                 <i class="icon-search icon-font-16"></i>
@@ -2028,11 +2022,10 @@
                 [placeholder]="'Search'"
                 [cssClass]="'form-control search-table mat-field-border'"
                 [autoFocus]="show"
-                
+                [formControl]="formControl"
             ></text-field>
         </div>
     </ng-template>
-    <!-- [formControl]="formControl" -->
     <!-- datepicker field -->
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">
@@ -2064,8 +2057,9 @@
             [type]="voucherType === 'debit note' || voucherType === 'credit note' ? 'drcr' : voucherType === 'purchase' ? 'purchase' : 'invoice'"
             [request]="advanceFilters"
             [localeData]="localeData"
-            [isEInvoiceEnabled]="isEInvoiceEnabled"
             [commonLocaleData]="commonLocaleData"
+            [isEInvoiceEnabled]="isEInvoiceEnabled"
+            [advanceFilters]="advanceFilters"
             (applyFilterEvent)="applyAdvanceSearch($event)"
             (closeModelEvent)="closeAdvanceSearchDialog(true)"
         ></app-advance-search>
@@ -2083,7 +2077,19 @@
 
     <!-- adjust-payment-dialog -->
     <ng-template #adjustPaymentDialog>
-        <app-adjust-payment-dialog></app-adjust-payment-dialog>
+        <voucher-adjustments
+            [isUpdateMode]="isUpdateMode"
+            [depositAmount]="depositAmount"
+            [account]="voucherDetails?.account"
+            [voucherDetails]="voucherDetails"
+            [voucherTotals]="voucherTotals"
+            [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
+            (closeModelEvent)="closeAdvanceReceiptDialog()"
+            (submitClicked)="getAdvanceReceiptAdjustData($event)"
+            [voucherForAdjustment]="vouchersForAdjustment"
+            [adjustedVoucherType]="voucherType"
+        >
+        </voucher-adjustments>
     </ng-template>
 
     <!-- bulk-update-dialog -->

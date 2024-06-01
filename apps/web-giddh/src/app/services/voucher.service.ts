@@ -438,4 +438,19 @@ export class VoucherService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<string, any>(model)));
     }
+
+    public actionVoucher(voucherUniqueName: string, action: { action: string, amount?: number }): Observable<BaseResponse<string, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + INVOICE_API.ACTION_ON_INVOICE?.replace(':companyUniqueName', this.companyUniqueName)?.replace(':invoiceUniqueName', voucherUniqueName);
+        url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+
+        return this.http.post(url, action).pipe(
+            map((res) => {
+                let data: BaseResponse<string, string> = res;
+                data.request = voucherUniqueName;
+                data.queryString = { voucherUniqueName, action };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, string>(e, voucherUniqueName)));
+    }
 }

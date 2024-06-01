@@ -6,33 +6,33 @@
     <!-- invoice-search-start -->
     <ng-container *ngIf="type === 'invoice'">
         <div class="d-flex d-flex column-gap1 mr-b15 w-100">
-            <dropdown-field [name]="'invoice_date_range'" [label]="localeData?.invoice_date_range" [placeholder]="commonLocaleData?.app_select_action"
-                [options]="dateOptions" class="w-50" (selectedOption)="dateChanged($event, 'invoice')">
-            </dropdown-field>
+            <reactive-dropdown-field [name]="'invoice_date_range'" [label]="localeData?.invoice_date_range" [placeholder]="commonLocaleData?.app_select_action"
+                [options]="dateOptions" class="w-50" (selectedOption)="dateChanged($event, 'invoice')" formControlName="invoiceDateRange" [labelValue]="fieldLabelValues.invoiceDateRange">
+            </reactive-dropdown-field>
             <giddh-datepicker (keydown.enter)="$event.preventDefault()" [label]="commonLocaleData?.app_select_date"
                 [placeholder]="commonLocaleData?.app_select_date" name="voucherDate" [showToggleIcon]="false" [appearance]="'outline'"
                 class="w-50" formControlName="voucherDate">
             </giddh-datepicker>
         </div>
         <div class="d-flex column-gap1 mr-b15 w-100">
-            <dropdown-field [name]="'invoice_total_amount'" [label]="localeData?.invoice_total_amount" [placeholder]="commonLocaleData?.app_select"
-                [options]="filtersForEntryTotal" class="w-50" (selectedOption)="invoiceTotalRangeChanged($event)">
-            </dropdown-field>
+            <reactive-dropdown-field [name]="'invoice_total_amount'" [label]="localeData?.invoice_total_amount" [placeholder]="commonLocaleData?.app_select"
+                [options]="filtersForEntryTotal" class="w-50" (selectedOption)="invoiceTotalRangeChanged($event)" formControlName="invoiceTotalAmount" [labelValue]="fieldLabelValues.invoiceTotalAmount">
+            </reactive-dropdown-field>
             <input-field [type]="'tel'" [placeholder]="'00'" class="w-50" name="total" formControlName="total"></input-field>
         </div>
         <div class="d-flex column-gap1 mr-b15 w-100">
-            <dropdown-field [name]="'due_date_range'" [label]="localeData?.due_date_range" [placeholder]="commonLocaleData?.app_select_action"
-                [options]="dateOptions" class="w-50" (selectedOption)="dateChanged($event, 'due')">
-            </dropdown-field>
+            <reactive-dropdown-field [name]="'due_date_range'" [label]="localeData?.due_date_range" [placeholder]="commonLocaleData?.app_select_action"
+                [options]="dateOptions" class="w-50" (selectedOption)="dateChanged($event, 'due')" formControlName="dueDateRange" [labelValue]="fieldLabelValues.dueDateRange">
+            </reactive-dropdown-field>
             <giddh-datepicker (keydown.enter)="$event.preventDefault()" [label]="commonLocaleData?.app_select_date"
                 [placeholder]="commonLocaleData?.app_select_date" name="dueDateRange" [showToggleIcon]="false" [appearance]="'outline'"
                 class="w-50" formControlName="dueDate">
             </giddh-datepicker>
         </div>
         <div class="d-flex column-gap1 mr-b15 w-100">
-            <dropdown-field [name]="'app_due_amount'" [label]="commonLocaleData?.app_due_amount" [placeholder]="commonLocaleData?.app_select"
-                [options]="filtersForEntryTotal" class="w-50" (selectedOption)="dueTotalRangeChanged($event)">
-            </dropdown-field>
+            <reactive-dropdown-field [name]="'app_due_amount'" [label]="commonLocaleData?.app_due_amount" [placeholder]="commonLocaleData?.app_select"
+                [options]="filtersForEntryTotal" class="w-50" (selectedOption)="dueTotalRangeChanged($event)" formControlName="dueAmount" [labelValue]="fieldLabelValues.dueAmount">
+            </reactive-dropdown-field>
             <input-field [type]="'tel'" [placeholder]="'00'" class="w-50" name="balanceDue" formControlName="balanceDue">
             </input-field>
         </div>
@@ -67,18 +67,18 @@
 
     <ng-container *ngIf="type === 'drcr' || type === 'receipt'">
         <div class="d-flex d-flex column-gap1 mr-b15 w-100">
-            <dropdown-field [name]="'app_date_range'" [label]="commonLocaleData?.app_date_range" [placeholder]="commonLocaleData?.app_select_action"
-                [options]="dateOptions" class="w-50" (selectedOption)="dateChanged($event, 'invoice')">
-            </dropdown-field>
+            <reactive-dropdown-field [name]="'app_date_range'" [label]="commonLocaleData?.app_date_range" [placeholder]="commonLocaleData?.app_select_action"
+                [options]="dateOptions" class="w-50" (selectedOption)="dateChanged($event, 'invoice')" formControlName="dateRange" [labelValue]="fieldLabelValues.dateRange">
+            </reactive-dropdown-field>
             <giddh-datepicker (keydown.enter)="$event.preventDefault()" [label]="commonLocaleData?.app_select_date"
                 [placeholder]="commonLocaleData?.app_select_date" name="voucherDate" [showToggleIcon]="false" [appearance]="'outline'"
                 class="w-50" formControlName="voucherDate">
             </giddh-datepicker>
         </div>
         <div class="d-flex column-gap1 mr-b15 w-100">
-            <dropdown-field [name]="'invoice_total_amount'" [label]="localeData?.invoice_total_amount" [placeholder]="commonLocaleData?.app_select"
-                [options]="filtersForEntryTotal" class="w-50" (selectedOption)="invoiceTotalRangeChanged($event)">
-            </dropdown-field>
+            <reactive-dropdown-field [name]="'invoice_total_amount'" [label]="localeData?.invoice_total_amount" [placeholder]="commonLocaleData?.app_select"
+                [options]="filtersForEntryTotal" class="w-50" (selectedOption)="invoiceTotalRangeChanged($event)" formControlName="invoiceTotalAmount" [labelValue]="fieldLabelValues.invoiceTotalAmount">
+            </reactive-dropdown-field>
             <input-field [type]="'tel'" [placeholder]="'00'" class="w-50" name="total" formControlName="total"></input-field>
         </div>
         <mat-form-field appearance="outline" class="w-100 mr-b15" *ngIf="isEInvoiceEnabled">
@@ -109,9 +109,9 @@
                 </div>
             </div>
             <div class="d-flex column-gap1">
-                <dropdown-field [name]="'total_amt'" [label]="localeData?.total_amt" [placeholder]="commonLocaleData?.app_select_range"
-                    [options]="filtersForAmount" class="w-50" (selectedOption)="amountRangeChanged($event)">
-                </dropdown-field>
+                <reactive-dropdown-field [name]="'total_amt'" [label]="localeData?.total_amt" [placeholder]="commonLocaleData?.app_select_range"
+                    [options]="filtersForAmount" class="w-50" (selectedOption)="amountRangeChanged($event)" formControlName="amountFieldSelector" [labelValue]="fieldLabelValues.amountFieldSelector">
+                </reactive-dropdown-field>
                 <input-field [type]="'tel'" [placeholder]="'00'" class="w-50" name="amount" formControlName="amount"></input-field>
             </div>
         </div>
@@ -119,24 +119,24 @@
 
     <ng-container *ngIf="type === 'purchase'">
         <div class="d-flex d-flex column-gap1 mr-b15 w-100">
-            <dropdown-field [name]="'app_date_range'" [label]="commonLocaleData?.app_date_range" [placeholder]="commonLocaleData?.app_select_action"
-                [options]="dateOptions" class="w-50" (selectedOption)="dateChanged($event, 'invoice')">
-            </dropdown-field>
+            <reactive-dropdown-field [name]="'app_date_range'" [label]="commonLocaleData?.app_date_range" [placeholder]="commonLocaleData?.app_select_action"
+                [options]="dateOptions" class="w-50" (selectedOption)="dateChanged($event, 'invoice')" formControlName="dateRange" [labelValue]="fieldLabelValues.dateRange">
+            </reactive-dropdown-field>
             <giddh-datepicker (keydown.enter)="$event.preventDefault()" [label]="commonLocaleData?.app_select_date"
                 [placeholder]="commonLocaleData?.app_select_date" name="voucherDate" [showToggleIcon]="false" [appearance]="'outline'"
                 class="w-50" formControlName="voucherDate">
             </giddh-datepicker>
         </div>
         <div class="d-flex column-gap1 mr-b15 w-100">
-            <dropdown-field [name]="'invoice_total_amount'" [label]="localeData?.invoice_total_amount" [placeholder]="commonLocaleData?.app_select"
-                [options]="filtersForEntryTotal" class="w-50" (selectedOption)="invoiceTotalRangeChanged($event)">
-            </dropdown-field>
+            <reactive-dropdown-field [name]="'invoice_total_amount'" [label]="localeData?.invoice_total_amount" [placeholder]="commonLocaleData?.app_select"
+                [options]="filtersForEntryTotal" class="w-50" (selectedOption)="invoiceTotalRangeChanged($event)" formControlName="invoiceTotalAmount" [labelValue]="fieldLabelValues.invoiceTotalAmount">
+            </reactive-dropdown-field>
             <input-field [type]="'tel'" [placeholder]="'00'" class="w-50" name="total" formControlName="total"></input-field>
         </div>
         <div class="d-flex column-gap1 mr-b15 w-100">
-            <dropdown-field [name]="'due_date_range'" [label]="localeData?.due_date_range" [placeholder]="commonLocaleData?.app_select_action"
-                [options]="dateOptions" class="w-50" (selectedOption)="dateChanged($event, 'due')">
-            </dropdown-field>
+            <reactive-dropdown-field [name]="'due_date_range'" [label]="localeData?.due_date_range" [placeholder]="commonLocaleData?.app_select_action"
+                [options]="dateOptions" class="w-50" (selectedOption)="dateChanged($event, 'due')" formControlName="dueDateRange" [labelValue]="fieldLabelValues.dueDateRange">
+            </reactive-dropdown-field>
             <giddh-datepicker (keydown.enter)="$event.preventDefault()" [label]="commonLocaleData?.app_select_date"
                 [placeholder]="commonLocaleData?.app_select_date" name="dueDateRange" [showToggleIcon]="false" [appearance]="'outline'"
                 class="w-50" formControlName="dueDate">

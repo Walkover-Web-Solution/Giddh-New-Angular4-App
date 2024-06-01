@@ -5,7 +5,6 @@ import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatSort } from "@angular/material/sort";
 import { NewConfirmationModalComponent } from "../../theme/new-confirmation-modal/confirmation-modal.component";
-import { ConfirmationModalConfiguration } from "../../theme/confirmation-modal/confirmation-modal.interface";
 import { GeneralService } from "../../services/general.service";
 import { TemplatePreviewDialogComponent } from "../template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "../template-edit-dialog/template-edit-dialog.component";
@@ -25,6 +24,8 @@ import * as saveAs from "file-saver";
 import { ToasterService } from "../../services/toaster.service";
 import { InvoiceReceiptActions } from "../../actions/invoice/receipt/receipt.actions";
 import { InvoiceService } from "../../services/invoice.service";
+import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-models/AdvanceReceiptsAdjust";
+import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustment/services/adjustment-utility.service";
 
 // invoice-table
 export interface PeriodicElement {
@@ -194,6 +195,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public showInvoiceNoSearch: boolean = false;
     public voucherNumberInput: FormControl = new FormControl();
     public accountUniqueNameInput: FormControl = new FormControl();
+    public searchedName: FormControl = new FormControl();
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
@@ -263,6 +265,31 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public allVouchersSelected: boolean = false;
     public ewayBillDialogRef: any;
     public advanceSearchDialogRef: any;
+    public voucherDetails: any;
+    /** Stores the adjustment data */
+    public advanceReceiptAdjustmentData: VoucherAdjustments;
+    /** True, if select perform adjust payment action for an invoice  */
+    public selectedPerformAdjustPaymentAction: boolean = false;
+    /** Total deposit amount of invoice */
+    public depositAmount: number = 0;
+    /** List of vouchers available for adjustment */
+    public vouchersForAdjustment: any[] = [];
+    public isUpdateMode: boolean;
+    /** Holds voucher totals */
+    public voucherTotals: any = {
+        totalAmount: 0,
+        totalDiscount: 0,
+        totalTaxableValue: 0,
+        totalTaxWithoutCess: 0,
+        totalCess: 0,
+        grandTotal: 0,
+        roundOff: 0,
+        tcsTotal: 0,
+        tdsTotal: 0,
+        balanceDue: 0
+    };
+    /** True if round off will be applicable */
+    public applyRoundOff: boolean = true;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -275,7 +302,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private modalService: BsModalService,
         private toasterService: ToasterService,
         private invoiceReceiptActions: InvoiceReceiptActions,
-        private invoiceService: InvoiceService
+        private invoiceService: InvoiceService,
+        private adjustmentUtilityService: AdjustmentUtilityService
     ) {
 
     }
@@ -414,6 +442,56 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
                 this.getVouchers(this.isUniversalDateApplicable);
+            }
+        });
+
+        this.componentStore.actionVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.toasterService.showSnackBar("success", this.commonLocaleData?.app_messages?.invoice_updated);
+                this.getVouchers(this.isUniversalDateApplicable);
+            }
+        });
+
+        this.componentStore.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.voucherDetails = response;
+
+                this.voucherTotals = this.vouchersUtilityService.getVoucherTotals(response?.entries, this.company.giddhBalanceDecimalPlaces, this.applyRoundOff, response?.exchangeRate);
+
+                let tcsSum: number = 0;
+                let tdsSum: number = 0;
+                response.body?.entries.forEach(entry => {
+                    entry.taxes?.forEach(tax => {
+                        if (['tcsrc', 'tcspay'].includes(tax?.taxType)) {
+                            tcsSum += tax.amount?.amountForAccount;
+                        } else if (['tdsrc', 'tdspay'].includes(tax?.taxType)) {
+                            tdsSum += tax.amount?.amountForAccount;
+                        }
+                    });
+                });
+                this.voucherTotals.tcsTotal = tcsSum;
+                this.voucherTotals.tdsTotal = tdsSum;
+
+                this.advanceReceiptAdjustmentData = { adjustments: this.adjustmentUtilityService.formatAdjustmentsObject(response.body?.adjustments) };
+                this.isUpdateMode = (response?.body?.adjustments?.length) ? true : false;
+
+                this.dialog.open(this.adjustPaymentDialog, {
+                    panelClass: ['mat-dialog-md']
+                });
+            }
+        });
+
+        /** Vouchers list for adjustment */
+        this.componentStore.vouchersForAdjustment$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                const results = (response.body?.results || response.body?.items || response.body);
+                this.vouchersForAdjustment = results?.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue?.amountForAccount, amountForCompany: result.balanceDue?.amountForCompany } }));
+
+                this.dialog.open(this.adjustPaymentDialog, {
+                    panelClass: ['mat-dialog-md']
+                });
+
+                this.selectedPerformAdjustPaymentAction = false;
             }
         });
 
@@ -621,6 +699,20 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.componentStore.getInvoiceSettings();
             } else {
                 this.isEInvoiceEnabled = settings.invoiceSettings?.gstEInvoiceEnable;
+                
+                if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
+                    this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
+                } else if (this.voucherType === VoucherTypeEnum.purchase) {
+                    this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
+                } else if (this.voucherType === VoucherTypeEnum.debitNote) {
+                    this.applyRoundOff = settings.invoiceSettings.debitNoteRoundOff;
+                } else if (this.voucherType === VoucherTypeEnum.creditNote) {
+                    this.applyRoundOff = settings.invoiceSettings.creditNoteRoundOff;
+                } else if (this.voucherType === VoucherTypeEnum.estimate || this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.proforma || this.voucherType === VoucherTypeEnum.generateProforma) {
+                    this.applyRoundOff = true;
+                } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
+                    this.applyRoundOff = true;
+                }
             }
         });
     }
@@ -716,18 +808,20 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             panelClass: ['mat-dialog-md']
         });
     }
+
     // adjust payment dialog
-    public adjustPayment(): void {
-        this.dialog.open(this.adjustPaymentDialog, {
-            panelClass: ['mat-dialog-md']
-        });
+    public showAdjustmentDialog(voucher: any): void {
+        this.selectedPerformAdjustPaymentAction = true;
+        this.componentStore.getVoucherDetails({ isCopyVoucher: false, accountUniqueName: voucher?.account?.uniqueName, payload: { uniqueName: voucher?.uniqueName, voucherType: this.voucherType } });
     }
+
     // bulk update dialog 
     public bulkUpdateDialog(): void {
         this.dialog.open(this.bulkUpdate, {
             panelClass: ['mat-dialog-md']
         });
     }
+
     // delete confirmation dialog
     public deleteVoucherDialog(): void {
         let confirmationMessages = [];
@@ -772,15 +866,43 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public toggleSearch(event: any, fieldName: string): void {
         if (fieldName === "accountUniqueName") {
             this.showCustomerSearch = true;
+            this.showInvoiceNoSearch = false;
         } else if (fieldName === "invoiceNumber") {
             this.showInvoiceNoSearch = true;
+            this.showCustomerSearch = false;
         }
         event.stopPropagation();
     }
 
-    public hideSearchFields(): void {
-        this.showCustomerSearch = false;
-        this.showInvoiceNoSearch = false;
+    /**
+     *This will be use for click outsie for search field hidden
+     *
+     * @param {*} event
+     * @param {*} element
+     * @param {string} searchedFieldName
+     * @return {*}  {void}
+     * @memberof ListBranchTransferComponent
+     */
+    public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        if (searchedFieldName === 'invoiceNumber') {
+            if (this.voucherNumberInput.value !== null && this.voucherNumberInput.value !== '') {
+                return;
+            }
+        } else if (searchedFieldName === 'accountUniqueName') {
+            if (this.accountUniqueNameInput.value !== null && this.accountUniqueNameInput.value !== '') {
+                return;
+            }
+        }
+
+        if (this.generalService.childOf(event?.target, element)) {
+            return;
+        } else {
+            if (searchedFieldName === 'invoiceNumber') {
+                this.showInvoiceNoSearch = false;
+            } else if (searchedFieldName === 'accountUniqueName') {
+                this.showCustomerSearch = false;
+            }
+        }
     }
 
     // convert bill dialog
@@ -790,21 +912,30 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         })
     }
 
-    public showEwayBillDialog(): void {
+    public showEwayBillDialog(voucher?: any): void {
         if (this.voucherType === VoucherTypeEnum.sales) {
             this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
+            this.invoiceService.selectedInvoicesLists = [];
+            this.invoiceService.VoucherType = this.voucherType;
+
             // To get re-assign receipts voucher store
-            if (this.selectedVouchers[0]?.account?.uniqueName) {
+            if (voucher) {
+                this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(voucher?.account?.uniqueName, {
+                    invoiceNumber: voucher?.voucherNumber,
+                    voucherType: VoucherTypeEnum.sales,
+                    uniqueName: voucher?.uniqueName
+                }));
+
+                this.invoiceService.setSelectedInvoicesList([voucher]);
+            } else if (this.selectedVouchers[0]?.account?.uniqueName) {
                 this.store.dispatch(this.invoiceReceiptActions.getVoucherDetailsV4(this.selectedVouchers[0]?.account?.uniqueName, {
                     invoiceNumber: this.selectedVouchers[0]?.voucherNumber,
                     voucherType: VoucherTypeEnum.sales,
                     uniqueName: this.selectedVouchers[0]?.uniqueName
                 }));
-            }
 
-            this.invoiceService.selectedInvoicesLists = [];
-            this.invoiceService.VoucherType = this.voucherType;
-            this.invoiceService.setSelectedInvoicesList(this.selectedVouchers);
+                this.invoiceService.setSelectedInvoicesList(this.selectedVouchers);
+            }
         }
 
         this.ewayBillDialogRef = this.dialog.open(this.ewayBill, {
@@ -828,6 +959,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     public applyAdvanceSearch(event: any): void {
+        this.advanceSearchDialogRef?.close();
+
         let advanceFilters = {
             sortBy: this.advanceFilters.sortBy,
             sort: this.advanceFilters.sort,
@@ -849,6 +982,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.advanceFilters.count = advanceFilters.count;
         this.advanceFilters.q = advanceFilters.q;
 
+        this.advanceFilters = this.vouchersUtilityService.cleanObject(this.advanceFilters);
+
         this.getVouchers(false);
         this.getVoucherBalances();
     }
@@ -858,5 +993,38 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             this.selectAllVouchers({ checked: false });
         }
         this.advanceSearchDialogRef?.close();
+    }
+
+    public actionVoucher(voucher: any, action: string): void {
+        this.componentStore.actionVoucher({ voucherUniqueName: voucher?.uniqueName, payload: { action: action, voucherType: voucher?.voucherType ?? this.voucherType } });
+    }
+
+    public closeAdvanceReceiptDialog(): void {
+        this.advanceReceiptAdjustmentData = null;
+        this.dialog.closeAll();
+    }
+
+    /**
+    * To get all advance adjusted data
+    *
+    * @param {{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }} advanceReceiptsAdjustEvent event that contains advance receipts adjusted data
+    * @memberof InvoicePreviewComponent
+    */
+    public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }) {
+        this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
+        if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments && this.advanceReceiptAdjustmentData.adjustments.length > 0) {
+            this.advanceReceiptAdjustmentData.adjustments.map(item => {
+                item.voucherDate = (item.voucherDate?.toString()?.includes('/')) ? item.voucherDate?.trim()?.replace(/\//g, '-') : item.voucherDate;
+                item.voucherNumber = item.voucherNumber === '-' ? '' : item.voucherNumber;
+                item.amount = item.adjustmentAmount;
+                item.unadjustedAmount = item.balanceDue;
+
+                delete item.adjustmentAmount;
+                delete item.balanceDue;
+            });
+        }
+
+        this.componentStore.adjustVoucherWithAdvanceReceipts({ adjustments: this.advanceReceiptAdjustmentData.adjustments, voucherUniqueName: this.voucherDetails?.uniqueName });
+        this.closeAdvanceReceiptDialog();
     }
 }

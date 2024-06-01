@@ -273,4 +273,13 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             this.selectField?.nativeElement?.focus();
         }, 10);
     }
+
+    /**
+    * This will use for close dropdown panel
+    *
+    * @memberof ReactiveDropdownFieldComponent
+    */
+    public closeDropdownPanel(): void {
+        this.trigger?.closePanel();
+    }
 }
