@@ -22,7 +22,7 @@ import { SettingsIntegrationService } from '../../services/settings.integraion.s
 import { ACCOUNT_REGISTERED_STATUS, SettingsIntegrationTab, SettingsIntegrationTabV1, UNLIMITED_LIMIT } from '../constants/settings.constant';
 import { SearchService } from '../../services/search.service';
 import { SalesService } from '../../services/sales.service';
-import { cloneDeep, isEmpty } from '../../lodash-optimized';
+import { cloneDeep, find, isEmpty } from '../../lodash-optimized';
 import { TabDirective } from 'ngx-bootstrap/tabs';
 import { MatTabGroup } from '@angular/material/tabs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -184,6 +184,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public editAccountModalRef: MatDialogRef<any>;
     /** Holds Create New Account User Dialog Ref */
     public createNewAccountUserModalRef: MatDialogRef<any>;
+    /** Holds Linked account label for selected value */
+    public linkedAccountLabel: string = ''; 
 
     constructor(
         private router: Router,
@@ -243,7 +245,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                         this.razorPayObj.account = { name: null, uniqueName: null };
                         this.forceClearLinkAccount$ = observableOf({ status: true });
                     }
-                    this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
+                    this.razorPayObj.password = '';   
                 }
                 this.updateRazor = true;
             } else {
@@ -255,6 +257,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             if (o?.paypalForm) {
                 if (typeof o?.paypalForm !== "string") {
                     this.paypalObj = cloneDeep(o?.paypalForm);
+                    this.linkedAccountLabel = this.paypalObj?.account?.name;
                     if (this.paypalObj && this.paypalObj.account === null) {
                         this.paypalObj.account = { name: null, uniqueName: null };
                         this.paypalForceClearLinkAccount$ = observableOf({ status: true });
@@ -377,7 +380,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public setDummyData() {
         if (this.razorPayObj) {
             this.razorPayObj.userName = '';
-            this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
+            this.razorPayObj.password = '';
             this.razorPayObj.account = { name: null, uniqueName: null };
             this.razorPayObj.autoCapturePayment = true;
         }
@@ -416,7 +419,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public selectLinkedAccount(event: IOption): void {
         if (event?.value) {
-            this.paypalObj.account.name = event.label;
+            this.linkedAccountLabel = event.label;
+            this.paypalAccounts$.subscribe((arr: IOption[]) => {
+                let res = find(arr, (account) => account?.value === event.value);
+                if (res) {
+                    this.paypalObj.account.name = res.text;
+                }
+            });
             this.paypalObj.account.uniqueName = event.value;
         }
     }
@@ -468,6 +477,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
             data.message = this.localeData?.collection?.unlinked_account_successfully;
             this.store.dispatch(this.settingsIntegrationActions.updatePaypalDetails(data));
+            this.linkedAccountLabel= ''; 
         } else {
             this.toasty.warningToast(this.localeData?.collection?.unlink_paypal_message);
         }
@@ -480,6 +490,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public deletePaypalDetails(): void {
         this.store.dispatch(this.settingsIntegrationActions.deletePaypalDetails());
+        this.linkedAccountLabel= ''; 
     }
 
 

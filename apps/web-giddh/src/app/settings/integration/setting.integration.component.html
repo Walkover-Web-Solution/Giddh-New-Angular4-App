@@ -255,36 +255,27 @@
                                             ></input-field>
                                         </div>
                                         <div class="form-group col-lg-4 col-md-6 col-xs-12">
-                                            <div>
+                                            <div class="d-flex align-items-center column-gap15">
                                                 <dropdown-field
-                                                        class="linked-account"
-                                                        [name]="'account'"
-                                                        [scrollableElementId]="'linkedAccount'"
-                                                        [label]="localeData?.collection?.link_account_label"
-                                                        [placeholder]="localeData?.collection?.link_account_placeholder"
-                                                        [options]="paypalAccounts"
-                                                        (selectedOption)="selectLinkedAccount($event)"
-                                                        [defaultValue]="paypalObj?.account?.name"
-                                                        [enableDynamicSearch]="true"
-                                                        [isPaginationEnabled]="true"
-                                                        (scrollEnd)="paypalHandleScrollEnd()"
-                                                        (dynamicSearchedQuery)="paypalOnAccountSearchQueryChanged($event)"
-                                                        [allowValueReset]="true"
-                                                        (onClear)="paypalObj.account.name = null; paypalObj.account.uniqueName = null"
-                                                    >
-                                                    </dropdown-field>
-                                                    <div
-                                                        class="input-group-addon cursor-pointer ml-2"
-                                                        *ngIf="
-                                                            paypalObj?.account?.uniqueName &&
-                                                            paypalObj?.account?.name
-                                                        "
-                                                    >
-                                                        <span
-                                                            (click)="unlinkAccountFromPaypal()"
-                                                            class="icon-trash"
-                                                        ></span>
-                                                    </div>
+                                                    class="linked-account"
+                                                    [name]="'account'"
+                                                    [scrollableElementId]="'linkedAccount'"
+                                                    [label]="localeData?.collection?.link_account_label"
+                                                    [placeholder]="localeData?.collection?.link_account_placeholder"
+                                                    [options]="paypalAccounts"
+                                                    (selectedOption)="selectLinkedAccount($event)"
+                                                    [defaultValue]="linkedAccountLabel"
+                                                    [enableDynamicSearch]="true"
+                                                    [isPaginationEnabled]="true"
+                                                    (scrollEnd)="paypalHandleScrollEnd()"
+                                                    (dynamicSearchedQuery)="paypalOnAccountSearchQueryChanged($event)"
+                                                    [allowValueReset]="true"
+                                                    (onClear)="paypalObj.account.name = null; paypalObj.account.uniqueName = null"
+                                                >
+                                                </dropdown-field>
+                                                <button mat-stroked-button class="min-width-unset" (click)="unlinkAccountFromPaypal()"  *ngIf="paypalObj?.account?.uniqueName && paypalObj?.account?.name">
+                                                    <i class="icon-trash"></i>
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -292,38 +283,40 @@
 
                                     <div class="row">
                                         <div class="col-sm-12 form-group">
-                                            <button
-                                                aria-label="save"
-                                                type="button"
-                                                *ngIf="!updatePaypal"
-                                                mat-stroked-button
-                                                color="primary"
-                                                [disabled]="paypalForm.invalid"
-                                                (click)="savePaypalDetails()"
-                                            >
-                                                {{ commonLocaleData?.app_save }}
-                                            </button>
-                                            <button
-                                                aria-label="update"
-                                                *ngIf="updatePaypal"
-                                                type="button"
-                                                mat-stroked-button
-                                                color="primary"
-                                                [disabled]="paypalForm.invalid"
-                                                (click)="updatePaypalDetails()"
-                                            >
-                                                {{ commonLocaleData?.app_update }}
-                                            </button>
-                                            <button
-                                                aria-label="delete"
-                                                *ngIf="updatePaypal"
-                                                mat-stroked-button
-                                                color="warn"
-                                                type="button"
-                                                (click)="deletePaypalDetails()"
-                                            >
-                                                {{ commonLocaleData?.app_delete }}
-                                            </button>
+                                            <div class="d-flex column-gap1">
+                                                <button
+                                                    aria-label="save"
+                                                    type="button"
+                                                    *ngIf="!updatePaypal"
+                                                    mat-stroked-button
+                                                    color="primary"
+                                                    [disabled]="paypalForm.invalid"
+                                                    (click)="savePaypalDetails()"
+                                                >
+                                                    {{ commonLocaleData?.app_save }}
+                                                </button>
+                                                <button
+                                                    aria-label="update"
+                                                    *ngIf="updatePaypal"
+                                                    type="button"
+                                                    mat-stroked-button
+                                                    color="primary"
+                                                    [disabled]="paypalForm.invalid"
+                                                    (click)="updatePaypalDetails()"
+                                                >
+                                                    {{ commonLocaleData?.app_update }}
+                                                </button>
+                                                <button
+                                                    aria-label="delete"
+                                                    *ngIf="updatePaypal"
+                                                    mat-stroked-button
+                                                    color="warn"
+                                                    type="button"
+                                                    (click)="deletePaypalDetails()"
+                                                >
+                                                    {{ commonLocaleData?.app_delete }}
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
