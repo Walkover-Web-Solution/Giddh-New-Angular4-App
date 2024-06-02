@@ -507,6 +507,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
                 return item?.voucherNumber !== '' || item?.adjustmentAmount?.amountForAccount > 0;
             });
         }
+
         if (this.isTaxDeducted) {
             if (this.adjustVoucherForm.tdsTaxUniqueName === '') {
                 if (this.tdsTypeBox && this.tdsTypeBox.nativeElement)
@@ -523,6 +524,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
             delete this.adjustVoucherForm['description'];
             delete this.adjustVoucherForm['tdsTaxUniqueName'];
         }
+
         if (isValid) {
             this.submitClicked.emit({
                 adjustVoucherData: this.adjustVoucherForm,

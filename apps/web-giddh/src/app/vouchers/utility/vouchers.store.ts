@@ -149,6 +149,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public bulkExportVoucherInProgress$ = this.select((state) => state.bulkExportVoucherInProgress);
     public bulkExportVoucherResponse$ = this.select((state) => state.bulkExportVoucherResponse);
     public actionVoucherIsSuccess$ = this.select((state) => state.actionVoucherIsSuccess);
+    public adjustVoucherIsSuccess$ = this.select((state) => state.adjustVoucherIsSuccess);
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);

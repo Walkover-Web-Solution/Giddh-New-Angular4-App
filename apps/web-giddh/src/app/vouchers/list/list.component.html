@@ -2072,7 +2072,11 @@
 
     <!-- paid-dialog -->
     <ng-template #paidDialog>
-        <app-payment-dialog></app-payment-dialog>
+        <app-payment-dialog
+            [voucherDetails]="voucherDetails"
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+        ></app-payment-dialog>
     </ng-template>
 
     <!-- adjust-payment-dialog -->
@@ -2086,7 +2090,7 @@
             [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
             (closeModelEvent)="closeAdvanceReceiptDialog()"
             (submitClicked)="getAdvanceReceiptAdjustData($event)"
-            [voucherForAdjustment]="vouchersForAdjustment"
+            [voucherForAdjustment]="null"
             [adjustedVoucherType]="voucherType"
         >
         </voucher-adjustments>
@@ -2124,6 +2128,4 @@
         >
         </app-generate-ewaybill-modal>
     </ng-template>
-    
-    
 </ng-container>

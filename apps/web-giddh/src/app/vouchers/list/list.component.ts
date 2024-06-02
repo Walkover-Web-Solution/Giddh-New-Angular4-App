@@ -268,12 +268,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public voucherDetails: any;
     /** Stores the adjustment data */
     public advanceReceiptAdjustmentData: VoucherAdjustments;
-    /** True, if select perform adjust payment action for an invoice  */
-    public selectedPerformAdjustPaymentAction: boolean = false;
-    /** Total deposit amount of invoice */
-    public depositAmount: number = 0;
-    /** List of vouchers available for adjustment */
-    public vouchersForAdjustment: any[] = [];
     public isUpdateMode: boolean;
     /** Holds voucher totals */
     public voucherTotals: any = {
@@ -472,7 +466,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.voucherTotals.tcsTotal = tcsSum;
                 this.voucherTotals.tdsTotal = tdsSum;
 
-                this.advanceReceiptAdjustmentData = { adjustments: this.adjustmentUtilityService.formatAdjustmentsObject(response.body?.adjustments) };
+                this.advanceReceiptAdjustmentData = { adjustments: this.adjustmentUtilityService.formatAdjustmentsObject(response.adjustments) };
                 this.isUpdateMode = (response?.body?.adjustments?.length) ? true : false;
 
                 this.dialog.open(this.adjustPaymentDialog, {
@@ -481,17 +475,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-        /** Vouchers list for adjustment */
-        this.componentStore.vouchersForAdjustment$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.adjustVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                const results = (response.body?.results || response.body?.items || response.body);
-                this.vouchersForAdjustment = results?.map(result => ({ ...result, adjustmentAmount: { amountForAccount: result.balanceDue?.amountForAccount, amountForCompany: result.balanceDue?.amountForCompany } }));
-
-                this.dialog.open(this.adjustPaymentDialog, {
-                    panelClass: ['mat-dialog-md']
-                });
-
-                this.selectedPerformAdjustPaymentAction = false;
+                this.toasterService.showSnackBar("success", this.localeData?.amount_adjusted);
+                this.getVouchers(this.isUniversalDateApplicable);
             }
         });
 
@@ -811,7 +798,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
     // adjust payment dialog
     public showAdjustmentDialog(voucher: any): void {
-        this.selectedPerformAdjustPaymentAction = true;
         this.componentStore.getVoucherDetails({ isCopyVoucher: false, accountUniqueName: voucher?.account?.uniqueName, payload: { uniqueName: voucher?.uniqueName, voucherType: this.voucherType } });
     }
 
@@ -1011,9 +997,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     * @memberof InvoicePreviewComponent
     */
     public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }) {
-        this.advanceReceiptAdjustmentData = advanceReceiptsAdjustEvent.adjustVoucherData;
-        if (this.advanceReceiptAdjustmentData && this.advanceReceiptAdjustmentData.adjustments && this.advanceReceiptAdjustmentData.adjustments.length > 0) {
-            this.advanceReceiptAdjustmentData.adjustments.map(item => {
+        this.closeAdvanceReceiptDialog();
+        let advanceReceiptAdjustmentData = cloneDeep(advanceReceiptsAdjustEvent.adjustVoucherData);
+        if (advanceReceiptAdjustmentData && advanceReceiptAdjustmentData.adjustments && advanceReceiptAdjustmentData.adjustments.length > 0) {
+            advanceReceiptAdjustmentData.adjustments.map(item => {
                 item.voucherDate = (item.voucherDate?.toString()?.includes('/')) ? item.voucherDate?.trim()?.replace(/\//g, '-') : item.voucherDate;
                 item.voucherNumber = item.voucherNumber === '-' ? '' : item.voucherNumber;
                 item.amount = item.adjustmentAmount;
@@ -1024,7 +1011,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             });
         }
 
-        this.componentStore.adjustVoucherWithAdvanceReceipts({ adjustments: this.advanceReceiptAdjustmentData.adjustments, voucherUniqueName: this.voucherDetails?.uniqueName });
-        this.closeAdvanceReceiptDialog();
+        this.componentStore.adjustVoucherWithAdvanceReceipts({ adjustments: advanceReceiptAdjustmentData.adjustments, voucherUniqueName: this.voucherDetails?.uniqueName });
     }
 }
