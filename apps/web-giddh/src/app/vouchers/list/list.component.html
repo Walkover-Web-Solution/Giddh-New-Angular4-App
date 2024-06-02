@@ -594,7 +594,7 @@
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
-                                            <button mat-menu-item (click)="onPerformAction()">Paid</button>
+                                            <button mat-menu-item (click)="showPaymentDialog(element)">Paid</button>
                                             <button mat-menu-item (click)="showAdjustmentDialog(element)">Adjust Amount</button>
                                             <button mat-menu-item (click)="actionVoucher(element, 'unpaid')">Unpaid</button>
                                             <button mat-menu-item (click)="actionVoucher(element, 'hold')">Hold</button>
@@ -2070,8 +2070,8 @@
         <app-bulk-export></app-bulk-export>
     </ng-template>
 
-    <!-- paid-dialog -->
-    <ng-template #paidDialog>
+    <!-- payment-dialog -->
+    <ng-template #paymentDialog>
         <app-payment-dialog
             [voucherDetails]="voucherDetails"
             [localeData]="localeData"

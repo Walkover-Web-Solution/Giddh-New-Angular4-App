@@ -178,7 +178,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     // export dialog
     @ViewChild('bulkExport', { static: true }) public bulkExport: TemplateRef<any>;
     // export dialog
-    @ViewChild('paidDialog', { static: true }) public paidDialog: TemplateRef<any>;
+    @ViewChild('paymentDialog', { static: true }) public paymentDialog: TemplateRef<any>;
     // adjust payment dialog
     @ViewChild('adjustPaymentDialog', { static: true }) public adjustPaymentDialog: TemplateRef<any>;
     // bulk update dialog
@@ -790,8 +790,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     // paid dialog
-    public onPerformAction(): void {
-        this.dialog.open(this.paidDialog, {
+    public showPaymentDialog(voucher: any): void {
+        this.voucherDetails = voucher;
+
+        this.dialog.open(this.paymentDialog, {
             panelClass: ['mat-dialog-md']
         });
     }
