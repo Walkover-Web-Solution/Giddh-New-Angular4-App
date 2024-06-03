@@ -39,7 +39,7 @@
                                 *ngIf="
                                     viewSubscriptionData?.isOwner &&
                                     viewSubscriptionData?.status?.toLowerCase() === 'expired' &&
-                                    activeCompany.subscription?.country?.countryCode !== 'GB' &&
+                                    viewSubscriptionData?.region?.code !== 'GBR' &&
                                     activeCompany?.planVersion === 2
                                 "
                             >
@@ -71,7 +71,7 @@
                                 (click)="buyPlan(viewSubscriptionData)"
                                 *ngIf="
                                     viewSubscriptionData?.status?.toLowerCase() === 'expired' &&
-                                    activeCompany.subscription?.country?.countryCode !== 'GB' &&
+                                   viewSubscriptionData?.region?.code !== 'GBR' &&
                                     activeCompany?.planVersion === 2
                                 "
                             >
