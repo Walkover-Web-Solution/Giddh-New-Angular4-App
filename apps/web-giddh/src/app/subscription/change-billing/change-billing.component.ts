@@ -508,7 +508,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
             },
             address: this.changeBillingForm.value.address
         }
-        if (this.changeBillingForm.value.country.code === 'UK') {
+        if (this.changeBillingForm.value.country.code === 'GB') {
             request['county'] = {
                 name: this.changeBillingForm.value.state.name ? this.changeBillingForm.value.state.name : this.changeBillingForm.value.state.label,
                 code: this.changeBillingForm.value.state.code ? this.changeBillingForm.value.state.code : this.changeBillingForm.value.state.value
