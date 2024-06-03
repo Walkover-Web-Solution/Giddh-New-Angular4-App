@@ -17,6 +17,7 @@ import { CompanyListDialogComponent } from './company-list-dialog/company-list-d
 import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.component';
 import { GeneralActions } from '../actions/general/general.actions';
 import { BuyPlanComponentStore } from './buy-plan/utility/buy-plan.store';
+import { ToasterService } from '../services/toaster.service';
 @Component({
     selector: 'subscription',
     templateUrl: './subscription.component.html',
@@ -133,7 +134,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private formBuilder: FormBuilder,
         private readonly componentStoreBuyPlan: BuyPlanComponentStore,
         private generalActions: GeneralActions,
-        private router: Router
+        private router: Router,
+        private toasterService: ToasterService
     ) {
         this.store.dispatch(this.generalActions.openSideMenu(true));
     }
@@ -195,6 +197,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
 
         window.addEventListener('message', event => {
             if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
+                this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
                 this.closeWindow();
                 this.getAllSubscriptions(false);
             }
