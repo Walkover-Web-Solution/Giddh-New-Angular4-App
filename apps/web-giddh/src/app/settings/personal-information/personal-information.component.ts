@@ -74,6 +74,8 @@ export class PersonalInformationComponent implements OnInit, AfterViewInit, OnDe
         this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(this.profileData.portalDomain);
         this.saveProfileSubject.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && this.profileForm.dirty) {
+                console.log(this.updatedData);
+                
                 this.saveProfile.emit(this.updatedData);
             }
         });
@@ -84,9 +86,14 @@ export class PersonalInformationComponent implements OnInit, AfterViewInit, OnDe
     *
     * @memberof PersonalInformationComponent
     */
-    public ngAfterViewInit(): void {
+   public ngAfterViewInit(): void {
+       setTimeout(() => {
         if (this.profileData) {
+
+            console.log("profileData", this.profileData);
+                
             if (this.profileData?.alias || this.profileData?.name) {
+                console.log("Chal gy re bhai !!!!", this.profileData);
                 this.initProfileForm(this.profileData);
             }
 
@@ -119,6 +126,7 @@ export class PersonalInformationComponent implements OnInit, AfterViewInit, OnDe
                 });
             }
         }
+        },1000);
     }
 
     /**

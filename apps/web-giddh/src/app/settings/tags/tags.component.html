@@ -29,101 +29,99 @@
                     </div>
                 </div>
                 <div class="col-12">
-                    <div>
-                      <table mat-table [dataSource]="tags" class="basic giddh-table table w-100 tags-table">
-                            <ng-container matColumnDef="number">
-                                <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.s_no }}</th>
-                                <td mat-cell *matCellDef="let element; let i = index">{{ i+1 }}</td>
-                            </ng-container>
-                            <ng-container matColumnDef="name">
-                                <th mat-header-cell *matHeaderCellDef>{{ localeData?.tags_name }}</th>
-                                <td mat-cell *matCellDef="let element; let i = index">
-                                    <span *ngIf="updateIndex !== i">{{ element.name }}</span>
-                                    <input
-                                        *ngIf="updateIndex === i"
-                                        type="text"
-                                        matInput
-                                        class="form-control"
-                                        name="name_of_{{ i }}"
-                                        [(ngModel)]="element.name"
-                                    />
-                                </td>
-                            </ng-container>
-                            <ng-container matColumnDef="description">
-                                <th mat-header-cell *matHeaderCellDef>{{ localeData?.tags_description }}</th>
-                                <td mat-cell *matCellDef="let element; let i = index">
-                                    <div *ngIf="updateIndex !== i">{{ element.description }}</div>
-                                    <textarea
-                                        rows="1"
-                                        *ngIf="updateIndex === i"
-                                        class="form-control"
-                                        name="description_of_{{ i }}"
-                                        [(ngModel)]="element.description"
-                                    ></textarea>
-                                </td>
-                            </ng-container>
-                            <ng-container matColumnDef="action">
-                                <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_action }}</th>
-                                <td mat-cell *matCellDef="let element; let i = index">
-                                    <div class="d-flex column-gap1">
-                                        <button
-                                            *ngIf="updateIndex !== i"
-                                            (click)="setUpdateIndex(i)"
-                                            type="button"
-                                            class="min-width-unset"
-                                            mat-stroked-button
-                                            [matTooltip]="commonLocaleData?.app_edit"
-                                            [matTooltipPosition]="'above'"
-                                        >
-                                            <i
-                                                class="icon-edit-pencil"
-                                                aria-hidden="true"                                           
-                                            ></i>
-                                        </button>
-                                        <button
-                                            *ngIf="updateIndex !== i"
-                                            (click)="deleteTag(element)"
-                                            type="button"
-                                            class="min-width-unset"
-                                            mat-stroked-button
-                                            [matTooltip]="commonLocaleData?.app_delete"
-                                            [matTooltipPosition]="'above'"
-                                        >
-                                            <i
-                                                class="fa fa-trash"
-                                                aria-hidden="true"                                            
-                                            ></i>
-                                        </button>
+                    <table *ngIf="!isLoading && tags?.length" mat-table [dataSource]="tags" class="basic giddh-table table w-100 tags-table">
+                        <ng-container matColumnDef="number">
+                            <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.s_no }}</th>
+                            <td mat-cell *matCellDef="let element; let i = index">{{ i+1 }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.tags_name }}</th>
+                            <td mat-cell *matCellDef="let element; let i = index">
+                                <span *ngIf="updateIndex !== i">{{ element.name }}</span>
+                                <input
+                                    *ngIf="updateIndex === i"
+                                    type="text"
+                                    matInput
+                                    class="form-control"
+                                    name="name_of_{{ i }}"
+                                    [(ngModel)]="element.name"
+                                />
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="description">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.tags_description }}</th>
+                            <td mat-cell *matCellDef="let element; let i = index">
+                                <div *ngIf="updateIndex !== i">{{ element.description }}</div>
+                                <textarea
+                                    rows="1"
+                                    *ngIf="updateIndex === i"
+                                    class="form-control"
+                                    name="description_of_{{ i }}"
+                                    [(ngModel)]="element.description"
+                                ></textarea>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_action }}</th>
+                            <td mat-cell *matCellDef="let element; let i = index">
+                                <div class="d-flex column-gap1">
+                                    <button
+                                        *ngIf="updateIndex !== i"
+                                        (click)="setUpdateIndex(i)"
+                                        type="button"
+                                        class="min-width-unset"
+                                        mat-stroked-button
+                                        [matTooltip]="commonLocaleData?.app_edit"
+                                        [matTooltipPosition]="'above'"
+                                    >
+                                        <i
+                                            class="icon-edit-pencil"
+                                            aria-hidden="true"                                           
+                                        ></i>
+                                    </button>
+                                    <button
+                                        *ngIf="updateIndex !== i"
+                                        (click)="deleteTag(element)"
+                                        type="button"
+                                        class="min-width-unset"
+                                        mat-stroked-button
+                                        [matTooltip]="commonLocaleData?.app_delete"
+                                        [matTooltipPosition]="'above'"
+                                    >
+                                        <i
+                                            class="fa fa-trash"
+                                            aria-hidden="true"                                            
+                                        ></i>
+                                    </button>
 
-                                        <button
-                                            *ngIf="updateIndex === i"
-                                            (click)="updateTag(element, i)"
-                                            type="button"
-                                            class="min-width-unset"
-                                            mat-stroked-button
-                                        >
-                                            <i class="fa fa-check" aria-hidden="true"></i>
-                                        </button>
-                                        <button
-                                            *ngIf="updateIndex === i"
-                                            (click)="resetUpdateIndex()"
-                                            type="button"
-                                            class="min-width-unset"
-                                            mat-stroked-button
-                                        >
-                                            <i class="icon-cross" aria-hidden="true"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                        </table>
+                                    <button
+                                        *ngIf="updateIndex === i"
+                                        (click)="updateTag(element, i)"
+                                        type="button"
+                                        class="min-width-unset"
+                                        mat-stroked-button
+                                    >
+                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                    </button>
+                                    <button
+                                        *ngIf="updateIndex === i"
+                                        (click)="resetUpdateIndex()"
+                                        type="button"
+                                        class="min-width-unset"
+                                        mat-stroked-button
+                                    >
+                                        <i class="icon-cross" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    </table>
+                    <div class="no-data" *ngIf="!isLoading && !tags?.length">
+                        <no-data [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
                     </div>
                 </div>
-            </div>
-            <div class="no-data" *ngIf="!isLoading && !tags?.length">
-                <no-data [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
             </div>
         </form>
     </div>

@@ -26,13 +26,6 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     public selectedCompanyUniqueName: string;
     public selectedUser: ShareRequestForm;
     public currentUser: any;
-    public showEditUserModal: boolean = false;
-    public modalConfig = {
-        animated: true,
-        keyboard: false,
-        backdrop: 'static',
-        ignoreBackdropClick: true
-    };
     public isUpdtCase: boolean = false;
     private loggedInUserEmail: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -125,7 +118,8 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     public showModalForEdit(user?: any): void {
         this.selectedUser = user ? user : '';
         this.editDialogRef = this.dialog.open(this.editUserModal, { 
-            width: '800px', 
+            width: '1000px',
+            maxWidth: '85vw',
             position: {
                 top: '75px'
             }
@@ -138,14 +132,12 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
                     this.hasUnsavedChanges = false;
                     this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                     this.editDialogRef.close();
-                    setTimeout(() => this.showEditUserModal = false, 700);
                 }
             });
         } else {
             this.hasUnsavedChanges = false;
             this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
             this.editDialogRef.close();
-            setTimeout(() => this.showEditUserModal = false, 700);
         }
     }
 
