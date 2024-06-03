@@ -2076,6 +2076,7 @@
             [voucherDetails]="voucherDetails"
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
+            (paymentSubmitted)="paymentSubmitted($event)"
         ></app-payment-dialog>
     </ng-template>
 

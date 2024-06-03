@@ -23,7 +23,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    @Output() public performActionPopup: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
+    @Output() public paymentSubmitted: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
     @Output() public closeModelEvent: EventEmitter<void> = new EventEmitter();
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public dayjs = dayjs;
@@ -47,6 +47,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     private currencySwitched: boolean = false;
     /** True if we need to show exchange rate edit field */
     public showExchangeRateEditField: boolean = false;
+    public saveInProgress: boolean = false;
 
     constructor(
         private componentStore: VoucherComponentStore,
@@ -59,14 +60,16 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.paymentForm = this.formBuilder.group({
-            paymentDate: [''],
+            action: ['paid'],
+            date: [''],
             amount: ['', Validators.required],
             accountUniqueName: ['', Validators.required],
             tagUniqueName: [''],
             chequeNumber: [''],
             chequeClearanceDate: [''],
             description: [''],
-            exchangeRate: [1]
+            exchangeRate: [1],
+            uniqueName: [this.voucherDetails?.uniqueName]
         });
 
         this.isMulticurrencyAccount = this.voucherDetails?.accountCurrencySymbol !== this.voucherDetails?.companyCurrencySymbol;
@@ -110,6 +113,10 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
                 this.tags = orderBy(arr, 'name');
             }
         });
+
+        this.componentStore.actionVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.saveInProgress = response;
+        });
     }
 
     public ngOnDestroy(): void {
@@ -117,7 +124,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public onSelectPaymentMode(event) {
+    public onSelectPaymentMode(event: any): void {
         if (event && event.value) {
             if (!this.isMulticurrencyAccount || this.voucherDetails?.account?.currency?.code === event?.additional?.currency) {
                 this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.account?.currency?.symbol);
@@ -186,12 +193,10 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
 
     public savePayment(): void {
         let newFormObj = this.paymentForm?.value;
-        newFormObj.paymentDate = dayjs(newFormObj.paymentDate).format(GIDDH_DATE_FORMAT);
+        newFormObj.date = dayjs(newFormObj.date).format(GIDDH_DATE_FORMAT);
         if (newFormObj.chequeClearanceDate) {
             newFormObj.chequeClearanceDate = dayjs(newFormObj.chequeClearanceDate).format(GIDDH_DATE_FORMAT);
         }
-
-        newFormObj.date = newFormObj.paymentDate;
 
         if (this.voucherDetails?.account?.currency?.code === this.selectedPaymentMode?.additional?.currency) {
             newFormObj.amountForAccount = newFormObj.amount;
@@ -201,10 +206,9 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
 
         newFormObj.tagNames = (newFormObj.tagUniqueName) ? [newFormObj.tagUniqueName] : [];
 
-        delete newFormObj.paymentDate;
         delete newFormObj.amount;
         delete newFormObj.tagUniqueName;
 
-        this.performActionPopup.emit(newFormObj);
+        this.paymentSubmitted.emit(newFormObj);
     }
 }

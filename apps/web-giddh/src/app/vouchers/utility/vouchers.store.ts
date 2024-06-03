@@ -58,6 +58,8 @@ export interface VoucherState {
     bulkExportVoucherResponse: any;
     actionVoucherIsSuccess: boolean;
     adjustVoucherIsSuccess: boolean;
+    uploadImageBase64InProgress: boolean;
+    uploadImageBase64Response: any;
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -95,7 +97,9 @@ const DEFAULT_STATE: VoucherState = {
     bulkExportVoucherInProgress: null,
     bulkExportVoucherResponse: null,
     actionVoucherIsSuccess: null,
-    adjustVoucherIsSuccess: null
+    adjustVoucherIsSuccess: null,
+    uploadImageBase64InProgress: false,
+    uploadImageBase64Response: null
 };
 
 @Injectable()
@@ -150,6 +154,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public bulkExportVoucherResponse$ = this.select((state) => state.bulkExportVoucherResponse);
     public actionVoucherIsSuccess$ = this.select((state) => state.actionVoucherIsSuccess);
     public adjustVoucherIsSuccess$ = this.select((state) => state.adjustVoucherIsSuccess);
+    public uploadImageBase64InProgress$ = this.select((state) => state.uploadImageBase64InProgress);
+    public uploadImageBase64Response$ = this.select((state) => state.uploadImageBase64Response);
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
@@ -1014,6 +1020,34 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             this.toaster.showSnackBar("error", error);
                             this.patchState({
                                 adjustVoucherIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly uploadImageBase64 = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    uploadImageBase64InProgress: true
+                });
+                return this.commonService.uploadImageBase64(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                uploadImageBase64Response: res?.body,
+                                uploadImageBase64InProgress: false
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                uploadImageBase64Response: null,
+                                uploadImageBase64InProgress: false
                             });
                         }
                     ),

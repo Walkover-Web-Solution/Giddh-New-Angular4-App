@@ -284,6 +284,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     };
     /** True if round off will be applicable */
     public applyRoundOff: boolean = true;
+    public depositAmount: number = 0;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -441,6 +442,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         this.componentStore.actionVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
+                this.dialog.closeAll();
                 this.toasterService.showSnackBar("success", this.commonLocaleData?.app_messages?.invoice_updated);
                 this.getVouchers(this.isUniversalDateApplicable);
             }
@@ -465,6 +467,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 });
                 this.voucherTotals.tcsTotal = tcsSum;
                 this.voucherTotals.tdsTotal = tdsSum;
+
+                this.depositAmount = response.deposit?.amountForAccount ?? 0;
 
                 this.advanceReceiptAdjustmentData = { adjustments: this.adjustmentUtilityService.formatAdjustmentsObject(response.adjustments) };
                 this.isUpdateMode = (response?.body?.adjustments?.length) ? true : false;
@@ -806,7 +810,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     // bulk update dialog 
     public bulkUpdateDialog(): void {
         this.dialog.open(this.bulkUpdate, {
-            panelClass: ['mat-dialog-md']
+            panelClass: ['mat-dialog-md'],
+            data: {
+                voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
+                voucherType: this.voucherType,
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData
+            }
         });
     }
 
@@ -985,6 +995,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
     public actionVoucher(voucher: any, action: string): void {
         this.componentStore.actionVoucher({ voucherUniqueName: voucher?.uniqueName, payload: { action: action, voucherType: voucher?.voucherType ?? this.voucherType } });
+    }
+
+    public paymentSubmitted(event: any): void {
+        this.componentStore.actionVoucher({ voucherUniqueName: event?.uniqueName, payload: event });
     }
 
     public closeAdvanceReceiptDialog(): void {

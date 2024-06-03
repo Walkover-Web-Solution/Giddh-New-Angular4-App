@@ -6,9 +6,9 @@
     <div class="d-flex column-gap1 mr-b15">
         <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()" [label]="localeData?.payment_date"
             [placeholder]="localeData?.payment_date" name="voucherDate" [showToggleIcon]="false"
-            [appearance]="'outline'" class="w-50" formControlName="paymentDate">
+            [appearance]="'outline'" class="w-50" formControlName="date">
         </giddh-datepicker>
-        <input-field [type]="'tel'" [label]="commonLocaleData?.app_amount" [placeholder]="localeData?.enter_amount"
+        <input-field [type]="'text'" [label]="commonLocaleData?.app_amount" [placeholder]="localeData?.enter_amount"
             class="w-50" [mask]="company?.inputMaskFormat" [useMask]="true" [prefix]="amountCurrency"
             formControlName="amount">
         </input-field>
@@ -65,7 +65,7 @@
             formControlName="description"></textarea>
     </mat-form-field>
     <div class="d-flex column-gap1 justify-content-end">
-        <button mat-stroked-button color="primary" (click)="savePayment()">{{ commonLocaleData?.app_save }}</button>
+        <button mat-stroked-button color="primary" (click)="savePayment()" [disabled]="saveInProgress">{{ commonLocaleData?.app_save }}</button>
         <button mat-stroked-button mat-dialog-close (click)="closeModelEvent.emit()">{{ commonLocaleData?.app_cancel }}</button>
     </div>
 </div>
