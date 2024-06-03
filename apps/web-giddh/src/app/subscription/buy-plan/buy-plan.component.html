@@ -22,7 +22,7 @@
                             <div class="plan-width">
                                 <ng-template matStepLabel>{{ localeData?.all_plans }}</ng-template>
                                 <div class="plan-header d-flex justify-content-between align-items-center mb-3">
-                                    <div class="width-100 dropdown-wrapper" *ngIf="(!(planListInProgress$ | async) && !isLoading && !isChangePlan || isSubscriptionRegion)">
+                                    <div class="width-100 dropdown-wrapper" *ngIf="(!(planListInProgress$ | async) && !isLoading && !isChangePlan) || isSubscriptionRegion">
                                         <div class="country-dropdown d-flex flex-column" [ngClass]="{ 'mx-auto': !inputData?.length }">
                                             <img [src]="getFlagUrl(currentCountry.value?.additional?.alpha2CountryCode ? currentCountry.value?.additional?.alpha2CountryCode : currentCountry.value?.additional?.alpha3CountryCode)" [alt]="currentCountry.value?.additional?.countryName" width="32" height="32" class="flag cursor-pointer" (click)="countryList.open()">
 
