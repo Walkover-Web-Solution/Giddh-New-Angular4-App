@@ -473,7 +473,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 }
 
             });
-        } else if (!this.isChangePlan && localStorage.getItem('Country-Region') === 'GL') {
+        } else if (!this.isChangePlan && !this.activeCompany?.uniqueName &&  localStorage.getItem('Country-Region') === 'GL') {
             this.newUserSelectCountry({
                 "label": "GLB - Global",
                 "value": "GLB",
