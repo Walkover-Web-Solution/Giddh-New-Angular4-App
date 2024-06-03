@@ -1,5 +1,5 @@
 import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, map, skip, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { select, Store } from '@ngrx/store';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
@@ -186,6 +186,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public voucherApiVersion: 1 | 2;
     /** Holds Active Tab Index */
     public activeTabIndex: number = 0;
+    private isGetLinkedEntitiesInprogress: boolean = false;
+    private isGetStatesInprogress: boolean = false;
 
     constructor(
         private commonService: CommonService,
@@ -278,7 +280,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         });
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            this.currentTab = (params['referrer']) ? params['referrer'] : "personal";;
+            this.currentTab = (params['referrer']) ? params['referrer'] : "personal";
             if ((params['referrer']) === 'personal') { this.activeTabIndex = 0; }
             else if ((params['referrer']) === 'address') { this.activeTabIndex = 1; }
             else if ((params['referrer']) === 'other') { this.activeTabIndex = 2; }
@@ -879,16 +881,20 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public loadLinkedEntities(): void {
-        this.settingsProfileService.getAllLinkedEntities().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.body && response.status === 'success') {
-                this.addressConfiguration.linkedEntities = response.body.map(result => ({
-                    ...result,
-                    isDefault: false,
-                    label: result.alias,
-                    value: result?.uniqueName
-                }));
-            }
-        });
+        if(!this.isGetLinkedEntitiesInprogress){
+            this.isGetLinkedEntitiesInprogress = true;
+            this.settingsProfileService.getAllLinkedEntities().pipe(takeUntil(this.destroyed$)).subscribe(response => {    
+                if (response && response.body && response.status === 'success') {
+                    this.addressConfiguration.linkedEntities = response.body.map(result => ({
+                        ...result,
+                        isDefault: false,
+                        label: result.alias,
+                        value: result?.uniqueName
+                    }));
+                }
+                this.isGetLinkedEntitiesInprogress = false;
+            });
+        }
     }
 
     /**
@@ -898,6 +904,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public loadStates(countryCode: string): void {
+        this.isGetStatesInprogress = true;
         this.companyService.getAllStates({ country: countryCode }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 const result = response.body;
@@ -934,7 +941,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = 'onboarding';
         onboardingFormRequest.country = countryCode;
-        this.commonService.getOnboardingForm(onboardingFormRequest).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
+        this.commonService.getOnboardingForm(onboardingFormRequest).pipe(takeUntil(this.destroyed$), skip(1)).subscribe((response: any) => {
             if (response && response.status === 'success') {
                 if (response.body && response.body.fields && response.body.fields.length > 0) {
                     const taxField = response.body.fields.find(field => field && field.name === 'taxName');
@@ -1290,7 +1297,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     }
                 });
 
-                if (this.addressOnly) {
+                if (this.addressOnly) {               
                     this.loadLinkedEntities();
                     if (this.currentCompanyDetails && this.currentCompanyDetails.countryV2) {
                         this.loadTaxDetails(this.currentCompanyDetails.countryV2.alpha2CountryCode);

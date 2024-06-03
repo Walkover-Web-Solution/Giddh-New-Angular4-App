@@ -28,6 +28,7 @@
                             [placeholder]="localeData?.role_name_placeholder"
                             [options]="allRoles"
                             formControlName="roleUniqueName"
+                            [labelValue]="userdata?.roleName ?? ''"
                             [required]="true"
                         ></reactive-dropdown-field>
                     </div>

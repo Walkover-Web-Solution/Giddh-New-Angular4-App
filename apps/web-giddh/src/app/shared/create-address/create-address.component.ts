@@ -5,8 +5,6 @@ import { IForceClear } from '../../models/api-models/Sales';
 import { ToasterService } from '../../services/toaster.service';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../../settings/constants/settings.constant';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../../store';
 
 function validateFieldWithPatterns(patterns: Array<string>) {
     return (field: UntypedFormControl): { [key: string]: any } => {
@@ -63,14 +61,11 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     public entityArchived: string[] = ["BRANCH", "WAREHOUSE"];
     /** Holds Selected Entity */
     public selectedEntity: any[] = [];
-    /** Holds true if active company has Tax Number in any of its address */
-    public isBusinessTypeRegistered: boolean;
 
     constructor(
         private formBuilder: UntypedFormBuilder,
         private toasterService: ToasterService,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        private store: Store<AppState>
     ) {
     }
 
@@ -80,11 +75,6 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public ngOnInit(): void {
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.isBusinessTypeRegistered = activeCompany?.addresses.findIndex(address => address?.taxNumber?.length) > -1;
-            }
-        });
         if (this.addressConfiguration) {
             if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateBranchAddress) {
                 this.addressConfiguration.linkedEntities = this.addressConfiguration.linkedEntities?.filter(address => (!address.entity?.includes(this.entityArchived)) || (address.entity?.includes(this.entityArchived) && !address.isArchived));
@@ -186,7 +176,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
 
         if (this.addressConfiguration.tax && this.addressConfiguration.tax.name && this.addressConfiguration.tax.name === 'GSTIN') {
             const taxField = this.addressForm.get('taxNumber');
-            taxField.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+            taxField?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
                 if (taxField.valid && taxField?.value) {
                     this.addressForm.get('address').setValidators([Validators.required]);
                 } else {
@@ -196,12 +186,12 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             });
         }
 
-        this.addressForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+        this.addressForm?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (this.addressForm?.dirty) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
         });
-        this.addressForm?.get('taxNumber').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+        this.addressForm?.get('taxNumber')?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
             if (value !== null && value !== undefined && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN') {
                 this.getStateCode(value);
             }

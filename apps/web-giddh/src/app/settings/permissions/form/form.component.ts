@@ -97,11 +97,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             if (this.userdata.from && this.userdata.to) {
                 let from: any = dayjs(this.userdata.from, GIDDH_DATE_FORMAT);
                 let to: any = dayjs(this.userdata.to, GIDDH_DATE_FORMAT);
-                setTimeout(() => {
-                    // Set timeout is used because ngx datepicker doesn't take the
-                    // format provided in bsConfig if bsValue is set in ngOnInit
                     this.dateRangePickerValue = [from, to];
-                }, 0);
             }
             this.initAcForm(this.userdata);
         } else {

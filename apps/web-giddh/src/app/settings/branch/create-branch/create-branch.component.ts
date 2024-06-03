@@ -414,6 +414,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         this.asideAccountAsidePaneRef = this.dialog.open(this.asideAccountAsidePane, {
             width: '760px',
             height: '100vh !important',
+            disableClose: true,
             position: {
                 right: '0',
                 top: '0'

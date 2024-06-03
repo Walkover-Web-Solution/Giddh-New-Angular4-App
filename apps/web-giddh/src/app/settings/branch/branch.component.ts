@@ -414,6 +414,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 position: {
                     right: '0'
                 },
+                disableClose: true,
                 width: '760px',
                 height: '100vh',
                 maxHeight: '100vh'
