@@ -1655,6 +1655,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 }
                 if (data.transactions?.length) {
                     data.transactions[0].amount = data.transactions[0].actualAmount;
+                    data.transactions[0].isInclusiveTax = false;
                 }
                 this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
             } else {
