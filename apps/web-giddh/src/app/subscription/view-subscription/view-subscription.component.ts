@@ -10,6 +10,7 @@ import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.comp
 import { MatMenuTrigger } from '@angular/material/menu';
 import { BuyPlanComponentStore } from '../buy-plan/utility/buy-plan.store';
 import { GeneralService } from '../../services/general.service';
+import { ToasterService } from '../../services/toaster.service';
 
 @Component({
     selector: 'view-subscription',
@@ -66,7 +67,8 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         private componentStore: ViewSubscriptionComponentStore,
         private readonly componentStoreBuyPlan: BuyPlanComponentStore,
         private subscriptionComponentStore: SubscriptionComponentStore,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private toasterService: ToasterService
     ) {
     }
 
@@ -137,6 +139,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
 
         window.addEventListener('message', event => {
             if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
+                this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
                 this.closeWindow();
                 this.getSubscriptionData(this.subscriptionId);
             }
