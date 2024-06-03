@@ -910,27 +910,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 toAmount = baseAmount;
                 taxAmount = gstAmount;
                 toEntryControl?.get('amount')?.patchValue(toAmount);
-                setTimeout(() => {
-                    transactionAtIndex?.get('isInclusiveTax')?.patchValue(true);
-                }, 100);
-            } else {
-                toAmount = toAmount;
-                taxAmount = 0;
-            }
-        }
-
-        if (transactionAtIndex?.get('isInclusiveTax')?.value && transactionAtIndex?.value.type === 'to') {
-            if (taxAmount > 0 && toAmount > 0) {
-                let amountIncludingGST = transactionAtIndex.value.actualAmount;
-                let baseAmount: number = 0;
-                let gstAmount: number = 0;
-                let gstRate = actualTaxAmount; // GST rate in percentage
-                baseAmount = Math.round(amountIncludingGST);
-                gstAmount = Math.round(baseAmount * (gstRate / 100));
-                toAmount = baseAmount;
-                taxAmount = gstAmount;
-                byEntryControl?.get('amount')?.patchValue(toAmount + (taxAmount ?? 0));
-                toEntryControl?.get('amount')?.patchValue(toAmount);
+                toEntryControl?.get('actualAmount')?.patchValue(toAmount);
                 setTimeout(() => {
                     transactionAtIndex?.get('isInclusiveTax')?.patchValue(true);
                 }, 100);
@@ -952,6 +932,30 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 toAmount = baseAmount;
                 taxAmount = gstAmount;
                 toEntryControl?.get('amount')?.patchValue(toAmount);
+                toEntryControl?.get('actualAmount')?.patchValue(toAmount);
+                setTimeout(() => {
+                    transactionAtIndex?.get('isInclusiveTax')?.patchValue(false);
+                }, 100);
+            } else {
+                toAmount = toAmount;
+                taxAmount = 0;
+            }
+        }
+
+        if (transactionAtIndex?.get('isInclusiveTax')?.value && transactionAtIndex?.value.type === 'to') {
+            if (taxAmount > 0 && toAmount > 0) {
+                let amountIncludingGST = transactionAtIndex.value.actualAmount;
+                let baseAmount: number = 0;
+                let gstAmount: number = 0;
+                let gstRate = actualTaxAmount; // GST rate in percentage
+                baseAmount = Math.round(amountIncludingGST);
+                gstAmount = Math.round(baseAmount * (gstRate / 100));
+                toAmount = baseAmount;
+                taxAmount = gstAmount;
+                byEntryControl?.get('amount')?.patchValue(toAmount + (taxAmount ?? 0));
+                byEntryControl?.get('actualAmount')?.patchValue(toAmount + (taxAmount ?? 0));
+                toEntryControl?.get('amount')?.patchValue(toAmount);
+                toEntryControl?.get('actualAmount')?.patchValue(toAmount);
                 setTimeout(() => {
                     transactionAtIndex?.get('isInclusiveTax')?.patchValue(true);
                 }, 100);
@@ -972,15 +976,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 toAmount = baseAmount;
                 taxAmount = gstAmount;
                 byEntryControl?.get('amount')?.patchValue(toAmount + (taxAmount ?? 0));
+                byEntryControl?.get('actualAmount')?.patchValue(toAmount + (taxAmount ?? 0));
+                toEntryControl?.get('actualAmount')?.patchValue(toAmount);
                 toEntryControl?.get('amount')?.patchValue(toAmount);
                 setTimeout(() => {
-                    transactionAtIndex?.get('isInclusiveTax')?.patchValue(false);
+                    transactionAtIndex?.get('isInclusiveTax')?.patchValue(true);
                 }, 100);
             } else {
                 toAmount = toAmount;
                 taxAmount = 0;
             }
         }
+
+
         taxEntryControl?.get('amount')?.patchValue(taxAmount);
         this.changeDetectionRef.detectChanges();
         return taxAmount;
