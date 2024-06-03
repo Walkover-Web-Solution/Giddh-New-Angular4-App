@@ -24,7 +24,7 @@
                                 <div class="plan-header d-flex justify-content-between align-items-center mb-3">
                                     <div
                                         class="width-100 dropdown-wrapper"
-                                        *ngIf="!(planListInProgress$ | async) && !isLoading && !isChangePlan"
+                                        *ngIf="!(planListInProgress$ | async) && !isLoading && !isChangePlan || isSubscriptionRegion"
                                     >
                                         <div
                                             class="country-dropdown d-flex flex-column"
