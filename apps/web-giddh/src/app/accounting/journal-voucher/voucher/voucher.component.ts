@@ -1188,7 +1188,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 transactionAtIndex = transactionsFormArray.at(idx) as FormGroup;
                 if (acc && acc.parentGroups.find((pg) => pg?.uniqueName === 'bankaccounts')) {
                     this.openChequeDetailForm();
-                } else {
                 }
 
                 if (acc) {
@@ -1313,7 +1312,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      *
      * @memberof AccountAsVoucherComponent
      */
-    public checkSalesEntry() {
+    public checkSalesEntry(): void {
         let parentGroups = ['revenuefromoperations', 'otherincome', 'fixedassets'];
         (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
             const isSalesEntry = this.checkIfSalesAccount(control, parentGroups);
@@ -1474,10 +1473,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 if (!control.get('isDiscountApplied')?.value) {
                     totalCredit += control.get('amount').value;
                 }
-            } else {
-                if (!control.get('isDiscountApplied')?.value) {
-                    totalDebit += control.get('amount').value;
-                }
+            } else if (!control.get('isDiscountApplied')?.value) {
+                totalDebit += control.get('amount').value;
             }
         });
 
@@ -2534,7 +2531,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
-     * Keydown handler event
+     *  Key up/down event handler
      *
      * @param {*} event
      * @memberof AccountAsVoucherComponent
