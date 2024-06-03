@@ -291,7 +291,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
     }
 
     /**
-     * This will be use for keyboard handler
+     * This will be use for keyboard event handler
      *
      * @param {*} event
      * @memberof AVShSelectComponent
