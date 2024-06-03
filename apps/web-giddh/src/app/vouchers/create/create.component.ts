@@ -2883,14 +2883,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     entry.get('date')?.patchValue(dayjs(this.invoiceForm.get('date')?.value).format(GIDDH_DATE_FORMAT));
                 });
             } else if (this.dateChangeType === "entry") {
-                let entryDate = null;
                 let entryFormGroup = this.getEntryFormGroup(this.updatedEntryIndex);
-
-                if (typeof (entryFormGroup.get('date')?.value === "object")) {
-                    entryDate = dayjs(entryFormGroup.get('date')?.value).format(GIDDH_DATE_FORMAT);
-                } else {
-                    entryDate = dayjs(entryFormGroup.get('date')?.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-                }
 
                 this.invoiceForm?.get('entries')['controls']?.forEach((entry, entryLoop) => {
                     if (entryLoop !== this.updatedEntryIndex) {

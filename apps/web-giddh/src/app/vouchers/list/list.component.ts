@@ -434,6 +434,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         this.componentStore.bulkUpdateVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
+                this.dialog.closeAll();
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
                 this.getVouchers(this.isUniversalDateApplicable);
@@ -690,7 +691,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.componentStore.getInvoiceSettings();
             } else {
                 this.isEInvoiceEnabled = settings.invoiceSettings?.gstEInvoiceEnable;
-                
+
                 if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
                     this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
                 } else if (this.voucherType === VoucherTypeEnum.purchase) {
@@ -809,7 +810,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
     // bulk update dialog 
     public bulkUpdateDialog(): void {
-        this.dialog.open(this.bulkUpdate, {
+        let dialogRef = this.dialog.open(this.bulkUpdate, {
             panelClass: ['mat-dialog-md'],
             data: {
                 voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
@@ -818,6 +819,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 commonLocaleData: this.commonLocaleData
             }
         });
+
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.selectedVouchers = [];
+                this.allVouchersSelected = false;
+                this.getVouchers(this.isUniversalDateApplicable);
+            }
+        })
     }
 
     // delete confirmation dialog

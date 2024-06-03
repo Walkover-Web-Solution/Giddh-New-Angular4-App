@@ -74,7 +74,7 @@
     </div>
     <p>{{ localeData?.bulk_invoice_update_note }}</p>
     <div class="d-flex column-gap1 mr-t15">
-        <button mat-stroked-button color="primary" (click)="updateBulkInvoice()">{{ commonLocaleData?.app_update }}</button>
-        <button mat-stroked-button mat-dialog-close>{{ commonLocaleData?.app_cancel }}</button>
+        <button mat-stroked-button color="primary" (click)="updateBulkInvoice()" [disabled]="(bulkUpdateVoucherInProgress$ | async) || (uploadImageBase64InProgress$ | async)">{{ commonLocaleData?.app_update }}</button>
+        <button mat-stroked-button (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
     </div>
 </div>

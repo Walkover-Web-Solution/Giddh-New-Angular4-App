@@ -1,13 +1,14 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { VoucherComponentStore } from '../utility/vouchers.store';
-import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { CustomTemplateResponse } from '../../models/api-models/Invoice';
 import { GeneralService } from '../../services/general.service';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ToasterService } from '../../services/toaster.service';
+import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 
 @Component({
     selector: 'app-bulk-update',
@@ -28,6 +29,7 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
     /** True, if user has opted to show notes at the last page of sales invoice */
     public showNotesAtLastPage: boolean;
     public uploadImageBase64InProgress$: Observable<any> = this.componentStore.uploadImageBase64InProgress$;
+    public bulkUpdateVoucherInProgress$: Observable<any> = this.componentStore.bulkUpdateVoucherInProgress$;
     public bulkUpdateForm: FormGroup;
     public signatureSrc: string = "";
     public fieldOptions: any[] = [];
@@ -40,14 +42,13 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
         private formBuilder: FormBuilder,
         private componentStore: VoucherComponentStore,
         private generalService: GeneralService,
-        private toasterService: ToasterService
+        private toasterService: ToasterService,
+        private dialog: MatDialog
     ) {
 
     }
 
     public ngOnInit(): void {
-        console.log(this.inputData);
-
         this.bulkUpdateForm = this.formBuilder.group({
             selectedField: [''],
             imageSignatureUniqueName: [''],
@@ -86,12 +87,18 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
         this.componentStore.uploadImageBase64Response$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.bulkUpdateForm.get("imageSignatureUniqueName")?.patchValue("");
-                if (response.body && response.uniqueName) {
+                if (response && response.uniqueName) {
                     this.signatureSrc = response.path;
                     this.bulkUpdateForm.get("imageSignatureUniqueName")?.patchValue(response.uniqueName);
                 }
             } else {
                 this.bulkUpdateForm.get("imageSignatureUniqueName")?.patchValue("");
+            }
+        });
+
+        this.componentStore.bulkUpdateVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.onCancel(true);
             }
         });
     }
@@ -200,9 +207,6 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
      * @memberof InvoiceBulkUpdateModalComponent
      */
     public onCancel(refreshVouchers: boolean = false): void {
-        this.bulkUpdateForm.get("selectedField")?.patchValue("");
-        this.bulkUpdateForm.get("signatureOption")?.patchValue("");
-        this.bulkUpdateForm.reset();
         this.dialogRef.close(refreshVouchers);
     }
 
@@ -225,7 +229,7 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
      * @memberof InvoiceBulkUpdateModalComponent
      */
     public updateBulkInvoice(): void {
-        if (this.bulkUpdateForm.get("selectedField")?.value && this.inputData?.voucherType && this.inputData?.selectedVouchers) {
+        if (this.bulkUpdateForm.get("selectedField")?.value && this.inputData?.voucherType && this.inputData?.voucherUniqueNames) {
             switch (this.bulkUpdateForm.get("selectedField")?.value) {
                 case 'pdfTemplate':
                     this.bulkUpdateRequest({ templateUniqueName: this.bulkUpdateForm.get("templateUniqueName")?.value }, 'templates');
@@ -238,13 +242,13 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
                 case 'signature':
                     if (this.bulkUpdateForm.get("signatureOption")?.value === 'image') {
                         if (!this.isDefaultTemplateSignatureImage) {
-                            //this.bulkUpdateImageSlogan?.show();
+                            this.confirmImageSlogan();
                         } else {
                             this.onConfirmationUpdateImageSlogan();
                         }
                     } else {
                         if (this.isDefaultTemplateSignatureImage) {
-                            //this.bulkUpdateImageSlogan?.show();
+                            this.confirmImageSlogan();
                         } else {
                             this.onConfirmationUpdateImageSlogan();
                         }
@@ -279,7 +283,7 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
     }
 
     public bulkUpdateRequest(payload: any, actionType: string): void {
-        payload.voucherUniqueNames = this.inputData?.selectedVouchers;
+        payload.voucherUniqueNames = this.inputData?.voucherUniqueNames;
         payload.voucherType = this.inputData?.voucherType;
 
         this.componentStore.bulkUpdateInvoice({ payload: payload, actionType: actionType });
@@ -291,7 +295,6 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
      * @memberof InvoiceBulkUpdateModalComponent
      */
     public onConfirmationUpdateImageSlogan(): void {
-        //this.bulkUpdateImageSlogan?.hide();
         if (this.bulkUpdateForm.get("signatureOption")?.value === 'image') {
             if (this.bulkUpdateForm.get("imageSignatureUniqueName")?.value) {
                 this.bulkUpdateRequest({ imageSignatureUniqueName: this.bulkUpdateForm.get("imageSignatureUniqueName")?.value }, 'imagesignature');
@@ -309,8 +312,27 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
      * @memberof InvoiceBulkUpdateModalComponent
      */
     public onCancelBulkUpdateImageSloganModal(): void {
-        //this.bulkUpdateImageSlogan?.hide();
         this.clearImage();
         this.bulkUpdateForm.get("slogan")?.patchValue("");
+    }
+
+    private confirmImageSlogan(): void {
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: this.localeData?.bulk_image_note,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no,
+                permanentlyDeleteMessage: this.localeData?.want_proceed
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.onConfirmationUpdateImageSlogan();
+            } else {
+                this.onCancelBulkUpdateImageSloganModal();
+            }
+        });
     }
 }
