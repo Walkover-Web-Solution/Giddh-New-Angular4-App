@@ -245,7 +245,7 @@
                                         *ngIf="
                                             element?.status?.toLowerCase() === 'expired' &&
                                             element?.isOwner &&
-                                            activeCompany.subscription?.country?.countryCode !== 'GB' &&
+                                            element?.region?.code !== 'GBR' &&
                                             activeCompany?.planVersion === 2
                                         "
                                         mat-menu-item

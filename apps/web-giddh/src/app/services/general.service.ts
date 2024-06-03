@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs/internal/Observable';
 import { Injectable } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -1951,7 +1952,7 @@ export class GeneralService {
      *
      * @memberof GeneralService
      */
-    public getClientIp(): any {
+    public getClientIp(): Observable<any> {
         return this.http.get<any>(MOBILE_NUMBER_SELF_URL);
     }
 
