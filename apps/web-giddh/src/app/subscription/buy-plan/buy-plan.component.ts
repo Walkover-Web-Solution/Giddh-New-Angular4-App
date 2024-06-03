@@ -379,7 +379,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         window.addEventListener('message', event => {
             if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
-                this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                if (this.isChangePlan) {
+                    this.router.navigate(['/pages/subscription']);
+                } else {
+                    this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                }
             }
         });
 
@@ -416,74 +420,74 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 }
             } else {
                 if (response?.region?.code === 'GBR') {
-                    this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message );
+                    this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
                     this.router.navigate(['/pages/subscription']);
                 } else {
                     this.updateSubscriptionPayment(response, true);
                 }
             }
         });
-            this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (this.subscriptionId && response?.region) {
-                    this.newUserSelectCountry({
-                        "label": response.region?.code + " - " + response.region?.name,
+        this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (this.subscriptionId && response?.region) {
+                this.newUserSelectCountry({
+                    "label": response.region?.code + " - " + response.region?.name,
+                    "value": response.region?.code,
+                    "additional": {
                         "value": response.region?.code,
-                        "additional": {
-                            "value": response.region?.code,
-                            "label": response.region?.code + " - " + response.region?.name,
-                        }
-                    });
-                } else if (this.activeCompany?.subscription?.region) {
-                    this.newUserSelectCountry({
-                        "label": this.activeCompany?.subscription?.region?.code + " - " + this.activeCompany?.subscription?.region?.name,
+                        "label": response.region?.code + " - " + response.region?.name,
+                    }
+                });
+            } else if (this.activeCompany?.subscription?.region) {
+                this.newUserSelectCountry({
+                    "label": this.activeCompany?.subscription?.region?.code + " - " + this.activeCompany?.subscription?.region?.name,
+                    "value": this.activeCompany?.subscription?.region?.code,
+                    "additional": {
                         "value": this.activeCompany?.subscription?.region?.code,
-                        "additional": {
-                            "value": this.activeCompany?.subscription?.region?.code,
-                            "label": this.activeCompany?.subscription?.region?.code + " - " + this.activeCompany?.subscription?.region?.name
-                        }
-                    });
-                } else if (localStorage.getItem('Country-Region') === 'IN') {
-                    this.newUserSelectCountry({
-                        "label": "IND - India",
+                        "label": this.activeCompany?.subscription?.region?.code + " - " + this.activeCompany?.subscription?.region?.name
+                    }
+                });
+            } else if (localStorage.getItem('Country-Region') === 'IN') {
+                this.newUserSelectCountry({
+                    "label": "IND - India",
+                    "value": "IND",
+                    "additional": {
                         "value": "IND",
-                        "additional": {
-                            "value": "IND",
-                            "label": "IND - India"
-                        }
-                    });
-                } else if (localStorage.getItem('Country-Region') === 'GB') {
-                    this.newUserSelectCountry({
-                        "label": "GBR - United Kingdom",
+                        "label": "IND - India"
+                    }
+                });
+            } else if (localStorage.getItem('Country-Region') === 'GB') {
+                this.newUserSelectCountry({
+                    "label": "GBR - United Kingdom",
+                    "value": "GBR",
+                    "additional": {
                         "value": "GBR",
-                        "additional": {
-                            "value": "GBR",
-                            "label": "GBR - United Kingdom"
-                        }
-                    });
-                } else if (localStorage.getItem('Country-Region') === 'AE') {
-                    this.newUserSelectCountry({
-                        "label": "ARE - United Arab Emirates",
+                        "label": "GBR - United Kingdom"
+                    }
+                });
+            } else if (localStorage.getItem('Country-Region') === 'AE') {
+                this.newUserSelectCountry({
+                    "label": "ARE - United Arab Emirates",
+                    "value": "ARE",
+                    "additional": {
                         "value": "ARE",
-                        "additional": {
-                            "value": "ARE",
-                            "label": "ARE - United Arab Emirates"
-                        }
+                        "label": "ARE - United Arab Emirates"
+                    }
 
-                    });
-                } else if (!this.isChangePlan && !this.activeCompany?.uniqueName && localStorage.getItem('Country-Region') === 'GL') {
-                    this.newUserSelectCountry({
-                        "label": "GLB - Global",
+                });
+            } else if (!this.isChangePlan && !this.activeCompany?.uniqueName && localStorage.getItem('Country-Region') === 'GL') {
+                this.newUserSelectCountry({
+                    "label": "GLB - Global",
+                    "value": "GLB",
+                    "additional": {
                         "value": "GLB",
-                        "additional": {
-                            "value": "GLB",
-                            "label": "GLB - Global"
-                        }
-                    });
-                } else {
-                    this.isSubscriptionRegion = true;
-                    this.setUserCountry();
-                }
-            });
+                        "label": "GLB - Global"
+                    }
+                });
+            } else {
+                this.isSubscriptionRegion = true;
+                this.setUserCountry();
+            }
+        });
 
     }
 
