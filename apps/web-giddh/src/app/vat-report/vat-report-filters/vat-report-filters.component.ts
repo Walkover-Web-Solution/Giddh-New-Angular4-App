@@ -13,6 +13,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helper
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep } from '../../lodash-optimized';
 import { GstReconcileService } from '../../services/gst-reconcile.service';
+import { CommonService } from '../../services/common.service';
 
 @Component({
     selector: 'vat-report-filters',
@@ -26,6 +27,8 @@ export class VatReportFiltersComponent implements OnInit {
     @Input() public commonLocaleData: any = {};
     /** This will hold active company data */
     @Input() public activeCompany: any = null;
+    /** This will hold active company data */
+    @Input() public moduleType: 'VAT_REPORT' | 'LIABILITY_REPORT' = 'VAT_REPORT';
     /** True if active country is UK */
     @Input() public isUKCompany: boolean = false;
     /** True if active country is Zimbabwe */
@@ -130,7 +133,8 @@ export class VatReportFiltersComponent implements OnInit {
         private generalService: GeneralService,
         private settingsBranchAction: SettingsBranchActions,
         private modalService: BsModalService,
-        public settingsFinancialYearService: SettingsFinancialYearService
+        public settingsFinancialYearService: SettingsFinancialYearService,
+        private commonService: CommonService
     ) {
         this.getFinancialYears();
     }
@@ -142,6 +146,7 @@ export class VatReportFiltersComponent implements OnInit {
      * @memberof VatReportFiltersComponent
      */
     public ngOnInit(): void {
+        this.getSelectedCurrency();
         // Refresh report data according to universal date
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
@@ -339,6 +344,7 @@ export class VatReportFiltersComponent implements OnInit {
      */
     public onCurrencyChange(event: any): void {
         if (event) {
+            this.saveSelectedCurrency(event.value);
             this.vatReportCurrencyCode = event.value;
             this.currentCurrencyCode.emit(event.value);
             this.getVatReport();
@@ -420,6 +426,42 @@ export class VatReportFiltersComponent implements OnInit {
             this.currentBranchChange.emit(this.currentBranch);
             this.getVatReport();
         }
+    }
+
+    /**
+    * This will get last currecy in whiich view report
+    *
+    * @memberof VatReportFiltersComponent
+    */
+    public getSelectedCurrency(): void {
+        this.commonService.getSelectedTableColumns(this.moduleType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.status === 'success') {
+                if (response.body) {
+                    // console.log(response.body);
+                    this.onCurrencyChange({value: this.moduleType ? response.body?.vatReportCurrency : response.body?.liabilityReportCurrency});
+                } else if (response.body === null) {
+                    this.onCurrencyChange({ value: this.vatReportCurrencyList[0].value });
+                }
+            }
+        });
+    }
+
+    /**
+     * This will save current currecy in whiich view report
+     *
+     * @memberof VatReportFiltersComponent
+     */
+    public saveSelectedCurrency(currencyCode: string): void {
+        let request = {
+            module: this.moduleType,
+        }
+        request[this.moduleType ? 'vatReportCurrency' : 'liabilityReportCurrency'] = currencyCode;
+
+        this.commonService.saveSelectedTableColumns(request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.body && response.status === 'success') {
+                // console.log("Save",response);
+            }
+        });
     }
 
     /**
