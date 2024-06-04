@@ -187,9 +187,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     /** Holds Active Tab Index */
     public activeTabIndex: number = 0;
     /** Holds true if get Linkied Entities API call in progress */
-    private isGetLinkedEntitiesInprogress: boolean = false;
+    private isGetLinkedEntitiesInProgress: boolean = false;
     /** Holds true if get states API call in progress */
-    private isGetStatesInprogress: boolean = false;
+    private isGetStatesInProgress: boolean = false;
 
     constructor(
         private commonService: CommonService,
@@ -872,7 +872,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             this.loadLinkedEntities();
             this.loadTaxAndStates();
         }
-        this.getPageHeading();
         this.router.navigateByUrl('/pages/settings/profile/' + tabName);
     }
 
@@ -895,8 +894,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public loadLinkedEntities(): void {
-        if (!this.isGetLinkedEntitiesInprogress) {
-            this.isGetLinkedEntitiesInprogress = true;
+        if (!this.isGetLinkedEntitiesInProgress) {
+            this.isGetLinkedEntitiesInProgress = true;
             this.settingsProfileService.getAllLinkedEntities().pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.body && response.status === 'success') {
                     this.addressConfiguration.linkedEntities = response.body.map(result => ({
@@ -906,7 +905,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                         value: result?.uniqueName
                     }));
                 }
-                this.isGetLinkedEntitiesInprogress = false;
+                this.isGetLinkedEntitiesInProgress = false;
             });
         }
     }
@@ -918,7 +917,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public loadStates(countryCode: string): void {
-        this.isGetStatesInprogress = true;
+        this.isGetStatesInProgress = true;
         this.companyService.getAllStates({ country: countryCode }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 const result = response.body;
@@ -942,7 +941,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     });
                 }
             }
-            this.isGetStatesInprogress = false;
+            this.isGetStatesInProgress = false;
         });
     }
 
@@ -1365,37 +1364,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     });
                 }
             });
-
-            this.getPageHeading();
         }
-    }
-
-    /**
-     * This will return page heading based on active tab
-     *
-     * @param {boolean} event
-     * @memberof SettingProfileComponent
-     */
-    public getPageHeading(): void {
-        let pageHeading = "";
-
-        if (this.isMobileScreen) {
-            switch (this.currentTab) {
-                case 'personal':
-                    pageHeading = this.personalInformationTabHeading;
-                    break;
-                case 'address':
-                    pageHeading = this.companyProfileObj?.taxType ? (this.localeData?.address + this.companyProfileObj?.taxType) : this.localeData?.addresses;
-                    break;
-                case 'portal':
-                    pageHeading = this.localeData?.portal_heading;
-                    break;
-                case 'other':
-                    pageHeading = this.localeData?.other;
-                    break;
-            }
-        }
-        this.pageHeading.emit(pageHeading);
     }
 
     /**

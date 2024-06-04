@@ -187,7 +187,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /** Holds Linked account label for selected value */
     public linkedAccountLabel: string = ''; 
     /**  Holds Mat Dialog reference */
-    public removeGmailintegrationDialogRef: MatDialogRef<any>;
+    public removeGmailIntegrationDialogRef: MatDialogRef<any>;
 
     constructor(
         private router: Router,
@@ -648,12 +648,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     /**
-     * Open confirmatiom dialog
+     * Open confirmation dialog
      *
      * @memberof SettingIntegrationComponent
      */
     public openRemoveGmailIntegrationDialog(): void {
-        this.removeGmailintegrationDialogRef = this.dialog.open( this.removegmailintegration, {
+        this.removeGmailIntegrationDialogRef = this.dialog.open( this.removegmailintegration, {
             width: '630px'
         });
     }
