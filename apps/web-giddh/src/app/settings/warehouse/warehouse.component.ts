@@ -273,6 +273,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             this.asideAccountAsidePaneDialogRef = this.dialog.open(this.asideAccountAsidePane, {
                 width: '760px',
                 height: '100vh !important',
+                disableClose: true,
                 position: {
                     right: '0',
                     top: '0'

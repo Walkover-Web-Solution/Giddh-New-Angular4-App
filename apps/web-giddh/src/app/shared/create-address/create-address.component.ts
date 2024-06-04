@@ -1,12 +1,10 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { Observable, of as observableOf, ReplaySubject, takeUntil } from 'rxjs';
 import { IForceClear } from '../../models/api-models/Sales';
 import { ToasterService } from '../../services/toaster.service';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../../settings/constants/settings.constant';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../../store';
 
 function validateFieldWithPatterns(patterns: Array<string>) {
     return (field: UntypedFormControl): { [key: string]: any } => {
@@ -63,14 +61,11 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     public entityArchived: string[] = ["BRANCH", "WAREHOUSE"];
     /** Holds Selected Entity */
     public selectedEntity: any[] = [];
-    /** Holds true if active company has Tax Number in any of its address */
-    public isBusinessTypeRegistered: boolean;
 
     constructor(
         private formBuilder: UntypedFormBuilder,
         private toasterService: ToasterService,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        private store: Store<AppState>
     ) {
     }
 
@@ -80,113 +75,128 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public ngOnInit(): void {
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.isBusinessTypeRegistered = activeCompany?.addresses.findIndex(address => address?.taxNumber?.length) > -1;
+        this.setFormData();
+    }
+
+    /**
+     * On Change of input properties
+     *
+     * @memberof CreateAddressComponent
+     */
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes?.addressConfiguration && changes.addressConfiguration.currentValue !== changes.addressConfiguration.previousValue && (this.addressConfiguration.stateList.length || this.addressConfiguration.countyList.length)) {
+            this.setFormData();
+        }
+    }
+
+    /**
+     * Set form data get from input
+     *
+     * @private
+     * @memberof CreateAddressComponent
+     */
+    private setFormData(): void {
+        if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateBranchAddress) {
+            this.addressConfiguration.linkedEntities = this.addressConfiguration.linkedEntities?.filter(address => (!address.entity?.includes(this.entityArchived)) || (address.entity?.includes(this.entityArchived) && !address.isArchived));
+
+            const taxValidatorPatterns = this.addressConfiguration.tax.name ? this.addressConfiguration.tax.validation : [];
+            this.addressForm = this.formBuilder.group({
+                name: ['', [Validators.required, Validators.maxLength(100)]],
+                taxNumber: ['', (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
+                state: ['', !this.addressConfiguration.countyList?.length ? Validators.required : null],
+                stateLabel: [''],
+                county: ['', this.addressConfiguration.countyList?.length ? Validators.required : null],
+                address: [''],
+                linkedEntity: [[]],
+                pincode: []
+            });
+            if (this.currentOrganizationUniqueName && this.addressConfiguration && this.addressConfiguration.linkedEntities
+                && this.addressConfiguration.linkedEntities.some(entity => entity?.uniqueName === this.currentOrganizationUniqueName)) {
+                // This will by default show the current organization unique name as selected linked entity
+                const currentOrganizationUniqueNameObj = this.addressConfiguration.linkedEntities?.filter(i => i?.uniqueName === this.currentOrganizationUniqueName);
+                this.addressForm.get('linkedEntity')?.patchValue(currentOrganizationUniqueNameObj);
             }
-        });
-        if (this.addressConfiguration) {
-            if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress || this.addressConfiguration.type === SettingsAsideFormType.CreateBranchAddress) {
-                this.addressConfiguration.linkedEntities = this.addressConfiguration.linkedEntities?.filter(address => (!address.entity?.includes(this.entityArchived)) || (address.entity?.includes(this.entityArchived) && !address.isArchived));
-        
+        } else if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress) {
+            if (this.addressToUpdate) {
                 const taxValidatorPatterns = this.addressConfiguration.tax.name ? this.addressConfiguration.tax.validation : [];
                 this.addressForm = this.formBuilder.group({
-                    name: ['', [Validators.required, Validators.maxLength(100)]],
-                    taxNumber: ['', (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
-                    state: ['', !this.addressConfiguration.countyList?.length ? Validators.required : null],
-                    stateLabel: [''],
-                    county: ['', this.addressConfiguration.countyList?.length ? Validators.required : null],
-                    address: [''],
-                    linkedEntity: [[]],
-                    pincode: []
+                    name: [this.addressToUpdate.name, [Validators.required, Validators.maxLength(100)]],
+                    taxNumber: [this.addressToUpdate.taxNumber, (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
+                    state: [{ value: this.addressToUpdate.stateCode, disabled: !!this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' }, !this.addressConfiguration.countyList?.length ? Validators.required : null],
+                    stateLabel: [this.addressToUpdate?.stateCode + ' - ' + this.addressToUpdate?.stateName],
+                    county: [this.addressToUpdate.county?.code, this.addressConfiguration.countyList?.length ? Validators.required : null],
+                    address: [this.addressToUpdate.address, this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' ? [Validators.required] : []],
+                    linkedEntity: [this.addressConfiguration.linkedEntities?.filter((item) => {
+                        return item?.uniqueName ===
+                            this.addressToUpdate.linkedEntities?.filter(i => i?.uniqueName === item?.uniqueName)[0]?.uniqueName
+                    })],
+                    pincode: [this.addressToUpdate.pincode]
                 });
-                if (this.currentOrganizationUniqueName && this.addressConfiguration && this.addressConfiguration.linkedEntities
-                    && this.addressConfiguration.linkedEntities.some(entity => entity?.uniqueName === this.currentOrganizationUniqueName)) {
-                    // This will by default show the current organization unique name as selected linked entity
-                    const currentOrganizationUniqueNameObj = this.addressConfiguration.linkedEntities?.filter(i => i?.uniqueName === this.currentOrganizationUniqueName);
-                    this.addressForm.get('linkedEntity')?.patchValue(currentOrganizationUniqueNameObj);
-                }
-            } else if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress) {
-                if (this.addressToUpdate) {
-                    const taxValidatorPatterns = this.addressConfiguration.tax.name ? this.addressConfiguration.tax.validation : [];
-                    this.addressForm = this.formBuilder.group({
-                        name: [this.addressToUpdate.name, [Validators.required, Validators.maxLength(100)]],
-                        taxNumber: [this.addressToUpdate.taxNumber, (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
-                        state: [{ value: this.addressToUpdate.stateCode, disabled: !!this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' }, !this.addressConfiguration.countyList?.length ? Validators.required : null],
-                        stateLabel: [this.addressToUpdate?.stateCode + ' - ' + this.addressToUpdate?.stateName],
-                        county: [this.addressToUpdate.county?.code, this.addressConfiguration.countyList?.length ? Validators.required : null],
-                        address: [this.addressToUpdate.address, this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' ? [Validators.required] : []],
-                        linkedEntity: [this.addressConfiguration.linkedEntities?.filter((item) => {
-                            return item?.uniqueName ===
-                                this.addressToUpdate.linkedEntities?.filter(i => i?.uniqueName === item?.uniqueName)[0]?.uniqueName
-                        })],
-                        pincode: [this.addressToUpdate.pincode]
-                    });
-                    const linkedEntity = [...this.addressToUpdate.linkedEntities];
-                    while (linkedEntity?.length) {
-                        // Update the default entity status in UPDATE mode
-                        const entity = linkedEntity.pop();
-                        const entityIndex = this.addressConfiguration.linkedEntities?.findIndex(linkEntity => linkEntity?.uniqueName === entity?.uniqueName);
-                        if (entityIndex > -1) {
-                            this.addressConfiguration.linkedEntities[entityIndex].isDefault = entity.isDefault;
-                        }
-                    }
-                }
-            } else if (this.addressConfiguration.type === SettingsAsideFormType.EditBranch) {
-                if (this.branchToUpdate) {
-                    this.addressForm = this.formBuilder.group({
-                        name: [this.branchToUpdate.name, [Validators.required, Validators.maxLength(100)]],
-                        alias: [this.branchToUpdate.alias, [Validators.required, Validators.maxLength(50)]],
-                        linkedEntity: [this.addressConfiguration.linkedEntities?.filter((item) => {
-                            return item?.uniqueName ===
-                                this.branchToUpdate.linkedEntities?.filter(i => i?.uniqueName === item?.uniqueName)[0]?.uniqueName
-                        })]
-                    });
-
-                    const linkedEntity = [...this.branchToUpdate.linkedEntities];
-                    while (linkedEntity?.length) {
-                        // Update the default entity status in UPDATE mode
-                        const entity = linkedEntity.pop();
-                        const entityIndex = this.addressConfiguration.linkedEntities?.findIndex(linkEntity => linkEntity?.uniqueName === entity?.uniqueName);
-                        if (entityIndex > -1) {
-                            this.addressConfiguration.linkedEntities[entityIndex].isDefault = entity.isDefault;
-                        }
-                    }
-                }
-            } else if (this.addressConfiguration.type === SettingsAsideFormType.EditWarehouse) {
-                if (this.warehouseToUpdate) {
-                    this.addressForm = this.formBuilder.group({
-                        name: [this.warehouseToUpdate.name, [Validators.required, Validators.maxLength(100)]],
-                        linkedEntity: [this.addressConfiguration.linkedEntities?.filter((item) => {
-                            return item?.uniqueName ===
-                                this.warehouseToUpdate.linkedEntities?.filter(i => i?.uniqueName === item?.uniqueName)[0]?.uniqueName
-                        })]
-                    });
-                    const linkedEntity = [...this.warehouseToUpdate.linkedEntities];
-                    while (linkedEntity?.length) {
-                        // Update the default entity status in UPDATE mode
-                        const entity = linkedEntity.pop();
-                        const entityIndex = this.addressConfiguration.linkedEntities?.findIndex(linkEntity => linkEntity?.uniqueName === entity?.uniqueName);
-                        if (entityIndex > -1) {
-                            this.addressConfiguration.linkedEntities[entityIndex].isDefault = entity.isDefault;
-                        }
+                const linkedEntity = [...this.addressToUpdate.linkedEntities];
+                while (linkedEntity?.length) {
+                    // Update the default entity status in UPDATE mode
+                    const entity = linkedEntity.pop();
+                    const entityIndex = this.addressConfiguration.linkedEntities?.findIndex(linkEntity => linkEntity?.uniqueName === entity?.uniqueName);
+                    if (entityIndex > -1) {
+                        this.addressConfiguration.linkedEntities[entityIndex].isDefault = entity.isDefault;
                     }
                 }
             }
-
-            if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress && this.hideLinkEntity) {
-                this.addressConfiguration?.linkedEntities?.forEach(option => {
-                    this.addressForm.get('linkedEntity')?.patchValue([
-                        ...this.addressForm.get('linkedEntity')?.value,
-                        option?.value
-                    ]);
+        } else if (this.addressConfiguration.type === SettingsAsideFormType.EditBranch) {
+            if (this.branchToUpdate) {
+                this.addressForm = this.formBuilder.group({
+                    name: [this.branchToUpdate.name, [Validators.required, Validators.maxLength(100)]],
+                    alias: [this.branchToUpdate.alias, [Validators.required, Validators.maxLength(50)]],
+                    linkedEntity: [this.addressConfiguration.linkedEntities?.filter((item) => {
+                        return item?.uniqueName ===
+                            this.branchToUpdate.linkedEntities?.filter(i => i?.uniqueName === item?.uniqueName)[0]?.uniqueName
+                    })]
                 });
+
+                const linkedEntity = [...this.branchToUpdate.linkedEntities];
+                while (linkedEntity?.length) {
+                    // Update the default entity status in UPDATE mode
+                    const entity = linkedEntity.pop();
+                    const entityIndex = this.addressConfiguration.linkedEntities?.findIndex(linkEntity => linkEntity?.uniqueName === entity?.uniqueName);
+                    if (entityIndex > -1) {
+                        this.addressConfiguration.linkedEntities[entityIndex].isDefault = entity.isDefault;
+                    }
+                }
+            }
+        } else if (this.addressConfiguration.type === SettingsAsideFormType.EditWarehouse) {
+            if (this.warehouseToUpdate) {
+                this.addressForm = this.formBuilder.group({
+                    name: [this.warehouseToUpdate.name, [Validators.required, Validators.maxLength(100)]],
+                    linkedEntity: [this.addressConfiguration.linkedEntities?.filter((item) => {
+                        return item?.uniqueName ===
+                            this.warehouseToUpdate.linkedEntities?.filter(i => i?.uniqueName === item?.uniqueName)[0]?.uniqueName
+                    })]
+                });
+                const linkedEntity = [...this.warehouseToUpdate.linkedEntities];
+                while (linkedEntity?.length) {
+                    // Update the default entity status in UPDATE mode
+                    const entity = linkedEntity.pop();
+                    const entityIndex = this.addressConfiguration.linkedEntities?.findIndex(linkEntity => linkEntity?.uniqueName === entity?.uniqueName);
+                    if (entityIndex > -1) {
+                        this.addressConfiguration.linkedEntities[entityIndex].isDefault = entity.isDefault;
+                    }
+                }
             }
         }
 
+        if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress && this.hideLinkEntity) {
+            this.addressConfiguration?.linkedEntities?.forEach(option => {
+                this.addressForm.get('linkedEntity')?.patchValue([
+                    ...this.addressForm.get('linkedEntity')?.value,
+                    option?.value
+                ]);
+            });
+        }
+
+
         if (this.addressConfiguration.tax && this.addressConfiguration.tax.name && this.addressConfiguration.tax.name === 'GSTIN') {
             const taxField = this.addressForm.get('taxNumber');
-            taxField.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+            taxField?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
                 if (taxField.valid && taxField?.value) {
                     this.addressForm.get('address').setValidators([Validators.required]);
                 } else {
@@ -196,12 +206,12 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             });
         }
 
-        this.addressForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+        this.addressForm?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (this.addressForm?.dirty) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
         });
-        this.addressForm?.get('taxNumber').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+        this.addressForm?.get('taxNumber')?.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
             if (value !== null && value !== undefined && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN') {
                 this.getStateCode(value);
             }

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { OrganizationType } from '../../models/user-login-state';
@@ -13,7 +13,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
     templateUrl: './personal-information.component.html',
     styleUrls: ['./personal-information.component.scss']
 })
-export class PersonalInformationComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PersonalInformationComponent implements OnInit, OnChanges, OnDestroy {
 
     /** Decides when to emit the value for UPDATE operation */
     public saveProfileSubject: Subject<any> = new Subject();
@@ -61,7 +61,9 @@ export class PersonalInformationComponent implements OnInit, AfterViewInit, OnDe
     /** Holds Profile Form */
     public profileForm: FormGroup;
 
-    constructor(private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService, private formBuilder: FormBuilder) { }
+    constructor(private generalService: GeneralService, private toasty: ToasterService, private clipboardService: ClipboardService, private formBuilder: FormBuilder) {
+        this.initProfileForm();
+     }
 
     /**
      * Initializes the component
@@ -69,7 +71,6 @@ export class PersonalInformationComponent implements OnInit, AfterViewInit, OnDe
      * @memberof PersonalInformationComponent
      */
     public ngOnInit(): void {
-        this.initProfileForm();
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.isValidDomain = this.generalService.checkDashCharacterNumberPattern(this.profileData.portalDomain);
         this.saveProfileSubject.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
@@ -80,12 +81,12 @@ export class PersonalInformationComponent implements OnInit, AfterViewInit, OnDe
     }
 
     /**
-    * This will called after component initialization
-    *
-    * @memberof PersonalInformationComponent
-    */
-    public ngAfterViewInit(): void {
-        if (this.profileData) {
+     * On Change of input properties
+     *
+     * @memberof PersonalInformationComponent
+     */
+    public ngOnChanges(changes: SimpleChanges): void {
+        if (changes?.profileData && changes.profileData.currentValue !== changes.profileData.previousValue) {  
             if (this.profileData?.alias || this.profileData?.name) {
                 this.initProfileForm(this.profileData);
             }

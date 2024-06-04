@@ -51,17 +51,19 @@
                         <label class="font-15">{{ localeData?.country_currency }}:</label>
                     </div>
                     <div class="country-info col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2 view-txt">
-                        <img
-                            class="country-flag"
-                            *ngIf="profileData?.country?.countryCode"
-                            src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{
-                                profileData?.country?.countryCode
-                            }}.svg"
-                            alt="flag img"
-                        />
-                        <div class="font-15">
-                            {{ profileData?.country?.countryName }} - {{ profileData?.country?.currencyCode }}
-                            {{ profileData?.country?.currencyName }}
+                        <div class="d-flex align-items-center">
+                            <img
+                                class="country-flag"
+                                *ngIf="profileData?.country?.countryCode"
+                                src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{
+                                    profileData?.country?.countryCode
+                                }}.svg"
+                                alt="flag img"
+                            />
+                            <div class="font-15">
+                                {{ profileData?.country?.countryName }} - {{ profileData?.country?.currencyCode }}
+                                {{ profileData?.country?.currencyName }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -107,17 +109,16 @@
             <div class="row mr-0 mt-3" *ngIf="organizationType === 'COMPANY'">
                 <div class="col-md-4 col-lg-4 col-xl-3 mt-3 pd-r05">
                     <div class="form-group">
-                        <reactive-dropdown-field
-                            [readonly]="true"
+                        <input-field
                             [label]="localeData?.business_type"
                             [placeholder]="localeData?.business_type_placeholder"
                             [name]="'businessType'"
-                            [id]="'businessType'"
                             formControlName="businessType"
-                            [options]="profileData.businessTypes"
-                            [labelValue]="profileForm?.get('businessType')?.value"
-                        >
-                        </reactive-dropdown-field>
+                            [type]="'text'"
+                            [readonly]="true"
+                            [disabled]="true"
+                            [defaultValue]="profileForm?.get('businessType')?.value"
+                        ></input-field>
                     </div>
                 </div>
                 <div class="col-md-4 col-lg-4 col-xl-3 mt-3 pd-l05 pd-r05">

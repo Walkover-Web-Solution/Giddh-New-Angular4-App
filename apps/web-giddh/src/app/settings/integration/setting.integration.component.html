@@ -89,7 +89,7 @@
                                 color="warn"
                                 aria-label="remove account"
                                 class="btn mr-l2"
-                                (click)="removegmailintegration.toggle()"
+                                (click)="openRemoveGmailIntegrationDialog()"
                             >
                                 {{ localeData?.email?.remove_account }}
                             </button>
@@ -206,34 +206,36 @@
 
                                     <div class="row">
                                         <div class="col-sm-12 form-group">
-                                            <button
-                                                mat-stroked-button
-                                                color="primary"
-                                                aria-label="save"
-                                                *ngIf="!updateRazor"
-                                                [disabled]="razorPayform.invalid"
-                                                (click)="saveRazorPayDetails()"
-                                            >
-                                                {{ commonLocaleData?.app_save }}
-                                            </button>
-                                            <button
-                                                mat-stroked-button
-                                                color="primary"
-                                                aria-label="update"
-                                                *ngIf="updateRazor"
-                                                [disabled]="razorPayform.invalid"
-                                                (click)="updateRazorPayDetails()"
-                                            >
-                                                {{ commonLocaleData?.app_update }}
-                                            </button>
-                                            <button
-                                                mat-stroked-button
-                                                aria-label="delete"
-                                                *ngIf="updateRazor"
-                                                (click)="deleteRazorPayDetails()"
-                                            >
-                                                {{ commonLocaleData?.app_delete }}
-                                            </button>
+                                            <div class="d-flex column-gap1">
+                                                <button
+                                                    mat-stroked-button
+                                                    color="primary"
+                                                    aria-label="save"
+                                                    *ngIf="!updateRazor"
+                                                    [disabled]="razorPayform.invalid"
+                                                    (click)="saveRazorPayDetails()"
+                                                >
+                                                    {{ commonLocaleData?.app_save }}
+                                                </button>
+                                                <button
+                                                    mat-stroked-button
+                                                    color="primary"
+                                                    aria-label="update"
+                                                    *ngIf="updateRazor"
+                                                    [disabled]="razorPayform.invalid"
+                                                    (click)="updateRazorPayDetails()"
+                                                >
+                                                    {{ commonLocaleData?.app_update }}
+                                                </button>
+                                                <button
+                                                    mat-stroked-button
+                                                    aria-label="delete"
+                                                    *ngIf="updateRazor"
+                                                    (click)="deleteRazorPayDetails()"
+                                                >
+                                                    {{ commonLocaleData?.app_delete }}
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>
@@ -655,8 +657,8 @@
                 <confirm-modal
                     [title]="localeData?.email?.remove_account_title"
                     [body]="localeData?.email?.remove_account_message"
-                    (cancelCallBack)="removegmailintegration.toggle()"
-                    (successCallBack)="removeGmailAccount(); removegmailintegration.toggle()"
+                    (cancelCallBack)="removeGmailIntegrationDialogRef.close()"
+                    (successCallBack)="removeGmailAccount(); removeGmailIntegrationDialogRef.close()"
                 >
                 </confirm-modal>
             </div>

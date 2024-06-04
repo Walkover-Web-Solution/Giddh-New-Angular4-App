@@ -284,6 +284,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
         this.asideAccountAsidePaneRef =  this.dialog.open(this.asideAccountAsidePane, {
             width: '1000px',
             height: '100vh !important',
+            disableClose: true,
             position: {
                 right: '0',
                 top: '0'

@@ -186,6 +186,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public createNewAccountUserModalRef: MatDialogRef<any>;
     /** Holds Linked account label for selected value */
     public linkedAccountLabel: string = ''; 
+    /**  Holds Mat Dialog reference */
+    public removeGmailIntegrationDialogRef: MatDialogRef<any>;
 
     constructor(
         private router: Router,
@@ -245,7 +247,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                         this.razorPayObj.account = { name: null, uniqueName: null };
                         this.forceClearLinkAccount$ = observableOf({ status: true });
                     }
-                    this.razorPayObj.password = '';   
+                    this.razorPayObj.password = o?.razorPayForm?.userName ? 'YOU_ARE_NOT_ALLOWED' : '';  
                 }
                 this.updateRazor = true;
             } else {
@@ -643,6 +645,17 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
     public deleteRazorPayDetails() {
         this.store.dispatch(this.settingsIntegrationActions.DeleteRazorPayDetails());
+    }
+
+    /**
+     * Open confirmation dialog
+     *
+     * @memberof SettingIntegrationComponent
+     */
+    public openRemoveGmailIntegrationDialog(): void {
+        this.removeGmailIntegrationDialogRef = this.dialog.open( this.removegmailintegration, {
+            width: '630px'
+        });
     }
 
     public removeGmailAccount() {
