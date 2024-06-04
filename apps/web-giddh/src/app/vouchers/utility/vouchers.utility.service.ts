@@ -509,4 +509,26 @@ export class VouchersUtilityService {
 
         return selectedAddressIndex;
     }
+
+    public addEstimateProformaToolTiptext(item: any, giddhBalanceDecimalPlaces: any, baseCurrency: string): any {
+        try {
+            let grandTotalAmountForCompany,
+                grandTotalAmountForAccount;
+
+            if (item.amount) {
+                grandTotalAmountForCompany = Number(item.amount.amountForCompany) || 0;
+                grandTotalAmountForAccount = Number(item.amount.amountForAccount) || 0;
+            }
+
+            let grandTotalConversionRate = 0;
+            if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
+                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
+            }
+
+            item['grandTotalTooltipText'] = `In ${baseCurrency}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${grandTotalConversionRate})`;
+        } catch (error) {
+
+        }
+        return item;
+    }
 }

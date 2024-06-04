@@ -132,6 +132,9 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             dateRange: [this.advanceFilters?.dateRange || ''],
         });
 
+        this.selectedDateRange = { startDate: this.advanceFilters.from, endDate: this.advanceFilters.to };
+        this.selectedDateRangeUi = this.advanceFilters.from + " - " + this.advanceFilters.to;
+
         const invoiceDateRange = this.dateOptions?.filter(option => option.value === this.advanceFilters?.invoiceDateRange);
         if (invoiceDateRange?.length) {
             this.fieldLabelValues.invoiceDateRange = invoiceDateRange[0]?.label;

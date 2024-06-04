@@ -29,6 +29,7 @@ import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustmen
 import { trigger, state, style, transition, animate } from "@angular/animations";
 import { UpdateAccountRequest } from "../../models/api-models/Account";
 import { SalesActions } from "../../actions/sales/sales.action";
+import { OrganizationType } from "../../models/user-login-state";
 
 // invoice-table
 export interface PeriodicElement {
@@ -168,10 +169,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     // invoice table data
     public displayedColumns: string[] = ['index', 'invoice', 'customer', 'voucherDate', 'grandTotal', 'balanceDue', 'dueDate', 'einvoicestatus', 'status'];
     public dataSource: any[] = [];
-
     // estimate-table
-    displayedColumnEstimate: string[] = ['position', 'estimate', 'customer', 'estimatedate', 'amount', 'expirydate', 'status', 'action'];
-    dataSourceEstimate = new MatTableDataSource<PeriodicElementEstimate>(ESTIMATE_DATA);
+    displayedColumnEstimate: string[] = ['index', 'estimate', 'customer', 'estimateDate', 'amount', 'expiryDate', 'status', 'action'];
     // proforma-table
     displayedColumnProforma: string[] = ['position', 'proforma', 'customer', 'proformadate', 'amount', 'expirydate', 'status', 'action'];
     dataSourceProforma = new MatTableDataSource<PeriodicElementProforma>(PROFORMA_DATA);
@@ -306,6 +305,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Hold account aside menu reference  */
     public accountAsideMenuRef: MatDialogRef<any>;
     public accountParentGroup: string = "";
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -441,6 +442,30 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         }
                     }
 
+                    if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
+                        item.isSelected = false;
+                        item.uniqueName = item.proformaNumber || item.estimateNumber;
+                        item.voucherNumber = item.proformaNumber || item.estimateNumber;
+                        item.voucherDate = item.proformaDate || item.estimateDate;
+                        item.account = { customerName: item.customerName, uniqueName: item.customerUniqueName };
+
+                        let dueDate = item.expiryDate ? dayjs(item.expiryDate, GIDDH_DATE_FORMAT) : null;
+
+                        if (dueDate) {
+                            if (dueDate.isAfter(dayjs()) || ['paid', 'cancel'].includes(item.action)) {
+                                item.expiredDays = null;
+                            } else {
+                                let dueDays = dueDate ? dayjs().diff(dueDate, 'day') : null;
+                                item.isSelected = false;
+                                item.expiredDays = dueDays;
+                            }
+                        } else {
+                            item.expiredDays = null;
+                        }
+
+                        item = this.vouchersUtilityService.addEstimateProformaToolTiptext(item, this.company.giddhBalanceDecimalPlaces, this.company.baseCurrency);
+                    }
+
                     this.dataSource.push(item);
                 });
             }
@@ -535,6 +560,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.componentStore.updatedAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.accountAsideMenuRef?.close();
+            }
+        });
+
+        this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
             }
         });
     }
@@ -639,11 +670,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     public getVouchers(isUniversalDateApplicable: boolean): void {
-        if (this.voucherType === VoucherTypeEnum.generateProforma || this.voucherType === VoucherTypeEnum.generateEstimate) {
-
-        } else {
-            this.getAllVouchers();
-        }
+        this.getAllVouchers();
     }
 
     public getVoucherBalances(): void {
@@ -653,7 +680,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     private getAllVouchers(): void {
-        this.componentStore.getPreviousVouchers({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
+        if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
+            this.componentStore.getPreviousProformaEstimates({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
+        } else {
+            this.componentStore.getPreviousVouchers({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
+        }
     }
 
     public sortChange(event: any): void {

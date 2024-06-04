@@ -13,18 +13,22 @@
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary">
+                            <button mat-stroked-button color="primary" [routerLink]="['/pages/vouchers/estimates/create']">
                                 <span>+ New Estimate</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
-                                <div class="custom-datepicker">
-                                    <input type="text" name="selectedDateRange"
-                                        class="giddh-datepicker date-range-picker" />
+                                <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                    <input
+                                        type="text"
+                                        name="selectedDateRange"
+                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                        class="giddh-datepicker date-range-picker border-radius-2"
+                                    />
                                 </div>
                             </div>
                         </div>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreEstimate">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreEstimate" *ngIf="selectedVouchers?.length">
                                 <span>More</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -37,125 +41,129 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table mat-table [dataSource]="dataSourceEstimate" matSort class="w-100">
-                            <ng-container matColumnDef="position">
-                                <th mat-header-cell *matHeaderCellDef> # 
-                                    <!-- <span>
+                        <giddh-page-loader *ngIf="(getVouchersInProgress$ | async)"></giddh-page-loader>
+                        <table mat-table *ngIf="!(getVouchersInProgress$ | async)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
+                            <ng-container matColumnDef="index">
+                                <th mat-header-cell *matHeaderCellDef> <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
+                                    <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
                                             color="primary"
+                                            [value]="true"
+                                            (change)="selectAllVouchers($event)"
                                         ></mat-checkbox>
-                                    </span> -->
+                                    </span>
                                 </th>
                                 <td mat-cell *matCellDef="let element">
                                     <div class="d-flex align-items-center">
-                                        <div class="invoice-number">
-                                            {{element.position}}
+                                        <div class="invoice-number" *ngIf="!selectedVouchers?.length">
+                                            {{element.index}}
                                         </div>
-                                        <div class="checkbox-hide">
+                                        <div [ngClass]="{'checkbox-hide': !selectedVouchers?.length }">
                                             <mat-checkbox
                                                 color="primary"
+                                                [checked]="isVoucherSelected(element)"
+                                                [value]="element.uniqueName"
+                                                (change)="selectVoucher($event, element)"
                                             ></mat-checkbox>
                                         </div>
                                     </div>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="estimate">
-                                <th mat-header-cell *matHeaderCellDef>
+                                <th mat-header-cell *matHeaderCellDef #invoiceNo (clickOutside)="handleClickOutside($event, invoiceNo, 'invoiceNumber')">
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
-                                                    $implicit: showCustomerSearch,
-                                                    fieldName: 'name',
-                                                    formControl: searchedName,
-                                                    title: name
+                                                    $implicit: showInvoiceNoSearch,
+                                                    fieldName: 'invoiceNumber',
+                                                    formControl: voucherNumberInput,
+                                                    title: 'Estimate No.'
                                                 }
                                             "
                                         ></ng-container>
-                                        Estimate No.
                                     </div>
-                                    </th>
+                                </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <a href="javascript:;" class="btn-link-2">
-                                        {{element.estimate}}
-                                    </a>
+                                    <a href="javascript:;" class="btn-link-2">{{ element.voucherNumber ? element.voucherNumber : commonLocaleData?.app_not_available }}</a>
+                                    <span *ngIf="element.expiredDays !== null">
+                                    <small class="text-danger" *ngIf="element.expiredDays === 0">
+                                        {{ localeData?.expired_by_today }}
+                                    </small>
+                                </span>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="customer">
-                                <th mat-header-cell *matHeaderCellDef> 
+                                <th mat-header-cell *matHeaderCellDef #accountUniqueName (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')"> 
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
                                                     $implicit: showCustomerSearch,
-                                                    fieldName: 'name',
-                                                    formControl: searchedName,
-                                                    title: name
+                                                    fieldName: 'accountUniqueName',
+                                                    formControl: accountUniqueNameInput,
+                                                    title: 'Customer'
                                                 }
                                             "
                                         ></ng-container>
-                                        Customer
                                     </div>    
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cp">{{element.customer}}</div>
-                                    <!-- account-detail-double-click -->
-                                    <!-- <mat-card class="outline-card account-detail-wrapper">
-                                        <div class="p-3 border-bottom account-header">
-                                            <div class="d-flex align-items-center justify-content-between column-gap15 ">
-                                                <h3>00000000</h3>
-                                                <span class="cp">
-                                                    <img src="./assets/images/path.svg" />
-                                                </span>
-                                            </div>
-                                            <p class="mt-2">919111525164</p>
-                                            <p>ravinder@walkover.in</p>
+                                    <div class="cp" (dblclick)="element.showAccountDetails = true">{{ element.account?.customerName }}</div>
+                                    <mat-card class="outline-card account-detail-wrapper" *ngIf="element.showAccountDetails" (clickOutside)="element.showAccountDetails = false">
+                                        <div class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
+                                            <h3>{{ element.account?.customerName }}</h3>
+                                            <span class="cp" (click)="editAccount(element)">
+                                                <img src="./assets/images/path.svg" />
+                                            </span>
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
-                                                <li class="text-left"><a href="javascript:;" class="default-color">Go to Ledger</a></li>
-                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color">Generate Invoice</a></li>
+                                                <li class="text-left"><a href="javascript:;" class="default-color" (click)="goToLedger(element)">Go to Ledger</a></li>
+                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color" (click)="generateVoucher(element)">Generate Invoice</a></li>
                                             </ul>
                                         </mat-card-content>
-                                    </mat-card> -->
+                                    </mat-card>
                                 </td>
                             </ng-container>
-                            <ng-container matColumnDef="estimatedate">
+                            <ng-container matColumnDef="estimateDate">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
                                     Estimate Date
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
-                                    {{element.estimatedate}}
+                                    {{ element.voucherDate }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="amount">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
                                     Total Amt.
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-right" matTooltip="In INR: 1.239 (Conversion Rate: 0.005)"
+                                <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element.grandTotalTooltipText"
                                 matTooltipPosition="above"> 
-                                    Rp233.00
+                                    <amount-field
+                                        [amount]="element.amount?.amountForAccount"
+                                        [currencySymbol]="element?.amount?.currencyForAccount?.symbol"
+                                        [currencyCode]="element?.amount?.currencyForAccount?.code"
+                                    >
+                                    </amount-field>
                                 </td>
                             </ng-container>
-                            <ng-container matColumnDef="expirydate">
+                            <ng-container matColumnDef="expiryDate">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
                                     Expiry Date
                                 </th>
-                                <td mat-cell *matCellDef="let element" matTooltip="In INR: 1.239 (Conversion Rate: 0.005)"
-                                matTooltipPosition="above"> 
-                                    {{element.expirydate}}
+                                <td mat-cell *matCellDef="let element"> 
+                                    {{ element.expiryDate }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="status">
                                 <th mat-header-cell *matHeaderCellDef>
                                     Status
                                 </th>
-                                <td mat-cell *matCellDef="let element">
-                                    <div [matTooltip]="'Credential are Invalid, please add valid credentials.'" [matTooltipPosition]="'above'">
-                                        Actual
-                                    </div>
+                                <td mat-cell *matCellDef="let element"> 
+                                    {{ element.status }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="action">
@@ -163,17 +171,17 @@
                                     Action
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
-                                    <div class="d-flex justify-content-between align-items-center column-gap5">
-                                        <p>Expired</p>
-                                        <span [matMenuTriggerFor]="menu" class="cp">
+                                    <div class="d-flex justify-content-between align-items-center column-gap5" *ngIf="element.action !== 'invoiced'">
+                                        <p>{{ element.action ? (element.action | titlecase) : commonLocaleData?.app_select_action }}</p>
+                                        <span [matMenuTriggerFor]="menu" class="cp" *ngIf="!isCompany">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
-                                            <button mat-menu-item>Accepted</button>
-                                            <button mat-menu-item>Declined</button>
-                                            <button mat-menu-item>Convert to Proforma</button>
-                                            <button mat-menu-item>Convert to Invoice</button>
-                                            <button mat-menu-item>Expired</button>
+                                            <button mat-menu-item (click)="showPaymentDialog(element)">{{ localeData?.accepted }}</button>
+                                            <button mat-menu-item (click)="showAdjustmentDialog(element)">{{ localeData?.declined }}</button>
+                                            <button mat-menu-item (click)="actionVoucher(element, 'unpaid')">{{ localeData?.convert_proforma }}</button>
+                                            <button mat-menu-item (click)="actionVoucher(element, 'hold')">{{ localeData?.convert_invoice }}</button>
+                                            <button mat-menu-item (click)="actionVoucher(element, 'cancel')">{{ localeData?.expired }}</button>
                                         </mat-menu>
                                     </div>
                                 </td>
@@ -181,10 +189,16 @@
                             <tr mat-header-row *matHeaderRowDef="displayedColumnEstimate"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumnEstimate;" class="checkbox-show"></tr>
                         </table>
-                        <mat-paginator [pageSizeOptions]="[5, 10, 20]"
-                            showFirstLastButtons
-                            aria-label="Select page of periodic elements">
-                        </mat-paginator>
+                        <mat-paginator
+                            *ngIf="!(getVouchersInProgress$ | async)"
+                            (page)="handlePageChange($event)"
+                            [length]="totalResults"
+                            [pageSize]="advanceFilters.count"
+                            [showFirstLastButtons]="true"
+                            [pageSizeOptions]="pageSizeOptions"
+                            [hidePageSize]="false"
+                            [pageIndex]="advanceFilters.page - 1"
+                        ></mat-paginator>
                     </div>
                 </div>
             </mat-tab>
@@ -376,11 +390,11 @@
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15 flex-wrap row-gap1">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="downloadCsvEmail">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="createNewVoucher">
                                 <span>+ New Invoice</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
-                            <mat-menu #downloadCsvEmail="matMenu">
+                            <mat-menu #createNewVoucher="matMenu">
                                 <button mat-menu-item [routerLink]="['/pages/vouchers/cash/create']">Cash Invoice</button>
                                 <button mat-menu-item [routerLink]="['/pages/vouchers/sales/create']">Sales Invoice</button>
                             </mat-menu>
@@ -2054,7 +2068,7 @@
     <!-- advance-search-dialog -->
     <ng-template #advanceSearch>
         <app-advance-search
-            [type]="voucherType === 'debit note' || voucherType === 'credit note' ? 'drcr' : voucherType === 'purchase' ? 'purchase' : 'invoice'"
+            [type]="voucherType === 'debit note' || voucherType === 'credit note' ? 'drcr' : voucherType === 'purchase' ? 'purchase' : (voucherType === 'estimates' || voucherType === 'proformas') ? 'proforma' : 'invoice'"
             [request]="advanceFilters"
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
