@@ -5,14 +5,14 @@
                 <div>
                     <div class="form-header" tabindex="0">
                         <h3 mat-dialog-title *ngIf="
-                                addressConfiguration.type === 'createAddress' ||
-                                addressConfiguration.type === 'createBranchAddress'
+                                addressConfiguration?.type === 'createAddress' ||
+                                addressConfiguration?.type === 'createBranchAddress'
                             ">
                             {{ localeData?.create_address }}
                         </h3>
-                        <h3 *ngIf="addressConfiguration.type === 'editAddress'">{{ localeData?.update_address }}</h3>
-                        <h3 *ngIf="addressConfiguration.type === 'editBranch'">{{ localeData?.edit_branch }}</h3>
-                        <h3 *ngIf="addressConfiguration.type === 'editWarehouse'">{{ localeData?.edit_warehouse }}</h3>
+                        <h3 *ngIf="addressConfiguration?.type === 'editAddress'">{{ localeData?.update_address }}</h3>
+                        <h3 *ngIf="addressConfiguration?.type === 'editBranch'">{{ localeData?.edit_branch }}</h3>
+                        <h3 *ngIf="addressConfiguration?.type === 'editWarehouse'">{{ localeData?.edit_warehouse }}</h3>
                         <button id="close" aria-label="close" type="button" (click)="closeAsidePane($event)">
                             <i class="icon-cross"></i>
                         </button>
@@ -20,10 +20,10 @@
                     <mat-dialog-content>
                         <div class="aside-body">
                             <div class="aside-pane-form"
-                                [ngClass]="{ 'edit-branch-mode': addressConfiguration.type === 'editBranch' }">
+                                [ngClass]="{ 'edit-branch-mode': addressConfiguration?.type === 'editBranch' }">
                                 <section *ngIf="
-                                        addressConfiguration.type !== 'editBranch' &&
-                                        addressConfiguration.type !== 'editWarehouse'
+                                        addressConfiguration?.type !== 'editBranch' &&
+                                        addressConfiguration?.type !== 'editWarehouse'
                                     " class="clearfix margin-child-label">
                                     <div *ngIf="companyName" class="font-15 mr-b15"
                                         [innerHTML]="getInformationSaveText(companyName)"></div>
@@ -53,8 +53,9 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-sm-4 form-group">
-                                                <input-field [label]="addressConfiguration?.tax?.name"
+                                            <div *ngIf="addressConfiguration?.tax?.name" class="col-sm-4 form-group">
+                                                <input-field 
+                                                    [label]="addressConfiguration?.tax?.name"
                                                     [class.error-box]="
                                                         addressForm?.get('taxNumber')?.touched &&
                                                         addressForm?.get('taxNumber')?.invalid
@@ -73,7 +74,7 @@
                                                         addressConfiguration?.tax?.name &&
                                                         addressConfiguration?.tax?.name === 'GSTIN' || (addressForm?.get('stateLabel')?.value && addressForm?.get('taxNumber')?.value)
                                                     " 
-                                                    [options]="addressConfiguration.stateList"
+                                                    [options]="addressConfiguration?.stateList"
                                                     formControlName="state"
                                                     [labelValue]="addressForm?.get('stateLabel')?.value ? addressForm?.get('stateLabel')?.value : ''"
                                                     [cssClass]="w-100" 
@@ -119,13 +120,13 @@
                                             </div>
                                         </div>
 
-                                        <div *ngIf="addressConfiguration.type !== 'createBranchAddress'"
+                                        <div *ngIf="addressConfiguration?.type !== 'createBranchAddress'"
                                             [hidden]="hideLinkEntity" class="row">
                                             <div class="col-sm-12 form-group linked-entities">
                                                 <mat-form-field appearance="outline" class="w-100">
                                                     <mat-label>{{localeData?.link_entity}}</mat-label>
                                                     <mat-chip-list #chipList class="d-flex flex-wrap column-gap5 row-gap1">
-                                                      <mat-chip *ngFor="let selected of addressForm.get('linkedEntity')?.value" (removed)="removeItem(selected)">
+                                                      <mat-chip *ngFor="let selected of addressForm?.get('linkedEntity')?.value" (removed)="removeItem(selected)">
                                                         {{ selected?.alias }} 
                                                         <span matChipRemove><i class="icon-cross"></i></span>
                                                       </mat-chip>
@@ -179,7 +180,7 @@
                                     </div>
                                 </section>
 
-                                <section *ngIf="addressConfiguration.type === 'editBranch'"
+                                <section *ngIf="addressConfiguration?.type === 'editBranch'"
                                     class="clearfix margin-child-label">
                                     <div class="clearfix">
                                         <div class="row">
@@ -223,7 +224,7 @@
                                                 <mat-form-field appearance="outline" class="w-100">
                                                     <mat-label>{{ localeData?.linked_addresses }}</mat-label>
                                                     <mat-chip-list class="d-flex flex-wrap column-gap5 row-gap1">
-                                                      <mat-chip *ngFor="let selected of addressForm.get('linkedEntity')?.value" (removed)="removeItem(selected)">
+                                                      <mat-chip *ngFor="let selected of addressForm?.get('linkedEntity')?.value" (removed)="removeItem(selected)">
                                                         {{ selected?.label }}
                                                         <span matChipRemove><i class="icon-cross"></i></span>
                                                       </mat-chip>
@@ -279,7 +280,7 @@
                                     </div>
                                 </section>
 
-                                <section *ngIf="addressConfiguration.type === 'editWarehouse'"
+                                <section *ngIf="addressConfiguration?.type === 'editWarehouse'"
                                     class="clearfix margin-child-label">
                                     <div class="clearfix">
                                         <div class="row">
@@ -299,7 +300,7 @@
                                                 <mat-form-field appearance="outline" class="w-100">
                                                     <mat-label>{{ localeData?.linked_addresses }}</mat-label>
                                                     <mat-chip-list #chipList class="d-flex flex-wrap column-gap5 row-gap1">
-                                                      <mat-chip *ngFor="let item of addressForm.get('linkedEntity')?.value" (removed)="removeItem(selected)">
+                                                      <mat-chip *ngFor="let item of addressForm?.get('linkedEntity')?.value" (removed)="removeItem(selected)">
                                                         {{ item?.label }}
                                                         <span matChipRemove><i class="icon-cross"></i></span>
                                                       </mat-chip>
@@ -363,14 +364,14 @@
                                             <button mat-stroked-button color="primary" [ladda]="showLoader"
                                                 [disabled]="addressForm?.invalid" type="submit" class="btn custom-btn" aria-label="save">
                                                 <ng-container *ngIf="
-                                                        addressConfiguration.type === 'createAddress' ||
-                                                        addressConfiguration.type === 'createBranchAddress'
+                                                        addressConfiguration?.type === 'createAddress' ||
+                                                        addressConfiguration?.type === 'createBranchAddress'
                                                     ">
                                                     {{ commonLocaleData?.app_save }}</ng-container>
                                                 <ng-container *ngIf="
-                                                        addressConfiguration.type === 'editAddress' ||
-                                                        addressConfiguration.type === 'editBranch' ||
-                                                        addressConfiguration.type === 'editWarehouse'
+                                                        addressConfiguration?.type === 'editAddress' ||
+                                                        addressConfiguration?.type === 'editBranch' ||
+                                                        addressConfiguration?.type === 'editWarehouse'
                                                     ">
                                                     {{ commonLocaleData?.app_update }}</ng-container>
                                             </button>

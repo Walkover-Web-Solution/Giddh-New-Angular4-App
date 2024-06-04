@@ -89,7 +89,7 @@
                                 color="warn"
                                 aria-label="remove account"
                                 class="btn mr-l2"
-                                (click)="removegmailintegration.toggle()"
+                                (click)="openRemoveGmailIntegrationDialog()"
                             >
                                 {{ localeData?.email?.remove_account }}
                             </button>
@@ -657,8 +657,8 @@
                 <confirm-modal
                     [title]="localeData?.email?.remove_account_title"
                     [body]="localeData?.email?.remove_account_message"
-                    (cancelCallBack)="removegmailintegration.toggle()"
-                    (successCallBack)="removeGmailAccount(); removegmailintegration.toggle()"
+                    (cancelCallBack)="removeGmailintegrationDialogRef.close()"
+                    (successCallBack)="removeGmailAccount(); removeGmailintegrationDialogRef.close()"
                 >
                 </confirm-modal>
             </div>
