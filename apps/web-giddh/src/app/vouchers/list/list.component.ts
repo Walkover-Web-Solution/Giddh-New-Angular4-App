@@ -545,7 +545,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         this.voucherNumberInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             if (search !== null && search !== undefined) {
-                this.advanceFilters.q = search;
+                if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
+                    if (this.voucherType === VoucherTypeEnum.generateProforma) {
+                        this.advanceFilters.proformaNumber = search;
+                    } else {
+                        this.advanceFilters.estimateNumber = search;
+                    }
+                } else {
+                    this.advanceFilters.q = search;
+                }
+
                 this.getVouchers(this.isUniversalDateApplicable);
             }
         });

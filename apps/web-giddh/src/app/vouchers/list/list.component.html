@@ -41,8 +41,8 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <giddh-page-loader *ngIf="(getVouchersInProgress$ | async)"></giddh-page-loader>
-                        <table mat-table *ngIf="!(getVouchersInProgress$ | async)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
+                        <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
+                        <table mat-table [hidden]="getVouchersInProgress$ | async" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
                             <ng-container matColumnDef="index">
                                 <th mat-header-cell *matHeaderCellDef> <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
@@ -458,8 +458,8 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <giddh-page-loader *ngIf="(getVouchersInProgress$ | async)"></giddh-page-loader>
-                        <table mat-table *ngIf="!(getVouchersInProgress$ | async)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
+                        <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
+                        <table mat-table [hidden]="getVouchersInProgress$ | async" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
                             <ng-container matColumnDef="index">
                                 <th mat-header-cell *matHeaderCellDef> <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
