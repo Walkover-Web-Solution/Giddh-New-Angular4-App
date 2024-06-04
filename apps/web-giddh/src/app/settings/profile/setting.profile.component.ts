@@ -185,7 +185,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public activeTabIndex: number = 0;
     /** Holds true if get Linkied Entities API call in progress */
     private isGetLinkedEntitiesInprogress: boolean = false;
-    // /** Holds true if get states API call in progress */
+    /** Holds true if get states API call in progress */
     private isGetStatesInprogress: boolean = false;
 
     constructor(
