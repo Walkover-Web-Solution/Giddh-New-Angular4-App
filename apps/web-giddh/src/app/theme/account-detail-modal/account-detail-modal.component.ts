@@ -129,7 +129,12 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
                 break;
 
             case 1: // go to ledger
-                this.goToRoute('ledger', `/${this.from}/${this.to}`);
+                if (this.generalService.voucherApiVersion === 2) {
+                    this.goToRoute('/pages/ledger/' + this.accountUniqueName + `/${this.from}/${this.to}`);
+                } else {
+                    this.goToRoute('ledger', `/${this.from}/${this.to}`);
+                }
+                
                 break;
 
             case 2: // go to sales/ purchase/ debit note or credit note generate page

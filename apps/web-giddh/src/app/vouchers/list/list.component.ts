@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatSort } from "@angular/material/sort";
@@ -26,6 +26,9 @@ import { InvoiceReceiptActions } from "../../actions/invoice/receipt/receipt.act
 import { InvoiceService } from "../../services/invoice.service";
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-models/AdvanceReceiptsAdjust";
 import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustment/services/adjustment-utility.service";
+import { trigger, state, style, transition, animate } from "@angular/animations";
+import { UpdateAccountRequest } from "../../models/api-models/Account";
+import { SalesActions } from "../../actions/sales/sales.action";
 
 // invoice-table
 export interface PeriodicElement {
@@ -146,12 +149,24 @@ const BILL_DATA: PeriodicElementBill[] = [
     selector: "list",
     templateUrl: "./list.component.html",
     styleUrls: ["./list.component.scss"],
-    providers: [VoucherComponentStore]
+    providers: [VoucherComponentStore],
+    animations: [
+        trigger('slideInOut', [
+            state('in', style({
+                transform: 'translate3d(0, 0, 0)'
+            })),
+            state('out', style({
+                transform: 'translate3d(100%, 0, 0)'
+            })),
+            transition('in => out', animate('400ms ease-in-out')),
+            transition('out => in', animate('400ms ease-in-out'))
+        ]),
+    ]
 })
 export class VoucherListComponent implements OnInit, OnDestroy {
     public moduleType: string = "";
     // invoice table data
-    public displayedColumns: string[] = ['index', 'invoice', 'customer', 'voucherDate', 'grandTotal', 'balanceDue', 'dueDate', 'invoicestatus', 'status'];
+    public displayedColumns: string[] = ['index', 'invoice', 'customer', 'voucherDate', 'grandTotal', 'balanceDue', 'dueDate', 'einvoicestatus', 'status'];
     public dataSource: any[] = [];
 
     // estimate-table
@@ -173,6 +188,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     displayedColumnsBill: string[] = ['position', 'bill', 'vendor', 'billdate', 'order', 'amount', 'duedate', 'status'];
     dataSourceBill = new MatTableDataSource<PeriodicElementBill>(BILL_DATA);
 
+    /** Template Reference for Generic aside menu account */
+    @ViewChild("accountAsideMenu") public accountAsideMenu: TemplateRef<any>;
     // advance search dialog
     @ViewChild('advanceSearch', { static: true }) public advanceSearch: TemplateRef<any>;
     // export dialog
@@ -202,6 +219,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /* Hold invoice  type*/
     public voucherType: any = '';
+    public urlVoucherType: any = '';
     public dayjs = dayjs;
     public modalRef: BsModalRef;
     /** directive to get reference of element */
@@ -285,6 +303,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** True if round off will be applicable */
     public applyRoundOff: boolean = true;
     public depositAmount: number = 0;
+    /** Hold account aside menu reference  */
+    public accountAsideMenuRef: MatDialogRef<any>;
+    public accountParentGroup: string = "";
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -298,7 +319,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private toasterService: ToasterService,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
-        private adjustmentUtilityService: AdjustmentUtilityService
+        private adjustmentUtilityService: AdjustmentUtilityService,
+        private salesAction: SalesActions
     ) {
 
     }
@@ -316,6 +338,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
+            this.urlVoucherType = params?.voucherType;
             this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
             this.activeModule = params.module;
             this.advanceFilters.type = this.voucherType;
@@ -341,15 +364,23 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     if ((dayjs(universalStorageData[0]).format(GIDDH_DATE_FORMAT) === dayjs(response[0]).format(GIDDH_DATE_FORMAT)) && (dayjs(universalStorageData[1]).format(GIDDH_DATE_FORMAT) === dayjs(response[1]).format(GIDDH_DATE_FORMAT))) {
                         if (window.localStorage && localStorage.getItem('invoiceSelectedDate')) {
                             let storedSelectedDate = JSON.parse(localStorage.getItem('invoiceSelectedDate'));
-                            let dateRange = { fromDate: '', toDate: '' };
-                            dateRange = this.generalService.dateConversionToSetComponentDatePicker(storedSelectedDate.fromDates, storedSelectedDate.toDates);
-                            this.selectedDateRange = { startDate: dayjs(dateRange.fromDate), endDate: dayjs(dateRange.toDate) };
-                            this.selectedDateRangeUi = dayjs(dateRange.fromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate).format(GIDDH_NEW_DATE_FORMAT_UI);
                             // assign dates
                             if (storedSelectedDate.fromDates && storedSelectedDate.toDates) {
+                                let dateRange = { fromDate: '', toDate: '' };
+                                dateRange = this.generalService.dateConversionToSetComponentDatePicker(storedSelectedDate.fromDates, storedSelectedDate.toDates);
+                                this.selectedDateRange = { startDate: dayjs(dateRange.fromDate), endDate: dayjs(dateRange.toDate) };
+                                this.selectedDateRangeUi = dayjs(dateRange.fromDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate).format(GIDDH_NEW_DATE_FORMAT_UI);
                                 this.advanceFilters.from = storedSelectedDate.fromDates;
                                 this.advanceFilters.to = storedSelectedDate.toDates;
                                 this.isUniversalDateApplicable = false;
+                            } else {
+                                this.selectedDateRange = { startDate: dayjs(response[0]), endDate: dayjs(response[1]) };
+                                this.selectedDateRangeUi = dayjs(response[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(response[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                                // assign dates
+
+                                this.advanceFilters.from = dayjs(response[0]).format(GIDDH_DATE_FORMAT);
+                                this.advanceFilters.to = dayjs(response[1]).format(GIDDH_DATE_FORMAT);
+                                this.isUniversalDateApplicable = true;
                             }
                         } else {
                             this.selectedDateRange = { startDate: dayjs(response[0]), endDate: dayjs(response[1]) };
@@ -498,6 +529,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (search !== null && search !== undefined) {
                 this.advanceFilters.q = search;
                 this.getVouchers(this.isUniversalDateApplicable);
+            }
+        });
+
+        this.componentStore.updatedAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.accountAsideMenuRef?.close();
             }
         });
     }
@@ -694,6 +731,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
                 if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.cash) {
                     this.applyRoundOff = settings.invoiceSettings.salesRoundOff;
+
+                    if (!this.isEInvoiceEnabled) {
+                        this.displayedColumns = this.displayedColumns?.filter(column => column !== "einvoicestatus");
+                    }
                 } else if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.applyRoundOff = settings.invoiceSettings.purchaseRoundOff;
                 } else if (this.voucherType === VoucherTypeEnum.debitNote) {
@@ -1037,5 +1078,71 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
 
         this.componentStore.adjustVoucherWithAdvanceReceipts({ adjustments: advanceReceiptAdjustmentData.adjustments, voucherUniqueName: this.voucherDetails?.uniqueName });
+    }
+
+    public goToLedger(voucher: any): void {
+        let url = '/pages/ledger/' + voucher?.account?.uniqueName + '/' + this.advanceFilters.from + '/' + this.advanceFilters.to;
+        this.openUrl(url);
+    }
+
+    public generateVoucher(voucher: any): void {
+        let url = "";
+        if (this.voucherType === VoucherTypeEnum.sales) {
+            if (voucher?.account?.uniqueName === 'cash') {
+                url = '/pages/vouchers/cash/create';
+            } else {
+                url = '/pages/vouchers/sales/' + voucher?.account?.uniqueName + '/create';
+            }
+        } else {
+            let tempVoucherType = this.urlVoucherType === "purchase" ? "bill" : this.urlVoucherType;
+
+            if (voucher?.account?.uniqueName === 'cash') {
+                url = '/pages/vouchers/cash-' + tempVoucherType + '/create';
+            } else {
+                url = '/pages/vouchers/' + tempVoucherType + '/' + voucher?.account?.uniqueName + '/create';
+            }
+        }
+
+        this.openUrl(url);
+    }
+
+    private openUrl(url: string): void {
+        if (isElectron) {
+            let ipcRenderer = (window as any).require('electron').ipcRenderer;
+            url = location.origin + location.pathname + `#./pages/${url}`;
+            ipcRenderer.send('open-url', url);
+        } else {
+            (window as any).open(url);
+        }
+    }
+
+    public getParentGroupForAccountCreate(voucherType: string): string {
+        if (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.purchaseOrder || voucherType === VoucherTypeEnum.cashBill || voucherType === VoucherTypeEnum.cashDebitNote) {
+            return 'sundrycreditors';
+        } else {
+            return 'sundrydebtors';
+        }
+    }
+
+    public editAccount(voucher: any): void {
+        this.voucherDetails = voucher;
+        this.accountParentGroup = this.getParentGroupForAccountCreate(this.voucherType);
+
+        this.accountAsideMenuRef = this.dialog.open(this.accountAsideMenu, {
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
+    }
+
+    /**
+     * Callback for update account
+     *
+     * @param {UpdateAccountRequest} item
+     * @memberof VoucherCreateComponent
+     */
+    public updateAccount(item: UpdateAccountRequest): void {
+        this.store.dispatch(this.salesAction.updateAccountDetailsForSales(item));
     }
 }

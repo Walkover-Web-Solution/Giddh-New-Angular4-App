@@ -76,6 +76,7 @@ import { PurchaseOrderPreviewModule } from "../shared/purchase-order-preview/pur
 import { DecimalDigitsModule } from "../shared/helpers/directives/decimalDigits/decimalDigits.module";
 import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
 import { GenerateEWayBillModule } from "../invoice/preview/models/generateEWayBill/generateEWayBill.module";
+import { DatepickerWrapperModule } from "../shared/datepicker-wrapper/datepicker.wrapper.module";
 
 @NgModule({
     declarations: [
@@ -158,7 +159,8 @@ import { GenerateEWayBillModule } from "../invoice/preview/models/generateEWayBi
         PurchaseOrderPreviewModule,
         DecimalDigitsModule,
         NgxMaskModule,
-        GenerateEWayBillModule
+        GenerateEWayBillModule,
+        DatepickerWrapperModule
     ],
     exports: [
 
