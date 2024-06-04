@@ -1,5 +1,5 @@
 import { Observable, of as observableOf, ReplaySubject, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, map, skip, switchMap, take, takeUntil } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { select, Store } from '@ngrx/store';
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
@@ -183,7 +183,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public voucherApiVersion: 1 | 2;
     /** Holds Active Tab Index */
     public activeTabIndex: number = 0;
+    /** Holds true if get Linkied Entities API call in progress */
     private isGetLinkedEntitiesInprogress: boolean = false;
+    // /** Holds true if get states API call in progress */
     private isGetStatesInprogress: boolean = false;
 
     constructor(
@@ -303,6 +305,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     if (organization.type === OrganizationType.Branch) {
                         this.store.dispatch(this.settingsProfileActions.getBranchInfo());
                         this.currentOrganizationType = OrganizationType.Branch;
+                        this.loadTaxAndStates();
                     } else if (organization.type === OrganizationType.Company) {
                         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                         this.currentOrganizationType = OrganizationType.Company;
@@ -817,7 +820,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.patchProfile({ ...value });
             }
         } else if (this.currentOrganizationType === OrganizationType.Branch) {
-            this.updateBranchProfile();
+            this.updateBranchProfile(value);
         }
     }
 
@@ -827,10 +830,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @param {*} [params] Request payload for API
      * @memberof SettingProfileComponent
      */
-    public updateBranchProfile(params?: any): void {
+    public updateBranchProfile(value: any): void {
         this.currentBranchDetails.name = this.companyProfileObj.name;
-        this.currentBranchDetails.alias = this.companyProfileObj.alias;
-        this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(params ? params : this.currentBranchDetails))
+        this.currentBranchDetails.alias = this.companyProfileObj.alias = value?.alias ?? this.companyProfileObj.alias;
+
+        this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(this.currentBranchDetails))
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
                 if (response) {
@@ -854,13 +858,23 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         if (tabName === 'address') {
             this.loadAddresses('GET');
             this.loadLinkedEntities();
-            if (this.currentCompanyDetails && this.currentCompanyDetails.countryV2) {
-                this.loadTaxDetails(this.currentCompanyDetails.countryV2.alpha2CountryCode);
-                this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
-            }
+            this.loadTaxAndStates();
         }
         this.getPageHeading();
         this.router.navigateByUrl('/pages/settings/profile/' + tabName);
+    }
+
+    /**
+     * This function used to load taxes and states
+     *
+     * @private
+     * @memberof SettingProfileComponent
+     */
+    private loadTaxAndStates(): void {
+        if (this.currentCompanyDetails && this.currentCompanyDetails.countryV2) {
+            this.loadTaxDetails(this.currentCompanyDetails.countryV2.alpha2CountryCode);
+            this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
+        }
     }
 
     /**
@@ -868,9 +882,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public loadLinkedEntities(): void {
-        if(!this.isGetLinkedEntitiesInprogress){
+        if (!this.isGetLinkedEntitiesInprogress) {
             this.isGetLinkedEntitiesInprogress = true;
-            this.settingsProfileService.getAllLinkedEntities().pipe(takeUntil(this.destroyed$)).subscribe(response => {    
+            this.settingsProfileService.getAllLinkedEntities().pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.body && response.status === 'success') {
                     this.addressConfiguration.linkedEntities = response.body.map(result => ({
                         ...result,
@@ -914,6 +928,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     });
                 }
             }
+            this.isGetStatesInprogress = false;
         });
     }
 
@@ -927,7 +942,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         let onboardingFormRequest = new OnboardingFormRequest();
         onboardingFormRequest.formName = 'onboarding';
         onboardingFormRequest.country = countryCode;
-        this.commonService.getOnboardingForm(onboardingFormRequest).pipe(takeUntil(this.destroyed$), skip(1)).subscribe((response: any) => {
+        this.commonService.getOnboardingForm(onboardingFormRequest).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response && response.status === 'success') {
                 if (response.body && response.body.fields && response.body.fields.length > 0) {
                     const taxField = response.body.fields.find(field => field && field.name === 'taxName');
@@ -1274,14 +1289,14 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                             this.taxType = this.commonLocaleData?.app_gstin;
                         }
                         if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode) || activeCompany.countryV2?.alpha2CountryCode === 'IN') {
-                            this.showTaxColumn = true;                      
+                            this.showTaxColumn = true;
                         } else {
                             this.showTaxColumn = false;
                         }
                     }
                 });
 
-                if (this.addressOnly) {               
+                if (this.addressOnly) {
                     this.loadLinkedEntities();
                     if (this.currentCompanyDetails && this.currentCompanyDetails.countryV2) {
                         this.loadTaxDetails(this.currentCompanyDetails.countryV2.alpha2CountryCode);
@@ -1301,7 +1316,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                         if (activeCompany) {
                             if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
-                                if(activeCompany?.countryV2?.alpha2CountryCode === 'ZW' || activeCompany?.countryV2?.alpha2CountryCode === 'KE') {
+                                if (activeCompany?.countryV2?.alpha2CountryCode === 'ZW' || activeCompany?.countryV2?.alpha2CountryCode === 'KE') {
                                     this.taxType = this.commonLocaleData?.app_vat;
                                     this.localeData.company_address_list = this.localeData.company_vat_list;
                                     this.localeData.add_address = this.localeData.add_vat;
