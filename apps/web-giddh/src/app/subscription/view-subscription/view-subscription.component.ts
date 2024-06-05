@@ -138,7 +138,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         });
 
         window.addEventListener('message', event => {
-            if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
+            if ((this.router.url === '/pages/subscription/view-subscription/' + this.subscriptionId) && event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
                 this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
                 this.closeWindow();
                 this.getSubscriptionData(this.subscriptionId);
