@@ -7,8 +7,8 @@ import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { VatService } from '../../services/vat.service';
 import { ToasterService } from '../../services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from '@angular/router';
 import * as saveAs from 'file-saver';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'liability-report-component',
@@ -51,7 +51,7 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
         private vatService: VatService,
         private toaster: ToasterService,
         public dialog: MatDialog,
-        private route: Router
+        private router: Router
     ) { }
 
     /**
@@ -60,14 +60,13 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     * @memberof LiabilityReportComponent
     */
     public ngOnInit(): void {
-
+        document.querySelector('body').classList.add('gst-sidebar-open');
+        this.initLiabilityReport();
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
         });
-        document.querySelector('body').classList.add('gst-sidebar-open');
-        this.initLiabilityReport();
     }
 
     /**
@@ -102,7 +101,7 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
             let formValue = this.liabilityReportForm.value;
             let section = report?.section === "Input VAT Total" ? 'inputVat' : 'outputVat';
 
-            this.route.navigate(['pages', 'vat-report', 'liability-report', 'detailed'], { queryParams: { from: formValue.from, to: formValue.to, taxNumber: formValue.taxNumber, currencyCode: formValue.currencyCode, section: section } });
+            this.router.navigate(['pages', 'vat-report', 'liability-report', 'detailed'], { queryParams: { from: formValue.from, to: formValue.to, taxNumber: formValue.taxNumber, currencyCode: formValue.currencyCode, section: section } });
         }
     }
 
@@ -164,7 +163,7 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     * @memberof LiabilityReportComponent
     */
     public handleNavigation(): void {
-        this.route.navigate(['pages', 'gstfiling']);
+        this.router.navigate(['pages', 'gstfiling']);
     }
 
     /**

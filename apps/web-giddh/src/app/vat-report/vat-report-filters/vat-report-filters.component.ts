@@ -15,6 +15,7 @@ import { cloneDeep } from '../../lodash-optimized';
 import { GstReconcileService } from '../../services/gst-reconcile.service';
 import { CommonService } from '../../services/common.service';
 import { ToasterService } from '../../services/toaster.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'vat-report-filters',
@@ -127,6 +128,12 @@ export class VatReportFiltersComponent implements OnInit {
     public hasTaxNumber: boolean = false;
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
+    /** True if value in query params */
+    private hasQueryParams: boolean = false;
+    /** True if Vat Report page */
+    public isVatReport: boolean;
+     /** True if Liability Report page */
+    public isLiabilityReport: boolean;
 
     constructor(
         private store: Store<AppState>,
@@ -136,7 +143,8 @@ export class VatReportFiltersComponent implements OnInit {
         private modalService: BsModalService,
         public settingsFinancialYearService: SettingsFinancialYearService,
         private commonService: CommonService,
-        private toaster: ToasterService
+        private toaster: ToasterService,
+        private route: ActivatedRoute
     ) {
         this.getFinancialYears();
     }
@@ -148,10 +156,19 @@ export class VatReportFiltersComponent implements OnInit {
      * @memberof VatReportFiltersComponent
      */
     public ngOnInit(): void {
-        this.getSelectedCurrency();
+        this.isVatReport = this.moduleType === "VAT_REPORT";
+        this.isLiabilityReport = this.moduleType === "LIABILITY_REPORT";
+
+        if (this.isLiabilityReport) {
+            this.getQueryParams();
+        }
+        if(!this.hasQueryParams){
+            this.getSelectedCurrency();
+        }
+
         // Refresh report data according to universal date
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
-            if (dateObj) {
+            if (dateObj && this.hasQueryParams) {
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
@@ -165,6 +182,49 @@ export class VatReportFiltersComponent implements OnInit {
         });
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.getCurrentCompanyBranches();
+    }
+
+    /**
+     * Get Query Params value
+     *
+     * @private
+     * @memberof VatReportFiltersComponent
+     */
+    private getQueryParams(): void {
+        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            if (params) {
+                const from = params['from'];
+                const to = params['to'];
+                const taxNumber = params['taxNumber'];
+                const currencyCode = params['currencyCode'];
+                this.hasQueryParams = from && to && taxNumber;
+                const queryObject = {from: from, to: to, taxNumber: taxNumber, currencyCode: currencyCode};
+                this.assignQueryValues(queryObject);
+            }
+        });
+    }
+
+    /**
+     * Assign values
+     *
+     * @private
+     * @param {*} value
+     * @memberof VatReportFiltersComponent
+     */
+    private assignQueryValues(value: any): void {
+        this.taxNumber = value.taxNumber;
+        this.currentTaxNumber.emit(this.taxNumber);
+
+        this.from = value.from;
+        this.fromDate.emit(this.from);
+
+        this.to = value.to;
+        this.toDate.emit(this.to);
+
+        this.selectedDateRange = { startDate: dayjs(this.from), endDate: dayjs(this.to) };
+        this.selectedDateRangeUi = dayjs(this.from).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.to).format(GIDDH_NEW_DATE_FORMAT_UI);
+        this.onCurrencyChange({ value: value.currencyCode }, true);
+        // this.getVatReport();
     }
 
     /**
@@ -239,7 +299,9 @@ export class VatReportFiltersComponent implements OnInit {
             }
             this.isTaxApiInProgress.emit(false);
             setTimeout(() => {
-                this.getVatReport();
+                if(!this.hasQueryParams){
+                    this.getVatReport();
+                }
             }, 100);
         });
     }
@@ -296,7 +358,9 @@ export class VatReportFiltersComponent implements OnInit {
             this.fromDate.emit(this.from);
             this.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.toDate.emit(this.to);
-            this.getVatReport();
+            if(!this.hasQueryParams){
+                this.getVatReport();
+            }
         }
     }
 
@@ -442,7 +506,7 @@ export class VatReportFiltersComponent implements OnInit {
         this.commonService.getSelectedTableColumns(this.moduleType).pipe(take(1)).subscribe(response => {
             if (response && response.status === 'success') {
                 if (response.body) {
-                    this.onCurrencyChange({ value: this.moduleType === "VAT_REPORT" ? response.body?.vatReportCurrency : response.body?.liabilityReportCurrency }, true);
+                    this.onCurrencyChange({ value: this.isVatReport ? response.body?.vatReportCurrency : response.body?.liabilityReportCurrency }, true);
                 } else if (response.body === null) {
                     this.onCurrencyChange({ value: this.vatReportCurrencyList[0].value }, true);
                 }
@@ -459,7 +523,7 @@ export class VatReportFiltersComponent implements OnInit {
         let request = {
             module: this.moduleType,
         }
-        request[this.moduleType === "VAT_REPORT" ? 'vatReportCurrency' : 'liabilityReportCurrency'] = currencyCode;
+        request[this.isVatReport ? 'vatReportCurrency' : 'liabilityReportCurrency'] = currencyCode;
         this.commonService.saveSelectedTableColumns(request).pipe(take(1)).subscribe(response => {
             if (response && response.status === 'error' && response.message) {
                 this.toaster.showSnackBar("error", response.message);

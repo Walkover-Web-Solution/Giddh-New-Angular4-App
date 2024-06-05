@@ -13,7 +13,7 @@
     </div>
     <div class="detailed-liability-report mx-auto pd-15">
         <div class="mt-2">
-            <button mat-stroked-button [routerLink]="['/pages/vat-report/liability-report']">
+            <button mat-stroked-button (click)="backToOverViewReport()">
                 <i class="fa fa-angle-left font-16 mr-1"></i>
                 <span>{{ commonLocaleData?.app_back }}</span>
             </button>
