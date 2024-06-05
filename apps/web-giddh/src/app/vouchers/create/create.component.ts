@@ -751,11 +751,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         /** Voucher details */
         this.componentStore.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.invoiceForm.controls["account"].get("customerName")?.patchValue(this.invoiceType.isCashInvoice ? response.account?.customerName : response.account?.name);
-                this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response.account?.uniqueName);
-                this.invoiceForm.controls["account"].get("attentionTo").patchValue(response.account?.attentionTo);
-                this.invoiceForm.controls["account"].get("email").patchValue(response.account?.email);
-                this.invoiceForm.controls["account"].get("mobileNumber").patchValue(response.account?.mobileNumber);
+                if (!response.isCopyVoucher) {
+                    this.invoiceForm.controls["account"].get("customerName")?.patchValue(this.invoiceType.isCashInvoice ? response.account?.customerName : response.account?.name);
+                    this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response.account?.uniqueName);
+                    this.invoiceForm.controls["account"].get("attentionTo").patchValue(response.account?.attentionTo);
+                    this.invoiceForm.controls["account"].get("email").patchValue(response.account?.email);
+                    this.invoiceForm.controls["account"].get("mobileNumber").patchValue(response.account?.mobileNumber);
+                }
 
                 if (response?.purchaseOrderDetails?.length) {
                     this.purchaseOrderDetailsForEdit = response?.purchaseOrderDetails;
@@ -764,51 +766,54 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                 this.getAccountDetails(response.account?.uniqueName);
 
-                this.fillBillingShippingAddress("account", "billingDetails", response.account?.billingDetails, 0);
-                this.fillBillingShippingAddress("account", "shippingDetails", response.account?.shippingDetails, 0);
+                if (!response.isCopyVoucher) {
+                    this.fillBillingShippingAddress("account", "billingDetails", response.account?.billingDetails, 0);
+                    this.fillBillingShippingAddress("account", "shippingDetails", response.account?.shippingDetails, 0);
 
-                this.copyAccountBillingInShippingAddress = isEqual(response.account?.billingDetails, response.account?.shippingDetails);
+                    this.copyAccountBillingInShippingAddress = isEqual(response.account?.billingDetails, response.account?.shippingDetails);
 
-                if (this.invoiceType.isPurchaseOrder || (this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice)) {
-                    this.fillBillingShippingAddress("company", "billingDetails", response.company?.billingDetails, 0);
-                    this.fillBillingShippingAddress("company", "shippingDetails", response.company?.shippingDetails, 0);
+                    if (this.invoiceType.isPurchaseOrder || (this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice)) {
+                        this.fillBillingShippingAddress("company", "billingDetails", response.company?.billingDetails, 0);
+                        this.fillBillingShippingAddress("company", "shippingDetails", response.company?.shippingDetails, 0);
 
-                    this.copyCompanyBillingInShippingAddress = isEqual(response.company?.billingDetails, response.company?.shippingDetails);
-                }
+                        this.copyCompanyBillingInShippingAddress = isEqual(response.company?.billingDetails, response.company?.shippingDetails);
+                    }
 
-                this.invoiceForm.get('exchangeRate')?.patchValue(response.exchangeRate);
-                this.invoiceForm.get('number')?.patchValue(response.number);
+                    this.invoiceForm.get('exchangeRate')?.patchValue(response.exchangeRate);
+                    this.invoiceForm.get('number')?.patchValue(response.number);
+                    this.invoiceForm.get('touristSchemeApplicable')?.patchValue(response?.touristSchemeApplicable);
 
-                this.invoiceForm.get("date").patchValue(response.date);
-                this.invoiceForm.get("dueDate").patchValue(response.dueDate);
+                    this.invoiceForm.get("date").patchValue(response.date);
+                    this.invoiceForm.get("dueDate").patchValue(response.dueDate);
 
-                if (response.warehouse) {
-                    this.invoiceForm.controls["warehouse"].get("name").patchValue(response.warehouse?.name);
-                    this.invoiceForm.controls["warehouse"].get("uniqueName").patchValue(response.warehouse?.uniqueName);
-                }
+                    if (response.warehouse) {
+                        this.invoiceForm.controls["warehouse"].get("name").patchValue(response.warehouse?.name);
+                        this.invoiceForm.controls["warehouse"].get("uniqueName").patchValue(response.warehouse?.uniqueName);
+                    }
 
-                this.invoiceForm.get("templateDetails.other.customField1")?.patchValue(response.templateDetails?.other?.customField1);
-                this.invoiceForm.get("templateDetails.other.customField2")?.patchValue(response.templateDetails?.other?.customField2);
-                this.invoiceForm.get("templateDetails.other.customField3")?.patchValue(response.templateDetails?.other?.customField3);
-                this.invoiceForm.get("templateDetails.other.message2")?.patchValue(response.templateDetails?.other?.message2);
-                this.invoiceForm.get("templateDetails.other.shippedVia")?.patchValue(response.templateDetails?.other?.shippedVia);
-                this.invoiceForm.get("templateDetails.other.shippingDate")?.patchValue(response.templateDetails?.other?.shippingDate);
-                this.invoiceForm.get("templateDetails.other.trackingNumber")?.patchValue(response.templateDetails?.other?.trackingNumber);
+                    this.invoiceForm.get("templateDetails.other.customField1")?.patchValue(response.templateDetails?.other?.customField1);
+                    this.invoiceForm.get("templateDetails.other.customField2")?.patchValue(response.templateDetails?.other?.customField2);
+                    this.invoiceForm.get("templateDetails.other.customField3")?.patchValue(response.templateDetails?.other?.customField3);
+                    this.invoiceForm.get("templateDetails.other.message2")?.patchValue(response.templateDetails?.other?.message2);
+                    this.invoiceForm.get("templateDetails.other.shippedVia")?.patchValue(response.templateDetails?.other?.shippedVia);
+                    this.invoiceForm.get("templateDetails.other.shippingDate")?.patchValue(response.templateDetails?.other?.shippingDate);
+                    this.invoiceForm.get("templateDetails.other.trackingNumber")?.patchValue(response.templateDetails?.other?.trackingNumber);
 
-                if (response.attachedFiles) {
-                    this.invoiceForm.get("attachedFiles")?.patchValue(response.attachedFiles);
-                    this.selectedFileName = response.attachedFileName;
-                }
+                    if (response.attachedFiles) {
+                        this.invoiceForm.get("attachedFiles")?.patchValue(response.attachedFiles);
+                        this.selectedFileName = response.attachedFileName;
+                    }
 
-                this.invoiceForm.get('isRcmEntry').patchValue((response.subVoucher === SubVoucher.ReverseCharge) ? true : false);
+                    this.invoiceForm.get('isRcmEntry').patchValue((response.subVoucher === SubVoucher.ReverseCharge) ? true : false);
 
-                if (response.adjustments?.length) {
-                    response.adjustments = response.adjustments?.map(adjustment => {
-                        adjustment.adjustmentAmount = adjustment.amount;
-                        return adjustment;
-                    });
-                    this.advanceReceiptAdjustmentData = { adjustments: response.adjustments };
-                    this.calculateAdjustedVoucherTotal(response.adjustments);
+                    if (response.adjustments?.length) {
+                        response.adjustments = response.adjustments?.map(adjustment => {
+                            adjustment.adjustmentAmount = adjustment.amount;
+                            return adjustment;
+                        });
+                        this.advanceReceiptAdjustmentData = { adjustments: response.adjustments };
+                        this.calculateAdjustedVoucherTotal(response.adjustments);
+                    }
                 }
 
                 const entriesFormArray = this.invoiceForm.get('entries') as FormArray;
@@ -819,7 +824,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.stockUnits[index] = observableOf(entry.transactions[0]?.stock.unitRates);
                         this.componentStore.getStockVariants({ q: entry.transactions[0]?.stock?.uniqueName, index: index, autoSelectVariant: false });
                     }
-                    this.invoiceForm.get('entries')['controls'].push(this.getEntriesFormGroup(entry));
+                    this.invoiceForm.get('entries')['controls'].push(this.getEntriesFormGroup(entry, false));
 
                     if (entry.discounts?.length) {
                         this.getSelectedDiscounts(index, entry.discounts);
@@ -1232,13 +1237,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.voucherDateLabel = this.localeData?.dr_note_date;
         } else if (this.invoiceType.isPurchaseInvoice) {
             this.voucherDateLabel = this.localeData?.bill_date;
+            this.voucherDueDateLabel = this.localeData?.balance_due_date;
         } else if (this.invoiceType.isReceiptInvoice) {
             this.voucherDateLabel = this.localeData?.receipt_date;
         } else if (this.invoiceType.isPaymentInvoice) {
             this.voucherDateLabel = this.localeData?.payment_date;
         } else {
             this.voucherDateLabel = this.commonLocaleData?.app_invoice_date;
-            this.voucherDueDateLabel = !this.invoiceType.isPurchaseInvoice ? this.localeData?.due_date : this.localeData?.balance_due_date;
+            this.voucherDueDateLabel = this.localeData?.due_date;
         }
     }
 
@@ -2105,7 +2111,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @return {*}  {FormGroup}
      * @memberof VoucherCreateComponent
      */
-    private getEntriesFormGroup(entryData?: any): FormGroup {
+    private getEntriesFormGroup(entryData?: any, copyUniqueName: boolean = true): FormGroup {
         let voucherDate = "";
 
         if (typeof (this.invoiceForm?.get('date')?.value) === "object") {
@@ -2118,7 +2124,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             date: [!this.invoiceType.isPurchaseOrder && !this.invoiceType.isEstimateInvoice && !this.invoiceType.isProformaInvoice ? voucherDate || this.universalDate || dayjs().format(GIDDH_DATE_FORMAT) : null],
             description: [entryData ? entryData?.description : ''],
             voucherType: [this.voucherType],
-            uniqueName: [entryData ? entryData?.uniqueName : ''],
+            uniqueName: [entryData && copyUniqueName ? entryData?.uniqueName : ''],
             showCodeType: [entryData && entryData?.hsnNumber ? 'hsn' : 'sac'], //temp
             hsnNumber: [entryData ? entryData?.hsnNumber : ''],
             sacNumber: [entryData ? entryData?.sacNumber : ''],
