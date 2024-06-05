@@ -378,7 +378,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         window.addEventListener('message', event => {
-            if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
+            if ((this.router.url === '/pages/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/subscription/buy-plan') && event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
                 if (this.isChangePlan) {
                     this.router.navigate(['/pages/subscription']);
                 } else {
