@@ -5,7 +5,7 @@ import { GeneralService } from '../../services/general.service';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SettingsFinancialYearService } from '../../services/settings.financial-year.service';
-import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import * as dayjs from 'dayjs';
@@ -13,6 +13,8 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helper
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep } from '../../lodash-optimized';
 import { GstReconcileService } from '../../services/gst-reconcile.service';
+import { CommonService } from '../../services/common.service';
+import { ToasterService } from '../../services/toaster.service';
 
 @Component({
     selector: 'vat-report-filters',
@@ -26,6 +28,8 @@ export class VatReportFiltersComponent implements OnInit {
     @Input() public commonLocaleData: any = {};
     /** This will hold active company data */
     @Input() public activeCompany: any = null;
+    /** This will hold module type */
+    @Input() public moduleType: 'VAT_REPORT' | 'LIABILITY_REPORT' = 'VAT_REPORT';
     /** True if active country is UK */
     @Input() public isUKCompany: boolean = false;
     /** True if active country is Zimbabwe */
@@ -130,7 +134,9 @@ export class VatReportFiltersComponent implements OnInit {
         private generalService: GeneralService,
         private settingsBranchAction: SettingsBranchActions,
         private modalService: BsModalService,
-        public settingsFinancialYearService: SettingsFinancialYearService
+        public settingsFinancialYearService: SettingsFinancialYearService,
+        private commonService: CommonService,
+        private toaster: ToasterService
     ) {
         this.getFinancialYears();
     }
@@ -142,6 +148,7 @@ export class VatReportFiltersComponent implements OnInit {
      * @memberof VatReportFiltersComponent
      */
     public ngOnInit(): void {
+        this.getSelectedCurrency();
         // Refresh report data according to universal date
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
             if (dateObj) {
@@ -337,11 +344,15 @@ export class VatReportFiltersComponent implements OnInit {
      * @param {*} event
      * @memberof VatReportFiltersComponent
      */
-    public onCurrencyChange(event: any): void {
-        if (event) {
+    public onCurrencyChange(event: any, initialCall: boolean = false): void {
+        if (this.vatReportCurrencyCode !== event?.value) {
             this.vatReportCurrencyCode = event.value;
             this.currentCurrencyCode.emit(event.value);
-            this.getVatReport();
+
+            if (!initialCall) {
+                this.saveSelectedCurrency(event.value);
+                this.getVatReport();
+            }
         }
     }
 
@@ -420,6 +431,40 @@ export class VatReportFiltersComponent implements OnInit {
             this.currentBranchChange.emit(this.currentBranch);
             this.getVatReport();
         }
+    }
+
+    /**
+    * Get last currency in which the report was viewed.
+    *
+    * @memberof VatReportFiltersComponent
+    */
+    public getSelectedCurrency(): void {
+        this.commonService.getSelectedTableColumns(this.moduleType).pipe(take(1)).subscribe(response => {
+            if (response && response.status === 'success') {
+                if (response.body) {
+                    this.onCurrencyChange({ value: this.moduleType === "VAT_REPORT" ? response.body?.vatReportCurrency : response.body?.liabilityReportCurrency }, true);
+                } else if (response.body === null) {
+                    this.onCurrencyChange({ value: this.vatReportCurrencyList[0].value }, true);
+                }
+            }
+        });
+    }
+
+    /**
+     * Save last currency in which the report was viewed.
+     *
+     * @memberof VatReportFiltersComponent
+     */
+    public saveSelectedCurrency(currencyCode: string): void {
+        let request = {
+            module: this.moduleType,
+        }
+        request[this.moduleType === "VAT_REPORT" ? 'vatReportCurrency' : 'liabilityReportCurrency'] = currencyCode;
+        this.commonService.saveSelectedTableColumns(request).pipe(take(1)).subscribe(response => {
+            if (response && response.status === 'error' && response.message) {
+                this.toaster.showSnackBar("error", response.message);
+            }
+        });
     }
 
     /**
