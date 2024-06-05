@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { debounceTime, distinctUntilChanged, ReplaySubject, takeUntil } from 'rxjs';
 import { GeneralService } from '../services/general.service';
 import { ConfirmModalComponent } from "../theme/new-confirm-modal/confirm-modal.component";
-import {Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { SubscriptionComponentStore } from './utility/subscription.store';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -195,13 +195,15 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             }
         });
 
-        window.addEventListener('message', event => {
-            if (this.router.url === '/pages/subscription' && event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
-                this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
-                this.closeWindow();
-                this.getAllSubscriptions(false);
-            }
-        });
+        if (this.router.url === '/pages/subscription') {
+            window.addEventListener('message', event => {
+                if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
+                    this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
+                    this.closeWindow();
+                    this.getAllSubscriptions(false);
+                }
+            });
+        }
 
         this.subscriptionRazorpayOrderDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
