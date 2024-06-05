@@ -14,6 +14,7 @@ import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep } from '../../lodash-optimized';
 import { GstReconcileService } from '../../services/gst-reconcile.service';
 import { CommonService } from '../../services/common.service';
+import { ToasterService } from '../../services/toaster.service';
 
 @Component({
     selector: 'vat-report-filters',
@@ -134,7 +135,8 @@ export class VatReportFiltersComponent implements OnInit {
         private settingsBranchAction: SettingsBranchActions,
         private modalService: BsModalService,
         public settingsFinancialYearService: SettingsFinancialYearService,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private toaster: ToasterService
     ) {
         this.getFinancialYears();
     }
@@ -342,12 +344,15 @@ export class VatReportFiltersComponent implements OnInit {
      * @param {*} event
      * @memberof VatReportFiltersComponent
      */
-    public onCurrencyChange(event: any): void {
-        if (event) {
-            this.saveSelectedCurrency(event.value);
+    public onCurrencyChange(event: any, initialCall: boolean = false): void {
+        if (this.vatReportCurrencyCode !== event.value) {
             this.vatReportCurrencyCode = event.value;
             this.currentCurrencyCode.emit(event.value);
-            this.getVatReport();
+        
+            if (!initialCall) {
+                this.saveSelectedCurrency(event.value);
+                this.getVatReport();
+            }
         }
     }
 
@@ -437,10 +442,9 @@ export class VatReportFiltersComponent implements OnInit {
         this.commonService.getSelectedTableColumns(this.moduleType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.status === 'success') {
                 if (response.body) {
-                    // console.log(response.body);
-                    this.onCurrencyChange({value: this.moduleType ? response.body?.vatReportCurrency : response.body?.liabilityReportCurrency});
+                    this.onCurrencyChange({ value: this.moduleType  === "VAT_REPORT" ? response.body?.vatReportCurrency : response.body?.liabilityReportCurrency }, true);
                 } else if (response.body === null) {
-                    this.onCurrencyChange({ value: this.vatReportCurrencyList[0].value });
+                    this.onCurrencyChange({ value: this.vatReportCurrencyList[0].value }, true);
                 }
             }
         });
@@ -455,11 +459,10 @@ export class VatReportFiltersComponent implements OnInit {
         let request = {
             module: this.moduleType,
         }
-        request[this.moduleType ? 'vatReportCurrency' : 'liabilityReportCurrency'] = currencyCode;
-
+        request[this.moduleType === "VAT_REPORT" ? 'vatReportCurrency' : 'liabilityReportCurrency'] = currencyCode;
         this.commonService.saveSelectedTableColumns(request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.body && response.status === 'success') {
-                // console.log("Save",response);
+            if (response && response.status === 'error' && response.message) {
+                this.toaster.showSnackBar("error", response.message);
             }
         });
     }
