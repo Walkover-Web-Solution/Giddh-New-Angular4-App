@@ -95,7 +95,7 @@ export class VouchersUtilityService {
         return requestObject;
     }
 
-    public getVoucherNameByType(voucherType: string, localeData: any): string {
+    public getVoucherNameByType(voucherType: string, localeData: any, isCopyVoucher: boolean = false): string {
         let voucherName = "";
 
         switch (voucherType) {
@@ -116,7 +116,7 @@ export class VouchersUtilityService {
                 break;
 
             case VoucherTypeEnum.sales:
-                voucherName = localeData?.invoice_types?.sales;
+                voucherName = isCopyVoucher ? localeData?.invoice_types?.sales : localeData?.invoice_types?.invoice;
                 break;
 
             case VoucherTypeEnum.creditNote:

@@ -8,7 +8,7 @@
                     <!-- Voucher Page Heading -->
                     <div class="vouchers-title d-flex align-items-center">
                         <div class="d-flex align-items-center">
-                            <h1 [ngClass]="{'voucher-heading': !(invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) || ((invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) && !invoiceForm.get('salesPurchaseAsReceiptPayment')?.value), 'cursor-pointer': invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote}" (click)="invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote ? invoiceForm.get('salesPurchaseAsReceiptPayment')?.patchValue(!invoiceForm.get('salesPurchaseAsReceiptPayment')?.value) : ''">{{ voucherType | voucherName: localeData | titlecase }}</h1>
+                            <h1 [ngClass]="{'voucher-heading': !(invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) || ((invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) && !invoiceForm.get('salesPurchaseAsReceiptPayment')?.value), 'cursor-pointer': invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote}" (click)="invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote ? invoiceForm.get('salesPurchaseAsReceiptPayment')?.patchValue(!invoiceForm.get('salesPurchaseAsReceiptPayment')?.value) : ''">{{ invoiceType.isCashInvoice && invoiceType.isSalesInvoice ? localeData?.invoice_types?.cash_invoice : invoiceType.isCashInvoice && invoiceType.isPurchaseInvoice ? localeData?.invoice_types?.cash_bill : invoiceType.isCashInvoice && invoiceType.isDebitNote ? localeData?.invoice_types?.cash_debit_note : invoiceType.isCashInvoice && invoiceType.isCreditNote ? localeData?.invoice_types?.cash_credit_note : (voucherType | voucherName: localeData | titlecase) }}</h1>
 
                             <mat-slide-toggle color="primary" class="ml-4" *ngIf="invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote" formControlName="salesPurchaseAsReceiptPayment">
                                 <span [ngClass]="{'voucher-heading': invoiceForm.get('salesPurchaseAsReceiptPayment')?.value}" class="mr-l2">
@@ -564,7 +564,7 @@
                                             [label]="voucherDateLabel"
                                             [placeholder]="voucherDateLabel" name="voucherDate" [showToggleIcon]="false"
                                             [appearance]="'outline'" formControlName="date"
-                                            (dateSelected)="onBlueVoucherDate()" [disabled]="!invoiceType.isPurchaseInvoice && isUpdateMode ? 'disabled' : null" [cssClass]="!invoiceType.isPurchaseInvoice && isUpdateMode ? 'disable-bg cursor-disable' : null">
+                                            (dateSelected)="onBlueVoucherDate()" [disabled]="isUpdateMode ? 'disabled' : null" [cssClass]="isUpdateMode ? 'disable-bg cursor-disable' : null">
                                         </giddh-datepicker>
                                     </div>
 
