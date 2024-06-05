@@ -134,8 +134,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public promoCodeResponse: any[] = [];
     /** This will use for tax percentage */
     public taxPercentage: number = 0.18;
-    /** Hold api response subscription id*/
-    public responseSubscriptionId: any;
     /** Hold api response redirect link*/
     public redirectLink: any;
     /** Hold final plan amount */
@@ -233,16 +231,19 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.buyPlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.redirectLink) {
-                this.openWindow(response.redirectLink);
-            } else if (response?.subscriptionId) {
-                this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
+            if (response) {
+                this.subscriptionId = response.subscriptionId;
+                if (response?.redirectLink) {
+                    this.openWindow(response.redirectLink);
+                } else if (response?.subscriptionId) {
+                    this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
+                }
             }
         });
 
         this.createSubscriptionResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.responseSubscriptionId = response.subscriptionId;
+                this.subscriptionId = response.subscriptionId;
                 // if (response.duration === "YEARLY") {
                 //     this.isLoading = true;
                 //     this.subscriptionResponse = response;
@@ -250,27 +251,26 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 // } else {
                 //     this.openCashfreeDialog(response?.redirectLink);
                 // }
-                this.subscriptionId = response.subscriptionId;
                 if (this.isChangePlan) {
                     this.router.navigate(['/pages/subscription']);
                 } else {
                     if (this.payType === 'trial') {
-                        this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
+                        this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
                     } else {
                         if (response?.region?.code === 'GBR') {
                             let model = {
                                 planUniqueName: response?.planDetails?.uniqueName,
                                 paymentProvider: "GOCARDLESS",
-                                subscriptionId: response.subscriptionId,
+                                subscriptionId: this.subscriptionId,
                                 duration: response?.duration
                             };
                             if (response?.status?.toLowerCase() === 'active') {
-                                this.router.navigate(['/pages/new-company/' + response?.subscriptionId]);
+                                this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
                             } else {
                                 this.subscriptionComponentStore.buyPlanByGoCardless(model);
                             }
                         } else {
-                            this.componentStore.generateOrderBySubscriptionId(response?.subscriptionId);
+                            this.componentStore.generateOrderBySubscriptionId(this.subscriptionId);
                         }
                     }
                 };
@@ -279,13 +279,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.subscriptionRazorpayOrderDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.subscriptionId = response.subscriptionId;
                 if (response.dueAmount > 0) {
                     this.initializePayment(response);
                 } else {
                     if (this.isChangePlan) {
                         this.router.navigate(['/pages/subscription']);
                     } else {
-                        this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
+                        this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
                     };
                 }
             }
@@ -293,7 +294,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.updatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.responseSubscriptionId = response.subscriptionId;
+                this.subscriptionId = response.subscriptionId;
                 // if (response.duration === "YEARLY") {
                 //     this.isLoading = true;
                 //     this.subscriptionResponse = response;
@@ -304,7 +305,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 if (this.isChangePlan) {
                     this.router.navigate(['/pages/subscription']);
                 } else {
-                    this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
+                    this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
                 };
             }
         });
@@ -312,6 +313,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.updateSubscriptionPaymentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.subscriptionId = response.subscriptionId;
                 this.isLoading = false;
                 if (this.isChangePlan) {
                     this.router.navigate(['/pages/subscription']);
@@ -377,15 +379,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-        window.addEventListener('message', event => {
-            if ((this.router.url === '/pages/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/subscription/buy-plan') && event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
-                if (this.isChangePlan) {
-                    this.router.navigate(['/pages/subscription']);
-                } else {
-                    this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+        if (this.router.url === '/pages/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/subscription/buy-plan') {
+            window.addEventListener('message', event => {
+                if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
+                    if (this.isChangePlan) {
+                        this.router.navigate(['/pages/subscription']);
+                    } else {
+                        this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                    }
                 }
-            }
-        });
+            });
+        }
 
         this.applyPromoCodeSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -406,12 +410,15 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.changePlanDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.subscriptionId = response.subscriptionId;
+            }
             if (response && response.dueAmount > 0) {
                 if (response?.region?.code === 'GBR') {
                     let model = {
                         planUniqueName: response?.planDetails?.uniqueName,
                         paymentProvider: "GOCARDLESS",
-                        subscriptionId: response.subscriptionId,
+                        subscriptionId: this.subscriptionId,
                         duration: response?.duration
                     };
                     this.subscriptionComponentStore.buyPlanByGoCardless(model);
@@ -1070,8 +1077,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public getAllPlans(): void {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length) {
-                this.monthlyPlans = response?.filter(plan => plan?.monthlyAmount !== null && plan?.monthlyAmount >= 0);
-                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmount !== null && plan?.yearlyAmount >= 0);
+                this.monthlyPlans = response?.filter(plan => plan?.monthlyAmount && plan?.monthlyAmount !== null && plan?.monthlyAmount >= 0);
+                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmount && plan?.yearlyAmount !== null && plan?.yearlyAmount >= 0);
                 this.monthlyPlans = this.monthlyPlans.sort((a, b) => a.monthlyAmount - b.monthlyAmount);
                 this.yearlyPlans = this.yearlyPlans.sort((a, b) => a.yearlyAmount - b.yearlyAmount);
                 if (this.yearlyPlans?.length) {
