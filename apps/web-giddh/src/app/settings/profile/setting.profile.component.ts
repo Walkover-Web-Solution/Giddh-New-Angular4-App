@@ -297,7 +297,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         });
     }
 
-    public getInitialProfileData(): void {
+    public getInitialProfileData() {
         this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
             if (!this.initialDataFetched) {
                 this.initialDataFetched = true;
