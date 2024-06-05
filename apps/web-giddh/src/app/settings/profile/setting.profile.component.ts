@@ -305,11 +305,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     if (organization.type === OrganizationType.Branch) {
                         this.store.dispatch(this.settingsProfileActions.getBranchInfo());
                         this.currentOrganizationType = OrganizationType.Branch;
-                        this.loadTaxAndStates();
                     } else if (organization.type === OrganizationType.Company) {
                         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                         this.currentOrganizationType = OrganizationType.Company;
                     }
+                    this.loadTaxAndStates();
                 } else {
                     // Treat it as company
                     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
