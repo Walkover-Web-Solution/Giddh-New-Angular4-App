@@ -313,7 +313,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                         this.currentOrganizationType = OrganizationType.Company;
                     }
-                    this.loadTaxAndStates();
+                    this.loadTaxLinkedEnitiesAndStates();
                 } else {
                     // Treat it as company
                     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
@@ -869,8 +869,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.currentTab = tabName;
         if (tabName === 'address') {
             this.loadAddresses('GET');
-            this.loadLinkedEntities();
-            this.loadTaxAndStates();
+            this.loadTaxLinkedEnitiesAndStates();
         }
         this.router.navigateByUrl('/pages/settings/profile/' + tabName);
     }
@@ -881,8 +880,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @private
      * @memberof SettingProfileComponent
      */
-    private loadTaxAndStates(): void {
+    private loadTaxLinkedEnitiesAndStates(): void {
         if (this.currentCompanyDetails && this.currentCompanyDetails.countryV2) {
+            this.loadLinkedEntities();
             this.loadTaxDetails(this.currentCompanyDetails.countryV2.alpha2CountryCode);
             this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
         }

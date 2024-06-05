@@ -15098,3 +15098,9 @@ aside-menu-product-service {
 .country-dropdown-list {
     min-width: 300px;
 }
+// Global Class to align main container center
+.giddh-container-center {
+    max-width: var(--center-content-max-width) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}

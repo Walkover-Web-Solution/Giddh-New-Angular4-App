@@ -4,30 +4,38 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="box">
+    <div class="box giddh-container-center">
         <form>
             <div class="row">
-                <div class="col-lg-6 mt-1">
-                    <div class="form-group clearfix">
-                        <div>
-                            <span class="pull-left searchTag">
-                                <input-field
-                                    [type]="'text'"
-                                    [(ngModel)]="searchText"
-                                    (keyup)="filterData(searchText)"
-                                    [name]="'search_text'"
-                                    [placeholder]="localeData?.search_tag_placeholder"
+                <form (submit)="createTag()" [formGroup]="tagForm" class="row">
+                    <div class="w-100">
+                        <div class="form-group d-flex column-gap1 align-items-center">
+                            <input-field
+                                [type]="'text'"
+                                [name]="'tagName'"
+                                formControlName="name"
+                                [placeholder]="localeData?.tag_name_placeholder"
+                            >
+                            </input-field>
+                            <div>
+                                <button
+                                    mat-stroked-button
+                                    color="primary"
+                                    type="submit"
+                                    class="min-width-unset"
+                                    [disabled]="tagForm?.invalid"
                                 >
-                                </input-field>
-                            </span>
+                                    <i class="icon-plus"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group clearfix col-md-12 col-lg-6 col-xs-12 mt-1">
+                </form>
+                <!-- <div class="form-group clearfix col-md-12 col-lg-6 col-xs-12 mt-1">
                     <div class="create-tag" (click)="showCreateTag()">
                         <button mat-stroked-button color="primary">{{ localeData?.create_tag }}</button>
                     </div>
-                </div>
+                </div> -->
                 <div class="col-12">
                     <table *ngIf="!isLoading && tags?.length" mat-table [dataSource]="tags" class="basic giddh-table table w-100 tags-table">
                         <ng-container matColumnDef="number">
