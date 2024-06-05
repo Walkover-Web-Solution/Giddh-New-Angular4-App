@@ -5,7 +5,7 @@ import { GeneralService } from '../../services/general.service';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SettingsFinancialYearService } from '../../services/settings.financial-year.service';
-import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import * as dayjs from 'dayjs';
@@ -28,7 +28,7 @@ export class VatReportFiltersComponent implements OnInit {
     @Input() public commonLocaleData: any = {};
     /** This will hold active company data */
     @Input() public activeCompany: any = null;
-    /** This will hold active company data */
+    /** This will hold module type */
     @Input() public moduleType: 'VAT_REPORT' | 'LIABILITY_REPORT' = 'VAT_REPORT';
     /** True if active country is UK */
     @Input() public isUKCompany: boolean = false;
@@ -345,10 +345,10 @@ export class VatReportFiltersComponent implements OnInit {
      * @memberof VatReportFiltersComponent
      */
     public onCurrencyChange(event: any, initialCall: boolean = false): void {
-        if (this.vatReportCurrencyCode !== event.value) {
+        if (this.vatReportCurrencyCode !== event?.value) {
             this.vatReportCurrencyCode = event.value;
             this.currentCurrencyCode.emit(event.value);
-        
+
             if (!initialCall) {
                 this.saveSelectedCurrency(event.value);
                 this.getVatReport();
@@ -434,15 +434,15 @@ export class VatReportFiltersComponent implements OnInit {
     }
 
     /**
-    * This will get last currecy in whiich view report
+    * Get last currency in which the report was viewed.
     *
     * @memberof VatReportFiltersComponent
     */
     public getSelectedCurrency(): void {
-        this.commonService.getSelectedTableColumns(this.moduleType).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.commonService.getSelectedTableColumns(this.moduleType).pipe(take(1)).subscribe(response => {
             if (response && response.status === 'success') {
                 if (response.body) {
-                    this.onCurrencyChange({ value: this.moduleType  === "VAT_REPORT" ? response.body?.vatReportCurrency : response.body?.liabilityReportCurrency }, true);
+                    this.onCurrencyChange({ value: this.moduleType === "VAT_REPORT" ? response.body?.vatReportCurrency : response.body?.liabilityReportCurrency }, true);
                 } else if (response.body === null) {
                     this.onCurrencyChange({ value: this.vatReportCurrencyList[0].value }, true);
                 }
@@ -451,7 +451,7 @@ export class VatReportFiltersComponent implements OnInit {
     }
 
     /**
-     * This will save current currecy in whiich view report
+     * Save last currency in which the report was viewed.
      *
      * @memberof VatReportFiltersComponent
      */
@@ -460,7 +460,7 @@ export class VatReportFiltersComponent implements OnInit {
             module: this.moduleType,
         }
         request[this.moduleType === "VAT_REPORT" ? 'vatReportCurrency' : 'liabilityReportCurrency'] = currencyCode;
-        this.commonService.saveSelectedTableColumns(request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.commonService.saveSelectedTableColumns(request).pipe(take(1)).subscribe(response => {
             if (response && response.status === 'error' && response.message) {
                 this.toaster.showSnackBar("error", response.message);
             }
