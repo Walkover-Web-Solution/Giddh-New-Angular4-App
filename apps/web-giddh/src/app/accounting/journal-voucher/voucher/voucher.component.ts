@@ -882,10 +882,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
             if (control.value.particular && control.value.type === "to" && !control.value.isTaxApplied && !control.value.isDiscountApplied) {
+                discountScenario = 'none';
                 toEntryControl = control;
                 toAmount += control.value.actualAmount;
             }
             if (control.value.particular && control.value.type === "by" && !control.value.isTaxApplied && !control.value.isDiscountApplied) {
+                discountScenario = 'none';
                 byEntryControl = control;
                 byAmount += control.value.actualAmount;
             }
@@ -893,7 +895,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             if (control.value.particular && control.value.type === "by" && control.value.isDiscountApplied) {
                 discountEntryControl = control;
                 actualDiscountAmount = control.value.discountValue;
-                discountScenario = control.value.discountScenario;
                 if (!taxAmount) {
                     toEntryControl?.get('amount')?.patchValue(toAmount - control.value.discountValue);
                     toEntryControl?.get('actualAmount')?.patchValue(toAmount - control.value.discountValue);
@@ -901,14 +902,22 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 }
             }
 
+            if (control.value.particular && control.value.isDiscountApplied && !control.value.isTaxApplied) {
+                console.log("yes");
+                discountScenario = 'beforeTax';
+            }
+            if (control.value.particular  && control.value.isTaxApplied && !control.value.isDiscountApplied) {
+                console.log("no");
+                discountScenario = 'afterTax';
+             }
+
+
             if (!taxAmount && control.value.particular && control.value.type === "to" && control.value.isTaxApplied) {
                 taxEntryControl = control;
                 actualTaxAmount = control.value.taxValue;
                 taxAmount = control.value.taxValue;
             }
         });
-
-        console.log(byAmount, toAmount, taxAmount);
 
         let transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
         let transactionAtIndex = transactionsFormArray.at(this.selectedIdx) as FormGroup;
@@ -928,6 +937,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         // Apply discount before tax if applicable
         if (discountScenario === 'beforeTax' && actualDiscountAmount > 0) {
+            console.log(actualDiscountAmount, byAmount);
             byAmount -= actualDiscountAmount;
         }
 
@@ -997,9 +1007,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 toAmount = toAmount;
             }
         }
-
+        console.log(discountScenario, actualDiscountAmount);
         // Apply discount after tax if applicable
         if (discountScenario === 'afterTax' && actualDiscountAmount > 0) {
+            console.log(actualDiscountAmount, toAmount);
             toAmount -= actualDiscountAmount;
             byEntryControl?.get('amount')?.patchValue(toAmount + (taxAmount ?? 0));
             byEntryControl?.get('actualAmount')?.patchValue(toAmount + (taxAmount ?? 0));
@@ -1008,20 +1019,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         taxEntryControl?.get('amount')?.patchValue(taxAmount);
         this.changeDetectionRef.detectChanges();
         return taxAmount;
-    }
-
-    public setDiscountScenarioBasedOnConditions(control: any): void {
-        const transactions = this.journalVoucherForm.get('transactions') as FormArray;
-        transactions.controls.forEach((control: FormGroup, index: number) => {
-            // Example condition to set discount scenario
-            if (control) {
-                control.get('discountScenario')?.setValue('beforeTax');
-            } else if (control) {
-                control.get('discountScenario')?.setValue('afterTax');
-            } else {
-                control.get('discountScenario')?.setValue('none');
-            }
-        });
     }
 
     /**
