@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { GeneralService } from '../../services/general.service';
@@ -9,14 +9,20 @@ import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import * as dayjs from 'dayjs';
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep } from '../../lodash-optimized';
 import { GstReconcileService } from '../../services/gst-reconcile.service';
 import { CommonService } from '../../services/common.service';
 import { ToasterService } from '../../services/toaster.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
+interface DateCheckResult {
+    status: boolean;
+    monthName?: string;
+    monthNumber?: number;
+    year?: number;
+}
 @Component({
     selector: 'vat-report-filters',
     templateUrl: './vat-report-filters.component.html',
@@ -98,7 +104,7 @@ export class VatReportFiltersComponent implements OnInit {
     /** Hold static months array */
     public months: any[] = [
         { label: 'January', value: 1 },
-        { label: 'Febuary', value: 2 },
+        { label: 'February', value: 2 },
         { label: 'March', value: 3 },
         { label: 'April', value: 4 },
         { label: 'May', value: 5 },
@@ -132,7 +138,7 @@ export class VatReportFiltersComponent implements OnInit {
     private hasQueryParams: boolean = false;
     /** True if Vat Report page */
     public isVatReport: boolean;
-     /** True if Liability Report page */
+    /** True if Liability Report page */
     public isLiabilityReport: boolean;
 
     constructor(
@@ -144,7 +150,8 @@ export class VatReportFiltersComponent implements OnInit {
         public settingsFinancialYearService: SettingsFinancialYearService,
         private commonService: CommonService,
         private toaster: ToasterService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private router: Router
     ) {
         this.getFinancialYears();
     }
@@ -162,13 +169,13 @@ export class VatReportFiltersComponent implements OnInit {
         if (this.isLiabilityReport) {
             this.getQueryParams();
         }
-        if(!this.hasQueryParams){
+        if (!this.hasQueryParams) {
             this.getSelectedCurrency();
         }
 
         // Refresh report data according to universal date
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj: Date[]) => {
-            if (dateObj && this.hasQueryParams) {
+            if (dateObj && !this.hasQueryParams) {
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
@@ -191,14 +198,14 @@ export class VatReportFiltersComponent implements OnInit {
      * @memberof VatReportFiltersComponent
      */
     private getQueryParams(): void {
-        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+        this.route.queryParams.pipe(take(1)).subscribe(params => {
             if (params) {
                 const from = params['from'];
                 const to = params['to'];
                 const taxNumber = params['taxNumber'];
                 const currencyCode = params['currencyCode'];
                 this.hasQueryParams = from && to && taxNumber;
-                const queryObject = {from: from, to: to, taxNumber: taxNumber, currencyCode: currencyCode};
+                const queryObject = { from: from, to: to, taxNumber: taxNumber, currencyCode: currencyCode };
                 this.assignQueryValues(queryObject);
             }
         });
@@ -215,16 +222,25 @@ export class VatReportFiltersComponent implements OnInit {
         this.taxNumber = value.taxNumber;
         this.currentTaxNumber.emit(this.taxNumber);
 
-        this.from = value.from;
+        const fromDateInYYYYDDMM = dayjs(value?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD);
+        this.from = dayjs(fromDateInYYYYDDMM).format(GIDDH_DATE_FORMAT);
         this.fromDate.emit(this.from);
 
-        this.to = value.to;
+        const toDateInYYYYDDMM = dayjs(value?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD);
+        this.to = dayjs(toDateInYYYYDDMM).format(GIDDH_DATE_FORMAT);
         this.toDate.emit(this.to);
 
-        this.selectedDateRange = { startDate: dayjs(this.from), endDate: dayjs(this.to) };
-        this.selectedDateRangeUi = dayjs(this.from).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.to).format(GIDDH_NEW_DATE_FORMAT_UI);
+        this.selectedDateRange = { startDate: dayjs(fromDateInYYYYDDMM), endDate: dayjs(toDateInYYYYDDMM) };
+        this.selectedDateRangeUi = dayjs(fromDateInYYYYDDMM).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(toDateInYYYYDDMM).format(GIDDH_NEW_DATE_FORMAT_UI);
         this.onCurrencyChange({ value: value.currencyCode }, true);
-        // this.getVatReport();
+
+        const isMonthwiseDateRange = this.checkFullMonthRange(fromDateInYYYYDDMM, toDateInYYYYDDMM);
+
+        if (isMonthwiseDateRange.status) {
+            this.getYearStartAndEndDate({ label: isMonthwiseDateRange.year, value: isMonthwiseDateRange?.year });
+            this.getMonthStartAndEndDate({ label: isMonthwiseDateRange.monthName, value: isMonthwiseDateRange?.monthNumber }, true);
+        }
+        this.getVatReport();
     }
 
     /**
@@ -299,7 +315,7 @@ export class VatReportFiltersComponent implements OnInit {
             }
             this.isTaxApiInProgress.emit(false);
             setTimeout(() => {
-                if(!this.hasQueryParams){
+                if (!this.hasQueryParams) {
                     this.getVatReport();
                 }
             }, 100);
@@ -338,6 +354,7 @@ export class VatReportFiltersComponent implements OnInit {
     * @memberof VatReportFiltersComponent
     */
     public dateSelectedCallback(value?: any): void {
+        this.hasQueryParams = false;
         if (value && value.event === "cancel") {
             this.hideGiddhDatepicker();
             return;
@@ -358,10 +375,20 @@ export class VatReportFiltersComponent implements OnInit {
             this.fromDate.emit(this.from);
             this.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.toDate.emit(this.to);
-            if(!this.hasQueryParams){
-                this.getVatReport();
-            }
+            this.getVatReport();
+            this.clearQueryParams();
         }
+    }
+
+    /**
+     * Clear query params,
+     * Navigate to the current URL path without query parameters, 
+     *
+     * @private
+     * @memberof VatReportFiltersComponent
+     */
+    private clearQueryParams(): void {
+        this.router.navigate([], { queryParams: {} });
     }
 
     /**
@@ -443,7 +470,7 @@ export class VatReportFiltersComponent implements OnInit {
      * @param {number} selectedMonth
      * @memberof VatReportFiltersComponent
      */
-    public getMonthStartAndEndDate(selectedMonth: any): void {
+    public getMonthStartAndEndDate(selectedMonth: any, callUsingQueryParams: boolean = false): void {
         if (selectedMonth) {
             this.selectedMonth = selectedMonth;
 
@@ -457,6 +484,10 @@ export class VatReportFiltersComponent implements OnInit {
             this.to = dayjs(endDate).format(GIDDH_DATE_FORMAT);
             this.toDate.emit(this.to);
             this.getVatReport();
+
+            if (!callUsingQueryParams) {
+                this.clearQueryParams();
+            }
         }
     }
 
@@ -529,6 +560,40 @@ export class VatReportFiltersComponent implements OnInit {
                 this.toaster.showSnackBar("error", response.message);
             }
         });
+    }
+
+    /**
+     * Check the From and To Date is lies in same month and also start and end day of the same month
+     *
+     * @private
+     * @param {string} fromDate
+     * @param {string} toDate
+     * @returns {DateCheckResult}
+     * @memberof VatReportFiltersComponent
+     */
+    private checkFullMonthRange(fromDate: string, toDate: string): DateCheckResult {
+        const from = dayjs(fromDate);
+        const to = dayjs(toDate);
+
+        const fromStartOfMonth = from.startOf('month');
+        const toEndOfMonth = from.endOf('month');
+
+        const isFirstDayOfMonth = from.isSame(fromStartOfMonth, 'day');
+        const isLastDayOfMonth = to.isSame(toEndOfMonth, 'day');
+        const isSameMonthAndYear = from.isSame(to, 'month') && from.isSame(to, 'year');
+
+        if (isFirstDayOfMonth && isLastDayOfMonth && isSameMonthAndYear) {
+            return {
+                status: true,
+                monthName: from.format('MMMM'),
+                monthNumber: from.month() + 1,
+                year: from.year(),
+            };
+        } else {
+            return {
+                status: false,
+            };
+        }
     }
 
     /**
