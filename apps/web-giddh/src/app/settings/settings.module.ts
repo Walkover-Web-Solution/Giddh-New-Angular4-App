@@ -136,6 +136,9 @@ import { CommonModule } from '@angular/common';
         AccountNumberMaskModule,
         WatchVideoModule,
         CreateAddressModule
+    ],
+    exports: [
+        SettingsTagsComponent
     ]
 })
 

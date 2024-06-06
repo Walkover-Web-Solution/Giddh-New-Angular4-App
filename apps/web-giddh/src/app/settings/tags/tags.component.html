@@ -5,127 +5,36 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div class="box giddh-container-center">
-        <form>
+        <form [formGroup]="tagForm" >
             <div class="row">
-                <form (submit)="createTag()" [formGroup]="tagForm" class="row">
-                    <div class="w-100">
-                        <div class="form-group d-flex column-gap1 align-items-center">
-                            <input-field
-                                [type]="'text'"
-                                [name]="'tagName'"
-                                formControlName="name"
-                                [placeholder]="localeData?.tag_name_placeholder"
+                <div class="col-12 px-0">
+                    <div *ngIf="isLoading">
+                        <giddh-page-loader></giddh-page-loader>
+                    </div>
+                    <mat-form-field class="w-100" appearance="outline" *ngIf="!isLoading">
+                        <mat-label>{{ localeData?.tags_name  }}</mat-label>
+                        <mat-chip-grid #chipGrid aria-label="Enter tag">
+                            <mat-chip-row *ngFor="let tag of tags"
+                                        (removed)="deleteTag(tag)"
+                                        [editable]="true"
+                                        (edited)="updateTag(tag, $event)"
+                                        [aria-description]="'press enter to edit ' + tag.name"
                             >
-                            </input-field>
-                            <div>
-                                <button
-                                    mat-stroked-button
-                                    color="primary"
-                                    type="submit"
-                                    class="min-width-unset"
-                                    [disabled]="tagForm?.invalid"
-                                >
-                                    <i class="icon-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <!-- <div class="form-group clearfix col-md-12 col-lg-6 col-xs-12 mt-1">
-                    <div class="create-tag" (click)="showCreateTag()">
-                        <button mat-stroked-button color="primary">{{ localeData?.create_tag }}</button>
-                    </div>
-                </div> -->
-                <div class="col-12">
-                    <table *ngIf="!isLoading && tags?.length" mat-table [dataSource]="tags" class="basic giddh-table table w-100 tags-table">
-                        <ng-container matColumnDef="number">
-                            <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.s_no }}</th>
-                            <td mat-cell *matCellDef="let element; let i = index">{{ i+1 }}</td>
-                        </ng-container>
-                        <ng-container matColumnDef="name">
-                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.tags_name }}</th>
-                            <td mat-cell *matCellDef="let element; let i = index">
-                                <span *ngIf="updateIndex !== i">{{ element.name }}</span>
-                                <input
-                                    *ngIf="updateIndex === i"
-                                    type="text"
-                                    matInput
-                                    class="form-control"
-                                    name="name_of_{{ i }}"
-                                    [(ngModel)]="element.name"
-                                />
-                            </td>
-                        </ng-container>
-                        <ng-container matColumnDef="description">
-                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.tags_description }}</th>
-                            <td mat-cell *matCellDef="let element; let i = index">
-                                <div *ngIf="updateIndex !== i">{{ element.description }}</div>
-                                <textarea
-                                    rows="1"
-                                    *ngIf="updateIndex === i"
-                                    class="form-control"
-                                    name="description_of_{{ i }}"
-                                    [(ngModel)]="element.description"
-                                ></textarea>
-                            </td>
-                        </ng-container>
-                        <ng-container matColumnDef="action">
-                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_action }}</th>
-                            <td mat-cell *matCellDef="let element; let i = index">
-                                <div class="d-flex column-gap1">
-                                    <button
-                                        *ngIf="updateIndex !== i"
-                                        (click)="setUpdateIndex(i)"
-                                        type="button"
-                                        class="min-width-unset"
-                                        mat-stroked-button
-                                        [matTooltip]="commonLocaleData?.app_edit"
-                                        [matTooltipPosition]="'above'"
-                                    >
-                                        <i
-                                            class="icon-edit-pencil"
-                                            aria-hidden="true"                                           
-                                        ></i>
-                                    </button>
-                                    <button
-                                        *ngIf="updateIndex !== i"
-                                        (click)="deleteTag(element)"
-                                        type="button"
-                                        class="min-width-unset"
-                                        mat-stroked-button
-                                        [matTooltip]="commonLocaleData?.app_delete"
-                                        [matTooltipPosition]="'above'"
-                                    >
-                                        <i
-                                            class="fa fa-trash"
-                                            aria-hidden="true"                                            
-                                        ></i>
-                                    </button>
-
-                                    <button
-                                        *ngIf="updateIndex === i"
-                                        (click)="updateTag(element, i)"
-                                        type="button"
-                                        class="min-width-unset"
-                                        mat-stroked-button
-                                    >
-                                        <i class="fa fa-check" aria-hidden="true"></i>
-                                    </button>
-                                    <button
-                                        *ngIf="updateIndex === i"
-                                        (click)="resetUpdateIndex()"
-                                        type="button"
-                                        class="min-width-unset"
-                                        mat-stroked-button
-                                    >
-                                        <i class="icon-cross" aria-hidden="true"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </ng-container>
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                    </table>
+                            {{tag.name | titlecase }}
+                            <button matChipRemove [attr.aria-label]="'remove ' + tag.name">
+                                <i class="icon-cross"></i>
+                            </button>
+                            </mat-chip-row>
+                            <input  
+                                [placeholder]="localeData?.tag_name_placeholder"
+                                [matChipInputFor]="chipGrid"
+                                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                [matChipInputAddOnBlur]="addOnBlur"
+                                (matChipInputTokenEnd)="createTag($event)"
+                            />
+                        </mat-chip-grid>
+                    </mat-form-field>
+                   
                     <div class="no-data" *ngIf="!isLoading && !tags?.length">
                         <no-data [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
                     </div>
@@ -134,60 +43,7 @@
         </form>
     </div>
 
-    <ng-template #createTagForm>
-        <div class="aside-pane">
-            <div class="dialog-header">
-                <h3 mat-dialog-title>{{ localeData?.create_tag }}</h3>
-                <i mat-dialog-close class="icon-cross"></i>
-            </div>
-            <mat-dialog-content>
-                <div class="aside-body">
-                    <div class="aside-pane-form">
-                        <div class="form-group clearfix col-md-12 col-lg-12 col-xs-12 mt-4">
-                            <form (submit)="createTag(newTag)" class="row">
-                                <div class="w-100">
-                                    <div class="form-group">
-                                        <input-field
-                                            [type]="'text'"
-                                            [name]="'tagName'"
-                                            [(ngModel)]="newTag.name"
-                                            [placeholder]="localeData?.tag_name_placeholder"
-                                        >
-                                        </input-field>
-                                    </div>
-                                    <div class="form-group">
-                                        <mat-form-field appearance="outline" class="w-100">
-                                            <mat-label>{{ localeData?.tag_description_placeholder }}</mat-label>
-                                            <textarea
-                                                matInput
-                                                [name]="'tagDescription'"
-                                                [(ngModel)]="newTag.description"
-                                                [placeholder]="localeData?.tag_description_placeholder"
-                                            ></textarea>
-                                        </mat-form-field>
-                                    </div>
-                                    <div class="mr-t1">
-                                        <button
-                                            mat-stroked-button
-                                            color="primary"
-                                            type="submit"
-                                            class="btn"
-                                            [disabled]="!newTag.name"
-                                        >
-                                            {{ commonLocaleData?.app_create }}
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </mat-dialog-content>
-        </div>
-    </ng-template>
-
     <!-- add branch modal -->
-
     <ng-template #confirmationModal>
         <div class="modal-md">
             <div class="modal-content">

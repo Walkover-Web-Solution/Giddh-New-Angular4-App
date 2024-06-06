@@ -1,11 +1,13 @@
-import { ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { take } from 'rxjs/operators';
+import { Component, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { cloneDeep, map, orderBy } from '../../lodash-optimized';
 import { SettingsTagService } from '../../services/settings.tag.service';
 import { ToasterService } from '../../services/toaster.service';
 import { FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
 
 export interface TagInterface {
     name: string,
@@ -18,24 +20,25 @@ export interface TagInterface {
     templateUrl: './tags.component.html',
     styleUrls: ['./tags.component.scss'],
 })
-export class SettingsTagsComponent implements OnInit, OnDestroy {
-    public tagForm: FormGroup;
-    public tags: any[] = [];
-    public updateIndex: number = null;
-    public confirmationMessage: string = '';
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** True if api call in progress */
-    public isLoading: boolean = false;
-    /* This will hold local JSON data */
-    public localeData: any = {};
-    /* This will hold common JSON data */
-    public commonLocaleData: any = {};
-    /** Create Tag Form template reference */
-    @ViewChild('createTagForm', { static: true }) public createTagForm: TemplateRef<any>;
+export class SettingsTagsComponent implements OnInit {
     /** Create Confirmation Dialog template reference */
     @ViewChild('confirmationModal', { static: true }) public confirmationModal: TemplateRef<any>;
-    /** Holds Table Display Columns */
-    public displayedColumns: string[] = ['number', 'name', 'description', 'action'];
+    public tagForm: FormGroup;
+    public tags: any[] = [];
+    public confirmationMessage: string = '';
+    /** True if api call in progress */
+    public isLoading: boolean = false;
+    /** This will hold local JSON data */
+    public localeData: any = {};
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** Holds True if want to trigger create tag function in input blur*/
+    public addOnBlur: boolean = true;
+    /** Holds separator Keys Codes constant */
+    public readonly separatorKeysCodes: any = [ENTER, COMMA] as const;
+    /** Holds announcer for mat chip */
+    public announcer: any = inject(LiveAnnouncer);
+
 
     constructor(
         private settingsTagService: SettingsTagService,
@@ -45,15 +48,25 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
     ) {
     }
 
-    public ngOnInit() {
+    /**
+     * Initializes the component
+     *
+     * @memberof SettingsTagsComponent
+     */
+    public ngOnInit(): void {
         this.tagFormInit();
         this.getTags();
     }
 
-    public getTags() {
+    /**
+     * Get all tags
+     *
+     * @memberof SettingsTagsComponent
+     */
+    public getTags(): void {
         this.tags = [];
         this.isLoading = true;
-        this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.settingsTagService.GetAllTags().pipe(take(1)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
                 map(response?.body, (tag) => {
                     tag.uniqueName = tag?.name;
@@ -65,40 +78,61 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
         });
     }
 
-    public createTag() {
-        const formValue = this.tagForm.value;
-        console.log("formValue", formValue);
+    /**
+     * Create new tag
+     *
+     * @param {MatChipInputEvent} event
+     * @memberof SettingsTagsComponent
+     */
+    public createTag(event: MatChipInputEvent): void {
+        if (event?.value?.length) {
+            this.tagForm.get('name').patchValue(event.value);
+            const formValue = this.tagForm.value;
+            this.settingsTagService.CreateTag(formValue).pipe(take(1)).subscribe(response => {
+                if (response) {
+                    this.tagForm.reset();
+                    event.chipInput!.clear();
+                    this.showToaster(this.commonLocaleData?.app_messages?.tag_created, response);
+                }
+            });
+        }
+    }
 
-        this.settingsTagService.CreateTag(formValue).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.showToaster(this.commonLocaleData?.app_messages?.tag_created, response);
+    /**
+     * Update Tag name
+     *
+     * @param {TagInterface} tag
+     * @param {MatChipEditedEvent} event
+     * @memberof SettingsTagsComponent
+     */
+    public updateTag(tag: TagInterface, event: MatChipEditedEvent): void {
+        tag.name = event.value.trim();
+        this.setTagValue(tag);
+        this.settingsTagService.UpdateTag(tag).pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.showToaster(this.commonLocaleData?.app_messages?.tag_updated, response);
+            }
         });
     }
 
-    public updateTag(tag: TagInterface) {
-        this.settingsTagService.UpdateTag(tag).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.showToaster(this.commonLocaleData?.app_messages?.tag_updated, response);
-        });
-        this.updateIndex = null;
-    }
-
-    public setUpdateIndex(indx: number) {
-        this.updateIndex = indx;
-    }
-
-    public onUserConfirmation(deleteTagConfirmation: boolean) {
+    /**
+     * Delete Tag
+     *
+     * @param {boolean} deleteTagConfirmation
+     * @memberof SettingsTagsComponent
+     */
+    public onUserConfirmation(deleteTagConfirmation: boolean): void {
         if (deleteTagConfirmation) {
-            let model = this.tagForm.value;
-            
-            this.settingsTagService.DeleteTag(model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                this.showToaster(this.commonLocaleData?.app_messages?.tag_deleted, response);
+            const model = this.tagForm.value;
+
+            this.settingsTagService.DeleteTag(model).pipe(take(1)).subscribe(response => {
+                if (response) {
+                    this.showToaster(this.commonLocaleData?.app_messages?.tag_deleted, response);
+                    this.announcer.announce(`Removed ${model?.name}`);
+                }
             });
         }
         this.confirmationMessage = '';
-    }
-
-    public ngOnDestroy() {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
     }
 
     /**
@@ -119,21 +153,19 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
         }
     }
 
-    // /**
-    // * Open Create Tag Dialog
-    // *
-    // * @memberof SettingsTagsComponent
-    // */
-    // public showCreateTag(): void {
-    //     this.createTagFormRef = this.dialog.open(this.createTagForm, {
-    //         height: '100vh !important',
-    //         width: 'var(--aside-pane-width)',
-    //         position: {
-    //             right: '0',
-    //             top: '0'
-    //         }
-    //     });
-    // }
+    /**
+     * Set tag name and uniqueName to formcontrol
+     *
+     * @private
+     * @param {TagInterface} tag
+     * @memberof SettingsTagsComponent
+     */
+    private setTagValue(tag: TagInterface): void {
+        if (tag?.name) {
+            this.tagForm.get('name').patchValue(tag?.name);
+            this.tagForm.get('uniqueName').patchValue(tag?.uniqueName);
+        }
+    }
 
     /**
      * Open Delete Tag Confirmation Dialog
@@ -142,8 +174,7 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
      * @memberof SettingsTagsComponent
      */
     public deleteTag(tag: TagInterface): void {
-        this.tagForm.get('name').patchValue(tag?.name);
-        this.tagForm.get('uniqueName').patchValue(tag?.uniqueName);
+        this.setTagValue(tag);
         let message = this.localeData?.remove_tag;
         message = message?.replace("[TAG_NAME]", tag.name);
         this.confirmationMessage = message;
@@ -163,7 +194,7 @@ export class SettingsTagsComponent implements OnInit, OnDestroy {
         this.tagForm = this.formBuilder.group({
             name: ['', Validators.required],
             description: [''],
-            uniqueName: ['' ]
+            uniqueName: ['']
         });
     }
 }
