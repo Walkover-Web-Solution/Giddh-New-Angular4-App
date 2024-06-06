@@ -377,15 +377,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-        window.addEventListener('message', event => {
-            if ((this.router.url === '/pages/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/subscription/buy-plan') && event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
-                if (this.isChangePlan) {
-                    this.router.navigate(['/pages/subscription']);
-                } else {
-                    this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+        if (this.router.url === '/pages/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/subscription/buy-plan') {
+            window.addEventListener('message', event => {
+                if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
+                    if (this.isChangePlan) {
+                        this.router.navigate(['/pages/subscription']);
+                    } else {
+                        this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                    }
                 }
-            }
-        });
+            });
+        }
 
         this.applyPromoCodeSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -1070,8 +1072,13 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public getAllPlans(): void {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length) {
-                this.monthlyPlans = response?.filter(plan => plan?.monthlyAmount > 0);
-                this.yearlyPlans = response?.filter(plan => plan?.yearlyAmount >= 0);
+                this.monthlyPlans = response?.filter(plan =>
+                    plan.hasOwnProperty('monthlyAmount') && plan?.monthlyAmount !== null
+                );
+
+                this.yearlyPlans = response?.filter(plan =>
+                    plan.hasOwnProperty('yearlyAmount') && plan?.yearlyAmount !== null
+                );
                 this.monthlyPlans = this.monthlyPlans.sort((a, b) => a.monthlyAmount - b.monthlyAmount);
                 this.yearlyPlans = this.yearlyPlans.sort((a, b) => a.yearlyAmount - b.yearlyAmount);
                 if (this.yearlyPlans?.length) {
