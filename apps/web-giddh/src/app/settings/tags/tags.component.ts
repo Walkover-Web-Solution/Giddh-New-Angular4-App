@@ -23,8 +23,11 @@ export interface TagInterface {
 export class SettingsTagsComponent implements OnInit {
     /** Create Confirmation Dialog template reference */
     @ViewChild('confirmationModal', { static: true }) public confirmationModal: TemplateRef<any>;
+    /** Holds tag form group */
     public tagForm: FormGroup;
+    /** Holds tags list */
     public tags: any[] = [];
+    /** Holds confirmation message */
     public confirmationMessage: string = '';
     /** True if api call in progress */
     public isLoading: boolean = false;
@@ -39,14 +42,12 @@ export class SettingsTagsComponent implements OnInit {
     /** Holds announcer for mat chip */
     public announcer: any = inject(LiveAnnouncer);
 
-
     constructor(
         private settingsTagService: SettingsTagService,
         private toaster: ToasterService,
         public dialog: MatDialog,
         private formBuilder: UntypedFormBuilder
-    ) {
-    }
+    ) { }
 
     /**
      * Initializes the component
