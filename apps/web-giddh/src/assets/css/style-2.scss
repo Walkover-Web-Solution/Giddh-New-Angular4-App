@@ -14016,10 +14016,12 @@ input[type="checkbox"].cdk-visually-hidden::after {
             width: 18px;
         }
     }
-.table-row {
-    &:hover {
-        .table-menu-first-td {
-            visibility: visible;
+
+    .table-row {
+        &:hover {
+            .table-menu-first-td {
+                visibility: visible;
+            }
         }
     }
     }
