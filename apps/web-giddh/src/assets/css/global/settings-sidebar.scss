@@ -1,6 +1,6 @@
 .setting-items {
-    padding: 5px 0 0;
-    mat-list {
+padding: 5px 0 0;
+mat-list {
         padding: 0;
         list-style: none;
         font-size: var(--font-size-15);
@@ -62,6 +62,29 @@
                 }
                 span {
                     color: var(--color-primary-right-sidebar-list-text-hover) !important;
+                }
+            }
+        }
+    }
+}
+
+body {
+    &.on-setting-page {
+        .cdk-overlay-pane {
+            &:has(.tags-menu-contianer) {
+                top: var(--header-height) !important;
+                right: 0px !important;
+                transform: translateX(-240px) !important; // 240px is width of setting sidebar
+            .mat-mdc-menu-panel{
+                max-width: unset !important;
+                .mat-mdc-menu-content {
+                    padding: 0 !important;
+                        .tags-menu-contianer {  
+                            padding: 15px !important;
+                            min-width: 480px;
+                            height: calc(100vh - (var(--header-height)));
+                        }
+                    }
                 }
             }
         }

@@ -126,7 +126,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                     name: [this.addressToUpdate.name, [Validators.required, Validators.maxLength(100)]],
                     taxNumber: [this.addressToUpdate.taxNumber, (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
                     state: [{ value: this.addressToUpdate.stateCode, disabled: !!this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' }, !this.addressConfiguration.countyList?.length ? Validators.required : null],
-                    stateLabel: [this.addressToUpdate?.stateCode + ' - ' + this.addressToUpdate?.stateName],
+                    stateLabel: [this.addressToUpdate?.stateName && this.addressToUpdate?.stateCode ? this.addressToUpdate?.stateCode + ' - ' + this.addressToUpdate?.stateName : ''],
                     county: [this.addressToUpdate.county?.code, this.addressConfiguration.countyList?.length ? Validators.required : null],
                     address: [this.addressToUpdate.address, this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' ? [Validators.required] : []],
                     linkedEntity: [this.addressConfiguration.linkedEntities?.filter((item) => {
