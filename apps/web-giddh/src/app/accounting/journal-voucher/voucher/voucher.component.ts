@@ -878,6 +878,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let actualTaxAmount;
         let discountEntryControl;
         let actualDiscountAmount;
+        let discountScenario: string
 
         (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
             if (control.value.particular && control.value.type === "to" && !control.value.isTaxApplied && !control.value.isDiscountApplied) {
@@ -892,12 +893,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             if (control.value.particular && control.value.type === "by" && control.value.isDiscountApplied) {
                 discountEntryControl = control;
                 actualDiscountAmount = control.value.discountValue;
-                byAmount += control.value.actualAmount;
-                // if (!taxAmount) {
-                //     toEntryControl?.get('amount')?.patchValue(toAmount - control.value.discountValue);
-                //     toEntryControl?.get('actualAmount')?.patchValue(toAmount - control.value.discountValue);
-                //     toAmount = toEntryControl.value.amount;
-                // }
+                discountScenario = control.value.discountScenario;
+                if (!taxAmount) {
+                    toEntryControl?.get('amount')?.patchValue(toAmount - control.value.discountValue);
+                    toEntryControl?.get('actualAmount')?.patchValue(toAmount - control.value.discountValue);
+                    toAmount = toEntryControl.value.amount;
+                }
             }
 
             if (!taxAmount && control.value.particular && control.value.type === "to" && control.value.isTaxApplied) {
@@ -925,6 +926,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             return { baseAmount, gstAmount };
         };
 
+        // Apply discount before tax if applicable
+        if (discountScenario === 'beforeTax' && actualDiscountAmount > 0) {
+            byAmount -= actualDiscountAmount;
+        }
+
         if (!transactionAtIndex?.get('isInclusiveTax')?.value && transactionAtIndex?.value.type === 'to') {
             if (actualTaxAmount > 0 && toAmount > 0) {
                 const { baseAmount, gstAmount } = applyTax(byAmount, actualTaxAmount, true);
@@ -942,7 +948,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
         if (!transactionAtIndex?.get('isInclusiveTax')?.value && transactionAtIndex?.value.type === 'by') {
             if (actualTaxAmount > 0 && toAmount > 0) {
-                const { baseAmount, gstAmount } = applyTax(byAmount, actualTaxAmount, false);
+                const { baseAmount, gstAmount } = applyTax(byAmount, actualTaxAmount, true);
                 toAmount = baseAmount;
                 taxAmount = gstAmount;
                 toEntryControl?.get('amount')?.patchValue(toAmount);
@@ -958,7 +964,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         if (transactionAtIndex?.get('isInclusiveTax')?.value && transactionAtIndex?.value.type === 'to') {
             if (taxAmount > 0 && toAmount > 0) {
-                const { baseAmount, gstAmount } = applyTax(transactionAtIndex.value.actualAmount, actualTaxAmount, true);
+                const { baseAmount, gstAmount } = applyTax(transactionAtIndex.value.actualAmount, actualTaxAmount, false);
                 toAmount = baseAmount;
                 taxAmount = gstAmount;
                 byEntryControl?.get('amount')?.patchValue(toAmount + (taxAmount ?? 0));
@@ -976,7 +982,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         if (transactionAtIndex?.get('isInclusiveTax')?.value && transactionAtIndex?.value.type === 'by') {
             if (taxAmount > 0 && toAmount > 0) {
-                const { baseAmount, gstAmount } = applyTax(transactionAtIndex.value.actualAmount, actualTaxAmount, true);
+                const { baseAmount, gstAmount } = applyTax(transactionAtIndex.value.actualAmount, actualTaxAmount, false);
                 toAmount = baseAmount;
                 taxAmount = gstAmount;
                 byEntryControl?.get('amount')?.patchValue(toAmount + (taxAmount ?? 0));
@@ -990,6 +996,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 taxAmount = 0;
                 toAmount = toAmount;
             }
+        }
+
+        // Apply discount after tax if applicable
+        if (discountScenario === 'afterTax' && actualDiscountAmount > 0) {
+            toAmount -= actualDiscountAmount;
+            byEntryControl?.get('amount')?.patchValue(toAmount + (taxAmount ?? 0));
+            byEntryControl?.get('actualAmount')?.patchValue(toAmount + (taxAmount ?? 0));
         }
 
         taxEntryControl?.get('amount')?.patchValue(taxAmount);
