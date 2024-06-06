@@ -146,6 +146,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
                 }
             });
         }
+    }
 
     /**
      * Opens a dialog for transferring the subscription.
