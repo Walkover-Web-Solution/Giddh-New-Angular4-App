@@ -36,18 +36,18 @@
                 <mat-list role="list" *ngFor="let section of filteredSettingsPageTabs">
                     <ng-container *ngFor="let tab of section">
                         <ng-container *ngIf="tab?.link !== '/pages/settings/tag'; else tagsListItem">
-                            <mat-list-item role="listitem" [ngClass]="{ 'active-link': (tab.link === routerUrl || tab?.linked_pages?.includes(routerUrl)) && !isTagMenuOpened }">
+                            <mat-list-item role="listitem" [ngClass]="{ 'active-link': (tab?.link === routerUrl || tab?.linked_pages?.includes(routerUrl)) && !isTagMenuOpened }">
                                 <a href="javascript:;" aria-label="icon" class="d-block clearfix" [routerLink]="tab?.link">
-                                    <span [innerHTML]="tab.icon"></span>
-                                    <span>{{ tab.label }}</span>
+                                    <span [innerHTML]="tab?.icon"></span>
+                                    <span>{{ tab?.label }}</span>
                                 </a>
                             </mat-list-item>
                         </ng-container>
                         <ng-template #tagsListItem>
                             <mat-list-item role="listitem" [ngClass]="{ 'active-link': isTagMenuOpened }">
                                 <a href="javascript:;" aria-label="icon" class="d-block clearfix" [matMenuTriggerFor]="tagsMenu" #tagsMenuTrigger="matMenuTrigger" (menuOpened)="isTagMenuOpened = true" (menuClosed)="isTagMenuOpened = false">
-                                    <span [innerHTML]="tab.icon"></span>
-                                    <span>{{ tab.label }}</span>
+                                    <span [innerHTML]="tab?.icon"></span>
+                                    <span>{{ tab?.label }}</span>
                                 </a>
                             </mat-list-item>
                         </ng-template>

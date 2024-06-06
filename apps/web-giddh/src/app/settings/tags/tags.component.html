@@ -4,7 +4,7 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="box giddh-container-center">
+    <div class="box section-center">
         <form [formGroup]="tagForm" >
             <div class="row">
                 <div class="col-12 px-0">
@@ -18,10 +18,10 @@
                                         (removed)="deleteTag(tag)"
                                         [editable]="true"
                                         (edited)="updateTag(tag, $event)"
-                                        [aria-description]="'press enter to edit ' + tag.name"
+                                        [aria-description]="'press enter to edit ' + tag?.name"
                             >
-                            {{tag.name | titlecase }}
-                            <button matChipRemove [attr.aria-label]="'remove ' + tag.name">
+                            {{ tag?.name | titlecase }}
+                            <button matChipRemove [attr.aria-label]="'remove ' + tag?.name">
                                 <i class="icon-cross"></i>
                             </button>
                             </mat-chip-row>
