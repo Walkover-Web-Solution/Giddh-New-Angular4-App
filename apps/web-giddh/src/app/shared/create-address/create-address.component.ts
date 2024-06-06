@@ -86,9 +86,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.addressConfiguration && changes.addressConfiguration.currentValue !== changes.addressConfiguration.previousValue && (this.addressConfiguration?.stateList?.length || this.addressConfiguration?.countyList?.length || this.addressConfiguration?.
             linkedEntities)) {
-            this.setFormData();
-            console.log(this.addressConfiguration);
-            
+            this.setFormData();            
         }
     }
 
