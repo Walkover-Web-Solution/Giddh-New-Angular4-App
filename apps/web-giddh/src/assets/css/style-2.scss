@@ -13980,10 +13980,11 @@ input[type="checkbox"].cdk-visually-hidden::after {
             vertical-align: middle;
             visibility: hidden;
             color: var(--color-primary-contact-icon-dots-three-vertical);
-            height: 18px;
             width: 18px;
         }
+    }
 
+    .table-row {
         &:hover {
             .table-menu-first-td {
                 visibility: visible;
@@ -15098,6 +15099,7 @@ aside-menu-product-service {
 .country-dropdown-list {
     min-width: 300px;
 }
+
 // Global Class to align main container center
 .section-center {
     max-width: var(--center-content-max-width) !important;

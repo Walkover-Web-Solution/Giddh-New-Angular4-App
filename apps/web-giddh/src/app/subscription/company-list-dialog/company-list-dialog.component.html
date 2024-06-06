@@ -122,7 +122,7 @@
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    <tr class="table-row" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
             </section>
             <div class="no-data" *ngIf="!dataSource?.filteredData?.length">
