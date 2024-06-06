@@ -195,13 +195,15 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             }
         });
 
-        window.addEventListener('message', event => {
-            if (this.router.url === '/pages/subscription' && event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
-                this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
-                this.closeWindow();
-                this.getAllSubscriptions(false);
-            }
-        });
+        if (this.router.url === '/pages/subscription') {
+            window.addEventListener('message', event => {
+                if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
+                    this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
+                    this.closeWindow();
+                    this.getAllSubscriptions(false);
+                }
+            });
+        }
 
         this.subscriptionRazorpayOrderDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
