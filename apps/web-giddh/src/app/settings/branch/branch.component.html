@@ -21,16 +21,17 @@
                                 >
                                 </input-field>
                             </div>
-                            <a
-                                class="cursor-pointer mr-l1 clear-filter-btn"
+                            <button
                                 *ngIf="searchBranchQuery.value"
-                                href="javascript:;"
+                                class="w-100 mr-l1"
+                                mat-stroked-button
                                 (click)="resetFilter()"
+                                aria-label="cross icon"
                                 [matTooltip]="localeData?.reset_search"
-                                [matTooltipPosition]="'above'"
                             >
-                                <i aria-hidden="true" class="icon-refresh"></i> {{ commonLocaleData?.app_clear_filter }}
-                            </a>
+                                <i aria-hidden="true"  class="icon-cross d-inline-block font-12 mr-1"></i> 
+                                <span>{{ commonLocaleData?.app_clear_filter }}</span>
+                            </button>
                         </div>
                     </div>
                 </form>

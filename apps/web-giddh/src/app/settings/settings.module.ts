@@ -15,7 +15,6 @@ import { SettingPermissionComponent } from './permissions/setting.permission.com
 import { SettingProfileComponent } from './profile/setting.profile.component';
 import { SettingsComponent } from './settings.component';
 import { SettingRountingModule } from './settings.routing.module';
-import { SettingsTagsComponent } from './tags/tags.component';
 import { DeleteTaxConfirmationModelComponent } from './taxes/confirmation/confirmation.model.component';
 import { SettingTaxesComponent } from './taxes/setting.taxes.component';
 import { SettingTriggerComponent } from './trigger/setting.trigger.component';
@@ -64,6 +63,7 @@ import { PortalWhiteLabelComponent } from './portal-white-label/portal-white-lab
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { CreateAddressModule } from '../shared/create-address/create-address.module';
 import { CommonModule } from '@angular/common';
+import { TagsModule } from './tags/tags.module';
 
 @NgModule({
     declarations: [
@@ -80,7 +80,6 @@ import { CommonModule } from '@angular/common';
         SettingPermissionFormComponent,
         BranchComponent,
         DiscountComponent,
-        SettingsTagsComponent,
         SettingTriggerComponent,
         WarehouseComponent,
         CreateWarehouseComponent,
@@ -135,8 +134,9 @@ import { CommonModule } from '@angular/common';
         AsideMenuAccountModule,
         AccountNumberMaskModule,
         WatchVideoModule,
-        CreateAddressModule
-    ]
+        CreateAddressModule,
+        TagsModule
+    ],
 })
 
 export class SettingsModule {
