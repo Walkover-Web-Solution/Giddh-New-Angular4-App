@@ -1,7 +1,7 @@
 <div class="add-new-role-modal">
     <div class="modal-header d-flex justify-content-between">
         <h3>{{ localeData?.add_role }}</h3>
-        <span class="cursor-pointer font-24" (click)="closePopupEvent()">×</span>
+        <span class="cursor-pointer font-24 text-black" (click)="closePopupEvent()">×</span>
     </div>
     <div class="modal-body clearfix" id="export-body">
         <form #newRoleForm="ngForm" (submit)="addNewRole()" autocomplete="off">
@@ -17,7 +17,7 @@
                         #name="ngModel"
                     ></input-field>
                 </div>
-                <div class="form-group custom-select position-relative">
+                <div class="form-group custom-select position-relative bg-transparent">
                     <dropdown-field
                         [label]="localeData?.role_type_label"
                         [required]="true"
