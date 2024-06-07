@@ -14,6 +14,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { SubscriptionsService } from '../../services/subscriptions.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'change-billing',
@@ -88,12 +89,15 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
         billingName: "",
         uniqueName: ""
     };
+    /** Hold current time stamp  */
+    public currentTimestamp: string;
 
     constructor(
         private formBuilder: FormBuilder,
         private componentStore: ChangeBillingComponentStore,
         private commonActions: CommonActions,
         private toasterService: ToasterService,
+        private generalService: GeneralService,
         private subscriptionService: SubscriptionsService,
         private store: Store<AppState>,
         private changeDetection: ChangeDetectorRef,
@@ -110,6 +114,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
      * @memberof ChangeBillingComponent
      */
     public ngOnInit(): void {
+        this.currentTimestamp = this.generalService.getTimesStamp();
         this.initForm();
         this.getCountry();
         this.getStates();
