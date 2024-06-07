@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { VatService } from '../../services/vat.service';
 import { ToasterService } from '../../services/toaster.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { VatDetailedReportRequest } from '../../models/api-models/Vat';
 import { ReplaySubject, takeUntil } from 'rxjs';
 import { PAGINATION_LIMIT } from '../../app.constant';
@@ -52,7 +52,8 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
     constructor(
         private vatService: VatService,
         private toaster: ToasterService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private router: Router
     ) { }
 
     /**
@@ -64,13 +65,13 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
         document.querySelector('body').classList.add('gst-sidebar-open');
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            if(params) {
+            if (params) {
                 this.vatLiabilityReportRequest.from = params['from'];
                 this.vatLiabilityReportRequest.to = params['to'];
                 this.vatLiabilityReportRequest.taxNumber = params['taxNumber'];
                 this.vatLiabilityReportRequest.currencyCode = params['currencyCode'];
                 this.vatLiabilityReportRequest.section = params['section'];
-    
+
                 this.getVatLiabilityReport();
             }
         });
@@ -108,6 +109,25 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
             this.vatLiabilityReportRequest.page = event.page;
             this.getVatLiabilityReport();
         }
+    }
+
+    /**
+     * Back to liability report report page with same query params
+     *
+     * @memberof LiabilityDetailedReportComponent
+     */
+    public backToOverViewReport(): void {
+        this.router.navigate(
+            ['/pages/vat-report/liability-report'],
+            {
+                queryParams: {
+                    from: this.vatLiabilityReportRequest.from,
+                    to: this.vatLiabilityReportRequest.to,
+                    taxNumber: this.vatLiabilityReportRequest.taxNumber,
+                    currencyCode: this.vatLiabilityReportRequest.currencyCode
+                }
+            }
+        );
     }
 
     /**

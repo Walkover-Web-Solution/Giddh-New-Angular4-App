@@ -158,7 +158,7 @@
                             #vatReport="routerLinkActive"
                             [class.active]="vatReport.isActive"
                             [routerLink]="['/pages/vat-report/liability-report']"
-                            [routerLinkActiveOptions]="{exact: true}"
+                            [routerLinkActiveOptions]="{exact: false}"
                         >
                             <span><i class="icon-balance-sheet-new"></i></span>
                             <span>{{ localeData?.liability_report }}</span>
