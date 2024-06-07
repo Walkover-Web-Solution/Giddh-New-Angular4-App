@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { cloneDeep, map, orderBy } from '../../lodash-optimized';
 import { SettingsTagService } from '../../services/settings.tag.service';
 import { ToasterService } from '../../services/toaster.service';
-import { FormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
@@ -46,7 +46,7 @@ export class SettingsTagsComponent implements OnInit {
         private settingsTagService: SettingsTagService,
         private toaster: ToasterService,
         public dialog: MatDialog,
-        private formBuilder: UntypedFormBuilder
+        private formBuilder: FormBuilder
     ) { }
 
     /**
