@@ -34,7 +34,7 @@ export class DropdownFieldComponent implements OnInit, OnChanges, OnDestroy, Aft
     /** True if field is readonly */
     @Input() public readonly: boolean;
     /** True if field is autocomplete */
-    @Input() public autocomplete;
+    @Input() public autocomplete: string = 'off';
     /** Default value to prefill */
     @Input() public defaultValue: any = "";
     /** True if field is required */

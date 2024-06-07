@@ -218,7 +218,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         document.body?.classList?.add("plan-page");
         this.currentTimestamp = this.generalService.getTimesStamp();
-        console.log(this.currentTimestamp);
         this.initSubscriptionForm();
         this.getCountry();
         this.getAllPlans();
