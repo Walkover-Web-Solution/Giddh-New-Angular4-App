@@ -12,7 +12,7 @@
                     <h1 class="border-btm">{{ localeData?.try_things }}</h1>
                     <mat-list role="list" class="manage-invoice pt-0">
                         <mat-list-item role="listitem" class="mr-b1 px-0">
-                            <a [routerLink]="['/pages', 'proforma-invoice', 'invoice', 'sales']">
+                            <a [routerLink]="[voucherApiVersion === 2 ? '/pages/vouchers/sales/create' : '/pages/proforma-invoice/invoice/sales']">
                                 <img src="{{ imgPath }}create-invoice.svg" alt="" class="mr-r1" />{{
                                     localeData?.create_send_invoice
                                 }}</a

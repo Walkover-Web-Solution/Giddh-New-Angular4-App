@@ -20,14 +20,18 @@ export class EntryOtherTaxDirective implements OnChanges {
     public ngOnChanges(): void {
         let taxableValue = 0;
 
-        if (this.entry.otherTax.calculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
-            taxableValue = Number(this.entry.transactions[0].amount.amountForAccount) - this.entry.totalDiscount;
+        if (this.entry.otherTax) {
+            if (this.entry.otherTax?.calculationMethod === SalesOtherTaxesCalculationMethodEnum.OnTaxableAmount) {
+                taxableValue = Number(this.entry.transactions[0].amount.amountForAccount) - this.entry.totalDiscount;
+            } else {
+                taxableValue = Number(this.entry.transactions[0].amount.amountForAccount) - this.entry.totalDiscount + this.entry.totalTaxWithoutCess + this.entry.totalCess;
+            }
+
+            const amount = giddhRoundOff(((taxableValue * this.entry.otherTax?.taxValue) / 100), HIGH_RATE_FIELD_PRECISION);
+
+            this.calculatedAmount.emit(amount);
         } else {
-            taxableValue = Number(this.entry.transactions[0].amount.amountForAccount) - this.entry.totalDiscount + this.entry.totalTaxWithoutCess + this.entry.totalCess;
+            this.calculatedAmount.emit(0);
         }
-
-        const amount = giddhRoundOff(((taxableValue * this.entry.otherTax.taxValue) / 100), HIGH_RATE_FIELD_PRECISION);
-
-        this.calculatedAmount.emit(amount);
     }
 }

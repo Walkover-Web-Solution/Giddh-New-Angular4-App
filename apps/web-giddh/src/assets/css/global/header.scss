@@ -17,6 +17,20 @@
         }
     }
 }
+.menu-dropdown-wrapper {
+    .mat-list-base {
+        .mat-list-item {
+            width: auto;
+            height: auto;
+            .mat-list-item-content {
+                align-items: center !important;
+                column-gap: 8px !important;
+                font-size: var(--font-size-15);
+                padding: 0 !important;
+            }
+        }
+    }
+}
 .mat-mdc-menu-panel {
     max-width: 450px !important;
 }

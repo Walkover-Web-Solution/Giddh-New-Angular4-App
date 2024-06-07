@@ -49,6 +49,8 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     private createAccountIsSuccess$: Observable<boolean>;
     /** Holds true if current company country is plaid supported country */
     public isPlaidSupportedCountry: boolean;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2 = 2;
 
     constructor(
         private _router: Router, private _generalService: GeneralService,
@@ -60,6 +62,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.voucherApiVersion = this._generalService.voucherApiVersion;
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {

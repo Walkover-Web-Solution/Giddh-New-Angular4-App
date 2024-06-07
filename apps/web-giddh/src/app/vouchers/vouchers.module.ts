@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { MainComponent } from "./main.component";
-import { CommonModule } from "@angular/common";
+import { CommonModule, TitleCasePipe } from "@angular/common";
 import { RouterModule } from "@angular/router";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { VouchersRoutingModule } from "./vouchers.routing.module";
@@ -160,7 +160,8 @@ import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
     ],
     exports: [
 
-    ]
+    ],
+    providers: [TitleCasePipe]
 })
 export class VouchersModule {
 

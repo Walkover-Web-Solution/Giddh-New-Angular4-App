@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { Store } from "@ngrx/store";
-import { Observable, switchMap, catchError, EMPTY, of } from "rxjs";
+import { Observable, switchMap, catchError, EMPTY, of, mergeMap } from "rxjs";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { CustomTemplateResponse } from "../../models/api-models/Invoice";
 import { IDiscountList } from "../../models/api-models/SettingsDiscount";
@@ -46,6 +46,7 @@ export interface VoucherState {
     voucherListForCreditDebitNote: any;
     pendingPurchaseOrders: any[];
     countryList: any[];
+    ledgerEntries: any[];
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -74,7 +75,8 @@ const DEFAULT_STATE: VoucherState = {
     vouchersForAdjustment: null,
     voucherListForCreditDebitNote: null,
     pendingPurchaseOrders: null,
-    countryList: null
+    countryList: null,
+    ledgerEntries: null
 };
 
 @Injectable()
@@ -117,6 +119,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public pendingPurchaseOrders$ = this.select((state) => state.pendingPurchaseOrders);
     public countryList$ = this.select((state) => state.countryList);
     public deleteAttachmentIsSuccess$ = this.select((state) => state.deleteAttachmentIsSuccess);
+    public ledgerEntries$ = this.select((state) => state.ledgerEntries);
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
@@ -257,7 +260,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
 
     readonly getStockVariants = this.effect((data: Observable<{ q: any, index: number, autoSelectVariant: boolean }>) => {
         return data.pipe(
-            switchMap((req) => {
+            mergeMap((req) => {
                 return this.ledgerService.loadStockVariants(req.q).pipe(
                     tapResponse(
                         (res: Array<IVariant>) => {
@@ -513,6 +516,56 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
+    readonly getPurchaseOrderDetails = this.effect((data: Observable<string>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.getPurchaseOrder(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            let voucherDetails = res?.body ?? {};
+                            voucherDetails.isCopyVoucher = false;
+                            return this.patchState({
+                                voucherDetails: voucherDetails
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                voucherDetails: {}
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getEstimateProformaDetails = this.effect((data: Observable<{ voucherType: string, payload: any}>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.getEstimateProforma(req.payload, req.voucherType).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            let voucherDetails = res?.body ?? {};
+                            voucherDetails.isCopyVoucher = false;
+                            return this.patchState({
+                                voucherDetails: voucherDetails
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                voucherDetails: {}
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+    
     readonly getVoucherDetails = this.effect((data: Observable<{ isCopyVoucher: boolean, accountUniqueName: string, payload: any }>) => {
         return data.pipe(
             switchMap((req) => {
@@ -700,6 +753,29 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
+    readonly getEntriesByEntryUniqueNames = this.effect((data: Observable<{ accountUniqueName: any, payload: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                return this.voucherService.getEntriesByEntryUniqueNames(req.accountUniqueName, req.payload).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                ledgerEntries: res.body?.entries
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                ledgerEntries: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
     readonly resetAll = this.effect((data: Observable<void>) => {
         return data.pipe(
             switchMap((req) => {
@@ -713,7 +789,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     voucherDetails: null,
                     vouchersForAdjustment: null,
                     voucherListForCreditDebitNote: null,
-                    pendingPurchaseOrders: null
+                    pendingPurchaseOrders: null,
+                    exchangeRate: null
                 });
                 return of(null);
             })

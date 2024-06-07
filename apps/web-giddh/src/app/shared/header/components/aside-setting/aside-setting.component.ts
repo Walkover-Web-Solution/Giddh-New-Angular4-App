@@ -39,6 +39,8 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public routerUrl: string = "";
     /** Hold selected active company */
     public selectedCompany: CompanyResponse = null;
+    /** Hold true if tag menu is open */
+    public isTagMenuOpened: boolean = false;
 
     constructor(private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
 
@@ -59,7 +61,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
-            if (this.activeLocale && this.activeLocale !== response?.value) {
+            if(this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('aside-setting', response?.value).subscribe(response => {
                     this.localeData = response;
                 });

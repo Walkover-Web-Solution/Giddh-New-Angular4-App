@@ -1,5 +1,5 @@
 .setting-profile-container {
-    padding-top: 45px;
+    padding-top: 25px;
 }
 
 .giddh-table {
@@ -34,6 +34,10 @@
                 max-width: 400px;
                 white-space: normal;
                 word-break: break-word;
+            }
+
+            &.min-width-50{
+                min-width: 50px;
             }
         }
     }
@@ -124,18 +128,6 @@
 @media (max-width: 767px) {
     .setting-profile-container {
         padding-top: 15px;
-    }
-    .linked-with {
-        width: 100% !important;
-        .wrap-linked-company {
-            flex-direction: column;
-            .ml-auto {
-                margin-left: 0 !important;
-                .action-icon {
-                    width: 70px;
-                }
-            }
-        }
     }
 }
 

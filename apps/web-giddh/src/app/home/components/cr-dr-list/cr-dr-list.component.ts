@@ -61,6 +61,8 @@ export class CrDrComponent implements OnInit, OnDestroy {
     public giddhBalanceDecimalPlaces: number = 2;
     /** This will use for table heading */
     public displayedColumns: string[] = ['name', 'latestInvoiceDate', 'latestBillAmount', 'closingBalance'];
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2 = 2;
 
     constructor(private store: Store<AppState>, private contactService: ContactService, private cdRef: ChangeDetectorRef, private modalService: BsModalService, private generalService: GeneralService) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil((this.initializeDateWithUniversalDate) ? of(this.isDatePickerInitialized) : this.destroyed$));
@@ -73,6 +75,8 @@ export class CrDrComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
+        
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);

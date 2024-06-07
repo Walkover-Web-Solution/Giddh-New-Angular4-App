@@ -195,12 +195,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     public openingBalance: any;
     /** This will hold closing balance amount */
     public closingBalance: number = 0;
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
     /** This will store screen size */
@@ -223,7 +223,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     @ViewChild("mailModal") public mailModalComponent: TemplateRef<any>;
     /** Instance of bulk payment modal */
     @ViewChild("template") public bulkPaymentModalRef: TemplateRef<any>;
-
     /** True if we should select all checkbox */
     public showSelectAll: boolean = false;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
@@ -238,6 +237,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public moduleType: string = '';
     /** Holds true if current company country is plaid supported country */
     public isPlaidSupportedCountry: boolean;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: 1 | 2 = 2;
 
     constructor(public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
@@ -268,8 +269,9 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.renderer.addClass(document.body, 'contact-body');
-        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.store.dispatch(this.companyActions.getAllRegistrations());
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
@@ -554,10 +556,22 @@ export class ContactComponent implements OnInit, OnDestroy {
             case 2: // go to sales or purchase
                 this.purchaseOrSales = this.activeTab === "customer" ? "sales" : "purchase";
                 if (this.purchaseOrSales === "purchase") {
-                    this.goToRoute("proforma-invoice/invoice/purchase", "", account?.uniqueName);
+                    if (this.voucherApiVersion === 2) {
+                        this.goToRoute("vouchers/purchase/" + account?.uniqueName + "/create", "", "");
+                    } else {
+                        this.goToRoute("proforma-invoice/invoice/purchase", "", account?.uniqueName);
+                    }
                 } else {
                     let isCashInvoice = account?.uniqueName === "cash";
-                    this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? "cash" : "sales"}`, "", account?.uniqueName);
+                    if (this.voucherApiVersion === 2) {
+                        if (isCashInvoice) {
+                            this.goToRoute("vouchers/cash/create", "", "");
+                        } else {
+                            this.goToRoute("vouchers/sales/" + account?.uniqueName + "/create", "", "");
+                        }
+                    } else {
+                        this.goToRoute(`proforma-invoice/invoice/${isCashInvoice ? "cash" : "sales"}`, "", account?.uniqueName);
+                    }
                 }
                 break;
             // case 3: // send sms
@@ -578,7 +592,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public goToRoute(part: string, additionalParams: string = "", accUniqueName: string) {
-        let url = location.href + `?returnUrl=${part}/${accUniqueName}`;
+        let url = (this.generalService.voucherApiVersion === 2) ? "/pages/" + part : location.href + `?returnUrl=${part}/${accUniqueName}`;
         if (additionalParams) {
             url = `${url}${additionalParams}`;
         }

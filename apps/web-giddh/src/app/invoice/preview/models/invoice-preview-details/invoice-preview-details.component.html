@@ -697,7 +697,7 @@
                                 #attachedDocumentPreview
                                 class="pdf-expand-collapse pdf-preview mt-0"
                             >
-                                <iframe #pdfContainer width="100%" height="100%" [src]="attachedPdfFileUrl" title="attached PDF"></iframe>
+                                <iframe #pdfContainer width="100%" height="100%" [src]="attachedPdfFileUrl" title="PDF"></iframe>
                             </div>
                             <div
                                 #attachedDocumentPreview
@@ -713,7 +713,7 @@
                                 >
                                     <strong>{{ localeData?.auto_generated_purchase_bill }}</strong>
                                 </h5>
-                                <iframe #pdfContainer width="100%" height="100%" [src]="sanitizedPdfFileUrl" title="sanatized PDF"></iframe>
+                                <iframe #pdfContainer width="100%" height="100%" [src]="sanitizedPdfFileUrl" title="PDF"></iframe>
                                 <giddh-page-loader
                                     *ngIf="
                                         isPdfAvailable &&

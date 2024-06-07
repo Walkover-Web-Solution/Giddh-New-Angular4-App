@@ -43,7 +43,7 @@
                                 mat-stroked-button
                                 color="primary"
                                 class="min-width-130"
-                                [routerLink]="['/pages/proforma-invoice/invoice/sales']"
+                                [routerLink]="[voucherApiVersion === 2 ? '/pages/vouchers/sales/create' : '/pages/proforma-invoice/invoice/sales']"
                             >
                                 {{ localeData?.do_sales }}
                             </button>
@@ -141,7 +141,7 @@
                                 mat-stroked-button
                                 color="primary"
                                 class="min-width-130"
-                                [routerLink]="['/pages/proforma-invoice/invoice/purchase']"
+                                [routerLink]="[voucherApiVersion === 2 ? '/pages/vouchers/purchase/create' : '/pages/proforma-invoice/invoice/sales']"
                             >
                                 {{ localeData?.do_purchase }}
                             </button>

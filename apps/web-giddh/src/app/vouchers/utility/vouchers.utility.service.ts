@@ -34,6 +34,8 @@ export class VouchersUtilityService {
         let isProformaInvoice = voucherType === VoucherTypeEnum.proforma || voucherType === VoucherTypeEnum.generateProforma;
         let isEstimateInvoice = voucherType === VoucherTypeEnum.estimate || voucherType === VoucherTypeEnum.generateEstimate;
         let isPurchaseOrder = voucherType === VoucherTypeEnum.purchaseOrder;
+        let isReceiptInvoice = voucherType === VoucherTypeEnum.receipt;
+        let isPaymentInvoice = voucherType === VoucherTypeEnum.payment;
 
         // special case when we double click on account name and that accountUniqueName is cash then we have to mark as Cash Invoice
         if (isSalesInvoice && !isLastInvoiceCopied) {
@@ -43,7 +45,7 @@ export class VouchersUtilityService {
             }
         }
 
-        return { isSalesInvoice, isCashInvoice, isCreditNote, isDebitNote, isPurchaseInvoice, isProformaInvoice, isEstimateInvoice, isPurchaseOrder };
+        return { isSalesInvoice, isCashInvoice, isCreditNote, isDebitNote, isPurchaseInvoice, isProformaInvoice, isEstimateInvoice, isPurchaseOrder, isReceiptInvoice, isPaymentInvoice };
     }
 
     public parseVoucherType(voucherType: string): string {
@@ -74,10 +76,9 @@ export class VouchersUtilityService {
         let group: string;
 
         if (searchType === SearchType.CUSTOMER) {
-            group = (voucherType === VoucherTypeEnum.debitNote) ? 'sundrycreditors' : (voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.purchaseOrder) ? 'sundrycreditors' : 'sundrydebtors';
+            group = (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.purchaseOrder || voucherType === VoucherTypeEnum.payment) ? 'sundrycreditors' : 'sundrydebtors';
         } else if (searchType === SearchType.ITEM) {
-            group = (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.cashBill || voucherType === VoucherTypeEnum.cashDebitNote || voucherType === VoucherTypeEnum.purchaseOrder) ?
-                'operatingcost, indirectexpenses, fixedassets' : 'otherincome, revenuefromoperations, fixedassets';
+            group = voucherType === VoucherTypeEnum.receipt || voucherType === VoucherTypeEnum.payment ? 'bankaccounts, cash, loanandoverdraft' : (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.cashBill || voucherType === VoucherTypeEnum.cashDebitNote || voucherType === VoucherTypeEnum.purchaseOrder) ? 'operatingcost, indirectexpenses, fixedassets' : 'otherincome, revenuefromoperations, fixedassets';
             withStocks = true;
         } else if (searchType === SearchType.BANK) {
             group = 'bankaccounts, cash, loanandoverdraft';
@@ -95,7 +96,7 @@ export class VouchersUtilityService {
         return requestObject;
     }
 
-    public getVoucherNameByType(voucherType: string, localeData: any): string {
+    public getVoucherNameByType(voucherType: string, localeData: any, isCopyVoucher: boolean = false): string {
         let voucherName = "";
 
         switch (voucherType) {
@@ -116,7 +117,7 @@ export class VouchersUtilityService {
                 break;
 
             case VoucherTypeEnum.sales:
-                voucherName = localeData?.invoice_types?.sales;
+                voucherName = isCopyVoucher ? localeData?.invoice_types?.sales : localeData?.invoice_types?.invoice;
                 break;
 
             case VoucherTypeEnum.creditNote:
@@ -148,7 +149,15 @@ export class VouchersUtilityService {
                 break;
 
             case VoucherTypeEnum.purchaseOrder:
-                voucherName = "Purchase Order";
+                voucherName = localeData?.invoice_types?.purchase_order;
+                break;
+
+            case VoucherTypeEnum.receipt:
+                voucherName = localeData?.invoice_types?.receipt;
+                break;
+
+            case VoucherTypeEnum.payment:
+                voucherName = localeData?.invoice_types?.payment;
                 break;
 
             default:
@@ -160,7 +169,7 @@ export class VouchersUtilityService {
     }
 
     public getParentGroupForAccountCreate(voucherType: string): string {
-        if (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.purchaseOrder || voucherType === VoucherTypeEnum.cashBill || voucherType === VoucherTypeEnum.cashDebitNote) {
+        if (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.purchaseOrder || voucherType === VoucherTypeEnum.cashBill || voucherType === VoucherTypeEnum.cashDebitNote || voucherType === VoucherTypeEnum.payment) {
             return 'sundrycreditors';
         } else {
             return 'sundrydebtors';
@@ -188,7 +197,7 @@ export class VouchersUtilityService {
                 code: defaultAddress.stateCode,
                 name: defaultAddress.stateName
             };
-        } 
+        }
 
         return { defaultAddress, defaultAddressIndex };
     }
@@ -273,11 +282,17 @@ export class VouchersUtilityService {
     }
 
     public cleanVoucherObject(invoiceForm: any): any {
-        delete invoiceForm.deposit.currencySymbol;
+        if (invoiceForm.deposit) {
+            delete invoiceForm.deposit.currencySymbol;
+        }
         delete invoiceForm.account.billingDetails.index;
         delete invoiceForm.account.shippingDetails.index;
         delete invoiceForm.company.billingDetails.index;
         delete invoiceForm.company.shippingDetails.index;
+        delete invoiceForm.grandTotalMultiCurrency;
+        delete invoiceForm.chequeNumber;
+        delete invoiceForm.chequeClearanceDate;
+        delete invoiceForm.isAdvanceReceipt;
         delete invoiceForm.salesPurchaseAsReceiptPayment;
 
         invoiceForm?.entries?.forEach(entry => {
@@ -288,6 +303,7 @@ export class VouchersUtilityService {
             delete entry.totalCess;
             delete entry.total;
             delete entry.requiredTax;
+            delete entry.calculateTotal;
 
             entry.taxes?.forEach(tax => {
                 delete tax.taxType;
@@ -295,6 +311,10 @@ export class VouchersUtilityService {
             });
 
             if (entry.otherTax?.uniqueName && entry.otherTax?.calculationMethod) {
+                if (!entry.taxes) {
+                    entry.taxes = [];
+                }
+
                 entry.taxes.push({
                     uniqueName: entry.otherTax?.uniqueName,
                     calculationMethod: entry.otherTax?.calculationMethod
@@ -360,7 +380,11 @@ export class VouchersUtilityService {
 
     public calculateInclusiveRate(entry: any, companyTaxes: any[], balanceDecimalPlaces: any, entryTotal: number = null): number {
         if (entryTotal === null) {
-            entryTotal = giddhRoundOff(Number(entry.transactions[0].stock?.quantity) * Number(entry.transactions[0].stock?.rate?.rateForAccount));
+            if (entry.transactions[0].stock?.uniqueName) {
+                entryTotal = giddhRoundOff(Number(entry.transactions[0].stock?.quantity) * Number(entry.transactions[0].stock?.rate?.rateForAccount));
+            } else {
+                entryTotal = giddhRoundOff(Number(entry.transactions[0].amount.amountForAccount));
+            }
         }
 
         // Calculate percentage discount total
@@ -422,5 +446,19 @@ export class VouchersUtilityService {
         }
 
         return invoiceForm;
+    }
+
+    public getSelectedAddressIndex(addressList: any[], selectedAddress: any): number {
+        let selectedAddressIndex = -1;
+        addressList?.forEach((add, index) => {
+            const address = typeof add?.address === "string" ? add?.address : add?.address[0];
+            const state = add?.state?.name ? add?.state?.name : add?.stateName ? add?.stateName : "";
+
+            if (address === selectedAddress?.address[0] && state === selectedAddress?.state?.name && (add?.taxNumber === selectedAddress?.gstNumber || add?.taxNumber === selectedAddress?.taxNumber)) {
+                selectedAddressIndex = index;
+            }
+        });
+
+        return selectedAddressIndex;
     }
 }

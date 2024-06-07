@@ -1,8 +1,8 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, TemplateRef, SimpleChanges, ViewChild } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
-import { ModalDirective } from 'ngx-bootstrap/modal';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { combineLatest, ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
@@ -31,8 +31,10 @@ import { WarehouseActions } from '../warehouse/action/warehouse.action';
     ]
 })
 export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
-    /** Stores the confirmation modal instance */
-    @ViewChild('deleteAddressConfirmationModal', { static: true }) public deleteAddressConfirmationModal: ModalDirective;
+    /** Holds Aside Account AsidePane Dialog Template Reference */
+    @ViewChild("asideAccountAsidePane") public asideAccountAsidePane: TemplateRef<any>;
+    /** Holds Delete Address Confirmation Dialog Template Reference */
+    @ViewChild("deleteAddressConfirmationModal") public deleteAddressConfirmationModal: TemplateRef<any>;
     /** True if we need to show manage address section only */
     @Input() public addressOnly: boolean = false;
     /** Tax type (gst/trn) */
@@ -133,12 +135,20 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public hideLinkEntity: boolean = true;
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Holds Table Columns */
+    public displayedColumns: string[] = ['no', 'name', 'address', 'gstin', 'state', 'linked'];
+    /** Holds Delete Address Confirmation Dialog Reference */
+    private deleteAddressConfirmationModalRef: MatDialogRef<any>;
+    /** Holds Aside Account AsidePane Dialog Reference */
+    private asideAccountAsidePaneRef: MatDialogRef<any>;
+
 
     /** @ignore */
     constructor(
         private store: Store<AppState>,
         private warehouseActions: WarehouseActions,
-        private settingsBranchActions: SettingsBranchActions
+        private settingsBranchActions: SettingsBranchActions,
+        public dialog: MatDialog
     ) { }
 
     /**
@@ -193,7 +203,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
                 this.searchAddress.emit(this.addressSearchRequest);
             }
         });
-    }
+}
 
     /**
      * Checks the input data if changed
@@ -214,11 +224,9 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
                 }
             });
         }
-
+        
         if (changes.closeSidePane?.currentValue) {
-            if (this.accountAsideMenuState === 'in') {
-                this.toggleAccountAsidePane();
-            }
+            this.closeAccountAsidePane();
         }
     }
 
@@ -260,9 +268,10 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      *
      * @memberof AddressSettingsComponent
      */
-    public openAddAndManage(): void {
+    public openAddAndManage() {
         this.toggleAccountAsidePane();
-    }
+        
+     }
 
     /**
      * Toggles the aside menu
@@ -270,16 +279,23 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof AddressSettingsComponent
      */
     public toggleAccountAsidePane(): void {
-        this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
-        this.closeSidePane = false;
         this.isAddressChangeInProgress = false;
         this.isAddressChangeInProgressChange.emit(this.isAddressChangeInProgress);
-        this.closeSidePaneChange.emit(this.closeSidePane);
-        if (this.accountAsideMenuState === 'out') {
-            this.addressConfiguration.type = SettingsAsideFormType.CreateAddress;
-            this.addressToUpdate = null;
-        }
-        this.toggleBodyClass();
+        this.asideAccountAsidePaneRef =  this.dialog.open(this.asideAccountAsidePane, {
+            width: '1000px',
+            height: '100vh !important',
+            disableClose: true,
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
+    }
+
+    public closeAccountAsidePane(): void{
+        this.asideAccountAsidePaneRef.close();
+        this.addressConfiguration.type = SettingsAsideFormType.CreateAddress;
+        this.addressToUpdate = null;
     }
 
     /**
@@ -337,7 +353,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public handleUpdateAddress(address: any): void {
         this.addressConfiguration.type = SettingsAsideFormType.EditAddress;
         this.addressToUpdate = address;
-        this.openAddAndManage();
+        this.toggleAccountAsidePane();
     }
 
     /**
@@ -466,10 +482,18 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @param {*} address Selected address
      * @memberof AddressSettingsComponent
      */
-    public showConfirmationModal(address: any): void {
+    // public showConfirmationModal(address: any): void {
+    //     this.selectedAddress = address;
+    //     this.deleteAddressConfirmationModal?.show();
+    // }
+
+    public showConfirmationModal(address: any) {
         this.selectedAddress = address;
-        this.deleteAddressConfirmationModal?.show();
-    }
+       this.deleteAddressConfirmationModalRef =  this.dialog.open(this.deleteAddressConfirmationModal, {
+            panelClass: 'modal-dialog',
+            width: '1000px',
+        });
+     }
 
     /**
      * Handles the confirmation of the operation
@@ -482,7 +506,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             this.handleDeleteAddress(this.selectedAddress);
         }
-        this.deleteAddressConfirmationModal.hide();
+        this.deleteAddressConfirmationModalRef.close();
     }
 
     /**
@@ -490,9 +514,6 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      *
      * @memberof AddressSettingsComponent
      */
-    public onCancel(): void {
-        this.deleteAddressConfirmationModal.hide();
-    }
 
     /**
      * Returns the search field text
