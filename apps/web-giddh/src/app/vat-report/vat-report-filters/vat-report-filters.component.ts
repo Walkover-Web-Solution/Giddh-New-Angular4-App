@@ -238,7 +238,7 @@ export class VatReportFiltersComponent implements OnInit {
 
         if (isMonthwiseDateRange.status) {
             this.getYearStartAndEndDate({ label: isMonthwiseDateRange.year, value: isMonthwiseDateRange?.year });
-            this.getMonthStartAndEndDate({ label: isMonthwiseDateRange.monthName, value: isMonthwiseDateRange?.monthNumber }, true);
+            this.getMonthStartAndEndDate({ label: isMonthwiseDateRange.monthName, value: isMonthwiseDateRange?.monthNumber });
         }
         this.getVatReport();
     }
@@ -376,19 +376,7 @@ export class VatReportFiltersComponent implements OnInit {
             this.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.toDate.emit(this.to);
             this.getVatReport();
-            this.clearQueryParams();
         }
-    }
-
-    /**
-     * Clear query params,
-     * Navigate to the current URL path without query parameters, 
-     *
-     * @private
-     * @memberof VatReportFiltersComponent
-     */
-    private clearQueryParams(): void {
-        this.router.navigate([], { queryParams: {} });
     }
 
     /**
@@ -470,7 +458,7 @@ export class VatReportFiltersComponent implements OnInit {
      * @param {number} selectedMonth
      * @memberof VatReportFiltersComponent
      */
-    public getMonthStartAndEndDate(selectedMonth: any, callUsingQueryParams: boolean = false): void {
+    public getMonthStartAndEndDate(selectedMonth: any): void {
         if (selectedMonth) {
             this.selectedMonth = selectedMonth;
 
@@ -484,10 +472,6 @@ export class VatReportFiltersComponent implements OnInit {
             this.to = dayjs(endDate).format(GIDDH_DATE_FORMAT);
             this.toDate.emit(this.to);
             this.getVatReport();
-
-            if (!callUsingQueryParams) {
-                this.clearQueryParams();
-            }
         }
     }
 
