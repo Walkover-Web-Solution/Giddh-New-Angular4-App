@@ -300,7 +300,7 @@
                                                 <mat-form-field appearance="outline" class="w-100">
                                                     <mat-label>{{ localeData?.linked_addresses }}</mat-label>
                                                     <mat-chip-list #chipList class="d-flex flex-wrap column-gap5 row-gap1">
-                                                      <mat-chip *ngFor="let item of addressForm?.get('linkedEntity')?.value" (removed)="removeItem(selected)">
+                                                      <mat-chip *ngFor="let item of addressForm?.get('linkedEntity')?.value" (removed)="removeItem(item)">
                                                         {{ item?.label }}
                                                         <span matChipRemove><i class="icon-cross"></i></span>
                                                       </mat-chip>
