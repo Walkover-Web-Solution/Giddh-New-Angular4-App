@@ -32,7 +32,7 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** This will hold the value out/in to open/close setting sidebar popup */
+    /** This will hold the value out/in to open/close setting gst sidebar */
     public asideGstSidebarMenuState: string = 'in';
     /** Hold table display columns */
     public displayedColumns: string[] = ['date', 'type', 'rate', 'reference', 'accountName', 'description', 'period', 'exclusive', 'inclusive', 'vat'];
@@ -66,11 +66,11 @@ export class LiabilityDetailedReportComponent implements OnInit, OnDestroy {
 
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
-                this.vatLiabilityReportRequest.from = params['from'];
-                this.vatLiabilityReportRequest.to = params['to'];
-                this.vatLiabilityReportRequest.taxNumber = params['taxNumber'];
-                this.vatLiabilityReportRequest.currencyCode = params['currencyCode'];
-                this.vatLiabilityReportRequest.section = params['section'];
+                this.vatLiabilityReportRequest.from = params.from;
+                this.vatLiabilityReportRequest.to = params.to;
+                this.vatLiabilityReportRequest.taxNumber = params.taxNumber;
+                this.vatLiabilityReportRequest.currencyCode = params.currencyCode;
+                this.vatLiabilityReportRequest.section = params.section;
 
                 this.getVatLiabilityReport();
             }

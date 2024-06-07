@@ -536,7 +536,7 @@ export class VatReportFiltersComponent implements OnInit {
      */
     public saveSelectedCurrency(currencyCode: string): void {
         let request = {
-            module: this.moduleType,
+            module: this.moduleType
         }
         request[this.isVatReport ? 'vatReportCurrency' : 'liabilityReportCurrency'] = currencyCode;
         this.commonService.saveSelectedTableColumns(request).pipe(take(1)).subscribe(response => {
@@ -571,11 +571,11 @@ export class VatReportFiltersComponent implements OnInit {
                 status: true,
                 monthName: from.format('MMMM'),
                 monthNumber: from.month() + 1,
-                year: from.year(),
+                year: from.year()
             };
         } else {
             return {
-                status: false,
+                status: false
             };
         }
     }

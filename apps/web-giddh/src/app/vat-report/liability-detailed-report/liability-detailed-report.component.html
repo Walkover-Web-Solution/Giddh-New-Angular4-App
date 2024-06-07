@@ -19,7 +19,7 @@
             </button>
         </div>
         <div class="table-responsive mt-4">
-            <table mat-table [dataSource]="vatLiabilityDetailedReport.sections"
+            <table mat-table [dataSource]="vatLiabilityDetailedReport?.sections"
                 class="table basic table-bordered mt-2 invoice-table desktop-table"
                 *ngIf="vatLiabilityDetailedReport?.sections?.length && !isLoading">
                 <ng-container matColumnDef="date">
