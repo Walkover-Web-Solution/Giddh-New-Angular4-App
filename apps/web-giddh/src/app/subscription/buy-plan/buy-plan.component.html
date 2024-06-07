@@ -552,35 +552,35 @@
                                             <div class="form-group">
                                                 <input-field
                                                     [type]="'text'"
-                                                    [name]="'subscriptionBillingName' + currentTimestamp"
+                                                    [name]="'subscriptionBillingName' + currentTimeStamp"
                                                     [label]="localeData?.billing_name + '*'"
                                                     [placeholder]="localeData?.billing_name"
                                                     formControlName="billingName"
                                                     [showError]="
                                                         isFormSubmitted && !secondStepForm.get('billingName')?.value
                                                     "
-                                                    [autocomplete]="'subscriptionBillingName' + currentTimestamp"
+                                                    [autocomplete]="'subscriptionBillingName' + currentTimeStamp"
                                                 >
                                                 </input-field>
                                             </div>
                                             <div class="form-group">
                                                 <input-field
                                                     [type]="'text'"
-                                                    [name]="'subscriptionCompanyName' + currentTimestamp"
+                                                    [name]="'subscriptionCompanyName' + currentTimeStamp"
                                                     [label]="commonLocaleData?.app_company_name + '*'"
                                                     formControlName="companyName"
                                                     [placeholder]="commonLocaleData?.app_company_name"
                                                     [showError]="
                                                         isFormSubmitted && !secondStepForm.get('companyName')?.value
                                                     "
-                                                    [autocomplete]="'subscriptionCompanyName' + currentTimestamp"
+                                                    [autocomplete]="'subscriptionCompanyName' + currentTimeStamp"
                                                 >
                                                 </input-field>
                                             </div>
                                             <div class="form-group">
                                                 <input-field
                                                     [type]="'text'"
-                                                    [name]="'subscriptionEmail' + currentTimestamp"
+                                                    [name]="'subscriptionEmail' + currentTimeStamp"
                                                     [label]="commonLocaleData?.app_email + '*'"
                                                     formControlName="email"
                                                     [placeholder]="commonLocaleData?.app_email"
@@ -589,18 +589,18 @@
                                                         (!secondStepForm.get('email')?.value ||
                                                             secondStepForm.get('email')?.errors?.pattern)
                                                     "
-                                                    [autocomplete]="'subscriptionEmail' + currentTimestamp"
+                                                    [autocomplete]="'subscriptionEmail' + currentTimeStamp"
                                                 >
                                                 </input-field>
                                             </div>
                                             <div class="form-group">
                                                 <input-field
                                                     [type]="'number'"
-                                                    [name]="'subscriptionPincode' + currentTimestamp"
+                                                    [name]="'subscriptionPincode' + currentTimeStamp"
                                                     [label]="localeData?.pincode"
                                                     formControlName="pincode"
                                                     [placeholder]="localeData?.pincode"
-                                                    [autocomplete]="'subscriptionPincode' + currentTimestamp"
+                                                    [autocomplete]="'subscriptionPincode' + currentTimeStamp"
                                                 >
                                                 </input-field>
                                             </div>
@@ -616,7 +616,7 @@
                                                         "
                                                         [id]="'init-contact'"
                                                         [placeholder]="commonLocaleData?.app_mobile_number"
-                                                        [attr.name]="'subscriptionMobileNumber' + currentTimestamp"
+                                                        [attr.name]="'subscriptionMobileNumber' + currentTimeStamp"
                                                         class="mat-form-field-border mat-form-field-height mobile-height bg-transparent border"
                                                         [ngClass]="{
                                                             'invalid-input':
@@ -630,7 +630,7 @@
                                                                 .get('mobileNumber')
                                                                 ?.setValue(intlClass?.phoneNumber?.replace('+', ''))
                                                         "
-                                                        [autocomplete]="'subscriptionMobileNumber' + currentTimestamp"
+                                                        [autocomplete]="'subscriptionMobileNumber' + currentTimeStamp"
                                                     />
                                                     <mat-error
                                                         *ngIf="
@@ -644,7 +644,7 @@
                                             <div class="form-group">
                                                 <div class="width-100">
                                                     <dropdown-field
-                                                        [name]="'subscriptionCountry' + currentTimestamp"
+                                                        [name]="'subscriptionCountry' + currentTimeStamp"
                                                         [label]="commonLocaleData?.app_country + '*'"
                                                         [placeholder]="commonLocaleData?.app_country"
                                                         class="mb-3 d-block"
@@ -654,14 +654,14 @@
                                                         [showError]="
                                                             isFormSubmitted && !secondStepForm.get('country')?.value
                                                         "
-                                                        [autocomplete]="'subscriptionCountry' + currentTimestamp"
+                                                        [autocomplete]="'subscriptionCountry' + currentTimeStamp"
                                                     >
                                                     </dropdown-field>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <input-field
-                                                    [name]="'subscriptionTaxNumber' + currentTimestamp"
+                                                    [name]="'subscriptionTaxNumber' + currentTimeStamp"
                                                     [placeholder]="getEnterTaxText()"
                                                     [type]="'text'"
                                                     formControlName="taxNumber"
@@ -674,14 +674,14 @@
                                                     "
                                                     [maxlength]="15"
                                                     (change)="validateGstNumber()"
-                                                    [autocomplete]="'subscriptionTaxNumber' + currentTimestamp"
+                                                    [autocomplete]="'subscriptionTaxNumber' + currentTimeStamp"
                                                 >
                                                 </input-field>
                                             </div>
                                             <div class="form-group">
                                                 <div *ngIf="!countyList?.length">
                                                     <dropdown-field
-                                                        [name]="'subscriptionState' + currentTimestamp"
+                                                        [name]="'subscriptionState' + currentTimeStamp"
                                                         [label]="commonLocaleData?.app_state + '*'"
                                                         [placeholder]="commonLocaleData?.app_state"
                                                         [options]="states"
@@ -692,13 +692,13 @@
                                                         [defaultValue]="selectedState"
                                                         (selectedOption)="selectState($event)"
                                                         [ngClass]="{ 'readonly-field': disabledState }"
-                                                        [autocomplete]="'subscriptionState' + currentTimestamp"
+                                                        [autocomplete]="'subscriptionState' + currentTimeStamp"
                                                     >
                                                     </dropdown-field>
                                                 </div>
                                                 <div *ngIf="countyList?.length">
                                                     <dropdown-field
-                                                        [name]="'subscriptionCounty' + currentTimestamp"
+                                                        [name]="'subscriptionCounty' + currentTimeStamp"
                                                         [label]="commonLocaleData?.app_region + '*'"
                                                         [placeholder]="commonLocaleData?.app_select_region"
                                                         [options]="countyList"
@@ -707,7 +707,7 @@
                                                         "
                                                         [defaultValue]="selectedState"
                                                         (selectedOption)="selectState($event)"
-                                                        [autocomplete]="'subscriptionCounty' + currentTimestamp"
+                                                        [autocomplete]="'subscriptionCounty' + currentTimeStamp"
                                                     >
                                                     </dropdown-field>
                                                 </div>
@@ -716,11 +716,11 @@
                                                 <mat-form-field appearance="outline" class="w-100">
                                                     <mat-label>{{ commonLocaleData?.app_address }}</mat-label>
                                                     <textarea
-                                                        [name]="'subscriptionTextarea' + currentTimestamp"
+                                                        [name]="'subscriptionTextarea' + currentTimeStamp"
                                                         matInput
                                                         [placeholder]="commonLocaleData?.app_address"
                                                         formControlName="address"
-                                                        [autocomplete]="'subscriptionTextarea' + currentTimestamp"
+                                                        [autocomplete]="'subscriptionTextarea' + currentTimeStamp"
                                                     ></textarea>
                                                 </mat-form-field>
                                             </div>
