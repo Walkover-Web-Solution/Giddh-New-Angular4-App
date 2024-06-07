@@ -42,5 +42,7 @@
     "detailsOfPurchases": "Details of Purchases",
     "amountExclVat": "Amount(Excl VAT)",
     "amountOfOutputTax": "Amount of Output Tax",
-    "amountOfInputTax": "Amount of Input Tax"
+    "amountOfInputTax": "Amount of Input Tax",
+    "inclusive": "Inclusive",
+    "exclusive": "Exclusive"
 }
