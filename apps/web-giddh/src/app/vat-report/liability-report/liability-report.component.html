@@ -1,0 +1,88 @@
+<ng-container appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+    <hamburger-menu></hamburger-menu>
+    <div class="relative w-100">
+        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+            *ngIf="asideGstSidebarMenuState === 'in'">
+            <tax-sidebar 
+                (navigateEvent)="handleNavigation()"
+                [exclude]="'#primary-new-header'" 
+                class="gst-sidebar"
+            ></tax-sidebar>
+        </div>
+    </div>
+    <div class="liability-report mx-auto pd-15">
+        <div class="container-fluid ml-0">
+            <div class="row align-items-center row-gap">
+                <div class="w-100">
+                    <vat-report-filters 
+                        [localeData]="localeData" 
+                        [commonLocaleData]="commonLocaleData"
+                        [activeCompany]="activeCompany"
+                        [moduleType]="'LIABILITY_REPORT'"
+                        [isZimbabweCompany]="true" 
+                        [localeData]="localeData"
+                        [vatReportCurrencyCode]="getFormControl('currencyCode')?.value"
+                        (getReport)="getVatLiabilityReport()" 
+                        (exportReport)="downloadVatLiabilityReport()"
+                        (isTaxApiInProgress)="isTaxApiInProgress = $event"
+                        (currentCurrencyCode)="getFormControl('currencyCode')?.patchValue($event)"
+                        (currentTaxNumber)="getFormControl('taxNumber')?.patchValue($event)"
+                        (fromDate)="getFormControl('from')?.patchValue($event)"
+                        (toDate)="getFormControl('to')?.patchValue($event)"
+                        (currentBranchChange)="getFormControl('branchUniqueName')?.patchValue($event)">
+                    </vat-report-filters>
+                </div>
+            </div>
+            <div class="mt-5" *ngIf="isLoading">
+                <giddh-page-loader></giddh-page-loader>
+            </div>
+            <div class="row mt-5">
+                <div class="table-responsive" *ngIf="vatLiabilityOverviewReport && !isLoading">
+                    <table class="table table-bordered">
+                        <tr *ngFor="let vatReport of vatLiabilityOverviewReport">
+                            <td width="80%">
+                                <span *ngIf="vatReport?.order === 3; else clickableItem">
+                                    {{ vatReport?.section }}
+                                </span>
+                                <ng-template #clickableItem>
+                                    <a href="javascript:;" (click)="viewDetailedReport(vatReport)"> 
+                                        {{vatReport?.section }}
+                                    </a>
+                                </ng-template>
+                            </td>
+                            <td width="20%" class="text-right">
+                                <amount-field
+                                    class="d-inline-block" 
+                                    [amount]="vatReport?.vatTotal"
+                                    [currencySymbol]="vatReportCurrencySymbol" 
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div *ngIf="!isTaxApiInProgress && !vatLiabilityOverviewReport?.length" class="no-data no-report">
+                    <h1>{{ localeData?.no_vat_available }}</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>
+
+<!-- Universal Date Picker  -->
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition">
+            </app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>
