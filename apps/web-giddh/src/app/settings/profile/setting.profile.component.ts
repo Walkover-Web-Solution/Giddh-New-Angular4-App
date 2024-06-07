@@ -1072,7 +1072,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.settingsProfileService.updateAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 this.closeAddressSidePane = true;
-                setTimeout(() => { this.closeAddressSidePane = false }, 500);
+                setTimeout(() => { this.closeAddressSidePane = false; }, 500);
                 this.loadAddresses('GET');
                 this._toasty.successToast('Address updated successfully');
             } else {
