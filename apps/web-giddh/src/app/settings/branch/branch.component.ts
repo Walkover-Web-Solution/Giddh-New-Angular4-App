@@ -125,7 +125,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         private settingsUtilityService: SettingsUtilityService,
         private toasterService: ToasterService,
         private settingsBranchService: SettingsBranchService,
-        public dialog: MatDialog,
+        public dialog: MatDialog
     ) {
 
     }
@@ -246,7 +246,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public openCreateCompanyDialog(): void {
         this.dialog.open(this.addCompanyModal, {
             panelClass: 'modal-dialog',
-            width: '1000px',
+            width: '1000px'
         });
     }
 
@@ -570,7 +570,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             this.branchStatusToUpdate = branch;
             this.statusDialogRef = this.dialog.open(this.statusDialog, {
                 panelClass: 'modal-dialog',
-                width: '1000px',
+                width: '1000px'
             });
         } else {
             this.toasterService.warningToast(this.localeData?.archive_notallowed);

@@ -279,9 +279,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.currentTab = (params['referrer']) ? params['referrer'] : "personal";
-            if ((params['referrer']) === 'personal') { this.activeTabIndex = 0; }
-            else if ((params['referrer']) === 'address') { this.activeTabIndex = 1; }
-            else if ((params['referrer']) === 'other') { this.activeTabIndex = 2; }
+            if ((params['referrer']) === 'personal') {
+                this.activeTabIndex = 0;
+            } else if ((params['referrer']) === 'address') {
+                this.activeTabIndex = 1;
+            } else if ((params['referrer']) === 'other') {
+                this.activeTabIndex = 2;
+            }
         });
 
         this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';

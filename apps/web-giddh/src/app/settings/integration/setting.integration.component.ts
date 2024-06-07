@@ -1194,7 +1194,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.activeBankAccount = bankAccount;
         this.createNewAccountUserModalRef = this.dialog.open(this.createNewAccountUserModal, {
             panelClass: 'modal-dialog',
-            width: '1000px',
+            width: '1000px'
         });
     }
 
@@ -1304,7 +1304,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         }
         this.confirmationModalRef = this.dialog.open(this.confirmationModal, {
             panelClass: 'modal-dialog',
-            width: '1000px',
+            width: '1000px'
         });
     }
 
@@ -1320,7 +1320,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.activePayorAccount = payor;
         this.editAccountUserModalRef = this.dialog.open(this.editAccountUserModal, {
             panelClass: 'modal-dialog',
-            width: '1000px',
+            width: '1000px'
         });
     }
 
@@ -1334,7 +1334,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.activeBankAccount = bankAccount;
         this.editAccountModalRef = this.dialog.open(this.editAccountModal, {
             panelClass: 'modal-dialog',
-            width: '1000px',
+            width: '1000px'
         });
     }
 

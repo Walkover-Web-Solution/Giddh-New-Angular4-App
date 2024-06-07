@@ -65,7 +65,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     constructor(
         private formBuilder: UntypedFormBuilder,
         private toasterService: ToasterService,
-        private pageLeaveUtilityService: PageLeaveUtilityService,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
     }
 

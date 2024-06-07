@@ -51,7 +51,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
     /** Holds Discount Confirmation Dialog Ref */
     public discountConfirmationDialogRef: MatDialogRef<any>;
     /** Holds Create New Account Dialog Ref */
-    public createNewAccountDialogRef: MatDialogRef<any>
+    public createNewAccountDialogRef: MatDialogRef<any>;
 
     constructor(
         private salesService: SalesService,
@@ -142,7 +142,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
     public showDeleteDiscountDialog(uniqueName: string): void {
         this.deleteRequest = uniqueName;
         this.discountConfirmationDialogRef = this.dialog.open(this.discountConfirmationDialog, {
-            panelClass: 'modal-dialog',
+            panelClass: 'modal-dialog'
         });
     }
 

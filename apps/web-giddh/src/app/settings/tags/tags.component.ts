@@ -181,7 +181,7 @@ export class SettingsTagsComponent implements OnInit {
         this.confirmationMessage = message;
         this.dialog.open(this.confirmationModal, {
             panelClass: 'modal-dialog',
-            width: '1000px',
+            width: '1000px'
         });
     }
 

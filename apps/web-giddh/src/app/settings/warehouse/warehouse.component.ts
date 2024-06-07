@@ -125,7 +125,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         private toasterService: ToasterService,
         private warehouseActions: WarehouseActions,
         private settingsWarehouseService: SettingsWarehouseService,
-        public dialog: MatDialog,
+        public dialog: MatDialog
     ) { }
 
     /**
@@ -174,7 +174,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
     public openCreateWarehouseModal(): void {
         this.startOnBoarding();
         this.dialog.open(this.warehouseOnBoardingModal, {
-            panelClass: 'modal-dialog',
+            panelClass: 'modal-dialog'
         });
     }
 
@@ -341,7 +341,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public closeAsidePane(event?: any): void {
         this.isWarehouseUpdateInProgress = false;
-        this.asideAccountAsidePaneDialogRef.close()
+        this.asideAccountAsidePaneDialogRef.close();
     }
 
     /**
@@ -559,7 +559,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             this.warehouseStatusToUpdate = warehouse;
             this.statusModalRef = this.dialog.open(this.statusModal, {
                 panelClass: 'modal-dialog',
-                width: '1000px',
+                width: '1000px'
             });
         } else {
             this.toasterService.warningToast(this.localeData?.archive_notallowed);

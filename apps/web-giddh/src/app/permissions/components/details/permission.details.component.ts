@@ -160,9 +160,9 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
     public getScopeDataReadyForAPI(data): Scope[] {
         let arr: Scope[];
         arr = forEach(data?.scopes, (page: Scope) => {
-            remove(page.permissions, (o: Permission) => !o.isSelected || o.code === 'SELECT-ALL');
+            remove(page.permissions, (permission: Permission) => !permission.isSelected || permission.code === 'SELECT-ALL');
         });
-        return filter(arr, (o: Scope) => o.permissions?.length > 0);
+        return filter(arr, (scope: Scope) => scope.permissions?.length > 0);
     }
 
     public addNewRole(): any {
@@ -201,7 +201,7 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
         if (response) {
             response.forEach(item => {
                 let count = 0;
-                item.permissions.forEach(item => {
+                item?.permissions?.forEach(item => {
                     if (item.code !== 'SELECT-ALL' && item.isSelected) {
                         count++;
                     }
@@ -334,15 +334,15 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
 
         let res = find(this.roleObj?.scopes, (o: Scope) => o.name === pageName);
         if (res) {
-            map(res.permissions, (o: Permission) => o.isSelected = event.checked ? true : false);
+            map(res.permissions, (permission: Permission) => permission.isSelected = event.checked ? true : false);
         }
     }
 
     public toggleItem(pageName: string, item: Permission, event: any) {
         let res = find(this.roleObj?.scopes, (o: Scope) => o.name === pageName);
         if (event.checked) {
-            let idx = findIndex(res.permissions, (o: Permission) => {
-                return o.isSelected === false && o.code !== 'SELECT-ALL';
+            let idx = findIndex(res.permissions, (permission: Permission) => {
+                return permission.isSelected === false && permission.code !== 'SELECT-ALL';
             });
 
             if (idx !== -1) {
