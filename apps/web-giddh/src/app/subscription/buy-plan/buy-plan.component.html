@@ -716,11 +716,11 @@
                                                 <mat-form-field appearance="outline" class="w-100">
                                                     <mat-label>{{ commonLocaleData?.app_address }}</mat-label>
                                                     <textarea
-                                                        [name]="'subscriptionTextarea' + currentTimeStamp"
+                                                        [name]="'subscriptionAddress' + currentTimeStamp"
                                                         matInput
                                                         [placeholder]="commonLocaleData?.app_address"
                                                         formControlName="address"
-                                                        [autocomplete]="'subscriptionTextarea' + currentTimeStamp"
+                                                        [autocomplete]="'subscriptionAddress' + currentTimeStamp"
                                                     ></textarea>
                                                 </mat-form-field>
                                             </div>
