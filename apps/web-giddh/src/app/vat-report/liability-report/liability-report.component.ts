@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { VatService } from '../../services/vat.service';
 import { ToasterService } from '../../services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
-import * as saveAs from 'file-saver';
+import { saveAs } from 'file-saver';
 import { Router } from '@angular/router';
 
 @Component({
