@@ -90,7 +90,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
         uniqueName: ""
     };
     /** Hold current time stamp  */
-    public currentTimestamp: string;
+    public currentTimeStamp: string;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -114,7 +114,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
      * @memberof ChangeBillingComponent
      */
     public ngOnInit(): void {
-        this.currentTimestamp = this.generalService.getTimesStamp();
+        this.currentTimeStamp = this.generalService.getTimeStamp();
         this.initForm();
         this.getCountry();
         this.getStates();

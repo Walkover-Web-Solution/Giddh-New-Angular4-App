@@ -185,7 +185,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** True if it is subscription region */
     public isSubscriptionRegion: boolean = false;
     /** Hold current time stamp  */
-    public currentTimestamp: string;
+    public currentTimeStamp: string;
 
     constructor(
         public dialog: MatDialog,
@@ -217,7 +217,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         document.body?.classList?.add("plan-page");
-        this.currentTimestamp = this.generalService.getTimesStamp();
+        this.currentTimeStamp = this.generalService.getTimeStamp();
         this.initSubscriptionForm();
         this.getCountry();
         this.getAllPlans();

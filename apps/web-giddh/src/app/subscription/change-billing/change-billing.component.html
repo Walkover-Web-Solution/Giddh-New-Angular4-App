@@ -21,8 +21,8 @@
                         <div class="form-group">
                             <input-field
                                 [type]="'text'"
-                                [name]="'billingName' + currentTimestamp"
-                                [autocomplete]="'billingName' + currentTimestamp"
+                                [name]="'billingName' + currentTimeStamp"
+                                [autocomplete]="'billingName' + currentTimeStamp"
                                 [label]="localeData?.billing_name"
                                 [placeholder]="localeData?.billing_name"
                                 formControlName="billingName"
@@ -33,8 +33,8 @@
                         <div class="form-group">
                             <input-field
                                 [type]="'text'"
-                                [name]="'billingCompanyName' + currentTimestamp"
-                                [autocomplete]="'billingCompanyName' + currentTimestamp"
+                                [name]="'billingCompanyName' + currentTimeStamp"
+                                [autocomplete]="'billingCompanyName' + currentTimeStamp"
                                 [label]="commonLocaleData?.app_company_name"
                                 formControlName="companyName"
                                 [placeholder]="commonLocaleData?.app_company_name"
@@ -45,8 +45,8 @@
                         <div class="form-group">
                             <input-field
                                 [type]="'text'"
-                                [name]="'billingEmail' + currentTimestamp"
-                                [autocomplete]="'billingEmail' + currentTimestamp"
+                                [name]="'billingEmail' + currentTimeStamp"
+                                [autocomplete]="'billingEmail' + currentTimeStamp"
                                 [label]="commonLocaleData?.app_email"
                                 formControlName="email"
                                 [placeholder]="commonLocaleData?.app_email"
@@ -61,8 +61,8 @@
                         <div class="form-group">
                             <input-field
                                 [type]="'number'"
-                                [name]="'billingPincode' + currentTimestamp"
-                                [autocomplete]="'billingPincode' + currentTimestamp"
+                                [name]="'billingPincode' + currentTimeStamp"
+                                [autocomplete]="'billingPincode' + currentTimeStamp"
                                 [label]="localeData?.pincode"
                                 formControlName="pincode"
                                 [placeholder]="localeData?.pincode"
@@ -81,8 +81,8 @@
                                     "
                                     [id]="'init-contact'"
                                     [placeholder]="commonLocaleData?.app_mobile_number"
-                                    [attr.name]="'billingMobileNumber' + currentTimestamp"
-                                    [autocomplete]="'billingMobileNumber' + currentTimestamp"
+                                    [attr.name]="'billingMobileNumber' + currentTimeStamp"
+                                    [autocomplete]="'billingMobileNumber' + currentTimeStamp"
                                     class="mat-form-field-border mat-form-field-height mobile-height bg-transparent border"
                                     [ngClass]="{
                                         'invalid-input':
@@ -109,8 +109,8 @@
                         <div class="form-group">
                             <div class="width-100">
                                 <dropdown-field
-                                    [name]="'billingCountry' + currentTimestamp"
-                                    [autocomplete]="'billingCountry' + currentTimestamp"
+                                    [name]="'billingCountry' + currentTimeStamp"
+                                    [autocomplete]="'billingCountry' + currentTimeStamp"
                                     [label]="commonLocaleData?.app_country + '*'"
                                     [placeholder]="commonLocaleData?.app_country"
                                     class="mb-3 d-block"
@@ -124,8 +124,8 @@
                         </div>
                         <div class="form-group">
                             <input-field
-                                [name]="'billingTaxNumber' + currentTimestamp"
-                                [autocomplete]="'billingTaxNumber' + currentTimestamp"
+                                [name]="'billingTaxNumber' + currentTimeStamp"
+                                [autocomplete]="'billingTaxNumber' + currentTimeStamp"
                                 [label]="formFields['taxName']?.label ?? commonLocaleData?.app_tax_number"
                                 [placeholder]="getEnterTaxText()"
                                 [type]="'text'"
@@ -141,8 +141,8 @@
                         <div class="form-group">
                             <div *ngIf="!countyList?.length">
                                 <dropdown-field
-                                    [name]="'billingState' + currentTimestamp"
-                                    [autocomplete]="'billingState' + currentTimestamp"
+                                    [name]="'billingState' + currentTimeStamp"
+                                    [autocomplete]="'billingState' + currentTimeStamp"
                                     [label]="commonLocaleData?.app_state"
                                     [placeholder]="commonLocaleData?.app_state"
                                     [options]="states"
@@ -156,8 +156,8 @@
                             </div>
                             <div *ngIf="countyList?.length">
                                 <dropdown-field
-                                    [name]="'billingCounty' + currentTimestamp"
-                                    [autocomplete]="'billingCounty' + currentTimestamp"
+                                    [name]="'billingCounty' + currentTimeStamp"
+                                    [autocomplete]="'billingCounty' + currentTimeStamp"
                                     [label]="commonLocaleData?.app_region"
                                     [placeholder]="commonLocaleData?.app_select_region"
                                     [options]="countyList"
@@ -172,8 +172,8 @@
                             <mat-form-field appearance="outline" class="w-100">
                                 <mat-label>{{ commonLocaleData?.app_address }}</mat-label>
                                 <textarea
-                                    [name]="'billingAddress' + currentTimestamp"
-                                    [autocomplete]="'billingAddress' + currentTimestamp"
+                                    [name]="'billingAddress' + currentTimeStamp"
+                                    [autocomplete]="'billingAddress' + currentTimeStamp"
                                     matInput
                                     [placeholder]="commonLocaleData?.app_address"
                                     formControlName="address"
