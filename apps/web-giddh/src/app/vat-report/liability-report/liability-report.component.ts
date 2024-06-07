@@ -3,7 +3,7 @@ import { ReplaySubject, takeUntil } from 'rxjs';
 import { GeneralService } from '../../services/general.service';
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { VatService } from '../../services/vat.service';
 import { ToasterService } from '../../services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -23,8 +23,8 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Holds Fromgroup  */
-    public liabilityReportForm: UntypedFormGroup
+    /** Holds Form group  */
+    public liabilityReportForm: FormGroup
     /** Holds table data */
     public tableDataSource: any[] = [];
     /** Holds table columns */
@@ -45,7 +45,7 @@ export class LiabilityReportComponent implements OnInit, OnDestroy {
     public currentBranch: any = { name: '', uniqueName: '' };
 
     constructor(
-        private formBuilder: UntypedFormBuilder,
+        private formBuilder: FormBuilder,
         private store: Store<AppState>,
         private generalService: GeneralService,
         private vatService: VatService,
