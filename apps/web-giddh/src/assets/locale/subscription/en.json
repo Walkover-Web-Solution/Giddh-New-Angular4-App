@@ -112,5 +112,6 @@
         "support":"Support",
         "chat_voice":"Chat/Voice",
         "gst_direct":"GST Direct Filling",
-        "e_invoice":"E-invoice"
+        "e_invoice":"E-invoice",
+        "plan_purchased_success_message":"Plan purchased successfully"
     }

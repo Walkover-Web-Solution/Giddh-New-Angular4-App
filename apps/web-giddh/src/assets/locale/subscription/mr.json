@@ -143,5 +143,6 @@
         "support":"सपोर्ट",
         "chat_voice":"चॅट/व्हॉइस",
         "gst_direct":"जीएसटी थेट भरणे",
-        "e_invoice":"ई-चालन"
+        "e_invoice":"ई-चालन",
+        "plan_purchased_success_message":"योजना यशस्वीरित्या खरेदी केली"
 	}

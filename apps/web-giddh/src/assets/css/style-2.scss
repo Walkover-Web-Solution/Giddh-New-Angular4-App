@@ -14007,10 +14007,11 @@ input[type="checkbox"].cdk-visually-hidden::after {
             vertical-align: middle;
             visibility: hidden;
             color: var(--color-primary-contact-icon-dots-three-vertical);
-            height: 18px;
             width: 18px;
         }
+    }
 
+    .table-row {
         &:hover {
             .table-menu-first-td {
                 visibility: visible;
