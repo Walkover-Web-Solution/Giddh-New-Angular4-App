@@ -757,6 +757,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.invoiceForm.get('exchangeRate')?.patchValue(response.exchangeRate);
                     this.invoiceForm.get('number')?.patchValue(response.number);
                     this.invoiceForm.get('touristSchemeApplicable')?.patchValue(response?.touristSchemeApplicable);
+                    this.invoiceForm.get('passportNumber').patchValue(response?.passportNumber);
 
                     this.invoiceForm.get("date").patchValue(response.date);
                     this.invoiceForm.get("dueDate").patchValue(response.dueDate);
@@ -1206,7 +1207,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.voucherDateLabel = this.localeData?.dr_note_date;
         } else if (this.invoiceType.isPurchaseInvoice) {
             this.voucherDateLabel = this.localeData?.bill_date;
-            this.voucherDueDateLabel = this.localeData?.balance_due_date;
+            this.voucherDueDateLabel = this.localeData?.due_date;
         } else {
             this.voucherDateLabel = this.commonLocaleData?.app_invoice_date;
             this.voucherDueDateLabel = this.localeData?.due_date;
@@ -1938,8 +1939,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
 
                 if (this.invoiceType.isPurchaseOrder || (this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCashInvoice)) {
-                    const companyBillingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(this.company?.branch?.addresses, this.invoiceForm.controls["company"].get("billingDetails")?.value);
-                    const companyShippingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(this.company?.branch?.addresses, this.invoiceForm.controls["company"].get("shippingDetails")?.value);
+                    const companyBillingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(this.company?.addresses, this.invoiceForm.controls["company"].get("billingDetails")?.value);
+                    const companyShippingAddressIndex = this.vouchersUtilityService.getSelectedAddressIndex(this.company?.addresses, this.invoiceForm.controls["company"].get("shippingDetails")?.value);
 
                     if (companyBillingAddressIndex > -1) {
                         this.invoiceForm.controls["company"].get("billingDetails").get("index").patchValue(companyBillingAddressIndex);

@@ -427,10 +427,11 @@ export class VouchersUtilityService {
     public getSelectedAddressIndex(addressList: any[], selectedAddress: any): number {
         let selectedAddressIndex = -1;
         addressList?.forEach((add, index) => {
-            const address = typeof add?.address === "string" ? add?.address : add?.address[0];
+            const address = typeof add?.address === "undefined" ? "" : typeof add?.address === "string" ? add?.address : add?.address[0];
             const state = add?.state?.name ? add?.state?.name : add?.stateName ? add?.stateName : "";
+            const taxNumber = !selectedAddress?.taxNumber ? "" : selectedAddress?.taxNumber;
 
-            if (address === selectedAddress?.address[0] && state === selectedAddress?.state?.name && (add?.taxNumber === selectedAddress?.gstNumber || add?.taxNumber === selectedAddress?.taxNumber)) {
+            if (address === selectedAddress?.address[0] && state === selectedAddress?.state?.name && (add?.taxNumber === selectedAddress?.gstNumber || add?.taxNumber === taxNumber)) {
                 selectedAddressIndex = index;
             }
         });
