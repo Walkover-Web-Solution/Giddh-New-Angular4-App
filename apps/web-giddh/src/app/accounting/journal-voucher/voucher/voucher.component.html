@@ -197,6 +197,7 @@
                                                     changeTab('enter', 'amount')
                                                 "
                                                 (keydown.Tab)="changeTab('tab', 'amount')"
+                                                (change)="calculateAmount(transaction.get('amount')?.value, transaction, i)"
                                                 (keydown.Shift.Tab)="changeTab('shift', 'amount')"
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
