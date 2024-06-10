@@ -456,8 +456,6 @@
     "app_select_branch": "शाखा का चयन करें",
     "app_voucher": "वाउचर",
     "app_alt_c": "Alt+C",
-    "app_alt_d": "Alt+D",
-    "app_alt_t": "Alt+T",
     "app_generate_multiple": "एकाधिक उत्पन्न करें",
     "app_generate_compound": "यौगिक उत्पन्न करें",
     "app_error": "त्रुटि",
@@ -726,5 +724,6 @@
     "app_help": "मदद",
     "app_applicable_date": "लागू तिथि",
     "app_name_placeholder": "नाम दर्ज करें",
-    "app_county": "काउंटी"
+    "app_county": "काउंटी",
+    "app_period": "अवधि"
 }

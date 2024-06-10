@@ -290,13 +290,7 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
         this.cdRef.markForCheck();
     }
 
-    /**
-     * This will be use for keyboard event handler
-     *
-     * @param {*} event
-     * @memberof AVShSelectComponent
-     */
-    public keydownUp(event: any): void {
+    public keydownUp(event): void {
         const elements = this.eleRef?.nativeElement?.querySelectorAll('.list-item');
         let key = event.which;
         if (this.isOpen) {
@@ -304,8 +298,8 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
                 this.hide();
             } else if (key === this.KEYS.ENTER) {
                 const selectedElement = elements[this.selectedIndex];
-                const anchorElement = selectedElement?.firstChild as HTMLElement;
-                anchorElement?.click();
+                const anchorElement = selectedElement.firstChild as HTMLElement;
+                anchorElement.click();
             } else if (key === this.KEYS.UP) {
                 event.preventDefault();
                 this.selectedIndex = Math.max(this.selectedIndex - 1, 0);
@@ -504,4 +498,3 @@ export class AVShSelectComponent implements ControlValueAccessor, OnInit, AfterV
 export function AVShSelectProvider(): any {
     return forwardRef(() => AVShSelectComponent);
 }
-

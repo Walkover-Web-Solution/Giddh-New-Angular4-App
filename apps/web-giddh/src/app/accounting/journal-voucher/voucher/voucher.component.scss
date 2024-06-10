@@ -1,49 +1,9 @@
-$hilighted-color: var(--color-blue) !important;
-$text-overflow-ellipsis-width: 255px;
-
 .day-date {
     display: flex;
-
     .voucher-date-field {
         width: auto;
     }
 }
-
-.discount-sidebar-section {
-    padding: 5px !important;
-}
-
-.grp-list {
-    padding: 0 !important;
-
-    .account-list {
-        padding: 9px 12px !important;
-    }
-}
-
-.hilighted {
-    color: var(--color-blue) !important;
-    background-color: var(--color-dark-fog) !important;
-}
-
-.account-list:hover {
-    color: var(--color-blue) !important;
-    background-color: var(--color-dark-fog) !important;
-}
-
-.hilighted {
-    &>a {
-        color: $hilighted-color;
-    }
-}
-
-.text-overflow-ellipsis {
-    .list-item {
-        text-overflow: ellipsis;
-        width: $text-overflow-ellipsis-width;
-    }
-}
-
 .voucher-heading {
     padding: 10px;
     font-weight: bolder;
@@ -67,46 +27,37 @@ $text-overflow-ellipsis-width: 255px;
         }
     }
 }
-
 .debtor-details-form {
     display: flex;
     font-size: var(--font-size-15);
     background-color: var(--color-gray);
     padding: 10px 9px;
     margin-bottom: 10px;
-
     .form-fields {
         display: flex;
         align-items: center;
-
         .single-field {
             width: 20%;
             margin-right: 15px;
             min-width: 180px;
-
             &.cr-dr-field {
                 width: 5% !important;
             }
-
             label {
                 margin-bottom: 5px;
                 display: none;
             }
-
             input.form-control {
                 background-color: var(--color-white) !important;
                 border: 1px solid var(--color-iron);
                 border-radius: 5px !important;
             }
-
             &.set-width {
                 width: 30%;
             }
-
             &:last-child {
                 width: 5%;
             }
-
             .icon-arrow-down {
                 font-size: var(--font-size-15);
                 position: absolute;
@@ -121,7 +72,6 @@ $text-overflow-ellipsis-width: 255px;
             cursor: pointer;
             padding: 5px;
         }
-
         .cr-dr-field,
         .delete-row {
             min-width: 30px;

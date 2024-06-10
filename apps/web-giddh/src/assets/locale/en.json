@@ -456,8 +456,6 @@
     "app_select_branch": "Select Branch",
     "app_voucher": "Voucher",
     "app_alt_c": "Alt+C",
-    "app_alt_d": "Alt+D",
-    "app_alt_t": "Alt+T",
     "app_generate_multiple": "Generate Multiple",
     "app_generate_compound": "Generate Compound",
     "app_error": "Error",
@@ -729,5 +727,6 @@
     "app_help": "Help",
     "app_applicable_date": "Applicable date",
     "app_name_placeholder": "Enter Name",
-    "app_county": "County"
+    "app_county": "County",
+    "app_period": "Period"
 }
