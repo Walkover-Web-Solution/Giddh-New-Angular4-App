@@ -203,7 +203,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
                 this.searchAddress.emit(this.addressSearchRequest);
             }
         });
-}
+    }
 
     /**
      * Checks the input data if changed
@@ -224,7 +224,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
                 }
             });
         }
-        
+
         if (changes.closeSidePane?.currentValue) {
             this.closeAccountAsidePane();
         }
@@ -270,8 +270,8 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public openAddAndManage() {
         this.toggleAccountAsidePane();
-        
-     }
+
+    }
 
     /**
      * Toggles the aside menu
@@ -281,7 +281,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public toggleAccountAsidePane(): void {
         this.isAddressChangeInProgress = false;
         this.isAddressChangeInProgressChange.emit(this.isAddressChangeInProgress);
-        this.asideAccountAsidePaneRef =  this.dialog.open(this.asideAccountAsidePane, {
+        this.asideAccountAsidePaneRef = this.dialog.open(this.asideAccountAsidePane, {
             width: '1000px',
             height: '100vh !important',
             disableClose: true,
@@ -292,7 +292,12 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
-    public closeAccountAsidePane(): void{
+    /**
+     * Close Account asidepane dialog
+     *
+     * @memberof AddressSettingsComponent
+     */
+    public closeAccountAsidePane(): void {
         this.asideAccountAsidePaneRef.close();
         this.addressConfiguration.type = SettingsAsideFormType.CreateAddress;
         this.addressToUpdate = null;
@@ -345,7 +350,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Update address handller
+     * Update address handler
      *
      * @param {*} address Address to be updatedd
      * @memberof AddressSettingsComponent
@@ -477,23 +482,18 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Displays the confirmation modal for taking any action
+     * Displays the confirmation dialog
      *
      * @param {*} address Selected address
      * @memberof AddressSettingsComponent
      */
-    // public showConfirmationModal(address: any): void {
-    //     this.selectedAddress = address;
-    //     this.deleteAddressConfirmationModal?.show();
-    // }
-
     public showConfirmationModal(address: any) {
         this.selectedAddress = address;
-       this.deleteAddressConfirmationModalRef =  this.dialog.open(this.deleteAddressConfirmationModal, {
+        this.deleteAddressConfirmationModalRef = this.dialog.open(this.deleteAddressConfirmationModal, {
             panelClass: 'modal-dialog',
-            width: '1000px',
+            width: '1000px'
         });
-     }
+    }
 
     /**
      * Handles the confirmation of the operation
@@ -508,12 +508,6 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
         }
         this.deleteAddressConfirmationModalRef.close();
     }
-
-    /**
-     * Handles the cancel operation
-     *
-     * @memberof AddressSettingsComponent
-     */
 
     /**
      * Returns the search field text

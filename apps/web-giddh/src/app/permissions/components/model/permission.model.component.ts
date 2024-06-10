@@ -119,7 +119,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
             this.selectedValues = [];
             this.newRoleObj.pageList.forEach((item: IPage) => {
                 item.isSelected = true;
-                this.selectedValues.push(item)
+                this.selectedValues.push(item);
             });
             this.newRoleObj.isSelectedAllPages = true;
         } else {

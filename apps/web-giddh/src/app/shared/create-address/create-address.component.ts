@@ -65,7 +65,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     constructor(
         private formBuilder: UntypedFormBuilder,
         private toasterService: ToasterService,
-        private pageLeaveUtilityService: PageLeaveUtilityService,
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
     }
 
@@ -86,7 +86,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.addressConfiguration && changes.addressConfiguration.currentValue !== changes.addressConfiguration.previousValue && (this.addressConfiguration?.stateList?.length || this.addressConfiguration?.countyList?.length || this.addressConfiguration?.
             linkedEntities)) {
-            this.setFormData();            
+            this.setFormData();
         }
     }
 
@@ -278,7 +278,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 }
             }
         }
-        this.addressForm.get('taxNumber').patchValue(this.addressForm.get('taxNumber')?.value?.trim());
+        this.addressForm?.get('taxNumber')?.patchValue(this.addressForm?.get('taxNumber')?.value?.trim());
         if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
             this.saveAddress.emit({
                 formValue: this.addressForm.getRawValue(),
