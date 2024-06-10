@@ -1,90 +1,72 @@
 <div class="add-new-role-modal">
     <div class="modal-header d-flex justify-content-between">
         <h3>{{ localeData?.add_role }}</h3>
-        <button aria-hidden="true" class="close" data-dismiss="modal" (click)="closePopupEvent()">×</button>
+        <span class="cursor-pointer font-24 text-black" (click)="closePopupEvent()">×</span>
     </div>
     <div class="modal-body clearfix" id="export-body">
         <form #newRoleForm="ngForm" (submit)="addNewRole()" autocomplete="off">
             <div>
                 <div class="form-group">
-                    <label>{{ localeData?.role_name_label }}</label>
-                    <input
-                        type="text"
-                        required
-                        name="name"
-                        class="form-control"
+                    <input-field
+                        [label]="localeData?.role_name_label"
+                        [type]="'text'"
+                        [required]="true"
+                        [name]="'name'"
                         [(ngModel)]="newRoleObj.name"
                         [placeholder]="localeData?.role_name_label"
                         #name="ngModel"
-                    />
+                    ></input-field>
                 </div>
-                <div class="form-group custom-select position-relative">
-                    <label>{{ localeData?.role_type_label }}</label>
-                    <select
-                        class="form-control"
-                        required
-                        [(ngModel)]="newRoleObj.isFresh"
-                        name="isFresh"
-                        #isFresh="ngModel"
-                    >
-                        <option [ngValue]="true">{{ localeData?.fresh_start }}</option>
-                        <option [ngValue]="false">{{ localeData?.copy_other_role }}</option>
-                    </select>
-                    <span class="select-drop"><i class="fa fa-caret-down"></i></span>
+                <div class="form-group custom-select position-relative bg-transparent">
+                    <dropdown-field
+                        [label]="localeData?.role_type_label"
+                        [required]="true"
+                        (selectedOption)="newRoleObj.isFresh = $event?.value"
+                        [name]="'isFresh'"
+                        [options]="isFreshOptions"
+                    ></dropdown-field>
                 </div>
-                <div class="form-group select-page position-relative" *ngIf="newRoleObj.isFresh">
-                    <div
-                        class="btn-group btn-block"
-                        dropdown
-                        (onShown)="onDDShown()"
-                        (onHidden)="onDDHidden()"
-                        #permissionDropDown="bs-dropdown"
-                        [attachOutsideOnClick]="true"
-                        (clickOutside)="permissionDropDown?.hide()"
-                    >
-                        <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
-                            {{ dropdownHeading }}
-                            <span class="select-drop pull-right mr-t1"><i class="fa fa-caret-down"></i></span>
-                        </button>
-                        <ul id="pageListDD" *dropdownMenu class="dropdown-menu pd-l1 pd-r1" role="menu">
-                            <li>
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        [ngModelOptions]="{ standalone: true }"
-                                        (click)="selectAllPages($event)"
-                                        [(ngModel)]="newRoleObj.isSelectedAllPages"
-                                    />
+                <div class="form-group" *ngIf="newRoleObj.isFresh">
+                    <mat-form-field class="w-100" appearance="outline">
+                        <mat-label>{{ dropdownHeading }}</mat-label>
+                        <mat-select [(ngModel)]="selectedValues" name="page-list" multiple>
+                            <div class="custom-select-all-option">
+                                <mat-checkbox
+                                    color="primary"
+                                    (change)="selectAllPages($event)"
+                                    [checked]="newRoleObj.isSelectedAllPages"
+                                >
                                     {{ commonLocaleData?.app_select_all }}
-                                </label>
-                            </li>
-                            <li *ngFor="let item of newRoleObj.pageList; let i = index">
-                                <label>
-                                    <input
-                                        type="checkbox"
-                                        [ngModelOptions]="{ standalone: true }"
-                                        (click)="selectPage($event)"
-                                        [(ngModel)]="item.isSelected"
-                                    />
+                                </mat-checkbox>
+                            </div>
+                            <ng-container *ngFor="let item of newRoleObj.pageList; let i = index">
+                                <mat-option (onSelectionChange)="selectPage(i)" [name]="'item' + i" [value]="item">
                                     {{ item.name | capitalize }}
-                                </label>
-                            </li>
-                        </ul>
-                    </div>
+                                </mat-option>
+                            </ng-container>
+                        </mat-select>
+                    </mat-form-field>
                 </div>
-                <div class="form-group custom-select position-relative" *ngIf="!newRoleObj.isFresh">
-                    <label>{{ localeData?.copy_permission }}</label>
-                    <select class="form-control text-capitalize" name="somename" [(ngModel)]="newRoleObj.uniqueName">
-                        <option [ngValue]="">{{ commonLocaleData?.app_please_select }}</option>
-                        <option *ngFor="let role of allRoles" [ngValue]="role?.uniqueName">{{ role?.name }}</option>
-                    </select>
-                    <span class="select-drop"><i class="fa fa-caret-down"></i></span>
+                <div *ngIf="!newRoleObj.isFresh">
+                    <mat-form-field class="w-100" appearance="outline">
+                        <mat-label>{{ localeData?.copy_permission }}</mat-label>
+                        <mat-select [(ngModel)]="newRoleObj.uniqueName" name="roles">
+                            <mat-option [value]="">
+                                {{ commonLocaleData?.app_please_select }}
+                            </mat-option>
+                            <ng-container *ngFor="let item of allRoles; let i = index">
+                                <mat-option (onSelectionChange)="selectPage(i)" [name]="'item' + i" [value]="item">
+                                    {{ item.name | capitalize }}
+                                </mat-option>
+                            </ng-container>
+                        </mat-select>
+                    </mat-form-field>
                 </div>
                 <div class="clearfix text-right mr-t4">
-                    <button type="submit" class="btn btn-sm btn-success" [disabled]="!isFormValid">
+                    <button mat-stroked-button color="primary" type="submit" class="btn" [disabled]="!isFormValid">
                         {{ commonLocaleData?.app_next }}
                     </button>
-                    <button type="button" class="btn btn-sm btn-danger" (click)="closePopupEvent()">
+                    <button mat-stroked-button class="btn custom-btn" type="button" (click)="closePopupEvent()">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>

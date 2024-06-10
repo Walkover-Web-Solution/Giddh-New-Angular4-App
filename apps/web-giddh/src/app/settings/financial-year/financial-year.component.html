@@ -11,44 +11,86 @@
                 <div class="col-sm-12">
                     <h1 class="section-head">{{ localeData?.page_heading }} - {{ currentCompanyName }}</h1>
                     <div class="row">
-                        <div class="col-xl-7 col-md-12 col-xs-12">
-                            <div class="table-responsive">
-                                <table class="table-bordered basic table financial-year on-mobile-view">
-                                    <thead [hidden]="!financialYearObj?.financialYears?.length">
-                                        <tr>
-                                            <th>{{ localeData?.sr_no }}</th>
-                                            <th>{{ commonLocaleData?.app_from }}</th>
-                                            <th>{{ commonLocaleData?.app_to }}</th>
-                                            <th>{{ localeData?.lock_status }}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody *ngIf="financialYearObj && financialYearObj.financialYears">
-                                        <tr
-                                            *ngFor="let financialYear of financialYearObj.financialYears; let i = index"
-                                        >
-                                            <td data-title="#">{{ i + 1 }}</td>
-                                            <td [attr.data-title]="commonLocaleData?.app_from">
-                                                {{ financialYear?.financialYearStarts }}
-                                            </td>
-                                            <td [attr.data-title]="commonLocaleData?.app_to">
-                                                {{ financialYear?.financialYearEnds }}
-                                            </td>
-                                            <td [attr.data-title]="localeData?.lock_status" class="status">
-                                                <span *ngIf="financialYear?.isLocked"
-                                                    ><span (click)="lockUnlockFinancialYear(financialYear)"
-                                                        ><i class="fa fa-toggle-off fa-2x cp" aria-hidden="true"></i
-                                                    ></span>
-                                                    <label>{{ localeData?.locked }}</label></span
-                                                >
-                                                <span *ngIf="!financialYear?.isLocked"
-                                                    ><span (click)="lockUnlockFinancialYear(financialYear)"
-                                                        ><i class="fa fa-toggle-on fa-2x cp" aria-hidden="true"></i
-                                                    ></span>
-                                                    <label>{{ localeData?.unlocked }}</label></span
-                                                >
-                                            </td>
-                                        </tr>
-                                    </tbody>
+                        <div class="col-xl-12 col-md-12 col-xs-12">
+                            <div class="financial-year-field row pt-1">
+                                <div class="form-group mt-1 col-xl-4 col-lg-8 col-md-12 col-sm-12 clearfix">
+                                    <div class="row align-items-center">
+                                        <span class="col-sm-7 col-xs-12 pd-r05">
+                                            <dropdown-field
+                                                [label]="localeData?.add_financial_year"
+                                                [placeholder]="localeData?.select_financial_year"
+                                                [options]="yearOptions"
+                                                (selectedOption)="selectYear($event)"
+                                            >
+                                            </dropdown-field>
+                                        </span>
+                                        <div class="col-sm-4 col-xs-12 pd-l1">
+                                            <button mat-stroked-button color="primary" (click)="addFY()">
+                                                {{ commonLocaleData?.app_save }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mt-1 col-xl-4 col-lg-8 col-md-12 col-sm-12 clearfix">
+                                    <div class="row align-items-center">
+                                        <span class="col-sm-7 col-xs-12 pd-r05">
+                                            <dropdown-field
+                                                [label]="localeData?.financial_year_period"
+                                                [name]="'selectedFYPeriod'"
+                                                [placeholder]="localeData?.financial_year_period"
+                                                (selectedOption)="selectedFYPeriod = $event.value; selectFYPeriod($event)"
+                                                [options]="FYPeriodOptions"
+                                            >
+                                            </dropdown-field>
+                                        </span>
+                                        <div class="col-sm-4 col-xs-12 pd-l1">
+                                            <button mat-stroked-button color="primary" (click)="updateFYPeriod()">
+                                                {{ commonLocaleData?.app_save }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive" *ngIf="financialYearObj && financialYearObj.financialYears">
+                               <table
+                                    mat-table
+                                    [dataSource]="financialYearObj.financialYears"
+                                    class="table-bordered basic table financial-year on-mobile-view"
+                                >
+                                    <ng-container matColumnDef="number">
+                                        <th mat-header-cell *matHeaderCellDef width="25%">{{ localeData?.sr_no }}</th>
+                                        <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="from">
+                                        <th mat-header-cell *matHeaderCellDef width="25%">
+                                            {{ commonLocaleData?.app_from }}
+                                        </th>
+                                        <td mat-cell *matCellDef="let element">{{ element?.financialYearStarts }}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="to">
+                                        <th mat-header-cell *matHeaderCellDef width="25%">
+                                            {{ commonLocaleData?.app_to }}
+                                        </th>
+                                        <td mat-cell *matCellDef="let element">{{ element?.financialYearEnds }}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="status">
+                                        <th mat-header-cell *matHeaderCellDef width="25%">
+                                            {{ localeData?.lock_status }}
+                                        </th>
+                                        <td mat-cell *matCellDef="let element"  class="status">
+                                            <mat-slide-toggle
+                                                color="primary"
+                                                name="lockedUnlockedFinancial"
+                                                [checked]="element.isLocked"
+                                                (change)="lockUnlockFinancialYear(element)"
+                                            >
+                                                {{ element.isLocked ? localeData?.locked : localeData?.unlocked }}
+                                            </mat-slide-toggle>
+                                        </td>
+                                    </ng-container>
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                                 </table>
                             </div>
                             <div class="no-data" *ngIf="!financialYearObj || !financialYearObj?.financialYears?.length">
@@ -57,49 +99,6 @@
                                     [secondaryMessage]="commonLocaleData?.app_search_suggestion"
                                     [secondaryMessageClass]="'p-0'"
                                 ></no-data>
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="clearfix" />
-                    <div class="financial-year-field row pt-1">
-                        <div class="form-group mt-1 col-xl-4 col-lg-8 col-md-12 col-sm-12 clearfix">
-                            <label>{{ localeData?.add_financial_year }}</label>
-                            <div class="row">
-                                <span class="col-sm-7 col-xs-12">
-                                    <sh-select
-                                        [placeholder]="localeData?.select_financial_year"
-                                        [options]="yearOptions"
-                                        [forceClearReactive]="forceClear$ | async"
-                                        (selected)="selectYear($event)"
-                                    >
-                                    </sh-select>
-                                </span>
-                                <div class="col-sm-4 col-xs-12">
-                                    <button class="btn btn-success btn-sm" (click)="addFY()">
-                                        {{ commonLocaleData?.app_save }}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group mt-1 col-xl-4 col-lg-8 col-md-12 col-sm-12 clearfix">
-                            <label>{{ localeData?.financial_year_period }}</label>
-                            <div class="row">
-                                <span class="col-sm-7 col-xs-12">
-                                    <sh-select
-                                        name="selectedFYPeriod"
-                                        [ngModel]="selectedFYPeriod"
-                                        [placeholder]="localeData?.financial_year_period"
-                                        (selected)="selectFYPeriod($event)"
-                                        [options]="FYPeriodOptions"
-                                    >
-                                    </sh-select>
-                                </span>
-                                <div class="col-sm-4 col-xs-12">
-                                    <button class="btn btn-success btn-sm" (click)="updateFYPeriod()">
-                                        {{ commonLocaleData?.app_save }}
-                                    </button>
-                                </div>
                             </div>
                         </div>
                     </div>

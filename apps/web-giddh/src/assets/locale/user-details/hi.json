@@ -3,7 +3,8 @@
 		"tab_heading": "ऑथ-की",
 		"main_auth_key": "मुख्य ऑथ-की",
 		"regenerate_auth_key": "मुख्य ऑथ-की  को फिर से बनाना",
-		"documentation": "प्रलेखन"
+		"documentation": "प्रलेखन",
+		"copied": "कॉपी किया गया..."
 	},
 	"mobile_number": {
 		"tab_heading": "मोबाइल नंबर",

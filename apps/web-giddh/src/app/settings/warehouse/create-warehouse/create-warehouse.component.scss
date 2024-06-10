@@ -50,30 +50,6 @@
                 width: 100%;
                 max-width: 350px;
             }
-            .address-dropdown {
-                .list-item {
-                    .entity-icon {
-                        padding: 4px;
-                    }
-                    .entity-details {
-                        margin-left: 6px;
-                        flex: 1;
-                        .item {
-                            font-family: var(--font-semibold);
-                        }
-                    }
-                    .default-entity {
-                        align-items: center;
-                        display: flex;
-                        &:hover:after {
-                            color: var(--color-blue);
-                        }
-                        .icon-favorite-selected {
-                            color: var(--color-blue);
-                        }
-                    }
-                }
-            }
             input[type="checkbox"] {
                 width: auto;
                 max-width: auto;
@@ -96,7 +72,6 @@
     }
 }
 .footer-btn {
-    background-color: var(--color-dark-fog);
     padding: 15px;
 }
 .linked-entities {
@@ -123,9 +98,7 @@
         }
     }
 }
-.address-dropdown sales-sh-select::ng-deep .menu {
-    max-height: inherit !important;
-}
+
 @media (max-width: 1023px) {
     .create-warehouse-page {
         .create-warehouse-under {

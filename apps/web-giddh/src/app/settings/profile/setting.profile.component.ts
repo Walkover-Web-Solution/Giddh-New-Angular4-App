@@ -184,6 +184,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public showTaxColumn: boolean;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    /** Holds Active Tab Index */
+    public activeTabIndex: number = 0;
+    /** Holds true if get Linkied Entities API call in progress */
+    private isGetLinkedEntitiesInProgress: boolean = false;
+    /** Holds true if get states API call in progress */
+    private isGetStatesInProgress: boolean = false;
 
     constructor(
         private commonService: CommonService,
@@ -257,6 +263,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             .pipe(debounceTime(5000), distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((event: any) => {
                 this.patchProfile(this.dataToSave);
+
             });
 
         this.gstKeyDownSubject$
@@ -276,6 +283,13 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.currentTab = (params['referrer']) ? params['referrer'] : "personal";
+            if ((params['referrer']) === 'personal') {
+                this.activeTabIndex = 0;
+            } else if ((params['referrer']) === 'address') {
+                this.activeTabIndex = 1;
+            } else if ((params['referrer']) === 'other') {
+                this.activeTabIndex = 2;
+            }
         });
 
         this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
@@ -303,6 +317,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                         this.currentOrganizationType = OrganizationType.Company;
                     }
+                    this.loadTaxLinkedEnitiesAndStates();
                 } else {
                     // Treat it as company
                     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
@@ -372,6 +387,23 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             }
         });
 
+    }
+
+    /**
+     * This will use for on tab changes
+     *
+     * @param {*} event
+     * @memberof SettingProfileComponent
+     */
+    public onTabChange(event: any): void {
+        this.activeTabIndex = event?.index;
+        if (event.index === 0) {
+            this.handleTabChanged("personal");
+        } else if (event.index === 1) {
+            this.handleTabChanged("address");
+        } else {
+            this.handleTabChanged("other");
+        }
     }
 
     public addGst() {
@@ -559,6 +591,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 ele.classList.remove('error-box');
                 this.isPANValid = true;
                 this.patchProfile({ panNumber: ele.value });
+
             } else {
                 this.isPANValid = false;
                 this._toasty.errorToast('Invalid PAN number');
@@ -639,6 +672,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             delete obj['contactNo'];
         }
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
+
     }
 
     public typeaheadOnSelect(e: TypeaheadMatch): void {
@@ -669,6 +703,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             return;
         }
         this.patchProfile({ balanceDecimalPlaces: this.companyProfileObj.balanceDecimalPlaces });
+
     }
 
     public nameAlisPush(event) {
@@ -677,6 +712,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
 
         this.patchProfile({ nameAlias: this.companyProfileObj.nameAlias });
+
     }
 
     public savePincode(event) {
@@ -800,7 +836,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.patchProfile({ ...value });
             }
         } else if (this.currentOrganizationType === OrganizationType.Branch) {
-            this.updateBranchProfile();
+            this.updateBranchProfile(value);
         }
     }
 
@@ -810,15 +846,16 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @param {*} [params] Request payload for API
      * @memberof SettingProfileComponent
      */
-    public updateBranchProfile(params?: any): void {
+    public updateBranchProfile(value: any): void {
         this.currentBranchDetails.name = this.companyProfileObj.name;
-        this.currentBranchDetails.alias = this.companyProfileObj.alias;
-        this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(params ? params : this.currentBranchDetails))
+        this.currentBranchDetails.alias = this.companyProfileObj.alias = value?.alias ?? this.companyProfileObj.alias;
+
+        this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(this.currentBranchDetails))
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
                 if (response) {
                     if (response.status === 'success') {
-                        this._toasty.successToast('Profile Updated Successfully.');
+                        this._toasty.showSnackBar("success", this.commonLocaleData?.app_messages.profile_updated);
                     } else {
                         this._toasty.errorToast(response.message);
                     }
@@ -836,14 +873,23 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.currentTab = tabName;
         if (tabName === 'address') {
             this.loadAddresses('GET');
-            this.loadLinkedEntities();
-            if (this.currentCompanyDetails && this.currentCompanyDetails.countryV2) {
-                this.loadTaxDetails(this.currentCompanyDetails.countryV2.alpha2CountryCode);
-                this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
-            }
+            this.loadTaxLinkedEnitiesAndStates();
         }
-        this.getPageHeading();
         this.router.navigateByUrl('/pages/settings/profile/' + tabName);
+    }
+
+    /**
+     * This function used to load taxes and states
+     *
+     * @private
+     * @memberof SettingProfileComponent
+     */
+    private loadTaxLinkedEnitiesAndStates(): void {
+        if (this.currentCompanyDetails && this.currentCompanyDetails.countryV2) {
+            this.loadLinkedEntities();
+            this.loadTaxDetails(this.currentCompanyDetails.countryV2.alpha2CountryCode);
+            this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
+        }
     }
 
     /**
@@ -852,16 +898,20 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public loadLinkedEntities(): void {
-        this.settingsProfileService.getAllLinkedEntities().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.body && response.status === 'success') {
-                this.addressConfiguration.linkedEntities = response.body.map(result => ({
-                    ...result,
-                    isDefault: false,
-                    label: result.alias,
-                    value: result?.uniqueName
-                }));
-            }
-        });
+        if (!this.isGetLinkedEntitiesInProgress) {
+            this.isGetLinkedEntitiesInProgress = true;
+            this.settingsProfileService.getAllLinkedEntities().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response && response.body && response.status === 'success') {
+                    this.addressConfiguration.linkedEntities = response.body.map(result => ({
+                        ...result,
+                        isDefault: false,
+                        label: result.alias,
+                        value: result?.uniqueName
+                    }));
+                }
+                this.isGetLinkedEntitiesInProgress = false;
+            });
+        }
     }
 
     /**
@@ -871,6 +921,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public loadStates(countryCode: string): void {
+        this.isGetStatesInProgress = true;
         this.companyService.getAllStates({ country: countryCode }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 const result = response.body;
@@ -894,6 +945,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     });
                 }
             }
+            this.isGetStatesInProgress = false;
         });
     }
 
@@ -1024,6 +1076,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.settingsProfileService.updateAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 this.closeAddressSidePane = true;
+                setTimeout(() => { this.closeAddressSidePane = false; }, 500);
                 this.loadAddresses('GET');
                 this._toasty.successToast('Address updated successfully');
             } else {
@@ -1256,7 +1309,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                             this.taxType = this.commonLocaleData?.app_gstin;
                         }
                         if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode) || activeCompany.countryV2?.alpha2CountryCode === 'IN') {
-                            this.showTaxColumn = true;                      
+                            this.showTaxColumn = true;
                         } else {
                             this.showTaxColumn = false;
                         }
@@ -1283,7 +1336,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                         if (activeCompany) {
                             if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
-                                if(activeCompany?.countryV2?.alpha2CountryCode === 'ZW' || activeCompany?.countryV2?.alpha2CountryCode === 'KE') {
+                                if (activeCompany?.countryV2?.alpha2CountryCode === 'ZW' || activeCompany?.countryV2?.alpha2CountryCode === 'KE') {
                                     this.taxType = this.commonLocaleData?.app_vat;
                                     this.localeData.company_address_list = this.localeData.company_vat_list;
                                     this.localeData.add_address = this.localeData.add_vat;
@@ -1316,37 +1369,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     });
                 }
             });
-
-            this.getPageHeading();
         }
-    }
-
-    /**
-     * This will return page heading based on active tab
-     *
-     * @param {boolean} event
-     * @memberof SettingProfileComponent
-     */
-    public getPageHeading(): void {
-        let pageHeading = "";
-
-        if (this.isMobileScreen) {
-            switch (this.currentTab) {
-                case 'personal':
-                    pageHeading = this.personalInformationTabHeading;
-                    break;
-                case 'address':
-                    pageHeading = this.companyProfileObj?.taxType ? (this.localeData?.address + this.companyProfileObj?.taxType) : this.localeData?.addresses;
-                    break;
-                case 'portal':
-                    pageHeading = this.localeData?.portal_heading;
-                    break;
-                case 'other':
-                    pageHeading = this.localeData?.other;
-                    break;
-            }
-        }
-        this.pageHeading.emit(pageHeading);
     }
 
     /**

@@ -17,7 +17,6 @@ import { OrganizationProfile } from '../constants/settings.constant';
     styleUrls: ['./other-settings.component.scss']
 })
 export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
-
     /** Stores the company number system */
     public numberSystemSource: IOption[] = [];
     /** Stores the company decimal system */
@@ -71,12 +70,16 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public showLanguageChangeMessage: boolean = false;
     /** List of available themes */
     public availableThemes: IOption[] = [];
+    /** Stores the company decimal system */
+    public inventoryType: IOption[] = [];
     /** This holds the active theme */
     public activeTheme: string = "";
     /** List of available themes */
     public exportTypes: IOption[] = [];
     /** Holds export type */
     public exportType: string = '';
+    /** Holds Current Theme Label  */
+    public currentThemeLabel: string;
 
     constructor(private commonActions: CommonActions, private generalService: GeneralService, private store: Store<AppState>, private toasterService: ToasterService) { }
 
@@ -102,6 +105,7 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
 
         this.translationLocales = this.generalService.getSupportedLocales();
         this.availableThemes = this.generalService.getAvailableThemes();
+        
         this.voucherApiVersion = this.generalService.voucherApiVersion;
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
@@ -109,7 +113,10 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.activeTheme), takeUntil(this.destroyed$)).subscribe(response => {
-            this.activeTheme = response?.value;
+            if(response) {
+                this.activeTheme = response?.value;
+                this.currentThemeLabel = this.availableThemes.find(theme => theme.value === this.activeTheme)?.label;
+            }
         });
 
         this.store.pipe(select(state => state.session.commonLocaleData), takeUntil(this.destroyed$)).subscribe((response) => {
@@ -148,6 +155,28 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
+     * Get label for export type
+     *
+     * @returns {string}
+     * @memberof OtherSettingsComponent
+     */
+    public getExportTypeLabel(): string {
+        const exportType = this.exportTypes.find(item => item.value === this.exportType);
+        return exportType ? exportType.label : '';
+    }
+
+    /**
+     * Get Dropdown field label by value
+     *
+     * @returns {string}
+     * @memberof OtherSettingsComponent
+     */
+    public getDropdownLabel(options: IOption[], currentValue: string | number): string {
+        const listItem = options.find(item => item.value === currentValue);
+        return listItem ? listItem.label : '';
+    }
+
+    /**
      * Unsubscribes from the listeners
      *
      * @memberof OtherSettingsComponent
@@ -169,12 +198,12 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         this.saveProfileSubject.next(true);
     }
 
-        /**
-     * Inventory type update handler
-     *
-     * @param {boolean} value True, if Product is selected
-     * @memberof OtherSettingsComponent
-     */
+    /**
+ * Inventory type update handler
+ *
+ * @param {boolean} value True, if Product is selected
+ * @memberof OtherSettingsComponent
+ */
     public inventoryTypeUpdated(value: boolean): void {
         this.profileData.manageInventory = value;
         this.profileUpdated('manageInventory');
@@ -224,8 +253,10 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof OtherSettingsComponent
      */
     public setExportType(event?: any): void {
-        this.exportType = event?.value;
-        this.updatedData['withPay'] = event?.value === 'yes' ? true : false;
-        this.saveProfileSubject.next(true);
+        if(event && event.value && this.exportType !== event.value) {
+            this.exportType = event.value;
+            this.updatedData['withPay'] = event.value === 'yes';
+            this.saveProfileSubject.next(true);
+        }
     }
 }

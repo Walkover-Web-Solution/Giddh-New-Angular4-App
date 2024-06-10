@@ -26,6 +26,7 @@ import { ConnectPlaidComponent } from "../../theme/connect-plaid/connect-plaid.c
 import { CommandKModule } from "../../theme/command-k/command.k.module";
 import { MatDividerModule } from "@angular/material/divider";
 import { GenericAsideMenuAccountModule } from "../generic-aside-menu-account/generic.aside.menu.account.module";
+import { TagsModule } from "../../settings/tags/tags.module";
 
 @NgModule({
     declarations: [
@@ -62,7 +63,8 @@ import { GenericAsideMenuAccountModule } from "../generic-aside-menu-account/gen
         CommandKModule,
         MatDividerModule,
         GenericAsideMenuAccountModule,
-        MatTooltipModule
+        MatTooltipModule,
+        TagsModule
     ],
     exports: [
         HeaderComponent,
