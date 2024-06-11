@@ -83,4 +83,31 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
             })
         );
     });
+
+    readonly updateDiscount = this.effect((data: Observable<{ model: CreateDiscountRequest }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ createDiscountSuccess: false, createDiscountInProgress: true });
+                return this.settingsDiscountService.UpdateDiscount(req.model, req.model.accountUniqueName).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            this.toaster.showSnackBar('success', res.body);
+                            return this.patchState({
+                                createDiscountInProgress: false,
+                                createDiscountSuccess: true
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar('error', error);
+                            return this.patchState({
+                                createDiscountInProgress: false,
+                                createDiscountSuccess: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
 }
