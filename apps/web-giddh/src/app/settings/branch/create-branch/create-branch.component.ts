@@ -259,6 +259,8 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                 if (response.status === 'success') {
                     this.toastService.successToast(this.localeData?.branch_created);
                     this.branchForm.reset();
+                    this.branchForm.markAsPristine();
+                    this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                     this.router.navigate(['/pages/settings/branch']);
                 } else {
                     this.toastService.errorToast(response.message);

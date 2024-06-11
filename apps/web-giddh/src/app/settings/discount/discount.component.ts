@@ -1,15 +1,15 @@
-import { takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { IOption } from '../../theme/ng-select/ng-select';
 import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/SettingsDiscount';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SalesService } from '../../services/sales.service';
 import { SettingsDiscountService } from '../../services/settings.discount.service';
 import { ToasterService } from '../../services/toaster.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { CreateDiscountComponent } from '../../theme/create-discount/create-discount.component';
 
 @Component({
     selector: 'setting-discount',
@@ -20,6 +20,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 export class DiscountComponent implements OnInit, OnDestroy {
     /** Holds Delete Discount Confirmation Dialog Template Ref */
     @ViewChild('discountConfirmationDialog', { static: true }) public discountConfirmationDialog: TemplateRef<any>;
+    /** Holds Create/Edit Discount Dialog Template Ref */
+    @ViewChild('createUpdateDiscount', { static: true }) public createUpdateDiscount: TemplateRef<any>;
     /** Holds Create New Account Dialog Template Ref */
     @ViewChild('createNew', { static: true }) public createNew: TemplateRef<any>;
     /** Holds Discount Type Input Field Element Ref */
@@ -52,6 +54,8 @@ export class DiscountComponent implements OnInit, OnDestroy {
     public discountConfirmationDialogRef: MatDialogRef<any>;
     /** Holds Create New Account Dialog Ref */
     public createNewAccountDialogRef: MatDialogRef<any>;
+    /** Holds Create/Update discount Dialog Ref */
+    public createUpdateDiscountRef: MatDialogRef<any>;
 
     constructor(
         private salesService: SalesService,
@@ -81,20 +85,64 @@ export class DiscountComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Open Creat Account Aside Pane
+     * Open Create Account Aside Pane
      *
      * @memberof DiscountComponent
      */
     public openAccountAsidePane(event: any): void {
-        if(event) {
+        if (event) {
             this.createNewAccountDialogRef = this.dialog.open(this.createNew, {
-                width: '768px',
+                width: 'var(--aside-pane-width)',
                 position: {
                     right: '0',
                     top: '0'
                 }
             });
         }
+    }
+
+     /**
+     * Open Create/Update Discount Aside Pane
+     *
+     * @memberof DiscountComponent
+     */
+    public openCreateEditDiscountAsidePane(discountInfo?: CreateDiscountRequest): void {
+        // this.createUpdateDiscountRef = this.dialog.open(this.createUpdateDiscount, {
+        //     width: 'var(--aside-pane-width)',
+        //     height: '100vh',
+        //     position: {
+        //         right: '0',
+        //         top: '0'
+        //     }
+        // });
+        this.createUpdateDiscountRef = this.dialog.open(CreateDiscountComponent, {
+            data: discountInfo ?? null,
+            position: {
+                right: '0',
+                top: '0'
+            }
+        });
+
+        this.createUpdateDiscountRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.getDiscounts();
+            }
+        });
+    }
+
+
+     /**
+     * Open Create/Update Discount Aside Pane
+     *
+     * @memberof DiscountComponent
+     */
+     public closeCreateEditDiscountAsidePane(): void {
+        this.createUpdateDiscountRef.close();
+        this.createRequest.type = null;
+        this.createRequest.name = null;
+        this.createRequest.discountValue = null;
+        this.createRequest.accountUniqueName = null;
+        this.createRequest.discountUniqueName = null;
     }
 
     /**
@@ -130,6 +178,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
         this.createRequest.discountValue = data.discountValue;
         this.createRequest.accountUniqueName = data.linkAccount?.uniqueName;
         this.createRequest.discountUniqueName = data.uniqueName;
+        this.openCreateEditDiscountAsidePane(this.createRequest);
         this.discountTypeField?.selectField?.nativeElement.focus();
     }
 

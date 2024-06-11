@@ -54,21 +54,13 @@ body {
             .mat-mdc-option {
                 &.mdc-list-item {
                     align-items: flex-start;
+                    padding-top: 10px;
+                    padding-bottom: 4px;
                 }
             }
     
             .mdc-list-item__primary-text {
                 width: 100%;
-            }
-        }
-    }
-}
-
-.settings-profile-tabs {
-    .mat-mdc-tab-header {
-        .mat-mdc-tab-labels {
-            .mdc-tab {
-                padding-left: 5px;
             }
         }
     }

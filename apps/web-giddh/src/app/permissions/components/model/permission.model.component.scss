@@ -1,8 +1,9 @@
-.add-new-role-modal .open > #pageListDD {
-    display: inline-block;
-    min-width: 200px;
-    max-height: 180px;
-    overflow: auto;
+.add-new-role-modal {
+    .modal-header {
+        span {
+            color: var(--color-popup-list-head-text);
+        }
+    }
 }
 
 .dropdown-menu li {
@@ -19,3 +20,4 @@
         top: 40px;
     }
 }
+

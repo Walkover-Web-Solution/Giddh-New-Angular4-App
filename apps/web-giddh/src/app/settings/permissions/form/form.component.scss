@@ -206,6 +206,10 @@ i.icon-cross {
     font-size: var(--font-size-15) !important;
     height: 48px;
     justify-content: space-between;
+
+    &.range-wrapper {
+        max-width: 238px;
+    }
 }
 .custom-date-range-menu{
     min-width: 237px;
