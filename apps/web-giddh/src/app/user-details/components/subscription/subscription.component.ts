@@ -45,8 +45,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public localeData: any = {};
     /** This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    /** Holds Mat Input Label */
+    /** Emits subscription api loading status */
     @Output() public isSubscriptionLoading: EventEmitter<boolean> = new EventEmitter<boolean>();
+    /** Emits selected subscription id */
+    @Output() public subscriptionId: EventEmitter<string> = new EventEmitter<string>();
     /**  This will use for companies list expansion in accordian */
     @ViewChild(MatAccordion) accordion: MatAccordion;
     /** This will use for move company in to another company  */
@@ -275,6 +277,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
      */
     public selectSubscription(subscription: any): void {
         this.selectedSubscription = subscription;
+        this.subscriptionId.emit(this.selectedSubscription?.subscriptionId);
     }
 
     /**
