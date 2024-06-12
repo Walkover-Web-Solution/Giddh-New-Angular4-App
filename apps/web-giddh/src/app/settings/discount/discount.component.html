@@ -6,49 +6,49 @@
     (translationComplete)="translationComplete($event)"
 >
     <div class="discount box clearfix section-center position-relative">
-        <div class="initial-screen position-absolute text-center" *ngIf="!discountList?.length">
+        <div *ngIf="isLoading" class="mt-5">
+            <giddh-page-loader></giddh-page-loader>
+        </div>
+        <div class="initial-screen position-absolute text-center" *ngIf="!discountList?.length && !isLoading">
             <div class="mb-5">
                 <img src="assets/images/create-discounts.png" alt="create discount banner image" width="500px" height="auto">
             </div>
             <button mat-raised-button color="primary" (click)="openCreateEditDiscountAsidePane()">+ {{ localeData?.tab_heading }}</button>
         </div>
-        <button *ngIf="discountList?.length" mat-raised-button color="primary" (click)="openCreateEditDiscountAsidePane()">+ {{ localeData?.tab_heading }}</button>
-        <div>
-            <div class="row mt-4">
-                <div class="col-lg-12">
-                    <table mat-table [dataSource]="discountList" class="bdr table basic mr-b05 on-mobile-view w-100" *ngIf="discountList?.length">
-                        <ng-container matColumnDef="number">
-                            <th mat-header-cell *matHeaderCellDef>#</th>
-                            <td mat-cell *matCellDef="let element;let i = index">{{ i + 1 }}</td>
-                        </ng-container>
-                        <ng-container matColumnDef="name">
-                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_name }}</th>
-                            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-                        </ng-container>
-                        <ng-container matColumnDef="value">
-                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_value }}</th>
-                            <td mat-cell *matCellDef="let element">{{ element.discountValue }}</td>
-                        </ng-container>
-                        <ng-container matColumnDef="type">
-                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.discount_type }}</th>
-                            <td mat-cell *matCellDef="let element">{{ element.discountType === 'FIX_AMOUNT' ? localeData?.fixed_value : commonLocaleData?.app_percent }}</td>
-                        </ng-container>
-                        <ng-container matColumnDef="action">
-                            <th class="text-right" mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_action }}</th>
-                            <td mat-cell *matCellDef="let element" class="icon-btn text-right">
-                                <button mat-stroked-button (click)="editDiscount(element)" class="p-0 mr-3 action-btn">
-                                    <i class="icon-edit-pencil"></i>
-                                </button>
-                                <button mat-stroked-button (click)="showDeleteDiscountDialog(element?.uniqueName)" class="p-0 action-btn">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </td>
-                        </ng-container>
-                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                    </table>
-                </div>
-            </div>
+        <button *ngIf="discountList?.length && !isLoading" mat-raised-button color="primary" (click)="openCreateEditDiscountAsidePane()">+ {{ localeData?.tab_heading }}</button>
+    
+        <div class="mt-4" *ngIf="discountList?.length && !isLoading">
+            <table mat-table [dataSource]="discountList" class="bdr table basic mr-b05 on-mobile-view w-100">
+                <ng-container matColumnDef="number">
+                    <th mat-header-cell *matHeaderCellDef>#</th>
+                    <td mat-cell *matCellDef="let element;let i = index">{{ i + 1 }}</td>
+                </ng-container>
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_name }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+                </ng-container>
+                <ng-container matColumnDef="value">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_value }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element.discountValue }}</td>
+                </ng-container>
+                <ng-container matColumnDef="type">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.discount_type }}</th>
+                    <td mat-cell *matCellDef="let element">{{ element.discountType === 'FIX_AMOUNT' ? localeData?.fixed_value : commonLocaleData?.app_percent }}</td>
+                </ng-container>
+                <ng-container matColumnDef="action">
+                    <th class="text-right" mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_action }}</th>
+                    <td mat-cell *matCellDef="let element" class="icon-btn text-right">
+                        <button mat-stroked-button (click)="openCreateEditDiscountAsidePane(element)" class="p-0 mr-3 action-btn">
+                            <i class="icon-edit-pencil"></i>
+                        </button>
+                        <button mat-stroked-button (click)="showDeleteDiscountDialog(element?.uniqueName)" class="p-0 action-btn">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
         </div>
     </div>
 </ng-container>

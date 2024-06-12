@@ -32,7 +32,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
     public isUpdateMode: boolean = false;
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) public discountInfo: CreateDiscountRequest,
+        @Inject(MAT_DIALOG_DATA) public discountInfo: any,
         private componentStore: CreateDiscountComponentStore,
         private formBuilder: UntypedFormBuilder,
         public dialogRef: MatDialogRef<any>) {
@@ -66,13 +66,13 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
      * @private
      * @memberof CreateDiscountComponent
      */
-    private initDiscountForm(discount?: CreateDiscountRequest): void {
+    private initDiscountForm(discount?: any): void {
         this.createDiscountForm = this.formBuilder.group({
             type: [discount?.type ?? 'PERCENTAGE', Validators.required],
             name: [discount?.name ?? '', Validators.required],
             discountValue: [discount?.discountValue ?? '', Validators.required],
-            accountUniqueName: [discount?.accountUniqueName ?? '', Validators.required],
-            discountUniqueName: [discount?.discountUniqueName ?? ''],
+            accountUniqueName: [discount?.linkAccount?.uniqueName ?? ''],
+            discountUniqueName: [discount?.uniqueName ?? ''],
             accountName: ['']
         });
     }
@@ -90,7 +90,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
             } else {
                 this.discountsAccountList$ = observableOf(discountsAccountList);
                 if(this.discountInfo) {
-                    const accountNameObject = discountsAccountList.find(account => account?.value === this.discountInfo.accountUniqueName);
+                    const accountNameObject = discountsAccountList.find(account => account?.value === this.discountInfo.linkAccount?.uniqueName);
                     if(accountNameObject) {
                         this.selectDiscount(accountNameObject);
                     }
