@@ -66,7 +66,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     /** Branch form */
     public branchForm: UntypedFormGroup;
     /** Search Address Control */
-    public addressQuery: UntypedFormControl =  new FormControl('');
+    public addressQuery: UntypedFormControl = new FormControl('');
     /** Holds Addresses list used to reset */
     public addressesConstantList: any[] = [];
     /** Stores all the addresses within a company */
@@ -158,10 +158,10 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
             }
         });
         this.addressQuery.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(query => {
-            if(query && query.length){
+            if (query && query.length) {
                 this.addresses = this.addressesConstantList?.filter(address => address.label.toUpperCase().indexOf(query.toUpperCase()) > -1);
             }
-            if(query === ''){
+            if (query === '') {
                 this.addresses = this.addressesConstantList;
             }
         });
@@ -186,7 +186,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         if (event) {
             event.preventDefault();
         }
-        
+
         this.asideAccountAsidePaneRef?.close();
         this.isAddressChangeInProgress = false;
     }
@@ -235,7 +235,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
             });
         }
         option.isDefault = !option.isDefault;
-        if (option.isDefault &&( (this.branchForm.get('address')?.value === '') || (this.branchForm.get('address')?.value.findIndex(i => i.uniqueName === option.uniqueName) === -1))) {
+        if (option.isDefault && ((this.branchForm.get('address')?.value === '') || (this.branchForm.get('address')?.value.findIndex(i => i.uniqueName === option.uniqueName) === -1))) {
             this.branchForm.get('address')?.patchValue([...this.branchForm.get('address')?.value, option]);
         }
     }
@@ -255,7 +255,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                 isDefault: filteredAddress.isDefault
             }))
         };
-        
+
         this.settingsProfileService.createNewBranch(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
@@ -402,7 +402,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      *
      * @memberof CreateBranchComponent
      */
-    public handleShortcutPress(): void  {
+    public handleShortcutPress(): void {
         this.loadLinkedEntities(() => {
             this.openCreateBranchDialog();
         });
@@ -496,11 +496,11 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      * @param {*} element
      * @memberof CreateBranchComponent
      */
-    public removeItem(element: any): void { 
+    public removeItem(element: any): void {
         this.branchForm.get('address')?.patchValue(this.branchForm.get('address').value.filter(address => address !== element));
 
         this.addresses = this.addresses.map(address => {
-            if(address?.uniqueName === element?.uniqueName){
+            if (address?.uniqueName === element?.uniqueName) {
                 address.isDefault = false;
             }
             return address;
