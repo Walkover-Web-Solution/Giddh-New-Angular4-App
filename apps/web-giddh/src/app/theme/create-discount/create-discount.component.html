@@ -50,7 +50,7 @@
                     <button *ngIf="!isUpdateMode" mat-stroked-button color="primary" (click)="saveDiscount()" [ladda]="createDiscountInProgress$ | async">{{ commonLocaleData?.app_save }}</button>
                     <button *ngIf="isUpdateMode" mat-stroked-button color="primary" (click)="updateDiscount()" [ladda]="createDiscountInProgress$ | async">{{ commonLocaleData?.app_update }}</button>
                     <button mat-stroked-button color="primary" (click)="cancelDiscount()">{{ commonLocaleData?.app_cancel }}</button>
-                    <button mat-stroked-button color="primary" (click)="clearDiscount()">{{ commonLocaleData?.app_clear }}</button>
+                    <button *ngIf="!isUpdateMode" mat-stroked-button color="primary" (click)="clearDiscount()">{{ commonLocaleData?.app_clear }}</button>
                 </div>
             </div>
         </div>

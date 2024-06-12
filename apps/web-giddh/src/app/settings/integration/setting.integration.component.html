@@ -657,8 +657,8 @@
                 <confirm-modal
                     [title]="localeData?.email?.remove_account_title"
                     [body]="localeData?.email?.remove_account_message"
-                    (cancelCallBack)="removeGmailIntegrationDialogRef.close()"
-                    (successCallBack)="removeGmailAccount(); removeGmailIntegrationDialogRef.close()"
+                    (cancelCallBack)="removeGmailIntegrationDialogRef?.close()"
+                    (successCallBack)="removeGmailAccount(); removeGmailIntegrationDialogRef?.close()"
                 >
                 </confirm-modal>
             </div>
@@ -671,7 +671,7 @@
                 <icici-account-create-edit
                     [commonLocaleData]="commonLocaleData"
                     (getAllBankAccounts)="getAllBankAccounts()"
-                    (closeModalEvent)="createNewAccountDialogRef.close()"
+                    (closeModalEvent)="createNewAccountDialogRef?.close()"
                 >
                 </icici-account-create-edit>
             </div>
@@ -685,7 +685,7 @@
                     [commonLocaleData]="commonLocaleData"
                     [activeBankAccount]="activeBankAccount"
                     (getAllBankAccounts)="getAllBankAccounts()"
-                    (closeModalEvent)="editAccountModalRef.close()"
+                    (closeModalEvent)="editAccountModalRef?.close()"
                     [isIciciBankSupportedCountry]="isIciciBankSupportedCountry"
                 >
                 </icici-account-create-edit>
@@ -700,7 +700,7 @@
                     [commonLocaleData]="commonLocaleData"
                     [activeBankAccount]="activeBankAccount"
                     (getAllBankAccounts)="getAllBankAccounts()"
-                    (closeModalEvent)="createNewAccountUserModalRef.close()"
+                    (closeModalEvent)="createNewAccountUserModalRef?.close()"
                 ></icici-payor-account-create-edit>
             </div>
         </div>
@@ -714,7 +714,7 @@
                     [activeBankAccount]="activeBankAccount"
                     [activePayorAccount]="activePayorAccount"
                     (getAllBankAccounts)="getAllBankAccounts()"
-                    (closeModalEvent)="editAccountUserModalRef.close()"
+                    (closeModalEvent)="editAccountUserModalRef?.close()"
                 >
                 </icici-payor-account-create-edit>
             </div>
@@ -726,7 +726,7 @@
             <div class="modal-content">
                 <confirm-modal
                     [body]="localeData?.payment?.delete_login | replace : '[LOGIN_ID]' : activeBankAccount?.loginId"
-                    (cancelCallBack)="confirmationModalRef.close()"
+                    (cancelCallBack)="confirmationModalRef?.close()"
                     (successCallBack)="deleteBankAccountLogin(true)"
                 >
                 </confirm-modal>

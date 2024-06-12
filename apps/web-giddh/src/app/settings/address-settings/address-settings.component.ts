@@ -299,7 +299,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof AddressSettingsComponent
      */
     public closeAccountAsidePane(): void {
-        this.asideAccountAsidePaneRef.close();
+        this.asideAccountAsidePaneRef?.close();
         this.addressConfiguration.type = SettingsAsideFormType.CreateAddress;
         this.addressToUpdate = null;
     }
@@ -507,7 +507,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             this.handleDeleteAddress(this.selectedAddress);
         }
-        this.deleteAddressConfirmationModalRef.close();
+        this.deleteAddressConfirmationModalRef?.close();
     }
 
     /**

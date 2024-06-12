@@ -119,8 +119,6 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             }
         } else if (this.addressConfiguration.type === SettingsAsideFormType.EditAddress) {
             if (this.addressToUpdate) {
-                console.log("this.addressToUpdate", this.addressToUpdate);
-                
                 const taxValidatorPatterns = this.addressConfiguration.tax.name ? this.addressConfiguration.tax.validation : [];
                 this.addressForm = this.formBuilder.group({
                     name: [this.addressToUpdate.name, [Validators.required, Validators.maxLength(100)]],
@@ -281,7 +279,11 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 }
             }
         }
-        this.addressForm?.get('taxNumber')?.patchValue(this.addressForm?.get('taxNumber')?.value?.trim());
+        if(this.addressForm?.get('taxNumber')?.value) {
+            const trimmedTaxNumber = this.addressForm?.get('taxNumber')?.value?.trim();
+            this.addressForm?.get('taxNumber')?.patchValue(trimmedTaxNumber);
+        }
+        
         if (this.addressConfiguration.type === SettingsAsideFormType.CreateAddress) {
             this.saveAddress.emit({
                 formValue: this.addressForm.getRawValue(),

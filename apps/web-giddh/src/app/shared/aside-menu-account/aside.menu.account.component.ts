@@ -157,7 +157,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     }
 
     public hideDeleteAccountModal(): void {
-        this.deleteAccountmodalRef.close()
+        this.deleteAccountmodalRef?.close()
     }
 
     public deleteAccount() {

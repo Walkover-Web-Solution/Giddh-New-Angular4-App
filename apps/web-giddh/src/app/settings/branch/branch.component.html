@@ -238,7 +238,7 @@
                             : localeData?.confirm_archive_title
                     "
                     [permanentlyDeleteMessage]="' '"
-                    (cancelCallBack)="branchStatusToUpdate = ''; statusDialogRef.close()"
+                    (cancelCallBack)="branchStatusToUpdate = ''; statusDialogRef?.close()"
                     (successCallBack)="updateBranchStatus()"
                 >
                 </confirm-modal>
@@ -256,7 +256,7 @@
             <create-address
                 [class]="addressAsidePane"
                 [keyboardShortcut]="'esc'"
-                (onShortcutPress)="addressAsidePaneRef.close()"
+                (onShortcutPress)="addressAsidePaneRef?.close()"
                 [companyName]="currentBranch"
                 [branchToUpdate]="branchToUpdate"
                 [showLoader]="isBranchChangeInProgress"
@@ -264,7 +264,7 @@
                 [addressConfiguration]="addressConfiguration"
                 [localeData]="profileLocaleData"
                 [commonLocaleData]="commonLocaleData"
-                (closeAsideEvent)="addressAsidePaneRef.close()"
+                (closeAsideEvent)="addressAsidePaneRef?.close()"
             >
             </create-address>
         </div>

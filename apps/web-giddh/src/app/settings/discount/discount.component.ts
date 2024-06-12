@@ -49,7 +49,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
     /** True if get all discounts api call in progress */
     public isLoading: boolean = false;
     /** Holds Mat Table Display columns */
-    public displayedColumns: string[] = ['number', 'name', 'action'];
+    public displayedColumns: string[] = ['number', 'name', 'value', 'type', 'action'];
     /** Holds Discount Confirmation Dialog Ref */
     public discountConfirmationDialogRef: MatDialogRef<any>;
     /** Holds Create New Account Dialog Ref */
@@ -78,7 +78,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
 
         this.createAccountIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: boolean) => {
             if (response) {
-                this.createNewAccountDialogRef.close();
+                this.createNewAccountDialogRef?.close();
                 this.getDiscountAccounts();
             }
         });
@@ -107,16 +107,10 @@ export class DiscountComponent implements OnInit, OnDestroy {
      * @memberof DiscountComponent
      */
     public openCreateEditDiscountAsidePane(discountInfo?: CreateDiscountRequest): void {
-        // this.createUpdateDiscountRef = this.dialog.open(this.createUpdateDiscount, {
-        //     width: 'var(--aside-pane-width)',
-        //     height: '100vh',
-        //     position: {
-        //         right: '0',
-        //         top: '0'
-        //     }
-        // });
         this.createUpdateDiscountRef = this.dialog.open(CreateDiscountComponent, {
             data: discountInfo ?? null,
+            width: 'var(--aside-pane-width)',
+            height: '100vh',
             position: {
                 right: '0',
                 top: '0'
@@ -137,7 +131,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
      * @memberof DiscountComponent
      */
      public closeCreateEditDiscountAsidePane(): void {
-        this.createUpdateDiscountRef.close();
+        this.createUpdateDiscountRef?.close();
         this.createRequest.type = null;
         this.createRequest.name = null;
         this.createRequest.discountValue = null;
@@ -145,42 +139,6 @@ export class DiscountComponent implements OnInit, OnDestroy {
         this.createRequest.discountUniqueName = null;
     }
 
-    /**
-     * Create / Update Discount API Call
-     *
-     * @memberof DiscountComponent
-     */
-    public submit() {
-        if (this.createRequest.discountUniqueName) {
-            this.isLoading$ = of(true);
-            this.settingsDiscountService.UpdateDiscount(this.createRequest, this.createRequest.discountUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                this.showToaster(this.commonLocaleData?.app_messages?.discount_updated, response);
-                this.isLoading$ = of(false);
-            });
-        } else {
-            this.isLoading$ = of(true);
-            this.settingsDiscountService.CreateDiscount(this.createRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                this.showToaster(this.commonLocaleData?.app_messages?.discount_created, response);
-                this.isLoading$ = of(false);
-            });
-        }
-    }
-
-    /**
-     * Set discount details in input feilds to update 
-     *
-     * @param {IDiscountList} data
-     * @memberof DiscountComponent
-     */
-    public editDiscount(data: IDiscountList) {
-        this.createRequest.type = data.discountType;
-        this.createRequest.name = data.name;
-        this.createRequest.discountValue = data.discountValue;
-        this.createRequest.accountUniqueName = data.linkAccount?.uniqueName;
-        this.createRequest.discountUniqueName = data.uniqueName;
-        this.openCreateEditDiscountAsidePane(this.createRequest);
-        this.discountTypeField?.selectField?.nativeElement.focus();
-    }
 
     /**
      * Open delete discount confirmation dialog
@@ -202,7 +160,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
      */
     public hideDeleteDiscountModal() {
         this.deleteRequest = null;
-        this.discountConfirmationDialogRef.close();
+        this.discountConfirmationDialogRef?.close();
     }
 
     /**
@@ -213,7 +171,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
     public deleteDiscount() {
         this.isLoading$ = of(true);
         this.settingsDiscountService.DeleteDiscount(this.deleteRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.discountConfirmationDialogRef.close();
+            this.discountConfirmationDialogRef?.close();
             this.showToaster(this.commonLocaleData?.app_messages?.discount_deleted, response);
             this.isLoading$ = of(false);
         });
@@ -261,7 +219,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.settingsDiscountService.GetDiscounts().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
-                this.discountList = response?.body;
+                this.discountList = response?.body;     
             }
             this.isLoading = false;
         });

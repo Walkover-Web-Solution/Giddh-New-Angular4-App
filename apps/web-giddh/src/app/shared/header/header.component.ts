@@ -1903,7 +1903,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     */
     public closeEvent(): void {
         setTimeout(() => {
-            this.commandkDialogRef.close();
+            this.commandkDialogRef?.close();
         }, 600);
     }
 

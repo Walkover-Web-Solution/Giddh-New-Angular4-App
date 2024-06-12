@@ -45,14 +45,14 @@ export class SettingsDiscountService {
     /**
      * Update Discount
      */
-    public UpdateDiscount(model: CreateDiscountRequest, uniqueName: string): Observable<BaseResponse<IDiscountList, CreateDiscountRequest>> {
+    public UpdateDiscount(model: CreateDiscountRequest): Observable<BaseResponse<IDiscountList, CreateDiscountRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.put(this.config.apiUrl + SETTINGS_DISCOUNT_API.PUT
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':discountUniqueName', encodeURIComponent(uniqueName)), model).pipe(map((res) => {
+            ?.replace(':discountUniqueName', encodeURIComponent(model?.discountUniqueName)), model).pipe(map((res) => {
                 let data: BaseResponse<IDiscountList, CreateDiscountRequest> = res;
                 data.request = model;
-                data.queryString = uniqueName;
+                data.queryString = model?.discountUniqueName;
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<IDiscountList, CreateDiscountRequest>(e, model)));
     }

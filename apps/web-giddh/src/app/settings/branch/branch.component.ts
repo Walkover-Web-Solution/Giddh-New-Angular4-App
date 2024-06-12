@@ -443,7 +443,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         };
         this.settingsProfileService.updateBranchInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
-                this.addressAsidePaneRef.close();
+                this.addressAsidePaneRef?.close();
                 this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '' }));
                 this.toasterService.successToast(this.localeData?.branch_updated);
             } else {
@@ -594,7 +594,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             } else {
                 this.toasterService.errorToast(response?.message);
             }
-            this.statusDialogRef.close();
+            this.statusDialogRef?.close();
         });
     }
 }

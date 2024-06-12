@@ -72,6 +72,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
             name: [discount?.name ?? '', Validators.required],
             discountValue: [discount?.discountValue ?? '', Validators.required],
             accountUniqueName: [discount?.accountUniqueName ?? '', Validators.required],
+            discountUniqueName: [discount?.discountUniqueName ?? ''],
             accountName: ['']
         });
     }
@@ -125,7 +126,11 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
             this.isFormSubmitted = true;
             return;
         }
-        this.componentStore.saveDiscount(this.createDiscountForm.value);
+        let model = this.createDiscountForm.value;
+        delete model.accountName;
+        delete model.discountUniqueName;
+
+        this.componentStore.saveDiscount(model);
     }
 
     /**
@@ -140,7 +145,9 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
             this.isFormSubmitted = true;
             return;
         }
-        this.componentStore.updateDiscount(this.createDiscountForm.value);
+        let model = this.createDiscountForm.value;
+        delete model.accountName;
+        this.componentStore.updateDiscount(model);
     }
 
     /**
@@ -149,7 +156,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
      * @memberof CreateDiscountComponent
      */
     public cancelDiscount(): void {
-        this.dialogRef.close();
+        this.dialogRef?.close();
     }
 
     /**
@@ -163,6 +170,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
         this.createDiscountForm.get('name')?.patchValue('');
         this.createDiscountForm.get('discountValue')?.patchValue('');
         this.createDiscountForm.get('accountUniqueName')?.patchValue('');
+        this.createDiscountForm.get('discountUniqueName')?.patchValue('');
         this.createDiscountForm.get('accountName')?.patchValue('');
     }
 

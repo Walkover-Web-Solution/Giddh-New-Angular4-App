@@ -131,13 +131,13 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
                 if (action) {
                     this.hasUnsavedChanges = false;
                     this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
-                    this.editDialogRef.close();
+                    this.editDialogRef?.close();
                 }
             });
         } else {
             this.hasUnsavedChanges = false;
             this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
-            this.editDialogRef.close();
+            this.editDialogRef?.close();
         }
     }
 

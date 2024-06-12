@@ -187,7 +187,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
             event.preventDefault();
         }
         
-        this.asideAccountAsidePaneRef.close();
+        this.asideAccountAsidePaneRef?.close();
         this.isAddressChangeInProgress = false;
     }
 
@@ -246,14 +246,16 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchComponent
      */
     public handleFormSubmit(): void {
+        const formValue = this.branchForm?.value;
         const requestObj = {
-            name: this.branchForm?.value.name,
-            alias: this.branchForm?.value.alias,
-            linkAddresses: this.addresses?.filter(address => this.branchForm?.value.address?.includes(address?.uniqueName))?.map(filteredAddress => ({
+            name: formValue.name,
+            alias: formValue.alias,
+            linkAddresses: formValue.address?.map(filteredAddress => ({
                 uniqueName: filteredAddress?.uniqueName,
                 isDefault: filteredAddress.isDefault
             }))
         };
+        
         this.settingsProfileService.createNewBranch(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.status === 'success') {
