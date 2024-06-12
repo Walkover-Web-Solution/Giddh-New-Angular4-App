@@ -430,7 +430,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      */
     public closeAddressAsidePane(event?: any): void {
         this.isAddressChangeInProgress = false;
-        this.asideAccountAsidePaneDialogRef.close();
+        this.asideAccountAsidePaneDialogRef?.close();
     }
 
     /**

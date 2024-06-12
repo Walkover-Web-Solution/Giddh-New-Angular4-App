@@ -341,7 +341,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
      */
     public closeAsidePane(event?: any): void {
         this.isWarehouseUpdateInProgress = false;
-        this.asideAccountAsidePaneDialogRef.close();
+        this.asideAccountAsidePaneDialogRef?.close();
     }
 
     /**

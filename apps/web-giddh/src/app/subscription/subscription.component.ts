@@ -613,7 +613,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             if (action) {
                 this.componentStore.cancelSubscription(id);
             } else {
-                cancelDialogRef.close();
+                cancelDialogRef?.close();
             }
         });
     }

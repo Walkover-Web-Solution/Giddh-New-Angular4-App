@@ -66,21 +66,34 @@
                                                 ></input-field>
                                             </div>
                                             <div class="col-sm-4 form-group">
-                                                <reactive-dropdown-field 
-                                                    [label]="commonLocaleData?.app_state" 
-                                                    [readonly]="
-                                                        addressConfiguration?.type === 'editAddress' &&
-                                                        addressToUpdate?.taxNumber &&
-                                                        addressConfiguration?.tax?.name &&
-                                                        addressConfiguration?.tax?.name === 'GSTIN' || (addressForm?.get('stateLabel')?.value && addressForm?.get('taxNumber')?.value)
-                                                    " 
-                                                    [options]="addressConfiguration?.stateList"
-                                                    formControlName="state"
-                                                    [labelValue]="addressForm?.get('stateLabel')?.value ? addressForm?.get('stateLabel')?.value : ''"
-                                                    [cssClass]="w-100" 
-                                                    [required]="true"
-                                                >
-                                                </reactive-dropdown-field>
+                                                <ng-container *ngIf="addressConfiguration.stateList?.length">
+                                                    <reactive-dropdown-field 
+                                                        [label]="commonLocaleData?.app_state" 
+                                                        [readonly]="
+                                                            addressConfiguration?.type === 'editAddress' &&
+                                                            addressToUpdate?.taxNumber &&
+                                                            addressConfiguration?.tax?.name &&
+                                                            addressConfiguration?.tax?.name === 'GSTIN' || (addressForm?.get('stateLabel')?.value && addressForm?.get('taxNumber')?.value)
+                                                        " 
+                                                        [options]="addressConfiguration?.stateList"
+                                                        formControlName="state"
+                                                        [labelValue]="addressForm?.get('stateLabel')?.value ? addressForm?.get('stateLabel')?.value : ''"
+                                                        [cssClass]="w-100" 
+                                                        [required]="true"
+                                                    >
+                                                    </reactive-dropdown-field>
+                                                </ng-container>
+                                                <ng-container *ngIf="addressConfiguration.countyList?.length">
+                                                    <reactive-dropdown-field 
+                                                        [label]="commonLocaleData?.app_region" 
+                                                        [options]="addressConfiguration?.countyList"
+                                                        formControlName="county"
+                                                        [labelValue]="addressToUpdate?.county?.name ? addressToUpdate?.county?.name : ''"
+                                                        [cssClass]="w-100" 
+                                                        [required]="true"
+                                                    >
+                                                    </reactive-dropdown-field>
+                                                </ng-container>
                                             </div>
                                             <!-- static code added for the pincode -->
                                             <div class="col-sm-4">
@@ -128,7 +141,7 @@
                                                     <mat-chip-list #chipList class="d-flex flex-wrap column-gap5 row-gap1">
                                                       <mat-chip *ngFor="let selected of addressForm?.get('linkedEntity')?.value" (removed)="removeItem(selected)">
                                                         {{ selected?.alias }} 
-                                                        <span matChipRemove><i class="icon-cross"></i></span>
+                                                        <span matChipRemove><i class="icon-cross font-14"></i></span>
                                                       </mat-chip>
                                                     </mat-chip-list>
                                               
@@ -163,7 +176,7 @@
                                                                     {{ item?.name || "-" }}
                                                                 </div>
                                                             </span>
-                                                            <span class="default-entity ml-auto">
+                                                            <span class="default-entity ml-auto align-self-center">
                                                                 <i (click)="setDefault(item, $event)"
                                                                     *ngIf="!item?.isDefault"
                                                                     class="icon-no-selected mr-r05"></i>
@@ -226,7 +239,7 @@
                                                     <mat-chip-list class="d-flex flex-wrap column-gap5 row-gap1">
                                                       <mat-chip *ngFor="let selected of addressForm?.get('linkedEntity')?.value" (removed)="removeItem(selected)">
                                                         {{ selected?.label }}
-                                                        <span matChipRemove><i class="icon-cross"></i></span>
+                                                        <span matChipRemove><i class="icon-cross font-14"></i></span>
                                                       </mat-chip>
                                                     </mat-chip-list>
                                                     <mat-select
@@ -261,7 +274,7 @@
                                                                     {{ item?.name || "-" }}
                                                                 </div>
                                                             </span>
-                                                            <span class="default-entity ml-auto">
+                                                            <span class="default-entity ml-auto align-self-center">
                                                                 <i (click)="setDefault(item, $event)"
                                                                     *ngIf="!item?.isDefault"
                                                                     class="icon-no-selected mr-r05"></i>
@@ -302,7 +315,7 @@
                                                     <mat-chip-list #chipList class="d-flex flex-wrap column-gap5 row-gap1">
                                                       <mat-chip *ngFor="let item of addressForm?.get('linkedEntity')?.value" (removed)="removeItem(item)">
                                                         {{ item?.label }}
-                                                        <span matChipRemove><i class="icon-cross"></i></span>
+                                                        <span matChipRemove><i class="icon-cross font-14"></i></span>
                                                       </mat-chip>
                                                     </mat-chip-list>
                                               
@@ -337,7 +350,7 @@
                                                                     {{ item?.name || "-" }}
                                                                 </div>
                                                             </span>
-                                                            <span class="default-entity ml-auto">
+                                                            <span class="default-entity ml-auto align-self-center">
                                                                 <i (click)="setDefault(item, $event)"
                                                                     *ngIf="!item?.isDefault"
                                                                     class="icon-no-selected mr-r05"></i>

@@ -83,7 +83,7 @@
                                     <ng-container *ngFor="let chipItem of branchForm?.get('address')?.value">
                                         <mat-chip-row (removed)="removeItem(chipItem)" role="option" >
                                             <span>{{ chipItem?.label }}</span>
-                                            <span matChipRemove><i class="icon-cross"></i></span>
+                                            <span matChipRemove><i class="icon-cross font-14"></i></span>
                                         </mat-chip-row>
                                     </ng-container>
                                     <input type="text" autocomplete="off" (focus)="trigger.open()" [formControl]="addressQuery" matInput [placeholder]="localeData?.select_addresses" [matChipInputFor]="chipGrid" >

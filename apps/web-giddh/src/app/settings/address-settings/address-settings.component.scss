@@ -84,74 +84,12 @@
     }
     i {
         color: var(--color-abbey);
-        margin-right: 5px;
-        margin-top: 4px;
-        float: left;
     }
     span.entity-alias {
         margin-right: 0;
         margin-top: 0;
         float: right;
         width: 95%;
-    }
-}
-
-@media (max-width: 768px) {
-    .giddh-table {
-        tr {
-            td {
-                &::before {
-                    left: 15px;
-                }
-            }
-        }
-    }
-    .linked-with {
-        width: 100% !important;
-        .wrap-linked-company {
-            flex-direction: column;
-            .ml-auto {
-                margin-left: 0 !important;
-                .action-icon {
-                    width: 70px;
-                }
-            }
-        }
-    }
-    .address-list-top {
-        .search-container {
-            width: calc(100% - 120px);
-        }
-    }
-}
-
-@media (max-width: 767px) {
-    .setting-profile-container {
-        padding-top: 15px;
-    }
-}
-
-@media (max-width: 445px) {
-    .giddh-table {
-        tr {
-            td {
-                .action-icon {
-                    a {
-                        width: 100%;
-                    }
-                }
-            }
-        }
-    }
-}
-
-@media (max-width: 575px) {
-    .address-list-top {
-        display: block !important;
-        .btn-sky-blue {
-            float: right;
-            margin-top: 5px;
-        }
     }
 }
 

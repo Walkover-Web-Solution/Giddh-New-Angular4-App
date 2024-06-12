@@ -206,7 +206,7 @@
                             : localeData?.confirm_archive_title
                     "
                     [permanentlyDeleteMessage]="' '"
-                    (cancelCallBack)="warehouseStatusToUpdate = ''; statusModalRef.close()"
+                    (cancelCallBack)="warehouseStatusToUpdate = ''; statusModalRef?.close()"
                     (successCallBack)="updateWarehouseStatus()"
                 >
                 </confirm-modal>
