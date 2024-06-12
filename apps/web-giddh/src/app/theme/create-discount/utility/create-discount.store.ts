@@ -6,6 +6,7 @@ import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { SalesService } from "../../../services/sales.service";
 import { SettingsDiscountService } from "../../../services/settings.discount.service";
 import { CreateDiscountRequest } from "../../../models/api-models/SettingsDiscount";
+import { LocaleService } from "../../../services/locale.service";
 
 export interface CreateDiscountState {
     discountsAccountList: any[];
@@ -26,6 +27,7 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
         private toaster: ToasterService,
         private salesService: SalesService,
         private settingsDiscountService: SettingsDiscountService,
+        private localeService: LocaleService
     ) {
         super(DEFAULT_STATE);
     }
@@ -88,10 +90,10 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ createDiscountSuccess: false, createDiscountInProgress: true });
-                return this.settingsDiscountService.UpdateDiscount(req.model, req.model.accountUniqueName).pipe(
+                return this.settingsDiscountService.UpdateDiscount(req as any).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            this.toaster.showSnackBar('success', res.body);
+                            this.toaster.showSnackBar('success', this.localeService.translate("app_messages.discount_updated"));
                             return this.patchState({
                                 createDiscountInProgress: false,
                                 createDiscountSuccess: true

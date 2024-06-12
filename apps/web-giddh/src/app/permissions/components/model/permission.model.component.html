@@ -40,7 +40,7 @@
                                 </mat-checkbox>
                             </div>
                             <ng-container *ngFor="let item of newRoleObj.pageList; let i = index">
-                                <mat-option (onSelectionChange)="selectPage(i)" [name]="'item' + i" [value]="item">
+                                <mat-option (click)="item.isSelected = !item.isSelected; enableDisableSelectAll()" [name]="'item' + i" [value]="item">
                                     {{ item.name | capitalize }}
                                 </mat-option>
                             </ng-container>
@@ -55,7 +55,7 @@
                                 {{ commonLocaleData?.app_please_select }}
                             </mat-option>
                             <ng-container *ngFor="let item of allRoles; let i = index">
-                                <mat-option (onSelectionChange)="selectPage(i)" [name]="'item' + i" [value]="item">
+                                <mat-option (click)="item.isSelected = !item.isSelected; enableDisableSelectAll()" [name]="'item' + i" [value]="item">
                                     {{ item.name | capitalize }}
                                 </mat-option>
                             </ng-container>
