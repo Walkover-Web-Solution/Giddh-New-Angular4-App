@@ -9,6 +9,10 @@
             <watch-video [cssClass]="'text-primary pr-0'" [moduleName]="'TWO_FACTOR_AUTHENTICATION'"></watch-video>
         </div>
         <hamburger-menu *ngIf="localeData?.auth_key" [pageHeading]="getPageHeading()"></hamburger-menu>
+
+        <button class="buy-plan-btn position-absolute" mat-stroked-button color="primary" [routerLink]="['/pages/subscription/buy-plan']" *ngIf="activeTabIndex === 3 && !isSubscriptionLoading">
+            {{ commonLocaleData?.app_buy_new_plan }}
+        </button>
         <mat-tab-group 
             mat-stretch-tabs="false" 
             mat-align-tabs="start" 
@@ -352,7 +356,15 @@
                     </div>
                 </div>
             </mat-tab>
+            <mat-tab
+                [label]="localeData?.subscription?.tab_heading"
+            >
+                <div class="wrap-tab-content-pd-15">
+                    <subscription [localeData]="localeData" [commonLocaleData]="commonLocaleData" (isSubscriptionLoading)="isSubscriptionLoading = $event"></subscription>
+                </div>
+            </mat-tab>
         </mat-tab-group>
+
         <!-- end of tab set -->
     </div>
 
