@@ -6,7 +6,7 @@
     (translationComplete)="translationComplete($event)"
 >
     <div class="discount box clearfix section-center position-relative">
-        <div class="inital-screen position-absolute text-center" *ngIf="!discountList?.length">
+        <div class="initial-screen position-absolute text-center" *ngIf="!discountList?.length">
             <div class="mb-5">
                 <img src="assets/images/create-discounts.png" alt="create discount banner image" width="500px" height="auto">
             </div>
@@ -73,88 +73,6 @@
                 (successCallBack)="deleteDiscount()"
                 (cancelCallBack)="hideDeleteDiscountModal()"
             ></confirm-modal>
-        </div>
-    </div>
-</ng-template>
-
-<!-- Create/Update Discount -->
-<ng-template #createUpdateDiscount>
-    <div class="bulk-entry">
-        <div class="dialog-header">
-            <span mat-dialog-title class="font-16">{{ localeData?.tab_heading }}</span>
-            <i (click)="closeCreateEditDiscountAsidePane()" class="icon-cross"></i>
-        </div>
-        <div mat-dialog-content class="dialog-body d-flex">
-            <form #discountForm="ngForm" novalidate (submit)="submit()" class="discount-form-setting-tab">
-                <div class="row row-gap align-items-center mt-2">
-                    <div class="col-xl-2 col-md-6 col-xs-12">
-                        <div class="discount-type">
-                            <dropdown-field
-                                #discountTypeField
-                                [options]="discountTypeList"
-                                [name]="'type'"
-                                [defaultValue]="getDropdownLabelByValue(discountTypeList, createRequest.type)"
-                                [placeholder]="localeData?.discount_type_placeholder"
-                                (selectedOption)="createRequest.type = $event.value"
-                            ></dropdown-field>
-                        </div>
-                    </div>
-                    <div class="col-xl-2 col-md-6 col-xs-12" *ngIf="createRequest.type">
-                        <input-field
-                            [label]="commonLocaleData?.app_name"
-                            [type]="'text'"
-                            [(ngModel)]="createRequest.name"
-                            [name]="'name'"
-                            [placeholder]="commonLocaleData?.app_name"
-                        ></input-field>
-                    </div>
-        
-                    <div class="col-xl-2 col-md-6 col-xs-12" *ngIf="createRequest.type">
-                        <input-field
-                            [label]="commonLocaleData?.app_value"
-                            [type]="'text'"
-                            [(ngModel)]="createRequest.discountValue"
-                            [name]="'value'"
-                            [placeholder]="commonLocaleData?.app_value"
-                        ></input-field>
-                    </div>
-        
-                    <div class="col-xl-2 col-md-6 col-xs-12" *ngIf="createRequest.type">
-                        <dropdown-field
-                            [label]="localeData?.linked_accounts_label"
-                            [name]="'account'"
-                            [placeholder]="localeData?.linked_accounts_placeholder"
-                            [options]="accounts"
-                            [cssClass]="'select-linked-accounts'"
-                            [defaultValue]="getDropdownLabelByValue(accounts, createRequest.accountUniqueName)"
-                            (selectedOption)="createRequest.accountUniqueName = $event.value"
-                            (createOption)="openAccountAsidePane($event)"
-                            [showCreateNew]="true"
-                        ></dropdown-field>
-                    </div>
-        
-                    <div class="col-xl-2 col-md-6 col-xs-12 hide-lable-on-mobile" *ngIf="createRequest.type">
-                        <button
-                            mat-stroked-button
-                            color="primary"
-                            type="submit"
-                            *ngIf="!createRequest.discountUniqueName"
-                            [ladda]="isLoading$ | async"
-                        >
-                            {{ commonLocaleData?.app_add }}
-                        </button>
-                        <button
-                            mat-stroked-button
-                            color="primary"
-                            type="submit"
-                            *ngIf="createRequest.discountUniqueName"
-                            [ladda]="isLoading$ | async"
-                        >
-                            {{ commonLocaleData?.app_update }}
-                        </button>
-                    </div>
-                </div>
-            </form>
         </div>
     </div>
 </ng-template>

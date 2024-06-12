@@ -1219,8 +1219,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      */
     private handleBranchProfileResponse(response: any): void {
         if (response && response.name) {
-            console.log("response", response);
-            
             this.companyProfileObj = {
                 ...this.companyProfileObj,
                 name: response.name,

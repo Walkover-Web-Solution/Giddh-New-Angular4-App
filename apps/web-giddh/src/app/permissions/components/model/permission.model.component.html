@@ -55,7 +55,7 @@
                                 {{ commonLocaleData?.app_please_select }}
                             </mat-option>
                             <ng-container *ngFor="let item of allRoles; let i = index">
-                                <mat-option (click)="item.isSelected = !item.isSelected; enableDisableSelectAll()" [name]="'item' + i" [value]="item">
+                                <mat-option (click)="item.isSelected = !item.isSelected; enableDisableSelectAll()" [name]="'item' + i" [value]="item?.uniqueName">
                                     {{ item.name | capitalize }}
                                 </mat-option>
                             </ng-container>

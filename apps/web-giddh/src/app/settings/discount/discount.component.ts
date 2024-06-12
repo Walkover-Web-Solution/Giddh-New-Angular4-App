@@ -20,12 +20,8 @@ import { CreateDiscountComponent } from '../../theme/create-discount/create-disc
 export class DiscountComponent implements OnInit, OnDestroy {
     /** Holds Delete Discount Confirmation Dialog Template Ref */
     @ViewChild('discountConfirmationDialog', { static: true }) public discountConfirmationDialog: TemplateRef<any>;
-    /** Holds Create/Edit Discount Dialog Template Ref */
-    @ViewChild('createUpdateDiscount', { static: true }) public createUpdateDiscount: TemplateRef<any>;
     /** Holds Create New Account Dialog Template Ref */
     @ViewChild('createNew', { static: true }) public createNew: TemplateRef<any>;
-    /** Holds Discount Type Input Field Element Ref */
-    @ViewChild('discountTypeField', { static: true }) public discountTypeField: any;
     /** Holds Translated Discount Type List */
     public discountTypeList: IOption[] = []
     /** Holds Linked Account List */
