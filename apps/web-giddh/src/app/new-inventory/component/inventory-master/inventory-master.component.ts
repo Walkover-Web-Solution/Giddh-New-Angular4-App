@@ -56,7 +56,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         private inventoryService: InventoryService,
         private route: ActivatedRoute,
         private scrollDispatcher: ScrollDispatcher,
-        public dialog: MatDialog,
+        public dialog: MatDialog
     ) {
 
     }
@@ -540,9 +540,13 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         }
     }
 
-    // export button
+    /**
+     * Export inventory master detail
+     *
+     * @memberof InventoryMasterComponent
+     */
     public exportInventoryMaster() {
-        let exportData = {
+        const exportData = {
             exportType: "INVENTORY_EXPORT",
             groupUniqueNames:  this.currentGroup?.uniqueName ? [this.currentGroup.uniqueName] : [],
             fileType: "CSV",

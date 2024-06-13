@@ -2,10 +2,8 @@
     p {
         color: var(--color-sidebar-content-text);
     }
-    form {
-        height: 290px;
-        min-height: 215px;
-        max-height: 290px;    
+    form { 
+        height: clamp(215px, 290px, 290px); 
     }
 }
 .label-width {

@@ -1,5 +1,7 @@
   <div class="modal-header">
-    <h3>Export Inventory Master</h3>
+    <h3>{{
+      inputData?.localeData?.export_inventory_master  
+    }}</h3>
     <button aria-hidden="true" class="close" mat-dialog-close>
       ×
     </button>
@@ -7,15 +9,14 @@
   <mat-dialog-content class="overflow-hidden">
     <div class="modal-body">
       <p class="pd-l15 pb-3">
-        <span> {{ inputData?.commonLocaleData?.app_note }} : </span> 
+        {{ inputData?.commonLocaleData?.app_note }} :
         {{ inputData?.localeData?.export_note }}
       </p>
       <form [formGroup]="exportForm" class="d-flex justify-content-between px-3 pt-2 overflow-auto">
         <div>
           <div class="mr-b15">
-            <label class="label-width">Stock Group Name :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="stockGroupName">
+            <label class="label-width">{{ inputData?.localeData?.stock_group_name }} :</label>
+              <mat-slide-toggle color="primary" formControlName="stockGroupName" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("stockGroupName")?.value
@@ -24,12 +25,10 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
           <div class="mr-b15">
-            <label class="label-width">Stock Name :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="stockName">
+            <label class="label-width">{{ inputData?.localeData?.stock_name }} :</label>
+              <mat-slide-toggle color="primary" formControlName="stockName" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("stockName")?.value
@@ -38,12 +37,10 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
           <div class="mr-b15">
-            <label class="label-width">Unique Name :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="uniqueName">
+            <label class="label-width">{{ inputData?.localeData?.unique_name }} :</label>
+              <mat-slide-toggle color="primary" formControlName="uniqueName" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("uniqueName")?.value
@@ -52,12 +49,10 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
           <div class="mr-b15">
-            <label class="label-width">Parent Group Name :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="parentGroupName">
+            <label class="label-width">{{ inputData?.localeData?.parent_group_name }} :</label>
+              <mat-slide-toggle color="primary" formControlName="parentGroupName" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("parentGroupName")?.value
@@ -66,12 +61,10 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
           <div class="mr-b15">
-            <label class="label-width">Parent Group Unique Name :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="parentGroupUniqueName">
+            <label class="label-width">{{ inputData?.localeData?.parent_group_unique_name }} :</label>
+              <mat-slide-toggle color="primary" formControlName="parentGroupUniqueName" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("parentGroupUniqueName")?.value
@@ -80,12 +73,10 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
           <div class="mr-b15">
-            <label class="label-width">Stock Unit Code :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="stockUnitCode">
+            <label class="label-width">{{ inputData?.localeData?.stock_unit_code }} :</label>
+              <mat-slide-toggle color="primary" formControlName="stockUnitCode" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("stockUnitCode")?.value
@@ -94,12 +85,10 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
           <div class="mr-b15">
-            <label class="label-width">Opening Amount :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="openingAmount">
+            <label class="label-width">{{ inputData?.localeData?.opening_amount }} :</label>
+              <mat-slide-toggle color="primary" formControlName="openingAmount" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("openingAmount")?.value
@@ -108,12 +97,10 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
           <div class="mr-b15">
-            <label class="label-width">Opening Quantity :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="openingQuantity">
+            <label class="label-width">{{ inputData?.localeData?.opening_quantity }} :</label>
+              <mat-slide-toggle color="primary" formControlName="openingQuantity" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("openingQuantity")?.value
@@ -122,12 +109,10 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
           <div class="mr-b15">
-            <label class="label-width">HSN Number :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="hsnNumber">
+            <label class="label-width">{{ inputData?.localeData?.hsn_number }} :</label>
+              <mat-slide-toggle color="primary" formControlName="hsnNumber" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("hsnNumber")?.value
@@ -136,12 +121,10 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
           <div class="mr-b15">
-            <label class="label-width">SAC Number :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="sacNumber">
+            <label class="label-width">{{ inputData?.localeData?.sac_number }} :</label>
+              <mat-slide-toggle color="primary" formControlName="sacNumber" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("sacNumber")?.value
@@ -150,12 +133,10 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
           <div class="mr-b15">
-            <label class="label-width">Tax :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="tax">
+            <label class="label-width">{{ inputData?.localeData?.tax }} :</label>
+              <mat-slide-toggle color="primary" formControlName="tax" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("tax")?.value
@@ -164,15 +145,13 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
         </div>
   
         <div>
           <div class="mr-b15">
-            <label class="label-width">Purchase Account :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="purchaseAccount">
+            <label class="label-width">{{ inputData?.localeData?.purchase_account }} :</label>
+              <mat-slide-toggle color="primary" formControlName="purchaseAccount" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("purchaseAccount")?.value
@@ -181,12 +160,10 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
           <div class="mr-b15">
-            <label class="label-width">Purchase Rate :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="purchaseRate">
+            <label class="label-width">{{ inputData?.localeData?.purchase_rate }} :</label>
+              <mat-slide-toggle color="primary" formControlName="purchaseRate" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("purchaseRate")?.value
@@ -195,12 +172,10 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
           <div class="mr-b15">
-            <label class="label-width">Purchase Stock Unit Code :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="purchaseStockUnitCode">
+            <label class="label-width">{{ inputData?.localeData?.purchase_stock_unit_code }} :</label>
+              <mat-slide-toggle color="primary" formControlName="purchaseStockUnitCode" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("purchaseStockUnitCode")?.value
@@ -209,12 +184,10 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
           <div class="mr-b15">
-            <label class="label-width">Sales Account :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="salesAccount">
+            <label class="label-width">{{ inputData?.localeData?.sales_account }} :</label>
+              <mat-slide-toggle color="primary" formControlName="salesAccount" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("salesAccount")?.value
@@ -223,12 +196,10 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
           <div class="mr-b15">
-            <label class="label-width">Sales Rate :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="salesRate">
+            <label class="label-width">{{ inputData?.localeData?.sales_rate }} :</label>
+              <mat-slide-toggle color="primary" formControlName="salesRate" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("salesRate")?.value
@@ -237,12 +208,10 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
           <div class="mr-b15">
-            <label class="label-width">Sales Stock Unit Code :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="salesStockUnitCode">
+            <label class="label-width">{{ inputData?.localeData?.sales_stock_unit_code }} :</label>
+              <mat-slide-toggle color="primary" formControlName="salesStockUnitCode" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("salesStockUnitCode")?.value
@@ -251,12 +220,10 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
           <div class="mr-b15">
-            <label class="label-width">Custom Field 1 Heading :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="customField1Heading">
+            <label class="label-width">{{ inputData?.localeData?.custom_field_1_heading }} :</label>
+              <mat-slide-toggle color="primary" formControlName="customField1Heading" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("customField1Heading")?.value
@@ -265,12 +232,10 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
           <div class="mr-b15">
-            <label class="label-width">Custom Field 1 Heading Value :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="customField1Value">
+            <label class="label-width">{{ inputData?.localeData?.custom_field_1_value }} :</label>
+              <mat-slide-toggle color="primary" formControlName="customField1Value" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("customField1Value")?.value
@@ -279,12 +244,10 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
           <div class="mr-b15">
-            <label class="label-width">Custom Field 2 Heading :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="customField2Heading">
+            <label class="label-width">{{ inputData?.localeData?.custom_field_2_heading }} :</label>
+              <mat-slide-toggle color="primary" formControlName="customField2Heading" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("customField2Heading")?.value
@@ -293,12 +256,10 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
           <div class="mr-b15">
-            <label class="label-width">Custom Field 2 Heading Value :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="customField2Value">
+            <label class="label-width">{{ inputData?.localeData?.custom_field_2_value }} :</label>
+              <mat-slide-toggle color="primary" formControlName="customField2Value" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("customField2Value")?.value
@@ -307,12 +268,10 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
           <div class="mr-b15">
-            <label class="label-width">SKU Code :</label>
-            <label class="p-0 ml-2 toggle-width">
-              <mat-slide-toggle color="primary" formControlName="skuCode">
+            <label class="label-width">{{ inputData?.localeData?.sku_code }} :</label>
+              <mat-slide-toggle color="primary" formControlName="skuCode" class="ml-2 toggle-width">
                 <span>
                   {{
                     exportForm.get("skuCode")?.value
@@ -321,7 +280,6 @@
                   }}
                 </span>
               </mat-slide-toggle>
-            </label>
           </div>
         </div>
       </form>
