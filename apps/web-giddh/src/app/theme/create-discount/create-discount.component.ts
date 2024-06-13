@@ -1,9 +1,8 @@
-import { Component, Inject, Input, OnDestroy, OnInit } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { Observable, ReplaySubject, takeUntil, of as observableOf } from "rxjs";
 import { CreateDiscountComponentStore } from "./utility/create-discount.store";
 import { UntypedFormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { CreateDiscountRequest } from "../../models/api-models/SettingsDiscount";
 
 @Component({
     selector: "create-discount",
@@ -30,14 +29,15 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if update mode */
     public isUpdateMode: boolean = false;
+    /** Holds true if api is in progress */
+    public isLoading: boolean = true;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public discountInfo: any,
         private componentStore: CreateDiscountComponentStore,
         private formBuilder: UntypedFormBuilder,
-        public dialogRef: MatDialogRef<any>) {
-        
-    }
+        public dialogRef: MatDialogRef<any>
+    ) { }
 
     /**
      * This will be use for component initialization
@@ -45,7 +45,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
      * @memberof CreateDiscountComponent
      */
     public ngOnInit(): void {
-        if(this.discountInfo) {
+        if (this.discountInfo) {
             this.isUpdateMode = true;
             this.initDiscountForm(this.discountInfo);
         } else {
@@ -89,18 +89,18 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
                 this.componentStore.getDiscountsAccountList();
             } else {
                 this.discountsAccountList$ = observableOf(discountsAccountList);
-                if(this.discountInfo) {
+                if (this.discountInfo) {
                     const accountNameObject = discountsAccountList.find(account => account?.value === this.discountInfo.linkAccount?.uniqueName);
-                    if(accountNameObject) {
+                    if (accountNameObject) {
                         this.selectDiscount(accountNameObject);
                     }
                 }
-                
+
                 if (discountsAccountList?.length === 1) {
                     this.createDiscountForm.get('accountName')?.patchValue(discountsAccountList[0]?.label);
                     this.createDiscountForm.get('accountUniqueName')?.patchValue(discountsAccountList[0]?.value);
                 }
-
+                this.isLoading = false;
             }
         });
     }
