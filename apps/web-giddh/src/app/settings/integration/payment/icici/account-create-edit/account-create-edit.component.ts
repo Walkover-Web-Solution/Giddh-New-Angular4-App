@@ -95,7 +95,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
             });
         }
 
-        this.accountForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+        this.accountForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {    
             if (this.accountForm.dirty) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }

@@ -12,6 +12,11 @@ $custom-typography: mat-typography-config($font-family: var(--font-regular),
 @import "../css/global/add-company.scss";
 @import "../css/global/aside-modal.scss";
 @import "../css/global/onboarding.scss";
+@import "../css/global/setting.profile.scss";
+@import "../css/global/user-details.scss";
+@import "../css/global/permission-list.scss";
+@import "../css/global/aside-menu-account.scss";
+@import "../css/global/subscription.component.scss";
 @import "../css/global/custom-fields.scss";
 @import "../css/global/inventory.scss";
 @import "../css/global/mat-button.scss";
@@ -35,6 +40,7 @@ $custom-typography: mat-typography-config($font-family: var(--font-regular),
 @import "../css/global/dialog.scss";
 @import "../css/global/add-bulk-entry.scss";
 @import "../css/global/global-variable.scss";
+@import "../css/global/settings-sidebar.scss";
 @import "../css/global/mat-menu.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
@@ -5363,11 +5369,6 @@ label {
     border-radius: 0;
 }
 
-#single-role tbody tr td:first-child,
-#single-role thead tr th:first-child {
-    border-right: 1px solid var(--color-iron);
-}
-
 #single-role .lead {
     font-size: var(--font-size-24);
 }
@@ -8858,7 +8859,8 @@ button.ladda-button .ladda-label {
 .voucher-preview-edit,
 .update-ledger-entry-panel-popup,
 .page-has-tabs,
-.ledger-body {
+.ledger-body,
+.on-setting-page {
     .other-taxes-input {
         border: 1px solid var(--color-secondary-input-bar-border) !important;
     }
@@ -9642,42 +9644,6 @@ span#HW_badge_cont:nth-child(3) {
 
 .giddh-datepicker {
     cursor: pointer !important;
-}
-
-.setting-items {
-    ul {
-        li {
-            a {
-                span {
-                    i {
-                        color: var(--color-sidebar-primary-anchor-text);
-                        margin-right: 10px;
-                        font-size: 22px;
-                    }
-                }
-            }
-
-            &:hover {
-                a {
-                    span {
-                        i {
-                            color: var(--color-primary-right-sidebar-list-text-hover);
-                        }
-                    }
-                }
-            }
-        }
-
-        .active-link {
-            a {
-                span {
-                    i {
-                        color: var(--color-primary-right-sidebar-list-text-hover);
-                    }
-                }
-            }
-        }
-    }
 }
 
 .debtor-details-form {
@@ -13501,6 +13467,13 @@ body.prevent-body-scroll {
         }
     }
 }
+.custom-btn {
+    &:disabled {
+        .ladda-label {
+            color: var(--color-giddh-blue) !important;
+        }
+    }
+}
 
 .giddh-no-permissions {
     display: none !important;
@@ -14784,6 +14757,9 @@ voucher-component {
     }
 }
 
+.custom-btn {
+    color: var(--color-black);
+}
 .readonly-field {
     .dropdown-bg {
         display: none !important;
@@ -14859,6 +14835,11 @@ activity-compare-json {
 .mat-mdc-dialog-content {
     max-height: 70vh !important;
 }
+.aside-pane{
+    .mat-mdc-dialog-content {
+        max-height: 100vh !important;
+    }
+}
 
 .flag-input {
     position: relative;
@@ -14909,6 +14890,11 @@ activity-compare-json {
     }
 }
 
+.mat-select-btn{
+    .mdc-button__label{
+        width: 100%;
+    }
+}
 /*---- aside-button ----*/
 aside-menu-product-service {
     .mat-mdc-outlined-button {
@@ -14920,7 +14906,17 @@ aside-menu-product-service {
     }
 }
 
-.dialog-fixed-header {
+.on-setting-page{
+    .entity-details{
+        .item {
+            color: var(--color-dropdown-list);
+        }
+        .item-unique{
+            color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
+        }
+    }
+}
+.dialog-fixed-header{
     position: sticky !important;
     top: 0;
     z-index: 1;
@@ -15115,4 +15111,11 @@ aside-menu-product-service {
 // Subscription Page Country List Dropdown
 .country-dropdown-list {
     min-width: 300px;
+}
+
+// Global Class to align main container center
+.section-center {
+    max-width: var(--center-content-max-width) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
 }

@@ -10,48 +10,54 @@
             <i mat-dialog-close class="icon-cross icon-font-16"></i>
         </div>
         <div mat-dialog-content class="create-discount-aside dialog-body">
-            <form autocomplete="off" novalidate name="createDiscountForm" [formGroup]="createDiscountForm">
-                <div class="row row-gap15 mt-2">
-                    <div class="col-6">
-                        <span class="custom-mat-form-field">
-                            <mat-form-field appearance="outline">
-                                <mat-label>{{ localeData?.discount_type }}</mat-label>
-                                <mat-select formControlName="type">
-                                    <mat-option [value]="'FIX_AMOUNT'">{{ localeData?.discount_types?.as_per_value }}</mat-option>
-                                    <mat-option [value]="'PERCENTAGE'">{{ localeData?.discount_types?.as_per_percent }}</mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                        </span>
-                    </div>
-                    <div class="col-6">
-                        <input-field [type]="'text'" [showError]="isFormSubmitted && !createDiscountForm.get('name')?.value"
-                            [name]="'discount-name'" formControlName="name" [placeholder]="commonLocaleData?.app_name_placeholder" [label]="commonLocaleData?.app_name"></input-field>
-                    </div>
-                    <div class="col-6">
-                        <input-field [type]="'number'"
-                            [showError]="isFormSubmitted && !createDiscountForm.get('discountValue')?.value"
-                            [name]="'discountValue'" formControlName="discountValue" [placeholder]="localeData?.discount_value_placeholder"
-                            [label]="commonLocaleData?.app_value"></input-field>
-                    </div>
-                    <div class="col-6">
-                        <reactive-dropdown-field [label]="localeData?.linked_accounts_label" [placeholder]="localeData?.linked_accounts_placeholder"
-                            formControlName="accountUniqueName" [name]="'accountUniqueName'"
-                            [options]="discountsAccountList$ | async"
-                            [showError]="isFormSubmitted && !createDiscountForm.get('accountUniqueName')?.value"
-                            [labelValue]="createDiscountForm.get('accountName')?.value"
-                            (selectedOption)="selectDiscount($event)"
-                            (onClear)="clearAccount()">
-                        </reactive-dropdown-field>
-                    </div>
-                </div>
-            </form>
-            <div class="row mt-4">
-                <div class="col-12 d-flex column-gap1">
-                    <button mat-stroked-button color="primary" (click)="saveDiscount()" [ladda]="createDiscountInProgress$ | async">{{ commonLocaleData?.app_save }}</button>
-                    <button mat-stroked-button color="primary" (click)="cancelDiscount()">{{ commonLocaleData?.app_cancel }}</button>
-                    <button mat-stroked-button color="primary" (click)="clearDiscount()">{{ commonLocaleData?.app_clear }}</button>
-                </div>
+            <div *ngIf="isLoading">
+                <giddh-page-loader></giddh-page-loader>
             </div>
+            <ng-container *ngIf="!isLoading">
+                <form autocomplete="off" novalidate name="createDiscountForm" [formGroup]="createDiscountForm">
+                    <div class="row row-gap15 mt-2">
+                        <div class="col-6">
+                            <span class="custom-mat-form-field">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>{{ localeData?.discount_type }}</mat-label>
+                                    <mat-select formControlName="type">
+                                        <mat-option [value]="'FIX_AMOUNT'">{{ localeData?.discount_types?.as_per_value }}</mat-option>
+                                        <mat-option [value]="'PERCENTAGE'">{{ localeData?.discount_types?.as_per_percent }}</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </span>
+                        </div>
+                        <div class="col-6">
+                            <input-field [type]="'text'" [showError]="isFormSubmitted && !createDiscountForm.get('name')?.value"
+                                [name]="'discount-name'" formControlName="name" [placeholder]="commonLocaleData?.app_name_placeholder" [label]="commonLocaleData?.app_name"></input-field>
+                        </div>
+                        <div class="col-6">
+                            <input-field [type]="'number'"
+                                [showError]="isFormSubmitted && !createDiscountForm.get('discountValue')?.value"
+                                [name]="'discountValue'" formControlName="discountValue" [placeholder]="localeData?.discount_value_placeholder"
+                                [label]="commonLocaleData?.app_value"></input-field>
+                        </div>
+                        <div class="col-6">
+                            <reactive-dropdown-field [label]="localeData?.linked_accounts_label" [placeholder]="localeData?.linked_accounts_placeholder"
+                                formControlName="accountUniqueName" [name]="'accountUniqueName'"
+                                [options]="discountsAccountList$ | async"
+                                [showError]="isFormSubmitted && !createDiscountForm.get('accountUniqueName')?.value"
+                                [labelValue]="createDiscountForm.get('accountName')?.value"
+                                (selectedOption)="selectDiscount($event)"
+                                (onClear)="clearAccount()">
+                            </reactive-dropdown-field>
+                        </div>
+                    </div>
+                </form>
+                <div class="row mt-4">
+                    <div class="col-12 d-flex column-gap1">
+                        <button *ngIf="!isUpdateMode" mat-stroked-button color="primary" (click)="saveDiscount()" [ladda]="createDiscountInProgress$ | async">{{ commonLocaleData?.app_save }}</button>
+                        <button *ngIf="isUpdateMode" mat-stroked-button color="primary" (click)="updateDiscount()" [ladda]="createDiscountInProgress$ | async">{{ commonLocaleData?.app_update }}</button>
+                        <button mat-stroked-button color="primary" (click)="cancelDiscount()">{{ commonLocaleData?.app_cancel }}</button>
+                        <button *ngIf="!isUpdateMode" mat-stroked-button color="primary" (click)="clearDiscount()">{{ commonLocaleData?.app_clear }}</button>
+                    </div>
+                </div>
+            </ng-container>
         </div>
     </div>
 </ng-container>

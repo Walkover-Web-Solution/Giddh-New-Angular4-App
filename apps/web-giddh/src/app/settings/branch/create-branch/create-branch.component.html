@@ -44,140 +44,139 @@
             <form [formGroup]="branchForm" novalidate (ngSubmit)="handleFormSubmit()">
                 <div class="branch-form">
                     <div class="branch-form-field">
-                        <label> {{ commonLocaleData?.app_branch_name }} <span class="red-text">*</span> </label>
-                        <input
-                            maxlength="50"
-                            [class.error-box]="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.invalid"
-                            type="text"
-                            class="form-control"
-                            formControlName="alias"
-                            [placeholder]="localeData?.enter_name"
-                        />
-                        <span
-                            class="danger pl-1"
-                            *ngIf="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.errors?.maxlength"
-                        >
-                            {{ commonLocaleData?.app_max_50_characters_allowed_limit }}
-                        </span>
+                        <div class="address-dropdown">
+                            <input-field
+                                [label]="commonLocaleData?.app_branch_name"
+                                [maxlength]="50"
+                                [class.error-box]="
+                                    branchForm?.get('alias')?.touched && branchForm?.get('alias')?.invalid
+                                "
+                                [type]="'text'"
+                                formControlName="alias"
+                                [placeholder]="localeData?.enter_name"
+                                [required]="true"
+                            ></input-field>
+                            <span
+                                class="danger pl-1"
+                                *ngIf="branchForm?.get('alias')?.touched && branchForm?.get('alias')?.errors?.maxlength"
+                            >
+                                {{ commonLocaleData?.app_max_50_characters_allowed_limit }}
+                            </span>
+                        </div>
                     </div>
                     <!-- This field is kept hidden, DO NOT REMOVE -->
                     <div hidden class="branch-form-field">
-                        <label> {{ commonLocaleData?.app_branch_name }} <span class="red-text">*</span> </label>
-                        <input
-                            type="text"
-                            class="form-control"
-                            formControlName="name"
-                            [placeholder]="localeData?.enter_name"
-                        />
-                    </div>
-                    <div class="branch-form-field">
-                        <label>
-                            {{ localeData?.addresses }}
-                        </label>
-                        <div class="address-dropdown form-group mb-0">
-                            <sales-sh-select
-                                [options]="addresses"
-                                formControlName="address"
-                                name="particulars"
-                                [notFoundLink]="true"
-                                (clearSingleItem)="handleFinalSelection($event)"
-                                [isFilterEnabled]="true"
-                                [multiple]="true"
-                                [placeholder]="localeData?.select_addresses"
-                                class="linked-add create"
-                                (noResultsClicked)="handleShortcutPress()"
-                            >
-                                <ng-template #optionTemplate let-option="option">
-                                    <ng-container>
-                                        <a
-                                            (click)="selectAddress(option)"
-                                            href="javascript:void(0)"
-                                            class="list-item d-flex"
-                                        >
-                                            <span
-                                                ><input
-                                                    type="checkbox"
-                                                    [checked]="
-                                                        branchForm?.get('address')?.value?.includes(option?.value)
-                                                    "
-                                                    [value]="option?.value" /></span
-                                            >&nbsp;
-                                            <span class="entity-details">
-                                                <div class="item giddh-limit single-line-clamp">
-                                                    {{ option.label || "-" }}
-                                                </div>
-                                                <div class="item-unique">
-                                                    <p *ngIf="option.taxType && option.taxNumber">
-                                                        {{ option.taxType }} : {{ option.taxNumber }}
-                                                    </p>
-                                                </div>
-                                            </span>
-                                            <span class="default-entity">
-                                                <i
-                                                    (click)="setDefault(option, $event)"
-                                                    *ngIf="!option.isDefault"
-                                                    class="icon-no-selected mr-r05"
-                                                ></i>
-                                                <i
-                                                    (click)="setDefault(option, $event)"
-                                                    *ngIf="option.isDefault"
-                                                    class="icon-favorite-selected mr-r05"
-                                                ></i>
-                                            </span>
-                                        </a>
-                                    </ng-container>
-                                </ng-template>
-                                <ng-template #notFoundLinkTemplate>
-                                    <a
-                                        href="javascript:void(0)"
-                                        [keyboardShortcut]="'alt+c'"
-                                        (onShortcutPress)="handleShortcutPress()"
-                                        class="list-item pd-l05 pd-r05 border-none d-flex justify-content-between w-100"
-                                        [keyboardShortcut]="'alt+c'"
-                                    >
-                                        <div class="item">{{ localeData?.add_address }}</div>
-                                        <div class="item">{{ commonLocaleData?.app_alt_c }}</div>
-                                    </a>
-                                </ng-template>
-                            </sales-sh-select>
+                        <div class="address-dropdown">
+                            <input-field
+                                [label]="commonLocaleData?.app_branch_name"
+                                [type]="'text'"
+                                formControlName="name"
+                                [placeholder]="localeData?.enter_name"
+                            ></input-field>
                         </div>
                     </div>
+                    <div class="branch-form-field">
+                        <div class="address-dropdown form-group mb-0" [ngClass]="{'custom-mat-form-field': !branchForm?.get('address')?.value?.length}">
+                            <mat-form-field appearance="outline" class="w-100" (click)="trigger.open()">
+                                <mat-label>{{ localeData?.addresses }}</mat-label>
+                                <mat-chip-grid #chipGrid  class="d-flex flex-wrap column-gap5 row-gap1">
+                                    <ng-container *ngFor="let chipItem of branchForm?.get('address')?.value">
+                                        <mat-chip-row (removed)="removeItem(chipItem)" role="option" >
+                                            <span>{{ chipItem?.label }}</span>
+                                            <span matChipRemove><i class="icon-cross font-14"></i></span>
+                                        </mat-chip-row>
+                                    </ng-container>
+                                    <input type="text" autocomplete="off" (focus)="trigger.open()" [formControl]="addressQuery" matInput [placeholder]="localeData?.select_addresses" [matChipInputFor]="chipGrid" >
+                                </mat-chip-grid>
+                                <mat-select-trigger>
+                                </mat-select-trigger>
+                                <mat-select formControlName="address" panelClass="linked-entities-options" name="particulars" multiple #trigger>
+                                    <div>
+                                        <div class="bg-grey-on-hover">
+                                            <a  href="javascript:;"
+                                                [keyboardShortcut]="'alt+c'"
+                                                (onShortcutPress)="handleShortcutPress()"
+                                                (click)="handleShortcutPress(); trigger.close()"
+                                                class="px-2 py-3 d-flex justify-content-between w-100"
+                                            >
+                                                <div class="item">{{ localeData?.add_address }}</div>
+                                                <div class="item">{{ commonLocaleData?.app_alt_c }}</div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <ng-container *ngFor="let option of addresses">
+                                        <mat-option [value]="option" (click)="selectAddress(option)" class="align-items-center">
+                                            <div  class="d-flex justify-content-between">
+                                                <span>
+                                                    <div>
+                                                        {{ option.label || "-" }}
+                                                    </div>
+                                                    <div >
+                                                        <p *ngIf="option.taxType && option.taxNumber">
+                                                            {{ option.taxType }} : {{ option.taxNumber }}
+                                                        </p>
+                                                    </div>
+                                                </span>
+                                                <span class="default-entity">
+                                                    <i
+                                                        (click)="setDefault(option, $event)"
+                                                        *ngIf="!option.isDefault"
+                                                        class="icon-no-selected mr-r05"
+                                                    ></i>
+                                                    <i
+                                                        (click)="setDefault(option, $event)"
+                                                        *ngIf="option.isDefault"
+                                                        class="icon-favorite-selected mr-r05"
+                                                    ></i>
+                                                </span>
+                                            </div>
+                                        </mat-option>
+                                    </ng-container>
+                                    <div class="px-2" *ngIf="addresses?.length === 0">{{ commonLocaleData?.app_no_result_found }}</div>
+                                </mat-select>
+                              </mat-form-field>
+                        </div> 
+                    </div>
                 </div>
-                <div class="footer-btn row">
-                    <div class="button-group">
-                        <button type="reset" (click)="handleFormClear()" class="btn btn-primary mr-r15 clear-btn-width">
-                            {{ commonLocaleData?.app_clear }}
-                        </button>
-                        <button type="submit" [disabled]="branchForm?.invalid" class="btn btn-success">
-                            {{ localeData?.create_branch }}
-                        </button>
+                <div class="pd-l15 pd-r15">
+                    <div class="row">
+                        <div class="button-group">
+                            <button mat-stroked-button type="reset" (click)="handleFormClear()" class="btn custom-btn">
+                                {{ commonLocaleData?.app_clear }}
+                            </button>
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                type="submit"
+                                [disabled]="branchForm?.invalid"
+                            >
+                                {{ localeData?.create_branch }}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-    <div class="aside-overlay" *ngIf="addressAsideMenuState === 'in'"></div>
-    <ng-container
-        appTranslate
-        [file]="'settings/profile'"
-        (localeData)="profileLocaleData = $event"
-        [requireCommonData]="false"
-        *ngIf="addressAsideMenuState === 'in'"
-    >
-        <create-address
-            [class]="addressAsideMenuState"
-            [@slideInOut]="addressAsideMenuState"
-            [keyboardShortcut]="'esc'"
-            (onShortcutPress)="toggleAddressAsidePane()"
-            [currentOrganizationUniqueName]="currentOrganizationUniqueName"
-            [showLoader]="isAddressChangeInProgress"
-            (saveAddress)="createNewAddress($event)"
-            [addressConfiguration]="addressConfiguration"
-            (closeAsideEvent)="toggleAddressAsidePane($event)"
-            *ngIf="addressAsideMenuState === 'in'"
-            [localeData]="profileLocaleData"
-            [commonLocaleData]="commonLocaleData"
-            [hideLinkEntity]="addresses?.length <= 0 && hideLinkEntity"
-        ></create-address>
-    </ng-container>
+    <ng-template #asideAccountAsidePane>
+        <ng-container
+            appTranslate
+            [file]="'settings/profile'"
+            (localeData)="profileLocaleData = $event"
+            [requireCommonData]="false"
+        >
+            <create-address
+                [keyboardShortcut]="'esc'"
+                (onShortcutPress)="closeAddressAsidePane()"
+                [currentOrganizationUniqueName]="currentOrganizationUniqueName"
+                [showLoader]="isAddressChangeInProgress"
+                (saveAddress)="createNewAddress($event)"
+                [addressConfiguration]="addressConfiguration"
+                (closeAsideEvent)="closeAddressAsidePane($event)"
+                [localeData]="profileLocaleData"
+                [commonLocaleData]="commonLocaleData"
+                [hideLinkEntity]="addresses?.length <= 0 && hideLinkEntity"
+            ></create-address>
+        </ng-container>
+    </ng-template>
 </ng-container>
