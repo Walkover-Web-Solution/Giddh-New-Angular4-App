@@ -184,6 +184,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public subscriptionRazorpayOrderDetails$ = this.componentStore.select(state => state.subscriptionRazorpayOrderDetails);
     /** True if it is subscription region */
     public isSubscriptionRegion: boolean = false;
+    /** Hold current time stamp  */
+    public currentTimeStamp: string;
 
     constructor(
         public dialog: MatDialog,
@@ -215,7 +217,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         document.body?.classList?.add("plan-page");
-
+        this.currentTimeStamp = this.generalService.getTimeStamp();
         this.initSubscriptionForm();
         this.getCountry();
         this.getAllPlans();

@@ -1278,7 +1278,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         while (transactionsFormArray.length !== 0) {
             transactionsFormArray.removeAt(0);
         }
-
         // Reset other variables and properties
         this.showConfirmationBox = false;
         this.totalCreditAmount = 0;

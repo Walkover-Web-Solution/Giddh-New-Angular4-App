@@ -164,7 +164,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         transferDialogRef.afterClosed().subscribe((action) => {
             if (action) {
             } else {
-                transferDialogRef.close();
+                transferDialogRef?.close();
             }
         });
     }
@@ -230,7 +230,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
             if (action) {
                 this.subscriptionComponentStore.cancelSubscription(this.subscriptionId);
             } else {
-                cancelDialogRef.close();
+                cancelDialogRef?.close();
             }
         });
     }

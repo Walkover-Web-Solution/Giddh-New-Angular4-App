@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { debounceTime, distinctUntilChanged, ReplaySubject, takeUntil } from 'rxjs';
 import { GeneralService } from '../services/general.service';
 import { ConfirmModalComponent } from "../theme/new-confirm-modal/confirm-modal.component";
-import {Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { SubscriptionComponentStore } from './utility/subscription.store';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -613,7 +613,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             if (action) {
                 this.componentStore.cancelSubscription(id);
             } else {
-                cancelDialogRef.close();
+                cancelDialogRef?.close();
             }
         });
     }

@@ -5,30 +5,37 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <ng-container *ngIf="warehouses">
-        <div class="warehouse-card-view">
+        <div class="warehouse-card-view mt-4">
             <div class="row">
                 <div class="mr-b15 col-sm-12 mr-0 d-flex justify-content-between warehouse-header">
-                    <div class="search-container">
+                    <div class="d-flex align-items-center">
                         <div class="search-warehouse-box">
-                            <input
+                            <input-field
                                 #searchWarehouse
-                                type="text"
+                                [type]="'text'"
                                 [(ngModel)]="searchWarehouseQuery"
-                                class="form-control"
                                 [placeholder]="localeData?.search_warehouse"
-                            />
+                            ></input-field>
                         </div>
-                        <a
-                            class="cp mr-l1 clear-filter-btn"
+                        <button
                             *ngIf="searchWarehouseQuery"
-                            href="javascript:;"
+                            class="mr-l1"
+                            mat-stroked-button
                             (click)="resetFilter()"
-                            [tooltip]="localeData?.reset_search"
+                            aria-label="cross icon"
+                            [matTooltip]="localeData?.reset_search"
                         >
-                            <i aria-hidden="true" class="icon-refresh"></i> {{ commonLocaleData?.app_clear_filter }}
-                        </a>
+                            <i aria-hidden="true"  class="icon-cross d-inline-block font-12 mr-1"></i> 
+                            <span>{{ commonLocaleData?.app_clear_filter }}</span>
+                        </button>
                     </div>
-                    <button aria-label="create warehouse" class="btn btn-sky-blue mr-0" [routerLink]="['/pages/settings/create-warehouse']">
+                    <button
+                        aria-label="create warehouse"
+                        mat-stroked-button
+                        color="primary"
+                        class="btn mr-0"
+                        [routerLink]="['/pages/settings/create-warehouse']"
+                    >
                         {{ localeData?.create_warehouse }}
                     </button>
                 </div>
@@ -63,67 +70,28 @@
                                 >
                                 <div class="btn-group" dropdown>
                                     <button
+                                        mat-icon-button
+                                        [matMenuTriggerFor]="menu"
                                         aria-label="vertical dots"
-                                        id="warehouse dots"
-                                        dropdownToggle
-                                        type="button"
-                                        class="btn dropdown-toggle"
-                                        aria-controls="dropdown-basic"
                                     >
-                                        <span class="icon-dots-three-vertical"></span>
-                                    </button>
-                                    <ul
-                                        id="dropdown-basic"
-                                        *dropdownMenu
-                                        class="dropdown-menu"
-                                        role="menu"
-                                        aria-labelledby="button-basic"
-                                    >
-                                        <li role="menuitem" (click)="editWarehouse(warehouse)">
-                                            <a class="dropdown-item warehouse-options">{{
-                                                commonLocaleData?.app_edit
-                                            }}</a>
-                                        </li>
-                                        <li role="menuitem">
-                                            <a
-                                                class="dropdown-item warehouse-options"
-                                                (click)="confirmStatusUpdate(warehouse)"
-                                                >{{
-                                                    warehouse?.isArchived
-                                                        ? commonLocaleData?.app_unarchive
-                                                        : commonLocaleData?.app_archive
-                                                }}</a
-                                            >
-                                        </li>
-                                        <!--
-                                            not in V1, Will use it V2, don't remove code
-                                        <li role="menuitem">
-                                            <a>Merge</a>
-                                        </li>
-                                        <li role="menuitem">
-                                            <a>Delete</a>
-                                        </li>
-                                    --></ul>
+                                        <span class="icon-dots-three-vertical mr-0 font-14 d-block"></span>
+                                     </button>
+                                    <mat-menu #menu="matMenu">
+                                        <button mat-menu-item (click)="editWarehouse(warehouse)">
+                                            {{ commonLocaleData?.app_edit }}
+                                        </button>
+                                        <button mat-menu-item (click)="confirmStatusUpdate(warehouse)">
+                                            {{
+                                                branch?.isArchived
+                                                    ? commonLocaleData?.app_unarchive
+                                                    : commonLocaleData?.app_archive
+                                            }}
+                                        </button>
+                                    </mat-menu>
                                 </div>
                             </div>
                         </div>
                         <div class="warehouse-details">
-                            <!--
-                                    TODO: Integrate below code once the API is ready
-                                -->
-                            <!--
-                                    <div class="clearfix about-warehouse">
-                                        <label>Linked with:</label>
-                                        <p>{{warehouse.uniqueName}}</p>
-                                    </div>
-                                -->
-
-                            <!--
-                                    <div class="clearfix about-warehouse">
-                                        <label>Inventory Value:</label>
-                                        <p>22,000/-</p>
-                                    </div>
-                                -->
                             <div class="clearfix about-warehouse">
                                 <!-- <div class="col-xl-3 col-lg-4 col-md-6"> -->
                                 <div class="parent-branch pd-t1 pd-b1">{{ localeData?.linked_address }}:</div>
@@ -157,25 +125,6 @@
                                 </div>
                                 <!-- </div> -->
                             </div>
-                            <!--<div class="row">
-                                <div class="col-sm-6">
-                                    <div class="linked-details">
-                                        <label>Linked Entity/ies:</label>
-                                        <ul>
-                                            <li><i class="icon-company-HO mr-r05"></i>Alias Company Name</li>
-                                            <li><i class="icon-branch-icon mr-r05"></i>Alias Branch Name</li>
-                                            <li><i class="icon-branch-icon mr-r05"></i>Alias Branch 3 Name</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="linked-details">
-                                        <label>Sub - Location:</label>
-                                        <ul>
-                                            <li><i class="icon-warehouse-icon mr-r05"></i>Floor 1, Floor 2, Floor 3</li>
-                                        </ul>
-                                    </div>
-                                </div> -->
                         </div>
                     </div>
                 </div>
@@ -207,33 +156,23 @@
     </ng-container>
 
     <!-- Warehouse on boarding modal (Step 1) -->
-    <div
-        bsModal
-        #warehouseOnBoardingModal="bs-modal"
-        [config]="{ ignoreBackdropClick: 'true', keyboard: 'true' }"
-        tabindex="-1"
-        class="modal fade open-popup"
-        role="dialog"
-        (onHidden)="onBoardingModalDismiss($event)"
-    >
+    <ng-template #warehouseOnBoardingModal>
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
-                <ng-template element-view-container-ref #onBoardingContainer="elementviewcontainerref"> </ng-template>
+                <ng-template element-view-container-ref #onBoardingContainer="elementviewcontainerref">
+                </ng-template>
             </div>
         </div>
-    </div>
-    <div>
-        <div class="aside-overlay" *ngIf="asideEditWarehousePane === 'in'"></div>
+    </ng-template>
+
+    <ng-template #asideAccountAsidePane>
         <ng-container
             appTranslate
             [file]="'settings/profile'"
             (localeData)="profileLocaleData = $event"
             [requireCommonData]="false"
-            *ngIf="asideEditWarehousePane === 'in'"
         >
             <create-address
-                [class]="asideEditWarehousePane"
-                [@slideInOut]="asideEditWarehousePane"
                 [currentOrganizationUniqueName]="currentOrganizationUniqueName"
                 [warehouseToUpdate]="warehouseToUpdate"
                 [showLoader]="isWarehouseUpdateInProgress"
@@ -241,12 +180,11 @@
                 [addressConfiguration]="addressConfiguration"
                 [localeData]="profileLocaleData"
                 [commonLocaleData]="commonLocaleData"
-                (closeAsideEvent)="toggleAsidePane($event)"
-                *ngIf="asideEditWarehousePane === 'in'"
+                (closeAsideEvent)="closeAsidePane($event)"
             >
             </create-address>
         </ng-container>
-    </div>
+    </ng-template>
     <!-- Welcome component (Step 2) -->
     <ng-template #welcomeComponent>
         <welcome-component
@@ -256,11 +194,11 @@
         >
         </welcome-component>
     </ng-template>
-    <div bsModal #statusModal="bs-modal" class="modal fade aaa" role="dialog">
-        <div class="modal-dialog modal-md">
+
+    <ng-template #statusModal>
+        <div class="modal-md">
             <div class="modal-content">
                 <confirm-modal
-                    *ngIf="statusModal?.isShown"
                     [title]="commonLocaleData?.app_confirmation"
                     [body]="
                         warehouseStatusToUpdate?.isArchived
@@ -268,11 +206,11 @@
                             : localeData?.confirm_archive_title
                     "
                     [permanentlyDeleteMessage]="' '"
-                    (cancelCallBack)="warehouseStatusToUpdate = ''; statusModal?.hide()"
+                    (cancelCallBack)="warehouseStatusToUpdate = ''; statusModalRef?.close()"
                     (successCallBack)="updateWarehouseStatus()"
                 >
                 </confirm-modal>
             </div>
         </div>
-    </div>
+    </ng-template>
 </ng-container>

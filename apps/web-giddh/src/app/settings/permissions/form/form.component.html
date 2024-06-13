@@ -5,291 +5,279 @@
     (ngSubmit)="submitPermissionForm()"
     autocomplete="off"
 >
-    <div class="row">
-        <div class="col-xl-10 col-md-12">
-            <div class="row mr-0 ml-0">
-                <div class="col-xl-3 col-md-6 col-sm-4 pl-0">
-                    <div class="form-group ml-0">
-                        <label *ngIf="isLblShow">{{ localeData?.unique_name_email_label }}</label>
-                        <input
-                            type="text"
-                            name="emailId"
-                            formControlName="emailId"
-                            [placeholder]="localeData?.unique_name_email_placeholder"
-                            class="form-control"
-                            [attr.readonly]="userdata?.uniqueName"
-                        />
-                    </div>
-                </div>
-                <div class="col-xl-3 col-md-6 col-sm-4 pl-0">
-                    <div class="form-group">
-                        <label *ngIf="isLblShow">{{ localeData?.role_name_label }}</label>
-                        <sh-select
-                            [placeholder]="localeData?.role_name_placeholder"
-                            formControlName="roleUniqueName"
-                            [forceClearReactive]="permissionRoleClear$ | async"
-                            [options]="allRoles"
-                            [isRequired]="true"
-                        ></sh-select>
-                    </div>
-                </div>
-                <div class="col-xl-2 col-md-6 col-sm-4 pl-0">
-                    <!-- time span -->
-                    <div
-                        class="form-group"
-                        [exclude]="'.time-span-dropdown'"
-                        [attachOutsideOnClick]="true"
-                        (clickOutside)="methodForToggleSection('timeSpanSection')"
+    <div class="d-flex align-items-center justify-content-between form-wrapper">
+        <div class="field-wrapper d-flex align-items-center column-gap15 row-gap15" [ngClass]="{ 'flex-wrap w-100 permission-update-mode': isUpdtCase}">
+            <div>
+                <input-field
+                    [label]="isLblShow ? localeData?.unique_name_email_label : ''"
+                    [type]="'text'"
+                    [name]="'emailId'"
+                    formControlName="emailId"
+                    [placeholder]="localeData?.unique_name_email_placeholder"
+                    [readonly]="userdata?.uniqueName"
+                ></input-field>
+            </div>
+            <div>
+                <reactive-dropdown-field
+                    [label]="isLblShow ? localeData?.role_name_label : ''"
+                    [name]="'roles'"
+                    [placeholder]="localeData?.role_name_placeholder"
+                    [options]="allRoles"
+                    formControlName="roleUniqueName"
+                    [labelValue]="userdata?.roleName ?? ''"
+                    [required]="true"
+                ></reactive-dropdown-field>
+            </div>
+            <!-- time span -->
+            <div
+                [exclude]="'.time-span-dropdown'"
+                [attachOutsideOnClick]="true"
+                (clickOutside)="methodForToggleSection('timeSpanSection')"
+            >
+                <button
+                    mat-button
+                    [matMenuTriggerFor]="menu"
+                    (click)="showTimeSpan = !showTimeSpan"
+                    type="button"
+                    class="mat-select-btn range-wrapper text-left w-100"
+                >
+                    <span class="d-flex w-100">
+                        {{ selectedTimeSpan }}
+                        <span class="ml-auto"><span class="fa fa-caret-down"></span></span>
+                    </span>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <section
+                        class="mr-b1 time-span-dropdown custom-date-range-menu"
+                        (click)="$event.stopPropagation()"
                     >
-                        <label *ngIf="isLblShow">{{ localeData?.time_span }}</label>
-                        <div class="btn-group" [ngClass]="{ 'open': showTimeSpan, 'btn-group-liq': !isHorizntl }">
-                            <button (click)="showTimeSpan = !showTimeSpan" type="button" class="form-control text-left">
-                                {{ selectedTimeSpan }}
-                                <span class="pull-right"><span class="fa fa-caret-down"></span></span>
-                            </button>
-                            <section
-                                class="dropdown-menu custom-dropdown mr-b1 time-span-dropdown"
-                                [ngClass]="{ 'open': showTimeSpan }"
-                            >
-                                <div class="clearfix pd-1 option-box">
-                                    <span
-                                        class="p-0 mr-r3"
-                                        (click)="isOpenedInModal ? handleTimeSpanChange('daterange') : ''"
-                                    >
-                                        <input
-                                            id="dateRange"
-                                            class="radio-custom cp ml-0"
-                                            type="radio"
-                                            name="periodOptions"
-                                            formControlName="periodOptions"
-                                            value="daterange"
-                                        />
-                                        <label for="dateRange" class="radio-custom-label">{{
-                                            commonLocaleData?.app_date_range
-                                        }}</label>
-                                    </span>
-
-                                    <span
-                                        class="p-0 mr-r3"
-                                        (click)="isOpenedInModal ? handleTimeSpanChange('pastperiod') : ''"
-                                    >
-                                        <input
-                                            id="pastPeriod"
-                                            class="radio-custom cp ml-0"
-                                            type="radio"
-                                            name="periodOptions"
-                                            formControlName="periodOptions"
-                                            value="pastperiod"
-                                        />
-                                        <label for="pastPeriod" class="radio-custom-label">{{
-                                            localeData?.past_period
-                                        }}</label>
-                                    </span>
-                                </div>
-
-                                <section
-                                    class="periods container-fluid mr-b1"
-                                    *ngIf="permissionForm.get('periodOptions')?.value === 'daterange'"
+                        <div class="pd-15">
+                            <mat-radio-group formControlName="periodOptions" class="d-flex flex-column">
+                                <mat-radio-button
+                                    value="daterange"
+                                    id="dateRange"
+                                    color="primary"
+                                    (click)="isOpenedInModal ? handleTimeSpanChange('daterange') : ''"
+                                    class="w-100 mr-0 mb-1"
                                 >
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <label>{{ localeData?.from_to_label }}</label>
-                                            <input
-                                                name="DateRangePicker"
-                                                [bsValue]="dateRangePickerValue"
-                                                (bsValueChange)="onSelectDateRange($event)"
-                                                [placeholder]="localeData?.from_to_placeholder"
-                                                type="text"
-                                                class="form-control"
-                                                bsDaterangepicker
-                                                container="body"
-                                                autocomplete="off"
-                                            />
-                                        </div>
-                                    </div>
-                                </section>
-
-                                <section
-                                    class="periods container-fluid mr-b1"
-                                    *ngIf="permissionForm.get('periodOptions')?.value === 'pastperiod'"
+                                    {{ commonLocaleData?.app_date_range }}
+                                </mat-radio-button>
+                                <mat-radio-button
+                                    value="pastperiod"
+                                    id="pastPeriod"
+                                    color="primary"
+                                    (click)="isOpenedInModal ? handleTimeSpanChange('pastperiod') : ''"
+                                    class="w-100 mr-0 mr-t1"
                                 >
-                                    <label>{{ localeData?.select_past_period_label }}</label>
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <input
-                                                class="form-control"
-                                                name="duration"
-                                                digitsOnlyDirective
-                                                formControlName="duration"
-                                                type="number"
-                                                [placeholder]="localeData?.select_past_period_placeholder"
-                                            />
-                                        </div>
-                                    </div>
-                                </section>
-                            </section>
+                                    {{ localeData?.past_period }}
+                                </mat-radio-button>
+                            </mat-radio-group>
                         </div>
-                    </div>
-                    <!-- time span end -->
-                </div>
-                <div class="col-xl-2 col-md-6 col-sm-4 pl-0">
-                    <div
-                        class="form-group"
-                        [exclude]="'.ip-addresses-dropdown'"
-                        [attachOutsideOnClick]="true"
-                        (clickOutside)="methodForToggleSection('rangeSpanSection')"
-                    >
-                        <label *ngIf="isLblShow">{{ localeData?.ip_addresses }}</label>
-                        <div class="btn-group" [ngClass]="{ 'open': showIPWrap, 'btn-group-liq': !isHorizntl }">
-                            <button (click)="showIPWrap = !showIPWrap" type="button" class="form-control text-left">
-                                {{ selectedIPRange }}
-                                <span class="pull-right"><span class="fa fa-caret-down"></span></span>
-                            </button>
-                            <section
-                                class="dropdown-menu custom-dropdown ip-addresses-dropdown"
-                                role="menu"
-                                [ngClass]="{ 'open': showIPWrap }"
-                            >
-                                <div class="clearfix option-box pd-1">
-                                    <span
-                                        (click)="isOpenedInModal ? handleIpAddressChange('cidr_range') : ''"
-                                        class="p-0 mr-r3"
-                                    >
-                                        <input
-                                            id="cidrRange"
-                                            class="radio-custom cp ml-0"
-                                            type="radio"
-                                            name="ipOptions"
-                                            formControlName="ipOptions"
-                                            value="cidr_range"
-                                        />
-                                        <label for="cidrRange" class="radio-custom-label">{{
-                                            localeData?.cidr_range
-                                        }}</label>
-                                    </span>
 
-                                    <span
-                                        (click)="isOpenedInModal ? handleIpAddressChange('ip_address') : ''"
-                                        class="p-0 mr-r3"
-                                    >
-                                        <input
-                                            id="address"
-                                            class="radio-custom cp ml-0"
-                                            type="radio"
-                                            name="ipOptions"
-                                            formControlName="ipOptions"
-                                            value="ip_address"
-                                        />
-                                        <label for="address" class="radio-custom-label">{{
-                                            commonLocaleData?.app_address
-                                        }}</label>
-                                    </span>
-                                </div>
-
-                                <section
-                                    formArrayName="allowedCidrs"
-                                    class="ip-range container-fluid"
-                                    *ngIf="permissionForm.get('ipOptions')?.value === 'cidr_range'"
-                                >
-                                    <div
-                                        class="row mr-b1"
-                                        *ngFor="
-                                            let item of permissionForm.get('allowedCidrs')['controls'];
-                                            let i = index;
-                                            let l = last
-                                        "
-                                        [formGroupName]="i"
-                                    >
-                                        <div class="col-11">
-                                            <input
-                                                class="form-control"
-                                                name="item_{{ i }}"
-                                                formControlName="range"
-                                                type="text"
-                                                [placeholder]="localeData?.cidr_example"
-                                            />
-                                        </div>
-                                        <div class="pull-left lh-34">
-                                            <i
-                                                *ngIf="!l"
-                                                (click)="delRow('allowedCidrs', i, $event)"
-                                                class="icon-trash cursor-pointer"
-                                            ></i>
-                                            <i
-                                                *ngIf="l"
-                                                (click)="addNewRow('allowedCidrs', item, $event)"
-                                                class="icon-plus cursor-pointer"
-                                            ></i>
-                                        </div>
-                                    </div>
-                                </section>
-
-                                <section
-                                    formArrayName="allowedIps"
-                                    class="ip-range container-fluid"
-                                    *ngIf="permissionForm.get('ipOptions')?.value === 'ip_address'"
-                                >
-                                    <div
-                                        class="row mr-b1"
-                                        *ngFor="
-                                            let item of permissionForm.get('allowedIps')['controls'];
-                                            let i = index;
-                                            let l = last
-                                        "
-                                        [formGroupName]="i"
-                                    >
-                                        <div class="col-11">
-                                            <input
-                                                class="form-control"
-                                                (keypress)="allowOnlyNumbersAndDot($event)"
-                                                name="item_{{ i }}"
-                                                formControlName="range"
-                                                type="text"
-                                                [placeholder]="localeData?.ip_example"
-                                            />
-                                        </div>
-                                        <div class="pull-left lh-34">
-                                            <i
-                                                *ngIf="!l"
-                                                (click)="delRow('allowedIps', i, $event)"
-                                                class="icon-trash cursor-pointer"
-                                            ></i>
-                                            <i
-                                                *ngIf="l"
-                                                (click)="addNewRow('allowedIps', item, $event)"
-                                                class="icon-plus cursor-pointer"
-                                            ></i>
-                                        </div>
-                                    </div>
-                                </section>
-                            </section>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-2 col-md-6 col-sm-4 pl-0">
-                    <div class="form-group add-btn">
-                        <label class="d-block" *ngIf="isUpdtCase">&nbsp;</label>
-                        <button
-                            [ladda]="createPermissionInProcess$ | async"
-                            [disabled]="permissionForm.invalid"
-                            class="btn btn-success"
+                        <section
+                            class="periods container-fluid mr-b1 mt-3"
+                            *ngIf="permissionForm.get('periodOptions')?.value === 'daterange'"
                         >
-                            <span *ngIf="!isUpdtCase">{{ commonLocaleData?.app_add }}</span>
-                            <span *ngIf="isUpdtCase">{{ commonLocaleData?.app_update }}</span>
-                        </button>
-                    </div>
+                            <div>
+                                <div>
+                                    <div class="date-range-wrapper">
+                                        <mat-form-field
+                                            [matDatepickerToggleIcon]="false"
+                                            appearance="outline"
+                                            (click)="picker.open()"
+                                            class="w-100"                                                     
+                                        >
+                                            <mat-label>{{ localeData?.from_to_label }}</mat-label>
+                                            <mat-date-range-input [rangePicker]="picker">
+                                                <input
+                                                    matStartDate
+                                                    [placeholder]="commonLocaleData?.app_start_date"
+                                                    formControlName="from"
+                                                />
+                                                <input
+                                                    matEndDate
+                                                    [placeholder]="commonLocaleData?.app_end_date"
+                                                    formControlName="to"
+                                                />
+                                            </mat-date-range-input>
+                                            <mat-date-range-picker #picker></mat-date-range-picker>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section
+                            class="periods container-fluid mr-b1 mt-2"
+                            *ngIf="permissionForm.get('periodOptions')?.value === 'pastperiod'"
+                        >
+                            <div>
+                                <div>
+                                    <div class="date-range-wrapper">
+                                        <input-field
+                                            [label]="localeData?.select_past_period_label"
+                                            [name]="'duration'"
+                                            [allowDigitsOnly]="true"
+                                            formControlName="duration"
+                                            [type]="'number'"
+                                            [placeholder]="localeData?.select_past_period_placeholder"
+                                        ></input-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </section>
+                </mat-menu>
+            </div>
+            <!-- time span end -->
+            <div>
+                <div
+                    [exclude]="'.ip-addresses-dropdown'"
+                    [attachOutsideOnClick]="true"
+                    (clickOutside)="methodForToggleSection('rangeSpanSection')"
+                >
+                    <button
+                        mat-button
+                        [matMenuTriggerFor]="menurange"
+                        (click)="showIPWrap = !showIPWrap"
+                        type="button"
+                        class="mat-select-btn range-wrapper text-left w-100"
+                    >
+                        {{ selectedIPRange }}
+                        <span class="pull-right"><span class="fa fa-caret-down"></span></span>
+                    </button>
+                    <mat-menu #menurange="matMenu">
+                        <section class="ip-addresses-dropdown" role="menu" (click)="$event.stopPropagation()">
+                            <div class="pd-15">  
+                                <mat-radio-group formControlName="ipOptions" class="d-flex flex-column">
+                                    <mat-radio-button
+                                        value="cidr_range"
+                                        id="cidrRange"
+                                        color="primary"
+                                        (click)="isOpenedInModal ? handleIpAddressChange('cidr_range') : ''"
+                                        class="w-100 mr-0"
+                                    >
+                                        {{ localeData?.cidr_range }}
+                                    </mat-radio-button>
+                                    <mat-radio-button
+                                        value="ip_address"
+                                        id="address"
+                                        color="primary"
+                                        (click)="isOpenedInModal ? handleIpAddressChange('ip_address') : ''"
+                                        class="w-100 mr-0 mr-t1"
+                                    >
+                                        {{ commonLocaleData?.app_address }}
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+
+                            <section
+                                formArrayName="allowedCidrs"
+                                class="ip-range container-fluid mt-2"
+                                *ngIf="permissionForm.get('ipOptions')?.value === 'cidr_range'"
+                            >
+                                <div
+                                    class="d-flex column-gap1 align-items-center mr-b1"
+                                    *ngFor="
+                                        let item of permissionForm.get('allowedCidrs')['controls'];
+                                        let i = index;
+                                        let l = last
+                                    "
+                                    [formGroupName]="i"
+                                >
+                                    <div>
+                                        <input
+                                            class="form-control"
+                                            name="item_{{ i }}"
+                                            formControlName="range"
+                                            type="text"
+                                            [placeholder]="localeData?.cidr_example"
+                                        />
+                                    </div>
+                                    <div class="pull-left lh-34">
+                                        <i
+                                            *ngIf="!l"
+                                            (click)="delRow('allowedCidrs', i, $event)"
+                                            class="icon-trash cursor-pointer"
+                                        ></i>
+                                        <i
+                                            *ngIf="l"
+                                            (click)="addNewRow('allowedCidrs', item, $event)"
+                                            class="icon-plus cursor-pointer"
+                                        ></i>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section
+                                formArrayName="allowedIps"
+                                class="ip-range container-fluid mt-2"
+                                *ngIf="permissionForm.get('ipOptions')?.value === 'ip_address'"
+                            >
+                                <div
+                                    class="d-flex column-gap1 align-items-center mr-b1"
+                                    *ngFor="
+                                        let item of permissionForm.get('allowedIps')['controls'];
+                                        let i = index;
+                                        let l = last
+                                    "
+                                    [formGroupName]="i"
+                                >
+                                    <div>
+                                        <input
+                                            class="form-control"
+                                            (keypress)="allowOnlyNumbersAndDot($event)"
+                                            name="item_{{ i }}"
+                                            formControlName="range"
+                                            type="text"
+                                            [placeholder]="localeData?.ip_example"
+                                        />
+                                    </div>
+                                    <div class="pull-left lh-34">
+                                        <i
+                                            *ngIf="!l"
+                                            (click)="delRow('allowedIps', i, $event)"
+                                            class="icon-trash cursor-pointer"
+                                        ></i>
+                                        <i
+                                            *ngIf="l"
+                                            (click)="addNewRow('allowedIps', item, $event)"
+                                            class="icon-plus cursor-pointer"
+                                        ></i>
+                                    </div>
+                                </div>
+                            </section>
+                        </section>
+                    </mat-menu>
+                </div>
+            </div>
+            <div class="action-button text-right text-xl-left" [ngClass]="{ 'text-xl-right' : isUpdtCase}">
+                <div class="add-btn">
+                    <button
+                        mat-stroked-button
+                        color="primary"
+                        [ladda]="createPermissionInProcess$ | async"
+                        [disabled]="permissionForm.invalid"
+                        class="btn custom-btn"
+                    >
+                        <span *ngIf="!isUpdtCase">{{ commonLocaleData?.app_add }}</span>
+                        <span *ngIf="isUpdtCase">{{ commonLocaleData?.app_update }}</span>
+                    </button>
                 </div>
             </div>
         </div>
-        <div class="col-xl-2 col-md-12" *ngIf="isSuperAdminCompany">
-            <a
-                href="javascript:void(0)"
+        <div class="ml-auto" *ngIf="isSuperAdminCompany">
+            <button
+                mat-stroked-button
+                type="button"
+                color="primary"
                 *ngIf="!isUpdtCase"
-                class="btn btn-sky-blue pull-right create-btn mr-0"
+                class="btn pull-right create-btn mr-0"
                 [routerLink]="['/pages/permissions/list']"
                 [queryParams]="{ tab: 'settings' }"
-                >{{ localeData?.add_custom_role }}</a
             >
+                {{ localeData?.add_custom_role }}
+            </button>
         </div>
     </div>
 </form>
