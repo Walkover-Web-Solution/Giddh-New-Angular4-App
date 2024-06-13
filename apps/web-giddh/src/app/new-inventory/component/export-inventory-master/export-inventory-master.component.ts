@@ -37,7 +37,7 @@ export class ExportInventoryMasterComponent implements OnInit {
    *
    * @memberof ExportInventoryMasterComponent
    */
-  ngOnInit() {
+  public ngOnInit(): void {
     this.initExportForm();
   }
   /**
@@ -81,7 +81,6 @@ export class ExportInventoryMasterComponent implements OnInit {
    */
   public exportInventory(): void {
     let exportRequest: ExportBodyRequest = new ExportBodyRequest();
-    console.log(exportRequest)
     exportRequest.exportType = this.inputData?.exportType;
     exportRequest.columnsToExport = [];
     exportRequest.groupUniqueNames = this.inputData?.groupUniqueNames;
@@ -152,7 +151,6 @@ export class ExportInventoryMasterComponent implements OnInit {
     if (formValue.skuCode) {
       exportRequest.columnsToExport?.push("SKU code");
     }
-    console.log(exportRequest)
     this.isLoading = true;
     this.ledgerService
       .exportData(exportRequest)
