@@ -9,7 +9,7 @@
     }
 
     &.permission-update-mode {
-        &>div {
+        .action-button {
             flex-basis: auto !important;
         }
     }
