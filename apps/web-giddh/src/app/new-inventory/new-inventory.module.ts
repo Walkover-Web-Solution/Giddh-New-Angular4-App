@@ -84,6 +84,8 @@ import { CustomPriceModule } from "./component/custom-price/custom-price.module"
 import { BulkStockEditComponent } from "./component/bulk-stock-edit/bulk-stock-edit.component";
 import { BulkStockAdvanceFilterComponent } from "./component/bulk-stock-advance-filter/bulk-stock-advance-filter.component";
 import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
+import { ExportInventoryMasterComponent } from "./component/export-inventory-master/export-inventory-master.component";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 
 @NgModule({
     declarations: [
@@ -130,7 +132,8 @@ import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
         CustomUnitsComponent,
         InventoryMasterComponent,
         BulkStockEditComponent,
-        BulkStockAdvanceFilterComponent
+        BulkStockAdvanceFilterComponent,
+        ExportInventoryMasterComponent
     ],
     imports: [
         NewInventoryRoutingModule,
@@ -172,7 +175,8 @@ import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
         NoDataModule,
         DragDropModule,
         CustomPriceModule,
-        WatchVideoModule
+        WatchVideoModule,
+        MatSlideToggleModule
     ],
     exports: [
         NewInventoryComponent,

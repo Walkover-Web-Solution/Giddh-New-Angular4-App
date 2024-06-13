@@ -33,6 +33,7 @@ export class ExportBodyRequest {
     q?: any;
     tagNames?: any[];
     includeTag?: boolean;
+    groupUniqueNames?: any;
 }
 
 export interface DayBookRequestModel {
