@@ -13,10 +13,6 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./export-inventory-master.component.scss']
 })
 export class ExportInventoryMasterComponent implements OnInit {
-  /* This will hold local JSON data */
-  @Input() public localeData: any = {};
-  /* This will hold common JSON data */
-  @Input() public commonLocaleData: any = {};
   /** Form Group for export  form */
   public exportForm: FormGroup;
   /** True if api call in progress */
@@ -159,10 +155,10 @@ export class ExportInventoryMasterComponent implements OnInit {
       .subscribe((response) => {
         this.isLoading = false;
         if (response?.status === "success") {
-          this.toaster.successToast(response?.body);
+          this.toaster.showSnackBar("success", response?.body);
           this.router.navigate(["/pages/downloads"]);
         } else {
-          this.toaster.errorToast(response?.message);
+          this.toaster.showSnackBar("error", response?.message);
         }
       });
   }

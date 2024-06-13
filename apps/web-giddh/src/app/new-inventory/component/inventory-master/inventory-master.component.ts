@@ -545,7 +545,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      *
      * @memberof InventoryMasterComponent
      */
-    public exportInventoryMaster() {
+    public exportInventoryMaster():void {
         const exportData = {
             exportType: "INVENTORY_EXPORT",
             groupUniqueNames:  this.currentGroup?.uniqueName ? [this.currentGroup.uniqueName] : [],
