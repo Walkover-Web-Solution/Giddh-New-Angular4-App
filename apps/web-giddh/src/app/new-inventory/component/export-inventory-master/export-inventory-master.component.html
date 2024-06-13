@@ -1,0 +1,292 @@
+  <div class="modal-header">
+    <h3>{{
+      inputData?.localeData?.export_inventory_master  
+    }}</h3>
+    <button aria-hidden="true" class="close" mat-dialog-close>
+      ×
+    </button>
+  </div>
+  <mat-dialog-content class="overflow-hidden">
+    <div class="modal-body">
+      <p class="pd-l15 pb-3">
+        {{ inputData?.commonLocaleData?.app_note }} :
+        {{ inputData?.localeData?.export_note }}
+      </p>
+      <form [formGroup]="exportForm" class="d-flex justify-content-between px-3 pt-2 overflow-auto">
+        <div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.stock_group_name }} :</label>
+              <mat-slide-toggle color="primary" formControlName="stockGroupName" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("stockGroupName")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.stock_name }} :</label>
+              <mat-slide-toggle color="primary" formControlName="stockName" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("stockName")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.unique_name }} :</label>
+              <mat-slide-toggle color="primary" formControlName="uniqueName" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("uniqueName")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.parent_group_name }} :</label>
+              <mat-slide-toggle color="primary" formControlName="parentGroupName" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("parentGroupName")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.parent_group_unique_name }} :</label>
+              <mat-slide-toggle color="primary" formControlName="parentGroupUniqueName" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("parentGroupUniqueName")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.stock_unit_code }} :</label>
+              <mat-slide-toggle color="primary" formControlName="stockUnitCode" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("stockUnitCode")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.opening_amount }} :</label>
+              <mat-slide-toggle color="primary" formControlName="openingAmount" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("openingAmount")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.opening_quantity }} :</label>
+              <mat-slide-toggle color="primary" formControlName="openingQuantity" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("openingQuantity")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.hsn_number }} :</label>
+              <mat-slide-toggle color="primary" formControlName="hsnNumber" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("hsnNumber")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.sac_number }} :</label>
+              <mat-slide-toggle color="primary" formControlName="sacNumber" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("sacNumber")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.tax }} :</label>
+              <mat-slide-toggle color="primary" formControlName="tax" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("tax")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+        </div>
+  
+        <div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.purchase_account }} :</label>
+              <mat-slide-toggle color="primary" formControlName="purchaseAccount" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("purchaseAccount")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.purchase_rate }} :</label>
+              <mat-slide-toggle color="primary" formControlName="purchaseRate" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("purchaseRate")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.purchase_stock_unit_code }} :</label>
+              <mat-slide-toggle color="primary" formControlName="purchaseStockUnitCode" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("purchaseStockUnitCode")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.sales_account }} :</label>
+              <mat-slide-toggle color="primary" formControlName="salesAccount" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("salesAccount")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.sales_rate }} :</label>
+              <mat-slide-toggle color="primary" formControlName="salesRate" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("salesRate")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.sales_stock_unit_code }} :</label>
+              <mat-slide-toggle color="primary" formControlName="salesStockUnitCode" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("salesStockUnitCode")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.custom_field_1_heading }} :</label>
+              <mat-slide-toggle color="primary" formControlName="customField1Heading" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("customField1Heading")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.custom_field_1_value }} :</label>
+              <mat-slide-toggle color="primary" formControlName="customField1Value" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("customField1Value")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.custom_field_2_heading }} :</label>
+              <mat-slide-toggle color="primary" formControlName="customField2Heading" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("customField2Heading")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.custom_field_2_value }} :</label>
+              <mat-slide-toggle color="primary" formControlName="customField2Value" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("customField2Value")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+          <div class="mr-b15">
+            <label class="label-width">{{ inputData?.localeData?.sku_code }} :</label>
+              <mat-slide-toggle color="primary" formControlName="skuCode" class="ml-2 toggle-width">
+                <span>
+                  {{
+                    exportForm.get("skuCode")?.value
+                    ? inputData?.commonLocaleData?.app_yes
+                    : inputData?.commonLocaleData?.app_no
+                  }}
+                </span>
+              </mat-slide-toggle>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer justify-content-start pt-0">
+      <button mat-stroked-button color="primary" (click)="exportInventory()">
+          {{ inputData?.commonLocaleData?.app_download }}
+      </button>
+  </div>
+  </mat-dialog-content>

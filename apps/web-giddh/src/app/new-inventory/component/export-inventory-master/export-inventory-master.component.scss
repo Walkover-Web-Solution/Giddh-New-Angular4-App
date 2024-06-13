@@ -1,0 +1,15 @@
+.modal-body {
+    p {
+        color: var(--color-sidebar-content-text);
+    }
+    form { 
+        height: clamp(215px, 290px, 290px); 
+    }
+}
+.label-width {
+    min-width: 220px;
+}
+
+.toggle-width {
+    min-width: 65px;
+}

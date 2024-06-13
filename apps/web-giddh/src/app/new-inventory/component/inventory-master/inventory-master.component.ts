@@ -6,6 +6,8 @@ import { ActivatedRoute } from "@angular/router";
 import { ScrollDispatcher } from "@angular/cdk/scrolling";
 import { UntypedFormControl } from "@angular/forms";
 import { cloneDeep } from "../../../lodash-optimized";
+import { MatDialog } from "@angular/material/dialog";
+import { ExportInventoryMasterComponent } from "../export-inventory-master/export-inventory-master.component";
 
 @Component({
     selector: "inventory-master",
@@ -53,7 +55,8 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
     constructor(
         private inventoryService: InventoryService,
         private route: ActivatedRoute,
-        private scrollDispatcher: ScrollDispatcher
+        private scrollDispatcher: ScrollDispatcher,
+        public dialog: MatDialog
     ) {
 
     }
@@ -535,5 +538,25 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
             breadcrumbs.push(masterData?.name);
             this.breadcrumbs = breadcrumbs;
         }
+    }
+
+    /**
+     * Export inventory master detail
+     *
+     * @memberof InventoryMasterComponent
+     */
+    public exportInventoryMaster():void {
+        const exportData = {
+            exportType: "INVENTORY_EXPORT",
+            groupUniqueNames:  this.currentGroup?.uniqueName ? [this.currentGroup.uniqueName] : [],
+            fileType: "CSV",
+            commonLocaleData: this.commonLocaleData,
+            localeData: this.localeData
+        }
+
+        this.dialog.open(ExportInventoryMasterComponent, {
+            width: "750px",
+            data: exportData
+        })
     }
 }
