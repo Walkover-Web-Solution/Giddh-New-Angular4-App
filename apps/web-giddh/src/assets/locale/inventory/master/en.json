@@ -1,4 +1,5 @@
 {
     "no_inventory_found_primary_message": "No data found with given keyword.",
-    "no_inventory_found_secondary_message": "Do search with some other keyword"
+    "no_inventory_found_secondary_message": "Do search with some other keyword",
+    "export_note": "The default columns 'Stock Group Name, Stock Name , Unique Name, Parent Group Name, Parent Group Unique Name, Stock Unit Code, Stock Unit Unique Name' will be exported, you also have the option to add custom columns as needed."
 }

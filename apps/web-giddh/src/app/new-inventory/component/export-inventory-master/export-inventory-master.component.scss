@@ -1,0 +1,17 @@
+.modal-body {
+    p {
+        color: var(--color-sidebar-content-text);
+    }
+    form {
+        height: 290px;
+        min-height: 215px;
+        max-height: 290px;    
+    }
+}
+.label-width {
+    min-width: 220px;
+}
+
+.toggle-width {
+    min-width: 65px;
+}
