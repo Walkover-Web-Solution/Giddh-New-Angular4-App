@@ -40,6 +40,7 @@ export class ExportInventoryMasterComponent implements OnInit {
   public ngOnInit(): void {
     this.initExportForm();
   }
+  
   /**
    * This will use for initial export form
    *
