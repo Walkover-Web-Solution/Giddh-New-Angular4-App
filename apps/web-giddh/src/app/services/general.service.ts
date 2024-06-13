@@ -1757,7 +1757,7 @@ export class GeneralService {
      * @returns {string} The current timestamp.
      * @memberof GeneralService
      */
-    public getTimesStamp(): any {
+    public getTimeStamp(): any {
         const timestamp = new Date().toISOString();
         return timestamp;
     }
@@ -1939,7 +1939,7 @@ export class GeneralService {
      */
     public getUserAgentData(): any {
         let args: any = {};
-        args["timestamp"] = this.getTimesStamp();
+        args["timestamp"] = this.getTimeStamp();
         args["Gov-Client-Timezone"] = 'UTC' + this.getUserTimeZone();
         args["Gov-client-screens"] = this.getClientScreens();
         args["Gov-client-window-size"] = this.getClientWindowSize();
