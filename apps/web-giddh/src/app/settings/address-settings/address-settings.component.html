@@ -2,7 +2,7 @@
     <div class="row">
         <div
             *ngIf="organizationType === 'COMPANY'"
-            class="w-100 d-flex justify-content-between mb-4 align-items-center address-list-top"
+            class="w-100 d-flex justify-content-between mb-4 mt-2 align-items-start address-list-top"
         >
             <div class="search-container">
                 <div class="font-15">{{ localeData?.company_address_list }}</div>
@@ -24,7 +24,7 @@
         <!-- branch profile element start -->
         <div
             *ngIf="organizationType === 'BRANCH'"
-            class="w-100 d-flex justify-content-between mb-4 align-items-center address-list-top"
+            class="w-100 d-flex justify-content-between mb-4 mt-2 align-items-start address-list-top"
         >
             <div class="font-15">{{ localeData?.address_list }}</div>
             <button mat-stroked-button color="primary" type="button" class="mr-0" (click)="openAddAndManage()" aria-label="address">
@@ -182,25 +182,25 @@
                                         <i
                                             [matTooltip]="commonLocaleData?.app_branch"
                                             *ngIf="entity.isBranch"
-                                            class="icon-branch-icon"
+                                            class="icon-branch-icon mr-r05"
                                         ></i>
                                         <i
                                             [matTooltip]="commonLocaleData?.app_warehouse"
                                             *ngIf="entity.isWarehouse"
-                                            class="icon-warehouse-icon"
+                                            class="icon-warehouse-icon mr-r05"
                                         ></i>
                                         <span class="entity-alias"> {{ entity.alias || entity.name }} </span>
                                     </span>
                                 </div>
     
                                 <div class="ml-auto">
-                                    <div class="action-icon">
-                                        <a href="javascript:void(0);" (click)="handleUpdateAddress(element)">
-                                            <span class="icon-edit"></span
-                                        ></a>
-                                        <a href="javascript:void(0);" (click)="showConfirmationModal(element)">
-                                            <span class="icon-trash"></span
-                                        ></a>
+                                    <div class="d-flex column-gap2">
+                                        <span class="cursor-pointer" (click)="handleUpdateAddress(element)">
+                                            <i class="icon-edit font-14"></i
+                                        ></span>
+                                        <span class="cursor-pointer" (click)="showConfirmationModal(element)">
+                                            <i class="icon-trash"></i
+                                        ></span>
                                     </div>
                                 </div>
                             </div>
@@ -208,15 +208,15 @@
                     </ng-container>
                     <ng-container *ngIf="hideLinkEntity">
                         <td width="30%" class="linked-with" mat-cell *matCellDef="let element">
-                            <div class="d-flex wrap-linked-company">
+                            <div class="d-flex column-gap2">
                                 <div class="ml-auto">
-                                    <div class="action-icon">
-                                        <a href="javascript:;" (click)="handleUpdateAddress(element)">
-                                            <span class="icon-edit"></span
-                                        ></a>
-                                        <a href="javascript:;" (click)="showConfirmationModal(element)">
-                                            <span class="icon-trash"></span
-                                        ></a>
+                                    <div class="d-flex">
+                                        <span class="cursor-pointer" (click)="handleUpdateAddress(element)">
+                                            <i class="icon-edit font-14"></i
+                                        ></span>
+                                        <span class="cursor-pointer" (click)="showConfirmationModal(element)">
+                                            <i class="icon-trash"></i
+                                        ></span>
                                     </div>
                                 </div>
                             </div>
@@ -240,7 +240,7 @@
             <div *ngFor="let address of addresses; index as addressIndex">
                 <div class="branch-profile-address-content col-md-12 mr-b15">
                     <div class="single-branch-detail mr-b15">
-                        <h4><i class="icon-branch-icon"></i>{{ address?.name }}</h4>
+                        <h4><i class="icon-branch-icon mr-r05"></i>{{ address?.name }}</h4>
                         <div class="row">
                             <div class="col-md-4">
                                 <label>{{ commonLocaleData?.app_address }}:</label>

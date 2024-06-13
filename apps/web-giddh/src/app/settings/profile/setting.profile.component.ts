@@ -25,7 +25,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LocaleService } from '../../services/locale.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { cloneDeep, uniqBy, without } from '../../lodash-optimized';
-import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 export interface IGstObj {
     newGstNumber: string;
     newstateCode: number;
@@ -176,8 +176,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     private initialDataFetched: boolean = false;
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
+    /* This will hold list of tax (trn/vat) supported countries */
+    public taxSupportedCountries = TAX_SUPPORTED_COUNTRIES;
     /* This will hold list of vat supported countries */
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
+    /* This will hold list of trn supported countries */
+    public trnSupportedCountries = TRN_SUPPORTED_COUNTRIES;
     /** Tax type (gst/trn) */
     public taxType: string = '';
     /** True if initial data is fetched */
@@ -1301,14 +1305,15 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
                 this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                     if (activeCompany) {
-                        if (activeCompany?.countryV2?.alpha2CountryCode === 'ZW' || activeCompany?.countryV2?.alpha2CountryCode === 'KE') {
+                        if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                             this.taxType = this.commonLocaleData?.app_vat;
-                        } else if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
+                        } else if (this.trnSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                             this.taxType = this.commonLocaleData?.app_trn;
+                            console.log(this.taxType);
                         } else {
                             this.taxType = this.commonLocaleData?.app_gstin;
                         }
-                        if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode) || activeCompany.countryV2?.alpha2CountryCode === 'IN') {
+                        if (this.taxSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode) || activeCompany.countryV2?.alpha2CountryCode === 'IN') {
                             this.showTaxColumn = true;
                         } else {
                             this.showTaxColumn = false;
@@ -1335,15 +1340,15 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
                     this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                         if (activeCompany) {
-                            if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
-                                if (activeCompany?.countryV2?.alpha2CountryCode === 'ZW' || activeCompany?.countryV2?.alpha2CountryCode === 'KE') {
+                            if (this.taxSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
+                                if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                                     this.taxType = this.commonLocaleData?.app_vat;
                                     this.localeData.company_address_list = this.localeData.company_vat_list;
                                     this.localeData.add_address = this.localeData.add_vat;
                                     this.localeData.address_list = this.localeData.vat_list;
                                     this.localeData.create_address = this.localeData.create_vat;
                                     this.localeData.update_address = this.localeData.update_vat;
-                                } else {
+                                } else if(this.trnSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                                     this.taxType = this.commonLocaleData?.app_trn;
                                     this.localeData.company_address_list = this.localeData.company_trn_list;
                                     this.localeData.add_address = this.localeData.add_trn;

@@ -117,12 +117,9 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
 
     public showModalForEdit(user?: any): void {
         this.selectedUser = user ? user : '';
-        this.editDialogRef = this.dialog.open(this.editUserModal, { 
-            width: '1000px',
-            maxWidth: '85vw',
-            position: {
-                top: '75px'
-            }
+        this.editDialogRef = this.dialog.open(this.editUserModal, {
+            width: '1200px',
+            maxWidth: '90vw'
         });
     }
     public closeEditUserModal(event?: any): void {
@@ -131,13 +128,13 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
                 if (action) {
                     this.hasUnsavedChanges = false;
                     this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
-                    this.editDialogRef.close();
+                    this.editDialogRef?.close();
                 }
             });
         } else {
             this.hasUnsavedChanges = false;
             this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
-            this.editDialogRef.close();
+            this.editDialogRef?.close();
         }
     }
 

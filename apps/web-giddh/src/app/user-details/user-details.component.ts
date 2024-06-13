@@ -85,6 +85,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
     private tabName = ['auth-key','mobile-number', 'session', 'subscription'];
     /** Holds True if API calling in progress in old subscription page */
     public isSubscriptionLoading: boolean = false;
+    /** Holds subscription id */
+    public subscriptionId: string = '';
 
     constructor(private store: Store<AppState>,
         private toasty: ToasterService,

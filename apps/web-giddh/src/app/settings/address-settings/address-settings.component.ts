@@ -215,6 +215,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
 
         if (this.addresses?.length > 1) {
             this.hideLinkEntity = false;
+            
         } else {
             combineLatest([this.store.pipe(select(state => state.warehouse.warehouses)), this.store.pipe(select(state => state.settings.branches))]).pipe(takeUntil(this.destroyed$)).subscribe((response: any[]) => {
                 if (response && response[0] && response[1]) {
@@ -298,7 +299,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof AddressSettingsComponent
      */
     public closeAccountAsidePane(): void {
-        this.asideAccountAsidePaneRef.close();
+        this.asideAccountAsidePaneRef?.close();
         this.addressConfiguration.type = SettingsAsideFormType.CreateAddress;
         this.addressToUpdate = null;
     }
@@ -506,7 +507,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             this.handleDeleteAddress(this.selectedAddress);
         }
-        this.deleteAddressConfirmationModalRef.close();
+        this.deleteAddressConfirmationModalRef?.close();
     }
 
     /**

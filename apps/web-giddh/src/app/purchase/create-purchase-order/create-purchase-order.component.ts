@@ -19,7 +19,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { ToasterService } from '../../services/toaster.service';
 import { OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
-import { VAT_SUPPORTED_COUNTRIES, SubVoucher, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SearchResultText, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT } from '../../app.constant';
+import { TAX_SUPPORTED_COUNTRIES, SubVoucher, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SearchResultText, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, VAT_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, SalesOtherTaxesModal, SalesOtherTaxesCalculationMethodEnum, VoucherClass, VoucherTypeEnum, SalesAddBulkStockItems, SalesEntryClassMulticurrency, TransactionClassMulticurrency, CodeStockMulticurrency, DiscountMulticurrency, AccountDetailsClass } from '../../models/api-models/Sales';
 import { TaxResponse } from '../../models/api-models/Company';
@@ -187,8 +187,12 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public showVATNo: boolean;
     /* This will hold if tax is valid */
     public isValidTaxNumber: boolean = false;
+    /* This will hold list of tax (trn/vat) supported countries */
+    public taxSupportedCountries = TAX_SUPPORTED_COUNTRIES;
     /* This will hold list of vat supported countries */
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
+      /* This will hold list of trn supported countries */
+    public trnSupportedCountries = TRN_SUPPORTED_COUNTRIES;
     /* This will hold giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /* Observable for sales account */
@@ -1397,16 +1401,16 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 this.showTRNNo = false;
                 this.showVATNo = false;
                 this.getOnboardingForm('IN')
-            } else if (this.vatSupportedCountries.includes(code)) {
-                if (code === 'GB') {
+            } else if (this.taxSupportedCountries.includes(code)) {
+                if (this.vatSupportedCountries.includes(code)) {
+                    this.showVATNo = true;
                     this.showGSTINNo = false;
                     this.showTRNNo = false;
-                    this.showVATNo = true;
                     this.getOnboardingForm('GB')
-                } else {
+                } else if(this.trnSupportedCountries.includes(code)) {
+                    this.showTRNNo = true;
                     this.showGSTINNo = false;
                     this.showVATNo = false;
-                    this.showTRNNo = true;
                     this.getOnboardingForm(code);
                 }
             } else {

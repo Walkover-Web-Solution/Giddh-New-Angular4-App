@@ -69,7 +69,7 @@ mat-list {
 }
 
 body {
-    &.on-setting-page {
+    &.aside-setting {
         .cdk-overlay-pane {
             &:has(.tags-menu-contianer) {
                 top: var(--header-height) !important;
@@ -81,7 +81,7 @@ body {
                     padding: 0 !important;
                         .tags-menu-contianer {  
                             padding: 15px !important;
-                            min-width: 480px;
+                            width: 480px;
                             height: calc(100vh - (var(--header-height)));
                         }
                     }
