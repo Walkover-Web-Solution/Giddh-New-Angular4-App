@@ -9,9 +9,6 @@ import { DeleteRoleConfirmationModelComponent } from './components/confirmation/
 import { PermissionModelComponent } from './components/model/permission.model.component';
 import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { CapitalizePipe } from './capitalize.pipe';
-import { LaddaModule } from 'angular2-ladda';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { ModalModule } from 'ngx-bootstrap/modal';
 import { SharedModule } from '../shared/shared.module';
 import { SortByModule } from '../shared/helpers/pipes/sort-by/sort-by.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
@@ -58,12 +55,6 @@ const PERMISSION_ROUTES: Routes = [
         CommonModule,
         FormsModule,
         RouterModule.forChild(PERMISSION_ROUTES),
-        LaddaModule.forRoot({
-            style: 'slide-left',
-            spinnerSize: 30
-        }),
-        ModalModule.forRoot(),
-        BsDropdownModule.forRoot(),
         SharedModule,
         SortByModule,
         FormFieldsModule,
