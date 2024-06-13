@@ -1,98 +1,753 @@
-<!-- <div class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'" (click)="show($event)" [class.open]="isOpen" tabindex="0" (focus)="show($event)" (blur)="hide($event)" (keydown)="keydownUp($event)"> -->
-
-<!--region multiple-->
-<!-- <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}" style="background: white;" class="bdr">
-          <ng-container *ngIf="selectedValues?.length">
-              <span class="chip" *ngFor="let sl of selectedValues">
-                  {{ sl.label }}
-                  <span class="chip-close-btn" (mousedown)="clearSingleSelection($event, sl)" (click)="clearSingleSelection($event, sl)">&times;</span>
-              </span>
-          </ng-container>
-          <input type="text" style="opacity: 0 !important;position: absolute" class="pd-l1" [ngClass]="{'hasValue':filter?.length}" #inputFilter (click)="show($event);" (blur)="filterInputBlur($event)" [placeholder]="selectedValues?.length > 0 ? filter : placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)">
-      </div> -->
-<!--endregion-->
-
-<!--region single-->
-<!-- <input type="text" class="form-control" #inputFilter tabindex="0" *ngIf="!multiple" [hidden]="((!isOpen || !isFilterEnabled))" (click)="show($event);" (blur)="filterInputBlur($event)" [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)"
-          style="padding-right: 22px !important;opacity: 0;position: absolute"> -->
-
-<!-- <div (click)="show($event);" *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
-          <ng-container *ngIf="selectedValues?.length">
-              <div *ngIf="!multiple">
-                  <input type="text" readonly value="{{selectedValues[0].label}}" class="form-control selected-val cursor-pointer" />
-              </div>
-          </ng-container>
-          <ng-container *ngIf="!selectedValues?.length">
-              <input type="text" class="form-control" [placeholder]="placeholder" [value]="filter" style="padding-right: 22px !important;" />
-          </ng-container>
-      </div> -->
-<!--endregion-->
-
-<!-- </div> -->
-<!-- <span class="clear" *ngIf="showClear && selectedValues.length > 0" (click)="$event.stopPropagation();clear();">&times;</span> -->
-<!-- <virtual-list-menu
-        #menuEle
-        [isOpen]="isOpen"
-        [rows]="rows"
-        [selectedValues]="selectedValues"
-        [optionTemplate]="optionTemplate"
-        (noToggleClick)="toggleSelected($event)"
-        (noResultClicked)="noResultsClicked.emit(); hide()"
-        [noResultLinkEnabled]="notFoundLink"
-        [notFoundMsg]="notFoundMsg"
-        [notFoundLinkText]="notFoundLinkText"
-        [ItemHeight]="ItemHeight"
-        [NoFoundMsgHeight]="NoFoundMsgHeight"
-        [NoFoundLinkHeight]="NoFoundLinkHeight"
-        [isPaginationEnabled]="isPaginationEnabled"
-        [dropdownMinHeight]="dropdownMinHeight"
-        (scrollEnd)="scrollEnd.emit()"
-    ></virtual-list-menu> -->
-    <div [style.width]="width" class="h-100">
-        <div #dd class="menu" *ngIf="isOpen" class="h-100">
-            <ul *ngIf="rows?.length === 0" class="grp-list group-list-no-found users-last-list">
-                <li>
-                    <a href="javascript:void(0)"> {{ notFoundMsg }}</a>
-                </li>
-                <li>
-                    <a class="btn-link" (click)="noResultsClicked.emit(); hide()" href="javascript:void(0)">{{
-                        notFoundLinkText
-                    }}</a>
-                </li>
-            </ul>
-            <div
-                class="h-100"
-            >
-                <ng-container *ngIf="rows?.length">
-                    <ul class="grp-list users-last-list">
-                        <cdk-virtual-scroll-viewport
-                            class="virtual-group-list overflow-x-hidden"
-                            [itemSize]="37"
-                            [minBufferPx]="400"
-                            [maxBufferPx]="800"
-                            #cdkMenu
+<div *ngIf="isLoading">
+    <giddh-page-loader></giddh-page-loader>
+</div>
+<div class="journal-voucher" *ngIf="!isLoading">
+    <form autocomplete="off" novalidate [formGroup]="journalVoucherForm">
+        <div class="bg-wrap">
+            <div class="d-flex justify-content-between align-items-center w-100 pd-t2">
+                <div class="text-left mr-b1" (clickOutside)="showFromDatePicker = false">
+                    <span class="voucher-heading font-16">{{
+                        journalVoucherForm.get("voucherType").value | uppercase
+                    }}</span>
+                </div>
+                <div
+                    class="d-flex justify-content-end align-items-baseline pull-right text-right mr-b1 custom-entry-date"
+                    (clickOutside)="showFromDatePicker = false"
+                >
+                    <span>{{ displayDay }},</span>
+                    <div class="entry-date-container">
+                        <giddh-datepicker
+                            [name]="'entryDate'"
+                            [placeholder]="giddhDateFormat"
+                            [cssClass]="'form-control text-right voucher-date-field'"
+                            formControlName="entryDate"
+                            [showToggleIcon]="false"
+                            (datepickerState)="onDateFieldFocus()"
+                            (dateSelected)="handleVoucherDateChange(); dateEntered()"
+                            (keydown.enter)="dateEntered(); activeRowIndex = 0; activeRowType = 'type'"
                         >
-                            <li
-                                *cdkVirtualFor="let row of rows; let j = index; trackBy: trackByFn"
-                                [ngClass]="{ 'hilighted': j === selectedIndex }"
-                                class="list-item sidebarTooltip text-overflow-ellipsis"
+                        </giddh-datepicker>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix" [style.min-height]="'calc(-262px + 100vh)'">
+                <div class="bd-rt">
+                    <table class="table entry-table">
+                        <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>{{ commonLocaleData?.app_particulars }}</th>
+                                <th [style.min-width.px]="140" [style.width.px]="140" class="text-right">
+                                    {{ commonLocaleData?.app_debit }}
+                                </th>
+                                <th [style.min-width.px]="140" [style.width.px]="140" class="text-right">
+                                    {{ commonLocaleData?.app_credit }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <br />
+                        <tbody>
+                            <ng-container
+                                *ngFor="
+                                    let transaction of journalVoucherForm.get('transactions').controls;
+                                    let i = index;
+                                    let l = last
+                                "
+                                formArrayName="transactions"
                             >
-                                <a
-                                    #focusElement
-                                    href="javascript:void(0);"
-                                    class="isAcc account-list"
-                                    id="acc_{{ row.label }}"
-                                    tooltip="{{ row.label }}"
-                                    placement="bottom"
-                                    (click)="toggleSelected(row)"
-                                    (keydown.enter)="toggleSelected(row)"
+                                <ng-container [formGroupName]="i">
+                                    <tr (click)="activeRow(true, i)">
+                                        <td
+                                            class="voucher-type"
+                                            [style.width.px]="40"
+                                            [ngClass]="{
+                                                'active-row':
+                                                    (isSelectedRow && selectedIdx === i) ||
+                                                    (!selectedIdx && !isSelectedRow && i == 0)
+                                            }"
+                                        >
+                                            <text-field
+                                                [autoFocus]="activeRowIndex === i && activeRowType === 'type'"
+                                                [id]="'transactionType_' + i"
+                                                [type]="'text'"
+                                                [cssClass]="'form-control text-capitalize byTo'"
+                                                [readonly]="
+                                                    (i === 0 && !isFirstRowDeleted) ||
+                                                    transaction?.get('isDiscountApplied')?.value
+                                                "
+                                                formControlName="type"
+                                                (input)="selectRow(true, i, transaction)"
+                                                [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
+                                                [value]="transaction.get('type')?.value | lowercase"
+                                                [maxlength]="'2'"
+                                                [autocomplete]="'off'"
+                                                (keydown.Enter)="changeTab('enter', 'type')"
+                                                (keydown.Shift.Tab)="changeTab('shift', 'type')"
+                                                (keydown.Tab)="changeTab('tab', 'type')"
+                                            ></text-field>
+                                        </td>
+                                        <td
+                                            class="particular-account"
+                                            [ngClass]="{
+                                                'active-row':
+                                                    (isSelectedRow && selectedIdx === i) ||
+                                                    (!selectedIdx && !isSelectedRow && i == 0)
+                                            }"
+                                            formGroupName="selectedAccount"
+                                        >
+                                            <text-field
+                                                [autoFocus]="activeRowIndex === i && activeRowType === 'account'"
+                                                [autocomplete]="'off'"
+                                                [id]="'transactionAccount_' + i"
+                                                [type]="'text'"
+                                                [cssClass]="'form-control from-or-to-acc'"
+                                                [required]="transaction.get('amount')?.value"
+                                                formControlName="account"
+                                                (input)="
+                                                    onAccountFocus(
+                                                        $event,
+                                                        transaction.get('type')?.value?.toLowerCase() === 'by'
+                                                            ? byAmountField
+                                                            : toAmountField,
+                                                        transaction.get('type')?.value,
+                                                        i
+                                                    );
+                                                    searchedAccountQuery.next($event);
+                                                    selectedInputFieldIndex = i
+                                                "
+                                                (blur)="onAccountBlur($event)"
+                                                [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
+                                                (keydown)="detectKey($event)"
+                                                (keydown.Tab)="
+                                                    validateAccount(transaction, $event, i);
+                                                    showLedgerAccountList = false;
+                                                    changeTab('tab', 'account')
+                                                "
+                                                (keydown.Enter)="
+                                                    showLedgerAccountList
+                                                        ? event?.preventDefault()
+                                                        : changeTab('enter', 'account')
+                                                "
+                                                (keydown.Shift.Tab)="
+                                                    showLedgerAccountList = false; changeTab('shift', 'account')
+                                                "
+                                                (change)="removeAmountIfAccountRemoved(transaction, i)"
+                                            ></text-field>
+                                        </td>
+                                        <td
+                                            class="amount1"
+                                            [ngClass]="{
+                                                'active-row':
+                                                    (isSelectedRow && selectedIdx === i) ||
+                                                    (!selectedIdx && !isSelectedRow && i == 0)
+                                            }"
+                                        >
+                                            <text-field
+                                                [readonly]="
+                                                    transaction?.get('isDiscountApplied')?.value ||
+                                                    transaction?.get('isTaxApplied')?.value
+                                                "
+                                                [id]="'transactionAmount_' + i"
+                                                (keydown.Tab)="changeTab('tab', 'amount')"
+                                                (keydown.Shift.Tab)="changeTab('shift', 'amount')"
+                                                *ngIf="transaction.get('type')?.value?.toLowerCase() === 'by'"
+                                                [autoFocus]="activeRowIndex === i && activeRowType === 'amount'"
+                                                [autocomplete]="'off'"
+                                                [type]="'text'"
+                                                [cssClass]="'form-control text-right debit-credit'"
+                                                decimalDigitsDirective
+                                                [mask]="inputMaskFormat"
+                                                formControlName="amount"
+                                                (input)="selectRow(true, i);
+                                                updateTransactionActualAmount(transaction)"
+                                                (keydown.Enter)="
+                                                    addNewEntry(transaction.get('amount')?.value, transaction, i);
+                                                    changeTab('enter', 'amount')
+                                                "
+                                                (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
+                                                [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
+                                            ></text-field>
+                                        </td>
+                                        <td
+                                            class="amount2"
+                                            [ngClass]="{
+                                                'active-row':
+                                                    (isSelectedRow && selectedIdx === i) ||
+                                                    (!selectedIdx && !isSelectedRow && i == 0)
+                                            }"
+                                        >
+                                            <text-field
+                                                [readonly]="
+                                                    transaction?.get('isDiscountApplied')?.value ||
+                                                    transaction?.get('isTaxApplied')?.value
+                                                "
+                                                *ngIf="transaction.get('type')?.value?.toLowerCase() === 'to'"
+                                                [autoFocus]="activeRowIndex === i && activeRowType === 'amount'"
+                                                [autocomplete]="'off'"
+                                                [type]="'text'"
+                                                [cssClass]="'form-control text-right debit-credit'"
+                                                #toAmountField
+                                                decimalDigitsDirective
+                                                [mask]="inputMaskFormat"
+                                                formControlName="amount"
+                                                (input)="selectRow(true, i);
+                                                updateTransactionActualAmount(transaction);"
+                                                (keydown.Enter)="
+                                                    addNewEntry(transaction.get('amount')?.value, transaction, i);
+                                                    changeTab('enter', 'amount')
+                                                "
+                                                (keydown.Tab)="changeTab('tab', 'amount')"
+                                                (keydown.Shift.Tab)="changeTab('shift', 'amount')"
+                                                (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
+                                                [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
+                                            ></text-field>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="100%" formGroupName="selectedAccount">
+                                            <span
+                                                [ngClass]="{
+                                                    'active-row-transparent':
+                                                        (isSelectedRow && selectedIdx === i) ||
+                                                        (!selectedIdx && !isSelectedRow && i == 0)
+                                                }"
+                                                *ngIf="
+                                                    journalVoucherForm
+                                                        .get('transactions')
+                                                        .at(i)
+                                                        .get('selectedAccount.account')?.value &&
+                                                    transaction.get('currentBalance')?.value !== ''
+                                                "
+                                                class="current-balance d-block mr-b05"
+                                            >
+                                                Current Balance:
+                                                {{ transaction.get("currentBalance")?.value | giddhCurrency }}
+                                                {{
+                                                    transaction.get("selectedAccount.type")?.value === "DEBIT"
+                                                        ? localeData?.dr
+                                                        : localeData?.cr
+                                                }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="clearfix row">
+                <div class="col-xs-9 col-sm-9">
+                    <div class="form-group custom-textarea">
+                        <label>{{ localeData?.narration }}:</label>
+                        <textarea
+                            #narrationBox
+                            id="narration"
+                            class="form-control"
+                            formControlName="description"
+                            (keydown)="handleEnterKeyPress($event, submitButton)"
+                            resize="false"
+                            rows="3"
+                        ></textarea>
+                    </div>
+                </div>
+                <div class="col-xs-3 col-sm-3">
+                    <div [hidden]="!showConfirmationBox" class="confirmation-box bdr text-center pd-2">
+                        <div>
+                            <h1>{{ localeData?.accept }}</h1>
+                            <div class="pd-t2">
+                                <div class="d-flex column-gap15 justify-content-center">
+                                    <button
+                                        mat-stroked-button
+                                        color="primary"
+                                        [hidden]="isCompany"
+                                        #submitButton
+                                        (keyup)="keyUpOnSubmitButton($event)"
+                                        (click)="saveEntry()"
+                                        type="button"
+                                        [keyboardShortcut]="'ctrl+a'"
+                                        (onShortcutPress)="openConfirmBoxFromShortcut(submitButton)"
+                                    >
+                                        {{ commonLocaleData?.app_yes }}
+                                    </button>
+                                    <button
+                                        mat-stroked-button
+                                        color="primary"
+                                        #resetButton
+                                        (keyup)="keyUpOnResetButton($event)"
+                                        (click)="acceptCancel()"
+                                        type="button"
+                                    >
+                                        {{ commonLocaleData?.app_no }}
+                                    </button>
+                                </div>
+                                <br />
+                                <button
+                                    type="button"
+                                    mat-stroked-button
+                                    color="primary"
+                                    class="mt-1"
+                                    (click)="refreshEntry()"
                                 >
-                                    {{ row?.label }}
-                                </a>
-                            </li>
-                        </cdk-virtual-scroll-viewport>
+                                    {{ commonLocaleData?.app_reset }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-inline-block float-right min-150">
+                        <div class="d-flex flex-column">
+                            <div class="total-box text-right pull-right d-flex justify-content-end">
+                                <span
+                                    ><strong>{{ totalDebitAmount | giddhCurrency }}</strong></span
+                                >
+                                <span
+                                    ><strong>{{ totalCreditAmount | giddhCurrency }}</strong></span
+                                >
+                            </div>
+                            <span class="border-bottom custom-border float-right"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="sidebar-list form-control" [hidden]="!showLedgerAccountList">
+        <h3 class="pd-1 bd-rb primary-color" *ngIf="selectedField === 'account'">
+            {{ localeData?.ledger_accounts_list }}
+        </h3>
+        <h3 class="pd-1 bd-rb primary-color" *ngIf="selectedField === 'stock'">{{ localeData?.stock_items_list }}</h3>
+        <accounting-virtual-list
+            [keydownUpInput]="keyUpDownEvent"
+            [filterText]="filterByText"
+            [options]="inputForList"
+            [showList]="showLedgerAccountList"
+            [isFilterEnabled]="true"
+            (selected)="onItemSelected($event)"
+            [(ngModel)]="currentSelectedValue"
+            [placeholder]="commonLocaleData?.app_select_option"
+            (scrollEnd)="handleScrollEnd()"
+            (typingEvent)="getTypeEvent($event)"
+            [notFoundLink]="selectedField === 'account'"
+            (noResultsClicked)="addNewAccount()"
+            (noOptionsFound)="onNoAccountFound($event)"
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+            [notFoundMsg]="commonLocaleData?.app_no_result_found"
+            [notFoundLinkText]="commonLocaleData?.app_create_new"
+        ></accounting-virtual-list>
+    </div>
+    <div class="sidebar-list form-control" [hidden]="!showDiscountSidebar">
+        <div class="bd-rb d-flex justify-content-between align-items-center discount-sidebar-section">
+            <h3 class="primary-color">{{ localeData?.discount_list }}</h3>
+            <i class="fa fa-close pdR-5 cursor-pointer" (click)="closeDiscountSidebar()"></i>
+        </div>
+        <div [style.width]="width" class="h-100">
+            <div #dd class="menu" *ngIf="showDiscountSidebar" class="h-100">
+                <div class="h-100">
+                    <ul
+                        role="discount-list"
+                        *ngIf="discountsList?.length === 0"
+                        class="grp-list group-list-no-found users-last-list"
+                    >
+                        <li role="items" class="list-item sidebarTooltip text-overflow-ellipsis">
+                            <span class="account-list d-block w-100"> {{ commonLocaleData?.app_no_data_found }}</span>
+                        </li>
                     </ul>
-                </ng-container>
+                    <ng-container *ngIf="discountsList?.length">
+                        <ul role="discount-list-items" class="grp-list users-last-list">
+                            <cdk-virtual-scroll-viewport
+                                tabindex="0"
+                                class="virtual-group-list overflow-x-hidden"
+                                [itemSize]="37"
+                                [minBufferPx]="400"
+                                [maxBufferPx]="800"
+                                #cdkMenu
+                            >
+                                <li
+                                    role="discount-items"
+                                    *cdkVirtualFor="let discount of discountsList; let j = index; trackBy: trackByFn"
+                                    class="list-item sidebarTooltip text-overflow-ellipsis"
+                                    [ngClass]="{ 'hilighted': j === selectedIndex }"
+                                >
+                                    <a
+                                        aria-label="discount"
+                                        #focusElement
+                                        href="javascript:void(0);"
+                                        class="isAcc account-list"
+                                        id="acc_{{ discount.label }}"
+                                        tooltip="{{ discount.label }}"
+                                        placement="bottom"
+                                        (click)="toggleDiscountSelected(discount)"
+                                        (keydown.enter)="toggleDiscountSelected(discount)"
+                                        cdkFocusInitial
+                                    >
+                                        {{ discount?.label }}
+                                    </a>
+                                </li>
+                            </cdk-virtual-scroll-viewport>
+                        </ul>
+                    </ng-container>
+                </div>
             </div>
         </div>
     </div>
+    <div class="sidebar-list form-control" [hidden]="!showTaxSidebar">
+        <div class="bd-rb d-flex justify-content-between align-items-center discount-sidebar-section">
+            <h3 class="primary-color">{{ localeData?.tax_list }}</h3>
+            <i class="fa fa-close pdR-5 cursor-pointer" (click)="closeTaxSidebar()"></i>
+        </div>
+        <div [style.width]="width" class="h-100">
+            <div #dd class="menu" *ngIf="showTaxSidebar" class="h-100">
+                <div class="h-100">
+                    <ul
+                        role="tax-list"
+                        *ngIf="companyTaxesList?.length === 0"
+                        class="grp-list group-list-no-found users-last-list"
+                    >
+                        <li role="tax-list-items" class="list-item sidebarTooltip text-overflow-ellipsis">
+                            <span class="account-list d-block w-100"> {{ commonLocaleData?.app_no_data_found }}</span>
+                        </li>
+                    </ul>
+                    <ng-container *ngIf="companyTaxesList?.length">
+                        <ul role="user-list" class="grp-list users-last-list">
+                            <cdk-virtual-scroll-viewport
+                                tabindex="0"
+                                class="virtual-group-list overflow-x-hidden"
+                                [itemSize]="37"
+                                [minBufferPx]="400"
+                                [maxBufferPx]="800"
+                                #cdkMenu
+                            >
+                                <li
+                                    role="tax-items"
+                                    *cdkVirtualFor="let tax of companyTaxesList; let j = index; trackBy: trackByFn"
+                                    class="list-item sidebarTooltip text-overflow-ellipsis"
+                                    [ngClass]="{ 'hilighted': j === selectedIndex }"
+                                >
+                                    <a
+                                        aria-label="account"
+                                        #focusElement
+                                        href="javascript:void(0);"
+                                        class="isAcc account-list"
+                                        id="acc_{{ tax.label }}"
+                                        tooltip="{{ tax.label }}"
+                                        placement="bottom"
+                                        (click)="toggleTaxSelected(tax)"
+                                        (keydown.enter)="toggleTaxSelected(tax)"
+                                        cdkFocusInitial
+                                    >
+                                        {{ tax?.label }}
+                                    </a>
+                                </li>
+                            </cdk-virtual-scroll-viewport>
+                        </ul>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+<generic-aside-menu-account
+    [allGroups]="allGroups"
+    [class]="accountAsideMenuState"
+    [@slideInOut]="accountAsideMenuState"
+    (closeAsideEvent)="toggleAccountAsidePane($event)"
+    [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' }"
+    [selectedGrpUniqueName]="categoryOfAccounts"
+    *ngIf="accountAsideMenuState === 'in'"
+    [selectedAccountUniqueName]="null"
+    (onShortcutPress)="toggleAccountAsidePane()"
+    (addEvent)="addNewSidebarAccount($event)"
+    (updateEvent)="updateSidebarAccount($event)"
+></generic-aside-menu-account>
+
+<!--Modal for All Items -->
+<ng-template #chequeEntryModal>
+    <div class="modal-header theme-bg pd-l2 pd-r2">
+        <h3 class="modal-title bg" id="modal-title">{{ localeData?.cheque_details }}</h3>
+        <button
+            mat-icon-button
+            aria-hidden="true"
+            class="close"
+            [attr.aria-label]="commonLocaleData?.app_close"
+            (click)="closeChequeDetailForm()"
+        >
+            ×
+        </button>
+    </div>
+    <div class="modal-body pd-l2 pd-r2 clearfix d-flex">
+        <form
+            *ngIf="chequeDetailForm"
+            autocomplete="off"
+            novalidate
+            name="chequeDetailForm"
+            [formGroup]="chequeDetailForm"
+            class="new-account-form"
+        >
+            <div class="clearfix mr-t1">
+                <input-field
+                    [autocomplete]="'off'"
+                    [name]="'account1'"
+                    [placeholder]="localeData?.cheque_number"
+                    [type]="'text'"
+                    formControlName="chequeNumber"
+                    (keydown)="onCheckNumberFieldKeyDown($event, 'chqNumber', chequeClearanceDateInput)"
+                    [label]="localeData?.cheque_number"
+                    (keydown.enter)="$event.preventDefault()"
+                    #chequeNumberInput
+                    cdkFocusInitial
+                >
+                </input-field>
+            </div>
+            <div class="clearfix mr-t1 check-clearance-date">
+                <giddh-datepicker
+                    [name]="'entryDate'"
+                    [placeholder]="giddhDateFormat"
+                    [cssClass]="'form-control voucher-date-field'"
+                    formControlName="chequeClearanceDate"
+                    [showToggleIcon]="false"
+                    (keydown.enter)="$event.preventDefault()"
+                    (dateSelected)="selectDate($event)"
+                    [appearance]="'outline'"
+                    [cssClass]="'w-100'"
+                >
+                </giddh-datepicker>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="d-flex float-end column-gap15">
+            <button
+                mat-stroked-button
+                color="primary"
+                class="w-100"
+                (click)="onSubmitChequeDetail(); focusDebitCreditAmount()"
+                #chqFormSubmitBtn
+            >
+                {{ commonLocaleData?.app_create }}
+            </button>
+            <button mat-stroked-button color="primary" class="w-100" (click)="closeChequeDetailForm()">
+                {{ commonLocaleData?.app_cancel }}
+            </button>
+        </div>
+    </div>
+</ng-template>
+<!--
+<div class="aside-overlay" (click)="closeCreateStock($event)" *ngIf="asideMenuStateForProductService === 'in'"></div>
+<aside-inventory-stock-group
+    *ngIf="asideMenuStateForProductService === 'in'"
+    [autoFocus]="autoFocusStockGroupField"
+    (closeAsideEvent)="closeCreateStock()"
+    [class]="asideMenuStateForProductService"
+    [@slideInOut]="asideMenuStateForProductService"
+>
+</aside-inventory-stock-group> -->
+
+<!-- Recipt entry modal -->
+<!-- <ng-template #receiptEntry>
+    <receipt-entry
+        *ngIf="currentTransaction"
+        [transaction]="currentTransaction"
+        [activeCompany]="activeCompany"
+        [voucherDate]="journalDate"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        (entriesList)="handleEntries($event)"
+    ></receipt-entry>
+</ng-template> -->
+
+<!-- <div
+                                    *ngIf="
+                                        transaction.type === 'to' &&
+                                        transaction.voucherAdjustments &&
+                                        transaction.voucherAdjustments.length > 0
+                                    "
+                                >
+                                    <div
+                                        class="debtor-details-form pb-1 pd-t05"
+                                        *ngFor="let entry of receiptEntries; let i = index"
+                                    >
+                                        <div class="form-fields">
+                                            <div class="single-field relative">
+                                                <sh-select
+                                                    #adjustmentTypesField
+                                                    [options]="entry.allowedTypes"
+                                                    [placeholder]="commonLocaleData?.app_type"
+                                                    name="type"
+                                                    [(ngModel)]="entry.type"
+                                                    class="receipt-type"
+                                                    (selected)="onSelectAdjustmentType($event, entry)"
+                                                ></sh-select>
+                                                <i
+                                                    class="icon-arrow-down"
+                                                    (click)="adjustmentTypesField?.show($event)"
+                                                ></i>
+                                            </div>
+                                            <div class="single-field" *ngIf="entry.type !== 'againstReference'">
+                                                    <input type="text" class="form-control" placeholder="Notes" name="notes" [(ngModel)]="entry.note">
+                                                </div>
+                                            <div
+                                                class="single-field relative {{ entry.tax?.uniqueName }}"
+                                                *ngIf="entry.type !== 'againstReference'"
+                                            >
+                                                <sh-select
+                                                    [options]="taxListSource$ | async"
+                                                    [placeholder]="commonLocaleData?.app_select_tax"
+                                                    name="tax"
+                                                    [(ngModel)]="entry.tax.uniqueName"
+                                                    [forceClearReactive]="forceClear$ | async"
+                                                    [disabled]="entry.type === 'receipt'"
+                                                    (selected)="onSelectTax($event, entry)"
+                                                    class="select-tax"
+                                                >
+                                                </sh-select>
+                                                <i class="icon-arrow-down"></i>
+                                            </div>
+                                            <div
+                                                class="single-field relative"
+                                                *ngIf="entry.type === 'againstReference'"
+                                                [ngClass]="{ 'set-width': entry.type === 'againstReference' }"
+                                            >
+                                                <sh-select
+                                                    [options]="pendingInvoiceListSource$ | async"
+                                                    name="invoiceNo"
+                                                    [placeholder]="localeData?.against_reference_placeholder"
+                                                    [(ngModel)]="entry.invoice.uniqueName"
+                                                    (selected)="onSelectInvoice($event, entry)"
+                                                ></sh-select>
+                                                <i class="icon-arrow-down"></i>
+                                            </div>
+                                            <div class="single-field">
+                                                <input
+                                                    type="tel"
+                                                    class="form-control"
+                                                    [placeholder]="localeData?.enter_amount"
+                                                    name="amount"
+                                                    [(ngModel)]="entry.amount"
+                                                    (keydown)="validateAmount($event, entry)"
+                                                    (blur)="validateEntry(entry)"
+                                                    decimalDigitsDirective
+                                                    [mask]="inputMaskFormat"
+                                                    (input)="formatAmount(entry)"
+                                                />
+                                            </div>
+                                            <div class="single-field cr-dr-field">
+                                                <p>
+                                                    <label class="d-block">&nbsp;</label>
+                                                    {{ localeData?.to_cr }}
+                                                </p>
+                                            </div>
+                                            <span class="delete-row">
+                                                <a href="javascript:;" (click)="removeReceiptEntry(i)" *ngIf="i > 0"
+                                                    ><i class="icon-cross"></i
+                                                ></a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div> -->
+<!-- <table
+                                    *ngIf="requestObj.voucherType !== 'contra' && requestObj.voucherType !== 'receipt'"
+                                >
+                                    <tbody>
+                                        <ng-container *ngIf="transaction.inventory && transaction.inventory.length">
+                                            <tr
+                                                *ngFor="
+                                                    let inventory of transaction.inventory;
+                                                    let idx = index;
+                                                    let l = last
+                                                "
+                                                [ngClass]="{
+                                                    'active-row':
+                                                        isSelectedRow && selectedStockIdx === idx && selectedIdx === i
+                                                }"
+                                            >
+                                                <td [style.width.px]="250">
+                                                    <input
+                                                        onReturn
+                                                        (keydown)="detectKey($event)"
+                                                        (keydown.Tab)="addNewEntry(transaction.amount, transaction, i)"
+                                                        (keyup)="searchStock($event?.target?.value)"
+                                                        type="text"
+                                                        [placeholder]="localeData?.search_stock_placeholder"
+                                                        class="form-control stock-field"
+                                                        [(ngModel)]="inventory.stock.name"
+                                                        [ngClass]="{
+                                                            'focus': isSelectedRow && selectedStockIdx === idx
+                                                        }"
+                                                        (focus)="onStockFocus($event, idx, i)"
+                                                        (blur)="onStockBlur(qty)"
+                                                    />
+                                                </td>
+                                                <td>
+                                                    <input
+                                                        onReturn
+                                                        [disabled]="!inventory.stock.name"
+                                                        type="text"
+                                                        #qty
+                                                        [placeholder]="commonLocaleData?.app_quantity"
+                                                        class="form-control text-right"
+                                                        [(ngModel)]="inventory.quantity"
+                                                        (input)="changeQuantity(idx, inventory.quantity)"
+                                                        [ngClass]="{
+                                                            'focus': isSelectedRow && selectedStockIdx === idx
+                                                        }"
+                                                        decimalDigitsDirective
+                                                        [mask]="inputMaskFormat"
+                                                        (focus)="selectedIdx = i"
+                                                    />
+                                                </td>
+                                                <td>
+                                                    <input
+                                                        onReturn
+                                                        type="text"
+                                                        [disabled]="!inventory.stock.name"
+                                                        [placeholder]="commonLocaleData?.app_rate"
+                                                        class="form-control text-right"
+                                                        [(ngModel)]="inventory.unit.rate"
+                                                        (input)="changePrice(idx, inventory.unit.rate)"
+                                                        (focus)="selectedStockIdx = idx; selectedIdx = i"
+                                                        [ngClass]="{
+                                                            'focus': isSelectedRow && selectedStockIdx === idx
+                                                        }"
+                                                        decimalDigitsDirective
+                                                        [mask]="inputMaskFormat"
+                                                    />
+                                                </td>
+                                                <td>
+                                                    <input
+                                                        type="text"
+                                                        [placeholder]="commonLocaleData?.app_unit"
+                                                        class="form-control text-left"
+                                                        [(ngModel)]="inventory.unit.stockUnitCode"
+                                                        [readonly]="true"
+                                                        (focus)="selectedStockIdx = idx; selectedIdx = i"
+                                                        [disabled]="!inventory.stock.name"
+                                                    />
+                                                </td>
+                                                <td>
+                                                    <input
+                                                        onReturn
+                                                        type="text"
+                                                        [disabled]="!inventory.stock.name"
+                                                        [placeholder]="commonLocaleData?.app_total"
+                                                        class="form-control text-right"
+                                                        #toAmountField
+                                                        [(ngModel)]="inventory.amount"
+                                                        (focus)="selectedStockIdx = idx; selectedIdx = i"
+                                                        [ngClass]="{
+                                                            'focus': isSelectedRow && selectedStockIdx === idx
+                                                        }"
+                                                        (input)="amountChanged(idx)"
+                                                        (keydown.Tab)="validateAndAddNewStock(idx)"
+                                                        (keyup.Enter)="validateAndAddNewStock(idx)"
+                                                        decimalDigitsDirective
+                                                        [mask]="inputMaskFormat"
+                                                    />
+                                                </td>
+                                            </tr>
+                                        </ng-container>
+                                    </tbody>
+                                </table> -->
