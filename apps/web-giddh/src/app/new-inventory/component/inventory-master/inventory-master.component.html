@@ -18,7 +18,7 @@
             ></text-field>
         </div>
         <div class="mat-list-wrap">
-            <span class="pull-right pd-t05" *ngIf="breadcrumbs?.length === 0 && !createUpdateGroup">
+            <span class="pull-right pt-2" *ngIf="breadcrumbs?.length === 0 && !createUpdateGroup">
                 <watch-video [cssClass]="'text-primary'" [moduleName]="'INVENTORY_MASTER'"></watch-video>
             </span>
             <div class="no-data" *ngIf="isSearching && !masterColumnsData?.length">
