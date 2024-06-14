@@ -153,7 +153,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     public viewFilteredTxn(filter, val) {
         this.filterParam[filter] = val;
         if (filter === 'entityType') {
-            this.filterParam.type = 'all';
+            this.filterParam.type = this.filterParam.type ?? 'all';
             this.filterParam.status = 'all';
         }
         this.store.dispatch(this.gstAction.GetSummaryTransaction(this.selectedGst, this.filterParam));
