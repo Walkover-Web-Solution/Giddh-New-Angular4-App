@@ -540,6 +540,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (this.showTaxSidebar) {
             this.keydownUp(event);
         }
+        this.journalVoucherForm.get('transactions').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe( value => {
+            if(value) {
+                console.log(value);
+            }
+        })
     }
 
     /**
@@ -1349,10 +1354,22 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public calculateAmount(amount: any, transactionObj: any, indx: number): any {
-        let lastIndx = (this.journalVoucherForm.get('transactions') as FormArray).length - 1;
+        const formAsArray = this.journalVoucherForm.get('transactions') as FormArray;
+        let lastIndx = formAsArray.length - 1;
         // Update amount in transaction object
-        transactionObj.get('amount').patchValue(Number(amount));
-        transactionObj.get('total').patchValue(transactionObj.get('amount').value);
+        // transactionObj.get('amount').patchValue(Number(amount));
+        // transactionObj.get('total').patchValue(transactionObj.get('amount').value);
+        if(transactionObj.get('isDiscountApplied').value) {
+            formAsArray.controls?.forEach((control: FormGroup) => {
+                if (control.value?.selectedAccount?.parentGroup?.includes("revenuefromoperations") || control.value.selectedAccount.parentGroup.includes("sales")) {
+                    control.get('actualAmount').patchValue(Number(control?.value?.amount) - amount);
+                    control.get('amount')?.patchValue(Number(control?.value?.amount) - amount);
+                    console.log("calculateAmount: ", control);
+                }
+            });
+            console.log("Form: ", this.journalVoucherForm.value);
+        }
+        
         const { totalCredit, totalDebit } = this.calculateTotalCreditAndDebit();
         this.totalCreditAmount = totalCredit;
         this.totalDebitAmount = totalDebit;
@@ -2336,7 +2353,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 count: PAGINATION_LIMIT
             };
             // Loaded accounts will be of groups -> (Groups - Except Groups)
-            this.searchService.searchAccountV2(requestObject).subscribe(data => {
+            this.searchService.searchAccountV2(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(data => {
                 if (data && data.body && data.body.results) {
                     const searchResults = data.body.results.map(result => {
                         return {
