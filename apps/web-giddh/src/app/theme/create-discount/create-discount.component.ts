@@ -129,6 +129,9 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
         let model = this.createDiscountForm.value;
         delete model.accountName;
         delete model.discountUniqueName;
+        if (!model.accountUniqueName) {
+            delete model.accountUniqueName;
+        }
 
         this.componentStore.saveDiscount(model);
     }
@@ -147,6 +150,9 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
         }
         let model = this.createDiscountForm.value;
         delete model.accountName;
+        if (!model.accountUniqueName) {
+            delete model.accountUniqueName;
+        }
         this.componentStore.updateDiscount(model);
     }
 
