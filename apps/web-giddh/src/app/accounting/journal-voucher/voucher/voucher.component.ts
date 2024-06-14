@@ -695,8 +695,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public newEntryObj(byOrTo?: string, typeData?: any, type?: any): void {
+        console.log(byOrTo,typeData, type );
+        
         let formArray = this.journalVoucherForm.get('transactions') as FormArray;
         const newTransactionFormGroup = this.initTransactionFormGroup();
+        
         let discountObj = null;
         let taxData = null;
         if (type === 'discount') {
@@ -1186,6 +1189,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 let idx = this.selectedIdx;
                 transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
                 transactionAtIndex = transactionsFormArray.at(idx) as FormGroup;
+                const byControlValue = transactionsFormArray.value.find(item => item?.type === "by");
                 if (acc && acc.parentGroups.find((pg) => pg?.uniqueName === 'bankaccounts')) {
                     this.openChequeDetailForm();
                 }
@@ -1206,9 +1210,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     };
 
                     // Update transaction form group with received data
-                    transactionAtIndex?.patchValue({
-                        amount: !this.isSalesEntry ? this.calculateDiffAmount(transactionAtIndex.get('type')?.value?.toLowerCase()) : 0,
-                        actualAmount: !this.isSalesEntry ? this.calculateDiffAmount(transactionAtIndex.get('type')?.value?.toLowerCase()) : 0,
+                    transactionAtIndex?.patchValue({    
+                        amount: !this.isSalesEntry ? this.calculateDiffAmount(transactionAtIndex.get('type')?.value?.toLowerCase()) : byControlValue.amount ?? 0,
+                        actualAmount: !this.isSalesEntry ? this.calculateDiffAmount(transactionAtIndex.get('type')?.value?.toLowerCase()) : byControlValue.amount ?? 0,
                         particular: accModel?.UniqueName,
                         currentBalance: '',
                         selectedAccount: {
@@ -1304,34 +1308,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     }
                 });
             }
-            this.checkSalesEntry();
         });
-    }
-    /**
-     * This will be use for check sales entry
-     *
-     * @memberof AccountAsVoucherComponent
-     */
-    public checkSalesEntry(): void {
-        let parentGroups = ['revenuefromoperations', 'otherincome', 'fixedassets'];
-        (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
-            const isSalesEntry = this.checkIfSalesAccount(control, parentGroups);
-            this.salesEntry.emit(isSalesEntry);
-            this.isSalesEntry = isSalesEntry;
-        });
-    }
-
-    /**
-     *This will be use for sales account
-     *
-     * @param {FormGroup} control
-     * @param {string[]} parentGroups
-     * @return {*}  {boolean}
-     * @memberof AccountAsVoucherComponent
-     */
-    public checkIfSalesAccount(control: FormGroup, parentGroups: string[]): boolean {
-        const selectedAccount = control?.get('selectedAccount.parentGroup')?.value;
-        return Array.isArray(selectedAccount) && selectedAccount.some(group => parentGroups.includes(group));
     }
 
     /**
@@ -1777,12 +1754,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public refreshEntry(): void {
         const transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
-
+        this.isSalesEntry = false;
+        this.salesEntry.emit(this.isSalesEntry);
         // Clear transactions FormArray
         while (transactionsFormArray.length !== 0) {
             transactionsFormArray.removeAt(0);
         }
-        this.checkSalesEntry();
         // Reset other variables and properties
         this.showConfirmationBox = false;
         this.totalCreditAmount = 0;
@@ -1827,6 +1804,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
                 case VOUCHERS.SALES:
                     firstTransaction.patchValue({ type: 'by' });
+                    this.isSalesEntry = true;
+                    this.salesEntry.emit(this.isSalesEntry);
                     break;
 
                 default:
