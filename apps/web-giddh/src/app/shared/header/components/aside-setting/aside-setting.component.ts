@@ -39,6 +39,8 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public routerUrl: string = "";
     /** Hold selected active company */
     public selectedCompany: CompanyResponse = null;
+    /** Hold true if tag menu is open */
+    public isTagMenuOpened: boolean = false;
 
     constructor(private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
 

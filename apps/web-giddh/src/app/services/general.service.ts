@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../theme/confirmation-modal/confirmation-modal.interface';
 import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
@@ -1757,7 +1757,7 @@ export class GeneralService {
      * @returns {string} The current timestamp.
      * @memberof GeneralService
      */
-    public getTimesStamp(): any {
+    public getTimeStamp(): any {
         const timestamp = new Date().toISOString();
         return timestamp;
     }
@@ -1939,7 +1939,7 @@ export class GeneralService {
      */
     public getUserAgentData(): any {
         let args: any = {};
-        args["timestamp"] = this.getTimesStamp();
+        args["timestamp"] = this.getTimeStamp();
         args["Gov-Client-Timezone"] = 'UTC' + this.getUserTimeZone();
         args["Gov-client-screens"] = this.getClientScreens();
         args["Gov-client-window-size"] = this.getClientWindowSize();
@@ -1951,7 +1951,7 @@ export class GeneralService {
      *
      * @memberof GeneralService
      */
-    public getClientIp(): any {
+    public getClientIp(): Observable<any> {
         return this.http.get<any>(MOBILE_NUMBER_SELF_URL);
     }
 

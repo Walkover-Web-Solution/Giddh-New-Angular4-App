@@ -19,9 +19,10 @@
         </div>
         <div class="container-fluid">
             <div class="clearfix pd-t15">
-                <a (click)="navigateToPreviousPage()" class="cursor-pointer fond-inline-block mr-2"
-                    ><i class="fa fa-angle-left middle"></i> {{ commonLocaleData?.app_back }}</a
-                >
+                <button mat-stroked-button (click)="navigateToPreviousPage()">
+                    <i class="fa fa-angle-left font-16 mr-1"></i>
+                    <span>{{ commonLocaleData?.app_back }}</span>
+                </button>
                 <span *ngIf="vatReportTransactions.results && vatReportTransactions.results.length > 0">{{
                     vatReportTransactions.results[0].description
                 }}</span>
@@ -31,6 +32,7 @@
                     mat-table
                     [dataSource]="vatReportTransactions.results"
                     class="table basic table-bordered mt-2 invoice-table desktop-table"
+                    *ngIf="vatReportTransactions?.results?.length && !isLoading"
                 >
                     <ng-container matColumnDef="date">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.invoice_date }}</th>

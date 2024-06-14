@@ -48,51 +48,51 @@
         [dropdownMinHeight]="dropdownMinHeight"
         (scrollEnd)="scrollEnd.emit()"
     ></virtual-list-menu> -->
-<div [style.width]="width" class="h-100">
-    <div #dd class="menu" *ngIf="isOpen" class="h-100">
-        <ul *ngIf="rows?.length === 0" class="grp-list group-list-no-found users-last-list">
-            <li>
-                <a href="javascript:void(0)"> {{ notFoundMsg }}</a>
-            </li>
-            <li>
-                <a class="btn-link" (click)="noResultsClicked.emit(); hide()" href="javascript:void(0)">{{
-                    notFoundLinkText
-                }}</a>
-            </li>
-        </ul>
-        <div
-            class="h-100"
-        >
-            <ng-container *ngIf="rows?.length">
-                <ul class="grp-list users-last-list">
-                    <cdk-virtual-scroll-viewport
-                        class="virtual-group-list overflow-x-hidden"
-                        [itemSize]="37"
-                        [minBufferPx]="400"
-                        [maxBufferPx]="800"
-                        #cdkMenu
-                    >
-                        <li
-                            *cdkVirtualFor="let row of rows; let j = index; trackBy: trackByFn"
-                            [ngClass]="{ 'hilighted': j === selectedIndex }"
-                            class="list-item sidebarTooltip text-overflow-ellipsis"
+    <div [style.width]="width" class="h-100">
+        <div #dd class="menu" *ngIf="isOpen" class="h-100">
+            <ul *ngIf="rows?.length === 0" class="grp-list group-list-no-found users-last-list">
+                <li>
+                    <a href="javascript:void(0)"> {{ notFoundMsg }}</a>
+                </li>
+                <li>
+                    <a class="btn-link" (click)="noResultsClicked.emit(); hide()" href="javascript:void(0)">{{
+                        notFoundLinkText
+                    }}</a>
+                </li>
+            </ul>
+            <div
+                class="h-100"
+            >
+                <ng-container *ngIf="rows?.length">
+                    <ul class="grp-list users-last-list">
+                        <cdk-virtual-scroll-viewport
+                            class="virtual-group-list overflow-x-hidden"
+                            [itemSize]="37"
+                            [minBufferPx]="400"
+                            [maxBufferPx]="800"
+                            #cdkMenu
                         >
-                            <a
-                                #focusElement
-                                href="javascript:void(0);"
-                                class="isAcc account-list"
-                                id="acc_{{ row.label }}"
-                                tooltip="{{ row.label }}"
-                                placement="bottom"
-                                (click)="toggleSelected(row)"
-                                (keydown.enter)="toggleSelected(row)"
+                            <li
+                                *cdkVirtualFor="let row of rows; let j = index; trackBy: trackByFn"
+                                [ngClass]="{ 'hilighted': j === selectedIndex }"
+                                class="list-item sidebarTooltip text-overflow-ellipsis"
                             >
-                                {{ row?.label }}
-                            </a>
-                        </li>
-                    </cdk-virtual-scroll-viewport>
-                </ul>
-            </ng-container>
+                                <a
+                                    #focusElement
+                                    href="javascript:void(0);"
+                                    class="isAcc account-list"
+                                    id="acc_{{ row.label }}"
+                                    tooltip="{{ row.label }}"
+                                    placement="bottom"
+                                    (click)="toggleSelected(row)"
+                                    (keydown.enter)="toggleSelected(row)"
+                                >
+                                    {{ row?.label }}
+                                </a>
+                            </li>
+                        </cdk-virtual-scroll-viewport>
+                    </ul>
+                </ng-container>
+            </div>
         </div>
     </div>
-</div>

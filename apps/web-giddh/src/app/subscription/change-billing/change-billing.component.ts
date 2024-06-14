@@ -14,6 +14,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { SubscriptionsService } from '../../services/subscriptions.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'change-billing',
@@ -88,12 +89,15 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
         billingName: "",
         uniqueName: ""
     };
+    /** Hold current time stamp  */
+    public currentTimeStamp: string;
 
     constructor(
         private formBuilder: FormBuilder,
         private componentStore: ChangeBillingComponentStore,
         private commonActions: CommonActions,
         private toasterService: ToasterService,
+        private generalService: GeneralService,
         private subscriptionService: SubscriptionsService,
         private store: Store<AppState>,
         private changeDetection: ChangeDetectorRef,
@@ -110,6 +114,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
      * @memberof ChangeBillingComponent
      */
     public ngOnInit(): void {
+        this.currentTimeStamp = this.generalService.getTimeStamp();
         this.initForm();
         this.getCountry();
         this.getStates();
@@ -508,7 +513,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
             },
             address: this.changeBillingForm.value.address
         }
-        if (this.changeBillingForm.value.country.code === 'UK') {
+        if (this.changeBillingForm.value.country.code === 'GB') {
             request['county'] = {
                 name: this.changeBillingForm.value.state.name ? this.changeBillingForm.value.state.name : this.changeBillingForm.value.state.label,
                 code: this.changeBillingForm.value.state.code ? this.changeBillingForm.value.state.code : this.changeBillingForm.value.state.value

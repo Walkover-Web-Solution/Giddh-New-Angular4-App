@@ -244,7 +244,9 @@
                                     <button
                                         *ngIf="
                                             element?.status?.toLowerCase() === 'expired' &&
-                                            element?.isOwner
+                                            element?.isOwner &&
+                                            element?.region?.code !== 'GBR' &&
+                                            activeCompany?.planVersion === 2
                                         "
                                         mat-menu-item
                                         (click)="buyPlan(element)"

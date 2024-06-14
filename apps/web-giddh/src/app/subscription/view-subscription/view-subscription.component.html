@@ -13,9 +13,7 @@
                 <mat-card-content *ngIf="!(viewSubscriptionDataInProgress$ | async)">
                     <div class="d-flex justify-content-between column-gap1 align-items-center border-bottom pb-2">
                         <div class="d-flex column-gap1">
-                            <h4 class="font-16">
-                                {{ commonLocaleData?.app_view }} {{ localeData?.tab_heading }}
-                            </h4>
+                            <h4 class="font-16">{{ commonLocaleData?.app_view }} {{ localeData?.tab_heading }}</h4>
                             <span class="badge btn-success cp font-12">{{
                                 viewSubscriptionData?.status | uppercase
                             }}</span>
@@ -40,7 +38,9 @@
                                 (click)="buyPlan(viewSubscriptionData)"
                                 *ngIf="
                                     viewSubscriptionData?.isOwner &&
-                                    viewSubscriptionData?.status?.toLowerCase() === 'expired'
+                                    viewSubscriptionData?.status?.toLowerCase() === 'expired' &&
+                                    viewSubscriptionData?.region?.code !== 'GBR' &&
+                                    activeCompany?.planVersion === 2
                                 "
                             >
                             <!-- &&
@@ -66,12 +66,15 @@
                             >
                                 {{ commonLocaleData?.app_buy_plan }}
                             </button>
+
                             <button
                                 aria-label="plan"
                                 mat-menu-item
                                 (click)="buyPlan(viewSubscriptionData)"
                                 *ngIf="
-                                    viewSubscriptionData?.status?.toLowerCase() === 'expired'
+                                    viewSubscriptionData?.status?.toLowerCase() === 'expired' &&
+                                    viewSubscriptionData?.region?.code !== 'GBR' &&
+                                    activeCompany?.planVersion === 2
                                 "
                             >
                                 <!--   &&
