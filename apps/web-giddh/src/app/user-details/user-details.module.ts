@@ -37,6 +37,8 @@ import { MatCardModule } from '@angular/material/card';
 import { SafePipeModule } from '../shared/helpers/pipes/safePipe/safePipe.module';
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 
 @NgModule({
@@ -57,7 +59,6 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
         FormsModule,
         ReactiveFormsModule,
         UserDetailsRoutingModule,
-        TabsModule.forRoot(),
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
@@ -65,9 +66,6 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
         DecimalDigitsModule,
         SharedModule,
         ElementViewChildModule,
-        ModalModule.forRoot(),
-        BsDropdownModule.forRoot(),
-        TooltipModule.forRoot(),
         ScrollingModule,
         NoDataModule,
         MatToolbarModule,
@@ -81,13 +79,14 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
         MatDividerModule,
         MatTableModule,
         MatDialogModule,
-        ShSelectModule,
         MatSliderModule,
         MatCardModule,
         SafePipeModule,
         GiddhPageLoaderModule,
         NoDataModule,
         MatSlideToggleModule,
+        MatTooltipModule,
+        FormFieldsModule,
         WatchVideoModule
     ],
     providers: [

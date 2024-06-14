@@ -6,26 +6,42 @@
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="container-fluid clearfix" *ngIf="allRoles?.length > 0">
-        <a
-            href="javascript:void(0)"
-            *ngIf="showBackButton"
-            class="btn btn-sky-blue pull-right mr-t1 permission-btn mr-b1"
-            [routerLink]="['/pages/settings/permission']"
-            >{{commonLocaleData?.app_back}}</a
-        >
-        <div class="col-sm-12 mr-t15 p-0 role clearfix" *ngFor="let role of allRoles">
+        <div class="col-sm-12 mr-t2 mr-b2 d-flex justify-content-end column-gap5">
+            <button mat-stroked-button color="primary" (click)="openPermissionDialog()">
+                {{localeData?.add_new_role}}
+            </button>
+            <button
+                mat-stroked-button
+                *ngIf="showBackButton"
+                class="btn custom-btn"
+                [routerLink]="['/pages/settings/permission']"
+            >
+                {{commonLocaleData?.app_back}}
+            </button>
+        </div>
+        <div class="col-sm-12 mr-t15 p-0 role clearfix btn-show" *ngFor="let role of allRoles">
             <div class="row mr-0 ml-0">
                 <div class="col-md-3 col-sm-3 col-12 p-0 role-head cp">
                     <span class="vertical-center">
                         <h1>{{role.name}}</h1>
-                        <div class="text-center mr-t2 on-hover">
-                            <button *ngIf="!role.isFixed" class="btn btn-sm btn-primary" (click)="updateRole(role);">
+                        <div class="text-center mr-t2 on-hover d-flex column-gap1">
+                            <button
+                                mat-stroked-button
+                                *ngIf="!role.isFixed"
+                                class="custom-btn"
+                                (click)="updateRole(role)"
+                            >
                                 {{commonLocaleData?.app_edit}}
                             </button>
-                            <button *ngIf="!role.isFixed" class="btn btn-sm btn-danger" (click)="deleteRole(role);">
+                            <button
+                                mat-stroked-button
+                                color="warn"
+                                *ngIf="!role.isFixed"
+                                (click)="deleteRole(role);"
+                            >
                                 {{commonLocaleData?.app_delete}}
                             </button>
-                            <button *ngIf="role.isFixed" class="btn btn-sm btn-primary" (click)="updateRole(role);">
+                            <button mat-stroked-button color="primary" (click)="updateRole(role)">
                                 {{commonLocaleData?.app_view}}
                             </button>
                         </div>
@@ -38,40 +54,30 @@
                 </div>
             </div>
         </div>
-
-        <div class="col-sm-12 mr-t2 mr-b2 role text-center clearfix pd-4 new-box">
-            <h1 class="inline-block cursor-pointer" (click)="openPermissionModal()">{{localeData?.add_new_role}}</h1>
-        </div>
     </div>
 
     <!--add and manage role model -->
-    <div bsModal #permissionModel="bs-modal" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <permission-model
-                    *ngIf="permissionModel.isShown && localeData?.page_heading"
-                    [localeData]="localeData"
-                    [commonLocaleData]="commonLocaleData"
-                    (closeEvent)="closePopupEvent($event)"
-                ></permission-model>
-            </div>
+    <ng-template #permissiomDialog>
+        <div class="modal-content">
+            <permission-model
+                [localeData]="localeData"
+                [commonLocaleData]="commonLocaleData"
+                (closeEvent)="closePopupEvent($event)"
+            ></permission-model>
         </div>
-    </div>
+    </ng-template>
 
     <!--delete role confirmation model -->
-    <div bsModal #permissionConfirmationModel="bs-modal" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <delete-role-confirmation-model
-                    *ngIf="permissionConfirmationModel.isShown"
-                    [selectedRoleForDelete]="selectedRoleForDelete"
-                    [localeData]="localeData"
-                    [commonLocaleData]="commonLocaleData"
-                    (confirmDeleteEvent)="deleteConfirmedRole()"
-                    (closeModelEvent)="closeConfirmationPopup()"
-                >
-                </delete-role-confirmation-model>
-            </div>
+    <ng-template #permissionConfirmationDialog>
+        <div class="modal-content">
+            <delete-role-confirmation-model
+                [selectedRoleForDelete]="selectedRoleForDelete"
+                [localeData]="localeData"
+                [commonLocaleData]="commonLocaleData"
+                (confirmDeleteEvent)="deleteConfirmedRole()"
+                (closeModelEvent)="closeConfirmationPopup()"
+            >
+            </delete-role-confirmation-model>
         </div>
-    </div>
+    </ng-template>
 </ng-container>

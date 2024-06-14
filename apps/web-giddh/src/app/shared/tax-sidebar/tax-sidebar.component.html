@@ -136,7 +136,7 @@
                             <span>{{ localeData?.unit_mapping }}</span>
                         </a>
                     </li>
-                    <li *ngIf="showVatMenus">
+                    <li *ngIf="showTaxMenus">
                         <a
                             href="javascript:;"
                             class="d-block clearfix"
@@ -150,7 +150,7 @@
                             <span>{{ localeData?.vat_report }}</span>
                         </a>
                     </li>
-                    <li *ngIf="showVatMenus && isZimbabweCompany">
+                    <li *ngIf="showTaxMenus && isZimbabweCompany">
                         <a
                             href="javascript:;"
                             class="d-block clearfix"
@@ -177,7 +177,7 @@
                             <span>{{ taxTypeSidebarLabel }}</span>
                         </a>
                     </li>
-                    <li *ngIf="showVatMenus && isUKCompany">
+                    <li *ngIf="showTaxMenus && isUKCompany">
                         <a
                             href="javascript:;"
                             class="d-block clearfix"
@@ -190,7 +190,7 @@
                             <span>{{ localeData?.vat_obligations }}</span>
                         </a>
                     </li>
-                    <li *ngIf="showVatMenus && (isZimbabweCompany || isKenyaCompany)">
+                    <li *ngIf="showTaxMenus && (isZimbabweCompany || isKenyaCompany)">
                         <a
                             href="javascript:;"
                             class="d-block clearfix"

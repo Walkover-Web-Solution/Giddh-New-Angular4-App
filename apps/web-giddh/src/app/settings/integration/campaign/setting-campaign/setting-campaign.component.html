@@ -55,28 +55,22 @@
                 ><i class="icon-left"></i><span class="back-text">{{ localeData?.communication?.msg91 }}</span>
             </span>
         </button>
-        <div class="d-flex align-items-end verify-form mr-t1">
+        <div class="d-flex align-items-center verify-form mr-t15">
             <div class="input-field">
-                <p class="label auth-label">
-                    {{ communicationPlatforms?.MSG91?.fields?.auth_key?.label
-                    }}<span class="mandatory-label" *ngIf="communicationPlatforms?.MSG91?.fields?.auth_key?.mandatory"
-                        >*</span
-                    >
-                </p>
-                <text-field
+                <input-field
+                    [label]="communicationPlatforms?.MSG91?.fields?.auth_key?.label"
                     [type]="'text'"
-                    [cssClass]="'form-control mat-field-border auth_key_input '"
+                    [cssClass]="'auth-key-input'"
                     [name]="'title'"
                     [placeholder]="localeData?.communication?.auth_key"
                     [(ngModel)]="communicationPlatformAuthModel.authFields[0].value"
-                    [ngClass]="{ 'fields-error': mandatoryFields.authKey }"
-                >
-                </text-field>
+                    [required]="mandatoryFields.authKey"
+                ></input-field>
             </div>
             <button
                 mat-stroked-button
                 color="primary"
-                class="mt-1 font-15"
+                class="font-15"
                 [disabled]="isCommunicationPlatformVerificationInProcess"
                 (click)="verifyCommunicationPlatform('MSG91')"
             >
@@ -222,23 +216,20 @@
             </div>
 
             <div class="trigger-input">
-                <p class="trigger-input-label">{{ localeData?.communication?.title }}<span>*</span></p>
-                <text-field
+                <input-field
+                    [label]="localeData?.communication?.title"
                     [type]="'text'"
-                    [cssClass]="'form-control mat-field-border'"
                     [placeholder]="localeData?.communication?.name_trigger"
                     [name]="'trigger'"
                     [(ngModel)]="createTrigger.title"
                     [ngClass]="{ 'fields-error': mandatoryFields.title }"
                     [allowValueReset]="true"
                     (onClear)="createTrigger.title = ''"
-                >
-                </text-field>
+                ></input-field>
             </div>
-            <div class="trigger-input">
-                <p class="trigger-input-label">{{ localeData?.communication?.condition }}<span>*</span></p>
-                <select-field
-                    [cssClass]="'form-control mat-field-border'"
+            <div class="trigger-input mr-t15">
+                <dropdown-field
+                    [label]="localeData?.communication?.condition"
                     [placeholder]="localeData?.communication?.select_condition"
                     [options]="triggerCondition"
                     (selectedOption)="selectConditions($event?.value)"
@@ -246,12 +237,11 @@
                     [ngClass]="{ 'fields-error': mandatoryFields.condition }"
                     [allowValueReset]="true"
                     (onClear)="createTrigger.condition.action[0] = ''"
-                ></select-field>
+                ></dropdown-field>
             </div>
-            <div class="trigger-input">
-                <p class="trigger-input-label">{{ localeData?.communication?.entity }}<span>*</span></p>
-                <select-field
-                    [cssClass]="'form-control mat-field-border'"
+            <div class="trigger-input mr-t15">
+                <dropdown-field
+                    [label]="localeData?.communication?.entity"
                     [placeholder]="localeData?.communication?.select_entity"
                     [options]="triggerEntity"
                     (selectedOption)="selectEntity($event?.value)"
@@ -259,34 +249,37 @@
                     [ngClass]="{ 'fields-error': mandatoryFields.entity }"
                     [allowValueReset]="true"
                     (onClear)="createTrigger.condition.entity = ''"
-                ></select-field>
+                    [required]="true"
+                ></dropdown-field>
             </div>
-            <div class="trigger-input">
-                <p class="trigger-input-label">{{ localeData?.communication?.sub_entity }}<span>*</span></p>
-                <mat-select
-                    name="subentity"
-                    class="form-control mat-field-border sub-entity-trigger"
-                    [placeholder]="localeData?.communication?.select_sub_entity"
-                    multiple
-                    [(ngModel)]="createTrigger.condition.subConditions[0].action"
-                    (selectionChange)="selectSubEntity($event?.value)"
-                    [ngClass]="{ 'fields-error': mandatoryFields.subConditions }"
-                    [allowValueReset]="true"
-                    (onClear)="createTrigger.condition.subConditions[0].action = ''"
-                >
-                    <mat-option
-                        class="font-15"
-                        *ngFor="let action of subConditionAction"
-                        [selected]="action?.isChecked"
-                        [value]="action"
-                        >{{ action | titlecase }}</mat-option
+            <div class="trigger-input mr-t15">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>{{ localeData?.communication?.sub_entity }}</mat-label>
+                    <mat-select
+                        class="px-0"
+                        required="true"
+                        [name]="'subentity'"
+                        [placeholder]="localeData?.communication?.select_sub_entity"
+                        multiple
+                        [(ngModel)]="createTrigger.condition.subConditions[0].action"
+                        (selectionChange)="selectSubEntity($event?.value)"
+                        [ngClass]="{ 'fields-error': mandatoryFields.subConditions }"
+                        [allowValueReset]="true"
+                        (onClear)="createTrigger.condition.subConditions[0].action = ''"
                     >
-                </mat-select>
+                        <mat-option
+                            class="font-15"
+                            *ngFor="let action of subConditionAction"
+                            [selected]="action?.isChecked"
+                            [value]="action"
+                            >{{ action | titlecase }}</mat-option
+                        >
+                    </mat-select>
+                </mat-form-field>
             </div>
-            <div class="trigger-input">
-                <p class="trigger-input-label">{{ localeData?.communication?.campaign }}<span>*</span></p>
-                <select-field
-                    [cssClass]="'form-control mat-field-border'"
+            <div class="trigger-input mr-t15">
+                <dropdown-field
+                    [label]="localeData?.communication?.campaign"
                     [placeholder]="localeData?.communication?.select_campaign"
                     [options]="campaignList"
                     (selectedOption)="selectCampaign($event, true)"
@@ -294,7 +287,8 @@
                     [ngClass]="{ 'fields-error': mandatoryFields.campaignSlug }"
                     [allowValueReset]="true"
                     (onClear)="createTrigger.campaignDetails.campaignName = ''"
-                ></select-field>
+                    [required]="true"
+                ></dropdown-field>
             </div>
             <button
                 *ngIf="triggerMode === 'create' || triggerMode === 'copy'"
