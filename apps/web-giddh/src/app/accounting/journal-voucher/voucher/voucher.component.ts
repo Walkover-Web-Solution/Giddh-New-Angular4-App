@@ -1486,6 +1486,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.openConfirmBox(submitButton);
             }
         }
+
+        if(event.key === 'Tab') {
+            event.preventDefault();
+            document.getElementById('transactionAccount_0')?.focus();
+        }
     }
 
 
