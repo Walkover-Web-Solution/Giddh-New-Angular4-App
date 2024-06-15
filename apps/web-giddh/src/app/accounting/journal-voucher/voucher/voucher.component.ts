@@ -514,10 +514,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         } else if (event.key === 'F7') {
             event.preventDefault(); // Prevent default F7 behavior
             this.customFunctionForF7();
-        } else if (event.key === 'ð' || (event.altKey && event.key === 'd')) {
+        } else if ((event.altKey && event.key === 'd' || event.code === 'KeyD')) {
             event.preventDefault();
             this.customFunctionForDiscountSidebar();
-        } else if (event.key === 'þ' || (event.altKey && event.key === 't')) {
+        } else if ((event.altKey && event.key === 't' || event.code === 'KeyT')) {
             event.preventDefault();
             this.customFunctionForTaxSidebar();
         }
@@ -540,11 +540,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (this.showTaxSidebar) {
             this.keydownUp(event);
         }
-        this.journalVoucherForm.get('transactions').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe( value => {
-            if(value) {
-                console.log(value);
-            }
-        })
     }
 
     /**
@@ -666,9 +661,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         }
         if ('showDiscount' in changes && changes?.showDiscount?.currentValue !== changes?.showDiscount?.previousValue) {
+            if (changes?.showDiscount?.currentValue) {
+                this.closeTaxSidebar();
+            }
             this.showDiscountSidebar = changes?.showDiscount?.currentValue;
         }
         if ('showTax' in changes && changes?.showTax?.currentValue !== changes?.showTax?.previousValue) {
+            if (changes?.showTax?.currentValue) {
+                this.closeDiscountSidebar();
+            }
             this.showTaxSidebar = changes?.showTax?.currentValue;
         }
     }
@@ -700,11 +701,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public newEntryObj(byOrTo?: string, typeData?: any, type?: any): void {
-        console.log(byOrTo,typeData, type );
-        
         let formArray = this.journalVoucherForm.get('transactions') as FormArray;
         const newTransactionFormGroup = this.initTransactionFormGroup();
-        
+
         let discountObj = null;
         let taxData = null;
         if (type === 'discount') {
@@ -805,6 +804,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public updateTransactionActualAmount(transaction: FormGroup): void {
+        if (transaction.get('amount')?.value?.length > 1 && transaction.get('amount')?.value?.startsWith('0')) {
+            transaction.get('amount')?.patchValue(transaction.get('amount')?.value?.replace(/^0+/, ''));
+        }
         transaction.get('actualAmount')?.patchValue(Number(transaction.get('amount')?.value));
     }
 
@@ -819,21 +821,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (!transaction.get('account')?.value && (transaction?.get('isDiscountApplied')?.value || transaction?.get('isTaxApplied')?.value)) {
             const transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
             transactionsFormArray.removeAt(index);
-
-            const { totalCredit, totalDebit } = this.calculateTotalCreditAndDebit();
+            const { totalCredit, totalDebit } = this.calculateTotalCreditAndDebit(true);
             this.totalCreditAmount = totalCredit;
             this.totalDebitAmount = totalDebit;
         }
-    }
-
-    /**
-     * This will be use for calculating tax and discount amounts
-     *
-     * @memberof AccountAsVoucherComponent
-     */
-    public calculateTaxDiscount(): void {
-        this.calculateDiscount();
-        this.calculateTax();
     }
 
     /**
@@ -859,12 +850,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 discountValue = control.value.discountValue;
             }
         });
-        if (amount) {
-            discountAmount = (discountType === 'PERCENTAGE') ? discountValue / 100 * amount : discountValue;
-            discountEntryControl?.get('amount')?.patchValue(discountAmount);
-        } else {
-            discountAmount = discountType === 'PERCENTAGE' ? 0 : discountValue;
-            discountEntryControl?.get('amount')?.patchValue(discountAmount);
+        if (!discountEntryControl?.get('amount')?.value) {
+            if (amount) {
+                discountAmount = (discountType === 'PERCENTAGE') ? discountValue / 100 * amount : discountValue
+                discountEntryControl?.get('amount')?.patchValue(discountAmount);
+            } else {
+                discountAmount = discountType === 'PERCENTAGE' ? 0 : discountValue;
+                discountEntryControl?.get('amount')?.patchValue(discountAmount);
+            }
         }
         return discountAmount;
     }
@@ -876,7 +869,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @return {*}
      * @memberof AccountAsVoucherComponent
      */
-    public calculateTax(taxAmount?: number) {
+    public calculateTax() {
+        let taxAmount = 0;
         let toAmount = 0;
         let byAmount = 0;
         let toEntryControl;
@@ -1215,7 +1209,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     };
 
                     // Update transaction form group with received data
-                    transactionAtIndex?.patchValue({    
+                    transactionAtIndex?.patchValue({
                         amount: !this.isSalesEntry ? this.calculateDiffAmount(transactionAtIndex.get('type')?.value?.toLowerCase()) : byControlValue.amount ?? 0,
                         actualAmount: !this.isSalesEntry ? this.calculateDiffAmount(transactionAtIndex.get('type')?.value?.toLowerCase()) : byControlValue.amount ?? 0,
                         particular: accModel?.UniqueName,
@@ -1358,18 +1352,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let lastIndx = formAsArray.length - 1;
         // Update amount in transaction object
         // transactionObj.get('amount').patchValue(Number(amount));
-        // transactionObj.get('total').patchValue(transactionObj.get('amount').value);
-        if(transactionObj.get('isDiscountApplied').value) {
+        transactionObj.get('total').patchValue(transactionObj.get('amount').value);
+        if (transactionObj.get('isDiscountApplied').value) {
             formAsArray.controls?.forEach((control: FormGroup) => {
                 if (control.value?.selectedAccount?.parentGroup?.includes("revenuefromoperations") || control.value.selectedAccount.parentGroup.includes("sales")) {
                     control.get('actualAmount').patchValue(Number(control?.value?.amount) - amount);
                     control.get('amount')?.patchValue(Number(control?.value?.amount) - amount);
-                    console.log("calculateAmount: ", control);
                 }
             });
-            console.log("Form: ", this.journalVoucherForm.value);
         }
-        
+
         const { totalCredit, totalDebit } = this.calculateTotalCreditAndDebit();
         this.totalCreditAmount = totalCredit;
         this.totalDebitAmount = totalDebit;
@@ -1453,10 +1445,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @return {*}  {{ totalCredit: number, totalDebit: number }}
      * @memberof AccountAsVoucherComponent
      */
-    public calculateTotalCreditAndDebit(): { totalCredit: number, totalDebit: number } {
+    public calculateTotalCreditAndDebit(isRemoveEntry: boolean = false): { totalCredit: number, totalDebit: number } {
         const voucherTypeControl = this.journalVoucherForm.get('voucherType');
-        if (voucherTypeControl.value === VOUCHERS.SALES) {
-            this.calculateTaxDiscount();
+        if (voucherTypeControl.value === VOUCHERS.SALES && !isRemoveEntry) {
+            this.calculateTax();
         }
 
         let totalCredit = 0;
@@ -1465,10 +1457,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
             if (control.get('type').value.toLowerCase() === 'to') {
                 if (!control.get('isDiscountApplied')?.value) {
-                    totalCredit += control.get('amount').value;
+                    totalCredit += +control.get('amount').value;
                 }
             } else if (!control.get('isDiscountApplied')?.value) {
-                totalDebit += control.get('amount').value;
+                totalDebit += +control.get('amount').value;
             }
         });
 
@@ -1596,6 +1588,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
                     // data.transactions[1].type = "to"; // changing it to "to" so that it becomes debit in loop below
                 }
+                const discountValue = data.transactions.find(transaction => transaction.type === 'by' && transaction.isDiscountApplied)?.amount;
 
                 data.transactions.forEach((element: any) => {
                     if (element) {
@@ -1645,9 +1638,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     data.transactions = filteredWithoutTaxDiscountData;
                 }
                 if (data.transactions?.length) {
-                    data.transactions[0].amount = data.transactions[0].actualAmount;
+                    data.transactions[0].amount = data.transactions[0].amount + discountValue;
                     data.transactions[0].isInclusiveTax = false;
                 }
+                delete data.transactions[0].actualAmount;
                 this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
             } else {
                 const byOrTo = data.voucherType === 'Payment' ? 'by' : 'to';
