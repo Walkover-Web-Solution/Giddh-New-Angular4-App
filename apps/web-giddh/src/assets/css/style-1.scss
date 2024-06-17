@@ -23,6 +23,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-size: var(--font-size-15) !important;
+    scroll-behavior: smooth;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
