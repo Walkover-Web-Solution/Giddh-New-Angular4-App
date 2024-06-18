@@ -313,7 +313,7 @@
             </div>
         </th>
 
-        <th class="text-left width-date">
+        <th class="text-left width-date" *ngIf="selectedGst === GstReport.Gstr1">
             <div class="position-relative">
                 <div
                     [attr.data-test-title]="localeData?.filing?.rate"
@@ -429,7 +429,7 @@
             <div>{{ item.pos ? item.pos : "-" }}</div>
             <div class="unrecognized-value pt-1">-</div>
         </td>
-        <td>
+        <td *ngIf="selectedGst === GstReport.Gstr1">
             <div>{{ item.rate ? item.rate : "-" }}</div>
             <div class="unrecognized-value pt-1">-</div>
         </td>
