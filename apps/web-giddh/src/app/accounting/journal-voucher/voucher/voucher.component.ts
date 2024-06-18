@@ -903,35 +903,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public calculateTax(taxAmount?: number) {
-        let toAmount = 0;
-        let byAmount = 0;
-        let toEntryControl;
-        let byEntryControl;
-        let taxEntryControl;
-        let actualTaxAmount;
-
-        (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
-            if (control.value.particular && control.value.type === "to" && !control.value.isTaxApplied && !control.value.isDiscountApplied) {
-                toEntryControl = control;
-                toAmount += control.value.actualAmount;
-            }
-            if (control.value.particular && control.value.type === "by" && !control.value.isTaxApplied && !control.value.isDiscountApplied) {
-                byEntryControl = control;
-                byAmount += control.value.actualAmount;
-            }
-            if (control.value.particular && control.value.type === "by" && control.value.isDiscountApplied) {
-                byAmount += control.value.actualAmount;
-            }
-
-            if (!taxAmount && control.value.particular && control.value.type === "to" && control.value.isTaxApplied) {
-                taxEntryControl = control;
-                taxAmount = control.value.taxValue;
-                actualTaxAmount = control.value.taxValue;
-            }
-        });
+        let { toAmount, byAmount, actualTaxAmount, toEntryControl,byEntryControl,taxEntryControl } = this.getUniqueAccountDetail(taxAmount);
 
         let transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
         let transactionAtIndex = transactionsFormArray.at(this.selectedIdx) as FormGroup;
+
         if (!transactionAtIndex?.get('isInclusiveTax')?.value && transactionAtIndex?.value.type === 'to') {
             if (actualTaxAmount > 0 && toAmount > 0) {
                 let amountIncludingGST = byAmount;
@@ -1026,6 +1002,43 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         taxEntryControl?.get('amount')?.patchValue(taxAmount);
         this.changeDetectionRef.detectChanges();
         return taxAmount;
+    }
+
+    private getUniqueAccountDetail(taxAmount): { toAmount: number, byAmount: number, actualTaxAmount: number, toEntryControl: FormGroup, byEntryControl: FormGroup, taxEntryControl: FormGroup } {
+        let toAmount = 0;
+        let byAmount = 0;
+        let toEntryControl;
+        let byEntryControl;
+        let taxEntryControl;
+        let actualTaxAmount;
+
+        (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
+             // Get Sales Row 
+            if (control.value.particular && control.value.type === "to" && !control.value.isTaxApplied && !control.value.isDiscountApplied) {
+                toEntryControl = control;
+                toAmount += control.value.actualAmount;
+            }
+
+             // Get Cash Row 
+            if (control.value.particular && control.value.type === "by" && !control.value.isTaxApplied && !control.value.isDiscountApplied) {
+                byEntryControl = control;
+                byAmount += control.value.actualAmount;
+            }
+
+             // Get Discount Row 
+            if (control.value.particular && control.value.type === "by" && control.value.isDiscountApplied) {
+                byAmount += control.value.actualAmount;
+            }
+
+            // Get Tax Row 
+            if (!taxAmount && control.value.particular && control.value.type === "to" && control.value.isTaxApplied) {
+                taxEntryControl = control;
+                taxAmount = control.value.taxValue;
+                actualTaxAmount = control.value.taxValue;
+            }
+        });
+
+        return  { toAmount, byAmount, actualTaxAmount, toEntryControl, byEntryControl, taxEntryControl };
     }
 
     /**
@@ -1193,6 +1206,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.dialog.closeAll();
         this.changeTab('enter', 'account', true);
     }
+
     /**
      *
      *
@@ -1404,6 +1418,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         // Update amount in transaction object
         transactionObj.get('amount').patchValue(Number(amount));
         transactionObj.get('total').patchValue(transactionObj.get('amount').value);
+
+
+
+        let { toAmount, byAmount, actualTaxAmount, toEntryControl,byEntryControl,taxEntryControl } = this.getUniqueAccountDetail(null);
+
+        console.log(toAmount, byAmount, actualTaxAmount, toEntryControl,byEntryControl,taxEntryControl);
+        
         const { totalCredit, totalDebit } = this.calculateTotalCreditAndDebit();
         this.totalCreditAmount = totalCredit;
         this.totalDebitAmount = totalDebit;
