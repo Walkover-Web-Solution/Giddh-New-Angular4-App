@@ -37,6 +37,12 @@
 
                         <th class="text-right">
                             <div class="position-relative">
+                                <div class="over-flow">{{ localeData?.filing?.rate }} (%)</div>
+                            </div>
+                        </th>
+
+                        <th class="text-right">
+                            <div class="position-relative">
                                 <div class="over-flow">{{ localeData?.filing?.igst_amount }}</div>
                             </div>
                         </th>
@@ -67,13 +73,25 @@
                 <tbody>
                     <tr *ngFor="let item of hsnSummary.data">
                         <td [attr.data-title]="commonLocaleData?.app_hsn_sac">{{ item.hsn_sc ? item.hsn_sc : "-" }}</td>
-                        <td [attr.data-title]="localeData?.filing?.description" class="description-overlap d-inline-block" [matTooltip]="item.desc ? item.desc : '-'" matTooltipPosition="above">{{ item.desc ? item.desc : "-" }}</td>
+                        <td
+                            [attr.data-title]="localeData?.filing?.description"
+                            class="description-overlap d-inline-block"
+                            [matTooltip]="item.desc ? item.desc : '-'"
+                            matTooltipPosition="above"
+                        >
+                            {{ item.desc ? item.desc : "-" }}
+                        </td>
                         <td [attr.data-title]="commonLocaleData?.app_quantity">{{ item.qty ? item.qty : "-" }}</td>
                         <td [attr.data-title]="commonLocaleData?.app_unit">{{ item.uqc ? item.uqc : "-" }}</td>
                         <td [attr.data-title]="localeData?.filing?.taxable_amount" class="text-right">
                             <span class="d-inline-flex">
                                 <amount-field [amount]="item.txval" [currencySymbol]="false" [currencyCode]="false">
                                 </amount-field>
+                            </span>
+                        </td>
+                        <td [attr.data-title]="localeData?.filing?.rate" class="text-right">
+                            <span class="d-inline-flex">
+                                {{ item.rt }}
                             </span>
                         </td>
                         <td [attr.data-title]="localeData?.filing?.igst_amount" class="text-right">
