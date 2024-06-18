@@ -35,7 +35,7 @@
                             </div>
                         </th>
 
-                        <th class="text-right">
+                        <th class="text-right" *ngIf="selectedGst === GstReport.Gstr1">
                             <div class="position-relative">
                                 <div class="over-flow">{{ localeData?.filing?.rate }} (%)</div>
                             </div>
@@ -89,7 +89,11 @@
                                 </amount-field>
                             </span>
                         </td>
-                        <td [attr.data-title]="localeData?.filing?.rate" class="text-right">
+                        <td
+                            *ngIf="selectedGst === GstReport.Gstr1"
+                            [attr.data-title]="localeData?.filing?.rate"
+                            class="text-right"
+                        >
                             <span class="d-inline-flex">
                                 {{ item.rt }}
                             </span>
