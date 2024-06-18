@@ -514,10 +514,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         } else if (event.key === 'F7') {
             event.preventDefault(); // Prevent default F7 behavior
             this.customFunctionForF7();
-        } else if (event.key === 'ð' || (event.altKey && event.key === 'd')) {
+        } else if (event.altKey && (event.key === 'd' || event.code === 'KeyD')) {
             event.preventDefault();
             this.customFunctionForDiscountSidebar();
-        } else if (event.key === 'þ' || (event.altKey && event.key === 't')) {
+        } else if (event.altKey && (event.key === 't' || event.code === 'KeyT')) {
             event.preventDefault();
             this.customFunctionForTaxSidebar();
         }
@@ -661,9 +661,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         }
         if ('showDiscount' in changes && changes?.showDiscount?.currentValue !== changes?.showDiscount?.previousValue) {
+            if (changes?.showDiscount?.currentValue) {
+                this.closeTaxSidebar();
+            }
             this.showDiscountSidebar = changes?.showDiscount?.currentValue;
         }
         if ('showTax' in changes && changes?.showTax?.currentValue !== changes?.showTax?.previousValue) {
+            if (changes?.showTax?.currentValue) {
+                this.closeDiscountSidebar();
+            }
             this.showTaxSidebar = changes?.showTax?.currentValue;
         }
     }
@@ -695,6 +701,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public newEntryObj(byOrTo?: string, typeData?: any, type?: any): void {
+        console.log("newEntryObj");
+        
         let formArray = this.journalVoucherForm.get('transactions') as FormArray;
         const newTransactionFormGroup = this.initTransactionFormGroup();
         let discountObj = null;
@@ -797,7 +805,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public updateTransactionActualAmount(transaction: FormGroup): void {
-        transaction.get('actualAmount')?.patchValue(Number(transaction.get('amount')?.value));
+        if (+transaction.get('amount')?.value > 9 && transaction.get('amount')?.value?.startsWith('0')) {
+            transaction.get('amount')?.patchValue(+transaction.get('amount')?.value?.replace(/^0+/, ''));
+        }
+        const amount =  Number(transaction.get('amount')?.value);
+        transaction.get('amount')?.patchValue(amount);
+        transaction.get('actualAmount')?.patchValue(amount);
+        transaction.get('total')?.patchValue(amount);
     }
 
     /**
@@ -824,7 +838,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public calculateTaxDiscount(): void {
-        this.calculateDiscount();
+        // this.calculateDiscount();
         this.calculateTax();
     }
 
@@ -837,13 +851,17 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public calculateDiscount(discountType?: string, discountValue?: number): number {
+        console.log("calculateDiscount");
+        
         let discountAmount = 0;
         let discountEntryControl;
+        let byAmountControl;
 
         let amount = 0;
         (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
             if (control.value.particular && control.value.type === "to" && !control.value.isTaxApplied && !control.value.isDiscountApplied) {
                 amount += control.value.actualAmount;
+                byAmountControl = control;
             }
             if (control.value.particular && control.value.type === "by" && control.value.isDiscountApplied) {
                 discountEntryControl = control;
@@ -852,13 +870,29 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         });
         if (amount) {
-            discountAmount = (discountType === 'PERCENTAGE') ? discountValue / 100 * amount : discountValue;
+            discountAmount = (discountType === 'PERCENTAGE') ? this.getPercentAmount(amount, discountValue) : discountValue;
             discountEntryControl?.get('amount')?.patchValue(discountAmount);
         } else {
             discountAmount = discountType === 'PERCENTAGE' ? 0 : discountValue;
             discountEntryControl?.get('amount')?.patchValue(discountAmount);
         }
+        if(byAmountControl.get('amount').patchValue(discountAmount)) {
+            byAmountControl.get('amount').patchValue(discountAmount);
+        }
         return discountAmount;
+    }
+
+    /**
+     * Calculate Discount amount by percent
+     *
+     * @private
+     * @param {number} amount
+     * @param {number} percent
+     * @returns {number}
+     * @memberof AccountAsVoucherComponent
+     */
+    private getPercentAmount(amount: number, percent: number): number {
+        return amount * (percent / 100);
     }
 
     /**
@@ -949,7 +983,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 let gstAmount: number = 0;
                 let gstRate = actualTaxAmount; // GST rate in percentage
                 baseAmount = Math.round(amountIncludingGST);
-                gstAmount = Math.round(baseAmount * (gstRate / 100));
+                gstAmount = Math.round(this.getPercentAmount(baseAmount, gstRate));
                 toAmount = baseAmount;
                 taxAmount = gstAmount;
                 byEntryControl?.get('amount')?.patchValue(toAmount + (taxAmount ?? 0));
@@ -1177,7 +1211,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {*} acc
      * @memberof AccountAsVoucherComponent
      */
-    public setAccount(acc: any, event?: any): void {
+    public setAccount(acc: any): void {
+        console.log("setAccount", acc);
+        
         this.searchService.loadDetails(acc?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             let transactionsFormArray;
             let transactionAtIndex;
@@ -1204,11 +1240,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         groupUniqueName: acc.parentGroups[acc.parentGroups?.length - 1]?.uniqueName,
                         account: acc.name,
                     };
+                    const byControlValue = transactionsFormArray.value.find(item => item?.type === "by");
 
                     // Update transaction form group with received data
+                    const amount = !this.isSalesEntry ? this.calculateDiffAmount(transactionAtIndex.get('type')?.value?.toLowerCase()) : byControlValue.amount ?? 0;
                     transactionAtIndex?.patchValue({
-                        amount: !this.isSalesEntry ? this.calculateDiffAmount(transactionAtIndex.get('type')?.value?.toLowerCase()) : 0,
-                        actualAmount: !this.isSalesEntry ? this.calculateDiffAmount(transactionAtIndex.get('type')?.value?.toLowerCase()) : 0,
+                        amount: Number(amount),
+                        actualAmount: Number(amount),
                         particular: accModel?.UniqueName,
                         currentBalance: '',
                         selectedAccount: {
@@ -1218,7 +1256,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                             account: accModel.account,
                             type: '',
                             parentGroup: response?.body?.parentGroups
-                        }
+                        },
+                        total: Number(amount)
                     });
                     // Check and push to inventory
                     if (acc) {
@@ -1304,22 +1343,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     }
                 });
             }
-            this.checkSalesEntry();
         });
+        console.log(this.journalVoucherForm.value);
+        
     }
-    /**
-     * This will be use for check sales entry
-     *
-     * @memberof AccountAsVoucherComponent
-     */
-    public checkSalesEntry(): void {
-        let parentGroups = ['revenuefromoperations', 'otherincome', 'fixedassets'];
-        (this.journalVoucherForm.get('transactions') as FormArray).controls?.forEach((control: FormGroup) => {
-            const isSalesEntry = this.checkIfSalesAccount(control, parentGroups);
-            this.salesEntry.emit(isSalesEntry);
-            this.isSalesEntry = isSalesEntry;
-        });
-    }
+
 
     /**
      *This will be use for sales account
@@ -1782,7 +1810,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         while (transactionsFormArray.length !== 0) {
             transactionsFormArray.removeAt(0);
         }
-        this.checkSalesEntry();
         // Reset other variables and properties
         this.showConfirmationBox = false;
         this.totalCreditAmount = 0;
@@ -1791,6 +1818,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.totalEntries = 0;
         this.adjustmentTransaction = {};
         this.chequeDetailForm?.reset();
+        this.isSalesEntry = false;
+        this.salesEntry.emit(this.isSalesEntry);
 
         // Set entry date
         this.journalVoucherForm.patchValue({
@@ -1827,6 +1856,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
                 case VOUCHERS.SALES:
                     firstTransaction.patchValue({ type: 'by' });
+                    this.isSalesEntry = true;
+                    this.salesEntry.emit(this.isSalesEntry);
                     break;
 
                 default:
@@ -2035,6 +2066,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public onItemSelected(event: IOption): void {
+        console.log("onItemSelected", event);
+        
         setTimeout(() => {
             this.currentSelectedValue = '';
             this.showLedgerAccountList = false;
@@ -2045,7 +2078,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
         // this.activeParticularAccountIndex = null;
         if (this.selectedField === 'account') {
-            this.setAccount(event.additional, event);
+            this.setAccount(event.additional);
         }
 
         this.changeDetectionRef.detectChanges();
