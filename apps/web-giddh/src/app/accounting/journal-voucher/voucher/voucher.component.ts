@@ -516,10 +516,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         } else if (event.key === 'F7') {
             event.preventDefault(); // Prevent default F7 behavior
             this.customFunctionForF7();
-        } else if ((event.altKey && event.key === 'd' || event.code === 'KeyD')) {
+        } else if (event.altKey && (event.key === 'd' || event.code === 'KeyD')) {
             event.preventDefault();
             this.customFunctionForDiscountSidebar();
-        } else if ((event.altKey && event.key === 't' || event.code === 'KeyT')) {
+        } else if (event.altKey && (event.key === 't' || event.code === 'KeyT')) {
             event.preventDefault();
             this.customFunctionForTaxSidebar();
         }
@@ -813,7 +813,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (+transaction.get('amount')?.value > 9 && transaction.get('amount')?.value?.startsWith('0')) {
             transaction.get('amount')?.patchValue(+transaction.get('amount')?.value?.replace(/^0+/, ''));
         }
-        transaction.get('actualAmount')?.patchValue(Number(transaction.get('amount')?.value));
+        const amount =  Number(transaction.get('amount')?.value);
+        transaction.get('amount')?.patchValue(amount);
+        transaction.get('actualAmount')?.patchValue(amount);
+        transaction.get('total')?.patchValue(amount);
     }
 
     /**
@@ -827,7 +830,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (!transaction.get('account')?.value && (transaction?.get('isDiscountApplied')?.value || transaction?.get('isTaxApplied')?.value)) {
             const transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
             transactionsFormArray.removeAt(index);
-            
+
             // this.selectedIdx = transactionsFormArray.length - 2;
 
             // if (transaction?.get('isDiscountApplied')?.value) {
@@ -877,7 +880,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
         if (!discountEntryControl?.get('amount')?.value) {
             if (amount) {
-                discountAmount = (discountType === 'PERCENTAGE') ? discountValue / 100 * amount : discountValue
+                discountAmount = (discountType === 'PERCENTAGE') ? this.getPercentAmount(amount, discountValue) : discountValue
                 discountEntryControl?.get('amount')?.patchValue(discountAmount);
             } else {
                 discountAmount = discountType === 'PERCENTAGE' ? 0 : discountValue;
@@ -885,6 +888,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         }
         return discountAmount;
+    }
+
+    /**
+     * Calculate Discount amount by percent
+     *
+     * @private
+     * @param {number} amount
+     * @param {number} percent
+     * @returns {number}
+     * @memberof AccountAsVoucherComponent
+     */
+    private getPercentAmount(amount: number, percent: number): number {
+        return amount * (percent / 100);
     }
 
     /**
@@ -980,7 +996,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 let gstAmount: number = 0;
                 let gstRate = actualTaxAmount; // GST rate in percentage
                 baseAmount = Math.round(amountIncludingGST);
-                gstAmount = Math.round(baseAmount * (gstRate / 100));
+                gstAmount = Math.round(this.getPercentAmount(baseAmount, gstRate));
                 toAmount = baseAmount;
                 taxAmount = gstAmount;
                 byEntryControl?.get('amount')?.patchValue(toAmount + (taxAmount ?? 0));
@@ -1107,13 +1123,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public onAccountFocus(event: any, element: any, trxnType: any, index: number): void {
         this.selectedAccountInputField = event.target;
-        
+
         this.selectedField = 'account';
         this.showConfirmationBox = false;
         this.selectedTransactionType = trxnType;
         this.selectedParticular = element;
         this.selectRow(true, index);
-        
+
         this.filterAccount(trxnType);
         this.inputForList = cloneDeep(this.flattenAccounts);
     }
@@ -1380,27 +1396,25 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const formAsArray = this.journalVoucherForm.get('transactions') as FormArray;
         let lastIndx = formAsArray.length - 1;
         // Update amount in transaction object
-        // transactionObj.get('amount').patchValue(Number(amount));
-        transactionObj.get('total').patchValue(transactionObj.get('amount').value);
-        if (transactionObj.get('isDiscountApplied').value) {
-            formAsArray.controls?.forEach((control: FormGroup) => {
-                if (control.value?.selectedAccount?.parentGroup?.includes("revenuefromoperations") || control.value.selectedAccount.parentGroup.includes("sales")) {
-                    control.get('actualAmount').patchValue(Number(control?.value?.amount) - amount);
-                    control.get('amount')?.patchValue(Number(control?.value?.amount) - amount);
-                }
-            });
-        }
+        // if (transactionObj.get('isDiscountApplied').value) {
+        //     formAsArray.controls?.forEach((control: FormGroup) => {
+        //         if (control.value?.selectedAccount?.parentGroup?.includes("revenuefromoperations") || control.value.selectedAccount.parentGroup.includes("sales")) {
+        //             control.get('actualAmount').patchValue(Number(control?.value?.amount) - amount);
+        //             control.get('amount')?.patchValue(Number(control?.value?.amount) - amount);
+        //         }
+        //     });
+        // }
 
         const { totalCredit, totalDebit } = this.calculateTotalCreditAndDebit();
         this.totalCreditAmount = totalCredit;
         this.totalDebitAmount = totalDebit;
 
+        // Set type To to By for new row
         if (indx === lastIndx && transactionObj.get('selectedAccount.name').value) {
-            const voucherTypeControl = this.journalVoucherForm.get('voucherType');
             // Setting the value of voucherType FormControl to currentVoucher
-            voucherTypeControl.setValue(this.currentVoucher);
+            this.journalVoucherForm.get('voucherType').setValue(this.currentVoucher);
             let voucherType = cloneDeep(VOUCHERS);
-            this.checkVoucherTypeNewEntries(this.currentVoucher, voucherType, transactionObj);
+            this.checkVoucherTypeNewEntries(this.currentVoucher, voucherType);
         }
     }
 
@@ -1411,7 +1425,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {*} voucherType
      * @memberof AccountAsVoucherComponent
      */
-    public checkVoucherTypeNewEntries(currentVoucher: any, voucherType: any, transactionObj?: any): void {
+    public checkVoucherTypeNewEntries(currentVoucher: any, voucherType: any): void {
         if (this.totalCreditAmount < this.totalDebitAmount || (this.totalCreditAmount === 0 && this.totalDebitAmount === 0)) {
             if (currentVoucher === voucherType.RECEIPT) {
                 this.newEntryObj('by');
@@ -1436,7 +1450,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public openConfirmBoxFromShortcut(submitButton: HTMLButtonElement) {
         this.openConfirmBox(submitButton);
     }
-
 
     /**
      * openConfirmBox() to save entry
@@ -1492,7 +1505,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 totalDebit += +control.get('amount').value;
             }
         });
-        
+
         return { totalCredit, totalDebit };
     }
 
