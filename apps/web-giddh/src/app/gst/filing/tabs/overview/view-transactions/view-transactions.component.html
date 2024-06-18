@@ -188,6 +188,19 @@
                                 <div class="pull-left over-flow">{{ commonLocaleData?.app_customer_name }}</div>
                             </div>
                         </th>
+                        <th
+                            class="text-left"
+                            *ngIf="selectedGst === GstReport.Gstr1 && filterParam.entityType === 'unregistered-notes'"
+                        >
+                            <div class="relative">
+                                <div class="pull-left over-flow">{{ commonLocaleData?.app_type }}</div>
+                            </div>
+                        </th>
+                        <th class="text-left" *ngIf="selectedGst === GstReport.Gstr1">
+                            <div class="relative">
+                                <div class="pull-left over-flow">{{ commonLocaleData?.app_voucher_type }}</div>
+                            </div>
+                        </th>
                         <th class="text-left">
                             <div class="relative">
                                 <div class="pull-left over-flow">{{ commonLocaleData?.app_status }}</div>
@@ -257,6 +270,12 @@
                             {{ item.accountGstin ? item.accountGstin : "-" }}
                         </td>
                         <td class="white-normal">{{ item.accountName ? item.accountName : "-" }}</td>
+                        <td *ngIf="selectedGst === GstReport.Gstr1 && filterParam.entityType === 'unregistered-notes'">
+                            {{ item?.typ ? item?.typ : "-" }}
+                        </td>
+                        <td *ngIf="selectedGst === GstReport.Gstr1">
+                            {{ item?.voucherType ? (item?.voucherType | titlecase) : "-" }}
+                        </td>
                         <td>{{ item?.status ? item?.status : "-" }}</td>
                         <td>{{ item.actionOnGstin ? item.actionOnGstin : "-" }}</td>
                         <td>
