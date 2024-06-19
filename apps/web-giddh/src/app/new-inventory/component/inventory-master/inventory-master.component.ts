@@ -51,6 +51,8 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
     public parentGroup: any = {};
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** False if we did not need to show Export button */
+    public showExportButton: boolean = true;
 
     constructor(
         private inventoryService: InventoryService,
@@ -67,6 +69,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @memberof InventoryMasterComponent
      */
     public ngOnInit(): void {
+        this.showExportButton = true;
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (this.inventoryType !== params.type) {
                 this.inventoryType = params.type?.toUpperCase();
@@ -158,6 +161,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @memberof InventoryMasterComponent
      */
     public getMasters(stockGroup: any, currentIndex: number, isRefresh: boolean = false, isLoadMore: boolean = false): void {
+        if(stockGroup.entity === 'STOCK_GROUP') {
+            this.showExportButton = true;
+        }
         if (!stockGroup?.uniqueName) {
             return;
         }
@@ -356,6 +362,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @memberof InventoryMasterComponent
      */
     public editStock(masterData: any, index: number): void {
+        if(masterData.entity === 'STOCK') {
+            this.showExportButton = false;
+        }
         this.masterColumnsData = this.masterColumnsData.slice(0, index + 1);
         this.isTopLevel = false;
         this.resetCurrentStockAndGroup();
@@ -545,10 +554,10 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      *
      * @memberof InventoryMasterComponent
      */
-    public exportInventoryMaster():void {
+    public exportInventoryMaster(): void {
         const exportData = {
             exportType: "INVENTORY_EXPORT",
-            groupUniqueNames:  this.currentGroup?.uniqueName ? [this.currentGroup.uniqueName] : [],
+            groupUniqueNames: this.currentGroup?.uniqueName ? [this.currentGroup.uniqueName] : [],
             fileType: "CSV",
             commonLocaleData: this.commonLocaleData,
             localeData: this.localeData
