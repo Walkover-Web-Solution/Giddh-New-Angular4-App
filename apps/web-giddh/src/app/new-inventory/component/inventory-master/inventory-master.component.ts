@@ -556,6 +556,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
     public exportInventoryMaster(): void {
         const exportData = {
             exportType: "INVENTORY_EXPORT",
+            stockGroupType: this.inventoryType === 'FIXEDASSETS' ? 'FIXED_ASSETS' :  this.inventoryType,
             groupUniqueNames: this.currentGroup?.uniqueName ? [this.currentGroup.uniqueName] : [],
             fileType: "CSV",
             commonLocaleData: this.commonLocaleData,
