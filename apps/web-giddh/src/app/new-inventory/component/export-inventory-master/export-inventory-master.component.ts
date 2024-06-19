@@ -44,12 +44,6 @@ export class ExportInventoryMasterComponent implements OnInit {
    */
   public initExportForm(): void {
     this.exportForm = this.formBuilder.group({
-        stockGroupName: new FormControl(false),
-        stockName: new FormControl(false),
-        uniqueName: new FormControl(false),
-        parentGroupName: new FormControl(false),
-        parentGroupUniqueName: new FormControl(false),
-        stockUnitCode: new FormControl(false),
         openingAmount: new FormControl(false),
         openingQuantity: new FormControl(false),
         hsnNumber: new FormControl(false),
@@ -82,24 +76,6 @@ export class ExportInventoryMasterComponent implements OnInit {
     exportRequest.columnsToExport = [];
     exportRequest.groupUniqueNames = this.inputData?.groupUniqueNames;
     const formValue = this.exportForm.value;
-    if (formValue.stockGroupName) {
-      exportRequest.columnsToExport?.push("Stock group name");
-    }
-    if (formValue.stockName) {
-      exportRequest.columnsToExport?.push("Stock name");
-    }
-    if (formValue.uniqueName) {
-      exportRequest.columnsToExport?.push("Unique name");
-    }
-    if (formValue.parentGroupName) {
-      exportRequest.columnsToExport?.push("Parent group name");
-    }
-    if (formValue.parentGroupUniqueName) {
-      exportRequest.columnsToExport?.push("Parent group unique name");
-    }
-    if (formValue.stockUnitCode) {
-      exportRequest.columnsToExport.push("Stock unit code");
-    }
     if (formValue.openingAmount) {
       exportRequest.columnsToExport?.push("Opening amount");
     }

@@ -2,9 +2,6 @@
     p {
         color: var(--color-sidebar-content-text);
     }
-    form { 
-        height: clamp(215px, 290px, 290px); 
-    }
 }
 .label-width {
     min-width: 220px;
@@ -12,4 +9,18 @@
 
 .toggle-width {
     min-width: 65px;
+}
+
+.export-border {
+    &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 1px;
+        height: 55%;
+        background-color: var(--color-gray);
+        top: 46%;
+        right: -55px;
+        transform: translateY(-50%);
+    }
 }
