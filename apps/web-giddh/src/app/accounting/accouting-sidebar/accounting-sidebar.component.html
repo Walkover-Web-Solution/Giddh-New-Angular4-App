@@ -41,7 +41,7 @@
             >{{ commonLocaleData?.app_keys?.f7 }}: {{ commonLocaleData?.app_voucher_types?.journal }}</a
         >
     </li>
-    <li role="account-items">
+    <!-- <li role="account-items">
         <a
             href="javascript:;"
             aria-label="sales"
@@ -50,8 +50,8 @@
             [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.SALES }"
             >{{ commonLocaleData?.app_keys?.f8 }}: {{ commonLocaleData?.app_voucher_types?.sales }}</a
         >
-    </li>
-    <ng-container *ngIf="salesEntry">
+    </li> -->
+    <!-- <ng-container *ngIf="salesEntry">
         <li role="account-items">
             <a
                 class="cursor-pointer text-underline"
@@ -70,7 +70,7 @@
                 >{{ commonLocaleData?.app_alt_t }} : {{ localeData?.tax_list}}</a
             >
         </li>
-    </ng-container>
+    </ng-container> -->
     <!--    "isHidden" class  if user is not able to access the module
     <li><a class="cursor-pointer" (click)="setSelectedPage('Sales', 'voucher', 'sales')"
             [ngClass]="{ 'active-parent': selectedVoucher === 'Sales'}">F8: Sales</a></li>
