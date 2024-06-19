@@ -118,7 +118,7 @@
                 </div>
             </div>
             <div class="inventory-btnside">
-                <div class="d-flex justify-content-end mt-1" *ngIf="!breadcrumbs?.length && showExportButton">
+                <div class="d-flex justify-content-end mt-1 mr-1" *ngIf="!breadcrumbs?.length && showExportButton">
                     <button mat-stroked-button color="primary" (click)="exportInventoryMaster()">{{ commonLocaleData?.app_export }}</button>
                 </div>
                 <div class="d-flex">
@@ -133,7 +133,7 @@
                             </li>
                         </ol>
                     </div>
-                    <div class="d-flex justify-content-end mt-1" *ngIf="showExportButton">
+                    <div class="d-flex justify-content-end mr-1 pb-1" *ngIf="showExportButton">
                         <button mat-stroked-button color="primary" (click)="exportInventoryMaster()">{{ commonLocaleData?.app_export }}</button>
                     </div>
                 </div>
