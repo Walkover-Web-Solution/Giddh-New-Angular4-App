@@ -69,7 +69,6 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
      * @memberof InventoryMasterComponent
      */
     public ngOnInit(): void {
-        this.showExportButton = true;
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (this.inventoryType !== params.type) {
                 this.inventoryType = params.type?.toUpperCase();
