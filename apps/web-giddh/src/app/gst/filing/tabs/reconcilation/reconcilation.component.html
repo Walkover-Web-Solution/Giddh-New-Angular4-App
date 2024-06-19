@@ -313,6 +313,18 @@
             </div>
         </th>
 
+        <th class="text-left width-date" *ngIf="selectedGst === GstReport.Gstr1">
+            <div class="position-relative">
+                <div
+                    [attr.data-test-title]="localeData?.filing?.rate"
+                    [attr.title]="localeData?.filing?.rate"
+                    class="pull-left over-flow"
+                >
+                    {{ localeData?.filing?.rate }} (%)
+                </div>
+            </div>
+        </th>
+
         <th class="text-right width-amount">
             <div class="position-relative">
                 <div
@@ -417,6 +429,10 @@
             <div>{{ item.pos ? item.pos : "-" }}</div>
             <div class="unrecognized-value pt-1">-</div>
         </td>
+        <td *ngIf="selectedGst === GstReport.Gstr1">
+            <div>{{ item.rate >= 0 ? item?.rate : "-" }}</div>
+            <div class="unrecognized-value pt-1">-</div>
+        </td>
 
         <td class="text-right">
             <div>
@@ -510,6 +526,11 @@
         <td>
             <div>-</div>
             <div class="unrecognized-value pt-1">{{ item.pos ? item.pos : "-" }}</div>
+        </td>
+
+        <td *ngIf="selectedGst === GstReport.Gstr1">
+            <div>{{ item.rate >= 0 ? item?.rate : "-" }}</div>
+            <div class="unrecognized-value pt-1">-</div>
         </td>
 
         <td class="text-right">
@@ -610,6 +631,11 @@
             <div [ngClass]="{ 'unrecognized-value': item.pos !== item?.data_in_giddh?.pos }" class="pt-1">
                 {{ item?.data_in_giddh?.pos ? item?.data_in_giddh?.pos : "-" }}
             </div>
+        </td>
+
+        <td *ngIf="selectedGst === GstReport.Gstr1">
+            <div>{{ item.rate >= 0 ? item?.rate : "-" }}</div>
+            <div class="unrecognized-value pt-1">-</div>
         </td>
 
         <td class="text-right">
@@ -777,6 +803,11 @@
             <div class="pt-1">{{ item?.data_in_giddh?.pos ? item?.data_in_giddh?.pos : "-" }}</div>
         </td>
 
+        <td *ngIf="selectedGst === GstReport.Gstr1">
+            <div>{{ item.rate >= 0 ? item?.rate : "-" }}</div>
+            <div class="pt-1">-</div>
+        </td>
+
         <td class="text-right">
             <div>
                 <span class="d-inline-flex">
@@ -912,7 +943,7 @@
 <!--region common not found msg-->
 <ng-template #notFoundTmpl let-show>
     <div class="filings-empty-state" *ngIf="show">
-        <img src="{{ imgPath }}nofound.svg" [style.max-width.px]="110" alt="Image not found"  />
+        <img src="{{ imgPath }}nofound.svg" [style.max-width.px]="110" alt="Image not found" />
         <div class="empty-msg">
             <span>{{ localeData?.filing?.reconcilation_note }}</span>
         </div>
