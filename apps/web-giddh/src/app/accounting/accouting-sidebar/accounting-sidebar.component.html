@@ -34,6 +34,36 @@
             >F7: Journal</a
         >
     </li>
+    <!-- <li role="account-items">
+        <a
+            href="javascript:;"
+            aria-label="sales"
+            class="cursor-pointer"
+            (click)="setSelectedPage(accountingVouchers.SALES, 'voucher', 'sales')"
+            [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.SALES }"
+            >{{ commonLocaleData?.app_keys?.f8 }}: {{ commonLocaleData?.app_voucher_types?.sales }}</a
+        >
+    </li> -->
+    <!-- <ng-container *ngIf="salesEntry">
+        <li role="account-items">
+            <a
+                class="cursor-pointer text-underline"
+                href="javascript:;"
+                aria-label="discount"
+                (click)="showDiscountSidebar($event)"
+                >{{ commonLocaleData?.app_alt_d }} : {{ localeData?.discount_list}}</a
+            >
+        </li>
+        <li role="account-items">
+            <a
+                href="javascript:;"
+                aria-label="tax"
+                class="cursor-pointer text-underline"
+                (click)="showTaxSidebar($event)"
+                >{{ commonLocaleData?.app_alt_t }} : {{ localeData?.tax_list}}</a
+            >
+        </li>
+    </ng-container> -->
     <!--    "isHidden" class  if user is not able to access the module
     <li><a class="cp" (click)="setSelectedPage('Sales', 'voucher', 'sales')"
             [ngClass]="{ 'active-parent': selectedVoucher === 'Sales'}">F8: Sales</a></li>
