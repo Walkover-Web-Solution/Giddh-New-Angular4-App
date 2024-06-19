@@ -430,7 +430,7 @@
             <div class="unrecognized-value pt-1">-</div>
         </td>
         <td *ngIf="selectedGst === GstReport.Gstr1">
-            <div>{{ item.rate }}</div>
+            <div>{{ item.rate >= 0 ? item?.rate : "-" }}</div>
             <div class="unrecognized-value pt-1">-</div>
         </td>
 
@@ -526,6 +526,11 @@
         <td>
             <div>-</div>
             <div class="unrecognized-value pt-1">{{ item.pos ? item.pos : "-" }}</div>
+        </td>
+
+        <td *ngIf="selectedGst === GstReport.Gstr1">
+            <div>{{ item.rate >= 0 ? item?.rate : "-" }}</div>
+            <div class="unrecognized-value pt-1">-</div>
         </td>
 
         <td class="text-right">
@@ -626,6 +631,11 @@
             <div [ngClass]="{ 'unrecognized-value': item.pos !== item?.data_in_giddh?.pos }" class="pt-1">
                 {{ item?.data_in_giddh?.pos ? item?.data_in_giddh?.pos : "-" }}
             </div>
+        </td>
+
+        <td *ngIf="selectedGst === GstReport.Gstr1">
+            <div>{{ item.rate >= 0 ? item?.rate : "-" }}</div>
+            <div class="unrecognized-value pt-1">-</div>
         </td>
 
         <td class="text-right">
@@ -791,6 +801,11 @@
         <td>
             <div>{{ item.pos ? item.pos : "-" }}</div>
             <div class="pt-1">{{ item?.data_in_giddh?.pos ? item?.data_in_giddh?.pos : "-" }}</div>
+        </td>
+
+        <td *ngIf="selectedGst === GstReport.Gstr1">
+            <div>{{ item.rate >= 0 ? item?.rate : "-" }}</div>
+            <div class="pt-1">-</div>
         </td>
 
         <td class="text-right">
