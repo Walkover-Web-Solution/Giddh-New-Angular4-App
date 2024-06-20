@@ -18,7 +18,7 @@
             ></text-field>
         </div>
         <div class="mat-list-wrap">
-            <span class="pull-right pd-t05" *ngIf="breadcrumbs?.length === 0 && !createUpdateGroup">
+            <span class="pull-right pt-2" *ngIf="breadcrumbs?.length === 0 && !createUpdateGroup">
                 <watch-video [cssClass]="'text-primary'" [moduleName]="'INVENTORY_MASTER'"></watch-video>
             </span>
             <div class="no-data" *ngIf="isSearching && !masterColumnsData?.length">
@@ -118,10 +118,14 @@
                 </div>
             </div>
             <div class="inventory-btnside">
+                <div class="d-flex justify-content-end mt-1 mr-1" *ngIf="!breadcrumbs?.length && showExportButton">
+                    <button mat-stroked-button color="primary" (click)="exportInventoryMaster()">{{ commonLocaleData?.app_export }}</button>
+                </div>
+                <div class="d-flex">
                 <div
-                    class="searchbar d-flex justify-content-between align-items-center pt-2 pb-1"
+                    class="searchbar d-flex justify-content-between align-items-center pt-2 pb-1 w-100"
                     *ngIf="breadcrumbs?.length"
-                >
+                    >
                     <div>
                         <ol class="breadcrumb row pd-l15">
                             <li *ngFor="let breadcrumb of breadcrumbs">
@@ -129,6 +133,10 @@
                             </li>
                         </ol>
                     </div>
+                    <div class="d-flex justify-content-end mr-1 pb-1" *ngIf="showExportButton">
+                        <button mat-stroked-button color="primary" (click)="exportInventoryMaster()">{{ commonLocaleData?.app_export }}</button>
+                    </div>
+                </div>
                 </div>
                 <div class="create-btn-grp create-btn-inventory" *ngIf="showCreateButtons">
                     <button mat-stroked-button color="primary" class="mr-0" (click)="showCreateGroup()">
