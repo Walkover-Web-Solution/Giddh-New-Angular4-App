@@ -101,17 +101,17 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @param {*} l
      * @memberof CreateAddressComponent
      */
-    public checkGstNumValidation(l): void {
+    public checkGstNumValidation(): void {
         if (this.addressForm.get('taxNumber').value && this.addressForm.get('taxNumber').valid) {
             this.getGstConfirmationPopup();
         }
     }
 
     /**
-   * This will open for get gst information confirmation dialog
-   *
-   * @memberof CreateAddressComponent
-   */
+    * This will open for get gst information confirmation dialog
+    *
+    * @memberof CreateAddressComponent
+    */
     public getGstConfirmationPopup(): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
             width: '40%',
