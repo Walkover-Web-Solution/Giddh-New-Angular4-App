@@ -98,12 +98,13 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     /**
      * This will be use for check gst number validation
      *
-     * @param {*} l
      * @memberof CreateAddressComponent
      */
     public checkGstNumValidation(): void {
         if (this.addressForm.get('taxNumber').value && this.addressForm.get('taxNumber').valid) {
-            this.getGstConfirmationPopup();
+            if (this.addressConfiguration.tax.name === 'GSTIN') {
+                this.getGstConfirmationPopup();
+            }
         }
     }
 
@@ -128,12 +129,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             if (response) {
                 this.commonService.getGstInformationDetails(this.addressForm.get('taxNumber')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                     if (result) {
-                        let address1 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.bno : '';
-                        let address2 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.bnm : '';
-                        let address3 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.st : '';
-                        let address4 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.landMark : '';
-                        let address5 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.loc : '';
-                        let completeAddress = `${address1} ${address2} ${address3} ${address4} ${address5}`;
+                        let completeAddress = this.commonService.getCompleteAddres(result.body?.pradr?.addr);
                         this.addressForm.get('name')?.patchValue(result.body?.lgnm);
                         this.addressForm.get('address')?.patchValue(completeAddress);
                         this.addressForm.get('pincode')?.patchValue(result.body?.pradr?.addr?.pncd);

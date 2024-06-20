@@ -1005,7 +1005,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             } else {
                 ele.classList.remove('error-box');
                 this.isGstValid$ = observableOf(true);
-                this.getGstConfirmationPopup();
+                if (this.selectedCountryCode = 'IN') {
+                    this.getGstConfirmationPopup();
+                }
             }
         } else {
             ele.classList.remove('error-box');
@@ -1639,12 +1641,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 if (response) {
                     this.commonService.getGstInformationDetails(addresses.get('gstNumber')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                         if (result) {
-                            let address1 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.bno : '';
-                            let address2 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.bnm : '';
-                            let address3 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.st : '';
-                            let address4 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.landMark : '';
-                            let address5 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.loc : '';
-                            let completeAddress = `${address1} ${address2} ${address3} ${address4} ${address5}`;
+                            let completeAddress = this.commonService.getCompleteAddres(result.body?.pradr?.addr);
                             this.addAccountForm.get('name')?.patchValue(result.body?.lgnm);
                             addresses.get('address')?.patchValue(completeAddress);
                             addresses.get('pincode')?.patchValue(result.body?.pradr?.addr?.pncd);

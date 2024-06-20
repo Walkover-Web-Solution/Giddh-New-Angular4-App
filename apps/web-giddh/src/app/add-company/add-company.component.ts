@@ -690,7 +690,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isGstinValid = false;
             } else {
                 this.isGstinValid = true;
-                this.getGstConfirmationPopup();
+                if (this.selectedCountryCode === 'IN') {
+                    this.getGstConfirmationPopup();
+                }
             }
         }
 
@@ -738,19 +740,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             if (response) {
                 this.commonService.getGstInformationDetails(this.secondStepForm.get('gstin')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                     if (result) {
-                        let address1 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.bno : '';
-                        let address2 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.bnm : '';
-                        let address3 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.st : '';
-                        let address4 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.landMark : '';
-                        let address5 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.loc : '';
-                        let completeAddress = `${address1} ${address2} ${address3} ${address4} ${address5}`;
+                        let completeAddress = this.commonService.getCompleteAddres(result.body?.pradr?.addr);
                         this.firstStepForm.get('name')?.patchValue(result.body?.lgnm);
                         this.secondStepForm.get('address')?.patchValue(completeAddress);
                         this.secondStepForm.get('pincode')?.patchValue(result.body?.pradr?.addr?.pncd);
                     }
                 });
             } else {
-                this.closeDialog()
+                dialogRef?.close();
             }
         });
     }
