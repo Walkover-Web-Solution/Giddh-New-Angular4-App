@@ -122,7 +122,6 @@ export function provideConfig() {
         GiddhPageLoaderModule,
         GiddhDatepickerModule,
         MatSlideToggleModule,
-        MatSlideToggleModule,
         CheckPermissionModule,
         AccountUpdateNewDetailsModule,
         MatRadioModule
