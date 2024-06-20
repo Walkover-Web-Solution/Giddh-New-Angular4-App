@@ -659,8 +659,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             addresses.push(this.initialGstDetailsForm());
         }
     }
-
-    public isDefaultAddressSelected(val: boolean, i: number) {
+    /**
+     * This will be use for is default address selected
+     *
+     * @param {boolean} val
+     * @param {number} i
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public isDefaultAddressSelected(val: boolean, i: number): void {
         this.activeIndex = i;
         if (val) {
             let addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
@@ -1613,7 +1619,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
       */
     public getGstConfirmationPopup(): void {
         let addresses = (this.addAccountForm.get('addresses') as UntypedFormArray).at(this.activeIndex);
-        if (addresses.get('isDefault')?.value) {
+        if (addresses?.get('isDefault')?.value) {
             let dialogRef = this.dialog.open(ConfirmModalComponent, {
                 width: '40%',
                 data: {
