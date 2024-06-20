@@ -75,6 +75,7 @@ export class ExportInventoryMasterComponent implements OnInit {
     exportRequest.exportType = this.inputData?.exportType;
     exportRequest.columnsToExport = [];
     exportRequest.groupUniqueNames = this.inputData?.groupUniqueNames;
+    exportRequest.inventoryType = this.inputData?.inventoryType;
     const formValue = this.exportForm.value;
     if (formValue.openingAmount) {
       exportRequest.columnsToExport?.push("Opening amount");

@@ -10,7 +10,9 @@
     <div class="modal-body">
       <p class="pd-l15 pb-3">
         {{ inputData?.commonLocaleData?.app_note }} :
-        {{ inputData?.localeData?.export_note }}
+        <span [innerHTML] = "inputData?.localeData?.export_note">
+          {{ inputData?.localeData?.export_note }}
+        </span>
       </p>
       <form [formGroup]="exportForm" class="d-flex justify-content-between px-3 pt-2">
         <div class="export-border position-relative">
