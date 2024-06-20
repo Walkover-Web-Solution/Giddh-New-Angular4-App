@@ -1,10 +1,13 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import { Observable, of as observableOf, ReplaySubject, takeUntil } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject, take, takeUntil } from 'rxjs';
 import { IForceClear } from '../../models/api-models/Sales';
 import { ToasterService } from '../../services/toaster.service';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../../settings/constants/settings.constant';
+import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
+import { CommonService } from '../../services/common.service';
+import { MatDialog } from '@angular/material/dialog';
 
 function validateFieldWithPatterns(patterns: Array<string>) {
     return (field: UntypedFormControl): { [key: string]: any } => {
@@ -65,7 +68,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     constructor(
         private formBuilder: UntypedFormBuilder,
         private toasterService: ToasterService,
-        private pageLeaveUtilityService: PageLeaveUtilityService
+        private pageLeaveUtilityService: PageLeaveUtilityService,
+        private commonService: CommonService,
+        public dialog: MatDialog
     ) {
     }
 
@@ -88,6 +93,56 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             linkedEntities)) {
             this.setFormData();
         }
+    }
+
+    /**
+     * This will be use for check gst number validation
+     *
+     * @param {*} l
+     * @memberof CreateAddressComponent
+     */
+    public checkGstNumValidation(l): void {
+        if (this.addressForm.get('taxNumber').value && this.addressForm.get('taxNumber').valid) {
+            this.getGstConfirmationPopup();
+        }
+    }
+
+    /**
+   * This will open for get gst information confirmation dialog
+   *
+   * @memberof CreateAddressComponent
+   */
+    public getGstConfirmationPopup(): void {
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '40%',
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: this.commonLocaleData?.app_gst_confirm_message1,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no,
+                permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.commonService.getGstInformationDetails(this.addressForm.get('taxNumber')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                    if (result) {
+                        let address1 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.bno : '';
+                        let address2 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.bnm : '';
+                        let address3 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.st : '';
+                        let address4 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.landMark : '';
+                        let address5 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.loc : '';
+                        let completeAddress = `${address1} ${address2} ${address3} ${address4} ${address5}`;
+                        this.addressForm.get('name')?.patchValue(result.body?.lgnm);
+                        this.addressForm.get('address')?.patchValue(completeAddress);
+                        this.addressForm.get('pincode')?.patchValue(result.body?.pradr?.addr?.pncd);
+                    }
+                });
+            } else {
+                dialogRef?.close();
+            }
+        });
     }
 
     /**
@@ -369,7 +424,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle Remove Item from Mat Chip and 
+     * Handle Remove Item from Mat Chip and
      * remove item form linkedEntity
      *
      * @param {*} element

@@ -165,10 +165,7 @@
                                 </div>
                             </ng-container>
                         </div>
-                        <div class="d-flex column-gap15 mr-t15">
-                            <button mat-stroked-button color="primary" (click)="nextStepForm()" aria-label="next">
-                                {{ commonLocaleData?.app_next }}
-                            </button>
+                        <div class="d-flex column-gap15 justify-content-between mr-t15">
                             <button
                                 mat-stroked-button
                                 color="primary"
@@ -185,6 +182,9 @@
                                 (click)="openLogoutConfirmationDialog()"
                             >
                                 {{ commonLocaleData?.app_cancel }}
+                            </button>
+                            <button mat-stroked-button color="primary" (click)="nextStepForm()" aria-label="next">
+                                {{ commonLocaleData?.app_next }}
                             </button>
                         </div>
                     </form>
@@ -298,7 +298,11 @@
                                             ? commonLocaleData?.app_state + '*'
                                             : commonLocaleData?.app_state
                                     "
-                                    [placeholder]=" selectedCountryCode === 'EE' ? localeData?.select_county:localeData?.select_state"
+                                    [placeholder]="
+                                        selectedCountryCode === 'EE'
+                                            ? localeData?.select_county
+                                            : localeData?.select_state
+                                    "
                                     [options]="states"
                                     [showError]="isFormSubmitted && secondStepForm.get('state')?.invalid"
                                     [readonly]="disabledState"

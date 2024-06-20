@@ -1,5 +1,5 @@
-import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, take, takeUntil, pairwise } from 'rxjs/operators';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import {
     AfterViewInit,
     ChangeDetectorRef,
@@ -17,7 +17,7 @@ import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup
 import { digitsOnly } from '../../../helpers';
 import { AppState } from '../../../../store';
 import { select, Store } from '@ngrx/store';
-import { AccountRequestV2, CustomFieldsData } from '../../../../models/api-models/Account';
+import { AccountRequestV2 } from '../../../../models/api-models/Account';
 import { ToasterService } from '../../../../services/toaster.service';
 import { CompanyResponse, StateList, StatesRequest } from '../../../../models/api-models/Company';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
@@ -37,7 +37,9 @@ import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fiel
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 import { HttpClient } from '@angular/common/http';
 import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
-import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
+import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
+import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'account-add-new-details',
@@ -183,10 +185,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public portalIndex: number;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    /** Hold active index of form group */
+    public activeIndex: number;
 
     constructor(
         private _fb: UntypedFormBuilder,
-        private accountService: AccountService,
         private store: Store<AppState>,
         private _toaster: ToasterService,
         private commonActions: CommonActions,
@@ -198,7 +201,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private changeDetectorRef: ChangeDetectorRef,
         private customFieldsService: CustomFieldsService,
         private http: HttpClient,
-        private accountsAction: AccountsAction) {
+        private accountsAction: AccountsAction,
+        public dialog: MatDialog,
+        private commonService: CommonService) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
     }
 
@@ -262,6 +267,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             }
         });
+
 
         this.addAccountForm.get('hsnOrSac').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
@@ -426,6 +432,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }, 500);
             }
         }
+        setTimeout(() => {
+            let addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+            addresses.controls[0].get('isDefault')?.patchValue(true);
+        }, 500);
     }
 
     public ngAfterViewInit() {
@@ -651,6 +661,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public isDefaultAddressSelected(val: boolean, i: number) {
+        this.activeIndex = i;
         if (val) {
             let addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
             for (let control of addresses.controls) {
@@ -986,6 +997,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             } else {
                 ele.classList.remove('error-box');
                 this.isGstValid$ = observableOf(true);
+                this.getGstConfirmationPopup();
             }
         } else {
             ele.classList.remove('error-box');
@@ -1049,7 +1061,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
     }
-    
+
     /**
      * Get Party Type List
      *
@@ -1594,5 +1606,45 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
+    /**
+      * This will open for get gst information confirmation dialog
+      *
+      * @memberof AccountAddNewDetailsComponent
+      */
+    public getGstConfirmationPopup(): void {
+        let addresses = (this.addAccountForm.get('addresses') as UntypedFormArray).at(this.activeIndex);
+        if (addresses.get('isDefault')?.value) {
+            let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                width: '40%',
+                data: {
+                    title: this.commonLocaleData?.app_confirmation,
+                    body: this.commonLocaleData?.app_gst_confirm_message1,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no,
+                    permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
+                }
+            });
+
+            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                if (response) {
+                    this.commonService.getGstInformationDetails(addresses.get('gstNumber')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                        if (result) {
+                            let address1 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.bno : '';
+                            let address2 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.bnm : '';
+                            let address3 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.st : '';
+                            let address4 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.landMark : '';
+                            let address5 = result.body?.pradr?.addr?.bno ? result.body?.pradr?.addr?.loc : '';
+                            let completeAddress = `${address1} ${address2} ${address3} ${address4} ${address5}`;
+                            this.addAccountForm.get('name')?.patchValue(result.body?.lgnm);
+                            addresses.get('address')?.patchValue(completeAddress);
+                            addresses.get('pincode')?.patchValue(result.body?.pradr?.addr?.pncd);
+                        }
+                    });
+                } else {
+                    dialogRef?.close();
+                }
+            });
+        }
+    }
 }
 
