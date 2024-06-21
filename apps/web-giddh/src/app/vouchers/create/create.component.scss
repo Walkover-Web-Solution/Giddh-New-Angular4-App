@@ -89,6 +89,7 @@
                     'address address'
                     'country state'
                     'gstin pincode';
+                grid-template-columns: 1fr 1fr;
                 gap: 15px;
                 padding: 15px;
                 border: 1px solid var(--color-fields-border);
