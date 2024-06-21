@@ -17,7 +17,7 @@ import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup
 import { digitsOnly } from '../../../helpers';
 import { AppState } from '../../../../store';
 import { select, Store } from '@ngrx/store';
-import { AccountRequestV2 } from '../../../../models/api-models/Account';
+import { AccountRequestV2, CustomFieldsData } from '../../../../models/api-models/Account';
 import { ToasterService } from '../../../../services/toaster.service';
 import { CompanyResponse, StateList, StatesRequest } from '../../../../models/api-models/Company';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
