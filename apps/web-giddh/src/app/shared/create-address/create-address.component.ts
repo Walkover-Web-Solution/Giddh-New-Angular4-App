@@ -8,6 +8,7 @@ import { SettingsAsideConfiguration, SettingsAsideFormType } from '../../setting
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { CommonService } from '../../services/common.service';
 import { MatDialog } from '@angular/material/dialog';
+import { GeneralService } from '../../services/general.service';
 
 function validateFieldWithPatterns(patterns: Array<string>) {
     return (field: UntypedFormControl): { [key: string]: any } => {
@@ -70,6 +71,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         private toasterService: ToasterService,
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private commonService: CommonService,
+        private generalService: GeneralService,
         public dialog: MatDialog
     ) {
     }
@@ -129,14 +131,12 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             if (response) {
                 this.commonService.getGstInformationDetails(this.addressForm.get('taxNumber')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                     if (result) {
-                        let completeAddress = this.commonService.getCompleteAddres(result.body?.pradr?.addr);
+                        let completeAddress = this.generalService.getCompleteAddres(result.body?.pradr?.addr);
                         this.addressForm.get('name')?.patchValue(result.body?.lgnm);
                         this.addressForm.get('address')?.patchValue(completeAddress);
                         this.addressForm.get('pincode')?.patchValue(result.body?.pradr?.addr?.pncd);
                     }
                 });
-            } else {
-                dialogRef?.close();
             }
         });
     }
