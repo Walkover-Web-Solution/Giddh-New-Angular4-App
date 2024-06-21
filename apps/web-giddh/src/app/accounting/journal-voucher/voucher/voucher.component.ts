@@ -1281,7 +1281,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let index = entryIndex;
         setTimeout(() => {
             this.calculateAmount(amount, transactionObj, index, true);
-        }, 100);
+        }, 50);
     }
 
     /**
@@ -1305,7 +1305,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (manualChangeValue) {
             let { toAmount, byAmount, toEntryControl, byEntryControl, taxEntryControl, discountEntryControl } = this.getUniqueAccountDetail();
 
-            if (toAmount && byAmount) {
+            if (toAmount >= 0 && byAmount >= 0) {
                 const { totalCredit, totalDebit } = this.calculateTotalCreditAndDebit();
                 this.totalCreditAmount = totalCredit;
                 this.totalDebitAmount = totalDebit;
@@ -1377,8 +1377,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
-     * In case of sales ( i.e To ) row update manually the calculate 
-     * then and update cash ( i.e. By ) value
+     * In case of sales ( i.e To ) row update manually then 
+     * calculate and update cash ( i.e. By ) value
      *
      * @private
      * @param {number} salesAmount
