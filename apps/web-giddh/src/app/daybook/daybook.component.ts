@@ -381,7 +381,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             this.daybookQueryRequest.type = response.type;
             this.daybookQueryRequest.format = response.fileType;
             this.daybookQueryRequest.sort = response.order;
-            if (response.type === 'admin-detailed' || response.type === 'admin-condensed') {
+            if ((response.type === 'admin-detailed' || response.type === 'view-detailed') || (response.type === 'admin-condensed' || response.type === 'view-condensed')) {
                 if (this.daybookExportRequestType === 'post') {
                     if (response.fileType === "csv") {
                         let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();

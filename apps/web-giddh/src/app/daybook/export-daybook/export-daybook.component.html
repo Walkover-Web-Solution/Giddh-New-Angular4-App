@@ -26,7 +26,7 @@
                     </mat-radio-button>
                 </mat-radio-group>
             </div>
-            <ng-container *ngIf="emailTypeSelected === 'admin-detailed' || emailTypeSelected === 'admin-condensed'">
+            <ng-container *ngIf="(emailTypeSelected === 'admin-detailed' || emailTypeSelected === 'view-detailed') || (emailTypeSelected === 'admin-condensed' || emailTypeSelected === 'view-condensed')">
                 <div class="pd-b2 clearfix">
                     <label class="w100 d-sm-inline-flex d-flex">{{ commonLocaleData?.app_export_as }}: </label>
                     <mat-radio-group color="primary" name="fileType" [(ngModel)]="fileType">
