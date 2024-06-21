@@ -101,7 +101,6 @@ export class DaybookService {
         }
         let format = request.fileType
         delete request.fileType;
-        console.log(request, url)
         return this.http.post(url, request).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.queryString = request;
