@@ -172,7 +172,7 @@
                                 </div>
                             </ng-container>
                         </div>
-                        <div class="d-flex column-gap15 justify-content-between mr-t15">
+                        <div class="d-flex justify-content-between mr-t15">
                             <button
                                 mat-stroked-button
                                 color="primary"
@@ -405,19 +405,21 @@
                             </div>
                         </ng-container>
                         <ng-container *ngIf="!isNewUserLoggedIn">
-                            <div class="d-flex column-gap15 mt-3">
-                                <button mat-stroked-button matStepperPrevious>
-                                    {{ commonLocaleData?.app_back }}
-                                </button>
+                            <div class="d-flex justify-content-between mt-3">
+                                <div class="d-flex column-gap15">
+                                    <button mat-stroked-button matStepperPrevious>
+                                        {{ commonLocaleData?.app_back }}
+                                    </button>
+                                    <button
+                                        *ngIf="companiesList?.length === 0"
+                                        mat-stroked-button
+                                        (click)="openLogoutConfirmationDialog()"
+                                    >
+                                        {{ commonLocaleData?.app_cancel }}
+                                    </button>
+                                </div>
                                 <button mat-stroked-button color="primary" (click)="onSubmit()">
                                     {{ commonLocaleData?.app_submit }}
-                                </button>
-                                <button
-                                    *ngIf="companiesList?.length === 0"
-                                    mat-stroked-button
-                                    (click)="openLogoutConfirmationDialog()"
-                                >
-                                    {{ commonLocaleData?.app_cancel }}
                                 </button>
                             </div>
                         </ng-container>
