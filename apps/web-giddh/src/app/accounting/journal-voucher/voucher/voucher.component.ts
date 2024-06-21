@@ -701,6 +701,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public newEntryObj(byOrTo?: string, typeData?: any, type?: any): void {
+        this.journalVoucherForm.get('description').patchValue(null);
         let formArray = this.journalVoucherForm.get('transactions') as FormArray;
         const newTransactionFormGroup = this.initTransactionFormGroup();
         let discountObj = null;
@@ -852,20 +853,32 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
 
         if (byEntryControl) {
-            byEntryControl?.get('amount')?.patchValue(Math.round(discountFixedValue !== null && !isSalesChanged ? newCash - newDiscount : newCash));
+            byEntryControl?.get('amount')?.patchValue(this.roundOffValueByTwoDecimalPlace(discountFixedValue !== null && !isSalesChanged ? newCash - newDiscount : newCash));
         }
         if (toEntryControl) {
-            toEntryControl?.get('amount')?.patchValue(Math.round(newSales));
+            toEntryControl?.get('amount')?.patchValue(this.roundOffValueByTwoDecimalPlace(newSales));
         }
         if (discountEntryControl) {
-            discountEntryControl?.get('amount')?.patchValue(Math.round(newDiscount));
+            discountEntryControl?.get('amount')?.patchValue(this.roundOffValueByTwoDecimalPlace(newDiscount));
         }
         if (taxEntryControl) {
-            taxEntryControl?.get('amount')?.patchValue(Math.round(newTax));
+            taxEntryControl?.get('amount')?.patchValue(this.roundOffValueByTwoDecimalPlace(newTax));
         }
         const totalCreditAndDebit = this.calculateTotalCreditAndDebit();
         this.totalCreditAmount = totalCreditAndDebit.totalCredit;
         this.totalDebitAmount = totalCreditAndDebit.totalDebit;
+    }
+
+    /**
+     * Round a Number to 2 Decimal Places
+     *
+     * @private
+     * @param {*} value
+     * @returns {number}
+     * @memberof AccountAsVoucherComponent
+     */
+    private roundOffValueByTwoDecimalPlace(value: number): number {
+        return Math.round(value * 100) / 100;
     }
 
     /**
@@ -1464,8 +1477,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         });
 
-        totalCredit = Math.round(totalCredit);
-        totalDebit = Math.round(totalDebit);
+        totalCredit = this.roundOffValueByTwoDecimalPlace(totalCredit);
+        totalDebit = this.roundOffValueByTwoDecimalPlace(totalDebit);
 
         return { totalCredit, totalDebit };
     }
@@ -1478,7 +1491,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public handleEnterKeyPress(event: KeyboardEvent, submitButton: HTMLButtonElement): void {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && !this.showDiscountSidebar && !this.showTaxSidebar) {
             const descriptionControl = this.journalVoucherForm.get('description');
             if (!descriptionControl?.value || descriptionControl.value.trim() === '') {
                 event.preventDefault();
@@ -1590,9 +1603,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
                     // data.transactions[1].type = "to"; // changing it to "to" so that it becomes debit in loop below
                 }
-
+                let salesAmount;
                 data.transactions.forEach((element: any) => {
                     if (element) {
+                        if (element.type === 'to' && !element.isDiscountApplied && !element.isTaxApplied) {
+                            salesAmount = element.amount;
+                        }
                         element.type = (element.type === 'by') ? 'credit' : 'debit';
                     }
                 });
@@ -1608,11 +1624,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     data.transactions.splice(indexOfMaxAmountEntry, 1);
                 }
                 let filteredWithoutTaxDiscountData = [];
+                let filteredDiscountData = data?.transactions?.filter(transaction => transaction?.isDiscountApplied);
+                let filteredTaxData = data?.transactions?.filter(transaction => transaction?.isTaxApplied);
                 if (voucherTypeControl.value === VOUCHERS.SALES) {
-
-                    let filteredDiscountData = data?.transactions?.filter(transaction => transaction?.isDiscountApplied);
-                    let filteredTaxData = data?.transactions?.filter(transaction => transaction?.isTaxApplied);
-
                     filteredWithoutTaxDiscountData = data?.transactions?.filter(transaction => !transaction?.isDiscountApplied && !transaction?.isTaxApplied);
                     if (filteredDiscountData?.length) {
                         filteredDiscountData?.forEach(discount => {
@@ -1637,10 +1651,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         delete transaction?.isTaxApplied;
                     });
                     data.transactions = filteredWithoutTaxDiscountData;
-                }
-                if (data.transactions?.length) {
-                    data.transactions[0].amount = data.transactions[0].actualAmount;
-                    data.transactions[0].isInclusiveTax = false;
+                    if (data.transactions?.length) {
+                        data.transactions[0].amount = salesAmount;
+                        data.transactions[0].total = data.transactions[0].actualAmount + (filteredDiscountData[0]?.amount ?? 0);
+                        data.transactions[0].isInclusiveTax = false;
+                    }
                 }
                 delete data.transactions[0].actualAmount;
                 this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
@@ -2563,6 +2578,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public toggleDiscountSelected(discountObj: any): void {
         if (discountObj) {
+            this.journalVoucherForm.get('description').patchValue(null);
             this.showDiscountSidebar = false;
             let transactionsFormArray = (this.journalVoucherForm.get('transactions') as FormArray);
             let discountTransactionIndex = transactionsFormArray?.value?.findIndex(obj => obj.isDiscountApplied);
@@ -2614,6 +2630,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public toggleTaxSelected(tax: any): void {
         if (tax) {
+            this.journalVoucherForm.get('description').patchValue(null);
             this.showTaxSidebar = false;
             let transactionsFormArray = (this.journalVoucherForm.get('transactions') as FormArray);
             let taxTransactionIndex = transactionsFormArray?.value?.findIndex(obj => obj.isTaxApplied);
