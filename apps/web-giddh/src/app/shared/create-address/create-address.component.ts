@@ -103,7 +103,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public checkGstNumValidation(): void {
-        if (this.addressForm.get('taxNumber').value && this.addressForm.get('taxNumber').valid) {
+        if (this.addressForm.get('taxNumber').value && this.addressForm.get('taxNumber').valid && this.addressConfiguration.tax.name === 'GSTIN') {
             if (this.addressConfiguration.tax.name === 'GSTIN') {
                 this.getGstConfirmationPopup();
             }
