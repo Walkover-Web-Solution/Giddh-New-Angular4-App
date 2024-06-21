@@ -667,14 +667,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @param {number} i
      * @memberof AccountAddNewDetailsComponent
      */
-    public isDefaultAddressSelected(val: boolean, i: number): void {
-        this.activeIndex = i;
+    public isDefaultAddressSelected(val: boolean, activeIndex: number): void {
+        this.activeIndex = activeIndex;
         if (val) {
             let addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
             for (let control of addresses.controls) {
                 control.get('isDefault')?.patchValue(false);
             }
-            addresses.controls[i].get('isDefault')?.patchValue(true);
+            addresses.controls[activeIndex].get('isDefault')?.patchValue(true);
         }
     }
 
@@ -1641,14 +1641,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 if (response) {
                     this.commonService.getGstInformationDetails(addresses.get('gstNumber')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                         if (result) {
-                            let completeAddress = this.commonService.getCompleteAddres(result.body?.pradr?.addr);
+                            let completeAddress = this.generalService.getCompleteAddres(result.body?.pradr?.addr);
                             this.addAccountForm.get('name')?.patchValue(result.body?.lgnm);
                             addresses.get('address')?.patchValue(completeAddress);
                             addresses.get('pincode')?.patchValue(result.body?.pradr?.addr?.pncd);
                         }
                     });
-                } else {
-                    dialogRef?.close();
                 }
             });
         }

@@ -270,24 +270,4 @@ export class CommonService {
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
     }
 
-    /**
-     *This will be use for get complete address information
-     *
-     * @param {*} addr
-     * @return {*}  {string}
-     * @memberof CommonService
-     */
-    public getCompleteAddres(addr: any): string {
-        // Check each property and assign to a variable with a fallback to empty string
-        let address1 = addr?.bno ? addr.bno : '';
-        let address2 = addr?.bnm ? addr.bnm : '';
-        let address3 = addr?.st ? addr.st : '';
-        let address4 = addr?.landMark ? addr.landMark : '';
-        let address5 = addr?.loc ? addr.loc : '';
-
-        // Construct the complete address string
-        let completeAddress = `${address1} ${address2} ${address3} ${address4} ${address5}`.trim();
-
-        return completeAddress;
-    }
 }

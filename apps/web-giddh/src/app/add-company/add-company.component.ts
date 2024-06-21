@@ -740,14 +740,12 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             if (response) {
                 this.commonService.getGstInformationDetails(this.secondStepForm.get('gstin')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                     if (result) {
-                        let completeAddress = this.commonService.getCompleteAddres(result.body?.pradr?.addr);
+                        let completeAddress = this.generalService.getCompleteAddres(result.body?.pradr?.addr);
                         this.firstStepForm.get('name')?.patchValue(result.body?.lgnm);
                         this.secondStepForm.get('address')?.patchValue(completeAddress);
                         this.secondStepForm.get('pincode')?.patchValue(result.body?.pradr?.addr?.pncd);
                     }
                 });
-            } else {
-                dialogRef?.close();
             }
         });
     }
