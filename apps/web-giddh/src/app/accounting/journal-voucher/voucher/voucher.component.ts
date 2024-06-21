@@ -701,7 +701,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public newEntryObj(byOrTo?: string, typeData?: any, type?: any): void {
-        this.journalVoucherForm.get('description').patchValue(null);
         let formArray = this.journalVoucherForm.get('transactions') as FormArray;
         const newTransactionFormGroup = this.initTransactionFormGroup();
         let discountObj = null;
@@ -1351,6 +1350,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             const totalCreditAndDebit = this.calculateTotalCreditAndDebit();
             this.totalCreditAmount = totalCreditAndDebit.totalCredit;
             this.totalDebitAmount = totalCreditAndDebit.totalDebit;
+        }
+
+        if (this.journalVoucherForm.get('description').value?.length === 1) {
+            this.journalVoucherForm.get('description').patchValue(null);
         }
 
         if (currentIndex === lastIndx && transactionObj.get('selectedAccount.name').value) {
@@ -2578,7 +2581,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public toggleDiscountSelected(discountObj: any): void {
         if (discountObj) {
-            this.journalVoucherForm.get('description').patchValue(null);
             this.showDiscountSidebar = false;
             let transactionsFormArray = (this.journalVoucherForm.get('transactions') as FormArray);
             let discountTransactionIndex = transactionsFormArray?.value?.findIndex(obj => obj.isDiscountApplied);
@@ -2630,7 +2632,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public toggleTaxSelected(tax: any): void {
         if (tax) {
-            this.journalVoucherForm.get('description').patchValue(null);
             this.showTaxSidebar = false;
             let transactionsFormArray = (this.journalVoucherForm.get('transactions') as FormArray);
             let taxTransactionIndex = transactionsFormArray?.value?.findIndex(obj => obj.isTaxApplied);
