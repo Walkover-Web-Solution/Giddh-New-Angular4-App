@@ -730,5 +730,6 @@
     "app_applicable_date": "Applicable date",
     "app_name_placeholder": "Enter Name",
     "app_county": "County",
-    "app_period": "Period"
+    "app_period": "Period",
+    "app_expanded": "Expanded"
 }

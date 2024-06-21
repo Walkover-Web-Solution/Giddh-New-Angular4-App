@@ -19,6 +19,7 @@ export class ExportDaybookComponent implements OnInit, OnDestroy {
     public emailTypeSelected: string = '';
     public emailTypeMini: string = '';
     public emailTypeDetail: string;
+    public emailTypeExpanded: string;
     public emailData: string = '';
     public fileType: string = 'pdf';
     public order: string = 'asc';

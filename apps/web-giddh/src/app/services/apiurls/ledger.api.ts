@@ -53,5 +53,8 @@ export const LEDGER_API = {
     RUN_AUTOPAID: 'company/:companyUniqueName/accounts/:accountUniqueName/autopaid',
 
     // Load stock variant
-    GET_STOCK_VARIANTS: 'company/:companyUniqueName/stock/:stockUniqueName/variants'
+    GET_STOCK_VARIANTS: 'company/:companyUniqueName/stock/:stockUniqueName/variants',
+
+    // Export Daybook Expanded
+    EXPORT_EXPANDED: 'company/:companyUniqueName/exports?output=file'
 };
