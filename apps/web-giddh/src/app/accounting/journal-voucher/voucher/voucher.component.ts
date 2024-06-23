@@ -844,7 +844,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const discountFixedValue: number = discountEntryControl?.value?.discountType === "FIX_AMOUNT" ? discountEntryControl?.value?.discountValue ?? 0 : null;
         const discountRateValue: number = discountFixedValue !== null ? 0 : discountRate;
 
-        let newCash = cash
+        let newCash = cash;
         let newSales = (cash / (1 - (discountRateValue / 100)) / (1 + (taxRate / 100))) + (isSalesChanged ? discountFixedValue : 0);
         let newDiscount = discountFixedValue !== null ? discountFixedValue : newSales * (discountRate / 100);
         let salesAfterDiscount = newSales - newDiscount;
