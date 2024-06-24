@@ -109,20 +109,6 @@
                                     ></dropdown-field>
                                 </div>
                             </div>
-                            <div class="col-12 col-sm-6" *ngIf="profileData?.country?.countryCode?.toUpperCase() === 'IN'">
-                                <div class="form-group">
-                                    <dropdown-field
-                                        [label]="localeData?.export_type"
-                                        [cssClass]="'theme-selection'"
-                                        [options]="exportTypes"
-                                        [defaultValue]="getExportTypeLabel()"
-                                        [placeholder]="localeData?.select_export_type"
-                                        [isFilterEnabled]="true"
-                                        [name]="'exportType'"
-                                        (selectedOption)="setExportType($event)"
-                                    ></dropdown-field>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

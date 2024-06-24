@@ -1,0 +1,33 @@
+.unit-mapping-grid-list {
+    border-bottom: 1px solid var(--color-common-primary-border);
+    .grid-box {
+        font-size: var(--font-size-15);
+    }
+
+    .grid-box-head,
+    .grid-box-content {
+        border-right: 1px solid var(--color-common-primary-border);
+        .unit-value {
+            width: 110px;
+        }
+    }
+    .grid-box-head {
+        border-bottom: 1px solid var(--color-common-primary-border);
+        .unit-box {
+            width: 82px;
+        }
+        .unit-box,
+        .map-unit-box {
+            font-family: var(--font-semibold);
+            color: var(--color-table-secondary-heading);
+            font-size: var(--font-size-16);
+        }
+    }
+}
+
+.button-wrapper {
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 30px;
+    padding-top: 20px;
+}

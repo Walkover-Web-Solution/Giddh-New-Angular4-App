@@ -1,0 +1,38 @@
+<ng-container
+    appTranslate
+    [file]="'gst-setting'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <div
+        class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+        *ngIf="asideGstSidebarMenuState === 'in'"
+    >
+        <div
+            class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+            *ngIf="asideGstSidebarMenuState === 'in'"
+        >
+            <tax-sidebar
+                (navigateEvent)="handleNavigation()"
+                (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
+                [exclude]="'#primary-new-header'"
+                class="gst-sidebar"
+            ></tax-sidebar>
+        </div>
+        <form name="gstSettingForm" [formGroup]="gstSettingForm" autocomplete="off">
+            <div class="col-12 col-sm-3 mr-t2" *ngIf="activeCompany?.country === 'India'">
+                <div class="form-group">
+                    <dropdown-field
+                        [label]="localeData?.export_type"
+                        [cssClass]="'theme-selection'"
+                        [options]="exportTypes"
+                        [defaultValue]="getExportTypeLabel()"
+                        [placeholder]="localeData?.select_export_type"
+                        [name]="'exportType'"
+                        (selectedOption)="setExportType($event)"
+                    ></dropdown-field>
+                </div>
+            </div>
+        </form>
+    </div>
+</ng-container>
