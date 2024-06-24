@@ -90,13 +90,14 @@ export class DaybookService {
     /**
      * For Export Daybook expanded
      * @param request 
+     * @param branchUniqueName 
      * @memberof DaybookService 
      */
     public exportDaybookExpandedPost(request: any, branchUniqueName: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + DAYBOOK_SEARCH_API.ENTRIES_EXPORT
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':output', request.fileType?.toString())
+            ?.replace(':output', request.fileType?.toString());
         if (branchUniqueName) {
             branchUniqueName = branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${branchUniqueName}`);
