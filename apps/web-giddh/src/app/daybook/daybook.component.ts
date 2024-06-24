@@ -444,7 +444,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 exportBodyRequestObj.to = this.daybookQueryRequest.to;
                 exportBodyRequestObj.fileType = this.fileTypeExpand;
                 exportBodyRequestObj.exportType = "ENTRIES_EXPORT";
-                let branchUniqueName = this.generalService.currentBranchUniqueName ? this.generalService.currentBranchUniqueName : (this.currentBranch) ? this.currentBranch?.uniqueName : "";
+                let branchUniqueName = this.generalService.currentBranchUniqueName ? this.generalService.currentBranchUniqueName : this.currentBranch ? this.currentBranch?.uniqueName : "";
                 this.daybookService.ExportDaybookExpandedPost(exportBodyRequestObj, branchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success') {
                         if (response?.body?.type === "message") {

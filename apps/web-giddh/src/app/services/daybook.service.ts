@@ -87,19 +87,21 @@ export class DaybookService {
             catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request)));
     }
 
-    public ExportDaybookExpandedPost(request: any,branchUniqueName:string): Observable<BaseResponse<any, any>> {
+    /**
+     * For Export Daybook expanded
+     * @param request 
+     * @memberof DaybookService 
+     */
+    public ExportDaybookExpandedPost(request: any, branchUniqueName: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + DAYBOOK_SEARCH_API.ENTRIES_EXPORT
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':from', encodeURIComponent(request.from))
-            ?.replace(':to', encodeURIComponent(request.to))
-            ?.replace(':type', request.type?.toString())
             ?.replace(':output', request.fileType?.toString())
         if (branchUniqueName) {
             branchUniqueName = branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${branchUniqueName}`);
         }
-        let format = request.fileType
+        const format = request.fileType;
         delete request.fileType;
         return this.http.post(url, request).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
