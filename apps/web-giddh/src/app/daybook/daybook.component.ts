@@ -447,8 +447,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 let branchUniqueName = this.generalService.currentBranchUniqueName ? this.generalService.currentBranchUniqueName : this.currentBranch ? this.currentBranch?.uniqueName : "";
                 this.daybookService.exportDaybookExpandedPost(exportBodyRequestObj, branchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success') {
-                        if (response?.body?.type === "message") {
-                            this.toasterService.showSnackBar("success", response?.body?.encodedData);
+                        if (typeof response?.body === "string") {
+                            this.toasterService.showSnackBar("success", response?.body);
+                            this.router.navigate(["/pages/downloads"]);
                         } else {
                             let blob = this.generalService.base64ToBlob(response?.body?.encodedData, response?.queryString?.requestType, 512);
                             saveAs(blob, response?.body?.name);
