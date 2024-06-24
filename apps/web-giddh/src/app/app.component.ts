@@ -188,7 +188,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._generalService.addLinkTag("./assets/css/toastr.css");
             this._generalService.addLinkTag("./assets/css/ngx-bootstrap/bs-datepicker.css");
             this._generalService.addLinkTag("./assets/css/ladda-themeless.min.css");
-            this._generalService.addLinkTag("./assets/css/lightbox.scss");
+            this._generalService.addLinkTag("./assets/css/lightbox.css");
 
             /* RAZORPAY */
             if (window['Razorpay'] === undefined) {
