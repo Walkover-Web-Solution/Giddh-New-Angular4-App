@@ -12,7 +12,7 @@ module.exports = {
             'errlyticsNeeded': JSON.stringify(false),
             'errlyticsKey': JSON.stringify(''),
             'AppUrl': JSON.stringify('http://localhost:3000/'),
-            'ApiUrl': JSON.stringify('https://apitest.giddh.com/'),
+            'ApiUrl': JSON.stringify('https://api.giddh.com/'),
             'PORTAL_URL': JSON.stringify('https://master.d2n1i21e52r793.amplifyapp.com/'),
             'APP_FOLDER': JSON.stringify(''),
             'PRODUCTION_ENV': JSON.stringify(false),
@@ -37,7 +37,7 @@ module.exports = {
             'process.env.errlyticsNeeded': JSON.stringify(false),
             'process.env.errlyticsKey': JSON.stringify(''),
             'process.env.AppUrl': JSON.stringify('http://localhost:3000/'),
-            'process.env.ApiUrl': JSON.stringify('https://apitest.giddh.com/'),
+            'process.env.ApiUrl': JSON.stringify('https://api.giddh.com/'),
             'process.PORTAL_URL': JSON.stringify('https://master.d2n1i21e52r793.amplifyapp.com/'),
             'process.env.APP_FOLDER': JSON.stringify('')
         }),
