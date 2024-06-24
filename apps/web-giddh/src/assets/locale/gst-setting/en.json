@@ -1,0 +1,6 @@
+{
+    "export_type": "Export Type",
+    "select_export_type": "Select Export Type",
+    "with_pay": "With payment of IGST",
+    "without_pay": "Without payment of IGST/LUT Bond"
+}

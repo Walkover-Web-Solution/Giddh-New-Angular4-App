@@ -118,7 +118,7 @@
                             [class.active]="taxes.isActive"
                         >
                             <span><i class="icon-settings-cog"></i></span>
-                            <span>{{ localeData?.setting }}</span>
+                            <span>Manage Tax</span>
                         </a>
                     </li>
                     <li *ngIf="showGstMenus">
@@ -144,7 +144,7 @@
                             #vatReport="routerLinkActive"
                             [class.active]="vatReport.isActive"
                             [routerLink]="['/pages/vat-report']"
-                            [routerLinkActiveOptions]="{exact: true}"
+                            [routerLinkActiveOptions]="{ exact: true }"
                         >
                             <span><i class="icon-vat1"></i></span>
                             <span>{{ localeData?.vat_report }}</span>
@@ -158,7 +158,7 @@
                             #vatReport="routerLinkActive"
                             [class.active]="vatReport.isActive"
                             [routerLink]="['/pages/vat-report/liability-report']"
-                            [routerLinkActiveOptions]="{exact: false}"
+                            [routerLinkActiveOptions]="{ exact: false }"
                         >
                             <span><i class="icon-balance-sheet-new"></i></span>
                             <span>{{ localeData?.liability_report }}</span>
@@ -201,6 +201,19 @@
                         >
                             <span><i class="icon-settings-cog"></i></span>
                             <span>{{ localeData?.with_held_setting }}</span>
+                        </a>
+                    </li>
+                    <li *ngIf="showGstMenus">
+                        <a
+                            href="javascript:;"
+                            class="d-block clearfix"
+                            routerLinkActive
+                            #gstSetting="routerLinkActive"
+                            [class.active]="gstSetting.isActive"
+                            [routerLink]="['/pages/gstfiling/gst-setting']"
+                        >
+                            <span><i class="icon-settings-cog"></i></span>
+                            <span>GST setting</span>
                         </a>
                     </li>
                     <li *ngIf="showGstMenus">

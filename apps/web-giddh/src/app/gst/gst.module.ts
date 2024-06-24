@@ -49,6 +49,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { GstSettingComponent } from './gst-setting/gst-setting.component';
+import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 
 @NgModule({
     declarations: [FileGstR3Component,
@@ -56,7 +58,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent,
         OverviewSummaryComponent, TransactionSummaryComponent,
         PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent,
-        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, UnitMappingComponent, PushToPortalComponent,FilingStatusComponent],
+        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, UnitMappingComponent, PushToPortalComponent,FilingStatusComponent, GstSettingComponent],
     imports: [
         GstRoutingModule,
         CollapseModule,
@@ -75,6 +77,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         ElementViewChildModule,
         DecimalDigitsModule,
         ModalModule.forRoot(),
+        TranslateDirectiveModule,
         PurchaseModule,
         InvoiceModule,
         CurrencyModule,
