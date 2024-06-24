@@ -16,10 +16,12 @@ export class ExportDaybookComponent implements OnInit, OnDestroy {
 
     @Output() public closeExportDaybookModal: EventEmitter<any> = new EventEmitter();
 
-    /** This values holds radion type values */
     public emailTypeSelected: string = '';
+    /** This variable holds value of Mini button */
     public emailTypeMini: string = '';
+    /** This variable holds value of Detailed button */
     public emailTypeDetail: string;
+    /** This variable holds value of expanded button */
     public emailTypeExpanded: string;
     public emailData: string = '';
     public fileType: string = 'pdf';
