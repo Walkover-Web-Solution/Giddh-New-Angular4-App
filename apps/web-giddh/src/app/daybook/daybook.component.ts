@@ -146,8 +146,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
         let hasParticularSelected = this.lc.blankLedger.transactions?.filter(txn => txn?.particular);
         return (hasParticularSelected?.length) ? true : false;
     }
-    /** This will use for export as file type*/
+    /** This will use for export as file type */
     public fileTypeExpand: string = 'CSV';
+    /** This will hold the file type extension */
+    public fileTypeExtension: string = 'base64';
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -442,7 +444,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 let exportBodyRequestObj: ExportBodyRequest = new ExportBodyRequest();
                 exportBodyRequestObj.from = this.daybookQueryRequest.from;
                 exportBodyRequestObj.to = this.daybookQueryRequest.to;
-                exportBodyRequestObj.fileType = this.fileTypeExpand;
+                exportBodyRequestObj.fileType = this.fileTypeExtension;
                 exportBodyRequestObj.exportType = "ENTRIES_EXPORT";
                 let branchUniqueName = this.generalService.currentBranchUniqueName ? this.generalService.currentBranchUniqueName : this.currentBranch ? this.currentBranch?.uniqueName : "";
                 this.daybookService.ExportDaybookExpandedPost(exportBodyRequestObj, branchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {

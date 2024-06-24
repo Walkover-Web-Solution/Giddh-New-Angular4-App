@@ -101,12 +101,12 @@ export class DaybookService {
             branchUniqueName = branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${branchUniqueName}`);
         }
-        const format = request.fileType;
+        let reqObj = request;
         delete request.fileType;
         return this.http.post(url, request).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             data.queryString = request;
-            data.request = request;
+            data.request = reqObj;
             return data;
         }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
