@@ -146,8 +146,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
         let hasParticularSelected = this.lc.blankLedger.transactions?.filter(txn => txn?.particular);
         return (hasParticularSelected?.length) ? true : false;
     }
-    /** This will use for export as file type */
-    public fileTypeExpand: string = 'CSV';
     /** This will hold the file type extension */
     public fileTypeExtension: string = 'base64';
 
@@ -380,10 +378,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public hideExportDaybookModal(response: any) {
         this.modalDialogRef.close();
         if (response !== 'close') {
-            this.daybookQueryRequest.type = response.type;
-            this.daybookQueryRequest.format = response.fileType;
-            this.daybookQueryRequest.sort = response.order;
             if ((response.type === 'admin-detailed' || response.type === 'view-detailed') || (response.type === 'admin-condensed' || response.type === 'view-condensed')) {
+                this.daybookQueryRequest.type = response.type;
+                this.daybookQueryRequest.format = response.fileType;
+                this.daybookQueryRequest.sort = response.order;
                 if (this.daybookExportRequestType === 'post') {
                     if (response.fileType === "csv") {
                         let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
