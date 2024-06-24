@@ -809,6 +809,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         transaction.get('amount')?.patchValue(amount);
         transaction.get('actualAmount')?.patchValue(amount);
         transaction.get('total')?.patchValue(amount);
+
+        const totalCreditAndDebit = this.calculateTotalCreditAndDebit();
+        this.totalCreditAmount = totalCreditAndDebit.totalCredit;
+        this.totalDebitAmount = totalCreditAndDebit.totalDebit;
     }
 
     /**
@@ -1328,7 +1332,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     if ((transactionsFormArray.at(currentIndex) as FormGroup).value.type === 'by') {
                         this.updateAllAmountOfControl(toEntryControl, byAmount);
                     } else {
-                        this.updateAllAmountOfControl(byEntryControl, toAmount);
+                        this.updateCashEntryBySales(toAmount, discountEntryControl?.value?.discountValue ?? 0, discountEntryControl?.value?.discountType, taxEntryControl?.value?.taxValue ?? 0, byEntryControl);
                     }
                     this.calculateTaxDiscountAmount(true);
                 } else if (taxEntryControl && discountEntryControl && (this.totalCreditAmount !== this.totalDebitAmount)) {
@@ -1395,7 +1399,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const discountAmount: number = (discountType === 'PERCENTAGE' ? Math.round(salesAmount * (discountRateValue / 100)) : discountRateValue) ?? 0;
         const salesAfterDiscount = salesAmount - discountAmount;
         const taxAmount = Math.floor(salesAfterDiscount * (taxRate / 100));
-        const cash = Math.round(salesAmount - discountAmount + taxAmount);
+        const cash = Math.round(salesAfterDiscount + taxAmount);
         this.updateAllAmountOfControl(byAmountControl, cash);
     }
 
