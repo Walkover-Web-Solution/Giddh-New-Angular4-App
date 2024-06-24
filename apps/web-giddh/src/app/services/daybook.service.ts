@@ -92,7 +92,7 @@ export class DaybookService {
      * @param request 
      * @memberof DaybookService 
      */
-    public ExportDaybookExpandedPost(request: any, branchUniqueName: string): Observable<BaseResponse<any, any>> {
+    public exportDaybookExpandedPost(request: any, branchUniqueName: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + DAYBOOK_SEARCH_API.ENTRIES_EXPORT
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))

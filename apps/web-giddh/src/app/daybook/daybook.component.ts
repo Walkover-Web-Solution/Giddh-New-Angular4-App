@@ -146,7 +146,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
         let hasParticularSelected = this.lc.blankLedger.transactions?.filter(txn => txn?.particular);
         return (hasParticularSelected?.length) ? true : false;
     }
-    /** This will hold the file type extension */
+    /** This will hold the file type extension for expand */
     public fileTypeExtension: string = 'base64';
 
     constructor(
@@ -445,7 +445,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 exportBodyRequestObj.fileType = this.fileTypeExtension;
                 exportBodyRequestObj.exportType = "ENTRIES_EXPORT";
                 let branchUniqueName = this.generalService.currentBranchUniqueName ? this.generalService.currentBranchUniqueName : this.currentBranch ? this.currentBranch?.uniqueName : "";
-                this.daybookService.ExportDaybookExpandedPost(exportBodyRequestObj, branchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.daybookService.exportDaybookExpandedPost(exportBodyRequestObj, branchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success') {
                         if (response?.body?.type === "message") {
                             this.toasterService.showSnackBar("success", response?.body?.encodedData);
