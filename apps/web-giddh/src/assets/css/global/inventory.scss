@@ -104,6 +104,14 @@ inventory-sidebar {
             transform: translateY(-50%);
         }
     }
+    /* common text-field */
+    &.text-value-field {
+        text-field {
+            input {
+                padding: 13px 16px !important;
+            }
+        }
+    }
 }
 
 body {
