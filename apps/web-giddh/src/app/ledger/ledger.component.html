@@ -645,14 +645,16 @@
                                             <span>{{ localeData?.mapped_account_transactions }}</span>
                                         </h3>
                                     </div>
-                                    <button mat-stroked-button color="primary" *ngIf="transactionCountConvertToEntries > 0"> 
-                                        <span>{{ transactionCountConvertToEntries }} - {{ localeData?.convert_to_entries }}</span>
-                                    </button>
-                                    <button mat-button type="button" class="mat-close" aria-label="close">
-                                        <span class="font-12 font-weight-normal" (click)="hideEledgerWrap()">{{
-                                            commonLocaleData?.app_close
-                                        }}</span>
-                                    </button>
+                                    <div class="d-flex align-items-center column-gap15">
+                                        <button mat-raised-button color="primary" type="button" aria-label="create bulk entry" *ngIf="transactionCountConvertToEntries > 0" (click)="saveBulkBankTransaction()"> 
+                                            <span>{{ transactionCountConvertToEntries }} - {{ localeData?.convert_to_entries }}</span>
+                                        </button>
+                                        <button mat-stroked-button type="button" class="min-width-unset" aria-label="close">
+                                            <span class="font-12 font-weight-normal" (click)="hideEledgerWrap()">{{
+                                                commonLocaleData?.app_close
+                                            }}</span>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div class="wrap-transaction-map clearfix">
                                     <div class="w-100 ledger-head mt-0">
@@ -721,8 +723,8 @@
                                                         <div
                                                             class="ledger-row"
                                                             [ngClass]="{
-                                                                'compound-entry':
-                                                                    txn.id === lc.selectedBankTxnUniqueName
+                                                                'compound-entry' :txn.id === lc.selectedBankTxnUniqueName,
+                                                                'highlighted-transaction' : txn?.selectedAccount?.name
                                                             }"
                                                             (mouseover)="bankEntryHovered(txn.id)"
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
@@ -822,6 +824,7 @@
                                                                     <sh-select
                                                                         *ngIf="txn.showDropdown"
                                                                         class="transaction-list-sh-select"
+                                                                        [cssClass]="'bg-transparent'"
                                                                         #debitShSelect
                                                                         (viewInitEvent)="debitShSelect?.show()"
                                                                         [options]="searchResults"
@@ -937,7 +940,7 @@
                                                             >
                                                                 <input
                                                                     matInput
-                                                                    class="text-right form-control p-0"
+                                                                    class="text-right form-control p-0 bg-transparent"
                                                                     type="text"
                                                                     [id]="'enter-amount-dr-' + i"
                                                                     decimalDigitsDirective
@@ -1071,8 +1074,8 @@
                                                         <div
                                                             class="ledger-row"
                                                             [ngClass]="{
-                                                                'compound-entry':
-                                                                    txn.id === lc.selectedBankTxnUniqueName
+                                                                'compound-entry': txn.id === lc.selectedBankTxnUniqueName,
+                                                                'highlighted-transaction' : txn?.selectedAccount?.name
                                                             }"
                                                             (mouseover)="bankEntryHovered(txn.id)"
                                                             (mouseout)="selectedBankTrxWhileHovering = ''"
@@ -1171,6 +1174,7 @@
                                                                     <sh-select
                                                                         *ngIf="txn.showDropdown"
                                                                         class="transaction-list-sh-select"
+                                                                        [cssClass]="'bg-transparent'"
                                                                         #creditShSelect
                                                                         (viewInitEvent)="creditShSelect?.show()"
                                                                         [options]="searchResults"
@@ -1284,7 +1288,7 @@
                                                             >
                                                                 <input
                                                                     matInput
-                                                                    class="text-right form-control p-0"
+                                                                    class="text-right form-control p-0 bg-transparent"
                                                                     type="text"
                                                                     [id]="'enter-amount-cr-' + i"
                                                                     decimalDigitsDirective

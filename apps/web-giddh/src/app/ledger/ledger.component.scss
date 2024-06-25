@@ -22,8 +22,14 @@
                     top: $i + px !important;
                 }
             }
-            &:hover {
-                background-color: transparent;
+
+            &.highlighted-transaction {
+                background-color: var(--color-success-enable-bg-light);
+            }
+            &:not(.highlighted-transaction) {
+                &:hover {
+                    background-color: transparent;
+                }
             }
         }
         .entry-modal-height {
