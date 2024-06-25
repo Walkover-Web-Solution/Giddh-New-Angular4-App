@@ -122,6 +122,34 @@ export class LedgerService {
             catchError((e) => this.errorHandler.HandleCatch<LedgerResponse[], BlankLedgerVM>(e, model, { accountUniqueName })));
     }
 
+    /**
+     * Create Bulk Ledger from bank transaction
+     *
+     * @param {BlankLedgerVM} model
+     * @param {string} accountUniqueName
+     * @returns {Observable<BaseResponse<LedgerResponse[], BlankLedgerVM>>}
+     * @memberof LedgerService
+     */
+    public CreateBulkLedger(model: BlankLedgerVM, accountUniqueName: string): Observable<BaseResponse<LedgerResponse[], BlankLedgerVM>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        console.log("CreateBulkLedger: ", model);
+
+        const clonedRequest = cloneDeep(model);
+        let url = LEDGER_API.CREATE_BULK?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+        return this.http.post(this.config.apiUrl + url, model).pipe(
+            map((res) => {
+                let data: BaseResponse<LedgerResponse[], BlankLedgerVM> = res;
+                data.request = clonedRequest;
+                data.queryString = { accountUniqueName };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<LedgerResponse[], BlankLedgerVM>(e, model, { accountUniqueName })));
+    }
+
     /*
     * update Ledger transaction
     */
@@ -731,6 +759,6 @@ export class LedgerService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         const url = this.config.apiUrl + LEDGER_API.GET_STOCK_VARIANTS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName));
-        return this.http.get(url).pipe(map((res) => res.body),catchError(e => this.errorHandler.HandleCatch<string, string>(e, '')));
+        return this.http.get(url).pipe(map((res) => res.body), catchError(e => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
 }

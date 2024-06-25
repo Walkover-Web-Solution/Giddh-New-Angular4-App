@@ -71,6 +71,18 @@ export class LedgerActions {
                 payload: res
             }, true))));
 
+    public CreateBulksBlankLedgers$: Observable<Action> = createEffect(() => this.action$
+    .pipe(
+        ofType(LEDGER.CREATE_BULK_BLANK_LEDGER_REQUEST),
+        switchMap((action: CustomActions) => this.ledgerService.CreateBulkLedger(action.payload.model, action.payload.accountUniqueName)),
+        map(res => this.validateResponse<LedgerResponse[], BlankLedgerVM>(res, {
+            type: LEDGER.CREATE_BULK_BLANK_LEDGER_RESPONSE,
+            payload: res
+        }, true, {
+            type: LEDGER.CREATE_BULK_BLANK_LEDGER_RESPONSE,
+            payload: res
+        }, true))));
+
     public DeleteTrxEntry$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(LEDGER.DELETE_TRX_ENTRY),
@@ -401,6 +413,13 @@ export class LedgerActions {
     public CreateBlankLedger(model: BlankLedgerVM, accountUniqueName: string): CustomActions {
         return {
             type: LEDGER.CREATE_BLANK_LEDGER_REQUEST,
+            payload: { model, accountUniqueName }
+        };
+    }
+
+    public CreateBulksBlankLedgers(model: BlankLedgerVM, accountUniqueName: string): CustomActions {
+        return {
+            type: LEDGER.CREATE_BULK_BLANK_LEDGER_REQUEST,
             payload: { model, accountUniqueName }
         };
     }
