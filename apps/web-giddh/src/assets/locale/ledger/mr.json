@@ -210,5 +210,6 @@
     "download_sample_xls": "एक नमुना एक्सेल फाइल डाउनलोड करा",
     "download_sample_csv": "एक नमुना सीएसव्ही फाईल डाउनलोड करा",
     "select_variant": "प्रकार निवडा",
-    "uncheck_auto_generate_tooltip_message": "आपण \"प्रविष्टियोंसाठी स्वच्छंद रूपात वाउचर उत्पन्न करा\" सेटिंग सक्रिय आहे, म्हणून आपण चेकबॉक्स को अनचेक करू शकता नाही. हे निष्क्रिय करून घेतल्यास, इथे <a href='/pages/invoice/preview/settings/sales?tabIndex=4' target='_blank'>क्लिक करा</a> आणि इन्व्हॉईस > सेटिंग्स पृष्ठावर जा."
+    "uncheck_auto_generate_tooltip_message": "आपण \"प्रविष्टियोंसाठी स्वच्छंद रूपात वाउचर उत्पन्न करा\" सेटिंग सक्रिय आहे, म्हणून आपण चेकबॉक्स को अनचेक करू शकता नाही. हे निष्क्रिय करून घेतल्यास, इथे <a href='/pages/invoice/preview/settings/sales?tabIndex=4' target='_blank'>क्लिक करा</a> आणि इन्व्हॉईस > सेटिंग्स पृष्ठावर जा.",
+    "convert_to_entries": "नोंदींमध्ये रूपांतरित करा"
 }
