@@ -639,17 +639,20 @@
                         </h1>
                         <section id="eledgerwrap" class="mr-t2" [hidden]="!lc.showEledger || isBankTransactionLoading">
                             <div class="alert alert-danger ledger-book fade in position-relative pd-r15">
-                                <button mat-button type="button" class="mat-close" aria-label="close">
-                                    <span class="font-12 font-weight-normal" (click)="hideEledgerWrap()">{{
-                                        commonLocaleData?.app_close
-                                    }}</span>
-                                </button>
-                                <div>
+                                <div class="d-flex align-items-start justify-content-between">
                                     <div class="clearfix ledger-top-header-left">
                                         <h3 class="ledger-main-head">
                                             <span>{{ localeData?.mapped_account_transactions }}</span>
                                         </h3>
                                     </div>
+                                    <button mat-stroked-button color="primary" *ngIf="transactionCountConvertToEntries > 0"> 
+                                        <span>{{ transactionCountConvertToEntries }} - {{ localeData?.convert_to_entries }}</span>
+                                    </button>
+                                    <button mat-button type="button" class="mat-close" aria-label="close">
+                                        <span class="font-12 font-weight-normal" (click)="hideEledgerWrap()">{{
+                                            commonLocaleData?.app_close
+                                        }}</span>
+                                    </button>
                                 </div>
                                 <div class="wrap-transaction-map clearfix">
                                     <div class="w-100 ledger-head mt-0">

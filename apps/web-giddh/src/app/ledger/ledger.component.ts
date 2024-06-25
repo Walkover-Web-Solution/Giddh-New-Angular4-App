@@ -304,6 +304,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public selectedCreditTransactionIds = new Set<string>();
     /** String representing the selected bank transaction while hovering. */
     public selectedBankTrxWhileHovering: string;
+    public transactionCountConvertToEntries: number = null;
 
 
     constructor(
@@ -399,6 +400,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public selectAccount(e: IOption, txn: TransactionVM, clearAccount?: boolean, isBankTransaction?: boolean, allowChangeDetection?: boolean) {
+        // console.log("selectAccount", this.lc.bankTransactionsDebitData, txn);
+
         this.keydownClassAdded = false;
         this.selectedTxnAccUniqueName = '';
         this.selectedAccountDetails = e;
@@ -944,10 +947,37 @@ export class LedgerComponent implements OnInit, OnDestroy {
                             this.getAccountSearchPrediction(this.lc.bankTransactionsCreditData);
                             this.getAccountSearchPrediction(this.lc.bankTransactionsDebitData);
                         });
+
+                        // console.log("this.lc.bankTransactionsDebitData", this.lc.bankTransactionsDebitData);
+                        // console.log("this.lc.bankTransactionsCreditData", this.lc.bankTransactionsCreditData);
                         this.cdRf.detectChanges();
                     }
                 }
             });
+        }
+    }
+
+    public getTransactionCountConvertToEntries(): void {
+        if (this.lc.bankTransactionsDebitData?.length && this.lc.bankTransactionsCreditData?.length) {
+            let filteredDebit: any[] = [];
+            let filteredCredit: any[] = [];
+
+            this.lc.bankTransactionsDebitData.forEach(transaction => {
+                if (transaction.transactions[0].selectedAccount?.name) {
+                    filteredDebit.push(transaction.transactions[0]);
+                }
+            });
+            this.lc.bankTransactionsCreditData.forEach(transaction => {
+                if (transaction.transactions[0].selectedAccount?.name) {
+                    filteredCredit.push(transaction.transactions[0]);
+                }
+            });
+
+            const finalArray: any[] = [...filteredDebit, ...filteredCredit];
+            console.log(finalArray);
+
+            this.transactionCountConvertToEntries = finalArray.length;
+            console.log("transactionCountConvertToEntries", this.transactionCountConvertToEntries);
         }
     }
 
@@ -2929,6 +2959,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (allowChangeDetection) {
                     this.cdRf.detectChanges();
                 }
+                this.getTransactionCountConvertToEntries();
             }
         });
     }
