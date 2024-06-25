@@ -1005,7 +1005,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             } else {
                 ele.classList.remove('error-box');
                 this.isGstValid$ = observableOf(true);
-                if (this.selectedCountryCode = 'IN') {
+                if (this.selectedCountryCode === 'IN') {
                     this.getGstConfirmationPopup();
                 }
             }
