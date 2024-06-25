@@ -16,7 +16,7 @@ import { SettingsProfileActions } from "../../actions/settings/profile/settings.
 import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { GeneralService } from "../../services/general.service";
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from "../../app.constant";
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD, GIDDH_NEW_DATE_FORMAT_UI } from "../../shared/helpers/defaultDateFormat";
 import * as dayjs from "dayjs";
 import { GstSettingComponentStore } from "./utility/gst-setting.store";
 
@@ -40,16 +40,12 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     public isMobileScreen: boolean = false;
     /** This will use for destroy */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Holds active company GST number */
-    public activeCompanyGstNumber = '';
     /** List of available themes */
     public exportTypes: IOption[] = [];
     /** Holds export type */
     public exportType: string = '';
     /** Invoice Settings */
     public activeCompany: any;
-    /** Holds unit array list */
-    public lutListArray: any[] = [];
     /** Holds gst setting form group */
     public gstSettingForm: FormGroup;
     /** Entry index which is open in edit mode */
@@ -60,6 +56,8 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     public toDate: string;
     /** Get Lut Number get in progress Observable */
     public getLutNumberInProgress$: Observable<any> = this.componentStore.getLutNumberInProgress$;
+    /** Delete Lut Number get in progress Observable */
+    public deleteLutNumberIsSuccess$: Observable<any> = this.componentStore.deleteLutNumberIsSuccess$;
 
     constructor(
         private breakpointObserver: BreakpointObserver,
@@ -93,7 +91,6 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                 let universalDate = _.cloneDeep(dateObj);
                 this.fromDate = universalDate[0];
                 this.toDate = universalDate[1];
-                console.log(this.fromDate);
                 let gstFormArray = this.gstSettingForm.get('gstData') as FormArray;
                 let gstFormGroup = gstFormArray.at(0);
                 gstFormGroup.get('fromDate')?.patchValue(universalDate[0]);
@@ -126,12 +123,12 @@ export class GstSettingComponent implements OnInit, OnDestroy {
  * @return {*}  {FormGroup}
  * @memberof GstSettingComponent
  */
-    public initLutForm(): FormGroup {
+    public initLutForm(data?: any): FormGroup {
         return this.formBuilder.group({
-            fromDate: [''],
-            toDate: [''],
-            lutNumber: [''],
-            uniqueName: ['']
+            fromDate: [data?.fromDate ?? ''],
+            toDate: [data?.toDate ?? ''],
+            lutNumber: [data?.lutNumber ?? ''],
+            uniqueName: [data?.uniqueName ?? '']
         });
     }
 
@@ -156,42 +153,32 @@ export class GstSettingComponent implements OnInit, OnDestroy {
      * @memberof OtherSettingsComponent
      */
     public addNewLutItem(user?: any): void {
-        // Ensure gstData is initialized as a FormArray
         let mappings = this.gstSettingForm.get('gstData') as FormArray;
-
-        let mappingForm = this.formBuilder.group({
-            fromDate: [this.fromDate], // Use user values if available, else default to ''
-            toDate: [this.toDate], // Use user values if available, else default to ''
-            lutNumber: [''] // Use user values if available, else default to ''
-        });
-        mappings.push(mappingForm);
+        let lastIndex = mappings.length - 1;
+        let lastFormArray = mappings.at(lastIndex);
         if (user) {
-            const fromDate = user.fromDate;
-            const [fromDay, fromMonth, fromYear] = fromDate.split('-').map(Number);
-            const formatFromDate = new Date(fromYear, fromMonth - 1, fromDay);
-            const fromDateString = formatFromDate.toString();
-
-            const toDate = user.fromDate;
-            const [toDay, toMonth, toYear] = toDate.split('-').map(Number);
-            const toFromDate = new Date(toYear, toMonth - 1, toDay);
-            const toDateString = toFromDate.toString();
-
-            console.log(mappings, fromDateString, toDateString);
-
-            mappings.controls.forEach(control => {
-                console.log(control);
-                if (!control?.get('lutNumber').value) {
-                    control.get('fromDate')?.patchValue(fromDateString);
-                    control.get('toDate')?.patchValue(toDateString);
-                    control.get('lutNumber')?.patchValue(user.lutNumber);
-                    // Assuming you have a 'uniqueName' field in your form
-                    // Replace 'uniqueName' with the actual field name in your form
-                    control.get('uniqueName')?.patchValue(user.uniqueName);
-                }
-            });
+            let fromDate = null;
+            let toDate = null;
+            if (user.fromDate && user.toDate) {
+                fromDate = dayjs(user?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD);
+                toDate = dayjs(user.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD);
+            }
+            if (!lastFormArray?.get('lutNumber')?.value) {
+                mappings.at(lastIndex).patchValue({
+                    fromDate: fromDate,
+                    toDate: toDate,
+                    lutNumber: user.lutNumber,
+                    uniqueName: user.uniqueName
+                });
+            }
+        } else {
+            mappings.push(this.initLutForm({
+                fromDate: this.fromDate,
+                toDate: this.toDate
+            }));
         }
-
     }
+
 
     /**
  * This will be use for remove lut item
@@ -199,15 +186,29 @@ export class GstSettingComponent implements OnInit, OnDestroy {
  * @param {number} index
  * @memberof OtherSettingsComponent
  */
-    public removeLutItem(index: number): void {
+    public removeLutItem(index: number ): void {
         let mappings = this.gstSettingForm.get('gstData') as FormArray;
         let mappingForm = mappings.at(index);
+
+        console.log(mappingForm);
+
+
         if (index === 0) {
-            mappingForm.get('lutNumber')?.patchValue(null);
-            mappingForm.get('fromDate')?.patchValue(this.fromDate);
-            mappingForm.get('toDate')?.patchValue(this.toDate);
+            if (mappingForm.get('uniqueName')?.value) {
+                this.componentStore.deleteLutNumber({ lutNumberUniqueName: mappingForm.get('uniqueName')?.value });
+                mappings.removeAt(index);
+                mappings.push(this.initLutForm({
+                    fromDate: this.fromDate,
+                    toDate: this.toDate
+                }));
+            } else {
+                mappingForm.get('lutNumber')?.patchValue(null);
+                mappingForm.get('fromDate')?.patchValue(this.fromDate);
+                mappingForm.get('toDate')?.patchValue(this.toDate);
+            }
         } else {
             mappings.removeAt(index);
+            this.componentStore.deleteLutNumber({ lutNumberUniqueName: mappingForm.get('uniqueName')?.value });
         }
     }
 

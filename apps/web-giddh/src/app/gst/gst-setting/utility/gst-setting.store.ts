@@ -83,57 +83,32 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
         );
     });
 
-    // readonly getInvoiceSettings = this.effect((data: Observable<void>) => {
-    //     return data.pipe(
-    //         switchMap(() => {
-    //             this.patchState({ isLoading: true });
-    //             return this.voucherService.getInvoiceSettings().pipe(
-    //                 tapResponse(
-    //                     (res: BaseResponse<InvoiceSetting, any>) => {
-    //                         return this.patchState({
-    //                             isLoading: false,
-    //                             invoiceSettings: res?.body ?? null
-    //                         });
-    //                     },
-    //                     (error: any) => {
-    //                         this.toaster.showSnackBar("error", error);
-    //                         return this.patchState({
-    //                             isLoading: false,
-    //                             invoiceSettings: null
-    //                         });
-    //                     }
-    //                 ),
-    //                 catchError((err) => EMPTY)
-    //             );
-    //         })
-    //     );
-    // });
 
-    // readonly getPreviousVouchers = this.effect((data: Observable<{ model: InvoiceReceiptFilter, type: string }>) => {
-    //     return data.pipe(
-    //         switchMap((req) => {
-    //             this.patchState({ getLastVouchersInProgress: true });
-    //             return this.voucherService.getAllVouchers(req.model, req.type).pipe(
-    //                 tapResponse(
-    //                     (res: BaseResponse<LastVouchersResponse, any>) => {
-    //                         return this.patchState({
-    //                             getLastVouchersInProgress: false,
-    //                             lastVouchers: res?.body ?? {}
-    //                         });
-    //                     },
-    //                     (error: any) => {
-    //                         this.toaster.showSnackBar("error", error);
-    //                         return this.patchState({
-    //                             getLastVouchersInProgress: false,
-    //                             lastVouchers: null
-    //                         });
-    //                     }
-    //                 ),
-    //                 catchError((err) => EMPTY)
-    //             );
-    //         })
-    //     );
-    // });
+    readonly deleteLutNumber = this.effect((data: Observable<{lutNumberUniqueName:any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ deleteLutNumberInProgress: true });
+                return this.gstReconcileService.deleteLutNumber(req.lutNumberUniqueName).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                this.toaster.showSnackBar("success", res.body);
+                                return this.patchState({ deleteLutNumberInProgress: false, deleteLutNumberIsSuccess: true });
+                            } else {
+                                this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({ deleteLutNumberInProgress: false, deleteLutNumberIsSuccess: false });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({ deleteLutNumberInProgress: false, deleteLutNumberIsSuccess: false });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
 
     // readonly getPreviousProformaEstimates = this.effect((data: Observable<{ model: ProformaFilter, type: string }>) => {
     //     return data.pipe(

@@ -321,4 +321,15 @@ export class GstReconcileService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, FilingStatusRequest>(e)));
     }
+
+    public deleteLutNumber(lutNumberUniqueName: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let apiUrl = GSTR_API.DELETE_LUT_NUMBER
+            ?.replace(':companyUniqueName', this.companyUniqueName)
+            ?.replace(':lutNumberUniqueName', lutNumberUniqueName)
+        return this.http.delete(this.config.apiUrl + apiUrl).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, FilingStatusRequest>(e)));
+    }
 }
