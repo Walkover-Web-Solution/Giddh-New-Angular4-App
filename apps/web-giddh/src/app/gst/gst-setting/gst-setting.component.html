@@ -3,6 +3,7 @@
     [file]="'gst-setting'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
 >
     <div
         class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
@@ -33,6 +34,91 @@
                     ></dropdown-field>
                 </div>
             </div>
+            <giddh-page-loader *ngIf="getLutNumberInProgress$ | async"></giddh-page-loader>
+            <ng-container *ngIf="!(getLutNumberInProgress$ | async)">
+                <div class="col-6 pr-0 mr-b15">
+                    <div class="d-flex justify-content-end">
+                        <button mat-stroked-button color="primary">Save</button>
+                    </div>
+                </div>
+
+                <div class="col-6 pr-0">
+                    <div class="row">
+                        <div class="consumption-details-wrapper w-100">
+                            <div class="pd-r1 pd-l1">
+                                <table class="w-100">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>LUT Number</th>
+                                            <th class="text-right">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody formArrayName="gstData">
+                                        <tr
+                                            *ngFor="
+                                                let lutItem of gstSettingForm?.get('gstData')['controls'];
+                                                let i = index
+                                            "
+                                            [formGroupName]="i"
+                                        >
+                                            <td>
+                                                <div class="custom-mat-form-field">
+                                                    <div class="date-range-wrapper">
+                                                        <mat-form-field
+                                                            [matDatepickerToggleIcon]="false"
+                                                            (click)="picker.open()"
+                                                            class="w-100 mat-form-field-border"
+                                                            name="date_{{ i }}"
+                                                        >
+                                                            <mat-date-range-input [rangePicker]="picker">
+                                                                <input
+                                                                    matStartDate
+                                                                    [placeholder]="commonLocaleData?.app_start_date"
+                                                                    formControlName="fromDate"
+                                                                />
+                                                                <input
+                                                                    matEndDate
+                                                                    [placeholder]="commonLocaleData?.app_end_date"
+                                                                    formControlName="toDate"
+                                                                />
+                                                            </mat-date-range-input>
+                                                            <mat-date-range-picker #picker></mat-date-range-picker>
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="w-100 option-value-field text-value-field">
+                                                    <text-field
+                                                        type="text"
+                                                        [cssClass]="'w-100 pd-15'"
+                                                        [placeholder]="'Enter Lut Number'"
+                                                        formControlName="lutNumber"
+                                                        name="lut_{{ i }}"
+                                                    ></text-field>
+                                                </div>
+                                            </td>
+                                            <td class="text-right">
+                                                <button
+                                                    mat-stroked-button
+                                                    class="min-width-unset"
+                                                    (click)="removeLutItem(i)"
+                                                >
+                                                    <i class="icon-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="mt-2">
+                                    <a class="mb-2" (click)="addNewLutItem()" href="javascript:;"> Add New Line </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
         </form>
     </div>
 </ng-container>

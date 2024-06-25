@@ -310,4 +310,15 @@ export class GstReconcileService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, FilingStatusRequest>(e)));
     }
+
+
+    public getLutNumberList(): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let apiUrl = GSTR_API.GET_LUT_NUMBER_LIST
+            ?.replace(':companyUniqueName', this.companyUniqueName)
+        return this.http.get(this.config.apiUrl + apiUrl).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, FilingStatusRequest>(e)));
+    }
 }

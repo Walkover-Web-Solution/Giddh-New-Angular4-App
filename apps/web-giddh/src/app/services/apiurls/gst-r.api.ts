@@ -1,4 +1,5 @@
 const COMMON_URL_FOR_GSTR = 'company/:companyUniqueName/gstreturn';
+const COMMON_URL = 'company/:companyUniqueName';
 const COMMON_V2 = 'v2/company/:companyUniqueName';
 
 export const GSTR_API = {
@@ -14,5 +15,6 @@ export const GSTR_API = {
     FILE_GSTR1: COMMON_V2 + '/save-gstr1?gstin=:company_gstin&from=:from&to=:to&gsp=:gsp&currentDateTime=:currentDateTime',
     DOWNLOAD_JSON: COMMON_V2 +'/gstr1/download?gstin=:gstIn&from=:from&to=:to&type=:type',
     GET_FILING_STATUS_REFERENCE_ID: COMMON_V2 +'/gstr1-referenceIds?gstin=:gstIn&from=:from&to=:to&page=:page&count=:count&gsp=:gsp',
-    GET_FILING_STATUS_RESPONSE: COMMON_V2 + '/save-gstr1-status?referenceId=:referenceId'
+    GET_FILING_STATUS_RESPONSE: COMMON_V2 + '/save-gstr1-status?referenceId=:referenceId',
+    GET_LUT_NUMBER_LIST: COMMON_URL + '/gst-setting/list'
 };

@@ -51,6 +51,8 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { GstSettingComponent } from './gst-setting/gst-setting.component';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
+import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 
 @NgModule({
     declarations: [FileGstR3Component,
@@ -94,7 +96,9 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
         MatDatepickerModule,
         MatNativeDateModule,
         WatchVideoModule,
-        MatTooltipModule
+        MatTooltipModule,
+        GiddhDatepickerModule,
+        DatepickerWrapperModule
     ],
     providers: [],
     exports: [ViewTransactionsComponent]
