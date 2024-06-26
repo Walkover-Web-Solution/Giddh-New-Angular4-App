@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { Store } from "@ngrx/store";
-import { Observable, switchMap, catchError, EMPTY, of } from "rxjs";
+import { Observable, switchMap, catchError, EMPTY, of, tap, forkJoin, mergeMap } from "rxjs";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { AppState } from "../../../store";
 import { ToasterService } from "../../../services/toaster.service";
@@ -9,20 +9,18 @@ import { GstReconcileService } from "../../../services/gst-reconcile.service";
 
 export interface GstSettingState {
     isLoading: boolean;
-    createUpdateInProgress: boolean;
-    deleteLutNumberInProgress: boolean;
+    createUpdateInSuccess: boolean;
     deleteLutNumberIsSuccess: boolean;
-    getLutNumberInProgress: boolean;
     lutNumberList: any[];
+    lutNumberResponse: any;
 }
 
 const DEFAULT_STATE: GstSettingState = {
     isLoading: false,
-    createUpdateInProgress: null,
-    deleteLutNumberInProgress: null,
-    deleteLutNumberIsSuccess: null,
-    getLutNumberInProgress: null,
+    createUpdateInSuccess: false,
+    deleteLutNumberIsSuccess: false,
     lutNumberList: null,
+    lutNumberResponse: null
 };
 
 @Injectable()
@@ -37,12 +35,10 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
     }
 
     public isLoading$ = this.select((state) => state.isLoading);
-    public createUpdateInProgress$ = this.select((state) => state.createUpdateInProgress);
-    public deleteLutNumberInProgress$ = this.select((state) => state.deleteLutNumberInProgress);
+    public createUpdateInSuccess$ = this.select((state) => state.createUpdateInSuccess);
     public lutNumberList$ = this.select((state) => state.lutNumberList);
     public deleteLutNumberIsSuccess$ = this.select((state) => state.deleteLutNumberIsSuccess);
-    public getLutNumberInProgress$ = this.select((state) => state.getLutNumberInProgress);
-
+    public lutNumberResponse$ = this.select((state) => state.lutNumberResponse);
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
@@ -60,20 +56,20 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
     readonly getLutNumberList = this.effect((data: Observable<void>) => {
         return data.pipe(
             switchMap(() => {
-                this.patchState({ getLutNumberInProgress: true });
+                this.patchState({ isLoading: true });
                 return this.gstReconcileService.getLutNumberList().pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
                                 lutNumberList: res?.body ?? [],
-                                getLutNumberInProgress: false
+                                isLoading: false
                             });
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 lutNumberList: [],
-                                getLutNumberInProgress: false
+                                isLoading: false
                             });
                         }
                     ),
@@ -84,24 +80,24 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
     });
 
 
-    readonly deleteLutNumber = this.effect((data: Observable<{lutNumberUniqueName:any }>) => {
+    readonly deleteLutNumber = this.effect((data: Observable<{ lutNumberUniqueName: any }>) => {
         return data.pipe(
             switchMap((req) => {
-                this.patchState({ deleteLutNumberInProgress: true });
+                this.patchState({ isLoading: true, deleteLutNumberIsSuccess: false });
                 return this.gstReconcileService.deleteLutNumber(req.lutNumberUniqueName).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 this.toaster.showSnackBar("success", res.body);
-                                return this.patchState({ deleteLutNumberInProgress: false, deleteLutNumberIsSuccess: true });
+                                return this.patchState({ isLoading: false, deleteLutNumberIsSuccess: true });
                             } else {
                                 this.toaster.showSnackBar("error", res.message);
-                                return this.patchState({ deleteLutNumberInProgress: false, deleteLutNumberIsSuccess: false });
+                                return this.patchState({ isLoading: false, deleteLutNumberIsSuccess: false });
                             }
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
-                            return this.patchState({ deleteLutNumberInProgress: false, deleteLutNumberIsSuccess: false });
+                            return this.patchState({ isLoading: false, deleteLutNumberIsSuccess: false });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -110,31 +106,40 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
         );
     });
 
-    // readonly getPreviousProformaEstimates = this.effect((data: Observable<{ model: ProformaFilter, type: string }>) => {
-    //     return data.pipe(
-    //         switchMap((req) => {
-    //             this.patchState({ getLastVouchersInProgress: true });
-    //             return this.voucherService.getAllProformaEstimate(req.model, req.type).pipe(
-    //                 tapResponse(
-    //                     (res: BaseResponse<any, any>) => {
-    //                         return this.patchState({
-    //                             getLastVouchersInProgress: false,
-    //                             lastVouchers: res?.body ?? {}
-    //                         });
-    //                     },
-    //                     (error: any) => {
-    //                         this.toaster.showSnackBar("error", error);
-    //                         return this.patchState({
-    //                             getLastVouchersInProgress: false,
-    //                             lastVouchers: {}
-    //                         });
-    //                     }
-    //                 ),
-    //                 catchError((err) => EMPTY)
-    //             );
-    //         })
-    //     );
-    // });
+
+    readonly createLutNumber = this.effect((data: Observable<{ q: any, index: number, autoSelectLutNumber: boolean }>) => {
+        return data.pipe(
+            mergeMap((req) => {
+                this.patchState({ isLoading: true, createUpdateInSuccess: false, lutNumberResponse: null });
+                return this.gstReconcileService.createLutNumber(req.q).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    lutNumberResponse: { message: null, lutIndex: req.index, autoSelectLutNumber: true, lutNumberItem: req.q }, isLoading: false
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toaster.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    lutNumberResponse: { message: res.message, lutIndex: req.index, autoSelectVariant: false, lutNumberItem: req.q }, isLoading: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
+                            return this.patchState({
+                                lutNumberResponse: { message: error.message, lutIndex: req.index, autoSelectVariant: false, lutNumberItem: req.q }, isLoading: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
 
     // readonly getCreatedTemplates = this.effect((data: Observable<string>) => {
     //     return data.pipe(

@@ -1,3 +1,4 @@
+import { forEach } from 'apps/web-giddh/src/app/lodash-optimized';
 import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { ReplaySubject, Observable, combineLatest } from "rxjs";
@@ -55,9 +56,11 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     /* Selected to date */
     public toDate: string;
     /** Get Lut Number get in progress Observable */
-    public getLutNumberInProgress$: Observable<any> = this.componentStore.getLutNumberInProgress$;
-    /** Delete Lut Number get in progress Observable */
+    public isLoading$: Observable<any> = this.componentStore.isLoading$;
+    /** Delete Lut Number in progress Observable */
     public deleteLutNumberIsSuccess$: Observable<any> = this.componentStore.deleteLutNumberIsSuccess$;
+    /** Create Lut Number in progress Observable */
+    public createUpdateInSuccess$: Observable<any> = this.componentStore.createUpdateInSuccess$;
 
     constructor(
         private breakpointObserver: BreakpointObserver,
@@ -92,9 +95,9 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                 this.fromDate = universalDate[0];
                 this.toDate = universalDate[1];
                 let gstFormArray = this.gstSettingForm.get('gstData') as FormArray;
-                let gstFormGroup = gstFormArray.at(0);
-                gstFormGroup.get('fromDate')?.patchValue(universalDate[0]);
-                gstFormGroup.get('toDate')?.patchValue(universalDate[1]);
+                let gstFormGroup = gstFormArray?.at(0);
+                gstFormGroup?.get('fromDate')?.patchValue(this.fromDate);
+                gstFormGroup?.get('toDate')?.patchValue(this.toDate);
             }
         });
         this.breakpointObserver
@@ -106,6 +109,24 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                     this.asideGstSidebarMenuState = 'in';
                 }
             });
+
+        this.deleteLutNumberIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (result) {
+                this.getLutList();
+            }
+        });
+
+        this.componentStore.lutNumberList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.length) {
+                response.forEach((item) => {
+                    this.addNewLutItem(item);
+                })
+            }
+        });
+
+        this.componentStore.lutNumberResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response);
+        });
     }
 
     public initGstSettingForm(): void {
@@ -133,6 +154,18 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Get label for export type
+     *
+     * @returns {string}
+     * @memberof GstSettingComponent
+     */
+    public getExportTypeLabel(): string {
+        let value = this.activeCompany.withPay ? 'yes' : 'no';
+        const exportType = this.exportTypes.find(item => item.value === value);
+        return exportType ? exportType.label : '';
+    }
+
+    /**
  * Saves export type
  *
  * @memberof GstSettingComponent
@@ -145,6 +178,15 @@ export class GstSettingComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+ * This will use for get stock units
+ *
+ * @memberof GstSettingComponent
+ */
+    public getLutList(): void {
+        this.componentStore.getLutNumberList();
+    }
+
 
     /**
      * This will be use for add new lut item
@@ -154,9 +196,15 @@ export class GstSettingComponent implements OnInit, OnDestroy {
      */
     public addNewLutItem(user?: any): void {
         let mappings = this.gstSettingForm.get('gstData') as FormArray;
-        let lastIndex = mappings.length - 1;
-        let lastFormArray = mappings.at(lastIndex);
         if (user) {
+            mappings.push(this.initLutForm({
+                fromDate: this.fromDate,
+                toDate: this.toDate
+            }));
+            console.log(mappings);
+            let lastIndex = mappings.controls.findIndex(control => !control.get('lutNumber')?.value);
+            let lastFormArray = mappings.at(lastIndex);
+            console.log(lastFormArray);
             let fromDate = null;
             let toDate = null;
             if (user.fromDate && user.toDate) {
@@ -186,13 +234,9 @@ export class GstSettingComponent implements OnInit, OnDestroy {
  * @param {number} index
  * @memberof OtherSettingsComponent
  */
-    public removeLutItem(index: number ): void {
+    public removeLutItem(index: number): void {
         let mappings = this.gstSettingForm.get('gstData') as FormArray;
         let mappingForm = mappings.at(index);
-
-        console.log(mappingForm);
-
-
         if (index === 0) {
             if (mappingForm.get('uniqueName')?.value) {
                 this.componentStore.deleteLutNumber({ lutNumberUniqueName: mappingForm.get('uniqueName')?.value });
@@ -208,7 +252,9 @@ export class GstSettingComponent implements OnInit, OnDestroy {
             }
         } else {
             mappings.removeAt(index);
-            this.componentStore.deleteLutNumber({ lutNumberUniqueName: mappingForm.get('uniqueName')?.value });
+            if (mappingForm.get('uniqueName')?.value) {
+                this.componentStore.deleteLutNumber({ lutNumberUniqueName: mappingForm.get('uniqueName')?.value });
+            }
         }
     }
 
@@ -229,23 +275,43 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     }
 
 
-    /**
-     * Get label for export type
-     *
-     * @returns {string}
-     * @memberof GstSettingComponent
-     */
-    public getExportTypeLabel(): string {
-        let value = this.activeCompany.withPay ? 'yes' : 'no';
-        const exportType = this.exportTypes.find(item => item.value === value);
-        return exportType ? exportType.label : '';
+    public saveLutNumbers(): void {
+        const items = this.gstSettingForm.get('gstData') as FormArray;
+
+        // Map controls to include original indices
+        const itemsWithOriginalIndex = items.controls.map((ctrl, i) => ({
+            ...ctrl.value,
+            dirty: ctrl.dirty,
+            originalIndex: i,
+            fromDate: dayjs(ctrl.value.fromDate).format(GIDDH_DATE_FORMAT),
+            toDate: dayjs(ctrl.value.toDate).format(GIDDH_DATE_FORMAT)
+        }));
+
+        // Filter controls that are dirty and map them with their original index
+        const changedItems = itemsWithOriginalIndex
+            .filter(ctrl => ctrl.dirty)
+            .map(item => ({
+                ...item
+            }));
+
+        if (changedItems.length > 0) {
+            changedItems.forEach(item => {
+                const req = {
+                    q: item,
+                    index: item.originalIndex,
+                    autoSelectLutNumber: true
+                };
+                this.componentStore.createLutNumber(req);
+            });
+        }
     }
 
+
     /**
-     * Lifecycle hook runs when component is destroyed
-     *
-     * @memberof GstSettingComponent
-     */
+    * Lifecycle hook runs when component is destroyed
+    *
+    * @memberof GstSettingComponent
+    */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -254,19 +320,6 @@ export class GstSettingComponent implements OnInit, OnDestroy {
         this.asideGstSidebarMenuState = 'out';
     }
 
-    /**
-     * This will use for get stock units
-     *
-     * @memberof GstSettingComponent
-     */
-    public getLutList(): void {
-        this.componentStore.lutNumberList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                response.forEach((item) => {
-                    this.addNewLutItem(item);
-                })
-            }
-        });
-    }
+
 
 }

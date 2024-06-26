@@ -332,4 +332,19 @@ export class GstReconcileService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, FilingStatusRequest>(e)));
     }
+
+
+    public createLutNumber(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + GSTR_API.CREATE_LUT_NUMBER
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)),
+            model)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = model;
+                    return data;
+                })
+                , catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
 }

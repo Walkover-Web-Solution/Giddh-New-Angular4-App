@@ -17,6 +17,7 @@ export const GSTR_API = {
     GET_FILING_STATUS_REFERENCE_ID: COMMON_V2 +'/gstr1-referenceIds?gstin=:gstIn&from=:from&to=:to&page=:page&count=:count&gsp=:gsp',
     GET_FILING_STATUS_RESPONSE: COMMON_V2 + '/save-gstr1-status?referenceId=:referenceId',
     GET_LUT_NUMBER_LIST: COMMON_URL + '/gst-setting/list',
+    CREATE_LUT_NUMBER: COMMON_URL + '/gst-setting',
+    UPDATE_LUT_NUMBER: COMMON_URL + '/gst-setting/:lutNumberUniqueName',
     DELETE_LUT_NUMBER: COMMON_URL + '/gst-setting/:lutNumberUniqueName'
-
 };

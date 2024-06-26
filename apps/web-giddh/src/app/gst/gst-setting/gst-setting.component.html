@@ -34,11 +34,11 @@
                     ></dropdown-field>
                 </div>
             </div>
-            <giddh-page-loader *ngIf="getLutNumberInProgress$ | async"></giddh-page-loader>
-            <ng-container *ngIf="!(getLutNumberInProgress$ | async)">
+            <giddh-page-loader *ngIf="isLoading$ | async"></giddh-page-loader>
+            <ng-container *ngIf="!(isLoading$ | async)">
                 <div class="col-6 pr-0 mr-b15">
                     <div class="d-flex justify-content-end">
-                        <button mat-stroked-button color="primary">Save</button>
+                        <button mat-stroked-button color="primary" (click)="saveLutNumbers()">Save</button>
                     </div>
                 </div>
 
@@ -112,7 +112,7 @@
                                     </tbody>
                                 </table>
                                 <div class="mt-2">
-                                    <a class="mb-2" (click)="addNewLutItem()" href="javascript:;"> Add New Line </a>
+                                    <a class="mb-2" (click)="addNewLutItem()" href="javascript:;"> Add New Line + </a>
                                 </div>
                             </div>
                         </div>
