@@ -1639,7 +1639,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                             if (addresses?.get('isDefault')?.value) {
                                 this.addAccountForm.get('name')?.patchValue(result.body?.lgnm);
                             }
-                            let completeAddress = this.generalService.getCompleteAddres(result.body?.pradr?.addr);
+                            let completeAddress = this.generalService.getCompleteAddress(result.body?.pradr?.addr);
                             addresses.get('address')?.patchValue(completeAddress);
                             addresses.get('pincode')?.patchValue(result.body?.pradr?.addr?.pncd);
                         }

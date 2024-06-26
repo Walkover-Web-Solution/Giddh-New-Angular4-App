@@ -129,7 +129,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                     });
                     dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
                         if (response) {
-                            let completeAddress = this.generalService.getCompleteAddres(result.body?.pradr?.addr);
+                            let completeAddress = this.generalService.getCompleteAddress(result.body?.pradr?.addr);
                             this.addressForm.get('name')?.patchValue(result.body?.lgnm);
                             this.addressForm.get('address')?.patchValue(completeAddress);
                             this.addressForm.get('pincode')?.patchValue(result.body?.pradr?.addr?.pncd);
