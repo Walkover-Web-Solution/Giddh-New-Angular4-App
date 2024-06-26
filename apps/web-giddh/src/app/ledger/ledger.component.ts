@@ -961,7 +961,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public getTransactionCountConvertToEntries(transaction?: any): void {
-        if (this.lc.bankTransactionsDebitData?.length && this.lc.bankTransactionsCreditData?.length) {
+        if (this.lc.bankTransactionsDebitData?.length || this.lc.bankTransactionsCreditData?.length) {
 
             if (!transaction) {
                 let filteredDebit: any[] = [];
