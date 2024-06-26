@@ -456,8 +456,6 @@
     "app_select_branch": "Select Branch",
     "app_voucher": "Voucher",
     "app_alt_c": "Alt+C",
-    "app_alt_d": "Alt+D",
-    "app_alt_t": "Alt+T",
     "app_generate_multiple": "Generate Multiple",
     "app_generate_compound": "Generate Compound",
     "app_error": "Error",
@@ -731,7 +729,6 @@
     "app_name_placeholder": "Enter Name",
     "app_county": "County",
     "app_period": "Period",
-    "app_expanded": "Expanded",
     "app_gst_confirm_message1":"Do you want to override the filled information - ",
     "app_gst_confirm_message2":"When you select Yes, the content you entered will be overwritten. However, you can modify it later."
 }
