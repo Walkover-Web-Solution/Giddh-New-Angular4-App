@@ -728,5 +728,7 @@
     "app_applicable_date": "Applicable date",
     "app_name_placeholder": "Enter Name",
     "app_county": "County",
-    "app_period": "Period"
+    "app_period": "Period",
+    "app_gst_confirm_message1":"Do you want to override the filled information - ",
+    "app_gst_confirm_message2":"When you select Yes, the content you entered will be overwritten. However, you can modify it later."
 }

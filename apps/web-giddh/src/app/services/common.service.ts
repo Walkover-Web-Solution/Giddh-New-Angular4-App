@@ -253,4 +253,21 @@ export class CommonService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch(e)));
     }
+
+    /**
+     *  This will be use to show gst information details
+     *
+     * @param {*} gstin
+     * @return {*}  {Observable<BaseResponse<any, string>>}
+     * @memberof CommonService
+     */
+    public getGstInformationDetails(gstin: string): Observable<BaseResponse<any, string>> {
+        return this.http.get(this.config.apiUrl + COMMON_API.GST_INFORMATION?.replace(':gstin', gstin)).pipe(map((res) => {
+            let data: BaseResponse<any, string> = res;
+            data.request = '';
+            data.queryString = {};
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
+    }
+
 }

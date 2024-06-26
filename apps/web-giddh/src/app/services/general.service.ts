@@ -15,7 +15,6 @@ import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfac
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { HttpHeaders } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable()
@@ -1986,5 +1985,24 @@ export class GeneralService {
      */
     public getCountryFlagUrl(countryCode: string): string {
         return countryCode ? `https://giddh-uploads-2.s3.ap-south-1.amazonaws.com/flags/${countryCode?.toLowerCase()}.svg` : '';
+    }
+
+    /**
+     *This will be use for get complete address information
+     *
+     * @param {*} addr
+     * @return {*}  {string}
+     * @memberof GeneralService
+     */
+    public getCompleteAddress(addr: any): string {
+        // Check each property and assign to a variable with a fallback to empty string
+        let address1 = addr?.bno ? addr.bno : '';
+        let address2 = addr?.bnm ? addr.bnm : '';
+        let address3 = addr?.st ? addr.st : '';
+        let address4 = addr?.landMark ? addr.landMark : '';
+        let address5 = addr?.loc ? addr.loc : '';
+
+        // Construct the complete address string
+        return `${address1} ${address2} ${address3} ${address4} ${address5}`.trim();
     }
 }

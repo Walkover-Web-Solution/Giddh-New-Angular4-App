@@ -26,6 +26,7 @@ import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-
 import { HttpClient } from "@angular/common/http";
 import { AddCompanyComponentStore } from "./utility/add-company.store";
 import { userLoginStateEnum } from "../models/user-login-state";
+import { CommonService } from "../services/common.service";
 
 declare var initSendOTP: any;
 declare var window: any;
@@ -240,7 +241,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         private verifyActions: VerifyMobileActions,
         private socialAuthService: AuthService,
         private activateRoute: ActivatedRoute,
-        public router: Router
+        public router: Router,
+        private commonService: CommonService
     ) {
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
         this.session$ = this.store.pipe(select(state => state.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
@@ -688,6 +690,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isGstinValid = false;
             } else {
                 this.isGstinValid = true;
+                if (this.selectedCountryCode === 'IN') {
+                    this.getGstConfirmationPopup();
+                }
             }
         }
 
@@ -711,6 +716,39 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.selectedStateCode = '';
         }
         this.changeDetection.detectChanges();
+    }
+
+
+    /**
+     * This will open for get gst information confirmation dialog
+     *
+     * @memberof AddCompanyComponent
+     */
+    public getGstConfirmationPopup(): void {
+        if (this.secondStepForm.get('gstin')?.value) {
+            this.commonService.getGstInformationDetails(this.secondStepForm.get('gstin')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                if (result?.body) {
+                    let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                        width: '40%',
+                        data: {
+                            title: this.commonLocaleData?.app_confirmation,
+                            body: this.commonLocaleData?.app_gst_confirm_message1,
+                            ok: this.commonLocaleData?.app_yes,
+                            cancel: this.commonLocaleData?.app_no,
+                            permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
+                        }
+                    });
+                    dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                        if (response) {
+                            let completeAddress = this.generalService.getCompleteAddress(result.body?.pradr?.addr);
+                            this.firstStepForm.get('name')?.patchValue(result.body?.lgnm);
+                            this.secondStepForm.get('address')?.patchValue(completeAddress);
+                            this.secondStepForm.get('pincode')?.patchValue(result.body?.pradr?.addr?.pncd);
+                        }
+                    });
+                }
+            });
+        }
     }
 
     /**

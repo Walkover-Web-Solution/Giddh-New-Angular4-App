@@ -12,5 +12,6 @@ export const COMMON_API = {
     MODULE_WISE_COLUMNS: 'report-filters?module=:module&companyUniqueName=:companyUniqueName',
     UPLOAD_FILE: 'company/:companyUniqueName/ledger/upload',
     UPLOAD_IMAGE: 'company/:companyUniqueName/images',
-    BARCODE_SCAN: 'v4/company/:companyUniqueName/particular?customerUniqueName=:customerUniqueName&invoiceType=:invoiceType&barcode=:barcode'
+    BARCODE_SCAN: 'v4/company/:companyUniqueName/particular?customerUniqueName=:customerUniqueName&invoiceType=:invoiceType&barcode=:barcode',
+    GST_INFORMATION: 'gst-info?gstin=:gstin'
 };
