@@ -1655,12 +1655,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     });
                     data.transactions = filteredWithoutTaxDiscountData;
                     if (data.transactions?.length) {
-                        data.transactions[0].amount = salesAmount;
+                        data.transactions[0].amount = this.isSalesEntry ? salesAmount : data.transactions[0].actualAmount;
                         data.transactions[0].total = data.transactions[0].actualAmount + (filteredDiscountData[0]?.amount ?? 0);
                         data.transactions[0].isInclusiveTax = false;
                     }
                 }
-                delete data.transactions[0].actualAmount;
+                
+                if( data.transactions.length > 1) {
+                    data.transactions.forEach((transacition, i) => {
+                        delete data.transactions[i].actualAmount;
+                    })
+                } else {
+                    delete data.transactions[0].actualAmount;
+                }
                 this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
             } else {
                 const byOrTo = data.voucherType === 'Payment' ? 'by' : 'to';
