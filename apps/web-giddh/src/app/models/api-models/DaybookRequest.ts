@@ -35,7 +35,11 @@ export class ExportBodyRequest {
     includeTag?: boolean;
     groupUniqueNames?: any;
     inventoryType?: string;
+
     groupName?: any;
+    taxNumber?: any;
+    email?: any;
+    openingBalance?: any;
 }
 
 export interface DayBookRequestModel {

@@ -739,7 +739,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             localeData: this.localeData
         }
         this.dialog.open(ExportMasterDialogComponent, {
-            width: '500px',
+            width: '750px',
             data: exportData
         });
     }

@@ -1,19 +1,44 @@
 <div class="modal-header">
-  <h3>Export Master</h3>
+  <h3>{{ inputData?.localeData?.export_group_ledger }}</h3>
   <button aria-hidden="true" class="close" mat-dialog-close>
     ×
   </button>
 </div>
 <mat-dialog-content>
   <div class="modal-body">
-    <form [formGroup]="exportForm">
-      <mat-slide-toggle color="primary" formControlName="groupName">
-        {{
-          exportForm.get("groupName")?.value
-          ? inputData?.commonLocaleData?.app_yes
-          : inputData?.commonLocaleData?.app_no
-        }}
-      </mat-slide-toggle>
+    <p class="pd-l15 pb-3">
+      {{ inputData?.commonLocaleData?.app_note }} :
+      <span [innerHTML]="inputData?.localeData?.export_note">
+        {{ inputData?.localeData?.export_note }}
+      </span>
+    </p>
+    <form [formGroup]="exportForm" class="d-flex justify-content-between px-3 pt-2">
+      <div class="export-border position-relative">
+        <div class="mr-b15">
+          <label class="label-width">{{ inputData?.localeData?.opening_balance }} :</label>
+          <mat-slide-toggle color="primary" formControlName="openingBalance" class="ml-2 toggle-width">
+            <span>
+              {{
+              exportForm.get("openingBalance")?.value
+              ? inputData?.commonLocaleData?.app_yes
+              : inputData?.commonLocaleData?.app_no
+              }}
+            </span>
+          </mat-slide-toggle>
+        </div>
+        <div class="mr-b15">
+          <label class="label-width">{{ inputData?.localeData?.tax_number }} :</label>
+          <mat-slide-toggle color="primary" formControlName="taxNumber" class="ml-2 toggle-width">
+            <span>
+              {{
+              exportForm.get("taxNumber")?.value
+              ? inputData?.commonLocaleData?.app_yes
+              : inputData?.commonLocaleData?.app_no
+              }}
+            </span>
+          </mat-slide-toggle>
+        </div>
+      </div>
     </form>
     <button mat-stroked-button color="primary" (click)="exportMaster()">Export</button>
   </div>
