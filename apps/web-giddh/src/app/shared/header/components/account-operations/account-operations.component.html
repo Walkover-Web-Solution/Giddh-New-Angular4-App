@@ -209,7 +209,8 @@
 </div>
 <!-- ./ export ladger popup -->
 <!-- modals -->
-
-<button mat-stroked-button color="primary" (click)="exportMasterDialog()">Export</button>
+<div class="d-flex justify-content-start" *ngIf="!(showEditGroup$ | async)">
+    <button mat-stroked-button color="primary" (click)="exportMasterDialog()">Export</button>
+</div>
 
 
