@@ -842,34 +842,36 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public calculateTaxDiscountAmount(isSalesChanged: boolean = false): void {
         let { byAmount, toEntryControl, byEntryControl, taxEntryControl, discountEntryControl } = this.getUniqueAccountDetail();
 
-        const cash: number = byAmount ?? 0;
-        const taxRate: number = taxEntryControl?.value?.taxValue ?? 0;
-        const discountRate: number = discountEntryControl?.value?.discountType === "PERCENTAGE" ? discountEntryControl?.value?.discountValue ?? 0 : null;
-        const discountFixedValue: number = discountEntryControl?.value?.discountType === "FIX_AMOUNT" ? discountEntryControl?.value?.discountValue ?? 0 : null;
-        const discountRateValue: number = discountFixedValue !== null ? 0 : discountRate;
+        if (discountEntryControl || taxEntryControl) {
+            const cash: number = byAmount ?? 0;
+            const taxRate: number = taxEntryControl?.value?.taxValue ?? 0;
+            const discountRate: number = discountEntryControl?.value?.discountType === "PERCENTAGE" ? discountEntryControl?.value?.discountValue ?? 0 : null;
+            const discountFixedValue: number = discountEntryControl?.value?.discountType === "FIX_AMOUNT" ? discountEntryControl?.value?.discountValue ?? 0 : null;
+            const discountRateValue: number = discountFixedValue !== null ? 0 : discountRate;
 
-        let newCash = cash;
-        let newSales = (cash / (1 - (discountRateValue / 100)) / (1 + (taxRate / 100))) + (isSalesChanged ? discountFixedValue : 0);
-        let newDiscount = discountFixedValue !== null ? discountFixedValue : newSales * (discountRate / 100);
-        let salesAfterDiscount = newSales - newDiscount;
-        let newTax = salesAfterDiscount * (taxRate / 100);
+            let newCash = cash;
+            let newSales = (cash / (1 - (discountRateValue / 100)) / (1 + (taxRate / 100))) + (isSalesChanged ? discountFixedValue : 0);
+            let newDiscount = discountFixedValue !== null ? discountFixedValue : newSales * (discountRate / 100);
+            let salesAfterDiscount = newSales - newDiscount;
+            let newTax = salesAfterDiscount * (taxRate / 100);
 
 
-        if (byEntryControl) {
-            byEntryControl?.get('amount')?.patchValue(this.roundOffValueByTwoDecimalPlace(discountFixedValue !== null && !isSalesChanged ? newCash - newDiscount : newCash));
+            if (byEntryControl) {
+                byEntryControl?.get('amount')?.patchValue(this.roundOffValueByTwoDecimalPlace(discountFixedValue !== null && !isSalesChanged ? newCash - newDiscount : newCash));
+            }
+            if (toEntryControl) {
+                toEntryControl?.get('amount')?.patchValue(this.roundOffValueByTwoDecimalPlace(newSales));
+            }
+            if (discountEntryControl) {
+                discountEntryControl?.get('amount')?.patchValue(this.roundOffValueByTwoDecimalPlace(newDiscount));
+            }
+            if (taxEntryControl) {
+                taxEntryControl?.get('amount')?.patchValue(this.roundOffValueByTwoDecimalPlace(newTax));
+            }
+            const totalCreditAndDebit = this.calculateTotalCreditAndDebit();
+            this.totalCreditAmount = totalCreditAndDebit.totalCredit;
+            this.totalDebitAmount = totalCreditAndDebit.totalDebit;
         }
-        if (toEntryControl) {
-            toEntryControl?.get('amount')?.patchValue(this.roundOffValueByTwoDecimalPlace(newSales));
-        }
-        if (discountEntryControl) {
-            discountEntryControl?.get('amount')?.patchValue(this.roundOffValueByTwoDecimalPlace(newDiscount));
-        }
-        if (taxEntryControl) {
-            taxEntryControl?.get('amount')?.patchValue(this.roundOffValueByTwoDecimalPlace(newTax));
-        }
-        const totalCreditAndDebit = this.calculateTotalCreditAndDebit();
-        this.totalCreditAmount = totalCreditAndDebit.totalCredit;
-        this.totalDebitAmount = totalCreditAndDebit.totalDebit;
     }
 
     /**
@@ -1305,7 +1307,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             transactionObj.get('total').patchValue(transactionObj.get('amount').value);
         }
 
-        if (manualChangeValue) {
+        if (manualChangeValue && (this.isSalesEntry || VOUCHERS.JOURNAL === this.journalVoucherForm.get('voucherType').value)) {
             let { toAmount, byAmount, toEntryControl, byEntryControl, taxEntryControl, discountEntryControl } = this.getUniqueAccountDetail();
 
             if (toAmount >= 0 && byAmount >= 0) {
@@ -1313,13 +1315,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.totalCreditAmount = totalCredit;
                 this.totalDebitAmount = totalDebit;
 
-                if (toAmount != byAmount && !taxEntryControl && !discountEntryControl) {
-                    if ((transactionsFormArray.at(currentIndex) as FormGroup).value.type === 'by') {
-                        this.updateAllAmountOfControl(toEntryControl, byAmount);
-                    } else {
-                        this.updateAllAmountOfControl(byEntryControl, toAmount);
-                    }
-                } else if (!taxEntryControl && discountEntryControl && (this.totalCreditAmount !== this.totalDebitAmount)) {
+                if (!taxEntryControl && discountEntryControl && (this.totalCreditAmount !== this.totalDebitAmount)) {
                     if ((transactionsFormArray.at(currentIndex) as FormGroup).value.type === 'by') {
                         this.updateAllAmountOfControl(toEntryControl, byAmount);
                     } else {
@@ -1633,7 +1629,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 let filteredWithoutTaxDiscountData = [];
                 let filteredDiscountData = data?.transactions?.filter(transaction => transaction?.isDiscountApplied);
                 let filteredTaxData = data?.transactions?.filter(transaction => transaction?.isTaxApplied);
-                if (voucherTypeControl.value === VOUCHERS.SALES) {
+                if (voucherTypeControl.value === VOUCHERS.SALES || voucherTypeControl.value === VOUCHERS.JOURNAL) {
                     filteredWithoutTaxDiscountData = data?.transactions?.filter(transaction => !transaction?.isDiscountApplied && !transaction?.isTaxApplied);
                     if (filteredDiscountData?.length) {
                         filteredDiscountData?.forEach(discount => {
@@ -1659,12 +1655,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     });
                     data.transactions = filteredWithoutTaxDiscountData;
                     if (data.transactions?.length) {
-                        data.transactions[0].amount = salesAmount;
+                        data.transactions[0].amount = this.isSalesEntry ? salesAmount : (data.transactions[0]?.actualAmount - (filteredTaxData[0]?.amount ?? 0));
                         data.transactions[0].total = data.transactions[0].actualAmount + (filteredDiscountData[0]?.amount ?? 0);
                         data.transactions[0].isInclusiveTax = false;
                     }
                 }
-                delete data.transactions[0].actualAmount;
+
+                if (data.transactions.length > 1) {
+                    data.transactions.forEach((transaction, i) => {
+                        delete data.transactions[i].actualAmount;
+                    });
+                } else {
+                    delete data.transactions[0].actualAmount;
+                }
                 this.store.dispatch(this._ledgerActions.CreateBlankLedger(data, accUniqueName));
             } else {
                 const byOrTo = data.voucherType === 'Payment' ? 'by' : 'to';
