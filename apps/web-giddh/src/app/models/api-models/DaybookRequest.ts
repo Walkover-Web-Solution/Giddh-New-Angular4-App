@@ -35,6 +35,7 @@ export class ExportBodyRequest {
     includeTag?: boolean;
     groupUniqueNames?: any;
     inventoryType?: string;
+    groupName?: any;
 }
 
 export interface DayBookRequestModel {

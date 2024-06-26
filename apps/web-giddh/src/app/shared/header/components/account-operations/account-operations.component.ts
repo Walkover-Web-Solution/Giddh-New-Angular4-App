@@ -33,6 +33,8 @@ import { Router } from '@angular/router';
 import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
 import { PermissionActions } from 'apps/web-giddh/src/app/actions/permission/permission.action';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
+import { MatDialog } from '@angular/material/dialog';
+import { ExportMasterDialogComponent } from '../export-master-dialog/export-master-dialog.component';
 
 @Component({
     selector: 'account-operations',
@@ -133,7 +135,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public discounts: any[] = [];
 
     constructor(private _fb: UntypedFormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-        private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions, public generalService: GeneralService, public ledgerService: LedgerService, public router: Router, private settingsDiscountService: SettingsDiscountService, private permissionActions: PermissionActions, private generalAction: GeneralActions) {
+        private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions, public generalService: GeneralService, public ledgerService: LedgerService, public router: Router, private settingsDiscountService: SettingsDiscountService, private permissionActions: PermissionActions, private generalAction: GeneralActions, public dialog: MatDialog) {
         this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
     }
 
@@ -726,6 +728,19 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                     });
                 });
             }
+        });
+    }
+
+    public exportMasterDialog() {
+        const exportData = {
+            exportType: "MASTER_EXPORT",
+            fileType: "CSV",
+            commonLocaleData: this.commonLocaleData,
+            localeData: this.localeData
+        }
+        this.dialog.open(ExportMasterDialogComponent, {
+            width: '500px',
+            data: exportData
         });
     }
 }
