@@ -1994,7 +1994,7 @@ export class GeneralService {
      * @return {*}  {string}
      * @memberof GeneralService
      */
-    public getCompleteAddres(addr: any): string {
+    public getCompleteAddress(addr: any): string {
         // Check each property and assign to a variable with a fallback to empty string
         let address1 = addr?.bno ? addr.bno : '';
         let address2 = addr?.bnm ? addr.bnm : '';
