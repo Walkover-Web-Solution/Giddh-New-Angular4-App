@@ -1655,7 +1655,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     });
                     data.transactions = filteredWithoutTaxDiscountData;
                     if (data.transactions?.length) {
-                        data.transactions[0].amount = this.isSalesEntry ? salesAmount : data.transactions[0].actualAmount;
+                        data.transactions[0].amount = this.isSalesEntry ? salesAmount : (data.transactions[0]?.actualAmount - (filteredTaxData[0]?.amount ?? 0));
                         data.transactions[0].total = data.transactions[0].actualAmount + (filteredDiscountData[0]?.amount ?? 0);
                         data.transactions[0].isInclusiveTax = false;
                     }
