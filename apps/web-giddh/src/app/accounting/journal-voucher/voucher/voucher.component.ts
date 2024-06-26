@@ -1660,9 +1660,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         data.transactions[0].isInclusiveTax = false;
                     }
                 }
-                
-                if( data.transactions.length > 1) {
-                    data.transactions.forEach((transacition, i) => {
+
+                if (data.transactions.length > 1) {
+                    data.transactions.forEach((transaction, i) => {
                         delete data.transactions[i].actualAmount;
                     });
                 } else {
