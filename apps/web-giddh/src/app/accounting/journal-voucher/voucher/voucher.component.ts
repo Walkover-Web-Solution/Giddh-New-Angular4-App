@@ -1664,7 +1664,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 if( data.transactions.length > 1) {
                     data.transactions.forEach((transacition, i) => {
                         delete data.transactions[i].actualAmount;
-                    })
+                    });
                 } else {
                     delete data.transactions[0].actualAmount;
                 }
