@@ -52,6 +52,9 @@ import { CheckPermissionModule } from '../permissions/check-permission.module';
 import { GenericAsideMenuAccountModule } from './generic-aside-menu-account/generic.aside.menu.account.module';
 import { AccountUpdateNewDetailsModule } from './header/components/account-update-new-details/account-update-new-details.module';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { ExportMasterDialogComponent } from './header/components/export-master-dialog/export-master-dialog.component';
 
 const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
     {
@@ -75,7 +78,8 @@ export function provideConfig() {
         ShareGroupModalComponent,
         ShareAccountModalComponent,
         ExportGroupLedgerComponent,
-        MasterComponent
+        MasterComponent,
+        ExportMasterDialogComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -124,7 +128,9 @@ export function provideConfig() {
         MatSlideToggleModule,
         CheckPermissionModule,
         AccountUpdateNewDetailsModule,
-        MatRadioModule
+        MatRadioModule,
+        MatButtonModule,
+        MatDialogModule
     ],
     exports: [
         CommonModule,

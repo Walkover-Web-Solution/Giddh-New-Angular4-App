@@ -1,0 +1,20 @@
+<div class="modal-header">
+  <h3>Export Master</h3>
+  <button aria-hidden="true" class="close" mat-dialog-close>
+    ×
+  </button>
+</div>
+<mat-dialog-content>
+  <div class="modal-body">
+    <form [formGroup]="exportForm">
+      <mat-slide-toggle color="primary" formControlName="groupName">
+        {{
+          exportForm.get("groupName")?.value
+          ? inputData?.commonLocaleData?.app_yes
+          : inputData?.commonLocaleData?.app_no
+        }}
+      </mat-slide-toggle>
+    </form>
+    <button mat-stroked-button color="primary" (click)="exportMaster()">Export</button>
+  </div>
+</mat-dialog-content>
