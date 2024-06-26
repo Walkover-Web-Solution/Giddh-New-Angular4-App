@@ -34,10 +34,25 @@ export class ExportMasterDialogComponent implements OnInit {
 
   public initExportForm(): void {
     this.exportForm = this.formBuilder.group({
-      groupName: new FormControl(false),
-      taxNumber: new FormControl(false),
-      email: new FormControl(false),
       openingBalance: new FormControl(false),
+      openingBalanceType: new FormControl(false),
+      foreignOpeningBalance: new FormControl(false),
+      foreignOpeningBalanceType: new FormControl(false),
+      currency: new FormControl(false),
+      mobileNumber: new FormControl(false),
+      email: new FormControl(false),
+      attentionTo: new FormControl(false),
+      remark: new FormControl(false),
+      address: new FormControl(false),
+      pinCode: new FormControl(false),
+      taxNumber: new FormControl(false),
+      partyType: new FormControl(false),
+      bankName: new FormControl(false),
+      bankAccountNumber: new FormControl(false),
+      ifscCode: new FormControl(false),
+      beneficiaryName: new FormControl(false),
+      branchName: new FormControl(false),
+      swiftCode: new FormControl(false),
     })
   }
 
@@ -45,18 +60,64 @@ export class ExportMasterDialogComponent implements OnInit {
     let exportRequest: ExportBodyRequest = new ExportBodyRequest();
     exportRequest.exportType = this.inputData?.exportType;
     exportRequest.columnsToExport = [];
+    // exportRequest.groupUniqueNames = [];
     const formValue = this.exportForm.value;
-    if (formValue.groupName) {
-      exportRequest.columnsToExport?.push("Group Name")
-    }
     if (formValue.openingBalance) {
       exportRequest.columnsToExport?.push("Opening Balance")
+    }
+    if (formValue.openingBalanceType) {
+      exportRequest.columnsToExport?.push("Opening Balance Type")
+    }
+    if (formValue.foreignOpeningBalance) {
+      exportRequest.columnsToExport?.push("Foreign Opening Balance")
+    }
+    if (formValue.foreignOpeningBalanceType) {
+      exportRequest.columnsToExport?.push("Foreign Opening Balance Type")
+    }
+    if (formValue.currency) {
+      exportRequest.columnsToExport?.push("Currency")
+    }
+    if (formValue.mobileNumber) {
+      exportRequest.columnsToExport?.push("Mobile Number")
+    }
+    if (formValue.email) {
+      exportRequest.columnsToExport?.push("Email")
+    }
+    if (formValue.attentionTo) {
+      exportRequest.columnsToExport?.push("Attention to")
+    }
+    if (formValue.remark) {
+      exportRequest.columnsToExport?.push("Remark")
+    }
+    if (formValue.address) {
+      exportRequest.columnsToExport?.push("Address")
+    }
+    if (formValue.pinCode) {
+      exportRequest.columnsToExport?.push("Pin Code")
     }
     if (formValue.taxNumber) {
       exportRequest.columnsToExport?.push("Tax Number")
     }
-    if (formValue.email) {
-      exportRequest.columnsToExport?.push("Email")
+    if (formValue.partyType) {
+      exportRequest.columnsToExport?.push("Party Type")
+    }
+    if (formValue.bankName) {
+      exportRequest.columnsToExport?.push("Bank Name")
+    }
+    if (formValue.bankAccountNumber) {
+      exportRequest.columnsToExport?.push("Bank Account Number")
+    }
+    if (formValue.ifscCode) {
+      exportRequest.columnsToExport?.push("IFSC Code")
+    }
+    if (formValue.beneficiaryName) {
+      exportRequest.columnsToExport?.push("Beneficiary Name")
+    }
+    if (formValue.branchName) {
+      exportRequest.columnsToExport?.push("Branch Name")
+    }
+    if (formValue.swiftCode) {
+      exportRequest.columnsToExport?.push("Swift Code")
     }
     this.isLoading = true;
     this.ledgerService.exportData(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {

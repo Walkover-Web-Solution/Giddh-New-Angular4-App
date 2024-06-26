@@ -81,5 +81,18 @@
 
     "export_note": "The default columns <b class='fw-bold'>'Stock Group Name, Stock Name , Unique Name, Parent Group Name, Parent Group Unique Name, Stock Unit Code, Stock Unit Unique Name' </b>will be exported, you also have the option to add custom columns as needed.",
     "tax_number": "Tax Number",
-    "opening_balance": "Opening Balance"
+    "opening_balance_type": "Opening Balance Type",
+    "foreign_opening_balance_type": "Foreign Opening Balance Type",
+    "currency_title": "Currency",
+    "mobile_number": "Mobile Number",
+    "attention_to_master": "Attention to",
+    "remark": "Remark",
+    "address": "Address",
+    "pin_code": "Pin Code",
+    "bank_name": "Bank Name",
+    "bank_account_number": "Bank Account Number",
+    "ifsc_code": "IFSC Code",
+    "beneficiary_name": "Beneficiary Name",
+    "branch_name": "Branch Name",
+    "swift_code": "Swift Code"
 }
