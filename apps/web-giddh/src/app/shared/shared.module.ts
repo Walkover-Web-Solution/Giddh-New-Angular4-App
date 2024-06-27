@@ -55,6 +55,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { ExportMasterDialogComponent } from './header/components/export-master-dialog/export-master-dialog.component';
+import { MasterExportOptionComponent } from './header/components/master-export-option/master-export-option.component';
 
 const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
     {
@@ -79,7 +80,8 @@ export function provideConfig() {
         ShareAccountModalComponent,
         ExportGroupLedgerComponent,
         MasterComponent,
-        ExportMasterDialogComponent
+        ExportMasterDialogComponent,
+        MasterExportOptionComponent
     ],
     imports: [
         KeyboardShortutModule,
@@ -169,7 +171,8 @@ export function provideConfig() {
         GiddhPageLoaderModule,
         GiddhDatepickerModule,
         GenericAsideMenuAccountModule,
-        MasterComponent
+        MasterComponent,
+        MasterExportOptionComponent
     ],
     providers: [
         {
