@@ -1,3 +1,4 @@
+
 {
     "app_due_as_on": "अपेक्षित है",
     "app_total": "समस्त",
@@ -456,6 +457,8 @@
     "app_select_branch": "शाखा का चयन करें",
     "app_voucher": "वाउचर",
     "app_alt_c": "Alt+C",
+    "app_alt_d": "Alt+D",
+    "app_alt_t": "Alt+T",
     "app_generate_multiple": "एकाधिक उत्पन्न करें",
     "app_generate_compound": "यौगिक उत्पन्न करें",
     "app_error": "त्रुटि",
@@ -725,5 +728,8 @@
     "app_applicable_date": "लागू तिथि",
     "app_name_placeholder": "नाम दर्ज करें",
     "app_county": "काउंटी",
-    "app_period": "अवधि"
+    "app_period": "अवधि",
+    "app_expanded": "विस्तारित",
+    "app_gst_confirm_message1":"क्या आप भरी हुई जानकारी को ओवरराइड करना चाहते हैं -",
+    "app_gst_confirm_message2":"जब आप हाँ चुनते हैं, तो आपके द्वारा दर्ज की गई सामग्री अधिलेखित हो जाएगी। हालाँकि, आप इसे बाद में संशोधित कर सकते हैं।"
 }

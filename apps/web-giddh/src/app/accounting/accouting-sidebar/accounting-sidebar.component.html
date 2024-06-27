@@ -1,40 +1,47 @@
-<ul class="menu-list">
-    <li>
+<ul class="menu-list" role="account-list">
+    <li role="account-items">
         <a
-            class="cp"
+            href="javascript:;"
+            aria-label="contra"
+            class="cursor-pointer"
             (click)="setSelectedPage(accountingVouchers.CONTRA, 'voucher', 'purchases')"
             [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.CONTRA }"
             >{{ commonLocaleData?.app_keys?.f4 }}: {{ commonLocaleData?.app_voucher_types?.contra }}
         </a>
     </li>
 
-    <li>
+    <li role="account-items">
         <a
-            class="cp"
+            href="javascript:;"
+            aria-label="payment"
+            class="cursor-pointer"
             (click)="setSelectedPage(accountingVouchers.PAYMENT, 'voucher', 'purchases')"
             [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.PAYMENT }"
             >{{ commonLocaleData?.app_keys?.f5 }}: {{ commonLocaleData?.app_voucher_types?.payment }}</a
         >
     </li>
 
-    <li>
+    <li role="account-items">
         <a
-            class="cp"
+            href="javascript:;"
+            aria-label="receipt"
+            class="cursor-pointer"
             (click)="setSelectedPage(accountingVouchers.RECEIPT, 'voucher', 'purchases')"
             [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.RECEIPT }"
             >{{ commonLocaleData?.app_keys?.f6 }}: {{ commonLocaleData?.app_voucher_types?.receipt }}
         </a>
     </li>
-
-    <li>
+    <li role="account-items">
         <a
-            class="cp"
+            href="javascript:;"
+            aria-label="journal"
+            class="cursor-pointer"
             (click)="setSelectedPage(accountingVouchers.JOURNAL, 'voucher', 'purchases')"
             [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.JOURNAL }"
-            >F7: Journal</a
+            >{{ commonLocaleData?.app_keys?.f7 }}: {{ commonLocaleData?.app_voucher_types?.journal }}</a
         >
     </li>
-    <!-- <li role="account-items">
+    <li role="account-items">
         <a
             href="javascript:;"
             aria-label="sales"
@@ -43,8 +50,8 @@
             [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.SALES }"
             >{{ commonLocaleData?.app_keys?.f8 }}: {{ commonLocaleData?.app_voucher_types?.sales }}</a
         >
-    </li> -->
-    <!-- <ng-container *ngIf="salesEntry">
+    </li>
+    <ng-container *ngIf="salesEntry">
         <li role="account-items">
             <a
                 class="cursor-pointer text-underline"
@@ -63,46 +70,46 @@
                 >{{ commonLocaleData?.app_alt_t }} : {{ localeData?.tax_list}}</a
             >
         </li>
-    </ng-container> -->
+    </ng-container>
     <!--    "isHidden" class  if user is not able to access the module
-    <li><a class="cp" (click)="setSelectedPage('Sales', 'voucher', 'sales')"
+    <li><a class="cursor-pointer" (click)="setSelectedPage('Sales', 'voucher', 'sales')"
             [ngClass]="{ 'active-parent': selectedVoucher === 'Sales'}">F8: Sales</a></li>
-    <li><a class="cp" (click)="setSelectedPage('Sales', 'voucher', 'sales')"
+    <li><a class="cursor-pointer" (click)="setSelectedPage('Sales', 'voucher', 'sales')"
             [ngClass]="{ 'active-child': selectedVoucher === 'Sales' && selectedGrid === 'voucher'}" [hidden]="selectedVoucher !== 'Sales'"><span
                 class="dblUnderlined">V:</span> As Voucher</a></li>
-    <li><a class="cp" (click)="setSelectedPage('Sales', 'invoice', 'sales')"
+    <li><a class="cursor-pointer" (click)="setSelectedPage('Sales', 'invoice', 'sales')"
             [ngClass]="{ 'active-child': selectedVoucher === 'Sales' && selectedGrid === 'invoice'}" [hidden]="selectedVoucher !== 'Sales'"><span
                 class="dblUnderlined">I:</span> As Invoice</a></li>
 
-    <li><a class="cp" (click)="setSelectedPage('Credit note', 'voucher', 'purchases')"
+    <li><a class="cursor-pointer" (click)="setSelectedPage('Credit note', 'voucher', 'purchases')"
             [ngClass]="{ 'active-parent': selectedVoucher === 'Credit note'}"><span class="dblUnderlined">F8:</span> Credit
             Note</a></li>
-    <li><a class="cp" (click)="setSelectedPage('Credit note', 'voucher', 'sales')"
+    <li><a class="cursor-pointer" (click)="setSelectedPage('Credit note', 'voucher', 'sales')"
             [ngClass]="{ 'active-child': selectedVoucher === 'Credit note' && selectedGrid === 'voucher'}"
             [hidden]="selectedVoucher !== 'Credit note'"><span class="dblUnderlined">V:</span> As Voucher</a></li>
-    <li><a class="cp" (click)="setSelectedPage('Credit note', 'invoice', 'sales')"
+    <li><a class="cursor-pointer" (click)="setSelectedPage('Credit note', 'invoice', 'sales')"
             [ngClass]="{ 'active-child': selectedVoucher === 'Credit note' && selectedGrid === 'invoice'}"
             [hidden]="selectedVoucher !== 'Credit note'"><span class="dblUnderlined">I:</span> As Invoice</a></li>
 
 
-    <li><a class="cp" (click)="setSelectedPage('Purchase', 'voucher', 'purchases')"
+    <li><a class="cursor-pointer" (click)="setSelectedPage('Purchase', 'voucher', 'purchases')"
             [ngClass]="{ 'active-parent': selectedVoucher === 'Purchase'}">F9: Purchase</a></li>
-    <li><a class="cp" (click)="setSelectedPage('Purchase', 'voucher', 'purchases')"
+    <li><a class="cursor-pointer" (click)="setSelectedPage('Purchase', 'voucher', 'purchases')"
             [ngClass]="{ 'active-child': selectedVoucher === 'Purchase' && selectedGrid === 'voucher'}" [hidden]="selectedVoucher !== 'Purchase'"><span
                 class="dblUnderlined">V:</span> As Voucher</a></li>
-    <li><a class="cp" (click)="setSelectedPage('Purchase', 'invoice', 'purchases')"
+    <li><a class="cursor-pointer" (click)="setSelectedPage('Purchase', 'invoice', 'purchases')"
             [ngClass]="{ 'active-child': selectedVoucher === 'Purchase' && selectedGrid === 'invoice'}" [hidden]="selectedVoucher !== 'Purchase'"><span
                 class="dblUnderlined">I:</span> As Invoice</a></li>
 
     <li>
-        <a class="cp" (click)="setSelectedPage('Debit note', 'voucher', 'purchases')"
+        <a class="cursor-pointer" (click)="setSelectedPage('Debit note', 'voucher', 'purchases')"
             [ngClass]="{ 'active-parent': selectedVoucher === 'Debit note'}"> <span class="dblUnderlined">F9:</span> Debit
             Note</a>
     </li>
-    <li><a class="cp" (click)="setSelectedPage('Debit note', 'voucher', 'sales')"
+    <li><a class="cursor-pointer" (click)="setSelectedPage('Debit note', 'voucher', 'sales')"
             [ngClass]="{ 'active-child': selectedVoucher === 'Debit note' && selectedGrid === 'voucher'}"
             [hidden]="selectedVoucher !== 'Debit note'"><span class="dblUnderlined">V:</span>As Voucher</a></li>
-    <li><a class="cp" (click)="setSelectedPage('Debit note', 'invoice', 'sales')"
+    <li><a class="cursor-pointer" (click)="setSelectedPage('Debit note', 'invoice', 'sales')"
             [ngClass]="{ 'active-child': selectedVoucher === 'Debit note' && selectedGrid === 'invoice'}"
             [hidden]="selectedVoucher !== 'Debit note'"><span class="dblUnderlined">I:</span>As Invoice</a></li>
     -->
