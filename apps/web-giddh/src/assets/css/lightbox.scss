@@ -3,11 +3,12 @@ html.lb-disable-scrolling {
 }
 
 .lightboxOverlay {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     z-index: 9999;
     background-color: black;
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
     opacity: 0.8;
 }
 
@@ -21,8 +22,6 @@ html.lb-disable-scrolling {
     font-weight: normal;
     box-sizing: content-box;
     outline: none;
-    top: 50% !important;
-    transform: translateY(-50%);
 }
 
 .lightbox .lb-image {
@@ -38,7 +37,7 @@ html.lb-disable-scrolling {
 
 .lb-outerContainer {
     position: relative;
-    zoom: 1;
+    *zoom: 1;
     width: 250px;
     height: 250px;
     margin: 0 auto;
@@ -46,7 +45,7 @@ html.lb-disable-scrolling {
 
     /* Background color behind image.
      This is visible during transitions. */
-    background-color: var(--color-transparent-background);
+    background-color: white;
 }
 
 .lb-outerContainer:after {
@@ -140,7 +139,7 @@ html.lb-disable-scrolling {
 .lb-dataContainer {
     margin: 0 auto;
     padding-top: 10px;
-    zoom: 1;
+    *zoom: 1;
     width: 100%;
     -moz-border-radius-bottomleft: 4px;
     -webkit-border-bottom-left-radius: 4px;
@@ -187,24 +186,20 @@ html.lb-disable-scrolling {
 }
 
 .lb-data .lb-controlContainer {
-    display: block !important;
     float: right;
 }
 
 .lb-data .lb-turnContainer {
-    display: block !important;
     float: left;
     margin-right: 5px;
 }
 
 .lb-data .lb-zoomContainer {
-    display: block !important;
     float: right;
     margin-right: 5px;
 }
 
 .lb-data .lb-closeContainer {
-    display: block !important;
     float: right;
 }
 
@@ -260,7 +255,7 @@ html.lb-disable-scrolling {
 }
 
 .lb-data .lb-zoomOut {
-    display: block !important;
+    display: block;
     float: left;
     width: 30px;
     height: 30px;
