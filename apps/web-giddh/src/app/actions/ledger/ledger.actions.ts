@@ -74,7 +74,7 @@ export class LedgerActions {
     public CreateBulkBlankLedgers$: Observable<Action> = createEffect(() => this.action$
     .pipe(
         ofType(LEDGER.CREATE_BULK_BLANK_LEDGER_REQUEST),
-        switchMap((action: CustomActions) => this.ledgerService.CreateBulkLedger(action.payload.model, action.payload.accountUniqueName)),
+        switchMap((action: CustomActions) => this.ledgerService.createBulkLedger(action.payload.model, action.payload.accountUniqueName)),
         map(res => this.validateResponse<LedgerResponse[], BlankLedgerVM>(res, {
             type: LEDGER.CREATE_BULK_BLANK_LEDGER_RESPONSE,
             payload: res

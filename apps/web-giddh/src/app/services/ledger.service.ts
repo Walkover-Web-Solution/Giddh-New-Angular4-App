@@ -130,7 +130,7 @@ export class LedgerService {
      * @returns {Observable<BaseResponse<LedgerResponse[], BlankLedgerVM>>}
      * @memberof LedgerService
      */
-    public CreateBulkLedger(model: BlankLedgerVM, accountUniqueName: string): Observable<BaseResponse<LedgerResponse[], BlankLedgerVM>> {
+    public createBulkLedger(model: BlankLedgerVM, accountUniqueName: string): Observable<BaseResponse<LedgerResponse[], BlankLedgerVM>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         const clonedRequest = cloneDeep(model);
         let url = LEDGER_API.CREATE_BULK?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
