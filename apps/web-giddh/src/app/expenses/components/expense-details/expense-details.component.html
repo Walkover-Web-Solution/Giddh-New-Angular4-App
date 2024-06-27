@@ -35,7 +35,7 @@
                         <ng-container *ngFor="let item of imageURL; let i = index">
                             <li>
                                 <div class="upload-img">
-                                    <img [src]="item.src" (click)="openZoomImageView(i)" id="signatureImage" />
+                                    <img [src]="item.src" (click)="openZoomImageView(i)" [id]="'signatureImage_'+i" />
                                 </div>
                             </li>
                         </ng-container>
