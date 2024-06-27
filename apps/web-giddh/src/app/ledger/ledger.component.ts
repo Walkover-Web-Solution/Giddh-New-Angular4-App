@@ -970,23 +970,20 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public getTransactionCountConvertToEntries(transaction?: any): void {
         if (this.lc.bankTransactionsDebitData?.length || this.lc.bankTransactionsCreditData?.length) {
             if (!transaction) {
-                let filteredDebit: any[] = [];
-                let filteredCredit: any[] = [];
+                let bankTransactions: any[] = [];
 
                 this.lc.bankTransactionsDebitData.forEach(transaction => {
                     if (transaction.transactions[0].selectedAccount?.name) {
-                        filteredDebit.push(transaction);
+                        bankTransactions.push(transaction);
                     }
                 });
                 this.lc.bankTransactionsCreditData.forEach(transaction => {
                     if (transaction.transactions[0].selectedAccount?.name) {
-                        filteredCredit.push(transaction);
+                        bankTransactions.push(transaction);
                     }
                 });
-
-                const finalArray: any[] = [...filteredDebit, ...filteredCredit];
-                this.transactionCountConvertToEntries = finalArray.length;
-                this.bankTransactionsWithAccountName = finalArray;
+                this.transactionCountConvertToEntries = bankTransactions.length;
+                this.bankTransactionsWithAccountName = bankTransactions;
             } else {
                 const beforeFilterLength = this.bankTransactionsWithAccountName.length;
                 this.bankTransactionsWithAccountName = this.bankTransactionsWithAccountName.filter(item => (transaction?.id !== item?.id));
