@@ -409,6 +409,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (!e?.value || clearAccount) {
             if (clearAccount) {
                 this.getTransactionCountConvertToEntries(txn);
+            } else {
+                this.getTransactionCountConvertToEntries();
             }
             // if there's no selected account set selectedAccount to null
             txn.selectedAccount = null;
