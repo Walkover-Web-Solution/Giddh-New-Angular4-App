@@ -437,7 +437,7 @@
                                             : "Ship Date"
                                     }}
                                 </p>
-                                <p>10/09/2018</p>
+                                <p>Multi currency value</p>
                             </td>
                             <td *ngIf="fieldsAndVisibility.header.shippedVia?.display">
                                 <p>
@@ -447,7 +447,7 @@
                                             : "Ship Via"
                                     }}
                                 </p>
-                                <p>FedEx</p>
+                                <p>Conversion rate value</p>
                             </td>
                             <td *ngIf="fieldsAndVisibility.header.trackingNumber?.display">
                                 <p>
@@ -457,7 +457,7 @@
                                             : "Tracking No"
                                     }}
                                 </p>
-                                <p>00115467</p>
+                                <p>Place of supply value</p>
                             </td>
                             <td *ngIf="fieldsAndVisibility.header.customField1?.display">
                                 <p>
@@ -467,7 +467,7 @@
                                             : "Field 1"
                                     }}
                                 </p>
-                                <p>Custom</p>
+                                <p>Country of value</p>
                             </td>
                             <td *ngIf="fieldsAndVisibility.header.customField2?.display">
                                 <p>
@@ -477,17 +477,62 @@
                                             : "Field 2"
                                     }}
                                 </p>
-                                <p>Custom</p>
+                                <p>LUt Number</p>
                             </td>
-                            <td *ngIf="fieldsAndVisibility.header.customField3?.display">
-                                <p>
-                                    {{
-                                        fieldsAndVisibility.header.customField3?.label?.length > 0
-                                            ? fieldsAndVisibility.header.customField3?.label
-                                            : "Field 3"
-                                    }}
-                                </p>
-                                <p>Custom</p>
+                        </tr>
+                    </tbody>
+
+                    </table>
+                       <table class="meta" cellpadding="0 " cellspacing="0 ">
+                    <tbody>
+                        <tr>
+                            <!-- <td *ngIf="fieldsAndVisibility.header.customerName?.display || fieldsAndVisibility.header.customerEmail?.display || fieldsAndVisibility.header.customerMobileNumber?.display ">&nbsp;</td> -->
+
+                            <td *ngIf="fieldsAndVisibility.header.billingAddress?.display">
+                                <ng-container
+                                    *ngIf="
+                                        fieldsAndVisibility.header.billingAddress?.display &&
+                                        fieldsAndVisibility.header.billingGstin?.display
+                                    "
+                                >
+                                    <p>
+                                        {{
+                                            fieldsAndVisibility.header.billingGstin?.label?.length > 0
+                                                ? fieldsAndVisibility.header.billingGstin?.label
+                                                : "GSTIN"
+                                        }}
+                                    </p>
+                                    <p>11AAAAAA000Z0A1</p>
+                                </ng-container>
+                            </td>
+                            <td *ngIf="fieldsAndVisibility.header.shippingAddress?.display">
+                                <ng-container
+                                    *ngIf="
+                                        fieldsAndVisibility.header.shippingAddress?.display &&
+                                        fieldsAndVisibility.header.shippingGstin?.display
+                                    "
+                                >
+                                    <p>
+                                        {{
+                                            fieldsAndVisibility.header.shippingGstin?.label?.length > 0
+                                                ? fieldsAndVisibility.header.shippingGstin?.label
+                                                : "GSTIN"
+                                        }}
+                                    </p>
+                                    <p>11AAAAAA000Z0A1</p>
+                                </ng-container>
+                            </td>
+                            <td>
+                                <ng-container *ngIf="fieldsAndVisibility.header.dueDate?.display">
+                                    <p>
+                                        {{
+                                            fieldsAndVisibility.header.dueDate?.label?.length > 0
+                                                ? fieldsAndVisibility.header.dueDate?.label
+                                                : "Due Date"
+                                        }}
+                                    </p>
+                                    <p>10/09/2018</p>
+                                </ng-container>
                             </td>
                         </tr>
                     </tbody>

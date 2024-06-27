@@ -28,6 +28,78 @@
                         />
                         Company Name
                     </div>
+                    <div
+                        *ngIf="
+                            fieldsAndVisibility.header.displayExchangeRate &&
+                            customTemplate?.templateType !== 'gst_template_b' &&
+                            customTemplate?.templateType !== 'gst_template_d'
+                        "
+                        class="form-group"
+                    >
+                        <input
+                            type="checkbox"
+                            color="primary"
+                            name="exchangeRateCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['displayExchangeRate'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                            checked
+                        />
+                        Exchange/Conversion Rate
+                    </div>
+                    <div
+                        *ngIf="
+                            fieldsAndVisibility.header.displayPlaceOfSupply &&
+                            customTemplate?.templateType !== 'gst_template_b' &&
+                            customTemplate?.templateType !== 'gst_template_d'
+                        "
+                        class="form-group"
+                    >
+                        <input
+                            type="checkbox"
+                            color="primary"
+                            name="placeOfSupplyCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['displayPlaceOfSupply'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                            checked
+                        />
+                        Place Of Supply
+                    </div>
+                    <div
+                        *ngIf="
+                            fieldsAndVisibility.header.displayPlaceOfCountry &&
+                            customTemplate?.templateType !== 'gst_template_b' &&
+                            customTemplate?.templateType !== 'gst_template_d'
+                        "
+                        class="form-group"
+                    >
+                        <input
+                            type="checkbox"
+                            color="primary"
+                            name="countryOfSupplyfCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['displayPlaceOfCountry'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                            checked
+                        />
+                        Country of Supply
+                    </div>
+                    <div
+                        *ngIf="
+                            fieldsAndVisibility.header.displayLutNumber &&
+                            customTemplate?.templateType !== 'gst_template_b' &&
+                            customTemplate?.templateType !== 'gst_template_d'
+                        "
+                        class="form-group"
+                    >
+                        <input
+                            type="checkbox"
+                            color="primary"
+                            name="lutNumberCheckbox"
+                            [(ngModel)]="customTemplate.sections['header'].data['displayLutNumber'].display"
+                            (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                            checked
+                        />
+                        LUT Number
+                    </div>
                     <div class="form-group" *ngIf="customTemplate?.templateType === 'gst_template_e'">
                         <input
                             type="checkbox"
@@ -2098,8 +2170,8 @@
                             fieldsAndVisibility.footer.totalInWords &&
                             customTemplate?.templateType !== 'gst_template_b' &&
                             customTemplate?.templateType !== 'gst_template_d' &&
-                            customTemplate?.templateType !== 'gst_template_e' && 
-                            customTemplate?.templateType !== 'thermal_template' 
+                            customTemplate?.templateType !== 'gst_template_e' &&
+                            customTemplate?.templateType !== 'thermal_template'
                         "
                         class="form-group"
                     >
@@ -2111,10 +2183,10 @@
                         />
                         Invoice Total(in words)
                     </div>
-                                        <div
+                    <div
                         *ngIf="
                             fieldsAndVisibility.footer.totalInWords &&
-                            customTemplate?.templateType === 'thermal_template' 
+                            customTemplate?.templateType === 'thermal_template'
                         "
                         class="form-group"
                     >
@@ -2354,7 +2426,8 @@
                     </div>
                     <div
                         *ngIf="
-                            customTemplate?.templateType !== 'thermal_template' && customTemplate.sections['footer'].data['textUnderSlogan']
+                            customTemplate?.templateType !== 'thermal_template' &&
+                            customTemplate.sections['footer'].data['textUnderSlogan']
                         "
                         class="clearfix mr-t1 form-group"
                     >
