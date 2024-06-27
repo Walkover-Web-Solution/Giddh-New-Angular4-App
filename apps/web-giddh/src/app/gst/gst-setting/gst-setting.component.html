@@ -87,6 +87,9 @@
                                                         </mat-form-field>
                                                     </div>
                                                 </div>
+                                                <ng-container *ngIf="responseArray[i]?.message">
+                                                    <span>{{  responseArray[i]?.message }}</span>
+                                                </ng-container>
                                             </td>
                                             <td>
                                                 <div class="w-100 option-value-field text-value-field">
