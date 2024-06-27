@@ -960,21 +960,26 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Prepare array and count the selected bank transaction to save.
+     *
+     * @param {*} [transaction]
+     * @memberof LedgerComponent
+     */
     public getTransactionCountConvertToEntries(transaction?: any): void {
         if (this.lc.bankTransactionsDebitData?.length || this.lc.bankTransactionsCreditData?.length) {
-
             if (!transaction) {
                 let filteredDebit: any[] = [];
                 let filteredCredit: any[] = [];
 
                 this.lc.bankTransactionsDebitData.forEach(transaction => {
                     if (transaction.transactions[0].selectedAccount?.name) {
-                        filteredDebit.push(transaction.transactions[0]);
+                        filteredDebit.push(transaction);
                     }
                 });
                 this.lc.bankTransactionsCreditData.forEach(transaction => {
                     if (transaction.transactions[0].selectedAccount?.name) {
-                        filteredCredit.push(transaction.transactions[0]);
+                        filteredCredit.push(transaction);
                     }
                 });
 
@@ -991,8 +996,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
             }
         }
     }
-
-    // public save
 
     /**
      * Loop through bank transactions and prepare model to send data to api
@@ -1185,22 +1188,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Save bulk bank transaction 
+     *
+     * @returns {void}
+     * @memberof LedgerComponent
+     */
     public saveBulkBankTransaction(): void {
         let blankTransactionsObjArray: BlankLedgerVM[] = [];
 
-        this.bankTransactionsWithAccountName.forEach(item => {
-            let blankTransactionObj: BlankLedgerVM = this.lc.prepareBankLedgerRequestObject({ transactions: [item] });
+        this.bankTransactionsWithAccountName.forEach(currentBankEntry => {
+            let blankTransactionObj: BlankLedgerVM = this.lc.prepareBankLedgerRequestObject(currentBankEntry);
             blankTransactionObj.invoicesToBePaid = this.selectedInvoiceList;
             delete blankTransactionObj['voucherType'];
-            delete blankTransactionObj['invoicesToBePaid'];
-            delete blankTransactionObj['baseCurrencyToDisplay'];
-            delete blankTransactionObj['foreignCurrencyToDisplay'];
-            delete blankTransactionObj['otherTaxModal'];
-            delete blankTransactionObj?.transactions[0]['convertedTax'];
-            delete blankTransactionObj?.transactions[0]['selectedAccount'];
-            delete blankTransactionObj?.transactions[0]['showAccountDropdown'];
-            delete blankTransactionObj?.transactions[0]['tax'];
-            delete blankTransactionObj?.transactions[0]['taxesVm'];
 
             if (blankTransactionObj && blankTransactionObj?.transactions && blankTransactionObj?.transactions.length > 0) {
                 blankTransactionsObjArray.push(blankTransactionObj);
@@ -1208,7 +1208,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         })
 
         if (blankTransactionsObjArray.length) {
-            this.store.dispatch(this.ledgerActions.CreateBulksBlankLedgers(cloneDeep(blankTransactionsObjArray), this.lc.accountUnq));
+            this.store.dispatch(this.ledgerActions.CreateBulkBlankLedgers(cloneDeep(blankTransactionsObjArray), this.lc.accountUnq));
         } else {
             this.toaster.showSnackBar("error", this.localeData?.transaction_required, this.commonLocaleData?.app_error);
         }
