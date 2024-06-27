@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
-    <div class="row mr-0 ml-0"  [style.min-height]="'calc(100vh - 90px)'">
+    <div class="row mr-0 ml-0" [style.height]="'calc(100vh - 90px)'">
         <account-as-voucher
             class="col-md-12 col-lg-10 account-wrapper"
             [currentDate]="currentDate"
@@ -16,6 +16,11 @@
             [isCompany]="isCompany"
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
+            [showDiscount]="showDiscountEvent"
+            [showTax]="showTaxEvent"
+            (hideDiscountSidebar)="showDiscountEvent = false"
+            (hideTaxSidebar)="showTaxEvent = false"
+            (salesEntry)="getSalesEntryEvent($event)"
         >
         </account-as-voucher>
 
@@ -32,7 +37,13 @@
         <input type="hidden" [attr.data-gridType]="gridType" id="get-grid-type" />
 
         <div class="sidebar-menu col-md-12 col-lg-2 p-0">
-            <accounting-sidebar [commonLocaleData]="commonLocaleData"></accounting-sidebar>
+            <accounting-sidebar
+                (showDiscountEvent)="showDiscountEvent = $event"
+                (showTaxEvent)="showTaxEvent = $event"
+                [commonLocaleData]="commonLocaleData"
+                [localeData]="localeData"
+                [salesEntry]="salesEntry"
+            ></accounting-sidebar>
         </div>
     </div>
 </ng-container>
