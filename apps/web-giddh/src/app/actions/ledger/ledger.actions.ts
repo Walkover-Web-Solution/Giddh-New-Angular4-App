@@ -71,7 +71,7 @@ export class LedgerActions {
                 payload: res
             }, true))));
 
-    public CreateBulksBlankLedgers$: Observable<Action> = createEffect(() => this.action$
+    public CreateBulkBlankLedgers$: Observable<Action> = createEffect(() => this.action$
     .pipe(
         ofType(LEDGER.CREATE_BULK_BLANK_LEDGER_REQUEST),
         switchMap((action: CustomActions) => this.ledgerService.CreateBulkLedger(action.payload.model, action.payload.accountUniqueName)),
@@ -417,7 +417,7 @@ export class LedgerActions {
         };
     }
 
-    public CreateBulksBlankLedgers(model: BlankLedgerVM, accountUniqueName: string): CustomActions {
+    public CreateBulkBlankLedgers(model: BlankLedgerVM, accountUniqueName: string): CustomActions {
         return {
             type: LEDGER.CREATE_BULK_BLANK_LEDGER_REQUEST,
             payload: { model, accountUniqueName }

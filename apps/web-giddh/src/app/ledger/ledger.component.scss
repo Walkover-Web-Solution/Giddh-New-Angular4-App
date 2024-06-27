@@ -28,7 +28,7 @@
             }
             &:not(.highlighted-transaction) {
                 &:hover {
-                    background-color: transparent;
+                    background-color: var(--color-transparent-background);
                 }
             }
         }
