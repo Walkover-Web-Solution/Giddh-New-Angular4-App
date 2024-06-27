@@ -731,12 +731,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         });
     }
 
+    /**
+     * Export master file
+     */
     public exportMasterDialog() {
         const exportData = {
             exportType: "MASTER_EXPORT",
-            fileType: "CSV",
-            commonLocaleData: this.commonLocaleData,
-            localeData: this.localeData
+            fileType: "CSV"
         }
         this.dialog.open(ExportMasterDialogComponent, {
             width: '750px',

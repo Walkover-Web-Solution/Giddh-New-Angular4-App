@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ExportBodyRequest } from 'apps/web-giddh/src/app/models/api-models/DaybookRequest';
@@ -14,54 +13,34 @@ import { ReplaySubject, takeUntil } from 'rxjs';
 })
 export class ExportMasterDialogComponent implements OnInit {
   /** Form Group for export  form */
-  public exportForm: FormGroup;
+  public exportForm: any;
   /** True if api call in progress */
   public isLoading: boolean = false;
   /** To destroy observers */
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  /* This will hold local JSON data */
+  public localeData: any = {};
+  /* This will hold common JSON data */
+  public commonLocaleData: any = {};
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public inputData,
     private ledgerService: LedgerService,
     private toaster: ToasterService,
-    private router: Router,
-    private formBuilder: FormBuilder
+    private router: Router
   ) { }
 
   ngOnInit() {
-    this.initExportForm();
   }
 
-  public initExportForm(): void {
-    this.exportForm = this.formBuilder.group({
-      openingBalance: new FormControl(false),
-      openingBalanceType: new FormControl(false),
-      foreignOpeningBalance: new FormControl(false),
-      foreignOpeningBalanceType: new FormControl(false),
-      currency: new FormControl(false),
-      mobileNumber: new FormControl(false),
-      email: new FormControl(false),
-      attentionTo: new FormControl(false),
-      remark: new FormControl(false),
-      address: new FormControl(false),
-      pinCode: new FormControl(false),
-      taxNumber: new FormControl(false),
-      partyType: new FormControl(false),
-      bankName: new FormControl(false),
-      bankAccountNumber: new FormControl(false),
-      ifscCode: new FormControl(false),
-      beneficiaryName: new FormControl(false),
-      branchName: new FormControl(false),
-      swiftCode: new FormControl(false),
-    })
-  }
+
 
   public exportMaster(): void {
     let exportRequest: ExportBodyRequest = new ExportBodyRequest();
     exportRequest.exportType = this.inputData?.exportType;
     exportRequest.columnsToExport = [];
     // exportRequest.groupUniqueNames = [];
-    const formValue = this.exportForm.value;
+    const formValue = this.exportForm;
     if (formValue.openingBalance) {
       exportRequest.columnsToExport?.push("Opening Balance")
     }
