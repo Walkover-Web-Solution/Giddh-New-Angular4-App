@@ -71,16 +71,15 @@ export const PAGE_SHORTCUT_MAPPING = [
             gridType: 'voucher'
         }
     },
-    {
-        keyCode: 119, // 'F8',
-        key: FUNCTIONAL_KEYS.F8,
-        inputForFn: {
-            page: 'Sales',
-            uniqueName: 'purchases',
-            gridType: 'voucher'
-        }
-    },
     //{
+    //     keyCode: 119, // 'F8',
+    //     key: FUNCTIONAL_KEYS.F8,
+    //     inputForFn: {
+    //         page: 'Sales',
+    //         uniqueName: 'purchases',
+    //         gridType: 'voucher'
+    //     }
+    // }, {
     //     keyCode: 119, // 'F8',
     //     key: FUNCTIONAL_KEYS.F8,
     //     altKey: true,
@@ -138,12 +137,6 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Hold show discount event  */
-    public showDiscountEvent: boolean;
-    /** Hold show tax event  */
-    public showTaxEvent: boolean;
-    /** Hold sales entry event  */
-    public salesEntry: boolean;
 
     /** @ignore */
     constructor(
@@ -245,16 +238,6 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
             }
         });
         this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
-    }
-
-    /**
-     * This will be use for transfer data
-     *
-     * @param {*} event
-     * @memberof JournalVoucherComponent
-     */
-    public getSalesEntryEvent(event: any): void {
-        this.salesEntry = event;
     }
 
     /**
