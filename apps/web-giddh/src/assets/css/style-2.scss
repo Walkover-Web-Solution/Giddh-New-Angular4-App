@@ -5868,7 +5868,9 @@ label {
 .form-control[readonly],
 fieldset[disabled] .form-control {
     color: var(--color-primary-input-bar-text) !important;
-    background-color: var(--color-primary-input-bar-background) !important;
+    &:not(.bg-transparent) {
+        background-color: var(--color-primary-input-bar-background) !important;
+    }
 }
 
 .disable-bg[disabled],
@@ -15202,6 +15204,7 @@ aside-menu-product-service {
 }
 
 .bg-transparent {
+    background: var(--color-transparent-background) !important;
     background-color: var(--color-transparent-background) !important;
 }
 
