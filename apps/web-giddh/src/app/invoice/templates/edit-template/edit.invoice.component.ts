@@ -59,132 +59,158 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
         fontSize: '10pt',
         sections: [{
             sectionName: 'header',
-            content: [{
-                field: 'companyName',
-                label: '',
-                display: true,
-                width: null
-            }, {
-                field: 'gstin',
-                label: 'GSTIN',
-                display: true,
-                width: null
-            }, {
-                field: 'pan',
-                label: 'PAN',
-                display: true,
-                width: null
-            }, {
-                field: 'address',
-                label: '',
-                display: true,
-                width: null
-            }, {
-                field: 'invoiceDate',
-                label: 'Date',
-                display: true,
-                width: null
-            }, {
-                field: 'invoiceNumber',
-                label: 'Number',
-                display: true,
-                width: null
-            }, {
-                field: 'shippingDate',
-                label: 'Ship Date',
-                display: true,
-                width: null
-            }, {
-                field: 'shippedVia',
-                label: 'Ship Via',
-                display: true,
-                width: null
-            }, {
-                field: 'trackingNumber',
-                label: 'Tracking No.',
-                display: true,
-                width: null
-            }, {
-                field: 'customerName',
-                label: '',
-                display: true,
-                width: null
-            }, {
-                field: 'customerEmail',
-                label: '',
-                display: true,
-                width: null
-            }, {
-                field: 'customerMobileNumber',
-                label: '',
-                display: true,
-                width: null
-            }, {
-                field: 'dueDate',
-                label: 'Due Date',
-                display: true,
-                width: null
-            }, {
-                field: 'billingState',
-                label: 'State',
-                display: true,
-                width: null
-            }, {
-                field: 'billingAddress',
-                label: 'Billing Address',
-                display: true,
-                width: null
-            }, {
-                field: 'billingGstin',
-                label: 'GSTIN',
-                display: true,
-                width: null
-            }, {
-                field: 'shippingAddress',
-                label: 'Shipping Address',
-                display: true,
-                width: null
-            }, {
-                field: 'shippingState',
-                label: 'State',
-                display: true,
-                width: null
-            }, {
-                field: 'shippingGstin',
-                label: 'GSTIN',
-                display: true,
-                width: null
-            }, {
-                field: 'customField1',
-                label: '',
-                display: true,
-                width: null
-            }, {
-                field: 'customField2',
-                label: '',
-                display: true,
-                width: null
-            }, {
-                field: 'customField3',
-                label: '',
-                display: true,
-                width: null
-            }, {
-                field: 'formNameInvoice',
-                label: 'INVOICE',
-                display: true,
-                width: null
-            }, {
-                field: 'formNameTaxInvoice',
-                label: 'TAX INVOICE',
-                display: true,
-                width: null
-            }, {
-                field: 'attentionTo',
-                label: 'Attention To',
-                display: true,
-                width: null
-            }]
+            content: [
+                {
+                    field: 'companyName',
+                    label: '',
+                    display: true,
+                    width: null
+                },
+                {
+                    field: 'displayExchangeRate',
+                    label: "Exchange/Conversion Rate",
+                    display: true,
+                    width: null
+                },
+                {
+                    field: 'displayLutNumber',
+                    label: "LUt Number",
+                    display: true,
+                    width: null
+                },
+                {
+                    field: 'displayPlaceOfSupply',
+                    label: "Place of Supply",
+                    display: true,
+                    width: null
+                },
+                {
+                    field: 'displayPlaceOfCountry',
+                    label: "Place of Country",
+                    display: true,
+                    width: null
+                },
+                {
+                    field: 'gstin',
+                    label: 'GSTIN',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'pan',
+                    label: 'PAN',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'address',
+                    label: '',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'invoiceDate',
+                    label: 'Date',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'invoiceNumber',
+                    label: 'Number',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'shippingDate',
+                    label: 'Ship Date',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'shippedVia',
+                    label: 'Ship Via',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'trackingNumber',
+                    label: 'Tracking No.',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'customerName',
+                    label: '',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'customerEmail',
+                    label: '',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'customerMobileNumber',
+                    label: '',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'dueDate',
+                    label: 'Due Date',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'billingState',
+                    label: 'State',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'billingAddress',
+                    label: 'Billing Address',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'billingGstin',
+                    label: 'GSTIN',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'shippingAddress',
+                    label: 'Shipping Address',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'shippingState',
+                    label: 'State',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'shippingGstin',
+                    label: 'GSTIN',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'customField1',
+                    label: '',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'customField2',
+                    label: '',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'customField3',
+                    label: '',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'formNameInvoice',
+                    label: 'INVOICE',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'formNameTaxInvoice',
+                    label: 'TAX INVOICE',
+                    display: true,
+                    width: null
+                }, {
+                    field: 'attentionTo',
+                    label: 'Attention To',
+                    display: true,
+                    width: null
+                }]
         }, {
             sectionName: 'table',
             content: [{

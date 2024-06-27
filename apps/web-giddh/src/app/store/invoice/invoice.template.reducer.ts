@@ -160,6 +160,26 @@ export const initialState: CustomTemplateState = {
                         display: true,
                         width: null
                     },
+                    displayExchangeRate: {
+                        label: '',
+                        display: true,
+                        width: null
+                    },
+                    displayLutNumber: {
+                        label: '',
+                        display: true,
+                        width: null
+                    },
+                    displayPlaceOfSupply: {
+                        label: '',
+                        display: true,
+                        width: null
+                    },
+                    displayPlaceOfCountry: {
+                        label: '',
+                        display: true,
+                        width: null
+                    },
                     dueDate: {
                         label: 'Due Date',
                         display: true,
