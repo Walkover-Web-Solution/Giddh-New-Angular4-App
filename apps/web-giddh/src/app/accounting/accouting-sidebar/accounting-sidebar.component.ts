@@ -1,7 +1,7 @@
 import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { IPageInfo, TallyModuleService } from './../tally-service';
 import { ReplaySubject } from 'rxjs';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { VOUCHERS } from '../constants/accounting.constant';
 
@@ -16,8 +16,6 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
     @Input() public AccountListOpen: boolean;
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    /* This will hold locale JSON data */
-    @Input() public localeData: any = {};
     public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
     public isGroupToggle: boolean;
     public accountSearch: string = '';
@@ -27,12 +25,6 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
     public selectedGrid: string = null;
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public accountingVouchers: any = VOUCHERS;
-    /** Emits the show discount event  */
-    @Output() public showDiscountEvent: EventEmitter<boolean> = new EventEmitter();
-    /** Emits the show tax event  */
-    @Output() public showTaxEvent: EventEmitter<boolean> = new EventEmitter();
-    /** Hold sales entry event  */
-    @Input() public salesEntry: boolean;
 
     constructor(private _tallyModuleService: TallyModuleService) {
         //
@@ -83,27 +75,4 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
         this.destroyed$.complete();
     }
 
-    /**
-     * This will be use for emit the show discount sidebar state
-     *
-     * @param {*} event
-     * @memberof AccountingSidebarComponent
-     */
-    public showDiscountSidebar(event: any): void {
-        if (event) {
-            this.showDiscountEvent.emit(true);
-        }
-    }
-
-    /**
-     * This will be use for emit the show tax sidebar state
-     *
-     * @param {*} event
-     * @memberof AccountingSidebarComponent
-     */
-    public showTaxSidebar(event: any): void {
-        if (event) {
-            this.showTaxEvent.emit(true);
-        }
-    }
 }

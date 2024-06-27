@@ -149,7 +149,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     /** True if we need to show red border around the field */
     public showEntryAgainstRequired: boolean = false;
     /** Holds Aside Menu State For Other Taxes DialogRef */
-    public asideMenuStateForOtherTaxesDialogRef: any;
+    public asideMenuStateForOtherTaxesDialogRef:any;
 
     constructor(
         private toaster: ToasterService,
@@ -468,14 +468,14 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public toggleOtherTaxesAsidePane(): void {
-        this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes, {
+        this.asideMenuStateForOtherTaxesDialogRef = this.dialog.open(this.asideMenuStateForOtherTaxes,{
             position: {
                 right: '0'
             },
             maxWidth: '760px',
-            width: '100%',
-            height: '100vh',
-            maxHeight: '100vh'
+            width:'100%',
+            height:'100vh',
+            maxHeight:'100vh'
         });
     }
 
