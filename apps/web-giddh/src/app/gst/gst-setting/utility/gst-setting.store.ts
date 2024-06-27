@@ -13,6 +13,7 @@ export interface GstSettingState {
     deleteLutNumberIsSuccess: boolean;
     lutNumberList: any[];
     lutNumberResponse: any;
+    updateLutNumberResponse: any;
 }
 
 const DEFAULT_STATE: GstSettingState = {
@@ -20,7 +21,8 @@ const DEFAULT_STATE: GstSettingState = {
     createUpdateInSuccess: false,
     deleteLutNumberIsSuccess: false,
     lutNumberList: null,
-    lutNumberResponse: null
+    lutNumberResponse: null,
+    updateLutNumberResponse: null
 };
 
 @Injectable()
@@ -39,6 +41,7 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
     public lutNumberList$ = this.select((state) => state.lutNumberList);
     public deleteLutNumberIsSuccess$ = this.select((state) => state.deleteLutNumberIsSuccess);
     public lutNumberResponse$ = this.select((state) => state.lutNumberResponse);
+    public updateLutNumberResponse$ = this.select((state) => state.updateLutNumberResponse);
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
@@ -112,6 +115,39 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
             mergeMap((req) => {
                 this.patchState({ isLoading: true, createUpdateInSuccess: false, lutNumberResponse: null });
                 return this.gstReconcileService.createLutNumber(req.q).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    lutNumberResponse: { message: null, lutIndex: req.index, autoSelectLutNumber: true, lutNumberItem: req.q }, isLoading: false
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toaster.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    lutNumberResponse: { message: res.message, lutIndex: req.index, autoSelectVariant: false, lutNumberItem: req.q }, isLoading: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
+                            return this.patchState({
+                                lutNumberResponse: { message: error.message, lutIndex: req.index, autoSelectVariant: false, lutNumberItem: req.q }, isLoading: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly updateLutNumber = this.effect((data: Observable<{ q: any, index: number, autoSelectLutNumber: boolean }>) => {
+        return data.pipe(
+            mergeMap((req) => {
+                this.patchState({ isLoading: true, createUpdateInSuccess: false, lutNumberResponse: null });
+                return this.gstReconcileService.updateLutNumber(req.q).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {

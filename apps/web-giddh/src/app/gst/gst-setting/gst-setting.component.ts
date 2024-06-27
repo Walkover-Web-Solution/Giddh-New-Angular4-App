@@ -61,6 +61,8 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     public deleteLutNumberIsSuccess$: Observable<any> = this.componentStore.deleteLutNumberIsSuccess$;
     /** Create Lut Number in progress Observable */
     public createUpdateInSuccess$: Observable<any> = this.componentStore.createUpdateInSuccess$;
+    public responseArray: any[] = [];
+    public lutItemList: any[] = [];
 
     constructor(
         private breakpointObserver: BreakpointObserver,
@@ -118,6 +120,9 @@ export class GstSettingComponent implements OnInit, OnDestroy {
 
         this.componentStore.lutNumberList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length) {
+                let mappings = this.gstSettingForm.get('gstData') as FormArray;
+                mappings.clear();
+                this.lutItemList = response;
                 response.forEach((item) => {
                     this.addNewLutItem(item);
                 })
@@ -125,7 +130,9 @@ export class GstSettingComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.lutNumberResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
+            if (response) {
+                this.responseArray[response.lutIndex] = response;
+            }
         });
     }
 
@@ -201,10 +208,8 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                 fromDate: this.fromDate,
                 toDate: this.toDate
             }));
-            console.log(mappings);
             let lastIndex = mappings.controls.findIndex(control => !control.get('lutNumber')?.value);
             let lastFormArray = mappings.at(lastIndex);
-            console.log(lastFormArray);
             let fromDate = null;
             let toDate = null;
             if (user.fromDate && user.toDate) {
@@ -276,16 +281,36 @@ export class GstSettingComponent implements OnInit, OnDestroy {
 
 
     public saveLutNumbers(): void {
+        this.responseArray = [];
         const items = this.gstSettingForm.get('gstData') as FormArray;
 
         // Map controls to include original indices
         const itemsWithOriginalIndex = items.controls.map((ctrl, i) => ({
             ...ctrl.value,
-            dirty: ctrl.dirty,
             originalIndex: i,
             fromDate: dayjs(ctrl.value.fromDate).format(GIDDH_DATE_FORMAT),
             toDate: dayjs(ctrl.value.toDate).format(GIDDH_DATE_FORMAT)
         }));
+
+        console.log(this.lutItemList, itemsWithOriginalIndex);
+        this.lutItemList.forEach((obj1, index) => {
+            const obj2 = itemsWithOriginalIndex.find(item => item.lutNumber === obj1.lutNumber);
+
+            if (obj2) {
+                // Compare key-value pairs
+                for (const key in obj1) {
+                    if (obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
+                        if (obj1[key] !== obj2[key]) {
+                            console.log(`Difference found at key '${key}' between objects:`);
+                            console.log(`Object 1:`, obj1);
+                            console.log(`Object 2:`, obj2);
+                        }
+                    }
+                }
+            } else {
+                console.log(`No matching object found in list2 for obj1 at index ${index}:`, obj1);
+            }
+        });
 
         // Filter controls that are dirty and map them with their original index
         const changedItems = itemsWithOriginalIndex
@@ -294,16 +319,27 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                 ...item
             }));
 
-        if (changedItems.length > 0) {
-            changedItems.forEach(item => {
-                const req = {
-                    q: item,
-                    index: item.originalIndex,
-                    autoSelectLutNumber: true
-                };
-                this.componentStore.createLutNumber(req);
-            });
-        }
+        // if (changedItems.length > 0) {
+        //     changedItems.forEach(item => {
+        //         console.log(item);
+        //         if (item?.uniqueName) {
+        //             const req = {
+        //                 q: item,
+        //                 index: item.originalIndex,
+        //                 autoSelectLutNumber: true,
+        //                 uniqueName:item.uniqueName
+        //             };
+        //             this.componentStore.updateLutNumber(req);
+        //         } else {
+        //             const req = {
+        //                 q: item,
+        //                 index: item.originalIndex,
+        //                 autoSelectLutNumber: true
+        //             };
+        //             this.componentStore.createLutNumber(req);
+        //         }
+        //     });
+        // }
     }
 
 
