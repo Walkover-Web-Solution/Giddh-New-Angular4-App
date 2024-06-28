@@ -42,7 +42,6 @@
                             name="exchangeRateCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['displayExchangeRate'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                            checked
                         />
                         Exchange/Conversion Rate
                     </div>
@@ -60,7 +59,6 @@
                             name="placeOfSupplyCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['displayPlaceOfSupply'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                            checked
                         />
                         Place Of Supply
                     </div>
@@ -78,7 +76,6 @@
                             name="countryOfSupplyfCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['displayPlaceOfCountry'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                            checked
                         />
                         Country of Supply
                     </div>
@@ -96,7 +93,6 @@
                             name="lutNumberCheckbox"
                             [(ngModel)]="customTemplate.sections['header'].data['displayLutNumber'].display"
                             (ngModelChange)="onChangeFieldVisibility(null, null, null)"
-                            checked
                         />
                         LUT Number
                     </div>
@@ -1770,6 +1766,27 @@
                                 >
                             </td>
                         </tr>
+                        <tr
+                            *ngIf="
+                                customTemplate?.templateType === 'gst_template_a' &&
+                                customTemplate.sections['table'].data['displayBaseCurrency']
+                            "
+                        >
+                            <td class="pb-3">
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        name="displayBaseCurrency"
+                                        checked
+                                        [(ngModel)]="
+                                            customTemplate.sections['table'].data['displayBaseCurrency'].display
+                                        "
+                                        (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                                    />
+                                    Hide company's base currency on Pdf</label
+                                >
+                            </td>
+                        </tr>
                         <div
                             class="form-group"
                             *ngIf="customTemplate?.templateType === 'gst_template_e' && voucherType === 'sales'"
@@ -2267,6 +2284,24 @@
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             />
                             Show notes at the last page
+                        </div>
+                    </div>
+                                     <div
+                        class="clearfix mr-t1 form-group"
+                        *ngIf="
+                            customTemplate?.templateType !== 'thermal_template' &&
+                            customTemplate.sections['footer'].data['displayExportMessage']
+                        "
+                    >
+                        <div>
+                            <input
+                                type="checkbox"
+                                name="displayExportMessage"
+                                [checked]="customTemplate.sections['footer'].data['displayExportMessage']?.display"
+                                [(ngModel)]="customTemplate.sections['footer'].data['displayExportMessage'].display"
+                                (ngModelChange)="onChangeFieldVisibility(null, null, null)"
+                            />
+                            {{customTemplate.sections['footer'].data['displayExportMessage'].label}}
                         </div>
                     </div>
                     <div
