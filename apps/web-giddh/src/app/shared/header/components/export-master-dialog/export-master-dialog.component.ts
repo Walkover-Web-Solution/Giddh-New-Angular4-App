@@ -1,10 +1,14 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { ExportBodyRequest } from 'apps/web-giddh/src/app/models/api-models/DaybookRequest';
 import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { ReplaySubject, takeUntil } from 'rxjs';
+import { ManageGroupsAccountsComponent } from '../new-manage-groups-accounts/manage-groups-accounts.component';
+import { Store } from '@ngrx/store';
+import { AppState } from 'apps/web-giddh/src/app/store';
+import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 
 @Component({
   selector: 'app-export-master-dialog',
@@ -27,7 +31,10 @@ export class ExportMasterDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public inputData,
     private ledgerService: LedgerService,
     private toaster: ToasterService,
-    private router: Router
+    private router: Router,
+    private dialogRef: MatDialogRef<ManageGroupsAccountsComponent>,
+    private store: Store<AppState>,
+    private groupWithAccountsAction: GroupWithAccountsAction
   ) { }
 
   ngOnInit() {
@@ -39,7 +46,6 @@ export class ExportMasterDialogComponent implements OnInit {
     let exportRequest: ExportBodyRequest = new ExportBodyRequest();
     exportRequest.exportType = this.inputData?.exportType;
     exportRequest.columnsToExport = [];
-    // exportRequest.groupUniqueNames = [];
     const formValue = this.exportForm;
     if (formValue.openingBalance) {
       exportRequest.columnsToExport?.push("Opening Balance")
@@ -101,13 +107,16 @@ export class ExportMasterDialogComponent implements OnInit {
     this.isLoading = true;
     this.ledgerService.exportData(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
       this.isLoading = false;
-      console.log(response?.status)
       if (response?.status === "success") {
         this.toaster.showSnackBar("success", response?.body);
+        this.dialogRef.close();
         this.router.navigate(['pages/downloads'])
       } else {
         this.toaster.showSnackBar("error", response?.body);
       }
     });
+    // for close master dialog
+    this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+    document.querySelector('body')?.classList?.remove('master-page');
   }
 }

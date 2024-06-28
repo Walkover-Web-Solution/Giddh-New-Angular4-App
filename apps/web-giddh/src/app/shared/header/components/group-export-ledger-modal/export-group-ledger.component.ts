@@ -15,6 +15,7 @@ import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { Router } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
+import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 
 @Component({
     selector: 'export-group-ledger',
@@ -28,6 +29,8 @@ export class ExportGroupLedgerComponent implements OnInit {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Output() public closeExportGroupLedgerModal: EventEmitter<any> = new EventEmitter();
+    /** Holds group unique name */
+    @Input() public currentGrpUniqueName: string = '';
 
     public emailTypeSelected: string = '';
     public emailTypeMini: string = '';
@@ -62,7 +65,6 @@ export class ExportGroupLedgerComponent implements OnInit {
     /** To unsubscribe observer */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** To hold export request object */
-    // public groupUniqueName: string = '';
     public exportRequest: ExportBodyRequest = {
         from: '',
         to: '',
@@ -86,15 +88,14 @@ export class ExportGroupLedgerComponent implements OnInit {
     /** Holds current group object */
     public currentGroup: any = {};
     /** Holds Group uniques name from Params */
-    private groupUniqueName: 'sundrydebtors' | 'sundrycreditors';
-
-
+    public groupUniqueName: string = '';
 
     constructor(private store: Store<AppState>, private _permissionDataService: PermissionDataService, private generalService: GeneralService, private modalService: BsModalService,
         private ledgerService: LedgerService,
         private toaster: ToasterService,
         private router: Router,
-        private formBuilder: FormBuilder) {
+        private formBuilder: FormBuilder,
+        private groupWithAccountsAction: GroupWithAccountsAction) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -139,8 +140,8 @@ export class ExportGroupLedgerComponent implements OnInit {
             let exportRequest: ExportBodyRequest = new ExportBodyRequest();
             exportRequest.exportType = "MASTER_EXPORT";
             exportRequest.fileType = "CSV";
-            // exportRequest.groupUniqueNames = this.currentGroup?.uniqueName;
-            console.log(exportRequest.groupUniqueNames = this.currentGroup?.uniqueName)
+            exportRequest.groupUniqueNames = [this.currentGrpUniqueName];
+            console.log(this.currentGrpUniqueName)
             exportRequest.columnsToExport = [];
             const formValue = this.exportForm;
             if (formValue.openingBalance) {
@@ -203,14 +204,17 @@ export class ExportGroupLedgerComponent implements OnInit {
             this.isLoading = true;
             this.ledgerService.exportData(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.isLoading = false;
-                console.log(response?.status)
                 if (response?.status === "success") {
                     this.toaster.showSnackBar("success", response?.body);
+                    this.closeExportGroupLedgerModal.emit();
                     this.router.navigate(['pages/downloads'])
                 } else {
                     this.toaster.showSnackBar("error", response?.body);
                 }
             });
+            // for close master dialog
+            this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+            document.querySelector('body')?.classList?.remove('master-page');
         }
     }
 
