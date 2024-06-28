@@ -133,6 +133,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public groupExportLedgerBodyRequest: ExportBodyRequest = new ExportBodyRequest();
     /** List of discounts */
     public discounts: any[] = [];
+    /** Holds group unique name */
+    @Input() public currentGrpUniqueName: string = '';
 
     constructor(private _fb: UntypedFormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
         private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions, public generalService: GeneralService, public ledgerService: LedgerService, public router: Router, private settingsDiscountService: SettingsDiscountService, private permissionActions: PermissionActions, private generalAction: GeneralActions, public dialog: MatDialog) {
