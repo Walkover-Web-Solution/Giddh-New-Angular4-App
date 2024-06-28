@@ -26,7 +26,12 @@
                 }"
                 (click)="onClickSection('header')"
             >
-                <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.header" aria-label="edit icon">
+                <a
+                    href="javascript:void(0);"
+                    class="edit-template"
+                    *ngIf="!templateUISectionVisibility.header"
+                    aria-label="edit icon"
+                >
                     <i class="icon-edit-pencil"></i>
                 </a>
                 <header>
@@ -209,7 +214,8 @@
                                                 >
                                                     <div class="qr-image">
                                                         <img
-                                                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png" alt="qr image"
+                                                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/1200px-QR_code_for_mobile_English_Wikipedia.svg.png"
+                                                            alt="qr image"
                                                         />
                                                     </div>
                                                 </td>
@@ -284,7 +290,10 @@
                         <tbody>
                             <tr>
                                 <td colspan="2">
-                                    <p class="mb-2"><strong>IRN:&nbsp;</strong>def01b2b4b08ba07e92556896bb0e5a6c5b80428f756ae902ab57db0b60781c3</p>
+                                    <p class="mb-2">
+                                        <strong>IRN:&nbsp;</strong
+                                        >def01b2b4b08ba07e92556896bb0e5a6c5b80428f756ae902ab57db0b60781c3
+                                    </p>
                                 </td>
                             </tr>
                             <tr>
@@ -437,7 +446,7 @@
                                             : "Ship Date"
                                     }}
                                 </p>
-                                <p>Multi currency value</p>
+                                <p>10/09/2018</p>
                             </td>
                             <td *ngIf="fieldsAndVisibility.header.shippedVia?.display">
                                 <p>
@@ -447,7 +456,7 @@
                                             : "Ship Via"
                                     }}
                                 </p>
-                                <p>Conversion rate value</p>
+                                <p>FedEx</p>
                             </td>
                             <td *ngIf="fieldsAndVisibility.header.trackingNumber?.display">
                                 <p>
@@ -457,7 +466,7 @@
                                             : "Tracking No"
                                     }}
                                 </p>
-                                <p>Place of supply value</p>
+                                <p>00115467</p>
                             </td>
                             <td *ngIf="fieldsAndVisibility.header.customField1?.display">
                                 <p>
@@ -467,7 +476,7 @@
                                             : "Field 1"
                                     }}
                                 </p>
-                                <p>Country of value</p>
+                                <p>Custom</p>
                             </td>
                             <td *ngIf="fieldsAndVisibility.header.customField2?.display">
                                 <p>
@@ -477,62 +486,63 @@
                                             : "Field 2"
                                     }}
                                 </p>
-                                <p>LUt Number</p>
+                                <p>Custom</p>
+                            </td>
+                            <td *ngIf="fieldsAndVisibility.header.customField3?.display">
+                                <p>
+                                    {{
+                                        fieldsAndVisibility.header.customField3?.label?.length > 0
+                                            ? fieldsAndVisibility.header.customField3?.label
+                                            : "Field 3"
+                                    }}
+                                </p>
+                                <p>Custom</p>
                             </td>
                         </tr>
                     </tbody>
-
-                    </table>
-                       <table class="meta" cellpadding="0 " cellspacing="0 ">
+                </table>
+                <table class="meta" cellpadding="0 " cellspacing="0 ">
                     <tbody>
                         <tr>
-                            <!-- <td *ngIf="fieldsAndVisibility.header.customerName?.display || fieldsAndVisibility.header.customerEmail?.display || fieldsAndVisibility.header.customerMobileNumber?.display ">&nbsp;</td> -->
-
-                            <td *ngIf="fieldsAndVisibility.header.billingAddress?.display">
-                                <ng-container
-                                    *ngIf="
-                                        fieldsAndVisibility.header.billingAddress?.display &&
-                                        fieldsAndVisibility.header.billingGstin?.display
-                                    "
-                                >
-                                    <p>
-                                        {{
-                                            fieldsAndVisibility.header.billingGstin?.label?.length > 0
-                                                ? fieldsAndVisibility.header.billingGstin?.label
-                                                : "GSTIN"
-                                        }}
-                                    </p>
-                                    <p>11AAAAAA000Z0A1</p>
-                                </ng-container>
+                            <td *ngIf="fieldsAndVisibility.header.displayExchangeRate?.display">
+                                <p>
+                                    {{
+                                        fieldsAndVisibility.header.displayExchangeRate?.label?.length > 0
+                                            ? fieldsAndVisibility.header.displayExchangeRate?.label
+                                            : "Exchange/Conversion Rate"
+                                    }}
+                                </p>
+                                <p>83.4</p>
                             </td>
-                            <td *ngIf="fieldsAndVisibility.header.shippingAddress?.display">
-                                <ng-container
-                                    *ngIf="
-                                        fieldsAndVisibility.header.shippingAddress?.display &&
-                                        fieldsAndVisibility.header.shippingGstin?.display
-                                    "
-                                >
-                                    <p>
-                                        {{
-                                            fieldsAndVisibility.header.shippingGstin?.label?.length > 0
-                                                ? fieldsAndVisibility.header.shippingGstin?.label
-                                                : "GSTIN"
-                                        }}
-                                    </p>
-                                    <p>11AAAAAA000Z0A1</p>
-                                </ng-container>
+                            <td *ngIf="fieldsAndVisibility.header.displayPlaceOfSupply?.display">
+                                <p>
+                                    {{
+                                        fieldsAndVisibility.header.displayPlaceOfSupply?.label?.length > 0
+                                            ? fieldsAndVisibility.header.displayPlaceOfSupply?.label
+                                            : "Place Of Supply"
+                                    }}
+                                </p>
+                                <p>Madhya Pradesh (MP)</p>
                             </td>
-                            <td>
-                                <ng-container *ngIf="fieldsAndVisibility.header.dueDate?.display">
-                                    <p>
-                                        {{
-                                            fieldsAndVisibility.header.dueDate?.label?.length > 0
-                                                ? fieldsAndVisibility.header.dueDate?.label
-                                                : "Due Date"
-                                        }}
-                                    </p>
-                                    <p>10/09/2018</p>
-                                </ng-container>
+                            <td *ngIf="fieldsAndVisibility.header.displayPlaceOfCountry?.display">
+                                <p>
+                                    {{
+                                        fieldsAndVisibility.header.displayPlaceOfCountry?.label?.length > 0
+                                            ? fieldsAndVisibility.header.displayPlaceOfCountry?.label
+                                            : " Country of Supply"
+                                    }}
+                                </p>
+                                <p>India</p>
+                            </td>
+                            <td *ngIf="fieldsAndVisibility.header.displayLutNumber?.display">
+                                <p>
+                                    {{
+                                        fieldsAndVisibility.header.displayLutNumber?.label?.length > 0
+                                            ? fieldsAndVisibility.header.displayLutNumber?.label
+                                            : "LUT Number"
+                                    }}
+                                </p>
+                                <p>AD330123123123F</p>
                             </td>
                         </tr>
                     </tbody>
@@ -546,7 +556,12 @@
                 }"
                 (click)="onClickSection('table')"
             >
-                <a href="javascript:void(0); " class="edit-template" *ngIf="!templateUISectionVisibility.table" aria-label="edit icon">
+                <a
+                    href="javascript:void(0); "
+                    class="edit-template"
+                    *ngIf="!templateUISectionVisibility.table"
+                    aria-label="edit icon"
+                >
                     <i class="icon-edit-pencil"></i>
                 </a>
                 <article class="table-item" tabindex="0">
@@ -1020,7 +1035,12 @@
                 (click)="onClickSection('footer')"
             >
                 <div class="clearfix">
-                    <a href="javascript:void(0); " class="edit-template" *ngIf="!templateUISectionVisibility.footer" aria-label="edit icon">
+                    <a
+                        href="javascript:void(0); "
+                        class="edit-template"
+                        *ngIf="!templateUISectionVisibility.footer"
+                        aria-label="edit icon"
+                    >
                         <i class="icon-edit-pencil"></i>
                     </a>
                     <article tabindex="0">
@@ -1061,7 +1081,9 @@
                                 </td>
                             </tr>
                             <tr *ngIf="fieldsAndVisibility.footer.grandTotal?.display">
-                                <th class="strong">{{ fieldsAndVisibility.footer.grandTotal?.label }} (USD)</th>
+                                <th class="strong">
+                                    {{ fieldsAndVisibility.footer.grandTotal?.label }} {{dollarSymbol ?'(USD)':'' }}
+                                </th>
                                 <td class="strong"><span [innerHTML]="dollarSymbol"></span>30.34</td>
                             </tr>
                             <tr *ngIf="fieldsAndVisibility.footer.totalInWords?.display">
@@ -1263,7 +1285,12 @@
                 </div>
 
                 <div class="clearfix">
-                    <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer" aria-label="edit icon">
+                    <a
+                        href="javascript:void(0);"
+                        class="edit-template"
+                        *ngIf="!templateUISectionVisibility.footer"
+                        aria-label="edit icon"
+                    >
                         <i class="icon-edit-pencil"></i>
                     </a>
                     <aside>
@@ -1287,6 +1314,30 @@
                         </p>
                         <table cellpadding="0" cellspacing="0" class="subfooter">
                             <tbody>
+                                <tr *ngIf="fieldsAndVisibility.footer.displayExportMessage?.display">
+                                    <td [ngStyle]="{ 'font-size': inputTemplate.fontDefault + 'px' }">
+                                        <strong>
+                                            <h2
+                                                *ngIf="fieldsAndVisibility.footer.displayExportMessage?.label"
+                                                [ngStyle]="{
+                                                    'color': inputTemplate.templateColor,
+                                                    'font-size': inputTemplate.fontDefault + 'px'
+                                                }"
+                                                [innerHTML]="fieldsAndVisibility.footer.displayExportMessage?.label"
+                                            ></h2>
+                                            <h2
+                                                *ngIf="!fieldsAndVisibility.footer.displayExportMessage?.label"
+                                                [ngStyle]="{
+                                                    'color': inputTemplate.templateColor,
+                                                    'font-size': inputTemplate.fontDefault + 'px'
+                                                }"
+                                            >
+                                                {{ fieldsAndVisibility.footer.displayExportMessage?.label }}
+                                            </h2>
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <br />
                                 <tr>
                                     <td class="accc" [ngStyle]="{ 'font-size': inputTemplate.fontMedium + 'px' }">
                                         <ng-container
