@@ -21,7 +21,7 @@
     <div *ngIf="taxes?.length > 1" class="input-width">
         <dropdown-field
             [label]="isKenyaCompany || isZimbabweCompany || isUKCompany ? commonLocaleData?.app_vat : commonLocaleData?.app_trn"
-            [options]="taxes" (selectedOption)="getVatReport($event)" [placeholder]="isKenyaCompany || isZimbabweCompany || isUKCompany ? commonLocaleData?.app_enter_vat : commonLocaleData?.app_enter_trm"
+            [options]="taxes" (selectedOption)="getVatReport($event)" [placeholder]="isKenyaCompany || isZimbabweCompany || isUKCompany ? commonLocaleData?.app_enter_vat : commonLocaleData?.app_enter_trn"
             [defaultValue]="taxes[0]?.label" [required]="true">
         </dropdown-field>
     </div>
