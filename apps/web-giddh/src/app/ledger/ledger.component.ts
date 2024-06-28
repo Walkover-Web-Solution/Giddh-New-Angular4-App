@@ -1206,6 +1206,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         })
 
         if (blankTransactionsObjArray.length) {
+            this.store.dispatch(this.ledgerActions.ResetBlankLedger());
             this.store.dispatch(this.ledgerActions.CreateBulkBlankLedgers(cloneDeep(blankTransactionsObjArray), this.lc.accountUnq));
         } else {
             this.toaster.showSnackBar("error", this.localeData?.transaction_required, this.commonLocaleData?.app_error);
@@ -2828,7 +2829,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      *
      * @memberof LedgerComponent
      */
-    public getPurchaseSettings(): void {
+    public getPurchaseSettings(): void {        
         this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe(response => {
 
             this.autoGenerateVoucherFromEntryStatus = response?.invoiceSettings?.autoGenerateVoucherFromEntry;
