@@ -798,9 +798,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 response.entries?.forEach((entry: any, index: number) => {
                     if (entry.transactions[0]?.stock) {
                         this.stockUnits[index] = observableOf(entry.transactions[0]?.stock.unitRates);
-                        this.componentStore.getStockVariants({ q: entry.transactions[0]?.stock?.uniqueName, index: index, autoSelectVariant: false });
                     }
-                    this.invoiceForm.get('entries')['controls'].push(this.getEntriesFormGroup(entry, false));
+                    this.invoiceForm.get('entries')['controls'].push(this.getEntriesFormGroup(entry, true));
 
                     if (entry.discounts?.length) {
                         this.getSelectedDiscounts(index, entry.discounts);
@@ -2145,7 +2144,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         customField2: this.formBuilder.group({
                             key: [entryData?.transactions[0]?.stock?.customField2?.value ? entryData?.transactions[0]?.stock?.customField2?.key : ''],
                             value: [entryData?.transactions[0]?.stock?.customField2?.value ? entryData?.transactions[0]?.stock?.customField2?.value : '']
-                        })
+                        }),
+                        hasVariants: [entryData ? entryData?.transactions[0]?.stock?.hasVariants : false]
                     })
                 })
             ]),
@@ -4915,6 +4915,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getVoucherDateLabelPlaceholder();
         if (this.isUpdateMode) {
             this.getUpdateVoucherText();
+        }
+    }
+
+    /**
+     * Get stock variants
+     *
+     * @param {*} entry
+     * @param {number} entryIndex
+     * @memberof VoucherCreateComponent
+     */
+    public getStockVariants(entry: any, entryIndex: number): void {
+        if (!this.stockVariants[entryIndex] && entry.transactions[0]?.stock?.hasVariants) {
+            this.componentStore.getStockVariants({ q: entry.transactions[0]?.stock?.uniqueName, index: entryIndex, autoSelectVariant: false });
         }
     }
 }
