@@ -594,8 +594,8 @@
                                             [label]="!invoiceType.isPurchaseOrder? commonLocaleData?.app_voucher_number : localeData?.order_no"
                                             [placeholder]="!invoiceType.isPurchaseOrder? localeData?.enter_voucher_number : localeData?.order_no_placeholder"
                                             [type]="'text'" formControlName="number"
-                                            [readonly]="isUpdateMode || !useCustomVoucherNumber"
-                                            [disabled]="isUpdateMode || !useCustomVoucherNumber">
+                                            [readonly]="(isUpdateMode && !invoiceType.isPurchaseInvoice) || !useCustomVoucherNumber"
+                                            [disabled]="(isUpdateMode && !invoiceType.isPurchaseInvoice) || !useCustomVoucherNumber">
                                         </input-field>
                                     </div>
 
@@ -765,7 +765,7 @@
                                             <ng-container
                                                 *ngFor="let entry of invoiceForm?.get('entries')['controls']; let entryIndex = index">
                                                 <tr [formGroupName]="entryIndex"
-                                                    (click)="activeEntryIndex = entryIndex; $event.stopPropagation()">
+                                                    (click)="activeEntryIndex = entryIndex; getStockVariants(entry?.value, entryIndex); $event.stopPropagation()">
                                                     <!-- Product/Service -->
                                                     <td [width]="hasStock ? '20%' : '25%'"
                                                         class="text-left product-column">
