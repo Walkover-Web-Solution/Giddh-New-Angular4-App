@@ -66,7 +66,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     /** True if account has unsaved changes */
     private hasUnsavedChanges: boolean = false;
     /** Emits groupUniqueName path */
-    @Output() public currentGrpUniqueName = new EventEmitter();
+    @Output() public activeGroupUniqueName = new EventEmitter();
 
     constructor(
         private groupService: GroupService,
@@ -358,7 +358,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     private groupClicked(item: any, currentIndex: number, loadMaster: boolean = true): void {
         this.currentGroupColumnIndex = currentIndex;
         this.currentGroupUniqueName = item?.uniqueName;
-        this.currentGrpUniqueName.emit(item?.uniqueName);
+        this.activeGroupUniqueName.emit(item?.uniqueName);
         this.showCreateNewButton = true;
         this.useAccountBreadcrumb = false;
         this.breadcrumbPath = [];

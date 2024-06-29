@@ -9,7 +9,7 @@ import { ReplaySubject, takeUntil } from 'rxjs';
 })
 export class MasterExportOptionComponent implements OnInit {
   /** Form Group for export  form */
-  public exportForm: FormGroup;
+  public exportFormValue: FormGroup;
   /** Emits the show discount event  */
   @Output() public exportFormMaster: EventEmitter<any> = new EventEmitter();
   /** To destroy observers */
@@ -22,18 +22,23 @@ export class MasterExportOptionComponent implements OnInit {
     private formBuilder: FormBuilder
   ) { }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.initExportForm();
-    this.exportFormMaster.emit(this.exportForm.value);
-    this.exportForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+    this.exportFormMaster.emit(this.exportFormValue.value);
+    this.exportFormValue.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
       if (value) {
-        this.exportFormMaster.emit(this.exportForm.value);
+        this.exportFormMaster.emit(this.exportFormValue.value);
       }
     });
   }
 
+    /**
+   * This will use for initial export form
+   *
+   * @memberof MasterExportOptionComponent
+   */
   public initExportForm(): void {
-    this.exportForm = this.formBuilder.group({
+    this.exportFormValue = this.formBuilder.group({
       openingBalance: new FormControl(false),
       openingBalanceType: new FormControl(false),
       foreignOpeningBalance: new FormControl(false),
@@ -56,6 +61,11 @@ export class MasterExportOptionComponent implements OnInit {
     })
   }
 
+  /**
+   * This will use for destroy
+   * 
+   * @memberof MasterExportOptionComponent
+   */
   public ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();

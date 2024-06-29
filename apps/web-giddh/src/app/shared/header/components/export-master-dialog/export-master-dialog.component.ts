@@ -17,7 +17,7 @@ import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwit
 })
 export class ExportMasterDialogComponent implements OnInit {
   /** Form Group for export  form */
-  public exportForm: any;
+  public exportFormValue: any;
   /** True if api call in progress */
   public isLoading: boolean = false;
   /** To destroy observers */
@@ -37,80 +37,82 @@ export class ExportMasterDialogComponent implements OnInit {
     private groupWithAccountsAction: GroupWithAccountsAction
   ) { }
 
-  ngOnInit() {
+  public ngOnInit() {
   }
 
 
-
+  /**
+   * Master Export form value
+   */
   public exportMaster(): void {
     let exportRequest: ExportBodyRequest = new ExportBodyRequest();
     exportRequest.exportType = this.inputData?.exportType;
     exportRequest.columnsToExport = [];
-    const formValue = this.exportForm;
+    const formValue = this.exportFormValue;
     if (formValue.openingBalance) {
-      exportRequest.columnsToExport?.push("Opening Balance")
+      exportRequest.columnsToExport?.push("Opening Balance");
     }
     if (formValue.openingBalanceType) {
-      exportRequest.columnsToExport?.push("Opening Balance Type")
+      exportRequest.columnsToExport?.push("Opening Balance Type");
     }
     if (formValue.foreignOpeningBalance) {
-      exportRequest.columnsToExport?.push("Foreign Opening Balance")
+      exportRequest.columnsToExport?.push("Foreign Opening Balance");
     }
     if (formValue.foreignOpeningBalanceType) {
-      exportRequest.columnsToExport?.push("Foreign Opening Balance Type")
+      exportRequest.columnsToExport?.push("Foreign Opening Balance Type");
     }
     if (formValue.currency) {
-      exportRequest.columnsToExport?.push("Currency")
+      exportRequest.columnsToExport?.push("Currency");
     }
     if (formValue.mobileNumber) {
-      exportRequest.columnsToExport?.push("Mobile Number")
+      exportRequest.columnsToExport?.push("Mobile Number");
     }
     if (formValue.email) {
-      exportRequest.columnsToExport?.push("Email")
+      exportRequest.columnsToExport?.push("Email");
     }
     if (formValue.attentionTo) {
-      exportRequest.columnsToExport?.push("Attention to")
+      exportRequest.columnsToExport?.push("Attention to");
     }
     if (formValue.remark) {
-      exportRequest.columnsToExport?.push("Remark")
+      exportRequest.columnsToExport?.push("Remark");
     }
     if (formValue.address) {
-      exportRequest.columnsToExport?.push("Address")
+      exportRequest.columnsToExport?.push("Address");
     }
     if (formValue.pinCode) {
-      exportRequest.columnsToExport?.push("Pin Code")
+      exportRequest.columnsToExport?.push("Pin Code");
     }
     if (formValue.taxNumber) {
-      exportRequest.columnsToExport?.push("Tax Number")
+      exportRequest.columnsToExport?.push("Tax Number");
     }
     if (formValue.partyType) {
-      exportRequest.columnsToExport?.push("Party Type")
+      exportRequest.columnsToExport?.push("Party Type");
     }
     if (formValue.bankName) {
-      exportRequest.columnsToExport?.push("Bank Name")
+      exportRequest.columnsToExport?.push("Bank Name");
     }
     if (formValue.bankAccountNumber) {
-      exportRequest.columnsToExport?.push("Bank Account Number")
+      exportRequest.columnsToExport?.push("Bank Account Number");
     }
     if (formValue.ifscCode) {
-      exportRequest.columnsToExport?.push("IFSC Code")
+      exportRequest.columnsToExport?.push("IFSC Code");
     }
     if (formValue.beneficiaryName) {
-      exportRequest.columnsToExport?.push("Beneficiary Name")
+      exportRequest.columnsToExport?.push("Beneficiary Name");
     }
     if (formValue.branchName) {
-      exportRequest.columnsToExport?.push("Branch Name")
+      exportRequest.columnsToExport?.push("Branch Name");
     }
     if (formValue.swiftCode) {
-      exportRequest.columnsToExport?.push("Swift Code")
+      exportRequest.columnsToExport?.push("Swift Code");
     }
     this.isLoading = true;
     this.ledgerService.exportData(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
       this.isLoading = false;
       if (response?.status === "success") {
         this.toaster.showSnackBar("success", response?.body);
-        this.dialogRef.close();
-        this.router.navigate(['pages/downloads'])
+        this.dialogRef?.close();
+        this.router.navigate(['pages/downloads']);
       } else {
         this.toaster.showSnackBar("error", response?.body);
       }
