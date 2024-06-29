@@ -141,7 +141,6 @@ export class ExportGroupLedgerComponent implements OnInit {
             exportRequest.exportType = "MASTER_EXPORT";
             exportRequest.fileType = "CSV";
             exportRequest.groupUniqueNames = [this.currentGrpUniqueName];
-            console.log(this.currentGrpUniqueName)
             exportRequest.columnsToExport = [];
             const formValue = this.exportForm;
             if (formValue.openingBalance) {

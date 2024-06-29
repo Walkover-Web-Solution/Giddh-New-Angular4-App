@@ -24,7 +24,9 @@ export class MasterExportOptionComponent implements OnInit {
 
   ngOnInit() {
     this.initExportForm();
-    this.exportFormMaster.emit(this.exportForm.value);
+    this.exportForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+      this.exportFormMaster.emit(this.exportForm.value)
+    })
   }
 
   public initExportForm(): void {
