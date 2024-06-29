@@ -37,7 +37,10 @@ export class ExportMasterDialogComponent implements OnInit {
     private groupWithAccountsAction: GroupWithAccountsAction
   ) { }
 
-  public ngOnInit() {
+  /**
+   * ngOnInit
+   */
+  public ngOnInit(): void {
   }
 
 
