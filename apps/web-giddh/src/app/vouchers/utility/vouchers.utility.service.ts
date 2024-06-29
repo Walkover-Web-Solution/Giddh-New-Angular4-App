@@ -95,7 +95,15 @@ export class VouchersUtilityService {
         return requestObject;
     }
 
-    public getVoucherNameByType(voucherType: string, localeData: any): string {
+    /**
+     * Returns the voucher name by voucher type
+     *
+     * @param {string} voucherType
+     * @param {*} localeData
+     * @param {boolean} isCopyVoucher
+     * @memberof VoucherComponent
+     */
+    public getVoucherNameByType(voucherType: string, localeData: any, isCopyVoucher: boolean = false): string {
         let voucherName = "";
 
         switch (voucherType) {
@@ -116,7 +124,7 @@ export class VouchersUtilityService {
                 break;
 
             case VoucherTypeEnum.sales:
-                voucherName = localeData?.invoice_types?.sales;
+                voucherName = isCopyVoucher ? localeData?.invoice_types?.sales : localeData?.invoice_types?.invoice;
                 break;
 
             case VoucherTypeEnum.creditNote:
@@ -148,7 +156,7 @@ export class VouchersUtilityService {
                 break;
 
             case VoucherTypeEnum.purchaseOrder:
-                voucherName = "Purchase Order";
+                voucherName = localeData?.invoice_types?.purchase_order;
                 break;
 
             default:
@@ -188,7 +196,7 @@ export class VouchersUtilityService {
                 code: defaultAddress.stateCode,
                 name: defaultAddress.stateName
             };
-        } 
+        }
 
         return { defaultAddress, defaultAddressIndex };
     }
@@ -422,5 +430,27 @@ export class VouchersUtilityService {
         }
 
         return invoiceForm;
+    }
+
+    /**
+     * Returns the index of selected address from the address list
+     *
+     * @param {*} addressList
+     * @param {*} selectedAddress
+     * @memberof VoucherComponent
+     */
+    public getSelectedAddressIndex(addressList: any[], selectedAddress: any): number {
+        let selectedAddressIndex = -1;
+        addressList?.forEach((add, index) => {
+            const address = typeof add?.address === "undefined" ? "" : typeof add?.address === "string" ? add?.address : add?.address[0];
+            const state = add?.state?.name ? add?.state?.name : add?.stateName ? add?.stateName : "";
+            const taxNumber = !selectedAddress?.taxNumber ? "" : selectedAddress?.taxNumber;
+
+            if (address === selectedAddress?.address[0] && state === selectedAddress?.state?.name && (add?.taxNumber === selectedAddress?.gstNumber || add?.taxNumber === taxNumber)) {
+                selectedAddressIndex = index;
+            }
+        });
+
+        return selectedAddressIndex;
     }
 }

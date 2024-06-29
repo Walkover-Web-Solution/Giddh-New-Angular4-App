@@ -21,13 +21,7 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { cloneDeep, find, forEach, groupBy, indexOf, map, orderBy, uniq } from '../../lodash-optimized';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
-
-const COUNTS = [
-    { label: '12', value: '12' },
-    { label: '25', value: '25' },
-    { label: '50', value: '50' },
-    { label: '100', value: '100' }
-];
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-invoice-generate',
@@ -46,7 +40,6 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     public showFromDatePicker: boolean = false;
     public showToDatePicker: boolean = false;
     public togglePrevGenBtn: boolean = false;
-    public counts: IOption[] = COUNTS;
     public ledgerSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
     public filtersForEntryTotal: IOption[] = [];
     public ledgersData: GetAllLedgersOfInvoicesResponse;
@@ -158,7 +151,8 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
         private _breakPointObservar: BreakpointObserver,
         private commonActions: CommonActions,
         private modalService: BsModalService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private router: Router
     ) {
         // set initial values
         this.ledgerSearchRequest.page = 1;
@@ -427,42 +421,34 @@ export class InvoiceGenerateComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public previewInvoice() {
-        this.generateVoucherInProcess = false;
-
-        let model;
-
         if (this.voucherApiVersion === 2) {
-            model = {
-                entryUniqueNames: uniq(this.selectedLedgerItems)
-            };
+            this.router.navigate(['/pages/vouchers/' + this.selectedVoucher + '/' + this.selectedCountOfAccounts[0] + '/create'], { queryParams: { entryUniqueNames: uniq(this.selectedLedgerItems)?.join(",") } });
         } else {
-            model = {
+            this.generateVoucherInProcess = false;
+            
+            let model = {
                 uniqueNames: uniq(this.selectedLedgerItems)
             };
-        }
 
-        let res = find(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-            return item?.uniqueName === this.selectedLedgerItems[0];
-        });
-        this.selectedItem = cloneDeep(res);
-        if (this.selectedItem && this.selectedItem.account && this.selectedItem.account?.uniqueName) {
-            this.selectedAccountUniqueName = this.selectedItem.account?.uniqueName;
-        } else {
-            this.selectedAccountUniqueName = '';
-        }
+            let res = find(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+                return item?.uniqueName === this.selectedLedgerItems[0];
+            });
+            this.selectedItem = cloneDeep(res);
+            if (this.selectedItem && this.selectedItem.account && this.selectedItem.account?.uniqueName) {
+                this.selectedAccountUniqueName = this.selectedItem.account?.uniqueName;
+            } else {
+                this.selectedAccountUniqueName = '';
+            }
 
-        if (this.voucherApiVersion === 2) {
-            this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model?.entryUniqueNames));
-        } else {
             this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model?.uniqueNames));
-        }
 
-        if (res?.account?.uniqueName) {
-            this.generateVoucherInProcess = true;
-            this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account?.uniqueName, model));
-        }
+            if (res?.account?.uniqueName) {
+                this.generateVoucherInProcess = true;
+                this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account?.uniqueName, model));
+            }
 
-        this.toggleBodyClass();
+            this.toggleBodyClass();
+        }
     }
 
     /**
