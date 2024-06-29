@@ -1427,6 +1427,7 @@
                                             [class.invalid-inp]="
                                                 voucherDate.errors && (voucherDate.dirty || voucherDate.touched)
                                             "
+                                            [disabled]="invoiceType !== 'purchase' && isUpdateMode ? 'disabled' : null"
                                             (datepickerState)="onFocusInvoiceDate()"
                                             (dateSelected)="
                                                 onVoucherDateChanged($event, invFormData.voucherDetails.voucherDate);

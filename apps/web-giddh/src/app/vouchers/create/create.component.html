@@ -819,7 +819,7 @@
                                                                 </ng-container>
                                                             </ng-container>
                                                         </ng-container>
-
+                                                        
                                                         <div class="mt-2 d-flex justify-content-between">
                                                             <ng-container
                                                                 *ngFor="let transaction of entry.get('transactions')['controls']"
@@ -983,7 +983,7 @@
                                                             <div class="description-text" *ngIf="transaction.get('stock.customField2.key')?.value">
                                                                 {{ transaction.get('stock.customField2.key')?.value }}: {{ transaction.get('stock.customField2.value')?.value }}
                                                             </div>
-                                                        </ng-container>
+                                                        </ng-container>            
                                                     </td>
 
                                                     <ng-container
@@ -1557,7 +1557,7 @@
                                                     <ng-container *ngIf="voucherTotals.totalCess">
                                                         <tr>
                                                             <td>
-                                                                {{ commonLocaleData?.app_cess }}
+                                                                {{ commonLocaleData?.app_cess }}        
                                                             </td>
                                                             <td>
                                                                 <amount-field class="d-inline-block"
