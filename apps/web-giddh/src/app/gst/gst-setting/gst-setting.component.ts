@@ -132,6 +132,7 @@ export class GstSettingComponent implements OnInit, OnDestroy {
         this.componentStore.lutNumberResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.responseArray[response.lutIndex] = response;
+                this.changeDetection.detectChanges();
             }
         });
     }
@@ -287,59 +288,45 @@ export class GstSettingComponent implements OnInit, OnDestroy {
         // Map controls to include original indices
         const itemsWithOriginalIndex = items.controls.map((ctrl, i) => ({
             ...ctrl.value,
-            originalIndex: i,
             fromDate: dayjs(ctrl.value.fromDate).format(GIDDH_DATE_FORMAT),
             toDate: dayjs(ctrl.value.toDate).format(GIDDH_DATE_FORMAT)
         }));
 
-        console.log(this.lutItemList, itemsWithOriginalIndex);
-        this.lutItemList.forEach((obj1, index) => {
-            const obj2 = itemsWithOriginalIndex.find(item => item.lutNumber === obj1.lutNumber);
-
-            if (obj2) {
-                // Compare key-value pairs
-                for (const key in obj1) {
-                    if (obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
-                        if (obj1[key] !== obj2[key]) {
-                            console.log(`Difference found at key '${key}' between objects:`);
-                            console.log(`Object 1:`, obj1);
-                            console.log(`Object 2:`, obj2);
-                        }
-                    }
+        itemsWithOriginalIndex.forEach((obj1, index) => {
+            if (!this.lutItemList[index] || this.lutItemList[index].fromDate !== obj1.fromDate || this.lutItemList[index].lutNumber !== obj1.lutNumber || this.lutItemList[index].toDate !== obj1.toDate) {
+                console.log(this.lutItemList[index]);
+                if (!this.lutItemList[index]) {
+                    const req = {
+                        q: obj1,
+                        index: index,
+                        autoSelectLutNumber: true
+                    };
+                    this.componentStore.createLutNumber(req);
+                } else {
+                    const req = {
+                        q: obj1,
+                        index: index,
+                        autoSelectLutNumber: true,
+                        uniqueName: obj1.uniqueName
+                    };
+                    this.componentStore.updateLutNumber(req);
                 }
-            } else {
-                console.log(`No matching object found in list2 for obj1 at index ${index}:`, obj1);
             }
         });
+        // console.log(this.lutItemList, itemsWithOriginalIndex);
+        // this.lutItemList.forEach((obj1, index) => {
+        //     const obj2 = itemsWithOriginalIndex.find(item => item.lutNumber === obj1.lutNumber);
+        //     console.log(obj1,obj2, index);
+        //     let createObj;
+        //     let updateObj;
+        //     if (obj2) {
+        //         if (obj1.lutNumber === obj2.lutNumber && obj1.fromDate === obj2.fromDate && obj1.toDate === obj2.toDate) {
 
-        // Filter controls that are dirty and map them with their original index
-        const changedItems = itemsWithOriginalIndex
-            .filter(ctrl => ctrl.dirty)
-            .map(item => ({
-                ...item
-            }));
-
-        // if (changedItems.length > 0) {
-        //     changedItems.forEach(item => {
-        //         console.log(item);
-        //         if (item?.uniqueName) {
-        //             const req = {
-        //                 q: item,
-        //                 index: item.originalIndex,
-        //                 autoSelectLutNumber: true,
-        //                 uniqueName:item.uniqueName
-        //             };
-        //             this.componentStore.updateLutNumber(req);
-        //         } else {
-        //             const req = {
-        //                 q: item,
-        //                 index: item.originalIndex,
-        //                 autoSelectLutNumber: true
-        //             };
-        //             this.componentStore.createLutNumber(req);
         //         }
-        //     });
-        // }
+        //     } else {
+        //         console.log(`No matching object found in list2 for obj1 at index ${index}:`, obj1);
+        //     }
+        // });
     }
 
 
