@@ -62,6 +62,7 @@
                                             "
                                             [formGroupName]="i"
                                         >
+                                        <div class="ggg">
                                             <td>
                                                 <div class="custom-mat-form-field">
                                                     <div class="date-range-wrapper">
@@ -88,7 +89,7 @@
                                                     </div>
                                                 </div>
                                                 <ng-container *ngIf="responseArray[i]?.message">
-                                                    <span>{{  responseArray[i]?.message }}</span>
+                                                    <p class="text-danger">{{ responseArray[i]?.message }}</p>
                                                 </ng-container>
                                             </td>
                                             <td>
@@ -111,6 +112,7 @@
                                                     <i class="icon-trash"></i>
                                                 </button>
                                             </td>
+                                        </div>
                                         </tr>
                                     </tbody>
                                 </table>
