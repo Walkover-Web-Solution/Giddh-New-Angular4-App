@@ -50,7 +50,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     /** True if confirmation is open on search groups/accounts keyup event */
     private isPageLeaveConfirmationOpen: boolean = false;
     /** shows group unique name */
-    public currentGrpUniqueName: string = '';
+    public activeGroupUniqueName: string = '';
 
     // tslint:disable-next-line:no-empty
     constructor(

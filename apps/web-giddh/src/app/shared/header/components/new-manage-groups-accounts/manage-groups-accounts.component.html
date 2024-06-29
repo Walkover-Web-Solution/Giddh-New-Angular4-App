@@ -91,7 +91,7 @@
                                 [commonLocaleData]="commonLocaleData"
                                 (resetSearchString)="resetGroupSearchString(false)"
                                 (breadcrumbPathChanged)="breadcrumbPathChanged($event)"
-                                (currentGrpUniqueName)="currentGrpUniqueName = $event"
+                                (activeGroupUniqueName)="activeGroupUniqueName = $event"
                                 (scrollToRight)="scrollToRight()"
                             >
                             </master>
@@ -109,7 +109,7 @@
                         [localeData]="localeData"
                         [commonLocaleData]="commonLocaleData"
                         [isMasterOpen]="true"
-                        [currentGrpUniqueName]="currentGrpUniqueName"
+                        [activeGroupUniqueName]="activeGroupUniqueName"
                         #form
                         *ngIf="localeData?.page_heading"
                     >

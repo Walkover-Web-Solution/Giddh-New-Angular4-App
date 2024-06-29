@@ -78,7 +78,6 @@
     "bank_details_error_message": "All the bank fields are mandatory if you provide data for any of them",
     "item_no": "Item #[ITEM_NO]",
     "duplicate_email":"Duplicate email are not allowed",
-
     "tax_number": "Tax Number",
     "opening_balance_type": "Opening Balance Type",
     "foreign_opening_balance_type": "Foreign Opening Balance Type",

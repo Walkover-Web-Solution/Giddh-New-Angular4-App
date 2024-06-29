@@ -19,12 +19,12 @@
         </div>
         <div class="modal-body mr-b4" id="export-body">
             <form name="addShareEmailForm" novalidate autocomplete="off">
-                <mat-radio-group color="primary" name="expotyType" [(ngModel)]="expotyType" class="mr-b15">
+                <mat-radio-group color="primary" name="exportType" [(ngModel)]="exportType" class="mr-b15">
                     <mat-radio-button id="ledger-entries" [value]="'ledger'">{{ localeData?.ledger_entries }}</mat-radio-button>
                     <mat-radio-button id="account" [value]="'account'">{{ localeData?.account }}</mat-radio-button>
                 </mat-radio-group>
 
-                <ng-container *ngIf="expotyType === 'ledger'">
+                <ng-container *ngIf="exportType === 'ledger'">
                     <div class="pd-b3 clearfix">
                         <div class="form-inline">
                             <div class="form-group">
@@ -133,7 +133,7 @@
                         </label>
                     </div>
                 </ng-container>
-                <ng-container *ngIf="expotyType === 'account'">
+                <ng-container *ngIf="exportType === 'account'">
                     <div class="account-dialog">
                         <p class="pb-3">
                             {{ commonLocaleData?.app_note }} :
@@ -142,7 +142,7 @@
                             </span>
                           </p>
                           <master-export-option
-                            (exportFormMaster) = "exportForm = $event"
+                            (exportFormMaster) = "exportFormValue = $event"
                           ></master-export-option>
                     </div>
                 </ng-container>

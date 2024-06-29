@@ -134,7 +134,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     /** List of discounts */
     public discounts: any[] = [];
     /** Holds group unique name */
-    @Input() public currentGrpUniqueName: string = '';
+    @Input() public activeGroupUniqueName: string = '';
 
     constructor(private _fb: UntypedFormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
         private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions, public generalService: GeneralService, public ledgerService: LedgerService, public router: Router, private settingsDiscountService: SettingsDiscountService, private permissionActions: PermissionActions, private generalAction: GeneralActions, public dialog: MatDialog) {
@@ -736,10 +736,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     /**
      * Export master file
      */
-    public exportMasterDialog() {
+    public exportMasterDialog(): void {
         const exportData = {
-            exportType: "MASTER_EXPORT",
-            fileType: "CSV"
+            exportType: "MASTER_EXPORT"
         }
         this.dialog.open(ExportMasterDialogComponent, {
             width: '750px',
