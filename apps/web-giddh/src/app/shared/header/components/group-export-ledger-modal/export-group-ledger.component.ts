@@ -14,7 +14,6 @@ import { ExportBodyRequest } from 'apps/web-giddh/src/app/models/api-models/Dayb
 import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { Router } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 
 @Component({
@@ -29,6 +28,8 @@ export class ExportGroupLedgerComponent implements OnInit {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Output() public closeExportGroupLedgerModal: EventEmitter<any> = new EventEmitter();
+    /** Event emitter for the close dialog */
+    @Output() public closeExportGroupAccountModal: EventEmitter<any> = new EventEmitter();
     /** Holds active group unique name */
     @Input() public activeGroupUniqueName: string = '';
 
@@ -94,7 +95,6 @@ export class ExportGroupLedgerComponent implements OnInit {
         private ledgerService: LedgerService,
         private toaster: ToasterService,
         private router: Router,
-        private formBuilder: FormBuilder,
         private groupWithAccountsAction: GroupWithAccountsAction) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -204,8 +204,7 @@ export class ExportGroupLedgerComponent implements OnInit {
                 this.isLoading = false;
                 if (response?.status === "success") {
                     this.toaster.showSnackBar("success", response?.body);
-                    this.closeExportGroupLedgerModal.emit();
-                    this.router.navigate(['pages/downloads']);
+                    this.closeExportGroupAccountModal.emit(true);
                 } else {
                     this.toaster.showSnackBar("error", response?.body);
                 }
