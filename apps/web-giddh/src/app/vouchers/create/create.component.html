@@ -859,7 +859,7 @@
                                                                     </reactive-dropdown-field>
                                                                 </ng-container>
                                                                 <ng-container
-                                                                    *ngIf="(stockVariants[entryIndex] | async)?.length > 1"
+                                                                    *ngIf="(stockVariants[entryIndex] | async)?.length > 1 || transaction.get('stock.hasVariants')?.value"
                                                                     formGroupName="stock">
                                                                     <ng-container formGroupName="variant">
                                                                         <ng-container
