@@ -29,7 +29,7 @@ export class ExportGroupLedgerComponent implements OnInit {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Output() public closeExportGroupLedgerModal: EventEmitter<any> = new EventEmitter();
-    /** Holds group unique name */
+    /** Holds active group unique name */
     @Input() public activeGroupUniqueName: string = '';
 
     public emailTypeSelected: string = '';
@@ -79,7 +79,7 @@ export class ExportGroupLedgerComponent implements OnInit {
     }
     /** To hold export request object */
     public fileType: string = 'CSV';
-    /** hold exportType value */
+    /** Hold export type */
     public exportType: string = 'ledger';
     /** True if api call in progress */
     public isLoading: boolean = false;
@@ -199,7 +199,6 @@ export class ExportGroupLedgerComponent implements OnInit {
             if (formValue.swiftCode) {
                 exportRequest.columnsToExport?.push("Swift Code");
             }
-            console.log(this.exportFormValue);
             this.isLoading = true;
             this.ledgerService.exportData(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.isLoading = false;

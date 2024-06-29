@@ -65,8 +65,8 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     private useAccountBreadcrumb: boolean = false;
     /** True if account has unsaved changes */
     private hasUnsavedChanges: boolean = false;
-    /** Emits groupUniqueName path */
-    @Output() public activeGroupUniqueName = new EventEmitter();
+    /** Emits active grou pUnique Name path */
+    @Output() public activeGroupUniqueName: EventEmitter<any> = new EventEmitter();
 
     constructor(
         private groupService: GroupService,

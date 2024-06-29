@@ -15,7 +15,7 @@ import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwit
   templateUrl: './export-master-dialog.component.html',
   styleUrls: ['./export-master-dialog.component.scss']
 })
-export class ExportMasterDialogComponent implements OnInit {
+export class ExportMasterDialogComponent {
   /** Form Group for export  form */
   public exportFormValue: any;
   /** True if api call in progress */
@@ -36,12 +36,6 @@ export class ExportMasterDialogComponent implements OnInit {
     private store: Store<AppState>,
     private groupWithAccountsAction: GroupWithAccountsAction
   ) { }
-
-  /**
-   * ngOnInit
-   */
-  public ngOnInit(): void {
-  }
 
 
   /**
