@@ -702,7 +702,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     /**
      * This will use for hide group export account modal
      */
-    public hideAccountGroupExportModal(event) {
+    public hideAccountGroupExportModal(event: boolean): void {
         if (event) {
             this.groupExportLedgerModal?.hide();
             this.router.navigate(['pages/downloads']);
