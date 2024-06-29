@@ -371,7 +371,7 @@ export const initialState: CustomTemplateState = {
                     },
                     displayBaseCurrency: {
                         label: '',
-                        display: false,
+                        display: true,
                         width: null
                     },
                     showDescriptionInRows: {

@@ -1783,7 +1783,7 @@
                                         "
                                         (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                                     />
-                                    Hide company's base currency on Pdf</label
+                                    Show company's base currency on Pdf</label
                                 >
                             </td>
                         </tr>
@@ -2286,7 +2286,7 @@
                             Show notes at the last page
                         </div>
                     </div>
-                                     <div
+                    <div
                         class="clearfix mr-t1 form-group"
                         *ngIf="
                             customTemplate?.templateType !== 'thermal_template' &&
@@ -2301,7 +2301,7 @@
                                 [(ngModel)]="customTemplate.sections['footer'].data['displayExportMessage'].display"
                                 (ngModelChange)="onChangeFieldVisibility(null, null, null)"
                             />
-                            {{customTemplate.sections['footer'].data['displayExportMessage'].label}}
+                            Show Export Message
                         </div>
                     </div>
                     <div
