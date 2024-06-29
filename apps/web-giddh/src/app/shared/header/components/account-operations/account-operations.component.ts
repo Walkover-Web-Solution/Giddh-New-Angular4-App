@@ -133,7 +133,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public groupExportLedgerBodyRequest: ExportBodyRequest = new ExportBodyRequest();
     /** List of discounts */
     public discounts: any[] = [];
-    /** Holds group unique name */
+    /** Holds active group unique name */
     @Input() public activeGroupUniqueName: string = '';
 
     constructor(private _fb: UntypedFormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
@@ -672,34 +672,44 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
      */
     public hideGroupExportModal(response: any) {
         this.groupExportLedgerModal?.hide();
-        if (response) {
-            this.activeGroupUniqueName$.pipe(take(1)).subscribe((grpUniqueName: string) => {
-                if (response !== 'close') {
-                    this.groupExportLedgerBodyRequest.from = response.body?.from;
-                    this.groupExportLedgerBodyRequest.to = response.body?.to;
-                    this.groupExportLedgerBodyRequest.showVoucherNumber = response.body?.showVoucherNumber;
-                    this.groupExportLedgerBodyRequest.showVoucherTotal = response.body?.showVoucherTotal;
-                    this.groupExportLedgerBodyRequest.showEntryVoucher = response.body?.showEntryVoucher;
-                    this.groupExportLedgerBodyRequest.showDescription = response.body?.showDescription;
-                    this.groupExportLedgerBodyRequest.exportType = response.body?.exportType;
-                    this.groupExportLedgerBodyRequest.showEntryVoucherNo = response.body?.showEntryVoucherNo;
-                    this.groupExportLedgerBodyRequest.groupUniqueName = grpUniqueName;
-                    this.groupExportLedgerBodyRequest.sort = response.body?.sort ? 'ASC' : 'DESC';
-                    this.groupExportLedgerBodyRequest.fileType = response.fileType;
-                    this.ledgerService.exportData(this.groupExportLedgerBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                        if (response?.status === 'success') {
-                            this.router.navigate(["/pages/downloads/exports"]);
-                            this.toaster.showSnackBar("success", response?.body);
-                            this.store.dispatch(this.generalAction.addAndManageClosed());
-                            this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
-                        } else {
-                            this.toaster.showSnackBar("error", response?.message, response?.code);
-                        }
-                    });
-                }
-            });
+        this.activeGroupUniqueName$.pipe(take(1)).subscribe((grpUniqueName: string) => {
+            if (response !== 'close') {
+                this.groupExportLedgerBodyRequest.from = response.body?.from;
+                this.groupExportLedgerBodyRequest.to = response.body?.to;
+                this.groupExportLedgerBodyRequest.showVoucherNumber = response.body?.showVoucherNumber;
+                this.groupExportLedgerBodyRequest.showVoucherTotal = response.body?.showVoucherTotal;
+                this.groupExportLedgerBodyRequest.showEntryVoucher = response.body?.showEntryVoucher;
+                this.groupExportLedgerBodyRequest.showDescription = response.body?.showDescription;
+                this.groupExportLedgerBodyRequest.exportType = response.body?.exportType;
+                this.groupExportLedgerBodyRequest.showEntryVoucherNo = response.body?.showEntryVoucherNo;
+                this.groupExportLedgerBodyRequest.groupUniqueName = grpUniqueName;
+                this.groupExportLedgerBodyRequest.sort = response.body?.sort ? 'ASC' : 'DESC';
+                this.groupExportLedgerBodyRequest.fileType = response.fileType;
+                this.ledgerService.exportData(this.groupExportLedgerBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                    if (response?.status === 'success') {
+                        this.router.navigate(["/pages/downloads/exports"]);
+                        this.toaster.showSnackBar("success", response?.body);
+                        this.store.dispatch(this.generalAction.addAndManageClosed());
+                        this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+                    } else {
+                        this.toaster.showSnackBar("error", response?.message, response?.code);
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * This will use for hide group export account modal
+     */
+    public hideAccountGroupExportModal(event) {
+        if (event) {
+            this.groupExportLedgerModal?.hide();
+            this.router.navigate(['pages/downloads']);
         }
     }
+
+
     public isGroupSelected(event) {
         if (event) {
             this.activeGroupUniqueName$ = observableOf(event.value);
@@ -736,7 +746,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
     /**
-     * Export master file
+     * This will use for open Master Export Dialog
      */
     public exportMasterDialog(): void {
         const exportData = {
