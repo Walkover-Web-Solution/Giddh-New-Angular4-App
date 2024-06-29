@@ -57,7 +57,7 @@ export class MasterExportOptionComponent implements OnInit {
       ifscCode: new FormControl(false),
       beneficiaryName: new FormControl(false),
       branchName: new FormControl(false),
-      swiftCode: new FormControl(false),
+      swiftCode: new FormControl(false)
     })
   }
 

@@ -21,7 +21,7 @@
       <master-export-option
         (exportFormMaster) = "exportFormValue = $event"
       ></master-export-option>
-      <button mat-stroked-button color="primary" (click)="exportMaster()">Export</button>
+      <button mat-stroked-button color="primary" (click)="exportMaster()">{{ commonLocaleData?.app_export }}</button>
     </div>
   </mat-dialog-content>
 </ng-container>
