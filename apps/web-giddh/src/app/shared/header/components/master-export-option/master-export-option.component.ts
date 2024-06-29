@@ -9,8 +9,8 @@ import { ReplaySubject, takeUntil } from 'rxjs';
 })
 export class MasterExportOptionComponent implements OnInit {
   /** Form Group for export  form */
-  public exportFormValue: FormGroup;
-  /** Emits the show discount event  */
+  public exportForm: FormGroup;
+  /** Emits the ecport form master  */
   @Output() public exportFormMaster: EventEmitter<any> = new EventEmitter();
   /** To destroy observers */
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -22,23 +22,28 @@ export class MasterExportOptionComponent implements OnInit {
     private formBuilder: FormBuilder
   ) { }
 
+  /**
+   * This will use for export form
+   *
+   * @memberof MasterExportOptionComponent
+   */
   public ngOnInit(): void {
     this.initExportForm();
-    this.exportFormMaster.emit(this.exportFormValue.value);
-    this.exportFormValue.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
+    this.exportFormMaster.emit(this.exportForm.value);
+    this.exportForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
       if (value) {
-        this.exportFormMaster.emit(this.exportFormValue.value);
+        this.exportFormMaster.emit(this.exportForm.value);
       }
     });
   }
 
-    /**
-   * This will use for initial export form
-   *
-   * @memberof MasterExportOptionComponent
-   */
+  /**
+ * This will use for initial export form
+ *
+ * @memberof MasterExportOptionComponent
+ */
   public initExportForm(): void {
-    this.exportFormValue = this.formBuilder.group({
+    this.exportForm = this.formBuilder.group({
       openingBalance: new FormControl(false),
       openingBalanceType: new FormControl(false),
       foreignOpeningBalance: new FormControl(false),

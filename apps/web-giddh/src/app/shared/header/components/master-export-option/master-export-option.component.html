@@ -4,14 +4,14 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-<form [formGroup]="exportFormValue" class="d-flex justify-content-between pt-2">
+<form [formGroup]="exportForm" class="d-flex justify-content-between pt-2">
   <div class="export-border position-relative">
     <div class="mr-b15">
       <label class="label-width">{{ localeData?.opening_balance }} :</label>
       <mat-slide-toggle color="primary" formControlName="openingBalance" class="ml-2 toggle-width">
         <span>
           {{
-          exportFormValue.get("openingBalance")?.value
+          exportForm.get("openingBalance")?.value
           ? commonLocaleData?.app_yes
           : commonLocaleData?.app_no
           }}
@@ -23,7 +23,7 @@
       <mat-slide-toggle color="primary" formControlName="openingBalanceType" class="ml-2 toggle-width">
         <span>
           {{
-          exportFormValue.get("openingBalanceType")?.value
+          exportForm.get("openingBalanceType")?.value
           ? commonLocaleData?.app_yes
           : commonLocaleData?.app_no
           }}
@@ -35,7 +35,7 @@
       <mat-slide-toggle color="primary" formControlName="foreignOpeningBalance" class="ml-2 toggle-width">
         <span>
           {{
-          exportFormValue.get("foreignOpeningBalance")?.value
+          exportForm.get("foreignOpeningBalance")?.value
           ? commonLocaleData?.app_yes
           : commonLocaleData?.app_no
           }}
@@ -47,7 +47,7 @@
       <mat-slide-toggle color="primary" formControlName="foreignOpeningBalanceType" class="ml-2 toggle-width">
         <span>
           {{
-          exportFormValue.get("foreignOpeningBalanceType")?.value
+          exportForm.get("foreignOpeningBalanceType")?.value
           ? commonLocaleData?.app_yes
           : commonLocaleData?.app_no
           }}
@@ -59,7 +59,7 @@
       <mat-slide-toggle color="primary" formControlName="currency" class="ml-2 toggle-width">
         <span>
           {{
-          exportFormValue.get("currency")?.value
+          exportForm.get("currency")?.value
           ? commonLocaleData?.app_yes
           : commonLocaleData?.app_no
           }}
@@ -71,7 +71,7 @@
       <mat-slide-toggle color="primary" formControlName="mobileNumber" class="ml-2 toggle-width">
         <span>
           {{
-          exportFormValue.get("mobileNumber")?.value
+          exportForm.get("mobileNumber")?.value
           ? commonLocaleData?.app_yes
           : commonLocaleData?.app_no
           }}
@@ -83,7 +83,7 @@
       <mat-slide-toggle color="primary" formControlName="email" class="ml-2 toggle-width">
         <span>
           {{
-          exportFormValue.get("email")?.value
+          exportForm.get("email")?.value
           ? commonLocaleData?.app_yes
           : commonLocaleData?.app_no
           }}
@@ -95,7 +95,7 @@
       <mat-slide-toggle color="primary" formControlName="attentionTo" class="ml-2 toggle-width">
         <span>
           {{
-          exportFormValue.get("attentionTo")?.value
+          exportForm.get("attentionTo")?.value
           ? commonLocaleData?.app_yes
           : commonLocaleData?.app_no
           }}
@@ -107,7 +107,7 @@
       <mat-slide-toggle color="primary" formControlName="remark" class="ml-2 toggle-width">
         <span>
           {{
-          exportFormValue.get("remark")?.value
+          exportForm.get("remark")?.value
           ? commonLocaleData?.app_yes
           : commonLocaleData?.app_no
           }}
@@ -119,7 +119,7 @@
       <mat-slide-toggle color="primary" formControlName="address" class="ml-2 toggle-width">
         <span>
           {{
-          exportFormValue.get("address")?.value
+          exportForm.get("address")?.value
           ? commonLocaleData?.app_yes
           : commonLocaleData?.app_no
           }}
@@ -134,7 +134,7 @@
       <mat-slide-toggle color="primary" formControlName="pinCode" class="ml-2 toggle-width">
         <span>
           {{
-          exportFormValue.get("pinCode")?.value
+          exportForm.get("pinCode")?.value
           ? commonLocaleData?.app_yes
           : commonLocaleData?.app_no
           }}
@@ -146,7 +146,7 @@
       <mat-slide-toggle color="primary" formControlName="taxNumber" class="ml-2 toggle-width">
         <span>
           {{
-          exportFormValue.get("taxNumber")?.value
+          exportForm.get("taxNumber")?.value
           ? commonLocaleData?.app_yes
           : commonLocaleData?.app_no
           }}
@@ -158,7 +158,7 @@
       <mat-slide-toggle color="primary" formControlName="partyType" class="ml-2 toggle-width">
         <span>
           {{
-          exportFormValue.get("partyType")?.value
+          exportForm.get("partyType")?.value
           ? commonLocaleData?.app_yes
           : commonLocaleData?.app_no
           }}
@@ -170,7 +170,7 @@
       <mat-slide-toggle color="primary" formControlName="bankName" class="ml-2 toggle-width">
         <span>
           {{
-          exportFormValue.get("bankName")?.value
+          exportForm.get("bankName")?.value
           ? commonLocaleData?.app_yes
           : commonLocaleData?.app_no
           }}
@@ -182,7 +182,7 @@
       <mat-slide-toggle color="primary" formControlName="bankAccountNumber" class="ml-2 toggle-width">
         <span>
           {{
-          exportFormValue.get("bankAccountNumber")?.value
+          exportForm.get("bankAccountNumber")?.value
           ? commonLocaleData?.app_yes
           : commonLocaleData?.app_no
           }}
@@ -194,7 +194,7 @@
       <mat-slide-toggle color="primary" formControlName="ifscCode" class="ml-2 toggle-width">
         <span>
           {{
-          exportFormValue.get("ifscCode")?.value
+          exportForm.get("ifscCode")?.value
           ? commonLocaleData?.app_yes
           : commonLocaleData?.app_no
           }}
@@ -206,7 +206,7 @@
       <mat-slide-toggle color="primary" formControlName="beneficiaryName" class="ml-2 toggle-width">
         <span>
           {{
-          exportFormValue.get("beneficiaryName")?.value
+          exportForm.get("beneficiaryName")?.value
           ? commonLocaleData?.app_yes
           : commonLocaleData?.app_no
           }}
@@ -218,7 +218,7 @@
       <mat-slide-toggle color="primary" formControlName="branchName" class="ml-2 toggle-width">
         <span>
           {{
-          exportFormValue.get("branchName")?.value
+          exportForm.get("branchName")?.value
           ? commonLocaleData?.app_yes
           : commonLocaleData?.app_no
           }}
@@ -230,7 +230,7 @@
       <mat-slide-toggle color="primary" formControlName="swiftCode" class="ml-2 toggle-width">
         <span>
           {{
-          exportFormValue.get("swiftCode")?.value
+          exportForm.get("swiftCode")?.value
           ? commonLocaleData?.app_yes
           : commonLocaleData?.app_no
           }}

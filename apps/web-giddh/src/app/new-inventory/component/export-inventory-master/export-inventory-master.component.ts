@@ -13,8 +13,8 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./export-inventory-master.component.scss']
 })
 export class ExportInventoryMasterComponent implements OnInit {
-  /** Form Group for export  form */
-  public exportFormValue: FormGroup;
+  /** Hold export form group value */
+  public exportForm: FormGroup;
   /** True if api call in progress */
   public isLoading: boolean = false;
   /** To destroy observers */
@@ -43,7 +43,7 @@ export class ExportInventoryMasterComponent implements OnInit {
    * @memberof ExportInventoryMasterComponent
    */
   public initExportForm(): void {
-    this.exportFormValue = this.formBuilder.group({
+    this.exportForm = this.formBuilder.group({
         openingAmount: new FormControl(false),
         openingQuantity: new FormControl(false),
         hsnNumber: new FormControl(false),
@@ -76,7 +76,7 @@ export class ExportInventoryMasterComponent implements OnInit {
     exportRequest.columnsToExport = [];
     exportRequest.groupUniqueNames = this.inputData?.groupUniqueNames;
     exportRequest.inventoryType = this.inputData?.inventoryType;
-    const formValue = this.exportFormValue.value;
+    const formValue = this.exportForm.value;
     if (formValue.openingAmount) {
       exportRequest.columnsToExport?.push("Opening amount");
     }
