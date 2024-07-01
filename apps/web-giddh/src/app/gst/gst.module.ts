@@ -53,6 +53,7 @@ import { GstSettingComponent } from './gst-setting/gst-setting.component';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
     declarations: [FileGstR3Component,
@@ -98,7 +99,8 @@ import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker
         WatchVideoModule,
         MatTooltipModule,
         GiddhDatepickerModule,
-        DatepickerWrapperModule
+        DatepickerWrapperModule,
+        MatDividerModule
     ],
     providers: [],
     exports: [ViewTransactionsComponent]

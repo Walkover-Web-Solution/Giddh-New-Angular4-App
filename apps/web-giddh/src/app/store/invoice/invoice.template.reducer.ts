@@ -37,7 +37,7 @@ export const initialState: CustomTemplateState = {
                         width: null
                     },
                     displayExportMessage: {
-                        label: '*',
+                        label: '',
                         display: false,
                         width: null
                     },
