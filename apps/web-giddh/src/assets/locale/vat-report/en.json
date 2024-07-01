@@ -28,7 +28,6 @@
     "status_open": "Open",
     "status_fulfilled": "Fulfilled",
     "select_status": "Select status",
-    "select_tax_number": "Select tax number",
     "connect_to_hmrc": "Connect to HMRC",
     "connected_to_hmrc": "Connected to HMRC",
     "select_year_label": "Select Year",
