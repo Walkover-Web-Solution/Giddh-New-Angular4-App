@@ -114,7 +114,7 @@ export class ExportMasterDialogComponent {
         document.querySelector('body')?.classList?.remove('master-page');
         this.router.navigate(['pages/downloads']);
       } else {
-        this.toaster.showSnackBar("error", response?.body);
+        this.toaster.showSnackBar("error", response?.message);
       }
     });
   }

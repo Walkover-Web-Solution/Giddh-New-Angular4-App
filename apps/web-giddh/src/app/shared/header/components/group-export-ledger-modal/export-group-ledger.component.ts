@@ -209,7 +209,7 @@ export class ExportGroupLedgerComponent implements OnInit {
                     this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
                     document.querySelector('body')?.classList?.remove('master-page');
                 } else {
-                    this.toaster.showSnackBar("error", response?.body);
+                    this.toaster.showSnackBar("error", response?.message);
                 }
             });
         }
