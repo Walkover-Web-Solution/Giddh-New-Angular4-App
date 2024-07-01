@@ -286,9 +286,9 @@ export class LedgerVM {
      * prepare bankLedger request object from vm for API
      * @returns {BlankLedgerVM}
      */
-    public prepareBankLedgerRequestObject(): BlankLedgerVM {
+    public prepareBankLedgerRequestObject(manualRequest?: any): BlankLedgerVM {
         let requestObj: BlankLedgerVM;
-        requestObj = cloneDeep(this.currentBankEntry);
+        requestObj = cloneDeep(manualRequest ? manualRequest : this.currentBankEntry);
 
         // filter transactions which have selected account
         requestObj.transactions = requestObj.transactions?.filter((bl: TransactionVM) => bl.particular);
