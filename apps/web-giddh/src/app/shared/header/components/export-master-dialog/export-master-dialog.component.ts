@@ -109,13 +109,13 @@ export class ExportMasterDialogComponent {
       if (response?.status === "success") {
         this.toaster.showSnackBar("success", response?.body);
         this.dialogRef?.close();
+        // for close master dialog
+        this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+        document.querySelector('body')?.classList?.remove('master-page');
         this.router.navigate(['pages/downloads']);
       } else {
         this.toaster.showSnackBar("error", response?.body);
       }
     });
-    // for close master dialog
-    this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
-    document.querySelector('body')?.classList?.remove('master-page');
   }
 }

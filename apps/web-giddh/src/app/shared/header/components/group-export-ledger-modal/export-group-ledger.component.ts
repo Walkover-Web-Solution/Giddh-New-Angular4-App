@@ -205,13 +205,13 @@ export class ExportGroupLedgerComponent implements OnInit {
                 if (response?.status === "success") {
                     this.toaster.showSnackBar("success", response?.body);
                     this.closeExportGroupAccountModal.emit(true);
+                    // for close master dialog
+                    this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+                    document.querySelector('body')?.classList?.remove('master-page');
                 } else {
                     this.toaster.showSnackBar("error", response?.body);
                 }
             });
-            // for close master dialog
-            this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
-            document.querySelector('body')?.classList?.remove('master-page');
         }
     }
 
