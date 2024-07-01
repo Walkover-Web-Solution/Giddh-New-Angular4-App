@@ -111,7 +111,7 @@
 
 <!--share Group modal  -->
 <div bsModal #shareGroupModal="bs-modal" class="modal translatY8 fade" role="dialog">
-    <div class="modal-dialog modal-md modal-share-group">
+    <div class="modal-dialog modal-share-group">
         <div class="modal-content">
             <share-group-modal
                 #shareGroupModalComp
@@ -196,16 +196,23 @@
 </div>
 
 <!-- export ladger popup -->
-<div bsModal #groupExportLedgerModal="bs-modal" class="modal translatY8 fade" role="dialog">
-    <div class="modal-dialog modal-md">
+<div bsModal #groupExportLedgerModal="bs-modal" class="modal translatY8 fade master-export" role="dialog">
+    <div class="modal-dialog modal-md modal-lg">
         <div class="modal-content">
             <export-group-ledger
                 [localeData]="localeData"
+                [activeGroupUniqueName]="activeGroupUniqueName"
                 [commonLocaleData]="commonLocaleData"
                 (closeExportGroupLedgerModal)="hideGroupExportModal($event)"
+                (closeExportGroupAccountModal)="hideAccountGroupExportModal($event)"
             ></export-group-ledger>
         </div>
     </div>
 </div>
 <!-- ./ export ladger popup -->
 <!-- modals -->
+<div class="text-center master-export-btn overflow-hidden d-flex justify-content-center align-items-center" *ngIf="!((showEditGroup$ | async) || (activeGroupInProgress$ | async) || (showNewForm$ | async))">
+    <button mat-stroked-button color="primary" (click)="exportMasterDialog()">{{ commonLocaleData?.app_export }}</button>
+</div>
+
+

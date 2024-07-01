@@ -49,6 +49,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     private hasUnsavedChanges: boolean = false;
     /** True if confirmation is open on search groups/accounts keyup event */
     private isPageLeaveConfirmationOpen: boolean = false;
+    /** shows active group unique name */
+    public activeGroupUniqueName: string = '';
 
     // tslint:disable-next-line:no-empty
     constructor(

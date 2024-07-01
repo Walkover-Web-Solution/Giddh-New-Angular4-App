@@ -11,10 +11,15 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { takeUntil } from 'rxjs/operators';
 import { ExportBodyRequest } from 'apps/web-giddh/src/app/models/api-models/DaybookRequest';
+import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
+import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
+import { Router } from '@angular/router';
+import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 
 @Component({
     selector: 'export-group-ledger',
-    templateUrl: './export-group-ledger.component.html'
+    templateUrl: './export-group-ledger.component.html',
+    styleUrls: ['./export-group-ledger.component.scss']
 })
 
 export class ExportGroupLedgerComponent implements OnInit {
@@ -23,6 +28,10 @@ export class ExportGroupLedgerComponent implements OnInit {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     @Output() public closeExportGroupLedgerModal: EventEmitter<any> = new EventEmitter();
+    /** Event emitter for the close dialog */
+    @Output() public closeExportGroupAccountModal: EventEmitter<any> = new EventEmitter();
+    /** Holds active group unique name */
+    @Input() public activeGroupUniqueName: string = '';
 
     public emailTypeSelected: string = '';
     public emailTypeMini: string = '';
@@ -71,9 +80,22 @@ export class ExportGroupLedgerComponent implements OnInit {
     }
     /** To hold export request object */
     public fileType: string = 'CSV';
+    /** Hold export type */
+    public exportType: string = 'ledger';
+    /** True if api call in progress */
+    public isLoading: boolean = false;
+    /** Form Group for export form */
+    public exportFormValue: any;
+    /** Holds current group object */
+    public currentGroup: any = {};
+    /** Holds Group uniques name from Params */
+    public groupUniqueName: string = '';
 
-
-    constructor(private store: Store<AppState>, private _permissionDataService: PermissionDataService, private generalService: GeneralService, private modalService: BsModalService) {
+    constructor(private store: Store<AppState>, private _permissionDataService: PermissionDataService, private generalService: GeneralService, private modalService: BsModalService,
+        private ledgerService: LedgerService,
+        private toaster: ToasterService,
+        private router: Router,
+        private groupWithAccountsAction: GroupWithAccountsAction) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -110,9 +132,87 @@ export class ExportGroupLedgerComponent implements OnInit {
      * @memberof ExportGroupLedgerComponent
      */
     public exportLedger() {
-        this.exportRequest.from = this.fromDate;
-        this.exportRequest.to = this.toDate;
-        this.closeExportGroupLedgerModal.emit({ from: this.fromDate, to: this.toDate, type: this.emailTypeSelected, fileType: this.fileType, order: this.order, body: this.exportRequest });
+        if (this.exportType === 'ledger') {
+            this.exportRequest.from = this.fromDate;
+            this.exportRequest.to = this.toDate;
+            this.closeExportGroupLedgerModal.emit({ from: this.fromDate, to: this.toDate, type: this.emailTypeSelected, fileType: this.fileType, order: this.order, body: this.exportRequest });
+        } else {
+            let exportRequest: ExportBodyRequest = new ExportBodyRequest();
+            exportRequest.exportType = "MASTER_EXPORT";
+            exportRequest.groupUniqueNames = [this.activeGroupUniqueName];
+            exportRequest.columnsToExport = [];
+            const formValue = this.exportFormValue;
+            if (formValue.openingBalance) {
+                exportRequest.columnsToExport?.push("Opening Balance");
+            }
+            if (formValue.openingBalanceType) {
+                exportRequest.columnsToExport?.push("Opening Balance Type");
+            }
+            if (formValue.foreignOpeningBalance) {
+                exportRequest.columnsToExport?.push("Foreign Opening Balance");
+            }
+            if (formValue.foreignOpeningBalanceType) {
+                exportRequest.columnsToExport?.push("Foreign Opening Balance Type");
+            }
+            if (formValue.currency) {
+                exportRequest.columnsToExport?.push("Currency");
+            }
+            if (formValue.mobileNumber) {
+                exportRequest.columnsToExport?.push("Mobile Number");
+            }
+            if (formValue.email) {
+                exportRequest.columnsToExport?.push("Email");
+            }
+            if (formValue.attentionTo) {
+                exportRequest.columnsToExport?.push("Attention to");
+            }
+            if (formValue.remark) {
+                exportRequest.columnsToExport?.push("Remark");
+            }
+            if (formValue.address) {
+                exportRequest.columnsToExport?.push("Address");
+            }
+            if (formValue.pinCode) {
+                exportRequest.columnsToExport?.push("Pin Code");
+            }
+            if (formValue.taxNumber) {
+                exportRequest.columnsToExport?.push("Tax Number");
+            }
+            if (formValue.partyType) {
+                exportRequest.columnsToExport?.push("Party Type");
+            }
+            if (formValue.bankName) {
+                exportRequest.columnsToExport?.push("Bank Name");
+            }
+            if (formValue.bankAccountNumber) {
+                exportRequest.columnsToExport?.push("Bank Account Number");
+            }
+            if (formValue.ifscCode) {
+                exportRequest.columnsToExport?.push("IFSC Code");
+            }
+            if (formValue.beneficiaryName) {
+                exportRequest.columnsToExport?.push("Beneficiary Name");
+            }
+            if (formValue.branchName) {
+                exportRequest.columnsToExport?.push("Branch Name");
+            }
+            if (formValue.swiftCode) {
+                exportRequest.columnsToExport?.push("Swift Code");
+            }
+            this.isLoading = true;
+            this.ledgerService.exportData(exportRequest).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                this.isLoading = false;
+                if (response?.status === "success") {
+                    this.toaster.showSnackBar("success", response?.body);
+                    this.closeExportGroupAccountModal.emit(true);
+                    // for close master dialog
+                    this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
+                    document.querySelector('body')?.classList?.remove('master-page');
+                } else {
+                    this.toaster.showSnackBar("error", response?.body);
+                }
+            });
+        }
     }
 
     public onSelectDateRange(ev) {
