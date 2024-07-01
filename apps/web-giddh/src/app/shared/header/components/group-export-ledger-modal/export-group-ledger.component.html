@@ -25,7 +25,7 @@
                 </mat-radio-group>
 
                 <ng-container *ngIf="exportType === 'ledger'">
-                    <div class="pd-b3 clearfix">
+                    <div class="pd-b3">
                         <div class="form-inline">
                             <div class="form-group">
                                 <label class="w100 justify-content-start">{{ commonLocaleData?.app_date_range }}: </label>
@@ -52,7 +52,7 @@
                             }}</mat-radio-button>
                         </mat-radio-group>
                     </div>
-                    <div class="pd-b2 clearfix">
+                    <div class="pd-b2">
                         <label class="w125">{{ commonLocaleData?.app_order }}:</label>
                         <label class="radio-inline p-0">
                             <mat-slide-toggle color="primary" name="sort" [(ngModel)]="exportRequest.sort">
@@ -62,7 +62,7 @@
                             </mat-slide-toggle>
                         </label>
                     </div>
-                    <div class="pd-b2 clearfix">
+                    <div class="pd-b2">
                         <label class="w125">{{ commonLocaleData?.app_voucher_type }}:</label>
                         <label class="radio-inline p-0">
                             <mat-slide-toggle
@@ -76,7 +76,7 @@
                             </mat-slide-toggle>
                         </label>
                     </div>
-                    <div class="pd-b2 clearfix">
+                    <div class="pd-b2">
                         <label class="w125">{{ commonLocaleData?.app_voucher_no }}:</label>
                         <label class="radio-inline p-0">
                             <mat-slide-toggle
@@ -90,7 +90,7 @@
                             </mat-slide-toggle>
                         </label>
                     </div>
-                    <div class="pd-b2 clearfix">
+                    <div class="pd-b2">
                         <label class="w125">{{ localeData?.voucher_total }}:</label>
                         <label class="radio-inline p-0">
                             <mat-slide-toggle
@@ -104,7 +104,7 @@
                             </mat-slide-toggle>
                         </label>
                     </div>
-                    <div class="pd-b2 clearfix">
+                    <div class="pd-b2">
                         <label class="w125">{{ localeData?.entry_no }}:</label>
                         <label class="radio-inline p-0">
                             <mat-slide-toggle
@@ -118,7 +118,7 @@
                             </mat-slide-toggle>
                         </label>
                     </div>
-                    <div class="pd-b2 clearfix">
+                    <div class="pd-b2">
                         <label class="w125">{{ localeData?.description }}:</label>
                         <label class="radio-inline p-0">
                             <mat-slide-toggle
