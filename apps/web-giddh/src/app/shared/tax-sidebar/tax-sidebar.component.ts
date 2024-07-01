@@ -6,7 +6,7 @@ import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
 import { Observable, of, ReplaySubject } from 'rxjs';
-import { TAX_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { GstReconcileService } from '../../services/gst-reconcile.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
@@ -68,6 +68,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public isZimbabweCompany: boolean;
     /** True if active country is Kenya */
     public isKenyaCompany: boolean;
+    /** Holds active company information */
+    public activeCompany: any;
 
     constructor(
         private router: Router,
@@ -95,17 +97,18 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
+                this.activeCompany = activeCompany;
                 this.isUKCompany = activeCompany?.country === "United Kingdom";
                 this.isZimbabweCompany = activeCompany?.country === "Zimbabwe";
                 this.isKenyaCompany = activeCompany?.country === "Kenya";
-                
+
                 if (this.taxSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                     this.showTaxMenus = true;
                     this.showGstMenus = false;
-                } else if (activeCompany.countryV2?.alpha2CountryCode ==='IN'){
+                } else if (activeCompany.countryV2?.alpha2CountryCode === 'IN') {
                     this.showGstMenus = true;
                     this.showTaxMenus = false;
-                } else{
+                } else {
                     this.showTaxMenus = false;
                     this.showGstMenus = false;
                 }
@@ -248,11 +251,11 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
      * @memberof TaxSidebarComponent
      */
     public translationComplete(event: any): void {
-        if(event) {
+        if (event) {
             let label = '';
-            if (this.showTaxMenus && (this.isZimbabweCompany || this.isKenyaCompany)) {
+            if (VAT_SUPPORTED_COUNTRIES.includes(this.activeCompany.countryV2?.alpha2CountryCode)) {
                 label = this.localeData?.add_vat;
-            } else if (this.showTaxMenus) {
+            } else if (TRN_SUPPORTED_COUNTRIES.includes(this.activeCompany.countryV2?.alpha2CountryCode)) {
                 label = this.localeData?.add_trn;
             } else if (this.showGstMenus) {
                 label = this.localeData?.add_gst;
