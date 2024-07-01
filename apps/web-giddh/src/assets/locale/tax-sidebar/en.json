@@ -18,5 +18,6 @@
     "vat_obligations": "Vat Obligations",
     "with_held_setting": "With Held Setting",
     "add_vat": "Add VAT",
-    "liability_report": "Liability Report"
+    "liability_report": "Liability Report",
+    "gst_setting": "GST Setting"
 }

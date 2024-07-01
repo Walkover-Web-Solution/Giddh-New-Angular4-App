@@ -20,8 +20,8 @@
                 class="gst-sidebar"
             ></tax-sidebar>
         </div>
-        <form name="gstSettingForm" [formGroup]="gstSettingForm" autocomplete="off">
-            <div class="col-12 col-sm-3 mr-t2" *ngIf="activeCompany?.country === 'India'">
+        <form name="paymentIntegrateForm" [formGroup]="paymentIntegrateForm" autocomplete="off">
+            <div class="col-12 col-sm-3 mr-t2">
                 <div class="form-group">
                     <dropdown-field
                         [label]="localeData?.export_type"
@@ -34,14 +34,11 @@
                     ></dropdown-field>
                 </div>
             </div>
+        </form>
+        <form name="gstSettingForm" [formGroup]="gstSettingForm" autocomplete="off">
+            <mat-divider class="my-2"></mat-divider>
             <giddh-page-loader *ngIf="isLoading$ | async"></giddh-page-loader>
             <ng-container *ngIf="!(isLoading$ | async)">
-                <div class="col-6 pr-0 mr-b15">
-                    <div class="d-flex justify-content-end">
-                        <button mat-stroked-button color="primary" (click)="saveLutNumbers()">Save</button>
-                    </div>
-                </div>
-
                 <div class="col-6 pr-0">
                     <div class="row">
                         <div class="consumption-details-wrapper w-100">
@@ -49,9 +46,9 @@
                                 <table class="w-100">
                                     <thead>
                                         <tr>
-                                            <th>Date</th>
-                                            <th>LUT Number</th>
-                                            <th class="text-right">Action</th>
+                                            <th>{{ commonLocaleData?.app_date }}</th>
+                                            <th>{{ localeData?.lut_number }}</th>
+                                            <th class="text-right">{{ commonLocaleData?.app_action }}</th>
                                         </tr>
                                     </thead>
                                     <tbody formArrayName="gstData">
@@ -60,9 +57,10 @@
                                                 let lutItem of gstSettingForm?.get('gstData')['controls'];
                                                 let i = index
                                             "
+                                            class="position-relative"
+                                            [ngClass]="{ 'invalid-row': responseArray[i]?.message }"
                                             [formGroupName]="i"
                                         >
-                                        <div class="ggg">
                                             <td>
                                                 <div class="custom-mat-form-field">
                                                     <div class="date-range-wrapper">
@@ -88,16 +86,13 @@
                                                         </mat-form-field>
                                                     </div>
                                                 </div>
-                                                <ng-container *ngIf="responseArray[i]?.message">
-                                                    <p class="text-danger">{{ responseArray[i]?.message }}</p>
-                                                </ng-container>
                                             </td>
                                             <td>
                                                 <div class="w-100 option-value-field text-value-field">
                                                     <text-field
                                                         type="text"
                                                         [cssClass]="'w-100 pd-15'"
-                                                        [placeholder]="'Enter Lut Number'"
+                                                        [placeholder]="localeData?.enter_lut_number"
                                                         formControlName="lutNumber"
                                                         name="lut_{{ i }}"
                                                     ></text-field>
@@ -105,6 +100,7 @@
                                             </td>
                                             <td class="text-right">
                                                 <button
+                                                    aria-label="remove"
                                                     mat-stroked-button
                                                     class="min-width-unset"
                                                     (click)="removeLutItem(i)"
@@ -112,15 +108,28 @@
                                                     <i class="icon-trash"></i>
                                                 </button>
                                             </td>
-                                        </div>
+                                            <ng-container *ngIf="responseArray[i]?.message">
+                                                <p class="text-danger position-absolute lut-number-error-message">
+                                                    {{ responseArray[i]?.message }}
+                                                </p>
+                                            </ng-container>
                                         </tr>
                                     </tbody>
                                 </table>
                                 <div class="mt-2">
-                                    <a class="mb-2" (click)="addNewLutItem()" href="javascript:;"> Add New Line + </a>
+                                    <a class="mb-2" (click)="addNewLutItem()" href="javascript:;">
+                                        {{ localeData?.add_new_line }}
+                                    </a>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="col-6 pr-0 mr-b15">
+                    <div class="d-flex justify-content-end pd-t15">
+                        <button mat-stroked-button color="primary" aria-label="save" (click)="saveLutNumbers()">
+                            {{ commonLocaleData?.app_save }}
+                        </button>
                     </div>
                 </div>
             </ng-container>

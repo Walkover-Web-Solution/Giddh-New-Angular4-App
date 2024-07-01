@@ -757,7 +757,9 @@
                                 </td>
                                 <td *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right">
                                     <span [innerHTML]="rupeeSymbol"></span>1000.00
-                                    <p *ngIf="fieldsAndVisibility.table.displayBaseCurrency.display"><span [innerHTML]="dollarSymbol"></span>14.28</p>
+                                    <p *ngIf="fieldsAndVisibility.table.displayBaseCurrency.display">
+                                        <span [innerHTML]="dollarSymbol"></span>14.28
+                                    </p>
                                 </td>
                                 <td *ngIf="fieldsAndVisibility.table.amountBeforeDiscount?.display" class="text-right">
                                     <span [innerHTML]="rupeeSymbol"> </span>2000.00
@@ -767,7 +769,9 @@
                                 </td>
                                 <td *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right">
                                     <span [innerHTML]="rupeeSymbol"></span>1700.00
-                                    <p *ngIf="fieldsAndVisibility.table.displayBaseCurrency.display"><span [innerHTML]="dollarSymbol"></span>24.28</p>
+                                    <p *ngIf="fieldsAndVisibility.table.displayBaseCurrency.display">
+                                        <span [innerHTML]="dollarSymbol"></span>24.28
+                                    </p>
                                 </td>
                                 <td class="text-right">
                                     <span [innerHTML]="rupeeSymbol"></span>153.00
@@ -783,7 +787,9 @@
                                 </td>
                                 <td colspan="3 " class="text-right">
                                     <span [innerHTML]="rupeeSymbol"></span>2006.00
-                                    <p *ngIf="fieldsAndVisibility.table.displayBaseCurrency.display"><span [innerHTML]="dollarSymbol"></span>28.65</p>
+                                    <p *ngIf="fieldsAndVisibility.table.displayBaseCurrency.display">
+                                        <span [innerHTML]="dollarSymbol"></span>28.65
+                                    </p>
                                 </td>
                             </tr>
                             <tr
@@ -831,7 +837,9 @@
                                 <td *ngIf="fieldsAndVisibility.table.quantity?.display" class="text-right">2 No.</td>
                                 <td *ngIf="fieldsAndVisibility.table.rate?.display" class="text-right">
                                     <span [innerHTML]="rupeeSymbol"></span>300.00
-                                    <p *ngIf="fieldsAndVisibility.table.displayBaseCurrency.display" ><span [innerHTML]="dollarSymbol"></span>4.28</p>
+                                    <p *ngIf="fieldsAndVisibility.table.displayBaseCurrency.display">
+                                        <span [innerHTML]="dollarSymbol"></span>4.28
+                                    </p>
                                 </td>
                                 <td *ngIf="fieldsAndVisibility.table.amountBeforeDiscount?.display" class="text-right">
                                     <span [innerHTML]="rupeeSymbol"></span>600.00
@@ -841,7 +849,9 @@
                                 </td>
                                 <td *ngIf="fieldsAndVisibility.table.taxableValue?.display" class="text-right">
                                     <span [innerHTML]="rupeeSymbol"></span>100.00
-                                    <p *ngIf="fieldsAndVisibility.table.displayBaseCurrency.display"><span [innerHTML]="dollarSymbol"></span>1.42</p>
+                                    <p *ngIf="fieldsAndVisibility.table.displayBaseCurrency.display">
+                                        <span [innerHTML]="dollarSymbol"></span>1.42
+                                    </p>
                                 </td>
                                 <td class="text-right">
                                     <span [innerHTML]="rupeeSymbol"></span>9.00
@@ -857,7 +867,9 @@
                                 </td>
                                 <td colspan="3 " class="text-right">
                                     <span [innerHTML]="rupeeSymbol"></span>118.00
-                                    <p *ngIf="fieldsAndVisibility.table.displayBaseCurrency.display"><span [innerHTML]="dollarSymbol"></span>1.68</p>
+                                    <p *ngIf="fieldsAndVisibility.table.displayBaseCurrency.display">
+                                        <span [innerHTML]="dollarSymbol"></span>1.68
+                                    </p>
                                 </td>
                             </tr>
                             <tr
@@ -1083,13 +1095,21 @@
                                     <div class="inner mr-0">&nbsp;</div>
                                 </td>
                             </tr>
-                            <tr *ngIf="fieldsAndVisibility.footer.grandTotal?.display && fieldsAndVisibility.table.displayBaseCurrency.display">
-                                <th class="strong">
-                                    {{ fieldsAndVisibility.footer.grandTotal?.label }}(USD)
-                                </th>
+                            <tr
+                                *ngIf="
+                                    fieldsAndVisibility.footer.grandTotal?.display &&
+                                    fieldsAndVisibility.table.displayBaseCurrency.display
+                                "
+                            >
+                                <th class="strong">{{ fieldsAndVisibility.footer.grandTotal?.label }}(USD)</th>
                                 <td class="strong"><span [innerHTML]="dollarSymbol"></span>30.34</td>
                             </tr>
-                            <tr *ngIf="fieldsAndVisibility.footer.totalInWords?.display && fieldsAndVisibility.table.displayBaseCurrency.display">
+                            <tr
+                                *ngIf="
+                                    fieldsAndVisibility.footer.totalInWords?.display &&
+                                    fieldsAndVisibility.table.displayBaseCurrency.display
+                                "
+                            >
                                 <th>
                                     <!--            {{fieldsAndVisibility.footer.totalInWords?.label}}-->
                                     Total (In words)
@@ -1304,7 +1324,7 @@
                         >
                             {{ fieldsAndVisibility.footer.message1?.label }}
                         </p>
-                              <p
+                        <p
                             class="pd-1"
                             [ngStyle]="{ 'font-size': inputTemplate.fontMedium + 'px', 'white-space': 'pre-line' }"
                             *ngIf="fieldsAndVisibility.footer.displayExportMessage?.display"
