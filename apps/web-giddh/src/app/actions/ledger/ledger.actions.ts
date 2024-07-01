@@ -417,6 +417,12 @@ export class LedgerActions {
         };
     }
 
+    /**
+     * Used to Reset Blank Ledger
+     *
+     * @returns {CustomActions}
+     * @memberof LedgerActions
+     */
     public ResetBlankLedger(): CustomActions {
         return {
             type: LEDGER.RESET_BLANK_LEDGER_REQUEST,
