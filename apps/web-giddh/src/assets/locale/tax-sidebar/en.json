@@ -19,5 +19,6 @@
     "with_held_setting": "With Held Setting",
     "add_vat": "Add VAT",
     "liability_report": "Liability Report",
-    "gst_setting": "GST Setting"
+    "gst_setting": "GST Setting",
+    "manage_tax": "Manage Tax"
 }
