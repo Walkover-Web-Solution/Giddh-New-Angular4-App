@@ -21,17 +21,19 @@
             ></tax-sidebar>
         </div>
         <form name="paymentIntegrateForm" [formGroup]="paymentIntegrateForm" autocomplete="off">
-            <div class="col-12 col-sm-3 mr-t2">
-                <div class="form-group">
-                    <dropdown-field
-                        [label]="localeData?.export_type"
-                        [cssClass]="'theme-selection'"
-                        [options]="exportTypes"
-                        [defaultValue]="getExportTypeLabel()"
-                        [placeholder]="localeData?.select_export_type"
-                        [name]="'exportType'"
-                        (selectedOption)="setExportType($event)"
-                    ></dropdown-field>
+            <div class="row">
+                <div class="col-12 col-sm-3 mr-t2">
+                    <div class="form-group">
+                        <dropdown-field
+                            [label]="localeData?.export_type"
+                            [cssClass]="'theme-selection'"
+                            [options]="exportTypes"
+                            [defaultValue]="getExportTypeLabel()"
+                            [placeholder]="localeData?.select_export_type"
+                            [name]="'exportType'"
+                            (selectedOption)="setExportType($event)"
+                        ></dropdown-field>
+                    </div>
                 </div>
             </div>
         </form>
@@ -39,8 +41,8 @@
             <mat-divider class="my-2"></mat-divider>
             <giddh-page-loader *ngIf="isLoading$ | async"></giddh-page-loader>
             <ng-container *ngIf="!(isLoading$ | async)">
-                <div class="col-6 pr-0">
-                    <div class="row">
+                <div class="row">
+                    <div class="col-6 pr-0">
                         <div class="consumption-details-wrapper w-100">
                             <div class="pd-r1 pd-l1">
                                 <table class="w-100">
@@ -125,11 +127,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6 pr-0 mr-b15">
-                    <div class="d-flex justify-content-end pd-t15">
-                        <button mat-stroked-button color="primary" aria-label="save" (click)="saveLutNumbers()">
-                            {{ commonLocaleData?.app_save }}
-                        </button>
+                <div class="row">
+                    <div class="col-6 pr-0 mr-b15">
+                        <div class="d-flex justify-content-end pd-t15">
+                            <button mat-stroked-button color="primary" aria-label="save" (click)="saveLutNumbers()">
+                                {{ commonLocaleData?.app_save }}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </ng-container>

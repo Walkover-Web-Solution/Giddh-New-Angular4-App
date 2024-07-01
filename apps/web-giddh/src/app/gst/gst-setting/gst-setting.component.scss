@@ -1,18 +1,18 @@
-
-
 thead {
     border-bottom: 1px solid var(--color-iron);
 }
 
-th {
-    color: var(--color-primary-button-text);
-    font-weight: 500;
-}
+
 tr {
     th,
     td {
         padding: 10px 5px;
         font-size: var(--font-size-15);
+    }
+
+    th {
+        color: var(--color-primary-button-text);
+        font-weight: 500;
     }
 
     &.invalid-row {
