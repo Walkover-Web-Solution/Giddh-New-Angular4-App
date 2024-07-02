@@ -33,6 +33,8 @@ import { Router } from '@angular/router';
 import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
 import { PermissionActions } from 'apps/web-giddh/src/app/actions/permission/permission.action';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
+import { MatDialog } from '@angular/material/dialog';
+import { ExportMasterDialogComponent } from '../export-master-dialog/export-master-dialog.component';
 
 @Component({
     selector: 'account-operations',
@@ -131,9 +133,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     public groupExportLedgerBodyRequest: ExportBodyRequest = new ExportBodyRequest();
     /** List of discounts */
     public discounts: any[] = [];
+    /** Holds active group unique name */
+    @Input() public activeGroupUniqueName: string = '';
 
     constructor(private _fb: UntypedFormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-        private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions, public generalService: GeneralService, public ledgerService: LedgerService, public router: Router, private settingsDiscountService: SettingsDiscountService, private permissionActions: PermissionActions, private generalAction: GeneralActions) {
+        private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private toaster: ToasterService, _permissionDataService: PermissionDataService, private invoiceActions: InvoiceActions, public generalService: GeneralService, public ledgerService: LedgerService, public router: Router, private settingsDiscountService: SettingsDiscountService, private permissionActions: PermissionActions, private generalAction: GeneralActions, public dialog: MatDialog) {
         this.isUserSuperAdmin = _permissionDataService.isUserSuperAdmin;
     }
 
@@ -667,7 +671,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
      * @memberof AccountOperationsComponent
      */
     public hideGroupExportModal(response: any) {
-        this.groupExportLedgerModal.hide();
+        this.groupExportLedgerModal?.hide();
         this.activeGroupUniqueName$.pipe(take(1)).subscribe((grpUniqueName: string) => {
             if (response !== 'close') {
                 this.groupExportLedgerBodyRequest.from = response.body?.from;
@@ -683,7 +687,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                 this.groupExportLedgerBodyRequest.fileType = response.fileType;
                 this.ledgerService.exportData(this.groupExportLedgerBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success') {
-                        this.router.navigate(["/pages/downloads"]);
+                        this.router.navigate(["/pages/downloads/exports"]);
                         this.toaster.showSnackBar("success", response?.body);
                         this.store.dispatch(this.generalAction.addAndManageClosed());
                         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
@@ -694,6 +698,18 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             }
         });
     }
+
+    /**
+     * This will use for hide group export account modal
+     */
+    public hideAccountGroupExportModal(event: boolean): void {
+        if (event) {
+            this.groupExportLedgerModal?.hide();
+            this.router.navigate(['pages/downloads']);
+        }
+    }
+
+
     public isGroupSelected(event) {
         if (event) {
             this.activeGroupUniqueName$ = observableOf(event.value);
@@ -726,6 +742,19 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                     });
                 });
             }
+        });
+    }
+
+    /**
+     * This will use for open Master Export Dialog
+     */
+    public exportMasterDialog(): void {
+        const exportData = {
+            exportType: "MASTER_EXPORT"
+        }
+        this.dialog.open(ExportMasterDialogComponent, {
+            width: '750px',
+            data: exportData
         });
     }
 }

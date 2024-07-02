@@ -35,3 +35,16 @@
     width: 760px;
     height: 100vh;
 }
+
+// modal width
+.master-export {
+    .modal-body {
+        overflow: scroll;
+        height: calc(100vh - 370px) !important;
+    }
+    .modal-dialog {
+        &.modal-lg {
+            max-width: 750px !important;
+        }
+    }
+}
