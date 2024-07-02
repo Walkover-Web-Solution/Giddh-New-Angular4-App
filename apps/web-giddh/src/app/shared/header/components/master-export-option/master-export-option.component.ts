@@ -23,7 +23,7 @@ export class MasterExportOptionComponent implements OnInit {
   ) { }
 
   /**
-   * This will use for master export file
+   * This will use for component initialization
    *
    * @memberof MasterExportOptionComponent
    */
