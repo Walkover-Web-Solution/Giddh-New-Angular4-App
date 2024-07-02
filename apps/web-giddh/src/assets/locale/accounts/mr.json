@@ -77,5 +77,20 @@
     "export_group_ledger": "ग्रुप लेजर निर्यात करा",
     "bank_details_error_message": "आपण त्यापैकी कोणासाठी डेटा प्रदान केल्यास सर्व बँक फील्ड अनिवार्य आहेत",
     "item_no": "आयटम #[ITEM_NO]",
-    "duplicate_email":"डुप्लिकेट ईमेल परवानगी नाहीत"
+    "duplicate_email":"डुप्लिकेट ईमेल परवानगी नाहीत",
+    "tax_number": "कर क्रमांक",
+    "opening_balance_type": "शिल्लक प्रकार उघडणे",
+    "foreign_opening_balance_type": "विदेशी ओपनिंग शिल्लक प्रकार",
+    "currency_title": "चलन",
+    "mobile_number": "मोबाईल नंबर",
+    "attention_to_master": "लक्ष",
+    "remark": "शेरा",
+    "address": "पत्ता",
+    "pin_code": "पिन कोड",
+    "bank_name": "बँकेचे नाव",
+    "bank_account_number": "बँक खाते क्रमांक",
+    "ifsc_code": "IFSC कोड",
+    "beneficiary_name": "लाभार्थीचे नाव",
+    "branch_name": "शाखेचे नाव",
+    "swift_code": "स्विफ्ट कोड"
 }

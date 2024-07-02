@@ -1,0 +1,242 @@
+<ng-container
+    appTranslate
+    [file]="'accounts'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+<form [formGroup]="exportForm" class="d-flex justify-content-between pt-2">
+  <div class="export-border position-relative">
+    <div class="mr-b15">
+      <label class="label-width">{{ localeData?.opening_balance }} :</label>
+      <mat-slide-toggle color="primary" formControlName="openingBalance" class="ml-2 toggle-width">
+        <span>
+          {{
+          exportForm.get("openingBalance")?.value
+          ? commonLocaleData?.app_yes
+          : commonLocaleData?.app_no
+          }}
+        </span>
+      </mat-slide-toggle>
+    </div>
+    <div class="mr-b15">
+      <label class="label-width">{{ localeData?.opening_balance_type }} :</label>
+      <mat-slide-toggle color="primary" formControlName="openingBalanceType" class="ml-2 toggle-width">
+        <span>
+          {{
+          exportForm.get("openingBalanceType")?.value
+          ? commonLocaleData?.app_yes
+          : commonLocaleData?.app_no
+          }}
+        </span>
+      </mat-slide-toggle>
+    </div>
+    <div class="mr-b15">
+      <label class="label-width">{{ localeData?.foreign_opening_balance }} :</label>
+      <mat-slide-toggle color="primary" formControlName="foreignOpeningBalance" class="ml-2 toggle-width">
+        <span>
+          {{
+          exportForm.get("foreignOpeningBalance")?.value
+          ? commonLocaleData?.app_yes
+          : commonLocaleData?.app_no
+          }}
+        </span>
+      </mat-slide-toggle>
+    </div>
+    <div class="mr-b15">
+      <label class="label-width">{{ localeData?.foreign_opening_balance_type }} :</label>
+      <mat-slide-toggle color="primary" formControlName="foreignOpeningBalanceType" class="ml-2 toggle-width">
+        <span>
+          {{
+          exportForm.get("foreignOpeningBalanceType")?.value
+          ? commonLocaleData?.app_yes
+          : commonLocaleData?.app_no
+          }}
+        </span>
+      </mat-slide-toggle>
+    </div>
+    <div class="mr-b15">
+      <label class="label-width">{{ localeData?.currency_title }} :</label>
+      <mat-slide-toggle color="primary" formControlName="currency" class="ml-2 toggle-width">
+        <span>
+          {{
+          exportForm.get("currency")?.value
+          ? commonLocaleData?.app_yes
+          : commonLocaleData?.app_no
+          }}
+        </span>
+      </mat-slide-toggle>
+    </div>
+    <div class="mr-b15">
+      <label class="label-width">{{ localeData?.mobile_number }} :</label>
+      <mat-slide-toggle color="primary" formControlName="mobileNumber" class="ml-2 toggle-width">
+        <span>
+          {{
+          exportForm.get("mobileNumber")?.value
+          ? commonLocaleData?.app_yes
+          : commonLocaleData?.app_no
+          }}
+        </span>
+      </mat-slide-toggle>
+    </div>
+    <div class="mr-b15">
+      <label class="label-width">{{ commonLocaleData?.app_email }} :</label>
+      <mat-slide-toggle color="primary" formControlName="email" class="ml-2 toggle-width">
+        <span>
+          {{
+          exportForm.get("email")?.value
+          ? commonLocaleData?.app_yes
+          : commonLocaleData?.app_no
+          }}
+        </span>
+      </mat-slide-toggle>
+    </div>
+    <div class="mr-b15">
+      <label class="label-width">{{ localeData?.attention_to_master }} :</label>
+      <mat-slide-toggle color="primary" formControlName="attentionTo" class="ml-2 toggle-width">
+        <span>
+          {{
+          exportForm.get("attentionTo")?.value
+          ? commonLocaleData?.app_yes
+          : commonLocaleData?.app_no
+          }}
+        </span>
+      </mat-slide-toggle>
+    </div>
+    <div class="mr-b15">
+      <label class="label-width">{{ localeData?.remark }} :</label>
+      <mat-slide-toggle color="primary" formControlName="remark" class="ml-2 toggle-width">
+        <span>
+          {{
+          exportForm.get("remark")?.value
+          ? commonLocaleData?.app_yes
+          : commonLocaleData?.app_no
+          }}
+        </span>
+      </mat-slide-toggle>
+    </div>
+    <div class="mr-b15">
+      <label class="label-width">{{ localeData?.address }} :</label>
+      <mat-slide-toggle color="primary" formControlName="address" class="ml-2 toggle-width">
+        <span>
+          {{
+          exportForm.get("address")?.value
+          ? commonLocaleData?.app_yes
+          : commonLocaleData?.app_no
+          }}
+        </span>
+      </mat-slide-toggle>
+    </div>
+  </div>
+
+  <div>
+    <div class="mr-b15">
+      <label class="label-width">{{ localeData?.pin_code }} :</label>
+      <mat-slide-toggle color="primary" formControlName="pinCode" class="ml-2 toggle-width">
+        <span>
+          {{
+          exportForm.get("pinCode")?.value
+          ? commonLocaleData?.app_yes
+          : commonLocaleData?.app_no
+          }}
+        </span>
+      </mat-slide-toggle>
+    </div>
+    <div class="mr-b15">
+      <label class="label-width">{{ localeData?.tax_number }} :</label>
+      <mat-slide-toggle color="primary" formControlName="taxNumber" class="ml-2 toggle-width">
+        <span>
+          {{
+          exportForm.get("taxNumber")?.value
+          ? commonLocaleData?.app_yes
+          : commonLocaleData?.app_no
+          }}
+        </span>
+      </mat-slide-toggle>
+    </div>
+    <div class="mr-b15">
+      <label class="label-width">{{ localeData?.party_type }} :</label>
+      <mat-slide-toggle color="primary" formControlName="partyType" class="ml-2 toggle-width">
+        <span>
+          {{
+          exportForm.get("partyType")?.value
+          ? commonLocaleData?.app_yes
+          : commonLocaleData?.app_no
+          }}
+        </span>
+      </mat-slide-toggle>
+    </div>
+    <div class="mr-b15">
+      <label class="label-width">{{ localeData?.bank_name }} :</label>
+      <mat-slide-toggle color="primary" formControlName="bankName" class="ml-2 toggle-width">
+        <span>
+          {{
+          exportForm.get("bankName")?.value
+          ? commonLocaleData?.app_yes
+          : commonLocaleData?.app_no
+          }}
+        </span>
+      </mat-slide-toggle>
+    </div>
+    <div class="mr-b15">
+      <label class="label-width">{{ localeData?.bank_account_number }} :</label>
+      <mat-slide-toggle color="primary" formControlName="bankAccountNumber" class="ml-2 toggle-width">
+        <span>
+          {{
+          exportForm.get("bankAccountNumber")?.value
+          ? commonLocaleData?.app_yes
+          : commonLocaleData?.app_no
+          }}
+        </span>
+      </mat-slide-toggle>
+    </div>
+    <div class="mr-b15">
+      <label class="label-width">{{ localeData?.ifsc_code }} :</label>
+      <mat-slide-toggle color="primary" formControlName="ifscCode" class="ml-2 toggle-width">
+        <span>
+          {{
+          exportForm.get("ifscCode")?.value
+          ? commonLocaleData?.app_yes
+          : commonLocaleData?.app_no
+          }}
+        </span>
+      </mat-slide-toggle>
+    </div>
+    <div class="mr-b15">
+      <label class="label-width">{{ localeData?.beneficiary_name }} :</label>
+      <mat-slide-toggle color="primary" formControlName="beneficiaryName" class="ml-2 toggle-width">
+        <span>
+          {{
+          exportForm.get("beneficiaryName")?.value
+          ? commonLocaleData?.app_yes
+          : commonLocaleData?.app_no
+          }}
+        </span>
+      </mat-slide-toggle>
+    </div>
+    <div class="mr-b15">
+      <label class="label-width">{{ localeData?.branch_name }} :</label>
+      <mat-slide-toggle color="primary" formControlName="branchName" class="ml-2 toggle-width">
+        <span>
+          {{
+          exportForm.get("branchName")?.value
+          ? commonLocaleData?.app_yes
+          : commonLocaleData?.app_no
+          }}
+        </span>
+      </mat-slide-toggle>
+    </div>
+    <div class="mr-b15">
+      <label class="label-width">{{ localeData?.swift_code }} :</label>
+      <mat-slide-toggle color="primary" formControlName="swiftCode" class="ml-2 toggle-width">
+        <span>
+          {{
+          exportForm.get("swiftCode")?.value
+          ? commonLocaleData?.app_yes
+          : commonLocaleData?.app_no
+          }}
+        </span>
+      </mat-slide-toggle>
+    </div>
+  </div>
+</form> 
+</ng-container>
