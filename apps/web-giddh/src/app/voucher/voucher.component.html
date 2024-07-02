@@ -1432,6 +1432,7 @@
                                                 onVoucherDateChanged($event, invFormData.voucherDetails.voucherDate);
                                                 onBlurInvoiceDate(0)
                                             "
+                                            [disabled]="invoiceType !== 'purchase' && isUpdateMode ? 'disabled' : null"
                                             (focusOut)="
                                                 !(
                                                     currentVoucherFormDetails?.dueDate ||
