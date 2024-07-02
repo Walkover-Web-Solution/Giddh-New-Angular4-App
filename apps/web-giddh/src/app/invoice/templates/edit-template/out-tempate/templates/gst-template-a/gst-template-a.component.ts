@@ -37,9 +37,10 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     public companyAddress: string = '';
     public columnsVisibled: number;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public isBaseCurrencyRupee = true;
     public dollarSymbol = '$';
+    public isBaseCurrencyRupee = true;
     public rupeeSymbol = '&#8377';
+
 
     constructor(
         private store: Store<AppState>,
@@ -94,6 +95,9 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
                     this.columnsVisibled++;
                 }
                 if (changes.fieldsAndVisibility.currentValue.table.taxes && changes.fieldsAndVisibility.currentValue.table.taxes?.display) {
+                    this.columnsVisibled++;
+                }
+                if (changes?.fieldsAndVisibility?.currentValue?.table?.displayBaseCurrency && changes.fieldsAndVisibility.currentValue.table.displayBaseCurrency?.display) {
                     this.columnsVisibled++;
                 }
                 if (this.columnsVisibled) {

@@ -1,0 +1,151 @@
+<ng-container
+    appTranslate
+    [file]="'gst-setting'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div
+        class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+        *ngIf="asideGstSidebarMenuState === 'in'"
+    >
+        <div
+            class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+            *ngIf="asideGstSidebarMenuState === 'in'"
+        >
+            <tax-sidebar
+                (navigateEvent)="handleNavigation()"
+                (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
+                [exclude]="'#primary-new-header'"
+                class="gst-sidebar"
+            ></tax-sidebar>
+        </div>
+        <div class="pd-15">
+            <form name="paymentIntegrateForm" [formGroup]="paymentIntegrateForm" autocomplete="off">
+                <div class="w-100">
+                    <div class="mr-t2 payment-dropdown">
+                        <div class="form-group">
+                            <dropdown-field
+                                [label]="localeData?.export_type"
+                                [cssClass]="'theme-selection'"
+                                [options]="exportTypes"
+                                [defaultValue]="exportType"
+                                [placeholder]="localeData?.select_export_type"
+                                [name]="'exportType'"
+                                (selectedOption)="setExportType($event)"
+                            ></dropdown-field>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <ng-container *ngIf="!paymentIntegrateForm.get('withPay')?.value">
+                <form name="gstSettingForm" [formGroup]="gstSettingForm" autocomplete="off">
+                    <mat-divider class="my-2"></mat-divider>
+                    <giddh-page-loader *ngIf="isLoading$ | async"></giddh-page-loader>
+                    <ng-container *ngIf="!(isLoading$ | async)">
+                        <div class="w-100 mx-0">
+                            <div class="lut-form-wrapper">
+                                <div class="consumption-details-wrapper">
+                                    <table class="w-100">
+                                        <thead>
+                                            <tr>
+                                                <th class="fw-bold text-primary">{{ commonLocaleData?.app_date }}</th>
+                                                <th class="fw-bold text-primary">{{ localeData?.lut_number }}</th>
+                                                <th class="text-right fw-bold text-primary">
+                                                    {{ commonLocaleData?.app_action }}
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody formArrayName="gstData">
+                                            <tr
+                                                *ngFor="
+                                                    let lutItem of gstSettingForm?.get('gstData')['controls'];
+                                                    let i = index
+                                                "
+                                                class="position-relative"
+                                                [ngClass]="{ 'invalid-row': responseArray[i]?.message }"
+                                                [formGroupName]="i"
+                                            >
+                                                <td>
+                                                    <div class="custom-mat-form-field">
+                                                        <div class="date-range-wrapper">
+                                                            <mat-form-field
+                                                                [matDatepickerToggleIcon]="false"
+                                                                (click)="picker.open()"
+                                                                class="w-100 mat-form-field-border"
+                                                                [name]="'date_' + i"
+                                                            >
+                                                                <mat-date-range-input [rangePicker]="picker">
+                                                                    <input
+                                                                        matStartDate
+                                                                        [placeholder]="commonLocaleData?.app_start_date"
+                                                                        formControlName="fromDate"
+                                                                    />
+                                                                    <input
+                                                                        matEndDate
+                                                                        [placeholder]="commonLocaleData?.app_end_date"
+                                                                        formControlName="toDate"
+                                                                    />
+                                                                </mat-date-range-input>
+                                                                <mat-date-range-picker #picker></mat-date-range-picker>
+                                                            </mat-form-field>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="w-100 option-value-field text-value-field">
+                                                        <text-field
+                                                            [type]="'text'"
+                                                            [cssClass]="'w-100 pd-15'"
+                                                            [placeholder]="localeData?.enter_lut_number"
+                                                            formControlName="lutNumber"
+                                                            [name]="'lut_' + i"
+                                                        ></text-field>
+                                                    </div>
+                                                </td>
+                                                <td class="text-right">
+                                                    <button
+                                                        aria-label="remove"
+                                                        mat-stroked-button
+                                                        class="min-width-unset"
+                                                        (click)="removeLutItem(i)"
+                                                    >
+                                                        <i class="icon-trash"></i>
+                                                    </button>
+                                                </td>
+                                                <ng-container *ngIf="responseArray[i]?.message">
+                                                    <p class="text-danger position-absolute lut-number-error-message">
+                                                        {{ responseArray[i]?.message }}
+                                                    </p>
+                                                </ng-container>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="mt-2">
+                                        <a class="mb-2" (click)="addNewLutItem()" href="javascript:;">
+                                            {{ localeData?.add_new_line }}
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-100">
+                            <div class="lut-form-wrapper">
+                                <div class="d-flex justify-content-end pd-t15">
+                                    <button
+                                        mat-stroked-button
+                                        color="primary"
+                                        aria-label="save"
+                                        (click)="saveLutNumbers()"
+                                    >
+                                        {{ commonLocaleData?.app_save }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </form>
+            </ng-container>
+        </div>
+    </div>
+</ng-container>
