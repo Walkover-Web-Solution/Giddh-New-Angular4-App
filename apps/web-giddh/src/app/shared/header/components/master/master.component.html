@@ -49,7 +49,7 @@
                                     nav-vr-item
                                     class="list-item d-block "
                                     (click)="onGroupClick(item, i)"
-                                    matTooltip="{{ item.synonyms || item.name }}"
+                                    [matTooltip]="(item.synonyms || item.name)"
                                     placement="bottom"
                                     [ngClass]="{
                                         'isActive':
@@ -83,7 +83,7 @@
                                     class="list-item isAcc d-block"
                                     nav-vr-item
                                     id="acc_{{ item.name }}"
-                                    matTooltip="{{ item.name }}"
+                                    [matTooltip]="(item.name)"
                                     placement="bottom"
                                     (click)="onAccountClick(item, i)"
                                     [ngClass]="{
