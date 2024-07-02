@@ -25,8 +25,8 @@ export const INVENTORY_API = {
     CREATE_NEW_MANUFACTURING_STOCKS: 'company/:companyUniqueName/stocks?isManufactured=true', // get call
     GROUPS_STOCKS: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // get call
     GROUPS_WITH_STOCKS_FLATTEN: 'company/:companyUniqueName/flatten-stock-groups-with-stocks?count=:count&page=:page&q=:q', // get call
-    GROUPS_WITH_STOCKS: 'company/:companyUniqueName/hierarchical-stock-groups?type=:type', // get call
-    GROUPS_WITH_STOCKS_HIERARCHY: 'company/:companyUniqueName/hierarchical-stock-groups?q=:q&page=:page&count=:count', // get call
+    GROUPS_WITH_STOCKS: 'company/:companyUniqueName/hierarchical-stock-groups?type=:type&refresh=true', // get call
+    GROUPS_WITH_STOCKS_HIERARCHY: 'company/:companyUniqueName/hierarchical-stock-groups?q=:q&page=:page&count=:count&refresh=true', // get call
     STOCK_UNIT: 'company/:companyUniqueName/stock-unit', // get call
     STOCK_REPORT: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/report-v2?from=:from&to=:to&count=:count&page=:page', // get call
     GROUP_STOCK_REPORT: 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/report?from=:from&to=:to&entity=:entity&value=:value&condition=:condition&number=:number&stock=:stock&count=:count&page=:page', // get call
