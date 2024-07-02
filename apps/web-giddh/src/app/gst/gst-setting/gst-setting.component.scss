@@ -2,17 +2,12 @@ thead {
     border-bottom: 1px solid var(--color-iron);
 }
 
-
 tr {
+
     th,
     td {
         padding: 10px 5px;
         font-size: var(--font-size-15);
-    }
-
-    th {
-        color: var(--color-primary-button-text);
-        font-weight: 500;
     }
 
     &.invalid-row {
@@ -34,4 +29,11 @@ tr {
 .lut-number-error-message {
     left: 5px;
     bottom: 0;
+}
+
+.payment-dropdown {
+    max-width: 400px;
+}
+.lut-form-wrapper {
+    max-width: 600px;
 }
