@@ -297,7 +297,7 @@
     "app_street": "Street",
     "app_enter_gstin": "Enter GSTIN",
     "app_enter_trn": "Enter TRN",
-    "app_enter_vat": "Enter VAT Reg No",
+    "app_enter_vat": "Enter VAT",
     "app_remove": "Remove",
     "app_show_all": "Show all",
     "app_show_less": "Show Less",
@@ -731,7 +731,6 @@
     "app_name_placeholder": "Enter Name",
     "app_county": "County",
     "app_period": "Period",
-    "app_expanded": "Expanded",
     "app_gst_confirm_message1":"Do you want to override the filled information - ",
     "app_gst_confirm_message2":"When you select Yes, the content you entered will be overwritten. However, you can modify it later."
 }

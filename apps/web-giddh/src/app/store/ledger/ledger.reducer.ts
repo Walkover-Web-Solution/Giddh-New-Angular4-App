@@ -156,6 +156,26 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
                 ledgerCreateInProcess: false,
                 showDuplicateVoucherConfirmation: {}
             });
+        case LEDGER.CREATE_BULK_BLANK_LEDGER_RESPONSE:
+            let ledgerBulkResponse: BaseResponse<LedgerResponse[], BlankLedgerVM> = action.payload;
+            if (ledgerBulkResponse?.status === 'success') {
+                return Object.assign({}, state, {
+                    ledgerCreateSuccess: true,
+                    ledgerCreateInProcess: false,
+                    showDuplicateVoucherConfirmation: {}
+                });
+            }
+            return Object.assign({}, state, {
+                ledgerCreateSuccess: false,
+                ledgerCreateInProcess: false,
+                showDuplicateVoucherConfirmation: {}
+            });
+        case LEDGER.RESET_BLANK_LEDGER_REQUEST:
+            return Object.assign({}, state, {
+                ledgerCreateSuccess: false,
+                ledgerCreateInProcess: false,
+                showDuplicateVoucherConfirmation: {}
+            });
         case LEDGER.SET_SELECTED_TXN_FOR_EDIT:
             return {
                 ...state,

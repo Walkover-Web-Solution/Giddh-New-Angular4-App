@@ -9,6 +9,7 @@ input-field,
 stock-balance,
 mat-form-field,
 reactive-dropdown-field,
+select-multiple-fields,
 report-filters,
 .custom-mat-form-field {
     .mat-mdc-form-field {
@@ -634,4 +635,20 @@ app-cdk-scroll {
     left: 0;
     bottom: 0px;
     background-color: var(--color-body-background);
+}
+
+// Height of Mat form field with mat-chip
+select-multiple-fields {
+
+    // Add 'value-filled' class to make form-field height 48px
+    &.value-filled {
+        .mat-mdc-form-field-type-mat-chip-grid {
+            .mat-mdc-text-field-wrapper {
+                .mat-mdc-form-field-infix {
+                    min-height: 48px;
+                    padding: 4px 0 ! important;
+                }
+            }
+        }
+    }
 }
