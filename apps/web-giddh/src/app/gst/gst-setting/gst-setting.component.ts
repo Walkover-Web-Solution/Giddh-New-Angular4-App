@@ -52,7 +52,7 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     /** Delete Lut Number in progress Observable */
     public deleteLutNumberIsSuccess$: Observable<any> = this.componentStore.deleteLutNumberIsSuccess$;
     /** Create Lut Number in progress Observable */
-    public createUpdateInSuccess$: Observable<any> = this.componentStore.createUpdateInSuccess$;
+    public createUpdateIsSuccess$: Observable<any> = this.componentStore.createUpdateIsSuccess$;
     /** Hold response for error message for each index */
     public responseArray: any[] = [];
     /** Hold lut number item list*/
@@ -144,13 +144,11 @@ export class GstSettingComponent implements OnInit, OnDestroy {
      * @memberof GstSettingComponent
      */
     public initGstSettingForm(): void {
-
         this.gstSettingForm = this.formBuilder.group({
             gstData: this.formBuilder.array([
                 this.initLutForm()
             ])
         });
-
         this.paymentIntegrateForm = this.formBuilder.group({
             withPay: [false]
         });
@@ -193,7 +191,7 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     public setExportType(event?: any): void {
         if (event && event.value && this.exportType !== event.value) {
             this.paymentIntegrateForm.get('withPay')?.patchValue(event.value === this.commonLocaleData.app_yes.toLowerCase());
-            let value = event.value === this.commonLocaleData.app_yes.toLowerCase() ? true : false;
+            const value = event.value === this.commonLocaleData.app_yes.toLowerCase() ? true : false;
             this.store.dispatch(this.settingsProfileActions.PatchProfile({ withPay: value }));
         }
     }
@@ -243,7 +241,6 @@ export class GstSettingComponent implements OnInit, OnDestroy {
             }));
         }
     }
-
 
     /**
      * This will be use for remove lut item
@@ -314,17 +311,13 @@ export class GstSettingComponent implements OnInit, OnDestroy {
 
         itemsWithOriginalIndex.forEach((obj1, index) => {
             if (!this.lutItemList[index] || this.lutItemList[index].fromDate !== obj1.fromDate || this.lutItemList[index].lutNumber !== obj1.lutNumber || this.lutItemList[index].toDate !== obj1.toDate) {
+                const req = {
+                    q: obj1,
+                    index: index
+                };
                 if (!this.lutItemList[index]) {
-                    const req = {
-                        q: obj1,
-                        index: index
-                    };
                     this.componentStore.createLutNumber(req);
                 } else {
-                    const req = {
-                        q: obj1,
-                        index: index
-                    };
                     this.componentStore.updateLutNumber(req);
                 }
             }

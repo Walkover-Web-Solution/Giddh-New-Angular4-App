@@ -675,9 +675,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         if (obj.contactNo && !this.isMobileNumberValid) {
             delete obj['contactNo'];
         }
-        console.log(obj);
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
-
     }
 
     public typeaheadOnSelect(e: TypeaheadMatch): void {
