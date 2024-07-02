@@ -29,7 +29,7 @@
                                 [label]="localeData?.export_type"
                                 [cssClass]="'theme-selection'"
                                 [options]="exportTypes"
-                                [defaultValue]="getExportTypeLabel()"
+                                [defaultValue]="exportTypeValue"
                                 [placeholder]="localeData?.select_export_type"
                                 [name]="'exportType'"
                                 (selectedOption)="setExportType($event)"

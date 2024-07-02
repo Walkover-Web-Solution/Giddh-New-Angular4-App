@@ -6,6 +6,7 @@ import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { AppState } from "../../../store";
 import { ToasterService } from "../../../services/toaster.service";
 import { GstReconcileService } from "../../../services/gst-reconcile.service";
+import { LocaleService } from "../../../services/locale.service";
 
 export interface GstSettingState {
     isLoading: boolean;
@@ -31,7 +32,8 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
     constructor(
         private store: Store<AppState>,
         private toaster: ToasterService,
-        private gstReconcileService: GstReconcileService
+        private gstReconcileService: GstReconcileService,
+        private localeService: LocaleService
     ) {
         super(DEFAULT_STATE);
     }
@@ -108,7 +110,7 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
-                                    lutNumberResponse: { message: null, successMessage: res.body ,lutIndex: req.index, lutNumberItem: req.q }, isLoading: false
+                                    lutNumberResponse: { message: null, successMessage: res.body, lutIndex: req.index, lutNumberItem: req.q }, isLoading: false
                                 });
                             } else {
                                 return this.patchState({
@@ -117,7 +119,7 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
                             }
                         },
                         (error: any) => {
-                            this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
+                            this.toaster.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
                             return this.patchState({
                                 lutNumberResponse: { message: error.message, lutIndex: req.index, lutNumberItem: req.q }, isLoading: false
                             });
