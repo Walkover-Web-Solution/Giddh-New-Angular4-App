@@ -74,7 +74,7 @@ export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {
                 },
                 {
                     field: 'displayLutNumber',
-                    label: "LUt Number",
+                    label: "Lut Number",
                     display: true,
                     width: null
                 },

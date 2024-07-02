@@ -1,4 +1,3 @@
-import { BreakpointObserver, BreakpointState } from "@angular/cdk/layout";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ReplaySubject, Observable } from "rxjs";
 import { takeUntil } from "rxjs/operators";
@@ -11,6 +10,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from "../../shared/he
 import * as dayjs from "dayjs";
 import { GstSettingComponentStore } from "./utility/gst-setting.store";
 import { ToasterService } from "../../services/toaster.service";
+import { cloneDeep } from "../../lodash-optimized";
 
 @Component({
     selector: 'gst-setting',
@@ -27,8 +27,6 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
-    /** this will check mobile screen size */
-    public isMobileScreen: boolean = false;
     /** This will use for destroy */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** List of export types list */
@@ -59,7 +57,6 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     public lutItemList: any[] = [];
 
     constructor(
-        private breakpointObserver: BreakpointObserver,
         private formBuilder: FormBuilder,
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions,
@@ -88,7 +85,7 @@ export class GstSettingComponent implements OnInit, OnDestroy {
 
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
+                let universalDate = cloneDeep(dateObj);
                 this.fromDate = universalDate[0];
                 this.toDate = universalDate[1];
                 let gstFormArray = this.gstSettingForm.get('gstData') as FormArray;
@@ -97,16 +94,6 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                 gstFormGroup?.get('toDate')?.patchValue(this.toDate);
             }
         });
-
-        this.breakpointObserver
-            .observe(['(max-width: 767px)'])
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe((state: BreakpointState) => {
-                this.isMobileScreen = state.matches;
-                if (!this.isMobileScreen) {
-                    this.asideGstSidebarMenuState = 'in';
-                }
-            });
 
         this.deleteLutNumberIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result) {
@@ -175,11 +162,11 @@ export class GstSettingComponent implements OnInit, OnDestroy {
      * @returns {string}
      * @memberof GstSettingComponent
      */
-    public getExportTypeLabel(): string {
+    public getExportTypeLabel(): void {
         if (this.activeCompany) {
             let value = this.activeCompany.withPay ? this.commonLocaleData.app_yes.toLowerCase() : this.commonLocaleData.app_no.toLowerCase();
             const exportType = this.exportTypes.find(item => item?.value === value);
-            return exportType ? exportType.label : '';
+            this.exportType = exportType ? exportType.label : '';
         }
     }
 
@@ -191,8 +178,7 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     public setExportType(event?: any): void {
         if (event && event.value && this.exportType !== event.value) {
             this.paymentIntegrateForm.get('withPay')?.patchValue(event.value === this.commonLocaleData.app_yes.toLowerCase());
-            const value = event.value === this.commonLocaleData.app_yes.toLowerCase() ? true : false;
-            this.store.dispatch(this.settingsProfileActions.PatchProfile({ withPay: value }));
+            this.store.dispatch(this.settingsProfileActions.PatchProfile({ withPay: event.value === this.commonLocaleData.app_yes.toLowerCase() }));
         }
     }
 
@@ -220,13 +206,13 @@ export class GstSettingComponent implements OnInit, OnDestroy {
             }));
             let lastIndex = mappings.controls.findIndex(control => !control.get('lutNumber')?.value);
             let lastFormArray = mappings.at(lastIndex);
-            let fromDate = null;
-            let toDate = null;
-            if (user.fromDate && user.toDate) {
-                fromDate = dayjs(user?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD);
-                toDate = dayjs(user.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD);
-            }
             if (!lastFormArray?.get('lutNumber')?.value) {
+                let fromDate = null;
+                let toDate = null;
+                if (user.fromDate && user.toDate) {
+                    fromDate = dayjs(user?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD);
+                    toDate = dayjs(user.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD);
+                }
                 mappings.at(lastIndex).patchValue({
                     fromDate: fromDate,
                     toDate: toDate,
@@ -267,10 +253,10 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                 this.responseArray[index]['message'] = null;
             }
         } else {
-            mappings.removeAt(index);
             if (mappingForm.get('uniqueName')?.value) {
                 this.responseArray[index] = [];
                 this.componentStore.deleteLutNumber({ lutNumberUniqueName: mappingForm.get('uniqueName')?.value });
+                mappings.removeAt(index);
             }
         }
     }
