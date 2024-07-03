@@ -104,7 +104,7 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
     readonly createLutNumber = this.effect((data: Observable<{ q: any, index: number }>) => {
         return data.pipe(
             mergeMap((req) => {
-                this.patchState({ isLoading: true, createUpdateIsSuccess: false, lutNumberResponse: null });
+                this.patchState({ isLoading: true, lutNumberResponse: null });
                 return this.gstReconcileService.createLutNumber(req.q).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
@@ -134,7 +134,7 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
     readonly updateLutNumber = this.effect((data: Observable<{ q: any, index: number }>) => {
         return data.pipe(
             mergeMap((req) => {
-                this.patchState({ isLoading: true, createUpdateIsSuccess: false, lutNumberResponse: null });
+                this.patchState({ isLoading: true, lutNumberResponse: null });
                 return this.gstReconcileService.updateLutNumber(req.q).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
