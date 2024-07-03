@@ -49,8 +49,6 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
     /** Delete Lut Number in progress Observable */
     public deleteLutNumberIsSuccess$: Observable<any> = this.componentStore.deleteLutNumberIsSuccess$;
-    /** Create Lut Number in progress Observable */
-    public createUpdateIsSuccess$: Observable<any> = this.componentStore.createUpdateIsSuccess$;
     /** Hold response for error message for each index */
     public responseArray: any[] = [];
     /** Hold lut number item list*/
@@ -68,6 +66,7 @@ export class GstSettingComponent implements OnInit, OnDestroy {
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
+                this.getExportTypeLabel();
             }
         });
     }
@@ -119,6 +118,7 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                 this.responseArray[response.lutIndex] = response;
                 if (this.responseArray[response.lutIndex]?.successMessage) {
                     this.toaster.showSnackBar('success', this.responseArray[response.lutIndex].successMessage);
+                    this.getLutList();
                 }
                 this.changeDetection.detectChanges();
             }
@@ -164,9 +164,11 @@ export class GstSettingComponent implements OnInit, OnDestroy {
      */
     public getExportTypeLabel(): void {
         if (this.activeCompany) {
-            let value = this.activeCompany.withPay ? this.commonLocaleData.app_yes.toLowerCase() : this.commonLocaleData.app_no.toLowerCase();
-            const exportType = this.exportTypes.find(item => item?.value === value);
-            this.exportType = exportType ? exportType.label : '';
+            setTimeout(() => {
+                let value = this.activeCompany.withPay ? this.commonLocaleData.app_yes?.toLowerCase() : this.commonLocaleData.app_no?.toLowerCase();
+                const exportType = this.exportTypes.find(item => item?.value === value);
+                this.exportType = exportType ? exportType.label : '';
+            }, 200);
         }
     }
 
@@ -177,8 +179,8 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     */
     public setExportType(event?: any): void {
         if (event && event.value && this.exportType !== event.value) {
-            this.paymentIntegrateForm.get('withPay')?.patchValue(event.value === this.commonLocaleData.app_yes.toLowerCase());
-            this.store.dispatch(this.settingsProfileActions.PatchProfile({ withPay: event.value === this.commonLocaleData.app_yes.toLowerCase() }));
+            this.paymentIntegrateForm.get('withPay')?.patchValue(event.value === this.commonLocaleData.app_yes?.toLowerCase());
+            this.store.dispatch(this.settingsProfileActions.PatchProfile({ withPay: event.value === this.commonLocaleData.app_yes?.toLowerCase() }));
         }
     }
 
