@@ -40,6 +40,8 @@ export class GstTemplateAComponent implements OnInit, OnDestroy, OnChanges {
     public dollarSymbol = '$';
     public isBaseCurrencyRupee = true;
     public rupeeSymbol = '&#8377';
+    /* This will hold active company*/
+    @Input() public activeCompany : any;
 
 
     constructor(

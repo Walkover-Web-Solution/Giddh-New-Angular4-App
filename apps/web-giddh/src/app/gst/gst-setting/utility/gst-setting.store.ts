@@ -10,7 +10,6 @@ import { LocaleService } from "../../../services/locale.service";
 
 export interface GstSettingState {
     isLoading: boolean;
-    createUpdateIsSuccess: boolean;
     deleteLutNumberIsSuccess: boolean;
     lutNumberList: any[];
     lutNumberResponse: any;
@@ -19,7 +18,6 @@ export interface GstSettingState {
 
 const DEFAULT_STATE: GstSettingState = {
     isLoading: false,
-    createUpdateIsSuccess: false,
     deleteLutNumberIsSuccess: false,
     lutNumberList: null,
     lutNumberResponse: null,
@@ -39,7 +37,6 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
     }
 
     public isLoading$ = this.select((state) => state.isLoading);
-    public createUpdateIsSuccess$ = this.select((state) => state.createUpdateIsSuccess);
     public lutNumberList$ = this.select((state) => state.lutNumberList);
     public deleteLutNumberIsSuccess$ = this.select((state) => state.deleteLutNumberIsSuccess);
     public lutNumberResponse$ = this.select((state) => state.lutNumberResponse);
@@ -104,7 +101,7 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
     readonly createLutNumber = this.effect((data: Observable<{ q: any, index: number }>) => {
         return data.pipe(
             mergeMap((req) => {
-                this.patchState({ isLoading: true, createUpdateIsSuccess: false, lutNumberResponse: null });
+                this.patchState({ isLoading: true, lutNumberResponse: null });
                 return this.gstReconcileService.createLutNumber(req.q).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
@@ -134,7 +131,7 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
     readonly updateLutNumber = this.effect((data: Observable<{ q: any, index: number }>) => {
         return data.pipe(
             mergeMap((req) => {
-                this.patchState({ isLoading: true, createUpdateIsSuccess: false, lutNumberResponse: null });
+                this.patchState({ isLoading: true, lutNumberResponse: null });
                 return this.gstReconcileService.updateLutNumber(req.q).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {

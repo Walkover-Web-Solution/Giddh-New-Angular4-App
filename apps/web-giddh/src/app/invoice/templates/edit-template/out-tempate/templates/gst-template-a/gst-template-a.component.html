@@ -1329,7 +1329,11 @@
                             [ngStyle]="{ 'font-size': inputTemplate.fontMedium + 'px', 'white-space': 'pre-line' }"
                             *ngIf="fieldsAndVisibility.footer.displayExportMessage?.display"
                         >
-                            {{ fieldsAndVisibility.footer.displayExportMessage?.label }}
+                            {{
+                                activeCompany?.withPay
+                                    ? "SUPPLY MEANT FOR EXPORT UNDER BOND OR LETTER OF UNDERTAKING WITH PAYMENT OF INTEGRATED TAX"
+                                    : "SUPPLY MEANT FOR EXPORT UNDER BOND OR LETTER OF UNDERTAKING WITHOUT PAYMENT OF INTEGRATED TAX"
+                            }}
                         </p>
                         <p
                             class="pd-1"
