@@ -49,8 +49,8 @@
                                     nav-vr-item
                                     class="list-item d-block "
                                     (click)="onGroupClick(item, i)"
-                                    tooltip="{{ item.synonyms || item.name }}"
-                                    placement="bottom"
+                                    [matTooltip]="(item.synonyms || item.name)"
+                                    [matTooltipPosition]="'below'"
                                     [ngClass]="{
                                         'isActive':
                                             ((activeGroupUniqueName$ | async) === item?.uniqueName ||
@@ -83,8 +83,8 @@
                                     class="list-item isAcc d-block"
                                     nav-vr-item
                                     id="acc_{{ item.name }}"
-                                    tooltip="{{ item.name }}"
-                                    placement="bottom"
+                                    [matTooltip]="item.name"
+                                    [matTooltipPosition]="'below'"
                                     (click)="onAccountClick(item, i)"
                                     [ngClass]="{
                                         'isActive':

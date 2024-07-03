@@ -146,6 +146,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
         let hasParticularSelected = this.lc.blankLedger.transactions?.filter(txn => txn?.particular);
         return (hasParticularSelected?.length) ? true : false;
     }
+    /** This will hold the file type extension for expand */
+    public fileTypeExtension: string = 'base64';
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -376,58 +378,81 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public hideExportDaybookModal(response: any) {
         this.modalDialogRef.close();
         if (response !== 'close') {
-            this.daybookQueryRequest.type = response.type;
-            this.daybookQueryRequest.format = response.fileType;
-            this.daybookQueryRequest.sort = response.order;
-            if (this.daybookExportRequestType === 'post') {
-                if (response.fileType === "csv") {
-                    let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
-                    exportBodyRequest.from = this.daybookQueryRequest.from;
-                    exportBodyRequest.to = this.daybookQueryRequest.to;
-                    exportBodyRequest.exportType = "DAYBOOK";
-                    exportBodyRequest.showVoucherNumber = response.showVoucherNumber;
-                    exportBodyRequest.showEntryVoucher = response.showEntryVoucher;
-                    exportBodyRequest.sort = response.order?.toUpperCase();
-                    exportBodyRequest.fileType = "CSV";
-                    exportBodyRequest.tagNames = this.searchFilterData?.tags;
-                    exportBodyRequest.includeTag = this.searchFilterData?.includeTag;
-                    this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                        if (response?.status === 'success') {
-                            if (typeof response?.body === "string") {
-                                this.toasterService.showSnackBar("success", response?.body);
-                                this.router.navigate(["/pages/downloads"]);
+            if ((response.type === 'admin-detailed' || response.type === 'view-detailed') || (response.type === 'admin-condensed' || response.type === 'view-condensed')) {
+                this.daybookQueryRequest.type = response.type;
+                this.daybookQueryRequest.format = response.fileType;
+                this.daybookQueryRequest.sort = response.order;
+                if (this.daybookExportRequestType === 'post') {
+                    if (response.fileType === "csv") {
+                        let exportBodyRequest: ExportBodyRequest = new ExportBodyRequest();
+                        exportBodyRequest.from = this.daybookQueryRequest.from;
+                        exportBodyRequest.to = this.daybookQueryRequest.to;
+                        exportBodyRequest.exportType = "DAYBOOK";
+                        exportBodyRequest.showVoucherNumber = response.showVoucherNumber;
+                        exportBodyRequest.showEntryVoucher = response.showEntryVoucher;
+                        exportBodyRequest.sort = response.order?.toUpperCase();
+                        exportBodyRequest.fileType = "CSV";
+                        exportBodyRequest.tagNames = this.searchFilterData?.tags;
+                        exportBodyRequest.includeTag = this.searchFilterData?.includeTag;
+                        this.ledgerService.exportData(exportBodyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                            if (response?.status === 'success') {
+                                if (typeof response?.body === "string") {
+                                    this.toasterService.showSnackBar("success", response?.body);
+                                    this.router.navigate(["/pages/downloads"]);
+                                } else {
+                                    let blob = this.generalService.base64ToBlob(response?.body?.encodedData, response?.queryString?.requestType, 512);
+                                    saveAs(blob, response?.body?.name);
+                                }
                             } else {
-                                let blob = this.generalService.base64ToBlob(response?.body?.encodedData, response?.queryString?.requestType, 512);
-                                saveAs(blob, response?.body?.name);
+                                this.toasterService.showSnackBar("error", response?.message);
                             }
-                        } else {
-                            this.toasterService.showSnackBar("error", response?.message);
-                        }
-                    });
-                } else {
-                    this.daybookService.ExportDaybookPost(this.searchFilterData, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                        });
+                    } else {
+                        this.daybookService.ExportDaybookPost(this.searchFilterData, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                            if (response?.status === 'success') {
+                                if (response?.body?.type === "message") {
+                                    this.toasterService.showSnackBar("success", response?.body?.file);
+                                } else {
+                                    let blob = this.generalService.base64ToBlob(response?.body?.file, response?.queryString?.requestType, 512);
+                                    let type = response?.queryString?.requestType === 'application/pdf' ? '.pdf' : '.xls';
+                                    saveAs(blob, 'Daybook' + type);
+                                }
+                            } else {
+                                this.toasterService.showSnackBar("error", response?.message);
+                            }
+                        });
+                    }
+                } else if (this.daybookExportRequestType === 'get') {
+                    this.daybookService.ExportDaybook(null, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                         if (response?.status === 'success') {
                             if (response?.body?.type === "message") {
                                 this.toasterService.showSnackBar("success", response?.body?.file);
                             } else {
                                 let blob = this.generalService.base64ToBlob(response?.body?.file, response?.queryString?.requestType, 512);
                                 let type = response?.queryString?.requestType === 'application/pdf' ? '.pdf' : '.xls';
-                                saveAs(blob, 'Daybook' + type);
+                                saveAs(blob, 'response' + type);
                             }
                         } else {
                             this.toasterService.showSnackBar("error", response?.message);
                         }
                     });
                 }
-            } else if (this.daybookExportRequestType === 'get') {
-                this.daybookService.ExportDaybook(null, this.daybookQueryRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            } else {
+                // for expanded option download
+                let exportBodyRequestObj: ExportBodyRequest = new ExportBodyRequest();
+                exportBodyRequestObj.from = this.daybookQueryRequest.from;
+                exportBodyRequestObj.to = this.daybookQueryRequest.to;
+                exportBodyRequestObj.fileType = this.fileTypeExtension;
+                exportBodyRequestObj.exportType = "ENTRIES_EXPORT";
+                let branchUniqueName = this.generalService.currentBranchUniqueName ? this.generalService.currentBranchUniqueName : this.currentBranch ? this.currentBranch?.uniqueName : "";
+                this.daybookService.exportDaybookExpandedPost(exportBodyRequestObj, branchUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success') {
-                        if (response?.body?.type === "message") {
-                            this.toasterService.showSnackBar("success", response?.body?.file);
+                        if (typeof response?.body === "string") {
+                            this.toasterService.showSnackBar("success", response?.body);
+                            this.router.navigate(["/pages/downloads"]);
                         } else {
-                            let blob = this.generalService.base64ToBlob(response?.body?.file, response?.queryString?.requestType, 512);
-                            let type = response?.queryString?.requestType === 'application/pdf' ? '.pdf' : '.xls';
-                            saveAs(blob, 'response' + type);
+                            let blob = this.generalService.base64ToBlob(response?.body?.encodedData, response?.queryString?.requestType, 512);
+                            saveAs(blob, response?.body?.name);
                         }
                     } else {
                         this.toasterService.showSnackBar("error", response?.message);
@@ -668,7 +693,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @param {ShSelectComponent} [shSelectElement]
      * @memberof DaybookComponent
      */
-    public toggleAsidePane(event?:any): void {
+    public toggleAsidePane(event?: any): void {
         if (event) {
             event.preventDefault();
         }
