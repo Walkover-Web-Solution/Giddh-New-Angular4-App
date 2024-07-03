@@ -399,6 +399,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public updateVoucherText: string = "";
     /** Holds purchase order details to put PO in PO list if not available */
     public purchaseOrderDetailsForEdit: any[] = [];
+    /** True if creating voucher from pending tab */
+    public isPendingEntries: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -557,7 +559,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
 
                 if (params?.accountUniqueName && queryParams?.entryUniqueNames) {
+                    this.isPendingEntries = true;
                     this.componentStore.getEntriesByEntryUniqueNames({ accountUniqueName: params?.accountUniqueName, payload: { entryUniqueNames: queryParams?.entryUniqueNames.split(",") } });
+                } else {
+                    this.isPendingEntries = false;
                 }
 
                 this.getCompanyProfile();
@@ -3295,7 +3300,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public generateVoucher(): void {
         this.invoiceForm.get('updateAccountDetails')?.patchValue(false);
-        this.saveVoucher();
+        if (this.isPendingEntries) {
+            this.saveVoucher(() => {
+                this.router.navigate(['/pages/invoice/preview/pending/sales']);
+            });
+        } else {
+            this.saveVoucher();
+        }
     }
 
     private redirectToGetAll(): void {
