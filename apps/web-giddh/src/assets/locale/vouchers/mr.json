@@ -59,7 +59,7 @@
     "adjust_amount": "रक्कम समायोजित करा",
     "product_service_description": "उत्पादन / सेवा वर्णन",
     "qty": "प्रमाण",
-    "generate_invoice": "उत्पन्न करा [INVOICE_TYPE]",
+    "generate_invoice": "चलन उत्पन्न करा",
     "update_invoice": "अद्यतनित करा [INVOICE_TYPE]",
     "and_update_acc": "खाते अद्यतनित करा",
     "create_send": "तयार करा आणि पाठवा",

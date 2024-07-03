@@ -59,7 +59,7 @@
     "adjust_amount": "राशि समायोजित करें",
     "product_service_description": "उत्पाद / सेवा विवरण",
     "qty": "मात्रा",
-    "generate_invoice": "उत्पन्न [INVOICE_TYPE]",
+    "generate_invoice": "उत्पन्न चालान",
     "update_invoice": "अपडेट करें [INVOICE_TYPE]",
     "and_update_acc": "& खाता अपडेट करें",
     "create_send": "बनाएँ और भेजें",
