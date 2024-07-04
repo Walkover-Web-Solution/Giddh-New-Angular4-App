@@ -767,6 +767,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 if (response?.purchaseOrderDetails?.length) {
                     this.purchaseOrderDetailsForEdit = response?.purchaseOrderDetails;
                     this.invoiceForm.get("linkedPo")?.patchValue(response?.purchaseOrderDetails?.map(po => { return po.uniqueName; }));
+                    this.selectedPoItems = this.invoiceForm.get("linkedPo")?.value;
                 }
 
                 this.getAccountDetails(response.account?.uniqueName);
@@ -791,6 +792,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                     this.invoiceForm.get("date").patchValue(response.date);
                     this.invoiceForm.get("dueDate").patchValue(response.dueDate);
+
+                    if (response.referenceVoucher) {
+                        this.creditDebitNoteInvoiceSelected({
+                            value: response.referenceVoucher.uniqueName,
+                            additional: {
+                                voucherType: response.referenceVoucher.voucherType,
+                                voucherNumber: response.referenceVoucher.number,
+                                voucherDate: response.referenceVoucher.date
+                            }
+                        });
+                    }
 
                     if (response.warehouse) {
                         this.invoiceForm.controls["warehouse"].get("name").patchValue(response.warehouse?.name);
