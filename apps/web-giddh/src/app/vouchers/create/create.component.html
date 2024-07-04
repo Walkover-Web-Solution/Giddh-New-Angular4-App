@@ -1783,7 +1783,6 @@
 
                                 <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4">
                                     <ng-container *ngIf="!isUpdateMode">
-
                                         <button mat-stroked-button (click)="resetVoucherForm()">{{ commonLocaleData?.app_clear }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isSalesInvoice && !isPendingEntries" (click)="updateAccountAndGenerateVoucher()">{{ localeData?.generate_sales_update_account }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isEstimateInvoice" (click)="generateVoucher()">{{ commonLocaleData?.app_create }}</button>
