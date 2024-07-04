@@ -104,4 +104,5 @@ export const INVENTORY_API = {
     CREATE_DISCOUNT: 'company/:companyUniqueName/customer-vendor-discount/stock/:stockUniqueName/assign-discount', // POST Call
     UPDATE_DISCOUNT: 'company/:companyUniqueName/customer-vendor-discount/stock/:stockUniqueName/variant/:variantUniqueName/update-discount', // Patch Call
     GET_STOCK_DETAILS: 'v2/company/:companyUniqueName/stock/:stockUniqueName/details?userType=:userType', // GET call
+    ADJUSTMENT_IREPORT: 'company/:companyUniqueName/inventory-adjustment/adjustment-report?page=:page&count=:count&sortBy=:sortBy&sort=:sort&q=:q&searchBy=:searchBy', // GET call
 };

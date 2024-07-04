@@ -18,7 +18,6 @@ import { InventoryComboListComponent } from "./component/combo-list/inventory-co
 import { AboutComboDetailComponent } from "./component/about-combo-detail/about-combo-detail.component";
 import { InventoryTransactionListComponent } from "./component/inventory-transaction-list/inventory-transaction-list.component";
 import { CreateCustomFieldComponent } from "./component/create-custom-field/create-custom-field.component";
-import { AdjustInventoryComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
 import { AsideAdjustInventoryComponent } from "./component/adjust-inventory-aside/adjust-inventory-aside.component";
 import { AdjustGroupComponent } from "./component/adjust-group/adjust-group.component";
 import { AdjustProductServiceComponent } from "./component/adjust-product-service/adjust-product-service.component";
@@ -86,6 +85,9 @@ import { BulkStockAdvanceFilterComponent } from "./component/bulk-stock-advance-
 import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 import { ExportInventoryMasterComponent } from "./component/export-inventory-master/export-inventory-master.component";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { AdjustInventroyComponent } from "./component/adjust-inventory/adjust-inventory.component";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { AdjustInventoryLisComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
 
 @NgModule({
     declarations: [
@@ -103,7 +105,8 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
         CreateComboComponent,
         InventoryTransactionListComponent,
         CreateCustomFieldComponent,
-        AdjustInventoryComponent,
+        AdjustInventroyComponent,
+        AdjustInventoryLisComponent,
         AsideAdjustInventoryComponent,
         AdjustGroupComponent,
         AdjustProductServiceComponent,
@@ -133,7 +136,8 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
         InventoryMasterComponent,
         BulkStockEditComponent,
         BulkStockAdvanceFilterComponent,
-        ExportInventoryMasterComponent
+        ExportInventoryMasterComponent,
+        AdjustInventroyComponent
     ],
     imports: [
         NewInventoryRoutingModule,
@@ -176,7 +180,8 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
         DragDropModule,
         CustomPriceModule,
         WatchVideoModule,
-        MatSlideToggleModule
+        MatSlideToggleModule,
+        MatExpansionModule
     ],
     exports: [
         NewInventoryComponent,
@@ -194,7 +199,8 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
         CreateComboComponent,
         InventoryTransactionListComponent,
         CreateCustomFieldComponent,
-        AdjustInventoryComponent,
+        AdjustInventroyComponent,
+        AdjustInventoryLisComponent,
         AsideAdjustInventoryComponent,
         AdjustGroupComponent,
         AdjustProductServiceComponent,
@@ -212,7 +218,8 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
         DashboardSellingReport,
         ReportFiltersComponent,
         MatDivider,
-        BulkStockAdvanceFilterComponent
+        BulkStockAdvanceFilterComponent,
+        AdjustInventroyComponent
     ]
 })
 export class NewInventoryModule { }

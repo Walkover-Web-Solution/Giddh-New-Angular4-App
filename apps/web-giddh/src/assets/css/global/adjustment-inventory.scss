@@ -1,0 +1,32 @@
+.adjustment {
+    .mat-expansion-panel {
+        .text-control-input {
+            width: 92px;
+        }
+
+        .table-border-none {
+            tr {
+                th {
+                    border-bottom-style: unset !important;
+                }
+
+                td {
+                    border-bottom-style: unset;
+                }
+            }
+
+        }
+
+        .select-input-field {
+            .mat-mdc-input-element {
+                width: 120px;
+                border-radius: 5px 0 0 5px;
+            }
+
+            .button-dropdown {
+                min-width: 0;
+                border-radius: 0 5px 5px 0;
+            }
+        }
+    }
+}

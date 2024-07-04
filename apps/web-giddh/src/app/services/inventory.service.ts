@@ -16,7 +16,8 @@ import {
     StockTransactionReportRequest,
     InventoryReportRequest,
     InventoryReportResponse,
-    CreateDiscount
+    CreateDiscount,
+    AdjustmentInventoryListResponse
 } from '../models/api-models/Inventory';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpWrapperService } from './http-wrapper.service';
@@ -1647,5 +1648,47 @@ export class InventoryService {
             data.queryString = {};
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '', {})));
+    }
+
+
+    public getAdjustmentInventoryReport(model: any): Observable<BaseResponse<any, any>> {
+        console.log(model);
+        this.companyUniqueName = this.generalService.companyUniqueName;
+
+        return this.http.post(this.config.apiUrl + INVENTORY_API.ADJUSTMENT_IREPORT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            // ?.replace(':from', encodeURIComponent(adjustmentInventoryReportRequest.from))
+            // ?.replace(':to', encodeURIComponent(adjustmentInventoryReportRequest.to))
+            ?.replace(':page', encodeURIComponent(model.page?.toString()))
+            ?.replace(':count', encodeURIComponent(model.count?.toString()))
+            ?.replace(':sortBy', encodeURIComponent(model.sortBy ? model.sortBy?.toString() : ''))
+            ?.replace(':sort', encodeURIComponent(model.sort ? model.sort?.toString() : ''))
+            ?.replace(':q', encodeURIComponent(model.q ? model.q?.toString() : ''))
+            ?.replace(':searchBy', encodeURIComponent(model.searchBy ? model.searchBy?.toString() : ''))
+            , model).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    data.queryString = {
+                        // from: model.from,
+                        // to: model.to,
+                        page: model.page,
+                        count: model.count,
+                        sortBy: model.sortBy,
+                        sort: model.sort,
+                        q: model.q,
+                        searchBy: model.searchBy
+
+                    };
+                    return data;
+                }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, {}, {
+                    // from: adjustmentInventoryReportRequest.from,
+                    // to: adjustmentInventoryReportRequest.to,
+                    page: model.page,
+                    count: model.count,
+                    sortBy: model.sortBy,
+                    sort: model.sort,
+                    q: model.q,
+                    searchBy: model.searchBy
+                })));
     }
 }

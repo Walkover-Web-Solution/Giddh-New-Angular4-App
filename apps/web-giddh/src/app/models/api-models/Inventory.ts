@@ -512,3 +512,40 @@ export class CreateDiscount {
         this.customerVendorGroupUniqueName = customerVendorGroupUniqueName;
     }
 }
+
+export class AdjustmentInventoryListResponse {
+    public count: number;
+    public page: number;
+    public totalItems: number;
+    public totalPages: number;
+    public results: InventorytAdjustmentReport[];
+}
+
+export class InventorytAdjustmentReport {
+    public date: string;
+    public refNo: string;
+    public reason: InventoryAdjustmentCommonUse;
+    public adjustmentMethod: string;
+    public entity: string;
+    public status: string;
+    public adjustedProduct: InventoryAdjustmentCommonUse;
+    public adjustedBy: InventoryAdjustmentCommonUse;
+    public failureReason: string;
+}
+
+export class InventoryAdjustmentCommonUse {
+    name: string;
+    uniqueName: string;
+}
+
+export class InventorytAdjustmentReportQueryRequest {
+    public q: string = '';
+    public from?: string = '';
+    public to?: string = '';
+    public page: number = 1;
+    public count: number = API_COUNT_LIMIT;
+    public sortBy: string = 'entityName';
+    public sort: 'asc' | 'desc' = 'asc';
+    public searchBy: string = '';
+}
+
