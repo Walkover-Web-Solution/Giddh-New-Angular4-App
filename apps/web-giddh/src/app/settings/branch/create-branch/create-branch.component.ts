@@ -250,11 +250,15 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         const requestObj = {
             name: formValue.name,
             alias: formValue.alias,
-            linkAddresses: formValue.address?.map(filteredAddress => ({
+            linkAddresses: []
+        };
+
+        if (formValue.address?.length) {
+            requestObj['linkAddresses'] = formValue.address.map(filteredAddress => ({
                 uniqueName: filteredAddress?.uniqueName,
                 isDefault: filteredAddress.isDefault
-            }))
-        };
+            }));
+        }
 
         this.settingsProfileService.createNewBranch(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -437,6 +441,8 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     private loadAddresses(method: string, params?: any): void {
         this.settingsProfileService.getCompanyAddresses(method, params).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.body && response.status === 'success') {
+                console.log(response);
+
                 this.addresses = this.settingsUtilityService.getFormattedCompanyAddresses(response.body.results).map(address => (
                     {
                         ...address,

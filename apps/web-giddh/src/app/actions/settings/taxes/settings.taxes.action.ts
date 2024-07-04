@@ -93,6 +93,14 @@ export class SettingsTaxesActions {
                     map(response => this.GetTaxListResponse(response)));
             })));
 
+    public GetTaxAuthorityList$: Observable<Action> = createEffect(() => this.action$
+    .pipe(
+        ofType(SETTINGS_TAXES_ACTIONS.GET_TAX_AUTHORITY),
+        switchMap((action: CustomActions) => {
+            return this.settingsTaxesService.GetTaxAuthorityList().pipe(
+                map(response => this.GetTaxAuthorityListResponse(response)));
+        })));
+
     constructor(private action$: Actions,
         private toasty: ToasterService,
         private localeService: LocaleService,
@@ -167,9 +175,22 @@ export class SettingsTaxesActions {
         };
     }
 
+    public GetTaxAuthorityList() {
+        return {
+            type: SETTINGS_TAXES_ACTIONS.GET_TAX_AUTHORITY,
+        };
+    }
+
     public GetTaxListResponse(value) {
         return {
             type: SETTINGS_TAXES_ACTIONS.GET_TAX_RESPONSE,
+            payload: value
+        };
+    }
+
+    public GetTaxAuthorityListResponse(value) {
+        return {
+            type: SETTINGS_TAXES_ACTIONS.GET_TAX_AUTHORITY_RESPONSE,
             payload: value
         };
     }

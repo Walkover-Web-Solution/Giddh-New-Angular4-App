@@ -291,7 +291,7 @@
                                                                         class="col-sm-12 col-md-6"
                                                                         *ngIf="
                                                                             shouldShowTrnGstVatField &&
-                                                                            (showGSTINNo || showTRNNo || showVATNo)
+                                                                            (showGSTINNo || showTRNNo || showVATNo || showSalesTaxNo)
                                                                         "
                                                                     >
                                                                         <input
@@ -320,6 +320,8 @@
                                                                                     ? commonLocaleData?.app_trn
                                                                                     : showVATNo
                                                                                     ? commonLocaleData?.app_enter_vat
+                                                                                    : showSalesTaxNo 
+                                                                                    ? commonLocaleData?.app_enter_sales_tax
                                                                                     : ''
                                                                             "
                                                                         />
@@ -328,11 +330,12 @@
                                                                     <div
                                                                         [ngClass]="{
                                                                             'col-sm-12 col-md-6':
-                                                                                showGSTINNo || showTRNNo || showVATNo,
+                                                                                showGSTINNo || showTRNNo || showVATNo || showSalesTaxNo,
                                                                             'col-sm-12 col-md-12': !(
                                                                                 showGSTINNo ||
                                                                                 showTRNNo ||
-                                                                                showVATNo
+                                                                                showVATNo ||
+                                                                                showSalesTaxNo
                                                                             )
                                                                         }"
                                                                     >
@@ -537,7 +540,7 @@
                                                                             class="col-sm-12 col-md-6"
                                                                             *ngIf="
                                                                                 shouldShowTrnGstVatField &&
-                                                                                (showGSTINNo || showTRNNo || showVATNo)
+                                                                                (showGSTINNo || showTRNNo || showVATNo || showSalesTaxNo)
                                                                             "
                                                                         >
                                                                             <input
@@ -565,6 +568,8 @@
                                                                                         ? commonLocaleData?.app_trn
                                                                                         : showVATNo
                                                                                         ? commonLocaleData?.app_enter_vat
+                                                                                        : showSalesTaxNo
+                                                                                        ? commonLocaleData?.app_enter_sales_tax
                                                                                         : ''
                                                                                 "
                                                                             />
@@ -575,11 +580,13 @@
                                                                                 'col-sm-12 col-md-6':
                                                                                     showGSTINNo ||
                                                                                     showTRNNo ||
-                                                                                    showVATNo,
+                                                                                    showVATNo ||
+                                                                                    showSalesTaxNo,
                                                                                 'col-sm-12 col-md-12': !(
                                                                                     showGSTINNo ||
                                                                                     showTRNNo ||
-                                                                                    showVATNo
+                                                                                    showVATNo ||
+                                                                                    showSalesTaxNo
                                                                                 )
                                                                             }"
                                                                         >
@@ -707,15 +714,15 @@
                                                                             {{
                                                                                 address.taxNumber
                                                                                     ? (showGSTINNo
-                                                                                          ? commonLocaleData?.app_gstin +
-                                                                                            ":"
+                                                                                          ? commonLocaleData?.app_gstin + ":"
                                                                                           : showTRNNo
-                                                                                          ? commonLocaleData?.app_trn +
-                                                                                            ":"
+                                                                                          ? commonLocaleData?.app_trn + ":"
                                                                                           : showVATNo
-                                                                                          ? commonLocaleData?.enter_vat_no +
-                                                                                            ":"
-                                                                                          : "") + address.gstNumber
+                                                                                          ? commonLocaleData?.app_enter_vat + ":"
+                                                                                          : showSalesTaxNo
+                                                                                          ? commonLocaleData?.app_enter_sales_tax + ":"
+                                                                                          : ""
+                                                                                        ) + address.gstNumber
                                                                                     : ""
                                                                             }}
                                                                         </a>
@@ -823,7 +830,7 @@
                                                                 class="col-sm-12 col-md-6"
                                                                 *ngIf="
                                                                     shouldShowTrnGstVatField &&
-                                                                    (showGSTINNo || showTRNNo || showVATNo)
+                                                                    (showGSTINNo || showTRNNo || showVATNo || showSalesTaxNo)
                                                                 "
                                                             >
                                                                 <input
@@ -848,6 +855,8 @@
                                                                             ? commonLocaleData?.app_trn
                                                                             : showVATNo
                                                                             ? commonLocaleData?.app_enter_vat
+                                                                            : showSalesTaxNo
+                                                                            ? commonLocaleData?.app_enter_sales_tax
                                                                             : ''
                                                                     "
                                                                 />
@@ -856,11 +865,12 @@
                                                             <div
                                                                 [ngClass]="{
                                                                     'col-sm-12 col-md-6':
-                                                                        showGSTINNo || showTRNNo || showVATNo,
+                                                                        showGSTINNo || showTRNNo || showVATNo || showSalesTaxNo,
                                                                     'col-sm-12 col-md-12': !(
                                                                         showGSTINNo ||
                                                                         showTRNNo ||
-                                                                        showVATNo
+                                                                        showVATNo ||
+                                                                        showSalesTaxNo
                                                                     )
                                                                 }"
                                                             >
@@ -957,16 +967,16 @@
                                                                             }}
                                                                             {{
                                                                                 address.taxNumber
-                                                                                    ? (showGSTINNo
-                                                                                          ? commonLocaleData?.app_gstin +
-                                                                                            ":"
-                                                                                          : showTRNNo
-                                                                                          ? commonLocaleData?.app_trn +
-                                                                                            ":"
-                                                                                          : showVATNo
-                                                                                          ? commonLocaleData?.enter_vat_no +
-                                                                                            ":"
-                                                                                          : "") + address.gstNumber
+                                                                                    ?   (showGSTINNo
+                                                                                            ? commonLocaleData?.app_gstin + ":"
+                                                                                            : showTRNNo
+                                                                                            ? commonLocaleData?.app_trn + ":"
+                                                                                            : showVATNo
+                                                                                            ? commonLocaleData?.app_enter_vat + ":"
+                                                                                            : showSalesTaxNo
+                                                                                            ? commonLocaleData?.app_enter_sales_tax + ":"
+                                                                                            : ""
+                                                                                        ) + address.gstNumber
                                                                                     : ""
                                                                             }}
                                                                         </a>
@@ -1079,7 +1089,7 @@
                                                                     class="col-sm-12 col-md-6"
                                                                     *ngIf="
                                                                         shouldShowTrnGstVatField &&
-                                                                        (showGSTINNo || showTRNNo || showVATNo)
+                                                                        (showGSTINNo || showTRNNo || showVATNo || showSalesTaxNo)
                                                                     "
                                                                 >
                                                                     <input
@@ -1107,6 +1117,8 @@
                                                                                 ? commonLocaleData?.app_trn
                                                                                 : showVATNo
                                                                                 ? commonLocaleData?.app_enter_vat
+                                                                                : showSalesTaxNo
+                                                                                ? commonLocaleData?.app_enter_sales_tax
                                                                                 : ''
                                                                         "
                                                                     />
@@ -1115,11 +1127,12 @@
                                                                 <div
                                                                     [ngClass]="{
                                                                         'col-sm-12 col-md-6':
-                                                                            showGSTINNo || showTRNNo || showVATNo,
+                                                                            showGSTINNo || showTRNNo || showVATNo || showSalesTaxNo,
                                                                         'col-sm-12 col-md-12': !(
                                                                             showGSTINNo ||
                                                                             showTRNNo ||
-                                                                            showVATNo
+                                                                            showVATNo ||
+                                                                            showSalesTaxNo
                                                                         )
                                                                     }"
                                                                 >

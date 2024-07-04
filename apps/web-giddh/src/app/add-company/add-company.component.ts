@@ -170,7 +170,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     /** List of counties of country */
     public countyList: IOption[] = [];
     /** List of registered business type countries */
-    public registeredTypeCountryList: any[] = ["IN", "GB", "AE", "ZW", "KE"];
+    public registeredTypeCountryList: any[] = ["IN", "GB", "AE", "ZW", "KE", "US"];
     /** This will hold disable State */
     public disabledState: boolean = false;
     /** Returns true if company created */

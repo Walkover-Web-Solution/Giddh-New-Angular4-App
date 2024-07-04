@@ -294,7 +294,7 @@ export const INVALID_STOCK_ERROR_MESSAGE = 'Both Unit and Rate fields are mandat
 
 /** Tax supported country codes */
 export const TAX_SUPPORTED_COUNTRIES = [
-    'QA', 'BH', 'AE', 'SA', 'OM', 'KW', 'GB', 'ZW', 'KE'
+    'QA', 'BH', 'AE', 'SA', 'OM', 'KW', 'GB', 'ZW', 'KE', 'US'
 ];
 
 /** VAT supported country codes */
@@ -305,6 +305,11 @@ export const VAT_SUPPORTED_COUNTRIES = [
 /** TRN supported country codes */
 export const TRN_SUPPORTED_COUNTRIES = [
     'QA', 'BH', 'AE', 'SA', 'OM', 'KW'
+];
+
+/** Sales tax supported country codes */
+export const SALES_TAX_SUPPORTED_COUNTRIES = [
+    'US'
 ];
 
 export const API_POSTMAN_DOC_URL = 'https://apidoc.giddh.com/';

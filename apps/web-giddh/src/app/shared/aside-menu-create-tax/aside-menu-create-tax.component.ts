@@ -13,6 +13,7 @@ import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import { SalesService } from '../../services/sales.service';
 import { cloneDeep } from '../../lodash-optimized';
 import { GeneralService } from '../../services/general.service';
+import { ITaxAuthority } from '../../models/interfaces/tax.interface';
 
 @Component({
     selector: 'aside-menu-create-tax-component',
@@ -32,6 +33,8 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     public tdsTcsTaxSubTypes: IOption[] = [];
     public allTaxes: IOption[] = [];
     public selectedTaxType: string = '';
+    /** Holds Default value for Tax Authority Dropdown value */
+    public selectedTaxAuthority: string = '';
     public checkIfTdsOrTcs: boolean = false;
     public days: IOption[] = [];
     public newTaxObj: TaxResponse = new TaxResponse();
@@ -49,7 +52,11 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     @Input() public otherTax: boolean;
     /** Observable for tax created successfully */
     public isTaxCreatedSuccessfully : boolean = false;
-
+    /** Holds true if active company  country is US */
+    public isUSCompany: boolean = false;
+    /** Holds true if active company  country is US */
+    public taxAuthorityList: IOption[] = [];
+ 
     constructor(
         private store: Store<AppState>,
         private _settingsTaxesActions: SettingsTaxesActions,
@@ -69,6 +76,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && activeCompany.countryV2) {
                 this.getTaxList(activeCompany.countryV2.alpha2CountryCode);
+                this.isUSCompany = activeCompany.countryV2.alpha2CountryCode === 'US';
             }
         });
 
@@ -85,6 +93,20 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
                     this.allTaxes = arr;
                 }
             });
+        
+        this.store
+        .pipe(select(p => p.company && p.company.taxAuthorities), takeUntil(this.destroyed$))
+        .subscribe(taxAuthorities => {
+            console.log("taxAuthorities", taxAuthorities);
+            if (taxAuthorities && taxAuthorities.length) {
+                let arr: IOption[] = [];
+                taxAuthorities.forEach(tax => {
+                    arr.push({ label: tax.name, value: tax?.uniqueName });
+                });
+                this.taxAuthorityList = arr;
+            }
+        });
+        this.store.dispatch(this._settingsTaxesActions.GetTaxAuthorityList());
 
         this.store
             .pipe(select(p => p.company && p.company.isTaxCreationInProcess), takeUntil(this.destroyed$))

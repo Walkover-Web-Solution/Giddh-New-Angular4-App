@@ -60,4 +60,22 @@ export class SettingsTaxesService {
             return data;
         }));
     }
+
+    /**
+     * Get Tax Authority List
+     *
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsTaxesService
+     */
+    public GetTaxAuthorityList(): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + COMPANY_API.GET_ALL_TAX_AUTHORITIES
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+        ).pipe(map((res) => {
+            console.log("In Service: ", res);
+            
+            let data: BaseResponse<any, any> = res;
+            return data;
+        }));
+    }
 }

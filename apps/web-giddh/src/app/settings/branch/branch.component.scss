@@ -328,6 +328,10 @@ button {
         }
     }
 }
+.popover-text {
+    position: static;
+    border: none;
+}
 
 @media (max-width: 375px) {
     .grey-color button.btn.btn-default {

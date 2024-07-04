@@ -1356,6 +1356,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.account.taxTypeLabel = this.commonLocaleData?.app_enter_vat;
             } else if (this.account.taxType === TaxType.TRN) {
                 this.account.taxTypeLabel = this.commonLocaleData?.app_trn;
+            } else if (this.account.taxType === TaxType.SALES_TAX) {
+                this.account.taxTypeLabel = this.commonLocaleData?.app_sales_tax;
             }
 
             this.getOnboardingForm(countryCode);
@@ -1380,6 +1382,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.company.taxTypeLabel = this.commonLocaleData?.app_enter_vat;
             } else if (this.company.taxType === TaxType.TRN) {
                 this.company.taxTypeLabel = this.commonLocaleData?.app_trn;
+            } else if (this.company.taxType === TaxType.SALES_TAX) {
+                this.company.taxTypeLabel = this.commonLocaleData?.app_sales_tax;
             }
 
             const onboardingFormRequest = {
@@ -2985,15 +2989,23 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public initIntl(): void {
+        let times = 0;
         const parentDom = document.querySelector('create');
         const input = document.getElementById('init-contact');
-        if (input) {
-            this.intlClass = new IntlPhoneLib(
-                input,
-                parentDom,
-                false
-            );
-        }
+        const interval = setInterval(() => {
+            times += 1;
+            if (input) {
+                clearInterval(interval);
+                this.intlClass = new IntlPhoneLib(
+                    input,
+                    parentDom,
+                    false
+                );
+            }
+            if (times > 25) {
+                clearInterval(interval);
+            }
+        }, 50);
     }
 
     /**

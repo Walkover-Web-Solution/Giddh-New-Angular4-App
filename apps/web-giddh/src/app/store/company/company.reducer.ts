@@ -6,6 +6,7 @@ import { CustomActions } from '../custom-actions';
 import * as dayjs from 'dayjs';
 import { IntegratedBankList, IRegistration } from "../../models/interfaces/registration.interface";
 import { DEFAULT_DATE_RANGE_PICKER_RANGES, UNAUTHORISED } from '../../app.constant';
+import { ITaxAuthority } from '../../models/interfaces/tax.interface';
 
 /**
  * Keeping Track of the CompanyState
@@ -25,6 +26,9 @@ export interface CurrentCompanyState {
     isGetAllIntegratedBankInProgress: boolean;
     integratedBankList: IntegratedBankList[];
     hasManageTaxPermission: boolean;
+    isTaxAuthoritiesLoading: boolean;
+    isGetTaxAuthoritiesSuccess: boolean;
+    taxAuthorities: ITaxAuthority[]
 }
 
 /**
@@ -58,7 +62,10 @@ const initialState: CurrentCompanyState = {
     isAccountInfoLoading: false,
     isTcsTdsApplicable: false,
     isGetAllIntegratedBankInProgress: false,
-    hasManageTaxPermission: false
+    hasManageTaxPermission: false,
+    isTaxAuthoritiesLoading: false,
+    isGetTaxAuthoritiesSuccess: false,
+    taxAuthorities: null
 };
 
 export function CompanyReducer(state: CurrentCompanyState = initialState, action: CustomActions): CurrentCompanyState {
@@ -88,6 +95,30 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
             }
             return Object.assign({}, state, {
                 isTaxesLoading: false
+            });
+        case CompanyActions.GET_TAX_AUTHORITY:
+            return Object.assign({}, state, {
+                isTaxAuthoritiesLoading: true,
+                isGetTaxAuthoritiesSuccess: false,
+                taxAuthorities: null
+            });
+        case CompanyActions.GET_TAX_AUTHORITY_RESPONSE:
+            let taxAuthorities: BaseResponse<TaxResponse[], string> = action.payload;
+            console.log("taxAuthorities Reducer", taxAuthorities);
+            if (taxAuthorities?.status === 'success') {
+                return Object.assign({}, state, {
+                    taxAuthorities: taxAuthorities.body,
+                    isTaxAuthoritiesLoading: false,
+                    isGetTaxAuthoritiesSuccess: true
+                });
+            } else if(taxes?.status === 'error' && taxes.statusCode === UNAUTHORISED) {
+                return Object.assign({}, state, {
+                    isTaxAuthoritiesLoading: false,
+                    isGetTaxAuthoritiesSuccess: false
+                });
+            }
+            return Object.assign({}, state, {
+                isTaxAuthoritiesLoading: false
             });
         case CompanyActions.SET_ACTIVE_COMPANY:
             return state;
