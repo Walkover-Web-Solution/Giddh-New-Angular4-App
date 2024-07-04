@@ -587,14 +587,18 @@
                                             [options]="vouchersListForCreditDebitNote$ | async"
                                             (selectedOption)="creditDebitNoteInvoiceSelected($event)"
                                             (onClear)="resetCreditDebitNoteSelectedInvoice()"
-                                            [enableDynamicSearch]="true" (dynamicSearchedQuery)="
+                                            [enableDynamicSearch]="true" 
+                                            (dynamicSearchedQuery)="
                                                 searchReferenceVoucher = $event;
                                                 resetVoucherListForCreditDebitNote();
                                                 getVoucherListForCreditDebitNote()
-                                            " [isPaginationEnabled]="true" (scrollEnd)="
-                                                !searchReferenceVoucher ? getVoucherListForCreditDebitNote() : ''
-                                            " [scrollableElementId]="'referenceVoucher'"
-                                            [readonly]="isEinvoiceGenerated">
+                                            " 
+                                            [isPaginationEnabled]="true" 
+                                            (scrollEnd)="!searchReferenceVoucher ? getVoucherListForCreditDebitNote() : ''" 
+                                            [scrollableElementId]="'referenceVoucher'"
+                                            [readonly]="isEinvoiceGenerated"
+                                            [labelValue]="invoiceForm.get('referenceVoucher.number')?.value"
+                                        >
                                             <ng-template #optionTemplate let-option="option">
                                                 <a *ngIf="option" href="javascript:void(0);" aria-label="option"
                                                     class="linking-item">
@@ -1663,10 +1667,11 @@
                                 <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4">
                                     <ng-container *ngIf="!isUpdateMode">
                                         <button mat-stroked-button (click)="resetVoucherForm()">{{ commonLocaleData?.app_clear }}</button>
-                                        <button mat-stroked-button color="primary" *ngIf="invoiceType.isSalesInvoice" (click)="updateAccountAndGenerateVoucher()">{{ localeData?.generate_sales_update_account }}</button>
+                                        <button mat-stroked-button color="primary" *ngIf="invoiceType.isSalesInvoice && !isPendingEntries" (click)="updateAccountAndGenerateVoucher()">{{ localeData?.generate_sales_update_account }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isEstimateInvoice" (click)="generateVoucher()">{{ commonLocaleData?.app_create }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isProformaInvoice" (click)="generateVoucher()">{{ commonLocaleData?.app_create }}</button>
-                                        <button mat-stroked-button color="primary" *ngIf="invoiceType.isSalesInvoice" (click)="generateVoucher()">{{ localeData?.generate_sales }}</button>
+                                        <button mat-stroked-button color="primary" *ngIf="invoiceType.isSalesInvoice && !isPendingEntries" (click)="generateVoucher()">{{ localeData?.generate_sales }}</button>
+                                        <button mat-stroked-button color="primary" *ngIf="isPendingEntries" (click)="generateVoucher()">{{ localeData?.generate_invoice }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isCashInvoice && !invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote" (click)="generateVoucher()">{{ localeData?.generate_cash }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isCashInvoice && invoiceType.isPurchaseInvoice" (click)="generateVoucher()">{{ localeData?.generate_cash_bill }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="!invoiceType.isCashInvoice && invoiceType.isCreditNote" (click)="updateAccountAndGenerateVoucher()">{{ localeData?.generate_cn_update_account }}</button>
