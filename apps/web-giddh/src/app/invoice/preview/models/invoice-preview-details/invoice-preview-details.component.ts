@@ -340,16 +340,26 @@ export class InvoicePreviewDetailsComponent implements OnInit, OnChanges, AfterV
     }
 
     public toggleEditMode() {
-        if (!this.showEditMode) {
-            this.selectedItemVoucher = this.selectedItem;
-        } else {
-            this.selectedItem = this.selectedItemVoucher;
-        }
-        this.store.dispatch(this.generalActions.setAppTitle('/pages/invoice/preview/' + this.voucherType));
-        this.showEditMode = !this.showEditMode;
+        if (this.voucherApiVersion === 1) { 
+            if (!this.showEditMode) {
+                this.selectedItemVoucher = this.selectedItem;
+            } else {
+                this.selectedItem = this.selectedItemVoucher;
+            }
+            this.store.dispatch(this.generalActions.setAppTitle('/pages/invoice/preview/' + this.voucherType));
+            this.showEditMode = !this.showEditMode;
 
-        if (this.searchElement && this.searchElement.nativeElement && this.searchElement.nativeElement.value) {
-            this.filterVouchers(this.searchElement.nativeElement.value);
+            if (this.searchElement && this.searchElement.nativeElement && this.searchElement.nativeElement.value) {
+                this.filterVouchers(this.searchElement.nativeElement.value);
+            }
+        } else {
+            if (this.voucherType === VoucherTypeEnum.generateEstimate) {
+                this.router.navigate(['/pages/vouchers/estimates/' + this.selectedItem?.account?.uniqueName + '/' + this.selectedItem?.voucherNumber + '/edit']);
+            } else if(this.voucherType === VoucherTypeEnum.generateProforma) {
+                this.router.navigate(['/pages/vouchers/proformas/' + this.selectedItem?.account?.uniqueName + '/' + this.selectedItem?.voucherNumber + '/edit']);
+            } else {
+                this.router.navigate(['/pages/vouchers/' + this.voucherType.toString().replace(/-/g, " ") + '/' + this.selectedItem?.account?.uniqueName + '/' + this.selectedItem?.uniqueName + '/edit']);
+            }
         }
     }
 

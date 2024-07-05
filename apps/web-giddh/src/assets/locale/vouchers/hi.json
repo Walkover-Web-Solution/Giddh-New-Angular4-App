@@ -10,7 +10,8 @@
         "estimate": "अनुमान",
         "cash_bill": "नकद बिल",
         "cash_credit_note": "कैश क्रेडिट नोट",
-        "cash_debit_note": "नकद डेबिट नोट"
+        "cash_debit_note": "नकद डेबिट नोट",
+        "purchase_order": "क्रय आदेश"
     },
     "customer_name": "ग्राहक का नाम",
     "enter_customer_name": "Enter Customer Name",
@@ -56,7 +57,7 @@
     "adjust_amount": "राशि समायोजित करें",
     "product_service_description": "उत्पाद / सेवा विवरण",
     "qty": "मात्रा",
-    "generate_invoice": "उत्पन्न [INVOICE_TYPE]",
+    "generate_invoice": "उत्पन्न चालान",
     "update_invoice": "अपडेट करें [INVOICE_TYPE]",
     "and_update_acc": "& खाता अपडेट करें",
     "create_send": "बनाएँ और भेजें",
@@ -144,5 +145,6 @@
     "expected_delivery": "अपेक्षित सुपुर्दगी",
     "vendor_name": "विक्रेता का नाम",
     "sales_as_receipt_voucher": "रसीद वाउचर के रूप में बिक्री",
-    "purchase_as_payment_voucher": "भुगतान वाउचर के रूप में खरीदारी करें"
+    "purchase_as_payment_voucher": "भुगतान वाउचर के रूप में खरीदारी करें",
+    "po_updated": "खरीद आदेश सफलतापूर्वक अपडेट किया गया"
 }

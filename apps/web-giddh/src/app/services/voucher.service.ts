@@ -12,7 +12,6 @@ import { PROFORMA_API } from "./apiurls/proforma.api";
 import { InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptResponse, Voucher, VoucherRequest } from "../models/api-models/recipt";
 import { VoucherTypeEnum } from "../models/api-models/Sales";
 import { RECEIPT_API } from "./apiurls/receipt.api";
-import { PURCHASE_RECORD_DATE_OPERATION, PURCHASE_RECORD_DUE_DATE_OPERATION, PURCHASE_RECORD_GRAND_TOTAL_OPERATION, PurchaseRecordAdvanceSearch } from "../purchase/purchase-record/constants/purchase-record.interface";
 import { CustomTemplateResponse } from "../models/api-models/Invoice";
 import { VouchersUtilityService } from "../vouchers/utility/vouchers.utility.service";
 import { SALES_API_V2, SALES_API_V4 } from "./apiurls/sales.api";
@@ -34,6 +33,12 @@ export class VoucherService {
 
     }
 
+    /**
+     * Get invoice settings
+     *
+     * @return {*}  {Observable<BaseResponse<InvoiceSetting, string>>}
+     * @memberof VoucherService
+     */
     public getInvoiceSettings(): Observable<BaseResponse<InvoiceSetting, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + INVOICE_API.SETTING_INVOICE?.replace(':companyUniqueName', this.companyUniqueName)).pipe(
@@ -44,6 +49,14 @@ export class VoucherService {
             catchError((e) => this.errorHandler.HandleCatch<InvoiceSetting, string>(e)));
     }
 
+    /**
+     * Get all proforma/estimate
+     *
+     * @param {ProformaFilter} request
+     * @param {string} voucherType
+     * @return {*}  {Observable<BaseResponse<ProformaResponse, ProformaFilter>>}
+     * @memberof VoucherService
+     */
     public getAllProformaEstimate(request: ProformaFilter, voucherType: string): Observable<BaseResponse<ProformaResponse, ProformaFilter>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.generalService.createQueryString(this.config.apiUrl + PROFORMA_API.getAll, {
@@ -63,23 +76,28 @@ export class VoucherService {
                 catchError((e) => this.errorHandler.HandleCatch<ProformaResponse, ProformaFilter>(e, request, { page: request.page, count: request.count, from: request.from, to: request.to, type: 'pdf' })));
     }
 
+    /**
+     * Get all vouchers
+     *
+     * @param {InvoiceReceiptFilter} body
+     * @param {string} type
+     * @return {*}  {Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>>}
+     * @memberof VoucherService
+     */
     public getAllVouchers(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        const requestPayload = (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? this.getPurchaseRecordPayload(body) : body;
-        const contextPath = (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? RECEIPT_API.GET_ALL_PURCHASE_RECORDS : RECEIPT_API.GET_ALL;
+        const requestPayload = body;
+        const contextPath = RECEIPT_API.GET_ALL;
         const requestParameter = {
             page: body?.page, count: body?.count, from: body?.from, to: body?.to, q: (body?.q) ? encodeURIComponent(body?.q) : body?.q, sort: body?.sort, sortBy: body?.sortBy
         };
 
-        if (this.generalService.voucherApiVersion === 2) {
-            delete body.from;
-            delete body.to;
-        }
+        delete body.from;
+        delete body.to;
 
         let url = this.vouchersUtilityService.createQueryString(this.config.apiUrl + contextPath, (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? requestParameter : { ...requestParameter, type });
-        if (this.generalService.voucherApiVersion === 2) {
-            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
-        }
+        url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+
         return this.http.post(url
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), requestPayload).pipe(
                 map((res) => {
@@ -92,51 +110,12 @@ export class VoucherService {
     }
 
     /**
-     * Mapper to map advance search request for Purchase Record
+     * Get list of all templates
      *
-     * @private
-     * @param {InvoiceReceiptFilter} request Request to be mapped
-     * @returns {PurchaseRecordAdvanceSearch} Request payload for purchase record advance search
-     * @memberof ReceiptService
+     * @param {*} voucherType
+     * @return {*}  {Observable<BaseResponse<CustomTemplateResponse[], string>>}
+     * @memberof VoucherService
      */
-    private getPurchaseRecordPayload(request: InvoiceReceiptFilter): PurchaseRecordAdvanceSearch {
-        let advanceSearchRequest: PurchaseRecordAdvanceSearch = new PurchaseRecordAdvanceSearch();
-        advanceSearchRequest.purchaseDate = request.invoiceDate;
-        if (request.invoiceDateEqual) {
-            advanceSearchRequest.purchaseDateOperation = PURCHASE_RECORD_DATE_OPERATION.ON;
-        } else if (request.invoiceDateAfter) {
-            advanceSearchRequest.purchaseDateOperation = PURCHASE_RECORD_DATE_OPERATION.AFTER;
-        } else if (request.invoiceDateBefore) {
-            advanceSearchRequest.purchaseDateOperation = PURCHASE_RECORD_DATE_OPERATION.BEFORE;
-        }
-        advanceSearchRequest.dueDate = request.dueDate;
-        if (request.dueDateEqual) {
-            advanceSearchRequest.dueDateOperation = PURCHASE_RECORD_DUE_DATE_OPERATION.ON;
-        } else if (request.dueDateAfter) {
-            advanceSearchRequest.dueDateOperation = PURCHASE_RECORD_DUE_DATE_OPERATION.AFTER;
-        } else if (request.dueDateBefore) {
-            advanceSearchRequest.dueDateOperation = PURCHASE_RECORD_DUE_DATE_OPERATION.BEFORE;
-        }
-        advanceSearchRequest.grandTotal = request.total;
-        if (request.totalEqual && request.totalMoreThan) {
-            advanceSearchRequest.grandTotalOperation = PURCHASE_RECORD_GRAND_TOTAL_OPERATION.GREATER_THAN_OR_EQUALS;
-        } else if (request.totalEqual && request.totalLessThan) {
-            advanceSearchRequest.grandTotalOperation = PURCHASE_RECORD_GRAND_TOTAL_OPERATION.LESS_THAN_OR_EQUALS;
-        } else if (request.totalEqual) {
-            advanceSearchRequest.grandTotalOperation = PURCHASE_RECORD_GRAND_TOTAL_OPERATION.EQUALS;
-        } else if (request.totalMoreThan) {
-            advanceSearchRequest.grandTotalOperation = PURCHASE_RECORD_GRAND_TOTAL_OPERATION.GREATER_THAN;
-        } else if (request.totalLessThan) {
-            advanceSearchRequest.grandTotalOperation = PURCHASE_RECORD_GRAND_TOTAL_OPERATION.LESS_THAN;
-        }
-
-        if (request.purchaseOrderNumber) {
-            advanceSearchRequest.purchaseOrderNumber = request.purchaseOrderNumber;
-        }
-
-        return advanceSearchRequest;
-    }
-
     public getAllCreatedTemplates(voucherType: any): Observable<BaseResponse<CustomTemplateResponse[], string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + INVOICE_API.GET_CREATED_TEMPLATES?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':voucherType', encodeURIComponent(voucherType))).pipe(map((res) => {
@@ -150,7 +129,7 @@ export class VoucherService {
      *
      * @param {*} requestObject Comma delimited string of group names or request object with param keys for the API in dynamic search
      * @returns {Observable<any>} Observable to carry out further operations
-     * @memberof SalesService
+     * @memberof VoucherService
      */
     public getBriefAccounts(params: any): Observable<any> {
         const companyUniqueName = this.generalService.companyUniqueName;
@@ -165,7 +144,7 @@ export class VoucherService {
      * @param {*} getRequestObject
      * @param {*} postRequestObject
      * @returns {Observable<BaseResponse<any, any>>}
-     * @memberof PurchaseOrderService
+     * @memberof VoucherService
      */
     public getVendorPurchaseOrders(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_ALL_PENDING;
@@ -181,6 +160,14 @@ export class VoucherService {
         return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
     }
 
+    /**
+     * Generate voucher
+     *
+     * @param {string} accountUniqueName
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
     public generateVoucher(accountUniqueName: string, model: any): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + SALES_API_V4.GENERATE_GENERIC_ITEMS;
@@ -199,6 +186,14 @@ export class VoucherService {
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 
+    /**
+     * Get voucher details
+     *
+     * @param {string} accountUniqueName
+     * @param {ReceiptVoucherDetailsRequest} model
+     * @return {*}  {Observable<BaseResponse<Voucher, ReceiptVoucherDetailsRequest>>}
+     * @memberof VoucherService
+     */
     public getVoucherDetails(accountUniqueName: string, model: ReceiptVoucherDetailsRequest): Observable<BaseResponse<Voucher, ReceiptVoucherDetailsRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + RECEIPT_API.GET_DETAILS_V4
@@ -219,13 +214,19 @@ export class VoucherService {
             catchError((e) => this.errorHandler.HandleCatch<Voucher, ReceiptVoucherDetailsRequest>(e, model, { accountUniqueName })));
     }
 
+    /**
+     * Sends voucher pdf on email
+     *
+     * @param {string} accountUniqueName
+     * @param {*} dataToSend
+     * @return {*}  {Observable<BaseResponse<string, string>>}
+     * @memberof VoucherService
+     */
     public sendVoucherOnEmail(accountUniqueName: string, dataToSend: any): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + INVOICE_API_2.SEND_INVOICE_ON_MAIL?.replace(':companyUniqueName', this.companyUniqueName)
             ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
-        if (this.generalService.voucherApiVersion === 2) {
-            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
-        }
+        url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         return this.http.post(url, dataToSend).pipe(map((res) => {
             let data: BaseResponse<string, string> = res;
             data.queryString = { accountUniqueName, dataToSend };
@@ -233,6 +234,14 @@ export class VoucherService {
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
     }
 
+    /**
+     * Sends proforma/estimate voucher pdf on email
+     *
+     * @param {ProformaGetRequest} request
+     * @param {string} voucherType
+     * @return {*}  {Observable<BaseResponse<string, ProformaGetRequest>>}
+     * @memberof VoucherService
+     */
     public sendProformaEstimateOnEmail(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + PROFORMA_API.mailProforma
@@ -268,9 +277,7 @@ export class VoucherService {
             ?.replace(':count', String(count))
             ?.replace(':number', encodeURIComponent((model.number || "")))
             ?.replace(':page', (model.page || 1));
-        if (this.generalService.voucherApiVersion === 2) {
-            contextPath = this.generalService.addVoucherVersion(contextPath, this.generalService.voucherApiVersion);
-        }
+        contextPath = this.generalService.addVoucherVersion(contextPath, this.generalService.voucherApiVersion);
         return this.http.post(this.config.apiUrl + contextPath, model
         ).pipe(catchError((error) => this.errorHandler.HandleCatch<any, any>(error, model)));
     }
@@ -281,7 +288,7 @@ export class VoucherService {
      * @param {*} getRequestObject
      * @param {*} postRequestObject
      * @returns {Observable<BaseResponse<any, any>>}
-     * @memberof PurchaseOrderService
+     * @memberof VoucherService
      */
     public getAllPendingPo(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
         let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_ALL_PENDING;
@@ -295,5 +302,91 @@ export class VoucherService {
         url = url?.replace(':sortBy', getRequestObject.sortBy);
 
         return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+    }
+
+    /**
+     * Get entries by entry unique name to convert pending entries to voucher
+     *
+     * @param {string} accountUniqueName
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public getEntriesByEntryUniqueNames(accountUniqueName: string, model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + INVOICE_API_2.PREVIEW_VOUCHERS_V4?.replace(':companyUniqueName', this.companyUniqueName)?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+        url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    /**
+     * Updates voucher
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public updateVoucher(model: any): Observable<BaseResponse<any, any>> {
+        let accountUniqueName = model.account?.uniqueName;
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + SALES_API_V4.UPDATE_VOUCHER?.replace(':companyUniqueName', this.companyUniqueName)?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+        
+        url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        return this.http.put(url, model)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = model;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    /**
+     * This will get the purchase order
+     *
+     * @param {*} getRequestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public getPurchaseOrder(poUniqueName: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET;
+        url = url?.replace(':companyUniqueName', this.companyUniqueName);
+        url = url?.replace(':poUniqueName', poUniqueName);
+
+        return this.http.get(url).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, poUniqueName)));
+    }
+
+    /**
+     * This will get the estimate/proforma details
+     *
+     * @param {*} request
+     * @param {string} voucherType
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public getEstimateProforma(request: any, voucherType: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + PROFORMA_API.base
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':vouchers', voucherType)
+            ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
+            request
+        ).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.queryString = voucherType;
+                data.request = request;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
     }
 }

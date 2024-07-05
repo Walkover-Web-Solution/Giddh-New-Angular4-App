@@ -263,7 +263,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         let totalIncome = this.amountSettings.baseCurrencySymbol + " " + this.currencyPipe.transform(this.totalIncome) + "/-";
         let totalExpense = this.amountSettings.baseCurrencySymbol + " " + this.currencyPipe.transform(this.totalExpense) + "/-";
         let label = [totalIncome, totalExpense];
-        let data = [this.totalIncome, this.totalExpense]
+        let data = [this.totalIncome, this.totalExpense];
 
         this.chart?.destroy();
 
@@ -303,7 +303,6 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
                 },
                 responsive: true,
                 maintainAspectRatio: false,
-                spacing: 1,
                 cutout: 50,
                 radius: '95%'
             }

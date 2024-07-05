@@ -415,7 +415,7 @@ var app = new Vue({
                     apiBaseUrl = 'https://apitest.giddh.com/';
                     break;
                 case 'giddh.com':
-                case 'books.giddh.com':
+                case 'app.giddh.com':
                     apiBaseUrl = 'https://api.giddh.com/';
                     break;
                 default:
