@@ -399,6 +399,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public updateVoucherText: string = "";
     /** Holds purchase order details to put PO in PO list if not available */
     public purchaseOrderDetailsForEdit: any[] = [];
+    /** True if creating voucher from pending tab */
+    public isPendingEntries: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -557,7 +559,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
 
                 if (params?.accountUniqueName && queryParams?.entryUniqueNames) {
+                    this.isPendingEntries = true;
                     this.componentStore.getEntriesByEntryUniqueNames({ accountUniqueName: params?.accountUniqueName, payload: { entryUniqueNames: queryParams?.entryUniqueNames.split(",") } });
+                } else {
+                    this.isPendingEntries = false;
                 }
 
                 this.getCompanyProfile();
@@ -737,6 +742,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 if (response?.purchaseOrderDetails?.length) {
                     this.purchaseOrderDetailsForEdit = response?.purchaseOrderDetails;
                     this.invoiceForm.get("linkedPo")?.patchValue(response?.purchaseOrderDetails?.map(po => { return po.uniqueName; }));
+                    this.selectedPoItems = this.invoiceForm.get("linkedPo")?.value;
                 }
 
                 this.getAccountDetails(response.account?.uniqueName);
@@ -761,6 +767,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                     this.invoiceForm.get("date").patchValue(response.date);
                     this.invoiceForm.get("dueDate").patchValue(response.dueDate);
+
+                    if (response.referenceVoucher) {
+                        this.creditDebitNoteInvoiceSelected({
+                            value: response.referenceVoucher.uniqueName,
+                            additional: {
+                                voucherType: response.referenceVoucher.voucherType,
+                                voucherNumber: response.referenceVoucher.number,
+                                voucherDate: response.referenceVoucher.date
+                            }
+                        });
+                    }
 
                     if (response.warehouse) {
                         this.invoiceForm.controls["warehouse"].get("name").patchValue(response.warehouse?.name);
@@ -3295,7 +3312,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public generateVoucher(): void {
         this.invoiceForm.get('updateAccountDetails')?.patchValue(false);
-        this.saveVoucher();
+        if (this.isPendingEntries) {
+            this.saveVoucher(() => {
+                this.router.navigate(['/pages/invoice/preview/pending/sales']);
+            });
+        } else {
+            this.saveVoucher();
+        }
     }
 
     private redirectToGetAll(): void {
