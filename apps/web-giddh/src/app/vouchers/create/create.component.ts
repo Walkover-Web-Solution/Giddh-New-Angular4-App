@@ -2171,8 +2171,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 amountForCompany: [0]
             }),
             purchaseOrderItemMapping: this.formBuilder.group({
-                uniqueName: [''],
-                entryUniqueName: ['']
+                uniqueName: [entryData ? entryData?.purchaseOrderItemMapping?.uniqueName : ''],
+                entryUniqueName: [entryData ? entryData?.purchaseOrderItemMapping?.entryUniqueName : '']
             })
         });
     }
