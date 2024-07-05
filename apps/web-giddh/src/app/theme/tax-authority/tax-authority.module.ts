@@ -10,6 +10,8 @@ import { DatepickerWrapperModule } from '../../shared/datepicker-wrapper/datepic
 import { GiddhPageLoaderModule } from '../../shared/giddh-page-loader/giddh-page-loader.module';
 import { GiddhDateRangepickerModule } from '../giddh-daterangepicker/giddh-daterangepicker.module';
 import { TranslateDirectiveModule } from '../translate/translate.directive.module';
+import { HamburgerMenuModule } from '../../shared/header/components/hamburger-menu/hamburger-menu.module';
+import { TaxSidebarModule } from '../../shared/tax-sidebar/tax-sidebar.module';
 
 @NgModule({
     imports: [
@@ -22,7 +24,9 @@ import { TranslateDirectiveModule } from '../translate/translate.directive.modul
         GiddhDateRangepickerModule,
         DatepickerWrapperModule,
         GiddhPageLoaderModule,
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        HamburgerMenuModule,
+        TaxSidebarModule
     ],
     exports: [
         TaxAuthorityComponent,

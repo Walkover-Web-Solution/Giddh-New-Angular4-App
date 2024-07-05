@@ -1,7 +1,8 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
-import { BsModalRef } from 'ngx-bootstrap/modal';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'tax-authority',
@@ -29,16 +30,20 @@ export class TaxAuthorityComponent implements OnInit {
     public selectedDateRangeUi: any;
     /** Instance of bootstrap modal */
     public modalRef: BsModalRef;
-     /** Holds Obligations table data */
-     public tableDataSource: any[] = [];
-     /** Holds Obligations table columns */
-     public displayedColumns = ['start', 'end', 'due', 'status', 'action'];
-     /** True if API Call is in progress */
-     public isLoading: boolean;
-     /** This will hold the value out/in to open/close setting sidebar popup */
-     public asideGstSidebarMenuState: string = 'in';
+    /** Holds Obligations table data */
+    public tableDataSource: any[] = [];
+    /** Holds Obligations table columns */
+    public displayedColumns = ['start', 'end', 'due', 'status', 'action'];
+    /** True if API Call is in progress */
+    public isLoading: boolean;
+    /** This will hold the value out/in to open/close setting sidebar popup */
+    public asideGstSidebarMenuState: string = 'in';
 
-    constructor() { }
+    constructor(
+        private generalService: GeneralService,
+        private modalService: BsModalService,
+
+    ) { }
 
     /**
      * Lifecycle hook for initialization
@@ -46,6 +51,29 @@ export class TaxAuthorityComponent implements OnInit {
      * @memberof TaxAuthorityComponent
      */
     public ngOnInit(): void {
+        document.querySelector('body').classList.add('gst-sidebar-open');
+        this.getTaxAuthority();
+    }
+
+    /**
+    * Get Tax Authority API Call
+    *
+    * @memberof TaxAuthorityComponent
+    */
+    public getTaxAuthority(): void {
+
+    }
+
+    /**
+     * Lifecycle hook for destroy
+     *
+     * @memberof TaxAuthorityComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+        document.querySelector('body').classList.remove('gst-sidebar-open');
+        this.asideGstSidebarMenuState === 'out'
     }
 
 }

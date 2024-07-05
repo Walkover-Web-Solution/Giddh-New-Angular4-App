@@ -13,32 +13,12 @@
                 [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
     </div>
-    <div class="obligations pd-15">
+    <div class="tax-authority pd-15">
         <div class="container-fluid ml-0">
-            <div class="row align-items-center row-gap">
-                <div class="col flex-grow-0">
-                    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                        <input type="text" name="selectedDateRange"
-                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker" />
-                    </div>
-                </div>
-                <div class="col flex-grow-0">
-
-                </div>
-                <div class="col flex-grow-0">
-                    <dropdown-field [label]="commonLocaleData?.app_status" [options]="statusList"
-                        (selectedOption)="statusSelected($event)" [placeholder]="localeData?.select_status"
-                        [defaultValue]="commonLocaleData?.app_all"></dropdown-field>
-                </div>
-                <div class="col flex-grow-0" *ngIf="isCompanyMode && isMultipleBranch">
-                    <dropdown-field [label]="commonLocaleData?.app_branch" [options]="branchList"
-                        (selectedOption)="branchSelected($event)"
-                        [placeholder]="commonLocaleData?.app_select_branch"></dropdown-field>
-                </div>
-                <div class="col flex-grow-0">
+            <div class="row">
+                <div class="col-12 text-right">
                     <button mat-stroked-button color="primary" (click)="null">
-                        {{ commonLocaleData?.app_search }}</button>
+                        {{ commonLocaleData?.app_create + ' ' + commonLocaleData?.app_tax_authority }}</button>
                 </div>
             </div>
 
@@ -69,19 +49,3 @@
         </div>
     </div>
 </ng-container>
-
-<!-- Universal Date Picker  -->
-<ng-template #datepickerTemplate>
-    <div class="datepicker-modal">
-        <div class="modal-body">
-            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
-                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
-                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition">
-            </app-datepicker-wrapper>
-        </div>
-    </div>
-</ng-template>
