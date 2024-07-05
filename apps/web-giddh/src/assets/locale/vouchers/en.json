@@ -10,7 +10,8 @@
         "estimate": "Estimate",
         "cash_bill": "Cash Bill",
         "cash_credit_note": "Cash Credit Note",
-        "cash_debit_note": "Cash Debit Note"
+        "cash_debit_note": "Cash Debit Note",
+        "purchase_order": "Purchase Order"
     },
     "customer_name": "Customer Name",
     "enter_customer_name": "Enter Customer Name",
@@ -56,7 +57,7 @@
     "adjust_amount": "Adjust Amount",
     "product_service_description": "Product/Service Description",
     "qty": "Qty",
-    "generate_invoice": "Generate [INVOICE_TYPE]",
+    "generate_invoice": "Generate Invoice",
     "update_invoice": "Update [INVOICE_TYPE]",
     "and_update_acc": "& Update A/c",
     "create_send": "Create & Send",
@@ -144,5 +145,6 @@
     "expected_delivery": "Expected Delivery",
     "vendor_name": "Vendor Name",
     "sales_as_receipt_voucher": "Sales as Receipt Voucher",
-    "purchase_as_payment_voucher": "Purchase as Payment Voucher"
+    "purchase_as_payment_voucher": "Purchase as Payment Voucher",
+    "po_updated": "Purchase order updated succesfully"
 }

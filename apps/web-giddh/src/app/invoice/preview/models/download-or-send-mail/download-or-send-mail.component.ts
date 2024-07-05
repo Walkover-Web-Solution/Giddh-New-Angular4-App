@@ -98,7 +98,9 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-
+        this.selectedVoucherType = this.selectedVoucher?.voucherType;
+        this.accountUniqueName = this.selectedVoucher?.accountUniqueName || this.selectedVoucher.account?.uniqueName;
+        
         if(this.voucherApiVersion === 2 && ![VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma].includes(this.selectedVoucher?.voucherType)) {
             this.invoiceType.push('Original');
 
@@ -254,7 +256,11 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit, OnDestroy {
     }
 
     public editVoucher() {
-        this._router.navigate(['/pages/proforma-invoice/invoice', this.selectedVoucherType, this.accountUniqueName, this.selectedInvoiceNo], { queryParams:  { uniqueName: this.selectedVoucherUniqueName } } );
+        if (this.voucherApiVersion === 2) {
+            this._router.navigate(['/pages/vouchers/' + this.selectedVoucherType?.toString()?.replace(/-/g, " ") + '/' + this.accountUniqueName + '/' + this.selectedVoucherUniqueName + '/edit'], { queryParams: { redirect: this._router.url } } );
+        } else {
+            this._router.navigate(['/pages/proforma-invoice/invoice', this.selectedVoucherType, this.accountUniqueName, this.selectedInvoiceNo], { queryParams:  { uniqueName: this.selectedVoucherUniqueName } } );
+        }
     }
 
     /**

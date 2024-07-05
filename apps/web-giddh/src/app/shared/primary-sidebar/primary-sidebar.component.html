@@ -218,30 +218,32 @@
                                                         >
                                                             <i [ngClass]="item.icon"></i>
                                                             {{ item?.label }}
-                                                            <ng-container *ngIf="!(item?.additional?.createNew?.queryParams?.addVendor || item?.additional?.createNew?.queryParams?.addCustomer)">
-                                                                <strong 
-                                                                    class="ml-auto" 
-                                                                    *ngIf="item?.additional?.createNew" 
-                                                                    (click)="$event.stopPropagation()" 
-                                                                    [routerLink]="[item?.additional?.createNew?.link]"
-                                                                    [queryParams]="item?.additional?.createNew?.queryParams"
-                                                                >
-                                                                {{ item?.additional?.createNew?.label }}
-                                                                </strong>
-                                                            </ng-container>
-                                                            <ng-container *ngIf="(item?.additional?.createNew?.queryParams?.addVendor || item?.additional?.createNew?.queryParams?.addCustomer)">
-                                                                <strong 
-                                                                class="ml-auto" 
-                                                                (click)="
-                                                                    $event.stopPropagation();
-                                                                    selectedGroupForCreateAccount = 
-                                                                    item?.additional?.createNew?.queryParams?.addCustomer
-                                                                    ? 'sundrydebtors'
-                                                                    : 'sundrycreditors';
-                                                                    toggleAccountAsidePane()"
-                                                                >
+                                                            <ng-container *ngIf="currentOrganizationType === 'BRANCH'">
+                                                                <ng-container *ngIf="!(item?.additional?.createNew?.queryParams?.addVendor || item?.additional?.createNew?.queryParams?.addCustomer)">
+                                                                    <strong 
+                                                                        class="ml-auto" 
+                                                                        *ngIf="item?.additional?.createNew" 
+                                                                        (click)="$event.stopPropagation()" 
+                                                                        [routerLink]="[item?.additional?.createNew?.link]"
+                                                                        [queryParams]="item?.additional?.createNew?.queryParams"
+                                                                    >
                                                                     {{ item?.additional?.createNew?.label }}
-                                                                </strong>
+                                                                    </strong>
+                                                                </ng-container>
+                                                                <ng-container *ngIf="(item?.additional?.createNew?.queryParams?.addVendor || item?.additional?.createNew?.queryParams?.addCustomer)">
+                                                                    <strong 
+                                                                    class="ml-auto" 
+                                                                    (click)="
+                                                                        $event.stopPropagation();
+                                                                        selectedGroupForCreateAccount = 
+                                                                        item?.additional?.createNew?.queryParams?.addCustomer
+                                                                        ? 'sundrydebtors'
+                                                                        : 'sundrycreditors';
+                                                                        toggleAccountAsidePane()"
+                                                                    >
+                                                                        {{ item?.additional?.createNew?.label }}
+                                                                    </strong>
+                                                                </ng-container>
                                                             </ng-container>
                                                 </div>
                                                     <div

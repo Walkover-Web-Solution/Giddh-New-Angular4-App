@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ReplaySubject, debounceTime, takeUntil } from 'rxjs';
+import { ReplaySubject, debounceTime, take, takeUntil } from 'rxjs';
 import { FormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
@@ -8,6 +8,7 @@ import { PAGINATION_LIMIT } from '../../app.constant';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { SubscriptionComponentStore } from '../utility/subscription.store';
 import { CompanyListDialogComponentStore } from './utility/company-list-dialog.store';
+import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 
 export interface CompanyRequest {
     page: number;
@@ -228,7 +229,32 @@ export class CompanyListDialogComponent implements OnInit {
             companyUniqueName: data.uniqueName,
             status: { archiveStatus: type }
         };
-        this.componentStore.archiveCompany(request);
+        this.openConfirmationDialog(request);
+    }
+
+    /**
+     * Open confirmation dialog for archive company
+     *
+     * @private
+     * @param {*} request
+     * @memberof CompanyListDialogComponent
+     */
+    private openConfirmationDialog(request: any): void {
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '540px',
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: this.localeData?.confirm_archive_message,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.componentStore.archiveCompany(request);
+            }
+        });
     }
 
     /**

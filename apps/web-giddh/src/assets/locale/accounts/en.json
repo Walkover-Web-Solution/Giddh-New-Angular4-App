@@ -77,5 +77,20 @@
     "export_group_ledger": "Export Group Ledger",
     "bank_details_error_message": "All the bank fields are mandatory if you provide data for any of them",
     "item_no": "Item #[ITEM_NO]",
-    "duplicate_email":"Duplicate email are not allowed"
+    "duplicate_email":"Duplicate email are not allowed",
+    "tax_number": "Tax Number",
+    "opening_balance_type": "Opening Balance Type",
+    "foreign_opening_balance_type": "Foreign Opening Balance Type",
+    "currency_title": "Currency",
+    "mobile_number": "Mobile Number",
+    "attention_to_master": "Attention to",
+    "remark": "Remark",
+    "address": "Address",
+    "pin_code": "Pin Code",
+    "bank_name": "Bank Name",
+    "bank_account_number": "Bank Account Number",
+    "ifsc_code": "IFSC Code",
+    "beneficiary_name": "Beneficiary Name",
+    "branch_name": "Branch Name",
+    "swift_code": "Swift Code"
 }
