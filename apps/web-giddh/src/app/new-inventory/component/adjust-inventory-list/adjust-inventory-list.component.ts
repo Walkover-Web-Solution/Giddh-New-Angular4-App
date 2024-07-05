@@ -30,7 +30,7 @@ export class AdjustInventoryLisComponent implements OnInit {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will use for table heading */
-    public displayedColumns: string[] = ['companyName', 'billingAccountName', 'subscriberName', 'countryName', 'planName', 'status', 'renewalDate'];
+    public displayedColumns: string[] = ['referenceNo', 'name', 'reason', 'status', 'ADJUSTED_BY', 'TYPE', 'DATE'];
     /** Hold the data of subscriptions */
     public dataSource: any;
     /** True if translations loaded */
@@ -75,21 +75,17 @@ export class AdjustInventoryLisComponent implements OnInit {
     public adjustInventoryListForm: FormGroup;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
     public showClearFilter: boolean = false;
-    /* True if billing account show */
-    public showBillingAccount = false;
-    /* True if  subscriber show */
-    public showSubscriber = false;
-    /* True if  country show */
-    public showCountry = false;
-    /* True if  name show */
-    public showName = false;
-    /* True if Plan Name show */
-    public showPlanSubName = false;
-    /* True if status show */
-    public showStatus = false;
-    /* True if duration show */
-    public showMonthlyYearly = false;
-    /* True if show header */
+    /* True if show Reason show */
+    public reason: boolean = false;
+    /* True if show Reference No show */
+    public referenceNo: boolean = false;
+    /* True if show Adjusted by show */
+    public adjustedBy: boolean = false;
+    /* True if show Status by show */
+    public status: boolean = false;
+    /* True if show Stock/Group Name show */
+    public name: boolean = false;
+    public inventoryType: 'stock' | 'group';
     public showData: boolean = true;
 
 
@@ -103,9 +99,9 @@ export class AdjustInventoryLisComponent implements OnInit {
     ) {
         this.adjustInventoryListRequest = new InventorytAdjustmentReportQueryRequest();
 
-     }
+    }
 
-    public ngOnInit(): void{
+    public ngOnInit(): void {
 
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
@@ -117,7 +113,7 @@ export class AdjustInventoryLisComponent implements OnInit {
                 this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 // this.branchTransferGetRequestParams.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 // this.branchTransferGetRequestParams.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                // this.getBranchTransferList(false);
+                this.getAllAdjusmentReports(false);
             }
         });
 
@@ -126,28 +122,24 @@ export class AdjustInventoryLisComponent implements OnInit {
 
         /** Get Discount List */
         this.adjustmentInventoryList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
             if (response) {
                 this.adjustmentInventoryList = response?.body?.results;
                 this.dataSource = new MatTableDataSource<any>(response?.body?.results);
-                if (this.dataSource?.filteredData?.length || this.adjustInventoryListForm?.controls['companyName']?.value ||
-                    this.adjustInventoryListForm?.controls['billingAccountName']?.value ||
-                    this.adjustInventoryListForm?.controls['subscriberName']?.value ||
-                    this.adjustInventoryListForm?.controls['countryName']?.value ||
-                    this.adjustInventoryListForm?.controls['planName']?.value ||
+                if (this.dataSource?.filteredData?.length || this.adjustInventoryListForm?.controls['referenceNo']?.value ||
+                    this.adjustInventoryListForm?.controls['name']?.value ||
                     this.adjustInventoryListForm?.controls['status']?.value ||
-                    this.adjustInventoryListForm?.controls['duration']?.value) {
+                    this.adjustInventoryListForm?.controls['reason']?.value) {
                     this.showData = true;
                 } else {
                     this.showData = false;
                 }
                 this.dataSource.paginator = this.paginator;
-                // this.adjustInventoryListRequestParams.totalItems = response?.body?.totalItems;
+                this.adjustInventoryListRequest.totalItems = response?.body?.totalItems;
             } else {
                 this.dataSource = new MatTableDataSource<any>([]);
                 this.adjustmentInventoryList = [];
                 this.showData = false;
-                // this.adjustInventoryListRequestParams.totalItems = 0;
+                this.adjustInventoryListRequest.totalItems = 0;
             }
         });
     }
@@ -159,13 +151,10 @@ export class AdjustInventoryLisComponent implements OnInit {
   */
     public initForm(): void {
         this.adjustInventoryListForm = this.formBuilder.group({
-            companyName: null,
-            billingAccountName: null,
-            subscriberName: null,
-            countryName: null,
-            planName: null,
-            status: null,
-            duration: null
+            referenceNo: null,
+            name: null,
+            reason: null,
+            status: null
         });
     }
 
@@ -174,7 +163,25 @@ export class AdjustInventoryLisComponent implements OnInit {
             this.adjustInventoryListRequest.page = 1;
         }
         this.componentStore.getAllAdjustmentInventoryReport(this.adjustInventoryListRequest);
+    }
 
+    /**
+ * This will be use for table sorting
+ *
+ * @param {*} event
+ * @memberof AdjustInventoryComponent
+ */
+    public sortChange(event: any): void {
+        this.adjustInventoryListRequest.sort = event?.direction ? event?.direction : 'asc';
+        this.adjustInventoryListRequest.sortBy = event?.active;
+        this.adjustInventoryListRequest.page = 1;
+        this.getAllAdjusmentReports(false);
+    }
+
+    public selectedInventoryType(inventoryType: string): void {
+        this.adjustInventoryListRequest.sortBy = inventoryType;
+        this.adjustInventoryListRequest.page = 1;
+        this.getAllAdjusmentReports(false);
     }
 
     /*datepicker funcation*/
@@ -229,13 +236,108 @@ export class AdjustInventoryLisComponent implements OnInit {
             document.querySelector('body').classList.remove('fixed');
         }
     }
+
     /* Create combo aside pane open function */
-    public adjustInventory(event?): void {
+    public addInventory(): void {
+
+    }
+
+    /**
+    * Callback for translation response complete
+    *
+    * @param {*} event
+    * @memberof SubscriptionComponent
+    */
+    public translationComplete(event: any): void {
         if (event) {
-            event.preventDefault();
+            this.translationLoaded = true;
+            this.changeDetection.detectChanges();
         }
-        this.asideMenuState = this.asideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
+    }
+
+
+    /**
+   * Returns the search field text
+   *
+   * @param {*} title
+   * @returns {string}
+   * @memberof SubscriptionComponent
+   */
+    public getSearchFieldText(title: any): string {
+        let searchField = this.localeData?.search_field;
+        searchField = searchField?.replace("[FIELD]", title);
+        return searchField;
+    }
+
+    /**
+     * Handles clicks outside the specified element for filtering in the SubscriptionComponent.
+     *
+     * @param event - The event triggered by the click.
+     * @param element - The element outside of which the click occurred.
+     * @param searchedFieldName - The name of the field being searched for.
+     * @memberof SubscriptionComponent
+     */
+    public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
+        console.log(event, element, searchedFieldName);
+        if (searchedFieldName === 'name') {
+            if (this.adjustInventoryListForm?.controls['name'].value !== null && this.adjustInventoryListForm?.controls['name'].value !== '') {
+                return;
+            }
+        } else if (searchedFieldName === 'reason') {
+            if (this.adjustInventoryListForm?.controls['reason'].value !== null && this.adjustInventoryListForm?.controls['reason'].value !== '') {
+                return;
+            }
+        } else if (searchedFieldName === 'status') {
+            if (this.adjustInventoryListForm?.controls['status'].value !== null && this.adjustInventoryListForm?.controls['status'].value !== '') {
+                return;
+            }
+        } else if (searchedFieldName === 'referenceNo') {
+            if (this.adjustInventoryListForm?.controls['referenceNo'].value !== null && this.adjustInventoryListForm?.controls['referenceNo'].value !== '') {
+                return;
+            }
+        }
+
+        if (this.generalService.childOf(event?.target, element)) {
+            return;
+        } else {
+            if (searchedFieldName === 'reason') {
+                this.reason = false;
+            } else if (searchedFieldName === 'referenceNo') {
+                this.referenceNo = false;
+            } else if (searchedFieldName === 'adjustedBy') {
+                this.adjustedBy = false;
+            } else if (searchedFieldName === 'name') {
+                this.name = false;
+            } else if (searchedFieldName === 'status') {
+                this.status = false;
+            }
+        }
+    }
+
+    /**
+     * This will be use for toggle search field
+     *
+     * @param {string} fieldName
+     * @param {*} el
+     * @memberof SubscriptionComponent
+     */
+    public toggleSearch(fieldName: string): void {
+        console.log(fieldName);
+        if (fieldName === 'reason') {
+            this.reason = true;
+        }
+        if (fieldName === 'referenceNo') {
+            this.referenceNo = true;
+        }
+        if (fieldName === 'adjustedBy') {
+            this.adjustedBy = true;
+        }
+        if (fieldName === 'name') {
+            this.name = true;
+        }
+        if (fieldName === 'status') {
+            this.status = true;
+        }
     }
 
 }

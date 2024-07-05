@@ -544,7 +544,9 @@ export class InventorytAdjustmentReportQueryRequest {
     public to?: string = '';
     public page: number = 1;
     public count: number = API_COUNT_LIMIT;
-    public sortBy: string = 'entityName';
+    public totalPages: number = 0;
+    public totalItems: number = 0;
+    public sortBy: string = '';
     public sort: 'asc' | 'desc' = 'asc';
     public searchBy: string = '';
 }

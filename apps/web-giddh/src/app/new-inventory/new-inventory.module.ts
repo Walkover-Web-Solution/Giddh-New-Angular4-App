@@ -88,6 +88,7 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { AdjustInventroyComponent } from "./component/adjust-inventory/adjust-inventory.component";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { AdjustInventoryLisComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
+import { MatPaginatorModule } from "@angular/material/paginator";
 
 @NgModule({
     declarations: [
@@ -181,7 +182,8 @@ import { AdjustInventoryLisComponent } from "./component/adjust-inventory-list/a
         CustomPriceModule,
         WatchVideoModule,
         MatSlideToggleModule,
-        MatExpansionModule
+        MatExpansionModule,
+        MatPaginatorModule
     ],
     exports: [
         NewInventoryComponent,
