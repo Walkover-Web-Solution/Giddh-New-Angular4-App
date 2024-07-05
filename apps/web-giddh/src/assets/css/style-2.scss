@@ -4783,7 +4783,6 @@ label {
     width: 100%;
     overflow-y: scroll;
     height: 100%;
-    padding-bottom: 180px;
 }
 
 .breadcrumbs {
@@ -6532,10 +6531,6 @@ typeahead-container .dropdown-menu li.active>a>a:hover {
     color: var(--color-common-secondary-text);
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-
-.ledger-row:hover {
-    background-color: var(--color-table-row-hover-secondary-background);
 }
 
 .ledg-head table td.pd-r25 {

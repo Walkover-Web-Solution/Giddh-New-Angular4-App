@@ -86,4 +86,30 @@ export class DaybookService {
         }),
             catchError((e) => this.errorHandler.HandleCatch<DayBookResponseModel, DayBookRequestModel>(e, request)));
     }
+
+    /**
+     * For Export Daybook expanded
+     * @param request 
+     * @param branchUniqueName 
+     * @memberof DaybookService 
+     */
+    public exportDaybookExpandedPost(request: any, branchUniqueName: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + DAYBOOK_SEARCH_API.ENTRIES_EXPORT
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':output', request.fileType?.toString());
+        if (branchUniqueName) {
+            branchUniqueName = branchUniqueName !== this.companyUniqueName ? branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${branchUniqueName}`);
+        }
+        let reqObj = request;
+        delete request.fileType;
+        return this.http.post(url, request).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.queryString = request;
+            data.request = reqObj;
+            return data;
+        }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
+    }
 }

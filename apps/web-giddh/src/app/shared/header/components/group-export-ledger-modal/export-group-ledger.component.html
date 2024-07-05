@@ -19,113 +19,133 @@
         </div>
         <div class="modal-body mr-b4" id="export-body">
             <form name="addShareEmailForm" novalidate autocomplete="off">
-                <div class="pd-b3 clearfix">
-                    <div class="form-inline">
-                        <div class="form-group">
-                            <label class="w100 justify-content-start">{{ commonLocaleData?.app_date_range }}: </label>
-                            <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                                <input
-                                    type="text"
-                                    name="selectedDateRange"
-                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                    class="giddh-datepicker date-range-picker"
-                                />
+                <mat-radio-group color="primary" name="exportType" [(ngModel)]="exportType" class="mr-b15">
+                    <mat-radio-button id="ledger-entries" [value]="'ledger'">{{ localeData?.ledger_entries }}</mat-radio-button>
+                    <mat-radio-button id="account" [value]="'account'">{{ localeData?.account }}</mat-radio-button>
+                </mat-radio-group>
+
+                <ng-container *ngIf="exportType === 'ledger'">
+                    <div class="pd-b3">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label class="w100 justify-content-start">{{ commonLocaleData?.app_date_range }}: </label>
+                                <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                                    <input
+                                        type="text"
+                                        name="selectedDateRange"
+                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                        class="giddh-datepicker date-range-picker"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div
-                    class="pd-b2 clearfix d-flex"
-                    [hidden]="emailTypeSelected === 'columnar' || emailTypeSelected === 'billToBill'"
-                >
-                    <label class="w100 d-sm-inline-flex d-flex">{{ commonLocaleData?.app_export_as }}: </label>
-                    <mat-radio-group color="primary" name="fileType" [(ngModel)]="fileType">
-                        <mat-radio-button id="csv" [value]="'CSV'">{{ commonLocaleData?.app_csv }}</mat-radio-button>
-                        <mat-radio-button id="excel" [value]="'XLSX'">{{
-                            commonLocaleData?.app_excel
-                        }}</mat-radio-button>
-                    </mat-radio-group>
-                </div>
-                <div class="pd-b2 clearfix">
-                    <label class="w125">{{ commonLocaleData?.app_order }}:</label>
-                    <label class="radio-inline p-0">
-                        <mat-slide-toggle color="primary" name="sort" [(ngModel)]="exportRequest.sort">
-                            <span class="pull-left">{{
-                                exportRequest.sort ? commonLocaleData?.app_ascending : commonLocaleData?.app_descending
-                            }}</span>
-                        </mat-slide-toggle>
-                    </label>
-                </div>
-                <div class="pd-b2 clearfix">
-                    <label class="w125">{{ commonLocaleData?.app_voucher_type }}:</label>
-                    <label class="radio-inline p-0">
-                        <mat-slide-toggle
-                            color="primary"
-                            name="showEntryVoucherNo"
-                            [(ngModel)]="exportRequest.showEntryVoucherNo"
-                        >
-                            <span class="pull-left">{{
-                                exportRequest.showEntryVoucherNo ? commonLocaleData?.app_yes : commonLocaleData?.app_no
-                            }}</span>
-                        </mat-slide-toggle>
-                    </label>
-                </div>
-                <div class="pd-b2 clearfix">
-                    <label class="w125">{{ commonLocaleData?.app_voucher_no }}:</label>
-                    <label class="radio-inline p-0">
-                        <mat-slide-toggle
-                            color="primary"
-                            name="showVoucherNumber"
-                            [(ngModel)]="exportRequest.showVoucherNumber"
-                        >
-                            <span class="pull-left">{{
-                                exportRequest.showVoucherNumber ? commonLocaleData?.app_yes : commonLocaleData?.app_no
-                            }}</span>
-                        </mat-slide-toggle>
-                    </label>
-                </div>
-                <div class="pd-b2 clearfix">
-                    <label class="w125">{{ localeData?.voucher_total }}:</label>
-                    <label class="radio-inline p-0">
-                        <mat-slide-toggle
-                            color="primary"
-                            name="showVoucherTotal"
-                            [(ngModel)]="exportRequest.showVoucherTotal"
-                        >
-                            <span class="pull-left">{{
-                                exportRequest.showVoucherTotal ? commonLocaleData?.app_yes : commonLocaleData?.app_no
-                            }}</span>
-                        </mat-slide-toggle>
-                    </label>
-                </div>
-                <div class="pd-b2 clearfix">
-                    <label class="w125">{{ localeData?.entry_no }}:</label>
-                    <label class="radio-inline p-0">
-                        <mat-slide-toggle
-                            color="primary"
-                            name="showEntryVoucher"
-                            [(ngModel)]="exportRequest.showEntryVoucher"
-                        >
-                            <span class="pull-left">{{
-                                exportRequest.showEntryVoucher ? commonLocaleData?.app_yes : commonLocaleData?.app_no
-                            }}</span>
-                        </mat-slide-toggle>
-                    </label>
-                </div>
-                <div class="pd-b2 clearfix">
-                    <label class="w125">{{ localeData?.description }}:</label>
-                    <label class="radio-inline p-0">
-                        <mat-slide-toggle
-                            color="primary"
-                            name="showDescription"
-                            [(ngModel)]="exportRequest.showDescription"
-                        >
-                            <span class="pull-left">{{
-                                exportRequest.showDescription ? commonLocaleData?.app_yes : commonLocaleData?.app_no
-                            }}</span>
-                        </mat-slide-toggle>
-                    </label>
-                </div>
+                    <div
+                        class="pd-b2 clearfix d-flex"
+                        [hidden]="emailTypeSelected === 'columnar' || emailTypeSelected === 'billToBill'"
+                    >
+                        <label class="w100 d-sm-inline-flex d-flex">{{ commonLocaleData?.app_export_as }}: </label>
+                        <mat-radio-group color="primary" name="fileType" [(ngModel)]="fileType">
+                            <mat-radio-button id="csv" [value]="'CSV'">{{ commonLocaleData?.app_csv }}</mat-radio-button>
+                            <mat-radio-button id="excel" [value]="'XLSX'">{{
+                                commonLocaleData?.app_excel
+                            }}</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <div class="pd-b2">
+                        <label class="w125">{{ commonLocaleData?.app_order }}:</label>
+                        <label class="radio-inline p-0">
+                            <mat-slide-toggle color="primary" name="sort" [(ngModel)]="exportRequest.sort">
+                                <span class="pull-left">{{
+                                    exportRequest.sort ? commonLocaleData?.app_ascending : commonLocaleData?.app_descending
+                                }}</span>
+                            </mat-slide-toggle>
+                        </label>
+                    </div>
+                    <div class="pd-b2">
+                        <label class="w125">{{ commonLocaleData?.app_voucher_type }}:</label>
+                        <label class="radio-inline p-0">
+                            <mat-slide-toggle
+                                color="primary"
+                                name="showEntryVoucherNo"
+                                [(ngModel)]="exportRequest.showEntryVoucherNo"
+                            >
+                                <span class="pull-left">{{
+                                    exportRequest.showEntryVoucherNo ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                }}</span>
+                            </mat-slide-toggle>
+                        </label>
+                    </div>
+                    <div class="pd-b2">
+                        <label class="w125">{{ commonLocaleData?.app_voucher_no }}:</label>
+                        <label class="radio-inline p-0">
+                            <mat-slide-toggle
+                                color="primary"
+                                name="showVoucherNumber"
+                                [(ngModel)]="exportRequest.showVoucherNumber"
+                            >
+                                <span class="pull-left">{{
+                                    exportRequest.showVoucherNumber ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                }}</span>
+                            </mat-slide-toggle>
+                        </label>
+                    </div>
+                    <div class="pd-b2">
+                        <label class="w125">{{ localeData?.voucher_total }}:</label>
+                        <label class="radio-inline p-0">
+                            <mat-slide-toggle
+                                color="primary"
+                                name="showVoucherTotal"
+                                [(ngModel)]="exportRequest.showVoucherTotal"
+                            >
+                                <span class="pull-left">{{
+                                    exportRequest.showVoucherTotal ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                }}</span>
+                            </mat-slide-toggle>
+                        </label>
+                    </div>
+                    <div class="pd-b2">
+                        <label class="w125">{{ localeData?.entry_no }}:</label>
+                        <label class="radio-inline p-0">
+                            <mat-slide-toggle
+                                color="primary"
+                                name="showEntryVoucher"
+                                [(ngModel)]="exportRequest.showEntryVoucher"
+                            >
+                                <span class="pull-left">{{
+                                    exportRequest.showEntryVoucher ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                }}</span>
+                            </mat-slide-toggle>
+                        </label>
+                    </div>
+                    <div class="pd-b2">
+                        <label class="w125">{{ localeData?.description }}:</label>
+                        <label class="radio-inline p-0">
+                            <mat-slide-toggle
+                                color="primary"
+                                name="showDescription"
+                                [(ngModel)]="exportRequest.showDescription"
+                            >
+                                <span class="pull-left">{{
+                                    exportRequest.showDescription ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                }}</span>
+                            </mat-slide-toggle>
+                        </label>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="exportType === 'account'">
+                    <div class="account-dialog">
+                        <p class="pb-3">
+                            {{ commonLocaleData?.app_note }} :
+                            <span [innerHTML]="commonLocaleData.app_export_note">
+                              {{ localeData?.export_note }}
+                            </span>
+                          </p>
+                          <master-export-option
+                            (exportFormMaster) = "exportFormValue = $event"
+                          ></master-export-option>
+                    </div>
+                </ng-container>
                 <button class="btn-success btn min-width-100" (click)="exportLedger()">
                     {{ commonLocaleData?.app_export }}
                 </button>

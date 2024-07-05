@@ -10,7 +10,8 @@
         "estimate": "अंदाज",
         "cash_bill": "रोख बिल",
         "cash_credit_note": "रोख क्रेडिट नोट",
-        "cash_debit_note": "कॅश डेबिट नोट"
+        "cash_debit_note": "कॅश डेबिट नोट",
+        "purchase_order": "खरेदी ऑर्डर"
     },
     "customer_name": "ग्राहकाचे नाव",
     "enter_customer_name": "Enter Customer Name",
@@ -56,7 +57,7 @@
     "adjust_amount": "रक्कम समायोजित करा",
     "product_service_description": "उत्पादन / सेवा वर्णन",
     "qty": "प्रमाण",
-    "generate_invoice": "उत्पन्न करा [INVOICE_TYPE]",
+    "generate_invoice": "चलन उत्पन्न करा",
     "update_invoice": "अद्यतनित करा [INVOICE_TYPE]",
     "and_update_acc": "खाते अद्यतनित करा",
     "create_send": "तयार करा आणि पाठवा",
@@ -144,5 +145,6 @@
     "expected_delivery": "अपेक्षित वितरण",
     "vendor_name": "विक्रेता नाव",
     "sales_as_receipt_voucher": "पावती व्हाउचर म्हणून विक्री",
-    "purchase_as_payment_voucher": "पेमेंट व्हाउचर म्हणून खरेदी करा"
+    "purchase_as_payment_voucher": "पेमेंट व्हाउचर म्हणून खरेदी करा",
+    "po_updated": "खरेदी ऑर्डर यशस्वीरित्या अद्यतनित केले"
 }

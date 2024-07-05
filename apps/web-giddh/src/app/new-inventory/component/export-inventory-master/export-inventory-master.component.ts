@@ -13,7 +13,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./export-inventory-master.component.scss']
 })
 export class ExportInventoryMasterComponent implements OnInit {
-  /** Form Group for export  form */
+  /** Hold export form group value */
   public exportForm: FormGroup;
   /** True if api call in progress */
   public isLoading: boolean = false;
