@@ -216,6 +216,19 @@
                             <span>{{ localeData?.filing_status }}</span>
                         </a>
                     </li>
+                    <li *ngIf="isUSCompany">
+                        <a
+                            href="javascript:;"
+                            [routerLink]="['/pages/settings/manage-tax-authority']"
+                            class="d-block clearfix pd-r1"
+                            routerLinkActive
+                            #filingstatus="routerLinkActive"
+                            [class.active]="filingstatus.isActive"
+                        >
+                            <span><i class="icon-settings-cog"></i></span>
+                            <span>{{ localeData?.manage_tax_authority }}</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

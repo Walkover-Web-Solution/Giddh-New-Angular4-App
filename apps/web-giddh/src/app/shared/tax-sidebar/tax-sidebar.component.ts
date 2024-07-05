@@ -72,6 +72,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public isZimbabweCompany: boolean;
     /** True if active country is Kenya */
     public isKenyaCompany: boolean;
+    /** True if active country is US */
+    public isUSCompany: boolean;
     /** Holds active company information */
     public activeCompany: any;
 
@@ -105,6 +107,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 this.isUKCompany = activeCompany?.country === "United Kingdom";
                 this.isZimbabweCompany = activeCompany?.country === "Zimbabwe";
                 this.isKenyaCompany = activeCompany?.country === "Kenya";
+                this.isUSCompany = activeCompany.countryV2?.alpha2CountryCode === "US";
 
                 this.showGstMenus = false;
                 this.showTaxMenus = false;

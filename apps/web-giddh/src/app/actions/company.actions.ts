@@ -52,8 +52,6 @@ export class CompanyActions {
 
     public static GET_TAX = 'GroupTax';
     public static GET_TAX_RESPONSE = 'GroupTaxResponse';
-    public static GET_TAX_AUTHORITY = 'GroupTaxAuthority';
-    public static GET_TAX_AUTHORITY_RESPONSE = 'GroupTaxAuthorityResponse';
     public static USER_SELECTED_PLANS = 'USER_SELECTED_PLANS';
     public static CURRENT_COMPANY_CURRENCY = 'CURRENT_COMPANY_CURRENCY';
     public static USER_CAREATE_COMPANY = 'USER_CAREATE_COMPANY';

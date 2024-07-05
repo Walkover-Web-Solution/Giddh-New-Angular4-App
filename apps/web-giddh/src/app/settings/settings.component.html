@@ -107,6 +107,12 @@
                                     <setting-warehouse></setting-warehouse>
                                 </div>
                             </div>
+                            <div *ngIf="activeTab === 'manage-tax-authority'">
+                                <hamburger-menu [pageHeading]="localeData?.setting_manage_tax_authority"></hamburger-menu>
+                                <div class="setting-container">
+                                    <tax-authority></tax-authority>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

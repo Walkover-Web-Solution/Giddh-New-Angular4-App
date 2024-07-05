@@ -181,13 +181,19 @@ export class SettingsTaxesActions {
         };
     }
 
+    public resetTaxList(): CustomActions {
+        return {
+            type: SETTINGS_TAXES_ACTIONS.RESET_TAX_RESPONSE
+        };
+    }
+
     public GetTaxListResponse(value) {
         return {
             type: SETTINGS_TAXES_ACTIONS.GET_TAX_RESPONSE,
             payload: value
         };
     }
-
+    
     public GetTaxAuthorityListResponse(value) {
         return {
             type: SETTINGS_TAXES_ACTIONS.GET_TAX_AUTHORITY_RESPONSE,
@@ -195,9 +201,9 @@ export class SettingsTaxesActions {
         };
     }
 
-    public resetTaxList(): CustomActions {
+    public resetTaxAuthorityList(): CustomActions {
         return {
-            type: SETTINGS_TAXES_ACTIONS.RESET_TAX_RESPONSE
+            type: SETTINGS_TAXES_ACTIONS.RESET_TAX_AUTHORITY_RESPONSE
         };
     }
 }

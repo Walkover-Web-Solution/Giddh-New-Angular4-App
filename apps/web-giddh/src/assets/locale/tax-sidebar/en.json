@@ -19,5 +19,6 @@
     "with_held_setting": "With Held Setting",
     "add_vat": "Add VAT",
     "liability_report": "Liability Report",
-    "add_sales_tax": "Add Sales Tax"
+    "add_sales_tax": "Add Sales Tax",
+    "manage_tax_authority": "Manage Tax Authority"
 }

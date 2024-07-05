@@ -1,0 +1,87 @@
+<ng-container 
+    appTranslate 
+    [file]="'vat-report'" 
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu></hamburger-menu>
+    <div class="relative w-100">
+        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+            *ngIf="asideGstSidebarMenuState === 'in'">
+            <tax-sidebar (navigateEvent)="handleNavigation()"
+                (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
+                [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
+        </div>
+    </div>
+    <div class="obligations pd-15">
+        <div class="container-fluid ml-0">
+            <div class="row align-items-center row-gap">
+                <div class="col flex-grow-0">
+                    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                        <input type="text" name="selectedDateRange"
+                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker" />
+                    </div>
+                </div>
+                <div class="col flex-grow-0">
+
+                </div>
+                <div class="col flex-grow-0">
+                    <dropdown-field [label]="commonLocaleData?.app_status" [options]="statusList"
+                        (selectedOption)="statusSelected($event)" [placeholder]="localeData?.select_status"
+                        [defaultValue]="commonLocaleData?.app_all"></dropdown-field>
+                </div>
+                <div class="col flex-grow-0" *ngIf="isCompanyMode && isMultipleBranch">
+                    <dropdown-field [label]="commonLocaleData?.app_branch" [options]="branchList"
+                        (selectedOption)="branchSelected($event)"
+                        [placeholder]="commonLocaleData?.app_select_branch"></dropdown-field>
+                </div>
+                <div class="col flex-grow-0">
+                    <button mat-stroked-button color="primary" (click)="null">
+                        {{ commonLocaleData?.app_search }}</button>
+                </div>
+            </div>
+
+            <div class="mt-5" *ngIf="isLoading">
+                <giddh-page-loader></giddh-page-loader>
+            </div>
+            <div class="row mt-5" *ngIf="tableDataSource.length && !isLoading">
+                <div class="table-responsive">
+                    <table mat-table [dataSource]="tableDataSource" class="w-100">
+                        <ng-container matColumnDef="start">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ commonLocaleData?.app_start_date }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.start }}
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    </table>
+                    <section *ngIf="!tableDataSource?.length">
+                        <div class="no-data">
+                            <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>
+
+<!-- Universal Date Picker  -->
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition">
+            </app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

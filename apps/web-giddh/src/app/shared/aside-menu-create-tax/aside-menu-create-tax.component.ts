@@ -13,7 +13,6 @@ import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import { SalesService } from '../../services/sales.service';
 import { cloneDeep } from '../../lodash-optimized';
 import { GeneralService } from '../../services/general.service';
-import { ITaxAuthority } from '../../models/interfaces/tax.interface';
 
 @Component({
     selector: 'aside-menu-create-tax-component',
@@ -24,6 +23,8 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
     @Input() public tax: TaxResponse;
     @Input() public asidePaneState: string;
+    /** This holds dialog open from other tax or create voucher */
+    @Input() public otherTax: boolean;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -48,14 +49,14 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** This holds dialog open from other tax or create voucher */
-    @Input() public otherTax: boolean;
     /** Observable for tax created successfully */
     public isTaxCreatedSuccessfully : boolean = false;
     /** Holds true if active company  country is US */
     public isUSCompany: boolean = false;
     /** Holds true if active company  country is US */
     public taxAuthorityList: IOption[] = [];
+     /** Holds true if tax authority list is inprogress */
+    public isTaxAuthoritiesLoading$: Observable<any>;
  
     constructor(
         private store: Store<AppState>,
@@ -64,9 +65,11 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         private generalService: GeneralService
     ) {
         this.newTaxObj.date = dayjs().toDate();
+        this.isTaxAuthoritiesLoading$ = this.store.pipe(select(settingsStore => settingsStore.settings.isTaxAuthoritiesLoading), takeUntil(this.destroyed$));
     }
 
     ngOnInit() {
+        this.newTaxObj.taxAuthorityRequest = {uniqueName : ''};        
         for (let i = 1; i <= 31; i++) {
             this.days.push({ label: i?.toString(), value: i?.toString() });
         }
@@ -93,11 +96,10 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
                     this.allTaxes = arr;
                 }
             });
-        
+
         this.store
-        .pipe(select(p => p.company && p.company.taxAuthorities), takeUntil(this.destroyed$))
+        .pipe(select(p => p.settings && p.settings.taxAuthorities), takeUntil(this.destroyed$))
         .subscribe(taxAuthorities => {
-            console.log("taxAuthorities", taxAuthorities);
             if (taxAuthorities && taxAuthorities.length) {
                 let arr: IOption[] = [];
                 taxAuthorities.forEach(tax => {
@@ -239,7 +241,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         });
     }
 
-    public selectTax(event) {
+    public selectTax() {
         this.newTaxObj.tdsTcsTaxSubTypes = "";
         this.forceClear$ = observableOf({ status: true });
     }

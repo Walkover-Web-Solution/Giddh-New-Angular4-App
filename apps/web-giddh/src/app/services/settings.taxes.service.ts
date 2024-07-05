@@ -72,8 +72,6 @@ export class SettingsTaxesService {
         return this.http.get(this.config.apiUrl + COMPANY_API.GET_ALL_TAX_AUTHORITIES
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
         ).pipe(map((res) => {
-            console.log("In Service: ", res);
-            
             let data: BaseResponse<any, any> = res;
             return data;
         }));
