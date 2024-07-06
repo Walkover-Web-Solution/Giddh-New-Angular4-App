@@ -20,7 +20,7 @@ import { ReportsComponent } from "./component/reports/reports.component";
 import { CustomUnitsComponent } from "./component/custom-units/custom-units.component"
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
 import { BulkStockEditComponent } from "./component/bulk-stock-edit/bulk-stock-edit.component";
-import { AdjustInventoryLisComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
+import { AdjustInventoryListComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
 import { AdjustInventroyComponent } from "./component/adjust-inventory/adjust-inventory.component";
 
 const routes: Routes = [
@@ -107,7 +107,7 @@ const routes: Routes = [
     },
     {
         path: "adjust-inventory-list",
-        component: AdjustInventoryLisComponent,
+        component: AdjustInventoryListComponent,
     },
     {
         path: "adjust-inventory-group",
@@ -155,6 +155,10 @@ const routes: Routes = [
     },
     {
         path: "adjust-inventory",
+        component: AdjustInventroyComponent
+    },
+    {
+        path: "adjust-inventory/:refNo",
         component: AdjustInventroyComponent
     },
 ];

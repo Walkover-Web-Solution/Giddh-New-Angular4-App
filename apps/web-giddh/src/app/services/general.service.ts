@@ -2005,4 +2005,28 @@ export class GeneralService {
         // Construct the complete address string
         return `${address1} ${address2} ${address3} ${address4} ${address5}`.trim();
     }
+
+        public deleteInventoryAdjustAdjustConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
+
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: 'Yes',
+            color: 'primary'
+        },
+        {
+            text: 'No'
+        }];
+        const headerText: string = 'Confirmation';
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
+        return {
+            headerText,
+            headerCssClass,
+            messageText: 'Are you sure you want to delete this inventory adjustment?',
+            messageCssClass,
+            footerText: 'It will be deleted permanently and will no longer be accessible from any other module.',
+            footerCssClass,
+            buttons
+        };
+    }
 }

@@ -1,3 +1,49 @@
+$color-nero: var(--color-nero);
+$color-wild-sand: var(--color-wild-sand);
+$color-giddh-blue: var(--color-giddh-blue);
+
+.td-search-box {
+    padding: 0 0 0 10px !important;
+    display: flex;
+
+    .input-container {
+        position: relative;
+
+        input {
+            height: 36px;
+            width: 100%;
+            min-width: 0; // Adjust as needed
+            padding: 11px;
+            padding-right: 0;
+            color: $color-nero;
+            border: none;
+            background-color: $color-wild-sand;
+        }
+
+        i {
+            position: absolute;
+            right: 0;
+            top: 9px;
+        }
+    }
+
+    div {
+        display: flex;
+
+        i {
+            margin-top: 1px;
+            color: $color-giddh-blue;
+            padding: 0 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        span {
+            padding: 8px 0;
+        }
+    }
+}
 .adjust-inventory-list-page {
     h4 {
         font-size: var(--font-size-15);
@@ -12,59 +58,7 @@
     }
 }
 
-.td-search-box .input-container input {
-    min-height: 38px;
-    width: 100%;
-    padding: 8px;
-    padding-right: 40px;
-    border: 0px;
-}
 
-.td-search-box .input-container i {
-    position: absolute;
-    right: 0px;
-    top: 9px;
-}
-
-.td-search-box .input-container input {
-    height: 36px;
-    min-width: 100%;
-    padding: 11px;
-    padding-right: 0;
-    color: var(--color-nero);
-    border: none;
-    background-color: var(--color-wild-sand);
-}
-
-.td-search-box {
-    padding: 0 0 0 10px !important;
-}
-
- .td-search-box div i {
-     margin-top: 1px;
-     color: var(--color-giddh-blue);
-     padding-right: 8px;
-     cursor: pointer;
-     display: flex;
-     align-items: center;
-     padding-left: 8px;
- }
-
- .td-search-box div {
-     display: flex;
- }
-
-.td-search-box .input-container {
-    position: relative;
-}
-
-.td-search-box {
-    div {
-        span {
-            padding: 8px 0 8px 0px;
-        }
-    }
-}
 
 @media (max-width: 767px) {
     .giddh-table {

@@ -8,7 +8,21 @@
         <hamburger-menu [pageHeading]="'Adjust inventory'"></hamburger-menu>
     </div>
     <div class="container-fluid mr-t15 adjust-inventory-list-page">
-        <div class="d-flex justify-content-between adjust-inventory-header">
+        <div class="d-flex align-items-center column-gap1 adjust-inventory-header">
+            <div
+                *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                class="branch-width mr-0 float-left"
+            >
+            {{currentBranch | json}}
+                <dropdown-field
+                    [label]="commonLocaleData?.app_select_entity"
+                    [options]="currentCompanyBranches"
+                    width="100%"
+                    (selectedOption)="currentBranch.uniqueName = $event?.value; handleBranchChange($event)"
+                    [placeholder]="commonLocaleData?.app_select_entity"
+                    [defaultValue]="currentBranch?.alias"
+                ></dropdown-field>
+            </div>
             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
                 <input
                     type="text"
@@ -27,21 +41,21 @@
                     adjustInventoryListForm?.controls['status']?.value
                 "
                 mat-stroked-button
-                class="min160 mr-l1"
+                class="min160 mx-auto"
                 color="primary"
                 (click)="clearFilter()"
             >
                 {{ commonLocaleData?.app_clear }}
             </button>
-            <button id="add-adjustment-btn" mat-stroked-button color="primary" class="mr-0" (click)="addInventory()">
+            <button id="add-adjustment-btn" mat-stroked-button color="primary" class="ml-auto" (click)="addInventory()">
                 + Add Adjustment
             </button>
         </div>
-        <div *ngIf="adjustmentInventoryInProgress$ | async">
+        <div *ngIf="adjustInventoryInProgress$ | async">
             <giddh-page-loader></giddh-page-loader>
         </div>
         <div class="custom-field-list mr-t15">
-            <section *ngIf="showData && !(adjustmentInventoryInProgress$ | async)" class="mt-4">
+            <section *ngIf="showData && !(adjustInventoryInProgress$ | async)" class="mt-4">
                 <form
                     class="table-responsive"
                     name="adjustInventoryListForm"
@@ -166,33 +180,13 @@
                             <td mat-cell *matCellDef="let element">{{ element.adjustedBy?.name }}</td>
                         </ng-container>
 
-                        <!-- Adjustment Method Column -->
-                        <!-- <ng-container matColumnDef="TYPE">
-                            <th width="10%" mat-header-cell *matHeaderCellDef [matMenuTriggerFor]="inventoryTypeMenu">
-                                Type
-                                <i
-                                    class="fa fa-ellipsis-v ml-1 text-light-2 mt-1 cursor-pointer"
-                                    aria-hidden="true"
-                                ></i>
-                                       <mat-menu #inventoryTypeMenu="matMenu" xPosition="before">
-                                <button
-                                    class="no-box-shadow"
-                                    mat-menu-item
-                                    (click)="selectedInventoryType('STOCK')"
-                                >
-                                Stock
-                                </button>
-                                <button
-                                    class="no-box-shadow"
-                                    mat-menu-item
-                                   (click)="selectedInventoryType('STOCK_GROUP')"
-                                >
-                                Group
-                                </button>
-                            </mat-menu>
+                        <!-- Adjusted Method Column -->
+                        <ng-container matColumnDef="adjustmentMethod">
+                            <th width="20%" mat-header-cell *matHeaderCellDef class="td-search-box">
+                                Adjustment Method
                             </th>
-                            <td mat-cell *matCellDef="let element">{{ element?.entity }}</td>
-                        </ng-container> -->
+                            <td mat-cell *matCellDef="let element">{{ element.adjustmentMethod }}</td>
+                        </ng-container>
 
                         <!-- Type Column -->
                         <ng-container matColumnDef="TYPE">
@@ -218,17 +212,13 @@
                                     </span>
                                 </button>
                                 <mat-menu #beforeMenu="matMenu" xPosition="before">
-                                    <button
-                                        class="no-box-shadow"
-                                        mat-menu-item
-                                        (click)="editInventoryAdjustment(element)"
-                                    >
+                                    <button class="no-box-shadow" mat-menu-item (click)="editInventoryAdjust(element)">
                                         {{ commonLocaleData?.app_edit }}
                                     </button>
                                     <button
                                         class="no-box-shadow"
                                         mat-menu-item
-                                        (click)="deleteInventoryAdjustment(element)"
+                                        (click)="showdeleteInventoryAdjustAdjust(element)"
                                     >
                                         {{ commonLocaleData?.app_delete }}
                                     </button>
@@ -236,19 +226,21 @@
                             </td>
                         </ng-container>
 
-                        <tr  (clickOutside)="inlineSearch = null" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr
+                            (clickOutside)="inlineSearch = null"
+                            mat-header-row
+                            *matHeaderRowDef="displayedColumns"
+                        ></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
                 </form>
             </section>
-            <div class="no-data" *ngIf="!dataSource?.filteredData?.length && !(adjustmentInventoryInProgress$ | async)">
+            <div class="no-data" *ngIf="!dataSource?.filteredData?.length && !(adjustInventoryInProgress$ | async)">
                 <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
             </div>
             <div
                 class="pagination-wrapper justify-content-end"
-                *ngIf="
-                    adjustInventoryListRequest.totalItems > 20 && showData && !(adjustmentInventoryInProgress$ | async)
-                "
+                *ngIf="adjustInventoryListRequest.totalItems > 20 && showData && !(adjustInventoryInProgress$ | async)"
             >
                 <mat-paginator
                     (page)="handlePageChange($event)"

@@ -17,7 +17,7 @@ import {
     InventoryReportRequest,
     InventoryReportResponse,
     CreateDiscount,
-    AdjustmentInventoryListResponse
+    AdjustInventoryListResponse
 } from '../models/api-models/Inventory';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpWrapperService } from './http-wrapper.service';
@@ -1650,45 +1650,57 @@ export class InventoryService {
         }), catchError((e) => this.errorHandler.HandleCatch<any[], string>(e, '', {})));
     }
 
-
-    public getAdjustmentInventoryReport(model: any): Observable<BaseResponse<any, any>> {
-        console.log(model);
+    /**
+     * This will be use for get all adjustments inventory report
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public getAdjustmentInventoryReport(getParams: any): Observable<BaseResponse<any, any>> {
+        console.log(getParams);
         this.companyUniqueName = this.generalService.companyUniqueName;
 
-        return this.http.post(this.config.apiUrl + INVENTORY_API.ADJUSTMENT_IREPORT?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            // ?.replace(':from', encodeURIComponent(adjustmentInventoryReportRequest.from))
-            // ?.replace(':to', encodeURIComponent(adjustmentInventoryReportRequest.to))
-            ?.replace(':page', encodeURIComponent(model.page?.toString()))
-            ?.replace(':count', encodeURIComponent(model.count?.toString()))
-            ?.replace(':sortBy', encodeURIComponent(model.sortBy ? model.sortBy?.toString() : ''))
-            ?.replace(':sort', encodeURIComponent(model.sort ? model.sort?.toString() : ''))
-            ?.replace(':q', encodeURIComponent(model.q ? model.q?.toString() : ''))
-            ?.replace(':searchBy', encodeURIComponent(model.searchBy ? model.searchBy?.toString() : ''))
-            , model).pipe(
-                map((res) => {
-                    let data: BaseResponse<any, any> = res;
-                    data.request = '';
-                    data.queryString = {
-                        // from: model.from,
-                        // to: model.to,
-                        page: model.page,
-                        count: model.count,
-                        sortBy: model.sortBy,
-                        sort: model.sort,
-                        q: model.q,
-                        searchBy: model.searchBy
+        let url = this.config.apiUrl + INVENTORY_API.INVENTORY_ADJUSTMENT.REPORT;
+        url = url?.replace(":companyUniqueName", this.companyUniqueName);
+        // url = url?.replace(":from", getParams.from);
+        // url = url?.replace(":to", getParams.to);
+        url = url?.replace(":page", getParams.page);
+        url = url?.replace(":count", getParams.count);
+        url = url?.replace(":sortBy", getParams.sortBy ? getParams.sortBy?.toString() : '');
+        url = url?.replace(":sort", getParams.sort ? getParams.sort?.toString() : '');
+        url = url?.replace(":q", getParams.q ? getParams.q?.toString() : '');
+        url = url?.replace(":searchBy", getParams.q ? getParams.searchBy?.toString() : '');
+        if (getParams.branchUniqueName) {
+            const branchUniqueName = getParams.branchUniqueName !== this.companyUniqueName ? getParams.branchUniqueName : '';
+            url = url.concat(`&branchUniqueName=${encodeURIComponent(branchUniqueName)}`);
+        }
+        return this.http.post(url, {})
+            .pipe(map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = '';
+                data.queryString = {};
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, {})));
+    }
 
-                    };
-                    return data;
-                }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, {}, {
-                    // from: adjustmentInventoryReportRequest.from,
-                    // to: adjustmentInventoryReportRequest.to,
-                    page: model.page,
-                    count: model.count,
-                    sortBy: model.sortBy,
-                    sort: model.sort,
-                    q: model.q,
-                    searchBy: model.searchBy
-                })));
+    /**
+     * This will be use for delete inventory adjustment
+     *
+     * @param {string} referenceNo
+     * @return {*}  {Observable<BaseResponse<string, string>>}
+     * @memberof InventoryService
+     */
+    public deleteInventoryAdjust(referenceNo: string): Observable<BaseResponse<string, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.delete(this.config.apiUrl + INVENTORY_API.INVENTORY_ADJUSTMENT.DELETE
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':referenceNo', encodeURIComponent(referenceNo)
+            )).pipe(map((res) => {
+                let data: BaseResponse<string, string> = res;
+                data.request = '';
+                data.queryString = { referenceNo };
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '', { referenceNo })));
     }
 }

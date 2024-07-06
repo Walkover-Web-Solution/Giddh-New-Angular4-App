@@ -87,7 +87,7 @@ import { ExportInventoryMasterComponent } from "./component/export-inventory-mas
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { AdjustInventroyComponent } from "./component/adjust-inventory/adjust-inventory.component";
 import { MatExpansionModule } from "@angular/material/expansion";
-import { AdjustInventoryLisComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
+import { AdjustInventoryListComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
 import { MatPaginatorModule } from "@angular/material/paginator";
 
 @NgModule({
@@ -107,7 +107,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
         InventoryTransactionListComponent,
         CreateCustomFieldComponent,
         AdjustInventroyComponent,
-        AdjustInventoryLisComponent,
+        AdjustInventoryListComponent,
         AsideAdjustInventoryComponent,
         AdjustGroupComponent,
         AdjustProductServiceComponent,
@@ -202,7 +202,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
         InventoryTransactionListComponent,
         CreateCustomFieldComponent,
         AdjustInventroyComponent,
-        AdjustInventoryLisComponent,
+        AdjustInventoryListComponent,
         AsideAdjustInventoryComponent,
         AdjustGroupComponent,
         AdjustProductServiceComponent,

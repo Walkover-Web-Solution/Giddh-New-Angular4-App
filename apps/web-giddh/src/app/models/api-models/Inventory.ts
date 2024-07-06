@@ -513,7 +513,7 @@ export class CreateDiscount {
     }
 }
 
-export class AdjustmentInventoryListResponse {
+export class AdjustInventoryListResponse {
     public count: number;
     public page: number;
     public totalItems: number;
@@ -538,7 +538,7 @@ export class InventoryAdjustmentCommonUse {
     uniqueName: string;
 }
 
-export class InventorytAdjustmentReportQueryRequest {
+export class InventorytAdjustReportQueryRequest {
     public q: string = '';
     public from?: string = '';
     public to?: string = '';
@@ -549,5 +549,6 @@ export class InventorytAdjustmentReportQueryRequest {
     public sortBy: string = '';
     public sort: 'asc' | 'desc' = 'asc';
     public searchBy: string = '';
+    public branchUniqueName?: string;
 }
 
