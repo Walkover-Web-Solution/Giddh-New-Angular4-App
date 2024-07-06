@@ -12,6 +12,7 @@ import { GiddhDateRangepickerModule } from '../giddh-daterangepicker/giddh-dater
 import { TranslateDirectiveModule } from '../translate/translate.directive.module';
 import { HamburgerMenuModule } from '../../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { TaxSidebarModule } from '../../shared/tax-sidebar/tax-sidebar.module';
+import { CreateComponent } from './create/create.component';
 
 @NgModule({
     imports: [
@@ -30,7 +31,11 @@ import { TaxSidebarModule } from '../../shared/tax-sidebar/tax-sidebar.module';
     ],
     exports: [
         TaxAuthorityComponent,
+        CreateComponent
     ],
-    declarations: [TaxAuthorityComponent]
+    declarations: [
+        TaxAuthorityComponent,
+        CreateComponent
+    ]
 })
 export class TaxAuthorityModule { }

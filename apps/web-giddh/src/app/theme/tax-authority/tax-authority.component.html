@@ -1,6 +1,6 @@
 <ng-container 
     appTranslate 
-    [file]="'vat-report'" 
+    [file]="'tax-authority'" 
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
@@ -17,7 +17,7 @@
         <div class="container-fluid ml-0">
             <div class="row">
                 <div class="col-12 text-right">
-                    <button mat-stroked-button color="primary" (click)="null">
+                    <button mat-stroked-button color="primary" (click)="openCreateTaxAuthorityDialog()">
                         {{ commonLocaleData?.app_create + ' ' + commonLocaleData?.app_tax_authority }}</button>
                 </div>
             </div>
@@ -25,25 +25,56 @@
             <div class="mt-5" *ngIf="isLoading">
                 <giddh-page-loader></giddh-page-loader>
             </div>
-            <div class="row mt-5" *ngIf="tableDataSource.length && !isLoading">
+            <div class="row mt-5" *ngIf="(taxAuthorityList$ | async)?.length && !(isLoading$ | async)">
                 <div class="table-responsive">
-                    <table mat-table [dataSource]="tableDataSource" class="w-100">
-                        <ng-container matColumnDef="start">
+                    <table mat-table [dataSource]="taxAuthorityList$ | async" class="w-100">
+                        <!-- Name -->
+                        <ng-container matColumnDef="name">
                             <th mat-header-cell *matHeaderCellDef>
-                                {{ commonLocaleData?.app_start_date }}
+                                {{ commonLocaleData?.app_name }}
                             </th>
                             <td mat-cell *matCellDef="let element">
-                                {{ element?.start }}
+                                {{ element?.name }}
                             </td>
                         </ng-container>
+
+                         <!-- UniqueName -->
+                         <ng-container matColumnDef="uniqueName">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ commonLocaleData?.app_unique_name }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.uniqueName }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Description -->
+                        <ng-container matColumnDef="description">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ commonLocaleData?.app_description }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.description }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Action (Edit / Delete) -->
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ commonLocaleData?.app_action }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.uniqueName }}
+                            </td>
+                        </ng-container>
+
+
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
-                    <section *ngIf="!tableDataSource?.length">
-                        <div class="no-data">
-                            <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
-                        </div>
-                    </section>
+                    <div class="no-data" *ngIf="!(taxAuthorityList$ | async)?.length && !(isLoading$ | async)">
+                        <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
+                    </div>
                 </div>
             </div>
         </div>

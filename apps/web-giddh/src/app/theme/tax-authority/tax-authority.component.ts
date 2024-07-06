@@ -1,48 +1,48 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GeneralService } from '../../services/general.service';
+import { TaxAuthorityComponentStore } from './utility/tax-authority.store';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { CreateComponent } from './create/create.component';
 
 @Component({
     selector: 'tax-authority',
     templateUrl: './tax-authority.component.html',
-    styleUrls: ['./tax-authority.component.scss']
+    styleUrls: ['./tax-authority.component.scss'],
+    providers: [TaxAuthorityComponentStore]
 })
 export class TaxAuthorityComponent implements OnInit {
-    /** Directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** This will store selected date ranges */
-    public selectedDateRange: any;
-    /** This will store available date ranges */
-    public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /** Selected range label */
-    public selectedRangeLabel: any = "";
-    /** This will store the x/y position of the field to show datepicker under it */
-    public dateFieldPosition: any = { x: 0, y: 0 };
-    /** This will store selected date range to show on UI */
-    public selectedDateRangeUi: any;
-    /** Instance of bootstrap modal */
-    public modalRef: BsModalRef;
-    /** Holds Obligations table data */
-    public tableDataSource: any[] = [];
-    /** Holds Obligations table columns */
-    public displayedColumns = ['start', 'end', 'due', 'status', 'action'];
+    /** Holds table columns */
+    public displayedColumns = ['name', 'uniqueName', 'description', 'action'];
     /** True if API Call is in progress */
     public isLoading: boolean;
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
 
-    constructor(
-        private generalService: GeneralService,
-        private modalService: BsModalService,
+     /** Loading Observable */
+     public isLoading$: Observable<any> = this.componentStore.isLoading$;
+     /** Tax Authority List Observable */
+     public taxAuthorityList$: Observable<any> = this.componentStore.taxAuthorityList$;
+     /** Delete Tax Authority is success Observable */
+     public deleteTaxAuthorityIsSuccess$: Observable<any> = this.componentStore.deleteTaxAuthorityIsSuccess$;
+     /** Create Tax Authority is success Observable */
+     public createTaxAuthorityIsSuccess$: Observable<any> = this.componentStore.createTaxAuthorityIsSuccess$;
+     /** Update Tax Authority is success Observable */
+     public updateTaxAuthorityIsSuccess$: Observable<any> = this.componentStore.updateTaxAuthorityIsSuccess$;
 
+     private createTaxAuthorityDialogRef: MatDialogRef<any>;
+
+    constructor(
+        private componentStore: TaxAuthorityComponentStore,
+        private dialog: MatDialog
     ) { }
 
     /**
@@ -53,6 +53,44 @@ export class TaxAuthorityComponent implements OnInit {
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.getTaxAuthority();
+        this.subscribeAllStoreObservable();
+    }
+
+    /**
+     * Subscribe store Observable
+     *
+     * @private
+     * @memberof TaxAuthorityComponent
+     */
+    private subscribeAllStoreObservable(): void {
+        // Subscribe Tax Authority List
+        this.taxAuthorityList$.pipe(takeUntil(this.destroyed$)).subscribe( response => {
+            if(response) {
+                console.log("taxAuthorityList", response);
+            }
+        });
+
+        // Subscribe Create Tax Authority Success
+        this.createTaxAuthorityIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe( response => {
+            if(response) {
+                this.createTaxAuthorityDialogRef.close();
+                console.log("Create", response);
+            }
+        });
+
+        // Subscribe Update Tax Authority Success
+        this.updateTaxAuthorityIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe( response => {
+            if(response) {
+                console.log("Update", response);
+            }
+        });
+
+        // Subscribe Delete Tax Authority Success
+        this.deleteTaxAuthorityIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe( response => {
+            if(response) {
+                console.log("Delete", response);
+            }
+        });
     }
 
     /**
@@ -61,7 +99,24 @@ export class TaxAuthorityComponent implements OnInit {
     * @memberof TaxAuthorityComponent
     */
     public getTaxAuthority(): void {
+        this.componentStore.getTaxAuthorityList();
+    }
 
+    /**
+     * Open Create Tax Authority dialog
+     *
+     * @memberof TaxAuthorityComponent
+     */
+    public openCreateTaxAuthorityDialog(): void {
+        this.createTaxAuthorityDialogRef = this.dialog.open(CreateComponent,
+            {
+                width: 'var(--aside-pane-width)',
+                position: {
+                    top: '0',
+                    right: '0'
+                }
+            }
+        );
     }
 
     /**

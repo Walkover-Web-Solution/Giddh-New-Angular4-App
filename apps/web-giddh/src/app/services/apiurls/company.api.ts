@@ -20,7 +20,10 @@ export const COMPANY_API = {
     GET_DETAILED_REGISTERED_SALES: 'v2/company/:companyUniqueName/sales-register-detailed?',
 
     GET_ALL_TAXES: 'ui/taxes?country=:country',
+    CREATE_TAX_AUTHORITY: 'company/:companyUniqueName/tax/authority',
     GET_ALL_TAX_AUTHORITIES: 'company/:companyUniqueName/tax/authority',
+    UPDATE_TAX_AUTHORITY: 'company/:companyUniqueName/tax/authority/:uniqueName',
+    DELETE_TAX_AUTHORITY: 'company/:companyUniqueName//tax/authority/:uniqueName',
 
     GET_REGISTERED_PURCHASE: 'v2/company/:companyUniqueName/purchases-register-overview?from=:fromDate&to=:toDate&interval=:interval',
     GET_DETAILED_REGISTERED_PURCHASE: 'v2/company/:companyUniqueName/purchases-register-detailed?',

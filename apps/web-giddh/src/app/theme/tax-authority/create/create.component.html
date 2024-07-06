@@ -1,0 +1,13 @@
+<ng-container appTranslate [file]="'tax-authority'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+    <div>
+        <div class="dialog-header">
+            <span mat-dialog-title class="font-16">
+                {{ commonLocaleData?.app_create + ' ' + commonLocaleData?.app_tax_authority }}  
+            </span>
+            <i mat-dialog-close class="icon-cross"></i>
+        </div>
+        <div mat-dialog-content class="bulk-entry-body dialog-body d-flex">
+        </div>
+    </div>
+</ng-container>
