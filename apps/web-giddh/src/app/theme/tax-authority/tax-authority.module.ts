@@ -13,10 +13,12 @@ import { TranslateDirectiveModule } from '../translate/translate.directive.modul
 import { HamburgerMenuModule } from '../../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { TaxSidebarModule } from '../../shared/tax-sidebar/tax-sidebar.module';
 import { CreateComponent } from './create/create.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     imports: [
         CommonModule,
+        ReactiveFormsModule,
         PaginationModule.forRoot(),
         FormFieldsModule,
         MatButtonModule,

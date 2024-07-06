@@ -1,13 +1,46 @@
-<ng-container appTranslate [file]="'tax-authority'" (localeData)="localeData = $event"
+<ng-container appTranslate [file]="'settings/tax-authority'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
-    <div>
+    <div class="tax-authority h-100">
         <div class="dialog-header">
             <span mat-dialog-title class="font-16">
                 {{ commonLocaleData?.app_create + ' ' + commonLocaleData?.app_tax_authority }}  
             </span>
             <i mat-dialog-close class="icon-cross"></i>
         </div>
-        <div mat-dialog-content class="bulk-entry-body dialog-body d-flex">
+        <div mat-dialog-content class="tax-authority-body dialog-body">
+            <form [formGroup]="taxAuthorityForm">
+                <div class="grid-wrapper">
+                    <input-field
+                        [name]="'name'"
+                        [label]="commonLocaleData?.app_name"
+                        [placeholder]="commonLocaleData?.app_name_placeholder"
+                        [type]="'text'"
+                        [required]="true"
+                        formControlName="name"
+                    >
+                    </input-field>
+                    <dropdown-field
+                        [name]="'country'"
+                        [label]="commonLocaleData?.app_state"
+                        [placeholder]="localeData?.select_state"
+                        [required]="true"
+                        [options]="stateList"
+                        (selectedOption)="taxAuthorityForm.get('stateCode').patchValue($event?.value)"
+                    >
+                    </dropdown-field>
+                    <input-field
+                        [name]="'name'"
+                        [label]="commonLocaleData?.app_description"
+                        [placeholder]="localeData?.enter_description"
+                        [type]="'text'"
+                        formControlName="description"
+                    >
+                    </input-field>
+                </div>
+                <div class="mr-t3">
+                    <button mat-stroked-button color="primary" [disabled]="taxAuthorityForm.invalid" (click)="createTaxAuthority()">{{commonLocaleData?.app_create}}</button>
+                </div>
+            </form>
         </div>
     </div>
 </ng-container>

@@ -19,16 +19,15 @@ export interface TaxAuthorityState {
 const DEFAULT_STATE: TaxAuthorityState = {
     isLoading: false,
     taxAuthorityList: null,
-    createTaxAuthorityIsSuccess: false,
-    updateTaxAuthorityIsSuccess: false,
-    deleteTaxAuthorityIsSuccess: false
+    createTaxAuthorityIsSuccess: null,
+    updateTaxAuthorityIsSuccess: null,
+    deleteTaxAuthorityIsSuccess: null
 };
 
 @Injectable()
 export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState> {
 
     constructor(
-        private store: Store<AppState>,
         private toaster: ToasterService,
         private settingsTaxesService: SettingsTaxesService
     ) {
@@ -67,19 +66,46 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
         );
     });
 
-    readonly createTaxAuthority = this.effect((data: Observable<any>) => {
+    readonly getStateList = this.effect((data: Observable<void>) => {
         return data.pipe(
-            switchMap((req) => {
-                this.patchState({ isLoading: true, createTaxAuthorityIsSuccess: false });
-                return this.settingsTaxesService.CreateTaxAuthority(req).pipe(
+            switchMap(() => {
+                this.patchState({ isLoading: true });
+                return this.settingsTaxesService.GetTaxAuthorityList().pipe(
                     tapResponse(
                         (res: BaseResponse<ITaxAuthority[], any>) => {
                             return this.patchState({
-                                createTaxAuthorityIsSuccess: true
+                                taxAuthorityList: res?.body ?? [],
+                                isLoading: false
                             });
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                taxAuthorityList: [],
+                                isLoading: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly createTaxAuthority = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ createTaxAuthorityIsSuccess: null });
+                return this.settingsTaxesService.CreateTaxAuthority(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            this.toaster.showSnackBar("success", "Tax authority created successfully"); // Need to translate
+                            return this.patchState({
+                                createTaxAuthorityIsSuccess: true
+                            });
+                        },
+                        (error: any) => {                    
+                            this.toaster.showSnackBar("error", error?.error?.message);
                             return this.patchState({
                                 createTaxAuthorityIsSuccess: false
                             });
@@ -94,7 +120,7 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
     readonly updateTaxAuthority = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
-                this.patchState({ updateTaxAuthorityIsSuccess: false });
+                this.patchState({ updateTaxAuthorityIsSuccess: null });
                 return this.settingsTaxesService.UpdateTaxAuthority(req.model, req.uniqueName).pipe(
                     tapResponse(
                         (res: BaseResponse<ITaxAuthority[], any>) => {
@@ -118,7 +144,9 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
     readonly deleteTaxAuthority = this.effect((data: Observable<string>) => {
         return data.pipe(
             switchMap((req) => {
-                this.patchState({ deleteTaxAuthorityIsSuccess: false });
+                console.log("req", req);
+                
+                this.patchState({ deleteTaxAuthorityIsSuccess: null });
                 return this.settingsTaxesService.DeleteTaxAuthority(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
