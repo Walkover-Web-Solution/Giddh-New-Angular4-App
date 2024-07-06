@@ -592,7 +592,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public goToRoute(part: string, additionalParams: string = "", accUniqueName: string) {
-        let url = (this.generalService.voucherApiVersion === 2) ? "/pages/" + part : location.href + `?returnUrl=${part}/${accUniqueName}`;
+        let url = (this.generalService.voucherApiVersion === 2) ? `/pages/${part}/${accUniqueName}` : location.href + `?returnUrl=${part}/${accUniqueName}`;
         if (additionalParams) {
             url = `${url}${additionalParams}`;
         }
