@@ -550,7 +550,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public performActions(type: number, account: any, event?: any) {
         switch (type) {
             case 1: // go to ledger
-                this.goToRoute("ledger", `/${this.fromDate}/${this.toDate}`, account?.uniqueName);
+                this.goToRoute("ledger", `/${account?.uniqueName}/${this.fromDate}/${this.toDate}`, account?.uniqueName);
                 break;
 
             case 2: // go to sales or purchase
@@ -592,7 +592,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public goToRoute(part: string, additionalParams: string = "", accUniqueName: string) {
-        let url = (this.generalService.voucherApiVersion === 2) ? `/pages/${part}/${accUniqueName}` : location.href + `?returnUrl=${part}/${accUniqueName}`;
+        let url = (this.generalService.voucherApiVersion === 2) ? `/pages/${part}` : location.href + `?returnUrl=${part}/${accUniqueName}`;
         if (additionalParams) {
             url = `${url}${additionalParams}`;
         }
