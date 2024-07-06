@@ -291,7 +291,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.moduleType = (params.type)?.toUpperCase();
 
             if (params) {
-               if ((params["type"] && params["type"].indexOf("customer") > -1) || (queryParams && queryParams.tab && queryParams.tab === "customer")) {
+                if ((params["type"] && params["type"].indexOf("customer") > -1) || (queryParams && queryParams.tab && queryParams.tab === "customer")) {
                     const activeTab = this.activeTab;
                     if (activeTab !== "customer") {
                         this.setActiveTab("customer");
@@ -550,7 +550,8 @@ export class ContactComponent implements OnInit, OnDestroy {
     public performActions(type: number, account: any, event?: any) {
         switch (type) {
             case 1: // go to ledger
-                this.goToRoute("ledger", `/${account?.uniqueName}/${this.fromDate}/${this.toDate}`, account?.uniqueName);
+                const additionalParams = this.fromDate && this.toDate ? `/${account?.uniqueName}/${this.fromDate}/${this.toDate}` : `/${account?.uniqueName}`;
+                this.goToRoute("ledger", additionalParams, account?.uniqueName);
                 break;
 
             case 2: // go to sales or purchase
