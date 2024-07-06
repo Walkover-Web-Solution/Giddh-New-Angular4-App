@@ -1,13 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef, ViewChildren, TemplateRef } from '@angular/core';
-import { GeneralService } from '../../../services/general.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { AdjustInventoryComponentStore } from './utility/adjust-inventory.store';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.action';
 import { ReplaySubject, takeUntil } from 'rxjs';
 import { SettingsUtilityService } from '../../../settings/services/settings-utility.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 @Component({
     selector: 'adjust-inventory',
     templateUrl: './adjust-inventory.component.html',
@@ -20,7 +18,9 @@ export class AdjustInventroyComponent implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds company warehouses */
     public warehouses: Array<any>;
-    public  panelOpenState = false;
+    /** Adjust inventory form group */
+    public adjustInventoryCreateEditForm: FormGroup;
+    public panelOpenState = false;
     public countries: any[] = [
         {
             label: 'option-1',
@@ -66,18 +66,49 @@ export class AdjustInventroyComponent implements OnInit {
         private store: Store<AppState>,
         private warehouseActions: WarehouseActions,
         private settingsUtilityService: SettingsUtilityService,
-        private componentStore: AdjustInventoryComponentStore
+        private componentStore: AdjustInventoryComponentStore,
+        private formBuilder: FormBuilder,
     ) { }
     public ngOnInit(): void {
+        this.initForm();
         this.getWarehouses();
+        this.getResons();
+
+        this.componentStore.reasons$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                console.log(response);
+                // this.getAllAdjustReports(true);
+            }
+        });
+
+        this.componentStore.createReason('Loss by train ');
+
     }
 
-/**
- * Gets company warehouses
- *
- * @private
- * @memberof VoucherCreateComponent
- */
+    private initForm(): void {
+        this.adjustInventoryCreateEditForm = this.formBuilder.group({
+            entity: [''],
+            entityName: [''],
+            entityUniqueName: [''],
+            reasonUniqueName: [''],
+            date: [''],
+            refNo: [''], // No validation needed as per your description
+            expenseAccountUniqueName: [''],
+            warehouseUniqueName: [''],
+            description: [''],
+            adjustmentMethod: [''], // Default to VALUE_WISE
+            calculationMethod: [''], // Default to PERCENTAGE
+            changeInValue: [''],
+            variantUniqueNames: [],
+        });
+    }
+
+    /**
+     * Gets company warehouses
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
     private getWarehouses(): void {
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
 
@@ -86,9 +117,12 @@ export class AdjustInventroyComponent implements OnInit {
                 let warehouseResults = response.results?.filter(warehouse => !warehouse.isArchived);
                 const warehouseData = this.settingsUtilityService.getFormattedWarehouseData(warehouseResults);
                 this.warehouses = warehouseData.formattedWarehouses;
-                console.log(this.warehouses);
-
             }
         });
     }
+
+    public getResons(): void {
+        this.componentStore.getAllReasons(true);
+    }
+
 }

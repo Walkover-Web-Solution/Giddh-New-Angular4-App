@@ -51,6 +51,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
     public inventorySearch$ = this.select((state) => state.inventorySearch);
     public itemWiseReport$ = this.select((state) => state.itemWiseReport);
     public variantWiseReport$ = this.select((state) => state.variantWiseReport);
+    public reasons$ = this.select((state) => state.reasonList);
     public createAdjustInventoryIsSuccess$ = this.select((state) => state.createAdjustInventoryIsSuccess);
     public createReasonIsSuccess$ = this.select((state) => state.createReasonIsSuccess);
     public isLoading$ = this.select((state) => state.isLoading);
@@ -100,15 +101,15 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
      *
      * @memberof AdjustInventoryComponentStore
      */
-    readonly getReasons = this.effect((data: Observable<any>) => {
+    readonly getAllReasons = this.effect((data: Observable<any>) => {
         return data.pipe(
-            switchMap((req) => {
-                return this.inventoryService.getAdjustmentInventoryReport(req).pipe(
+            switchMap(() => {
+                return this.inventoryService.getInventoryAdjustReasons().pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
-                                    reasonList: res ?? [],
+                                    reasonList: res.body ?? [],
                                 });
                             } else {
                                 if (res.message) {
@@ -235,6 +236,38 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                             return this.patchState({
                                 inventorySearch: [],
                             });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+
+    /**
+  * This will be use for create reason in  inventory adjustment
+  *
+  * @memberof AdjustInventoryListComponentStore
+  */
+    readonly createReason = this.effect((data: Observable<string>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ createReasonInProgress: true, createReasonIsSuccess: false });
+                return this.inventoryService.createInventoryAdjustReason(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                this.toaster.showSnackBar("success", res.body);
+                                return this.patchState({ createReasonInProgress: false, createReasonIsSuccess: true });
+                            } else {
+                                this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({ createReasonInProgress: false, createReasonIsSuccess: false });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({ createReasonInProgress: false, createReasonIsSuccess: false });
                         }
                     ),
                     catchError((err) => EMPTY)

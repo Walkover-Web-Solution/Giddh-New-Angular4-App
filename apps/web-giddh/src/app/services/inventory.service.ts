@@ -1653,7 +1653,7 @@ export class InventoryService {
     /**
      * This will be use for get all adjustments inventory report
      *
-     * @param {*} model
+     * @param {*} getParams
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof InventoryService
      */
@@ -1661,7 +1661,7 @@ export class InventoryService {
         console.log(getParams);
         this.companyUniqueName = this.generalService.companyUniqueName;
 
-        let url = this.config.apiUrl + INVENTORY_API.INVENTORY_ADJUSTMENT.REPORT;
+        let url = this.config.apiUrl + INVENTORY_API.INVENTORY_ADJUST.REPORT;
         url = url?.replace(":companyUniqueName", this.companyUniqueName);
         // url = url?.replace(":from", getParams.from);
         // url = url?.replace(":to", getParams.to);
@@ -1693,7 +1693,7 @@ export class InventoryService {
      */
     public deleteInventoryAdjust(referenceNo: string): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.delete(this.config.apiUrl + INVENTORY_API.INVENTORY_ADJUSTMENT.DELETE
+        return this.http.delete(this.config.apiUrl + INVENTORY_API.INVENTORY_ADJUST.DELETE
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':referenceNo', encodeURIComponent(referenceNo)
             )).pipe(map((res) => {
@@ -1702,5 +1702,41 @@ export class InventoryService {
                 data.queryString = { referenceNo };
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '', { referenceNo })));
+    }
+
+    /**
+     * Get Inventory Adjust Reasons
+     *
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InventoryService
+     */
+    public getInventoryAdjustReasons(): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + INVENTORY_API.INVENTORY_ADJUST.GET_REASON?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            data.request = '';
+            data.queryString = {  };
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, string>(e, '', {  })));
+    }
+
+/**
+ * This will be use for create inventory adjust reason
+ *
+ * @param {string} referenceNo
+ * @return {*}  {Observable<BaseResponse<string, string>>}
+ * @memberof InventoryService
+ */
+    public createInventoryAdjustReason(reason: string): Observable<BaseResponse<any, any>> {
+        let reqObj = {
+            reason: reason
+        }
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_ADJUST.CREATE_REASON?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            , reqObj).pipe(map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = { reqObj };
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, StockGroupRequest>(e, reqObj)));
     }
 }

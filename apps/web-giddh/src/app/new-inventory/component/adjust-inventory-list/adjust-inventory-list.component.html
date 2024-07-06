@@ -13,7 +13,6 @@
                 *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
                 class="branch-width mr-0 float-left"
             >
-            {{currentBranch | json}}
                 <dropdown-field
                     [label]="commonLocaleData?.app_select_entity"
                     [options]="currentCompanyBranches"
