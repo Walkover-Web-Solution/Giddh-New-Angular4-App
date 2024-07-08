@@ -1,159 +1,234 @@
-<div class="adjustment container-fluid pd-15">
-    <div class="row">
-                <div class="col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6">
-            <giddh-datepicker [placeholder]="'DD-MM-YY'" [appearance]="'outline'" [showToggleIcon]="false"
-                [label]="'Date'">
-            </giddh-datepicker>
-        </div>
-        <div class="col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6">
-            <input-field [label]="'Reference'" [placeholder]="'Enter number'" [type]="'text'">
-            </input-field>
-        </div>
-        <div class="col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6">
-            <dropdown-field [name]="'country'" [label]="'Expense Account'" [placeholder]="'Account1'"
-                [options]="countries">
-            </dropdown-field>
-        </div>
-        <div class="col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6">
-            <dropdown-field [name]="'country'" [label]="'Warehouse'" [placeholder]="'Account2'" [options]="countries">
-            </dropdown-field>
-        </div>
+<ng-container
+    appTranslate
+    [file]="'inventory/adjustment'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
+    <div class="relative">
+        <hamburger-menu [pageHeading]="'Adjust inventory'"></hamburger-menu>
     </div>
-    <div class="row">
+    <form
+        autocomplete="off"
+        novalidate
+        name="adjustInventoryCreateEditForm"
+        [formGroup]="adjustInventoryCreateEditForm"
+    >
+        <div class="adjustment container-fluid pd-15">
+            <div class="row">
+                <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6">
+                    <giddh-datepicker
+                        (keydown.enter)="$event.preventDefault()"
+                        [label]="'Date'"
+                        [placeholder]="'Select Date'"
+                        name="date"
+                        [showToggleIcon]="false"
+                        [appearance]="'outline'"
+                        formControlName="date"
+                    >
+                    </giddh-datepicker>
+                </div>
+                <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6">
+                    <input-field
+                        [name]="'reference'"
+                        [label]="'Reference Number'"
+                        [placeholder]="'Enter Reference Number'"
+                        [type]="'text'"
+                        formControlName="refNo"
+                        (onClear)="adjustInventoryCreateEditForm.get('refNo')?.patchValue(null)"
+                    >
+                    </input-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6">
+                    <reactive-dropdown-field
+                        [label]="'Expense Accounts'"
+                        [placeholder]="'Select Expense Accounts'"
+                        [options]="expenseAccounts$ | async"
+                        formControlName="expenseAccountUniqueName"
+                        (onClear)="adjustInventoryCreateEditForm.get('expenseAccountUniqueName')?.patchValue(null)"
+                        [required]="true"
+                    >
+                    </reactive-dropdown-field>
+                </div>
+                <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6">
+                    <reactive-dropdown-field
+                        [label]="'Warehouse'"
+                        [placeholder]="'Select Warehouse'"
+                        [options]="warehouses$ | async"
+                        formControlName="warehouseUniqueName"
+                        (onClear)="adjustInventoryCreateEditForm.get('warehouseUniqueName')?.patchValue(null)"
+                        [required]="true"
+                    >
+                    </reactive-dropdown-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xxl-3 mt-3 col-xl-4 col-lg-6 col-md-6">
+                    <mat-form-field class="w-100" [appearance]="'outline'">
+                        <mat-label>Leave a comment</mat-label>
+                        <textarea
+                            matInput
+                            rows="3"
+                            placeholder="Ex. It makes me feel..."
+                            [name]="'description'"
+                            formControlName="description"
+                        ></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6 custom-mat-form-field">
+                    <reactive-dropdown-field
+                        [label]="'Inventory'"
+                        [placeholder]="'Select Stock Group/ Stock'"
+                        [options]="inventoryList$ | async"
+                        formControlName="entityUniqueName"
+                        [required]="true"
+                        (selectedOption)="selectInventory($event)"
+                        (onClear)="adjustInventoryCreateEditForm.get('entityUniqueName')?.patchValue(null)"
+                    >
+                    </reactive-dropdown-field>
+                </div>
+                <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6">
+                    <reactive-dropdown-field
+                        [label]="'Adjustment Method'"
+                        [placeholder]="'Select Adjustment Method'"
+                        [options]="adjustmentMethod"
+                        formControlName="adjustmentMethod"
+                        [required]="true"
+                        (onClear)="adjustInventoryCreateEditForm.get('adjustmentMethod')?.patchValue(null)"
+                    >
+                    </reactive-dropdown-field>
+                </div>
+                <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6">
+                    <reactive-dropdown-field
+                        [label]="'Reason'"
+                        [placeholder]="'Select Reason'"
+                        [options]="reasons$ | async"
+                        formControlName="reasonUniqueName"
+                        [required]="true"
+                        (createOption)="openCreateReasonModal()"
+                        [createNewText]="'Create Reason'"
+                        (onClear)="adjustInventoryCreateEditForm.get('reasonUniqueName')?.patchValue(null)"
+                    >
+                    </reactive-dropdown-field>
+                </div>
+            </div>
+            <div class="col-xxl-3 mt-3 col-xl-6 col-lg-6 col-md-6 pl-0">
+                <mat-accordion>
+                    <mat-expansion-panel
+                        (mouseenter)="panelOpenState = true"
+                        [expanded]="panelOpenState"
+                        (opened)="panelOpenState = true"
+                        (closed)="panelOpenState = false"
+                    >
+                        <mat-expansion-panel-header class="h-auto">
+                            <table [width]="'100%'">
+                                <tr>
+                                    <td [width]="'16.7%'">Inventory</td>
+                                    <td [width]="'16.7%'">Method</td>
+                                    <td [width]="'16.7%'">Change in value</td>
+                                    <td [width]="'16.7%'">Closing value</td>
+                                    <td [width]="'16.7%'">Change</td>
+                                    <td [width]="'16.7%'">New value</td>
+                                </tr>
+                                <tr>
+                                    <td [width]="'16.7%'">T-shirts</td>
+                                    <td [width]="'16.7%'">
+                                        <div class="d-flex select-input-field">
+                                            <select-field
+                                                [cssClass]="'pd mat-field-border rounded-end-0'"
+                                                [name]="'fields'"
+                                                [placeholder]="'select'"
+                                                [options]="method"
+                                                (click)="$event.stopPropagation()"
+                                            >
+                                            </select-field>
+                                            <button
+                                                mat-button
+                                                class="mat-field-border button-dropdown mat-field-border"
+                                                (click)="$event.stopPropagation()"
+                                            >
+                                                <i class="caret"> </i>
+                                            </button>
+                                        </div>
+                                    </td>
 
-        <mat-form-field class="w-75 pd-t15 col-9"  [appearance]="'outline'">
-            <mat-label>Leave a comment</mat-label>
-            <textarea matInput rows="3" placeholder="Ex. It makes me feel..."></textarea>
-        </mat-form-field>
-    </div>
-    <div class="row mr-t15">
-        <div class="col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6 custom-mat-form-field">
-            <mat-form-field class="w-100" [appearance]="'outline'">
-                <mat-label>Number</mat-label>
-                <input type="text" placeholder="Pick one" aria-label="Number" matInput [matAutocomplete]="auto">
-                <button matSuffix mat-icon-button aria-label="Clear">
-                    <i class="icon-cross font-14"></i>
-                </button>
-                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                    <mat-option value="1">
-                        T-shirts
-                    </mat-option>
-                    <mat-option value="1">
-                        Pen
-                    </mat-option>
-                    <mat-option value="1">
-                        Ball
-                    </mat-option>
-                    <mat-option value="1">
-                        T-shirt New
-                    </mat-option>
-                </mat-autocomplete>
-            </mat-form-field>
+                                    <td [width]="'16.7%'">
+                                        <div class="d-flex align-items-center column-gap5">
+                                            <text-field
+                                                [cssClass]="'form-control text-left text-control-input'"
+                                                [name]="'percentage'"
+                                                [type]="'number'"
+                                                [placeholder]="'00'"
+                                                (click)="$event.stopPropagation()"
+                                            >
+                                            </text-field>
+                                            <span>%</span>
+                                        </div>
+                                    </td>
+
+                                    <td [width]="'16.7%'">5000</td>
+                                    <td class="px-3" [width]="'16.7%'">500</td>
+                                    <td class="px-4" [width]="'16.7%'">5500</td>
+                                </tr>
+                            </table>
+                        </mat-expansion-panel-header>
+                        <table mat-table [dataSource]="dataSource" class="w-100 table-border-none">
+                            <!-- Checkbox Column -->
+                            <ng-container matColumnDef="select">
+                                <th mat-header-cell *matHeaderCellDef width="32.4%">
+                                    <mat-checkbox color="primary">
+                                        <span>Select All</span>
+                                    </mat-checkbox>
+                                </th>
+                                <td mat-cell *matCellDef="let row">
+                                    <mat-checkbox color="primary">
+                                        <span>{{ row.position }}</span>
+                                    </mat-checkbox>
+                                </td>
+                            </ng-container>
+
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="position">
+                                <th mat-header-cell *matHeaderCellDef width="16.7%"></th>
+                                <td mat-cell *matCellDef="let element"></td>
+                            </ng-container>
+
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="name">
+                                <th mat-header-cell *matHeaderCellDef width="16.7%"></th>
+                                <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+                            </ng-container>
+
+                            <!-- Weight Column -->
+                            <ng-container matColumnDef="weight">
+                                <th mat-header-cell *matHeaderCellDef width="16.7%"></th>
+                                <td mat-cell *matCellDef="let element">{{ element.weight }}</td>
+                            </ng-container>
+
+                            <!-- Symbol Column -->
+                            <ng-container matColumnDef="symbol">
+                                <th mat-header-cell *matHeaderCellDef width="16.7%"></th>
+                                <td mat-cell *matCellDef="let element">{{ element.symbol }}</td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                        </table>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
         </div>
-        <div class="col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6">
-            <dropdown-field [name]="'country'" [label]="'Warehouse'" [placeholder]="'Account2'" [options]="countries">
-            </dropdown-field>
-        </div>
-        <div class="col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6">
-            <dropdown-field [name]="'country'" [label]="'Warehouse'" [placeholder]="'Account2'" [options]="countries">
-            </dropdown-field>
-        </div>
-    </div>
-    <div class="mr-t15 mr-b15">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item align-items-center"><a href="#">Home</a></li>
-                <li class="breadcrumb-item align-items-center active" aria-current="page">Library</li>
-            </ol>
-        </nav>
-    </div>
+    </form>
+</ng-container>
 
-    <mat-accordion>
-        <mat-expansion-panel (mouseenter)="panelOpenState = true" [expanded]="panelOpenState"
-            (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-            <mat-expansion-panel-header class="h-auto">
-                <table [width]="'100%'">
-                    <tr>
-                        <td [width]="'16.7%'">Inventory</td>
-                        <td [width]="'16.7%'">Method</td>
-                        <td [width]="'16.7%'">Change in value</td>
-                        <td [width]="'16.7%'">Closing value</td>
-                        <td [width]="'16.7%'">Change</td>
-                        <td [width]="'16.7%'">New value</td>
-                    </tr>
-                    <tr>
-                        <td [width]="'16.7%'">T-shirts</td>
-                        <td [width]="'16.7%'">
-                            <div class="d-flex select-input-field">
-                                <select-field [cssClass]="'pd mat-field-border rounded-end-0'"
-                                    [name]="'fields'" [placeholder]="'select'" [options]="method" (click)="$event.stopPropagation()">
-                                </select-field>
-                                <button mat-button class="mat-field-border button-dropdown mat-field-border" (click)="$event.stopPropagation()">
-                                    <i class="caret">
-                                    </i>
-                                </button>
-                            </div>
-                        </td>
-
-                        <td [width]="'16.7%'">
-                            <div class="d-flex align-items-center column-gap5">
-                                <text-field [cssClass]="'form-control text-left text-control-input'"
-                                    [name]="'percentage'" [type]="'number'" [placeholder]="'00'" (click)="$event.stopPropagation()">
-                                </text-field>
-                                <span>%</span>
-                            </div>
-                        </td>
-
-                        <td [width]="'16.7%'">5000</td>
-                        <td class="px-3" [width]="'16.7%'">500</td>
-                        <td class="px-4" [width]="'16.7%'">5500</td>
-                    </tr>
-                </table>
-            </mat-expansion-panel-header>
-            <table mat-table [dataSource]="dataSource" class="w-100 table-border-none">
-
-                <!-- Checkbox Column -->
-                <ng-container matColumnDef="select">
-                    <th mat-header-cell *matHeaderCellDef width="32.4%">
-                        <mat-checkbox color="primary">
-                            <span>Select All</span>
-                        </mat-checkbox>
-                    </th>
-                    <td mat-cell *matCellDef="let row">
-                        <mat-checkbox color="primary">
-                            <span>{{ row.position }}</span>
-                        </mat-checkbox>
-                    </td>
-                </ng-container>
-
-                <!-- Position Column -->
-                <ng-container matColumnDef="position">
-                    <th mat-header-cell *matHeaderCellDef width="16.7%"></th>
-                    <td mat-cell *matCellDef="let element"> </td>
-                </ng-container>
-
-                <!-- Name Column -->
-                <ng-container matColumnDef="name">
-                    <th mat-header-cell *matHeaderCellDef width="16.7%"></th>
-                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                </ng-container>
-
-                <!-- Weight Column -->
-                <ng-container matColumnDef="weight">
-                    <th mat-header-cell *matHeaderCellDef width="16.7%"></th>
-                    <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
-                </ng-container>
-
-                <!-- Symbol Column -->
-                <ng-container matColumnDef="symbol">
-                    <th mat-header-cell *matHeaderCellDef width="16.7%"></th>
-                    <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            </table>
-
-        </mat-expansion-panel>
-    </mat-accordion>
-</div>
+<!-- Create Reason Sidebar -->
+<ng-template #createReason>
+    <aside-create-reason
+        (commonLocaleData)="(commonLocaleData)"
+        (localeData)="(localeData)"
+        (closeAsideEvent)="closeCreateReasonModal($event)"
+    ></aside-create-reason>
+</ng-template>

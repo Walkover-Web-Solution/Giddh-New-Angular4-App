@@ -75,7 +75,7 @@ import { RecipeModule } from "./component/recipe/recipe.module";
 import { ManufacturingModule } from "../manufacturing/manufacturing.module";
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
 import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NoDataModule } from "../shared/no-data/no-data.module";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
@@ -85,10 +85,11 @@ import { BulkStockAdvanceFilterComponent } from "./component/bulk-stock-advance-
 import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 import { ExportInventoryMasterComponent } from "./component/export-inventory-master/export-inventory-master.component";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
-import { AdjustInventroyComponent } from "./component/adjust-inventory/adjust-inventory.component";
+import { AdjustInventoryComponent } from "./component/adjust-inventory/adjust-inventory.component";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { AdjustInventoryListComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { AsideCreateNewReasonComponent } from "./component/aside-create-reason/aside-create-reason.component";
 
 @NgModule({
     declarations: [
@@ -106,7 +107,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
         CreateComboComponent,
         InventoryTransactionListComponent,
         CreateCustomFieldComponent,
-        AdjustInventroyComponent,
+        AdjustInventoryComponent,
         AdjustInventoryListComponent,
         AsideAdjustInventoryComponent,
         AdjustGroupComponent,
@@ -138,7 +139,8 @@ import { MatPaginatorModule } from "@angular/material/paginator";
         BulkStockEditComponent,
         BulkStockAdvanceFilterComponent,
         ExportInventoryMasterComponent,
-        AdjustInventroyComponent
+        AdjustInventoryComponent,
+        AsideCreateNewReasonComponent
     ],
     imports: [
         NewInventoryRoutingModule,
@@ -183,7 +185,8 @@ import { MatPaginatorModule } from "@angular/material/paginator";
         WatchVideoModule,
         MatSlideToggleModule,
         MatExpansionModule,
-        MatPaginatorModule
+        MatPaginatorModule,
+        ReactiveFormsModule
     ],
     exports: [
         NewInventoryComponent,
@@ -201,7 +204,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
         CreateComboComponent,
         InventoryTransactionListComponent,
         CreateCustomFieldComponent,
-        AdjustInventroyComponent,
+        AdjustInventoryComponent,
         AdjustInventoryListComponent,
         AsideAdjustInventoryComponent,
         AdjustGroupComponent,
@@ -221,7 +224,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
         ReportFiltersComponent,
         MatDivider,
         BulkStockAdvanceFilterComponent,
-        AdjustInventroyComponent
+        AdjustInventoryComponent
     ]
 })
 export class NewInventoryModule { }

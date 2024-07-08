@@ -8,7 +8,7 @@ import { AdjustInventoryListComponentStore } from './utility/adjust-inventory-li
 import { debounceTime, distinctUntilChanged, ReplaySubject, take, takeUntil } from 'rxjs';
 import { AdjustInventoryListResponse, InventorytAdjustReportQueryRequest } from '../../../models/api-models/Inventory';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { ConfirmationModalConfiguration } from '../../../theme/confirmation-modal/confirmation-modal.interface';
@@ -103,6 +103,8 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     public currentBranch: any = { name: '', uniqueName: '' };
     /** This will hold local JSON data */
     public activeCompany: any;
+    /** Holds Inventory Type */
+    public inventoryType: string;
 
     constructor(
         private generalService: GeneralService,
@@ -111,6 +113,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         private readonly componentStore: AdjustInventoryListComponentStore,
         private formBuilder: FormBuilder,
         private router: Router,
+        private route: ActivatedRoute,
         public dialog: MatDialog,
         private store: Store<AppState>,
         private settingsBranchAction: SettingsBranchActions
@@ -125,6 +128,13 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
      * @memberof AdjustInventoryListComponent
      */
     public ngOnInit(): void {
+
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            console.log(params);
+            if (params?.type) {
+                this.inventoryType = params?.type.toLowerCase();
+            }
+        });
 
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
@@ -177,7 +187,6 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
                     label: branch.alias,
@@ -401,7 +410,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
      * @memberof AdjustInventoryListComponent
      */
     public addInventory(): void {
-        this.router.navigate(['/pages/inventory/v2/adjust-inventory']);
+        this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust-inventory/create`]);
     }
 
     /**
@@ -516,7 +525,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
      * @memberof AdjustInventoryListComponent
      */
     public editInventoryAdjust(item: any): void {
-        this.router.navigate(['/pages/inventory/v2/adjust-inventory/' + item?.refNo]);
+        this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust-inventory/${item?.refNo}`]);
     }
 
     /**

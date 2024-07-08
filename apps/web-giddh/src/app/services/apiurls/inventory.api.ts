@@ -107,7 +107,7 @@ export const INVENTORY_API = {
     INVENTORY_ADJUST: {
         REPORT: 'company/:companyUniqueName/inventory-adjustment/adjustment-report?page=:page&count=:count&sortBy=:sortBy&sort=:sort&q=:q&searchBy=:searchBy', // GET call
         DELETE: 'company/:companyUniqueName/inventory-adjustment/:referenceNo?voucherVersion=2', // DELETE call
-        GET_REASON: 'company/:companyUniqueName/inventory-adjustment/reason/get-all',// GET call
+        GET_REASON: 'company/:companyUniqueName/inventory-adjustment/reason/get-all?count=200',// GET call
         CREATE_REASON: 'company/:companyUniqueName/inventory-adjustment/reason' // GET call
     }
 };

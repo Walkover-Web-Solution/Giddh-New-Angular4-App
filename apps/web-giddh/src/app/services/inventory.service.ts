@@ -1728,15 +1728,12 @@ export class InventoryService {
  * @memberof InventoryService
  */
     public createInventoryAdjustReason(reason: string): Observable<BaseResponse<any, any>> {
-        let reqObj = {
-            reason: reason
-        }
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_ADJUST.CREATE_REASON?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            , reqObj).pipe(map((res) => {
+            , reason).pipe(map((res) => {
                 let data: BaseResponse<any, any> = res;
-                data.request = { reqObj };
+                data.request = { reason };
                 return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, StockGroupRequest>(e, reqObj)));
+            }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, StockGroupRequest>(e, reason)));
     }
 }

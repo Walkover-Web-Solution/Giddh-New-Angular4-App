@@ -21,7 +21,7 @@ import { CustomUnitsComponent } from "./component/custom-units/custom-units.comp
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
 import { BulkStockEditComponent } from "./component/bulk-stock-edit/bulk-stock-edit.component";
 import { AdjustInventoryListComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
-import { AdjustInventroyComponent } from "./component/adjust-inventory/adjust-inventory.component";
+import { AdjustInventoryComponent } from "./component/adjust-inventory/adjust-inventory.component";
 
 const routes: Routes = [
     {
@@ -72,7 +72,19 @@ const routes: Routes = [
             {
                 path: ":type/bulk-stock-edit",
                 component: BulkStockEditComponent
-            }
+            },
+            {
+                path: ":type/adjust-inventory",
+                component: AdjustInventoryListComponent,
+            },
+            {
+                path: ":type/adjust-inventory/create",
+                component: AdjustInventoryComponent
+            },
+            {
+                path: ":type/adjust-inventory/:refNo",
+                component: AdjustInventoryComponent
+            },
         ],
     },
 
@@ -104,10 +116,6 @@ const routes: Routes = [
     {
         path: "create-custom-field",
         component: CreateCustomFieldComponent,
-    },
-    {
-        path: "adjust-inventory-list",
-        component: AdjustInventoryListComponent,
     },
     {
         path: "adjust-inventory-group",
@@ -152,14 +160,6 @@ const routes: Routes = [
     {
         path: "stock-balance",
         component: StockBalanceComponent,
-    },
-    {
-        path: "adjust-inventory",
-        component: AdjustInventroyComponent
-    },
-    {
-        path: "adjust-inventory/:refNo",
-        component: AdjustInventroyComponent
     },
 ];
 

@@ -7,6 +7,7 @@ import { AppState } from "apps/web-giddh/src/app/store";
 import { InventoryService } from "apps/web-giddh/src/app/services/inventory.service";
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
 import { BaseResponse } from "apps/web-giddh/src/app/models/api-models/BaseResponse";
+import { GroupService } from "apps/web-giddh/src/app/services/group.service";
 
 export interface AdjustInventoryState {
     expensesAccountList: any;
@@ -40,6 +41,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
     constructor(
         private toaster: ToasterService,
         private inventoryService: InventoryService,
+        private groupService: GroupService,
         private store: Store<AppState>
     ) {
         super(DEFAULT_ADJUSTINVENTORY_STATE);
@@ -67,12 +69,12 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
     readonly getExpensesAccounts = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
-                return this.inventoryService.getAdjustmentInventoryReport(req).pipe(
+                return this.groupService.getMasters(req, 1).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
-                                    expensesAccountList: res ?? [],
+                                    expensesAccountList: res?.body ?? [],
                                 });
                             } else {
                                 if (res.message) {
@@ -141,7 +143,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
     readonly getItemWiseReport = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
-                return this.inventoryService.getAdjustmentInventoryReport(req).pipe(
+                return this.inventoryService.searchStockTransactionReport(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {

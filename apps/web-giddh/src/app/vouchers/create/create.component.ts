@@ -3014,7 +3014,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Validate the mobile number 
+     * Validate the mobile number
      *
      * @memberof VoucherCreateComponent
      */
@@ -3295,7 +3295,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
     }
 
-    /* 
+    /*
      * Updates account and generate voucher
      *
      * @memberof VoucherCreateComponent
@@ -3903,7 +3903,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * This will be use for send email after create voucher 
+     * This will be use for send email after create voucher
      *
      * @param {*} response
      * @memberof VoucherCreateComponent
