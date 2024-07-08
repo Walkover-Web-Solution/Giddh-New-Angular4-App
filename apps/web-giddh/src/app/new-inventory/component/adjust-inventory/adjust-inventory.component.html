@@ -115,7 +115,7 @@
                     </reactive-dropdown-field>
                 </div>
             </div>
-            <div class="col-xxl-3 mt-3 col-xl-6 col-lg-6 col-md-6 pl-0">
+            <div class="col-xxl-3 mt-3 col-xl-8 col-lg-6 col-md-6 pl-0">
                 <mat-accordion>
                     <mat-expansion-panel
                         (mouseenter)="panelOpenState = true"
@@ -126,16 +126,16 @@
                         <mat-expansion-panel-header class="h-auto">
                             <table [width]="'100%'">
                                 <tr>
-                                    <td [width]="'16.7%'">Inventory</td>
-                                    <td [width]="'16.7%'">Method</td>
-                                    <td [width]="'16.7%'">Change in value</td>
-                                    <td [width]="'16.7%'">Closing value</td>
-                                    <td [width]="'16.7%'">Change</td>
-                                    <td [width]="'16.7%'">New value</td>
+                                    <td [width]="'20%'">Inventory</td>
+                                    <td [width]="'15.625%'">Method</td>
+                                    <td [width]="'15.625%'">Change in value</td>
+                                    <td [width]="'15.625%'">Closing value</td>
+                                    <td [width]="'15.625%'">Change</td>
+                                    <td [width]="'15.625%'">New value</td>
                                 </tr>
                                 <tr>
-                                    <td [width]="'16.7%'">T-shirts</td>
-                                    <td [width]="'16.7%'">
+                                    <td [width]="'20%'">T-shirts</td>
+                                    <td [width]="'15.625%'">
                                         <div class="d-flex select-input-field">
                                             <select-field
                                                 [cssClass]="'pd mat-field-border rounded-end-0'"
@@ -155,7 +155,7 @@
                                         </div>
                                     </td>
 
-                                    <td [width]="'16.7%'">
+                                    <td [width]="'15.625%'">
                                         <div class="d-flex align-items-center column-gap5">
                                             <text-field
                                                 [cssClass]="'form-control text-left text-control-input'"
@@ -169,49 +169,53 @@
                                         </div>
                                     </td>
 
-                                    <td [width]="'16.7%'">5000</td>
-                                    <td class="px-3" [width]="'16.7%'">500</td>
-                                    <td class="px-4" [width]="'16.7%'">5500</td>
+                                    <td [width]="'15.625%'">5000</td>
+                                    <td class="px-3" [width]="'15.625%'">500</td>
+                                    <td class="px-4" [width]="'15.625%'">5500</td>
                                 </tr>
                             </table>
                         </mat-expansion-panel-header>
-                        <table mat-table [dataSource]="dataSource" class="w-100 table-border-none">
+                        <table mat-table [dataSource]="dataSource" class="table basic giddh-table on-mobile-view w-100  table-border-none">
                             <!-- Checkbox Column -->
                             <ng-container matColumnDef="select">
-                                <th mat-header-cell *matHeaderCellDef width="32.4%">
+                                <th mat-header-cell *matHeaderCellDef width="20%">
                                     <mat-checkbox color="primary">
                                         <span>Select All</span>
                                     </mat-checkbox>
                                 </th>
-                                <td mat-cell *matCellDef="let row">
-                                    <mat-checkbox color="primary">
-                                        <span>{{ row.position }}</span>
-                                    </mat-checkbox>
+                                <td mat-cell *matCellDef="let element">
+                                    <mat-checkbox color="primary" class="mr-2">{{ element.variant?.name }} </mat-checkbox>
                                 </td>
                             </ng-container>
 
-                            <!-- Position Column -->
-                            <ng-container matColumnDef="position">
-                                <th mat-header-cell *matHeaderCellDef width="16.7%"></th>
-                                <td mat-cell *matCellDef="let element"></td>
-                            </ng-container>
-
-                            <!-- Name Column -->
-                            <ng-container matColumnDef="name">
-                                <th mat-header-cell *matHeaderCellDef width="16.7%"></th>
-                                <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-                            </ng-container>
-
                             <!-- Weight Column -->
-                            <ng-container matColumnDef="weight">
-                                <th mat-header-cell *matHeaderCellDef width="16.7%"></th>
-                                <td mat-cell *matCellDef="let element">{{ element.weight }}</td>
+                            <ng-container matColumnDef="method">
+                                <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
+                                <td mat-cell *matCellDef="let element">MEthod</td>
                             </ng-container>
 
                             <!-- Symbol Column -->
-                            <ng-container matColumnDef="symbol">
-                                <th mat-header-cell *matHeaderCellDef width="16.7%"></th>
-                                <td mat-cell *matCellDef="let element">{{ element.symbol }}</td>
+                            <ng-container matColumnDef="changeValue">
+                                <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
+                                <td mat-cell *matCellDef="let element">Change value</td>
+                            </ng-container>
+
+                            <!-- Symbol Column -->
+                            <ng-container matColumnDef="closingValue">
+                                <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
+                                <td mat-cell *matCellDef="let element">Closing value</td>
+                            </ng-container>
+
+                            <!-- Symbol Column -->
+                            <ng-container matColumnDef="changes">
+                                <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
+                                <td mat-cell *matCellDef="let element">Chane</td>
+                            </ng-container>
+
+                            <!-- Symbol Column -->
+                            <ng-container matColumnDef="newValue">
+                                <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
+                                <td mat-cell *matCellDef="let element">New Value</td>
                             </ng-container>
 
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

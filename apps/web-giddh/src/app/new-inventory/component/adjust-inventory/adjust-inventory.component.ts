@@ -12,6 +12,7 @@ import { SearchStockTransactionReportRequest, StockTransactionReportRequest } fr
 import { ActivatedRoute } from '@angular/router';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
+import { GeneralService } from '../../../services/general.service';
 @Component({
     selector: 'adjust-inventory',
     templateUrl: './adjust-inventory.component.html',
@@ -77,24 +78,20 @@ export class AdjustInventoryComponent implements OnInit {
     ];
     /** Stock Transactional Object */
     public stockReportRequest: StockTransactionReportRequest = new StockTransactionReportRequest();
-
-    public displayedColumns: any[] = ['select', 'position', 'name', 'weight', 'symbol'];
-    public dataSource: any[] = [
-        { position: 'Red', name: 5000, weight: 500, symbol: 5500 },
-        { position: 'Green', name: 5000, weight: 500, symbol: 5500 },
-        { position: 'Blue', name: 5000, weight: 500, symbol: 5500 },
-    ];
-
+    /** Hold inventory variant wise response */
+    public displayedColumns: any[] = ['select', 'method', 'changeValue', 'closingValue', 'changes', 'newValue'];
+    public dataSource: any[] = [];
     constructor(
         private store: Store<AppState>,
         private warehouseActions: WarehouseActions,
         private settingsUtilityService: SettingsUtilityService,
+        private generalService: GeneralService,
         private componentStore: AdjustInventoryComponentStore,
         private formBuilder: FormBuilder,
         private dialog: MatDialog,
         private route: ActivatedRoute
     ) {
-     }
+    }
     public ngOnInit(): void {
         this.initForm();
         this.getWarehouses();
@@ -142,16 +139,10 @@ export class AdjustInventoryComponent implements OnInit {
 
         this.componentStore.variantWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             console.log(response);
-            // if (response) {
-            //     const mappedIItemWise: OptionInterface[] = response.results.map(item => ({
-            //         value: item.uniqueName,
-            //         label: item.name,
-            //         additional: {
-            //             type: item
-            //         }
-            //     }));
-            //     this.inventoryList$ = observableOf(mappedIItemWise);
-            // }
+
+            if (response) {
+                this.dataSource = response?.body?.results;
+            }
         });
 
         this.componentStore.expensesAccountList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -256,7 +247,9 @@ export class AdjustInventoryComponent implements OnInit {
             sortBy: this.stockReportRequest.sortBy ?? ''
         };
         this.stockReportRequest.inventoryType = this.inventoryType?.toUpperCase();
+        this.stockReportRequest.branchUniqueNames[0] = this.generalService.currentBranchUniqueName;
         if (event && event.additional?.type === 'STOCK GROUP') {
+            this.stockReportRequest.stockUniqueNames = [];
             this.stockReportRequest.stockGroupUniqueNames = [event.value];
             let reqObj = {
                 queryParams: queryParams,
@@ -268,6 +261,7 @@ export class AdjustInventoryComponent implements OnInit {
                 queryParams: queryParams,
                 stockReportRequest: this.stockReportRequest
             }
+            this.stockReportRequest.stockGroupUniqueNames = [];
             this.stockReportRequest.stockUniqueNames = [event.value];
             this.componentStore.getVariantWiseReport(reqObj);
         }
