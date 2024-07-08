@@ -50,14 +50,14 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Observable for tax created successfully */
-    public isTaxCreatedSuccessfully : boolean = false;
+    public isTaxCreatedSuccessfully: boolean = false;
     /** Holds true if active company  country is US */
     public isUSCompany: boolean = false;
     /** Holds true if active company  country is US */
     public taxAuthorityList: IOption[] = [];
-     /** Holds true if tax authority list is inprogress */
+    /** Holds true if tax authority list is inprogress */
     public isTaxAuthoritiesLoading$: Observable<any>;
- 
+
     constructor(
         private store: Store<AppState>,
         private _settingsTaxesActions: SettingsTaxesActions,
@@ -69,11 +69,12 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     }
 
     ngOnInit() {
-        this.newTaxObj.taxAuthorityRequest = {uniqueName : ''};        
+        this.newTaxObj.taxAuthorityRequest = { uniqueName: this.tax?.taxAuthority ? this.tax.taxAuthority?.uniqueName : '' };
+
         for (let i = 1; i <= 31; i++) {
             this.days.push({ label: i?.toString(), value: i?.toString() });
         }
-        
+
         this.translateDropdownValues();
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -98,16 +99,16 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             });
 
         this.store
-        .pipe(select(p => p.settings && p.settings.taxAuthorities), takeUntil(this.destroyed$))
-        .subscribe(taxAuthorities => {
-            if (taxAuthorities && taxAuthorities.length) {
-                let arr: IOption[] = [];
-                taxAuthorities.forEach(tax => {
-                    arr.push({ label: tax.name, value: tax?.uniqueName });
-                });
-                this.taxAuthorityList = arr;
-            }
-        });
+            .pipe(select(p => p.settings && p.settings.taxAuthorities), takeUntil(this.destroyed$))
+            .subscribe(taxAuthorities => {
+                if (taxAuthorities && taxAuthorities.length) {
+                    let arr: IOption[] = [];
+                    taxAuthorities.forEach(tax => {
+                        arr.push({ label: tax.name, value: tax?.uniqueName });
+                    });
+                    this.taxAuthorityList = arr;
+                }
+            });
         this.store.dispatch(this._settingsTaxesActions.GetTaxAuthorityList());
 
         this.store
@@ -119,7 +120,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         this.store
             .pipe(select(p => p.company && p.company.isTaxCreatedSuccessfully), takeUntil(this.destroyed$))
             .subscribe(result => {
-                if(result && this.otherTax) {
+                if (result && this.otherTax) {
                     this.closeEvent.emit();
                 }
             });
@@ -152,6 +153,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
                 taxType: subTyp ? this.tax.taxType?.replace(subTyp, '') : this.tax.taxType,
                 taxFileDate: this.tax.taxFileDate?.toString()
             };
+            this.selectedTaxAuthority = this.tax?.taxAuthority ? this.tax.taxAuthority?.name : '';
         }
     }
 
@@ -209,6 +211,11 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         dataToSave.date = dayjs(dataToSave.date).format(GIDDH_DATE_FORMAT);
         dataToSave.accounts = dataToSave.accounts ? dataToSave.accounts : [];
         dataToSave.taxDetail = [{ date: dataToSave.date, taxValue: dataToSave.taxValue }];
+
+        if (!this.isUSCompany) {
+            delete dataToSave.taxAuthorityRequest;
+        }
+        dataToSave?.taxAuthority && delete dataToSave.taxAuthority;
 
         if (this.tax && this.tax.uniqueName) {
             this.store.dispatch(this._settingsTaxesActions.UpdateTax(dataToSave));

@@ -1961,7 +1961,7 @@ input {
     padding: 20px;
     margin: 15px auto;
     box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
-    max-width: 1360px;
+    max-width: calc(var(--center-content-max-width) - 30px);
 }
 
 .vat-report .tab-content {

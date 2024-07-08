@@ -1,9 +1,9 @@
 <div class="advance-search-by-date date-advance-search d-flex justify-content-center row-gap column-gap15">
     <dropdown-field [options]="financialYears" (selectedOption)="getYearStartAndEndDate($event)"
-        [placeholder]="localeData?.select_year_label" [defaultValue]="selectedYear"></dropdown-field>
+        [placeholder]="commonLocaleData?.app_select_year" [defaultValue]="selectedYear"></dropdown-field>
 
     <dropdown-field [options]="months" *ngIf="year && selectedYear" (selectedOption)="getMonthStartAndEndDate($event)"
-        [placeholder]="localeData?.select_month_label" [defaultValue]="selectedMonth?.label"></dropdown-field>
+        [placeholder]="commonLocaleData?.app_select_month" [defaultValue]="selectedMonth?.label"></dropdown-field>
     <div>
         <div class="input-group custom-datepicker custom-new-datepicker" (click)="showGiddhDatepicker($event)">
             <input type="text" name="selectedDateRange" [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
@@ -16,7 +16,7 @@
         <dropdown-field [label]="commonLocaleData?.app_entity" [options]="currentCompanyBranches" width="100%"
             (selectedOption)="
                 currentBranch.uniqueName = $event.value; handleBranchChange($event)
-            " [placeholder]="localeData?.select_entity"></dropdown-field>
+            " [placeholder]="commonLocaleData?.app_select_entity"></dropdown-field>
     </div>
     <div *ngIf="taxes?.length > 1" class="input-width">
         <dropdown-field

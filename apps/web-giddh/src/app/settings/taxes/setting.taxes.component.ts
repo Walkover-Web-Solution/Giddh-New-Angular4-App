@@ -86,7 +86,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.onCancel();
-                this.availableTaxes = cloneDeep(o.taxes);
+                this.availableTaxes = cloneDeep(o.taxes);                
             }
 
             this.isLoading = o.isTaxesLoading;

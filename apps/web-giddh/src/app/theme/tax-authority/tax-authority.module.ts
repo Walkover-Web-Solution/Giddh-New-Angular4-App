@@ -14,6 +14,10 @@ import { HamburgerMenuModule } from '../../shared/header/components/hamburger-me
 import { TaxSidebarModule } from '../../shared/tax-sidebar/tax-sidebar.module';
 import { CreateComponent } from './create/create.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { TaxAuthorityReportComponent } from './reports/tax-authority-report/tax-authority-report.component';
+import { RateWiseComponent } from './reports/rate-wise/rate-wise.component';
+import { AccountWiseComponent } from './reports/account-wise/account-wise.component';
+import { VatReportModule } from '../../vat-report/vat-report.module';
 
 @NgModule({
     imports: [
@@ -29,14 +33,21 @@ import { ReactiveFormsModule } from '@angular/forms';
         GiddhPageLoaderModule,
         TranslateDirectiveModule,
         HamburgerMenuModule,
-        TaxSidebarModule
+        TaxSidebarModule,
+        VatReportModule
     ],
     exports: [
         TaxAuthorityComponent,
+        TaxAuthorityReportComponent,
+        RateWiseComponent,
+        AccountWiseComponent,
         CreateComponent
     ],
     declarations: [
         TaxAuthorityComponent,
+        TaxAuthorityReportComponent,
+        RateWiseComponent,
+        AccountWiseComponent,
         CreateComponent
     ]
 })

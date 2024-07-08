@@ -217,6 +217,7 @@ export class TaxResponse implements ITax {
     public isChecked?: boolean;
     public isDisabled?: boolean;
     public taxAuthorityRequest?: ITaxAuthority;
+    public taxAuthority?: ITaxAuthority;
 }
 
 export class StatesRequest {

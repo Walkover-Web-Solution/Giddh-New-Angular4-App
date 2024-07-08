@@ -7,10 +7,14 @@ import { AppState } from "../../../store";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { ToasterService } from "../../../services/toaster.service";
 import { SettingsTaxesService } from "../../../services/settings.taxes.service";
+import { SalesTaxReport } from "./tax-authority.const";
 
 export interface TaxAuthorityState {
     isLoading: boolean;
     taxAuthorityList: ITaxAuthority[];
+    taxAuthorityWiseReport: any[];
+    taxWiseReport: any[];
+    accountWiseReport: any[];
     createTaxAuthorityIsSuccess: boolean;
     deleteTaxAuthorityIsSuccess: boolean;
     updateTaxAuthorityIsSuccess: boolean;
@@ -19,6 +23,9 @@ export interface TaxAuthorityState {
 const DEFAULT_STATE: TaxAuthorityState = {
     isLoading: false,
     taxAuthorityList: null,
+    taxAuthorityWiseReport: null,
+    taxWiseReport: null,
+    accountWiseReport: null,
     createTaxAuthorityIsSuccess: null,
     updateTaxAuthorityIsSuccess: null,
     deleteTaxAuthorityIsSuccess: null
@@ -36,6 +43,9 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
 
     public isLoading$ = this.select((state) => state.isLoading);
     public taxAuthorityList$ = this.select((state) => state.taxAuthorityList);
+    public taxAuthorityWiseReport$ = this.select((state) => state.taxAuthorityWiseReport);
+    public taxWiseReport = this.select((state) => state.taxWiseReport);
+    public accountWiseReport = this.select((state) => state.accountWiseReport);
     public deleteTaxAuthorityIsSuccess$ = this.select((state) => state.deleteTaxAuthorityIsSuccess);
     public createTaxAuthorityIsSuccess$ = this.select((state) => state.createTaxAuthorityIsSuccess);
     public updateTaxAuthorityIsSuccess$ = this.select((state) => state.updateTaxAuthorityIsSuccess);
@@ -104,7 +114,7 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                                 createTaxAuthorityIsSuccess: true
                             });
                         },
-                        (error: any) => {                    
+                        (error: any) => {
                             this.toaster.showSnackBar("error", error?.error?.message);
                             return this.patchState({
                                 createTaxAuthorityIsSuccess: false
@@ -145,7 +155,7 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
         return data.pipe(
             switchMap((req) => {
                 console.log("req", req);
-                
+
                 this.patchState({ deleteTaxAuthorityIsSuccess: null });
                 return this.settingsTaxesService.DeleteTaxAuthority(req).pipe(
                     tapResponse(
@@ -158,6 +168,52 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 deleteTaxAuthorityIsSuccess: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getReportTaxAuthorityWise = this.effect((data: Observable<{ reportType: string, params: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    isLoading: true,
+                    taxAuthorityWiseReport: null,
+                    taxWiseReport: null,
+                    accountWiseReport: null
+                });
+                return this.settingsTaxesService.GetSaleTaxReport(req.reportType, req.params).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            switch (req.reportType) {
+                                case SalesTaxReport.TaxAuthorityWise:
+                                    return this.patchState({
+                                        taxAuthorityWiseReport: res?.body ?? [],
+                                        isLoading: false
+                                    });
+                                case SalesTaxReport.TaxWise:
+                                    return this.patchState({
+                                        taxWiseReport: res?.body ?? [],
+                                        isLoading: false
+                                    });
+                                case SalesTaxReport.AccountWise:
+                                    return this.patchState({
+                                        accountWiseReport: res?.body ?? [],
+                                        isLoading: false
+                                    });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                isLoading: false,
+                                taxAuthorityWiseReport: null,
+                                taxWiseReport: null,
+                                accountWiseReport: null
                             });
                         }
                     ),

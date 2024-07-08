@@ -1,4 +1,11 @@
 {
     "enter_description": "Enter Description",
-    "select_state" : "Select State"
+    "select_state" : "Select State",
+    "confirm_delete_tax_authority": "Are you sure you want to delete the <span class='fw-bold'>[NAME]?<span>",
+    "no_values_changed_message": "No values have been changed.",
+    "reporting_tax_authority": "Reporting Tax Authority",
+    "sales_with_tax": "Sales with Tax",
+    "non_taxable_amount": "Non Taxable Amount",
+    "taxable_amount": "Taxable Amount",
+    "tax_collected": "Tax Collected"
 }

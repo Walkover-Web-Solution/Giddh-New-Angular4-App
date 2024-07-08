@@ -1,11 +1,9 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { GeneralService } from '../../services/general.service';
 import { TaxAuthorityComponentStore } from './utility/tax-authority.store';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
 import { CreateComponent } from './create/create.component';
+import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 
 @Component({
     selector: 'tax-authority',
@@ -22,23 +20,12 @@ export class TaxAuthorityComponent implements OnInit {
     public commonLocaleData: any = {};
     /** Holds table columns */
     public displayedColumns = ['name', 'uniqueName', 'description', 'action'];
-    /** True if API Call is in progress */
-    public isLoading: boolean;
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
-
     /** Loading Observable */
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
     /** Tax Authority List Observable */
     public taxAuthorityList$: Observable<any> = this.componentStore.taxAuthorityList$;
-    // /** Delete Tax Authority is success Observable */
-    // public deleteTaxAuthorityIsSuccess$: Observable<any> = this.componentStore.deleteTaxAuthorityIsSuccess$;
-    // /** Create Tax Authority is success Observable */
-    // public createTaxAuthorityIsSuccess$: Observable<any> = this.componentStore.createTaxAuthorityIsSuccess$;
-    // /** Update Tax Authority is success Observable */
-    // public updateTaxAuthorityIsSuccess$: Observable<any> = this.componentStore.updateTaxAuthorityIsSuccess$;
-
-    private createTaxAuthorityDialogRef: MatDialogRef<any>;
 
     constructor(
         private componentStore: TaxAuthorityComponentStore,
@@ -53,44 +40,11 @@ export class TaxAuthorityComponent implements OnInit {
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.getTaxAuthority();
-        this.subscribeAllStoreObservable();
-    }
-
-    /**
-     * Subscribe store Observable
-     *
-     * @private
-     * @memberof TaxAuthorityComponent
-     */
-    private subscribeAllStoreObservable(): void {
-        // Subscribe Tax Authority List
-        this.componentStore.taxAuthorityList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                console.log("taxAuthorityList", response);
-            }
-        });
-
-        // Subscribe Create Tax Authority Success
-        this.componentStore.createTaxAuthorityIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log("createTaxAuthorityIsSuccess", response);
-            
-            if (response) {
-                this.createTaxAuthorityDialogRef.close();
-                console.log("Create", response);
-            }
-        });
-
-        // Subscribe Update Tax Authority Success
-        this.componentStore.updateTaxAuthorityIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                console.log("Update", response);
-            }
-        });
 
         // Subscribe Delete Tax Authority Success
         this.componentStore.deleteTaxAuthorityIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                console.log("Delete", response);
+                this.getTaxAuthority();
             }
         });
     }
@@ -109,26 +63,60 @@ export class TaxAuthorityComponent implements OnInit {
      *
      * @memberof TaxAuthorityComponent
      */
-    public openCreateTaxAuthorityDialog(): void {
-        this.createTaxAuthorityDialogRef = this.dialog.open(CreateComponent, {
+    public openCreateUpdateTaxAuthorityDialog(isUpdateMode: boolean = false, taxAuthorityInfo?: any): void {
+        const dialogConfig: MatDialogConfig = {
             width: 'var(--aside-pane-width)',
             height: '100vh',
             position: {
                 top: '0',
                 right: '0'
             }
+        };
+        if (isUpdateMode) {
+            dialogConfig.data = taxAuthorityInfo;
+        }
+        const createUpdateTaxAuthorityDialogRef = this.dialog.open(CreateComponent, dialogConfig);
+
+        createUpdateTaxAuthorityDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.getTaxAuthority();
+            }
         });
     }
 
     /**
-     * Delete Tax Authority
+     * Open Delete Tax Authority confirmation dialog
      *
      * @param {string} uniqueName
      * @memberof TaxAuthorityComponent
      */
-    public deleteTaxAuthority(uniqueName: string): void {
-        this.componentStore.deleteTaxAuthority(uniqueName);
-    } 
+    public deleteTaxAuthority(taxAuthorityName: string, uniqueName: string): void {
+        this.openConfirmationDialog(taxAuthorityName, uniqueName);
+    }
+
+    /**
+     * Open confirmation dialog to Tax Authority
+     *
+     * @private
+     * @param {*} request
+     * @memberof TaxAuthorityComponent
+     */
+    private openConfirmationDialog(taxAuthorityName: string, uniqueName: string): void {
+        const dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '540px',
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: this.localeData?.confirm_delete_tax_authority?.replace("[NAME]", taxAuthorityName),
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.componentStore.deleteTaxAuthority(uniqueName);
+            }
+        });
+    }
 
     /**
      * Lifecycle hook for destroy

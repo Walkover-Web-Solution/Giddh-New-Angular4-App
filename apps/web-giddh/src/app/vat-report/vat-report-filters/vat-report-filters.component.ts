@@ -43,6 +43,8 @@ export class VatReportFiltersComponent implements OnInit {
     @Input() public isZimbabweCompany: boolean = false;
     /** True if active country is Kenya */
     @Input() public isKenyaCompany: boolean = false;
+    /** True if active country is US */
+    @Input() public isUSCompany: boolean = false;
     /** Hold HMRC portal url */
     @Input() public connectToHMRCUrl: string = null;
     /** Holds Current Currency Code for Zimbabwe report */

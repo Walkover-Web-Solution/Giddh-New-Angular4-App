@@ -113,6 +113,24 @@
                                     <tax-authority></tax-authority>
                                 </div>
                             </div>
+                            <div *ngIf="activeTab === 'reports' && integrationtab === 'tax-authority'">
+                                <hamburger-menu [pageHeading]="localeData?.setting_manage_tax_authority"></hamburger-menu>
+                                <div class="setting-container">
+                                    <tax-authority-report></tax-authority-report>
+                                </div>
+                            </div>
+                            <div *ngIf="activeTab === 'reports' && integrationtab === 'rate-wise'">
+                                <hamburger-menu [pageHeading]="localeData?.setting_manage_tax_authority"></hamburger-menu>
+                                <div class="setting-container">
+                                    <rate-wise-report></rate-wise-report>
+                                </div>
+                            </div>
+                            <div *ngIf="activeTab === 'reports' && integrationtab === 'account-wise'">
+                                <hamburger-menu [pageHeading]="localeData?.setting_manage_tax_authority"></hamburger-menu>
+                                <div class="setting-container">
+                                    <account-wise-report></account-wise-report>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

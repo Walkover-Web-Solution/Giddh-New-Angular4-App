@@ -20,5 +20,7 @@
     "add_vat": "Add VAT",
     "liability_report": "Liability Report",
     "add_sales_tax": "Add Sales Tax",
-    "manage_tax_authority": "Manage Tax Authority"
+    "manage_tax_authority": "Manage Tax Authority",
+    "rate_wise": "Rate Wise",
+    "account_wise": "Account Wise"
 }
