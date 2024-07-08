@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ViewChildren, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AdjustInventoryComponentStore } from './utility/adjust-inventory.store';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
@@ -8,7 +8,10 @@ import { SettingsUtilityService } from '../../../settings/services/settings-util
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { OptionInterface } from '../../../models/api-models/Voucher';
-import { SearchStockTransactionReportRequest } from '../../../models/api-models/Inventory';
+import { SearchStockTransactionReportRequest, StockTransactionReportRequest } from '../../../models/api-models/Inventory';
+import { ActivatedRoute } from '@angular/router';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import * as dayjs from 'dayjs';
 @Component({
     selector: 'adjust-inventory',
     templateUrl: './adjust-inventory.component.html',
@@ -53,7 +56,14 @@ export class AdjustInventoryComponent implements OnInit {
 
         }
     ];
-    public method: any[] = [
+    /* dayjs object */
+    public dayjs = dayjs;
+    /** Stock Transactional Object */
+    public searchRequest: SearchStockTransactionReportRequest = new SearchStockTransactionReportRequest();
+    /** Holds Inventory Type */
+    public inventoryType: string;
+    /** Holds Calculation methods */
+    public calculationMethod: any[] = [
         {
             label: 'Percentage',
             value: 'PERCENTAGE',
@@ -66,7 +76,8 @@ export class AdjustInventoryComponent implements OnInit {
         },
     ];
     /** Stock Transactional Object */
-    public searchRequest: SearchStockTransactionReportRequest = new SearchStockTransactionReportRequest();
+    public stockReportRequest: StockTransactionReportRequest = new StockTransactionReportRequest();
+
     public displayedColumns: any[] = ['select', 'position', 'name', 'weight', 'symbol'];
     public dataSource: any[] = [
         { position: 'Red', name: 5000, weight: 500, symbol: 5500 },
@@ -80,7 +91,8 @@ export class AdjustInventoryComponent implements OnInit {
         private settingsUtilityService: SettingsUtilityService,
         private componentStore: AdjustInventoryComponentStore,
         private formBuilder: FormBuilder,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private route: ActivatedRoute
     ) {
      }
     public ngOnInit(): void {
@@ -90,30 +102,55 @@ export class AdjustInventoryComponent implements OnInit {
         this.getExpensesAccount();
         this.getItemWiseReport();
 
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            console.log(params);
+            if (params?.type) {
+                this.inventoryType = params?.type.toLowerCase();
+            }
+        });
+
+        /** Universal date */
+        this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
+            if (dateObj) {
+                let universalDate = _.cloneDeep(dateObj);
+                this.stockReportRequest.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.stockReportRequest.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
+            }
+        });
+
         this.componentStore.reasons$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 const mappedReasons: OptionInterface[] = response.results.map(item => ({
                     value: item.uniqueName,
                     label: item.reason,
-                    additional: {
-                        type: item
-                    }
+                    additional: item
                 }));
                 this.reasons$ = observableOf(mappedReasons);
             }
         });
 
         this.componentStore.itemWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                const mappedIItemWise: OptionInterface[] = response.results.map(item => ({
+                    value: item.uniqueName,
+                    label: item.name,
+                    additional: item
+                }));
+                this.inventoryList$ = observableOf(mappedIItemWise);
+            }
+        });
+
+        this.componentStore.variantWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             console.log(response);
             // if (response) {
-            //     const mappedReasons: OptionInterface[] = response.results.map(item => ({
+            //     const mappedIItemWise: OptionInterface[] = response.results.map(item => ({
             //         value: item.uniqueName,
-            //         label: item.reason,
+            //         label: item.name,
             //         additional: {
             //             type: item
             //         }
             //     }));
-            //     this.reasons$ = observableOf(mappedReasons);
+            //     this.inventoryList$ = observableOf(mappedIItemWise);
             // }
         });
 
@@ -122,9 +159,7 @@ export class AdjustInventoryComponent implements OnInit {
                 const mappedAccounts: OptionInterface[] = response.results.map(item => ({
                     value: item.uniqueName,
                     label: item.name,
-                    additional: {
-                        type: item
-                    }
+                    additional: item
                 }));
                 this.expenseAccounts$ = observableOf(mappedAccounts);
             }
@@ -137,9 +172,7 @@ export class AdjustInventoryComponent implements OnInit {
                 const mappedWarehouses: OptionInterface[] = warehouseData?.formattedWarehouses?.map(item => ({
                     value: item.value,
                     label: item.label,
-                    additional: {
-                        type: item
-                    }
+                    additional: item
                 }));
                 this.warehouses$ = observableOf(mappedWarehouses);
             }
@@ -148,7 +181,9 @@ export class AdjustInventoryComponent implements OnInit {
 
     public getItemWiseReport(): void {
         console.log(this.searchRequest);
-        this.searchRequest.count = 50;
+        this.searchRequest.count = 200000000;
+        this.searchRequest.inventoryType = this.inventoryType?.toUpperCase();
+        this.searchRequest.searchPage = 'VARIANT';
         this.componentStore.getItemWiseReport(this.searchRequest);
     }
 
@@ -212,6 +247,31 @@ export class AdjustInventoryComponent implements OnInit {
    */
     public selectInventory(event: any, isClear: boolean = false): void {
         console.log(event);
+        let queryParams = {
+            from: this.stockReportRequest.from ?? '',
+            to: this.stockReportRequest.to ?? '',
+            count: 200000000,
+            page: this.stockReportRequest.page ?? 1,
+            sort: this.stockReportRequest.sort ?? '',
+            sortBy: this.stockReportRequest.sortBy ?? ''
+        };
+        this.stockReportRequest.inventoryType = this.inventoryType?.toUpperCase();
+        if (event && event.additional?.type === 'STOCK GROUP') {
+            this.stockReportRequest.stockGroupUniqueNames = [event.value];
+            let reqObj = {
+                queryParams: queryParams,
+                stockReportRequest: this.stockReportRequest
+            }
+            this.componentStore.getVariantWiseReport(reqObj);
+        } else {
+            let reqObj = {
+                queryParams: queryParams,
+                stockReportRequest: this.stockReportRequest
+            }
+            this.stockReportRequest.stockUniqueNames = [event.value];
+            this.componentStore.getVariantWiseReport(reqObj);
+        }
+
     }
 
     /**

@@ -130,7 +130,6 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            console.log(params);
             if (params?.type) {
                 this.inventoryType = params?.type.toLowerCase();
             }

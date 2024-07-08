@@ -148,7 +148,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
-                                    itemWiseReport: res ?? [],
+                                    itemWiseReport: res?.body ?? [],
                                 });
                             } else {
                                 if (res.message) {
@@ -180,7 +180,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
     readonly getVariantWiseReport = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
-                return this.inventoryService.getAdjustmentInventoryReport(req).pipe(
+                return this.inventoryService.getVariantWiseReport(req.queryParams, req.stockReportRequest).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
