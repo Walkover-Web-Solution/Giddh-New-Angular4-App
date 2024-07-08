@@ -180,7 +180,7 @@ export class VatReportFiltersComponent implements OnInit {
             if (dateObj && !this.hasQueryParams) {
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                this.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);                
                 this.fromDate.emit(this.from);
                 this.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
                 this.toDate.emit(this.to);
@@ -201,7 +201,7 @@ export class VatReportFiltersComponent implements OnInit {
      */
     private getQueryParams(): void {
         this.route.queryParams.pipe(take(1)).subscribe(params => {
-            if (params) {
+            if (params && Object.keys(params)?.length > 0) {                
                 const from = params['from'];
                 const to = params['to'];
                 const taxNumber = params['taxNumber'];

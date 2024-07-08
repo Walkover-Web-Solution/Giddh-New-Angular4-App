@@ -308,9 +308,7 @@ export const TRN_SUPPORTED_COUNTRIES = [
 ];
 
 /** Sales tax supported country codes */
-export const SALES_TAX_SUPPORTED_COUNTRIES = [
-    'US'
-];
+export const SALES_TAX_SUPPORTED_COUNTRIES = ['US'];
 
 export const API_POSTMAN_DOC_URL = 'https://apidoc.giddh.com/';
 

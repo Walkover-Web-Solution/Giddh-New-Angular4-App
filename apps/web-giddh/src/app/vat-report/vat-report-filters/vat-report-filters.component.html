@@ -33,7 +33,7 @@
                 [defaultValue]="vatReportCurrencyCode" [required]="true">
             </dropdown-field>
         </div>
-        <div *ngIf="taxNumber && (isZimbabweCompany || isKenyaCompany)" class="export-btn d-flex justify-content-end w100">
+        <div *ngIf="taxNumber && (isZimbabweCompany || isKenyaCompany || isUSCompany)" class="export-btn d-flex justify-content-end w100">
             <button mat-stroked-button color="primary" (click)="downloadVatReport()">
                 <i class="icon-download1"></i>
                 {{ commonLocaleData?.app_export }}

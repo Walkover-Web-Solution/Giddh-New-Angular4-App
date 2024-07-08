@@ -1,0 +1,19 @@
+.tax-authority {
+    max-width: var(--center-content-max-width);
+
+    .vat-report-table {
+        &.mat-mdc-table {
+            &.bordered-table {
+                tr {
+                    th,td {
+                        border: 1px solid var(--color-table-primary-content-bar-border) !important;
+                        
+                        &:not(:first-child) {
+                            text-align: right;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

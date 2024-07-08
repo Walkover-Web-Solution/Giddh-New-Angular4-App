@@ -18,6 +18,7 @@ import { TaxAuthorityReportComponent } from './reports/tax-authority-report/tax-
 import { RateWiseComponent } from './reports/rate-wise/rate-wise.component';
 import { AccountWiseComponent } from './reports/account-wise/account-wise.component';
 import { VatReportModule } from '../../vat-report/vat-report.module';
+import { AmountFieldComponentModule } from '../../shared/amount-field/amount-field.module';
 
 @NgModule({
     imports: [
@@ -34,7 +35,8 @@ import { VatReportModule } from '../../vat-report/vat-report.module';
         TranslateDirectiveModule,
         HamburgerMenuModule,
         TaxSidebarModule,
-        VatReportModule
+        VatReportModule,
+        AmountFieldComponentModule
     ],
     exports: [
         TaxAuthorityComponent,

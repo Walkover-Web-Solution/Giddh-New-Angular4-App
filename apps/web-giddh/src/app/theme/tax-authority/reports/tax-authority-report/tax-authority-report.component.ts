@@ -6,6 +6,9 @@ import { Tax } from 'apps/web-giddh/src/app/models/api-models/Purchase';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { Store, select } from '@ngrx/store';
+import { saveAs } from "file-saver";
+import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+
 
 @Component({
     selector: 'tax-authority-report',
@@ -28,23 +31,25 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
     /** Tax Authority Wise Report Observable */
     public taxAuthorityWiseReport$: Observable<any> = this.componentStore.taxAuthorityWiseReport$;
-    /** Holds API Request Object */
-    private apiRequestParams: SalesTaxReportRequest = {
-        to: '31-12-2026', // ===== REMOVE THIS STATIC CODE =====
-        from: '01-01-2024',
-        taxNumber: '123456789'
-    };
+    // /** Holds API Request Object */
+    // private apiRequestParams: SalesTaxReportRequest = {
+    //     to: '31-12-2026', // ===== REMOVE THIS STATIC CODE =====
+    //     from: '01-01-2024',
+    //     taxNumber: '123456789'
+    // };
     public salesTaxReportForm: FormGroup;
-    isTaxApiInProgress
-     /** Holds Active company details */
-     public activeCompany: any = null;
-     /** Stores the current branch */
-     public currentBranch: any = { name: '', uniqueName: '' };
+    /** Holds True if get all tax number api isinprogress*/
+    public isTaxApiInProgress: boolean = false;
+    /** Holds Active company details */
+    public activeCompany: any = null;
+    /** Stores the current branch */
+    public currentBranch: any = { name: '', uniqueName: '' };
 
     constructor(
         private componentStore: TaxAuthorityComponentStore,
         private formBuilder: FormBuilder,
         private store: Store<AppState>,
+        private generalService: GeneralService
     ) { }
 
     /**
@@ -54,33 +59,45 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.initTaxAuthorityReport();
-        this.getTaxAuthority();
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
         });
+
+        this.salesTaxReportForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe( res => {
+            if (res) {
+                console.log("Res :", res);
+            } else{
+                console.log("faltu :", res);
+
+            }
+        });
     }
 
     /**
-   * Get Tax Authority API Call
-   *
-   * @memberof TaxAuthorityComponent
-   */
+    * Get Tax Authority API Call
+    *
+    * @memberof TaxAuthorityComponent
+    */
     public getTaxAuthority(): void {
-        const model: any = {
-            reportType: SalesTaxReport.TaxAuthorityWise,
-            params: this.apiRequestParams
-        };
-        this.componentStore.getReportTaxAuthorityWise(model);
+        console.log("taxNumber", this.getFormControl('taxNumber').value);
+        
+        if (this.getFormControl('taxNumber').value) {
+            const model: any = {
+                reportType: SalesTaxReport.TaxAuthorityWise,
+                params: this.salesTaxReportForm.value
+            };
+            this.componentStore.getReportTaxAuthorityWise(model);
+        }
     }
 
-   /**
-   * Export Tax Authority API Call
-   *
-   * @memberof TaxAuthorityComponent
-   */
-     public exportTaxAuthority(): void {
+    /**
+    * Export Tax Authority API Call
+    *
+    * @memberof TaxAuthorityComponent
+    */
+    public exportTaxAuthority(): void {
         // const model: any = {
         //     reportType: SalesTaxReport.TaxAuthorityWise,
         //     params: this.apiRequestParams
@@ -111,8 +128,20 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     * @returns {*}
     * @memberof TaxAuthorityComponent
     */
-      public getFormControl(control: string): any {
+    public getFormControl(control: string): any {
         return this.salesTaxReportForm.get(control);
+    }
+
+    public downloadVatReport() {
+        // this.componentStore.downloadVatReport(this.salesTaxReportForm.value).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        //     if (res?.status === "success") {
+        //         let blob = this.generalService.base64ToBlob(res.body, 'application/xls', 512);
+        //         return saveAs(blob, `SalesTaxReport.xlsx`);
+        //     } else {
+        // this.toasty.clearAllToaster();
+        // this.toasty.errorToast(res?.message);
+        //     }
+        // });
     }
 
     /**

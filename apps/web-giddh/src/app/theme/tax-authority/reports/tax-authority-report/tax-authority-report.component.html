@@ -11,125 +11,130 @@
         </div>
     </div>
     <!-- Tax Authority code  -->
-    <div class="tax-authority">
+    <div class="tax-authority mx-auto">
         <div class="container-fluid ml-0">
             <div class="row">
-                <div class="w-100">
-                    <vat-report-filters 
-                        [localeData]="localeData" 
-                        [commonLocaleData]="commonLocaleData"
-                        [activeCompany]="activeCompany"
-                        [moduleType]="'LIABILITY_REPORT'"
-                        [isUSCompany]="true" 
-                        [localeData]="localeData"
-                        (getReport)="getTaxAuthority()" 
-                        (exportReport)="exportTaxAuthority()"
-                        (isTaxApiInProgress)="isTaxApiInProgress = $event"
-                        (currentTaxNumber)="getFormControl('taxNumber')?.patchValue($event)"
-                        (fromDate)="getFormControl('from')?.patchValue($event)"
-                        (toDate)="getFormControl('to')?.patchValue($event)"
-                        (currentBranchChange)="getFormControl('branchUniqueName')?.patchValue($event)">
-                    </vat-report-filters>
-                </div>
-            </div>
-
-            <!-- Loader  -->
-            <div class="mt-5" *ngIf="isLoading$ | async">
-                <giddh-page-loader></giddh-page-loader>
-            </div>
-            <div class="row mt-4" *ngIf="(taxAuthorityWiseReport$ | async)?.responses?.length && !(isLoading$ | async)">
-                <!-- Tax Authority Table  -->
-                <div class="white-box">
-                    <p>
-                        <strong class="table-heading">{{ 'Sales Tax Report' }}</strong>  <!--  NEED TO TRANSLATE ===========-->
-                    </p>
-                    <div class="table-responsive">
-                        <table mat-table [dataSource]="(taxAuthorityWiseReport$ | async)?.responses"
-                            class="table basic mr-t2 on-mobile-view vat-report-table hide-last-row bordered-table">
-                            <!-- Reporting Tax Authority -->
-                            <ng-container matColumnDef="tax_authority_name">
-                                <th mat-header-cell *matHeaderCellDef>
-                                    {{ localeData?.reporting_tax_authority }}
-                                </th>
-                                <td mat-cell *matCellDef="let element" width="25%">
-                                    {{ element?.taxAuthorityName }}
-                                </td>
-                                <td mat-footer-cell *matFooterCellDef>
-                                    {{ commonLocaleData?.app_total }}
-                                </td>
-                            </ng-container>
-
-                             <!-- Sales with Tax -->
-                             <ng-container matColumnDef="taxable_amount">
-                                <th mat-header-cell *matHeaderCellDef>
-                                    {{ localeData?.box }}
-                                </th>
-                                <td mat-cell *matCellDef="let element" width="15%">
-                                    {{ element?.taxableAmount }}
-                                </td>
-                                <td mat-footer-cell *matFooterCellDef></td>
-                            </ng-container>
-
-                            <!-- Sales -->
-                            <ng-container matColumnDef="sub_total">
-                                <th mat-header-cell *matHeaderCellDef>
-                                    {{ commonLocaleData?.app_sales }}
-                                </th>
-                                <td mat-cell *matCellDef="let element" width="15%">
-                                    {{ element?.subTotal }}
-                                </td>
-                                <td mat-footer-cell *matFooterCellDef></td>
-                            </ng-container>
-
-                             <!-- Non Taxable Amount -->
-                             <ng-container matColumnDef="non_taxable_amount">
-                                <th mat-header-cell *matHeaderCellDef>
-                                    {{ localeData?.box }}
-                                </th>
-                                <td mat-cell *matCellDef="let element" width="15%">
-                                    {{ element?.nonTaxableAmount }}
-                                </td>
-                                <td mat-footer-cell *matFooterCellDef></td>
-                            </ng-container>
-
-                            <!-- Taxable Amount -->
-                            <ng-container matColumnDef="taxable_amount">
-                                <th mat-header-cell *matHeaderCellDef>
-                                    {{ localeData?.box }}
-                                </th>
-                                <td mat-cell *matCellDef="let element" width="15%">
-                                    {{ element?.taxableAmount }}
-                                </td>
-                                <td mat-footer-cell *matFooterCellDef></td>
-                            </ng-container>
-
-                             <!-- Tax Collected -->
-                             <ng-container matColumnDef="tax_total">
-                                <th mat-header-cell *matHeaderCellDef>
-                                    {{ localeData?.box }}
-                                </th>
-                                <td mat-cell *matCellDef="let element" width="15%">
-                                    {{ element?.taxTotal }}
-                                </td>
-                                <td mat-footer-cell *matFooterCellDef>
-                                    <amount-field
-                                        class="d-inline-block"
-                                        [amount]="report.totalAmount"
-                                        [currencySymbol]="activeCompany?.baseCurrencySymbol"
-                                        [currencyCode]="false"
-                                    ></amount-field>
-                                </td>
-                            </ng-container>
-
-                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                            <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-                        </table>
+                <div class="col-12">
+                    <div class="w-100">
+                        <vat-report-filters 
+                            [localeData]="localeData" 
+                            [commonLocaleData]="commonLocaleData"
+                            [activeCompany]="activeCompany"
+                            [moduleType]="'LIABILITY_REPORT'"
+                            [isUSCompany]="true" 
+                            [localeData]="localeData"
+                            (getReport)="getTaxAuthority()" 
+                            (exportReport)="exportTaxAuthority()"
+                            (isTaxApiInProgress)="isTaxApiInProgress = $event"
+                            (currentTaxNumber)="getFormControl('taxNumber')?.patchValue($event)"
+                            (fromDate)="getFormControl('from')?.patchValue($event)"
+                            (toDate)="getFormControl('to')?.patchValue($event)"
+                            (currentBranchChange)="getFormControl('branchUniqueName')?.patchValue($event)">
+                        </vat-report-filters>
                     </div>
                 </div>
-                <!-- No Data Found Message -->
-                <div class="no-data" *ngIf="!(taxAuthorityWiseReport$ | async)?.responses?.length && !(isLoading$ | async)">
-                    <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <!-- Loader  -->
+                    <div class="mt-5" *ngIf="(isLoading$ | async) || isTaxApiInProgress">
+                        <giddh-page-loader></giddh-page-loader>
+                    </div>
+                    <div class=" mt-4" *ngIf="!(isLoading$ | async) && !isTaxApiInProgress">
+                        <div class="white-box w-100" *ngIf="(taxAuthorityWiseReport$ | async)?.responses?.length">
+                            <p>
+                                <strong class="table-heading">{{ 'Sales Tax Report' }}</strong>  <!--  NEED TO TRANSLATE after confirmation of text ===========-->
+                            </p>
+                            <!-- Tax Authority Table  -->
+                            <div class="table-responsive">
+                                <table mat-table [dataSource]="(taxAuthorityWiseReport$ | async)?.responses"
+                                class="table basic mr-t2 vat-report-table hide-last-row bordered-table">
+                                    <!-- Reporting Tax Authority -->
+                                    <ng-container matColumnDef="tax_authority_name">
+                                        <th mat-header-cell *matHeaderCellDef>
+                                            {{ localeData?.reporting_tax_authority }}
+                                        </th>
+                                        <td mat-cell *matCellDef="let element" width="25%">
+                                            {{ element?.taxAuthorityName }}
+                                        </td>
+                                        <td mat-footer-cell *matFooterCellDef>
+                                            {{ commonLocaleData?.app_total }}
+                                        </td>
+                                    </ng-container>
+        
+                                     <!-- Sales with Tax -->
+                                     <ng-container matColumnDef="taxable_amount">
+                                        <th mat-header-cell *matHeaderCellDef>
+                                            {{ localeData?.taxable_amount }}
+                                        </th>
+                                        <td mat-cell *matCellDef="let element" width="15%">
+                                            {{ element?.taxableAmount }}
+                                        </td>
+                                        <td mat-footer-cell *matFooterCellDef></td>
+                                    </ng-container>
+        
+                                    <!-- Sales -->
+                                    <ng-container matColumnDef="sub_total">
+                                        <th mat-header-cell *matHeaderCellDef>
+                                            {{ commonLocaleData?.app_sales }}
+                                        </th>
+                                        <td mat-cell *matCellDef="let element" width="15%">
+                                            {{ element?.subTotal }}
+                                        </td>
+                                        <td mat-footer-cell *matFooterCellDef></td>
+                                    </ng-container>
+        
+                                     <!-- Non Taxable Amount -->
+                                     <ng-container matColumnDef="non_taxable_amount">
+                                        <th mat-header-cell *matHeaderCellDef>
+                                            {{ localeData?.non_taxable_amount }}
+                                        </th>
+                                        <td mat-cell *matCellDef="let element" width="15%">
+                                            {{ element?.nonTaxableAmount }}
+                                        </td>
+                                        <td mat-footer-cell *matFooterCellDef></td>
+                                    </ng-container>
+        
+                                    <!-- Taxable Amount -->
+                                    <ng-container matColumnDef="taxable_amount">
+                                        <th mat-header-cell *matHeaderCellDef>
+                                            {{ localeData?.taxable_amount }}
+                                        </th>
+                                        <td mat-cell *matCellDef="let element" width="15%">
+                                            {{ element?.taxableAmount }}
+                                        </td>
+                                        <td mat-footer-cell *matFooterCellDef></td>
+                                    </ng-container>
+        
+                                     <!-- Tax Collected -->
+                                     <ng-container matColumnDef="tax_total">
+                                        <th mat-header-cell *matHeaderCellDef>
+                                            {{ localeData?.tax_collected }}
+                                        </th>
+                                        <td mat-cell *matCellDef="let element" width="15%">
+                                            {{ element?.taxTotal }}
+                                        </td>
+                                        <td mat-footer-cell *matFooterCellDef>
+                                            <amount-field
+                                                class="d-inline-block"
+                                                [amount]="element?.taxTotal"
+                                                [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                                [currencyCode]="false"
+                                            ></amount-field>
+                                        </td>
+                                    </ng-container>
+        
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                    <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- No Data Found Message -->
+                        <div class="no-data" *ngIf="!(taxAuthorityWiseReport$ | async)?.responses?.length">
+                            <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
