@@ -18,6 +18,7 @@
             [fromToDate]="fromToDate"
             [stockReportRequest]="stockReportRequest"
             [balanceStockReportRequest]="balanceStockReportRequest"
+            [stockReportRequestExport]="stockReportRequestExport"
             [advanceSearchModalResponse]="advanceSearchModalResponse"
             [pullUniversalDate]="pullUniversalDate"
             (filters)="getSelectedFilters($event)"
@@ -327,6 +328,9 @@
             </div>
             <div class="row" *ngIf="isDataAvailable">
                 <div class="col-12 horizontal-padding">
+                    <div class="d-flex justify-content-end mt-3 mb-2" *ngIf="reportType === 'STOCK'">
+                        <button mat-stroked-button color="primary" (click)="exportReport()">Export</button>
+                    </div>
                     <div class="table-responsive inventory-report-table" *ngIf="displayedColumns?.length">
                         <table
                             mat-table

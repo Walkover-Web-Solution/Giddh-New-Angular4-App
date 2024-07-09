@@ -4,7 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { select, Store } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { BalanceStockTransactionReportRequest, InventoryReportRequest, InventoryReportBalanceResponse, StockReportRequest } from '../../../models/api-models/Inventory';
+import { BalanceStockTransactionReportRequest, InventoryReportRequest, InventoryReportBalanceResponse, StockReportRequest, InventoryReportRequestExport } from '../../../models/api-models/Inventory';
 import { InventoryService } from '../../../services/inventory.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
@@ -40,6 +40,8 @@ export class ReportsComponent implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Stock Transactional Object */
     public stockReportRequest: InventoryReportRequest = new InventoryReportRequest();
+    /** Stock Transactional Export Object */
+    public stockReportRequestExport: InventoryReportRequestExport = new InventoryReportRequestExport();
     /** Stock Transactional Object */
     public balanceStockReportRequest: BalanceStockTransactionReportRequest = new BalanceStockTransactionReportRequest();
     /** Stock Transactional Report Balance Response */
@@ -571,6 +573,7 @@ export class ReportsComponent implements OnInit {
             this.storeFilters[this.currentUrl] = event;
             this.store.dispatch(this.commonAction.setFilters(this.storeFilters));
             this.stockReportRequest = event?.stockReportRequest;
+            this.stockReportRequestExport = event?.stockReportRequestExport;
             this.balanceStockReportRequest = event?.balanceStockReportRequest;
             this.todaySelected = event?.todaySelected;
             this.showClearFilter = event?.showClearFilter;
@@ -597,6 +600,67 @@ export class ReportsComponent implements OnInit {
                 this.headerColumns[key].colSpan = colSpan;
             }
         });
+
+        /* This will use for table header from customise columns for export table */
+        this.stockReportRequestExport.showStockName = false;
+        this.stockReportRequestExport.showGroupName = false;
+        this.stockReportRequestExport.showUnitName = false;
+        this.stockReportRequestExport.showOpeningStockQty = false;
+        this.stockReportRequestExport.showOpeningStockValue = false;
+        this.stockReportRequestExport.showInwardsQty = false;
+        this.stockReportRequestExport.showInwardsValue = false;
+        this.stockReportRequestExport.showOutwardsQty = false;
+        this.stockReportRequestExport.showOutwardsValue = false;
+        this.stockReportRequestExport.showClosingStockQty = false;
+        this.stockReportRequestExport.showClosingStockValue = false;
+
+        /* for column value filter selected */
+        this.displayedColumns.forEach(column => {
+            if (column === 'stock_name') {
+                this.stockReportRequestExport.showStockName = true;
+                console.log(this.stockReportRequestExport.showStockName, 'stock_name');
+            }
+            if (column === 'group_name') {
+                this.stockReportRequestExport.showGroupName = true;
+                console.log(this.stockReportRequestExport.showGroupName, 'group_name');
+            }
+            if (column === 'unit_name') {
+                this.stockReportRequestExport.showUnitName = true;
+                console.log(this.stockReportRequestExport.showUnitName, 'unit_name');
+            }
+            if (column === 'opening_quantity') {
+                this.stockReportRequestExport.showOpeningStockQty = true;
+                console.log(this.stockReportRequestExport.showOpeningStockQty, 'opening_quantity');
+            }
+            else if (column === 'opening_amount') {
+                this.stockReportRequestExport.showOpeningStockValue = true;
+                console.log(this.stockReportRequestExport.showOpeningStockValue, 'opening_amount');
+            }
+            else if (column === 'inward_quantity') {
+                this.stockReportRequestExport.showInwardsQty = true;
+                console.log(this.stockReportRequestExport.showInwardsQty, 'inward_quantity');
+            }
+            else if (column === 'inward_amount') {
+                this.stockReportRequestExport.showInwardsValue = true;
+                console.log(this.stockReportRequestExport.showInwardsValue, 'inward_amount');
+            }
+            else if (column === 'outward_quantity') {
+                this.stockReportRequestExport.showOutwardsQty = true;
+                console.log(this.stockReportRequestExport.showOutwardsQty, 'outward_quantity');
+            }
+            else if (column === 'outward_amount') {
+                this.stockReportRequestExport.showOutwardsValue = true;
+                console.log(this.stockReportRequestExport.showOutwardsValue, 'outward_amount');
+            }
+            else if (column === 'closing_quantity') {
+                this.stockReportRequestExport.showClosingStockQty = true;
+                console.log(this.stockReportRequestExport.showClosingStockQty, 'closing_quantity');
+            }
+            else if (column === 'closing_amount') {
+                this.stockReportRequestExport.showClosingStockValue = true;
+                console.log(this.stockReportRequestExport.showClosingStockValue, 'closing_amount');
+            }
+        });
     }
 
     /**
@@ -621,6 +685,7 @@ export class ReportsComponent implements OnInit {
         let currentUrl = '';
         let stockReportRequest = cloneDeep(this.stockReportRequest);
         let balanceStockReportRequest = cloneDeep(this.balanceStockReportRequest);
+        let stockReportRequestExport = cloneDeep(this.stockReportRequestExport);
 
         stockReportRequest.stockGroupUniqueNames = undefined;
         stockReportRequest.stockUniqueNames = undefined;
@@ -638,6 +703,16 @@ export class ReportsComponent implements OnInit {
         stockReportRequest.expression = undefined;
         stockReportRequest.param = undefined;
         stockReportRequest.val = undefined;
+
+        stockReportRequestExport.expression = undefined;
+        stockReportRequestExport.param = undefined;
+        stockReportRequestExport.val = undefined;
+        stockReportRequestExport.stockGroupUniqueNames = undefined;
+        stockReportRequestExport.stockUniqueNames = undefined;
+        stockReportRequestExport.warehouseUniqueNames = undefined;
+        stockReportRequestExport.variantUniqueNames = undefined;
+
+        this.stockReportRequestExport = stockReportRequestExport;
 
         if (this.reportType === InventoryReportType.group) {
             if (element?.stockGroupHasChild) {
@@ -662,7 +737,6 @@ export class ReportsComponent implements OnInit {
             this.store.dispatch(this.commonAction.setFilters(this.storeFilters));
             this.router.navigate(['/pages/inventory/v2/reports/', this.moduleType?.toLowerCase(), 'transaction', element?.variant?.uniqueName]);
         }
-
     }
 
     /**
@@ -727,6 +801,45 @@ export class ReportsComponent implements OnInit {
         }
 
         this.router.navigate(['/pages/inventory/v2', 'stock', this.moduleType?.toLowerCase(), 'edit', element?.stock?.uniqueName], { queryParams: { tab: 1 } });
+    }
+
+    /**
+     * This will use for export stock transactions report data
+     *
+     * @return {*}  {void}
+     * @memberof ReportsComponent
+    */
+    public exportReport(): void {
+        setTimeout(() => {
+            this.isLoading = true;
+            if (this.reportType === InventoryReportType.stock) {
+
+                let stockReportRequestExport = this.stockReportRequestExport;
+                let queryParams = {
+                    from: this.fromDate,
+                    to: this.toDate,
+                };
+                delete stockReportRequestExport.from;
+                delete stockReportRequestExport.to;
+
+                stockReportRequestExport.inventoryType = this.moduleType;
+                console.log('Export Request:', stockReportRequestExport);
+                this.inventoryService.getItemWiseReportExport(queryParams, stockReportRequestExport).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
+                    this.isLoading = true;
+                    console.log('API Response:', response);
+                    if (response?.status === 'success') {
+                        if (typeof response?.body === "string") {
+                            this.toaster.successToast("success", response?.body);
+                            this.router.navigate(["/pages/downloads"]);
+                            this.isLoading = false;
+                        }
+                    } else {
+                        this.toaster.errorToast(response?.message);
+                    }
+                    this.changeDetection.detectChanges();
+                });
+            }
+        });
     }
 
     /**
