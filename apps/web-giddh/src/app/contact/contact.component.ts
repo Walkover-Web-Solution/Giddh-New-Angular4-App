@@ -550,8 +550,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     public performActions(type: number, account: any, event?: any) {
         switch (type) {
             case 1: // go to ledger
-                const additionalParams = this.fromDate && this.toDate ? `/${account?.uniqueName}/${this.fromDate}/${this.toDate}` : `/${account?.uniqueName}`;
-                this.goToRoute("ledger", additionalParams, account?.uniqueName);
+                if (this.voucherApiVersion === 2) {
+                    const additionalParams = this.fromDate && this.toDate ? `/${account?.uniqueName}/${this.fromDate}/${this.toDate}` : `/${account?.uniqueName}`;
+                    this.goToRoute("ledger", additionalParams, account?.uniqueName);
+                } else {
+                    this.goToRoute("ledger", `/${this.fromDate}/${this.toDate}`, account?.uniqueName);
+                }
                 break;
 
             case 2: // go to sales or purchase
