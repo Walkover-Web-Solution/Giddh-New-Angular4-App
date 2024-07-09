@@ -1,9 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
-import { Store } from "@ngrx/store";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { ITaxAuthority } from "../../../models/interfaces/tax.interface";
-import { AppState } from "../../../store";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { ToasterService } from "../../../services/toaster.service";
 import { SettingsTaxesService } from "../../../services/settings.taxes.service";
@@ -15,6 +13,9 @@ export interface TaxAuthorityState {
     taxAuthorityWiseReport: any[];
     taxWiseReport: any[];
     accountWiseReport: any[];
+    exportTaxAuthorityWiseReport: string;
+    exportTaxWiseReport: string;
+    exportAccountWiseReport: string;
     createTaxAuthorityIsSuccess: boolean;
     deleteTaxAuthorityIsSuccess: boolean;
     updateTaxAuthorityIsSuccess: boolean;
@@ -26,6 +27,9 @@ const DEFAULT_STATE: TaxAuthorityState = {
     taxAuthorityWiseReport: null,
     taxWiseReport: null,
     accountWiseReport: null,
+    exportTaxAuthorityWiseReport: null,
+    exportTaxWiseReport: null,
+    exportAccountWiseReport: null,
     createTaxAuthorityIsSuccess: null,
     updateTaxAuthorityIsSuccess: null,
     deleteTaxAuthorityIsSuccess: null
@@ -44,8 +48,11 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
     public isLoading$ = this.select((state) => state.isLoading);
     public taxAuthorityList$ = this.select((state) => state.taxAuthorityList);
     public taxAuthorityWiseReport$ = this.select((state) => state.taxAuthorityWiseReport);
-    public taxWiseReport = this.select((state) => state.taxWiseReport);
-    public accountWiseReport = this.select((state) => state.accountWiseReport);
+    public taxWiseReport$ = this.select((state) => state.taxWiseReport);
+    public accountWiseReport$ = this.select((state) => state.accountWiseReport);
+    public exportTaxAuthorityWiseReport$ = this.select((state) => state.exportTaxAuthorityWiseReport);
+    public exportTaxWiseReport$ = this.select((state) => state.exportTaxWiseReport);
+    public exportAccountWiseReport$ = this.select((state) => state.exportAccountWiseReport);
     public deleteTaxAuthorityIsSuccess$ = this.select((state) => state.deleteTaxAuthorityIsSuccess);
     public createTaxAuthorityIsSuccess$ = this.select((state) => state.createTaxAuthorityIsSuccess);
     public updateTaxAuthorityIsSuccess$ = this.select((state) => state.updateTaxAuthorityIsSuccess);
@@ -177,7 +184,7 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
         );
     });
 
-    readonly getReportTaxAuthorityWise = this.effect((data: Observable<{ reportType: string, params: any }>) => {
+    readonly getSalesTaxReport = this.effect((data: Observable<{ reportType: string, params: any, isExport: boolean }>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({
@@ -186,7 +193,7 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                     taxWiseReport: null,
                     accountWiseReport: null
                 });
-                return this.settingsTaxesService.GetSaleTaxReport(req.reportType, req.params).pipe(
+                return this.settingsTaxesService.GetExportSaleTaxReport(req.reportType, req.params, req.isExport).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             switch (req.reportType) {
@@ -214,6 +221,52 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                                 taxAuthorityWiseReport: null,
                                 taxWiseReport: null,
                                 accountWiseReport: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly exportSalesTaxReport = this.effect((data: Observable<{ reportType: string, params: any, isExport: boolean }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    isLoading: true,
+                    exportTaxAuthorityWiseReport: null,
+                    exportTaxWiseReport: null,
+                    exportAccountWiseReport: null
+                });
+                return this.settingsTaxesService.GetExportSaleTaxReport(req.reportType, req.params, req.isExport).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            switch (req.reportType) {
+                                case SalesTaxReport.TaxAuthorityWise:
+                                    return this.patchState({
+                                        exportTaxAuthorityWiseReport: res?.body ?? '',
+                                        isLoading: false
+                                    });
+                                case SalesTaxReport.TaxWise:
+                                    return this.patchState({
+                                        exportTaxWiseReport: res?.body ?? '',
+                                        isLoading: false
+                                    });
+                                case SalesTaxReport.AccountWise:
+                                    return this.patchState({
+                                        exportAccountWiseReport: res?.body ?? '',
+                                        isLoading: false
+                                    });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                isLoading: false,
+                                exportTaxAuthorityWiseReport: null,
+                                exportTaxWiseReport: null,
+                                exportAccountWiseReport: null
                             });
                         }
                     ),

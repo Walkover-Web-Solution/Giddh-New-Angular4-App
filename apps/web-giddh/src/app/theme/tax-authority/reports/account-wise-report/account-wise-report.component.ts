@@ -1,21 +1,22 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { TaxAuthorityComponentStore } from '../../utility/tax-authority.store';
-import { Observable, ReplaySubject, takeUntil } from 'rxjs';
-import { SalesTaxReport } from '../../utility/tax-authority.const';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { TaxAuthorityComponentStore } from '../../utility/tax-authority.store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { Store, select } from '@ngrx/store';
-import { saveAs } from "file-saver";
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { ActivatedRoute } from '@angular/router';
+import { saveAs } from "file-saver";
+import { SalesTaxReport } from '../../utility/tax-authority.const';
 
 
 @Component({
-    selector: 'tax-authority-report',
-    templateUrl: './tax-authority-report.component.html',
-    styleUrls: ['./tax-authority-report.component.scss'],
+    selector: 'account-wise-report',
+    templateUrl: './account-wise-report.component.html',
+    styleUrls: ['./account-wise-report.component.scss'],
     providers: [TaxAuthorityComponentStore]
 })
-export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
+export class AccountWiseReportComponent implements OnInit {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold local JSON data */
@@ -23,13 +24,13 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Holds table columns */
-    public displayedColumns: any = ['tax_authority_name', 'tax_amount', 'sub_total', 'non_taxable_amount', 'taxable_amount', 'tax_collected'];
+    public displayedColumns: any = ['tax_name', 'total_sales', 'taxable_amount', 'tax_percentage', 'tax_collected'];
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /** Loading Observable */
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
     /** Tax Authority Wise Report Observable */
-    public taxAuthorityWiseReport$: Observable<any> = this.componentStore.taxAuthorityWiseReport$;
+    public taxWiseReport$: Observable<any> = this.componentStore.taxWiseReport$;
     /** Holds Form group */
     public salesTaxReportForm: FormGroup;
     /** Holds True if get all tax number api isinprogress*/
@@ -41,16 +42,24 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
         private componentStore: TaxAuthorityComponentStore,
         private formBuilder: FormBuilder,
         private store: Store<AppState>,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private activateRoute: ActivatedRoute
     ) { }
 
     /**
      * Lifecycle hook for initialization
      *
-     * @memberof TaxAuthorityReportComponent
+     * @memberof AccountWiseReportComponent
      */
     public ngOnInit(): void {
+        document.querySelector('body').classList.add('gst-sidebar-open');
         this.initSalesTaxReportForm();
+        this.activateRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
+            if (queryParams?.uniqueName) {
+                console.log("Q -", queryParams.uniqueName);
+                this.getFormControl('taxAuthorityUniqueName').patchValue(queryParams.uniqueName);
+            }
+        });
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
@@ -68,13 +77,13 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     /**
     * Get Tax Authority API Call
     *
-    * @memberof TaxAuthorityReportComponent
+    * @memberof AccountWiseReportComponent
     */
     public getSalesTaxReport(): void {
         const formValue = this.salesTaxReportForm.value;
         if (formValue.taxNumber && formValue.from && formValue.to) {
             const model: any = {
-                reportType: SalesTaxReport.TaxAuthorityWise,
+                reportType: SalesTaxReport.TaxWise,
                 params: formValue,
                 isExport: false
             };
@@ -85,12 +94,12 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     /**
     * Export Tax Authority API Call
     *
-    * @memberof TaxAuthorityReportComponent
+    * @memberof AccountWiseReportComponent
     */
     public exportTaxAuthority(): void {
         const formValue = this.salesTaxReportForm.value;
         const model: any = {
-            reportType: SalesTaxReport.TaxAuthorityWise,
+            reportType: SalesTaxReport.TaxWise,
             params: formValue,
             isExport: true
         };
@@ -102,11 +111,12 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     * This will use for init main formgroup
     *
     * @private
-    * @memberof TaxAuthorityReportComponent
+    * @memberof AccountWiseReportComponent
     */
     private initSalesTaxReportForm(): void {
         this.salesTaxReportForm = this.formBuilder.group({
             branchUniqueName: [''],
+            taxAuthorityUniqueName: [''],
             taxNumber: [''],
             from: [''],
             to: ['']
@@ -118,7 +128,7 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     *
     * @param {string} control
     * @returns {*}
-    * @memberof TaxAuthorityReportComponent
+    * @memberof AccountWiseReportComponent
     */
     public getFormControl(control: string): any {
         return this.salesTaxReportForm.get(control);
@@ -129,17 +139,17 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
      *
      * @param {*} response
      * @returns {void}
-     * @memberof TaxAuthorityReportComponent
+     * @memberof AccountWiseReportComponent
      */
     public downloadReport(response: any): void {
         let blob = this.generalService.base64ToBlob(response, 'application/xls', 512);
-        return saveAs(blob, `Sales Tax Report - Tax Authority wise.csv`);
+        return saveAs(blob, `Sales Tax Report - Account wise.csv`);
     }
 
     /**
     * Lifecycle hook for destroy
     *
-    * @memberof TaxAuthorityReportComponent
+    * @memberof AccountWiseReportComponent
     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
@@ -147,4 +157,5 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
         document.querySelector('body').classList.remove('gst-sidebar-open');
         this.asideGstSidebarMenuState === 'out'
     }
+
 }

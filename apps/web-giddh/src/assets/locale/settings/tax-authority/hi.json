@@ -7,5 +7,8 @@
      "sales_with_tax": "कर सहित बिक्री",
      "non_taxable_amount": "कर योग्य राशि नहीं",
      "taxable_amount": "कर योग्य राशि",
-     "tax_collected": "संग्रहित कर"
+     "tax_collected": "संग्रहित कर",
+     "no_sales_tax_available": "रिपोर्ट देखने के लिए कृपया अपने डिफ़ॉल्ट पते में बिक्री कर जोड़ें",
+     "tax_name": "कर नाम",
+     "tax_percentage": "कर प्रतिशत"
 }

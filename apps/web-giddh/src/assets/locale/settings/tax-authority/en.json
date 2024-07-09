@@ -7,5 +7,8 @@
     "sales_with_tax": "Sales with Tax",
     "non_taxable_amount": "Non Taxable Amount",
     "taxable_amount": "Taxable Amount",
-    "tax_collected": "Tax Collected"
+    "tax_collected": "Tax Collected",
+    "no_sales_tax_available": "Please add Sales Tax to your default address in order to view report.",
+    "tax_name": "Tax Name",
+    "tax_percentage": "Tax Percentage"
 }

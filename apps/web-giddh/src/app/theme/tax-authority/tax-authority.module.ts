@@ -15,10 +15,10 @@ import { TaxSidebarModule } from '../../shared/tax-sidebar/tax-sidebar.module';
 import { CreateComponent } from './create/create.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TaxAuthorityReportComponent } from './reports/tax-authority-report/tax-authority-report.component';
-import { RateWiseComponent } from './reports/rate-wise/rate-wise.component';
-import { AccountWiseComponent } from './reports/account-wise/account-wise.component';
+import { RateWiseReportComponent } from './reports/rate-wise-report/rate-wise-report.component';
 import { VatReportModule } from '../../vat-report/vat-report.module';
 import { AmountFieldComponentModule } from '../../shared/amount-field/amount-field.module';
+import { AccountWiseReportComponent } from './reports/account-wise-report/account-wise-report.component';
 
 @NgModule({
     imports: [
@@ -41,15 +41,15 @@ import { AmountFieldComponentModule } from '../../shared/amount-field/amount-fie
     exports: [
         TaxAuthorityComponent,
         TaxAuthorityReportComponent,
-        RateWiseComponent,
-        AccountWiseComponent,
+        RateWiseReportComponent,
+        AccountWiseReportComponent,
         CreateComponent
     ],
     declarations: [
         TaxAuthorityComponent,
         TaxAuthorityReportComponent,
-        RateWiseComponent,
-        AccountWiseComponent,
+        RateWiseReportComponent,
+        AccountWiseReportComponent,
         CreateComponent
     ]
 })

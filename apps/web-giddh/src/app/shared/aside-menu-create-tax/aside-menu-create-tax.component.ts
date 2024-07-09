@@ -60,7 +60,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
 
     constructor(
         private store: Store<AppState>,
-        private _settingsTaxesActions: SettingsTaxesActions,
+        private settingsTaxesActions: SettingsTaxesActions,
         private salesService: SalesService,
         private generalService: GeneralService
     ) {
@@ -109,7 +109,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
                     this.taxAuthorityList = arr;
                 }
             });
-        this.store.dispatch(this._settingsTaxesActions.GetTaxAuthorityList());
+        this.store.dispatch(this.settingsTaxesActions.GetTaxAuthorityList());
 
         this.store
             .pipe(select(p => p.company && p.company.isTaxCreationInProcess), takeUntil(this.destroyed$))
@@ -218,14 +218,14 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         dataToSave?.taxAuthority && delete dataToSave.taxAuthority;
 
         if (this.tax && this.tax.uniqueName) {
-            this.store.dispatch(this._settingsTaxesActions.UpdateTax(dataToSave));
+            this.store.dispatch(this.settingsTaxesActions.UpdateTax(dataToSave));
         } else {
-            this.store.dispatch(this._settingsTaxesActions.CreateTax(dataToSave));
+            this.store.dispatch(this.settingsTaxesActions.CreateTax(dataToSave));
         }
     }
 
     public getTaxList(countryCode) {
-        this.store.dispatch(this._settingsTaxesActions.resetTaxList());
+        this.store.dispatch(this.settingsTaxesActions.resetTaxList());
         this.store.pipe(select(s => s.settings.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 Object.keys(res.taxes).forEach(key => {
@@ -243,7 +243,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
                 });
                 this.taxListSource$ = observableOf(this.taxList);
             } else {
-                this.store.dispatch(this._settingsTaxesActions.GetTaxList(countryCode));
+                this.store.dispatch(this.settingsTaxesActions.GetTaxList(countryCode));
             }
         });
     }

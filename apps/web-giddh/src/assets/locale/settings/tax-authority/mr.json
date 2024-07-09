@@ -7,5 +7,8 @@
     "sales_with_tax": "करासह विक्री",
     "non_taxable_amount": "करयोग्य नाही रक्कम",
     "taxable_amount": "करयोग्य रक्कम",
-    "tax_collected": "वसूल केलेला कर"
+    "tax_collected": "वसूल केलेला कर",
+    "no_sales_tax_available": "अहवाल पाहण्यासाठी कृपया तुमच्या डीफॉल्ट पत्त्यावर विक्रीकर जोडा",
+    "tax_name": "कर नाव",
+    "tax_percentage": "कर टक्केवारी"
 }

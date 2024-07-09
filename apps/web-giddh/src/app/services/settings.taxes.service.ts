@@ -8,7 +8,7 @@ import { COMPANY_API } from './apiurls/company.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { ITaxAuthority } from '../models/interfaces/tax.interface';
-import { CreateTaxAuthority, SalesTaxReport } from '../theme/tax-authority/utility/tax-authority.const';
+import { CreateTaxAuthority, SalesTaxReport, SalesTaxReportRequest } from '../theme/tax-authority/utility/tax-authority.const';
 
 @Injectable()
 export class SettingsTaxesService {
@@ -132,21 +132,24 @@ export class SettingsTaxesService {
     }
 
     /**
-     * Get Sale Tax Report -  Tax Authority wise / Tax wise / Account wise
+     * Get or Export Sale Tax Report -  Tax Authority wise / Tax wise / Account wise
      *
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof SettingsTaxesService
      */
-    public GetSaleTaxReport(reportType: string, params: any): Observable<BaseResponse<any, any>> {
+    public GetExportSaleTaxReport(reportType: string, params: SalesTaxReportRequest, isExport: boolean = false): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = this.config.apiUrl;
         switch (reportType) {
-            case SalesTaxReport.TaxAuthorityWise: apiUrl += COMPANY_API.GET_SALES_TAX_AUTHORITY_WISE_REPORT
+            case SalesTaxReport.TaxAuthorityWise: apiUrl +=
+                (isExport ? COMPANY_API.EXPORT_SALES_TAX_AUTHORITY_WISE_REPORT : COMPANY_API.GET_SALES_TAX_AUTHORITY_WISE_REPORT)
                 break;
-            case SalesTaxReport.TaxWise: apiUrl += COMPANY_API.GET_SALES_TAX_WISE_REPORT
+            case SalesTaxReport.TaxWise: apiUrl +=
+                (isExport ? COMPANY_API.EXPORT_SALES_TAX_WISE_REPORT : COMPANY_API.GET_SALES_TAX_WISE_REPORT)
                 ?.replace(':taxAuthorityUniqueName', encodeURIComponent(params?.taxAuthorityUniqueName))
                 break;
-            case SalesTaxReport.AccountWise: apiUrl += COMPANY_API.GET_SALES_TAX_ACCOUNT_WISE_REPORT
+            case SalesTaxReport.AccountWise: apiUrl +=
+                (isExport ? COMPANY_API.EXPORT_SALES_ACCOUNT_WISE_REPORT : COMPANY_API.GET_SALES_TAX_ACCOUNT_WISE_REPORT)
                 ?.replace(':taxAuthorityUniqueName', encodeURIComponent(params?.taxAuthorityUniqueName))
                 ?.replace(':taxUniqueName', encodeURIComponent(params?.taxUniqueName))
                 break;
@@ -161,4 +164,5 @@ export class SettingsTaxesService {
             return data;
         }));
     }
+
 }

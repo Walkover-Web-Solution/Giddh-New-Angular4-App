@@ -39,12 +39,12 @@ export class TaxAuthorityComponent implements OnInit {
      */
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
-        this.getTaxAuthority();
+        this.getSalesTaxReport();
 
         // Subscribe Delete Tax Authority Success
         this.componentStore.deleteTaxAuthorityIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.getTaxAuthority();
+                this.getSalesTaxReport();
             }
         });
     }
@@ -54,7 +54,7 @@ export class TaxAuthorityComponent implements OnInit {
     *
     * @memberof TaxAuthorityComponent
     */
-    public getTaxAuthority(): void {
+    public getSalesTaxReport(): void {
         this.componentStore.getTaxAuthorityList();
     }
 
@@ -79,7 +79,7 @@ export class TaxAuthorityComponent implements OnInit {
 
         createUpdateTaxAuthorityDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                this.getTaxAuthority();
+                this.getSalesTaxReport();
             }
         });
     }
