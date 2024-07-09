@@ -33,7 +33,7 @@ export const DEFAULT_ADJUSTINVENTORY_STATE: AdjustInventoryState = {
     itemWiseReport: null,
     variantWiseReport: null,
     inventorySearch: null,
-    adjustInventoryData:null,
+    adjustInventoryData: null,
     createAdjustInventoryInProgress: false,
     createAdjustInventoryIsSuccess: false,
     updateAdjustInventoryInProgress: false,
@@ -71,8 +71,6 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
     public createAdjustInventoryInProgress$ = this.select((state) => state.createAdjustInventoryInProgress);
     public createReasonIsSuccess$ = this.select((state) => state.createReasonIsSuccess);
     public isLoading$ = this.select((state) => state.isLoading);
-
-
 
     /**
      * This will be use for get expenses accounts
@@ -223,11 +221,11 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
     });
 
 
- /**
-* This will be use for get stock group balance
-*
-* @memberof AdjustInventoryComponentStore
-*/
+    /**
+   * This will be use for get stock group balance
+   *
+   * @memberof AdjustInventoryComponentStore
+   */
     readonly getStockGroupClosingBalance = this.effect((data: Observable<any>) => {
         return data.pipe(
             mergeMap((req) => {
@@ -262,10 +260,10 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
 
 
     /**
- * This will be use for get adjust inventory data
- *
- * @memberof AdjustInventoryComponentStore
- */
+     * This will be use for get adjust inventory data
+     *
+     * @memberof AdjustInventoryComponentStore
+     */
     readonly getAdjustInventoryData = this.effect((data: Observable<any>) => {
         return data.pipe(
             mergeMap((req) => {
@@ -337,10 +335,10 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
 
 
     /**
-  * This will be use for create reason in  inventory adjustment
-  *
-  * @memberof AdjustInventoryListComponentStore
-  */
+      * This will be use for create reason in  inventory adjustment
+      *
+      * @memberof AdjustInventoryListComponentStore
+      */
     readonly createReason = this.effect((data: Observable<string>) => {
         return data.pipe(
             switchMap((req) => {
@@ -410,10 +408,10 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
     });
 
     /**
-* This will be use for create inventory adjust
-*
-* @memberof AdjustInventoryComponentStore
-*/
+    * This will be use for update inventory adjust
+    *
+    * @memberof AdjustInventoryComponentStore
+    */
     readonly updateInventoryAdjustment = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -451,215 +449,11 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
         );
     });
 
-    /**
-    * This will be use for create reason
-    *
-    * @memberof AdjustInventoryComponentStore
-    */
-    // readonly createReason = this.effect((data: Observable<any>) => {
-    //     return data.pipe(
-    //         switchMap((req) => {
-    //             this.patchState({ createReasonInProgress: true });
-    //             return this.subscriptionService.cancelSubscriptionById(req).pipe(
-    //                 tapResponse(
-    //                     (res: BaseResponse<any, any>) => {
-    //                         if (res?.status === 'success') {
-    //                             this.toaster.showSnackBar('success', res?.body);
-    //                             return this.patchState({
-    //                                 createReasonInProgress: false,
-    //                                 createReasonIsSuccess: true,
-    //                             });
-    //                         } else {
-    //                             if (res.message) {
-    //                                 this.toaster.showSnackBar('error', res.message);
-    //                             }
-    //                             return this.patchState({
-    //                                 createReasonInProgress: false,
-    //                                 createReasonIsSuccess: false,
-    //                             });
-    //                         }
-    //                     },
-    //                     (error: any) => {
-    //                         this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
-
-    //                         return this.patchState({
-    //                             createReasonInProgress: false
-    //                         });
-    //                     }
-    //                 ),
-    //                 catchError((err) => EMPTY)
-    //             );
-    //         })
-    //     );
-    // });
-
-
-    //     /**
-    //      * Transfer Subscription
-    //      *
-    //      * @memberof SubscriptionComponentStore
-    //      */
-    //     readonly transferSubscription = this.effect((data: Observable<any>) => {
-    //         return data.pipe(
-    //             switchMap((req) => {
-    //                 this.patchState({ transferSubscriptionInProgress: false });
-    //                 return this.subscriptionService.transferSubscription(req.model, req.params).pipe(
-    //                     tapResponse(
-    //                         (res: BaseResponse<any, any>) => {
-    //                             if (res?.status === 'success') {
-    //                                 this.toasterService.showSnackBar('success', res?.body);
-    //                                 return this.patchState({
-    //                                     transferSubscriptionInProgress: false,
-    //                                     transferSubscriptionSuccess: true
-    //                                 });
-    //                             } else {
-    //                                 if (res.message) {
-    //                                     this.toasterService.showSnackBar('error', res.message);
-    //                                 }
-    //                                 return this.patchState({
-    //                                     transferSubscriptionSuccess: false,
-    //                                 });
-    //                             }
-    //                         },
-    //                         (error: any) => {
-    //                             this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
-
-    //                             return this.patchState({
-    //                                 transferSubscriptionSuccess: false
-    //                             });
-    //                         }
-    //                     ),
-    //                     catchError((err) => EMPTY)
-    //                 );
-    //             })
-    //         );
-    //     });
-
-    //     /**
-    //     *  Verify Ownership
-    //     *
-    //     * @memberof SubscriptionComponentStore
-    //     */
-    //     readonly verifyOwnership = this.effect((data: Observable<any>) => {
-    //         return data.pipe(
-    //             switchMap((req) => {
-    //                 this.patchState({ verifyOwnershipInProgress: true });
-    //                 return this.subscriptionService.verifyOwnership(req).pipe(
-    //                     tapResponse(
-    //                         (res: BaseResponse<any, any>) => {
-    //                             if (res?.status === 'success') {
-    //                                 this.toasterService.showSnackBar('success', 'Subscription ownership verified successfully.');
-    //                                 return this.patchState({
-    //                                     verifyOwnershipSuccess: res?.body ?? null,
-    //                                     verifyOwnershipInProgress: false,
-    //                                 });
-    //                             } else {
-    //                                 if (res.message) {
-    //                                     this.toasterService.showSnackBar('error', res.message);
-    //                                 }
-    //                                 return this.patchState({
-    //                                     verifyOwnershipSuccess: null,
-    //                                     verifyOwnershipInProgress: false,
-    //                                 });
-    //                             }
-    //                         },
-    //                         (error: any) => {
-    //                             this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
-    //                             return this.patchState({
-    //                                 verifyOwnershipSuccess: null,
-    //                                 verifyOwnershipInProgress: false
-    //                             });
-    //                         }
-    //                     ),
-    //                     catchError((err) => EMPTY)
-    //                 );
-    //             })
-    //         );
-    //     });
-
-    //     /**
-    //  * Get Subscribed Companies
-    //  *
-    //  * @memberof SubscriptionComponentStore
-    //  */
-    //     readonly getSubScribedCompanies = this.effect((data: Observable<any>) => {
-    //         return data.pipe(
-    //             switchMap(() => {
-    //                 this.patchState({ subscribedCompaniesInProgress: true });
-    //                 return this.subscriptionService.getSubScribedCompanies().pipe(
-    //                     tapResponse(
-    //                         (res: BaseResponse<any, any>) => {
-    //                             if (res?.status === 'success') {
-    //                                 return this.patchState({
-    //                                     subscribedCompanies: res?.body ?? null,
-    //                                     subscribedCompaniesInProgress: false,
-    //                                 });
-    //                             } else {
-    //                                 if (res.message) {
-    //                                     this.toasterService.showSnackBar('error', res.message);
-    //                                 }
-    //                                 return this.patchState({
-    //                                     subscribedCompanies: null,
-    //                                     subscribedCompaniesInProgress: false,
-    //                                 });
-    //                             }
-    //                         },
-    //                         (error: any) => {
-    //                             this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
-    //                             return this.patchState({
-    //                                 subscribedCompanies: null,
-    //                                 subscribedCompaniesInProgress: false
-    //                             });
-    //                         }
-    //                     ),
-    //                     catchError((err) => EMPTY)
-    //                 );
-    //             })
-    //         );
-    //     });
-
-    //     /**
-    //     *  Buy plan by Go cardless for UK companies
-    //     *
-    //     * @memberof SubscriptionComponentStore
-    //     */
-    //     readonly buyPlanByGoCardless = this.effect((data: Observable<any>) => {
-    //         return data.pipe(
-    //             switchMap((req) => {
-    //                 return this.subscriptionService.buyPlanByGoCardless(req).pipe(
-    //                     tapResponse(
-    //                         (res: BaseResponse<any, any>) => {
-    //                             if (res?.status === 'success') {
-    //                                 return this.patchState({
-    //                                     buyPlanSuccess: res?.body ?? null,
-    //                                 });
-    //                             } else {
-    //                                 if (res.message) {
-    //                                     this.toasterService.showSnackBar('error', res.message);
-    //                                 }
-    //                                 return this.patchState({
-    //                                     buyPlanSuccess: null
-    //                                 });
-    //                             }
-    //                         },
-    //                         (error: any) => {
-    //                             this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
-
-    //                             return this.patchState({
-    //                                 buyPlanSuccess: null
-    //                             });
-    //                         }
-    //                     ),
-    //                     catchError((err) => EMPTY)
-    //                 );
-    //             })
-    //         );
-    //     });
 
     /**
      * Lifecycle hook for component destroy
      *
-     * @memberof SubscriptionComponentStore
+     * @memberof AdjustInventoryComponentStore
      */
     public ngOnDestroy(): void {
         super.ngOnDestroy();

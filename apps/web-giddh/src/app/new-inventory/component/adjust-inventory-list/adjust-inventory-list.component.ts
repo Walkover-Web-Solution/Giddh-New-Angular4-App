@@ -17,8 +17,9 @@ import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-m
 import { OrganizationType } from '../../../models/user-login-state';
 import { cloneDeep } from '../../../lodash-optimized';
 import { AppState } from '../../../store';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
+
 @Component({
     selector: 'adjust-inventory-list',
     templateUrl: './adjust-inventory-list.component.html',
@@ -37,17 +38,17 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** This will use for table heading */
+    /** This will use for table display columns */
     public displayedColumns: string[] = ['DATE', 'referenceNo', 'name', 'reason', 'status', 'ADJUSTED_BY', 'adjustmentMethod', 'TYPE', 'action'];
-    /** Hold the data of inventory adjust */
+    /** Hold the data of inventory list */
     public dataSource: any;
     /** True if translations loaded */
     public translationLoaded: boolean = false;
-    /** Holds Store adjust inventory  observable*/
-    public adjustInventoryList$ = this.componentStore.select(state => state.adjustInventroyList);
+    /** Holds Store adjust inventory list observable*/
+    public adjustInventoryList$ = this.componentStore.select(state => state.adjustInventoryList);
     /** Holds Store adjust inventory list in progress API success state as observable*/
-    public adjustInventoryInProgress$ = this.componentStore.select(state => state.adjustInventroyListInProgress);
-    /* This will hold list of inventory adjust */
+    public adjustInventoryInProgress$ = this.componentStore.select(state => state.adjustInventoryListInProgress);
+    /* This will hold list of inventory adjust list*/
     public adjustInventoryList: AdjustInventoryListResponse[] = [];
     /* This will store modal reference */
     public modalRef: BsModalRef;
@@ -87,6 +88,10 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     public showReferenceNo: boolean = false;
     /* True if show Adjusted by show */
     public showAdjustedBy: boolean = false;
+    /* True if show type by show */
+    public showType: boolean = false;
+    /* True if show Adjustment method show */
+    public showAdjustmentMethod: boolean = false;
     /* True if show Status by show */
     public showStatus: boolean = false;
     /* True if show Stock/Group Name show */
@@ -123,11 +128,13 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     *This hook wil be use for component destory
+     *This hook wil be use for component initialization
      *
      * @memberof AdjustInventoryListComponent
      */
     public ngOnInit(): void {
+        this.initForm();
+        this.getAllAdjustReports(true);
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type) {
@@ -143,8 +150,8 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.toDate = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
-                // this.branchTransferGetRequestParams.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
-                // this.branchTransferGetRequestParams.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
+                this.adjustInventoryListRequest.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.adjustInventoryListRequest.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 this.getAllAdjustReports(false);
             }
         });
@@ -152,9 +159,6 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
         });
-
-        this.initForm();
-        this.getAllAdjustReports(true);
 
         /** Get Adjust inventory List */
         this.adjustInventoryList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -164,7 +168,11 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
                 if (this.dataSource?.filteredData?.length || this.adjustInventoryListForm?.controls['referenceNo']?.value ||
                     this.adjustInventoryListForm?.controls['name']?.value ||
                     this.adjustInventoryListForm?.controls['status']?.value ||
-                    this.adjustInventoryListForm?.controls['reason']?.value) {
+                    this.adjustInventoryListForm?.controls['reason']?.value ||
+                    this.adjustInventoryListForm?.controls['adjustmentMethod']?.value
+                    ||
+                    this.adjustInventoryListForm?.controls['adjustedBy']?.value  ||
+                    this.adjustInventoryListForm?.controls['entity']?.value) {
                     this.showData = true;
                 } else {
                     this.showData = false;
@@ -179,12 +187,14 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
             }
         });
 
+        /** Delete adjust inventory success */
         this.componentStore.deleteAdjustInventoryIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.getAllAdjustReports(true);
             }
         });
 
+        /** Get branch list  */
         this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.length) {
                 this.currentCompanyBranches = response.map(branch => ({
@@ -223,6 +233,8 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        /** Control value changes */
 
         this.adjustInventoryListForm?.controls['referenceNo'].valueChanges.pipe(
             debounceTime(700),
@@ -292,20 +304,73 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.adjustInventoryListForm?.controls['adjustmentMethod'].valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            if (searchedText !== null && searchedText !== undefined) {
+                this.showClearFilter = true;
+                this.adjustInventoryListRequest.q = searchedText;
+                this.adjustInventoryListRequest.searchBy = 'adjustmentMethod';
+                this.getAllAdjustReports(true);
+            }
+            if (searchedText === null || searchedText === "") {
+                this.showClearFilter = false;
+                this.showAdjustmentMethod = false;
+            }
+        });
+
+        this.adjustInventoryListForm?.controls['adjustedBy'].valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            if (searchedText !== null && searchedText !== undefined) {
+                this.showClearFilter = true;
+                this.adjustInventoryListRequest.q = searchedText;
+                this.adjustInventoryListRequest.searchBy = 'adjustedBy';
+                this.getAllAdjustReports(true);
+            }
+            if (searchedText === null || searchedText === "") {
+                this.showClearFilter = false;
+                this.showAdjustedBy = false;
+            }
+        });
+
+        this.adjustInventoryListForm?.controls['entity'].valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(searchedText => {
+            if (searchedText !== null && searchedText !== undefined) {
+                this.showClearFilter = true;
+                this.adjustInventoryListRequest.q = searchedText;
+                this.adjustInventoryListRequest.searchBy = 'entity';
+                this.getAllAdjustReports(true);
+            }
+            if (searchedText === null || searchedText === "") {
+                this.showClearFilter = false;
+                this.showType = false;
+            }
+        });
+
     }
 
     /**
- * Clears the filters and resets the form in the AdjustInventoryListComponent.
- *
- * @memberof AdjustInventoryListComponent
- */
+     * Clears the filters and resets the form in the AdjustInventoryListComponent.
+     *
+     * @memberof AdjustInventoryListComponent
+     */
     public clearFilter(): void {
         this.showClearFilter = false;
         this.showName = false;
         this.showReason = false;
         this.showReferenceNo = false;
         this.showAdjustedBy = false;
+        this.showType = false;
         this.showStatus = false;
+        this.showAdjustmentMethod = false;
         this.adjustInventoryListRequest = new InventorytAdjustReportQueryRequest();
         this.adjustInventoryListForm.reset();
         this.inlineSearch = '';
@@ -313,7 +378,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will use for init adjust inventrory report filters form
+     * This will use for init adjust inventrory form
      *
      * @memberof AdjustInventoryListComponent
      */
@@ -322,7 +387,10 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
             referenceNo: null,
             name: null,
             reason: null,
-            status: null
+            status: null,
+            adjustmentMethod: null,
+            adjustedBy: null,
+            entity: null
         });
     }
 
@@ -399,6 +467,8 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.adjustInventoryListRequest.from = this.fromDate;
+            this.adjustInventoryListRequest.to = this.toDate;
             this.getAllAdjustReports(false);
         }
     }
@@ -427,12 +497,12 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
 
 
     /**
-   * Returns the search field text
-   *
-   * @param {*} title
-   * @returns {string}
-   * @memberof AdjustInventoryListComponent
-   */
+    * Returns the search field text
+    *
+    * @param {*} title
+    * @returns {string}
+    * @memberof AdjustInventoryListComponent
+    */
     public getSearchFieldText(title: any): string {
         let searchField = this.localeData?.search_field;
         searchField = searchField?.replace("[FIELD]", title);
@@ -477,6 +547,18 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
             if (this.adjustInventoryListForm?.controls['referenceNo'].value !== null && this.adjustInventoryListForm?.controls['referenceNo'].value !== '') {
                 return;
             }
+        } else if (searchedFieldName === 'Adjustment Method') {
+            if (this.adjustInventoryListForm?.controls['adjustmentMethod'].value !== null && this.adjustInventoryListForm?.controls['adjustmentMethod'].value !== '') {
+                return;
+            }
+        } else if (searchedFieldName === 'Adjusted') {
+            if (this.adjustInventoryListForm?.controls['adjustedBy'].value !== null && this.adjustInventoryListForm?.controls['adjustedBy'].value !== '') {
+                return;
+            }
+        } else if (searchedFieldName === 'Type') {
+            if (this.adjustInventoryListForm?.controls['entity'].value !== null && this.adjustInventoryListForm?.controls['entity'].value !== '') {
+                return;
+            }
         }
 
         if (this.generalService.childOf(event?.target, element)) {
@@ -490,6 +572,12 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
                 this.showName = false;
             } else if (searchedFieldName === 'Request Status') {
                 this.showStatus = false;
+            } else if (searchedFieldName === 'Adjustment Method') {
+                this.showAdjustmentMethod = false;
+            } else if (searchedFieldName === 'Adjusted') {
+                this.showAdjustedBy = false;
+            } else if (searchedFieldName === 'Type') {
+                this.showType = false;
             }
         }
     }
@@ -502,7 +590,6 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
      * @memberof AdjustInventoryListComponent
      */
     public toggleSearch(fieldName: string): void {
-
         if (fieldName === 'Reason') {
             this.showReason = true;
         }
@@ -515,10 +602,19 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         if (fieldName === 'Request Status') {
             this.showStatus = true;
         }
+        if (fieldName === 'Adjustment Method') {
+            this.showAdjustmentMethod = true;
+        }
+        if (fieldName === 'Adjusted') {
+            this.showAdjustedBy = true;
+        }
+        if (fieldName === 'Type') {
+            this.showType = true;
+        }
     }
 
     /**
-     * This will be use for edit adjust inventory
+     * This will be use for edit adjust inventory routing
      *
      * @param {*} item
      * @memberof AdjustInventoryListComponent
@@ -553,13 +649,13 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for handle branchj change
+     * This will be use for handle branch change
      *
      * @param {*} selectedEntity
      * @memberof AdjustInventoryListComponent
      */
     public handleBranchChange(selectedEntity: any): void {
-        if (selectedEntity.value) {
+        if (selectedEntity?.value) {
             this.currentBranch.name = selectedEntity.label;
             this.adjustInventoryListRequest.branchUniqueName = selectedEntity.value;
             this.getAllAdjustReports(true);

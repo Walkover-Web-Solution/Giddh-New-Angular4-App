@@ -135,8 +135,7 @@
                 </div>
                 <div class="col-xxl-3 mt-3 col-xl-8 col-lg-6 col-md-6 pl-0">
                     <mat-accordion *ngIf="showHideTable">
-                        <!-- [expanded]="panelOpenState" -->
-                        <mat-expansion-panel>
+                        <mat-expansion-panel  [expanded]="panelOpenState">
                             <mat-expansion-panel-header class="h-auto">
                                 <table [width]="'100%'">
                                     <tr>

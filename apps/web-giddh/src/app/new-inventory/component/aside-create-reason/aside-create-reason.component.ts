@@ -18,7 +18,7 @@ export class AsideCreateNewReasonComponent implements OnDestroy, OnInit {
     @Input() public localeData: any = {};
     /** Emits modal close event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-    /** Holds Store adjust inventory list in progress API success state as observable*/
+    /** Holds Store create reason in progress API success state as observable*/
     public createReasonInProgress$ = this.componentStore.select(state => state.createReasonInProgress);
     /** Form Group for Reason form */
     public reasonForm: FormGroup;
@@ -60,7 +60,7 @@ export class AsideCreateNewReasonComponent implements OnDestroy, OnInit {
     }
 
     /**
-    * Resets form
+    * Reset form
     *
     * @memberof AsideCreateNewReasonComponent
     */
@@ -80,10 +80,10 @@ export class AsideCreateNewReasonComponent implements OnDestroy, OnInit {
     }
 
     /**
-   * Save reason
-   *
-   * @memberof AsideCreateNewReasonComponent
-   */
+     * Save reason
+     *
+     * @memberof AsideCreateNewReasonComponent
+     */
     public saveReason(): void {
         this.isValidForm = !this.reasonForm.invalid;
         if (this.reasonForm.invalid) {

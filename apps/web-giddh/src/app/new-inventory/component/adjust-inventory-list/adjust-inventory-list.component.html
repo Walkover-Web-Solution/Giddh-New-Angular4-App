@@ -1,49 +1,32 @@
-<ng-container
-    appTranslate
-    [file]="'inventory/adjustment'"
-    (commonLocaleData)="commonLocaleData = $event"
-    (localeData)="localeData = $event"
->
+<ng-container appTranslate [file]="'inventory/adjustment'" (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event">
     <div class="relative">
         <hamburger-menu [pageHeading]="'Adjust inventory'"></hamburger-menu>
     </div>
     <div class="container-fluid mr-t15 adjust-inventory-list-page">
         <div class="d-flex align-items-center column-gap1 adjust-inventory-header">
-            <div
-                *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
-                class="branch-width mr-0 float-left"
-            >
-                <dropdown-field
-                    [label]="commonLocaleData?.app_select_entity"
-                    [options]="currentCompanyBranches"
-                    width="100%"
-                    (selectedOption)="currentBranch.uniqueName = $event?.value; handleBranchChange($event)"
-                    [placeholder]="commonLocaleData?.app_select_entity"
-                    [defaultValue]="currentBranch?.alias"
-                ></dropdown-field>
+            <div *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
+                class="branch-width mr-0 float-left">
+                <dropdown-field [label]="commonLocaleData?.app_select_entity" [options]="currentCompanyBranches"
+                    width="100%" (selectedOption)="currentBranch.uniqueName = $event?.value; handleBranchChange($event)"
+                    [placeholder]="commonLocaleData?.app_select_entity" [defaultValue]="currentBranch?.alias">
+                </dropdown-field>
             </div>
             <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
-                <input
-                    type="text"
-                    id="select-date"
-                    name="selectedDateRange"
+                <input type="text" id="select-date" name="selectedDateRange"
                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                    class="giddh-datepicker date-range-picker"
-                />
+                    class="giddh-datepicker date-range-picker" />
             </div>
-            <button
-                *ngIf="
+            <button *ngIf="
                     showClearFilter ||
                     adjustInventoryListForm?.controls['referenceNo']?.value ||
                     adjustInventoryListForm?.controls['name']?.value ||
                     adjustInventoryListForm?.controls['reason']?.value ||
-                    adjustInventoryListForm?.controls['status']?.value
-                "
-                mat-stroked-button
-                class="min160 mx-auto"
-                color="primary"
-                (click)="clearFilter()"
-            >
+                    adjustInventoryListForm?.controls['status']?.value||
+                    adjustInventoryListForm?.controls['adjustmentMethod']?.value||
+                    adjustInventoryListForm?.controls['adjustedBy']?.value||
+                    adjustInventoryListForm?.controls['entity']?.value
+                " mat-stroked-button class="min160 mx-auto" color="primary" (click)="clearFilter()">
                 {{ commonLocaleData?.app_clear }}
             </button>
             <button id="add-adjustment-btn" mat-stroked-button color="primary" class="ml-auto" (click)="addInventory()">
@@ -55,34 +38,17 @@
         </div>
         <div class="custom-field-list mr-t15">
             <section *ngIf="showData && !(adjustInventoryInProgress$ | async)" class="mt-4">
-                <form
-                    class="table-responsive"
-                    name="adjustInventoryListForm"
-                    [formGroup]="adjustInventoryListForm"
-                    novalidate=""
-                    autocomplete="off"
-                >
-                    <table
-                        matSort
-                        mat-table
-                        (matSortChange)="sortChange($event)"
+                <form class="table-responsive" name="adjustInventoryListForm" [formGroup]="adjustInventoryListForm"
+                    novalidate="" autocomplete="off">
+                    <table matSort mat-table (matSortChange)="sortChange($event)"
                         [matSortActive]="adjustInventoryListRequest?.sortBy"
-                        [matSortDirection]="adjustInventoryListRequest?.sort"
-                        [dataSource]="dataSource"
-                        class="w-100"
-                    >
+                        [matSortDirection]="adjustInventoryListRequest?.sort" [dataSource]="dataSource" class="w-100">
                         <!-- Reference No. Column -->
                         <ng-container matColumnDef="referenceNo">
-                            <th
-                                width="12%"
-                                mat-header-cell
-                                *matHeaderCellDef
-                                #searchReferenceNoContainer
+                            <th width="12%" mat-header-cell *matHeaderCellDef #searchReferenceNoContainer
                                 class="td-search-box"
-                                (clickOutside)="handleClickOutside($event, searchReferenceNoContainer, 'Reference No')"
-                            >
-                                <ng-container
-                                    *ngTemplateOutlet="
+                                (clickOutside)="handleClickOutside($event, searchReferenceNoContainer, 'Reference No')">
+                                <ng-container *ngTemplateOutlet="
                                         searchTemplate;
                                         context: {
                                             $implicit: showReferenceNo,
@@ -90,8 +56,7 @@
                                             formControl: adjustInventoryListForm.controls['referenceNo'],
                                             title: 'Reference No.'
                                         }
-                                    "
-                                ></ng-container>
+                                    "></ng-container>
                             </th>
                             <td mat-cell *matCellDef="let element">
                                 {{ element.refNo }}
@@ -100,16 +65,9 @@
 
                         <!-- Name Column -->
                         <ng-container matColumnDef="name">
-                            <th
-                                width="20%"
-                                mat-header-cell
-                                *matHeaderCellDef
-                                #searchNameContainer
-                                class="td-search-box"
-                                (clickOutside)="handleClickOutside($event, searchNameContainer, 'Stock Name')"
-                            >
-                                <ng-container
-                                    *ngTemplateOutlet="
+                            <th width="20%" mat-header-cell *matHeaderCellDef #searchNameContainer class="td-search-box"
+                                (clickOutside)="handleClickOutside($event, searchNameContainer, 'Stock Name')">
+                                <ng-container *ngTemplateOutlet="
                                         searchTemplate;
                                         context: {
                                             $implicit: showName,
@@ -117,24 +75,17 @@
                                             title: 'Stock Name',
                                             formControl: adjustInventoryListForm.controls['name']
                                         }
-                                    "
-                                ></ng-container>
+                                    "></ng-container>
                             </th>
                             <td mat-cell *matCellDef="let element">{{ element.adjustedProduct?.name }}</td>
                         </ng-container>
 
                         <!-- Reason Column -->
                         <ng-container matColumnDef="reason">
-                            <th
-                                width="20%"
-                                mat-header-cell
-                                *matHeaderCellDef
-                                #searchReasonContainer
+                            <th width="20%" mat-header-cell *matHeaderCellDef #searchReasonContainer
                                 class="td-search-box"
-                                (clickOutside)="handleClickOutside($event, searchReasonContainer, 'Reason')"
-                            >
-                                <ng-container
-                                    *ngTemplateOutlet="
+                                (clickOutside)="handleClickOutside($event, searchReasonContainer, 'Reason')">
+                                <ng-container *ngTemplateOutlet="
                                         searchTemplate;
                                         context: {
                                             $implicit: showReason,
@@ -142,24 +93,17 @@
                                             title: 'Reason',
                                             formControl: adjustInventoryListForm.controls['reason']
                                         }
-                                    "
-                                ></ng-container>
+                                    "></ng-container>
                             </th>
                             <td mat-cell *matCellDef="let element">{{ element.reason?.name }}</td>
                         </ng-container>
 
                         <!-- Status Column -->
                         <ng-container matColumnDef="status">
-                            <th
-                                width="20%"
-                                mat-header-cell
-                                *matHeaderCellDef
-                                #searchStatusContainer
+                            <th width="20%" mat-header-cell *matHeaderCellDef #searchStatusContainer
                                 class="td-search-box"
-                                (clickOutside)="handleClickOutside($event, searchStatusContainer, 'Request Status')"
-                            >
-                                <ng-container
-                                    *ngTemplateOutlet="
+                                (clickOutside)="handleClickOutside($event, searchStatusContainer, 'Request Status')">
+                                <ng-container *ngTemplateOutlet="
                                         searchTemplate;
                                         context: {
                                             $implicit: showStatus,
@@ -167,30 +111,62 @@
                                             title: 'Request Status',
                                             formControl: adjustInventoryListForm.controls['status']
                                         }
-                                    "
-                                ></ng-container>
+                                    "></ng-container>
                             </th>
                             <td mat-cell *matCellDef="let element">{{ element?.status }}</td>
                         </ng-container>
 
                         <!-- Adjusted By Column -->
                         <ng-container matColumnDef="ADJUSTED_BY">
-                            <th width="20%" mat-header-cell *matHeaderCellDef class="td-search-box">Adjusted By</th>
-                            <td mat-cell *matCellDef="let element">{{ element.adjustedBy?.name }}</td>
+                            <th width="20%" mat-header-cell *matHeaderCellDef #searchAdjustedByContainer
+                                class="td-search-box"
+                                (clickOutside)="handleClickOutside($event, searchAdjustedByContainer, 'Adjusted')">
+                                <ng-container *ngTemplateOutlet="
+                                        searchTemplate;
+                                        context: {
+                                            $implicit: showAdjustedBy,
+                                            fieldName: 'Adjusted',
+                                            title: 'Adjusted',
+                                            formControl: adjustInventoryListForm.controls['adjustedBy']
+                                        }
+                                    "></ng-container>
+                            </th>
+                            <td mat-cell *matCellDef="let element">{{element.adjustedBy?.name }}</td>
                         </ng-container>
 
                         <!-- Adjusted Method Column -->
                         <ng-container matColumnDef="adjustmentMethod">
-                            <th width="20%" mat-header-cell *matHeaderCellDef class="td-search-box">
-                                Adjustment Method
+                            <th width="20%" mat-header-cell *matHeaderCellDef #searchAdjustmentMethodContainer
+                                class="td-search-box"
+                                (clickOutside)="handleClickOutside($event, searchAdjustmentMethodContainer, 'Adjustment Method')">
+                                <ng-container *ngTemplateOutlet="
+                                        searchTemplate;
+                                        context: {
+                                            $implicit: showAdjustmentMethod,
+                                            fieldName: 'Adjustment Method',
+                                            title: 'Adjustment Method',
+                                            formControl: adjustInventoryListForm.controls['adjustmentMethod']
+                                        }
+                                    "></ng-container>
                             </th>
                             <td mat-cell *matCellDef="let element">{{ element.adjustmentMethod }}</td>
                         </ng-container>
 
                         <!-- Type Column -->
                         <ng-container matColumnDef="TYPE">
-                            <th width="10%" mat-header-cell *matHeaderCellDef>Type</th>
-                            <td mat-cell *matCellDef="let element">{{ element?.entity }}</td>
+                            <th width="20%" mat-header-cell *matHeaderCellDef #searchTypeContainer class="td-search-box"
+                                (clickOutside)="handleClickOutside($event, searchTypeContainer, 'Adjusted By')">
+                                <ng-container *ngTemplateOutlet="
+                                        searchTemplate;
+                                        context: {
+                                            $implicit: showType,
+                                            fieldName: 'Type',
+                                            title: 'Type',
+                                            formControl: adjustInventoryListForm.controls['entity']
+                                        }
+                                    "></ng-container>
+                            </th>
+                            <td mat-cell *matCellDef="let element">{{element?.entity }}</td>
                         </ng-container>
 
                         <!-- Date Column -->
@@ -214,22 +190,16 @@
                                     <button class="no-box-shadow" mat-menu-item (click)="editInventoryAdjust(element)">
                                         {{ commonLocaleData?.app_edit }}
                                     </button>
-                                    <button
-                                        class="no-box-shadow"
-                                        mat-menu-item
-                                        (click)="showdeleteInventoryAdjustAdjust(element)"
-                                    >
+                                    <button class="no-box-shadow" mat-menu-item
+                                        (click)="showdeleteInventoryAdjustAdjust(element)">
                                         {{ commonLocaleData?.app_delete }}
                                     </button>
                                 </mat-menu>
                             </td>
                         </ng-container>
 
-                        <tr
-                            (clickOutside)="inlineSearch = null"
-                            mat-header-row
-                            *matHeaderRowDef="displayedColumns"
-                        ></tr>
+                        <tr (clickOutside)="inlineSearch = null" mat-header-row *matHeaderRowDef="displayedColumns">
+                        </tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
                 </form>
@@ -237,20 +207,11 @@
             <div class="no-data" *ngIf="!dataSource?.filteredData?.length && !(adjustInventoryInProgress$ | async)">
                 <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
             </div>
-            <div
-                class="pagination-wrapper justify-content-end"
-                *ngIf="adjustInventoryListRequest.totalItems > 20 && showData && !(adjustInventoryInProgress$ | async)"
-            >
-                <mat-paginator
-                    (page)="handlePageChange($event)"
-                    [length]="adjustInventoryListRequest.totalItems"
-                    [pageSize]="adjustInventoryListRequest.count"
-                    [showFirstLastButtons]="true"
-                    [pageSizeOptions]="pageSizeOptions"
-                    [hidePageSize]="false"
-                    [pageIndex]="pageIndex"
-                    class="mt-15"
-                >
+            <div class="pagination-wrapper justify-content-end"
+                *ngIf="adjustInventoryListRequest.totalItems > 20 && showData && !(adjustInventoryInProgress$ | async)">
+                <mat-paginator (page)="handlePageChange($event)" [length]="adjustInventoryListRequest.totalItems"
+                    [pageSize]="adjustInventoryListRequest.count" [showFirstLastButtons]="true"
+                    [pageSizeOptions]="pageSizeOptions" [hidePageSize]="false" [pageIndex]="pageIndex" class="mt-15">
                 </mat-paginator>
             </div>
         </div>
@@ -262,36 +223,22 @@
         <i class="icon-search" (click)="toggleSearch(fieldName)"></i>
     </div>
     <div class="input-container" [hidden]="!show">
-        <text-field
-            [type]="'text'"
-            [placeholder]="getSearchFieldText(fieldName)"
-            [cssClass]="'form-control search-table mat-field-border'"
-            [formControl]="formControl"
-            [autoFocus]="show"
-        ></text-field>
+        <text-field [type]="'text'" [placeholder]="getSearchFieldText(fieldName)"
+            [cssClass]="'form-control search-table mat-field-border'" [formControl]="formControl" [autoFocus]="show">
+        </text-field>
     </div>
 </ng-template>
 <!-- Datepicker template -->
 <ng-template #datepickerTemplate>
     <div class="datepicker-modal">
         <div class="modal-body">
-            <app-datepicker-wrapper
-                [inputStartDate]="selectedDateRange?.startDate"
-                [inputEndDate]="selectedDateRange?.endDate"
-                [alwaysShowCalendars]="true"
-                [ranges]="datePickerOption"
-                [selectedRangeLabel]="selectedRangeLabel"
-                [showCustomRangeLabel]="true"
-                [showClearButton]="false"
-                [showCancel]="true"
-                [linkedCalendars]="true"
-                [showDropdowns]="true"
-                (rangeClicked)="dateSelectedCallback($event)"
-                (datesUpdated)="dateSelectedCallback($event)"
-                [keepCalendarOpeningWithRange]="false"
-                [showRangeLabelOnInput]="false"
-                [dateFieldPosition]="dateFieldPosition"
-            ></app-datepicker-wrapper>
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
         </div>
     </div>
 </ng-template>

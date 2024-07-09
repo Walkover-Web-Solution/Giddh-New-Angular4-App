@@ -26,7 +26,7 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 })
 
 export class AdjustInventoryComponent implements OnInit {
-    /** Instance of create unit component */
+    /** Instance of create reason template */
     @ViewChild("createReason", { static: false }) public createReason: any;
     /** This will hold local JSON data */
     public localeData: any = {};
@@ -36,7 +36,7 @@ export class AdjustInventoryComponent implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Modal instance */
     public matDialogRef: any;
-    /** Adjust inventory form group */
+    /** Create adjust inventory form group */
     public adjustInventoryCreateEditForm: FormGroup;
     /**Hold indirect group  expense accounts */
     public groupUniqueName: string = "interestexpense";
@@ -79,13 +79,13 @@ export class AdjustInventoryComponent implements OnInit {
             label: 'Value',
             value: 'VALUE'
 
-        },
+        }
     ];
-    /** Stock Transactional Object */
+    /** Stock Report Object */
     public stockReportRequest: StockTransactionReportRequest = new StockTransactionReportRequest();
-    /** Stock Transactional Object */
+    /** Balance Stock/Group Request */
     public balanceStockReportRequest: BalanceStockTransactionReportRequest = new BalanceStockTransactionReportRequest();
-    /** Hold inventory variant wise response */
+    /** Hold inventory variant table columns */
     public displayedColumns: any[] = ['select', 'method', 'changeValue', 'closingValue', 'changes', 'newValue'];
     /** Holds query params */
     public queryParams: any = {};
@@ -100,15 +100,15 @@ export class AdjustInventoryComponent implements OnInit {
         changeValue: 0,
         closing: 0
     };
-    /** True if open panel state  */
+    /** False if show hide  */
     public showHideTable = true;
     /** True if form is submitted to show error if available */
     public isFormSubmitted: boolean = false;
-    /** Holds Store create adjust inventory  in progress API success state as observable*/
+    /** Holds Store create adjust inventory is success API success state as observable*/
     public createAdjustInventoryIsSuccess$ = this.componentStore.select(state => state.createAdjustInventoryIsSuccess);
-    /** Holds Store update adjust inventory  in progress API success state as observable*/
+    /** Holds Store update adjust inventory is success API success state as observable*/
     public updateAdjustInventoryIsSuccess$ = this.componentStore.select(state => state.updateAdjustInventoryIsSuccess);
-    /** Holds Store create adjust inventory  in progress API success state as observable*/
+    /** Holds Store create adjust inventory in progress API success state as observable*/
     public createAdjustInventoryInProgress$ = this.componentStore.select(state => state.createAdjustInventoryInProgress);
     /** Hold table data source */
     public dataSource: any;
@@ -118,7 +118,9 @@ export class AdjustInventoryComponent implements OnInit {
     public giddhRoundOff: any = giddhRoundOff;
     /** Hold Reference Number */
     public referenceNumber: string = "";
+    /** Hold selected items in list */
     public selection = new SelectionModel<any>(true, []);
+
     constructor(
         private store: Store<AppState>,
         private warehouseActions: WarehouseActions,
@@ -134,14 +136,21 @@ export class AdjustInventoryComponent implements OnInit {
     ) {
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
     }
+
+    /**
+     * This will be use for component intialization
+     *
+     * @memberof AdjustInventoryComponent
+     */
     public ngOnInit(): void {
+
         this.getWarehouses();
         this.getResons();
         this.getExpensesAccount();
         this.getItemWiseReport();
         this.initForm();
 
-
+        /** Activate router observable */
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type) {
                 this.inventoryType = params?.type.toLowerCase();
@@ -159,18 +168,21 @@ export class AdjustInventoryComponent implements OnInit {
             });
         }
 
+        /** Financial year observable */
         this.componentStore.financialYear$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.stockReportRequest.from = response?.startDate;
             }
         });
 
+        /** Create inventory success observable */
         this.createAdjustInventoryIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust-inventory`]);
             }
         });
 
+        /** Update inventory success observable */
         this.updateAdjustInventoryIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust-inventory`]);
@@ -186,6 +198,7 @@ export class AdjustInventoryComponent implements OnInit {
             }
         });
 
+        /** Reason observable */
         this.componentStore.reasons$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 const mappedReasons: OptionInterface[] = response.results.map(item => ({
@@ -197,13 +210,14 @@ export class AdjustInventoryComponent implements OnInit {
             }
         });
 
+        /** Setting profile observable */
         this.componentStore.settingsProfile$.pipe(takeUntil(this.destroyed$)).subscribe(profile => {
             if (profile) {
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
             }
         });
 
-
+        /** Item wise observable */
         this.componentStore.itemWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 const mappedIItemWise: OptionInterface[] = response.results.map(item => ({
@@ -215,6 +229,7 @@ export class AdjustInventoryComponent implements OnInit {
             }
         });
 
+        /** Stock Group CLosing balance observable */
         this.componentStore.stockGroupClosingBalance$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.stockGroupClosingBalance.closing = response;
@@ -222,6 +237,7 @@ export class AdjustInventoryComponent implements OnInit {
             }
         });
 
+        /**Variant wise observable */
         this.componentStore.variantWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 const data = response?.body?.results.map(result => {
@@ -238,9 +254,9 @@ export class AdjustInventoryComponent implements OnInit {
                 };
                 this.dataSource = new MatTableDataSource<any>(data);
                 this.adjustInventoryCreateEditForm.patchValue({
-                    adjustmentMethod: null, // Set to your default value
-                    calculationMethod: null, // Set to your default value
-                    changeInValue: null // Reset to empty string or default value as needed
+                    adjustmentMethod: null,
+                    calculationMethod: null,
+                    changeInValue: null
                 });
                 this.showHideTable = false;
                 setTimeout(() => {
@@ -251,6 +267,7 @@ export class AdjustInventoryComponent implements OnInit {
             }
         });
 
+        /** Expense account observable */
         this.componentStore.expensesAccountList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 const mappedAccounts: OptionInterface[] = response.results.map(item => ({
@@ -262,6 +279,7 @@ export class AdjustInventoryComponent implements OnInit {
             }
         });
 
+        /** Warehouse  observable */
         this.componentStore.warehouseList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 let warehouseResults = response.results?.filter(warehouse => !warehouse.isArchived);
@@ -276,34 +294,42 @@ export class AdjustInventoryComponent implements OnInit {
         });
     }
 
-
+    /**
+     * This will be use for get item wise report
+     *
+     * @memberof AdjustInventoryComponent
+     */
     public getItemWiseReport(): void {
-        this.searchRequest.count = 200000000;
+        this.searchRequest.count = 200000000000000;
         this.searchRequest.inventoryType = this.inventoryType?.toUpperCase();
         this.searchRequest.searchPage = 'VARIANT';
         this.componentStore.getItemWiseReport(this.searchRequest);
     }
 
+    /**
+     *This will be use for get expense account
+     *
+     * @memberof AdjustInventoryComponent
+     */
     public getExpensesAccount(): void {
         this.componentStore.getExpensesAccounts(this.groupUniqueName);
     }
 
     /**
-   * Resets the form
-   *
-   * @param {NgForm} stockCreateEditForm
-   * @memberof StockCreateEditComponent
-   */
+    * Resets the form
+    *
+    * @memberof AdjustInventoryComponent
+    */
     public resetForm(): void {
         this.adjustInventoryCreateEditForm.reset();
         this.adjustInventoryCreateEditForm.get('date')?.patchValue(this.stockReportRequest.to);
     }
 
     /**
-   * Opens create reason modal
-   *
-   * @memberof CustomUnitsComponent
-   */
+    * Opens create reason modal
+    *
+    * @memberof AdjustInventoryComponent
+    */
     public openCreateReasonModal(): void {
         this.matDialogRef = this.dialog.open(this.createReason, {
             width: 'var(--aside-pane-width)',
@@ -318,7 +344,7 @@ export class AdjustInventoryComponent implements OnInit {
      * Closes create reason modal
      *
      * @param {boolean} event
-     * @memberof CustomUnitsComponent
+     * @memberof AdjustInventoryComponent
      */
     public closeCreateReasonModal(event: boolean): void {
         this.matDialogRef?.close();
@@ -329,14 +355,21 @@ export class AdjustInventoryComponent implements OnInit {
     }
 
     /**
- * This will take the user back to last page
- *
- * @memberof StockCreateEditComponent
- */
+     * This will take the user back to last page
+     *
+     * @memberof AdjustInventoryComponent
+     */
     public backClicked(i): void {
         this.location.back();
     }
 
+    /**
+     * This will be use for component intialization form
+     *
+     * @private
+     * @param {*} [value]
+     * @memberof AdjustInventoryComponent
+     */
     private initForm(value?: any): void {
         this.adjustInventoryCreateEditForm = this.formBuilder.group({
             entity: [value?.entity ?? null, Validators.required],
@@ -356,13 +389,13 @@ export class AdjustInventoryComponent implements OnInit {
     }
 
     /**
-   * Callback for select inventory
-   *
-   * @param {*} event
-   * @param {boolean} [isClear=false]
-   * @memberof VoucherCreateComponent
-   */
-    public selectInventory(event: any, isClear: boolean = false): void {
+    * Callback for select inventory
+    *
+    * @param {*} event
+    * @param {boolean} [isClear=false]
+    * @memberof AdjustInventoryComponent
+    */
+    public selectInventory(event: any): void {
         let reqObj;
         let toDate;
         let balanceQueryParams = {
@@ -430,29 +463,33 @@ export class AdjustInventoryComponent implements OnInit {
             }
             this.componentStore.getStockGroupClosingBalance(balanceReqObj);
         }
-
         ;
-
-
     }
 
     /**
      * Gets company warehouses
      *
      * @private
-     * @memberof VoucherCreateComponent
+     * @memberof AdjustInventoryComponent
      */
     private getWarehouses(): void {
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
     }
 
+    /**
+     * This will be use for get reasons
+     *
+     * @memberof AdjustInventoryComponent
+     */
     public getResons(): void {
         this.componentStore.getAllReasons(true);
     }
-
-
-
-
+    /**
+     *This will be use for upate inventory
+     *
+     * @return {*}  {void}
+     * @memberof AdjustInventoryComponent
+     */
     public updateInventory(): void {
         this.isFormSubmitted = false;
         if (this.adjustInventoryCreateEditForm.invalid) {
@@ -471,6 +508,12 @@ export class AdjustInventoryComponent implements OnInit {
         this.componentStore.updateInventoryAdjustment(reqObj);
     }
 
+    /**
+     * This will be use for create inventory
+     *
+     * @return {*}  {void}
+     * @memberof AdjustInventoryComponent
+     */
     public createInventory(): void {
         this.isFormSubmitted = false;
         if (this.adjustInventoryCreateEditForm.invalid) {
@@ -489,6 +532,13 @@ export class AdjustInventoryComponent implements OnInit {
         this.componentStore.createInventoryAdjustment(reqObj);
     }
 
+    /**
+     * This will be use fo calculate calculation
+     *
+     * @param {FormGroup} adjustInventoryCreateEditForm
+     * @param {*} stockGroupClosingBalance
+     * @memberof AdjustInventoryComponent
+     */
     public calculateCalculation(adjustInventoryCreateEditForm: FormGroup, stockGroupClosingBalance: any): void {
         if (adjustInventoryCreateEditForm.value.entityUniqueName &&
             adjustInventoryCreateEditForm.value.adjustmentMethod === 'QUANTITY_WISE' &&
@@ -571,20 +621,23 @@ export class AdjustInventoryComponent implements OnInit {
 
     }
 
-    public calculateChangeNewValue(changeValue: number, newValue: number) {
-
-        return { changeValue, newValue };
-    }
-
-
+    /**
+     * This will be use for select all variants
+     *
+     * @return {*} 
+     * @memberof AdjustInventoryComponent
+     */
     public isAllSelected() {
         const numSelected = this.selection.selected.length;
         const numRows = this.dataSource?.data?.length;
         return numSelected === numRows;
     }
 
-
-
+    /**
+     * This will be use for master toggle by indirectExpense
+     *
+     * @memberof AdjustInventoryComponent
+     */
     public masterToggle() {
         if (this.isAllSelected()) {
             this.selection.clear();
@@ -593,12 +646,18 @@ export class AdjustInventoryComponent implements OnInit {
         }
     }
 
+    /**
+     * This will be use for checkbox label
+     *
+     * @param {*} [row]
+     * @return {*}  {string}
+     * @memberof AdjustInventoryComponent
+     */
     public checkboxLabel(row?: any): string {
         if (!row) {
             return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
         }
         return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
     }
-
 
 }

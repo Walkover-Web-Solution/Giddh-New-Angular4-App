@@ -518,22 +518,22 @@ export class AdjustInventoryListResponse {
     public page: number;
     public totalItems: number;
     public totalPages: number;
-    public results: InventorytAdjustmentReport[];
+    public results: InventorytAdjustReport[];
 }
 
-export class InventorytAdjustmentReport {
+export class InventorytAdjustReport {
     public date: string;
     public refNo: string;
-    public reason: InventoryAdjustmentCommonUse;
+    public reason: InventoryAdjustCommonUse;
     public adjustmentMethod: string;
     public entity: string;
     public status: string;
-    public adjustedProduct: InventoryAdjustmentCommonUse;
-    public adjustedBy: InventoryAdjustmentCommonUse;
+    public adjustedProduct: InventoryAdjustCommonUse;
+    public adjustedBy: InventoryAdjustCommonUse;
     public failureReason: string;
 }
 
-export class InventoryAdjustmentCommonUse {
+export class InventoryAdjustCommonUse {
     name: string;
     uniqueName: string;
 }

@@ -2006,7 +2006,15 @@ export class GeneralService {
         return `${address1} ${address2} ${address3} ${address4} ${address5}`.trim();
     }
 
-        public deleteInventoryAdjustAdjustConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
+    /**
+     * This will be use for delete inventory adjust configuration
+     *
+     * @param {*} localeData
+     * @param {*} commonLocaleData
+     * @return {*}  {ConfirmationModalConfiguration}
+     * @memberof GeneralService
+     */
+    public deleteInventoryAdjustAdjustConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
 
         const buttons: Array<ConfirmationModalButton> = [{
             text: 'Yes',
