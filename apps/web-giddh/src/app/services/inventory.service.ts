@@ -1301,7 +1301,6 @@ export class InventoryService {
      */
     public getItemWiseReportExport(queryParams: any, stockReportRequest: InventoryReportRequestExport): Observable<BaseResponse<InventoryReportRequestExport, InventoryReportRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        console.log('API Request Payload:', stockReportRequest);
         return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_ITEM_WISE_EXPORT
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':from', encodeURIComponent(queryParams.from))

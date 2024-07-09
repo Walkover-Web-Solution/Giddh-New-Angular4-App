@@ -618,47 +618,36 @@ export class ReportsComponent implements OnInit {
         this.displayedColumns.forEach(column => {
             if (column === 'stock_name') {
                 this.stockReportRequestExport.showStockName = true;
-                console.log(this.stockReportRequestExport.showStockName, 'stock_name');
             }
             if (column === 'group_name') {
                 this.stockReportRequestExport.showGroupName = true;
-                console.log(this.stockReportRequestExport.showGroupName, 'group_name');
             }
             if (column === 'unit_name') {
                 this.stockReportRequestExport.showUnitName = true;
-                console.log(this.stockReportRequestExport.showUnitName, 'unit_name');
             }
             if (column === 'opening_quantity') {
                 this.stockReportRequestExport.showOpeningStockQty = true;
-                console.log(this.stockReportRequestExport.showOpeningStockQty, 'opening_quantity');
             }
             else if (column === 'opening_amount') {
                 this.stockReportRequestExport.showOpeningStockValue = true;
-                console.log(this.stockReportRequestExport.showOpeningStockValue, 'opening_amount');
             }
             else if (column === 'inward_quantity') {
                 this.stockReportRequestExport.showInwardsQty = true;
-                console.log(this.stockReportRequestExport.showInwardsQty, 'inward_quantity');
             }
             else if (column === 'inward_amount') {
                 this.stockReportRequestExport.showInwardsValue = true;
-                console.log(this.stockReportRequestExport.showInwardsValue, 'inward_amount');
             }
             else if (column === 'outward_quantity') {
                 this.stockReportRequestExport.showOutwardsQty = true;
-                console.log(this.stockReportRequestExport.showOutwardsQty, 'outward_quantity');
             }
             else if (column === 'outward_amount') {
                 this.stockReportRequestExport.showOutwardsValue = true;
-                console.log(this.stockReportRequestExport.showOutwardsValue, 'outward_amount');
             }
             else if (column === 'closing_quantity') {
                 this.stockReportRequestExport.showClosingStockQty = true;
-                console.log(this.stockReportRequestExport.showClosingStockQty, 'closing_quantity');
             }
             else if (column === 'closing_amount') {
                 this.stockReportRequestExport.showClosingStockValue = true;
-                console.log(this.stockReportRequestExport.showClosingStockValue, 'closing_amount');
             }
         });
     }
@@ -823,10 +812,8 @@ export class ReportsComponent implements OnInit {
                 delete stockReportRequestExport.to;
 
                 stockReportRequestExport.inventoryType = this.moduleType;
-                console.log('Export Request:', stockReportRequestExport);
                 this.inventoryService.getItemWiseReportExport(queryParams, stockReportRequestExport).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     this.isLoading = true;
-                    console.log('API Response:', response);
                     if (response?.status === 'success') {
                         if (typeof response?.body === "string") {
                             this.toaster.successToast("success", response?.body);
