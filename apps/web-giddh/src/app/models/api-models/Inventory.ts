@@ -509,8 +509,6 @@ export class InventoryReportRequestExport {
     public from: string = '';
     public to: string = '';
     public inventoryType?: string;
-    results: any;
-    toDate: any;
     public showStockName?: boolean;
     public showGroupName?: boolean;
     public showUnitName?: boolean;

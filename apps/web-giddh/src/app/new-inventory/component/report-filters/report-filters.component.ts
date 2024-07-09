@@ -42,7 +42,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public fromToDate: any = {};
     /** Stock Transactional Object */
     @Input() public stockReportRequest: StockTransactionReportRequest = new StockTransactionReportRequest();
-    /** Stock Transactional Export Object */
+    /** Stock Export Table Data*/
     @Input() public stockReportRequestExport: StockTransactionReportRequestExport = new StockTransactionReportRequestExport();
     /** Stock Transactional Object */
     @Input() public balanceStockReportRequest: BalanceStockTransactionReportRequest = new BalanceStockTransactionReportRequest();
@@ -286,16 +286,12 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.selectedBranch = changes?.stockReportRequest?.currentValue?.branchUniqueNames;
                 this.stockReportRequest.branchUniqueNames = this.selectedBranch;
                 this.balanceStockReportRequest.branchUniqueNames = this.selectedBranch;
+                this.selectedBranch = changes?.stockReportRequestExport?.currentValue?.branchUniqueNames;
+                this.stockReportRequestExport.branchUniqueNames = this.selectedBranch;
             }
             if (changes?.stockReportRequest?.currentValue?.warehouseUniqueNames?.length) {
                 this.selectedWarehouse = changes?.stockReportRequest?.currentValue?.warehouseUniqueNames;
                 this.stockReportRequest.warehouseUniqueNames = this.selectedWarehouse;
-            }
-            if (changes?.stockReportRequestExport?.currentValue?.branchUniqueNames?.length) {
-                this.selectedBranch = changes?.stockReportRequestExport?.currentValue?.branchUniqueNames;
-                this.stockReportRequestExport.branchUniqueNames = this.selectedBranch;
-            }
-            if (changes?.stockReportRequestExport?.currentValue?.warehouseUniqueNames?.length) {
                 this.selectedWarehouse = changes?.stockReportRequestExport?.currentValue?.warehouseUniqueNames;
                 this.stockReportRequestExport.warehouseUniqueNames = this.selectedWarehouse;
             }
@@ -327,7 +323,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             panelClass: 'advance-search-container',
             data: {
                 stockReportRequest: this.stockReportRequest,
-                stockReportRequestExport: this.stockReportRequestExport,
                 advanceSearchResponse: this.advanceSearchModalResponse,
                 reportType: this.searchPage
             },
@@ -699,8 +694,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames ? this.stockReportRequest.stockGroupUniqueNames : [];
         this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames ? this.stockReportRequest.stockUniqueNames : [];
         this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames ? this.stockReportRequest.variantUniqueNames : [];
-        this.stockReportRequestExport.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames ? this.stockReportRequest.stockGroupUniqueNames : [];
-        this.stockReportRequestExport.stockUniqueNames = this.stockReportRequest.stockUniqueNames ? this.stockReportRequest.stockUniqueNames : [];
         if (loadMore) {
             this.searchRequest.page++;
         } else {

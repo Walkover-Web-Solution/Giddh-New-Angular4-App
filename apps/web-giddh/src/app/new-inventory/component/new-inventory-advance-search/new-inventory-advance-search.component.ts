@@ -84,10 +84,9 @@ export class NewInventoryAdvanceSearch implements OnInit {
             this.isMobileScreen = result.matches;
         });
         this.reportType = this.inputData?.reportType;
-        if (this.inputData?.stockReportRequest || this.inputData?.stockReportRequestExport) {
+        if (this.inputData?.stockReportRequest) {
             if (this.inputData?.advanceSearchResponse) {
                 this.advanceSearchFormObj = cloneDeep(this.inputData.advanceSearchResponse?.stockReportRequest);
-                this.advanceSearchFormObj = cloneDeep(this.inputData.advanceSearchResponse?.stockReportRequestExport);
                 if (this.advanceSearchFormObj.expression === 'EQUALS') {
                     this.advanceSearchFormObj.expression = "Equals";
                 } else if (this.advanceSearchFormObj.expression === 'NOT_EQUALS') {

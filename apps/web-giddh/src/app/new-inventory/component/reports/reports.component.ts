@@ -40,7 +40,7 @@ export class ReportsComponent implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Stock Transactional Object */
     public stockReportRequest: InventoryReportRequest = new InventoryReportRequest();
-    /** Stock Transactional Export Object */
+    /** Stock Stock Export Table Data */
     public stockReportRequestExport: InventoryReportRequestExport = new InventoryReportRequestExport();
     /** Stock Transactional Object */
     public balanceStockReportRequest: BalanceStockTransactionReportRequest = new BalanceStockTransactionReportRequest();
@@ -602,30 +602,33 @@ export class ReportsComponent implements OnInit {
         });
 
         /* This will use for table header from customise columns for export table */
-        this.stockReportRequestExport.showStockName = false;
-        this.stockReportRequestExport.showGroupName = false;
-        this.stockReportRequestExport.showUnitName = false;
-        this.stockReportRequestExport.showOpeningStockQty = false;
-        this.stockReportRequestExport.showOpeningStockValue = false;
-        this.stockReportRequestExport.showInwardsQty = false;
-        this.stockReportRequestExport.showInwardsValue = false;
-        this.stockReportRequestExport.showOutwardsQty = false;
-        this.stockReportRequestExport.showOutwardsValue = false;
-        this.stockReportRequestExport.showClosingStockQty = false;
-        this.stockReportRequestExport.showClosingStockValue = false;
+        this.stockReportRequestExport = {
+            ...this.stockReportRequestExport,
+            showStockName: false,
+            showGroupName: false,
+            showUnitName: false,
+            showOpeningStockQty: false,
+            showOpeningStockValue: false,
+            showInwardsQty: false,
+            showInwardsValue: false,
+            showOutwardsQty: false,
+            showOutwardsValue: false,
+            showClosingStockQty: false,
+            showClosingStockValue: false,
+        }
 
         /* for column value filter selected */
         this.displayedColumns.forEach(column => {
             if (column === 'stock_name') {
                 this.stockReportRequestExport.showStockName = true;
             }
-            if (column === 'group_name') {
+            else if (column === 'group_name') {
                 this.stockReportRequestExport.showGroupName = true;
             }
-            if (column === 'unit_name') {
+            else if (column === 'unit_name') {
                 this.stockReportRequestExport.showUnitName = true;
             }
-            if (column === 'opening_quantity') {
+            else if (column === 'opening_quantity') {
                 this.stockReportRequestExport.showOpeningStockQty = true;
             }
             else if (column === 'opening_amount') {
@@ -793,40 +796,39 @@ export class ReportsComponent implements OnInit {
     }
 
     /**
-     * This will use for export stock transactions report data
+     * This will use for export stock report data
      *
      * @return {*}  {void}
      * @memberof ReportsComponent
     */
     public exportReport(): void {
-        setTimeout(() => {
-            this.isLoading = true;
-            if (this.reportType === InventoryReportType.stock) {
+        this.isLoading = true;
+        if (this.reportType === InventoryReportType.stock) {
 
-                let stockReportRequestExport = this.stockReportRequestExport;
-                let queryParams = {
-                    from: this.fromDate,
-                    to: this.toDate,
-                };
-                delete stockReportRequestExport.from;
-                delete stockReportRequestExport.to;
+            let stockReportRequestExport = this.stockReportRequestExport;
+            let queryParams = {
+                from: this.fromDate,
+                to: this.toDate,
+            };
+            delete stockReportRequestExport.from;
+            delete stockReportRequestExport.to;
 
-                stockReportRequestExport.inventoryType = this.moduleType;
-                this.inventoryService.getItemWiseReportExport(queryParams, stockReportRequestExport).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
-                    this.isLoading = true;
-                    if (response?.status === 'success') {
-                        if (typeof response?.body === "string") {
-                            this.toaster.successToast("success", response?.body);
-                            this.router.navigate(["/pages/downloads"]);
-                            this.isLoading = false;
-                        }
-                    } else {
-                        this.toaster.errorToast(response?.message);
+            stockReportRequestExport.inventoryType = this.moduleType;
+            this.inventoryService.getItemWiseReportExport(queryParams, stockReportRequestExport).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
+                this.isLoading = true;
+                if (response?.status === 'success') {
+                    if (typeof response?.body === "string") {
+                        this.toaster.showSnackBar("success", response?.body);
+                        this.router.navigate(["/pages/downloads"]);
+                        this.isLoading = false;
                     }
-                    this.changeDetection.detectChanges();
-                });
-            }
-        });
+                } else {
+                    this.toaster.showSnackBar("error", response?.message);
+                    this.isLoading = false;
+                }
+                this.changeDetection.detectChanges();
+            });
+        }
     }
 
     /**
