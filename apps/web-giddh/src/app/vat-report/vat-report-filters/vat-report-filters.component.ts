@@ -19,6 +19,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { SalesTaxReport } from '../../theme/tax-authority/utility/tax-authority.const';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { CompanyActions } from '../../actions/company.actions';
 
 interface DateCheckResult {
     status: boolean;
@@ -52,6 +53,8 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     @Input() public salesTaxReportType: string = null;
     /** True if current Tax Authority uniqueName is US */
     @Input() public currentTaxAuthorityUniqueName: string = null;
+    /** True if current Tax uniqueName is US */
+    @Input() public currentTaxUniqueName: string = null;
     /** Hold HMRC portal url */
     @Input() public connectToHMRCUrl: string = null;
     /** Holds Current Currency Code for Zimbabwe report */
@@ -74,6 +77,8 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     @Output() public isTaxApiInProgress: EventEmitter<any> = new EventEmitter<any>();
     /** Emits selected taxAuthorityUniqueName */
     @Output() public taxAuthorityUniqueName: EventEmitter<string> = new EventEmitter<string>();
+    /** Emits selected taxUniqueName */
+    @Output() public taxUniqueName: EventEmitter<string> = new EventEmitter<string>();
     /** Universal Datepicker template reference */
     @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -153,7 +158,12 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     public isLiabilityReport: boolean;
     /** Holds true if active company  country is US */
     public taxAuthorityList: IOption[] = [];
-    public isSalesTaxTaxorAccountWise: boolean = false;
+    /** Holds true if Sales Tax report type is tax/rate wise */
+    public isSalesTaxRateWise: boolean = false;
+    /** Holds true if Sales Tax report type is account wise */
+    public isSalesTaxAccountWise: boolean = false;
+    /** Holds Company taxes list */
+    public taxList: IOption[] = [];
     /** Tax Authority info */
     public taxAuthority: any = {
         taxName: '',
@@ -173,7 +183,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
         private toaster: ToasterService,
         private route: ActivatedRoute,
         private settingsTaxesActions: SettingsTaxesActions,
-        private formBuilder: FormBuilder
+        private companyActions: CompanyActions
     ) {
         this.getFinancialYears();
     }
@@ -185,7 +195,8 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      * @memberof VatReportFiltersComponent
      */
     public ngOnInit(): void {
-        this.isSalesTaxTaxorAccountWise = (SalesTaxReport.TaxWise === this.salesTaxReportType || SalesTaxReport.AccountWise === this.salesTaxReportType);
+        this.isSalesTaxRateWise = SalesTaxReport.TaxWise === this.salesTaxReportType;
+        this.isSalesTaxAccountWise = SalesTaxReport.AccountWise === this.salesTaxReportType;
         this.isVatReport = this.moduleType === "VAT_REPORT";
         this.isLiabilityReport = this.moduleType === "LIABILITY_REPORT";
 
@@ -220,8 +231,8 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
                 .subscribe(taxAuthorities => {
                     if (taxAuthorities && taxAuthorities.length) {
                         let arr: IOption[] = [];
-                        taxAuthorities.forEach(tax => {
-                            arr.push({ label: tax.name, value: tax?.uniqueName });
+                        taxAuthorities.forEach(taxAuthority => {
+                            arr.push({ label: taxAuthority.name, value: taxAuthority?.uniqueName });
                         });
                         this.taxAuthorityList = arr;
                         if (this.taxAuthority.taxAuthorityUniqueName) {
@@ -230,6 +241,17 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
                     }
                 });
             this.store.dispatch(this.settingsTaxesActions.GetTaxAuthorityList());
+
+            this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe(taxes => {
+                if (taxes) {
+                    let arr: IOption[] = [];
+                    taxes.forEach(tax => {
+                        arr.push({ label: tax.name, value: tax?.uniqueName });
+                    });
+                    this.taxList = arr;
+                }
+            });
+            this.store.dispatch(this.companyActions.getTax());
         }
     }
 
@@ -242,6 +264,10 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
         if ('currentTaxAuthorityUniqueName' in changes && changes.currentTaxAuthorityUniqueName.currentValue !== changes.currentTaxAuthorityUniqueName.previousValue) {
             this.taxAuthority.taxAuthorityUniqueName = changes.currentTaxAuthorityUniqueName.currentValue;
         }
+
+        if ('currentTaxUniqueName' in changes && changes.currentTaxUniqueName.currentValue !== changes.currentTaxUniqueName.previousValue) {
+            this.taxAuthority.taxUniqueName = changes.currentTaxUniqueName.currentValue;
+        }
     }
 
     private setTaxAuthorityLabel(uniqueName: string): void {
@@ -253,20 +279,14 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
         }
     }
 
-    // /**
-    // * This will use for init main formgroup
-    // *
-    // * @private
-    // * @memberof RateWiseReportComponent
-    // */
-    // private initTaxAuthorityFrom(): void {
-    //     this.taxAuthorityFrom = this.formBuilder.group({
-    //         taxName: [''],
-    //         taxUniqueName: [''],
-    //         taxAuthorityName: [''],
-    //         taxAuthorityUniqueName: [''],
-    //     });
-    // }
+    private setTaxLabel(uniqueName: string): void {
+        let taxObj = this.taxList.find(tax => tax.value === uniqueName);
+        if (taxObj) {
+            this.taxAuthority.taxName = taxObj?.label;
+            console.log("Form", this.taxAuthority);
+            this.onTaxChange(taxObj);
+        }
+    }
 
     /**
      * Get Query Params value
@@ -522,6 +542,20 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
             this.taxAuthorityUniqueName.emit(event.value);
             this.taxAuthority.taxAuthorityName = event.label;
             this.taxAuthority.taxAuthorityUniqueName = event.value;
+            this.getVatReport();
+        }
+    }
+
+    /**
+     * Handle select tax dropdown and emit selected value
+     *
+     * @memberof VatReportFiltersComponent
+     */
+    public onTaxChange(event: any): void {
+        if (event) {
+            this.taxUniqueName.emit(event.value);
+            this.taxAuthority.taxName = event.label;
+            this.taxAuthority.taxUniqueName = event.value;
             this.getVatReport();
         }
     }

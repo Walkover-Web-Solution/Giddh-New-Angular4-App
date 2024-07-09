@@ -20,7 +20,6 @@
                             [localeData]="localeData" 
                             [commonLocaleData]="commonLocaleData"
                             [activeCompany]="activeCompany"
-                            [moduleType]="'LIABILITY_REPORT'"
                             [isUSCompany]="true" 
                             [localeData]="localeData"
                             (getReport)="getSalesTaxReport()" 
@@ -55,7 +54,7 @@
                                             {{ localeData?.reporting_tax_authority }}
                                         </th>
                                         <td mat-cell *matCellDef="let element" width="25%">
-                                            <a href="javascript:;" [routerLink]="['/pages/settings/reports/rate-wise']" [queryParams]="{ uniqueName: element?.element?.taxAuthority?.uniqueName }">
+                                            <a href="javascript:;" [routerLink]="['/pages/settings/reports/rate-wise']" [queryParams]="{ uniqueName: element?.taxAuthority?.uniqueName }">
                                                 {{ element?.taxAuthority?.name }}
                                             </a>
                                         </td>

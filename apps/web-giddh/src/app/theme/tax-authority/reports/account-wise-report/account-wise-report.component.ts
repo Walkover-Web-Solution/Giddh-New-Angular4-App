@@ -55,9 +55,9 @@ export class AccountWiseReportComponent implements OnInit {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.initSalesTaxReportForm();
         this.activateRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
-            if (queryParams?.uniqueName) {
-                console.log("Q -", queryParams.uniqueName);
-                this.getFormControl('taxAuthorityUniqueName').patchValue(queryParams.uniqueName);
+            if (queryParams?.taxAuthorityUniqueName || queryParams?.taxUniqueName) {
+                this.getFormControl('taxAuthorityUniqueName').patchValue(queryParams?.taxAuthorityUniqueName ?? '');
+                this.getFormControl('taxUniqueName').patchValue(queryParams?.taxUniqueName ?? '');
             }
         });
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -83,7 +83,7 @@ export class AccountWiseReportComponent implements OnInit {
         const formValue = this.salesTaxReportForm.value;
         if (formValue.taxNumber && formValue.from && formValue.to) {
             const model: any = {
-                reportType: SalesTaxReport.TaxWise,
+                reportType: SalesTaxReport.AccountWise,
                 params: formValue,
                 isExport: false
             };
@@ -99,7 +99,7 @@ export class AccountWiseReportComponent implements OnInit {
     public exportTaxAuthority(): void {
         const formValue = this.salesTaxReportForm.value;
         const model: any = {
-            reportType: SalesTaxReport.TaxWise,
+            reportType: SalesTaxReport.AccountWise,
             params: formValue,
             isExport: true
         };
@@ -117,6 +117,7 @@ export class AccountWiseReportComponent implements OnInit {
         this.salesTaxReportForm = this.formBuilder.group({
             branchUniqueName: [''],
             taxAuthorityUniqueName: [''],
+            taxUniqueName: [''],
             taxNumber: [''],
             from: [''],
             to: ['']

@@ -20,7 +20,6 @@
                             [localeData]="localeData" 
                             [commonLocaleData]="commonLocaleData"
                             [activeCompany]="activeCompany"
-                            [moduleType]="'LIABILITY_REPORT'"
                             [isUSCompany]="true" 
                             [localeData]="localeData"
                             [salesTaxReportType]="'tax'" 
@@ -58,7 +57,9 @@
                                             {{ commonLocaleData?.app_tax + ' ' +  commonLocaleData?.app_name }}
                                         </th>
                                         <td mat-cell *matCellDef="let element" width="25%">
-                                            {{ element?.taxName }}
+                                            <a href="javascript:;" [routerLink]="['/pages/settings/reports/account-wise']" [queryParams]="{ taxAuthorityUniqueName: element?.taxAuthority?.uniqueName, taxUniqueName: element?.tax?.uniqueName }">
+                                                {{ element?.taxAuthority?.name }}
+                                            </a>
                                         </td>
                                         <td mat-footer-cell *matFooterCellDef>
                                             {{ commonLocaleData?.app_total }}

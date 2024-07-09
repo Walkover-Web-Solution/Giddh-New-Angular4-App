@@ -33,10 +33,16 @@
                 [defaultValue]="vatReportCurrencyCode" [required]="true">
             </dropdown-field>
         </div>
-        <div *ngIf="isUSCompany && taxNumber && isSalesTaxTaxorAccountWise" class="min-width-100">
+        <div *ngIf="isUSCompany && taxNumber && (isSalesTaxRateWise || isSalesTaxAccountWise)" class="min-width-100">
             <dropdown-field [label]="commonLocaleData?.app_tax_authority" [options]="taxAuthorityList"
                 (selectedOption)="onTaxAuthorityChange($event)" [placeholder]="commonLocaleData?.app_select + ' ' + commonLocaleData?.app_tax_authority"
-                [defaultValue]="this.taxAuthority.taxAuthorityName" [required]="true">
+                [defaultValue]="taxAuthority.taxAuthorityName" [required]="true">
+            </dropdown-field>
+        </div>
+        <div *ngIf="isUSCompany && taxNumber && isSalesTaxAccountWise" class="min-width-100">
+            <dropdown-field [label]="commonLocaleData?.app_tax" [options]="taxList"
+                (selectedOption)="onTaxAuthorityChange($event)" [placeholder]="commonLocaleData?.app_select + ' ' + commonLocaleData?.app_tax"
+                [defaultValue]="taxAuthority.taxName" [required]="true">
             </dropdown-field>
         </div>
         <div *ngIf="taxNumber && (isZimbabweCompany || isKenyaCompany || isUSCompany)" class="export-btn d-flex justify-content-end w100">

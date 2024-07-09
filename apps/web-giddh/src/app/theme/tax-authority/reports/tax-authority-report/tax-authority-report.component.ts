@@ -50,6 +50,7 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
      * @memberof TaxAuthorityReportComponent
      */
     public ngOnInit(): void {
+        document.querySelector('body').classList.add('gst-sidebar-open');
         this.initSalesTaxReportForm();
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
