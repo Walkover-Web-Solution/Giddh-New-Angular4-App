@@ -290,12 +290,10 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             if (changes?.stockReportRequest?.currentValue?.warehouseUniqueNames?.length) {
                 this.selectedWarehouse = changes?.stockReportRequest?.currentValue?.warehouseUniqueNames;
                 this.stockReportRequest.warehouseUniqueNames = this.selectedWarehouse;
-                this.balanceStockReportRequest.warehouseUniqueNames = this.selectedWarehouse;
             }
             if (changes?.stockReportRequestExport?.currentValue?.branchUniqueNames?.length) {
                 this.selectedBranch = changes?.stockReportRequestExport?.currentValue?.branchUniqueNames;
                 this.stockReportRequestExport.branchUniqueNames = this.selectedBranch;
-                this.balanceStockReportRequest.branchUniqueNames = this.selectedBranch;
             }
             if (changes?.stockReportRequestExport?.currentValue?.warehouseUniqueNames?.length) {
                 this.selectedWarehouse = changes?.stockReportRequestExport?.currentValue?.warehouseUniqueNames;
