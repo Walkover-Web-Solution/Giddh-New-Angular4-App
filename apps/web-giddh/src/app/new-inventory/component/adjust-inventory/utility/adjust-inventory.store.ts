@@ -1,7 +1,7 @@
 
 import { Injectable, OnDestroy } from "@angular/core";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY } from "rxjs";
+import { Observable, switchMap, catchError, EMPTY, mergeMap } from "rxjs";
 import { Store } from "@ngrx/store";
 import { AppState } from "apps/web-giddh/src/app/store";
 import { InventoryService } from "apps/web-giddh/src/app/services/inventory.service";
@@ -15,9 +15,13 @@ export interface AdjustInventoryState {
     itemWiseReport: any;
     variantWiseReport: any;
     inventorySearch: any;
+    adjustInventoryData: any;
+    stockGroupClosingBalance: any
     isLoading: boolean;
     createAdjustInventoryInProgress: boolean;
     createAdjustInventoryIsSuccess: boolean;
+    updateAdjustInventoryInProgress: boolean;
+    updateAdjustInventoryIsSuccess: boolean;
     createReasonInProgress: boolean;
     createReasonIsSuccess: boolean;
 }
@@ -29,9 +33,13 @@ export const DEFAULT_ADJUSTINVENTORY_STATE: AdjustInventoryState = {
     itemWiseReport: null,
     variantWiseReport: null,
     inventorySearch: null,
-    createAdjustInventoryInProgress: null,
-    createAdjustInventoryIsSuccess: null,
+    adjustInventoryData:null,
+    createAdjustInventoryInProgress: false,
+    createAdjustInventoryIsSuccess: false,
+    updateAdjustInventoryInProgress: false,
+    updateAdjustInventoryIsSuccess: false,
     createReasonInProgress: null,
+    stockGroupClosingBalance: null,
     createReasonIsSuccess: null
 };
 
@@ -49,15 +57,20 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
 
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
     public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
+    public financialYear$: Observable<any> = this.select(this.store.select(state => state.settings.financialYearLimits), (response) => response);
+    public warehouseList$: Observable<any> = this.select(this.store.select(state => state.warehouse.warehouses), (response) => response);
+    public settingsProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public expensesAccountList$ = this.select((state) => state.expensesAccountList);
     public inventorySearch$ = this.select((state) => state.inventorySearch);
+    public inventoryAdjustData$ = this.select((state) => state.adjustInventoryData);
     public itemWiseReport$ = this.select((state) => state.itemWiseReport);
     public variantWiseReport$ = this.select((state) => state.variantWiseReport);
+    public stockGroupClosingBalance$ = this.select((state) => state.stockGroupClosingBalance);
     public reasons$ = this.select((state) => state.reasonList);
     public createAdjustInventoryIsSuccess$ = this.select((state) => state.createAdjustInventoryIsSuccess);
+    public createAdjustInventoryInProgress$ = this.select((state) => state.createAdjustInventoryInProgress);
     public createReasonIsSuccess$ = this.select((state) => state.createReasonIsSuccess);
     public isLoading$ = this.select((state) => state.isLoading);
-    public warehouseList$: Observable<any> = this.select(this.store.select(state => state.warehouse.warehouses), (response) => response);
 
 
 
@@ -179,7 +192,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
     */
     readonly getVariantWiseReport = this.effect((data: Observable<any>) => {
         return data.pipe(
-            switchMap((req) => {
+            mergeMap((req) => {
                 return this.inventoryService.getVariantWiseReport(req.queryParams, req.stockReportRequest).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
@@ -200,6 +213,82 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                             this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
                             return this.patchState({
                                 variantWiseReport: [],
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+
+ /**
+* This will be use for get stock group balance
+*
+* @memberof AdjustInventoryComponentStore
+*/
+    readonly getStockGroupClosingBalance = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            mergeMap((req) => {
+                return this.inventoryService.getStockTransactionReportBalance(req.queryParams, req.balanceStockReportRequest).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    stockGroupClosingBalance: res?.body ?? [],
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toaster.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    stockGroupClosingBalance: [],
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
+                            return this.patchState({
+                                stockGroupClosingBalance: [],
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+
+    /**
+ * This will be use for get adjust inventory data
+ *
+ * @memberof AdjustInventoryComponentStore
+ */
+    readonly getAdjustInventoryData = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            mergeMap((req) => {
+                return this.inventoryService.getInventoryAdjust(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    adjustInventoryData: res?.body ?? [],
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toaster.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    adjustInventoryData: [],
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
+                            return this.patchState({
+                                adjustInventoryData: [],
                             });
                         }
                     ),
@@ -283,42 +372,84 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
     *
     * @memberof AdjustInventoryComponentStore
     */
-    // readonly createInventoryAdjust = this.effect((data: Observable<any>) => {
-    //     return data.pipe(
-    //         switchMap((req) => {
-    //             this.patchState({ createAdjustInventoryInProgress: true });
-    //             return this.subscriptionService.cancelSubscriptionById(req).pipe(
-    //                 tapResponse(
-    //                     (res: BaseResponse<any, any>) => {
-    //                         if (res?.status === 'success') {
-    //                             this.toaster.showSnackBar('success', res?.body);
-    //                             return this.patchState({
-    //                                 createAdjustInventoryInProgress: false,
-    //                                 createAdjustInventoryIsSuccess: true,
-    //                             });
-    //                         } else {
-    //                             if (res.message) {
-    //                                 this.toaster.showSnackBar('error', res.message);
-    //                             }
-    //                             return this.patchState({
-    //                                 createAdjustInventoryInProgress: false,
-    //                                 createAdjustInventoryIsSuccess: false,
-    //                             });
-    //                         }
-    //                     },
-    //                     (error: any) => {
-    //                         this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
+    readonly createInventoryAdjustment = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ createAdjustInventoryInProgress: true });
+                return this.inventoryService.createInventoryAdjustment(req?.formValue, req.branchUniqueName).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                this.toaster.showSnackBar('success', res?.body);
+                                return this.patchState({
+                                    createAdjustInventoryInProgress: false,
+                                    createAdjustInventoryIsSuccess: true,
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toaster.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    createAdjustInventoryInProgress: false,
+                                    createAdjustInventoryIsSuccess: false,
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
 
-    //                         return this.patchState({
-    //                             createAdjustInventoryInProgress: false
-    //                         });
-    //                     }
-    //                 ),
-    //                 catchError((err) => EMPTY)
-    //             );
-    //         })
-    //     );
-    // });
+                            return this.patchState({
+                                createAdjustInventoryInProgress: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+* This will be use for create inventory adjust
+*
+* @memberof AdjustInventoryComponentStore
+*/
+    readonly updateInventoryAdjustment = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ updateAdjustInventoryInProgress: true });
+                return this.inventoryService.createInventoryAdjustment(req?.formValue, req.branchUniqueName).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                this.toaster.showSnackBar('success', res?.body);
+                                return this.patchState({
+                                    updateAdjustInventoryInProgress: false,
+                                    updateAdjustInventoryIsSuccess: true,
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toaster.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    updateAdjustInventoryInProgress: false,
+                                    updateAdjustInventoryIsSuccess: false,
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
+
+                            return this.patchState({
+                                updateAdjustInventoryInProgress: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
 
     /**
     * This will be use for create reason

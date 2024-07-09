@@ -7,224 +7,357 @@
     <div class="relative">
         <hamburger-menu [pageHeading]="'Adjust inventory'"></hamburger-menu>
     </div>
+    <div *ngIf="createAdjustInventoryInProgress$ | async">
+        <giddh-page-loader></giddh-page-loader>
+    </div>
     <form
         autocomplete="off"
         novalidate
         name="adjustInventoryCreateEditForm"
         [formGroup]="adjustInventoryCreateEditForm"
     >
-        <div class="adjustment container-fluid pd-15">
-            <div class="row">
-                <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6">
-                    <giddh-datepicker
-                        (keydown.enter)="$event.preventDefault()"
-                        [label]="'Date'"
-                        [placeholder]="'Select Date'"
-                        name="date"
-                        [showToggleIcon]="false"
-                        [appearance]="'outline'"
-                        formControlName="date"
-                    >
-                    </giddh-datepicker>
+        <ng-container *ngIf="!(createAdjustInventoryInProgress$ | async)">
+            <div class="adjustment container-fluid pd-15">
+                <div class="row">
+                    <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6">
+                        <giddh-datepicker
+                            (keydown.enter)="$event.preventDefault()"
+                            [label]="'Date'"
+                            [placeholder]="'Select Date'"
+                            name="date"
+                            [showToggleIcon]="false"
+                            [appearance]="'outline'"
+                            formControlName="date"
+                        >
+                        </giddh-datepicker>
+                    </div>
+                    <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6">
+                        <input-field
+                            [name]="'reference'"
+                            [label]="'Reference Number'"
+                            [placeholder]="'Enter Reference Number'"
+                            [type]="'text'"
+                            formControlName="refNo"
+                            (onClear)="adjustInventoryCreateEditForm.get('refNo')?.patchValue(null)"
+                        >
+                        </input-field>
+                    </div>
                 </div>
-                <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6">
-                    <input-field
-                        [name]="'reference'"
-                        [label]="'Reference Number'"
-                        [placeholder]="'Enter Reference Number'"
-                        [type]="'text'"
-                        formControlName="refNo"
-                        (onClear)="adjustInventoryCreateEditForm.get('refNo')?.patchValue(null)"
-                    >
-                    </input-field>
+                <div class="row">
+                    <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6">
+                        <reactive-dropdown-field
+                            [label]="'Expense Accounts'"
+                            [placeholder]="'Select Expense Accounts'"
+                            [options]="expenseAccounts$ | async"
+                            formControlName="expenseAccountUniqueName"
+                            (onClear)="adjustInventoryCreateEditForm.get('expenseAccountUniqueName')?.patchValue(null)"
+                            [required]="true"
+                            [showError]="
+                                isFormSubmitted && !adjustInventoryCreateEditForm.get('expenseAccountUniqueName')?.value
+                            "
+                        >
+                        </reactive-dropdown-field>
+                    </div>
+                    <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6">
+                        <reactive-dropdown-field
+                            [label]="'Warehouse'"
+                            [placeholder]="'Select Warehouse'"
+                            [options]="warehouses$ | async"
+                            formControlName="warehouseUniqueName"
+                            (onClear)="adjustInventoryCreateEditForm.get('warehouseUniqueName')?.patchValue(null)"
+                        >
+                        </reactive-dropdown-field>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6">
-                    <reactive-dropdown-field
-                        [label]="'Expense Accounts'"
-                        [placeholder]="'Select Expense Accounts'"
-                        [options]="expenseAccounts$ | async"
-                        formControlName="expenseAccountUniqueName"
-                        (onClear)="adjustInventoryCreateEditForm.get('expenseAccountUniqueName')?.patchValue(null)"
-                        [required]="true"
-                    >
-                    </reactive-dropdown-field>
+                <div class="row">
+                    <div class="col-xxl-3 mt-3 col-xl-4 col-lg-6 col-md-6">
+                        <mat-form-field class="w-100" [appearance]="'outline'">
+                            <mat-label>Leave a comment</mat-label>
+                            <textarea
+                                matInput
+                                rows="3"
+                                placeholder="Ex. It makes me feel..."
+                                [name]="'description'"
+                                formControlName="description"
+                            ></textarea>
+                        </mat-form-field>
+                    </div>
                 </div>
-                <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6">
-                    <reactive-dropdown-field
-                        [label]="'Warehouse'"
-                        [placeholder]="'Select Warehouse'"
-                        [options]="warehouses$ | async"
-                        formControlName="warehouseUniqueName"
-                        (onClear)="adjustInventoryCreateEditForm.get('warehouseUniqueName')?.patchValue(null)"
-                        [required]="true"
-                    >
-                    </reactive-dropdown-field>
+                <div class="row">
+                    <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6 custom-mat-form-field">
+                        <reactive-dropdown-field
+                            [label]="'Inventory'"
+                            [placeholder]="'Select Stock Group/ Stock'"
+                            [options]="inventoryList$ | async"
+                            formControlName="entityUniqueName"
+                            [required]="true"
+                            (selectedOption)="selectInventory($event)"
+                            (onClear)="adjustInventoryCreateEditForm.get('entityUniqueName')?.patchValue(null)"
+                            [showError]="
+                                isFormSubmitted && !adjustInventoryCreateEditForm.get('entityUniqueName')?.value
+                            "
+                        >
+                        </reactive-dropdown-field>
+                    </div>
+                    <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6" *ngIf="showHideTable">
+                        <reactive-dropdown-field
+                            [label]="'Adjustment Method'"
+                            [placeholder]="'Select Adjustment Method'"
+                            [options]="adjustmentMethod"
+                            formControlName="adjustmentMethod"
+                            [required]="true"
+                            (selectedOption)="
+                                calculateCalculation(adjustInventoryCreateEditForm, stockGroupClosingBalance)
+                            "
+                            (onClear)="adjustInventoryCreateEditForm.get('adjustmentMethod')?.patchValue(null)"
+                            [showError]="
+                                isFormSubmitted && !adjustInventoryCreateEditForm.get('adjustmentMethod')?.value
+                            "
+                        >
+                        </reactive-dropdown-field>
+                    </div>
+                    <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6">
+                        <reactive-dropdown-field
+                            [label]="'Reason'"
+                            [placeholder]="'Select Reason'"
+                            [options]="reasons$ | async"
+                            formControlName="reasonUniqueName"
+                            [required]="true"
+                            (createOption)="openCreateReasonModal()"
+                            [createNewText]="'Create Reason'"
+                            (onClear)="adjustInventoryCreateEditForm.get('reasonUniqueName')?.patchValue(null)"
+                            [showError]="
+                                isFormSubmitted && !adjustInventoryCreateEditForm.get('reasonUniqueName')?.value
+                            "
+                        >
+                        </reactive-dropdown-field>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-xxl-3 mt-3 col-xl-4 col-lg-6 col-md-6">
-                    <mat-form-field class="w-100" [appearance]="'outline'">
-                        <mat-label>Leave a comment</mat-label>
-                        <textarea
-                            matInput
-                            rows="3"
-                            placeholder="Ex. It makes me feel..."
-                            [name]="'description'"
-                            formControlName="description"
-                        ></textarea>
-                    </mat-form-field>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6 custom-mat-form-field">
-                    <reactive-dropdown-field
-                        [label]="'Inventory'"
-                        [placeholder]="'Select Stock Group/ Stock'"
-                        [options]="inventoryList$ | async"
-                        formControlName="entityUniqueName"
-                        [required]="true"
-                        (selectedOption)="selectInventory($event)"
-                        (onClear)="adjustInventoryCreateEditForm.get('entityUniqueName')?.patchValue(null)"
-                    >
-                    </reactive-dropdown-field>
-                </div>
-                <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6">
-                    <reactive-dropdown-field
-                        [label]="'Adjustment Method'"
-                        [placeholder]="'Select Adjustment Method'"
-                        [options]="adjustmentMethod"
-                        formControlName="adjustmentMethod"
-                        [required]="true"
-                        (onClear)="adjustInventoryCreateEditForm.get('adjustmentMethod')?.patchValue(null)"
-                    >
-                    </reactive-dropdown-field>
-                </div>
-                <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6">
-                    <reactive-dropdown-field
-                        [label]="'Reason'"
-                        [placeholder]="'Select Reason'"
-                        [options]="reasons$ | async"
-                        formControlName="reasonUniqueName"
-                        [required]="true"
-                        (createOption)="openCreateReasonModal()"
-                        [createNewText]="'Create Reason'"
-                        (onClear)="adjustInventoryCreateEditForm.get('reasonUniqueName')?.patchValue(null)"
-                    >
-                    </reactive-dropdown-field>
-                </div>
-            </div>
-            <div class="col-xxl-3 mt-3 col-xl-8 col-lg-6 col-md-6 pl-0">
-                <mat-accordion>
-                    <mat-expansion-panel
-                        (mouseenter)="panelOpenState = true"
-                        [expanded]="panelOpenState"
-                        (opened)="panelOpenState = true"
-                        (closed)="panelOpenState = false"
-                    >
-                        <mat-expansion-panel-header class="h-auto">
-                            <table [width]="'100%'">
-                                <tr>
-                                    <td [width]="'20%'">Inventory</td>
-                                    <td [width]="'15.625%'">Method</td>
-                                    <td [width]="'15.625%'">Change in value</td>
-                                    <td [width]="'15.625%'">Closing value</td>
-                                    <td [width]="'15.625%'">Change</td>
-                                    <td [width]="'15.625%'">New value</td>
-                                </tr>
-                                <tr>
-                                    <td [width]="'20%'">T-shirts</td>
-                                    <td [width]="'15.625%'">
-                                        <div class="d-flex select-input-field">
-                                            <select-field
-                                                [cssClass]="'pd mat-field-border rounded-end-0'"
-                                                [name]="'fields'"
-                                                [placeholder]="'select'"
-                                                [options]="calculationMethod"
-                                                (click)="$event.stopPropagation()"
-                                            >
-                                            </select-field>
-                                            <button
-                                                mat-button
-                                                class="mat-field-border button-dropdown mat-field-border"
-                                                (click)="$event.stopPropagation()"
-                                            >
-                                                <i class="caret"> </i>
-                                            </button>
-                                        </div>
-                                    </td>
+                <div class="col-xxl-3 mt-3 col-xl-8 col-lg-6 col-md-6 pl-0">
+                    <mat-accordion *ngIf="showHideTable">
+                        <!-- [expanded]="panelOpenState" -->
+                        <mat-expansion-panel>
+                            <mat-expansion-panel-header class="h-auto">
+                                <table [width]="'100%'">
+                                    <tr>
+                                        <td [width]="'20%'">Inventory</td>
+                                        <td [width]="'15.625%'">Method</td>
+                                        <td [width]="'15.625%'">Change in value</td>
+                                        <td [width]="'15.625%'">Closing</td>
+                                        <td [width]="'15.625%'">Change</td>
+                                        <td [width]="'15.625%'">New value</td>
+                                    </tr>
+                                    <tr>
+                                        <td [width]="'20%'">
+                                            {{ entity.entityName ? entity.entityName : "Stock/ Stock Group Name" }}
+                                        </td>
+                                        <td
+                                            [width]="'15.625%'"
+                                            (click)="$event.preventDefault(); $event.stopPropagation()"
+                                        >
+                                            <div class="d-flex select-input-field">
+                                                <mat-form-field appearance="outline">
+                                                    <mat-select
+                                                        required="true"
+                                                        formControlName="calculationMethod"
+                                                        name="calculationMethod"
+                                                        placeholder="Select method *"
+                                                        (selectionChange)="
+                                                            calculateCalculation(
+                                                                adjustInventoryCreateEditForm,
+                                                                stockGroupClosingBalance
+                                                            )
+                                                        "
+                                                    >
+                                                        <mat-option
+                                                            *ngFor="let method of calculationMethod"
+                                                            [value]="method.value"
+                                                            [value]="method.value"
+                                                        >
+                                                            {{ method.label }}
+                                                        </mat-option>
+                                                    </mat-select>
+                                                </mat-form-field>
+                                            </div>
+                                        </td>
 
-                                    <td [width]="'15.625%'">
-                                        <div class="d-flex align-items-center column-gap5">
-                                            <text-field
-                                                [cssClass]="'form-control text-left text-control-input'"
-                                                [name]="'percentage'"
-                                                [type]="'number'"
-                                                [placeholder]="'00'"
-                                                (click)="$event.stopPropagation()"
-                                            >
-                                            </text-field>
-                                            <span>%</span>
-                                        </div>
-                                    </td>
+                                        <td [width]="'15.625%'">
+                                            <div class="d-flex align-items-center column-gap5">
+                                                <text-field
+                                                    [cssClass]="'form-control text-left text-control-input'"
+                                                    [type]="'number'"
+                                                    [name]="'changeInValue'"
+                                                    [allowDecimalDigitsOnly]="true"
+                                                    (input)="
+                                                        calculateCalculation(
+                                                            adjustInventoryCreateEditForm,
+                                                            stockGroupClosingBalance
+                                                        )
+                                                    "
+                                                    (click)="$event.preventDefault(); $event.stopPropagation()"
+                                                    formControlName="changeInValue"
+                                                    [showError]="
+                                                        isFormSubmitted &&
+                                                        !adjustInventoryCreateEditForm?.get('changeInValue')?.value
+                                                    "
+                                                >
+                                                </text-field>
+                                                <span>{{
+                                                    adjustInventoryCreateEditForm.get("calculationMethod")?.value ===
+                                                    "PERCENTAGE"
+                                                        ? "%"
+                                                        : ""
+                                                }}</span>
+                                            </div>
+                                        </td>
+                                        <td [style.width]="'15.625%'">
+                                            {{
+                                                adjustInventoryCreateEditForm.get("adjustmentMethod")?.value
+                                                    ? adjustInventoryCreateEditForm.get("adjustmentMethod")?.value ===
+                                                      "QUANTITY_WISE"
+                                                        ? stockGroupClosingBalance?.closing?.closing?.quantity ?? 0
+                                                        : giddhRoundOff(
+                                                              stockGroupClosingBalance?.closing.closing?.amount ?? 0,
+                                                              this.giddhBalanceDecimalPlaces
+                                                          )
+                                                    : 0
+                                            }}
+                                        </td>
 
-                                    <td [width]="'15.625%'">5000</td>
-                                    <td class="px-3" [width]="'15.625%'">500</td>
-                                    <td class="px-4" [width]="'15.625%'">5500</td>
-                                </tr>
+                                        <td class="px-3" [width]="'15.625%'">
+                                            {{
+                                                stockGroupClosingBalance?.changeValue
+                                                    ? stockGroupClosingBalance?.changeValue
+                                                    : 0
+                                            }}
+                                        </td>
+                                        <td class="px-4" [width]="'15.625%'">
+                                            {{
+                                                stockGroupClosingBalance?.newValue
+                                                    ? stockGroupClosingBalance?.newValue
+                                                    : 0
+                                            }}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </mat-expansion-panel-header>
+                            <table
+                                *ngIf="dataSource?.data?.length && !(adjustInventoryInProgress$ | async)"
+                                mat-table
+                                [dataSource]="dataSource"
+                                class="table basic giddh-table on-mobile-view w-100 table-border-none"
+                            >
+                                <ng-container matColumnDef="select">
+                                    <th mat-header-cell *matHeaderCellDef width="20%">
+                                        <mat-checkbox
+                                            color="primary"
+                                            (change)="$event ? masterToggle() : null"
+                                            [checked]="selection.hasValue() && isAllSelected()"
+                                            [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                            [aria-label]="checkboxLabel()"
+                                        >
+                                            <span>Select All</span>
+                                        </mat-checkbox>
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <mat-checkbox
+                                            color="primary"
+                                            class="mr-2"
+                                            (click)="$event.stopPropagation()"
+                                            (change)="$event ? selection.toggle(element) : null"
+                                            [checked]="selection.isSelected(element)"
+                                            [aria-label]="checkboxLabel(element)"
+                                        >
+                                            {{ element.variant?.name }}
+                                        </mat-checkbox>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="method">
+                                    <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{
+                                            adjustInventoryCreateEditForm.get("calculationMethod")?.value
+                                                ? adjustInventoryCreateEditForm.get("calculationMethod")?.value
+                                                : "-"
+                                        }}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="changeValue">
+                                    <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{ adjustInventoryCreateEditForm.get("changeInValue")?.value }}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="closingValue">
+                                    <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{
+                                            adjustInventoryCreateEditForm.get("adjustmentMethod")?.value ===
+                                            "QUANTITY_WISE"
+                                                ? element?.closing?.quantity
+                                                : giddhRoundOff(
+                                                      element?.closing?.amount ?? 0,
+                                                      this.giddhBalanceDecimalPlaces
+                                                  )
+                                        }}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="changes">
+                                    <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
+                                    <td mat-cell *matCellDef="let element">{{ element?.changeValue }}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="newValue">
+                                    <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
+                                    <td mat-cell *matCellDef="let element">{{ element?.newValue }}</td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr
+                                    (click)="selection.toggle(row)"
+                                    mat-row
+                                    *matRowDef="let row; columns: displayedColumns"
+                                ></tr>
                             </table>
-                        </mat-expansion-panel-header>
-                        <table mat-table [dataSource]="dataSource" class="table basic giddh-table on-mobile-view w-100  table-border-none">
-                            <!-- Checkbox Column -->
-                            <ng-container matColumnDef="select">
-                                <th mat-header-cell *matHeaderCellDef width="20%">
-                                    <mat-checkbox color="primary">
-                                        <span>Select All</span>
-                                    </mat-checkbox>
-                                </th>
-                                <td mat-cell *matCellDef="let element">
-                                    <mat-checkbox color="primary" class="mr-2">{{ element.variant?.name }} </mat-checkbox>
-                                </td>
-                            </ng-container>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                    <div class="mt-3">
+                        <div class="button-group d-flex column-gap15">
+                            <button
+                                aria-label="create"
+                                *ngIf="!referenceNumber"
+                                mat-stroked-button
+                                color="primary"
+                                (click)="createInventory()"
+                            >
+                                {{ commonLocaleData?.app_create }}
+                            </button>
+                            <button aria-label="clear" mat-stroked-button color="warn" (click)="resetForm()">
+                                {{ commonLocaleData?.app_clear }}
+                            </button>
+                            <button
+                                aria-label="update"
+                                *ngIf="referenceNumber"
+                                mat-stroked-button
+                                color="primary"
+                                class="min-width-100"
+                                (click)="updateInventory()"
+                            >
+                                {{ commonLocaleData?.app_update }}
+                            </button>
 
-                            <!-- Weight Column -->
-                            <ng-container matColumnDef="method">
-                                <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
-                                <td mat-cell *matCellDef="let element">MEthod</td>
-                            </ng-container>
-
-                            <!-- Symbol Column -->
-                            <ng-container matColumnDef="changeValue">
-                                <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
-                                <td mat-cell *matCellDef="let element">Change value</td>
-                            </ng-container>
-
-                            <!-- Symbol Column -->
-                            <ng-container matColumnDef="closingValue">
-                                <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
-                                <td mat-cell *matCellDef="let element">Closing value</td>
-                            </ng-container>
-
-                            <!-- Symbol Column -->
-                            <ng-container matColumnDef="changes">
-                                <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
-                                <td mat-cell *matCellDef="let element">Chane</td>
-                            </ng-container>
-
-                            <!-- Symbol Column -->
-                            <ng-container matColumnDef="newValue">
-                                <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
-                                <td mat-cell *matCellDef="let element">New Value</td>
-                            </ng-container>
-
-                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                        </table>
-                    </mat-expansion-panel>
-                </mat-accordion>
+                            <button
+                                aria-label="close icon"
+                                mat-stroked-button
+                                *ngIf="referenceNumber"
+                                class="min-width-100"
+                                (click)="backClicked(true)"
+                            >
+                                {{ commonLocaleData?.app_close }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </ng-container>
     </form>
 </ng-container>
 

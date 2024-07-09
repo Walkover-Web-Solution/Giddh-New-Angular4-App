@@ -108,6 +108,8 @@ export const INVENTORY_API = {
         REPORT: 'company/:companyUniqueName/inventory-adjustment/adjustment-report?page=:page&count=:count&sortBy=:sortBy&sort=:sort&q=:q&searchBy=:searchBy', // GET call
         DELETE: 'company/:companyUniqueName/inventory-adjustment/:referenceNo?voucherVersion=2', // DELETE call
         GET_REASON: 'company/:companyUniqueName/inventory-adjustment/reason/get-all?count=200',// GET call
-        CREATE_REASON: 'company/:companyUniqueName/inventory-adjustment/reason' // GET call
+        CREATE_REASON: 'company/:companyUniqueName/inventory-adjustment/reason', // GET call
+        GET: 'company/:companyUniqueName/inventory-adjustment/:referenceNo', // GET call
+        CREATE_INVENTORY: 'company/:companyUniqueName/inventory-adjustment?voucherVersion=2&branchUniqueName=:branchUniqueName' // POST call
     }
 };

@@ -1704,6 +1704,27 @@ export class InventoryService {
             }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '', { referenceNo })));
     }
 
+
+    /**
+  * This will be use for get inventory adjustment
+  *
+  * @param {string} referenceNo
+  * @return {*}  {Observable<BaseResponse<string, string>>}
+  * @memberof InventoryService
+  */
+    public getInventoryAdjust(referenceNo: string): Observable<BaseResponse<string, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + INVENTORY_API.INVENTORY_ADJUST.GET
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':referenceNo', encodeURIComponent(referenceNo)
+            )).pipe(map((res) => {
+                let data: BaseResponse<string, string> = res;
+                data.request = '';
+                data.queryString = { referenceNo };
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '', { referenceNo })));
+    }
+
     /**
      * Get Inventory Adjust Reasons
      *
@@ -1735,5 +1756,17 @@ export class InventoryService {
                 data.request = { reason };
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, StockGroupRequest>(e, reason)));
+    }
+
+    public createInventoryAdjustment(model: any, branchUniqueName:string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_ADJUST.CREATE_INVENTORY
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':branchUniqueName', encodeURIComponent(branchUniqueName))
+            , model).pipe(map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = { model };
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, StockGroupRequest>(e, model)));
     }
 }

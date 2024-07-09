@@ -5,14 +5,19 @@ import { Store } from '@ngrx/store';
 import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.action';
 import { Observable, ReplaySubject, takeUntil, of as observableOf } from 'rxjs';
 import { SettingsUtilityService } from '../../../settings/services/settings-utility.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { OptionInterface } from '../../../models/api-models/Voucher';
-import { SearchStockTransactionReportRequest, StockTransactionReportRequest } from '../../../models/api-models/Inventory';
-import { ActivatedRoute } from '@angular/router';
+import { BalanceStockTransactionReportRequest, SearchStockTransactionReportRequest, StockTransactionReportRequest } from '../../../models/api-models/Inventory';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { GeneralService } from '../../../services/general.service';
+import { Location } from '@angular/common';
+import { MatTableDataSource } from '@angular/material/table';
+import { SelectionModel } from '@angular/cdk/collections';
+import { SettingsFinancialYearActions } from '../../../actions/settings/financial-year/financial-year.action';
+import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 @Component({
     selector: 'adjust-inventory',
     templateUrl: './adjust-inventory.component.html',
@@ -44,7 +49,7 @@ export class AdjustInventoryComponent implements OnInit {
     /** Inventory Observable */
     public inventoryList$: Observable<any[]> = observableOf(null);
     /** True if open panel state  */
-    public panelOpenState = false;
+    public panelOpenState = true;
     /** Adjustment Method  */
     public adjustmentMethod: any[] = [
         {
@@ -53,7 +58,7 @@ export class AdjustInventoryComponent implements OnInit {
         },
         {
             label: 'Value Wise',
-            value: 'VAlUE_WISE'
+            value: 'VALUE_WISE'
 
         }
     ];
@@ -67,20 +72,53 @@ export class AdjustInventoryComponent implements OnInit {
     public calculationMethod: any[] = [
         {
             label: 'Percentage',
-            value: 'PERCENTAGE',
+            value: 'PERCENTAGE'
 
         },
         {
-            label: 'Number',
-            value: '#',
+            label: 'Value',
+            value: 'VALUE'
 
         },
     ];
     /** Stock Transactional Object */
     public stockReportRequest: StockTransactionReportRequest = new StockTransactionReportRequest();
+    /** Stock Transactional Object */
+    public balanceStockReportRequest: BalanceStockTransactionReportRequest = new BalanceStockTransactionReportRequest();
     /** Hold inventory variant wise response */
     public displayedColumns: any[] = ['select', 'method', 'changeValue', 'closingValue', 'changes', 'newValue'];
-    public dataSource: any[] = [];
+    /** Holds query params */
+    public queryParams: any = {};
+    /** Holds entity object */
+    public entity: any = {
+        entityName: '',
+        balance: ''
+    };
+    /** This will hold stock/group closing balance */
+    public stockGroupClosingBalance: any = {
+        newValue: 0,
+        changeValue: 0,
+        closing: 0
+    };
+    /** True if open panel state  */
+    public showHideTable = true;
+    /** True if form is submitted to show error if available */
+    public isFormSubmitted: boolean = false;
+    /** Holds Store create adjust inventory  in progress API success state as observable*/
+    public createAdjustInventoryIsSuccess$ = this.componentStore.select(state => state.createAdjustInventoryIsSuccess);
+    /** Holds Store update adjust inventory  in progress API success state as observable*/
+    public updateAdjustInventoryIsSuccess$ = this.componentStore.select(state => state.updateAdjustInventoryIsSuccess);
+    /** Holds Store create adjust inventory  in progress API success state as observable*/
+    public createAdjustInventoryInProgress$ = this.componentStore.select(state => state.createAdjustInventoryInProgress);
+    /** Hold table data source */
+    public dataSource: any;
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
+    /** This will use for round off value */
+    public giddhRoundOff: any = giddhRoundOff;
+    /** Hold Reference Number */
+    public referenceNumber: string = "";
+    public selection = new SelectionModel<any>(true, []);
     constructor(
         private store: Store<AppState>,
         private warehouseActions: WarehouseActions,
@@ -89,20 +127,53 @@ export class AdjustInventoryComponent implements OnInit {
         private componentStore: AdjustInventoryComponentStore,
         private formBuilder: FormBuilder,
         private dialog: MatDialog,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private router: Router,
+        private location: Location,
+        private settingsFinancialYearActions: SettingsFinancialYearActions
     ) {
+        this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
     }
     public ngOnInit(): void {
-        this.initForm();
         this.getWarehouses();
         this.getResons();
         this.getExpensesAccount();
         this.getItemWiseReport();
+        this.initForm();
+
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
-            console.log(params);
             if (params?.type) {
                 this.inventoryType = params?.type.toLowerCase();
+                this.queryParams = params;
+                this.referenceNumber = params?.refNo;
+                this.componentStore.getAdjustInventoryData(this.referenceNumber);
+            }
+        });
+
+        if (this.referenceNumber) {
+            this.componentStore.inventoryAdjustData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response) {
+                    this.initForm(response);
+                }
+            });
+        }
+
+        this.componentStore.financialYear$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.stockReportRequest.from = response?.startDate;
+            }
+        });
+
+        this.createAdjustInventoryIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust-inventory`]);
+            }
+        });
+
+        this.updateAdjustInventoryIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust-inventory`]);
             }
         });
 
@@ -110,7 +181,7 @@ export class AdjustInventoryComponent implements OnInit {
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
                 let universalDate = _.cloneDeep(dateObj);
-                this.stockReportRequest.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.adjustInventoryCreateEditForm.get('date')?.patchValue(dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT));
                 this.stockReportRequest.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
         });
@@ -126,6 +197,13 @@ export class AdjustInventoryComponent implements OnInit {
             }
         });
 
+        this.componentStore.settingsProfile$.pipe(takeUntil(this.destroyed$)).subscribe(profile => {
+            if (profile) {
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+            }
+        });
+
+
         this.componentStore.itemWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 const mappedIItemWise: OptionInterface[] = response.results.map(item => ({
@@ -137,11 +215,39 @@ export class AdjustInventoryComponent implements OnInit {
             }
         });
 
-        this.componentStore.variantWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
-
+        this.componentStore.stockGroupClosingBalance$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.dataSource = response?.body?.results;
+                this.stockGroupClosingBalance.closing = response;
+
+            }
+        });
+
+        this.componentStore.variantWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                const data = response?.body?.results.map(result => {
+                    return {
+                        ...result,
+                        newValue: 0,
+                        changeValue: 0
+                    }
+                }) || [];
+                this.stockGroupClosingBalance = {
+                    newValue: 0,
+                    changeValue: 0,
+                    closing: 0
+                };
+                this.dataSource = new MatTableDataSource<any>(data);
+                this.adjustInventoryCreateEditForm.patchValue({
+                    adjustmentMethod: null, // Set to your default value
+                    calculationMethod: null, // Set to your default value
+                    changeInValue: null // Reset to empty string or default value as needed
+                });
+                this.showHideTable = false;
+                setTimeout(() => {
+                    this.showHideTable = true;
+                });
+            } else {
+                this.dataSource = new MatTableDataSource<any>([]);
             }
         });
 
@@ -170,8 +276,8 @@ export class AdjustInventoryComponent implements OnInit {
         });
     }
 
+
     public getItemWiseReport(): void {
-        console.log(this.searchRequest);
         this.searchRequest.count = 200000000;
         this.searchRequest.inventoryType = this.inventoryType?.toUpperCase();
         this.searchRequest.searchPage = 'VARIANT';
@@ -180,6 +286,17 @@ export class AdjustInventoryComponent implements OnInit {
 
     public getExpensesAccount(): void {
         this.componentStore.getExpensesAccounts(this.groupUniqueName);
+    }
+
+    /**
+   * Resets the form
+   *
+   * @param {NgForm} stockCreateEditForm
+   * @memberof StockCreateEditComponent
+   */
+    public resetForm(): void {
+        this.adjustInventoryCreateEditForm.reset();
+        this.adjustInventoryCreateEditForm.get('date')?.patchValue(this.stockReportRequest.to);
     }
 
     /**
@@ -211,21 +328,30 @@ export class AdjustInventoryComponent implements OnInit {
         }
     }
 
-    private initForm(): void {
+    /**
+ * This will take the user back to last page
+ *
+ * @memberof StockCreateEditComponent
+ */
+    public backClicked(i): void {
+        this.location.back();
+    }
+
+    private initForm(value?: any): void {
         this.adjustInventoryCreateEditForm = this.formBuilder.group({
-            entity: [''],
-            entityName: [''],
-            entityUniqueName: [''],
-            reasonUniqueName: [''],
-            date: [''],
-            refNo: [''], // No validation needed as per your description
-            expenseAccountUniqueName: [''],
-            warehouseUniqueName: [''],
-            description: [''],
-            adjustmentMethod: [''], // Default to VALUE_WISE
-            calculationMethod: [''], // Default to PERCENTAGE
-            changeInValue: [''],
-            variantUniqueNames: [],
+            entity: [value?.entity ?? null, Validators.required],
+            entityName: [value?.entityUniqueName ?? null, Validators.required],
+            entityUniqueName: [value?.entityUniqueName ?? null, Validators.required],
+            reasonUniqueName: [value?.reasonUniqueName ?? null, Validators.required],
+            date: [value?.date ?? null, Validators.required],
+            refNo: [value?.refNo ?? null], // No validation needed as per your description
+            expenseAccountUniqueName: [value?.expenseAccountUniqueName ?? null, Validators.required],
+            warehouseUniqueName: [value?.warehouseUniqueName ?? null],
+            description: [value?.description ?? null],
+            adjustmentMethod: [value?.adjustmentMethod ?? null, Validators.required], // Default to VALUE_WISE
+            calculationMethod: [value?.calculationMethod ?? null, Validators.required], // Default to PERCENTAGE
+            changeInValue: [value?.changeInValue ?? null, Validators.required],
+            variantUniqueNames: [value?.variantUniqueNames ?? null],
         });
     }
 
@@ -237,7 +363,24 @@ export class AdjustInventoryComponent implements OnInit {
    * @memberof VoucherCreateComponent
    */
     public selectInventory(event: any, isClear: boolean = false): void {
-        console.log(event);
+        let reqObj;
+        let toDate;
+        let balanceQueryParams = {
+            from: this.stockReportRequest.from ?? '',
+            to: this.stockReportRequest.to ?? '',
+            stockGroupUniqueName: '',
+            entity: ''
+        };
+        if (typeof this.adjustInventoryCreateEditForm.get('date')?.value === 'object') {
+            toDate = dayjs(this.adjustInventoryCreateEditForm.get('date')?.value).format(GIDDH_DATE_FORMAT);
+        } else {
+            toDate = this.adjustInventoryCreateEditForm.get('date')?.value
+        }
+        this.entity.entityName = event?.label;
+        this.adjustInventoryCreateEditForm.get('entityName').setValue(event?.label);
+        this.adjustInventoryCreateEditForm.get('entityUniqueName').setValue(event?.value);
+        this.adjustInventoryCreateEditForm.get('entity').setValue(event?.additional?.type);
+        this.stockReportRequest.to = toDate;
         let queryParams = {
             from: this.stockReportRequest.from ?? '',
             to: this.stockReportRequest.to ?? '',
@@ -251,20 +394,45 @@ export class AdjustInventoryComponent implements OnInit {
         if (event && event.additional?.type === 'STOCK GROUP') {
             this.stockReportRequest.stockUniqueNames = [];
             this.stockReportRequest.stockGroupUniqueNames = [event.value];
-            let reqObj = {
+            reqObj = {
                 queryParams: queryParams,
                 stockReportRequest: this.stockReportRequest
             }
             this.componentStore.getVariantWiseReport(reqObj);
+            this.balanceStockReportRequest.branchUniqueNames[0] = this.generalService.currentBranchUniqueName;
+            this.balanceStockReportRequest.from = undefined;
+            this.balanceStockReportRequest.to = undefined;
+            this.balanceStockReportRequest.stockGroupUniqueNames = [event.value];
+            this.balanceStockReportRequest.stockUniqueNames = [];
+            this.balanceStockReportRequest['inventoryType'] = this.inventoryType?.toUpperCase();
+            let balanceReqObj = {
+                queryParams: balanceQueryParams,
+                balanceStockReportRequest: this.balanceStockReportRequest
+            }
+            this.componentStore.getStockGroupClosingBalance(balanceReqObj);
         } else {
-            let reqObj = {
+            reqObj = {
                 queryParams: queryParams,
                 stockReportRequest: this.stockReportRequest
             }
             this.stockReportRequest.stockGroupUniqueNames = [];
             this.stockReportRequest.stockUniqueNames = [event.value];
             this.componentStore.getVariantWiseReport(reqObj);
+            this.balanceStockReportRequest.branchUniqueNames[0] = this.generalService.currentBranchUniqueName;
+            this.balanceStockReportRequest.from = undefined;
+            this.balanceStockReportRequest.to = undefined;
+            this.balanceStockReportRequest.stockGroupUniqueNames = [];
+            this.balanceStockReportRequest.stockUniqueNames = [event.value];
+            this.balanceStockReportRequest['inventoryType'] = this.inventoryType?.toUpperCase();
+            let balanceReqObj = {
+                queryParams: balanceQueryParams,
+                balanceStockReportRequest: this.balanceStockReportRequest
+            }
+            this.componentStore.getStockGroupClosingBalance(balanceReqObj);
         }
+
+        ;
+
 
     }
 
@@ -281,5 +449,156 @@ export class AdjustInventoryComponent implements OnInit {
     public getResons(): void {
         this.componentStore.getAllReasons(true);
     }
+
+
+
+
+    public updateInventory(): void {
+        this.isFormSubmitted = false;
+        if (this.adjustInventoryCreateEditForm.invalid) {
+            this.isFormSubmitted = true;
+            return;
+        }
+        let mappedVariants = this.selection.selected.map(item => (
+            item?.variant?.uniqueName
+        ));
+        this.adjustInventoryCreateEditForm.value.variantUniqueNames = mappedVariants;
+        this.adjustInventoryCreateEditForm.value.date = dayjs(this.adjustInventoryCreateEditForm.value.date).format(GIDDH_DATE_FORMAT);
+        let reqObj = {
+            formValue: this.adjustInventoryCreateEditForm.value,
+            branchUniqueName: this.generalService.currentBranchUniqueName
+        }
+        this.componentStore.updateInventoryAdjustment(reqObj);
+    }
+
+    public createInventory(): void {
+        this.isFormSubmitted = false;
+        if (this.adjustInventoryCreateEditForm.invalid) {
+            this.isFormSubmitted = true;
+            return;
+        }
+        let mappedVariants = this.selection.selected.map(item => (
+            item?.variant?.uniqueName
+        ));
+        this.adjustInventoryCreateEditForm.value.variantUniqueNames = mappedVariants;
+        this.adjustInventoryCreateEditForm.value.date = dayjs(this.adjustInventoryCreateEditForm.value.date).format(GIDDH_DATE_FORMAT);
+        let reqObj = {
+            formValue: this.adjustInventoryCreateEditForm.value,
+            branchUniqueName: this.generalService.currentBranchUniqueName
+        }
+        this.componentStore.createInventoryAdjustment(reqObj);
+    }
+
+    public calculateCalculation(adjustInventoryCreateEditForm: FormGroup, stockGroupClosingBalance: any): void {
+        if (adjustInventoryCreateEditForm.value.entityUniqueName &&
+            adjustInventoryCreateEditForm.value.adjustmentMethod === 'QUANTITY_WISE' &&
+            adjustInventoryCreateEditForm.value.calculationMethod === 'PERCENTAGE') {
+            this.stockGroupClosingBalance.changeValue = 0;
+            this.stockGroupClosingBalance.newValue = 0;
+            let changeInValue = stockGroupClosingBalance.closing?.closing?.quantity * (adjustInventoryCreateEditForm?.value?.changeInValue / 100);
+            let newValue = stockGroupClosingBalance.closing?.closing?.quantity - changeInValue;
+
+            this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
+            this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
+
+            const data = this.dataSource.data.map(result => {
+                result.changeValue = result.closing?.quantity * (adjustInventoryCreateEditForm?.value?.changeInValue / 100);
+                result.newValue = giddhRoundOff(result.closing?.quantity - result.changeValue, this.giddhBalanceDecimalPlaces);
+                return result
+            }) || [];
+            this.dataSource.data = data;
+        }
+
+        if (adjustInventoryCreateEditForm.value.entityUniqueName &&
+            adjustInventoryCreateEditForm.value.adjustmentMethod === 'QUANTITY_WISE'
+            && adjustInventoryCreateEditForm.value.calculationMethod === 'VALUE') {
+            this.stockGroupClosingBalance.changeValue = 0;
+            this.stockGroupClosingBalance.newValue = 0;
+            let changeInValue = adjustInventoryCreateEditForm?.value?.changeInValue;
+            let newValue = stockGroupClosingBalance.closing?.closing?.quantity - changeInValue;
+
+            this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
+            this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
+
+            const data = this.dataSource.data.map(result => {
+                result.changeValue = adjustInventoryCreateEditForm?.value?.changeInValue;
+                result.newValue = giddhRoundOff(result.closing?.quantity - result.changeValue, this.giddhBalanceDecimalPlaces);
+                return result
+            }) || [];
+            this.dataSource.data = data;
+        }
+
+        if (adjustInventoryCreateEditForm.value.entityUniqueName &&
+            adjustInventoryCreateEditForm.value.adjustmentMethod === 'VALUE_WISE' &&
+            adjustInventoryCreateEditForm.value.calculationMethod === 'PERCENTAGE') {
+            this.stockGroupClosingBalance.changeValue = 0;
+            this.stockGroupClosingBalance.newValue = 0;
+            let changeInValue = stockGroupClosingBalance.closing?.closing?.amount * (adjustInventoryCreateEditForm?.value?.changeInValue / 100);
+            let newValue = stockGroupClosingBalance.closing?.closing?.amount - changeInValue;
+
+            this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
+            this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
+
+            const data = this.dataSource.data.map(result => {
+                result.changeValue = result.closing?.amount * (adjustInventoryCreateEditForm?.value?.changeInValue / 100);
+                result.newValue = giddhRoundOff(result.closing?.amount - result.changeValue, this.giddhBalanceDecimalPlaces);
+                return result
+            }) || [];
+            this.dataSource.data = data;
+
+        }
+
+        if (adjustInventoryCreateEditForm.value.entityUniqueName &&
+            adjustInventoryCreateEditForm.value.adjustmentMethod === 'VALUE_WISE' &&
+            adjustInventoryCreateEditForm.value.calculationMethod === 'VALUE') {
+            this.stockGroupClosingBalance.changeValue = 0;
+            this.stockGroupClosingBalance.newValue = 0;
+            let changeInValue = adjustInventoryCreateEditForm?.value?.changeInValue;
+            let newValue = stockGroupClosingBalance.closing?.closing?.amount - changeInValue;
+
+            this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
+            this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
+
+            const data = this.dataSource.data.map(result => {
+                result.changeValue = adjustInventoryCreateEditForm?.value?.changeInValue;
+                result.newValue = giddhRoundOff(result.closing?.amount - result.changeValue, this.giddhBalanceDecimalPlaces);
+                return result
+            }) || [];
+            this.dataSource.data = data;
+
+        }
+
+
+    }
+
+    public calculateChangeNewValue(changeValue: number, newValue: number) {
+
+        return { changeValue, newValue };
+    }
+
+
+    public isAllSelected() {
+        const numSelected = this.selection.selected.length;
+        const numRows = this.dataSource?.data?.length;
+        return numSelected === numRows;
+    }
+
+
+
+    public masterToggle() {
+        if (this.isAllSelected()) {
+            this.selection.clear();
+        } else {
+            this.dataSource?.filteredData?.forEach(row => this.selection.select(row));
+        }
+    }
+
+    public checkboxLabel(row?: any): string {
+        if (!row) {
+            return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+        }
+        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+    }
+
 
 }
