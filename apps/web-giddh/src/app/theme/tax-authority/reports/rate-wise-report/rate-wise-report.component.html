@@ -1,6 +1,7 @@
 <ng-container appTranslate [file]="'settings/tax-authority'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu></hamburger-menu>
+
     <!-- Tax Sidebar code  -->
     <div class="relative w-100">
         <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
@@ -10,6 +11,7 @@
                 [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
     </div>
+
     <!-- Tax Authority code  -->
     <div class="tax-authority-report mx-auto pd-t15">
         <div class="container-fluid ml-0">
@@ -58,7 +60,7 @@
                                                 {{ element?.taxAuthority?.name }}
                                             </a>
                                         </td>
-                                        <td mat-footer-cell *matFooterCellDef>
+                                        <td class="bg-grey" mat-footer-cell *matFooterCellDef>
                                             {{ commonLocaleData?.app_total }}
                                         </td>
                                     </ng-container>
@@ -66,23 +68,23 @@
                                      <!-- Total Sales -->
                                      <ng-container matColumnDef="total_sales">
                                         <th mat-header-cell *matHeaderCellDef>
-                                            {{ localeData?.taxable_amount }}
+                                            {{ commonLocaleData?.app_total + ' ' + commonLocaleData?.app_sales }}
                                         </th>
                                         <td mat-cell *matCellDef="let element" width="15%">
-                                            {{ element?.taxableAmount }}
+                                            {{ element?.subTotal }}
                                         </td>
-                                        <td mat-footer-cell *matFooterCellDef></td>
+                                        <td class="bg-grey" mat-footer-cell *matFooterCellDef></td>
                                     </ng-container>
         
                                     <!-- Taxable Amount -->
                                     <ng-container matColumnDef="taxable_amount">
                                         <th mat-header-cell *matHeaderCellDef>
-                                            {{ commonLocaleData?.app_sales }}
+                                            {{ localeData?.taxable_amount }}
                                         </th>
                                         <td mat-cell *matCellDef="let element" width="15%">
-                                            {{ element?.subTotal }}
+                                            {{ element?.taxableAmount }}
                                         </td>
-                                        <td mat-footer-cell *matFooterCellDef></td>
+                                        <td class="bg-grey" mat-footer-cell *matFooterCellDef></td>
                                     </ng-container>
         
                                      <!-- Tax Percentage -->
@@ -93,7 +95,7 @@
                                         <td mat-cell *matCellDef="let element" width="15%">
                                             {{ element?.taxPercentage }}
                                         </td>
-                                        <td mat-footer-cell *matFooterCellDef></td>
+                                        <td class="bg-grey" mat-footer-cell *matFooterCellDef></td>
                                     </ng-container>
         
                                      <!-- Tax Collected -->
@@ -104,7 +106,7 @@
                                         <td mat-cell *matCellDef="let element" width="15%">
                                             {{ element?.taxTotal }}
                                         </td>
-                                        <td mat-footer-cell *matFooterCellDef>
+                                        <td class="bg-grey" mat-footer-cell *matFooterCellDef>
                                             <amount-field
                                                 class="d-inline-block"
                                                 [amount]="(taxWiseReport$ | async)?.totalTaxCollected"

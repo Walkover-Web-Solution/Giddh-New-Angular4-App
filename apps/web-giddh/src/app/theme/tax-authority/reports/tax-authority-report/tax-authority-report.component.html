@@ -46,7 +46,7 @@
                                 <table mat-table [dataSource]="(taxAuthorityWiseReport$ | async)?.responses"
                                 class="table basic mr-t2 vat-report-table hide-last-row bordered-table">
                                     <!-- Reporting Tax Authority -->
-                                    <ng-container matColumnDef="tax_authority_name">
+                                    <ng-container matColumnDef="reporting_tax_authority">
                                         <th mat-header-cell *matHeaderCellDef>
                                             {{ localeData?.reporting_tax_authority }}
                                         </th>
@@ -61,7 +61,7 @@
                                     </ng-container>
         
                                      <!-- Sales with Tax -->
-                                     <ng-container matColumnDef="tax_amount">
+                                     <ng-container matColumnDef="sales_with_tax">
                                         <th mat-header-cell *matHeaderCellDef>
                                             {{ localeData?.sales_with_tax }}
                                         </th>
@@ -72,7 +72,7 @@
                                     </ng-container>
         
                                     <!-- Sales -->
-                                    <ng-container matColumnDef="sub_total">
+                                    <ng-container matColumnDef="sales">
                                         <th mat-header-cell *matHeaderCellDef>
                                             {{ commonLocaleData?.app_sales }}
                                         </th>

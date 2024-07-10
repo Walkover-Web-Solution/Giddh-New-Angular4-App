@@ -170,6 +170,11 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
         taxAuthorityName: '',
         taxAuthorityUniqueName: '',
     };
+    /** Holds Tax type label  */
+    public taxType: any = {
+        label: '',
+        placeholder: ''
+    }
 
     constructor(
         private store: Store<AppState>,
@@ -269,6 +274,27 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
 
         if ('currentTaxUniqueName' in changes && changes.currentTaxUniqueName.currentValue !== changes.currentTaxUniqueName.previousValue) {
             this.taxAuthority.taxUniqueName = changes.currentTaxUniqueName.currentValue;
+        }
+    }
+
+    /**
+     * Set tax type label 
+     *
+     * @private
+     * @memberof VatReportFiltersComponent
+     */
+    private setTaxTypeLabelPlaceholder(): void {
+        if (this.taxes?.length && this.commonLocaleData) {
+            if (this.isKenyaCompany || this.isZimbabweCompany || this.isUKCompany) {
+                this.taxType.label = this.commonLocaleData?.app_vat;
+                this.taxType.placeholder = this.commonLocaleData?.app_enter_vat;
+            } else if (this.isUSCompany) {
+                this.taxType.label = this.commonLocaleData?.app_sales_tax;
+                this.taxType.placeholder = this.commonLocaleData?.app_enter_sales_tax;
+            } else {
+                this.taxType.label = this.commonLocaleData?.app_trn;
+                this.taxType.placeholder = this.commonLocaleData?.app_enter_trn;
+            }
         }
     }
 
@@ -424,6 +450,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
                 this.taxNumber = this.taxes[0]?.value;
                 this.currentTaxNumber.emit(this.taxNumber);
             }
+            this.setTaxTypeLabelPlaceholder();
             this.isTaxApiInProgress.emit(false);
             setTimeout(() => {
                 if (!this.hasQueryParams) {

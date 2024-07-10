@@ -25,7 +25,7 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Holds table columns */
-    public displayedColumns: any = ['tax_authority_name', 'tax_amount', 'sub_total', 'non_taxable_amount', 'taxable_amount', 'tax_collected'];
+    public displayedColumns: any = ['reporting_tax_authority', 'sales_with_tax', 'sales', 'non_taxable_amount', 'taxable_amount', 'tax_collected'];
     /** Holds page size options */
     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Hold table page index number*/

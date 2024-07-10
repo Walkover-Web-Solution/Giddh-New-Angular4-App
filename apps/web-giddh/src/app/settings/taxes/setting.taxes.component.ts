@@ -70,6 +70,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        document.querySelector('body').classList.add('gst-sidebar-open');
         for (let i = 1; i <= 31; i++) {
             let day = i?.toString();
             this.days.push({ label: day, value: day });
@@ -86,7 +87,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.onCancel();
-                this.availableTaxes = cloneDeep(o.taxes);                
+                this.availableTaxes = cloneDeep(o.taxes);
             }
 
             this.isLoading = o.isTaxesLoading;
@@ -99,14 +100,14 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
                     this.toggleTaxAsidePane();
                 }
             });
-        
+
         this.store
-        .pipe(select(p => p.company && p.company.isTaxUpdatedSuccessfully), takeUntil(this.destroyed$))
-        .subscribe(result => {
-            if (result && this.taxAsideMenuState === 'in') {
-                this.toggleTaxAsidePane();
-            }
-        });
+            .pipe(select(p => p.company && p.company.isTaxUpdatedSuccessfully), takeUntil(this.destroyed$))
+            .subscribe(result => {
+                if (result && this.taxAsideMenuState === 'in') {
+                    this.toggleTaxAsidePane();
+                }
+            });
     }
 
     public deleteTax(taxToDelete) {
@@ -203,6 +204,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
      * @memberof SettingTaxesComponent
      */
     public ngOnDestroy(): void {
+        document.querySelector('body').classList.remove('gst-sidebar-open');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

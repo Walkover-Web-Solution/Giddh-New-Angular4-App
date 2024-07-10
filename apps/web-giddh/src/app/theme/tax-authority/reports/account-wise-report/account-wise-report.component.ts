@@ -137,8 +137,8 @@ export class AccountWiseReportComponent implements OnInit {
     */
     private initSalesTaxReportForm(): void {
         this.salesTaxReportForm = this.formBuilder.group({
-            branchUniqueName: [''],
             taxAuthorityUniqueName: [''],
+            branchUniqueName: [''],
             taxUniqueName: [''],
             taxNumber: [''],
             from: [''],

@@ -135,8 +135,8 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
     */
     private initSalesTaxReportForm(): void {
         this.salesTaxReportForm = this.formBuilder.group({
-            branchUniqueName: [''],
             taxAuthorityUniqueName: [''],
+            branchUniqueName: [''],
             taxNumber: [''],
             from: [''],
             to: ['']

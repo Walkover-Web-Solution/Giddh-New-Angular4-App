@@ -157,6 +157,9 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof AddressSettingsComponent
      */
     public ngOnInit(): void {
+        if (this.addressOnly) {
+            document.querySelector('body').classList.add('gst-sidebar-open');
+        }
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, query: "", count: 2 })); // count is 2 because we only have to check if there are more than 1 records
         let branchFilterRequest = new BranchFilterRequest();
         branchFilterRequest.from = "";
@@ -215,7 +218,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
 
         if (this.addresses?.length > 1) {
             this.hideLinkEntity = false;
-            
+
         } else {
             combineLatest([this.store.pipe(select(state => state.warehouse.warehouses)), this.store.pipe(select(state => state.settings.branches))]).pipe(takeUntil(this.destroyed$)).subscribe((response: any[]) => {
                 if (response && response[0] && response[1]) {
@@ -260,6 +263,9 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof AddressSettingsComponent
      */
     public ngOnDestroy(): void {
+        if (this.addressOnly) {
+            document.querySelector('body').classList.remove('gst-sidebar-open');
+        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
