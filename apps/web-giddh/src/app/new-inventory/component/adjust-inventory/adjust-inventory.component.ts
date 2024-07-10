@@ -143,11 +143,6 @@ export class AdjustInventoryComponent implements OnInit {
      * @memberof AdjustInventoryComponent
      */
     public ngOnInit(): void {
-
-        this.getWarehouses();
-        this.getResons();
-        this.getExpensesAccount();
-        this.getItemWiseReport();
         this.initForm();
 
         /** Activate router observable */
@@ -155,10 +150,17 @@ export class AdjustInventoryComponent implements OnInit {
             if (params?.type) {
                 this.inventoryType = params?.type.toLowerCase();
                 this.queryParams = params;
+            }
+            if (params?.refNo) {
                 this.referenceNumber = params?.refNo;
                 this.componentStore.getAdjustInventoryData(this.referenceNumber);
             }
         });
+
+        this.getWarehouses();
+        this.getResons();
+        this.getExpensesAccount();
+        this.getItemWiseReport();
 
         if (this.referenceNumber) {
             this.componentStore.inventoryAdjustData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -201,11 +203,47 @@ export class AdjustInventoryComponent implements OnInit {
         /** Reason observable */
         this.componentStore.reasons$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                const mappedReasons: OptionInterface[] = response.results.map(item => ({
+                const mappedReasons: OptionInterface[] = response.results?.map(item => ({
                     value: item.uniqueName,
                     label: item.reason,
                     additional: item
                 }));
+
+                mappedReasons.unshift(
+                    {
+                        value: 'lossByFire',
+                        label: 'Loss by fire',
+                        additional: {
+                            name: 'Loss by fire',
+                            uniqueName: 'lossByFire'
+                        }
+                    },
+                    {
+                        value: 'lossByTheft',
+                        label: 'Loss by theft',
+                        additional: {
+                            name: 'Loss by theft',
+                            uniqueName: 'lossByTheft'
+                        }
+                    },
+                    {
+                        value: 'damagedGoods',
+                        label: 'Damaged goods',
+                        additional: {
+                            name: 'Damaged goods',
+                            uniqueName: 'damagedGoods'
+                        }
+                    },
+                    {
+                        value: 'lossInTransit',
+                        label: 'Loss in transit',
+                        additional: {
+                            name: 'Loss in transit',
+                            uniqueName: 'lossInTransit'
+                        }
+                    },
+                    ...mappedReasons
+                )
                 this.reasons$ = observableOf(mappedReasons);
             }
         });
@@ -220,7 +258,7 @@ export class AdjustInventoryComponent implements OnInit {
         /** Item wise observable */
         this.componentStore.itemWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                const mappedIItemWise: OptionInterface[] = response.results.map(item => ({
+                const mappedIItemWise: OptionInterface[] = response.results?.map(item => ({
                     value: item.uniqueName,
                     label: item.name,
                     additional: item
@@ -270,7 +308,7 @@ export class AdjustInventoryComponent implements OnInit {
         /** Expense account observable */
         this.componentStore.expensesAccountList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                const mappedAccounts: OptionInterface[] = response.results.map(item => ({
+                const mappedAccounts: OptionInterface[] = response.results?.map(item => ({
                     value: item.uniqueName,
                     label: item.name,
                     additional: item
@@ -300,7 +338,7 @@ export class AdjustInventoryComponent implements OnInit {
      * @memberof AdjustInventoryComponent
      */
     public getItemWiseReport(): void {
-        this.searchRequest.count = 200000000000000;
+        this.searchRequest.count = 20000000;
         this.searchRequest.inventoryType = this.inventoryType?.toUpperCase();
         this.searchRequest.searchPage = 'VARIANT';
         this.componentStore.getItemWiseReport(this.searchRequest);
@@ -624,7 +662,7 @@ export class AdjustInventoryComponent implements OnInit {
     /**
      * This will be use for select all variants
      *
-     * @return {*} 
+     * @return {*}
      * @memberof AdjustInventoryComponent
      */
     public isAllSelected() {

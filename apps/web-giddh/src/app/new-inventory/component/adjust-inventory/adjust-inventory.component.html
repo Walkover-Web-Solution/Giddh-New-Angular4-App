@@ -135,26 +135,23 @@
                 </div>
                 <div class="col-xxl-3 mt-3 col-xl-8 col-lg-6 col-md-6 pl-0">
                     <mat-accordion *ngIf="showHideTable">
-                        <mat-expansion-panel  [expanded]="panelOpenState">
+                        <mat-expansion-panel [expanded]="panelOpenState">
                             <mat-expansion-panel-header class="h-auto">
                                 <table [width]="'100%'">
                                     <tr>
                                         <td [width]="'20%'">Inventory</td>
-                                        <td [width]="'15.625%'">Method</td>
-                                        <td [width]="'15.625%'">Change in value</td>
-                                        <td [width]="'15.625%'">Closing</td>
-                                        <td [width]="'15.625%'">Change</td>
-                                        <td [width]="'15.625%'">New value</td>
+                                        <td>Method</td>
+                                        <td [width]="'15.625%'" class="text-right">Change in value</td>
+                                        <td [width]="'15.625%'" class="text-right">Closing</td>
+                                        <td [width]="'15.625%'" class="text-right">Change</td>
+                                        <td [width]="'15.625%'" class="text-right">New value</td>
                                     </tr>
                                     <tr>
                                         <td [width]="'20%'">
                                             {{ entity.entityName ? entity.entityName : "Stock/ Stock Group Name" }}
                                         </td>
-                                        <td
-                                            [width]="'15.625%'"
-                                            (click)="$event.preventDefault(); $event.stopPropagation()"
-                                        >
-                                            <div class="d-flex select-input-field">
+                                        <td (click)="$event.preventDefault(); $event.stopPropagation()">
+                                            <div class="d-flex select-input-field custom-mat-form-field">
                                                 <mat-form-field appearance="outline">
                                                     <mat-select
                                                         required="true"
@@ -180,7 +177,7 @@
                                             </div>
                                         </td>
 
-                                        <td [width]="'15.625%'">
+                                        <td [width]="'15.625%'" class="text-right">
                                             <div class="d-flex align-items-center column-gap5">
                                                 <text-field
                                                     [cssClass]="'form-control text-left text-control-input'"
@@ -209,7 +206,7 @@
                                                 }}</span>
                                             </div>
                                         </td>
-                                        <td [style.width]="'15.625%'">
+                                        <td [style.width]="'15.625%'" class="text-right">
                                             {{
                                                 adjustInventoryCreateEditForm.get("adjustmentMethod")?.value
                                                     ? adjustInventoryCreateEditForm.get("adjustmentMethod")?.value ===
@@ -223,14 +220,14 @@
                                             }}
                                         </td>
 
-                                        <td class="px-3" [width]="'15.625%'">
+                                        <td class="px-3" [width]="'15.625%'" class="text-right">
                                             {{
                                                 stockGroupClosingBalance?.changeValue
                                                     ? stockGroupClosingBalance?.changeValue
                                                     : 0
                                             }}
                                         </td>
-                                        <td class="px-4" [width]="'15.625%'">
+                                        <td class="px-4" [width]="'15.625%'" class="text-right">
                                             {{
                                                 stockGroupClosingBalance?.newValue
                                                     ? stockGroupClosingBalance?.newValue
@@ -272,7 +269,7 @@
                                     </td>
                                 </ng-container>
                                 <ng-container matColumnDef="method">
-                                    <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
+                                    <th mat-header-cell *matHeaderCellDef></th>
                                     <td mat-cell *matCellDef="let element">
                                         {{
                                             adjustInventoryCreateEditForm.get("calculationMethod")?.value
@@ -283,13 +280,13 @@
                                 </ng-container>
                                 <ng-container matColumnDef="changeValue">
                                     <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
-                                    <td mat-cell *matCellDef="let element">
+                                    <td mat-cell *matCellDef="let element" class="text-right">
                                         {{ adjustInventoryCreateEditForm.get("changeInValue")?.value }}
                                     </td>
                                 </ng-container>
                                 <ng-container matColumnDef="closingValue">
                                     <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
-                                    <td mat-cell *matCellDef="let element">
+                                    <td mat-cell *matCellDef="let element" class="text-right">
                                         {{
                                             adjustInventoryCreateEditForm.get("adjustmentMethod")?.value ===
                                             "QUANTITY_WISE"
@@ -303,11 +300,15 @@
                                 </ng-container>
                                 <ng-container matColumnDef="changes">
                                     <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
-                                    <td mat-cell *matCellDef="let element">{{ element?.changeValue }}</td>
+                                    <td mat-cell *matCellDef="let element" class="text-right">
+                                        {{ element?.changeValue }}
+                                    </td>
                                 </ng-container>
                                 <ng-container matColumnDef="newValue">
                                     <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
-                                    <td mat-cell *matCellDef="let element">{{ element?.newValue }}</td>
+                                    <td mat-cell *matCellDef="let element" class="text-right">
+                                        {{ element?.newValue }}
+                                    </td>
                                 </ng-container>
                                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                                 <tr
