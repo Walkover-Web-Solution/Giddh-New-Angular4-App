@@ -23,7 +23,7 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Holds table columns */
-    public displayedColumns: any = ['tax_name', 'total_sales', 'taxable_amount', 'tax_percentage', 'tax_collected'];
+    public displayedColumns: string[] = ['tax_name', 'total_sales', 'taxable_amount', 'tax_percentage', 'tax_collected'];
      /** Holds page size options */
      public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
      /** Hold table page index number*/

@@ -190,13 +190,13 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     /* This will hold if tax is valid */
     public isValidTaxNumber: boolean = false;
     /* This will hold list of tax (trn/vat) supported countries */
-    public taxSupportedCountries = TAX_SUPPORTED_COUNTRIES;
+    public taxSupportedCountries: string[] = TAX_SUPPORTED_COUNTRIES;
     /* This will hold list of vat supported countries */
-    public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
+    public vatSupportedCountries: string[] = VAT_SUPPORTED_COUNTRIES;
     /* This will hold list of trn supported countries */
-    public trnSupportedCountries = TRN_SUPPORTED_COUNTRIES;
+    public trnSupportedCountries: string[] = TRN_SUPPORTED_COUNTRIES;
     /* This will hold list of sales tax supported countries */
-    public salesTaxSupportedCountries = SALES_TAX_SUPPORTED_COUNTRIES;
+    public salesTaxSupportedCountries: string[] = SALES_TAX_SUPPORTED_COUNTRIES;
     /* This will hold giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /* Observable for sales account */

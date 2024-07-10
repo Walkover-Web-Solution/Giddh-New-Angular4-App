@@ -58,7 +58,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     /** Holds tax authority list */
     public taxAuthorityList: IOption[] = [];
     /** Holds true if tax authority list is inprogress */
-    public isTaxAuthoritiesLoading$: Observable<any>;
+    public isTaxAuthoritiesLoading$: Observable<any> = this.componentStore.isLoading$;
 
     constructor(
         private store: Store<AppState>,
@@ -68,7 +68,6 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         private componentStore: TaxAuthorityComponentStore
     ) {
         this.newTaxObj.date = dayjs().toDate();
-        this.isTaxAuthoritiesLoading$ = this.store.pipe(select(settingsStore => settingsStore.settings.isTaxAuthoritiesLoading), takeUntil(this.destroyed$));
     }
 
     ngOnInit() {
