@@ -30,7 +30,8 @@
                 </div>
                 <button
                     *ngIf="
-                        inputData?.rowData?.isOwner && inputData.rowData?.companies?.length < inputData.rowData?.totalCompanies
+                        inputData?.rowData?.isOwner &&
+                        inputData.rowData?.companies?.length < inputData.rowData?.totalCompanies
                     "
                     (click)="createCompanyInSubscription()"
                     mat-stroked-button

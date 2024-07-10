@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { GeneralService } from '../../services/general.service';
@@ -15,7 +15,10 @@ import { cloneDeep } from '../../lodash-optimized';
 import { GstReconcileService } from '../../services/gst-reconcile.service';
 import { CommonService } from '../../services/common.service';
 import { ToasterService } from '../../services/toaster.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
+import { SalesTaxReport } from '../../theme/tax-authority/utility/tax-authority.const';
+import { CompanyActions } from '../../actions/company.actions';
 
 interface DateCheckResult {
     status: boolean;
@@ -28,7 +31,7 @@ interface DateCheckResult {
     templateUrl: './vat-report-filters.component.html',
     styleUrls: ['./vat-report-filters.component.scss']
 })
-export class VatReportFiltersComponent implements OnInit {
+export class VatReportFiltersComponent implements OnInit, OnChanges {
     /** This will hold local JSON data */
     @Input() public localeData: any = {};
     /** This will hold common JSON data */
@@ -43,6 +46,14 @@ export class VatReportFiltersComponent implements OnInit {
     @Input() public isZimbabweCompany: boolean = false;
     /** True if active country is Kenya */
     @Input() public isKenyaCompany: boolean = false;
+    /** True if active country is US */
+    @Input() public isUSCompany: boolean = false;
+    /** True if Sales Tax Report Type is US */
+    @Input() public salesTaxReportType: string = null;
+    /** True if current Tax Authority uniqueName is US */
+    @Input() public currentTaxAuthorityUniqueName: string = null;
+    /** True if current Tax uniqueName is US */
+    @Input() public currentTaxUniqueName: string = null;
     /** Hold HMRC portal url */
     @Input() public connectToHMRCUrl: string = null;
     /** Holds Current Currency Code for Zimbabwe report */
@@ -63,6 +74,10 @@ export class VatReportFiltersComponent implements OnInit {
     @Output() public exportReport: EventEmitter<any> = new EventEmitter<any>();
     /** Emits true when tax api call inprogress */
     @Output() public isTaxApiInProgress: EventEmitter<any> = new EventEmitter<any>();
+    /** Emits selected taxAuthorityUniqueName */
+    @Output() public taxAuthorityUniqueName: EventEmitter<string> = new EventEmitter<string>();
+    /** Emits selected taxUniqueName */
+    @Output() public taxUniqueName: EventEmitter<string> = new EventEmitter<string>();
     /** Universal Datepicker template reference */
     @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -140,6 +155,26 @@ export class VatReportFiltersComponent implements OnInit {
     public isVatReport: boolean;
     /** True if Liability Report page */
     public isLiabilityReport: boolean;
+    /** Holds true if active company  country is US */
+    public taxAuthorityList: IOption[] = [];
+    /** Holds true if Sales Tax report type is tax/rate wise */
+    public isSalesTaxRateWise: boolean = false;
+    /** Holds true if Sales Tax report type is account wise */
+    public isSalesTaxAccountWise: boolean = false;
+    /** Holds Company taxes list */
+    public taxList: IOption[] = [];
+    /** Tax Authority info */
+    public taxAuthority: any = {
+        taxName: '',
+        taxUniqueName: '',
+        taxAuthorityName: '',
+        taxAuthorityUniqueName: '',
+    };
+    /** Holds Tax type label  */
+    public taxType: any = {
+        label: '',
+        placeholder: ''
+    }
 
     constructor(
         private store: Store<AppState>,
@@ -151,7 +186,8 @@ export class VatReportFiltersComponent implements OnInit {
         private commonService: CommonService,
         private toaster: ToasterService,
         private route: ActivatedRoute,
-        private router: Router
+        private settingsTaxesActions: SettingsTaxesActions,
+        private companyActions: CompanyActions
     ) {
         this.getFinancialYears();
     }
@@ -163,6 +199,8 @@ export class VatReportFiltersComponent implements OnInit {
      * @memberof VatReportFiltersComponent
      */
     public ngOnInit(): void {
+        this.isSalesTaxRateWise = SalesTaxReport.TaxWise === this.salesTaxReportType;
+        this.isSalesTaxAccountWise = SalesTaxReport.AccountWise === this.salesTaxReportType;
         this.isVatReport = this.moduleType === "VAT_REPORT";
         this.isLiabilityReport = this.moduleType === "LIABILITY_REPORT";
 
@@ -189,6 +227,105 @@ export class VatReportFiltersComponent implements OnInit {
         });
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.getCurrentCompanyBranches();
+
+        // Get All Tax Authorities for US Country
+        if (this.isUSCompany) {
+            this.store
+                .pipe(select(p => p.settings && p.settings.taxAuthorities), takeUntil(this.destroyed$))
+                .subscribe(taxAuthorities => {
+                    if (taxAuthorities && taxAuthorities.length) {
+                        let arr: IOption[] = [];
+                        taxAuthorities.forEach(taxAuthority => {
+                            arr.push({ label: taxAuthority.name, value: taxAuthority?.uniqueName });
+                        });
+                        this.taxAuthorityList = arr;
+                        if (this.taxAuthority.taxAuthorityUniqueName) {
+                            this.setTaxAuthorityLabel(this.taxAuthority.taxAuthorityUniqueName);
+                        }
+                    }
+                });
+            this.store.dispatch(this.settingsTaxesActions.GetTaxAuthorityList());
+
+            this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe(taxes => {
+                if (taxes) {
+                    let arr: IOption[] = [];
+                    taxes.forEach(tax => {
+                        arr.push({ label: tax.name, value: tax?.uniqueName });
+                    });
+                    this.taxList = arr;
+                    if (this.taxAuthority.taxUniqueName) {
+                        this.setTaxLabel(this.taxAuthority.taxUniqueName);
+                    }
+                }
+            });
+            this.store.dispatch(this.companyActions.getTax());
+        }
+    }
+
+    /**
+    * On Change of input properties
+    *
+    * @memberof VatReportFiltersComponent
+    */
+    public ngOnChanges(changes: SimpleChanges): void {
+        if ('currentTaxAuthorityUniqueName' in changes && changes.currentTaxAuthorityUniqueName.currentValue !== changes.currentTaxAuthorityUniqueName.previousValue) {
+            this.taxAuthority.taxAuthorityUniqueName = changes.currentTaxAuthorityUniqueName.currentValue;
+        }
+
+        if ('currentTaxUniqueName' in changes && changes.currentTaxUniqueName.currentValue !== changes.currentTaxUniqueName.previousValue) {
+            this.taxAuthority.taxUniqueName = changes.currentTaxUniqueName.currentValue;
+        }
+    }
+
+    /**
+     * Set tax type label 
+     *
+     * @private
+     * @memberof VatReportFiltersComponent
+     */
+    private setTaxTypeLabelPlaceholder(): void {
+        if (this.taxes?.length && this.commonLocaleData) {
+            if (this.isKenyaCompany || this.isZimbabweCompany || this.isUKCompany) {
+                this.taxType.label = this.commonLocaleData?.app_vat;
+                this.taxType.placeholder = this.commonLocaleData?.app_enter_vat;
+            } else if (this.isUSCompany) {
+                this.taxType.label = this.commonLocaleData?.app_sales_tax;
+                this.taxType.placeholder = this.commonLocaleData?.app_enter_sales_tax;
+            } else {
+                this.taxType.label = this.commonLocaleData?.app_trn;
+                this.taxType.placeholder = this.commonLocaleData?.app_enter_trn;
+            }
+        }
+    }
+
+    /**
+     * Set Tax Authority dropdown lable value 
+     *
+     * @private
+     * @param {string} uniqueName
+     * @memberof VatReportFiltersComponent
+     */
+    private setTaxAuthorityLabel(uniqueName: string): void {
+        let taxAuthorityObj = this.taxAuthorityList.find(taxAuthority => taxAuthority.value === uniqueName);
+        if (taxAuthorityObj) {
+            this.taxAuthority.taxAuthorityName = taxAuthorityObj?.label;
+            this.onTaxAuthorityChange(taxAuthorityObj);
+        }
+    }
+
+    /**
+     * Set Tax dropdown lable value 
+     *
+     * @private
+     * @param {string} uniqueName
+     * @memberof VatReportFiltersComponent
+     */
+    private setTaxLabel(uniqueName: string): void {
+        let taxObj = this.taxList.find(tax => tax.value === uniqueName);
+        if (taxObj) {
+            this.taxAuthority.taxName = taxObj?.label;
+            this.onTaxChange(taxObj);
+        }
     }
 
     /**
@@ -199,7 +336,7 @@ export class VatReportFiltersComponent implements OnInit {
      */
     private getQueryParams(): void {
         this.route.queryParams.pipe(take(1)).subscribe(params => {
-            if (params) {
+            if (params && Object.keys(params)?.length > 0) {
                 const from = params['from'];
                 const to = params['to'];
                 const taxNumber = params['taxNumber'];
@@ -313,6 +450,7 @@ export class VatReportFiltersComponent implements OnInit {
                 this.taxNumber = this.taxes[0]?.value;
                 this.currentTaxNumber.emit(this.taxNumber);
             }
+            this.setTaxTypeLabelPlaceholder();
             this.isTaxApiInProgress.emit(false);
             setTimeout(() => {
                 if (!this.hasQueryParams) {
@@ -432,6 +570,34 @@ export class VatReportFiltersComponent implements OnInit {
                 this.saveSelectedCurrency(event.value);
                 this.getVatReport();
             }
+        }
+    }
+
+    /**
+     * Handle select tax authority dropdown and emit selected value
+     *
+     * @memberof VatReportFiltersComponent
+     */
+    public onTaxAuthorityChange(event: any): void {
+        if (event) {
+            this.taxAuthorityUniqueName.emit(event.value);
+            this.taxAuthority.taxAuthorityName = event.label;
+            this.taxAuthority.taxAuthorityUniqueName = event.value;
+            this.getVatReport();
+        }
+    }
+
+    /**
+     * Handle select tax dropdown and emit selected value
+     *
+     * @memberof VatReportFiltersComponent
+     */
+    public onTaxChange(event: any): void {
+        if (event) {
+            this.taxUniqueName.emit(event.value);
+            this.taxAuthority.taxName = event.label;
+            this.taxAuthority.taxUniqueName = event.value;
+            this.getVatReport();
         }
     }
 

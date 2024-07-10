@@ -6,7 +6,7 @@ import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
 import { Observable, of, ReplaySubject } from 'rxjs';
-import { TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { SALES_TAX_SUPPORTED_COUNTRIES, TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { GstReconcileService } from '../../services/gst-reconcile.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
@@ -50,10 +50,14 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public showGstMenus: boolean = false;
     /** True if we need to show Tax menus */
     public showTaxMenus: boolean = false;
+    /** True if we need to show Sales Tax menus */
+    public showSalesTaxMenus: boolean = false;
     /** Holds Tax Type Translated Label for sidebar menu */
     public taxTypeSidebarLabel: string;
     /* This will hold list of vat supported countries */
-    public taxSupportedCountries = TAX_SUPPORTED_COUNTRIES;
+    public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
+    /* This will hold list of sales tax supported countries */
+    public salesTaxSupportedCountries = SALES_TAX_SUPPORTED_COUNTRIES;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
     /** Holds current date period for GST report */
@@ -68,6 +72,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public isZimbabweCompany: boolean;
     /** True if active country is Kenya */
     public isKenyaCompany: boolean;
+    /** True if active country is US */
+    public isUSCompany: boolean;
     /** Holds active company information */
     public activeCompany: any;
 
@@ -101,16 +107,17 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 this.isUKCompany = activeCompany?.country === "United Kingdom";
                 this.isZimbabweCompany = activeCompany?.country === "Zimbabwe";
                 this.isKenyaCompany = activeCompany?.country === "Kenya";
+                this.isUSCompany = activeCompany.countryV2?.alpha2CountryCode === "US";
 
-                if (this.taxSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
+                this.showGstMenus = false;
+                this.showTaxMenus = false;
+                this.showTaxMenus = false;
+                if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                     this.showTaxMenus = true;
-                    this.showGstMenus = false;
                 } else if (activeCompany.countryV2?.alpha2CountryCode === 'IN') {
                     this.showGstMenus = true;
-                    this.showTaxMenus = false;
-                } else {
-                    this.showTaxMenus = false;
-                    this.showGstMenus = false;
+                } else if (this.salesTaxSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
+                    this.showSalesTaxMenus = true;
                 }
             }
             this.changeDetectionRef.detectChanges();
@@ -251,12 +258,16 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
      * @memberof TaxSidebarComponent
      */
     public translationComplete(event: any): void {
-        if (event) {
+        if (event && this.activeCompany) {
+            const alpha2CountryCode = this.activeCompany?.countryV2?.alpha2CountryCode;
             let label = '';
-            if (VAT_SUPPORTED_COUNTRIES.includes(this.activeCompany.countryV2?.alpha2CountryCode)) {
+
+            if (VAT_SUPPORTED_COUNTRIES.includes(alpha2CountryCode)) {
                 label = this.localeData?.add_vat;
-            } else if (TRN_SUPPORTED_COUNTRIES.includes(this.activeCompany.countryV2?.alpha2CountryCode)) {
+            } else if (TRN_SUPPORTED_COUNTRIES.includes(alpha2CountryCode)) {
                 label = this.localeData?.add_trn;
+            } else if (SALES_TAX_SUPPORTED_COUNTRIES.includes(alpha2CountryCode)) {
+                label = this.localeData?.add_sales_tax;
             } else if (this.showGstMenus) {
                 label = this.localeData?.add_gst;
             } else {

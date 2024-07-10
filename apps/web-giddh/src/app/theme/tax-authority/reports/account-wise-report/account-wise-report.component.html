@@ -1,0 +1,154 @@
+<ng-container appTranslate [file]="'settings/tax-authority'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+    <hamburger-menu></hamburger-menu>
+
+    <!-- Tax Sidebar code  -->
+    <div class="relative w-100">
+        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+            *ngIf="asideGstSidebarMenuState === 'in'">
+            <tax-sidebar (navigateEvent)="handleNavigation()"
+                (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
+                [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
+        </div>
+    </div>
+
+    <!-- Tax Authority code  -->
+    <div class="tax-authority-report mx-auto pd-t15">
+        <div class="container-fluid ml-0">
+            <div class="row">
+                <div class="col-12">
+                    <div class="w-100">
+                        <vat-report-filters 
+                            [localeData]="localeData" 
+                            [commonLocaleData]="commonLocaleData"
+                            [activeCompany]="activeCompany"
+                            [isUSCompany]="true" 
+                            [localeData]="localeData"
+                            [salesTaxReportType]="'account'" 
+                            [currentTaxAuthorityUniqueName]="getFormControl('taxAuthorityUniqueName').value"
+                            [currentTaxUniqueName]="getFormControl('taxUniqueName').value"
+                            (getReport)="getSalesTaxReport()" 
+                            (exportReport)="exportTaxAuthority()"
+                            (isTaxApiInProgress)="isTaxApiInProgress = $event"
+                            (currentTaxNumber)="getFormControl('taxNumber')?.patchValue($event)"
+                            (fromDate)="getFormControl('from')?.patchValue($event)"
+                            (toDate)="getFormControl('to')?.patchValue($event)"
+                            (currentBranchChange)="getFormControl('branchUniqueName')?.patchValue($event)"
+                            (taxAuthorityUniqueName)="getFormControl('taxAuthorityUniqueName')?.patchValue($event)"
+                            (taxUniqueName)="getFormControl('taxUniqueName')?.patchValue($event)"
+                            >
+                        </vat-report-filters>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <!-- Loader  -->
+                    <div class="mt-5" *ngIf="(isLoading$ | async) || isTaxApiInProgress">
+                        <giddh-page-loader></giddh-page-loader>
+                    </div>
+                    <div class=" mt-4" *ngIf="!(isLoading$ | async) && !isTaxApiInProgress">
+                        <div class="white-box w-100" *ngIf="(accountWiseReport$ | async)?.responses?.length">
+                            <!-- Tax Authority Table  -->
+                            <div class="table-responsive">
+                                <table mat-table [dataSource]="(accountWiseReport$ | async)?.responses"
+                                class="table basic mr-t2 vat-report-table hide-last-row bordered-table">
+                                    <!-- Customer Name -->
+                                    <ng-container matColumnDef="customer_name">
+                                        <th mat-header-cell *matHeaderCellDef>
+                                            {{ commonLocaleData?.app_customer_name }}
+                                        </th>
+                                        <td mat-cell *matCellDef="let element" width="25%">
+                                            {{ element?.accountName }}
+                                        </td>
+                                        <td class="bg-grey" mat-footer-cell *matFooterCellDef>
+                                            {{ commonLocaleData?.app_total }}
+                                        </td>
+                                    </ng-container>
+        
+                                     <!-- Total Sales -->
+                                     <ng-container matColumnDef="total_sales">
+                                        <th mat-header-cell *matHeaderCellDef>
+                                            {{ commonLocaleData?.app_total + ' ' + commonLocaleData?.app_sales }}
+                                        </th>
+                                        <td mat-cell *matCellDef="let element" width="15%">
+                                            {{ element?.taxableAmount }}
+                                        </td>
+                                        <td class="bg-grey" mat-footer-cell *matFooterCellDef>
+                                            <amount-field
+                                                class="d-inline-block"
+                                                [amount]="(accountWiseReport$ | async)?.totalSales"
+                                                [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                                [currencyCode]="false"
+                                            ></amount-field>
+                                        </td>
+                                    </ng-container>
+        
+                                    <!-- Taxable Amount -->
+                                    <ng-container matColumnDef="taxable_amount">
+                                        <th mat-header-cell *matHeaderCellDef>
+                                            {{ localeData?.taxable_amount }}
+                                        </th>
+                                        <td mat-cell *matCellDef="let element" width="15%">
+                                            {{ element?.subTotal }}
+                                        </td>
+                                        <td class="bg-grey" mat-footer-cell *matFooterCellDef>
+                                            <amount-field
+                                                class="d-inline-block"
+                                                [amount]="(accountWiseReport$ | async)?.totalTaxableAmount"
+                                                [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                                [currencyCode]="false"
+                                            ></amount-field>
+                                        </td>
+                                    </ng-container>
+        
+                                     <!-- Tax Collected -->
+                                     <ng-container matColumnDef="tax_collected">
+                                        <th mat-header-cell *matHeaderCellDef>
+                                            {{ localeData?.tax_collected }}
+                                        </th>
+                                        <td mat-cell *matCellDef="let element" width="15%">
+                                            {{ element?.taxTotal }}
+                                        </td>
+                                        <td class="bg-grey" mat-footer-cell *matFooterCellDef>
+                                            <amount-field
+                                                class="d-inline-block"
+                                                [amount]="(accountWiseReport$ | async)?.totalTaxCollected"
+                                                [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                                [currencyCode]="false"
+                                            ></amount-field>
+                                        </td>
+                                    </ng-container>
+        
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                    <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- No Data Found Message -->
+                        <div class="no-data" *ngIf="(accountWiseReport$ | async)?.responses?.length === 0 && !(isLoading$ | async) && !isTaxApiInProgress">
+                            <h1 *ngIf="!getFormControl('taxNumber')?.value">{{ localeData?.no_sales_tax_available }}</h1>
+                            <h1 *ngIf="getFormControl('taxNumber')?.value">{{ commonLocaleData?.app_no_result_found }}</h1>
+                        </div>
+
+                        <!-- Pagination  -->
+                         <div class="pagination-wrapper justify-content-end" *ngIf="pagination?.totalPages > 1">
+                            <mat-paginator
+                                (page)="handlePageChange($event)"
+                                [length]="pagination?.totalItems"
+                                [pageSize]="pagination?.count"
+                                [showFirstLastButtons]="true"
+                                [pageSizeOptions]="pageSizeOptions"
+                                [hidePageSize]="false"
+                                [pageIndex]="pageIndex"
+                                class="mt-15"
+                            >
+                            </mat-paginator>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>

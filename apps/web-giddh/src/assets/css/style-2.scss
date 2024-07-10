@@ -84,7 +84,7 @@ textarea {
     border-color: var(--color-table-primary-content-bar-border);
 }
 
-.basic > thead > tr > th {
+.basic>thead>tr>th {
     color: var(--color-link) !important;
     border-right: 1px solid var(--color-table-primary-content-bar-border);
     padding: 15px 11px !important;
@@ -899,6 +899,7 @@ textarea {
         width: 100% !important;
     }
 }
+
 .voucher-preview-edit {
     .flag-input {
         .mdc-floating-label {
@@ -947,14 +948,14 @@ textarea {
         }
     }
 
-        .entry-date-container {
-            float: right;
-             width: 42%;
+    .entry-date-container {
+        float: right;
+        width: 42%;
 
         .mdc-text-field {
-                padding: 0px !important;
-            }
+            padding: 0px !important;
         }
+    }
 
     .amount1 {
         .form-control {
@@ -964,13 +965,13 @@ textarea {
         }
     }
 
-        .amount2 {
-            .form-control {
-                &:focus {
-                    border: 1px solid var(--color-secondary-input-bar-border) !important;
-                }
+    .amount2 {
+        .form-control {
+            &:focus {
+                border: 1px solid var(--color-secondary-input-bar-border) !important;
             }
         }
+    }
 
     .voucher-type {
         .form-control {
@@ -980,13 +981,13 @@ textarea {
         }
     }
 
-        .custom-textarea {
-            .form-control {
-                &:focus {
-                    border: 1px solid var(--color-secondary-input-bar-border) !important;
-                }
+    .custom-textarea {
+        .form-control {
+            &:focus {
+                border: 1px solid var(--color-secondary-input-bar-border) !important;
             }
         }
+    }
 
     .form-control {
         background-color: transparent !important;
@@ -1016,7 +1017,7 @@ textarea {
 }
 
 .subscription-page {
-.td-search-box .input-container {
+    .td-search-box .input-container {
         position: relative;
     }
 
@@ -1057,8 +1058,8 @@ textarea {
 .company-button {
     .mdc-button__label {
         display: flex;
-            align-items: center;
-            column-gap: 7px;
+        align-items: center;
+        column-gap: 7px;
     }
 }
 
@@ -1993,7 +1994,7 @@ input {
     padding: 20px;
     margin: 15px auto;
     box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
-    max-width: 1360px;
+    max-width: calc(var(--center-content-max-width) - 30px);
 }
 
 .vat-report .tab-content {
@@ -2946,10 +2947,12 @@ modal-container.modal {
     box-shadow: none;
     font-size: var(--font-size-15) !important;
 
-    .mat-mdc-select-placeholder, .mat-mdc-select-arrow{
+    .mat-mdc-select-placeholder,
+    .mat-mdc-select-arrow {
         color: var(--color-popup-list-input-text) !important;
     }
-    .mat-mdc-select-arrow{
+
+    .mat-mdc-select-arrow {
         margin-left: 4px;
     }
 }
@@ -9779,6 +9782,7 @@ span#HW_badge_cont:nth-child(3) {
     flex-direction: column;
     -ms-flex-direction: column;
 }
+
 .flex-wrap {
     flex-wrap: wrap;
 }
@@ -10659,9 +10663,14 @@ body {
     padding-left: 60px;
 }
 
-.setting-sidebar-open.on-setting-page .plan-wrapper,
-.setting-sidebar-open.on-user-page .plan-wrapper {
-    padding-left: 60px !important;
+.setting-sidebar-open {
+    &.on-setting-page, &.on-user-page {
+        &:not(.gst-sidebar-open) {
+            .plan-wrapper {
+                padding-left: 60px !important;
+            }
+        }
+    }
 }
 
 .setting-sidebar-open.aside-setting.on-setting-page .plan-wrapper,
@@ -10678,7 +10687,8 @@ body {
     padding-left: 240px !important;
 }
 
-.subscription-page .plan-wrapper, .subscription-page #content-wrapper {
+.subscription-page .plan-wrapper,
+.subscription-page #content-wrapper {
     padding-left: 23px !important;
 }
 
@@ -10913,7 +10923,7 @@ body {
     }
 
     #content-wrapper {
-        padding-left: 300px;
+        padding-left: 300px !important;
     }
 
     .nav-left-bar {
@@ -14107,7 +14117,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
             }
         }
     }
-
     .cdk-overlay-container {
         z-index: 99999;
     }
@@ -14972,20 +14981,23 @@ activity-compare-json {
     z-index: 99999 !important;
     justify-content: center;
 }
+
 .plan-page {
     .mdc-data-table__row {
-            &:last-child {
-                &>.mdc-data-table__cell {
-                    border-bottom: unset !important;
-                }
+        &:last-child {
+            &>.mdc-data-table__cell {
+                border-bottom: unset !important;
             }
         }
+    }
+
     .mat-horizontal-stepper-header-container {
         max-width: 1240px;
         margin: 0 auto;
         width: 100%;
     }
 }
+
 // Material 16 Table
 .mdc-data-table__row {
     &:last-child {
@@ -15080,6 +15092,7 @@ aside-menu-product-service {
         box-shadow: none;
     }
 }
+
 // invoice preview list
 .invoice-preview-wrapper {
     .mat-grid-wrapper {
@@ -15096,14 +15109,15 @@ aside-menu-product-service {
 
 //  Material checkbox color
 .mat-mdc-checkbox {
-    .mdc-form-field{
-       .mdc-checkbox{
-           .mdc-checkbox__background{
-               border-color: var(--color-common-primary-text) !important;
-           }
-       }
+    .mdc-form-field {
+        .mdc-checkbox {
+            .mdc-checkbox__background {
+                border-color: var(--color-common-primary-text) !important;
+            }
+        }
     }
 }
+
 .text-underline {
     text-decoration: underline;
 
@@ -15125,6 +15139,7 @@ aside-menu-product-service {
         p {
             font-size: var(--font-size-16);
         }
+
         a {
             color: var(--color-toast-primary-text);
         }
@@ -15140,29 +15155,31 @@ aside-menu-product-service {
         }
     }
 }
+
 .fw-bold {
     font-weight: 600;
 }
+
 .preview-list {
     .form-control {
         padding-left: 30px !important;
     }
 }
 
-.width-60{
+.width-60 {
     width: 60px !important;
 }
 
 // This Class will use globllay for border like mat input field
-.mat-form-field-border{
-    &.mat-form-field-height{
+.mat-form-field-border {
+    &.mat-form-field-height {
         height: 48px !important;
     }
 
     border-radius: 4px !important;
     border: 1px solid var(--color-fields-border) !important;
 
-    &:hover{
+    &:hover {
         border-color: var(--color-field-hover) !important;
     }
 }
@@ -15193,11 +15210,14 @@ aside-menu-product-service {
     color: var(--color-common-primary-text);
 }
 
+.bg-grey {
+    background-color: var(--color-wild-sand) !important;
+}
+
 // color link light-dark theme
 .color-link {
     color: var(--color-link) !important;
 }
-
 .bg-transparent {
     background: var(--color-transparent-background) !important;
     background-color: var(--color-transparent-background) !important;

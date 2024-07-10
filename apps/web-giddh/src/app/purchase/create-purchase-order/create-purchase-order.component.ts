@@ -19,7 +19,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { ToasterService } from '../../services/toaster.service';
 import { OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
-import { TAX_SUPPORTED_COUNTRIES, SubVoucher, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SearchResultText, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, VAT_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { TAX_SUPPORTED_COUNTRIES, SubVoucher, HIGH_RATE_FIELD_PRECISION, RATE_FIELD_PRECISION, SearchResultText, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, VAT_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, SALES_TAX_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { IForceClear, SalesTransactionItemClass, SalesEntryClass, IStockUnit, SalesOtherTaxesModal, SalesOtherTaxesCalculationMethodEnum, VoucherClass, VoucherTypeEnum, SalesAddBulkStockItems, SalesEntryClassMulticurrency, TransactionClassMulticurrency, CodeStockMulticurrency, DiscountMulticurrency, AccountDetailsClass } from '../../models/api-models/Sales';
 import { TaxResponse } from '../../models/api-models/Company';
@@ -175,7 +175,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     private updatedAccountDetails$: Observable<AccountResponseV2>;
     /* This will hold form fields */
     public formFields: any[] = [];
-    /* True, if the Giddh supports the taxation of the country (not supported now: UK, US, Nepal, Australia) */
+    /* True, if the Giddh supports the taxation of the country (not supported now: UK, Nepal, Australia) */
     public shouldShowTrnGstVatField: boolean = false;
     /* This will hold selected company details */
     public selectedCompany: any;
@@ -185,14 +185,18 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
     public showTRNNo: boolean;
     /** Show vat number */
     public showVATNo: boolean;
+    /** Show sales tax number */
+    public showSalesTaxNo: boolean;
     /* This will hold if tax is valid */
     public isValidTaxNumber: boolean = false;
     /* This will hold list of tax (trn/vat) supported countries */
     public taxSupportedCountries = TAX_SUPPORTED_COUNTRIES;
     /* This will hold list of vat supported countries */
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
-      /* This will hold list of trn supported countries */
+    /* This will hold list of trn supported countries */
     public trnSupportedCountries = TRN_SUPPORTED_COUNTRIES;
+    /* This will hold list of sales tax supported countries */
+    public salesTaxSupportedCountries = SALES_TAX_SUPPORTED_COUNTRIES;
     /* This will hold giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /* Observable for sales account */
@@ -1395,33 +1399,25 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
      * @memberof CreatePurchaseOrderComponent
      */
     private showGstAndTrnUsingCountry(code: string, name: string): void {
+        this.showGSTINNo = false;
+        this.showTRNNo = false;
+        this.showVATNo = false;
+        this.showSalesTaxNo = false;
+
         if (this.selectedCompany.country === name) {
             if (name === 'India') {
                 this.showGSTINNo = true;
-                this.showTRNNo = false;
-                this.showVATNo = false;
                 this.getOnboardingForm('IN')
             } else if (this.taxSupportedCountries.includes(code)) {
                 if (this.vatSupportedCountries.includes(code)) {
                     this.showVATNo = true;
-                    this.showGSTINNo = false;
-                    this.showTRNNo = false;
-                    this.getOnboardingForm('GB')
-                } else if(this.trnSupportedCountries.includes(code)) {
+                } else if (this.trnSupportedCountries.includes(code)) {
                     this.showTRNNo = true;
-                    this.showGSTINNo = false;
-                    this.showVATNo = false;
-                    this.getOnboardingForm(code);
+                } else if (this.salesTaxSupportedCountries.includes(code)) {
+                    this.showSalesTaxNo = true;
                 }
-            } else {
-                this.showGSTINNo = false;
-                this.showTRNNo = false;
-                this.showVATNo = false;
+                this.getOnboardingForm(code);
             }
-        } else {
-            this.showGSTINNo = false;
-            this.showTRNNo = false;
-            this.showVATNo = false;
         }
     }
 
@@ -2410,7 +2406,7 @@ export class CreatePurchaseOrderComponent implements OnInit, OnDestroy, AfterVie
                 }
             };
         }
-        
+
         data.templateDetails.other.shippingDate = this.convertDateForAPI(data.templateDetails?.other?.shippingDate);
 
         let txnErr: boolean;

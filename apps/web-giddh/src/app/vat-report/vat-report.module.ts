@@ -78,7 +78,8 @@ import { VatReportFiltersComponent } from './vat-report-filters/vat-report-filte
         NewConfirmationModalModule
     ],
     exports: [
-        VatReportRoutingModule
+        VatReportRoutingModule,
+        VatReportFiltersComponent
     ]
 })
 export class VatReportModule {

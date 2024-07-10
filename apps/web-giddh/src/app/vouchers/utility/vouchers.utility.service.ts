@@ -19,6 +19,8 @@ export class VouchersUtilityService {
                 return TaxType.TRN;
             } else if (countryCode === TaxSupportedCountries.GB || countryCode === TaxSupportedCountries.ZW || countryCode === TaxSupportedCountries.KE) {
                 return TaxType.VAT;
+            } else if(countryCode === TaxSupportedCountries.US) {
+                return TaxType.SALES_TAX;
             }
         } else {
             return null;
@@ -96,6 +98,14 @@ export class VouchersUtilityService {
         return requestObject;
     }
 
+    /**
+     * Returns the voucher name by voucher type
+     *
+     * @param {string} voucherType
+     * @param {*} localeData
+     * @param {boolean} isCopyVoucher
+     * @memberof VoucherComponent
+     */
     public getVoucherNameByType(voucherType: string, localeData: any, isCopyVoucher: boolean = false): string {
         let voucherName = "";
 
@@ -448,6 +458,13 @@ export class VouchersUtilityService {
         return invoiceForm;
     }
 
+    /**
+     * Returns the index of selected address from the address list
+     *
+     * @param {*} addressList
+     * @param {*} selectedAddress
+     * @memberof VoucherComponent
+     */
     public getSelectedAddressIndex(addressList: any[], selectedAddress: any): number {
         let selectedAddressIndex = -1;
         addressList?.forEach((add, index) => {

@@ -25,7 +25,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LocaleService } from '../../services/locale.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { cloneDeep, uniqBy, without } from '../../lodash-optimized';
-import { TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { SALES_TAX_SUPPORTED_COUNTRIES, TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 export interface IGstObj {
     newGstNumber: string;
     newstateCode: number;
@@ -179,6 +179,8 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
     /* This will hold list of trn supported countries */
     public trnSupportedCountries = TRN_SUPPORTED_COUNTRIES;
+    /* This will hold list of sales tax supported countries */
+    public salesTaxSupportedCountries = SALES_TAX_SUPPORTED_COUNTRIES;
     /** Tax type (gst/trn) */
     public taxType: string = '';
     /** True if initial data is fetched */
@@ -1288,15 +1290,19 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
                 this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                     if (activeCompany) {
-                        if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
+                        const alpha2CountryCode = activeCompany.countryV2?.alpha2CountryCode;
+
+                        if (this.vatSupportedCountries.includes(alpha2CountryCode)) {
                             this.taxType = this.commonLocaleData?.app_vat;
-                        } else if (this.trnSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
+                        } else if (this.trnSupportedCountries.includes(alpha2CountryCode)) {
                             this.taxType = this.commonLocaleData?.app_trn;
-                            console.log(this.taxType);
+                        } else if (this.salesTaxSupportedCountries.includes(alpha2CountryCode)) {
+                            this.taxType = this.commonLocaleData?.app_sales_tax;
                         } else {
                             this.taxType = this.commonLocaleData?.app_gstin;
                         }
-                        if (this.taxSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode) || activeCompany.countryV2?.alpha2CountryCode === 'IN') {
+
+                        if (this.taxSupportedCountries.includes(alpha2CountryCode) || alpha2CountryCode === 'IN') {
                             this.showTaxColumn = true;
                         } else {
                             this.showTaxColumn = false;
@@ -1331,13 +1337,20 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                                     this.localeData.address_list = this.localeData.vat_list;
                                     this.localeData.create_address = this.localeData.create_vat;
                                     this.localeData.update_address = this.localeData.update_vat;
-                                } else if(this.trnSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
+                                } else if (this.trnSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                                     this.taxType = this.commonLocaleData?.app_trn;
                                     this.localeData.company_address_list = this.localeData.company_trn_list;
                                     this.localeData.add_address = this.localeData.add_trn;
                                     this.localeData.address_list = this.localeData.trn_list;
                                     this.localeData.create_address = this.localeData.create_trn;
                                     this.localeData.update_address = this.localeData.update_trn;
+                                } else if (this.salesTaxSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
+                                    this.taxType = this.commonLocaleData?.app_sales_tax;
+                                    this.localeData.company_address_list = this.localeData.company_sales_tax_list;
+                                    this.localeData.add_address = this.localeData.add_sales_tax;
+                                    this.localeData.address_list = this.localeData.sales_tax_list;
+                                    this.localeData.create_address = this.localeData.create_sales_tax;
+                                    this.localeData.update_address = this.localeData.update_sales_tax;
                                 }
                             } else if (activeCompany.countryV2?.alpha2CountryCode === 'IN') {
                                 this.taxType = this.commonLocaleData?.app_gstin;

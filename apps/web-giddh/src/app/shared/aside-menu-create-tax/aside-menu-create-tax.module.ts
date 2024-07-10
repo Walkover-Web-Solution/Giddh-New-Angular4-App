@@ -8,6 +8,7 @@ import { DecimalDigitsModule } from '../helpers/directives/decimalDigits/decimal
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { KeyboardShortutModule } from '../helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
+import { GiddhPageLoaderModule } from '../giddh-page-loader/giddh-page-loader.module';
 
 
 @NgModule({
@@ -15,7 +16,7 @@ import { TranslateDirectiveModule } from '../../theme/translate/translate.direct
         CommonModule, FormsModule, ReactiveFormsModule, ShSelectModule, LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
-        }), DecimalDigitsModule, BsDatepickerModule.forRoot(), KeyboardShortutModule, TranslateDirectiveModule
+        }), DecimalDigitsModule, BsDatepickerModule.forRoot(), KeyboardShortutModule, TranslateDirectiveModule, GiddhPageLoaderModule
     ],
     exports: [AsideMenuCreateTaxComponent],
     declarations: [AsideMenuCreateTaxComponent],
