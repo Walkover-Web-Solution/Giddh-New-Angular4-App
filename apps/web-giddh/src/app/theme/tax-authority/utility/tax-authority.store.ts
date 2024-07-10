@@ -6,6 +6,7 @@ import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { ToasterService } from "../../../services/toaster.service";
 import { SettingsTaxesService } from "../../../services/settings.taxes.service";
 import { SalesTaxReport } from "./tax-authority.const";
+import { LocaleService } from "../../../services/locale.service";
 
 export interface TaxAuthorityState {
     isLoading: boolean;
@@ -40,7 +41,8 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
 
     constructor(
         private toaster: ToasterService,
-        private settingsTaxesService: SettingsTaxesService
+        private settingsTaxesService: SettingsTaxesService,
+        private localeService: LocaleService
     ) {
         super(DEFAULT_STATE);
     }
@@ -63,7 +65,7 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                 this.patchState({ isLoading: true });
                 return this.settingsTaxesService.GetTaxAuthorityList().pipe(
                     tapResponse(
-                        (res: BaseResponse<ITaxAuthority[], any>) => {
+                        (res: BaseResponse<any, any>) => {
                             return this.patchState({
                                 taxAuthorityList: res?.body ?? [],
                                 isLoading: false
@@ -89,7 +91,7 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                 this.patchState({ isLoading: true });
                 return this.settingsTaxesService.GetTaxAuthorityList().pipe(
                     tapResponse(
-                        (res: BaseResponse<ITaxAuthority[], any>) => {
+                        (res: BaseResponse<any, any>) => {
                             return this.patchState({
                                 taxAuthorityList: res?.body ?? [],
                                 isLoading: false
@@ -116,13 +118,20 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                 return this.settingsTaxesService.CreateTaxAuthority(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            this.toaster.showSnackBar("success", "Tax authority created successfully"); // Need to translate
-                            return this.patchState({
-                                createTaxAuthorityIsSuccess: true
-                            });
+                            if (res.status === 'success') {
+                                this.toaster.showSnackBar("success", this.localeService.translate("app_messages.tax_authority_created"));
+                                return this.patchState({
+                                    createTaxAuthorityIsSuccess: true
+                                });
+
+                            } else {
+                                res?.message && this.toaster.showSnackBar("error", res?.message);
+                                return this.patchState({
+                                    createTaxAuthorityIsSuccess: false
+                                });
+                            }
                         },
                         (error: any) => {
-                            this.toaster.showSnackBar("error", error?.error?.message);
                             return this.patchState({
                                 createTaxAuthorityIsSuccess: false
                             });
@@ -140,10 +149,18 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                 this.patchState({ updateTaxAuthorityIsSuccess: null });
                 return this.settingsTaxesService.UpdateTaxAuthority(req.model, req.uniqueName).pipe(
                     tapResponse(
-                        (res: BaseResponse<ITaxAuthority[], any>) => {
-                            return this.patchState({
-                                updateTaxAuthorityIsSuccess: true
-                            });
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === 'success') {
+                                res?.body && this.toaster.showSnackBar("success", res?.body);
+                                return this.patchState({
+                                    updateTaxAuthorityIsSuccess: true
+                                });
+                            } else {
+                                res?.message && this.toaster.showSnackBar("error", res?.message);
+                                return this.patchState({
+                                    updateTaxAuthorityIsSuccess: false
+                                });
+                            }
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
@@ -165,9 +182,17 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                 return this.settingsTaxesService.DeleteTaxAuthority(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            return this.patchState({
-                                deleteTaxAuthorityIsSuccess: true
-                            });
+                            if (res.status === 'success') {
+                                res?.body && this.toaster.showSnackBar("success", res?.body);
+                                return this.patchState({
+                                    deleteTaxAuthorityIsSuccess: true
+                                });
+                            } else {
+                                res?.message && this.toaster.showSnackBar("error", res?.message);
+                                return this.patchState({
+                                    deleteTaxAuthorityIsSuccess: false
+                                });
+                            }
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
