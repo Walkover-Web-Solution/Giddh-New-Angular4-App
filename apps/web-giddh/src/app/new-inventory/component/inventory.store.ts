@@ -8,6 +8,14 @@ import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { ToasterService } from "../../services/toaster.service";
 import { Router } from "@angular/router";
 
+export interface InventoryState {
+    isInProgress: boolean;
+}
+
+const DEFAULT_STATE: InventoryState = {
+    isInProgress: false,
+};
+
 @Injectable()
 export class InventoryComponentStore extends ComponentStore<any> {
     actions$: any;
@@ -17,8 +25,10 @@ export class InventoryComponentStore extends ComponentStore<any> {
         private toaster: ToasterService,
         public router: Router
     ) {
-        super({});
+        super(DEFAULT_STATE);
     }
+
+    public isInProgress$ = this.select((state) => state.isInProgress);
 
     /**
      *This will use for Export Item Wise Report Data
@@ -28,6 +38,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
     readonly exportStock = this.effect((data$: Observable<{ stockReportRequest: any, queryParams: any }>) => {
         return data$.pipe(
             switchMap((req) => {
+                this.patchState({ isInProgress: true });
                 return this.inventoryService.getItemWiseReportExport(req.queryParams, req.stockReportRequest).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
@@ -35,9 +46,15 @@ export class InventoryComponentStore extends ComponentStore<any> {
                                 if (typeof res?.body === "string") {
                                     this.toaster.showSnackBar("success", res?.body);
                                     this.router.navigate(["/pages/downloads"]);
+                                    return this.patchState({
+                                        isInProgress: false,
+                                    });
                                 }
                             } else {
                                 this.toaster.showSnackBar("error", res?.message);
+                                return this.patchState({
+                                    isInProgress: false,
+                                });
                             }
                         },
                         (error: any) => {
@@ -45,8 +62,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
                         }
                     ),
                 )
-            }
-            )
+            })
         );
     });
 }
