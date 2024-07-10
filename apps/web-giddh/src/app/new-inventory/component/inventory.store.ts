@@ -20,6 +20,11 @@ export class InventoryComponentStore extends ComponentStore<any> {
         super({});
     }
 
+    /**
+     *This will use for Export Item Wise Report Data
+     *
+     * @memberof InventoryComponentStore
+     */
     readonly exportStock = this.effect((data$: Observable<{ stockReportRequest: any, queryParams: any }>) => {
         return data$.pipe(
             switchMap((req) => {
