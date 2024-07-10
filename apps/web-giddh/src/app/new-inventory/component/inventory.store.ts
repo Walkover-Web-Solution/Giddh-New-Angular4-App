@@ -26,14 +26,13 @@ export class InventoryComponentStore extends ComponentStore<any> {
                 return this.inventoryService.getItemWiseReportExport(req.queryParams, req.stockReportRequest).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            console.log(res)
                             if (res.status === "success") {
                                 if (typeof res?.body === "string") {
-                                    this.toaster.showSnackBar("success", res.body);
+                                    this.toaster.showSnackBar("success", res?.body);
                                     this.router.navigate(["/pages/downloads"]);
                                 }
                             } else {
-                                this.toaster.showSnackBar("error", res.message);
+                                this.toaster.showSnackBar("error", res?.message);
                             }
                         },
                         (error: any) => {
