@@ -812,7 +812,7 @@ export class ReportsComponent implements OnInit {
             let stockReportRequestExport = this.stockReportRequestExport;
             let queryParams = {
                 from: this.fromDate,
-                to: this.toDate,
+                to: this.toDate
             };
             delete stockReportRequestExport.from;
             delete stockReportRequestExport.to;
@@ -821,7 +821,7 @@ export class ReportsComponent implements OnInit {
             // data is coming from inventory store
             this.componentStore.exportStock({
                 stockReportRequest: stockReportRequestExport,
-                queryParams: queryParams,
+                queryParams: queryParams
             });
         }
     }
