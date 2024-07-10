@@ -328,7 +328,7 @@
             </div>
             <div class="row" *ngIf="isDataAvailable">
                 <div class="col-12 horizontal-padding">
-                    <div class="d-flex justify-content-end mt-3 mb-2" *ngIf="reportType === 'STOCK'">
+                    <div class="d-flex justify-content-end mt-3 mb-2" *ngIf="(reportType === 'STOCK') || !(isLoading$ | async)">
                         <button mat-stroked-button color="primary" (click)="exportReport()">{{ commonLocaleData?.app_export }}</button>
                     </div>
                     <div class="table-responsive inventory-report-table" *ngIf="displayedColumns?.length">
