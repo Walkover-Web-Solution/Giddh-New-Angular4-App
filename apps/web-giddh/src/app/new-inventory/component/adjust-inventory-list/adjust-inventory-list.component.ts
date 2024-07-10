@@ -551,7 +551,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
             if (this.adjustInventoryListForm?.controls['adjustmentMethod'].value !== null && this.adjustInventoryListForm?.controls['adjustmentMethod'].value !== '') {
                 return;
             }
-        } else if (searchedFieldName === 'Adjusted') {
+        } else if (searchedFieldName === 'Adjusted By') {
             if (this.adjustInventoryListForm?.controls['adjustedBy'].value !== null && this.adjustInventoryListForm?.controls['adjustedBy'].value !== '') {
                 return;
             }
@@ -574,7 +574,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
                 this.showStatus = false;
             } else if (searchedFieldName === 'Adjustment Method') {
                 this.showAdjustmentMethod = false;
-            } else if (searchedFieldName === 'Adjusted') {
+            } else if (searchedFieldName === 'Adjusted By') {
                 this.showAdjustedBy = false;
             } else if (searchedFieldName === 'Type') {
                 this.showType = false;
@@ -605,7 +605,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         if (fieldName === 'Adjustment Method') {
             this.showAdjustmentMethod = true;
         }
-        if (fieldName === 'Adjusted') {
+        if (fieldName === 'Adjusted By') {
             this.showAdjustedBy = true;
         }
         if (fieldName === 'Type') {

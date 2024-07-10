@@ -11,6 +11,7 @@
     border: 0;
     border-radius: 0;
 }
+
 .flexy-child {
     flex-grow: 1;
     display: flex;
@@ -34,6 +35,7 @@
     text-align: center;
     margin: 0 auto;
 }
+
 .aside-body {
     padding: 15px;
 }
@@ -46,15 +48,18 @@
     overflow: auto;
     scroll-behavior: smooth;
     position: relative;
+
     .form-gap {
         row-gap: 10px;
     }
 }
+
 .header-create-unit {
     .form-header {
         display: flex;
     }
 }
+
 mat-dialog-content {
     overflow: inherit !important;
 }

@@ -18,6 +18,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { SettingsFinancialYearActions } from '../../../actions/settings/financial-year/financial-year.action';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import { AdjustmentInventory } from '../../../app.constant';
 @Component({
     selector: 'adjust-inventory',
     templateUrl: './adjust-inventory.component.html',
@@ -51,36 +52,17 @@ export class AdjustInventoryComponent implements OnInit {
     /** True if open panel state  */
     public panelOpenState = true;
     /** Adjustment Method  */
-    public adjustmentMethod: any[] = [
-        {
-            label: 'Quantity Wise',
-            value: 'QUANTITY_WISE'
-        },
-        {
-            label: 'Value Wise',
-            value: 'VALUE_WISE'
-
-        }
-    ];
+    public adjustmentMethod: any[] = [];
     /* dayjs object */
     public dayjs = dayjs;
     /** Stock Transactional Object */
     public searchRequest: SearchStockTransactionReportRequest = new SearchStockTransactionReportRequest();
     /** Holds Inventory Type */
     public inventoryType: string;
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
     /** Holds Calculation methods */
-    public calculationMethod: any[] = [
-        {
-            label: 'Percentage',
-            value: 'PERCENTAGE'
-
-        },
-        {
-            label: 'Value',
-            value: 'VALUE'
-
-        }
-    ];
+    public calculationMethod: any[] = [];
     /** Stock Report Object */
     public stockReportRequest: StockTransactionReportRequest = new StockTransactionReportRequest();
     /** Balance Stock/Group Request */
@@ -579,8 +561,8 @@ export class AdjustInventoryComponent implements OnInit {
      */
     public calculateCalculation(adjustInventoryCreateEditForm: FormGroup, stockGroupClosingBalance: any): void {
         if (adjustInventoryCreateEditForm.value.entityUniqueName &&
-            adjustInventoryCreateEditForm.value.adjustmentMethod === 'QUANTITY_WISE' &&
-            adjustInventoryCreateEditForm.value.calculationMethod === 'PERCENTAGE') {
+            adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.QuantityWise &&
+            adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Percentage) {
             this.stockGroupClosingBalance.changeValue = 0;
             this.stockGroupClosingBalance.newValue = 0;
             let changeInValue = stockGroupClosingBalance.closing?.closing?.quantity * (adjustInventoryCreateEditForm?.value?.changeInValue / 100);
@@ -598,8 +580,8 @@ export class AdjustInventoryComponent implements OnInit {
         }
 
         if (adjustInventoryCreateEditForm.value.entityUniqueName &&
-            adjustInventoryCreateEditForm.value.adjustmentMethod === 'QUANTITY_WISE'
-            && adjustInventoryCreateEditForm.value.calculationMethod === 'VALUE') {
+            adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.QuantityWise
+            && adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Value) {
             this.stockGroupClosingBalance.changeValue = 0;
             this.stockGroupClosingBalance.newValue = 0;
             let changeInValue = adjustInventoryCreateEditForm?.value?.changeInValue;
@@ -617,8 +599,8 @@ export class AdjustInventoryComponent implements OnInit {
         }
 
         if (adjustInventoryCreateEditForm.value.entityUniqueName &&
-            adjustInventoryCreateEditForm.value.adjustmentMethod === 'VALUE_WISE' &&
-            adjustInventoryCreateEditForm.value.calculationMethod === 'PERCENTAGE') {
+            adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.ValueWise &&
+            adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Percentage) {
             this.stockGroupClosingBalance.changeValue = 0;
             this.stockGroupClosingBalance.newValue = 0;
             let changeInValue = stockGroupClosingBalance.closing?.closing?.amount * (adjustInventoryCreateEditForm?.value?.changeInValue / 100);
@@ -637,8 +619,8 @@ export class AdjustInventoryComponent implements OnInit {
         }
 
         if (adjustInventoryCreateEditForm.value.entityUniqueName &&
-            adjustInventoryCreateEditForm.value.adjustmentMethod === 'VALUE_WISE' &&
-            adjustInventoryCreateEditForm.value.calculationMethod === 'VALUE') {
+            adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.ValueWise &&
+            adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Value) {
             this.stockGroupClosingBalance.changeValue = 0;
             this.stockGroupClosingBalance.newValue = 0;
             let changeInValue = adjustInventoryCreateEditForm?.value?.changeInValue;
@@ -696,6 +678,38 @@ export class AdjustInventoryComponent implements OnInit {
             return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
         }
         return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+    }
+
+    /**
+     *
+     * Callback for translation response complete
+     * @param {*} event
+     * @memberof AdjustInventoryComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.translationLoaded = true;
+            this.adjustmentMethod = [
+                {
+                    label: this.localeData?.quantity_wise,
+                    value: AdjustmentInventory.QuantityWise
+                },
+                {
+                    label: this.localeData?.value_wise,
+                    value: AdjustmentInventory.ValueWise
+                }
+            ];
+            this.calculationMethod = [
+                {
+                    label: this.localeData?.percentage,
+                    value: AdjustmentInventory.Percentage
+                },
+                {
+                    label: this.localeData?.value,
+                    value: AdjustmentInventory.Value
+                }
+            ];
+        }
     }
 
 }

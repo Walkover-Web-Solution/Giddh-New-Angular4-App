@@ -30,9 +30,7 @@ export class AsideCreateNewReasonComponent implements OnDestroy, OnInit {
     constructor(
         private componentStore: AdjustInventoryComponentStore,
         private formBuilder: FormBuilder
-    ) {
-
-    }
+    ) { }
 
     /**
      * Lifecycle hook for init component
@@ -41,7 +39,6 @@ export class AsideCreateNewReasonComponent implements OnDestroy, OnInit {
      */
     public ngOnInit(): void {
         this.initReasonForm();
-
         this.componentStore.createReasonIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.closeAsideEvent.emit(true);
@@ -89,7 +86,7 @@ export class AsideCreateNewReasonComponent implements OnDestroy, OnInit {
         if (this.reasonForm.invalid) {
             return;
         }
-        this.componentStore.createReason(this.reasonForm.value)
+        this.componentStore.createReason(this.reasonForm.value);
     }
 }
 
