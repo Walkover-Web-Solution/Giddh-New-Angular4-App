@@ -76,7 +76,7 @@ export class SettingsTaxesService {
         ).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;
-        }));
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
 
     /**
@@ -93,7 +93,7 @@ export class SettingsTaxesService {
         ).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;
-        }));
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
 
     /**
@@ -111,7 +111,7 @@ export class SettingsTaxesService {
         ).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;
-        }));
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
 
     /**
@@ -128,7 +128,7 @@ export class SettingsTaxesService {
         ).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;
-        }));
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
 
     /**
@@ -164,7 +164,7 @@ export class SettingsTaxesService {
         ).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;
-        }));
+        }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
 
 }
