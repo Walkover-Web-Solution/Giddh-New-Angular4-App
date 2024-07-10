@@ -85,21 +85,21 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
-                                    expensesAccountList: res?.body ?? [],
+                                    expensesAccountList: res?.body ?? []
                                 });
                             } else {
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
-                                    expensesAccountList: [],
+                                    expensesAccountList: []
                                 });
                             }
                         },
                         (error: any) => {
                             this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
                             return this.patchState({
-                                expensesAccountList: [],
+                                expensesAccountList: []
                             });
                         }
                     ),
@@ -122,21 +122,21 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
-                                    reasonList: res.body ?? [],
+                                    reasonList: res.body ?? []
                                 });
                             } else {
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
-                                    reasonList: [],
+                                    reasonList: []
                                 });
                             }
                         },
                         (error: any) => {
                             this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
                             return this.patchState({
-                                reasonList: [],
+                                reasonList: []
                             });
                         }
                     ),
@@ -159,21 +159,21 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
-                                    itemWiseReport: res?.body ?? [],
+                                    itemWiseReport: res?.body ?? []
                                 });
                             } else {
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
-                                    itemWiseReport: [],
+                                    itemWiseReport: []
                                 });
                             }
                         },
                         (error: any) => {
                             this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
                             return this.patchState({
-                                itemWiseReport: [],
+                                itemWiseReport: []
                             });
                         }
                     ),
@@ -196,21 +196,21 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
-                                    variantWiseReport: res ?? [],
+                                    variantWiseReport: res?.body ?? []
                                 });
                             } else {
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
-                                    variantWiseReport: [],
+                                    variantWiseReport: []
                                 });
                             }
                         },
                         (error: any) => {
                             this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
                             return this.patchState({
-                                variantWiseReport: [],
+                                variantWiseReport: []
                             });
                         }
                     ),

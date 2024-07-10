@@ -3,7 +3,7 @@
     [file]="'inventory/adjustment'"
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
-        (translationComplete)="translationComplete($event)"
+    (translationComplete)="translationComplete($event)"
 >
     <div class="relative">
         <hamburger-menu [pageHeading]="'Adjust inventory'"></hamburger-menu>
@@ -49,6 +49,7 @@
                         <reactive-dropdown-field
                             [label]="localeData?.expense_accounts"
                             [placeholder]="localeData?.select_expense_accounts"
+                            [labelValue]="inventoryResponse.expenseAccountName"
                             [options]="expenseAccounts$ | async"
                             formControlName="expenseAccountUniqueName"
                             (onClear)="adjustInventoryCreateEditForm.get('expenseAccountUniqueName')?.patchValue(null)"
@@ -63,6 +64,7 @@
                         <reactive-dropdown-field
                             [label]="localeData?.warehouse"
                             [placeholder]="localeData?.select_warehouse"
+                            [labelValue]="inventoryResponse.warehouseName"
                             [options]="warehouses$ | async"
                             formControlName="warehouseUniqueName"
                             (onClear)="adjustInventoryCreateEditForm.get('warehouseUniqueName')?.patchValue(null)"
@@ -90,6 +92,7 @@
                             [label]="commonLocaleData?.app_import_type?.inventory"
                             [placeholder]="commonLocaleData?.app_select_inventory_type"
                             [options]="inventoryList$ | async"
+                            [labelValue]="inventoryResponse.inventoryName"
                             formControlName="entityUniqueName"
                             [required]="true"
                             (selectedOption)="selectInventory($event)"
@@ -105,6 +108,7 @@
                             [label]="localeData?.adjustment_method"
                             [placeholder]="commonLocaleData?.app_select + ' ' + localeData?.adjustment_method"
                             [options]="adjustmentMethod"
+                            [labelValue]="inventoryResponse.adjustmentMethodName"
                             formControlName="adjustmentMethod"
                             [required]="true"
                             (selectedOption)="
@@ -123,6 +127,7 @@
                             [placeholder]="commonLocaleData?.app_select + ' ' + localeData?.reason"
                             [options]="reasons$ | async"
                             formControlName="reasonUniqueName"
+                            [labelValue]="inventoryResponse.reasonName"
                             [required]="true"
                             (createOption)="openCreateReasonModal()"
                             [createNewText]="commonLocaleData?.app_create + ' ' + localeData?.reason"
@@ -197,6 +202,10 @@
                                                             adjustInventoryCreateEditForm,
                                                             stockGroupClosingBalance
                                                         )
+                                                    "
+                                                    [readonly]="
+                                                        !adjustInventoryCreateEditForm?.get('adjustmentMethod')?.value &&
+                                                        !adjustInventoryCreateEditForm?.get('calculationMethod')?.value
                                                     "
                                                     (click)="$event.preventDefault(); $event.stopPropagation()"
                                                     formControlName="changeInValue"
