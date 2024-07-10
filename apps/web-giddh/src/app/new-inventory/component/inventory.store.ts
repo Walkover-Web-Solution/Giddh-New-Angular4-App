@@ -9,11 +9,11 @@ import { ToasterService } from "../../services/toaster.service";
 import { Router } from "@angular/router";
 
 export interface InventoryState {
-    isInProgress: boolean;
+    isLoading: boolean;
 }
 
 const DEFAULT_STATE: InventoryState = {
-    isInProgress: false,
+    isLoading: false,
 };
 
 @Injectable()
@@ -28,7 +28,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
         super(DEFAULT_STATE);
     }
 
-    public isInProgress$ = this.select((state) => state.isInProgress);
+    public isLoading$ = this.select((state) => state.isLoading);
 
     /**
      *This will use for Export Item Wise Report Data
@@ -38,7 +38,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
     readonly exportStock = this.effect((data$: Observable<{ stockReportRequest: any, queryParams: any }>) => {
         return data$.pipe(
             switchMap((req) => {
-                this.patchState({ isInProgress: true });
+                this.patchState({ isLoading: true });
                 return this.inventoryService.getItemWiseReportExport(req.queryParams, req.stockReportRequest).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
@@ -47,18 +47,21 @@ export class InventoryComponentStore extends ComponentStore<any> {
                                     this.toaster.showSnackBar("success", res?.body);
                                     this.router.navigate(["/pages/downloads"]);
                                     return this.patchState({
-                                        isInProgress: false,
+                                        isLoading: false,
                                     });
                                 }
                             } else {
                                 this.toaster.showSnackBar("error", res?.message);
                                 return this.patchState({
-                                    isInProgress: false,
+                                    isLoading: false,
                                 });
                             }
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                isLoading: false,
+                            });
                         }
                     ),
                 )

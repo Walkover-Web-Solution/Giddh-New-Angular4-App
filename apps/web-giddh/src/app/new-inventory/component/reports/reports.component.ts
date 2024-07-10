@@ -138,7 +138,7 @@ export class ReportsComponent implements OnInit {
     /** Observable to cancel api on reports api call */
     private cancelApi$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Loading Observable */
-    public isInProgress$: Observable<any> = this.componentStore.isInProgress$;
+    public isLoading$: Observable<any> = this.componentStore.isLoading$;
 
     constructor(
         public route: ActivatedRoute,
