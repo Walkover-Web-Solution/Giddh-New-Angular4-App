@@ -237,6 +237,56 @@ export class BalanceStockTransactionReportRequest {
     }
 }
 
+export class StockTransactionReportRequestExport {
+    public stockGroupUniqueNames: any[];
+    public stockUniqueNames: any[];
+    public transactionType: string;
+    public accountName: string;
+    public voucherTypes?: any[];
+    public param?: string;
+    public expression?: string;
+    public val?: number;
+    public warehouseUniqueNames?: any[];
+    public branchUniqueNames?: any[];
+    public variantUniqueNames?: any[];
+    public from: string = '';
+    public to: string = '';
+    public showStockName?: boolean;
+    public showGroupName?: boolean;
+    public showUnitName?: boolean;
+    public showOpeningStockQty?: boolean;
+    public showOpeningStockValue?: boolean;
+    public showInwardsQty?: boolean;
+    public showInwardsValue?: boolean;
+    public showOutwardsQty?: boolean;
+    public showOutwardsValue?: boolean;
+    public showClosingStockQty?: boolean;
+    public showClosingStockValue?: boolean;
+    constructor() {
+        this.stockGroupUniqueNames = [];
+        this.stockUniqueNames = [];
+        this.accountName = "";
+        this.param = null;
+        this.expression = null;
+        this.val = 0;
+        this.warehouseUniqueNames = [];
+        this.branchUniqueNames = [];
+        this.variantUniqueNames = [];
+        this.voucherTypes = [];
+        this.showStockName = false;
+        this.showGroupName = false;
+        this.showUnitName = false;
+        this.showOpeningStockQty = false;
+        this.showOpeningStockValue = false;
+        this.showInwardsQty = false;
+        this.showInwardsValue = false;
+        this.showOutwardsQty = false;
+        this.showOutwardsValue = false;
+        this.showClosingStockQty = false;
+        this.showClosingStockValue = false;
+    }
+}
+
 export class StockReportRequestTransactionParams {
     public from: string = '';
     public to: string = '';
@@ -445,6 +495,50 @@ export class InventoryReportRequest {
         this.warehouseUniqueNames = [];
         this.branchUniqueNames = [];
         this.variantUniqueNames = [];
+    }
+}
+
+export class InventoryReportRequestExport {
+    public param?: string;
+    public expression?: string;
+    public val?: number;
+    public stockGroupUniqueNames?: any[];
+    public stockUniqueNames?: any[];
+    public warehouseUniqueNames?: any[];
+    public variantUniqueNames?: any[];
+    public from: string = '';
+    public to: string = '';
+    public inventoryType?: string;
+    public showStockName?: boolean;
+    public showGroupName?: boolean;
+    public showUnitName?: boolean;
+    public showOpeningStockQty?: boolean;
+    public showOpeningStockValue?: boolean;
+    public showInwardsQty?: boolean;
+    public showInwardsValue?: boolean;
+    public showOutwardsQty?: boolean;
+    public showOutwardsValue?: boolean;
+    public showClosingStockQty?: boolean;
+    public showClosingStockValue?: boolean;
+    constructor() {
+        this.param = null;
+        this.expression = null;
+        this.val = 0;
+        this.stockGroupUniqueNames = [];
+        this.stockUniqueNames = [];
+        this.warehouseUniqueNames = [];
+        this.variantUniqueNames = [];
+        this.showStockName = false;
+        this.showGroupName = false;
+        this.showUnitName = false;
+        this.showOpeningStockQty = false;
+        this.showOpeningStockValue = false;
+        this.showInwardsQty = false;
+        this.showInwardsValue = false;
+        this.showOutwardsQty = false;
+        this.showOutwardsValue = false;
+        this.showClosingStockQty = false;
+        this.showClosingStockValue = false;
     }
 }
 

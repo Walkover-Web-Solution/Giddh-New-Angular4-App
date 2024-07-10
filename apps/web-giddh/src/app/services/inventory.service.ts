@@ -16,7 +16,8 @@ import {
     StockTransactionReportRequest,
     InventoryReportRequest,
     InventoryReportResponse,
-    CreateDiscount
+    CreateDiscount,
+    InventoryReportRequestExport
 } from '../models/api-models/Inventory';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpWrapperService } from './http-wrapper.service';
@@ -1287,6 +1288,30 @@ export class InventoryService {
                     count: queryParams.count,
                     page: queryParams.page,
                     type: queryParams.type
+                })));
+    }
+
+    /**
+     * This will use for export inventory stock report
+     *
+     * @param {*} queryParams
+     * @param {InventoryReportRequestExport} stockReportRequest
+     * @return {*}  {Observable<BaseResponse<InventoryReportRequestExport, InventoryReportRequest>>}
+     * @memberof InventoryService
+     */
+    public getItemWiseReportExport(queryParams: any, stockReportRequest: InventoryReportRequestExport): Observable<BaseResponse<InventoryReportRequestExport, InventoryReportRequest>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_ITEM_WISE_EXPORT
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':from', encodeURIComponent(queryParams?.from))
+            ?.replace(':to', encodeURIComponent(queryParams?.to))
+            , stockReportRequest).pipe(
+                map((res) => {
+                    let data: BaseResponse<InventoryReportRequestExport, InventoryReportRequest> = res;
+                    return data;
+                }), catchError((e) => this.errorHandler.HandleCatch<InventoryReportRequestExport, InventoryReportRequest>(e, stockReportRequest, {
+                    from: queryParams.from,
+                    to: queryParams.to
                 })));
     }
 
