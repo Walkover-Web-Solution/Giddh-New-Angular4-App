@@ -19,15 +19,16 @@
                         formControlName="name"
                     >
                     </input-field>
-                    <dropdown-field
+                    <reactive-dropdown-field
                         [name]="'country'"
                         [label]="commonLocaleData?.app_state"
+                        [labelValue]="taxAuthorityForm?.get('stateName')?.value"
                         [placeholder]="localeData?.select_state"
                         [required]="true"
                         [options]="stateList"
-                        (selectedOption)="taxAuthorityForm.get('stateCode').patchValue($event?.value)"
+                        formControlName="stateCode"
                     >
-                    </dropdown-field>
+                    </reactive-dropdown-field>
                     <input-field
                         [name]="'name'"
                         [label]="commonLocaleData?.app_description"

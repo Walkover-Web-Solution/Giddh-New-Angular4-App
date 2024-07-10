@@ -200,10 +200,4 @@ export class SettingsTaxesActions {
             payload: value
         };
     }
-
-    public resetTaxAuthorityList(): CustomActions {
-        return {
-            type: SETTINGS_TAXES_ACTIONS.RESET_TAX_AUTHORITY_RESPONSE
-        };
-    }
 }

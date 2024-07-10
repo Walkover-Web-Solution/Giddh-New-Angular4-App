@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { SubscriptionComponentStore } from './utility/subscription.store';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { API_COUNT_LIMIT } from '../app.constant';
+import { API_COUNT_LIMIT, PAGE_SIZE_OPTIONS } from '../app.constant';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AppState } from '../store';
 import { Store } from '@ngrx/store';
@@ -62,9 +62,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     /** Hold table page index number*/
     public pageIndex: number = 0;
     /** Holds page size options */
-    public pageSizeOptions: any[] = [20,
-        50,
-        100];
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Holds Total number of discounts */
     public totalDiscountCount: number = 0;
     /* Hold list searching value */

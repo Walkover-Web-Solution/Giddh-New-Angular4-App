@@ -604,22 +604,12 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
                     isTaxAuthoritiesLoading: false,
                     isGetTaxAuthoritiesSuccess: true
                 });
-            } else if (taxes?.status === 'error' && taxes.statusCode === UNAUTHORISED) {
+            } else {
                 return Object.assign({}, state, {
                     isTaxAuthoritiesLoading: false,
                     isGetTaxAuthoritiesSuccess: false
                 });
             }
-            return Object.assign({}, state, {
-                isTaxAuthoritiesLoading: false
-            });
-        // RESET IS CREATED BUT NOT USED YET ===========================================
-        case SETTINGS_TAXES_ACTIONS.RESET_TAX_AUTHORITY_RESPONSE: {
-            return { ...state, 
-                isTaxAuthoritiesLoading: false,
-                isGetTaxAuthoritiesSuccess: false,
-                taxAuthorities: null };
-        }
 
         case SETTINGS_BRANCH_ACTIONS.REMOVED_BRANCH_RESPONSE: {
             return Object.assign({}, state, { branchRemoved: true });

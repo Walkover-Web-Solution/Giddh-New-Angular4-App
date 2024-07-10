@@ -72,9 +72,10 @@ export class CreateComponent implements OnInit {
     private initializeForm(value?: any): void {
         this.taxAuthorityForm = this.formBuilder.group({
             name: [value?.name ?? null],
-            stateCode: [value?.stateCode ?? null],
+            stateCode: [value?.state?.code ?? null],
+            stateName: [value?.state?.name ?? null],
             description: [value?.description ?? null]
-        });
+        });        
     }
 
     /**

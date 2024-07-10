@@ -41,9 +41,6 @@
                     </div>
                     <div class=" mt-4" *ngIf="!(isLoading$ | async) && !isTaxApiInProgress">
                         <div class="white-box w-100" *ngIf="(taxAuthorityWiseReport$ | async)?.responses?.length">
-                            <p>
-                                <strong class="table-heading">{{ 'Sales Tax Report' }}</strong>  <!--  NEED TO TRANSLATE after confirmation of text ===========-->
-                            </p>
                             <!-- Tax Authority Table  -->
                             <div class="table-responsive">
                                 <table mat-table [dataSource]="(taxAuthorityWiseReport$ | async)?.responses"
@@ -131,10 +128,26 @@
                                 </table>
                             </div>
                         </div>
+                        
                         <!-- No Data Found Message -->
                         <div class="no-data" *ngIf="(taxAuthorityWiseReport$ | async)?.responses?.length === 0 && !(isLoading$ | async) && !isTaxApiInProgress">
                             <h1 *ngIf="!getFormControl('taxNumber')?.value">{{ localeData?.no_sales_tax_available }}</h1>
                             <h1 *ngIf="getFormControl('taxNumber')?.value">{{ commonLocaleData?.app_no_result_found }}</h1>
+                        </div>
+
+                        <!-- Pagination  -->
+                        <div class="pagination-wrapper justify-content-end" *ngIf="pagination?.totalPages > 1">
+                            <mat-paginator
+                                (page)="handlePageChange($event)"
+                                [length]="pagination?.totalItems"
+                                [pageSize]="pagination?.count"
+                                [showFirstLastButtons]="true"
+                                [pageSizeOptions]="pageSizeOptions"
+                                [hidePageSize]="false"
+                                [pageIndex]="pageIndex"
+                                class="mt-15"
+                            >
+                            </mat-paginator>
                         </div>
                     </div>
                 </div>

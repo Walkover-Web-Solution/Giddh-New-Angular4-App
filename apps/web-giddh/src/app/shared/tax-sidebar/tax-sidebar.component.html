@@ -216,7 +216,7 @@
                             <span>{{ localeData?.filing_status }}</span>
                         </a>
                     </li>
-                    <li *ngIf="isUSCompany">
+                    <li *ngIf="showSalesTaxMenus && isUSCompany">
                         <a
                             href="javascript:;"
                             [routerLink]="['/pages/settings/manage-tax-authority']"
@@ -229,7 +229,7 @@
                             <span>{{ localeData?.manage_tax_authority }}</span>
                         </a>
                     </li>
-                    <li *ngIf="isUSCompany">
+                    <li *ngIf="showSalesTaxMenus && isUSCompany">
                         <a
                             href="javascript:;"
                             [routerLink]="['/pages/settings/reports/tax-authority']"
@@ -242,7 +242,7 @@
                             <span>{{ commonLocaleData?.app_tax_authority }}</span>
                         </a>
                     </li>
-                    <li *ngIf="isUSCompany">
+                    <li *ngIf="showSalesTaxMenus && isUSCompany">
                         <a
                             href="javascript:;"
                             [routerLink]="['/pages/settings/reports/rate-wise']"
@@ -255,7 +255,7 @@
                             <span>{{ localeData?.rate_wise }}</span>
                         </a>
                     </li>
-                    <li *ngIf="isUSCompany">
+                    <li *ngIf="showSalesTaxMenus && isUSCompany">
                         <a
                             href="javascript:;"
                             [routerLink]="['/pages/settings/reports/account-wise']"

@@ -10595,10 +10595,6 @@ body {
     padding-left: 60px;
 }
 
-// .setting-sidebar-open.on-setting-page .plan-wrapper,
-// .setting-sidebar-open.on-user-page .plan-wrapper {
-//     padding-left: 60px !important;
-// }
 .setting-sidebar-open {
     &.on-setting-page, &.on-user-page {
         &:not(.gst-sidebar-open) {

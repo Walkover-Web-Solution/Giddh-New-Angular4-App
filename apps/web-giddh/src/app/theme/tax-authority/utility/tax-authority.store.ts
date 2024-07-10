@@ -10,9 +10,9 @@ import { SalesTaxReport } from "./tax-authority.const";
 export interface TaxAuthorityState {
     isLoading: boolean;
     taxAuthorityList: ITaxAuthority[];
-    taxAuthorityWiseReport: any[];
-    taxWiseReport: any[];
-    accountWiseReport: any[];
+    taxAuthorityWiseReport: any;
+    taxWiseReport: any;
+    accountWiseReport: any;
     exportTaxAuthorityWiseReport: string;
     exportTaxWiseReport: string;
     exportAccountWiseReport: string;
@@ -161,8 +161,6 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
     readonly deleteTaxAuthority = this.effect((data: Observable<string>) => {
         return data.pipe(
             switchMap((req) => {
-                console.log("req", req);
-
                 this.patchState({ deleteTaxAuthorityIsSuccess: null });
                 return this.settingsTaxesService.DeleteTaxAuthority(req).pipe(
                     tapResponse(

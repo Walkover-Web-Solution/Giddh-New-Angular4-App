@@ -117,7 +117,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 } else if (activeCompany.countryV2?.alpha2CountryCode === 'IN') {
                     this.showGstMenus = true;
                 } else if (this.salesTaxSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
-                    this.showSalesTaxMenus = true; // ===== NEED T USE THIS IN TAX SIDEBAR HTML ==========
+                    this.showSalesTaxMenus = true;
                 }
             }
             this.changeDetectionRef.detectChanges();

@@ -15,10 +15,9 @@ import { cloneDeep } from '../../lodash-optimized';
 import { GstReconcileService } from '../../services/gst-reconcile.service';
 import { CommonService } from '../../services/common.service';
 import { ToasterService } from '../../services/toaster.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { SalesTaxReport } from '../../theme/tax-authority/utility/tax-authority.const';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { CompanyActions } from '../../actions/company.actions';
 
 interface DateCheckResult {
@@ -249,6 +248,9 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
                         arr.push({ label: tax.name, value: tax?.uniqueName });
                     });
                     this.taxList = arr;
+                    if (this.taxAuthority.taxUniqueName) {
+                        this.setTaxLabel(this.taxAuthority.taxUniqueName);
+                    }
                 }
             });
             this.store.dispatch(this.companyActions.getTax());
@@ -270,20 +272,32 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
         }
     }
 
+    /**
+     * Set Tax Authority dropdown lable value 
+     *
+     * @private
+     * @param {string} uniqueName
+     * @memberof VatReportFiltersComponent
+     */
     private setTaxAuthorityLabel(uniqueName: string): void {
         let taxAuthorityObj = this.taxAuthorityList.find(taxAuthority => taxAuthority.value === uniqueName);
         if (taxAuthorityObj) {
             this.taxAuthority.taxAuthorityName = taxAuthorityObj?.label;
-            console.log("Form", this.taxAuthority);
             this.onTaxAuthorityChange(taxAuthorityObj);
         }
     }
 
+    /**
+     * Set Tax dropdown lable value 
+     *
+     * @private
+     * @param {string} uniqueName
+     * @memberof VatReportFiltersComponent
+     */
     private setTaxLabel(uniqueName: string): void {
         let taxObj = this.taxList.find(tax => tax.value === uniqueName);
         if (taxObj) {
             this.taxAuthority.taxName = taxObj?.label;
-            console.log("Form", this.taxAuthority);
             this.onTaxChange(taxObj);
         }
     }

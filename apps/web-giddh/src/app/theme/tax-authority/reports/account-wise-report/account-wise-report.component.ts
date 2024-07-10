@@ -8,6 +8,8 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { ActivatedRoute } from '@angular/router';
 import { saveAs } from "file-saver";
 import { SalesTaxReport } from '../../utility/tax-authority.const';
+import { IPagination } from 'apps/web-giddh/src/app/models/interfaces/paginated-response.interface';
+import { PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
 
 
 @Component({
@@ -24,13 +26,24 @@ export class AccountWiseReportComponent implements OnInit {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Holds table columns */
-    public displayedColumns: any = ['tax_name', 'total_sales', 'taxable_amount', 'tax_percentage', 'tax_collected'];
+    public displayedColumns: any = ['customer_name', 'total_sales', 'taxable_amount', 'tax_collected'];
+    /** Holds page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    /** Hold table page index number*/
+    public pageIndex: number = 0;
+    /** Holds pagination request  */
+    public pagination: IPagination = {
+        page: 1,
+        count: this.pageSizeOptions[0],
+        totalItems: null,
+        totalPages: null
+    };
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /** Loading Observable */
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
-    /** Tax Authority Wise Report Observable */
-    public taxWiseReport$: Observable<any> = this.componentStore.taxWiseReport$;
+    /** Account Wise Report Observable */
+    public accountWiseReport$: Observable<any> = this.componentStore.accountWiseReport$;
     /** Holds Form group */
     public salesTaxReportForm: FormGroup;
     /** Holds True if get all tax number api isinprogress*/
@@ -67,9 +80,18 @@ export class AccountWiseReportComponent implements OnInit {
         });
 
         // Subscribe Export Report Success Observable
-        this.componentStore.exportTaxAuthorityWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.exportAccountWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.downloadReport(response);
+            }
+        });
+
+        // Subscribe Sales Report List Observable
+        this.componentStore.accountWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.pagination.page = response?.page;
+                this.pagination.totalItems = response?.totalItems;
+                this.pagination.totalPages = response?.totalPages;
             }
         });
     }
@@ -84,7 +106,7 @@ export class AccountWiseReportComponent implements OnInit {
         if (formValue.taxNumber && formValue.from && formValue.to) {
             const model: any = {
                 reportType: SalesTaxReport.AccountWise,
-                params: formValue,
+                params: { ...formValue, page: this.pagination.page, count: this.pagination.count },
                 isExport: false
             };
             this.componentStore.getSalesTaxReport(model);
@@ -145,6 +167,21 @@ export class AccountWiseReportComponent implements OnInit {
     public downloadReport(response: any): void {
         let blob = this.generalService.base64ToBlob(response, 'application/xls', 512);
         return saveAs(blob, `Sales Tax Report - Account wise.csv`);
+    }
+
+    /**
+    * This will use for page change
+    *
+    * @param {*} event
+    * @memberof AccountWiseReportComponent
+    */
+    public handlePageChange(event: any): void {
+        if (event) {
+            this.pageIndex = event.pageIndex;
+            this.pagination.count = event.pageSize;
+            this.pagination.page = event.pageIndex + 1;
+            this.getSalesTaxReport();
+        }
     }
 
     /**

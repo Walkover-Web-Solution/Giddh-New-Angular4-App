@@ -19,12 +19,12 @@ import { RateWiseReportComponent } from './reports/rate-wise-report/rate-wise-re
 import { VatReportModule } from '../../vat-report/vat-report.module';
 import { AmountFieldComponentModule } from '../../shared/amount-field/amount-field.module';
 import { AccountWiseReportComponent } from './reports/account-wise-report/account-wise-report.component';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
     imports: [
         CommonModule,
         ReactiveFormsModule,
-        PaginationModule.forRoot(),
         FormFieldsModule,
         MatButtonModule,
         MatTableModule,
@@ -36,7 +36,8 @@ import { AccountWiseReportComponent } from './reports/account-wise-report/accoun
         HamburgerMenuModule,
         TaxSidebarModule,
         VatReportModule,
-        AmountFieldComponentModule
+        AmountFieldComponentModule,
+        MatPaginatorModule
     ],
     exports: [
         TaxAuthorityComponent,

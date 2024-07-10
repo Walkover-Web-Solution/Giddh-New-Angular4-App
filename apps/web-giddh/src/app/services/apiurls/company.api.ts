@@ -20,17 +20,17 @@ export const COMPANY_API = {
     GET_DETAILED_REGISTERED_SALES: 'v2/company/:companyUniqueName/sales-register-detailed?',
 
     GET_ALL_TAXES: 'ui/taxes?country=:country',
-    CREATE_TAX_AUTHORITY: 'company/:companyUniqueName/tax/authority?q=', // NEED TO WORK ===========
+    CREATE_TAX_AUTHORITY: 'company/:companyUniqueName/tax/authority',
     GET_ALL_TAX_AUTHORITIES: 'company/:companyUniqueName/tax/authority',
     UPDATE_TAX_AUTHORITY: 'company/:companyUniqueName/tax/authority/:uniqueName',
     DELETE_TAX_AUTHORITY: 'company/:companyUniqueName/tax/authority/:uniqueName',
 
-    GET_SALES_TAX_AUTHORITY_WISE_REPORT: 'company/:companyUniqueName/us/sales-report-authority-wise?from=:from&to=:to&taxNumber=:taxNumber',
-    GET_SALES_TAX_WISE_REPORT: 'company/:companyUniqueName/us/sales-report-tax-wise?from=:from&to=:to&taxNumber=:taxNumber&taxAuthorityUniqueName=:taxAuthorityUniqueName',
-    GET_SALES_TAX_ACCOUNT_WISE_REPORT: 'company/:companyUniqueName/us/sales-report-account-wise?from=:from&to=:to&taxNumber=:taxNumber&taxAuthorityUniqueName=:taxAuthorityUniqueName&taxUniqueName="taxUniqueName',
+    GET_SALES_TAX_AUTHORITY_WISE_REPORT: 'company/:companyUniqueName/us/sales-report-authority-wise?from=:from&to=:to&taxNumber=:taxNumber&page=:page&count=:count',
+    GET_SALES_TAX_WISE_REPORT: 'company/:companyUniqueName/us/sales-report-tax-wise?from=:from&to=:to&taxNumber=:taxNumber&taxAuthorityUniqueName=:taxAuthorityUniqueName&page=:page&count=:count',
+    GET_SALES_TAX_ACCOUNT_WISE_REPORT: 'company/:companyUniqueName/us/sales-report-account-wise?from=:from&to=:to&taxNumber=:taxNumber&taxAuthorityUniqueName=:taxAuthorityUniqueName&taxUniqueName=:taxUniqueName&page=:page&count=:count',
     EXPORT_SALES_TAX_AUTHORITY_WISE_REPORT: 'company/:companyUniqueName/us/export-sales-report-authority-wise?from=:from&to=:to&taxNumber=:taxNumber',
     EXPORT_SALES_TAX_WISE_REPORT: 'company/:companyUniqueName/us/export-sales-report-tax-wise?from=:from&to=:to&taxNumber=:taxNumber&taxAuthorityUniqueName=:taxAuthorityUniqueName',
-    EXPORT_SALES_ACCOUNT_WISE_REPORT: 'company/:companyUniqueName/us/export-sales-report-account-wise?from=:from&to=:to&taxNumber=:taxNumber&taxAuthorityUniqueName=:taxAuthorityUniqueName&taxUniqueName="taxUniqueName',
+    EXPORT_SALES_ACCOUNT_WISE_REPORT: 'company/:companyUniqueName/us/export-sales-report-account-wise?from=:from&to=:to&taxNumber=:taxNumber&taxAuthorityUniqueName=:taxAuthorityUniqueName&taxUniqueName=:taxUniqueName',
 
     GET_REGISTERED_PURCHASE: 'v2/company/:companyUniqueName/purchases-register-overview?from=:fromDate&to=:toDate&interval=:interval',
     GET_DETAILED_REGISTERED_PURCHASE: 'v2/company/:companyUniqueName/purchases-register-detailed?',

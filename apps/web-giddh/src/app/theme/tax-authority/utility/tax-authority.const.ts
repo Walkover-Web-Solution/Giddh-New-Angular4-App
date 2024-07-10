@@ -14,6 +14,8 @@ export class CreateTaxAuthority {
 
 /** Create Tax Authority Keys */
 export interface SalesTaxReportRequest {
+    page: number;
+    count: number;
     to: string;
     from: string;
     taxNumber: string;

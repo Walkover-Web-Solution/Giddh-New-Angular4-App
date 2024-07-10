@@ -157,6 +157,8 @@ export class SettingsTaxesService {
         return this.http.get(apiUrl
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':taxNumber', encodeURIComponent(params?.taxNumber))
+            ?.replace(':count', encodeURIComponent(params?.count))
+            ?.replace(':page', encodeURIComponent(params?.page))
             ?.replace(':from', encodeURIComponent(params?.from))
             ?.replace(':to', encodeURIComponent(params?.to))
         ).pipe(map((res) => {

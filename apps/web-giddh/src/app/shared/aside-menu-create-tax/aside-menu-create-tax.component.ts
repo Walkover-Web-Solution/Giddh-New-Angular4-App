@@ -53,7 +53,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     public isTaxCreatedSuccessfully: boolean = false;
     /** Holds true if active company  country is US */
     public isUSCompany: boolean = false;
-    /** Holds true if active company  country is US */
+    /** Holds tax authority list */
     public taxAuthorityList: IOption[] = [];
     /** Holds true if tax authority list is inprogress */
     public isTaxAuthoritiesLoading$: Observable<any>;

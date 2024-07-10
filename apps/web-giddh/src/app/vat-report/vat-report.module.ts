@@ -8,7 +8,7 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
 import { ClickOutsideModule } from "ng-click-outside";
-import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FormsModule } from "@angular/forms";
 import { Daterangepicker } from "../theme/ng2-daterangepicker/daterangepicker.module";
 import { VatReportRoutingModule } from './vat-report.routing.module';
 import { VatReportComponent } from './vat-report.component';
@@ -75,8 +75,7 @@ import { VatReportFiltersComponent } from './vat-report-filters/vat-report-filte
         GiddhDateRangepickerModule,
         DatepickerWrapperModule,
         GiddhPageLoaderModule,
-        NewConfirmationModalModule,
-        ReactiveFormsModule
+        NewConfirmationModalModule
     ],
     exports: [
         VatReportRoutingModule,

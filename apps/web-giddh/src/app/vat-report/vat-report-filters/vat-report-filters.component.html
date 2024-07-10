@@ -33,18 +33,20 @@
                 [defaultValue]="vatReportCurrencyCode" [required]="true">
             </dropdown-field>
         </div>
-        <div *ngIf="isUSCompany && taxNumber && (isSalesTaxRateWise || isSalesTaxAccountWise)" class="min-width-100">
-            <dropdown-field [label]="commonLocaleData?.app_tax_authority" [options]="taxAuthorityList"
-                (selectedOption)="onTaxAuthorityChange($event)" [placeholder]="commonLocaleData?.app_select + ' ' + commonLocaleData?.app_tax_authority"
-                [defaultValue]="taxAuthority.taxAuthorityName" [required]="true">
-            </dropdown-field>
-        </div>
-        <div *ngIf="isUSCompany && taxNumber && isSalesTaxAccountWise" class="min-width-100">
-            <dropdown-field [label]="commonLocaleData?.app_tax" [options]="taxList"
-                (selectedOption)="onTaxAuthorityChange($event)" [placeholder]="commonLocaleData?.app_select + ' ' + commonLocaleData?.app_tax"
-                [defaultValue]="taxAuthority.taxName" [required]="true">
-            </dropdown-field>
-        </div>
+        <ng-container *ngIf="isUSCompany && taxNumber">
+            <div *ngIf="isSalesTaxRateWise || isSalesTaxAccountWise" class="min-width-100">
+                <dropdown-field [label]="commonLocaleData?.app_tax_authority" [options]="taxAuthorityList"
+                    (selectedOption)="onTaxAuthorityChange($event)" [placeholder]="commonLocaleData?.app_select + ' ' + commonLocaleData?.app_tax_authority"
+                    [defaultValue]="taxAuthority.taxAuthorityName" [required]="true">
+                </dropdown-field>
+            </div>
+            <div *ngIf="isSalesTaxAccountWise" class="min-width-100">
+                <dropdown-field [label]="commonLocaleData?.app_tax" [options]="taxList"
+                    (selectedOption)="onTaxChange($event)" [placeholder]="commonLocaleData?.app_select + ' ' + commonLocaleData?.app_tax"
+                    [defaultValue]="taxAuthority.taxName" [required]="true">
+                </dropdown-field>
+            </div>
+        </ng-container>
         <div *ngIf="taxNumber && (isZimbabweCompany || isKenyaCompany || isUSCompany)" class="export-btn d-flex justify-content-end w100">
             <button mat-stroked-button color="primary" (click)="downloadVatReport()">
                 <i class="icon-download1"></i>
