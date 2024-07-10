@@ -5,9 +5,7 @@
     <div class="relative w-100">
         <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
             *ngIf="asideGstSidebarMenuState === 'in'">
-            <tax-sidebar (navigateEvent)="handleNavigation()"
-                (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
-                [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
+            <tax-sidebar [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
     </div>
     <!-- Tax Authority code  -->

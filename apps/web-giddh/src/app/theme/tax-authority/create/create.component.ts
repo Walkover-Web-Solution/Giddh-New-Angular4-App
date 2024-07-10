@@ -104,7 +104,7 @@ export class CreateComponent implements OnInit {
      * @memberof CreateComponent
      */
     public getStates(): void {
-        this.store.pipe(select(state => state.general.states), takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.stateList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 const states = [];
                 if (response.stateList) {

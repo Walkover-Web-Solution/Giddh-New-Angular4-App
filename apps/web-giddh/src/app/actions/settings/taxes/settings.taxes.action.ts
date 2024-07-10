@@ -97,7 +97,7 @@ export class SettingsTaxesActions {
     .pipe(
         ofType(SETTINGS_TAXES_ACTIONS.GET_TAX_AUTHORITY),
         switchMap((action: CustomActions) => {
-            return this.settingsTaxesService.GetTaxAuthorityList().pipe(
+            return this.settingsTaxesService.getTaxAuthorityList().pipe(
                 map(response => this.GetTaxAuthorityListResponse(response)));
         })));
 
@@ -175,7 +175,7 @@ export class SettingsTaxesActions {
         };
     }
 
-    public GetTaxAuthorityList() {
+    public getTaxAuthorityList() {
         return {
             type: SETTINGS_TAXES_ACTIONS.GET_TAX_AUTHORITY,
         };

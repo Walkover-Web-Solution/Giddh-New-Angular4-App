@@ -69,7 +69,7 @@ export class SettingsTaxesService {
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof SettingsTaxesService
      */
-    public GetTaxAuthorityList(): Observable<BaseResponse<any, any>> {
+    public getTaxAuthorityList(): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + COMPANY_API.GET_ALL_TAX_AUTHORITIES
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -85,7 +85,7 @@ export class SettingsTaxesService {
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof SettingsTaxesService
      */
-    public CreateTaxAuthority(model: CreateTaxAuthority): Observable<BaseResponse<any, any>> {
+    public createTaxAuthority(model: CreateTaxAuthority): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + COMPANY_API.CREATE_TAX_AUTHORITY
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -102,7 +102,7 @@ export class SettingsTaxesService {
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof SettingsTaxesService
      */
-    public UpdateTaxAuthority(model: ITaxAuthority, uniqueName: string): Observable<BaseResponse<any, any>> {
+    public updateTaxAuthority(model: ITaxAuthority, uniqueName: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.patch(this.config.apiUrl + COMPANY_API.UPDATE_TAX_AUTHORITY
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -120,7 +120,7 @@ export class SettingsTaxesService {
     * @returns {Observable<BaseResponse<any, any>>}
     * @memberof SettingsTaxesService
     */
-    public DeleteTaxAuthority(uniqueName: string): Observable<BaseResponse<any, any>> {
+    public deleteTaxAuthority(uniqueName: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.delete(this.config.apiUrl + COMPANY_API.DELETE_TAX_AUTHORITY
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -137,7 +137,7 @@ export class SettingsTaxesService {
      * @returns {Observable<BaseResponse<any, any>>}
      * @memberof SettingsTaxesService
      */
-    public GetExportSaleTaxReport(reportType: string, params: SalesTaxReportRequest, isExport: boolean = false): Observable<BaseResponse<any, any>> {
+    public getExportSaleTaxReport(reportType: string, params: SalesTaxReportRequest, isExport: boolean = false): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let apiUrl = this.config.apiUrl;
         switch (reportType) {
