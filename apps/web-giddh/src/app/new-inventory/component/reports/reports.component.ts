@@ -2,7 +2,7 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { select, Store } from '@ngrx/store';
-import { ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { BalanceStockTransactionReportRequest, InventoryReportRequest, InventoryReportBalanceResponse, StockReportRequest, InventoryReportRequestExport } from '../../../models/api-models/Inventory';
 import { InventoryService } from '../../../services/inventory.service';
@@ -137,6 +137,8 @@ export class ReportsComponent implements OnInit {
     public isCompany: boolean;
     /** Observable to cancel api on reports api call */
     private cancelApi$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Loading Observable */
+    public isInProgress$: Observable<any> = this.componentStore.isInProgress$;
 
     constructor(
         public route: ActivatedRoute,
@@ -807,8 +809,6 @@ export class ReportsComponent implements OnInit {
     */
     public exportReport(): void {
         if (this.reportType === InventoryReportType.stock) {
-            this.isLoading = true;
-
             let stockReportRequestExport = this.stockReportRequestExport;
             let queryParams = {
                 from: this.fromDate,
