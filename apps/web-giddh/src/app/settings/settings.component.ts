@@ -106,7 +106,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
             this.isMobileScreen = result.matches;
         });
 
-        this._route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {    
+        this._route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params['type'] && this.activeTab !== params['type'] && params['referrer']) {
                 if (params['type'] === 'integration' && params['referrer']) {
                     this.selectedChildTab = this.assignChildtabForIntegration(params['referrer']);
@@ -249,7 +249,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));
             this.loadModuleData(tab);
             this.router.navigate(['pages/settings/', tab, this.integrationtab], { replaceUrl: true });
-        } else if(tab !== 'reports') {
+        } else if (tab !== 'reports') {
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab));
             this.loadModuleData(tab);
             this.router.navigate(['pages/settings/', tab], { replaceUrl: true });

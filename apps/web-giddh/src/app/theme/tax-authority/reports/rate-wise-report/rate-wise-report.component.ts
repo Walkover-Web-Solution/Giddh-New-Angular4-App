@@ -2,9 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { TaxAuthorityComponentStore } from '../../utility/tax-authority.store';
-import { AppState } from 'apps/web-giddh/src/app/store';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { Store, select } from '@ngrx/store';
 import { SalesTaxReport } from '../../utility/tax-authority.const';
 import { saveAs } from "file-saver";
 import { ActivatedRoute } from '@angular/router';
@@ -53,7 +51,6 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
     constructor(
         private componentStore: TaxAuthorityComponentStore,
         private formBuilder: FormBuilder,
-        private store: Store<AppState>,
         private generalService: GeneralService,
         private activateRoute: ActivatedRoute
     ) { }
@@ -71,7 +68,8 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
                 this.getFormControl('taxAuthorityUniqueName').patchValue(queryParams.uniqueName ?? '');
             }
         });
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        
+        this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
@@ -190,6 +188,6 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState === 'out'
+        this.asideGstSidebarMenuState === 'out';
     }
 }

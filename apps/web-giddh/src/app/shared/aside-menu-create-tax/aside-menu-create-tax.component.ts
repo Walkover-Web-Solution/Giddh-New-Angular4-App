@@ -13,11 +13,13 @@ import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import { SalesService } from '../../services/sales.service';
 import { cloneDeep } from '../../lodash-optimized';
 import { GeneralService } from '../../services/general.service';
+import { TaxAuthorityComponentStore } from '../../theme/tax-authority/utility/tax-authority.store';
 
 @Component({
     selector: 'aside-menu-create-tax-component',
     templateUrl: './aside-menu-create-tax.component.html',
-    styleUrls: [`./aside-menu-create-tax.component.scss`]
+    styleUrls: [`./aside-menu-create-tax.component.scss`],
+    providers: [TaxAuthorityComponentStore]
 })
 export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
@@ -62,7 +64,8 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         private store: Store<AppState>,
         private settingsTaxesActions: SettingsTaxesActions,
         private salesService: SalesService,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private componentStore: TaxAuthorityComponentStore
     ) {
         this.newTaxObj.date = dayjs().toDate();
         this.isTaxAuthoritiesLoading$ = this.store.pipe(select(settingsStore => settingsStore.settings.isTaxAuthoritiesLoading), takeUntil(this.destroyed$));
@@ -98,18 +101,16 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
                 }
             });
 
-        this.store
-            .pipe(select(p => p.settings && p.settings.taxAuthorities), takeUntil(this.destroyed$))
-            .subscribe(taxAuthorities => {
-                if (taxAuthorities && taxAuthorities.length) {
-                    let arr: IOption[] = [];
-                    taxAuthorities.forEach(tax => {
-                        arr.push({ label: tax.name, value: tax?.uniqueName });
-                    });
-                    this.taxAuthorityList = arr;
-                }
-            });
-        this.store.dispatch(this.settingsTaxesActions.GetTaxAuthorityList());
+        this.componentStore.taxAuthorityList$.pipe(takeUntil(this.destroyed$)).subscribe(taxAuthorities => {
+            if (taxAuthorities?.length) {
+                let arr: IOption[] = [];
+                taxAuthorities.forEach(tax => {
+                    arr.push({ label: tax.name, value: tax?.uniqueName });
+                });
+                this.taxAuthorityList = arr;
+            }
+        });
+        this.componentStore.getTaxAuthorityList();
 
         this.store
             .pipe(select(p => p.company && p.company.isTaxCreationInProcess), takeUntil(this.destroyed$))
@@ -248,7 +249,12 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         });
     }
 
-    public selectTax() {
+    /**
+     * Handle Tax select 
+     *
+     * @memberof AsideMenuCreateTaxComponent
+     */
+    public selectTax(): void {
         this.newTaxObj.tdsTcsTaxSubTypes = "";
         this.forceClear$ = observableOf({ status: true });
     }

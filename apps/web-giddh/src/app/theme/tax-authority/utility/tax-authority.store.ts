@@ -7,6 +7,8 @@ import { ToasterService } from "../../../services/toaster.service";
 import { SettingsTaxesService } from "../../../services/settings.taxes.service";
 import { SalesTaxReport } from "./tax-authority.const";
 import { LocaleService } from "../../../services/locale.service";
+import { AppState } from "../../../store";
+import { Store } from "@ngrx/store";
 
 export interface TaxAuthorityState {
     isLoading: boolean;
@@ -42,7 +44,8 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
     constructor(
         private toaster: ToasterService,
         private settingsTaxesService: SettingsTaxesService,
-        private localeService: LocaleService
+        private localeService: LocaleService,
+        private store: Store<AppState>,
     ) {
         super(DEFAULT_STATE);
     }
@@ -59,11 +62,14 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
     public createTaxAuthorityIsSuccess$ = this.select((state) => state.createTaxAuthorityIsSuccess);
     public updateTaxAuthorityIsSuccess$ = this.select((state) => state.updateTaxAuthorityIsSuccess);
 
+    public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
+    public stateList$: Observable<any> = this.select(this.store.select(state => state.general.states), (response) => response);
+
     readonly getTaxAuthorityList = this.effect((data: Observable<void>) => {
         return data.pipe(
             switchMap(() => {
                 this.patchState({ isLoading: true });
-                return this.settingsTaxesService.GetTaxAuthorityList().pipe(
+                return this.settingsTaxesService.getTaxAuthorityList().pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
@@ -85,11 +91,16 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
         );
     });
 
+    /**
+     * Get State list
+     *
+     * @memberof TaxAuthorityComponentStore
+     */
     readonly getStateList = this.effect((data: Observable<void>) => {
         return data.pipe(
             switchMap(() => {
                 this.patchState({ isLoading: true });
-                return this.settingsTaxesService.GetTaxAuthorityList().pipe(
+                return this.settingsTaxesService.getTaxAuthorityList().pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
@@ -111,11 +122,16 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
         );
     });
 
+    /**
+     * Create Tax Authority
+     *
+     * @memberof TaxAuthorityComponentStore
+     */
     readonly createTaxAuthority = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ createTaxAuthorityIsSuccess: null });
-                return this.settingsTaxesService.CreateTaxAuthority(req).pipe(
+                return this.settingsTaxesService.createTaxAuthority(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === 'success') {
@@ -143,11 +159,16 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
         );
     });
 
+    /**
+     * Update Tax Authority
+     *
+     * @memberof TaxAuthorityComponentStore
+     */
     readonly updateTaxAuthority = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ updateTaxAuthorityIsSuccess: null });
-                return this.settingsTaxesService.UpdateTaxAuthority(req.model, req.uniqueName).pipe(
+                return this.settingsTaxesService.updateTaxAuthority(req.model, req.uniqueName).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === 'success') {
@@ -175,11 +196,16 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
         );
     });
 
+    /**
+     * Delete Tax Authority
+     *
+     * @memberof TaxAuthorityComponentStore
+     */
     readonly deleteTaxAuthority = this.effect((data: Observable<string>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ deleteTaxAuthorityIsSuccess: null });
-                return this.settingsTaxesService.DeleteTaxAuthority(req).pipe(
+                return this.settingsTaxesService.deleteTaxAuthority(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === 'success') {
@@ -207,6 +233,11 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
         );
     });
 
+    /**
+     * Get sale tax report - Tax authority/Rate/Account wise 
+     *
+     * @memberof TaxAuthorityComponentStore
+     */
     readonly getSalesTaxReport = this.effect((data: Observable<{ reportType: string, params: any, isExport: boolean }>) => {
         return data.pipe(
             switchMap((req) => {
@@ -216,7 +247,7 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                     taxWiseReport: null,
                     accountWiseReport: null
                 });
-                return this.settingsTaxesService.GetExportSaleTaxReport(req.reportType, req.params, req.isExport).pipe(
+                return this.settingsTaxesService.getExportSaleTaxReport(req.reportType, req.params, req.isExport).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             switch (req.reportType) {
@@ -253,6 +284,11 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
         );
     });
 
+    /**
+     * Export sale tax report - Tax authority/Rate/Account wise
+     *
+     * @memberof TaxAuthorityComponentStore
+     */
     readonly exportSalesTaxReport = this.effect((data: Observable<{ reportType: string, params: any, isExport: boolean }>) => {
         return data.pipe(
             switchMap((req) => {
@@ -262,7 +298,7 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                     exportTaxWiseReport: null,
                     exportAccountWiseReport: null
                 });
-                return this.settingsTaxesService.GetExportSaleTaxReport(req.reportType, req.params, req.isExport).pipe(
+                return this.settingsTaxesService.getExportSaleTaxReport(req.reportType, req.params, req.isExport).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             switch (req.reportType) {

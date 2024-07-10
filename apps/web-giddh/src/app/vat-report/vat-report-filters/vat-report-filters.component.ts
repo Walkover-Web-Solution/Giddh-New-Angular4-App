@@ -19,6 +19,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SettingsTaxesActions } from '../../actions/settings/taxes/settings.taxes.action';
 import { SalesTaxReport } from '../../theme/tax-authority/utility/tax-authority.const';
 import { CompanyActions } from '../../actions/company.actions';
+import { TaxAuthorityComponentStore } from '../../theme/tax-authority/utility/tax-authority.store';
 
 interface DateCheckResult {
     status: boolean;
@@ -29,7 +30,8 @@ interface DateCheckResult {
 @Component({
     selector: 'vat-report-filters',
     templateUrl: './vat-report-filters.component.html',
-    styleUrls: ['./vat-report-filters.component.scss']
+    styleUrls: ['./vat-report-filters.component.scss'],
+    providers: [TaxAuthorityComponentStore]
 })
 export class VatReportFiltersComponent implements OnInit, OnChanges {
     /** This will hold local JSON data */
@@ -187,7 +189,8 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
         private toaster: ToasterService,
         private route: ActivatedRoute,
         private settingsTaxesActions: SettingsTaxesActions,
-        private companyActions: CompanyActions
+        private companyActions: CompanyActions,
+        private componentStore: TaxAuthorityComponentStore
     ) {
         this.getFinancialYears();
     }
@@ -230,21 +233,19 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
 
         // Get All Tax Authorities for US Country
         if (this.isUSCompany) {
-            this.store
-                .pipe(select(p => p.settings && p.settings.taxAuthorities), takeUntil(this.destroyed$))
-                .subscribe(taxAuthorities => {
-                    if (taxAuthorities && taxAuthorities.length) {
-                        let arr: IOption[] = [];
-                        taxAuthorities.forEach(taxAuthority => {
-                            arr.push({ label: taxAuthority.name, value: taxAuthority?.uniqueName });
-                        });
-                        this.taxAuthorityList = arr;
-                        if (this.taxAuthority.taxAuthorityUniqueName) {
-                            this.setTaxAuthorityLabel(this.taxAuthority.taxAuthorityUniqueName);
-                        }
+            this.componentStore.taxAuthorityList$.pipe(takeUntil(this.destroyed$)).subscribe(taxAuthorities => {
+                if (taxAuthorities?.length) {
+                    let arr: IOption[] = [];
+                    taxAuthorities.forEach(taxAuthority => {
+                        arr.push({ label: taxAuthority.name, value: taxAuthority?.uniqueName });
+                    });
+                    this.taxAuthorityList = arr;
+                    if (this.taxAuthority.taxAuthorityUniqueName) {
+                        this.setTaxAuthorityLabel(this.taxAuthority.taxAuthorityUniqueName);
                     }
-                });
-            this.store.dispatch(this.settingsTaxesActions.GetTaxAuthorityList());
+                }
+            });
+            this.componentStore.getTaxAuthorityList();
 
             this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe(taxes => {
                 if (taxes) {

@@ -3,8 +3,6 @@ import { TaxAuthorityComponentStore } from '../../utility/tax-authority.store';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { SalesTaxReport } from '../../utility/tax-authority.const';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { AppState } from 'apps/web-giddh/src/app/store';
-import { Store, select } from '@ngrx/store';
 import { saveAs } from "file-saver";
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { PAGE_SIZE_OPTIONS } from 'apps/web-giddh/src/app/app.constant';
@@ -53,7 +51,6 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     constructor(
         private componentStore: TaxAuthorityComponentStore,
         private formBuilder: FormBuilder,
-        private store: Store<AppState>,
         private generalService: GeneralService
     ) { }
 
@@ -65,7 +62,7 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
         this.initSalesTaxReportForm();
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
             }
@@ -183,6 +180,6 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState === 'out'
+        this.asideGstSidebarMenuState === 'out';
     }
 }
