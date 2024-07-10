@@ -19,12 +19,14 @@ import { CommonActions } from '../../../actions/common.actions';
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { OrganizationType } from '../../../models/user-login-state';
+import { InventoryComponentStore } from '../inventory.store';
 
 @Component({
     selector: 'app-reports',
     templateUrl: './reports.component.html',
     styleUrls: ['./reports.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [InventoryComponentStore]
 })
 export class ReportsComponent implements OnInit {
     @ViewChild(ReportFiltersComponent, { read: ReportFiltersComponent, static: false }) public reportFiltersComponent: ReportFiltersComponent;
@@ -144,7 +146,9 @@ export class ReportsComponent implements OnInit {
         private toaster: ToasterService,
         private generalService: GeneralService,
         private store: Store<AppState>,
-        private commonAction: CommonActions) {
+        private commonAction: CommonActions,
+        private componentStore: InventoryComponentStore
+    ) {
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             if (profile) {
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
@@ -802,8 +806,8 @@ export class ReportsComponent implements OnInit {
      * @memberof ReportsComponent
     */
     public exportReport(): void {
-        this.isLoading = true;
         if (this.reportType === InventoryReportType.stock) {
+            this.isLoading = true;
 
             let stockReportRequestExport = this.stockReportRequestExport;
             let queryParams = {
@@ -814,19 +818,10 @@ export class ReportsComponent implements OnInit {
             delete stockReportRequestExport.to;
 
             stockReportRequestExport.inventoryType = this.moduleType;
-            this.inventoryService.getItemWiseReportExport(queryParams, stockReportRequestExport).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
-                this.isLoading = true;
-                if (response?.status === 'success') {
-                    if (typeof response?.body === "string") {
-                        this.toaster.showSnackBar("success", response?.body);
-                        this.router.navigate(["/pages/downloads"]);
-                        this.isLoading = false;
-                    }
-                } else {
-                    this.toaster.showSnackBar("error", response?.message);
-                    this.isLoading = false;
-                }
-                this.changeDetection.detectChanges();
+            // data is coming from inventory store
+            this.componentStore.exportStock({
+                stockReportRequest: stockReportRequestExport,
+                queryParams: queryParams,
             });
         }
     }
