@@ -54,15 +54,17 @@
                 {{ commonLocaleData?.app_export }}
             </button>
         </div>
-        <a mat-stroked-button color="primary" class="text-right" *ngIf="isUKCompany" [href]="connectToHMRCUrl"
-            [disabled]="!connectToHMRCUrl">
-            <ng-container *ngIf="connectToHMRCUrl">
-                {{ localeData?.connect_to_hmrc }}
-            </ng-container>
-            <ng-container *ngIf="!connectToHMRCUrl">
-                {{ localeData?.connected_to_hmrc }}
-            </ng-container>
-        </a>
+        <div class="input-width" *ngIf="isUKCompany">
+            <a mat-stroked-button color="primary" class="text-right" [href]="connectToHMRCUrl"
+                [disabled]="!connectToHMRCUrl">
+                <ng-container *ngIf="connectToHMRCUrl">
+                    {{ localeData?.connect_to_hmrc }}
+                </ng-container>
+                <ng-container *ngIf="!connectToHMRCUrl">
+                    {{ localeData?.connected_to_hmrc }}
+                </ng-container>
+            </a>
+        </div>
     </div>
 </div>
 

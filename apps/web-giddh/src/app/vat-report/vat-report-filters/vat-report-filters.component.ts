@@ -7,7 +7,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SettingsFinancialYearService } from '../../services/settings.financial-year.service';
 import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, SALES_TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { OrganizationType } from '../../models/user-login-state';
@@ -276,6 +276,10 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
         if ('currentTaxUniqueName' in changes && changes.currentTaxUniqueName.currentValue !== changes.currentTaxUniqueName.previousValue) {
             this.taxAuthority.taxUniqueName = changes.currentTaxUniqueName.currentValue;
         }
+
+        if ('activeCompany' in changes && changes.activeCompany.currentValue !== changes.activeCompany.previousValue) {
+            this.setTaxTypeLabelPlaceholder();
+        }
     }
 
     /**
@@ -285,16 +289,18 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
      * @memberof VatReportFiltersComponent
      */
     private setTaxTypeLabelPlaceholder(): void {
-        if (this.taxes?.length && this.commonLocaleData) {
-            if (this.isKenyaCompany || this.isZimbabweCompany || this.isUKCompany) {
+        if (this.activeCompany && this.commonLocaleData) {
+            const alpha2CountryCode = this.activeCompany?.countryV2?.alpha2CountryCode;
+
+            if (VAT_SUPPORTED_COUNTRIES.includes(alpha2CountryCode)) {
                 this.taxType.label = this.commonLocaleData?.app_vat;
                 this.taxType.placeholder = this.commonLocaleData?.app_enter_vat;
-            } else if (this.isUSCompany) {
-                this.taxType.label = this.commonLocaleData?.app_sales_tax;
-                this.taxType.placeholder = this.commonLocaleData?.app_enter_sales_tax;
-            } else {
+            } else if (TRN_SUPPORTED_COUNTRIES.includes(alpha2CountryCode)) {
                 this.taxType.label = this.commonLocaleData?.app_trn;
                 this.taxType.placeholder = this.commonLocaleData?.app_enter_trn;
+            } else if (SALES_TAX_SUPPORTED_COUNTRIES.includes(alpha2CountryCode)) {
+                this.taxType.label = this.commonLocaleData?.app_sales_tax;
+                this.taxType.placeholder = this.commonLocaleData?.app_enter_sales_tax;
             }
         }
     }
@@ -451,7 +457,6 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
                 this.taxNumber = this.taxes[0]?.value;
                 this.currentTaxNumber.emit(this.taxNumber);
             }
-            this.setTaxTypeLabelPlaceholder();
             this.isTaxApiInProgress.emit(false);
             setTimeout(() => {
                 if (!this.hasQueryParams) {

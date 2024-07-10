@@ -168,14 +168,14 @@ export class SettingsTaxesActions {
         return successAction;
     }
 
-    public GetTaxList(value) {
+    public GetTaxList(value): CustomActions {
         return {
             type: SETTINGS_TAXES_ACTIONS.GET_TAX,
             payload: value
         };
     }
 
-    public getTaxAuthorityList() {
+    public getTaxAuthorityList(): CustomActions {
         return {
             type: SETTINGS_TAXES_ACTIONS.GET_TAX_AUTHORITY,
         };
@@ -194,7 +194,7 @@ export class SettingsTaxesActions {
         };
     }
     
-    public GetTaxAuthorityListResponse(value) {
+    public GetTaxAuthorityListResponse(value): CustomActions {
         return {
             type: SETTINGS_TAXES_ACTIONS.GET_TAX_AUTHORITY_RESPONSE,
             payload: value

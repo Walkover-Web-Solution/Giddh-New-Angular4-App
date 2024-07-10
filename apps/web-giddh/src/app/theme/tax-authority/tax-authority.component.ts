@@ -19,7 +19,7 @@ export class TaxAuthorityComponent implements OnInit {
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Holds table columns */
-    public displayedColumns = ['name', 'uniqueName', 'description', 'action'];
+    public displayedColumns: string[] = ['name', 'uniqueName', 'description', 'action'];
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /** Loading Observable */

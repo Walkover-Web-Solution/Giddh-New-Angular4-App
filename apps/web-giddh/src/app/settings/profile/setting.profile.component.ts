@@ -179,11 +179,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     /* This will hold list of tax (trn/vat) supported countries */
     public taxSupportedCountries = TAX_SUPPORTED_COUNTRIES;
     /* This will hold list of vat supported countries */
-    public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
+    public vatSupportedCountries: string[] = VAT_SUPPORTED_COUNTRIES;
     /* This will hold list of trn supported countries */
-    public trnSupportedCountries = TRN_SUPPORTED_COUNTRIES;
+    public trnSupportedCountries: string[] = TRN_SUPPORTED_COUNTRIES;
     /* This will hold list of sales tax supported countries */
-    public salesTaxSupportedCountries = SALES_TAX_SUPPORTED_COUNTRIES;
+    public salesTaxSupportedCountries: string[] = SALES_TAX_SUPPORTED_COUNTRIES;
     /** Tax type (gst/trn) */
     public taxType: string = '';
     /** True if initial data is fetched */
