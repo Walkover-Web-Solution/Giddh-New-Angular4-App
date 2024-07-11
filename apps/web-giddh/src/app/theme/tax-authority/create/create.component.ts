@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { TaxAuthorityComponentStore } from '../utility/tax-authority.store';
 import { ReplaySubject, takeUntil } from 'rxjs';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { GeneralActions } from '../../../actions/general/general.actions';
@@ -25,6 +25,8 @@ export class CreateComponent implements OnInit {
     public taxAuthorityForm: FormGroup;
     /** Holds state list */
     public stateList: any = [];
+    /** Holds true if form is submitted */
+    public isFormSubmit: boolean = false;
 
     constructor(
         private componentStore: TaxAuthorityComponentStore,
@@ -71,8 +73,8 @@ export class CreateComponent implements OnInit {
      */
     private initializeForm(value?: any): void {
         this.taxAuthorityForm = this.formBuilder.group({
-            name: [value?.name ?? null],
-            stateCode: [value?.state?.code ?? null],
+            name: [value?.name ?? null, Validators.required],
+            stateCode: [value?.state?.code ?? null, Validators.required],
             stateName: [value?.state?.name ?? null],
             description: [value?.description ?? null]
         });        
@@ -83,7 +85,13 @@ export class CreateComponent implements OnInit {
      *
      * @memberof CreateComponent
      */
-    public createUpdateTaxAuthority(): void {
+    public createUpdateTaxAuthority(): null {
+        this.isFormSubmit = false;
+        if (this.taxAuthorityForm.invalid) {
+            this.isFormSubmit = true;
+            return;
+        }
+
         if (this.taxAuthorityInfo?.uniqueName) {
             const model: any = this.getChangedProperties();
             if (Object.keys(model).length !== 0) {

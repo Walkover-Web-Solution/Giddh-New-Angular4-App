@@ -215,6 +215,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public isNewUserLoggedIn: boolean = false;
     /** True if is come from subscription */
     public isCreateBySubscription: boolean = false;
+    /** Holds list of countries where hide applicable tax input field */
+    public hideApplicableTaxCountryList: string[] = ['US'];
 
 
     /** Returns true if form is dirty else false */

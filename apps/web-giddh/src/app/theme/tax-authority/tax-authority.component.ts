@@ -69,11 +69,9 @@ export class TaxAuthorityComponent implements OnInit {
             position: {
                 top: '0',
                 right: '0'
-            }
+            },
+            data: isUpdateMode ? taxAuthorityInfo : null
         };
-        if (isUpdateMode) {
-            dialogConfig.data = taxAuthorityInfo;
-        }
         const createUpdateTaxAuthorityDialogRef = this.dialog.open(CreateComponent, dialogConfig);
 
         createUpdateTaxAuthorityDialogRef.afterClosed().pipe(take(1)).subscribe(response => {
