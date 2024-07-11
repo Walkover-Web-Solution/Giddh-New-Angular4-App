@@ -589,28 +589,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
             return { ...state, taxes: null };
         }
 
-        case SETTINGS_TAXES_ACTIONS.GET_TAX_AUTHORITY:
-            return Object.assign({}, state, {
-                isTaxAuthoritiesLoading: true,
-                isGetTaxAuthoritiesSuccess: false,
-                taxAuthorities: null
-            });
-            
-        case SETTINGS_TAXES_ACTIONS.GET_TAX_AUTHORITY_RESPONSE:
-            let taxAuthorities: BaseResponse<TaxResponse[], string> = action.payload;
-            if (taxAuthorities?.status === 'success') {
-                return Object.assign({}, state, {
-                    taxAuthorities: taxAuthorities.body,
-                    isTaxAuthoritiesLoading: false,
-                    isGetTaxAuthoritiesSuccess: true
-                });
-            } else {
-                return Object.assign({}, state, {
-                    isTaxAuthoritiesLoading: false,
-                    isGetTaxAuthoritiesSuccess: false
-                });
-            }
-
         case SETTINGS_BRANCH_ACTIONS.REMOVED_BRANCH_RESPONSE: {
             return Object.assign({}, state, { branchRemoved: true });
         }
