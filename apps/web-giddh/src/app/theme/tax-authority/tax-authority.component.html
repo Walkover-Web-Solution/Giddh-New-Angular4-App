@@ -9,12 +9,22 @@
         </div>
     </div>
     <!-- Tax Authority code  -->
-    <div class="tax-authority">
-        <div class="container-fluid ml-0">
+    <div class="tax-authority section-center">
+        <!-- Create Tax Authority Button When No Tax authority present  -->
+        <div class="initial-screen position-absolute text-center" *ngIf="!(taxAuthorityList$ | async)?.length && !(isLoading$ | async)">
+            <div class="mb-5">
+                <img src="assets/images/create-discounts.png" alt="create discount banner image" width="500px" height="auto">
+            </div>
+            <button mat-raised-button color="primary" (click)="openCreateUpdateTaxAuthorityDialog()"> 
+                {{ commonLocaleData?.app_create + ' ' + commonLocaleData?.app_tax_authority }}
+            </button>
+        </div>
+        <div class="container-fluid ml-0" *ngIf="(taxAuthorityList$ | async)?.length && !(isLoading$ | async)">
             <div class="row">
-                <div class="col-12 px-0 text-right">
-                    <!-- Create Tax Authority Button  -->
-                    <button mat-stroked-button color="primary" (click)="openCreateUpdateTaxAuthorityDialog()">
+                <div class="col-12 px-0">
+                    <!-- Create Tax Authority Button When Tax authorities is present  -->
+                    <button mat-raised-button color="primary" 
+                        (click)="openCreateUpdateTaxAuthorityDialog()">
                         {{ commonLocaleData?.app_create + ' ' + commonLocaleData?.app_tax_authority }}
                     </button>
                 </div>
@@ -24,10 +34,10 @@
             <div class="mt-5" *ngIf="isLoading$ | async">
                 <giddh-page-loader></giddh-page-loader>
             </div>
-            <div class="row mt-4" *ngIf="(taxAuthorityList$ | async)?.length && !(isLoading$ | async)">
+            <div class="row mt-4">
                 <!-- Tax Authority Table  -->
                 <div class="table-responsive">
-                    <table mat-table [dataSource]="taxAuthorityList$ | async" class="w-100">
+                    <table mat-table [dataSource]="taxAuthorityList$ | async" class="bdr w-100">
                         <!-- Name -->
                         <ng-container matColumnDef="name">
                             <th mat-header-cell *matHeaderCellDef>
@@ -83,10 +93,6 @@
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
-                    <!-- No Data Found Message -->
-                    <div class="no-data" *ngIf="!(taxAuthorityList$ | async)?.length && !(isLoading$ | async)">
-                        <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
-                    </div>
                 </div>
             </div>
         </div>
