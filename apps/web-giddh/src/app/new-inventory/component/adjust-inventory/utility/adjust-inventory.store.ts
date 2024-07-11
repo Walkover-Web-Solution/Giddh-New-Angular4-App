@@ -373,7 +373,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
     readonly createInventoryAdjustment = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
-                this.patchState({ createAdjustInventoryInProgress: true });
+                this.patchState({ createAdjustInventoryInProgress: true, createAdjustInventoryIsSuccess: null });
                 return this.inventoryService.createInventoryAdjustment(req?.formValue, req.branchUniqueName).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
@@ -415,7 +415,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
     readonly updateInventoryAdjustment = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
-                this.patchState({ updateAdjustInventoryInProgress: true });
+                this.patchState({ updateAdjustInventoryInProgress: true, updateAdjustInventoryIsSuccess: null });
                 return this.inventoryService.createInventoryAdjustment(req?.formValue, req.branchUniqueName).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {

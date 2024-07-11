@@ -1053,6 +1053,12 @@ textarea {
     margin-bottom: -200px !important;
 }
 
+.adjust-inventory-list-page {
+    .td-search-box {
+        min-width: 160px !important;
+    }
+}
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;

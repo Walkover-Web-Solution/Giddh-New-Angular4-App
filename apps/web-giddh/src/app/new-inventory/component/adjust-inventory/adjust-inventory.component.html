@@ -8,7 +8,7 @@
     <div class="relative">
         <hamburger-menu [pageHeading]="'Adjust inventory'"></hamburger-menu>
     </div>
-    <div *ngIf="createAdjustInventoryInProgress$ | async">
+    <div *ngIf="(createAdjustInventoryInProgress$ | async) || (allApiCalled && referenceNumber)">
         <giddh-page-loader></giddh-page-loader>
     </div>
     <form
@@ -17,7 +17,7 @@
         name="adjustInventoryCreateEditForm"
         [formGroup]="adjustInventoryCreateEditForm"
     >
-        <ng-container *ngIf="!(createAdjustInventoryInProgress$ | async)">
+        <ng-container *ngIf="!allApiCalled">
             <div class="adjustment container-fluid pd-15">
                 <div class="row">
                     <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6">
@@ -111,6 +111,7 @@
                             [labelValue]="inventoryResponse.adjustmentMethodName"
                             formControlName="adjustmentMethod"
                             [required]="true"
+                            [readonly]="!adjustInventoryCreateEditForm.get('entityUniqueName')?.value"
                             (selectedOption)="
                                 calculateCalculation(adjustInventoryCreateEditForm, stockGroupClosingBalance)
                             "
@@ -204,7 +205,8 @@
                                                         )
                                                     "
                                                     [readonly]="
-                                                        !adjustInventoryCreateEditForm?.get('adjustmentMethod')?.value &&
+                                                        !adjustInventoryCreateEditForm?.get('adjustmentMethod')
+                                                            ?.value &&
                                                         !adjustInventoryCreateEditForm?.get('calculationMethod')?.value
                                                     "
                                                     (click)="$event.preventDefault(); $event.stopPropagation()"
@@ -264,9 +266,20 @@
                                     <th mat-header-cell *matHeaderCellDef width="20%">
                                         <mat-checkbox
                                             color="primary"
+                                            *ngIf="isEntityStockGroup"
+                                            [checked]="true"
+                                            [disabled]="isEntityStockGroup"
+                                            [aria-label]="checkboxLabel()"
+                                        >
+                                            <span>{{ localeData?.select_all }}</span>
+                                        </mat-checkbox>
+                                        <mat-checkbox
+                                            color="primary"
+                                            *ngIf="!isEntityStockGroup"
                                             (change)="$event ? masterToggle() : null"
                                             [checked]="selection.hasValue() && isAllSelected()"
                                             [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                            [disabled]="isEntityStockGroup"
                                             [aria-label]="checkboxLabel()"
                                         >
                                             <span>{{ localeData?.select_all }}</span>
@@ -280,6 +293,7 @@
                                             (change)="$event ? selection.toggle(element) : null"
                                             [checked]="selection.isSelected(element)"
                                             [aria-label]="checkboxLabel(element)"
+                                            [disabled]="isEntityStockGroup"
                                         >
                                             {{ element.variant?.name }}
                                         </mat-checkbox>

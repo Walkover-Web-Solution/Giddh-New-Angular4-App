@@ -19,6 +19,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { SettingsFinancialYearActions } from '../../../actions/settings/financial-year/financial-year.action';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AdjustmentInventory, API_COUNT_LIMIT } from '../../../app.constant';
+import { cloneDeep } from '../../../lodash-optimized';
 @Component({
     selector: 'adjust-inventory',
     templateUrl: './adjust-inventory.component.html',
@@ -88,10 +89,12 @@ export class AdjustInventoryComponent implements OnInit {
     public isFormSubmitted: boolean = false;
     /** Holds Store create adjust inventory is success API success state as observable*/
     public createAdjustInventoryIsSuccess$ = this.componentStore.select(state => state.createAdjustInventoryIsSuccess);
-    /** Holds Store update adjust inventory is success API success state as observable*/
-    public updateAdjustInventoryIsSuccess$ = this.componentStore.select(state => state.updateAdjustInventoryIsSuccess);
     /** Holds Store create adjust inventory in progress API success state as observable*/
     public createAdjustInventoryInProgress$ = this.componentStore.select(state => state.createAdjustInventoryInProgress);
+    /** Holds Store update adjust inventory is success API success state as observable*/
+    public updateAdjustInventoryIsSuccess$ = this.componentStore.select(state => state.updateAdjustInventoryIsSuccess);
+    /** Holds Store update adjust inventory in progress API success state as observable*/
+    public updateAdjustInventoryInProgress$ = this.componentStore.select(state => state.updateAdjustInventoryInProgress);
     /** Hold table data source */
     public dataSource: any;
     /** Decimal places from company settings */
@@ -111,7 +114,14 @@ export class AdjustInventoryComponent implements OnInit {
         inventoryName: null,
         calculationMethodName: null
     };
+    /** Hold balance request object */
     public balanceReqObj: any;
+    /** True if entity is stock group */
+    public isEntityStockGroup: boolean = false;
+    /** True if allApiCalled */
+    public allApiCalled: boolean = true;
+    /** Hold Adjusment Inventory Form Value */
+    public inventoryFormValue: any;
 
     constructor(
         private store: Store<AppState>,
@@ -136,7 +146,7 @@ export class AdjustInventoryComponent implements OnInit {
             if (params?.refNo) {
                 this.referenceNumber = params?.refNo;
                 this.componentStore.getAdjustInventoryData(this.referenceNumber);
-
+                this.allApiCalled = true;
             }
         });
     }
@@ -249,6 +259,7 @@ export class AdjustInventoryComponent implements OnInit {
                     this.stockGroupClosingBalance.changeValue = 0;
                     this.stockGroupClosingBalance.newValue = 0;
                     this.calculateCalculation();
+                    this.allApiCalled = false;
                 }
             }
         });
@@ -258,6 +269,7 @@ export class AdjustInventoryComponent implements OnInit {
             this.componentStore.variantWiseReport$.pipe(map(response => response?.results))
         ]).pipe(takeUntil(this.destroyed$))
             .subscribe(([itemWise, variantWise]) => {
+
                 if (itemWise) {
                     const mappedIItemWise = itemWise.map(item => ({
                         value: item.uniqueName,
@@ -287,6 +299,11 @@ export class AdjustInventoryComponent implements OnInit {
 
                     }
                     this.dataSource = new MatTableDataSource<any>(data);
+                    if (this.referenceNumber && this.isEntityStockGroup) {
+                        this.masterToggle();
+                    } else {
+                        this.selection.clear();
+                    }
                     this.showHideTable = false;
                     setTimeout(() => {
                         this.showHideTable = true;
@@ -300,14 +317,20 @@ export class AdjustInventoryComponent implements OnInit {
         /** Create inventory success observable */
         this.createAdjustInventoryIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.allApiCalled = false;
                 this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust-inventory`]);
+            } else if (response !== null) {
+                this.allApiCalled = false;
             }
         });
 
         /** Update inventory success observable */
         this.updateAdjustInventoryIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.allApiCalled = false;
                 this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust-inventory`]);
+            } else if (response !== null) {
+                this.allApiCalled = false;
             }
         });
 
@@ -413,6 +436,7 @@ export class AdjustInventoryComponent implements OnInit {
             changeInValue: [value?.changeInValue ?? null, Validators.required],
             variantUniqueNames: [value?.variantUniqueNames ?? null]
         });
+
     }
 
     /**
@@ -454,6 +478,7 @@ export class AdjustInventoryComponent implements OnInit {
         this.stockReportRequest.inventoryType = this.inventoryType?.toUpperCase();
         this.stockReportRequest.branchUniqueNames[0] = this.generalService.currentBranchUniqueName;
         if (event && event.additional?.type === 'STOCK GROUP') {
+            this.isEntityStockGroup = true;
             this.stockReportRequest.stockUniqueNames = [];
             this.stockReportRequest.stockGroupUniqueNames = [event.value];
             reqObj = {
@@ -473,6 +498,7 @@ export class AdjustInventoryComponent implements OnInit {
             this.componentStore.getVariantWiseReport(reqObj);
             this.balanceReqObj = balanceReqObj;
         } else {
+            this.isEntityStockGroup = false;
             reqObj = {
                 queryParams: queryParams,
                 stockReportRequest: this.stockReportRequest
@@ -520,7 +546,6 @@ export class AdjustInventoryComponent implements OnInit {
      * @memberof AdjustInventoryComponent
      */
     public updateInventory(): void {
-        console.log(this.adjustInventoryCreateEditForm.value);
         this.isFormSubmitted = false;
         if (this.adjustInventoryCreateEditForm.invalid) {
             this.isFormSubmitted = true;
@@ -535,6 +560,7 @@ export class AdjustInventoryComponent implements OnInit {
             formValue: this.adjustInventoryCreateEditForm.value,
             branchUniqueName: this.generalService.currentBranchUniqueName
         }
+        this.allApiCalled = true;
         this.componentStore.updateInventoryAdjustment(reqObj);
     }
 
@@ -545,6 +571,7 @@ export class AdjustInventoryComponent implements OnInit {
      * @memberof AdjustInventoryComponent
      */
     public createInventory(): void {
+        this.inventoryFormValue = cloneDeep(this.adjustInventoryCreateEditForm.value);
         this.isFormSubmitted = false;
         if (this.adjustInventoryCreateEditForm.invalid) {
             this.isFormSubmitted = true;
@@ -559,6 +586,7 @@ export class AdjustInventoryComponent implements OnInit {
             formValue: this.adjustInventoryCreateEditForm.value,
             branchUniqueName: this.generalService.currentBranchUniqueName
         }
+        this.allApiCalled = true;
         this.componentStore.createInventoryAdjustment(reqObj);
     }
 
@@ -658,15 +686,21 @@ export class AdjustInventoryComponent implements OnInit {
     }
 
     /**
-     * This will be use for master toggle by indirectExpense
+     * This will be use for master toggle
      *
      * @memberof AdjustInventoryComponent
      */
-    public masterToggle() {
-        if (this.isAllSelected()) {
-            this.selection.clear();
-        } else {
+    public masterToggle(): void {
+        if (this.isEntityStockGroup) {
+            // Select all rows if isEntityStockGroup is true
             this.dataSource?.filteredData?.forEach(row => this.selection.select(row));
+        } else {
+            // Toggle selection based on current state
+            if (this.isAllSelected()) {
+                this.selection.clear();
+            } else {
+                this.dataSource?.filteredData?.forEach(row => this.selection.select(row));
+            }
         }
     }
 
@@ -679,9 +713,9 @@ export class AdjustInventoryComponent implements OnInit {
      */
     public checkboxLabel(row?: any): string {
         if (!row) {
-            return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+            return `${this.isAllSelected() ? 'deselect' : 'select'} 'all'`;
         }
-        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row + 1}`;
     }
 
     /**

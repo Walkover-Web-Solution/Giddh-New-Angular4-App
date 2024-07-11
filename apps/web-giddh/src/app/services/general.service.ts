@@ -2023,16 +2023,16 @@ export class GeneralService {
         {
             text: 'No'
         }];
-        const headerText: string = 'Confirmation';
+        const headerText: string = commonLocaleData?.app_confirmation;
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mr-b1 text-light';
         const footerCssClass: string = 'mr-b1';
         return {
             headerText,
             headerCssClass,
-            messageText: 'Are you sure you want to delete this inventory adjustment?',
+            messageText: localeData?.delete_confirmation_message,
             messageCssClass,
-            footerText: 'It will be deleted permanently and will no longer be accessible from any other module.',
+            footerText: localeData?.delete_message1,
             footerCssClass,
             buttons
         };
