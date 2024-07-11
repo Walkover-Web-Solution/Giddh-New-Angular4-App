@@ -17,6 +17,7 @@
                         [type]="'text'"
                         [required]="true"
                         formControlName="name"
+                        [showError]="isFormSubmit && !taxAuthorityForm?.get('name')?.value"
                     >
                     </input-field>
                     <reactive-dropdown-field
@@ -27,6 +28,7 @@
                         [required]="true"
                         [options]="stateList"
                         formControlName="stateCode"
+                        [showError]="isFormSubmit && !taxAuthorityForm?.get('stateName')?.value"
                     >
                     </reactive-dropdown-field>
                     <input-field
@@ -39,7 +41,7 @@
                     </input-field>
                 </div>
                 <div class="mr-t3">
-                    <button mat-stroked-button color="primary" [disabled]="taxAuthorityForm.invalid" (click)="createUpdateTaxAuthority()">
+                    <button mat-stroked-button color="primary" (click)="createUpdateTaxAuthority()">
                         {{taxAuthorityInfo?.uniqueName ? commonLocaleData?.app_update : commonLocaleData?.app_create}}
                     </button>
                 </div>

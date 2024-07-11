@@ -101,7 +101,7 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
             });
 
         this.store
-            .pipe(select(p => p.company && p.company.isTaxUpdatedSuccessfully), takeUntil(this.destroyed$))
+            .pipe(select(state => state.company && state.company.isTaxUpdatedSuccessfully), takeUntil(this.destroyed$))
             .subscribe(result => {
                 if (result && this.taxAsideMenuState === 'in') {
                     this.toggleTaxAsidePane();
