@@ -62,7 +62,6 @@ export class AccountWiseReportComponent implements OnInit {
      * @memberof AccountWiseReportComponent
      */
     public ngOnInit(): void {
-        document.querySelector('body').classList.add('gst-sidebar-open');
         this.initSalesTaxReportForm();
         this.activateRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
             if (queryParams?.taxAuthorityUniqueName || queryParams?.taxUniqueName) {
@@ -190,7 +189,6 @@ export class AccountWiseReportComponent implements OnInit {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        document.querySelector('body').classList.remove('gst-sidebar-open');
         this.asideGstSidebarMenuState === 'out';
     }
 

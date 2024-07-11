@@ -70,7 +70,6 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        document.querySelector('body').classList.add('gst-sidebar-open');
         for (let i = 1; i <= 31; i++) {
             let day = i?.toString();
             this.days.push({ label: day, value: day });
@@ -204,7 +203,6 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
      * @memberof SettingTaxesComponent
      */
     public ngOnDestroy(): void {
-        document.querySelector('body').classList.remove('gst-sidebar-open');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
