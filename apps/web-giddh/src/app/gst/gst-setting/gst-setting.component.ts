@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { ReplaySubject, Observable } from "rxjs";
-import { takeUntil } from "rxjs/operators";
+import { take, takeUntil } from "rxjs/operators";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../store";
 import { IOption } from "../../theme/ng-virtual-select/sh-options.interface";
@@ -11,13 +11,14 @@ import * as dayjs from "dayjs";
 import { GstSettingComponentStore } from "./utility/gst-setting.store";
 import { ToasterService } from "../../services/toaster.service";
 import { cloneDeep } from "../../lodash-optimized";
+import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
     selector: 'gst-setting',
     templateUrl: './gst-setting.component.html',
     styleUrls: ['./gst-setting.component.scss'],
-    providers: [GstSettingComponentStore],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    providers: [GstSettingComponentStore]
 })
 
 export class GstSettingComponent implements OnInit, OnDestroy {
@@ -54,21 +55,17 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     /** Hold lut number item list*/
     public lutItemList: any[] = [];
 
+    public showHideLutForm: boolean;
     constructor(
         private formBuilder: FormBuilder,
         private store: Store<AppState>,
         private settingsProfileActions: SettingsProfileActions,
-        private changeDetection: ChangeDetectorRef,
         private componentStore: GstSettingComponentStore,
-        private toaster: ToasterService
+        private toaster: ToasterService,
+        private dialog: MatDialog
     ) {
         this.componentStore.getLutNumberList();
-        this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.activeCompany = activeCompany;
-                this.getExportTypeLabel();
-            }
-        });
+
     }
 
     /**
@@ -81,6 +78,14 @@ export class GstSettingComponent implements OnInit, OnDestroy {
 
         this.initGstSettingForm();
         this.getLutList();
+
+        this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.activeCompany = activeCompany;
+                this.paymentIntegrateForm.get('withPay').patchValue(activeCompany.withPay);
+                this.getExportTypeLabel();
+            }
+        });
 
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
@@ -110,7 +115,6 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                     this.addNewLutItem(item);
                 });
             }
-            this.changeDetection.detectChanges();
         });
 
         this.componentStore.lutNumberResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -120,7 +124,6 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                     this.toaster.showSnackBar('success', this.responseArray[response.lutIndex].successMessage);
                     this.getLutList();
                 }
-                this.changeDetection.detectChanges();
             }
         });
     }
@@ -137,7 +140,7 @@ export class GstSettingComponent implements OnInit, OnDestroy {
             ])
         });
         this.paymentIntegrateForm = this.formBuilder.group({
-            withPay: [false]
+            withPay: [null]
         });
     }
 
@@ -164,11 +167,9 @@ export class GstSettingComponent implements OnInit, OnDestroy {
      */
     public getExportTypeLabel(): void {
         if (this.activeCompany) {
-            setTimeout(() => {
-                let value = this.activeCompany.withPay ? this.commonLocaleData.app_yes?.toLowerCase() : this.commonLocaleData.app_no?.toLowerCase();
-                const exportType = this.exportTypes.find(item => item?.value === value);
-                this.exportType = exportType ? exportType.label : '';
-            }, 200);
+            let value = this.activeCompany.withPay ? this.commonLocaleData.app_yes?.toLowerCase() : this.commonLocaleData.app_no?.toLowerCase();
+            const exportType = this.exportTypes.find(item => item?.value === value);
+            this.exportType = exportType ? exportType.label : '';
         }
     }
 
@@ -179,7 +180,8 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     */
     public setExportType(event?: any): void {
         if (event && event.value && this.exportType !== event.value) {
-            this.paymentIntegrateForm.get('withPay')?.patchValue(event.value === this.commonLocaleData.app_yes?.toLowerCase());
+            console.log(event);
+            this.paymentIntegrateForm.get('withPay')?.patchValue(event.value === this.commonLocaleData.app_yes?.toLowerCase() ? this.commonLocaleData.app_yes?.toLowerCase() : this.commonLocaleData.app_no?.toLowerCase());
             this.store.dispatch(this.settingsProfileActions.PatchProfile({ withPay: event.value === this.commonLocaleData.app_yes?.toLowerCase() }));
         }
     }
@@ -237,30 +239,61 @@ export class GstSettingComponent implements OnInit, OnDestroy {
      * @memberof GstSettingComponent
      */
     public removeLutItem(index: number): void {
-        let mappings = this.gstSettingForm.get('gstData') as FormArray;
-        let mappingForm = mappings.at(index);
-        if (index === 0) {
-            if (mappingForm.get('uniqueName')?.value) {
-                this.componentStore.deleteLutNumber({ lutNumberUniqueName: mappingForm.get('uniqueName')?.value });
-                mappings.removeAt(index);
-                mappings.push(this.initLutForm({
-                    fromDate: this.fromDate,
-                    toDate: this.toDate
-                }));
-                this.responseArray[index]['message'] = null;
-            } else {
-                mappingForm.get('lutNumber')?.patchValue(null);
-                mappingForm.get('fromDate')?.patchValue(this.fromDate);
-                mappingForm.get('toDate')?.patchValue(this.toDate);
-                this.responseArray[index]['message'] = null;
+        this.openConfirmationDialog(index);
+    }
+
+    /**
+     * Open confirmation dialog for delete LUT number
+     *
+     * @private
+     * @param {*} request
+     * @memberof GstSettingComponent
+     */
+    private openConfirmationDialog(index: number): void {
+        const dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '540px',
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: this.localeData?.confirm_delete_message,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
             }
-        } else {
-            if (mappingForm.get('uniqueName')?.value) {
-                this.responseArray[index] = [];
-                this.componentStore.deleteLutNumber({ lutNumberUniqueName: mappingForm.get('uniqueName')?.value });
-                mappings.removeAt(index);
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                console.log(index);
+                let mappings = this.gstSettingForm.get('gstData') as FormArray;
+                let mappingForm = mappings.at(index);
+                if (index === 0) {
+                    if (mappingForm.get('uniqueName')?.value) {
+                        this.componentStore.deleteLutNumber({ lutNumberUniqueName: mappingForm.get('uniqueName')?.value });
+                        mappings.removeAt(index);
+                        mappings.push(this.initLutForm({
+                            fromDate: this.fromDate,
+                            toDate: this.toDate
+                        }));
+                        if (this.responseArray?.length) {
+                            this.responseArray[index]['message'] = null;
+                        }
+                    } else {
+                        mappingForm.get('lutNumber')?.patchValue(null);
+                        mappingForm.get('fromDate')?.patchValue(this.fromDate);
+                        mappingForm.get('toDate')?.patchValue(this.toDate);
+                        if (this.responseArray?.length) {
+                            this.responseArray[index]['message'] = null;
+                        }
+                    }
+                } else {
+                    if (mappingForm.get('uniqueName')?.value) {
+                        if (this.responseArray?.length) {
+                            this.responseArray[index] = [];
+                        }
+                        this.componentStore.deleteLutNumber({ lutNumberUniqueName: mappingForm.get('uniqueName')?.value });
+                        mappings.removeAt(index);
+                    }
+                }
             }
-        }
+        });
     }
 
     /**
@@ -275,7 +308,6 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                 { label: this.localeData?.with_pay, value: 'yes' },
                 { label: this.localeData?.without_pay, value: 'no' }
             ];
-            this.changeDetection.detectChanges();
         }
     }
 

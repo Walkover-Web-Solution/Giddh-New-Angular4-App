@@ -5,5 +5,7 @@
     "without_pay": "आईजीएसटी/एलयूटी बाँड भरल्याशिवाय",
     "lut_number":"LUT क्रमांक ",
     "enter_lut_number":"LUT क्रमांक प्रविष्ट करा",
-    "add_new_line": "+ नवीन ओळ जोडा"
+    "add_new_line": "+ नवीन ओळ जोडा",
+   "page_heading":"जीएसटी सेटिंग",
+    "confirm_delete_message": "Are you sure you want to delete lut number?"
 }
