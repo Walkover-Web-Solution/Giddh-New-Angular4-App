@@ -69,7 +69,7 @@
                                         <th mat-header-cell *matHeaderCellDef>
                                             {{ commonLocaleData?.app_total + ' ' + commonLocaleData?.app_sales }}
                                         </th>
-                                        <td mat-cell *matCellDef="let element" width="15%">
+                                        <td mat-cell *matCellDef="let element" width="25%">
                                             {{ element?.taxableAmount }}
                                         </td>
                                         <td class="bg-grey" mat-footer-cell *matFooterCellDef>
@@ -87,7 +87,7 @@
                                         <th mat-header-cell *matHeaderCellDef>
                                             {{ localeData?.taxable_amount }}
                                         </th>
-                                        <td mat-cell *matCellDef="let element" width="15%">
+                                        <td mat-cell *matCellDef="let element" width="25%">
                                             {{ element?.subTotal }}
                                         </td>
                                         <td class="bg-grey" mat-footer-cell *matFooterCellDef>
@@ -105,7 +105,7 @@
                                         <th mat-header-cell *matHeaderCellDef>
                                             {{ localeData?.tax_collected }}
                                         </th>
-                                        <td mat-cell *matCellDef="let element" width="15%">
+                                        <td mat-cell *matCellDef="let element" width="25%">
                                             {{ element?.taxTotal }}
                                         </td>
                                         <td class="bg-grey" mat-footer-cell *matFooterCellDef>

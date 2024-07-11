@@ -6,7 +6,7 @@ import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
 import { Observable, of, ReplaySubject } from 'rxjs';
-import { SALES_TAX_SUPPORTED_COUNTRIES, TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { SALES_TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { GstReconcileService } from '../../services/gst-reconcile.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
@@ -55,9 +55,9 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     /** Holds Tax Type Translated Label for sidebar menu */
     public taxTypeSidebarLabel: string;
     /* This will hold list of vat supported countries */
-    public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
+    public vatSupportedCountries: string[] = VAT_SUPPORTED_COUNTRIES;
     /* This will hold list of sales tax supported countries */
-    public salesTaxSupportedCountries = SALES_TAX_SUPPORTED_COUNTRIES;
+    public salesTaxSupportedCountries: string[] = SALES_TAX_SUPPORTED_COUNTRIES;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
     /** Holds current date period for GST report */
