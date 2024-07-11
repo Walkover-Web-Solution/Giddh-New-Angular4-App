@@ -11,7 +11,7 @@
     </div>
 
     <!-- Tax Authority code  -->
-    <div class="tax-authority-report mx-auto pd-t15">
+    <div class="tax-authority-report section-center pd-t15">
         <div class="container-fluid ml-0">
             <div class="row">
                 <div class="col-12">
@@ -50,7 +50,7 @@
                             <!-- Tax Authority Table  -->
                             <div class="table-responsive">
                                 <table mat-table [dataSource]="(accountWiseReport$ | async)?.responses"
-                                class="table basic mr-t2 vat-report-table hide-last-row bordered-table">
+                                class="table basic mr-t2 sales-report-table">
                                     <!-- Customer Name -->
                                     <ng-container matColumnDef="customer_name">
                                         <th mat-header-cell *matHeaderCellDef>
