@@ -83,5 +83,10 @@
     "select_export_type": "Select Export Type",
     "with_pay": "With payment of IGST",
     "without_pay": "Without payment of IGST/LUT Bond",
-    "add_vat": "+ Add VAT"
+    "add_vat": "+ Add VAT",
+    "add_sales_tax": "+ Add Sales Tax",
+    "sales_tax_list": "List of all the Sales Tax's created",
+    "create_sales_tax": "Create Sales Tax",
+    "update_sales_tax": "Update Sales Tax",
+    "company_sales_tax_list": "List of all the Sales Tax's created and linked in the company"
 }

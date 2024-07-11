@@ -160,16 +160,9 @@ export class SettingsTaxesActions {
         return successAction;
     }
 
-    public GetTaxList(value) {
+    public GetTaxList(value): CustomActions {
         return {
             type: SETTINGS_TAXES_ACTIONS.GET_TAX,
-            payload: value
-        };
-    }
-
-    public GetTaxListResponse(value) {
-        return {
-            type: SETTINGS_TAXES_ACTIONS.GET_TAX_RESPONSE,
             payload: value
         };
     }
@@ -177,6 +170,13 @@ export class SettingsTaxesActions {
     public resetTaxList(): CustomActions {
         return {
             type: SETTINGS_TAXES_ACTIONS.RESET_TAX_RESPONSE
+        };
+    }
+
+    public GetTaxListResponse(value) {
+        return {
+            type: SETTINGS_TAXES_ACTIONS.GET_TAX_RESPONSE,
+            payload: value
         };
     }
 }

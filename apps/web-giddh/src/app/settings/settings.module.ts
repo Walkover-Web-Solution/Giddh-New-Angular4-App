@@ -64,6 +64,7 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { CreateAddressModule } from '../shared/create-address/create-address.module';
 import { CommonModule } from '@angular/common';
 import { TagsModule } from './tags/tags.module';
+import { TaxAuthorityModule } from '../theme/tax-authority/tax-authority.module';
 
 @NgModule({
     declarations: [
@@ -135,7 +136,8 @@ import { TagsModule } from './tags/tags.module';
         AccountNumberMaskModule,
         WatchVideoModule,
         CreateAddressModule,
-        TagsModule
+        TagsModule,
+        TaxAuthorityModule
     ],
 })
 

@@ -2,7 +2,7 @@ import { SETTINGS_PERMISSION_ACTIONS } from '../../actions/settings/permissions/
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { SETTINGS_INTEGRATION_ACTIONS } from '../../actions/settings/settings.integration.const';
 import { SETTINGS_PROFILE_ACTIONS } from '../../actions/settings/profile/settings.profile.const';
-import { CompanyResponse } from '../../models/api-models/Company';
+import { CompanyResponse, TaxResponse } from '../../models/api-models/Company';
 import { EmailKeyClass, IntegrationPage, IntegrationPageClass, PayPalClass, PaymentClass, PaypalDetailsResponse, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
 import { SETTINGS_LINKED_ACCOUNTS_ACTIONS } from '../../actions/settings/linked-accounts/settings.linked.accounts.const';
@@ -15,6 +15,7 @@ import { COMMON_ACTIONS } from '../../actions/common.const';
 import { SETTINGS_TAXES_ACTIONS } from "../../actions/settings/taxes/settings.taxes.const";
 import { cloneDeep, filter, map, orderBy } from '../../lodash-optimized';
 import { UNAUTHORISED } from '../../app.constant';
+import { ITaxAuthority } from '../../models/interfaces/tax.interface';
 
 export interface LinkedAccountsState {
     bankAccounts?: BankAccountsResponse[];
@@ -91,6 +92,9 @@ export interface SettingsState {
     financialYearLimits: any;
     freePlanSubscribed: boolean;
     hasUnsavedChanges: boolean;
+    isTaxAuthoritiesLoading: boolean;
+    isGetTaxAuthoritiesSuccess: boolean;
+    taxAuthorities: ITaxAuthority[]
 }
 
 export const initialState: SettingsState = {
@@ -116,7 +120,10 @@ export const initialState: SettingsState = {
     getProfileInProgress: false,
     financialYearLimits: null,
     freePlanSubscribed: false,
-    hasUnsavedChanges: false
+    hasUnsavedChanges: false,
+    isTaxAuthoritiesLoading: false,
+    isGetTaxAuthoritiesSuccess: false,
+    taxAuthorities: null
 };
 
 export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
