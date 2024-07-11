@@ -38,7 +38,6 @@ export class TaxAuthorityComponent implements OnInit {
      * @memberof TaxAuthorityComponent
      */
     public ngOnInit(): void {
-        document.querySelector('body').classList.add('gst-sidebar-open');
         this.getSalesTaxReport();
 
         // Subscribe Delete Tax Authority Success
@@ -126,7 +125,6 @@ export class TaxAuthorityComponent implements OnInit {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        document.querySelector('body').classList.remove('gst-sidebar-open');
         this.asideGstSidebarMenuState === 'out';
     }
 

@@ -60,7 +60,6 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
      * @memberof TaxAuthorityReportComponent
      */
     public ngOnInit(): void {
-        document.querySelector('body').classList.add('gst-sidebar-open');
         this.initSalesTaxReportForm();
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -179,7 +178,6 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        document.querySelector('body').classList.remove('gst-sidebar-open');
         this.asideGstSidebarMenuState === 'out';
     }
 }
