@@ -551,7 +551,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.router.navigate(["/pages/proforma-invoice/invoice/" + this.voucherType]);
                 }
 
-                this.getVoucherType();
                 this.resetVoucherForm(!params?.uniqueName, true);
 
                 /** Open account dropdown on create */
