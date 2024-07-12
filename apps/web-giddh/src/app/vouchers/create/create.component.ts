@@ -585,6 +585,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.searchStock();
 
                 if (this.invoiceType.isCashInvoice) {
+                    this.invoiceForm.get('account.uniqueName')?.patchValue("cash");
                     this.componentStore.getBriefAccounts({ currency: this.company.baseCurrency, group: BriedAccountsGroup });
                 } else {
                     this.invoiceForm.get('account.uniqueName')?.patchValue(null);
@@ -3846,7 +3847,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 });
             } else {
-                this.voucherService.generateVoucher(accountUniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.voucherService.generateVoucher(invoiceForm.account.uniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.startLoader(false);
                     if (response?.status === "success") {
                         const isCashSalesPurchaseInvoice = this.invoiceType.isCashInvoice && ((!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote) || this.invoiceType.isPurchaseInvoice);
@@ -3996,6 +3997,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         if (!initialLoad) {
             this.searchAccount();
+        }
+
+        if (this.invoiceType.isCashInvoice) {
+            this.invoiceForm.get('account.uniqueName')?.patchValue("cash");
         }
 
 
