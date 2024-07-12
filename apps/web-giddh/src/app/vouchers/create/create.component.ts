@@ -3829,7 +3829,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             invoiceForm = this.vouchersUtilityService.cleanVoucherObject(invoiceForm);
 
-            let accountUniqueName = this.invoiceType.isCashInvoice ? invoiceForm.deposit?.accountUniqueName : invoiceForm.account?.uniqueName;
+            let accountUniqueName = this.invoiceType.isCashInvoice ? (invoiceForm.deposit?.accountUniqueName ? invoiceForm.deposit?.accountUniqueName : 'cash') : invoiceForm.account?.uniqueName;
             invoiceForm.account.uniqueName = accountUniqueName;
             if (this.isUpdateMode) {
                 this.voucherService.updateVoucher(invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
