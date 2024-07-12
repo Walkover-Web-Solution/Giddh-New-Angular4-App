@@ -100,7 +100,7 @@
                                     </div>
                                 </div>
                                 <div class="col-2 text-right"
-                                    *ngIf="!invoiceType.isPurchaseOrder && !invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
+                                    *ngIf="!invoiceType.isPurchaseOrder  && !invoiceType.isCashInvoice && !invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
                                     <div class="balance-due-label">{{ invoiceType.isProformaInvoice ||
                                         invoiceType.isEstimateInvoice ? commonLocaleData?.app_total_amount :
                                         localeData?.balance_due }}</div>
