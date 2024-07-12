@@ -90,7 +90,7 @@
                                         </ng-container>
                                     </div>
                                 </div>
-                                <div class="col-2 text-right" *ngIf="!invoiceType.isPurchaseOrder">
+                                <div class="col-2 text-right" *ngIf="!invoiceType.isPurchaseOrder && !invoiceType.isCashInvoice">
                                     <div class="balance-due-label">{{ invoiceType.isProformaInvoice || invoiceType.isEstimateInvoice ? commonLocaleData?.app_total_amount : localeData?.balance_due }}</div>
                                     <h2 class="d-inline-block">
                                         <amount-field [amount]="voucherTotals.balanceDue"
@@ -587,14 +587,14 @@
                                             [options]="vouchersListForCreditDebitNote$ | async"
                                             (selectedOption)="creditDebitNoteInvoiceSelected($event)"
                                             (onClear)="resetCreditDebitNoteSelectedInvoice()"
-                                            [enableDynamicSearch]="true" 
+                                            [enableDynamicSearch]="true"
                                             (dynamicSearchedQuery)="
                                                 searchReferenceVoucher = $event;
                                                 resetVoucherListForCreditDebitNote();
                                                 getVoucherListForCreditDebitNote()
-                                            " 
-                                            [isPaginationEnabled]="true" 
-                                            (scrollEnd)="!searchReferenceVoucher ? getVoucherListForCreditDebitNote() : ''" 
+                                            "
+                                            [isPaginationEnabled]="true"
+                                            (scrollEnd)="!searchReferenceVoucher ? getVoucherListForCreditDebitNote() : ''"
                                             [scrollableElementId]="'referenceVoucher'"
                                             [readonly]="isEinvoiceGenerated"
                                             [labelValue]="invoiceForm.get('referenceVoucher.number')?.value"
@@ -1317,7 +1317,7 @@
                                             <div class="container px-0">
                                                 <div class="row">
                                                     <div class="col-12"
-                                                        *ngIf="!invoiceType.isPurchaseOrder && (currentVoucherFormDetails?.depositAllowed || ((invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote) && (vouchersForAdjustment?.length || isAdjustAmount))) && (!isUpdateMode || (isUpdateMode && (vouchersForAdjustment?.length || isAdjustAmount)))">
+                                                        *ngIf="(invoiceType.isCashInvoice || (!invoiceType.isPurchaseOrder && (currentVoucherFormDetails?.depositAllowed || ((invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote) && (vouchersForAdjustment?.length || isAdjustAmount))) && (!isUpdateMode || (isUpdateMode && (vouchersForAdjustment?.length || isAdjustAmount)))))">
                                                         <mat-card>
                                                             <mat-card-header>
                                                                 <mat-card-title>
@@ -1328,7 +1328,7 @@
                                                                 <div class="container px-0" formGroupName="deposit">
                                                                     <div class="row align-items-center">
                                                                         <ng-container
-                                                                            *ngIf="currentVoucherFormDetails?.depositAllowed && !isUpdateMode">
+                                                                            *ngIf="invoiceType.isCashInvoice || currentVoucherFormDetails?.depositAllowed && !isUpdateMode">
                                                                             <div class="col">
                                                                                 <reactive-dropdown-field
                                                                                     [label]="commonLocaleData?.app_account"
@@ -1339,6 +1339,7 @@
                                                                                     [showCreateNew]="true"
                                                                                     [createNewText]="commonLocaleData?.app_create_new"
                                                                                     (createOption)="toggleAccountAsidePane(accountType.bank)"
+                                                                                    [labelValue]="invoiceType.isCashInvoice?depositAccountName :''"
                                                                                     formControlName="accountUniqueName">
                                                                                 </reactive-dropdown-field>
                                                                             </div>
@@ -1598,7 +1599,7 @@
                                                         </amount-field>
                                                     </td>
                                                 </tr>
-                                                <ng-container *ngIf="!invoiceType.isPurchaseOrder">
+                                                <ng-container *ngIf="!invoiceType.isPurchaseOrder && !invoiceType.isCashInvoice">
                                                     <tr>
                                                         <td>
                                                             {{ invoiceType.isProformaInvoice || invoiceType.isEstimateInvoice ? commonLocaleData?.app_total_amount : localeData?.balance_due }}

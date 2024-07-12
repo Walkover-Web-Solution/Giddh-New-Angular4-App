@@ -401,6 +401,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public purchaseOrderDetailsForEdit: any[] = [];
     /** True if creating voucher from pending tab */
     public isPendingEntries: boolean = false;
+    /** Holds deposit account name */
+    public depositAccountName: string = '';
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -548,9 +550,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 /** Open account dropdown on create */
                 if (params?.uniqueName) {
                     this.invoiceForm.get('uniqueName').patchValue(params?.uniqueName);
+                } else {
+                    this.depositAccountName = "";
                 }
 
                 this.getVoucherType();
+
 
                 if (params?.accountUniqueName && !params?.uniqueName) {
                     this.searchAccount(params?.accountUniqueName, 1, true);
@@ -573,7 +578,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.searchStock();
 
                 if (this.invoiceType.isCashInvoice) {
-                    this.invoiceForm.get('account.uniqueName')?.patchValue("cash");
+                    // this.invoiceForm.get('account.uniqueName')?.patchValue("cash");
                     this.componentStore.getBriefAccounts({ currency: this.company.baseCurrency, group: BriedAccountsGroup });
                 } else {
                     this.invoiceForm.get('account.uniqueName')?.patchValue(null);
@@ -731,6 +736,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         /** Voucher details */
         this.componentStore.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.getVoucherType(response);
                 if (!response.isCopyVoucher) {
                     this.invoiceForm.controls["account"].get("customerName")?.patchValue(this.invoiceType.isCashInvoice ? response.account?.customerName : response.account?.name);
                     this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response.account?.uniqueName);
@@ -743,6 +749,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.purchaseOrderDetailsForEdit = response?.purchaseOrderDetails;
                     this.invoiceForm.get("linkedPo")?.patchValue(response?.purchaseOrderDetails?.map(po => { return po.uniqueName; }));
                     this.selectedPoItems = this.invoiceForm.get("linkedPo")?.value;
+                }
+                if (this.invoiceType.isCashInvoice) {
+                    this.depositAccountName = response.account?.name;
                 }
 
                 this.getAccountDetails(response.account?.uniqueName);
@@ -1202,9 +1211,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @private
      * @memberof VoucherCreateComponent
      */
-    private getVoucherType(): void {
-        this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
-        this.currentVoucherFormDetails = this.vouchersUtilityService.prepareVoucherForm(this.voucherType);
+    private getVoucherType(response?: any): void {
+        if (response) {
+            let isCashInvoice = response.cashVoucher ? true : false;
+            this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType, isCashInvoice);
+        } else {
+            this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
+            this.currentVoucherFormDetails = this.vouchersUtilityService.prepareVoucherForm(this.voucherType);
+        }
     }
 
     /**
@@ -3014,7 +3028,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Validate the mobile number 
+     * Validate the mobile number
      *
      * @memberof VoucherCreateComponent
      */
@@ -3295,7 +3309,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
     }
 
-    /* 
+    /*
      * Updates account and generate voucher
      *
      * @memberof VoucherCreateComponent
@@ -3482,8 +3496,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         invoiceForm = this.vouchersUtilityService.formatVoucherObject(invoiceForm);
-
-        if (!this.currentVoucherFormDetails?.depositAllowed || (this.invoiceType.isCashInvoice && !this.invoiceType.isPurchaseInvoice && !this.invoiceType.isCreditNote && !this.invoiceType.isDebitNote)) {
+        if (!this.currentVoucherFormDetails?.depositAllowed) {
             delete invoiceForm.deposit;
         }
 
@@ -3705,7 +3718,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     invoiceForm.purchaseOrders.push({ name: this.linkedPoNumbers[order]?.voucherNumber, uniqueName: order });
                 });
             }
-
+            let accountUniqueName = this.invoiceType.isCashInvoice ? invoiceForm.deposit?.accountUniqueName : invoiceForm.account?.uniqueName;
+            invoiceForm.account.uniqueName = accountUniqueName;
             if (this.isUpdateMode) {
                 this.voucherService.updateVoucher(invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.startLoader(false);
@@ -3721,7 +3735,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 });
             } else {
-                this.voucherService.generateVoucher(invoiceForm.account.uniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.voucherService.generateVoucher(accountUniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.startLoader(false);
                     if (response?.status === "success") {
                         const isCashSalesPurchaseInvoice = this.invoiceType.isCashInvoice && ((!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote) || this.invoiceType.isPurchaseInvoice);
@@ -3796,6 +3810,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.accountFormFields = [];
         this.selectedFileName = "";
+        this.depositAccountName = "";
 
         this.account = {
             countryName: '',
@@ -3869,9 +3884,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.searchAccount();
         }
 
-        if (this.invoiceType.isCashInvoice) {
-            this.invoiceForm.get('account.uniqueName')?.patchValue("cash");
-        }
 
         setTimeout(() => {
             this.openAccountDropdown = openAccountDropdown;
@@ -3903,7 +3915,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * This will be use for send email after create voucher 
+     * This will be use for send email after create voucher
      *
      * @param {*} response
      * @memberof VoucherCreateComponent
