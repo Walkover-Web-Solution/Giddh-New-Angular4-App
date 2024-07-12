@@ -1328,7 +1328,7 @@
                                                                 <div class="container px-0" formGroupName="deposit">
                                                                     <div class="row align-items-center">
                                                                         <ng-container
-                                                                            *ngIf="invoiceType.isCashInvoice || currentVoucherFormDetails?.depositAllowed && !isUpdateMode">
+                                                                          *ngIf="invoiceType.isCashInvoice || (currentVoucherFormDetails?.depositAllowed && !isUpdateMode)">
                                                                             <div class="col">
                                                                                 <reactive-dropdown-field
                                                                                     [label]="commonLocaleData?.app_account"
@@ -1339,7 +1339,7 @@
                                                                                     [showCreateNew]="true"
                                                                                     [createNewText]="commonLocaleData?.app_create_new"
                                                                                     (createOption)="toggleAccountAsidePane(accountType.bank)"
-                                                                                    [labelValue]="invoiceType.isCashInvoice?depositAccountName :''"
+                                                                                    [labelValue]="invoiceType.isCashInvoice ? depositAccountName : ''"
                                                                                     formControlName="accountUniqueName">
                                                                                 </reactive-dropdown-field>
                                                                             </div>
