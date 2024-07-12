@@ -1711,12 +1711,8 @@
                                                         </amount-field>
                                                     </td>
                                                 </tr>
-<<<<<<< HEAD
                                                 <ng-container
-                                                    *ngIf="!invoiceType.isPurchaseOrder && !invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
-=======
-                                                <ng-container *ngIf="!invoiceType.isPurchaseOrder && !invoiceType.isCashInvoice">
->>>>>>> 9094b76d1a (Dilpreet | Stage | Voucher Prod bugs)
+                                                    *ngIf="!invoiceType.isPurchaseOrder  && !invoiceType.isCashInvoice&& !invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
                                                     <tr>
                                                         <td>
                                                             {{ invoiceType.isProformaInvoice ||
