@@ -585,7 +585,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.searchStock();
 
                 if (this.invoiceType.isCashInvoice) {
-                    // this.invoiceForm.get('account.uniqueName')?.patchValue("cash");
                     this.componentStore.getBriefAccounts({ currency: this.company.baseCurrency, group: BriedAccountsGroup });
                 } else {
                     this.invoiceForm.get('account.uniqueName')?.patchValue(null);
