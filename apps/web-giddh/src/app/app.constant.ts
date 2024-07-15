@@ -150,6 +150,14 @@ export enum SubVoucher {
     AdvanceReceipt = 'ADVANCE_RECEIPT'
 }
 
+/** Adjustment inventory */
+export enum AdjustmentInventory {
+    QuantityWise = 'QUANTITY_WISE',
+    ValueWise = 'VALUE_WISE',
+    Percentage = 'PERCENTAGE',
+    Value = 'VALUE'
+}
+
 /**
  * enums for default date range picker
  */
