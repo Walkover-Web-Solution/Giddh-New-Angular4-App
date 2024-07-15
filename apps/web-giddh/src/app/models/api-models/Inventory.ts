@@ -251,6 +251,7 @@ export class StockTransactionReportRequestExport {
     public variantUniqueNames?: any[];
     public from: string = '';
     public to: string = '';
+    public inventoryType?: string;
     public showStockName?: boolean;
     public showGroupName?: boolean;
     public showUnitName?: boolean;
