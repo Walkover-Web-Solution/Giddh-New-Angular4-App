@@ -19,14 +19,14 @@ import { CommonActions } from '../../../actions/common.actions';
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { OrganizationType } from '../../../models/user-login-state';
-import { InventoryComponentStore } from '../inventory.store';
+// import { InventoryComponentStore } from '../inventory.store';
 
 @Component({
     selector: 'app-reports',
     templateUrl: './reports.component.html',
     styleUrls: ['./reports.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [InventoryComponentStore]
+    // providers: [InventoryComponentStore]
 })
 export class ReportsComponent implements OnInit {
     @ViewChild(ReportFiltersComponent, { read: ReportFiltersComponent, static: false }) public reportFiltersComponent: ReportFiltersComponent;
@@ -137,8 +137,6 @@ export class ReportsComponent implements OnInit {
     public isCompany: boolean;
     /** Observable to cancel api on reports api call */
     private cancelApi$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Loading Observable */
-    public isLoading$: Observable<any> = this.componentStore.isLoading$;
 
     constructor(
         public route: ActivatedRoute,
@@ -149,7 +147,7 @@ export class ReportsComponent implements OnInit {
         private generalService: GeneralService,
         private store: Store<AppState>,
         private commonAction: CommonActions,
-        private componentStore: InventoryComponentStore
+        // private componentStore: InventoryComponentStore
     ) {
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             if (profile) {
@@ -606,59 +604,6 @@ export class ReportsComponent implements OnInit {
                 this.headerColumns[key].colSpan = colSpan;
             }
         });
-
-        /* This will use for table header from customise columns for export table */
-        this.stockReportRequestExport = {
-            ...this.stockReportRequestExport,
-            showStockName: false,
-            showGroupName: false,
-            showUnitName: false,
-            showOpeningStockQty: false,
-            showOpeningStockValue: false,
-            showInwardsQty: false,
-            showInwardsValue: false,
-            showOutwardsQty: false,
-            showOutwardsValue: false,
-            showClosingStockQty: false,
-            showClosingStockValue: false,
-        }
-
-        /* for column value filter selected */
-        this.displayedColumns.forEach(column => {
-            if (column === 'stock_name') {
-                this.stockReportRequestExport.showStockName = true;
-            }
-            else if (column === 'group_name') {
-                this.stockReportRequestExport.showGroupName = true;
-            }
-            else if (column === 'unit_name') {
-                this.stockReportRequestExport.showUnitName = true;
-            }
-            else if (column === 'opening_quantity') {
-                this.stockReportRequestExport.showOpeningStockQty = true;
-            }
-            else if (column === 'opening_amount') {
-                this.stockReportRequestExport.showOpeningStockValue = true;
-            }
-            else if (column === 'inward_quantity') {
-                this.stockReportRequestExport.showInwardsQty = true;
-            }
-            else if (column === 'inward_amount') {
-                this.stockReportRequestExport.showInwardsValue = true;
-            }
-            else if (column === 'outward_quantity') {
-                this.stockReportRequestExport.showOutwardsQty = true;
-            }
-            else if (column === 'outward_amount') {
-                this.stockReportRequestExport.showOutwardsValue = true;
-            }
-            else if (column === 'closing_quantity') {
-                this.stockReportRequestExport.showClosingStockQty = true;
-            }
-            else if (column === 'closing_amount') {
-                this.stockReportRequestExport.showClosingStockValue = true;
-            }
-        });
     }
 
     /**
@@ -683,7 +628,6 @@ export class ReportsComponent implements OnInit {
         let currentUrl = '';
         let stockReportRequest = cloneDeep(this.stockReportRequest);
         let balanceStockReportRequest = cloneDeep(this.balanceStockReportRequest);
-        let stockReportRequestExport = cloneDeep(this.stockReportRequestExport);
 
         stockReportRequest.stockGroupUniqueNames = undefined;
         stockReportRequest.stockUniqueNames = undefined;
@@ -701,16 +645,6 @@ export class ReportsComponent implements OnInit {
         stockReportRequest.expression = undefined;
         stockReportRequest.param = undefined;
         stockReportRequest.val = undefined;
-
-        stockReportRequestExport.expression = undefined;
-        stockReportRequestExport.param = undefined;
-        stockReportRequestExport.val = undefined;
-        stockReportRequestExport.stockGroupUniqueNames = undefined;
-        stockReportRequestExport.stockUniqueNames = undefined;
-        stockReportRequestExport.warehouseUniqueNames = undefined;
-        stockReportRequestExport.variantUniqueNames = undefined;
-
-        this.stockReportRequestExport = stockReportRequestExport;
 
         if (this.reportType === InventoryReportType.group) {
             if (element?.stockGroupHasChild) {
@@ -799,31 +733,6 @@ export class ReportsComponent implements OnInit {
         }
 
         this.router.navigate(['/pages/inventory/v2', 'stock', this.moduleType?.toLowerCase(), 'edit', element?.stock?.uniqueName], { queryParams: { tab: 1 } });
-    }
-
-    /**
-     * This will use for export stock report data
-     *
-     * @return {*}  {void}
-     * @memberof ReportsComponent
-    */
-    public exportReport(): void {
-        if (this.reportType === InventoryReportType.stock) {
-            let stockReportRequestExport = this.stockReportRequestExport;
-            let queryParams = {
-                from: this.fromDate,
-                to: this.toDate
-            };
-            delete stockReportRequestExport.from;
-            delete stockReportRequestExport.to;
-
-            stockReportRequestExport.inventoryType = this.moduleType;
-            // data is coming from inventory store
-            this.componentStore.exportStock({
-                stockReportRequest: stockReportRequestExport,
-                queryParams: queryParams
-            });
-        }
     }
 
     /**

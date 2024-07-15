@@ -102,8 +102,8 @@
         </ng-container>
 </div>
 <div class="inventory-filter-bar">
-    <div class="search-control">
-        <div class="icon-input">
+    <div class="search-control align-items-center">
+        <div class="icon-input flex-grow-1">
             <i class="icon-search search-icon" *ngIf="!filtersChipList?.length"></i>
             <mat-form-field
                 floatLabel="never"
@@ -177,7 +177,8 @@
                 </mat-autocomplete>
             </mat-form-field>
         </div>
-        <div class="menu-btn-control">
+        <div class="menu-btn-control d-flex justify-content-end align-items-center">
+            <button mat-button class="advance-filter-button" (click)="exportReport()" *ngIf="searchPage === 'STOCK'" [disabled]="isLoading$ | async">{{ commonLocaleData?.app_export }}</button>
             <button mat-button (click)="openModal()" class="advance-filter-button">
                 <i class="icon-advance-filter mr-2"></i>
                 {{ localeData?.header?.advance_filter }}
@@ -192,6 +193,7 @@
                 [iconClass]="'icon-options mr-2'"
                 [cssClass]="'customise-filter-button'"
                 [buttonText]="localeData?.header?.customise"
+                style="width: 33%;"
             >
             </select-table-column>
         </div>

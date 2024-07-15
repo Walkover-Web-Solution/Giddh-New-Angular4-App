@@ -112,8 +112,22 @@ export class ExportsComponent implements OnInit, OnDestroy {
      * @memberof ExportsComponent
      */
     public openDialog(row: any): void {
+        const exportType = [
+            'INVENTORY_ITEM_WISE_EXPORT',
+            'INVENTORY_VARIANT_WISE_EXPORT',
+            'INVENTORY_GROUP_WISE_EXPORT',
+            'INVENTORY_TRANSACTION_WISE_EXPORT'
+        ];
+        let dataToPass = row;
+        if (exportType.includes(row?.type)) {
+            dataToPass = row?.inventoryReportsExportFilter;
+            console.log(row?.inventoryReportsExportFilter);
+        } else {
+            dataToPass = row?.filters;
+        }
+        
         this.dialog.open(ExportsJsonComponent, {
-            data: row?.filters,
+            data: dataToPass,
             panelClass: 'download-json-panel',
             role: 'alertdialog',
             ariaLabel: 'Export Json Dialog'
