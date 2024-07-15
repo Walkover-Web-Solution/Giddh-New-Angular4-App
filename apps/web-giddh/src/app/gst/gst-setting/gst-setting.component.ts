@@ -54,8 +54,9 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     public responseArray: any[] = [];
     /** Hold lut number item list*/
     public lutItemList: any[] = [];
-
+    /** True false according to active company withPay value*/
     public showHideLutForm: boolean;
+
     constructor(
         private formBuilder: FormBuilder,
         private store: Store<AppState>,
