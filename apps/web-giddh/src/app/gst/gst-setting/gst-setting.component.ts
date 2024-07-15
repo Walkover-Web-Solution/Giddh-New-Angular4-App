@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ReplaySubject, Observable } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { Store } from "@ngrx/store";
@@ -78,14 +78,6 @@ export class GstSettingComponent implements OnInit, OnDestroy {
 
         this.initGstSettingForm();
         this.getLutList();
-
-        this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany) {
-                this.activeCompany = activeCompany;
-                this.paymentIntegrateForm.get('withPay').patchValue(activeCompany.withPay);
-                this.getExportTypeLabel();
-            }
-        });
 
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
@@ -180,7 +172,6 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     */
     public setExportType(event?: any): void {
         if (event && event.value && this.exportType !== event.value) {
-            console.log(event);
             this.paymentIntegrateForm.get('withPay')?.patchValue(event.value === this.commonLocaleData.app_yes?.toLowerCase() ? this.commonLocaleData.app_yes?.toLowerCase() : this.commonLocaleData.app_no?.toLowerCase());
             this.store.dispatch(this.settingsProfileActions.PatchProfile({ withPay: event.value === this.commonLocaleData.app_yes?.toLowerCase() }));
         }
@@ -250,50 +241,61 @@ export class GstSettingComponent implements OnInit, OnDestroy {
      * @memberof GstSettingComponent
      */
     private openConfirmationDialog(index: number): void {
-        const dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '540px',
-            data: {
-                title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.confirm_delete_message,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
+        let mappings = this.gstSettingForm.get('gstData') as FormArray;
+        let mappingForm = mappings.at(index);
+        if (index === 0 && !mappingForm.get('lutNumber')?.value) {
+            mappingForm.get('lutNumber')?.patchValue(null);
+            mappingForm.get('fromDate')?.patchValue(this.fromDate);
+            mappingForm.get('toDate')?.patchValue(this.toDate);
+            if (this.responseArray?.length) {
+                this.responseArray[index]['message'] = null;
             }
-        });
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if (response) {
-                console.log(index);
-                let mappings = this.gstSettingForm.get('gstData') as FormArray;
-                let mappingForm = mappings.at(index);
-                if (index === 0) {
-                    if (mappingForm.get('uniqueName')?.value) {
-                        this.componentStore.deleteLutNumber({ lutNumberUniqueName: mappingForm.get('uniqueName')?.value });
-                        mappings.removeAt(index);
-                        mappings.push(this.initLutForm({
-                            fromDate: this.fromDate,
-                            toDate: this.toDate
-                        }));
-                        if (this.responseArray?.length) {
-                            this.responseArray[index]['message'] = null;
+            return;
+        } else {
+            const dialogRef = this.dialog.open(ConfirmModalComponent, {
+                width: '540px',
+                data: {
+                    title: this.commonLocaleData?.app_confirmation,
+                    body: this.localeData?.confirm_delete_message,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
+            });
+            dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                if (response) {
+                    if (index === 0) {
+                        if (mappingForm.get('uniqueName')?.value) {
+                            this.componentStore.deleteLutNumber({ lutNumberUniqueName: mappingForm.get('uniqueName')?.value });
+                            mappings.removeAt(index);
+                            mappings.push(this.initLutForm({
+                                fromDate: this.fromDate,
+                                toDate: this.toDate
+                            }));
+                            if (this.responseArray?.length) {
+                                this.responseArray[index]['message'] = null;
+                            }
+                        } else {
+                            mappingForm.get('lutNumber')?.patchValue(null);
+                            mappingForm.get('fromDate')?.patchValue(this.fromDate);
+                            mappingForm.get('toDate')?.patchValue(this.toDate);
+                            if (this.responseArray?.length) {
+                                this.responseArray[index]['message'] = null;
+                            }
                         }
                     } else {
-                        mappingForm.get('lutNumber')?.patchValue(null);
-                        mappingForm.get('fromDate')?.patchValue(this.fromDate);
-                        mappingForm.get('toDate')?.patchValue(this.toDate);
-                        if (this.responseArray?.length) {
-                            this.responseArray[index]['message'] = null;
+                        if (mappingForm.get('uniqueName')?.value) {
+                            if (this.responseArray?.length) {
+                                this.responseArray[index] = [];
+                            }
+                            this.componentStore.deleteLutNumber({ lutNumberUniqueName: mappingForm.get('uniqueName')?.value });
+                            mappings.removeAt(index);
+                        } else {
+                            mappings.removeAt(index);
                         }
-                    }
-                } else {
-                    if (mappingForm.get('uniqueName')?.value) {
-                        if (this.responseArray?.length) {
-                            this.responseArray[index] = [];
-                        }
-                        this.componentStore.deleteLutNumber({ lutNumberUniqueName: mappingForm.get('uniqueName')?.value });
-                        mappings.removeAt(index);
                     }
                 }
-            }
-        });
+            });
+        }
     }
 
     /**
@@ -308,6 +310,13 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                 { label: this.localeData?.with_pay, value: 'yes' },
                 { label: this.localeData?.without_pay, value: 'no' }
             ];
+            this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
+                if (activeCompany) {
+                    this.activeCompany = activeCompany;
+                    this.paymentIntegrateForm.get('withPay').patchValue(activeCompany.withPay);
+                    this.getExportTypeLabel();
+                }
+            });
         }
     }
 
