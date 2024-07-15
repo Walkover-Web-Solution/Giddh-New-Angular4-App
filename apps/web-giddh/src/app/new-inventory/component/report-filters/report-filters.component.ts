@@ -700,7 +700,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.searchInventory();
         this.isFilterActive();
         this.emitFilters();
-        console.log(this.stockReportRequestExport.stockUniqueNames);
     }
 
     /**
@@ -866,8 +865,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     */
         public exportReport(): void {
             if (this.searchPage === InventoryReportType.stock) {
-                console.log(this.searchPage === InventoryReportType.stock);
-                console.log(this.stockReportRequestExport.stockUniqueNames);
                 let stockReportRequestExport = this.stockReportRequestExport;
                 let queryParams = {
                     from: this.fromDate,
@@ -876,7 +873,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 delete stockReportRequestExport.from;
                 delete stockReportRequestExport.to;
     
-                // stockReportRequestExport.inventoryType = this.moduleType;
+                stockReportRequestExport.inventoryType = this.moduleType;
                 // data is coming from inventory store
                 this.componentStore.exportStock({
                     stockReportRequest: stockReportRequestExport,
