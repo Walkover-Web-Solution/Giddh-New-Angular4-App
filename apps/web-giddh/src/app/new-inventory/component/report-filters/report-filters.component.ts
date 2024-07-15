@@ -142,8 +142,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public refreshColumns = new Subject<void>();
     /** This will hold if variant is selected on chip list */
     public isVariantSelected : boolean = false;
-    /** Holds report type */
-    public reportType: string = '';
     /** Loading Observable */
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
 

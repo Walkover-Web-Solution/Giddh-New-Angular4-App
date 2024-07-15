@@ -19,14 +19,12 @@ import { CommonActions } from '../../../actions/common.actions';
 import { PAGINATION_LIMIT } from '../../../app.constant';
 import { GeneralService } from '../../../services/general.service';
 import { OrganizationType } from '../../../models/user-login-state';
-// import { InventoryComponentStore } from '../inventory.store';
 
 @Component({
     selector: 'app-reports',
     templateUrl: './reports.component.html',
     styleUrls: ['./reports.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    // providers: [InventoryComponentStore]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ReportsComponent implements OnInit {
     @ViewChild(ReportFiltersComponent, { read: ReportFiltersComponent, static: false }) public reportFiltersComponent: ReportFiltersComponent;
@@ -146,8 +144,7 @@ export class ReportsComponent implements OnInit {
         private toaster: ToasterService,
         private generalService: GeneralService,
         private store: Store<AppState>,
-        private commonAction: CommonActions,
-        // private componentStore: InventoryComponentStore
+        private commonAction: CommonActions
     ) {
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             if (profile) {
