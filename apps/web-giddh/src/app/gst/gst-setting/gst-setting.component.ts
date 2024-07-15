@@ -160,9 +160,11 @@ export class GstSettingComponent implements OnInit, OnDestroy {
      */
     public getExportTypeLabel(): void {
         if (this.activeCompany) {
-            let value = this.activeCompany.withPay ? this.commonLocaleData.app_yes?.toLowerCase() : this.commonLocaleData.app_no?.toLowerCase();
-            const exportType = this.exportTypes.find(item => item?.value === value);
-            this.exportType = exportType ? exportType.label : '';
+            let value = this.activeCompany.withPay ? 'yes' : 'no';
+            if (this.exportTypes?.length) {
+                const exportType = this.exportTypes.filter(item => item?.value === value);
+                this.exportType = exportType ? exportType[0]?.label : '';
+            }
         }
     }
 
@@ -173,8 +175,8 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     */
     public setExportType(event?: any): void {
         if (event && event.value && this.exportType !== event.value) {
-            this.paymentIntegrateForm.get('withPay')?.patchValue(event.value === this.commonLocaleData.app_yes?.toLowerCase() ? this.commonLocaleData.app_yes?.toLowerCase() : this.commonLocaleData.app_no?.toLowerCase());
-            this.store.dispatch(this.settingsProfileActions.PatchProfile({ withPay: event.value === this.commonLocaleData.app_yes?.toLowerCase() }));
+            this.paymentIntegrateForm.get('withPay')?.patchValue(event.value === 'yes' ? 'yes' : 'no');
+            this.store.dispatch(this.settingsProfileActions.PatchProfile({ withPay: event.value === 'yes' }));
         }
     }
 
@@ -251,7 +253,6 @@ export class GstSettingComponent implements OnInit, OnDestroy {
             if (this.responseArray?.length) {
                 this.responseArray[index]['message'] = null;
             }
-            return;
         } else {
             const dialogRef = this.dialog.open(ConfirmModalComponent, {
                 width: '540px',
@@ -289,10 +290,8 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                                 this.responseArray[index] = [];
                             }
                             this.componentStore.deleteLutNumber({ lutNumberUniqueName: mappingForm.get('uniqueName')?.value });
-                            mappings.removeAt(index);
-                        } else {
-                            mappings.removeAt(index);
                         }
+                        mappings.removeAt(index);
                     }
                 }
             });
