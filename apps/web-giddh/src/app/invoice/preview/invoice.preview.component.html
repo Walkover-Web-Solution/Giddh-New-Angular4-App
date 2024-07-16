@@ -1308,7 +1308,7 @@
                                     <div class="d-flex align-items-center">
                                         <div class="flex-fill select-action">
                                             <span [ngClass]="{ 'text-light-2': !item.balanceStatus }">
-                                                {{ item.balanceStatus }}
+                                                {{ item?.balanceStatus }}
                                             </span>
                                         </div>
                                         <div>
@@ -1335,7 +1335,7 @@
                                                     [ngClass]="{ 'dropup-menu': isDropUp }"
                                                 >
                                                     <ul class="select-action-dropdown">
-                                                        <li *ngIf="item.balanceStatus !== 'cancel'" (click)="onPerformAction(item, 'paid')">
+                                                        <li *ngIf="item?.balanceStatus !== 'cancel'" (click)="onPerformAction(item, 'paid')">
                                                             <a class="cursor-pointer" href="javascript:;" aria-label="payment paid">
                                                                 {{ commonLocaleData?.app_payment_status?.paid }}
                                                             </a>
@@ -1570,7 +1570,7 @@
                                                         <li (click)="onPerformAction(item, 'cancel')">
                                                             <a class="cursor-pointer" href="javascript:;" aria-label="cancel">{{
                                                                 commonLocaleData?.app_payment_status?.cancel
-                                                            }} - karde</a>
+                                                            }}</a>
                                                         </li>
                                                     </ul>
                                                 </div>
