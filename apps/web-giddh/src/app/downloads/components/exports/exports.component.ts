@@ -16,6 +16,7 @@ import { cloneDeep } from '../../../lodash-optimized';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
 import { ExportsJsonComponent } from '../exports-json/exports-json.component';
 import { download } from '@giddh-workspaces/utils';
+import { exportTypeEnum } from '../../../new-inventory/inventory.enum';
 
 /** Hold information of Download  */
 const ELEMENT_DATA: DownloadData[] = [];
@@ -79,6 +80,13 @@ export class ExportsComponent implements OnInit, OnDestroy {
     public fromDate: string;
     /** Instance of is electron variable */
     public isElectron: any = isElectron;
+    /** enum for export data in inventory */
+    public exportType: any = [
+        exportTypeEnum.ItemWise,
+        exportTypeEnum.VariantWise,
+        exportTypeEnum.GroupWise,
+        exportTypeEnum.TransactionWise
+    ];
 
     constructor(public dialog: MatDialog, private downloadsService: DownloadsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private modalService: BsModalService, private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -112,22 +120,15 @@ export class ExportsComponent implements OnInit, OnDestroy {
      * @memberof ExportsComponent
      */
     public openDialog(row: any): void {
-        const exportType = [
-            'INVENTORY_ITEM_WISE_EXPORT',
-            'INVENTORY_VARIANT_WISE_EXPORT',
-            'INVENTORY_GROUP_WISE_EXPORT',
-            'INVENTORY_TRANSACTION_WISE_EXPORT'
-        ];
-        let dataToPass = row;
-        if (exportType.includes(row?.type)) {
-            dataToPass = row?.inventoryReportsExportFilter;
-            console.log(row?.inventoryReportsExportFilter);
+        let dataReq;
+        if (this.exportType.includes(row?.type)) {
+            dataReq = row?.inventoryReportsExportFilter;
         } else {
-            dataToPass = row?.filters;
+            dataReq = row?.filters;
         }
         
         this.dialog.open(ExportsJsonComponent, {
-            data: dataToPass,
+            data: dataReq,
             panelClass: 'download-json-panel',
             role: 'alertdialog',
             ariaLabel: 'Export Json Dialog'
