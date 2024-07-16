@@ -1417,6 +1417,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (this.invoiceType.isCashInvoice) {
                             this.componentStore.getAccountCountryStates(this.company.countryCode);
                         }
+
+                        if (this.invoiceType.isCashInvoice) {
+                            this.account.countryName = profile.country
+                            this.account.countryCode = profile.countryCode || profile.countryV2.alpha2CountryCode;
+                            this.account.baseCurrency = profile.baseCurrency;
+                            this.account.baseCurrencySymbol = profile.baseCurrencySymbol;
+                        }
                     }
                 });
             }
