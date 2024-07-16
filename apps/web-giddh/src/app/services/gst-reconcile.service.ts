@@ -375,7 +375,7 @@ export class GstReconcileService {
      */
     public updateLutNumber(model: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.patch(this.config.apiUrl + GSTR_API.UPDATE_LUT_NUMBER
+        return this.http.put(this.config.apiUrl + GSTR_API.UPDATE_LUT_NUMBER
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':lutNumberUniqueName', encodeURIComponent(model?.uniqueName)),
             model)
