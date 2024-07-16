@@ -762,7 +762,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         /** Voucher details */
         this.componentStore.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.getVoucherType(response);
+                if (response?.cashVoucher) {
+                    this.getVoucherType(response);
+                }
                 if (!response.isCopyVoucher) {
                     this.invoiceForm.controls["account"].get("customerName")?.patchValue(this.invoiceType.isCashInvoice ? response.account?.customerName : response.account?.name);
                     this.invoiceForm.controls["account"].get("uniqueName")?.patchValue(response.account?.uniqueName);
@@ -1249,7 +1251,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType, isCashInvoice);
         } else {
             this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
-            this.currentVoucherFormDetails = this.vouchersUtilityService.prepareVoucherForm(this.voucherType);
+        }
+
+        this.currentVoucherFormDetails = this.vouchersUtilityService.prepareVoucherForm(this.voucherType);
+        let voucherType = this.currentVoucherFormDetails;
+
+        if (response?.cashVoucher && (voucherType.type === 'credit note' || voucherType.type === 'debit note')) {
+            voucherType.depositAllowed = true;
+        }
+
+        if (!response?.cashVoucher && (voucherType.type === 'payment' || voucherType.type === 'receipt' || voucherType.type === 'estimate' || voucherType.type === 'proformas' || voucherType.type === 'credit note' || voucherType.type === 'debit note')) {
+            voucherType.depositAllowed = false;
         }
     }
 
