@@ -105,15 +105,6 @@ export class AdjustInventoryComponent implements OnInit {
     public referenceNumber: string = "";
     /** Hold selected items in list */
     public selection = new SelectionModel<any>(true, []);
-    /** Hold inventory reasponse */
-    public inventoryResponse: any = {
-        expenseAccountName: null,
-        warehouseName: null,
-        adjustmentMethodName: null,
-        reasonName: null,
-        inventoryName: null,
-        calculationMethodName: null
-    };
     /** Hold balance request object */
     public balanceReqObj: any;
     /** True if entity is stock group */
@@ -167,28 +158,22 @@ export class AdjustInventoryComponent implements OnInit {
                 if (response) {
                     this.initForm(response);
                     this.stockReportRequest.to = this.adjustInventoryCreateEditForm.value.date;
-                    setTimeout(() => {
-                        let adjustmentMethod = this.adjustmentMethod.filter(method => method.value === this.adjustInventoryCreateEditForm.value.adjustmentMethod);
-                        this.inventoryResponse.adjustmentMethodName = adjustmentMethod[0]?.label;
-                        this.selectInventory(
-                            {
-                                value: this.adjustInventoryCreateEditForm.value.entityUniqueName,
-                                label: this.adjustInventoryCreateEditForm.value.entityName,
-                                additional: {
-                                    type: this.adjustInventoryCreateEditForm.value.entity,
-                                    name: this.adjustInventoryCreateEditForm.value.entityName,
-                                    uniqueName: this.adjustInventoryCreateEditForm.value.entityUniqueName,
-                                }
-                            });
-                    }, 1000);
+                    this.selectInventory(
+                        {
+                            value: this.adjustInventoryCreateEditForm.value.entityUniqueName,
+                            label: this.adjustInventoryCreateEditForm.value.entityName,
+                            additional: {
+                                type: this.adjustInventoryCreateEditForm.value.entity,
+                                name: this.adjustInventoryCreateEditForm.value.entityName,
+                                uniqueName: this.adjustInventoryCreateEditForm.value.entityUniqueName,
+                            }
+                        });
                 }
-
             });
         }
 
         combineLatest([
             this.componentStore.reasons$.pipe(map(response => response?.results)),
-
             this.componentStore.settingsProfile$,
             this.componentStore.expensesAccountList$.pipe(map(response => response?.results)),
             this.componentStore.warehouseList$.pipe(map(response => response?.results)),
@@ -208,10 +193,6 @@ export class AdjustInventoryComponent implements OnInit {
                         label: item.reason,
                         additional: item
                     }));
-                    if (this.referenceNumber) {
-                        let filteredReason = mappedReasons?.length && mappedReasons.filter(reason => reason.value === this.adjustInventoryCreateEditForm.value.reasonUniqueName);
-                        this.inventoryResponse.reasonName = filteredReason[0]?.label;
-                    }
                     this.reasons$ = observableOf(mappedReasons);
                 }
 
@@ -227,10 +208,6 @@ export class AdjustInventoryComponent implements OnInit {
                         label: item.label,
                         additional: item
                     }));
-                    if (this.referenceNumber) {
-                        let filteredWarehouse = mappedWarehouses?.find(warehouse => warehouse.value === this.adjustInventoryCreateEditForm.value.warehouseUniqueName);
-                        this.inventoryResponse.warehouseName = filteredWarehouse?.label;
-                    }
                     this.warehouses$ = observableOf(mappedWarehouses);
                 }
 
@@ -243,10 +220,6 @@ export class AdjustInventoryComponent implements OnInit {
                         label: item.name,
                         additional: item
                     }));
-                    if (this.referenceNumber) {
-                        let filteredExpenses = mappedAccounts?.find(account => account.value === this.adjustInventoryCreateEditForm.value.expenseAccountUniqueName);
-                        this.inventoryResponse.expenseAccountName = filteredExpenses?.label;
-                    }
                     this.expenseAccounts$ = observableOf(mappedAccounts);
                 }
 
@@ -299,7 +272,12 @@ export class AdjustInventoryComponent implements OnInit {
 
                     }
                     this.dataSource = new MatTableDataSource<any>(data);
-                    if (this.referenceNumber && this.isEntityStockGroup) {
+                    if (this.isEntityStockGroup) {
+                        this.masterToggle();
+                    } else {
+                        this.selection.clear();
+                    }
+                    if (this.referenceNumber && !this.isEntityStockGroup) {
                         this.masterToggle();
                     } else {
                         this.selection.clear();
@@ -372,7 +350,18 @@ export class AdjustInventoryComponent implements OnInit {
     */
     public resetForm(): void {
         this.adjustInventoryCreateEditForm.reset();
+        this.dataSource = [];
+        this.entity = {
+            entityName: '',
+            balance: ''
+        }
+        this.stockGroupClosingBalance = {
+            newValue: 0,
+            changeValue: 0,
+            closing: 0
+        }
         this.adjustInventoryCreateEditForm.get('date')?.patchValue(this.stockReportRequest.to);
+        this.adjustInventoryCreateEditForm.updateValueAndValidity();
     }
 
     /**
@@ -421,22 +410,26 @@ export class AdjustInventoryComponent implements OnInit {
      * @memberof AdjustInventoryComponent
      */
     private initForm(value?: any): void {
+
         this.adjustInventoryCreateEditForm = this.formBuilder.group({
-            entity: [value?.entity ?? null, Validators.required],
-            entityName: [value?.entityUniqueName ?? null, Validators.required],
-            entityUniqueName: [value?.entityUniqueName ?? null, Validators.required],
-            reasonUniqueName: [value?.reasonUniqueName ?? null, Validators.required],
             date: [value?.date ?? null, Validators.required],
             refNo: [value?.refNo ?? null],
-            expenseAccountUniqueName: [value?.expenseAccountUniqueName ?? null, Validators.required],
-            warehouseUniqueName: [value?.warehouseUniqueName ?? null],
+            expenseAccountName: [value?.expenseAccount?.name ?? null, Validators.required],
+            expenseAccountUniqueName: [value?.expenseAccount?.uniqueName ?? null],
+            warehouseName: [value?.warehouse?.name ?? null],
+            warehouseUniqueName: [value?.warehouse?.uniqueName ?? null],
             description: [value?.description ?? null],
-            adjustmentMethod: [value?.adjustmentMethod ?? null, Validators.required],
-            calculationMethod: [value?.calculationMethod ?? null, Validators.required],
+            entity: [value?.entity ?? null, Validators.required],
+            entityName: [value?.entityInfo?.name ?? null],
+            entityUniqueName: [value?.entityInfo?.uniqueName ?? null, Validators.required],
+            reasonName: [value?.reason?.name ?? null],
+            reasonUniqueName: [value?.reason?.uniqueName ?? null, Validators.required],
+            adjustmentMethodName: [value?.adjustmentMethod?.name ?? null],
+            adjustmentMethod: [value?.adjustmentMethod?.code ?? null, Validators.required],
+            calculationMethod: [value?.calculationMethod?.code ?? null, Validators.required],
             changeInValue: [value?.changeInValue ?? null, Validators.required],
             variantUniqueNames: [value?.variantUniqueNames ?? null]
         });
-
     }
 
     /**
@@ -473,19 +466,24 @@ export class AdjustInventoryComponent implements OnInit {
             page: this.stockReportRequest.page ?? 1,
             sort: this.stockReportRequest.sort ?? '',
             sortBy: this.stockReportRequest.sortBy ?? ''
+
         };
         this.stockReportRequest.count = API_COUNT_LIMIT;
         this.stockReportRequest.inventoryType = this.inventoryType?.toUpperCase();
-        this.stockReportRequest.branchUniqueNames[0] = this.generalService.currentBranchUniqueName;
+        this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
+        if (this.referenceNumber) {
+            this.stockReportRequest.inventoryAdjustmentRefNo = this.referenceNumber;
+        }
         if (event && event.additional?.type === 'STOCK GROUP') {
             this.isEntityStockGroup = true;
             this.stockReportRequest.stockUniqueNames = [];
             this.stockReportRequest.stockGroupUniqueNames = [event.value];
+
             reqObj = {
                 queryParams: queryParams,
                 stockReportRequest: this.stockReportRequest
             }
-            this.balanceStockReportRequest.branchUniqueNames[0] = this.generalService.currentBranchUniqueName;
+            this.balanceStockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
             this.balanceStockReportRequest.from = undefined;
             this.balanceStockReportRequest.to = undefined;
             this.balanceStockReportRequest.stockGroupUniqueNames = [event.value];
@@ -498,6 +496,7 @@ export class AdjustInventoryComponent implements OnInit {
             this.componentStore.getVariantWiseReport(reqObj);
             this.balanceReqObj = balanceReqObj;
         } else {
+
             this.isEntityStockGroup = false;
             reqObj = {
                 queryParams: queryParams,
@@ -505,8 +504,7 @@ export class AdjustInventoryComponent implements OnInit {
             }
             this.stockReportRequest.stockGroupUniqueNames = [];
             this.stockReportRequest.stockUniqueNames = [event.value];
-            this.componentStore.getVariantWiseReport(reqObj);
-            this.balanceStockReportRequest.branchUniqueNames[0] = this.generalService.currentBranchUniqueName;
+            this.balanceStockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName ]: [];
             this.balanceStockReportRequest.from = undefined;
             this.balanceStockReportRequest.to = undefined;
             this.balanceStockReportRequest.stockGroupUniqueNames = [];
@@ -555,7 +553,15 @@ export class AdjustInventoryComponent implements OnInit {
             item?.variant?.uniqueName
         ));
         this.adjustInventoryCreateEditForm.value.variantUniqueNames = mappedVariants;
-        this.adjustInventoryCreateEditForm.value.date = dayjs(this.adjustInventoryCreateEditForm.value.date).format(GIDDH_DATE_FORMAT);
+
+        let toDate;
+        if (typeof this.adjustInventoryCreateEditForm.get('date')?.value === 'object') {
+            toDate = dayjs(this.adjustInventoryCreateEditForm.get('date')?.value).format(GIDDH_DATE_FORMAT);
+        } else {
+            toDate = this.adjustInventoryCreateEditForm.get('date')?.value
+        }
+        this.adjustInventoryCreateEditForm.value.date = toDate;
+
         let reqObj = {
             formValue: this.adjustInventoryCreateEditForm.value,
             branchUniqueName: this.generalService.currentBranchUniqueName
@@ -581,7 +587,15 @@ export class AdjustInventoryComponent implements OnInit {
             item?.variant?.uniqueName
         ));
         this.adjustInventoryCreateEditForm.value.variantUniqueNames = mappedVariants;
-        this.adjustInventoryCreateEditForm.value.date = dayjs(this.adjustInventoryCreateEditForm.value.date).format(GIDDH_DATE_FORMAT);
+
+        let toDate;
+        if (typeof this.adjustInventoryCreateEditForm.get('date')?.value === 'object') {
+            toDate = dayjs(this.adjustInventoryCreateEditForm.get('date')?.value).format(GIDDH_DATE_FORMAT);
+        } else {
+            toDate = this.adjustInventoryCreateEditForm.get('date')?.value
+        }
+        this.adjustInventoryCreateEditForm.value.date = toDate;
+
         let reqObj = {
             formValue: this.adjustInventoryCreateEditForm.value,
             branchUniqueName: this.generalService.currentBranchUniqueName

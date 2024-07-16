@@ -13,9 +13,9 @@ export class AsideCreateNewReasonComponent implements OnDestroy, OnInit {
     /* Aside pane state*/
     public asideMenuState: string = 'out';
     /* This will hold common JSON data */
-    @Input() public commonLocaleData: any = {};
+    public commonLocaleData: any = {};
     /* This will hold locale JSON data */
-    @Input() public localeData: any = {};
+    public localeData: any = {};
     /** Emits modal close event */
     @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
     /** Holds Store create reason in progress API success state as observable*/

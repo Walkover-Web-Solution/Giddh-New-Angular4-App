@@ -49,7 +49,7 @@
                         <reactive-dropdown-field
                             [label]="localeData?.expense_accounts"
                             [placeholder]="localeData?.select_expense_accounts"
-                            [labelValue]="inventoryResponse.expenseAccountName"
+                            [labelValue]="adjustInventoryCreateEditForm.get('expenseAccountName')?.value"
                             [options]="expenseAccounts$ | async"
                             formControlName="expenseAccountUniqueName"
                             (onClear)="adjustInventoryCreateEditForm.get('expenseAccountUniqueName')?.patchValue(null)"
@@ -64,7 +64,7 @@
                         <reactive-dropdown-field
                             [label]="localeData?.warehouse"
                             [placeholder]="localeData?.select_warehouse"
-                            [labelValue]="inventoryResponse.warehouseName"
+                            [labelValue]="adjustInventoryCreateEditForm.get('warehouseName')?.value"
                             [options]="warehouses$ | async"
                             formControlName="warehouseUniqueName"
                             (onClear)="adjustInventoryCreateEditForm.get('warehouseUniqueName')?.patchValue(null)"
@@ -92,7 +92,7 @@
                             [label]="commonLocaleData?.app_import_type?.inventory"
                             [placeholder]="commonLocaleData?.app_select_inventory_type"
                             [options]="inventoryList$ | async"
-                            [labelValue]="inventoryResponse.inventoryName"
+                            [labelValue]="adjustInventoryCreateEditForm.get('entityName')?.value"
                             formControlName="entityUniqueName"
                             [required]="true"
                             (selectedOption)="selectInventory($event)"
@@ -108,7 +108,7 @@
                             [label]="localeData?.adjustment_method"
                             [placeholder]="commonLocaleData?.app_select + ' ' + localeData?.adjustment_method"
                             [options]="adjustmentMethod"
-                            [labelValue]="inventoryResponse.adjustmentMethodName"
+                            [labelValue]="adjustInventoryCreateEditForm.get('adjustmentMethodName')?.value"
                             formControlName="adjustmentMethod"
                             [required]="true"
                             [readonly]="!adjustInventoryCreateEditForm.get('entityUniqueName')?.value"
@@ -128,7 +128,7 @@
                             [placeholder]="commonLocaleData?.app_select + ' ' + localeData?.reason"
                             [options]="reasons$ | async"
                             formControlName="reasonUniqueName"
-                            [labelValue]="inventoryResponse.reasonName"
+                            [labelValue]="adjustInventoryCreateEditForm.get('reasonName')?.value"
                             [required]="true"
                             (createOption)="openCreateReasonModal()"
                             [createNewText]="commonLocaleData?.app_create + ' ' + localeData?.reason"
@@ -162,7 +162,7 @@
                                     </tr>
                                     <tr>
                                         <td [width]="'20%'">
-                                            {{ entity.entityName ? entity.entityName : localeData?.search_bar }}
+                                            {{ adjustInventoryCreateEditForm.get('entityName')?.value ? adjustInventoryCreateEditForm.get('entityName')?.value : entity.entityName ? entity.entityName : localeData?.search_bar }}
                                         </td>
                                         <td (click)="$event.preventDefault(); $event.stopPropagation()">
                                             <div class="d-flex select-input-field custom-mat-form-field">

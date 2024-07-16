@@ -10,7 +10,7 @@
 
     .mat-expansion-panel {
         box-shadow: unset;
-        border: 1px solid;
+        border: 1px solid var(--color-common-primary-border);
 
         .mat-expansion-panel-header {
             padding-top: 15px !important;
@@ -18,7 +18,7 @@
             padding-left: 0 !important;
 
             &.mat-expanded {
-                border-bottom: 1px solid;
+                border-bottom: 1px solid var(--color-common-primary-border);
                 border-radius: 5px;
             }
 

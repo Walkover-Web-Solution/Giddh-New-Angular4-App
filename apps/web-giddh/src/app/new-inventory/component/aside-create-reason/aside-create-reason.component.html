@@ -1,4 +1,8 @@
-<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'inventory/adjustment'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event">
     <div class="aside-pane">
         <div class="header-create-unit">
             <div class="form-header">
