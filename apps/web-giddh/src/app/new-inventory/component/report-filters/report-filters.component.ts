@@ -327,11 +327,11 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
              showOutwardsQty: false,
              showOutwardsValue: false,
              showClosingStockQty: false,
-             showClosingStockValue: false,
+             showClosingStockValue: false
          }
 
         /* for column value filter selected */
-         this.displayedColumns.forEach(column => {
+         this.displayedColumns?.forEach(column => {
              if (column === 'stock_name') {
                  this.stockReportRequestExport.showStockName = true;
              }
@@ -484,7 +484,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             if (!this.isCompany) {
                 this.stockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
                 this.balanceStockReportRequest.branchUniqueNames = [this.generalService.currentBranchUniqueName];
-                this.stockReportRequestExport.branchUniqueNames = [this.generalService.currentBranchUniqueName];
             }
             this.resetFilters.emit(true);
             this.emitFilters();
