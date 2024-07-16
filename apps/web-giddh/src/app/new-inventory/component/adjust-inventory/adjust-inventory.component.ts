@@ -272,12 +272,9 @@ export class AdjustInventoryComponent implements OnInit {
 
                     }
                     this.dataSource = new MatTableDataSource<any>(data);
-                    if (this.isEntityStockGroup) {
-                        this.masterToggle();
-                    } else {
-                        this.selection.clear();
-                    }
-                    if (this.referenceNumber && !this.isEntityStockGroup) {
+                    const shouldMasterToggle = this.isEntityStockGroup || (this.referenceNumber && !this.isEntityStockGroup);
+
+                    if (shouldMasterToggle) {
                         this.masterToggle();
                     } else {
                         this.selection.clear();
@@ -410,12 +407,11 @@ export class AdjustInventoryComponent implements OnInit {
      * @memberof AdjustInventoryComponent
      */
     private initForm(value?: any): void {
-
         this.adjustInventoryCreateEditForm = this.formBuilder.group({
             date: [value?.date ?? null, Validators.required],
             refNo: [value?.refNo ?? null],
-            expenseAccountName: [value?.expenseAccount?.name ?? null, Validators.required],
-            expenseAccountUniqueName: [value?.expenseAccount?.uniqueName ?? null],
+            expenseAccountName: [value?.expenseAccount?.name ?? null],
+            expenseAccountUniqueName: [value?.expenseAccount?.uniqueName ?? null, Validators.required],
             warehouseName: [value?.warehouse?.name ?? null],
             warehouseUniqueName: [value?.warehouse?.uniqueName ?? null],
             description: [value?.description ?? null],
@@ -496,7 +492,6 @@ export class AdjustInventoryComponent implements OnInit {
             this.componentStore.getVariantWiseReport(reqObj);
             this.balanceReqObj = balanceReqObj;
         } else {
-
             this.isEntityStockGroup = false;
             reqObj = {
                 queryParams: queryParams,
@@ -504,7 +499,7 @@ export class AdjustInventoryComponent implements OnInit {
             }
             this.stockReportRequest.stockGroupUniqueNames = [];
             this.stockReportRequest.stockUniqueNames = [event.value];
-            this.balanceStockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName ]: [];
+            this.balanceStockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
             this.balanceStockReportRequest.from = undefined;
             this.balanceStockReportRequest.to = undefined;
             this.balanceStockReportRequest.stockGroupUniqueNames = [];
@@ -561,9 +556,10 @@ export class AdjustInventoryComponent implements OnInit {
             toDate = this.adjustInventoryCreateEditForm.get('date')?.value
         }
         this.adjustInventoryCreateEditForm.value.date = toDate;
-
+        let adjustFormValue;
+        adjustFormValue = this.cleanObject(this.adjustInventoryCreateEditForm.value);
         let reqObj = {
-            formValue: this.adjustInventoryCreateEditForm.value,
+            formValue: adjustFormValue,
             branchUniqueName: this.generalService.currentBranchUniqueName
         }
         this.allApiCalled = true;
@@ -577,7 +573,6 @@ export class AdjustInventoryComponent implements OnInit {
      * @memberof AdjustInventoryComponent
      */
     public createInventory(): void {
-        this.inventoryFormValue = cloneDeep(this.adjustInventoryCreateEditForm.value);
         this.isFormSubmitted = false;
         if (this.adjustInventoryCreateEditForm.invalid) {
             this.isFormSubmitted = true;
@@ -595,13 +590,30 @@ export class AdjustInventoryComponent implements OnInit {
             toDate = this.adjustInventoryCreateEditForm.get('date')?.value
         }
         this.adjustInventoryCreateEditForm.value.date = toDate;
+        let adjustFormValue;
+        adjustFormValue = this.cleanObject(this.adjustInventoryCreateEditForm.value);
 
         let reqObj = {
-            formValue: this.adjustInventoryCreateEditForm.value,
+            formValue: adjustFormValue,
             branchUniqueName: this.generalService.currentBranchUniqueName
         }
         this.allApiCalled = true;
         this.componentStore.createInventoryAdjustment(reqObj);
+    }
+
+    /**
+     * This will be use for clean request object
+     *
+     * @param {*} updatedData
+     * @return {*}  {void}
+     * @memberof AdjustInventoryComponent
+     */
+    public cleanObject(updatedData: any): void {
+        delete updatedData?.adjustmentMethodName;
+        delete updatedData?.expenseAccountName;
+        delete updatedData?.reasonName;
+        delete updatedData?.warehouseName;
+        return updatedData;
     }
 
     /**
@@ -706,7 +718,6 @@ export class AdjustInventoryComponent implements OnInit {
      */
     public masterToggle(): void {
         if (this.isEntityStockGroup) {
-            // Select all rows if isEntityStockGroup is true
             this.dataSource?.filteredData?.forEach(row => this.selection.select(row));
         } else {
             // Toggle selection based on current state
@@ -717,6 +728,8 @@ export class AdjustInventoryComponent implements OnInit {
             }
         }
     }
+
+
 
     /**
      * This will be use for checkbox label

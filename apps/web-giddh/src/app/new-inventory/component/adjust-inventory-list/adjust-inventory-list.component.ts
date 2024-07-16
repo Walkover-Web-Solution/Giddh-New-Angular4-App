@@ -531,32 +531,30 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
      * @memberof AdjustInventoryListComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
-        if (searchedFieldName === 'Stock Name') {
-            if (this.adjustInventoryListForm?.controls['name'].value !== null && this.adjustInventoryListForm?.controls['name'].value !== '') {
-                return;
-            }
-        } else if (searchedFieldName === 'Reason') {
-            if (this.adjustInventoryListForm?.controls['reason'].value !== null && this.adjustInventoryListForm?.controls['reason'].value !== '') {
-                return;
-            }
-        } else if (searchedFieldName === 'Request Status') {
-            if (this.adjustInventoryListForm?.controls['status'].value !== null && this.adjustInventoryListForm?.controls['status'].value !== '') {
-                return;
-            }
-        } else if (searchedFieldName === 'Reference No') {
-            if (this.adjustInventoryListForm?.controls['referenceNo'].value !== null && this.adjustInventoryListForm?.controls['referenceNo'].value !== '') {
-                return;
-            }
-        } else if (searchedFieldName === 'Adjustment Method') {
-            if (this.adjustInventoryListForm?.controls['adjustmentMethod'].value !== null && this.adjustInventoryListForm?.controls['adjustmentMethod'].value !== '') {
-                return;
-            }
-        } else if (searchedFieldName === 'Adjusted By') {
-            if (this.adjustInventoryListForm?.controls['adjustedBy'].value !== null && this.adjustInventoryListForm?.controls['adjustedBy'].value !== '') {
-                return;
-            }
-        } else if (searchedFieldName === 'Type') {
-            if (this.adjustInventoryListForm?.controls['entity'].value !== null && this.adjustInventoryListForm?.controls['entity'].value !== '') {
+        const formControlsMap: { [key: string]: string } = {
+            'Stock Name': 'name',
+            'Reason': 'reason',
+            'Request Status': 'status',
+            'Reference No': 'referenceNo',
+            'Adjustment Method': 'adjustmentMethod',
+            'Adjusted By': 'adjustedBy',
+            'Type': 'entity'
+        };
+
+        const visibilityMap: { [key: string]: string } = {
+            'Stock Name': 'showName',
+            'Reason': 'showReason',
+            'Request Status': 'showStatus',
+            'Reference No': 'showReferenceNo',
+            'Adjustment Method': 'showAdjustmentMethod',
+            'Adjusted By': 'showAdjustedBy',
+            'Type': 'showType'
+        };
+
+        const controlName = formControlsMap[searchedFieldName];
+        if (controlName) {
+            const controlValue = this.adjustInventoryListForm?.controls[controlName].value;
+            if (controlValue !== null && controlValue !== '') {
                 return;
             }
         }
@@ -564,23 +562,13 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         if (this.generalService.childOf(event?.target, element)) {
             return;
         } else {
-            if (searchedFieldName === 'Reason') {
-                this.showReason = false;
-            } else if (searchedFieldName === 'Reference No') {
-                this.showReferenceNo = false;
-            } else if (searchedFieldName === 'Stock Name') {
-                this.showName = false;
-            } else if (searchedFieldName === 'Request Status') {
-                this.showStatus = false;
-            } else if (searchedFieldName === 'Adjustment Method') {
-                this.showAdjustmentMethod = false;
-            } else if (searchedFieldName === 'Adjusted By') {
-                this.showAdjustedBy = false;
-            } else if (searchedFieldName === 'Type') {
-                this.showType = false;
+            const visibilityProp = visibilityMap[searchedFieldName];
+            if (visibilityProp) {
+                this[visibilityProp] = false;
             }
         }
     }
+
 
     /**
      * This will be use for toggle search field
@@ -642,8 +630,6 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response === 'Yes') {
                 this.componentStore.deleteInventoryAdjust(item?.refNo);
-            } else {
-                this.dialog.closeAll();
             }
         });
     }

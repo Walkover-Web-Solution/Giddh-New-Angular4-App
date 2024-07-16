@@ -162,7 +162,13 @@
                                     </tr>
                                     <tr>
                                         <td [width]="'20%'">
-                                            {{ adjustInventoryCreateEditForm.get('entityName')?.value ? adjustInventoryCreateEditForm.get('entityName')?.value : entity.entityName ? entity.entityName : localeData?.search_bar }}
+                                            {{
+                                                adjustInventoryCreateEditForm.get("entityName")?.value
+                                                    ? adjustInventoryCreateEditForm.get("entityName")?.value
+                                                    : entity.entityName
+                                                    ? entity.entityName
+                                                    : localeData?.search_bar
+                                            }}
                                         </td>
                                         <td (click)="$event.preventDefault(); $event.stopPropagation()">
                                             <div class="d-flex select-input-field custom-mat-form-field">
@@ -182,6 +188,12 @@
                                                         <mat-option
                                                             *ngFor="let method of calculationMethod"
                                                             [value]="method.value"
+                                                            [disabled]="
+                                                                !adjustInventoryCreateEditForm?.get('entityName')
+                                                                    ?.value &&
+                                                                !adjustInventoryCreateEditForm?.get('adjustmentMethod')
+                                                                    ?.value
+                                                            "
                                                             [value]="method.value"
                                                         >
                                                             {{ method.label }}

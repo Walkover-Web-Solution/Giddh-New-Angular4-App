@@ -185,7 +185,7 @@ export class StockTransactionReportRequest {
         this.branchUniqueNames = [];
         this.variantUniqueNames = [];
         this.voucherTypes = [];
-        this.inventoryAdjustmentRefNo = "";
+        this.inventoryAdjustmentRefNo = null;
     }
 }
 
