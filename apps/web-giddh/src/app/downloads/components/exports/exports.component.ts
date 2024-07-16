@@ -80,7 +80,7 @@ export class ExportsComponent implements OnInit, OnDestroy {
     public fromDate: string;
     /** Instance of is electron variable */
     public isElectron: any = isElectron;
-    /** enum for export data in inventory */
+    /** Instance for export data in inventory */
     public exportType: any = [
         exportTypeEnum.ItemWise,
         exportTypeEnum.VariantWise,
