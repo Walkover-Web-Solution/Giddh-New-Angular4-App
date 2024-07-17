@@ -24,10 +24,16 @@ export class VouchersUtilityService {
             return null;
         }
     }
-
-    public getVoucherType(voucherType: string, accountUniqueName: string = '', isLastInvoiceCopied: boolean = false): any {
-        let isSalesInvoice = voucherType === VoucherTypeEnum.sales;
-        let isCashInvoice = this.voucherTypes.includes(voucherType);
+    public getVoucherType(voucherType: string, isCashVoucher?: any, accountUniqueName: string = '', isLastInvoiceCopied: boolean = false): any {
+        let isSalesInvoice;
+        let isCashInvoice;
+        if (isCashVoucher === undefined) {
+            isSalesInvoice = voucherType === VoucherTypeEnum.sales;
+            isCashInvoice = this.voucherTypes.includes(voucherType);
+        } else {
+            isSalesInvoice = !isCashVoucher;
+            isCashInvoice = isCashVoucher;
+        }
         let isCreditNote = voucherType === VoucherTypeEnum.creditNote || voucherType === VoucherTypeEnum.cashCreditNote;
         let isDebitNote = voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.cashDebitNote;
         let isPurchaseInvoice = voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.cashBill;
@@ -42,7 +48,6 @@ export class VouchersUtilityService {
                 isCashInvoice = true;
             }
         }
-
         return { isSalesInvoice, isCashInvoice, isCreditNote, isDebitNote, isPurchaseInvoice, isProformaInvoice, isEstimateInvoice, isPurchaseOrder };
     }
 
