@@ -3,7 +3,7 @@ import { TaxAuthorityComponentStore } from '../utility/tax-authority.store';
 import { ReplaySubject, takeUntil } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AppState } from '../../../store';
-import { Store, select } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToasterService } from '../../../services/toaster.service';
@@ -101,7 +101,8 @@ export class CreateComponent implements OnInit {
             }
         } else {
             const model = this.taxAuthorityForm.value;
-            !model.description && delete model.description
+            delete model.stateName;
+            !model.description && delete model.description;
             this.componentStore.createTaxAuthority(model);
         }
     }

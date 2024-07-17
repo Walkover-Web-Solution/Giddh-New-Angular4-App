@@ -59,7 +59,7 @@
                                         <td mat-cell *matCellDef="let element" width="25%">
                                             {{ element?.accountName }}
                                         </td>
-                                        <td class="bg-grey" mat-footer-cell *matFooterCellDef>
+                                        <td class="bg-gray fw-bold" mat-footer-cell *matFooterCellDef>
                                             {{ commonLocaleData?.app_total }}
                                         </td>
                                     </ng-container>
@@ -70,12 +70,12 @@
                                             {{ commonLocaleData?.app_total + ' ' + commonLocaleData?.app_sales }}
                                         </th>
                                         <td mat-cell *matCellDef="let element" width="25%">
-                                            {{ element?.taxableAmount }}
+                                            {{ element?.grandTotal }}
                                         </td>
-                                        <td class="bg-grey" mat-footer-cell *matFooterCellDef>
+                                        <td class="bg-gray fw-bold" mat-footer-cell *matFooterCellDef>
                                             <amount-field
                                                 class="d-inline-block"
-                                                [amount]="(accountWiseReport$ | async)?.totalSales"
+                                                [amount]="(accountWiseReport$ | async)?.totalGrandTotal"
                                                 [currencySymbol]="activeCompany?.baseCurrencySymbol"
                                                 [currencyCode]="false"
                                             ></amount-field>
@@ -88,9 +88,9 @@
                                             {{ localeData?.taxable_amount }}
                                         </th>
                                         <td mat-cell *matCellDef="let element" width="25%">
-                                            {{ element?.subTotal }}
+                                            {{ element?.taxableAmount }}
                                         </td>
-                                        <td class="bg-grey" mat-footer-cell *matFooterCellDef>
+                                        <td class="bg-gray fw-bold" mat-footer-cell *matFooterCellDef>
                                             <amount-field
                                                 class="d-inline-block"
                                                 [amount]="(accountWiseReport$ | async)?.totalTaxableAmount"
@@ -108,7 +108,7 @@
                                         <td mat-cell *matCellDef="let element" width="25%">
                                             {{ element?.taxTotal }}
                                         </td>
-                                        <td class="bg-grey" mat-footer-cell *matFooterCellDef>
+                                        <td class="bg-gray fw-bold" mat-footer-cell *matFooterCellDef>
                                             <amount-field
                                                 class="d-inline-block"
                                                 [amount]="(accountWiseReport$ | async)?.totalTaxCollected"

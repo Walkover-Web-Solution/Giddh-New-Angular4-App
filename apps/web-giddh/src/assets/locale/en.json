@@ -528,6 +528,8 @@
     "app_bulk_export": "Bulk Export",
     "app_pin_code": "PIN Code",
     "app_enter_pin_code": "Enter PIN Code",
+    "app_zip_code": "ZIP Code",
+    "app_enter_zip_code": "Enter ZIP Code",
     "app_cmd_g": "Cmd + G",
     "app_esc": "esc",
     "app_escape": "Escape",

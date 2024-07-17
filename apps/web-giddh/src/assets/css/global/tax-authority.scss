@@ -1,14 +1,20 @@
 .tax-authority-report {
     .sales-report-table {
         &.mat-mdc-table {
-            &.bordered-table {
-                tr {
-                    th,td {
-                        border: 1px solid var(--color-table-primary-content-bar-border) !important;
-                        
-                        &:not(:first-child) {
-                            text-align: right;
-                        }
+            tr {
+
+                th,
+                td {
+                    border: 1px solid var(--color-table-primary-content-bar-border) !important;
+
+                    &:not(:first-child) {
+                        text-align: right;
+                    }
+                }
+
+                td {
+                    &.bg-gray {
+                        background-color: var(--color-white-secondary) !important;
                     }
                 }
             }
