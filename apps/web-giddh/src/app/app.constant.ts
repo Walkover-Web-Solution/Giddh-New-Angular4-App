@@ -312,6 +312,9 @@ export const TRN_SUPPORTED_COUNTRIES = [
 /** Sales tax supported country codes */
 export const SALES_TAX_SUPPORTED_COUNTRIES = ['US'];
 
+/** ZIP Code supported country codes */
+export const ZIP_CODE_SUPPORTED_COUNTRIES = ['US', 'UK'];
+
 export const API_POSTMAN_DOC_URL = 'https://apidoc.giddh.com/';
 
 /** Decimal point for rate field, irrespective of user profile preference

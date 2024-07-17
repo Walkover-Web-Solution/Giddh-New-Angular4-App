@@ -528,6 +528,8 @@
     "app_bulk_export": "थोक निर्यात",
     "app_pin_code": "पिन कोड",
     "app_enter_pin_code": "पिन कोड दर्ज करें",
+    "app_zip_code": "ज़िप कोड",
+    "app_enter_zip_code": "ज़िप कोड डालें",
     "app_cmd_g": "Cmd + G",
     "app_esc": "esc",
     "app_escape": "निकलना",
