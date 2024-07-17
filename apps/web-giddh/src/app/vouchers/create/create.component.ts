@@ -1223,13 +1223,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.currentVoucherFormDetails = this.vouchersUtilityService.prepareVoucherForm(this.voucherType);
         let voucherType = this.currentVoucherFormDetails;
+        if (response && voucherType) {
+            if (response?.cashVoucher && (voucherType.type === 'credit note' || voucherType.type === 'debit note')) {
+                voucherType.depositAllowed = true;
+            }
 
-        if (response?.cashVoucher && (voucherType.type === 'credit note' || voucherType.type === 'debit note')) {
-            voucherType.depositAllowed = true;
-        }
-
-        if (!response?.cashVoucher && (voucherType.type === 'payment' || voucherType.type === 'receipt' || voucherType.type === 'estimate' || voucherType.type === 'proformas' || voucherType.type === 'credit note' || voucherType.type === 'debit note')) {
-            voucherType.depositAllowed = false;
+            if (!response?.cashVoucher && (voucherType.type === 'payment' || voucherType.type === 'receipt' || voucherType.type === 'estimate' || voucherType.type === 'proformas' || voucherType.type === 'credit note' || voucherType.type === 'debit note')) {
+                voucherType.depositAllowed = false;
+            }
         }
     }
 
