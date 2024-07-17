@@ -47,6 +47,7 @@ $custom-typography: mat-typography-config($font-family: var(--font-regular),
 @import "../css/global/settings-sidebar.scss";
 @import "../css/global/mat-menu.scss";
 @import "../css/global/tax-authority.scss";
+@import "../css/global/adjustment-inventory.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -1074,6 +1075,12 @@ textarea {
 
 .iti__country-list--dropup {
     margin-bottom: -200px !important;
+}
+
+.adjust-inventory-list-page {
+    .td-search-box {
+        min-width: 160px !important;
+    }
 }
 
 @media screen and (max-width: 1366px) and (orientation: portrait) {
@@ -14311,7 +14318,7 @@ hamburger-menu {
             .customise-width {
                 width: 33%;
             }
-            
+
             .customise-filter-button {
                 border-left: 1px solid var(--color-fields-border);
                 border-radius: 0;

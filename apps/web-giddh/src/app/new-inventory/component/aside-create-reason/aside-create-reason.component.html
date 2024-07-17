@@ -1,0 +1,62 @@
+<ng-container
+    appTranslate
+    [file]="'inventory/adjustment'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event">
+    <div class="aside-pane">
+            <div class="d-flex">
+                <h3 mat-dialog-title>{{ commonLocaleData?.app_create + " " + localeData?.reason }}</h3>
+                <button  aria-label="close button" mat-dialog-close><i class="icon-cross"></i></button>
+            </div>
+        <mat-dialog-content class="w-100">
+            <div class="aside-body create-group-aside-body">
+                <giddh-page-loader *ngIf="createReasonInProgress$ | async"></giddh-page-loader>
+                <ng-container *ngIf="!(createReasonInProgress$ | async)">
+                    <form autocomplete="off" novalidate name="reasonForm" [formGroup]="reasonForm" class="container">
+                        <div class="row mr-b15">
+                            <div class="col-xl-5 col-lg-5 col-sm-5">
+                                <input-field
+                                    [name]="'code'"
+                                    [type]="'text'"
+                                    [label]="localeData?.reason"
+                                    [placeholder]="localeData?.enter_reason"
+                                    formControlName="reason"
+                                    [showError]="!isValidForm && !reasonForm?.get('reason')?.value"
+                                >
+                                </input-field>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-sm-4 pr-0">
+                                <div class="d-flex column-gap15">
+                                    <button
+                                        aria-label="save"
+                                        mat-stroked-button
+                                        color="primary"
+                                        type="button"
+                                        (click)="saveReason()"
+                                    >
+                                        {{ commonLocaleData?.app_save }}
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <div class="pull-right d-flex column-gap15">
+                                    <button
+                                        aria-label="clear"
+                                        mat-stroked-button
+                                        type="button"
+                                        class="btn-sm mr-0"
+                                        (click)="resetForm()"
+                                    >
+                                        {{ commonLocaleData?.app_clear }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </ng-container>
+            </div>
+        </mat-dialog-content>
+    </div>
+</ng-container>

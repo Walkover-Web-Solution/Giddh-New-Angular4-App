@@ -224,7 +224,8 @@ export class InventorySidebarComponent implements OnDestroy {
                         { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/inventory/v2/reports/product/variant' },
                         { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/inventory/v2/reports/product/transaction' },
                         { name: this.localeData?.sidebar?.master, icons: 'transactions.svg', link: '/pages/inventory/v2/product/master' },
-                        { name: this.localeData?.sidebar?.inventory, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/product/bulk-stock-edit' }
+                        { name: this.localeData?.sidebar?.inventory, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/product/bulk-stock-edit' },
+                        { name: 'Inventory Adjustment', icons: 'home-icon-black.svg', link: '/pages/inventory/v2/product/adjust', hiddenLink: ['/pages/inventory/v2/product/adjust/create'] }
                     ],
                 },
                 {
@@ -237,7 +238,8 @@ export class InventorySidebarComponent implements OnDestroy {
                         { name: this.localeData?.sidebar?.variant_wise, icons: 'varient-wise.svg', link: '/pages/inventory/v2/reports/service/variant' },
                         { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/inventory/v2/reports/service/transaction' },
                         { name: this.localeData?.sidebar?.master, icons: 'transactions.svg', link: '/pages/inventory/v2/service/master' },
-                        { name: this.localeData?.sidebar?.inventory, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/service/bulk-stock-edit' }
+                        { name: this.localeData?.sidebar?.inventory, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/service/bulk-stock-edit' },
+                        { name: 'Inventory Adjustment', icons: 'home-icon-black.svg', link: '/pages/inventory/v2/service/adjust', hiddenLink: ['/pages/inventory/v2/service/adjust/create'] }
                     ],
                 },
                 {
@@ -266,7 +268,7 @@ export class InventorySidebarComponent implements OnDestroy {
                     name: this.localeData?.sidebar?.custom_price,
                     icons: 'stock.svg',
                     children: [
-                        { name: this.localeData?.sidebar?.customer_wise, icons: 'customer-icon.svg',  link: '/pages/inventory/v2/price/customer-wise'},
+                        { name: this.localeData?.sidebar?.customer_wise, icons: 'customer-icon.svg', link: '/pages/inventory/v2/price/customer-wise' },
                         { name: this.localeData?.sidebar?.vendor_wise, icons: 'vendor-icon.svg', link: '/pages/inventory/v2/price/vendor-wise' }
                     ],
                 },
@@ -279,7 +281,7 @@ export class InventorySidebarComponent implements OnDestroy {
                     name: this.localeData?.sidebar?.branch_transfer,
                     icons: 'branch-transfer.svg',
                     children: [
-                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'branch-transfer', hiddenLink: ['/pages/inventory/v2/branch-transfer/receipt-note/create', '/pages/inventory/v2/branch-transfer/delivery-challan/create'],onlyBranchMode: true },
+                        { name: this.localeData?.sidebar?.create_new, icons: 'create-new.svg', openActiveMenu: true, moduleType: 'branch-transfer', hiddenLink: ['/pages/inventory/v2/branch-transfer/receipt-note/create', '/pages/inventory/v2/branch-transfer/delivery-challan/create'], onlyBranchMode: true },
                         { name: this.localeData?.sidebar?.report, icons: 'group-wise.svg', link: '/pages/inventory/v2/branch-transfer/list' }
                     ],
                 },

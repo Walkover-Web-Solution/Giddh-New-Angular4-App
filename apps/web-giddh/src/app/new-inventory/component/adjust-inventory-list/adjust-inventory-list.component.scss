@@ -1,34 +1,38 @@
-.adjust-inventory-list-page {
-    h4 {
-        font-size: var(--font-size-15);
-        font-family: var(--font-semibold);
+$color-nero: var(--color-nero);
+$color-wild-sand: var(--color-wild-sand);
+$color-giddh-blue: var(--color-giddh-blue);
+
+.td-search-box {
+    .input-container {
+        input {
+            height: 36px;
+            color: $color-nero;
+            background-color: $color-wild-sand;
+        }
+
+        i {
+            right: 0;
+            top: 9px;
+        }
     }
+
+    div {
+        i {
+            margin-top: 1px;
+            color: $color-giddh-blue;
+            padding: 0 8px;
+        }
+
+        span {
+            padding: 8px 0;
+        }
+    }
+}
+.adjust-inventory-list-page {
+
     .custom-datepicker {
         input {
-            text-align: center;
             padding: 0 10px;
-        }
-    }
-}
-@media (max-width: 767px) {
-    .giddh-table {
-        tr {
-            td {
-                white-space: normal !important;
-                word-break: inherit !important;
-                width: 100% !important;
-            }
-        }
-    }
-}
-@media (max-width: 414px) {
-    .adjust-inventory-list-page {
-        .adjust-inventory-header {
-            flex-direction: column;
-            .btn {
-                width: 160px;
-                margin-top: 15px;
-            }
         }
     }
 }
