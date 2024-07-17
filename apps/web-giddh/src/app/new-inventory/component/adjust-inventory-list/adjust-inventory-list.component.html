@@ -17,7 +17,6 @@
                     [label]="commonLocaleData?.app_select_entity"
                     [options]="currentCompanyBranches"
                     class="w-100"
-                    [placeholder]="commonLocaleData?.app_select_entity"
                     (selectedOption)="handleBranchChange($event)"
                     [placeholder]="commonLocaleData?.app_select_entity"
                     [defaultValue]="currentBranch?.alias"
@@ -30,7 +29,7 @@
                     id="select-date"
                     name="selectedDateRange"
                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                    class="giddh-datepicker date-range-picker text-align-center"
+                    class="giddh-datepicker date-range-picker text-align-center pd-l1 pd-r1"
                 />
             </div>
             <button
@@ -267,7 +266,7 @@
                         <!-- Date Column -->
                         <ng-container matColumnDef="DATE">
                             <th class="date-column-width" mat-header-cell *matHeaderCellDef mat-sort-header>
-                                {{ commonLocaleData.app_date }}
+                                {{ commonLocaleData?.app_date }}
                             </th>
                             <td class="date-column-width" mat-cell *matCellDef="let element">{{ element?.date }}</td>
                         </ng-container>
