@@ -3,40 +3,24 @@ $color-wild-sand: var(--color-wild-sand);
 $color-giddh-blue: var(--color-giddh-blue);
 
 .td-search-box {
-    padding: 0 0 0 10px !important;
-    display: flex;
-
     .input-container {
-        position: relative;
-
         input {
             height: 36px;
-            width: 100%;
-            min-width: 0; // Adjust as needed
-            padding: 11px;
-            padding-right: 0;
             color: $color-nero;
-            border: none;
             background-color: $color-wild-sand;
         }
 
         i {
-            position: absolute;
             right: 0;
             top: 9px;
         }
     }
 
     div {
-        display: flex;
-
         i {
             margin-top: 1px;
             color: $color-giddh-blue;
             padding: 0 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
         }
 
         span {
@@ -45,42 +29,10 @@ $color-giddh-blue: var(--color-giddh-blue);
     }
 }
 .adjust-inventory-list-page {
-    h4 {
-        font-size: var(--font-size-15);
-        font-family: var(--font-semibold);
-    }
 
     .custom-datepicker {
         input {
-            text-align: center;
             padding: 0 10px;
-        }
-    }
-}
-
-
-
-@media (max-width: 767px) {
-    .giddh-table {
-        tr {
-            td {
-                white-space: normal !important;
-                word-break: inherit !important;
-                width: 100% !important;
-            }
-        }
-    }
-}
-
-@media (max-width: 414px) {
-    .adjust-inventory-list-page {
-        .adjust-inventory-header {
-            flex-direction: column;
-
-            .btn {
-                width: 160px;
-                margin-top: 15px;
-            }
         }
     }
 }

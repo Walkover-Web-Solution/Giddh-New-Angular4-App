@@ -74,15 +74,15 @@ const routes: Routes = [
                 component: BulkStockEditComponent
             },
             {
-                path: ":type/adjust-inventory",
+                path: ":type/adjust",
                 component: AdjustInventoryListComponent,
             },
             {
-                path: ":type/adjust-inventory/create",
+                path: ":type/adjust/create",
                 component: AdjustInventoryComponent
             },
             {
-                path: ":type/adjust-inventory/:refNo",
+                path: ":type/adjust/:refNo",
                 component: AdjustInventoryComponent
             },
         ],

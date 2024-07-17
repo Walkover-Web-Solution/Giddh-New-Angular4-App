@@ -6,8 +6,7 @@ import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.a
 import { Observable, ReplaySubject, takeUntil, of as observableOf, combineLatest, map } from 'rxjs';
 import { SettingsUtilityService } from '../../../settings/services/settings-utility.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { OptionInterface } from '../../../models/api-models/Voucher';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BalanceStockTransactionReportRequest, SearchStockTransactionReportRequest, StockTransactionReportRequest } from '../../../models/api-models/Inventory';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
@@ -19,7 +18,6 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { SettingsFinancialYearActions } from '../../../actions/settings/financial-year/financial-year.action';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AdjustmentInventory, API_COUNT_LIMIT } from '../../../app.constant';
-import { cloneDeep } from '../../../lodash-optimized';
 @Component({
     selector: 'adjust-inventory',
     templateUrl: './adjust-inventory.component.html',
@@ -37,7 +35,7 @@ export class AdjustInventoryComponent implements OnInit {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Modal instance */
-    public matDialogRef: any;
+    public matDialogRef: MatDialogRef<any>;
     /** Create adjust inventory form group */
     public adjustInventoryCreateEditForm: FormGroup;
     /**Hold indirect group  expense accounts */
@@ -51,11 +49,11 @@ export class AdjustInventoryComponent implements OnInit {
     /** Inventory Observable */
     public inventoryList$: Observable<any[]> = observableOf(null);
     /** True if open panel state  */
-    public panelOpenState = true;
+    public panelOpenState: boolean = true;
     /** Adjustment Method  */
     public adjustmentMethod: any[] = [];
     /* dayjs object */
-    public dayjs = dayjs;
+    public dayjs: any = dayjs;
     /** Stock Transactional Object */
     public searchRequest: SearchStockTransactionReportRequest = new SearchStockTransactionReportRequest();
     /** Holds Inventory Type */
@@ -84,7 +82,7 @@ export class AdjustInventoryComponent implements OnInit {
         closing: 0
     };
     /** False if show hide  */
-    public showHideTable = true;
+    public showHideTable: boolean = true;
     /** True if form is submitted to show error if available */
     public isFormSubmitted: boolean = false;
     /** Holds Store create adjust inventory is success API success state as observable*/
@@ -109,7 +107,7 @@ export class AdjustInventoryComponent implements OnInit {
     public balanceReqObj: any;
     /** True if entity is stock group */
     public isEntityStockGroup: boolean = false;
-    /** True if allApiCalled */
+    /** False if allApiCalled */
     public allApiCalled: boolean = true;
     /** Hold Adjusment Inventory Form Value */
     public inventoryFormValue: any;
@@ -293,7 +291,7 @@ export class AdjustInventoryComponent implements OnInit {
         this.createAdjustInventoryIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.allApiCalled = false;
-                this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust-inventory`]);
+                this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust`]);
             } else if (response !== null) {
                 this.allApiCalled = false;
             }
@@ -303,7 +301,7 @@ export class AdjustInventoryComponent implements OnInit {
         this.updateAdjustInventoryIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.allApiCalled = false;
-                this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust-inventory`]);
+                this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust`]);
             } else if (response !== null) {
                 this.allApiCalled = false;
             }
@@ -395,8 +393,10 @@ export class AdjustInventoryComponent implements OnInit {
      *
      * @memberof AdjustInventoryComponent
      */
-    public backClicked(i): void {
-        this.location.back();
+    public back(event: boolean): void {
+        if (event) {
+            this.location.back();
+        }
     }
 
     /**
@@ -533,7 +533,7 @@ export class AdjustInventoryComponent implements OnInit {
         this.componentStore.getAllReasons(true);
     }
     /**
-     *This will be use for upate inventory
+     *This will be use for update inventory
      *
      * @return {*}  {void}
      * @memberof AdjustInventoryComponent
@@ -705,7 +705,7 @@ export class AdjustInventoryComponent implements OnInit {
      * @return {*}
      * @memberof AdjustInventoryComponent
      */
-    public isAllSelected() {
+    public isAllSelected(): boolean {
         const numSelected = this.selection.selected.length;
         const numRows = this.dataSource?.data?.length;
         return numSelected === numRows;

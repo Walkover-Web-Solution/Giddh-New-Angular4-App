@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { AdjustInventoryComponentStore } from '../adjust-inventory/utility/adjust-inventory.store';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReplaySubject, takeUntil } from 'rxjs';

@@ -5,7 +5,7 @@
     (localeData)="localeData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="relative">
+    <div class="postiion-relative">
         <hamburger-menu [pageHeading]="'Adjust inventory'"></hamburger-menu>
     </div>
     <div *ngIf="(createAdjustInventoryInProgress$ | async) || (allApiCalled && referenceNumber)">
@@ -75,11 +75,10 @@
                 <div class="row">
                     <div class="col-xxl-3 mt-3 col-xl-4 col-lg-6 col-md-6">
                         <mat-form-field class="w-100" [appearance]="'outline'">
-                            <mat-label>Leave a comment</mat-label>
+                            <mat-label>{{ localeData?.leave_comment }}</mat-label>
                             <textarea
                                 matInput
                                 rows="3"
-                                placeholder="Ex. It makes me feel..."
                                 [name]="'description'"
                                 formControlName="description"
                             ></textarea>
@@ -111,7 +110,7 @@
                             [labelValue]="adjustInventoryCreateEditForm.get('adjustmentMethodName')?.value"
                             formControlName="adjustmentMethod"
                             [required]="true"
-                            [readonly]="!adjustInventoryCreateEditForm.get('entityUniqueName')?.value"
+                            [readonly]="allApiCalled"
                             (selectedOption)="
                                 calculateCalculation(adjustInventoryCreateEditForm, stockGroupClosingBalance)
                             "
@@ -149,19 +148,19 @@
                             (closed)="panelOpenState = false"
                         >
                             <mat-expansion-panel-header class="h-auto">
-                                <table [width]="'100%'">
+                                <table width="100%">
                                     <tr>
-                                        <td [width]="'20%'">{{ commonLocaleData?.app_import_type?.inventory }}</td>
+                                        <td  width="16%">{{ commonLocaleData?.app_import_type?.inventory }}</td>
                                         <td>{{ localeData?.method }}</td>
-                                        <td [width]="'15.625%'" class="text-right">
+                                        <td width="16%"  class="text-right">
                                             {{ localeData?.change_in_value }}
                                         </td>
-                                        <td [width]="'15.625%'" class="text-right">{{ localeData?.closing }}</td>
-                                        <td [width]="'15.625%'" class="text-right">{{ localeData?.change }}</td>
-                                        <td [width]="'15.625%'" class="text-right">{{ localeData?.new_value }}</td>
+                                        <td width="16%" class="text-right">{{ localeData?.closing }}</td>
+                                        <td width="16%" class="text-right">{{ localeData?.change }}</td>
+                                        <td width="16%" class="text-right">{{ localeData?.new_value }}</td>
                                     </tr>
                                     <tr>
-                                        <td [width]="'20%'">
+                                        <td width="16%">
                                             {{
                                                 adjustInventoryCreateEditForm.get("entityName")?.value
                                                     ? adjustInventoryCreateEditForm.get("entityName")?.value
@@ -177,7 +176,7 @@
                                                         [required]="true"
                                                         formControlName="calculationMethod"
                                                         [name]="'calculationMethod'"
-                                                        [placeholder]="commonLocaleData?.app_select_method + '*'"
+                                                        [placeholder]="commonLocaleData?.app_select_method "
                                                         (selectionChange)="
                                                             calculateCalculation(
                                                                 adjustInventoryCreateEditForm,
@@ -188,11 +187,7 @@
                                                         <mat-option
                                                             *ngFor="let method of calculationMethod"
                                                             [value]="method.value"
-                                                            [disabled]="
-                                                                !adjustInventoryCreateEditForm?.get('entityName')
-                                                                    ?.value &&
-                                                                !adjustInventoryCreateEditForm?.get('adjustmentMethod')
-                                                                    ?.value
+                                                            [disabled]="allApiCalled
                                                             "
                                                             [value]="method.value"
                                                         >
@@ -203,7 +198,7 @@
                                             </div>
                                         </td>
 
-                                        <td [width]="'15.625%'" class="text-right">
+                                        <td width="16%" class="text-right">
                                             <div class="d-flex align-items-center column-gap5">
                                                 <text-field
                                                     [cssClass]="'form-control text-left text-control-input'"
@@ -251,14 +246,14 @@
                                             }}
                                         </td>
 
-                                        <td class="px-3" [width]="'15.625%'" class="text-right">
+                                        <td class="px-3" width="15.625%" class="text-right">
                                             {{
                                                 stockGroupClosingBalance?.changeValue
                                                     ? stockGroupClosingBalance?.changeValue
                                                     : 0
                                             }}
                                         </td>
-                                        <td class="px-4" [width]="'15.625%'" class="text-right">
+                                        <td class="px-4" width="15.625%" class="text-right">
                                             {{
                                                 stockGroupClosingBalance?.newValue
                                                     ? stockGroupClosingBalance?.newValue
@@ -373,7 +368,7 @@
                             >
                                 {{ commonLocaleData?.app_create }}
                             </button>
-                            <button aria-label="clear" mat-stroked-button color="warn" (click)="resetForm()">
+                            <button aria-label="clear" mat-stroked-button (click)="resetForm()">
                                 {{ commonLocaleData?.app_clear }}
                             </button>
                             <button
@@ -392,7 +387,7 @@
                                 mat-stroked-button
                                 *ngIf="referenceNumber"
                                 class="min-width-100"
-                                (click)="backClicked(true)"
+                                (click)="back(true)"
                             >
                                 {{ commonLocaleData?.app_close }}
                             </button>
@@ -407,8 +402,6 @@
 <!-- Create Reason Sidebar -->
 <ng-template #createReason>
     <aside-create-reason
-        (commonLocaleData)="(commonLocaleData)"
-        (localeData)="(localeData)"
         (closeAsideEvent)="closeCreateReasonModal($event)"
     ></aside-create-reason>
 </ng-template>

@@ -35,7 +35,7 @@ export class AdjustInventoryListComponentStore extends ComponentStore<AdjustInve
 
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
     public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
-    public deleteAdjustInventoryIsSuccess$ = this.select((state) => state.deleteAdjustInventoryIsSuccess);
+    public deleteAdjustInventoryIsSuccess$: Observable<any> = this.select((state) => state.deleteAdjustInventoryIsSuccess);
     public branchList$: Observable<any> = this.select(this.store.select(state => state.settings.branches), (response) => response);
 
     /**
@@ -50,15 +50,13 @@ export class AdjustInventoryListComponentStore extends ComponentStore<AdjustInve
                 return this.inventoryService.getAdjustmentInventoryReport(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            if (res?.status === 'success') {
+                            if (res.status === "success") {
                                 return this.patchState({
                                     adjustInventoryList: res ?? [],
                                     adjustInventoryListInProgress: false,
                                 });
                             } else {
-                                if (res.message) {
-                                    this.toaster.showSnackBar('error', res.message);
-                                }
+                                this.toaster.showSnackBar("error", res.message);
                                 return this.patchState({
                                     adjustInventoryList: [],
                                     adjustInventoryListInProgress: false,
@@ -66,10 +64,10 @@ export class AdjustInventoryListComponentStore extends ComponentStore<AdjustInve
                             }
                         },
                         (error: any) => {
-                            this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 adjustInventoryList: [],
-                                adjustInventoryListInProgress: false
+                                adjustInventoryListInProgress: false,
                             });
                         }
                     ),
@@ -92,10 +90,10 @@ export class AdjustInventoryListComponentStore extends ComponentStore<AdjustInve
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
-                                this.toaster.showSnackBar("success", res.body);
+                                this.toaster.showSnackBar("success", res?.body);
                                 return this.patchState({ deleteAdjustInventoryInProgress: false, deleteAdjustInventoryIsSuccess: true });
                             } else {
-                                this.toaster.showSnackBar("error", res.message);
+                                this.toaster.showSnackBar("error", res?.message);
                                 return this.patchState({ deleteAdjustInventoryInProgress: false, deleteAdjustInventoryIsSuccess: false });
                             }
                         },

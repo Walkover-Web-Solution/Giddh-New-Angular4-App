@@ -59,7 +59,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     /* This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     /* dayjs object */
-    public dayjs = dayjs;
+    public dayjs: any = dayjs;
     /* Selected from date */
     public fromDate: string;
     /* Selected to date */
@@ -171,7 +171,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
                     this.adjustInventoryListForm?.controls['reason']?.value ||
                     this.adjustInventoryListForm?.controls['adjustmentMethod']?.value
                     ||
-                    this.adjustInventoryListForm?.controls['adjustedBy']?.value  ||
+                    this.adjustInventoryListForm?.controls['adjustedBy']?.value ||
                     this.adjustInventoryListForm?.controls['entity']?.value) {
                     this.showData = true;
                 } else {
@@ -222,7 +222,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
                         this.currentBranch = {
                             name: this.activeCompany ? this.activeCompany.name : '',
                             alias: this.activeCompany ? this.activeCompany.nameAlias || this.activeCompany.name : '',
-                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : '',
+                            uniqueName: this.activeCompany ? this.activeCompany.uniqueName : ''
                         };
                     }
                 }
@@ -479,7 +479,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
      * @memberof AdjustInventoryListComponent
      */
     public addInventory(): void {
-        this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust-inventory/create`]);
+        this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust/create`]);
     }
 
     /**
@@ -608,11 +608,11 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
      * @memberof AdjustInventoryListComponent
      */
     public editInventoryAdjust(item: any): void {
-        this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust-inventory/${item?.refNo}`]);
+        this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust/${item?.refNo}`]);
     }
 
     /**
-     * This will be use for show delete delete inventory adjust confirmation modal
+     * This will be use for show delete inventory adjust confirmation modal
      *
      * @param {*} item
      * @memberof AdjustInventoryListComponent
@@ -642,6 +642,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
      */
     public handleBranchChange(selectedEntity: any): void {
         if (selectedEntity?.value) {
+            this.currentBranch.uniqueName = selectedEntity.value;
             this.currentBranch.name = selectedEntity.label;
             this.adjustInventoryListRequest.branchUniqueName = selectedEntity.value;
             this.getAllAdjustReports(true);
@@ -657,6 +658,4 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-
-
 }

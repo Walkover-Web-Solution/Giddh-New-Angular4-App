@@ -4,12 +4,10 @@
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event">
     <div class="aside-pane">
-        <div class="header-create-unit">
-            <div class="form-header">
+            <div class="d-flex">
                 <h3 mat-dialog-title>{{ commonLocaleData?.app_create + " " + localeData?.reason }}</h3>
-                <button id="closedialog" aria-label="close button" mat-dialog-close><i class="icon-cross"></i></button>
+                <button  aria-label="close button" mat-dialog-close><i class="icon-cross"></i></button>
             </div>
-        </div>
         <mat-dialog-content class="w-100">
             <div class="aside-body create-group-aside-body">
                 <giddh-page-loader *ngIf="createReasonInProgress$ | async"></giddh-page-loader>
@@ -20,7 +18,7 @@
                                 <input-field
                                     [name]="'code'"
                                     [type]="'text'"
-                                    [label]="localeData?.reason + '*'"
+                                    [label]="localeData?.reason"
                                     [placeholder]="localeData?.enter_reason"
                                     formControlName="reason"
                                     [showError]="!isValidForm && !reasonForm?.get('reason')?.value"

@@ -97,10 +97,8 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                             }
                         },
                         (error: any) => {
-                            this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
-                            return this.patchState({
-                                expensesAccountList: []
-                            });
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({ expensesAccountList: [] });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -134,7 +132,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                             }
                         },
                         (error: any) => {
-                            this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 reasonList: []
                             });
@@ -171,7 +169,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                             }
                         },
                         (error: any) => {
-                            this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 itemWiseReport: []
                             });
@@ -208,7 +206,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                             }
                         },
                         (error: any) => {
-                            this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 variantWiseReport: []
                             });
@@ -246,7 +244,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                             }
                         },
                         (error: any) => {
-                            this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 stockGroupClosingBalance: [],
                             });
@@ -284,7 +282,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                             }
                         },
                         (error: any) => {
-                            this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 adjustInventoryData: [],
                             });
@@ -321,7 +319,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                             }
                         },
                         (error: any) => {
-                            this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 inventorySearch: [],
                             });
@@ -394,8 +392,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                             }
                         },
                         (error: any) => {
-                            this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
-
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 createAdjustInventoryInProgress: false
                             });
@@ -436,8 +433,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
                             }
                         },
                         (error: any) => {
-                            this.toaster.showSnackBar('error', 'Something went wrong! Please try again.');
-
+                            this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 updateAdjustInventoryInProgress: false
                             });

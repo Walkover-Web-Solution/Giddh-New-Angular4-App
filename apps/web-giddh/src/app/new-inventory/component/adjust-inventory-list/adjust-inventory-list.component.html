@@ -11,13 +11,14 @@
         <div class="d-flex align-items-center column-gap1 adjust-inventory-header">
             <div
                 *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
-                class="branch-width mr-0 float-left"
+                class="branch-width mr-0"
             >
                 <dropdown-field
                     [label]="commonLocaleData?.app_select_entity"
                     [options]="currentCompanyBranches"
-                    width="100%"
-                    (selectedOption)="currentBranch.uniqueName = $event?.value; handleBranchChange($event)"
+                    class="w-100"
+                    [placeholder]="commonLocaleData?.app_select_entity"
+                    (selectedOption)="handleBranchChange($event)"
                     [placeholder]="commonLocaleData?.app_select_entity"
                     [defaultValue]="currentBranch?.alias"
                 >
@@ -29,7 +30,7 @@
                     id="select-date"
                     name="selectedDateRange"
                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                    class="giddh-datepicker date-range-picker"
+                    class="giddh-datepicker date-range-picker text-align-center"
                 />
             </div>
             <button
@@ -81,7 +82,7 @@
                                 mat-header-cell
                                 *matHeaderCellDef
                                 #searchReferenceNoContainer
-                                class="td-search-box"
+                                class="td-search-box d-flex pd-l1"
                                 (clickOutside)="
                                     handleClickOutside($event, searchReferenceNoContainer, localeData?.reference_no)
                                 "
@@ -99,18 +100,18 @@
                                 ></ng-container>
                             </th>
                             <td mat-cell *matCellDef="let element">
-                                {{ element.refNo }}
+                                {{ element?.refNo }}
                             </td>
                         </ng-container>
 
                         <!-- Name Column -->
                         <ng-container matColumnDef="name">
                             <th
-                                width="20%"
+                                width="12%"
                                 mat-header-cell
                                 *matHeaderCellDef
                                 #searchNameContainer
-                                class="td-search-box"
+                                class="td-search-box d-flex pd-l1"
                                 (clickOutside)="handleClickOutside($event, searchNameContainer, localeData?.stock_name)"
                             >
                                 <ng-container
@@ -125,17 +126,17 @@
                                     "
                                 ></ng-container>
                             </th>
-                            <td mat-cell *matCellDef="let element">{{ element.adjustedProduct?.name }}</td>
+                            <td mat-cell *matCellDef="let element">{{ element?.adjustedProduct?.name }}</td>
                         </ng-container>
 
                         <!-- Reason Column -->
                         <ng-container matColumnDef="reason">
                             <th
-                                width="20%"
+                                width="12%"
                                 mat-header-cell
                                 *matHeaderCellDef
                                 #searchReasonContainer
-                                class="td-search-box"
+                                class="td-search-box d-flex pd-l1"
                                 (clickOutside)="handleClickOutside($event, searchReasonContainer, localeData?.reason)"
                             >
                                 <ng-container
@@ -150,17 +151,17 @@
                                     "
                                 ></ng-container>
                             </th>
-                            <td mat-cell *matCellDef="let element">{{ element.reason?.name }}</td>
+                            <td mat-cell *matCellDef="let element">{{ element?.reason?.name }}</td>
                         </ng-container>
 
                         <!-- Status Column -->
                         <ng-container matColumnDef="status">
                             <th
-                                width="20%"
+                                width="12%"
                                 mat-header-cell
                                 *matHeaderCellDef
                                 #searchStatusContainer
-                                class="td-search-box"
+                                class="td-search-box d-flex pd-l1"
                                 (clickOutside)="
                                     handleClickOutside($event, searchStatusContainer, localeData?.request_status)
                                 "
@@ -183,11 +184,11 @@
                         <!-- Adjusted By Column -->
                         <ng-container matColumnDef="ADJUSTED_BY">
                             <th
-                                width="20%"
+                                width="12%"
                                 mat-header-cell
                                 *matHeaderCellDef
                                 #searchAdjustedByContainer
-                                class="td-search-box"
+                                class="td-search-box d-flex pd-l1"
                                 (clickOutside)="
                                     handleClickOutside($event, searchAdjustedByContainer, localeData?.adjusted_by)
                                 "
@@ -204,17 +205,17 @@
                                     "
                                 ></ng-container>
                             </th>
-                            <td mat-cell *matCellDef="let element">{{ element.adjustedBy?.name }}</td>
+                            <td mat-cell *matCellDef="let element">{{ element?.adjustedBy?.name }}</td>
                         </ng-container>
 
                         <!-- Adjusted Method Column -->
                         <ng-container matColumnDef="adjustmentMethod">
                             <th
-                                width="20%"
+                                width="12%"
                                 mat-header-cell
                                 *matHeaderCellDef
                                 #searchAdjustmentMethodContainer
-                                class="td-search-box"
+                                class="td-search-box d-flex pd-l1"
                                 (clickOutside)="
                                     handleClickOutside(
                                         $event,
@@ -235,17 +236,17 @@
                                     "
                                 ></ng-container>
                             </th>
-                            <td mat-cell *matCellDef="let element">{{ element.adjustmentMethod }}</td>
+                            <td mat-cell *matCellDef="let element">{{ element?.adjustmentMethod }}</td>
                         </ng-container>
 
                         <!-- Type Column -->
                         <ng-container matColumnDef="TYPE">
                             <th
-                                width="20%"
+                                width="12%"
                                 mat-header-cell
                                 *matHeaderCellDef
                                 #searchTypeContainer
-                                class="td-search-box"
+                                class="td-search-box d-flex pd-l1"
                                 (clickOutside)="handleClickOutside($event, searchTypeContainer, localeData?.type)"
                             >
                                 <ng-container
@@ -265,10 +266,10 @@
 
                         <!-- Date Column -->
                         <ng-container matColumnDef="DATE">
-                            <th class="date-column-width" width="18%" mat-header-cell *matHeaderCellDef mat-sort-header>
+                            <th class="date-column-width" mat-header-cell *matHeaderCellDef mat-sort-header>
                                 {{ commonLocaleData.app_date }}
                             </th>
-                            <td class="date-column-width" mat-cell *matCellDef="let element">{{ element.date }}</td>
+                            <td class="date-column-width" mat-cell *matCellDef="let element">{{ element?.date }}</td>
                         </ng-container>
 
                         <ng-container matColumnDef="action">
@@ -327,15 +328,15 @@
     </div>
 </ng-container>
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
-    <div [hidden]="show">
+    <div class="d-flex" [hidden]="show">
         <span> {{ title }}</span>
-        <i class="icon-search" (click)="toggleSearch(fieldName)"></i>
+        <i class="icon-search d-flex cursor-pointer align-items-center" (click)="toggleSearch(fieldName)"></i>
     </div>
-    <div class="input-container" [hidden]="!show">
+    <div class="input-container position-relative" [hidden]="!show">
         <text-field
             [type]="'text'"
             [placeholder]="getSearchFieldText(fieldName)"
-            [cssClass]="'form-control search-table mat-field-border'"
+            [cssClass]="'form-control search-table mat-field-border w-100 min-width-unset pd-15 pr-0'"
             [formControl]="formControl"
             [autoFocus]="show"
         >

@@ -1660,16 +1660,16 @@ export class InventoryService {
     public getAdjustmentInventoryReport(getParams: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
-        let url = this.config.apiUrl + INVENTORY_API.INVENTORY_ADJUST.REPORT;
-        url = url?.replace(":companyUniqueName", this.companyUniqueName);
-        url = url?.replace(":from", getParams.from);
-        url = url?.replace(":to", getParams.to);
-        url = url?.replace(":page", getParams.page);
-        url = url?.replace(":count", getParams.count);
-        url = url?.replace(":sortBy", getParams.sortBy ? getParams.sortBy?.toString() : '');
-        url = url?.replace(":sort", getParams.sort ? getParams.sort?.toString() : '');
-        url = url?.replace(":q", getParams.q ? getParams.q?.toString() : '');
-        url = url?.replace(":searchBy", getParams.q ? getParams.searchBy?.toString() : '');
+        let url = this.config.apiUrl + INVENTORY_API.INVENTORY_ADJUST.REPORT
+            ?.replace(":companyUniqueName", this.companyUniqueName)
+            ?.replace(":from", getParams.from)
+            ?.replace(":to", getParams.to)
+            ?.replace(":page", getParams.page)
+            ?.replace(":count", getParams.count)
+            ?.replace(":sortBy", getParams.sortBy ? getParams.sortBy?.toString() : '')
+            ?.replace(":sort", getParams.sort ? getParams.sort?.toString() : '')
+            ?.replace(":q", getParams.q ? getParams.q?.toString() : '')
+            ?.replace(":searchBy", getParams.q ? getParams.searchBy?.toString() : '')
         if (getParams.branchUniqueName) {
             const branchUniqueName = getParams.branchUniqueName !== this.companyUniqueName ? getParams.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(branchUniqueName)}`);
@@ -1732,12 +1732,13 @@ export class InventoryService {
      */
     public getInventoryAdjustReasons(): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + INVENTORY_API.INVENTORY_ADJUST.GET_REASON?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
-            let data: BaseResponse<any, any> = res;
-            data.request = '';
-            data.queryString = {};
-            return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, string>(e, '', {})));
+        return this.http.get(this.config.apiUrl + INVENTORY_API.INVENTORY_ADJUST.GET_REASON
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = '';
+                data.queryString = {};
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, string>(e, '', {})));
     }
 
     /**
@@ -1758,7 +1759,7 @@ export class InventoryService {
     }
 
     /**
-     * This will be use for create inventory adjust 
+     * This will be use for create inventory adjust
      *
      * @param {*} model
      * @param {string} branchUniqueName
