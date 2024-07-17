@@ -246,13 +246,14 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     private openConfirmationDialog(index: number): void {
         let mappings = this.gstSettingForm.get('gstData') as FormArray;
         let mappingForm = mappings.at(index);
-        if (index === 0 && !mappingForm.get('lutNumber')?.value) {
+        if ( !mappingForm.get('lutNumber')?.value) {
             mappingForm.get('lutNumber')?.patchValue(null);
             mappingForm.get('fromDate')?.patchValue(this.fromDate);
             mappingForm.get('toDate')?.patchValue(this.toDate);
             if (this.responseArray?.length) {
                 this.responseArray[index]['message'] = null;
             }
+            mappings.removeAt(index);
         } else {
             const dialogRef = this.dialog.open(ConfirmModalComponent, {
                 width: '540px',
@@ -273,14 +274,14 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                                 fromDate: this.fromDate,
                                 toDate: this.toDate
                             }));
-                            if (this.responseArray?.length) {
+                            if (this.responseArray?.length && this.responseArray[index] && this.responseArray[index]['message']) {
                                 this.responseArray[index]['message'] = null;
                             }
                         } else {
                             mappingForm.get('lutNumber')?.patchValue(null);
                             mappingForm.get('fromDate')?.patchValue(this.fromDate);
                             mappingForm.get('toDate')?.patchValue(this.toDate);
-                            if (this.responseArray?.length) {
+                            if (this.responseArray?.length && this.responseArray[index]  && this.responseArray[index]['message']) {
                                 this.responseArray[index]['message'] = null;
                             }
                         }
@@ -338,16 +339,18 @@ export class GstSettingComponent implements OnInit, OnDestroy {
             toDate: dayjs(ctrl.value.toDate).format(GIDDH_DATE_FORMAT)
         }));
 
-        itemsWithOriginalIndex.forEach((obj1, index) => {
-            if (!this.lutItemList[index] || this.lutItemList[index].fromDate !== obj1.fromDate || this.lutItemList[index].lutNumber !== obj1.lutNumber || this.lutItemList[index].toDate !== obj1.toDate) {
-                const req = {
-                    q: obj1,
-                    index: index
-                };
-                if (!this.lutItemList[index]) {
-                    this.componentStore.createLutNumber(req);
-                } else {
-                    this.componentStore.updateLutNumber(req);
+        itemsWithOriginalIndex?.forEach((obj1, index) => {
+            if (obj1.lutNumber) {
+                if (!this.lutItemList[index] || this.lutItemList[index].fromDate !== obj1.fromDate || this.lutItemList[index].lutNumber !== obj1.lutNumber || this.lutItemList[index].toDate !== obj1.toDate) {
+                    const req = {
+                        q: obj1,
+                        index: index
+                    };
+                    if (!this.lutItemList[index]) {
+                        this.componentStore.createLutNumber(req);
+                    } else {
+                        this.componentStore.updateLutNumber(req);
+                    }
                 }
             }
         });
