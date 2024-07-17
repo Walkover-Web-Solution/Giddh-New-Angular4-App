@@ -365,11 +365,11 @@
                                             />
                                         </div>
                                     </div>
-                                    <!-- static code added for the pincode -->
+                                    <!-- static code added for the pincode --> 
                                     <div class="col-sm-4">
                                         <div class="form-group mr-b05">
                                             <label for="pinCodeNum" class="d-block">{{
-                                                commonLocaleData?.app_pin_code
+                                                zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code 
                                             }}</label>
                                             <input
                                                 type="number"
@@ -378,7 +378,7 @@
                                                 formControlName="pincode"
                                                 autocomplete="false"
                                                 name="pinCodeNum"
-                                                [placeholder]="commonLocaleData?.app_enter_pin_code"
+                                                [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_enter_zip_code : commonLocaleData?.app_enter_pin_code"
                                                 decimalDigitsDirective
                                                 [preventDecimal]="true"
                                             />

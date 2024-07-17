@@ -9,6 +9,9 @@ import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-mod
 import { CommonService } from '../../services/common.service';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from '../../services/general.service';
+import { ZIP_CODE_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../store';
 
 function validateFieldWithPatterns(patterns: Array<string>) {
     return (field: UntypedFormControl): { [key: string]: any } => {
@@ -65,6 +68,10 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     public entityArchived: string[] = ["BRANCH", "WAREHOUSE"];
     /** Holds Selected Entity */
     public selectedEntity: any[] = [];
+    /** Hold active company country code */
+    public activeCompanyCountryCode: string = '';
+    /** Holds list of countries which use ZIP Code in address */
+    public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
 
     constructor(
         private formBuilder: UntypedFormBuilder,
@@ -72,7 +79,8 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private commonService: CommonService,
         private generalService: GeneralService,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private store: Store<AppState>
     ) {
     }
 
@@ -83,6 +91,11 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.setFormData();
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.activeCompanyCountryCode = activeCompany.countryV2?.alpha2CountryCode;
+            }
+        });
     }
 
     /**
