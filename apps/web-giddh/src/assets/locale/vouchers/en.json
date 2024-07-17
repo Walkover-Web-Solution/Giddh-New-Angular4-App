@@ -57,7 +57,7 @@
     "adjust_amount": "Adjust Amount",
     "product_service_description": "Product/Service Description",
     "qty": "Qty",
-    "generate_invoice": "Generate [INVOICE_TYPE]",
+    "generate_invoice": "Generate Invoice",
     "update_invoice": "Update [INVOICE_TYPE]",
     "and_update_acc": "& Update A/c",
     "create_send": "Create & Send",
