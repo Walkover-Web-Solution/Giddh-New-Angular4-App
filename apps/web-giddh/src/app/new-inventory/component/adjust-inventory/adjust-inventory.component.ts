@@ -367,6 +367,7 @@ export class AdjustInventoryComponent implements OnInit {
     public openCreateReasonModal(): void {
         this.matDialogRef = this.dialog.open(this.createReason, {
             width: 'var(--aside-pane-width)',
+            height: '100vh',
             position: {
                 right: '0',
                 top: '0'
