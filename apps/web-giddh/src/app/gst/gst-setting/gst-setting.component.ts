@@ -250,7 +250,7 @@ export class GstSettingComponent implements OnInit, OnDestroy {
             mappingForm.get('lutNumber')?.patchValue(null);
             mappingForm.get('fromDate')?.patchValue(this.fromDate);
             mappingForm.get('toDate')?.patchValue(this.toDate);
-            if (this.responseArray[index]?.length) {
+            if (this.responseArray?.length) {
                 this.responseArray[index]['message'] = null;
             }
             mappings.removeAt(index);
@@ -274,14 +274,14 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                                 fromDate: this.fromDate,
                                 toDate: this.toDate
                             }));
-                            if (this.responseArray[index]?.length) {
+                            if (this.responseArray?.length && this.responseArray[index] && this.responseArray[index]['message']) {
                                 this.responseArray[index]['message'] = null;
                             }
                         } else {
                             mappingForm.get('lutNumber')?.patchValue(null);
                             mappingForm.get('fromDate')?.patchValue(this.fromDate);
                             mappingForm.get('toDate')?.patchValue(this.toDate);
-                            if (this.responseArray[index]?.length) {
+                            if (this.responseArray?.length && this.responseArray[index]  && this.responseArray[index]['message']) {
                                 this.responseArray[index]['message'] = null;
                             }
                         }
