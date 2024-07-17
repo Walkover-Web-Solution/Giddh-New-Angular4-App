@@ -233,7 +233,7 @@
                                                 aria-labelledby="button-basic2"
                                             >
                                                 <li
-                                                    *ngIf="voucherType === 'sales'"
+                                                    *ngIf="voucherType === 'sales' || voucherType === 'debit note' || voucherType === 'credit note'"
                                                     class="cp"
                                                     role="menuitem"
                                                     (click)="invokeLoadPaymentModes(); receivePaymentPopup.show()"
@@ -310,6 +310,15 @@
                                                 role="menu"
                                                 aria-labelledby="button-basic2"
                                             >
+                                                <li
+                                                    class="cp"
+                                                    role="menuitem"
+                                                    (click)="invokeLoadPaymentModes(); receivePaymentPopup.show()"
+                                                >
+                                                    <a class="dropdown-item">
+                                                        {{ commonLocaleData?.app_payment_status?.paid }}
+                                                    </a>
+                                                </li>
                                                 <li class="cp" role="menuitem">
                                                     <a
                                                         class="dropdown-item"
