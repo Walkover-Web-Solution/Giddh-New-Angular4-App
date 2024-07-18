@@ -94,7 +94,7 @@ export interface SettingsState {
     hasUnsavedChanges: boolean;
     isTaxAuthoritiesLoading: boolean;
     isGetTaxAuthoritiesSuccess: boolean;
-    taxAuthorities: ITaxAuthority[]
+    taxAuthorities: ITaxAuthority[];
 }
 
 export const initialState: SettingsState = {

@@ -157,7 +157,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     public isVatReport: boolean;
     /** True if Liability Report page */
     public isLiabilityReport: boolean;
-    /** Holds true if active company  country is US */
+    /** Holds true if active company country is US */
     public taxAuthorityList: IOption[] = [];
     /** Holds true if Sales Tax report type is tax/rate wise */
     public isSalesTaxRateWise: boolean = false;
@@ -170,7 +170,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
         taxName: '',
         taxUniqueName: '',
         taxAuthorityName: '',
-        taxAuthorityUniqueName: '',
+        taxAuthorityUniqueName: ''
     };
     /** Holds Tax type label  */
     public taxType: any = {
@@ -251,7 +251,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
                 if (taxes) {
                     let arr: IOption[] = [];
                     taxes.forEach(tax => {
-                        arr.push({ label: tax.name, value: tax?.uniqueName });
+                        arr.push({ label: tax?.name, value: tax?.uniqueName });
                     });
                     this.taxList = arr;
                     if (this.taxAuthority.taxUniqueName) {

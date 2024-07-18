@@ -23,7 +23,7 @@
                             [isUSCompany]="true" 
                             [localeData]="localeData"
                             [salesTaxReportType]="'account'" 
-                            [currentTaxAuthorityUniqueName]="getFormControl('taxAuthorityUniqueName').value"
+                            [currentTaxAuthorityUniqueName]="getFormControl('taxAuthorityUniqueName')?.value"
                             [currentTaxUniqueName]="getFormControl('taxUniqueName').value"
                             (getReport)="getSalesTaxReport()" 
                             (exportReport)="exportTaxAuthority()"

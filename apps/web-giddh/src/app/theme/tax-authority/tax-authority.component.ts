@@ -125,5 +125,4 @@ export class TaxAuthorityComponent implements OnInit {
         this.destroyed$.complete();
         this.asideGstSidebarMenuState === 'out';
     }
-
 }
