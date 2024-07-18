@@ -16,6 +16,7 @@ import { cloneDeep } from '../../../lodash-optimized';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
 import { ExportsJsonComponent } from '../exports-json/exports-json.component';
 import { download } from '@giddh-workspaces/utils';
+import { exportTypeEnum } from '../../../new-inventory/inventory.enum';
 
 /** Hold information of Download  */
 const ELEMENT_DATA: DownloadData[] = [];
@@ -79,6 +80,13 @@ export class ExportsComponent implements OnInit, OnDestroy {
     public fromDate: string;
     /** Instance of is electron variable */
     public isElectron: any = isElectron;
+    /** Instance for export data in inventory */
+    public exportType: any = [
+        exportTypeEnum.ItemWise,
+        exportTypeEnum.VariantWise,
+        exportTypeEnum.GroupWise,
+        exportTypeEnum.TransactionWise
+    ];
 
     constructor(public dialog: MatDialog, private downloadsService: DownloadsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private modalService: BsModalService, private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -112,8 +120,15 @@ export class ExportsComponent implements OnInit, OnDestroy {
      * @memberof ExportsComponent
      */
     public openDialog(row: any): void {
+        let dataReq;
+        if (this.exportType.includes(row?.type)) {
+            dataReq = row?.inventoryReportsExportFilter;
+        } else {
+            dataReq = row?.filters;
+        }
+        
         this.dialog.open(ExportsJsonComponent, {
-            data: row?.filters,
+            data: dataReq,
             panelClass: 'download-json-panel',
             role: 'alertdialog',
             ariaLabel: 'Export Json Dialog'

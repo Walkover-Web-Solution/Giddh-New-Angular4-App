@@ -223,7 +223,8 @@ export class NewInventoryAdvanceSearch implements OnInit {
             return;
         }
         this.dialogRef.close({
-            stockReportRequest: this.advanceSearchFormObj
+            stockReportRequest: this.advanceSearchFormObj,
+            stockReportRequestExport: this.advanceSearchFormObj
         });
         this.advanceSearchFormObj.searching = true;
     }
