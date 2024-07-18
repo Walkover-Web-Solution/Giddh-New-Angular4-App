@@ -36,6 +36,11 @@ export const initialState: CustomTemplateState = {
                         display: true,
                         width: null
                     },
+                    displayExportMessage: {
+                        label: '',
+                        display: false,
+                        width: null
+                    },
                     thanks: {
                         label: '',
                         display: true,
@@ -158,6 +163,26 @@ export const initialState: CustomTemplateState = {
                     companyName: {
                         label: '',
                         display: true,
+                        width: null
+                    },
+                    displayExchangeRate: {
+                        label: '',
+                        display: false,
+                        width: null
+                    },
+                    displayLutNumber: {
+                        label: '',
+                        display: false,
+                        width: null
+                    },
+                    displayPlaceOfSupply: {
+                        label: '',
+                        display: false,
+                        width: null
+                    },
+                    displayPlaceOfCountry: {
+                        label: '',
+                        display: false,
                         width: null
                     },
                     dueDate: {
@@ -343,6 +368,11 @@ export const initialState: CustomTemplateState = {
                         label: 'Taxes',
                         display: true,
                         width: '10'
+                    },
+                    displayBaseCurrency: {
+                        label: '',
+                        display: true,
+                        width: null
                     },
                     showDescriptionInRows: {
                         label: '',

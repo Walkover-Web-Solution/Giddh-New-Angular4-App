@@ -113,5 +113,6 @@
         "chat_voice":"Chat/Voice",
         "gst_direct":"GST Direct Filling",
         "e_invoice":"E-invoice",
-        "plan_purchased_success_message":"Plan purchased successfully"
+        "plan_purchased_success_message":"Plan purchased successfully",
+        "confirm_archive_message": "Are you sure you want to archive the company?"
     }
