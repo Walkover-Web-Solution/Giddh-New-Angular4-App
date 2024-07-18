@@ -13,12 +13,11 @@ export interface InventoryState {
 }
 
 const DEFAULT_STATE: InventoryState = {
-    isLoading: false,
+    isLoading: false
 };
 
 @Injectable()
 export class InventoryComponentStore extends ComponentStore<any> {
-    actions$: any;
     constructor(
         private store: Store<AppState>,
         private inventoryService: InventoryService,
@@ -47,20 +46,20 @@ export class InventoryComponentStore extends ComponentStore<any> {
                                     this.toaster.showSnackBar("success", res?.body);
                                     this.router.navigate(["/pages/downloads"]);
                                     return this.patchState({
-                                        isLoading: false,
+                                        isLoading: false
                                     });
                                 }
                             } else {
                                 this.toaster.showSnackBar("error", res?.message);
                                 return this.patchState({
-                                    isLoading: false,
+                                    isLoading: false
                                 });
                             }
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({
-                                isLoading: false,
+                                isLoading: false
                             });
                         }
                     ),
