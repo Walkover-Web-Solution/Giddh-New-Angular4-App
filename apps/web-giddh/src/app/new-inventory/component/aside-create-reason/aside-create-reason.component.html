@@ -5,7 +5,7 @@
     (localeData)="localeData = $event"
 >
     <div class="dialog-header d-flex align-items-center">
-        <h3>{{ commonLocaleData?.app_create + " " + localeData?.reason }}</h3>
+        <h3>{{ localeData?.create_reason }}</h3>
         <button aria-hidden="true" class="close" mat-dialog-close>×</button>
     </div>
     <mat-dialog-content class="dialog-body">

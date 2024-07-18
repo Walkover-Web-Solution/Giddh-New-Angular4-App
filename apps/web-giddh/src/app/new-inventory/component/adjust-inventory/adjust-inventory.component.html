@@ -6,9 +6,9 @@
     (translationComplete)="translationComplete($event)"
 >
     <div class="postiion-relative">
-        <hamburger-menu [pageHeading]="'Adjust inventory'"></hamburger-menu>
+        <hamburger-menu [pageHeading]="localeData?.adjust_inventory"></hamburger-menu>
     </div>
-    <div *ngIf="(createAdjustInventoryInProgress$ | async) || (allApiCalled && referenceNumber)">
+    <div *ngIf="(createAdjustInventoryInProgress$ | async) || (apiCallInProgress && referenceNumber)">
         <giddh-page-loader></giddh-page-loader>
     </div>
     <form
@@ -17,7 +17,7 @@
         name="adjustInventoryCreateEditForm"
         [formGroup]="adjustInventoryCreateEditForm"
     >
-        <ng-container *ngIf="!allApiCalled">
+        <ng-container *ngIf="!apiCallInProgress">
             <div class="adjustment container-fluid pd-15">
                 <div class="row">
                     <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6">
@@ -110,9 +110,9 @@
                             [labelValue]="adjustInventoryCreateEditForm.get('adjustmentMethodName')?.value"
                             formControlName="adjustmentMethod"
                             [required]="true"
-                            [readonly]="allApiCalled"
+                            [readonly]="apiCallInProgress"
                             (selectedOption)="
-                                calculateCalculation(adjustInventoryCreateEditForm, stockGroupClosingBalance)
+                                calculateInventory(adjustInventoryCreateEditForm, stockGroupClosingBalance)
                             "
                             (onClear)="adjustInventoryCreateEditForm.get('adjustmentMethod')?.patchValue(null)"
                             [showError]="
@@ -124,13 +124,13 @@
                     <div class="col-xxl-3 mt-3 col-xl-2 col-lg-6 col-md-6">
                         <reactive-dropdown-field
                             [label]="localeData?.reason"
-                            [placeholder]="commonLocaleData?.app_select + ' ' + localeData?.reason"
+                            [placeholder]="localeData?.select_reason"
                             [options]="reasons$ | async"
                             formControlName="reasonUniqueName"
                             [labelValue]="adjustInventoryCreateEditForm.get('reasonName')?.value"
                             [required]="true"
                             (createOption)="openCreateReasonModal()"
-                            [createNewText]="commonLocaleData?.app_create + ' ' + localeData?.reason"
+                            [createNewText]="localeData?.create_reason"
                             (onClear)="adjustInventoryCreateEditForm.get('reasonUniqueName')?.patchValue(null)"
                             [showError]="
                                 isFormSubmitted && !adjustInventoryCreateEditForm.get('reasonUniqueName')?.value
@@ -178,7 +178,7 @@
                                                         [name]="'calculationMethod'"
                                                         [placeholder]="commonLocaleData?.app_select_method "
                                                         (selectionChange)="
-                                                            calculateCalculation(
+                                                            calculateInventory(
                                                                 adjustInventoryCreateEditForm,
                                                                 stockGroupClosingBalance
                                                             )
@@ -187,7 +187,7 @@
                                                         <mat-option
                                                             *ngFor="let method of calculationMethod"
                                                             [value]="method.value"
-                                                            [disabled]="allApiCalled
+                                                            [disabled]="apiCallInProgress
                                                             "
                                                             [value]="method.value"
                                                         >
@@ -206,7 +206,7 @@
                                                     [name]="'changeInValue'"
                                                     [allowDecimalDigitsOnly]="true"
                                                     (input)="
-                                                        calculateCalculation(
+                                                        calculateInventory(
                                                             adjustInventoryCreateEditForm,
                                                             stockGroupClosingBalance
                                                         )
@@ -364,7 +364,7 @@
                                 *ngIf="!referenceNumber"
                                 mat-stroked-button
                                 color="primary"
-                                (click)="createInventory()"
+                                (click)="createInventoryAdjustment()"
                             >
                                 {{ commonLocaleData?.app_create }}
                             </button>
@@ -377,7 +377,7 @@
                                 mat-stroked-button
                                 color="primary"
                                 class="min-width-100"
-                                (click)="updateInventory()"
+                                (click)="updateInventoryAdjustment()"
                             >
                                 {{ commonLocaleData?.app_update }}
                             </button>

@@ -18,6 +18,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { SettingsFinancialYearActions } from '../../../actions/settings/financial-year/financial-year.action';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AdjustmentInventory, API_COUNT_LIMIT } from '../../../app.constant';
+import { cloneDeep } from '../../../lodash-optimized';
 @Component({
     selector: 'adjust-inventory',
     templateUrl: './adjust-inventory.component.html',
@@ -107,8 +108,8 @@ export class AdjustInventoryComponent implements OnInit {
     public balanceReqObj: any;
     /** True if entity is stock group */
     public isEntityStockGroup: boolean = false;
-    /** False if allApiCalled */
-    public allApiCalled: boolean = true;
+    /** Holds true when api is in progress */
+    public apiCallInProgress: boolean = true;
     /** Hold Adjusment Inventory Form Value */
     public inventoryFormValue: any;
 
@@ -135,7 +136,7 @@ export class AdjustInventoryComponent implements OnInit {
             if (params?.refNo) {
                 this.referenceNumber = params?.refNo;
                 this.componentStore.getAdjustInventoryData(this.referenceNumber);
-                this.allApiCalled = true;
+                this.apiCallInProgress = true;
             }
         });
     }
@@ -148,7 +149,7 @@ export class AdjustInventoryComponent implements OnInit {
     public ngOnInit(): void {
         this.initForm();
         this.getWarehouses();
-        this.getResons();
+        this.getReasons();
         this.getExpensesAccount();
         this.getItemWiseReport();
         if (this.referenceNumber) {
@@ -229,8 +230,8 @@ export class AdjustInventoryComponent implements OnInit {
                 if (this.referenceNumber) {
                     this.stockGroupClosingBalance.changeValue = 0;
                     this.stockGroupClosingBalance.newValue = 0;
-                    this.calculateCalculation();
-                    this.allApiCalled = false;
+                    this.calculateInventory();
+                    this.apiCallInProgress = false;
                 }
             }
         });
@@ -290,27 +291,27 @@ export class AdjustInventoryComponent implements OnInit {
         /** Create inventory success observable */
         this.createAdjustInventoryIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.allApiCalled = false;
+                this.apiCallInProgress = false;
                 this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust`]);
             } else if (response !== null) {
-                this.allApiCalled = false;
+                this.apiCallInProgress = false;
             }
         });
 
         /** Update inventory success observable */
         this.updateAdjustInventoryIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.allApiCalled = false;
+                this.apiCallInProgress = false;
                 this.router.navigate([`/pages/inventory/v2/${this.inventoryType}/adjust`]);
             } else if (response !== null) {
-                this.allApiCalled = false;
+                this.apiCallInProgress = false;
             }
         });
 
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
+                let universalDate = cloneDeep(dateObj);
                 this.adjustInventoryCreateEditForm.get('date')?.patchValue(dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT));
                 this.stockReportRequest.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
             }
@@ -323,7 +324,6 @@ export class AdjustInventoryComponent implements OnInit {
      * @memberof AdjustInventoryComponent
      */
     public getItemWiseReport(): void {
-        this.searchRequest.count = 20000000;
         this.searchRequest.inventoryType = this.inventoryType?.toUpperCase();
         this.searchRequest.searchPage = 'VARIANT';
         this.componentStore.getItemWiseReport(this.searchRequest);
@@ -385,7 +385,7 @@ export class AdjustInventoryComponent implements OnInit {
         this.matDialogRef?.close();
 
         if (event) {
-            this.getResons();
+            this.getReasons();
         }
     }
 
@@ -530,7 +530,7 @@ export class AdjustInventoryComponent implements OnInit {
      *
      * @memberof AdjustInventoryComponent
      */
-    public getResons(): void {
+    public getReasons(): void {
         this.componentStore.getAllReasons(true);
     }
     /**
@@ -539,7 +539,7 @@ export class AdjustInventoryComponent implements OnInit {
      * @return {*}  {void}
      * @memberof AdjustInventoryComponent
      */
-    public updateInventory(): void {
+    public updateInventoryAdjustment(): void {
         this.isFormSubmitted = false;
         if (this.adjustInventoryCreateEditForm.invalid) {
             this.isFormSubmitted = true;
@@ -563,7 +563,7 @@ export class AdjustInventoryComponent implements OnInit {
             formValue: adjustFormValue,
             branchUniqueName: this.generalService.currentBranchUniqueName
         }
-        this.allApiCalled = true;
+        this.apiCallInProgress = true;
         this.componentStore.updateInventoryAdjustment(reqObj);
     }
 
@@ -573,7 +573,7 @@ export class AdjustInventoryComponent implements OnInit {
      * @return {*}  {void}
      * @memberof AdjustInventoryComponent
      */
-    public createInventory(): void {
+    public createInventoryAdjustment(): void {
         this.isFormSubmitted = false;
         if (this.adjustInventoryCreateEditForm.invalid) {
             this.isFormSubmitted = true;
@@ -598,7 +598,7 @@ export class AdjustInventoryComponent implements OnInit {
             formValue: adjustFormValue,
             branchUniqueName: this.generalService.currentBranchUniqueName
         }
-        this.allApiCalled = true;
+        this.apiCallInProgress = true;
         this.componentStore.createInventoryAdjustment(reqObj);
     }
 
@@ -618,13 +618,11 @@ export class AdjustInventoryComponent implements OnInit {
     }
 
     /**
-     * This will be use fo calculate calculation
+     * This will be use for  calculation
      *
-     * @param {FormGroup} adjustInventoryCreateEditForm
-     * @param {*} stockGroupClosingBalance
      * @memberof AdjustInventoryComponent
      */
-    public calculateCalculation(): void {
+    public calculateInventory(): void {
         this.stockGroupClosingBalance.changeValue = 0;
         this.stockGroupClosingBalance.newValue = 0;
         if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
