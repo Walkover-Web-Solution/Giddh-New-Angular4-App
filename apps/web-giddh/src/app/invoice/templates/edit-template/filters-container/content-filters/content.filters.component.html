@@ -33,7 +33,7 @@
                             fieldsAndVisibility.header.displayExchangeRate &&
                             customTemplate?.templateType !== 'gst_template_b' &&
                             customTemplate?.templateType !== 'gst_template_d' &&
-                            customTemplate.templateType !== 'thermal_template'
+                            customTemplate?.templateType !== 'thermal_template'
                         "
                         class="form-group"
                     >
@@ -51,7 +51,7 @@
                             fieldsAndVisibility.header.displayPlaceOfSupply &&
                             customTemplate?.templateType !== 'gst_template_b' &&
                             customTemplate?.templateType !== 'gst_template_d' &&
-                            customTemplate.templateType !== 'thermal_template'
+                            customTemplate?.templateType !== 'thermal_template'
                         "
                         class="form-group"
                     >
@@ -69,7 +69,7 @@
                             fieldsAndVisibility.header.displayPlaceOfCountry &&
                             customTemplate?.templateType !== 'gst_template_b' &&
                             customTemplate?.templateType !== 'gst_template_d' &&
-                            customTemplate.templateType !== 'thermal_template'
+                            customTemplate?.templateType !== 'thermal_template'
                         "
                         class="form-group"
                     >
@@ -87,7 +87,7 @@
                             fieldsAndVisibility.header.displayLutNumber &&
                             customTemplate?.templateType !== 'gst_template_b' &&
                             customTemplate?.templateType !== 'gst_template_d' &&
-                            customTemplate.templateType !== 'thermal_template'
+                            customTemplate?.templateType !== 'thermal_template'
                         "
                         class="form-group"
                     >
@@ -1773,7 +1773,7 @@
                         <tr
                             *ngIf="
                                 customTemplate?.templateType === 'gst_template_a' &&
-                                customTemplate.templateType !== 'thermal_template' &&
+                                customTemplate?.templateType !== 'thermal_template' &&
                                 customTemplate.sections['table'].data['displayBaseCurrency']
                             "
                         >
@@ -2295,7 +2295,6 @@
                         class="clearfix mr-t1 form-group"
                         *ngIf="
                             customTemplate?.templateType !== 'thermal_template' &&
-                            customTemplate.templateType !== 'thermal_template' &&
                             customTemplate.sections['footer'].data['displayExportMessage']
                         "
                     >
