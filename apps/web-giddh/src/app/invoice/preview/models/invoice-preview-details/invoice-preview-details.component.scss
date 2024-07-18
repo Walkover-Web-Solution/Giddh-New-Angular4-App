@@ -1050,25 +1050,6 @@ strong {
         }
     }
 }
-@media (max-width: 768px) {
-    .invoice-modal-content {
-        left: 60px;
-        width: 100%;
-    }
-    .invoice-modal-content:after {
-        display: none;
-    }
-}
-@media (max-width: 767px) {
-    .center-block .btn-sm {
-        float: none !important;
-        text-align: center !important;
-        display: block;
-        margin: 0 !important;
-        width: 100%;
-        padding: 4px 0;
-    }
-}
 
 /*responsive*/
 @media (max-width: 1199px) {
@@ -1164,16 +1145,6 @@ strong {
     }
 }
 
-@media (max-width: 767px) {
-    .invoice-modal-content {
-        top: 90px !important;
-        left: 0;
-        &:after {
-            top: 90px !important;
-            left: 0;
-        }
-    }
-}
 @media (max-width: 991px) {
     .invoice-preview-sidebar {
         display: none;
@@ -1209,38 +1180,6 @@ strong {
     .wrap-edit-history-btn {
         display: flex;
         align-items: center;
-    }
-}
-
-@media (max-width: 575px) {
-    .wrap-edit-history-btn {
-        float: none;
-        display: flex;
-        width: 100%;
-        padding-top: 10px;
-    }
-    .change-status-dropdown {
-        float: left;
-    }
-    span.close-modal.pull-right {
-        position: absolute !important;
-        top: -42px;
-        right: 30px;
-    }
-    .invoice-detail-header {
-        .edit-change-status {
-            flex-direction: column;
-            .wrap-edit-history-btn {
-                justify-content: space-between;
-            }
-        }
-    }
-}
-
-@media (max-width: 375px) {
-    .invoice-modal-content:after,
-    .invoice-modal-content {
-        top: 121px;
     }
 }
 

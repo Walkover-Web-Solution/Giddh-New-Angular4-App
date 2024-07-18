@@ -1234,7 +1234,7 @@
                                 >
                                     <div class="d-flex align-items-center">
                                         <div class="flex-fill select-action">
-                                            <span [ngClass]="{ 'text-light-2': !item.balanceStatus }">{{
+                                            <span [ngClass]="{ 'text-light-2': !item?.balanceStatus }">{{
                                                 item.balanceStatus
                                                     ? item.balanceStatus
                                                     : commonLocaleData?.app_select_action
@@ -1316,7 +1316,7 @@
                                 >
                                     <div class="d-flex align-items-center">
                                         <div class="flex-fill select-action">
-                                            <span [ngClass]="{ 'text-light-2': !item.balanceStatus }">
+                                            <span [ngClass]="{ 'text-light-2': !item?.balanceStatus }">
                                                 {{ item?.balanceStatus }}
                                             </span>
                                         </div>
@@ -1541,7 +1541,7 @@
                                 >
                                     <div class="d-flex align-items-center">
                                         <div class="flex-fill select-action">
-                                            <span [ngClass]="{ 'text-light-2': !item.balanceStatus }">{{
+                                            <span [ngClass]="{ 'text-light-2': !item?.balanceStatus }">{{
                                                 item.balanceStatus
                                                     ? item.balanceStatus
                                                     : commonLocaleData?.app_select_action
@@ -1743,7 +1743,7 @@
                                             <div class="cursor-pointer" *ngIf="item.balanceStatus !== 'cancel'">
                                                 <div class="d-flex align-items-center">
                                                     <div class="flex-fill select-action">
-                                                        <span [ngClass]="{ 'text-light-2': !item.balanceStatus }">{{
+                                                        <span [ngClass]="{ 'text-light-2': !item?.balanceStatus }">{{
                                                             item.balanceStatus
                                                                 ? item.balanceStatus
                                                                 : commonLocaleData?.app_select_action
