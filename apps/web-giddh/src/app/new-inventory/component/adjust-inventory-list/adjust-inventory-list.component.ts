@@ -39,7 +39,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will use for table display columns */
-    public displayedColumns: string[] = ['DATE', 'referenceNo', 'name', 'reason', 'status', 'ADJUSTED_BY', 'adjustmentMethod', 'TYPE', 'action'];
+    public displayedColumns: string[] = ['date', 'referenceNo', 'name', 'reason', 'status', 'adjustedBy', 'adjustmentMethod', 'type', 'action'];
     /** Hold the data of inventory list */
     public dataSource: any;
     /** True if translations loaded */
