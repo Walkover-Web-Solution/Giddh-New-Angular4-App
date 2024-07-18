@@ -255,7 +255,7 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                 return this.settingsTaxesService.getExportSaleTaxReport(req.reportType, req.params, req.isExport).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            if(res?.status === 'success') {
+                            if (res?.status === 'success') {
                                 switch (req.reportType) {
                                     case SalesTaxReport.TaxAuthorityWise:
                                         return this.patchState({
@@ -316,22 +316,32 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
                 return this.settingsTaxesService.getExportSaleTaxReport(req.reportType, req.params, req.isExport).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            switch (req.reportType) {
-                                case SalesTaxReport.TaxAuthorityWise:
-                                    return this.patchState({
-                                        exportTaxAuthorityWiseReport: res?.body ?? '',
-                                        isLoading: false
-                                    });
-                                case SalesTaxReport.TaxWise:
-                                    return this.patchState({
-                                        exportTaxWiseReport: res?.body ?? '',
-                                        isLoading: false
-                                    });
-                                case SalesTaxReport.AccountWise:
-                                    return this.patchState({
-                                        exportAccountWiseReport: res?.body ?? '',
-                                        isLoading: false
-                                    });
+                            if (res?.status === 'success') {
+                                switch (req.reportType) {
+                                    case SalesTaxReport.TaxAuthorityWise:
+                                        return this.patchState({
+                                            exportTaxAuthorityWiseReport: res?.body ?? '',
+                                            isLoading: false
+                                        });
+                                    case SalesTaxReport.TaxWise:
+                                        return this.patchState({
+                                            exportTaxWiseReport: res?.body ?? '',
+                                            isLoading: false
+                                        });
+                                    case SalesTaxReport.AccountWise:
+                                        return this.patchState({
+                                            exportAccountWiseReport: res?.body ?? '',
+                                            isLoading: false
+                                        });
+                                }
+                            } else {
+                                res?.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    isLoading: false,
+                                    exportTaxAuthorityWiseReport: null,
+                                    exportTaxWiseReport: null,
+                                    exportAccountWiseReport: null
+                                });
                             }
                         },
                         (error: any) => {
