@@ -1992,7 +1992,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (address?.state) {
             state.name = address.state?.name;
             state.code = address.state?.code;
-        } else if (address?.stateName && address?.stateCode) {
+        } else if (address?.stateName && address?.stateCode && !address?.county) {
             state.name = address.stateName;
             state.code = address.stateCode;
         } else if (address?.county) {
