@@ -592,7 +592,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            if (response === 'Yes') {
+            if (response === this.commonLocaleData?.app_yes) {
                 this.componentStore.deleteInventoryAdjust(item?.refNo);
             }
         });

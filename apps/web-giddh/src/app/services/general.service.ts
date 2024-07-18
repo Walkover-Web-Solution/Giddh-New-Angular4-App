@@ -2017,11 +2017,11 @@ export class GeneralService {
     public deleteInventoryAdjustAdjustConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
 
         const buttons: Array<ConfirmationModalButton> = [{
-            text: 'Yes',
+            text: commonLocaleData?.app_yes,
             color: 'primary'
         },
         {
-            text: 'No'
+            text: commonLocaleData?.app_no
         }];
         const headerText: string = commonLocaleData?.app_confirmation;
         const headerCssClass: string = 'd-inline-block mr-1';
