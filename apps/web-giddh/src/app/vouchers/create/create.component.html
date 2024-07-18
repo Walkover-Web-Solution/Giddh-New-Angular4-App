@@ -99,11 +99,8 @@
                                         </ng-container>
                                     </div>
                                 </div>
-                                <div class="col-2 text-right"
-                                    *ngIf="!invoiceType.isPurchaseOrder  && !invoiceType.isCashInvoice && !invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
-                                    <div class="balance-due-label">{{ invoiceType.isProformaInvoice ||
-                                        invoiceType.isEstimateInvoice ? commonLocaleData?.app_total_amount :
-                                        localeData?.balance_due }}</div>
+                                <div class="col-2 text-right" *ngIf="!invoiceType.isPurchaseOrder && !invoiceType.isCashInvoice">
+                                    <div class="balance-due-label">{{ invoiceType.isProformaInvoice || invoiceType.isEstimateInvoice ? commonLocaleData?.app_total_amount : localeData?.balance_due }}</div>
                                     <h2 class="d-inline-block">
                                         <amount-field [amount]="voucherTotals.balanceDue"
                                             [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
@@ -1711,8 +1708,7 @@
                                                         </amount-field>
                                                     </td>
                                                 </tr>
-                                                <ng-container
-                                                    *ngIf="!invoiceType.isPurchaseOrder  && !invoiceType.isCashInvoice && !invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
+                                                <ng-container *ngIf="!invoiceType.isPurchaseOrder && !invoiceType.isCashInvoice">
                                                     <tr>
                                                         <td>
                                                             {{ invoiceType.isProformaInvoice ||

@@ -20,9 +20,13 @@
     "add_vat": "वैट जोड़ें",
     "liability_report": "दायित्व रिपोर्ट",
     "gst_setting": "जीएसटी सेटिंग",
+<<<<<<< HEAD
     "manage_tax": "कर का प्रबंधन करें",
     "add_sales_tax": "बिक्री कर जोड़ें",
     "manage_tax_authority": "कर प्राधिकरण प्रबंधित करें",
     "rate_wise": "रेट वाइज",
     "account_wise": "खातावार"
+=======
+    "manage_tax": "कर का प्रबंधन करें"
+>>>>>>> ab585ddb45acf80314b8b9187140333b96f8e03c
 }

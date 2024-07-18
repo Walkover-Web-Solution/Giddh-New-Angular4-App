@@ -52,8 +52,12 @@ export class VouchersUtilityService {
                 isCashInvoice = true;
             }
         }
+<<<<<<< HEAD
 
         return { isSalesInvoice, isCashInvoice, isCreditNote, isDebitNote, isPurchaseInvoice, isProformaInvoice, isEstimateInvoice, isPurchaseOrder, isReceiptInvoice, isPaymentInvoice };
+=======
+        return { isSalesInvoice, isCashInvoice, isCreditNote, isDebitNote, isPurchaseInvoice, isProformaInvoice, isEstimateInvoice, isPurchaseOrder };
+>>>>>>> ab585ddb45acf80314b8b9187140333b96f8e03c
     }
 
     public parseVoucherType(voucherType: string): string {
