@@ -641,7 +641,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             .subscribe((state: BreakpointState) => {
                 this.isLargeWindow = state.matches;
                 this.adjustNavigationBar();
-                   if(state.matches){
+                if (state.matches) {
                     this.expandSidebar(true);
                 } else {
                     this.collapseSidebar(true);
@@ -1758,9 +1758,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public getSubscriptionEndNote(): string {
         let text = this.localeData?.subscription_end_note;
         if (this.planVersion === 2) {
-            text = text?.replace("[PLAN_DURATION]", this.subscribedPlan?.duration)?.replace("[PLAN_DURATION_UNIT]", '')?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry);
+            text = text
+                ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
+                ?.replace("[PLAN_DURATION_UNIT]", '')
+                ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
+                ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
         } else {
-            text = text?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration)?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit)?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry);
+            text = text
+                ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
+                ?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase() ?? '')
+                ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
+                ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
         }
         return text;
     }
@@ -1773,7 +1781,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public getSubscriptionEndedNote(): string {
         let text = this.localeData?.subscription_ended_note;
-        text = text?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration)?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit)?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry);
+        text = text
+            ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
+            ?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase() ?? '')
+            ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
+            ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
         return text;
     }
 
@@ -1785,7 +1797,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public getSubscriptionTransactionEndedNote(): string {
         let text = this.localeData?.subscription_transaction_limit_ended;
-        text = text?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[PLAN_START_DATE]", this.subscribedPlan?.startedAt);
+        text = text
+            ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
+            ?.replace("[PLAN_START_DATE]", this.subscribedPlan?.startedAt ?? '');
         return text;
     }
 
@@ -1797,7 +1811,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public getPlanExpiredNote(): string {
         let text = this.localeData?.plan_expired_note;
-        text = text?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration)?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase())?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry);
+        text = text
+            ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
+            ?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase() ?? '')
+            ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
+            ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
         return text;
     }
 
@@ -1809,7 +1827,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public getTransactionLimitCrossedNote(): string {
         let text = this.localeData?.transaction_limit_crossed;
-        text = text?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[PLAN_START_DATE]", this.subscribedPlan?.startedAt);
+        text = text
+            ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
+            ?.replace("[PLAN_START_DATE]", this.subscribedPlan?.startedAt ?? '');
         return text;
     }
 
