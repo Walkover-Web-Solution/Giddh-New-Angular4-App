@@ -56,7 +56,7 @@ export class SettingsTaxesService {
     /**
      * Get Tax List
      */
-    public GetTaxList(countryCode: string): Observable<BaseResponse<any, any>> {
+    public getTaxList(countryCode: string): Observable<BaseResponse<any, any>> {
         return this.http.get(this.config.apiUrl + COMPANY_API.GET_ALL_TAXES?.replace(':country', encodeURIComponent(countryCode))).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;
@@ -146,21 +146,21 @@ export class SettingsTaxesService {
                 break;
             case SalesTaxReport.TaxWise: apiUrl +=
                 (isExport ? COMPANY_API.EXPORT_SALES_TAX_WISE_REPORT : COMPANY_API.GET_SALES_TAX_WISE_REPORT)
-                ?.replace(':taxAuthorityUniqueName', encodeURIComponent(params?.taxAuthorityUniqueName))
+                ?.replace(':taxAuthorityUniqueName', encodeURIComponent(params.taxAuthorityUniqueName ?? ''))
                 break;
             case SalesTaxReport.AccountWise: apiUrl +=
                 (isExport ? COMPANY_API.EXPORT_SALES_ACCOUNT_WISE_REPORT : COMPANY_API.GET_SALES_TAX_ACCOUNT_WISE_REPORT)
-                ?.replace(':taxAuthorityUniqueName', encodeURIComponent(params?.taxAuthorityUniqueName))
-                ?.replace(':taxUniqueName', encodeURIComponent(params?.taxUniqueName))
+                ?.replace(':taxAuthorityUniqueName', encodeURIComponent(params.taxAuthorityUniqueName ?? ''))
+                ?.replace(':taxUniqueName', encodeURIComponent(params.taxUniqueName ?? ''))
                 break;
         }
         return this.http.get(apiUrl
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':taxNumber', encodeURIComponent(params?.taxNumber))
-            ?.replace(':count', encodeURIComponent(params?.count))
-            ?.replace(':page', encodeURIComponent(params?.page))
-            ?.replace(':from', encodeURIComponent(params?.from))
-            ?.replace(':to', encodeURIComponent(params?.to))
+            ?.replace(':taxNumber', encodeURIComponent(params.taxNumber))
+            ?.replace(':count', encodeURIComponent(params.count))
+            ?.replace(':page', encodeURIComponent(params.page))
+            ?.replace(':from', encodeURIComponent(params.from))
+            ?.replace(':to', encodeURIComponent(params.to))
         ).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
             return data;

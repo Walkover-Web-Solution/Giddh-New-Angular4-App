@@ -79,16 +79,16 @@ export class AccountWiseReportComponent implements OnInit {
         // Subscribe Export Report Success Observable
         this.componentStore.exportAccountWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.downloadReport(response);
+                this.downloadReport(response.data, response.name);
             }
         });
 
         // Subscribe Sales Report List Observable
         this.componentStore.accountWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.pagination.page = response?.page;
-                this.pagination.totalItems = response?.totalItems;
-                this.pagination.totalPages = response?.totalPages;
+                this.pagination.page = response.page;
+                this.pagination.totalItems = response.totalItems;
+                this.pagination.totalPages = response.totalPages;
             }
         });
     }
@@ -157,13 +157,14 @@ export class AccountWiseReportComponent implements OnInit {
     /**
      * Download Excel Report
      *
-     * @param {*} response
+     * @param {string} base64String
+     * @param {string} fileName
      * @returns {void}
      * @memberof AccountWiseReportComponent
      */
-    public downloadReport(response: any): void {
-        let blob = this.generalService.base64ToBlob(response, 'application/xls', 512);
-        return saveAs(blob, `Sales Tax Report - Account wise.csv`);
+    public downloadReport(base64String: string, fileName: string): void {
+        let blob = this.generalService.base64ToBlob(base64String, 'application/xls', 512);
+        return saveAs(blob, fileName);
     }
 
     /**
@@ -191,5 +192,4 @@ export class AccountWiseReportComponent implements OnInit {
         this.destroyed$.complete();
         this.asideGstSidebarMenuState === 'out';
     }
-
 }

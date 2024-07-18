@@ -19,7 +19,7 @@ export class VouchersUtilityService {
                 return TaxType.TRN;
             } else if (countryCode === TaxSupportedCountries.GB || countryCode === TaxSupportedCountries.ZW || countryCode === TaxSupportedCountries.KE) {
                 return TaxType.VAT;
-            } else if(countryCode === TaxSupportedCountries.US) {
+            } else if (countryCode === TaxSupportedCountries.US) {
                 return TaxType.SALES_TAX;
             }
         } else {

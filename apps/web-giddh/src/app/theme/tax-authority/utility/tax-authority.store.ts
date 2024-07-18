@@ -5,7 +5,7 @@ import { ITaxAuthority } from "../../../models/interfaces/tax.interface";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { ToasterService } from "../../../services/toaster.service";
 import { SettingsTaxesService } from "../../../services/settings.taxes.service";
-import { SalesTaxReport } from "./tax-authority.const";
+import { SalesTaxReport, SalesTaxReportRequest } from "./tax-authority.const";
 import { LocaleService } from "../../../services/locale.service";
 import { AppState } from "../../../store";
 import { Store } from "@ngrx/store";
@@ -16,9 +16,9 @@ export interface TaxAuthorityState {
     taxAuthorityWiseReport: any;
     taxWiseReport: any;
     accountWiseReport: any;
-    exportTaxAuthorityWiseReport: string;
-    exportTaxWiseReport: string;
-    exportAccountWiseReport: string;
+    exportTaxAuthorityWiseReport: any;
+    exportTaxWiseReport: any;
+    exportAccountWiseReport: any;
     createTaxAuthorityIsSuccess: boolean;
     deleteTaxAuthorityIsSuccess: boolean;
     updateTaxAuthorityIsSuccess: boolean;
@@ -45,7 +45,7 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
         private toaster: ToasterService,
         private settingsTaxesService: SettingsTaxesService,
         private localeService: LocaleService,
-        private store: Store<AppState>,
+        private store: Store<AppState>
     ) {
         super(DEFAULT_STATE);
     }
@@ -65,6 +65,11 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
     public stateList$: Observable<any> = this.select(this.store.select(state => state.general.states), (response) => response);
 
+    /**
+     * Get Tax Authority list
+     *
+     * @memberof TaxAuthorityComponentStore
+     */
     readonly getTaxAuthorityList = this.effect((data: Observable<void>) => {
         return data.pipe(
             switchMap(() => {
@@ -238,7 +243,7 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
      *
      * @memberof TaxAuthorityComponentStore
      */
-    readonly getSalesTaxReport = this.effect((data: Observable<{ reportType: string, params: any, isExport: boolean }>) => {
+    readonly getSalesTaxReport = this.effect((data: Observable<{ reportType: string, params: SalesTaxReportRequest, isExport: boolean }>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({
@@ -299,7 +304,7 @@ export class TaxAuthorityComponentStore extends ComponentStore<TaxAuthorityState
      *
      * @memberof TaxAuthorityComponentStore
      */
-    readonly exportSalesTaxReport = this.effect((data: Observable<{ reportType: string, params: any, isExport: boolean }>) => {
+    readonly exportSalesTaxReport = this.effect((data: Observable<{ reportType: string, params: SalesTaxReportRequest, isExport: boolean }>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({
