@@ -1,9 +1,9 @@
 {
 	"giddh_logo": "गिद्ध-लोगो",
 	"click_here": "यहाँ क्लिक करें",
-	"subscription_end_note": "आपका [PLAN_DURATION] [PLAN_DURATION_UNIT] प्लान [PLAN_NAME] [EXPIRY_DATE] को समाप्त होगा। अपनी सदस्यता को अपग्रेड करने के लिए आवेदन करें।",
-	"subscription_ended_note": "आपका [PLAN_DURATION] [PLAN_DURATION_UNIT] प्लान [PLAN_NAME] [EXPIRY_DATE] को समाप्त हो गया। अपनी सदस्यता को अपग्रेड करने के लिए आवेदन करें।",
-	"subscription_transaction_limit_ended": "आपने [PLAN_START_DATE] को सब्सक्राइब किए गए अपने असाइन किए गए प्लान [PLAN_NAME] की लेन-देन की सीमा पार कर ली है। गिद्ध के साथ अपना लेखा-जोखा जारी रखने के लिए, कृपया अपनी वर्तमान योजना का नवीनीकरण करें या किसी अन्य योजना पर स्विच करें। अधिक सहायता के लिए हमसे संपर्क करें।",
+	"subscription_end_note": "आपकी [PLAN_DURATION] [PLAN_DURATION_UNIT] योजना - [PLAN_NAME] [EXPIRY_DATE] को समाप्त हो जाएगी। अपनी सदस्यता को अपग्रेड करने के लिए आवेदन करें।",
+	"subscription_ended_note": "आपकी [PLAN_DURATION] [PLAN_DURATION_UNIT] योजना - [PLAN_NAME] [EXPIRY_DATE] को समाप्त हो गई। अपनी सदस्यता को अपग्रेड करने के लिए आवेदन करें।",
+	"subscription_transaction_limit_ended": "आपने अपनी निर्धारित योजना की लेन-देन सीमा पार कर ली है - [PLAN_NAME] ने [PLAN_START_DATE] को सदस्यता ली थी। गिद्ध के साथ अपना लेखा-जोखा जारी रखने के लिए, कृपया अपनी वर्तमान योजना को नवीनीकृत करें या किसी अन्य योजना पर स्विच करें। अधिक सहायता के लिए हमसे संपर्क करें।",
 	"ready_to_upgrade": "सदस्यता अपग्रेड करने के लिए तैयार",
 	"renew_plan": "नवीनीकरण योजना",
 	"change_plan": "योजना बदलें",
