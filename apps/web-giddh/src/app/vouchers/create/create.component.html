@@ -114,7 +114,7 @@
                                 <div class="col-12">
                                     <span
                                         *ngIf="!invoiceType.isCashInvoice && invoiceForm.controls['account'].get('uniqueName')?.value"
-                                        class="vouchers-form-fields-detail cursor-pointer"
+                                        class="vouchers-form-fields-detail cursor-pointer hello"
                                         (click)="toggleAccountAsidePane(accountType.customer, false)">
                                         {{ !invoiceType.isPurchaseOrder && !invoiceType.isDebitNote &&
                                         !invoiceType.isPurchaseInvoice && !invoiceType.isPaymentInvoice ?
