@@ -72,10 +72,10 @@
                                                     <reactive-dropdown-field
                                                         [label]="commonLocaleData?.app_state"
                                                         [readonly]="
-                                                            addressConfiguration?.type === 'editAddress' &&
+                                                           (addressConfiguration?.type === 'editAddress' &&
                                                             addressToUpdate?.taxNumber &&
                                                             addressConfiguration?.tax?.name &&
-                                                            addressConfiguration?.tax?.name === 'GSTIN' || (addressForm?.get('stateLabel')?.value && addressForm?.get('taxNumber')?.value)
+                                                            addressConfiguration?.tax?.name === 'GSTIN') || (addressForm?.get('stateLabel')?.value !== null && addressForm?.get('taxNumber')?.value !== null)
                                                         "
                                                         [options]="addressConfiguration?.stateList"
                                                         formControlName="state"
