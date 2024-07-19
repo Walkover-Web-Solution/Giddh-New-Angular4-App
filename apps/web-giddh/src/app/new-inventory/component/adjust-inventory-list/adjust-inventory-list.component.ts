@@ -38,8 +38,13 @@ export class AdjustInventoryComponent implements OnInit {
         private modalService: BsModalService
     ) { }
 
-    /*datepicker funcation*/
-    public showGiddhDatepicker(element: any): void {
+/**
+ * Show datepicker
+ *
+ * @param {*} element
+ * @memberof AdjustInventoryComponent
+ */
+public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
         }
