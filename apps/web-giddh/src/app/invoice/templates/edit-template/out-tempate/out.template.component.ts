@@ -34,6 +34,8 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
     public companyUniqueName$: Observable<string>;
     /* This will hold the value if Gst Composition will show/hide */
     public showGstComposition: boolean = false;
+    /** Active company details */
+    public activeCompany: any;
 
     constructor(
         private store: Store<AppState>,
@@ -60,6 +62,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy, OnChanges {
     public ngOnInit() {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany?.countryV2?.countryName) {
+                this.activeCompany = cloneDeep(activeCompany);
                 this.showGstComposition = activeCompany.countryV2.countryName === 'India';
             } else {
                 this.showGstComposition = false;
