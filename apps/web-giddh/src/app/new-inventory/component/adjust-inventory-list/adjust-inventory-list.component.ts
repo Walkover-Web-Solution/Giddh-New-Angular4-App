@@ -71,14 +71,13 @@ export class AdjustInventoryComponent implements OnInit {
         private dialog: MatDialog,
     ) { }
 
-
-
-    public ngOnInit() {
-
-    }
-
-    /*datepicker funcation*/
-    public showGiddhDatepicker(element: any): void {
+/**
+ * Show datepicker
+ *
+ * @param {*} element
+ * @memberof AdjustInventoryComponent
+ */
+public showGiddhDatepicker(element: any): void {
         if (element) {
             this.dateFieldPosition = this.generalService.getPosition(element.target);
         }
