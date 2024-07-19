@@ -309,6 +309,7 @@ export class ObligationsComponent implements OnInit, OnDestroy {
                     value: tax
                 }));
             }
+            console.log("ankit" , this.taxesList);
         });
     }
 
