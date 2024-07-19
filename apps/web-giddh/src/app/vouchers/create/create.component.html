@@ -99,11 +99,16 @@
                                         </ng-container>
                                     </div>
                                 </div>
+<<<<<<< HEAD
                                 <div class="col-2 text-right"
                                     *ngIf="!invoiceType.isPurchaseOrder  && !invoiceType.isCashInvoice && !invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
                                     <div class="balance-due-label">{{ invoiceType.isProformaInvoice ||
                                         invoiceType.isEstimateInvoice ? commonLocaleData?.app_total_amount :
                                         localeData?.balance_due }}</div>
+=======
+                                <div class="col-2 text-right" *ngIf="!invoiceType.isPurchaseOrder && !invoiceType.isCashInvoice">
+                                    <div class="balance-due-label">{{ invoiceType.isProformaInvoice || invoiceType.isEstimateInvoice ? commonLocaleData?.app_total_amount : localeData?.balance_due }}</div>
+>>>>>>> 9254a8f53a85255e92c014fa2dd55fe436052eb9
                                     <h2 class="d-inline-block">
                                         <amount-field [amount]="voucherTotals.balanceDue"
                                             [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
