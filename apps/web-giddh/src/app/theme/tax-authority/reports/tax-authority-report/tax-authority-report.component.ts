@@ -70,16 +70,16 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
         // Subscribe Export Report Success Observable
         this.componentStore.exportTaxAuthorityWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.downloadReport(response);
+                this.downloadReport(response.data, response.name);
             }
         });
 
         // Subscribe Sales Report List Observable
         this.componentStore.taxAuthorityWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.pagination.page = response?.page;
-                this.pagination.totalItems = response?.totalItems;
-                this.pagination.totalPages = response?.totalPages;
+                this.pagination.page = response.page;
+                this.pagination.totalItems = response.totalItems;
+                this.pagination.totalPages = response.totalPages;
             }
         });
     }
@@ -146,13 +146,14 @@ export class TaxAuthorityReportComponent implements OnInit, OnDestroy {
     /**
      * Download Excel Report
      *
-     * @param {*} response
+     * @param {string} base64String
+     * @param {string} fileName
      * @returns {void}
      * @memberof TaxAuthorityReportComponent
      */
-    public downloadReport(response: any): void {
-        let blob = this.generalService.base64ToBlob(response, 'application/xls', 512);
-        return saveAs(blob, `Sales Tax Report - Tax Authority wise.csv`);
+    public downloadReport(base64String: string, fileName: string): void {
+        let blob = this.generalService.base64ToBlob(base64String, 'application/xls', 512);
+        return saveAs(blob, fileName);
     }
 
     /**

@@ -24,17 +24,17 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Holds table columns */
     public displayedColumns: string[] = ['tax_name', 'total_sales', 'taxable_amount', 'tax_percentage', 'tax_collected'];
-     /** Holds page size options */
-     public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
-     /** Hold table page index number*/
-     public pageIndex: number = 0;
-     /** Holds pagination request  */
-     public pagination: IPagination = {
-         page: 1,
-         count: this.pageSizeOptions[0],
-         totalItems: null,
-         totalPages: null
-     };
+    /** Holds page size options */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+    /** Hold table page index number*/
+    public pageIndex: number = 0;
+    /** Holds pagination request  */
+    public pagination: IPagination = {
+        page: 1,
+        count: this.pageSizeOptions[0],
+        totalItems: null,
+        totalPages: null
+    };
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
     /** Loading Observable */
@@ -67,7 +67,7 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
                 this.getFormControl('taxAuthorityUniqueName').patchValue(queryParams.uniqueName ?? '');
             }
         });
-        
+
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
@@ -77,16 +77,16 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
         // Subscribe Export Report Success Observable
         this.componentStore.exportTaxWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.downloadReport(response);
+                this.downloadReport(response.data, response.name);
             }
         });
 
         // Subscribe Sales Report List Observable
         this.componentStore.taxWiseReport$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.pagination.page = response?.page;
-                this.pagination.totalItems = response?.totalItems;
-                this.pagination.totalPages = response?.totalPages;
+                this.pagination.page = response.page;
+                this.pagination.totalItems = response.totalItems;
+                this.pagination.totalPages = response.totalPages;
             }
         });
     }
@@ -154,20 +154,21 @@ export class RateWiseReportComponent implements OnInit, OnDestroy {
     /**
      * Download Excel Report
      *
-     * @param {*} response
+     * @param {string} base64String
+     * @param {string} fileName
      * @returns {void}
      * @memberof RateWiseReportComponent
      */
-    public downloadReport(response: any): void {
-        let blob = this.generalService.base64ToBlob(response, 'application/xls', 512);
-        return saveAs(blob, `Sales Tax Report - Rate wise.csv`);
+    public downloadReport(base64String: string, fileName: string): void {
+        let blob = this.generalService.base64ToBlob(base64String, 'application/xls', 512);
+        return saveAs(blob, fileName);
     }
 
     /**
     * This will use for page change
     *
     * @param {*} event
-    * @memberof AccountWiseReportComponent
+    * @memberof RateWiseReportComponent
     */
     public handlePageChange(event: any): void {
         if (event) {

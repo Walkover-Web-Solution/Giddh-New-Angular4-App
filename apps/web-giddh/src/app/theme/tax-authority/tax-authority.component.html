@@ -15,7 +15,7 @@
             <div class="mb-5">
                 <img src="assets/images/create-discounts.png" alt="create discount banner image" width="500px" height="auto">
             </div>
-            <button mat-raised-button color="primary" (click)="openCreateUpdateTaxAuthorityDialog()"> 
+            <button mat-raised-button color="primary" (click)="openCreateUpdateTaxAuthorityDialog()" class="font-20"> 
                 {{ commonLocaleData?.app_create + ' ' + commonLocaleData?.app_tax_authority }}
             </button>
         </div>
@@ -88,7 +88,6 @@
                                 </div>
                             </td>
                         </ng-container>
-
 
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>

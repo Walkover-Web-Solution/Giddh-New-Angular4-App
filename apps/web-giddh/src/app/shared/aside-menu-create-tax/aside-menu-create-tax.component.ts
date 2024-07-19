@@ -53,7 +53,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Observable for tax created successfully */
     public isTaxCreatedSuccessfully: boolean = false;
-    /** Holds true if active company  country is US */
+    /** Holds true if active company country is US */
     public isUSCompany: boolean = false;
     /** Holds tax authority list */
     public taxAuthorityList: IOption[] = [];
@@ -70,7 +70,12 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         this.newTaxObj.date = dayjs().toDate();
     }
 
-    ngOnInit() {
+    /**
+     * Initializes the component
+     *
+     * @memberof AsideMenuCreateTaxComponent
+     */
+    public ngOnInit(): void {
         this.newTaxObj.taxAuthorityRequest = { uniqueName: this.tax?.taxAuthority ? this.tax.taxAuthority?.uniqueName : '' };
 
         for (let i = 1; i <= 31; i++) {
@@ -243,7 +248,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
                 });
                 this.taxListSource$ = observableOf(this.taxList);
             } else {
-                this.store.dispatch(this.settingsTaxesActions.GetTaxList(countryCode));
+                this.store.dispatch(this.settingsTaxesActions.getTaxList(countryCode));
             }
         });
     }
