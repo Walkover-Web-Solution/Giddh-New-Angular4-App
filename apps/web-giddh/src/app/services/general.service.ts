@@ -2005,4 +2005,36 @@ export class GeneralService {
         // Construct the complete address string
         return `${address1} ${address2} ${address3} ${address4} ${address5}`.trim();
     }
+
+    /**
+     * This will be use for delete inventory adjust configuration
+     *
+     * @param {*} localeData
+     * @param {*} commonLocaleData
+     * @return {*}  {ConfirmationModalConfiguration}
+     * @memberof GeneralService
+     */
+    public deleteInventoryAdjustAdjustConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
+
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: commonLocaleData?.app_yes,
+            color: 'primary'
+        },
+        {
+            text: commonLocaleData?.app_no
+        }];
+        const headerText: string = commonLocaleData?.app_confirmation;
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
+        return {
+            headerText,
+            headerCssClass,
+            messageText: localeData?.delete_confirmation_message,
+            messageCssClass,
+            footerText: localeData?.delete_message1,
+            footerCssClass,
+            buttons
+        };
+    }
 }
