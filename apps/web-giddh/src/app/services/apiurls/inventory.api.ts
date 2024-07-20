@@ -104,6 +104,7 @@ export const INVENTORY_API = {
     CREATE_DISCOUNT: 'company/:companyUniqueName/customer-vendor-discount/stock/:stockUniqueName/assign-discount', // POST Call
     UPDATE_DISCOUNT: 'company/:companyUniqueName/customer-vendor-discount/stock/:stockUniqueName/variant/:variantUniqueName/update-discount', // Patch Call
     GET_STOCK_DETAILS: 'v2/company/:companyUniqueName/stock/:stockUniqueName/details?userType=:userType', // GET call
+<<<<<<< HEAD
     INVENTORY_ITEM_WISE_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/item-wise?from=:from&to=:to',
     INVENTORY_ADJUST: {
         REPORT: 'company/:companyUniqueName/inventory-adjustment/adjustment-report?page=:page&from=:from&to=:to&count=:count&sortBy=:sortBy&sort=:sort&q=:q&searchBy=:searchBy', // POST call
@@ -113,4 +114,7 @@ export const INVENTORY_API = {
         GET: 'company/:companyUniqueName/inventory-adjustment/:referenceNo', // GET call
         CREATE_INVENTORY: 'company/:companyUniqueName/inventory-adjustment?voucherVersion=2&branchUniqueName=:branchUniqueName' // POST call
     }
+=======
+    INVENTORY_ITEM_WISE_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/item-wise?from=:from&to=:to'
+>>>>>>> ce1c20c4d359a1d974aed656700174d48d2ce45f
 };
