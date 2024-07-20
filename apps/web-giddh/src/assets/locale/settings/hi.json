@@ -9,5 +9,6 @@
 	"setting_trigger": "सेटिंग > ट्रिगर",
 	"setting_discount": "सेटिंग > छूट",
 	"setting_warehouse": "सेटिंग > गोदाम",
-	"gmail_account_added": "जीमेल खाता सफलतापूर्वक जोड़ा गया।"
+	"gmail_account_added": "जीमेल खाता सफलतापूर्वक जोड़ा गया।",
+    "setting_manage_tax_authority": "सेटिंग > कर प्राधिकरण प्रबंधित करें"
 }

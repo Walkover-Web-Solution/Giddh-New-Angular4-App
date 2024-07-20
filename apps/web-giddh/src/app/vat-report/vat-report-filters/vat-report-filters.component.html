@@ -1,9 +1,12 @@
 <div class="advance-search-by-date date-advance-search d-flex justify-content-center row-gap column-gap15">
-    <dropdown-field [options]="financialYears" (selectedOption)="getYearStartAndEndDate($event)"
-        [placeholder]="localeData?.select_year_label" [defaultValue]="selectedYear"></dropdown-field>
-
-    <dropdown-field [options]="months" *ngIf="year && selectedYear" (selectedOption)="getMonthStartAndEndDate($event)"
-        [placeholder]="localeData?.select_month_label" [defaultValue]="selectedMonth?.label"></dropdown-field>
+    <div class="input-width">
+        <dropdown-field [options]="financialYears" (selectedOption)="getYearStartAndEndDate($event)"
+            [placeholder]="commonLocaleData?.app_select_year" [defaultValue]="selectedYear"></dropdown-field>
+    </div>
+    <div class="input-width" *ngIf="year && selectedYear">
+        <dropdown-field [options]="months" (selectedOption)="getMonthStartAndEndDate($event)"
+            [placeholder]="commonLocaleData?.app_select_month" [defaultValue]="selectedMonth?.label"></dropdown-field>
+    </div>
     <div>
         <div class="input-group custom-datepicker custom-new-datepicker" (click)="showGiddhDatepicker($event)">
             <input type="text" name="selectedDateRange" [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
@@ -16,38 +19,54 @@
         <dropdown-field [label]="commonLocaleData?.app_entity" [options]="currentCompanyBranches" width="100%"
             (selectedOption)="
                 currentBranch.uniqueName = $event.value; handleBranchChange($event)
-            " [placeholder]="localeData?.select_entity"></dropdown-field>
+            " [placeholder]="commonLocaleData?.app_select_entity"></dropdown-field>
     </div>
     <div *ngIf="taxes?.length > 1" class="input-width">
         <dropdown-field
-            [label]="isKenyaCompany || isZimbabweCompany || isUKCompany ? commonLocaleData?.app_vat : commonLocaleData?.app_trn"
-            [options]="taxes" (selectedOption)="getVatReport($event)" [placeholder]="isKenyaCompany || isZimbabweCompany || isUKCompany ? commonLocaleData?.app_enter_vat : commonLocaleData?.app_enter_trn"
+            [label]="taxType.label"
+            [options]="taxes" (selectedOption)="getVatReport($event)" [placeholder]="taxType.placeholder"
             [defaultValue]="taxes[0]?.label" [required]="true">
         </dropdown-field>
     </div>
 
     <div class="ml-auto d-flex justify-content-center column-gap1 align-items-center">
-        <div *ngIf="isZimbabweCompany && taxNumber" class="min-width-100">
+        <div *ngIf="isZimbabweCompany && taxNumber" class="input-width">
             <dropdown-field [label]="commonLocaleData?.app_currency" [options]="vatReportCurrencyList"
                 (selectedOption)="onCurrencyChange($event)" [placeholder]="commonLocaleData?.app_select"
                 [defaultValue]="vatReportCurrencyCode" [required]="true">
             </dropdown-field>
         </div>
-        <div *ngIf="taxNumber && (isZimbabweCompany || isKenyaCompany)" class="export-btn d-flex justify-content-end w100">
+        <ng-container *ngIf="isUSCompany && taxNumber">
+            <div *ngIf="isSalesTaxRateWise || isSalesTaxAccountWise" class="input-width">
+                <dropdown-field [label]="commonLocaleData?.app_tax_authority" [options]="taxAuthorityList"
+                    (selectedOption)="onTaxAuthorityChange($event)" [placeholder]="commonLocaleData?.app_select + ' ' + commonLocaleData?.app_tax_authority"
+                    [defaultValue]="taxAuthority.taxAuthorityName" [required]="true">
+                </dropdown-field>
+            </div>
+            <div *ngIf="isSalesTaxAccountWise" class="input-width">
+                <dropdown-field [label]="commonLocaleData?.app_tax" [options]="taxList"
+                    (selectedOption)="onTaxChange($event)" [placeholder]="commonLocaleData?.app_select + ' ' + commonLocaleData?.app_tax"
+                    [defaultValue]="taxAuthority.taxName" [required]="true">
+                </dropdown-field>
+            </div>
+        </ng-container>
+        <div *ngIf="taxNumber && (isZimbabweCompany || isKenyaCompany || isUSCompany)" class="export-btn d-flex justify-content-end w100">
             <button mat-stroked-button color="primary" (click)="downloadVatReport()">
                 <i class="icon-download1"></i>
                 {{ commonLocaleData?.app_export }}
             </button>
         </div>
-        <a mat-stroked-button color="primary" class="text-right" *ngIf="isUKCompany" [href]="connectToHMRCUrl"
-            [disabled]="!connectToHMRCUrl">
-            <ng-container *ngIf="connectToHMRCUrl">
-                {{ localeData?.connect_to_hmrc }}
-            </ng-container>
-            <ng-container *ngIf="!connectToHMRCUrl">
-                {{ localeData?.connected_to_hmrc }}
-            </ng-container>
-        </a>
+        <div *ngIf="isUKCompany">
+            <a mat-stroked-button color="primary" class="text-right" [href]="connectToHMRCUrl"
+                [disabled]="!connectToHMRCUrl">
+                <ng-container *ngIf="connectToHMRCUrl">
+                    {{ localeData?.connect_to_hmrc }}
+                </ng-container>
+                <ng-container *ngIf="!connectToHMRCUrl">
+                    {{ localeData?.connected_to_hmrc }}
+                </ng-container>
+            </a>
+        </div>
     </div>
 </div>
 

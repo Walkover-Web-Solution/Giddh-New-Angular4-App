@@ -85,11 +85,11 @@ export class SettingsTaxesActions {
                 return { type: 'EmptyAction' };
             })));
 
-    public GetTaxList$: Observable<Action> = createEffect(() => this.action$
+    public getTaxList$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(SETTINGS_TAXES_ACTIONS.GET_TAX),
             switchMap((action: CustomActions) => {
-                return this.settingsTaxesService.GetTaxList(action.payload).pipe(
+                return this.settingsTaxesService.getTaxList(action.payload).pipe(
                     map(response => this.GetTaxListResponse(response)));
             })));
 
@@ -160,16 +160,9 @@ export class SettingsTaxesActions {
         return successAction;
     }
 
-    public GetTaxList(value) {
+    public getTaxList(value: any): CustomActions {
         return {
             type: SETTINGS_TAXES_ACTIONS.GET_TAX,
-            payload: value
-        };
-    }
-
-    public GetTaxListResponse(value) {
-        return {
-            type: SETTINGS_TAXES_ACTIONS.GET_TAX_RESPONSE,
             payload: value
         };
     }
@@ -177,6 +170,13 @@ export class SettingsTaxesActions {
     public resetTaxList(): CustomActions {
         return {
             type: SETTINGS_TAXES_ACTIONS.RESET_TAX_RESPONSE
+        };
+    }
+
+    public GetTaxListResponse(value) {
+        return {
+            type: SETTINGS_TAXES_ACTIONS.GET_TAX_RESPONSE,
+            payload: value
         };
     }
 }
