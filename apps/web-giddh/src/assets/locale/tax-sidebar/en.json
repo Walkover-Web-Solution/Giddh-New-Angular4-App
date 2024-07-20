@@ -24,5 +24,7 @@
     "add_sales_tax": "Add Sales Tax",
     "manage_tax_authority": "Manage Tax Authority",
     "rate_wise": "Rate Wise",
-    "account_wise": "Account Wise"
+    "account_wise": "Account Wise",
+    "gst_setting": "GST Setting",
+    "manage_tax": "Manage Tax"
 }
