@@ -308,6 +308,9 @@ export class ObligationsComponent implements OnInit, OnDestroy {
                     label: tax,
                     value: tax
                 }));
+                if(this.taxesList.length === 1) {
+                    this.getFormControl('taxNumber').patchValue(this.taxesList[0].value);
+                    }
             }
         });
     }
