@@ -508,4 +508,19 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             this.addressForm.markAsPristine();
         }
     }
+
+    /**
+     * Return readonly status for state list dropdown
+     *
+     * @returns {boolean}
+     * @memberof CreateAddressComponent
+     */
+    public isReadonly(): boolean {
+        const isEditAddress = this.addressConfiguration?.type === 'editAddress';
+        const hasTaxNumber = this.addressToUpdate?.taxNumber?.length > 0;
+        const isGSTIN = this.addressConfiguration?.tax?.name === 'GSTIN';
+        const stateLabelNotNull = this.addressForm?.get('stateLabel')?.value !== null;
+        const taxNumberNotNull = this.addressForm?.get('taxNumber')?.value !== null;
+        return (isEditAddress && hasTaxNumber && isGSTIN) || (stateLabelNotNull && taxNumberNotNull);
+    }
 }
