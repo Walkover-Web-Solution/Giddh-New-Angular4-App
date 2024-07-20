@@ -678,7 +678,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             delete obj['contactNo'];
         }
         this.store.dispatch(this.settingsProfileActions.PatchProfile(obj));
-
     }
 
     public typeaheadOnSelect(e: TypeaheadMatch): void {

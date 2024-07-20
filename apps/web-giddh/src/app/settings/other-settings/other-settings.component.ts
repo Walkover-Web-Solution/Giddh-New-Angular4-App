@@ -74,10 +74,6 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public inventoryType: IOption[] = [];
     /** This holds the active theme */
     public activeTheme: string = "";
-    /** List of available themes */
-    public exportTypes: IOption[] = [];
-    /** Holds export type */
-    public exportType: string = '';
     /** Holds Current Theme Label  */
     public currentThemeLabel: string;
 
@@ -105,7 +101,7 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
 
         this.translationLocales = this.generalService.getSupportedLocales();
         this.availableThemes = this.generalService.getAvailableThemes();
-        
+
         this.voucherApiVersion = this.generalService.voucherApiVersion;
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
@@ -143,26 +139,6 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
         if (currencySystem) {
             this.numberSystem = currencySystem.name;
         }
-
-        this.exportTypes = [
-            { label: this.localeData?.with_pay, value: 'yes' },
-            { label: this.localeData?.without_pay, value: 'no' }
-        ];
-
-        if (typeof changes?.profileData?.currentValue?.withPay === "boolean") {
-            this.exportType = (changes?.profileData?.currentValue?.withPay) ? 'yes' : 'no';
-        }
-    }
-
-    /**
-     * Get label for export type
-     *
-     * @returns {string}
-     * @memberof OtherSettingsComponent
-     */
-    public getExportTypeLabel(): string {
-        const exportType = this.exportTypes.find(item => item.value === this.exportType);
-        return exportType ? exportType.label : '';
     }
 
     /**
@@ -245,18 +221,5 @@ export class OtherSettingsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public setActiveTheme(event?: any): void {
         this.store.dispatch(this.commonActions.setActiveTheme({ label: event?.label, value: event?.value }));
-    }
-
-    /**
-     * Saves export type
-     *
-     * @memberof OtherSettingsComponent
-     */
-    public setExportType(event?: any): void {
-        if(event && event.value && this.exportType !== event.value) {
-            this.exportType = event.value;
-            this.updatedData['withPay'] = event.value === 'yes';
-            this.saveProfileSubject.next(true);
-        }
     }
 }

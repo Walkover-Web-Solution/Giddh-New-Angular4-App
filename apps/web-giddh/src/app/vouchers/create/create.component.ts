@@ -1380,6 +1380,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         if (this.invoiceType.isCashInvoice) {
                             this.componentStore.getAccountCountryStates(this.company.countryCode);
                         }
+
+                        if (this.invoiceType.isCashInvoice) {
+                            this.account.countryName = profile.country
+                            this.account.countryCode = profile.countryCode || profile.countryV2.alpha2CountryCode;
+                            this.account.baseCurrency = profile.baseCurrency;
+                            this.account.baseCurrencySymbol = profile.baseCurrencySymbol;
+                        }
                     }
                 });
             }
@@ -2014,8 +2021,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.invoiceForm.controls[entityType].get(addressType).get("address").patchValue(typeof address?.address === "string" ? [address?.address] : address?.address);
         this.invoiceForm.controls[entityType].get(addressType).get("pincode").patchValue(address?.pincode);
         this.invoiceForm.controls[entityType].get(addressType).get("taxNumber").patchValue(address?.gstNumber || address?.taxNumber);
-        this.invoiceForm.controls[entityType].get(addressType).get("state").get("name").patchValue(address?.state?.name ? address?.state?.name : address?.stateName ? address?.stateName : "");
-        this.invoiceForm.controls[entityType].get(addressType).get("state").get("code").patchValue(address?.state?.code ? address?.state?.code : address?.stateCode ? address?.stateCode : "");
+        const state = { name: "", code: "" };
+        if (address?.state) {
+            state.name = address.state?.name;
+            state.code = address.state?.code;
+        } else if (address?.stateName && address?.stateCode && !address?.county) {
+            state.name = address.stateName;
+            state.code = address.stateCode;
+        } else if (address?.county) {
+            state.name = address.county?.name;
+            state.code = address.county?.code;
+        }
+        this.invoiceForm.controls[entityType].get(addressType).get("state").get("name").patchValue(state.name);
+        this.invoiceForm.controls[entityType].get(addressType).get("state").get("code").patchValue(state.code);
     }
 
     /**
