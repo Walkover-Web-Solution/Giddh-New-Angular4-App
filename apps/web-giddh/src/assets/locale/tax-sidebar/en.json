@@ -20,9 +20,13 @@
     "add_vat": "Add VAT",
     "liability_report": "Liability Report",
     "gst_setting": "GST Setting",
+<<<<<<< HEAD
     "manage_tax": "Manage Tax",
     "add_sales_tax": "Add Sales Tax",
     "manage_tax_authority": "Manage Tax Authority",
     "rate_wise": "Rate Wise",
     "account_wise": "Account Wise"
+=======
+    "manage_tax": "Manage Tax"
+>>>>>>> ce1c20c4d359a1d974aed656700174d48d2ce45f
 }
