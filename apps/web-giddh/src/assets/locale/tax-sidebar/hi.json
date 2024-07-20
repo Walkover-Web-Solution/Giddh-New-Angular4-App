@@ -24,5 +24,7 @@
     "add_sales_tax": "बिक्री कर जोड़ें",
     "manage_tax_authority": "कर प्राधिकरण प्रबंधित करें",
     "rate_wise": "रेट वाइज",
-    "account_wise": "खातावार"
+    "account_wise": "खातावार",
+    "gst_setting": "जीएसटी सेटिंग",
+    "manage_tax": "कर का प्रबंधन करें"
 }
