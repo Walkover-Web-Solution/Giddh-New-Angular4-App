@@ -56,7 +56,7 @@
                 {{ commonLocaleData?.app_export }}
             </button>
         </div>
-        <div class="input-width" *ngIf="isUKCompany">
+        <div *ngIf="isUKCompany">
             <a mat-stroked-button color="primary" class="text-right" [href]="connectToHMRCUrl"
                 [disabled]="!connectToHMRCUrl">
                 <ng-container *ngIf="connectToHMRCUrl">
