@@ -102,7 +102,7 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
 
         case SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE: {
             let res: BaseResponse<TaxResponse, string> = action.payload;
-            if (res?.status === 'success') {
+            if (res?.status === 'success') {                
                 return {
                     ...state,
                     taxes: [...state.taxes, res.body],
@@ -133,8 +133,8 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
                     isTaxUpdatingInProcess: false,
                     isTaxUpdatedSuccessfully: true,
                     taxes: state.taxes.map(tax => {
-                        if (tax?.uniqueName === res.request?.uniqueName) {
-                            tax = res.request;
+                        if (tax?.uniqueName === res.body?.uniqueName) {
+                            tax = res.body;
                         }
                         return tax;
                     })

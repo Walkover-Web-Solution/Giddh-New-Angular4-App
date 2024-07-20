@@ -287,7 +287,13 @@
                             </th>
                             <th class="td-search-box" *ngIf="showFieldFilter.pincode">
                                 <div>
-                                    <span> {{ commonLocaleData?.app_pin_code }}</span>
+                                    <span> 
+                                        {{ 
+                                            zipCodeSupportedCountryList.includes(activeCompanyCountryCode) 
+                                            ? commonLocaleData?.app_zip_code 
+                                            : commonLocaleData?.app_pin_code 
+                                        }}
+                                    </span>
                                 </div>
                             </th>
                             <th class="td-search-box" *ngIf="showFieldFilter.email">
@@ -487,7 +493,8 @@
                                     {{ item?.address ? item?.address : "-" }}
                                 </span>
                             </td>
-                            <td [attr.data-title]="commonLocaleData?.app_pin_code" *ngIf="showFieldFilter.pincode">
+                            <td [attr.data-title]="zipCodeSupportedCountryList.includes(activeCompanyCountryCode) 
+                            ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" *ngIf="showFieldFilter.pincode">
                                 <span class="d-inline-flex">
                                     {{ item?.pincode ? item?.pincode : "-" }}
                                 </span>

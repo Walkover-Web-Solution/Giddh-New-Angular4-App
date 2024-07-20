@@ -12,7 +12,29 @@
         <div class="aside-body aside-create-tax-component">
             <div class="aside-pane-form">
                 <div class="form-group">
-                    <form #taxForm="ngForm" (ngSubmit)="onSubmit()">
+                    <div *ngIf="isTaxAuthoritiesLoading$ | async">
+                        <giddh-page-loader></giddh-page-loader>
+                    </div>
+                    <form #taxForm="ngForm" (ngSubmit)="onSubmit()" *ngIf="!(isTaxAuthoritiesLoading$ | async)">
+
+                        <div class="row" *ngIf="isUSCompany">
+                            <div class="form-group col-sm-6 col-xs-12">
+                                <label>{{ commonLocaleData?.app_tax_authority }} <span class="text-danger">*</span> </label
+                                    ><br />
+                                    <sh-select
+                                        [options]="taxAuthorityList"
+                                        name="taxAuthority"
+                                        [(ngModel)]="newTaxObj.taxAuthorityRequest.uniqueName"
+                                        [defaultValue]="selectedTaxAuthority"
+                                        [placeholder]="commonLocaleData?.app_select + ' ' + commonLocaleData?.app_tax_authority"
+                                        [ngClass]="{ 'placeholder-black': selectedTaxAuthority }"
+                                        [ItemHeight]="33"
+                                        required
+                                        [isRequired]="true"
+                                    ></sh-select>
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="form-group col-sm-6 col-xs-12">
                                 <label>{{ localeData?.select_tax }} <span class="text-danger">*</span> </label><br />
@@ -25,7 +47,7 @@
                                     required
                                     [isRequired]="true"
                                     [ItemHeight]="33"
-                                    (selected)="selectTax($event)"
+                                    (selected)="selectTax()"
                                 ></sh-select>
                             </div>
 
