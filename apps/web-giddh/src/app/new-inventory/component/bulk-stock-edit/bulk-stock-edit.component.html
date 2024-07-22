@@ -12,7 +12,7 @@
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <div class="bulk-stock-warpper" *ngIf="!(noDataFound && !(advanceSearchData || search)) && !isLoading">
+        <div class="bulk-stock-warpper" *ngIf="!(noDataFound && !advanceSearchData) && !isLoading">
             <div class="bulk-stock-header">
                 <div class="d-flex justify-content-end align-items-center">
                     <div class="mr-5">
@@ -71,7 +71,7 @@
                         <div class="table-responsive">
                             <form [formGroup]="bulkStockEditForm" (ngSubmit)="onFormSubmit()">
                                 <table class="table table-bordered">
-                                    <thead *ngIf="!(noDataFound && (advanceSearchData || search) )">
+                                    <thead *ngIf="!(noDataFound && advanceSearchData )">
                                         <tr (clickOutside)="hideTableHeadInput()">
                                             <!-- Variant Name -->
                                             <th class="cursor-pointer" *ngIf="tableHeaderShowHide.variantName">
@@ -1108,7 +1108,7 @@
                                         </ng-container>
                                     </tbody>
                                 </table>
-                                <div *ngIf="noDataFound && (advanceSearchData || search) && !isLoading" class="no-data mb-5">
+                                <div *ngIf="noDataFound && advanceSearchData && !isLoading" class="no-data mb-5">
                                     <h1 class="mb-5">{{ commonLocaleData?.app_no_entries_found }}</h1>
                                 </div>
                             </form>
@@ -1134,7 +1134,7 @@
                 </div>
             </div>
         </div>
-        <div *ngIf="noDataFound && !(advanceSearchData|| search) && !isLoading " class="no-data mb-5">
+        <div *ngIf="noDataFound && !advanceSearchData  && !isLoading " class="no-data mb-5">
             <h1 class="mb-5">{{ commonLocaleData?.app_no_data_found }}</h1>
         </div>
     </div>

@@ -59,8 +59,6 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
     public advanceFilterDialogRef: MatDialogRef<any>;
     /** Holds Recent Advance search data*/
     public advanceSearchData: any = null;
-
-    public search: boolean = false;
     /** Holds hide show column list*/
     public hideShowColumnList: any = [];
     /** Holds Table Head Input Fileds open/close status*/
@@ -504,8 +502,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         if (!(this.tableHeadInput[key] && this.searchString && this.searchStringKey)) {
             this.tableHeadInput[key] = !this.tableHeadInput[key];
         }
-        this.search=true;
-        console.log("Ankit", this.search);
+        
     }
 
     /**
@@ -763,7 +760,6 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
      * @memberof BulkStockEditComponent
      */
     public resetSearch(): void {
-        this.search=false;
         this.thVariantName.reset();
         this.thVariantUniqueName.reset();
         this.thStockName.reset();
