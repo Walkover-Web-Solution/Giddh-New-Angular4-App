@@ -40,7 +40,7 @@ export class AdjustInventoryComponent implements OnInit {
     /** Create adjust inventory form group */
     public adjustInventoryCreateEditForm: FormGroup;
     /**Hold indirect group  expense accounts */
-    public groupUniqueName: string = "interestexpense";
+    public groupUniqueName: string = "otherindirectexpenses";
     /** Expense Accounts Observable */
     public expenseAccounts$: Observable<any[]> = observableOf(null);
     /** Warehouse Observable */
