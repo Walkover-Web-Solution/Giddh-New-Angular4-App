@@ -1,4 +1,22 @@
 {
     "no_inventory_found_primary_message": "No data found with given keyword.",
-    "no_inventory_found_secondary_message": "Do search with some other keyword"
+    "no_inventory_found_secondary_message": "Do search with some other keyword",
+    "export_note": "The default columns <b class='fw-bold'>'Stock Group Name, Stock Name , Unique Name, Parent Group Name, Parent Group Unique Name, Stock Unit Code, Stock Unit Unique Name' </b>will be exported, you also have the option to add custom columns as needed.",
+    "export_inventory_master": "Export Inventory Master",
+    "opening_amount": "Opening Amount",
+    "opening_quantity": "Opening Quantity",
+    "hsn_number": "HSN Number",
+    "sac_number": "SAC Number",
+    "tax": "Tax",
+    "purchase_account": "Purchase Account",
+    "purchase_rate": "Purchase Rate",
+    "purchase_stock_unit_code": "Purchase Stock Unit Code",
+    "sales_account": "Sales Account",
+    "sales_rate": "Sales Rate",
+    "sales_stock_unit_code": "Sales Stock Unit Code",
+    "custom_field_1_heading": "Custom Field 1 Heading",
+    "custom_field_1_value": "Custom Field 1 Heading Value",
+    "custom_field_2_heading": "Custom Field 2 Heading",
+    "custom_field_2_value": "Custom Field 2 Heading Value",
+    "sku_code": "SKU Code"
 }

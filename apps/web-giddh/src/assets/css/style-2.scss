@@ -4783,7 +4783,6 @@ label {
     width: 100%;
     overflow-y: scroll;
     height: 100%;
-    padding-bottom: 180px;
 }
 
 .breadcrumbs {
@@ -5838,7 +5837,9 @@ label {
 .form-control[readonly],
 fieldset[disabled] .form-control {
     color: var(--color-primary-input-bar-text) !important;
-    background-color: var(--color-primary-input-bar-background) !important;
+    &:not(.bg-transparent) {
+        background-color: var(--color-primary-input-bar-background) !important;
+    }
 }
 
 .disable-bg[disabled],
@@ -6530,10 +6531,6 @@ typeahead-container .dropdown-menu li.active>a>a:hover {
     color: var(--color-common-secondary-text);
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-
-.ledger-row:hover {
-    background-color: var(--color-table-row-hover-secondary-background);
 }
 
 .ledg-head table td.pd-r25 {
@@ -14166,7 +14163,7 @@ hamburger-menu {
             height: 100%;
             width: 100%;
             float: right;
-            max-width: 280px;
+            max-width: 435px;
             margin-left: auto;
 
             .advance-filter-button {
@@ -14174,7 +14171,7 @@ hamburger-menu {
                 border-radius: 0;
                 margin-right: 0 !important;
                 height: 100%;
-                width: 50%;
+                width: 33%;
                 margin-top: -1px;
 
                 &:hover {
@@ -14183,13 +14180,17 @@ hamburger-menu {
                 }
             }
 
+            .customise-width {
+                width: 33%;
+            }
+            
             .customise-filter-button {
                 border-left: 1px solid var(--color-fields-border);
                 border-radius: 0;
                 margin-right: 0 !important;
                 height: 100%;
                 padding-right: 15px !important;
-                width: 50%;
+                width: 100%;
                 font-size: var(--font-size-15);
                 position: relative;
 
@@ -15100,6 +15101,7 @@ aside-menu-product-service {
 }
 
 .bg-transparent {
+    background: var(--color-transparent-background) !important;
     background-color: var(--color-transparent-background) !important;
 }
 

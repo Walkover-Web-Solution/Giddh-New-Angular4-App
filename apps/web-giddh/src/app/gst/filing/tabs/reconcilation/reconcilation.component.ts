@@ -54,6 +54,10 @@ export class ReconcileComponent implements OnInit, OnDestroy {
     public reconcileActiveTab: GstReconcileActionsEnum = GstReconcileActionsEnum.notfoundonportal;
     public imgPath: string = '';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Returns the enum to be used in template */
+    public get GstReport() {
+        return GstReport;
+    }
 
     constructor(
         private store: Store<AppState>,

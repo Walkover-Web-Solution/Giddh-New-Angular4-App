@@ -31,18 +31,18 @@
                                 aria-labelledby="button-basic2"
                             >
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:void(0)" *ngIf="voucherApiVersion === 1" (click)="goToInvoice('cash')">{{
+                                    <a class="dropdown-item" href="javascript:;" *ngIf="voucherApiVersion === 1" (click)="goToInvoice('cash')">{{
                                         localeData?.cash_invoice
                                     }}</a>
-                                    <a class="dropdown-item" href="javascript:void(0)" *ngIf="voucherApiVersion === 2" [routerLink]="['/pages/vouchers/cash/create']">{{
+                                    <a class="dropdown-item" href="javascript:;" *ngIf="voucherApiVersion === 2" [routerLink]="['/pages/vouchers/cash/create']">{{
                                         localeData?.cash_invoice
                                     }}</a>
                                 </li>
                                 <li role="menuitem">
-                                    <a class="dropdown-item" href="javascript:void(0)" *ngIf="voucherApiVersion === 1" (click)="goToInvoice('sales')">{{
+                                    <a class="dropdown-item" href="javascript:;" *ngIf="voucherApiVersion === 1" (click)="goToInvoice('sales')">{{
                                         localeData?.sales_invoice
                                     }}</a>
-                                    <a class="dropdown-item" href="javascript:void(0)" *ngIf="voucherApiVersion === 2" [routerLink]="['/pages/vouchers/sales/create']">{{
+                                    <a class="dropdown-item" href="javascript:;" *ngIf="voucherApiVersion === 2" [routerLink]="['/pages/vouchers/sales/create']">{{
                                         localeData?.sales_invoice
                                     }}</a>
                                 </li>
@@ -62,7 +62,7 @@
                     <ul class="invoice-sidebar">
                         <cdk-virtual-scroll-viewport [itemSize]="62" tabindex="0">
                             <li
-                                class="single-invoice-detail cp"
+                                class="single-invoice-detail cursor-pointer"
                                 *cdkVirtualFor="let item of filteredData"
                                 [ngClass]="{ 'activeItem': item?.uniqueName === selectedItem?.uniqueName }"
                                 (click)="selectVoucher(item)"
@@ -123,7 +123,7 @@
 
                                 <div class="col-md-8 col-12">
                                     <div class="edit-change-status">
-                                        <span class="close-modal cp pull-right p-0" (click)="onCancel()">
+                                        <span class="close-modal cursor-pointer pull-right p-0" (click)="onCancel()">
                                             <img src="assets/images/multiply.svg" alt="close icon"
                                         /></span>
 
@@ -153,7 +153,7 @@
                                                 aria-labelledby="button-basic"
                                             >
                                                 <li
-                                                    class="cp"
+                                                    class="cursor-pointer"
                                                     role="menuitem"
                                                     (click)="updateVoucherAction.emit('accepted')"
                                                 >
@@ -161,7 +161,7 @@
                                                 </li>
 
                                                 <li
-                                                    class="cp"
+                                                    class="cursor-pointer"
                                                     role="menuitem"
                                                     (click)="updateVoucherAction.emit('decline')"
                                                 >
@@ -172,19 +172,19 @@
                                                     (click)="updateVoucherAction.emit('ConvertToSalesOrder')"
                                                     *ngIf="voucherType === 'estimate' || voucherType === 'estimates'"
                                                 >
-                                                    <a class="cp" href="javascript:void(0)">{{
+                                                    <a class="cursor-pointer" href="javascript:;">{{
                                                         localeData?.convert_proforma
                                                     }}</a>
                                                 </li>
 
                                                 <li (click)="updateVoucherAction.emit('ConvertToInvoice')">
-                                                    <a class="cp" href="javascript:void(0)">{{
+                                                    <a class="cursor-pointer" href="javascript:;">{{
                                                         localeData?.convert_invoice
                                                     }}</a>
                                                 </li>
 
                                                 <li
-                                                    class="cp"
+                                                    class="cursor-pointer"
                                                     role="menuitem"
                                                     (click)="updateVoucherAction.emit('expired')"
                                                 >
@@ -233,8 +233,8 @@
                                                 aria-labelledby="button-basic2"
                                             >
                                                 <li
-                                                    *ngIf="voucherType === 'sales'"
-                                                    class="cp"
+                                                    *ngIf="voucherType === 'sales' || voucherType === 'debit note' || voucherType === 'credit note'"
+                                                    class="cursor-pointer"
                                                     role="menuitem"
                                                     (click)="invokeLoadPaymentModes(); receivePaymentPopup.show()"
                                                 >
@@ -246,14 +246,14 @@
                                                     *ngIf="voucherType === 'sales'"
                                                     (click)="openInvoiceAdvanceReceiptModal()"
                                                 >
-                                                    <a class="cp" href="javascript:void(0)">{{
+                                                    <a class="cursor-pointer" href="javascript:;">{{
                                                         commonLocaleData?.app_payment_status?.adjust_amount
                                                     }}</a>
                                                 </li>
 
                                                 <li
                                                     *ngIf="voucherType === 'sales'"
-                                                    class="cp"
+                                                    class="cursor-pointer"
                                                     role="menuitem"
                                                     (click)="updateVoucherAction.emit('unpaid')"
                                                 >
@@ -264,7 +264,7 @@
 
                                                 <li
                                                     *ngIf="voucherType === 'sales'"
-                                                    class="cp"
+                                                    class="cursor-pointer"
                                                     role="menuitem"
                                                     (click)="updateVoucherAction.emit('hold')"
                                                 >
@@ -274,7 +274,7 @@
                                                 </li>
 
                                                 <li
-                                                    class="cp"
+                                                    class="cursor-pointer"
                                                     role="menuitem"
                                                     (click)="updateVoucherAction.emit('cancel')"
                                                 >
@@ -310,7 +310,16 @@
                                                 role="menu"
                                                 aria-labelledby="button-basic2"
                                             >
-                                                <li class="cp" role="menuitem">
+                                                <li
+                                                    class="cursor-pointer"
+                                                    role="menuitem"
+                                                    (click)="invokeLoadPaymentModes(); receivePaymentPopup.show()"
+                                                >
+                                                    <a class="dropdown-item">
+                                                        {{ commonLocaleData?.app_payment_status?.paid }}
+                                                    </a>
+                                                </li>
+                                                <li class="cursor-pointer" role="menuitem">
                                                     <a
                                                         class="dropdown-item"
                                                         [routerLink]="[
@@ -324,7 +333,7 @@
                                                     >
                                                 </li>
                                                 <li
-                                                    class="cp"
+                                                    class="cursor-pointer"
                                                     role="menuitem"
                                                     (click)="deleteConfirmationModel.toggle()"
                                                 >
@@ -749,7 +758,7 @@
                     </p>
                 </span>
 
-                <span class="close-modal cp p-0" (click)="toggleEditMode()">
+                <span class="close-modal cursor-pointer p-0" (click)="toggleEditMode()">
                     <img src="assets/images/multiply.svg" />
                 </span>
             </div>

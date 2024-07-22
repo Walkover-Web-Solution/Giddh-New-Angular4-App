@@ -33,7 +33,9 @@
                     </div>
                     <div class="col-sm-8">
                         <div class="form-group">
-                            <label for="accountName">{{ localeData?.account_name }} <sup class="text-danger">*</sup> </label>
+                            <label for="accountName"
+                                >{{ localeData?.account_name }} <sup class="text-danger">*</sup>
+                            </label>
                             <input
                                 type="text"
                                 id="accountName"
@@ -355,7 +357,7 @@
                                                 class="form-control"
                                                 autocomplete="false"
                                                 #gstNumberField
-                                                (keyup)="getStateCode(gst, states, $event)"
+                                                (keyup)="getStateCode(gst, states, $event); activeIndex = i"
                                                 (blur)="checkGstNumValidation(gstNumberField)"
                                                 name="gstNumber"
                                                 formControlName="gstNumber"
@@ -383,7 +385,13 @@
                                         </div>
                                     </div>
                                     <!-- end -->
-                                    <ng-container *ngIf="companyCountry === 'IN' || companyCountry === 'ZW' || companyCountry === 'KE'">
+                                    <ng-container
+                                        *ngIf="
+                                            companyCountry === 'IN' ||
+                                            companyCountry === 'ZW' ||
+                                            companyCountry === 'KE'
+                                        "
+                                    >
                                         <div class="col-sm-4">
                                             <div class="form-group">
                                                 <label
@@ -494,7 +502,13 @@
                     <div class="col-sm-6">
                         <div class="form-group">
                             <label for="email">{{ commonLocaleData?.app_email_id }}</label>
-                            <input id="email" type="email" class="form-control" formControlName="email" name="emailId" />
+                            <input
+                                id="email"
+                                type="email"
+                                class="form-control"
+                                formControlName="email"
+                                name="emailId"
+                            />
                             <span
                                 class="error-msg"
                                 *ngIf="addAccountForm.get('email').dirty && addAccountForm.get('email').errors"
@@ -530,7 +544,9 @@
                         </div>
                         <div class="col-xl-4 col-lg-3 col-md-3 col-sm-2 pr-0">
                             <div class="form-group portal-height">
-                                <label for="emailid">{{ commonLocaleData?.app_email_id }} <span class="red-text">*</span></label>
+                                <label for="emailid"
+                                    >{{ commonLocaleData?.app_email_id }} <span class="red-text">*</span></label
+                                >
                                 <input
                                     type="email"
                                     id="emailid"
@@ -656,7 +672,9 @@
                                     <label *ngIf="selectedCountryCode === 'IN'" for="accountNum">{{
                                         commonLocaleData?.app_account_number
                                     }}</label>
-                                    <label *ngIf="selectedCountryCode !== 'IN'" for="accountNum">{{ commonLocaleData?.app_iban }}</label>
+                                    <label *ngIf="selectedCountryCode !== 'IN'" for="accountNum">{{
+                                        commonLocaleData?.app_iban
+                                    }}</label>
                                     <input
                                         type="text"
                                         id="accountNum"
@@ -810,8 +828,7 @@
                             >
                                 <div class="col-lg-8">
                                     <div class="name-of-field">
-                                        <label
-                                            for="values"
+                                        <label for="values"
                                             >{{ item.fieldName }}
                                             <span class="red-text" *ngIf="item.isMandatory">*</span>
                                         </label>
