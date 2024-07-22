@@ -16,7 +16,7 @@ export interface IFormatable {
 export class DataFormatter {
     public accounts: Account[] = [];
     public groups: ChildGroup[] = [];
-    public formatDataGroupWise = (localeData): string => {
+    public formatDataGroupWise = (localeData, fromDate, toDate): string => {
         let csv;
         let header;
         let row;
@@ -31,7 +31,7 @@ export class DataFormatter {
         csv = '';
         row = '';
         title = '' + ',' + localeData?.csv.trial_balance.opening_balance + ',' + localeData?.csv.trial_balance.debit + ',' + localeData?.csv.trial_balance.credit + ',' + localeData?.csv.trial_balance.closing_balance + '\n';
-        header = `${this.selectedCompany?.name}\r\n"${this.selectedCompany?.address}"\r\n${this.selectedCompany?.city}-${this.selectedCompany?.pincode}\r\n${localeData?.csv.trial_balance.trial_balance} ${localeData?.csv.trial_balance.fromDate} ${localeData?.csv.trial_balance.to} ${localeData?.csv.trial_balance.toDate}\r\n`;
+        header = `${this.selectedCompany?.name ?? ''}\r\n"${this.selectedCompany?.address ?? ''}"\r\n${this.selectedCompany?.city ?? ''}${this.selectedCompany?.pincode ? '-' : ''}${this.selectedCompany?.pincode ?? ''}\r\n${localeData?.csv.trial_balance.trial_balance} ${fromDate ?? ''} ${localeData?.csv.trial_balance.to} ${toDate ?? ''}\r\n`;
         csv += `${header}\r\n${title}`;
 
         this.exportData.forEach(obj => {
