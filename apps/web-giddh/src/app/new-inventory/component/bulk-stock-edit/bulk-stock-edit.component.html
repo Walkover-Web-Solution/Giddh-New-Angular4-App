@@ -68,7 +68,7 @@
             </div>
             <div class="bulk-stock-body">
                 <div class="bulk-stock-table d-flex flex-column">
-                    <ng-container *ngIf="!noDataFound && !isLoading">
+                    <ng-container *ngIf="(!noDataFound || searchString) && !isLoading">
                         <div class="table-responsive">
                             <form [formGroup]="bulkStockEditForm" (ngSubmit)="onFormSubmit()">
                                 <table class="table table-bordered" >
@@ -1106,10 +1106,18 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                        </ng-container>
-                                    </tbody>
-                                </table>
-                                
+                                            
+                                        
+                                        </ng-container>                                
+                                        <tr *ngIf="noDataFound && !isLoading">
+                                            <td colspan="100%">
+                                                <div class="no-data mb-5">
+                                                    <h1 class="mb-5">{{ commonLocaleData?.app_no_entries_found }}</h1>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>                                   
+                                </table>  
                             </form>
                         </div>
 
@@ -1130,7 +1138,7 @@
                             ></pagination>
                         </div>
                     </ng-container>
-                    <div *ngIf="noDataFound  && !isLoading" class="no-data mb-5">
+                    <div *ngIf="!(!noDataFound || searchString)  && !isLoading" class="no-data mb-5">
                         <h1 class="mb-5">{{ commonLocaleData?.app_no_entries_found }}</h1>
                     </div>
                 </div>
