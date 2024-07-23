@@ -12,7 +12,7 @@
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <div class="bulk-stock-warpper" *ngIf="!(noDataFound && !advanceSearchData) && !isLoading">
+        <div class="bulk-stock-warpper" *ngIf="!(noDataFound && !(advanceSearchData || searchString)) && !isLoading">
             <div class="bulk-stock-header">
                 <div class="d-flex justify-content-end align-items-center">
                     <div class="mr-5">
@@ -36,7 +36,7 @@
                             <p *ngIf="!isLoading" class="mr-r3">
                                 {{ localeData?.total_inventory_count }} : <span>{{ totalInventoryCount }}</span>
                             </p>
-                            <div class="menu-btn-control" [matTooltip]="localeData?.customize_column">
+                            <div class="menu-btn-control" [matTooltip]="localeData?.customize_column" *ngIf="!noDataFound">
                                 <select-table-column
                                     [moduleName]="inventoryType"
                                     [moduleType]="moduleName"
@@ -58,6 +58,7 @@
                                 (click)="openAdvanceFilter()"
                                 [matTooltip]="commonLocaleData?.app_advanced_filter"
                                 aria-label="filter"
+                                *ngIf="!noDataFound"
                             >
                                 <i class="icon-advance-filter font-16"></i>
                             </button>
@@ -67,11 +68,11 @@
             </div>
             <div class="bulk-stock-body">
                 <div class="bulk-stock-table d-flex flex-column">
-                    <ng-container >
+                    <ng-container *ngIf="!noDataFound && !isLoading">
                         <div class="table-responsive">
                             <form [formGroup]="bulkStockEditForm" (ngSubmit)="onFormSubmit()">
-                                <table class="table table-bordered">
-                                    <thead *ngIf="!(noDataFound && advanceSearchData )">
+                                <table class="table table-bordered" >
+                                    <thead >
                                         <tr (clickOutside)="hideTableHeadInput()">
                                             <!-- Variant Name -->
                                             <th class="cursor-pointer" *ngIf="tableHeaderShowHide.variantName">
@@ -1108,9 +1109,7 @@
                                         </ng-container>
                                     </tbody>
                                 </table>
-                                <div *ngIf="noDataFound && advanceSearchData && !isLoading" class="no-data mb-5">
-                                    <h1 class="mb-5">{{ commonLocaleData?.app_no_entries_found }}</h1>
-                                </div>
+                                
                             </form>
                         </div>
 
@@ -1131,10 +1130,13 @@
                             ></pagination>
                         </div>
                     </ng-container>
+                    <div *ngIf="noDataFound  && !isLoading" class="no-data mb-5">
+                        <h1 class="mb-5">{{ commonLocaleData?.app_no_entries_found }}</h1>
+                    </div>
                 </div>
             </div>
         </div>
-        <div *ngIf="noDataFound && !advanceSearchData  && !isLoading " class="no-data mb-5">
+        <div *ngIf="noDataFound && !(advanceSearchData || searchString )  && !isLoading " class="no-data mb-5">
             <h1 class="mb-5">{{ commonLocaleData?.app_no_data_found }}</h1>
         </div>
     </div>
