@@ -99,7 +99,7 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
         this.showCsvDownloadOptions = false;
         let csv = '';
         let name = '';
-        let formatCsv = new FormatCsv(this.trialBalanceRequest, this.localeData);
+        let formatCsv = new FormatCsv(this.trialBalanceRequest, this.localeData);        
         switch (value) {
             case 'group-wise':
                 csv = this.dataFormatter.formatDataGroupWise(this.localeData, this.trialBalanceRequest.from, this.trialBalanceRequest.to);
@@ -112,7 +112,7 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
                 break;
             case 'account-wise':
                 this.dataFormatter.formatDataAccountWise(formatCsv);
-                csv = formatCsv.csv();
+                csv = formatCsv.csv();                
                 name = this.localeData?.csv.trial_balance_account_wise_report_file_name;
                 break;
             default:
