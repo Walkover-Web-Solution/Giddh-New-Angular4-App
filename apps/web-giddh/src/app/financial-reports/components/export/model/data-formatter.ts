@@ -58,7 +58,7 @@ export class DataFormatter {
                     group.accounts.forEach(account => {
                         if (account) {
                             let data1 = [];
-                            let name = this.truncate(`${this.firstCapital(account.name)} (${this.firstCapital(group.groupName)})`, true, 37);
+                            let name = `${this.firstCapital(account.name)} (${this.firstCapital(group.groupName)})`;
                             data1.push(name);
                             data1.push(`${account.openingBalance.amount}${this.recType.transform(account.openingBalance)}`);
                             data1.push(account.debitTotal);
@@ -115,7 +115,7 @@ export class DataFormatter {
                 }
                 if (group.closingBalance.amount !== 0) {
                     let data1: any[] = [];
-                    data1.push(this.truncate(group.groupName?.toUpperCase(), true, 25));
+                    data1.push(group.groupName?.toUpperCase());
                     data1.push(`${group.forwardedBalance.amount} ${this.recType.transform(group.forwardedBalance)}`);
                     data1.push(group.debitTotal);
                     data1.push(group.creditTotal);
@@ -125,7 +125,7 @@ export class DataFormatter {
                     if (group.accounts?.length > 0) {
                         group.accounts.forEach(acc => {
                             if (acc) {
-                                data1.push(this.truncate(`${this.firstCapital(acc.name)}(${this.firstCapital(group.groupName)})`, true, 25));
+                                data1.push(`${this.firstCapital(acc.name)}(${this.firstCapital(group.groupName)})`);
                                 data1.push(`${acc.openingBalance.amount}${this.recType.transform(acc.openingBalance)}`);
                                 data1.push(acc.debitTotal);
                                 data1.push(acc.creditTotal);
@@ -213,24 +213,25 @@ export class DataFormatter {
 
     }
 
-    private truncate(value: string, wordWise: boolean, max: number, tail?: string) {
-        if (!value) {
-            return '';
-        }
-        if (!max) {
-            return value;
-        }
-        if (value?.length <= max) {
-            return value;
-        }
-        value = value.substr(0, max);
-        let lastspace;
-        if (wordWise) {
-            lastspace = value.lastIndexOf(' ');
-        }
-        if (lastspace !== -1) {
-            value = value.substr(0, lastspace);
-        }
-        return value + (tail ? tail : ' …');
-    }
+
+    // private truncate(value: string, wordWise: boolean, max: number, tail?: string) {
+    //     if (!value) {
+    //         return '';
+    //     }
+    //     if (!max) {
+    //         return value;
+    //     }
+    //     if (value?.length <= max) {
+    //         return value;
+    //     }
+    //     value = value.substr(0, max);
+    //     let lastspace;
+    //     if (wordWise) {
+    //         lastspace = value.lastIndexOf(' ');
+    //     }
+    //     if (lastspace !== -1) {
+    //         value = value.substr(0, lastspace);
+    //     }
+    //     return value + (tail ? tail : ' …');
+    // }
 }
