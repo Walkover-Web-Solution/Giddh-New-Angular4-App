@@ -230,7 +230,7 @@
                                                 <div class="pin-code-field">
                                                     <text-field [type]="'text'" [name]="'billingPinCode'"
                                                         (keyup)="copyAccountBillingAddressToShippingAddress()"
-                                                        [placeholder]="commonLocaleData?.app_pin_code" [cssClass]="'border-0'"
+                                                        [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0'"
                                                         formControlName="pincode"></text-field>
                                                 </div>
                                             </div>
@@ -306,7 +306,7 @@
                                                 </div>
                                                 <div class="pin-code-field">
                                                     <text-field [type]="'text'" [name]="'shippingPinCode'"
-                                                        [placeholder]="commonLocaleData?.app_pin_code" [cssClass]="'border-0'"
+                                                        [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0'"
                                                         formControlName="pincode"></text-field>
                                                 </div>
                                             </div>
@@ -425,7 +425,7 @@
                                             <div class="pin-code-field">
                                                 <text-field [type]="'text'" [name]="'companyBillingPinCode'"
                                                     (keyup)="copyCompanyBillingAddressToShippingAddress()"
-                                                    [placeholder]="commonLocaleData?.app_pin_code" [cssClass]="'border-0'"
+                                                    [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0'"
                                                     formControlName="pincode"></text-field>
                                             </div>
                                         </div>
@@ -497,7 +497,7 @@
                                             </div>
                                             <div class="pin-code-field">
                                                 <text-field [type]="'text'" [name]="'companyShippingPinCode'"
-                                                    [placeholder]="commonLocaleData?.app_pin_code" [cssClass]="'border-0'"
+                                                    [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0'"
                                                     formControlName="pincode"></text-field>
                                             </div>
                                         </div>

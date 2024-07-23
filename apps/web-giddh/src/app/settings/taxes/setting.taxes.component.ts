@@ -99,6 +99,14 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
                     this.toggleTaxAsidePane();
                 }
             });
+
+        this.store
+            .pipe(select(state => state.company && state.company.isTaxUpdatedSuccessfully), takeUntil(this.destroyed$))
+            .subscribe(result => {
+                if (result && this.taxAsideMenuState === 'in') {
+                    this.toggleTaxAsidePane();
+                }
+            });
     }
 
     public deleteTax(taxToDelete) {
