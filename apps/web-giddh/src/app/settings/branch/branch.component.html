@@ -114,6 +114,7 @@
                                 <div class="col-xl-3 col-lg-4 col-md-6">
                                     <div class="parent-branch pt-1 pb-1">{{ localeData?.linked_address }}:</div>
                                     <div>
+                                        <span class="text-gray" *ngIf="!branch?.addresses?.length">{{ localeData?.no_linked_address_present }}</span>
                                         <div *ngFor="let address of branch?.addresses" class="linked-add">
                                             <ng-container *ngIf="address">
                                                 <i
@@ -127,14 +128,14 @@
                                                     class="cursor-pointer icon-favorite-selected mr-r05"
                                                 ></i>
                                                 <label
-                                                    class="cursor-pointer"
+                                                    class="position-static cursor-pointer border-none"
                                                     [popover]="popTemplate"
                                                     popoverTitle="{{ address?.name }}"
                                                     placement="right"
                                                     popover
                                                     triggers="mouseenter:mouseleave"
-                                                    >{{ address?.name }}</label
-                                                >
+                                                    >{{ address?.name }}
+                                                </label>
                                                 <ng-template #popTemplate>
                                                     {{ address?.address }} {{ address?.stateCode }}
                                                     <p *ngIf="address?.taxType && address?.taxNumber">
@@ -151,6 +152,7 @@
                                 <div class="col-xl-3 col-lg-4 col-md-6">
                                     <div class="parent-branch pt-1 pb-1">{{ localeData?.linked_warehouse }}:</div>
                                     <div>
+                                        <span class="text-gray" *ngIf="!branch?.warehouseResource?.length">{{ localeData?.no_linked_warehouse_present }}</span>
                                         <div *ngFor="let warehouse of branch?.warehouseResource" class="linked-add">
                                             <ng-container *ngIf="warehouse">
                                                 <i

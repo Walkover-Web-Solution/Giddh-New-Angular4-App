@@ -8,7 +8,7 @@ import { take, takeUntil, debounceTime, distinctUntilChanged, skip } from 'rxjs/
 import { ReplaySubject, Observable } from 'rxjs';
 import { BsDropdownDirective } from 'ngx-bootstrap/dropdown';
 import { UntypedFormControl } from '@angular/forms';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from '../../../services/general.service';
@@ -110,7 +110,11 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
     private params: any = { from: '', to: '' };
     /**True if API called on single time */
     public isDefaultLoaded: boolean = false;
-
+    /** Hold active company country code */
+    public activeCompanyCountryCode: string = '';
+    /** Holds list of countries which use ZIP Code in address */
+    public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
+    
     constructor(
         private store: Store<AppState>,
         private invoiceReceiptActions: InvoiceReceiptActions,
@@ -310,6 +314,12 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                 "checked": true,
             },
         ];
+
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.activeCompanyCountryCode = activeCompany.countryV2?.alpha2CountryCode;
+            }
+        });
     }
 
     public getDetailedPurchaseReport(PurchaseDetailedfilter) {

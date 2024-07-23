@@ -1,4 +1,4 @@
-import { ITax, ITaxDetail } from '../interfaces/tax.interface';
+import { ITax, ITaxAuthority, ITaxDetail } from '../interfaces/tax.interface';
 import { INameUniqueName } from './Inventory';
 import { OrganizationType } from '../user-login-state';
 
@@ -216,6 +216,8 @@ export class TaxResponse implements ITax {
     public taxValue?: any;
     public isChecked?: boolean;
     public isDisabled?: boolean;
+    public taxAuthorityRequest?: ITaxAuthority;
+    public taxAuthority?: ITaxAuthority;
 }
 
 export class StatesRequest {
