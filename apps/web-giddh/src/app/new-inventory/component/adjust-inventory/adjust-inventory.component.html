@@ -76,12 +76,7 @@
                     <div class="col-xxl-3 mt-3 col-xl-4 col-lg-6 col-md-6">
                         <mat-form-field class="w-100" [appearance]="'outline'">
                             <mat-label>{{ localeData?.leave_comment }}</mat-label>
-                            <textarea
-                                matInput
-                                rows="3"
-                                [name]="'description'"
-                                formControlName="description"
-                            ></textarea>
+                            <textarea matInput rows="3" [name]="'description'" formControlName="description"></textarea>
                         </mat-form-field>
                     </div>
                 </div>
@@ -93,6 +88,10 @@
                             [options]="inventoryList$ | async"
                             [labelValue]="adjustInventoryCreateEditForm.get('entityName')?.value"
                             formControlName="entityUniqueName"
+                            [enableDynamicSearch]="true"
+                            [isPaginationEnabled]="true"
+                            (scrollEnd)="handleSearchInventoryScrollEnd()"
+                            (dynamicSearchedQuery)="searchInventory($event)"
                             [required]="true"
                             (selectedOption)="selectInventory($event)"
                             (onClear)="adjustInventoryCreateEditForm.get('entityUniqueName')?.patchValue(null)"
@@ -150,9 +149,9 @@
                             <mat-expansion-panel-header class="h-auto">
                                 <table width="100%">
                                     <tr>
-                                        <td  width="16%">{{ commonLocaleData?.app_import_type?.inventory }}</td>
+                                        <td width="16%">{{ commonLocaleData?.app_import_type?.inventory }}</td>
                                         <td>{{ localeData?.method }}</td>
-                                        <td width="16%"  class="text-right">
+                                        <td width="16%" class="text-right">
                                             {{ localeData?.change_in_value }}
                                         </td>
                                         <td width="16%" class="text-right">{{ localeData?.closing }}</td>
@@ -176,7 +175,7 @@
                                                         [required]="true"
                                                         formControlName="calculationMethod"
                                                         [name]="'calculationMethod'"
-                                                        [placeholder]="commonLocaleData?.app_select_method "
+                                                        [placeholder]="commonLocaleData?.app_select_method"
                                                         (selectionChange)="
                                                             calculateInventory(
                                                                 adjustInventoryCreateEditForm,
@@ -187,8 +186,7 @@
                                                         <mat-option
                                                             *ngFor="let method of calculationMethod"
                                                             [value]="method.value"
-                                                            [disabled]="apiCallInProgress
-                                                            "
+                                                            [disabled]="apiCallInProgress"
                                                             [value]="method.value"
                                                         >
                                                             {{ method.label }}
@@ -401,7 +399,5 @@
 
 <!-- Create Reason Sidebar -->
 <ng-template #createReason>
-    <aside-create-reason
-        (closeAsideEvent)="closeCreateReasonModal($event)"
-    ></aside-create-reason>
+    <aside-create-reason (closeAsideEvent)="closeCreateReasonModal($event)"></aside-create-reason>
 </ng-template>
