@@ -72,7 +72,7 @@
                     <div class="total-sale-detail" *ngIf="activeGraphType !== undefined">
                         <div class="single-sale-detail">
                             <p>
-                                {{ commonLocaleData?.app_total }} {{ activeGraphType["displayName"] }} ({{
+                                {{ commonLocaleData?.app_total }} {{ activeGraphType["uniqueName"] }} ({{
                                     commonLocaleData?.app_this_week
                                 }})
                             </p>
@@ -89,7 +89,7 @@
                         </div>
                         <div class="single-sale-detail">
                             <p>
-                                {{ commonLocaleData?.app_total }} {{ activeGraphType["displayName"] }} ({{
+                                {{ commonLocaleData?.app_total }} {{ activeGraphType["uniqueName"] }} ({{
                                     commonLocaleData?.app_last_week
                                 }})
                             </p>
