@@ -201,6 +201,7 @@ export class SearchStockTransactionReportRequest {
     public totalPages?: number;
     public searchPage?: string;
     public inventoryType?: string;
+    public loadMore?: boolean;
     constructor() {
         this.count = API_COUNT_LIMIT;
         this.page = 1;
