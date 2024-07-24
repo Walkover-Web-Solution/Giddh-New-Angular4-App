@@ -17,8 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
         TranslateDirectiveModule,
         MatListModule,
         MatDialogModule,
-        MatButtonModule,
-        TranslateDirectiveModule
+        MatButtonModule
     ],
     declarations: [
         CommandKComponent,

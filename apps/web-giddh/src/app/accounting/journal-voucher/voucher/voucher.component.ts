@@ -1381,7 +1381,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
-     * In case of sales ( i.e To ) row update manually then
+     * In case of sales ( i.e To ) row update manually then 
      * calculate and update cash ( i.e. By ) value
      *
      * @private

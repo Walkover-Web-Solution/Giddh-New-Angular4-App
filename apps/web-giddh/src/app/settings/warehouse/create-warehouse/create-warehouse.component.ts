@@ -126,7 +126,6 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                 }
             }
         });
-
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.loadLinkedEntities();
         this.loadAddresses('GET', { count: 0 });

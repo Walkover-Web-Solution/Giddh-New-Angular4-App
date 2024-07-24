@@ -15,14 +15,14 @@
             >
                 <!-- Invoice filter section -->
                 <div class="mr-r1 d-flex flex-sm-row flex-column">
-                    <!-- <button
+                    <button
                         type="button"
                         class="btn btn-sky-blue dropdown-btn-new"
-                        [routerLink]="'/pages/voucher/receipt/create'"
+                        [routerLink]="'/pages/vouchers/receipt/create'"
                         *ngIf="voucherApiVersion === 2"
                     >
                         {{ localeData?.new_voucher }}
-                    </button> -->
+                    </button>
                     <div
                         class="input-group linked-entities mr-r15"
                         *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"
@@ -520,7 +520,7 @@
                             </td>
                             <td
                                 width="13%"
-                                class="text-break"
+                                class="text-break cursor-pointer"
                                 [attr.data-title]="localeData?.receipt_no_label"
                                 (click)="previewVoucher(receipt)"
                             >

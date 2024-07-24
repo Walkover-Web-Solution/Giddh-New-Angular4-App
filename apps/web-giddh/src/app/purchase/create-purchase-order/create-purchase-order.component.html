@@ -136,7 +136,7 @@
                                         <label>{{ localeData?.deliver_from }}<span class="red-text">*</span></label>
                                     </div>
                                     <!-- region vendor dropdown -->
-                                    <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 select-customer-name">
+                                    <div class="col-sm-12 col-xl-10 col-lg-8 col-md-9 select-customer-name">
                                         <section class="form-inline">
                                             <div class="wrap-billing-address w-100 clearfix">
                                                 <div class="row">
@@ -656,7 +656,7 @@
                                 <label>{{ localeData?.deliver_to }}<span class="red-text">*</span></label>
                             </div>
                             <!-- region customer dropdown -->
-                            <div class="col-sm-12 col-xl-9 col-lg-8 col-md-9 col-xs-12 select-customer-name">
+                            <div class="col-sm-12 col-xl-10 col-lg-8 col-md-9 col-xs-12 select-customer-name">
                                 <section class="form-inline">
                                     <div class="wrap-billing-address w-100 clearfix">
                                         <div class="row">
@@ -1141,7 +1141,7 @@
                                                                             type="number"
                                                                             class="form-control input-custom"
                                                                             autocomplete="false"
-                                                                            name="companyBillingPinCode"
+                                                                            name="companyShippingPinCode"
                                                                             [placeholder]="
                                                                                 commonLocaleData?.app_pin_code
                                                                             "
@@ -1280,7 +1280,7 @@
             class="static-purchase-table create-purchase-order-table clearfix mb-2 bg-white container-fluid"
         >
             <div class="switch-currency" *ngIf="isMulticurrencyAccount && !showSwitchedCurr">
-                <span class="left-currency">1 {{ customerCurrencyCode }}</span>
+                <span class="left-currency">{{ commonLocaleData?.app_numbers?.one }} {{ customerCurrencyCode }}</span>
                 <img
                     class="switch-icon"
                     src="assets/images/switch-icon.svg"
@@ -1331,7 +1331,7 @@
                 </span>
             </div>
             <div class="switch-currency" *ngIf="isMulticurrencyAccount && showSwitchedCurr">
-                <span class="left-currency">1 {{ companyCurrency }}</span>
+                <span class="left-currency">{{ commonLocaleData?.app_numbers?.one }} {{ companyCurrency }}</span>
                 <img
                     class="switch-icon"
                     src="assets/images/switch-icon.svg"
@@ -1458,7 +1458,7 @@
                         <td class="text-right stock-unit">
                             <div class="wrap-td-data">{{ transaction.quantity }} {{ transaction.stockUnitCode }}</div>
                         </td>
-                        <td class="text-right tra-rate item-rate">
+                        <td class="text-right trans-rate item-rate">
                             <div *ngIf="transaction.rate > 0 || transaction.isStockTxn">
                                 <div class="td-wrapper">
                                     <div>
@@ -1518,6 +1518,7 @@
                                             >
                                             </amount-field>
                                         </span>
+                                        <br />
                                     </div>
                                 </div>
                             </div>
@@ -1649,6 +1650,7 @@
                                             </span>
                                         </span>
                                     </div>
+                                    <br />
                                     <div
                                         class="tax-in-currency differ-currency"
                                         *ngIf="entry.isOtherTaxApplicable && isMulticurrencyAccount"
@@ -1801,7 +1803,7 @@
                                         {{ entryDescriptionLength - transaction.description?.length }}
                                     </p>
                                     <p
-                                        class="small text-muted sku-and-customfields"
+                                        class="small text-muted sku-and-custom-fields"
                                         *ngIf="transaction.sku_and_customfields"
                                     >
                                         {{ transaction.sku_and_customfields }}
@@ -2865,7 +2867,7 @@
                                                     {{ entryDescriptionLength - transaction.description?.length }}
                                                 </p>
                                                 <p
-                                                    class="small text-muted sku-and-customfields"
+                                                    class="small text-muted sku-and-custom-fields"
                                                     *ngIf="transaction.sku_and_customfields"
                                                 >
                                                     {{ transaction.sku_and_customfields }}
@@ -3134,8 +3136,8 @@
                                                 [maskInput]="inputMaskFormat"
                                                 [prefixInput]="purchaseOrder.accountDetails.currencySymbol"
                                                 [suffixInput]="selectedSuffixForCurrency"
-                                                [commonLocaleData]="commonLocaleData"
                                             >
+                                                [commonLocaleData]="commonLocaleData"
                                             </discount-control-component>
                                         </div>
                                         <div class="differ-currency" *ngIf="isMulticurrencyAccount">
@@ -3321,7 +3323,7 @@
 
                         <div class="clearfix max-width-600 m-0" [collapse]="isOthrDtlCollapsed">
                             <div class="row">
-                                <div class="form-group col-xs-4">
+                                <div class="form-group col-xs-4 custom-input-field">
                                     <giddh-datepicker
                                         [cssClass]="'mat-field-border bdr form-control'"
                                         #shippingDate="ngModel"
