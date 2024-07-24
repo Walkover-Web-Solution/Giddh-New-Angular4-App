@@ -8,13 +8,13 @@ on:
     branches: [ production ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-concurrency: test-build
+concurrency: stage-build
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -25,6 +25,8 @@ jobs:
         shell: bash
         run: echo "branch_name=${GITHUB_REF##*/}" >> $GITHUB_ENV
         id: extract_branch
+      - if: ${{env.branch_name == 'giddh-2.0'}}
+        run: echo "BUILD_ENV=Test" >> $GITHUB_ENV
       - if: ${{env.branch_name == 'beta-stage'}}
         run: echo "BUILD_ENV=Stage" >> $GITHUB_ENV
       - if: ${{env.branch_name == 'beta-branch'}}
@@ -133,6 +135,16 @@ jobs:
           cp -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/dist/apps/web-giddh /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public/website/
       - name: Create ZIP folder
         run: zip -r public.zip public
+      - name: Deploy to TEST env.
+        if: ${{ env.BUILD_ENV == 'Test' }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws s3 cp \
+            --acl private \
+            --region ap-south-1 \
+            /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public.zip s3://${{ secrets.UI_TEST_BUILD_S3_FOLDER }}
       - name: Deploy to STAGE env.
         if: ${{ env.BUILD_ENV == 'Stage' }}
         env:
