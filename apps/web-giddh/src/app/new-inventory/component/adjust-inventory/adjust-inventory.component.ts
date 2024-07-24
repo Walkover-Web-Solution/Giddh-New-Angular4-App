@@ -3,7 +3,7 @@ import { AdjustInventoryComponentStore } from './utility/adjust-inventory.store'
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.action';
-import { Observable, ReplaySubject, takeUntil, of as observableOf, combineLatest, map } from 'rxjs';
+import { Observable, ReplaySubject, takeUntil, of as observableOf, combineLatest, map, debounceTime, distinctUntilChanged } from 'rxjs';
 import { SettingsUtilityService } from '../../../settings/services/settings-utility.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -112,6 +112,10 @@ export class AdjustInventoryComponent implements OnInit {
     public apiCallInProgress: boolean = true;
     /** Hold Adjusment Inventory Form Value */
     public inventoryFormValue: any;
+    /** Holds report type */
+    public searchPage: string = "VARIANT";
+    /** Filtered options to show in autocomplete list */
+    public fieldFilteredOptions: any[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -151,7 +155,7 @@ export class AdjustInventoryComponent implements OnInit {
         this.getWarehouses();
         this.getReasons();
         this.getExpensesAccount();
-        this.getItemWiseReport();
+        this.searchInventory(false);
         if (this.referenceNumber) {
             this.componentStore.inventoryAdjustData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response) {
@@ -319,14 +323,75 @@ export class AdjustInventoryComponent implements OnInit {
     }
 
     /**
-     * This will be use for get item wise report
-     *
-     * @memberof AdjustInventoryComponent
-     */
-    public getItemWiseReport(): void {
+       * Searches the group/stock/variant
+       *
+       * @param {boolean} [loadMore]
+       * @memberof AdjustInventoryComponent
+       */
+    public searchInventory(searchedText: any, loadMore: boolean = false): void {
+        if (this.searchRequest.loadMore) {
+            return;
+        }
+        if (searchedText !== null && searchedText !== undefined && typeof searchedText === 'string') {
+            this.searchRequest.q = searchedText;
+        }
         this.searchRequest.inventoryType = this.inventoryType?.toUpperCase();
-        this.searchRequest.searchPage = 'VARIANT';
-        this.componentStore.getItemWiseReport(this.searchRequest);
+        this.searchRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames ? this.stockReportRequest.stockGroupUniqueNames : [];
+        this.searchRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames ? this.stockReportRequest.stockUniqueNames : [];
+        this.searchRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames ? this.stockReportRequest.variantUniqueNames : [];
+        this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames ? this.stockReportRequest.stockGroupUniqueNames : [];
+        this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames ? this.stockReportRequest.stockUniqueNames : [];
+        this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames ? this.stockReportRequest.variantUniqueNames : [];
+        if (loadMore) {
+            this.searchRequest.page++;
+        } else {
+            this.searchRequest.page = 1;
+        }
+        this.searchRequest.searchPage = this.searchPage;
+        if (this.searchRequest.page === 1 || this.searchRequest.page <= this.searchRequest.totalPages) {
+            delete this.searchRequest.totalItems;
+            delete this.searchRequest.totalPages;
+            this.componentStore.getItemWiseReport(this.searchRequest);
+            this.searchRequest.loadMore = true;
+            let initialData = cloneDeep(this.fieldFilteredOptions);
+            this.componentStore.itemWiseReport$.pipe(debounceTime(700),
+                distinctUntilChanged(),
+                takeUntil(this.destroyed$)).subscribe(response => {
+                    this.searchRequest.loadMore = false;
+                    if (response) {
+                        if (loadMore) {
+                            let nextPaginatedData = response.results.map(item => ({
+                                value: item.uniqueName,
+                                label: item.name,
+                                additional: item
+                            }));
+                            this.fieldFilteredOptions = nextPaginatedData;
+                            let concatData = initialData.concat(nextPaginatedData);
+                            this.inventoryList$ = observableOf(concatData);
+                        } else {
+                            this.fieldFilteredOptions = response.results.map(item => ({
+                                value: item.uniqueName,
+                                label: item.name,
+                                additional: item
+                            }));
+                            this.inventoryList$ = observableOf(this.fieldFilteredOptions);
+                        }
+                        this.searchRequest.totalItems = response.totalItems;
+                        this.searchRequest.totalPages = response.totalPages;
+                    } else {
+                        this.inventoryList$ = observableOf([]);
+                    }
+                });
+        }
+    }
+
+    /**
+    * Callback for inventory scroll end
+    *
+    * @memberof AdjustInventoryComponent
+    */
+    public handleSearchInventoryScrollEnd(): void {
+        this.searchInventory(this.searchRequest.q, true);
     }
 
     /**
