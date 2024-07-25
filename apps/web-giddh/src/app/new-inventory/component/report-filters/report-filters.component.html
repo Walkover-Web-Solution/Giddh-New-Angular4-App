@@ -178,7 +178,7 @@
             </mat-form-field>
         </div>
         <div class="menu-btn-control d-flex justify-content-end align-items-center">
-            <button mat-button class="advance-filter-button" (click)="exportReport()" *ngIf="searchPage === 'STOCK'" [disabled]="isLoading$ | async">
+            <button mat-button class="advance-filter-button" (click)="exportReport()" *ngIf="searchPage === 'STOCK' || searchPage === 'VARIANT'" [disabled]="isLoading$ | async">
                 <i class="icon-download-circle mr-1"></i>
                 {{ commonLocaleData?.app_export }}</button>
             <button mat-button (click)="openModal()" class="advance-filter-button">
