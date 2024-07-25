@@ -99,7 +99,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     public previousEnd: number;
     public startupLoop: boolean = true;
 
-    constructor(private element: ElementRef, private renderer: Renderer2 , private changeDetectionRef: ChangeDetectorRef,) {
+    constructor(private element: ElementRef, private renderer: Renderer2, private changeDetectionRef: ChangeDetectorRef) {
     }
 
     get width(): any {
