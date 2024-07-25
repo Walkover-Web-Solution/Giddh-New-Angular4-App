@@ -112,5 +112,6 @@ export const INVENTORY_API = {
         CREATE_REASON: 'company/:companyUniqueName/inventory-adjustment/reason', // GET call
         GET: 'company/:companyUniqueName/inventory-adjustment/:referenceNo', // GET call
         CREATE_INVENTORY: 'company/:companyUniqueName/inventory-adjustment?voucherVersion=2&branchUniqueName=:branchUniqueName' // POST call
-    }
+    },
+    INVENTORY_VARIANT_WISE_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/variant-wise?from=:from&to=:to'
 };
