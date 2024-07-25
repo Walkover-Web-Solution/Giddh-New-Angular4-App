@@ -370,7 +370,6 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             if(InventoryReportType.variant) {
                 if(column === 'variant_name') {
                     this.stockReportRequestExport.showVariantName = true;
-                    console.log(this.stockReportRequestExport.showVariantName)
                 }
             }
         });
