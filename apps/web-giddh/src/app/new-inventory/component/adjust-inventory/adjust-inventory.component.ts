@@ -249,7 +249,7 @@ export class AdjustInventoryComponent implements OnInit {
                 if (itemWise) {
                     const mappedIItemWise = itemWise.map(item => ({
                         value: item.uniqueName,
-                        label: item.name,
+                        label: item.name + ' (' + item?.type + ')',
                         additional: item
                     }));
                     this.inventoryList$ = observableOf(mappedIItemWise);
@@ -362,7 +362,7 @@ export class AdjustInventoryComponent implements OnInit {
                         if (loadMore) {
                             let nextPaginatedData = response.results.map(item => ({
                                 value: item.uniqueName,
-                                label: item.name,
+                                label: item.name + ' (' + item?.type + ')',
                                 additional: item
                             }));
                             this.fieldFilteredOptions = nextPaginatedData;
@@ -371,7 +371,7 @@ export class AdjustInventoryComponent implements OnInit {
                         } else {
                             this.fieldFilteredOptions = response.results.map(item => ({
                                 value: item.uniqueName,
-                                label: item.name,
+                                label: item.name + ' (' + item?.type + ')',
                                 additional: item
                             }));
                             this.inventoryList$ = observableOf(this.fieldFilteredOptions);
