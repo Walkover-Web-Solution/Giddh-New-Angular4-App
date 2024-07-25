@@ -413,7 +413,7 @@ export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventor
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ updateAdjustInventoryInProgress: true, updateAdjustInventoryIsSuccess: null });
-                return this.inventoryService.createInventoryAdjustment(req?.formValue, req.branchUniqueName).pipe(
+                return this.inventoryService.updateInventoryAdjustment(req?.formValue, req.branchUniqueName).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {

@@ -439,7 +439,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     /**
      * This will hide the datepicker
      *
-     * @memberof DaybookComponent
+     * @memberof AdjustInventoryListComponent
      */
     public hideGiddhDatepicker(): void {
         this.modalRef.hide();
@@ -449,7 +449,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
      * Call back function for date/range selection in datepicker
      *
      * @param {*} value
-     * @memberof DaybookComponent
+     * @memberof AdjustInventoryListComponent
      */
     public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
@@ -469,8 +469,9 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
             this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
             this.adjustInventoryListRequest.from = this.fromDate;
             this.adjustInventoryListRequest.to = this.toDate;
-            this.getAllAdjustReports(false);
         }
+        this.getAllAdjustReports(false);
+        this.changeDetection.detectChanges();
     }
 
     /**

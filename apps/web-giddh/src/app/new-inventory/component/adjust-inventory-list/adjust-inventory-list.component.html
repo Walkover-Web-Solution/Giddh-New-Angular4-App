@@ -50,7 +50,14 @@
             >
                 {{ commonLocaleData?.app_clear }}
             </button>
-            <button id="add-adjustment-btn" mat-stroked-button color="primary" class="ml-auto" (click)="addInventory()">
+            <button
+                *ngIf="currentOrganizationType !== 'COMPANY'"
+                id="add-adjustment-btn"
+                mat-stroked-button
+                color="primary"
+                class="ml-auto"
+                (click)="addInventory()"
+            >
                 {{ localeData?.add_adjsutment }}
             </button>
         </div>
