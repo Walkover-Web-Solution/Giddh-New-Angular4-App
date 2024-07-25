@@ -327,13 +327,14 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
              showOutwardsQty: false,
              showOutwardsValue: false,
              showClosingStockQty: false,
-             showClosingStockValue: false
+             showClosingStockValue: false,
+             showVariantName: false
          }
 
         /* for column value filter selected */
          this.displayedColumns?.forEach(column => {
              if (column === 'stock_name') {
-                 this.stockReportRequestExport.showStockName = true;
+                this.stockReportRequestExport.showStockName = true;
              }
             else if (column === 'group_name') {
                 this.stockReportRequestExport.showGroupName = true;
@@ -364,6 +365,13 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             }
             else if (column === 'closing_amount') {
                 this.stockReportRequestExport.showClosingStockValue = true;
+            }
+            /* for value filter selected in variant */
+            if(InventoryReportType.variant) {
+                if(column === 'variant_name') {
+                    this.stockReportRequestExport.showVariantName = true;
+                    console.log(this.stockReportRequestExport.showVariantName)
+                }
             }
         });
     }
@@ -692,6 +700,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
         this.stockReportRequestExport.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
         this.stockReportRequestExport.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
+        this.stockReportRequestExport.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
         this.filtersChipList?.push(selectOptionValue);
         this.searchRequest.q = "";
         this.searchInventory();
@@ -860,23 +869,39 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @return {*}  {void}
      * @memberof ReportFiltersComponent
     */
-        public exportReport(): void {
-            if (this.searchPage === InventoryReportType.stock) {
-                let stockReportRequestExport = this.stockReportRequestExport;
-                let queryParams = {
-                    from: this.fromDate,
-                    to: this.toDate
-                };
-                delete stockReportRequestExport.from;
-                delete stockReportRequestExport.to;
-    
-                stockReportRequestExport.inventoryType = this.moduleType;
-                // data is coming from inventory store
-                this.componentStore.exportStock({
-                    stockReportRequest: stockReportRequestExport,
-                    queryParams: queryParams
-                });
-            }
+    public exportReport(): void {
+        if (this.searchPage === InventoryReportType.stock) {
+            let stockReportRequestExport = this.stockReportRequestExport;
+            let queryParams = {
+                from: this.fromDate,
+                to: this.toDate
+            };
+            delete stockReportRequestExport.from;
+            delete stockReportRequestExport.to;
+
+            stockReportRequestExport.inventoryType = this.moduleType;
+            // data is coming from inventory store
+            this.componentStore.exportStock({
+                stockReportRequest: stockReportRequestExport,
+                queryParams: queryParams
+            });
         }
+        else if (this.searchPage === InventoryReportType.variant) {
+            let stockReportRequestExport = this.stockReportRequestExport;
+            let queryParams = {
+                from: this.fromDate,
+                to: this.toDate
+            };
+            delete stockReportRequestExport.from;
+            delete stockReportRequestExport.to;
+
+            stockReportRequestExport.inventoryType = this.moduleType;
+            // data is coming from inventory store
+            this.componentStore.exportVariant({
+                stockReportRequest: stockReportRequestExport,
+                queryParams: queryParams
+            });
+        }
+    }
 }
 
