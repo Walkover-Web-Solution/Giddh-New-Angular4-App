@@ -43,14 +43,14 @@ export class InventoryComponentStore extends ComponentStore<any> {
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 if (typeof res?.body === "string") {
-                                    this.toaster.showSnackBar("success", res?.body);
+                                    this.toaster.showSnackBar("success", res.body);
                                     this.router.navigate(["/pages/downloads"]);
                                     return this.patchState({
                                         isLoading: false
                                     });
                                 }
                             } else {
-                                this.toaster.showSnackBar("error", res?.message);
+                                res?.message && this.toaster.showSnackBar("error", res.message);
                                 return this.patchState({
                                     isLoading: false
                                 });
@@ -81,14 +81,14 @@ export class InventoryComponentStore extends ComponentStore<any> {
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 if (typeof res?.body === "string") {
-                                    this.toaster.showSnackBar("success", res?.body);
+                                    this.toaster.showSnackBar("success", res.body);
                                     this.router.navigate(["/pages/downloads"]);
                                     return this.patchState({
                                         isLoading: false
                                     });
                                 }
                             } else {
-                                this.toaster.showSnackBar("error", res?.message);
+                                res?.message && this.toaster.showSnackBar("error", res.message);
                                 return this.patchState({
                                     isLoading: false
                                 });
