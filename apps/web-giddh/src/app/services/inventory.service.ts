@@ -1824,4 +1824,27 @@ export class InventoryService {
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, StockGroupRequest>(e, model)));
     }
+
+    /**
+   * This will be use for update inventory adjust
+   *
+   * @param {*} model
+   * @param {string} branchUniqueName
+   * @return {*}  {Observable<BaseResponse<any, any>>}
+   * @memberof InventoryService
+   */
+    public updateInventoryAdjustment(model: any, branchUniqueName: string): Observable<BaseResponse<any, any>> {
+        let refNo = model.refNo;
+        delete model.refNo;
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.put(this.config.apiUrl + INVENTORY_API.INVENTORY_ADJUST.UPDATE_INVENTORY
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':branchUniqueName', encodeURIComponent(branchUniqueName))
+            ?.replace(':refNo', encodeURIComponent(refNo))
+            , model).pipe(map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = { model };
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, StockGroupRequest>(e, model)));
+    }
 }

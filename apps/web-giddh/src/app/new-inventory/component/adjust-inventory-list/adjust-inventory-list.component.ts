@@ -404,6 +404,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         if (resetPage) {
             this.adjustInventoryListRequest.page = 1;
         }
+        this.adjustInventoryListRequest.inventoryType = this.inventoryType;
         this.componentStore.getAllAdjustInventoryReport(this.adjustInventoryListRequest);
     }
 
@@ -436,6 +437,43 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         );
     }
 
+    /**
+     * This will hide the datepicker
+     *
+     * @memberof AdjustInventoryListComponent
+     */
+    public hideGiddhDatepicker(): void {
+        this.modalRef.hide();
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value
+     * @memberof AdjustInventoryListComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.hideGiddhDatepicker();
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.hideGiddhDatepicker();
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.adjustInventoryListRequest.from = this.fromDate;
+            this.adjustInventoryListRequest.to = this.toDate;
+        }
+        this.getAllAdjustReports(false);
+        this.changeDetection.detectChanges();
+    }
 
     /**
      * This method will be use for route to create adjust inventory
