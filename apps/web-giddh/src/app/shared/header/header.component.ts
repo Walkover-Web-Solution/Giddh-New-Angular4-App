@@ -85,8 +85,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /*This will check if page has not tabs*/
     public pageHasTabs: boolean = false;
 
-    public asideInventorySidebarMenuState: string = 'out';
-
     @Output() public menuStateChange: EventEmitter<boolean> = new EventEmitter();
 
     @ViewChild('companyadd', { static: true }) public companyadd: ElementViewContainerRef;
@@ -306,7 +304,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         // SETTING CURRENT PAGE ON INIT
         this.setCurrentPage();
-        this.checkIfPageHasTabs();
 
         // SETTING CURRENT PAGE ON ROUTE CHANGE
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
@@ -333,7 +330,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
                 this.setCurrentPage();
                 this.addClassInBodyIfPageHasTabs();
-                this.checkIfPageHasTabs();
 
                 if (this.router.url.includes("/ledger")) {
                     this.currentState = this.router.url;
@@ -920,7 +916,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.asideHelpSupportDialogRef?.close();
             }
             this.asideSettingMenuState = (show) ? 'in' : 'out';
-            this.asideInventorySidebarMenuState = (show && this.asideInventorySidebarMenuState === 'out') ? 'in' : 'out';
 
             if (this.asideSettingMenuState === "in") {
                 document.querySelector('body')?.classList?.add('aside-setting');
@@ -928,12 +923,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body')?.classList?.remove('aside-setting');
             }
 
-            if (this.asideSettingMenuState === "in" && this.asideInventorySidebarMenuState === "in") {
+            if (this.asideSettingMenuState === "in") {
                 document.querySelector('body').classList.add('mobile-setting-sidebar');
             } else {
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
             }
-        }, ((this.asideSettingMenuState === 'out') ? 100 : 0) && (this.asideInventorySidebarMenuState === 'out') ? 100 : 0);
+        }, ((this.asideSettingMenuState === 'out') ? 100 : 0));
     }
 
     /**
@@ -1484,17 +1479,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             } else if (
                 document.getElementsByTagName("tabset") &&
                 document.getElementsByTagName("tabset").length > 0 &&
-                !this.router.url.includes("/vendor") && (!document.getElementsByClassName("static-tabs-on-page") || (document.getElementsByClassName("static-tabs-on-page") && document.getElementsByClassName("static-tabs-on-page").length === 0))) {
+                !this.router.url.includes("/vendor")) {
                 document.querySelector('body').classList.add('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
-            }
-            /* this code is not working so that inventory sidebar is not working on mobile view, developer please check it */
-            else if (document.getElementsByClassName("new-inventory-page") && document.getElementsByClassName("new-inventory-page").length > 0) {
-                document.querySelector('body').classList.add('inventory-sidebar');
-                document.querySelector('body').classList.remove('page-has-tabs');
-                document.querySelector('body').classList.remove('on-user-page');
             } else {
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
@@ -1682,22 +1671,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (window['Headway'] !== undefined) {
             window['Headway'].init();
         }
-    }
-    /**
-     * This function will check if page has tabs to show/hide page heading
-     *
-     * @memberof HeaderComponent
-     */
-    public checkIfPageHasTabs(): void | boolean {
-        this.pageHasTabs = false;
-        let currentUrl = this.router.url;
-
-        NAVIGATION_ITEM_LIST.find((page) => {
-            if (page.uniqueName === decodeURI(currentUrl) && page.hasTabs === true) {
-                this.pageHasTabs = true;
-                return true;
-            }
-        });
     }
 
     /**

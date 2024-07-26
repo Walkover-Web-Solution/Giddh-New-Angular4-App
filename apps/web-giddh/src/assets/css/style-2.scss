@@ -27,8 +27,6 @@ $custom-typography: mat-typography-config($font-family: var(--font-regular),
 @import "../css/global/help-support.scss";
 @import "../css/global/sales-register-expand.scss";
 @import "../css/global/setting-integration.scss";
-@import "../css/global/help-support.scss";
-@import "../css/global/sales-register-expand.scss";
 @import "../css/global/input-dropdown-field.scss";
 @import "../css/global/voucher.scss";
 @import "../css/global/tabs.scss";
@@ -40,10 +38,7 @@ $custom-typography: mat-typography-config($font-family: var(--font-regular),
 @import "../css/global/tax-dropdown.scss";
 @import "../css/global/discount-dropdown.scss";
 @import "../css/global/dialog.scss";
-
-@import "../css/global/dialog.scss";
 @import "../css/global/add-bulk-entry.scss";
-@import "../css/global/global-variable.scss";
 @import "../css/global/settings-sidebar.scss";
 @import "../css/global/mat-menu.scss";
 @import "../css/global/tax-authority.scss";
@@ -11246,37 +11241,6 @@ body.update-scroll-hidden {
     }
 }
 
-.ledger-attachments-popup {
-    .cdk-overlay-container {
-        .mat-dialog-container {
-            background-color: var(--color-popup-background);
-        }
-
-        .cdk-overlay-connected-position-bounding-box {
-            .mat-menu-panel {
-                .mat-menu-content {
-                    button:focus {
-                        box-shadow: none !important;
-                        background-color: var(--color-dropdown-list-hover-background);
-                    }
-                }
-            }
-        }
-    }
-
-    button.mat-menu-item {
-        height: 40px;
-        display: flex;
-        align-items: center;
-        padding: 0 16px !important;
-    }
-
-    .mat-menu-content {
-        padding-top: 2px !important;
-        padding-bottom: 2px !important;
-    }
-}
-
 /*---- inventory-master ----*/
 
 inventory-master {
@@ -15195,7 +15159,23 @@ aside-menu-product-service {
         border-color: var(--color-field-hover) !important;
     }
 }
+// Ledger Create Panel text color
+.new-ledger-panel {
+    color: var(--color-default-button) !important;
 
+    label,
+    strong {
+        color: var(--color-default-button) !important;
+    }
+
+    .mat-expansion-panel {
+        .mat-expansion-panel-header {
+            .mat-expansion-panel-header-title {
+                color: var(--color-default-button) !important;
+            }
+        }
+    }
+}
 // hsn description
 .tax-engine {
     .description-overlap {

@@ -14,7 +14,6 @@ AUTHOR:   @THEMECHANIC
 VERSION:  1
 */
 @import "../css/giddh-common.scss";
-@import "./color.scss";
 
 html,
 body {
@@ -3113,6 +3112,9 @@ td.mat-footer-cell {
 .mat-sort-header-arrow.ng-trigger.ng-trigger-arrowPosition {
     opacity: 1 !important;
     transform: none !important;
+}
+.double-popup-zindex {
+    z-index: 99 !important;
 }
 .receipt-card {
     .mat-form-field {

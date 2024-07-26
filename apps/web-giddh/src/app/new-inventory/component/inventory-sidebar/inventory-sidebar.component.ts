@@ -225,7 +225,7 @@ export class InventorySidebarComponent implements OnDestroy {
                         { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/inventory/v2/reports/product/transaction' },
                         { name: this.localeData?.sidebar?.master, icons: 'transactions.svg', link: '/pages/inventory/v2/product/master' },
                         { name: this.localeData?.sidebar?.inventory, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/product/bulk-stock-edit' },
-                        { name: 'Inventory Adjustment', icons: 'home-icon-black.svg', link: '/pages/inventory/v2/product/adjust', hiddenLink: ['/pages/inventory/v2/product/adjust/create'] }
+                        // { name: 'Inventory Adjustment', icons: 'home-icon-black.svg', link: '/pages/inventory/v2/product/adjust', hiddenLink: ['/pages/inventory/v2/product/adjust/create'] }
                     ],
                 },
                 {
@@ -239,7 +239,7 @@ export class InventorySidebarComponent implements OnDestroy {
                         { name: this.localeData?.sidebar?.transactions, icons: 'transactions.svg', link: '/pages/inventory/v2/reports/service/transaction' },
                         { name: this.localeData?.sidebar?.master, icons: 'transactions.svg', link: '/pages/inventory/v2/service/master' },
                         { name: this.localeData?.sidebar?.inventory, icons: 'home-icon-black.svg', link: '/pages/inventory/v2/service/bulk-stock-edit' },
-                        { name: 'Inventory Adjustment', icons: 'home-icon-black.svg', link: '/pages/inventory/v2/service/adjust', hiddenLink: ['/pages/inventory/v2/service/adjust/create'] }
+                        // { name: 'Inventory Adjustment', icons: 'home-icon-black.svg', link: '/pages/inventory/v2/service/adjust', hiddenLink: ['/pages/inventory/v2/service/adjust/create'] }
                     ],
                 },
                 {

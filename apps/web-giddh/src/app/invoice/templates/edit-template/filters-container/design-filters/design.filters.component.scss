@@ -124,21 +124,6 @@
     padding: 4px;
 }
 
-.design-tool {
-    > li {
-        > i,
-        > span {
-            padding: 5px;
-            font-size: 18px;
-            background-color: var(--color-white);
-        }
-        .tab-expanded {
-            position: relative;
-            top: 3px;
-        }
-    }
-}
-
 @media (min-width: 1024px) and (max-width: 1266px) {
     .start-upload-btn {
         float: none;
