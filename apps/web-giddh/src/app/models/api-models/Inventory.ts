@@ -647,8 +647,9 @@ export class InventorytAdjustReportQueryRequest {
     public totalPages: number = 0;
     public totalItems: number = 0;
     public sortBy: string = '';
-    public sort: 'asc' | 'desc' = 'asc';
+    public sort: 'asc' | 'desc' = 'desc';
     public searchBy: string = '';
     public branchUniqueName?: string;
+    public inventoryType: string;
 }
 
