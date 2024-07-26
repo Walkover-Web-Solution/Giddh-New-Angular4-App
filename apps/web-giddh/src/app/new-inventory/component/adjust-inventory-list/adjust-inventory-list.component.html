@@ -79,6 +79,7 @@
                         (matSortChange)="sortChange($event)"
                         [matSortActive]="adjustInventoryListRequest?.sortBy"
                         [matSortDirection]="adjustInventoryListRequest?.sort"
+                        matSortStart="desc"
                         [dataSource]="dataSource"
                         class="w-100"
                     >

@@ -151,6 +151,7 @@ export class AdjustInventoryComponent implements OnInit {
      * @memberof AdjustInventoryComponent
      */
     public ngOnInit(): void {
+        this.inventoryList$ = observableOf([]);
         this.initForm();
         this.getWarehouses();
         this.getReasons();
@@ -239,7 +240,6 @@ export class AdjustInventoryComponent implements OnInit {
                 }
             }
         });
-
         combineLatest([
             this.componentStore.itemWiseReport$.pipe(map(response => response?.results)),
             this.componentStore.variantWiseReport$.pipe(map(response => response?.results))

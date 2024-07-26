@@ -404,6 +404,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         if (resetPage) {
             this.adjustInventoryListRequest.page = 1;
         }
+        this.adjustInventoryListRequest.inventoryType = this.inventoryType;
         this.componentStore.getAllAdjustInventoryReport(this.adjustInventoryListRequest);
     }
 
