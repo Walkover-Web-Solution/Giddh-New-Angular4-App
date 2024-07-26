@@ -1803,7 +1803,7 @@ export class InventoryService {
     }
 
     /**
-   * This will be use for create inventory adjust
+   * This will be use for update inventory adjust
    *
    * @param {*} model
    * @param {string} branchUniqueName
