@@ -134,11 +134,11 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.initForm();
-        this.getAllAdjustReports(true);
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type) {
                 this.inventoryType = params?.type.toLowerCase();
+                this.getAllAdjustReports(true);
             }
         });
 
@@ -404,7 +404,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         if (resetPage) {
             this.adjustInventoryListRequest.page = 1;
         }
-        this.adjustInventoryListRequest.inventoryType = this.inventoryType;
+        this.adjustInventoryListRequest.inventoryType = this.inventoryType.toUpperCase();;
         this.componentStore.getAllAdjustInventoryReport(this.adjustInventoryListRequest);
     }
 

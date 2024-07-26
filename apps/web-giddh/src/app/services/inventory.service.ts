@@ -1683,7 +1683,6 @@ export class InventoryService {
      */
     public getAdjustmentInventoryReport(getParams: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-
         let url = this.config.apiUrl + INVENTORY_API.INVENTORY_ADJUST.REPORT
             ?.replace(":companyUniqueName", this.companyUniqueName)
             ?.replace(":from", getParams.from)
@@ -1694,6 +1693,7 @@ export class InventoryService {
             ?.replace(":sort", getParams.sort ? getParams.sort?.toString() : '')
             ?.replace(":q", getParams.q ? getParams.q?.toString() : '')
             ?.replace(":searchBy", getParams.q ? getParams.searchBy?.toString() : '')
+            ?.replace(":inventoryType", getParams.inventoryType ? getParams.inventoryType?.toString() : '')
         if (getParams.branchUniqueName) {
             const branchUniqueName = getParams.branchUniqueName !== this.companyUniqueName ? getParams.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(branchUniqueName)}`);

@@ -521,6 +521,7 @@ export class AdjustInventoryComponent implements OnInit {
         this.adjustInventoryCreateEditForm.get('entityUniqueName').setValue(event?.value);
         this.adjustInventoryCreateEditForm.get('entity').setValue(event?.additional?.type);
         this.stockReportRequest.to = toDate;
+        this.stockReportRequest.archived = false;
         let queryParams = {
             from: this.stockReportRequest.from ?? '',
             to: this.stockReportRequest.to ?? '',
