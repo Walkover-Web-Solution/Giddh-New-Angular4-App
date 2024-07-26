@@ -211,11 +211,11 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._generalService.setParameterInLocalStorage("Country-Region", "GL");
         }
 
-        if (this._generalService.getUrlParameter("region") === "uk") {
-            this._generalService.setParameterInLocalStorage("X-Tenant", "GB");
-        } else {
-            this._generalService.setParameterInLocalStorage("X-Tenant", "GL");
-        }
+        // if (this._generalService.getUrlParameter("region") === "uk") {
+        //     this._generalService.setParameterInLocalStorage("X-Tenant", "GB");
+        // } else {
+        //     this._generalService.setParameterInLocalStorage("X-Tenant", "GL");
+        // }
     }
 
     public ngAfterViewInit() {
