@@ -106,7 +106,7 @@ export const INVENTORY_API = {
     GET_STOCK_DETAILS: 'v2/company/:companyUniqueName/stock/:stockUniqueName/details?userType=:userType', // GET call
     INVENTORY_ITEM_WISE_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/item-wise?from=:from&to=:to',
     INVENTORY_ADJUST: {
-        REPORT: 'company/:companyUniqueName/inventory-adjustment/adjustment-report?page=:page&from=:from&to=:to&count=:count&sortBy=:sortBy&sort=:sort&q=:q&searchBy=:searchBy', // POST call
+        REPORT: 'company/:companyUniqueName/inventory-adjustment/adjustment-report?page=:page&from=:from&to=:to&count=:count&sortBy=:sortBy&sort=:sort&q=:q&searchBy=:searchBy&inventoryType=:inventoryType', // POST call
         DELETE: 'company/:companyUniqueName/inventory-adjustment/:referenceNo?voucherVersion=2', // DELETE call
         GET_REASON: 'company/:companyUniqueName/inventory-adjustment/reason/get-all?count=2000',// GET call
         CREATE_REASON: 'company/:companyUniqueName/inventory-adjustment/reason', // GET call
