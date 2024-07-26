@@ -1693,7 +1693,7 @@ export class InventoryService {
             ?.replace(":sort", getParams.sort ? getParams.sort?.toString() : '')
             ?.replace(":q", getParams.q ? getParams.q?.toString() : '')
             ?.replace(":searchBy", getParams.q ? getParams.searchBy?.toString() : '')
-            ?.replace(":inventoryType", getParams.inventoryType ? getParams.inventoryType?.toString() : '')
+            ?.replace(":inventoryType", getParams.inventoryType ? getParams.inventoryType?.toString() : '');
         if (getParams.branchUniqueName) {
             const branchUniqueName = getParams.branchUniqueName !== this.companyUniqueName ? getParams.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(branchUniqueName)}`);
