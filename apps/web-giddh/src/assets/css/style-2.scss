@@ -1253,10 +1253,24 @@ aside-create-group {
             }
         }
 
-        mat-list {
-            .cdk-virtual-scroll-viewport {
-                height: 100% !important;
-                min-height: calc(100vh - 160px);
+        mat-grid-list{
+            mat-grid-tile {
+                &:first-child {
+                    mat-list {
+                        .cdk-virtual-scroll-viewport {
+                            height: 100% !important;
+                            min-height: calc(100vh - 160px);
+                        }
+                    }
+                }
+                &:nth-child(2) {
+                    mat-list {
+                        .cdk-virtual-scroll-viewport {
+                            height: 100% !important;
+                            min-height: calc(100vh - 205px);
+                        }
+                    }
+                }
             }
         }
     }
