@@ -1,9 +1,9 @@
 {
     "giddh_logo": "giddh-logo",
     "click_here": "Click here",
-    "subscription_end_note": "Your [PLAN_DURATION] [PLAN_DURATION_UNIT] plan [PLAN_NAME] will end on [EXPIRY_DATE]. Apply to upgrade your subscription.",
-    "subscription_ended_note": "Your [PLAN_DURATION] [PLAN_DURATION_UNIT] plan [PLAN_NAME] ended on [EXPIRY_DATE]. Apply to upgrade your subscription.",
-    "subscription_transaction_limit_ended": "You have crossed the transactions limit of your assigned plan [PLAN_NAME] subscribed on [PLAN_START_DATE]. To continue your accounting with Giddh, Please renew your current plan or switch to another one. Contact us for more assistance.",
+    "subscription_end_note": "Your [PLAN_DURATION] [PLAN_DURATION_UNIT] plan - [PLAN_NAME] will end on [EXPIRY_DATE]. Apply to upgrade your subscription.",
+    "subscription_ended_note": "Your [PLAN_DURATION] [PLAN_DURATION_UNIT] plan - [PLAN_NAME] ended on [EXPIRY_DATE]. Apply to upgrade your subscription.",
+    "subscription_transaction_limit_ended": "You have crossed the transactions limit of your assigned plan - [PLAN_NAME] subscribed on [PLAN_START_DATE]. To continue your accounting with Giddh, Please renew your current plan or switch to another one. Contact us for more assistance.",
     "ready_to_upgrade": "Ready to upgrade subscription",
     "renew_plan": "Renew Plan",
     "change_plan": "Change Plan",

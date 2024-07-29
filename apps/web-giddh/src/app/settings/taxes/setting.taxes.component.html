@@ -30,6 +30,7 @@
                                 <th>#</th>
                                 <th>{{ localeData?.tax }}</th>
                                 <th>{{ commonLocaleData?.app_name }}</th>
+                                <th *ngIf="availableTaxes?.length && availableTaxes[0]?.taxAuthority">{{ commonLocaleData?.app_tax_authority }}</th>
                                 <th>{{ localeData?.linked_account }}</th>
                                 <th>{{ localeData?.applied_from }}</th>
                                 <th>{{ localeData?.tax_percentage }}</th>
@@ -50,6 +51,9 @@
                                 </td>
                                 <td *ngIf="taxToEdit[i]" [attr.data-title]="commonLocaleData?.app_name">
                                     {{ tax.name }}
+                                </td>
+                                <td *ngIf="tax?.taxAuthority">
+                                    {{ tax?.taxAuthority?.name }}
                                 </td>
                                 <td *ngIf="!tax.accounts[0] && !taxToEdit[i]">--</td>
                                 <td

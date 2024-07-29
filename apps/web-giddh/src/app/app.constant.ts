@@ -131,6 +131,8 @@ export enum OnBoardingType {
 
 /** Pagination limit for every module */
 export const PAGINATION_LIMIT = 50;
+/** Pagination count options */
+export const PAGE_SIZE_OPTIONS = [20, 50, 100];
 /** API default count limit */
 export const API_COUNT_LIMIT = 20;
 /** Vouchers pagination limit  */
@@ -302,7 +304,7 @@ export const INVALID_STOCK_ERROR_MESSAGE = 'Both Unit and Rate fields are mandat
 
 /** Tax supported country codes */
 export const TAX_SUPPORTED_COUNTRIES = [
-    'QA', 'BH', 'AE', 'SA', 'OM', 'KW', 'GB', 'ZW', 'KE'
+    'QA', 'BH', 'AE', 'SA', 'OM', 'KW', 'GB', 'ZW', 'KE', 'US'
 ];
 
 /** VAT supported country codes */
@@ -314,6 +316,12 @@ export const VAT_SUPPORTED_COUNTRIES = [
 export const TRN_SUPPORTED_COUNTRIES = [
     'QA', 'BH', 'AE', 'SA', 'OM', 'KW'
 ];
+
+/** Sales tax supported country codes */
+export const SALES_TAX_SUPPORTED_COUNTRIES = ['US'];
+
+/** ZIP Code supported country codes */
+export const ZIP_CODE_SUPPORTED_COUNTRIES = ['US', 'GB'];
 
 export const API_POSTMAN_DOC_URL = 'https://apidoc.giddh.com/';
 
