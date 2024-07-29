@@ -1252,7 +1252,7 @@ aside-create-group {
                 }
             }
         }
-
+        // Units are not displaying after creation once the scroll comes on the page
         mat-grid-list{
             mat-grid-tile {
                 &:first-child {
