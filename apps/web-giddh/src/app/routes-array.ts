@@ -85,7 +85,6 @@ export const ROUTES: Routes = [
                 loadChildren: () => import('./accounting/accounting.module').then(module => module.AccountingModule),
                 data: { preload: true }
             },
-            { path: 'user-details', loadChildren: () => import('./user-details/user-details.module').then(module => module.UserDetailsModule) },
             { path: 'contact', loadChildren: () => import('./contact/contact.module').then(module => module.ContactModule) },
             {
                 path: 'new-vs-old-invoices',
@@ -107,7 +106,7 @@ export const ROUTES: Routes = [
             { path: 'custom-fields', loadChildren: () => import('./custom-fields/custom-fields.module').then(module => module.CustomFieldsModule) },
             { path: 'new-company', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
             { path: 'subscription/buy-plan', loadChildren: () => import('./subscription/subscription.module').then(module => module.SubscriptionModule) },
-            { path: 'subscription', loadChildren: () => import('./subscription/subscription.module').then(module => module.SubscriptionModule) },
+            { path: 'user-details', loadChildren: () => import('./subscription/subscription.module').then(module => module.SubscriptionModule) },
             { path: 'new-company/:subscriptionId', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
             { path: 'vouchers', loadChildren: () => import('./vouchers/vouchers.module').then(module => module.VouchersModule) },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }

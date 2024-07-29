@@ -254,7 +254,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 // }
                 this.subscriptionId = response.subscriptionId;
                 if (this.isChangePlan) {
-                    this.router.navigate(['/pages/subscription']);
+                    this.router.navigate(['/pages/user-details/subscription']);
                 } else {
                     if (this.payType === 'trial') {
                         this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
@@ -285,7 +285,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     this.initializePayment(response);
                 } else {
                     if (this.isChangePlan) {
-                        this.router.navigate(['/pages/subscription']);
+                        this.router.navigate(['/pages/user-details/subscription']);
                     } else {
                         this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
                     };
@@ -304,7 +304,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 //     this.openCashfreeDialog(response?.redirectLink);
                 // }
                 if (this.isChangePlan) {
-                    this.router.navigate(['/pages/subscription']);
+                    this.router.navigate(['/pages/user-details/subscription']);
                 } else {
                     this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
                 };
@@ -316,7 +316,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             if (response) {
                 this.isLoading = false;
                 if (this.isChangePlan) {
-                    this.router.navigate(['/pages/subscription']);
+                    this.router.navigate(['/pages/user-details/subscription']);
                 } else {
                     this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
                 };
@@ -379,11 +379,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-        if (this.router.url === '/pages/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/subscription/buy-plan') {
+        if (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan') {
             window.addEventListener('message', event => {
                 if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
                     if (this.isChangePlan) {
-                        this.router.navigate(['/pages/subscription']);
+                        this.router.navigate(['/pages/user-details/subscription']);
                     } else {
                         this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
                     }
@@ -425,7 +425,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             } else {
                 if (response?.region?.code === 'GBR') {
                     this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
-                    this.router.navigate(['/pages/subscription']);
+                    this.router.navigate(['/pages/user-details/subscription']);
                 } else {
                     this.updateSubscriptionPayment(response, true);
                 }

@@ -1,769 +1,369 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { debounceTime, distinctUntilChanged, ReplaySubject, takeUntil } from 'rxjs';
-import { GeneralService } from '../services/general.service';
-import { ConfirmModalComponent } from "../theme/new-confirm-modal/confirm-modal.component";
-import { Router } from '@angular/router';
-import { SubscriptionComponentStore } from './utility/subscription.store';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { API_COUNT_LIMIT, PAGE_SIZE_OPTIONS } from '../app.constant';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../store';
-import { Store } from '@ngrx/store';
-import { SubscriptionsUser } from '../models/api-models/Subscriptions';
-import { MatMenuTrigger } from '@angular/material/menu';
-import { CompanyListDialogComponent } from './company-list-dialog/company-list-dialog.component';
-import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.component';
+import { select, Store } from '@ngrx/store';
 import { GeneralActions } from '../actions/general/general.actions';
-import { BuyPlanComponentStore } from './buy-plan/utility/buy-plan.store';
 import { ToasterService } from '../services/toaster.service';
+import { CompanyResponse } from '../models/api-models/Company';
+import { SignupWithMobile, UserDetails, VerifyMobileModel } from '../models/api-models/loginModels';
+import { GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
+import { BsModalRef } from 'ngx-bootstrap/modal';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { ClipboardService } from 'ngx-clipboard';
+import { LoginActions } from '../actions/login.action';
+import { SessionActions } from '../actions/session.action';
+import { API_POSTMAN_DOC_URL, BootstrapToggleSwitch } from '../app.constant';
+import { cloneDeep } from '../lodash-optimized';
+import { AuthenticationService } from '../services/authentication.service';
+import * as dayjs from 'dayjs';
+import * as duration from 'dayjs/plugin/duration';
+dayjs.extend(duration)
 @Component({
     selector: 'app-subscription',
     templateUrl: './subscription.component.html',
     styleUrls: ['./subscription.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [SubscriptionComponentStore, BuyPlanComponentStore]
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SubscriptionComponent implements OnInit, OnDestroy {
-    /** Mat menu instance reference */
-    @ViewChild(MatMenuTrigger) menu: MatMenuTrigger;
-    /** Holds Paginator Reference */
-    @ViewChild(MatPaginator) paginator!: MatPaginator;
-    /** This will use for move company in to another company  */
-    @ViewChild("moveCompany", { static: false }) public moveCompany: any;
+    /** True If Auth key copied and used toggle Copy text */
+    public isCopied: boolean = false;
+    public userAuthKey: string = '';
+    public twoWayAuth: boolean = false;
+    public phoneNumber: string = '';
+    public oneTimePassword: string = '';
+    public countryCode: string = '';
+    public showVerificationBox: boolean = false;
+    public amount: number = 0;
+    public discount: number = 0;
+    public payStep2: boolean = false;
+    public payStep3: boolean = false;
+    public isHaveCoupon: boolean = false;
+    public couponcode: string = '';
+    public payAlert: any[] = [];
+    public directPay: boolean = false;
+    public disableRazorPay: boolean = false;
+    public contactNo$: Observable<string>;
+    public subscriptions: any;
+    public transactions: any;
+    public companies: any;
+    public companyTransactions: any;
+    public countryCode$: Observable<string>;
+    public isAddNewMobileNoInProcess$: Observable<boolean>;
+    public isAddNewMobileNoSuccess$: Observable<boolean>;
+    public isVerifyAddNewMobileNoInProcess$: Observable<boolean>;
+    public isVerifyAddNewMobileNoSuccess$: Observable<boolean>;
+    public authenticateTwoWay$: Observable<boolean>;
+    public selectedCompany: CompanyResponse = null;
+    public user: UserDetails = null;
+    public apiTabActivated: boolean = false;
+    public userSessionResponse$: Observable<any>;
+    public userSessionList: any[] = [];
+    public dayjs = dayjs;
+    public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
+    public userSessionId: any = null;
+    public modalRef: BsModalRef;
+    public isUpdateCompanyInProgress$: Observable<boolean>;
+    public isCreateAndSwitchCompanyInProcess: boolean;
+    public isMobileScreen: boolean = true;
+    public apiPostmanDocUrl: String = API_POSTMAN_DOC_URL;
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
-    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** This will use for table heading */
-    public displayedColumns: string[] = ['companyName', 'billingAccountName', 'subscriberName', 'countryName', 'planName', 'status', 'renewalDate'];
-    /** Hold the data of subscriptions */
-    public dataSource: any;
-    /** True if translations loaded */
-    public translationLoaded: boolean = false;
-    /** Holds Store Subscription list observable*/
-    public subscriptionList$ = this.componentStore.select(state => state.subscriptionList);
-    /** Holds Store Subscription list in progress API success state as observable*/
-    public subscriptionListInProgress$ = this.componentStore.select(state => state.subscriptionListInProgress);
-    /** Holds Store Plan list API success state as observable*/
-    public subscriptionRazorpayOrderDetails$ = this.componentStoreBuyPlan.select(state => state.subscriptionRazorpayOrderDetails);
-    /** Holds Store Apply Promocode API response state as observable*/
-    public updateSubscriptionPaymentIsSuccess$ = this.componentStoreBuyPlan.select(state => state.updateSubscriptionPaymentIsSuccess);
-    /** This will use for subscription pagination logs object */
-    public subscriptionRequestParams = {
-        page: 1,
-        totalPages: 0,
-        totalItems: 0,
-        count: API_COUNT_LIMIT,
-    }
-    /** Hold table page index number*/
-    public pageIndex: number = 0;
-    /** Holds page size options */
-    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
-    /** Holds Total number of discounts */
-    public totalDiscountCount: number = 0;
-    /* Hold list searching value */
-    public inlineSearch: any = '';
-    /** Form Group for subscription form */
-    public subscriptionListForm: FormGroup;
-    /** True, if custom date filter is selected or custom searching or sorting is performed */
-    public showClearFilter: boolean = false;
-    /* True if billing account show */
-    public showBillingAccount = false;
-    /* True if  subscriber show */
-    public showSubscriber = false;
-    /* True if  country show */
-    public showCountry = false;
-    /* True if  name show */
-    public showName = false;
-    /* True if Plan Name show */
-    public showPlanSubName = false;
-    /* True if status show */
-    public showStatus = false;
-    /* True if duration show */
-    public showMonthlyYearly = false;
-    /* True if show header */
-    public showData: boolean = true;
-    /** Razorpay instance */
-    public razorpay: any;
+    /** This will hold toggle buttons value and size */
+    public bootstrapToggleSwitch = BootstrapToggleSwitch;
+    /* Holds Mat Table Columns*/
+    public displayedColumns: string[] = ['ipaddress', 'signindate', 'signintime', 'duration', 'agent', 'action'];
+    /** Holds Active Tab Index */
+    public activeTabIndex: number = 0;
+    /** Holds Tab Name */
+    private tabName = ['auth-key', 'mobile-number', 'session', 'subscription'];
+    /** Holds True if API calling in progress in old subscription page */
+    public isSubscriptionLoading: boolean = false;
+    /** Holds subscription id */
+    public subscriptionId: string = '';
 
-    /** Getter for show search element by type */
-    public get shouldShowElement(): boolean {
-        const shouldShow = (
-            this.subscriptionListForm?.controls['companyName']?.value ||
-            this.subscriptionListForm?.controls['billingAccountName']?.value ||
-            this.subscriptionListForm?.controls['subscriberName']?.value ||
-            this.subscriptionListForm?.controls['countryName']?.value ||
-            this.subscriptionListForm?.controls['planName']?.value ||
-            this.subscriptionListForm?.controls['status']?.value ||
-            this.subscriptionListForm?.controls['duration']?.value
-        );
-        this.showData = shouldShow;
-        return shouldShow;
-    }
-    /** Holds Store Cancel Subscription observable*/
-    public cancelSubscription$ = this.componentStore.select(state => state.cancelSubscription);
-    /** Holds Store Subscribed companies API success state as observable*/
-    public subscribedCompanies$ = this.componentStore.select(state => state.subscribedCompanies);
-    /** Holds Store Subscribe companies in progress API success state as observable*/
-    public subscribedCompaniesInProgress$ = this.componentStore.select(state => state.subscribedCompaniesInProgress);
-    /* This will hold list of subscriptions */
-    public subscriptions: SubscriptionsUser[] = [];
-    /* This will hold the companies to use in selected company */
-    public selectedCompany: any;
-    /** This will use for active company */
-    public activeCompany: any = {};
-    /** True if subscription will move */
-    public subscriptionMove: boolean = false;
-    /** Holds Store Buy Plan Success observable*/
-    public buyPlanSuccess$ = this.componentStore.select(state => state.buyPlanSuccess);
-    /** This will use for open window */
-    private openedWindow: Window | null = null;
-
-
-    constructor(public dialog: MatDialog,
-        private changeDetection: ChangeDetectorRef,
-        private generalService: GeneralService,
-        private componentStore: SubscriptionComponentStore,
-        private store: Store<AppState>,
-        private formBuilder: FormBuilder,
-        private readonly componentStoreBuyPlan: BuyPlanComponentStore,
-        private generalActions: GeneralActions,
+    constructor(private store: Store<AppState>,
+        private toasty: ToasterService,
+        private loginService: AuthenticationService,
+        private loginAction: LoginActions,
         private router: Router,
-        private toasterService: ToasterService
-    ) {
-        this.store.dispatch(this.generalActions.openSideMenu(true));
+        private sessionAction: SessionActions,
+        private route: ActivatedRoute,
+        private breakPointObservar: BreakpointObserver,
+        private generalActions: GeneralActions,
+        private clipboardService: ClipboardService) {
+        this.contactNo$ = this.store.pipe(select(s => {
+            if (s.session.user) {
+                return s.session.user.user.contactNo;
+            }
+        }), takeUntil(this.destroyed$));
+        this.countryCode$ = this.store.pipe(select(s => {
+            if (s.session.user) {
+                return s.session.user.countryCode;
+            }
+        }), takeUntil(this.destroyed$));
+
+        this.isAddNewMobileNoInProcess$ = this.store.pipe(select(s => s.login.isAddNewMobileNoInProcess), takeUntil(this.destroyed$));
+        this.isAddNewMobileNoSuccess$ = this.store.pipe(select(s => s.login.isAddNewMobileNoSuccess), takeUntil(this.destroyed$));
+        this.isVerifyAddNewMobileNoInProcess$ = this.store.pipe(select(s => s.login.isVerifyAddNewMobileNoInProcess), takeUntil(this.destroyed$));
+        this.isVerifyAddNewMobileNoSuccess$ = this.store.pipe(select(s => s.login.isVerifyAddNewMobileNoSuccess), takeUntil(this.destroyed$));
+        this.userSessionResponse$ = this.store.pipe(select(s => s.userLoggedInSessions.Usersession), takeUntil(this.destroyed$));
+        this.isUpdateCompanyInProgress$ = this.store.pipe(select(s => s.settings.updateProfileInProgress), takeUntil(this.destroyed$));
+
+        this.authenticateTwoWay$ = this.store.pipe(select(s => {
+            if (s.session.user) {
+                return s.session.user.user.authenticateTwoWay;
+            }
+        }), takeUntil(this.destroyed$));
     }
 
     /**
-     * Initializes the component by subscribing to route parameters and fetching subscription data.
-     * Navigates to the subscription page upon subscription cancellation.
+     * Copy Authkey to Clipboard
      *
-     * @memberof SubscriptionComponent
+     * @memberof UserDetailsComponent
      */
-    public ngOnInit(): void {
-        document.body?.classList?.add("subscription-page");
-        this.initForm();
-        this.getAllSubscriptions(false);
-
-        /** Get Discount List */
-        this.subscriptionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.subscriptions = response?.body?.results;
-                this.dataSource = new MatTableDataSource<any>(response?.body?.results);
-                if (this.dataSource?.filteredData?.length || this.subscriptionListForm?.controls['companyName']?.value ||
-                    this.subscriptionListForm?.controls['billingAccountName']?.value ||
-                    this.subscriptionListForm?.controls['subscriberName']?.value ||
-                    this.subscriptionListForm?.controls['countryName']?.value ||
-                    this.subscriptionListForm?.controls['planName']?.value ||
-                    this.subscriptionListForm?.controls['status']?.value ||
-                    this.subscriptionListForm?.controls['duration']?.value) {
-                    this.showData = true;
-                } else {
-                    this.showData = false;
-                }
-                this.dataSource.paginator = this.paginator;
-                this.subscriptionRequestParams.totalItems = response?.body?.totalItems;
-            } else {
-                this.dataSource = new MatTableDataSource<any>([]);
-                this.subscriptions = [];
-                this.showData = false;
-                this.subscriptionRequestParams.totalItems = 0;
-            }
-        });
-
-        this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
-                this.activeCompany = response;
-            }
-        });
-
-        this.cancelSubscription$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.router.navigate(['/pages/subscription']);
-            }
-        });
-
-        this.buyPlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.redirectLink) {
-                this.openWindow(response?.redirectLink);
-            }
-        });
-
-        if (this.router.url === '/pages/subscription') {
-            window.addEventListener('message', event => {
-                if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
-                    this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
-                    this.closeWindow();
-                    this.getAllSubscriptions(false);
-                }
-            });
-        }
-
-        this.subscriptionRazorpayOrderDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                if (response.dueAmount > 0) {
-                    this.initializePayment(response);
-                } else {
-                    if (response.status === 'trial') {
-                        this.router.navigate(['/pages/subscription/buy-plan']);
-                    } else {
-                        this.router.navigate(['/pages/subscription/buy-plan/' + response.subscriptionId]);
-                    }
-                }
-            }
-        });
-
-        this.updateSubscriptionPaymentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.getAllSubscriptions(false);
-            }
-        });
-
-        this.subscriptionListForm?.controls['companyName'].valueChanges.pipe(
-            debounceTime(700),
-            distinctUntilChanged(),
-            takeUntil(this.destroyed$),
-        ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
-                this.showClearFilter = true;
-                this.getAllSubscriptions(true);
-            }
-            if (searchedText === null || searchedText === "") {
-                this.showClearFilter = false;
-                this.showName = false;
-            }
-        });
-        this.subscriptionListForm?.controls['billingAccountName'].valueChanges.pipe(
-            debounceTime(700),
-            distinctUntilChanged(),
-            takeUntil(this.destroyed$),
-        ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
-                this.showClearFilter = true;
-                this.getAllSubscriptions(true);
-            }
-            if (searchedText === null || searchedText === "") {
-                this.showClearFilter = false;
-                this.showBillingAccount = false;
-            }
-        });
-        this.subscriptionListForm?.controls['subscriberName'].valueChanges.pipe(
-            debounceTime(700),
-            distinctUntilChanged(),
-            takeUntil(this.destroyed$),
-        ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
-                this.showClearFilter = true;
-                this.getAllSubscriptions(true);
-            }
-            if (searchedText === null || searchedText === "") {
-                this.showClearFilter = false;
-                this.showSubscriber = false;
-            }
-        });
-        this.subscriptionListForm?.controls['countryName'].valueChanges.pipe(
-            debounceTime(700),
-            distinctUntilChanged(),
-            takeUntil(this.destroyed$),
-        ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
-                this.showClearFilter = true;
-                this.getAllSubscriptions(true);
-            }
-            if (searchedText === null || searchedText === "") {
-                this.showClearFilter = false;
-                this.showCountry = false;
-            }
-        });
-        this.subscriptionListForm?.controls['planName'].valueChanges.pipe(
-            debounceTime(700),
-            distinctUntilChanged(),
-            takeUntil(this.destroyed$),
-        ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
-                this.showClearFilter = true;
-                this.getAllSubscriptions(true);
-            }
-            if (searchedText === null || searchedText === "") {
-                this.showClearFilter = false;
-                this.showPlanSubName = false;
-            }
-        });
-
-        this.subscriptionListForm?.controls['status'].valueChanges.pipe(
-            debounceTime(700),
-            distinctUntilChanged(),
-            takeUntil(this.destroyed$),
-        ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
-                this.showClearFilter = true;
-                this.getAllSubscriptions(true);
-            }
-            if (searchedText === null || searchedText === "") {
-                this.showClearFilter = false;
-                this.showStatus = false;
-            }
-        });
-
-        this.subscriptionListForm?.controls['duration'].valueChanges.pipe(
-            debounceTime(700),
-            distinctUntilChanged(),
-            takeUntil(this.destroyed$),
-        ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
-                this.showClearFilter = true;
-                this.getAllSubscriptions(true);
-            }
-            if (searchedText === null || searchedText === "") {
-                this.showClearFilter = false;
-                this.showMonthlyYearly = false;
-            }
-        });
-
-        this.componentStore.isUpdateCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.getAllSubscriptions(null);
-            }
-        });
-
+    public toggleIsCopied(): void {
+        this.isCopied = true;
+        this.clipboardService.copyFromContent(this.userAuthKey);
+        setTimeout(() => {
+            this.isCopied = false;
+        }, 3000);
     }
 
-    /**
-     * This will use for init subscription form
-     *
-     * @memberof SubscriptionComponent
-     */
-    public initForm(): void {
-        this.subscriptionListForm = this.formBuilder.group({
-            companyName: null,
-            billingAccountName: null,
-            subscriberName: null,
-            countryName: null,
-            planName: null,
-            status: null,
-            duration: null
+    public ngOnInit() {
+        document.querySelector('body').classList.add('setting-sidebar-open');
+
+        this.breakPointObservar.observe([
+            '(max-width:767px)'
+        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            this.isMobileScreen = result.matches;
         });
-    }
 
-    /**
-   * Returns the search field text
-   *
-   * @param {*} title
-   * @returns {string}
-   * @memberof SubscriptionComponent
-   */
-    public getSearchFieldText(title: any): string {
-        let searchField = this.localeData?.search_field;
-        searchField = searchField?.replace("[FIELD]", title);
-        return searchField;
-    }
-
-    /**
-     * Handles clicks outside the specified element for filtering in the SubscriptionComponent.
-     *
-     * @param event - The event triggered by the click.
-     * @param element - The element outside of which the click occurred.
-     * @param searchedFieldName - The name of the field being searched for.
-     * @memberof SubscriptionComponent
-     */
-    public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
-        if (searchedFieldName === 'companyName') {
-            if (this.subscriptionListForm?.controls['companyName'].value !== null && this.subscriptionListForm?.controls['companyName'].value !== '') {
-                return;
-            }
-        } else if (searchedFieldName === 'Billing Account') {
-            if (this.subscriptionListForm?.controls['billingAccountName'].value !== null && this.subscriptionListForm?.controls['billingAccountName'].value !== '') {
-                return;
-            }
-        } else if (searchedFieldName === 'Subscriber') {
-            if (this.subscriptionListForm?.controls['subscriberName'].value !== null && this.subscriptionListForm?.controls['subscriberName'].value !== '') {
-                return;
-            }
-        } else if (searchedFieldName === 'Country') {
-            if (this.subscriptionListForm?.controls['countryName'].value !== null && this.subscriptionListForm?.controls['countryName'].value !== '') {
-                return;
-            }
-        } else if (searchedFieldName === 'Plan Name') {
-            if (this.subscriptionListForm?.controls['planName'].value !== null && this.subscriptionListForm?.controls['planName'].value !== '') {
-                return;
-            }
-        } else if (searchedFieldName === 'Status') {
-            if (this.subscriptionListForm?.controls['status'].value !== null && this.subscriptionListForm?.controls['status'].value !== '') {
-                return;
-            }
-        } else if (searchedFieldName === 'Monthly/Yearly') {
-            if (this.subscriptionListForm?.controls['duration'].value !== null && this.subscriptionListForm?.controls['duration'].value !== '') {
-                return;
-            }
-        }
-
-        if (this.generalService.childOf(event?.target, element)) {
-            return;
+        if (!this.isCreateAndSwitchCompanyInProcess) {
+            document.querySelector('body').classList.add('tabs-page');
         } else {
-            if (searchedFieldName === 'Name') {
-                this.showName = false;
-            } else if (searchedFieldName === 'Billing Account') {
-                this.showBillingAccount = false;
-            } else if (searchedFieldName === 'Subscriber') {
-                this.showSubscriber = false;
+            document.querySelector('body').classList.remove('tabs-page');
+        }
+
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            if (params['type'] && this.tabName[this.activeTabIndex] !== params['type']) {
+                this.activeTabIndex = this.tabName.indexOf(params['type']);
+            } else if (!params['type'] && !this.activeTabIndex) {
+                this.activeTabIndex = 0;
             }
-            else if (searchedFieldName === 'Country') {
-                this.showCountry = false;
-            } else if (searchedFieldName === 'Plan Name') {
-                this.showPlanSubName = false;
-            } else if (searchedFieldName === 'Monthly/Yearly') {
-                this.showMonthlyYearly = false;
-            } else if (searchedFieldName === 'Status') {
-                this.showStatus = false;
+        });
+
+        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            if (params && params.tabIndex) {
+                if (params && params.tabIndex == "0") {
+                    this.activeTabIndex = 0;
+                } else if (params && params.tabIndex == "1") {
+                    this.activeTabIndex = 1;
+                } else if (params && params.tabIndex == "2") {
+                    this.activeTabIndex = 2;
+                } else if (params && params.tabIndex == "3") {
+                    this.activeTabIndex = 3;
+                }
+                this.router.navigate(['pages/user-details/', this.tabName[this.activeTabIndex]], { replaceUrl: true });
             }
-        }
-    }
-
-    /**
-     * This will be use for toggle search field
-     *
-     * @param {string} fieldName
-     * @param {*} el
-     * @memberof SubscriptionComponent
-     */
-    public toggleSearch(fieldName: string): void {
-        if (fieldName === 'Name') {
-            this.showName = true;
-        }
-        if (fieldName === 'Billing Account') {
-            this.showBillingAccount = true;
-        }
-        if (fieldName === 'Subscriber') {
-            this.showSubscriber = true;
-        }
-        if (fieldName === 'Country') {
-            this.showCountry = true;
-        }
-        if (fieldName === 'Plan Name') {
-            this.showPlanSubName = true;
-        }
-        if (fieldName === 'Monthly/Yearly') {
-            this.showMonthlyYearly = true;
-        }
-        if (fieldName === 'Status') {
-            this.showStatus = true;
-        }
-    }
-
-    /**
-     * Handle page change
-     *
-     * @param {*} event
-     * @memberof SubscriptionComponent
-     */
-    public handlePageChange(event: any): void {
-        this.pageIndex = event.pageIndex;
-        this.subscriptionRequestParams.count = event.pageSize;
-        this.subscriptionRequestParams.page = event.pageIndex + 1;
-        this.getAllSubscriptions(false);
-    }
-
-
-    /**
-    * This function will use for get company details
-    *
-    * @param {*} element
-    * @memberof SubscriptionComponent
-    */
-    public openCompanyDialog(element: any): void {
-        this.menu?.closeMenu();
-        this.subscriptionMove = true;
-        let data = {
-            rowData: element,
-            subscriptions: this.subscriptions,
-            selectedCompany: this.selectedCompany,
-            localeData: this.localeData,
-            commonLocaleData: this.commonLocaleData,
-            subscriptionMove: this.subscriptionMove
-        }
-        this.dialog.open(CompanyListDialogComponent, {
-            data: data,
-            panelClass: 'subscription-sidebar',
-            role: 'alertdialog',
-            ariaLabel: 'companyDialog'
-        });
-    }
-
-    /**
-    * This function will use for transfer subscription
-    *
-    * @param {*} element
-    * @memberof SubscriptionComponent
-    */
-    public transferSubscription(subscriptionId: any): void {
-        this.menu.closeMenu();
-        this.dialog.open(TransferDialogComponent, {
-            data: subscriptionId,
-            panelClass: 'transfer-popup',
-            width: "630px",
-            role: 'alertdialog',
-            ariaLabel: 'transferDialog'
-        });
-    }
-
-
-    /**
-     * Callback for translation response complete
-     *
-     * @param {*} event
-     * @memberof SubscriptionComponent
-     */
-    public translationComplete(event: any): void {
-        if (event) {
-            this.translationLoaded = true;
-            this.changeDetection.detectChanges();
-        }
-    }
-
-    /**
-     *This function will open the move company popup
-     *
-     * @param {*} company
-     * @memberof SubscriptionComponent
-     */
-    public openModalMove(company: any): void {
-        this.menu.closeMenu();
-        this.subscriptionMove = true;
-        this.selectedCompany = company;
-        this.dialog.open(this.moveCompany, {
-            width: '40%',
-            role: 'alertdialog',
-            ariaLabel: 'moveDialog'
-        });
-    }
-
-    /**
-     * Clears the filters and resets the form in the SubscriptionComponent.
-     *
-     * @memberof SubscriptionComponent
-     */
-    public clearFilter(): void {
-        this.showClearFilter = false;
-        this.showName = false;
-        this.showBillingAccount = false;
-        this.showSubscriber = false;
-        this.showCountry = false;
-        this.showPlanSubName = false;
-        this.showMonthlyYearly = false;
-        this.showStatus = false;
-        this.subscriptionListForm.reset();
-        this.inlineSearch = '';
-        this.getAllSubscriptions(true);
-    }
-
-    /**
-     * Retrieves all subscriptions in the SubscriptionComponent.
-     *
-     * @param resetPage - Indicates whether to reset the pagination page.
-     * @memberof SubscriptionComponent
-     */
-    public getAllSubscriptions(resetPage: boolean): void {
-        if (resetPage) {
-            this.subscriptionRequestParams.page = 1;
-        }
-        let request = {
-            pagination: this.subscriptionRequestParams,
-            model: this.subscriptionListForm.value
-        };
-        this.componentStore.getAllSubscriptions(request);
-    }
-
-    /**
-     * Navigates to the page for purchasing a new plan in the SubscriptionComponent.
-     *
-     * @memberof SubscriptionComponent
-     */
-    public createSubscription(): void {
-        this.router.navigate(['/pages/subscription/buy-plan']);
-    }
-
-    /**
-     * Cancels a subscription in the SubscriptionComponent.
-     *
-     * @param id - The ID of the subscription to cancel.
-     * @memberof SubscriptionComponent
-     */
-    public cancelSubscription(id: any): void {
-        this.menu.closeMenu();
-        let cancelDialogRef = this.dialog.open(ConfirmModalComponent, {
-            data: {
-                title: this.localeData?.cancel_subscription,
-                body: this.localeData?.subscription_cancel_message,
-                ok: this.commonLocaleData?.app_proceed,
-                cancel: this.commonLocaleData?.app_cancel
-            },
-            panelClass: 'cancel-confirmation-modal',
-            width: '585px',
-            role: 'alertdialog',
-            ariaLabel: 'confirmDialog'
         });
 
-        cancelDialogRef.afterClosed().subscribe((action) => {
-            if (action) {
-                this.componentStore.cancelSubscription(id);
+        this.contactNo$.subscribe(s => this.phoneNumber = s);
+        this.countryCode$.subscribe(s => this.countryCode = s);
+        this.isAddNewMobileNoSuccess$.subscribe(s => this.showVerificationBox = s);
+        this.isVerifyAddNewMobileNoSuccess$.subscribe(s => {
+            if (s) {
+                this.oneTimePassword = '';
+                this.showVerificationBox = false;
+            }
+        });
+        this.authenticateTwoWay$.subscribe(response => {
+            this.twoWayAuth = (response) ? true : false;
+        });
+        this.store.dispatch(this.loginAction.FetchUserDetails());
+        this.loginService.GetAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
+            if (a?.status === 'success') {
+                this.userAuthKey = a?.body?.authKey;
             } else {
-                cancelDialogRef?.close();
+                this.toasty.errorToast(a?.message, a?.status);
+            }
+        });
+        this.store.pipe(select(s => s.subscriptions.companies), takeUntil(this.destroyed$))
+            .subscribe(s => this.companies = s);
+        this.store.pipe(select(s => s.subscriptions.companyTransactions), takeUntil(this.destroyed$))
+            .subscribe(s => this.companyTransactions = s);
+
+        this.store.pipe(select(s => s.session.user), takeUntil(this.destroyed$)).subscribe((user) => {
+            if (user) {
+                this.user = cloneDeep(user.user);
+                this.userSessionId = _.cloneDeep(user.session?.id);
+            }
+        });
+
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.selectedCompany = activeCompany;
+            }
+        });
+
+        this.store.dispatch(this.sessionAction.getAllSession());
+
+        this.userSessionResponse$.subscribe(s => {
+            if (s && s.length) {
+                this.userSessionList = s.map(session => {
+                    // Calculate sign in date
+                    session.signInDate = dayjs(session.createdAt).format(GIDDH_DATE_FORMAT_DD_MM_YYYY);
+                    // Calculate sign in time
+                    session.signInTime = dayjs(session.createdAt).format('LTS');
+                    // Calculate duration
+                    const duration = dayjs.duration(dayjs().diff(session.createdAt));
+                    session.sessionDuration = `${duration.days()}/${duration.hours()}/${duration.minutes()}/${duration.seconds()}`;
+                    return session;
+                });
+            }
+        });
+        this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
+            this.isCreateAndSwitchCompanyInProcess = inProcess;
+        });
+
+    }
+
+    /**
+     * Lifecycle method that is triggered once all the view child are rendered
+     *
+     * @memberof UserDetailsComponent
+     */
+    public ngAfterViewInit(): void {
+        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+            if (val && val.tab && val.tabIndex) {
+                this.selectTab({ index: val.tabIndex });
             }
         });
     }
 
-    /**
-     * Navigates to the page for changing billing information in the SubscriptionComponent.
-     *
-     * @param data - The subscription data for which billing information is to be changed.
-     * @memberof SubscriptionComponent
-     */
-    public changeBilling(data: any): void {
-        this.router.navigate(['/pages/subscription/change-billing/' + data]);
-    }
-
-    /**
-     * Navigates to the page for viewing a subscription in the SubscriptionComponent.
-     *
-     * @param data - The subscription data to view.
-     * @memberof SubscriptionComponent
-     */
-    public viewSubscription(data: any): void {
-        this.router.navigate(['/pages/subscription/view-subscription/' + data?.subscriptionId]);
-    }
-
-    /**
-     * Navigates to the page for purchasing a plan in the SubscriptionComponent.
-     *
-     * @memberof SubscriptionComponent
-     */
-    public buyPlan(subscription: any): void {
-        if (subscription?.region?.code === 'GBR') {
-            let model = {
-                planUniqueName: subscription?.plan?.uniqueName,
-                paymentProvider: "GOCARDLESS",
-                subscriptionId: subscription?.subscriptionId,
-                duration: subscription?.period
-            };
-            this.componentStore.buyPlanByGoCardless(model);
+    public addNumber(no: string) {
+        this.oneTimePassword = '';
+        const mobileRegex = /^[0-9]{1,10}$/;
+        if (mobileRegex.test(no) && (no?.length === 10)) {
+            const request: SignupWithMobile = new SignupWithMobile();
+            request.countryCode = Number(this.countryCode) || 91;
+            request.mobileNumber = this.phoneNumber;
+            this.store.dispatch(this.loginAction.AddNewMobileNo(request));
         } else {
-            this.componentStoreBuyPlan.generateOrderBySubscriptionId(subscription?.subscriptionId);
+            this.toasty.errorToast(this.localeData?.mobile_number?.mobile_number_validation_error);
         }
     }
 
-    /**
-     * Navigates to the page for changing a plan in the SubscriptionComponent.
-     *
-     * @param data - The subscription data for which the plan is to be changed.
-     * @memberof SubscriptionComponent
-     */
-    public changePlan(subscription: any): void {
-        this.router.navigate(['/pages/subscription/buy-plan/' + subscription.subscriptionId]);
+    public verifyNumber() {
+        const request: VerifyMobileModel = new VerifyMobileModel();
+        request.countryCode = Number(this.countryCode) || 91;
+        request.mobileNumber = this.phoneNumber;
+        request.oneTimePassword = this.oneTimePassword;
+        this.store.dispatch(this.loginAction.VerifyAddNewMobileNo(request));
     }
 
-    /**
-     * Navigates to the page for creating a new company.
-     *
-     * @memberof SubscriptionComponent
-     */
-    public createCompanyInSubscription(subscriptionId): void {
-        this.router.navigate(['/pages/new-company/' + subscriptionId]);
+    public changeTwoWayAuth() {
+        this.loginService.SetSettings({ authenticateTwoWay: this.twoWayAuth }).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            if (res?.status === 'success') {
+                this.toasty.successToast(res.body);
+            } else {
+                this.toasty.errorToast(res?.message);
+            }
+        });
     }
 
-    /**
-     * Lifecycle hook that is called when the component is destroyed.
-     * Removes "subscription-page" class from body, and completes the subject indicating component destruction.
-     *
-     * @memberof SubscriptionComponent
-     */
-    public ngOnDestroy(): void {
-        document.body?.classList?.remove("subscription-page");
+    public regenerateKey() {
+        this.loginService.RegenerateAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
+            if (a?.status === 'success') {
+                this.userAuthKey = a.body?.authKey;
+            } else {
+                this.toasty.errorToast(a?.message, a?.status);
+            }
+        });
+    }
+
+    public selectTab(event: any): void {
+        this.activeTabIndex = event?.index;
+        this.onTabChanged();
+    }
+
+    public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
+        document.querySelector('body').classList.remove('setting-sidebar-open');
     }
 
     /**
-     * Initializes razorpay payment
+     * Deletes the session
      *
-     * @param {*} request
-     * @memberof SubscriptionComponent
+     * @param {string} sessionId Session ID
+     * @param {number} sessionIndex Index of session to be deleted required to delete the session from store
+     * @memberof UserDetailsComponent
      */
-    public initializePayment(request: any): void {
-        let that = this;
-
-        let options = {
-            key: RAZORPAY_KEY,
-            image: 'data:image/png;base64,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',
-            handler: function (res) {
-                that.updateSubscriptionPayment(res, request);
-            },
-            order_id: request.razorpayOrderId,
-            theme: {
-                color: '#F37254'
-            },
-            amount: request.dueAmount,
-            currency: request.planDetails?.currency?.code || this.activeCompany?.baseCurrency,
-            name: 'GIDDH',
-            description: 'Walkover Technologies Private Limited.'
+    public deleteSession(sessionId: string, sessionIndex: number): void {
+        const requestPayload = {
+            sessionId,
+            sessionIndex
         };
-        try {
-            this.razorpay = new window['Razorpay'](options);
-            setTimeout(() => {
-                this.razorpay?.open();
-            }, 100);
-        } catch (exception) { }
+        this.store.dispatch(this.sessionAction.deleteSession(requestPayload));
+    }
+
+    public clearAllSession() {
+        this.store.dispatch(this.sessionAction.deleteAllSession());
     }
 
     /**
-     * Updates payment in subscription
+     * Tab change handler, used to set the state for selected page
+     * which is used by header component, update menu panel and
+     * change the route URL as per selected tab
      *
-     * @param {*} razorPayResponse
-     * @memberof SubscriptionComponent
+     * @memberof UserDetailsComponent
      */
-    public updateSubscriptionPayment(razorPayResponse: any, subscription: any): void {
-        let request;
-        if (razorPayResponse) {
-            request = {
-                subscriptionRequest: {
-                    subscriptionId: subscription?.subscriptionId
-                },
-                paymentId: razorPayResponse.razorpay_payment_id,
-                razorpaySignature: razorPayResponse.razorpay_signature,
-                amountPaid: subscription?.dueAmount,
-                callNewPlanApi: true,
-                razorpayOrderId: razorPayResponse?.razorpay_order_id
-            };
+    public onTabChanged(): void {
+        this.store.dispatch(this.generalActions.setAppTitle(`pages/user-details/${this.tabName[this.activeTabIndex]}`));
+        this.router.navigate(['pages/user-details/', this.tabName[this.activeTabIndex]], { replaceUrl: true });
+    }
 
-            this.componentStoreBuyPlan.updateNewLoginSubscriptionPayment({ request: request });
+    /**
+     * This will return page heading based on active tab
+     *
+     * @param {boolean} event
+     * @memberof UserDetailsComponent
+     */
+    public getPageHeading(): string {
+        let pageHeading = "";
+
+        if (this.isMobileScreen) {
+            switch (this.activeTabIndex) {
+                case 0:
+                    pageHeading = this.localeData?.auth_key?.tab_heading;
+                    break;
+                case 1:
+                    pageHeading = this.localeData?.mobile_number?.tab_heading;
+                    break;
+                case 2:
+                    pageHeading = this.localeData?.session?.tab_heading;
+                    break;
+                case 3:
+                    pageHeading = this.localeData?.subscription?.tab_heading;
+                    break;
+            }
         }
+        return pageHeading;
     }
 
     /**
-     * This will be open window by url
+     * Tracks by sessionId
      *
-     * @param {string} url
-     * @memberof SubscriptionComponent
+     * @param {number} index Index of current session
+     * @param {*} item Session ID instance
+     * @return {*} {string} Session's ID for unique identification
+     * @memberof UserDetailsComponent
      */
-    public openWindow(url: string): void {
-        const width = 700;
-        const height = 900;
-
-        this.openedWindow = this.generalService.openCenteredWindow(url, '', width, height);
-    }
-
-    /**
-     * This will close the current window
-     *
-     * @memberof SubscriptionComponent
-     */
-    public closeWindow(): void {
-        if (this.openedWindow) {
-            this.openedWindow.close();
-            this.openedWindow = null;
-        }
+    public trackBySessionId(index: number, item: any): string {
+        return item.sessionId;
     }
 }

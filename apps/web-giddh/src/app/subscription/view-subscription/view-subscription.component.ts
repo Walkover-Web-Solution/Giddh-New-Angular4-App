@@ -105,7 +105,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
 
         this.cancelSubscription$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.router.navigate(['/pages/subscription']);
+                this.router.navigate(['/pages/user-details/subscription']);
             }
         });
 
@@ -115,9 +115,9 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
                     this.initializePayment(response);
                 } else {
                     if (response.status === 'trial') {
-                        this.router.navigate(['/pages/subscription/buy-plan']);
+                        this.router.navigate(['/pages/user-details/subscription/buy-plan']);
                     } else {
-                        this.router.navigate(['/pages/subscription/buy-plan/' + response.subscriptionId]);
+                        this.router.navigate(['/pages/user-details/subscription/buy-plan/' + response.subscriptionId]);
                     }
                 }
             }
@@ -125,7 +125,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
 
         this.updateSubscriptionPaymentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.router.navigate(['/pages/subscription']);
+                this.router.navigate(['/pages/user-details/subscription']);
                 this.getSubscriptionData(this.subscriptionId);
             }
         });
@@ -133,11 +133,11 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
         this.componentStore.isUpdateCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && this.selectedMoveCompany) {
                 this.getSubscriptionData(this.subscriptionId);
-                this.router.navigate(['/pages/subscription']);
+                this.router.navigate(['/pages/user-details/subscription']);
             }
         });
 
-        if (this.router.url === '/pages/subscription/view-subscription/' + this.subscriptionId) {
+        if (this.router.url === '/pages/user-details/subscription/view-subscription/' + this.subscriptionId) {
             window.addEventListener('message', event => {
                 if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
                     this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
@@ -241,7 +241,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
      * @memberof ViewSubscriptionComponent
      */
     public changeBilling(): void {
-        this.router.navigate([`/pages/subscription/change-billing/${this.viewSubscriptionData?.billingAccountUniqueName}`]);
+        this.router.navigate([`/pages/user-details/subscription/change-billing/${this.viewSubscriptionData?.billingAccountUniqueName}`]);
     }
 
     /**
@@ -269,7 +269,7 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
      * @memberof ViewSubscriptionComponent
      */
     public changePlan(): void {
-        this.router.navigate([`/pages/subscription/buy-plan/` + this.subscriptionId]);
+        this.router.navigate([`/pages/user-details/subscription/buy-plan/` + this.subscriptionId]);
     }
 
     /**

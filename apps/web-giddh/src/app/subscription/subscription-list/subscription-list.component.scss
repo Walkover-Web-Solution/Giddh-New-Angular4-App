@@ -1,0 +1,15 @@
+.subscription-container {
+    max-width: 1360px;
+
+    .giddh-table {
+        border: 1px solid var(--color-table-primary-content-bar-border) !important;
+    }
+}
+
+.subscription-name {
+    color: var(--color-table-secondary-heading) !important;
+}
+
+.renewal-date-column {
+    transform: translateX(14px);
+}

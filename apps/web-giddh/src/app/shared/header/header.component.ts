@@ -338,14 +338,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     this.currentPageUrl = this.router.url;
                 }
 
-                this.isSubscriptionModule = this.router.url.includes("/pages/subscription") || this.router.url.includes("/pages/user-details");
+                this.isSubscriptionModule = this.router.url.includes("/pages/user-details");
                 this.isSubscriptionPage =
-                    this.router.url.includes("/pages/subscription/buy-plan") ||
-                    this.router.url.includes("/pages/subscription/view-subscription") ||
+                    this.router.url.includes("/pages/user-details/subscription/buy-plan") ||
+                    this.router.url.includes("/pages/user-details/subscription/view-subscription") ||
                     this.router.url.includes("/pages/user-details/mobile-number") ||
                     this.router.url.includes("/pages/user-details/auth-key") ||
-                    this.router.url.includes("/pages/user-details/session") ||
-                    this.router.url.includes("/pages/user-details/subscription");
+                    this.router.url.includes("/pages/user-details/session");
 
                 this.setCurrentPage();
                 this.addClassInBodyIfPageHasTabs();
@@ -815,9 +814,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                         tap(response => {
                             const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
                             if (hasSubscriptionPermission) {
-                                this.router.navigate(['/pages/subscription']);
+                                this.router.navigate(['/pages/user-details/subscription']);
                             } else {
-                                this.router.navigate(['/pages/subscription/buy-plan']);
+                                this.router.navigate(['/pages/user-details/subscription/buy-plan']);
                             }
                         })
                     ).subscribe();
@@ -1259,7 +1258,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         document.querySelector('body').classList.remove('modal-open');
         if (this.planVersion === 2 || this.subscribedPlan?.status === 'expired') {
-            this.router.navigate(['/pages/subscription/view-subscription/' + this.subscribedPlan?.subscriptionId]);
+            this.router.navigate(['/pages/user-details/subscription/view-subscription/' + this.subscribedPlan?.subscriptionId]);
         } else {
             this.router.navigate(['/pages', 'user-details'], {
                 queryParams: {
@@ -1902,7 +1901,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = decodeURI(lastState);
-        if (lastState !== '/pages/subscription/buy-plan') {
+        if (lastState !== '/pages/user-details/subscription/buy-plan') {
             this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
         }
     }
