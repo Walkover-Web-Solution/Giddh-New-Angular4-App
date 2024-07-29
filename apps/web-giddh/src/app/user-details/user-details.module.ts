@@ -30,7 +30,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
-import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { AddOnsComponent } from './components/add-ons/add-ons.component';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatCardModule } from '@angular/material/card';
@@ -53,7 +52,14 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
         SubscriptionComponent,
         AddOnsComponent
     ],
-    exports: [MoveCompanyComponent],
+    exports: [UserDetailsComponent,
+        UserDetailsPipe,
+        SubscriptionsPlansComponent,
+        CompanyDetailsSidebarComponent,
+        MoveCompanyComponent,
+        AllFeaturesComponent,
+        SubscriptionComponent,
+        AddOnsComponent],
     imports: [
         CommonModule,
         FormsModule,

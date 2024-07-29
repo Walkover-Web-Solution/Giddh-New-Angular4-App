@@ -10,23 +10,27 @@
         </div>
         <hamburger-menu *ngIf="localeData?.auth_key" [pageHeading]="getPageHeading()"></hamburger-menu>
 
-        <button class="buy-plan-btn position-absolute" mat-stroked-button color="primary" [routerLink]="['/pages/subscription/buy-plan/' + subscriptionId]" *ngIf="activeTabIndex === 3 && !isSubscriptionLoading">
+        <button
+            class="buy-plan-btn position-absolute"
+            mat-stroked-button
+            color="primary"
+            [routerLink]="['/pages/subscription/buy-plan/' + subscriptionId]"
+            *ngIf="activeTabIndex === 3 && selectedCompany?.planVersion === 1 && !isSubscriptionLoading"
+        >
             {{ commonLocaleData?.app_buy_new_plan }}
         </button>
-        <mat-tab-group 
-            mat-stretch-tabs="false" 
-            mat-align-tabs="start" 
-            animationDuration="0ms" 
+        <mat-tab-group
+            mat-stretch-tabs="false"
+            mat-align-tabs="start"
+            animationDuration="0ms"
             [selectedIndex]="activeTabIndex"
             (selectedTabChange)="selectTab($event)"
         >
-            <mat-tab
-                [label]="localeData?.auth_key?.tab_heading"
-            >
+            <mat-tab [label]="localeData?.auth_key?.tab_heading">
                 <div class="wrap-tab-content-pd-15">
                     <div class="box clearfix mt-3">
                         <form name="authKeyForm" #authKeyForm="ngForm" novalidate role="form">
-                            <div class="form-group row align-items-center" [ngClass]="{'mb-1' : isCopied}">
+                            <div class="form-group row align-items-center" [ngClass]="{ 'mb-1': isCopied }">
                                 <div class="col-12 col-sm-12 col-md-12 col-lg-6">
                                     <input-field
                                         [label]="localeData?.auth_key?.main_auth_key"
@@ -35,24 +39,25 @@
                                         [name]="'userAuthKey'"
                                         [(ngModel)]="userAuthKey"
                                         [readonly]="true"
-                                    ></input-field>                                    
+                                    ></input-field>
                                 </div>
-                                <button
-                                    type="button"
-                                    mat-stroked-button
-                                    color="primary"
-                                    (click)="toggleIsCopied()"
-                                >
-                                {{ commonLocaleData?.app_copy }}
+                                <button type="button" mat-stroked-button color="primary" (click)="toggleIsCopied()">
+                                    {{ commonLocaleData?.app_copy }}
                                 </button>
                             </div>
                             <div class="row mb-3" *ngIf="isCopied">
                                 <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-                                <span class="success">{{ localeData?.auth_key?.copied }}</span>
-                            </div>
+                                    <span class="success">{{ localeData?.auth_key?.copied }}</span>
+                                </div>
                             </div>
                             <div class="form-group clearfix mb-0">
-                                <button mat-stroked-button color="primary" type="submit" (click)="regenerateKey()" class="mr-4">
+                                <button
+                                    mat-stroked-button
+                                    color="primary"
+                                    type="submit"
+                                    (click)="regenerateKey()"
+                                    class="mr-4"
+                                >
                                     {{ localeData?.auth_key?.regenerate_auth_key }}
                                 </button>
                                 <a class="text-primary" href="{{ apiPostmanDocUrl }}" target="_blank">{{
@@ -63,9 +68,7 @@
                     </div>
                 </div>
             </mat-tab>
-            <mat-tab
-                [label]="localeData?.mobile_number?.tab_heading"
-            >
+            <mat-tab [label]="localeData?.mobile_number?.tab_heading">
                 <div class="wrap-tab-content-pd-15">
                     <div class="box clearfix mt-1">
                         <form class="row" name="mobileForm" novalidate>
@@ -283,9 +286,7 @@
                     </div>
                 </div>
             </mat-tab>
-            <mat-tab
-                [label]="localeData?.session?.tab_heading"
-            >
+            <mat-tab [label]="localeData?.session?.tab_heading">
                 <div class="wrap-tab-content-pd-15">
                     <div class="box clearfix mt-1">
                         <div class="d-flex pd-b1 activity-title">
@@ -356,11 +357,22 @@
                     </div>
                 </div>
             </mat-tab>
-            <mat-tab *ngIf="selectedCompany?.planVersion === 1 && selectedCompany?.subscription?.status !== 'expired'"
-                [label]="localeData?.subscription?.tab_heading">
-                <div class="wrap-tab-content-pd-15">
-                    <subscription [localeData]="localeData" [commonLocaleData]="commonLocaleData" (isSubscriptionLoading)="isSubscriptionLoading = $event" (subscriptionId)="subscriptionId = $event"></subscription>
-                </div>
+            <mat-tab [label]="localeData?.subscription?.tab_heading">
+                {{selectedCompany?.planVersion}} :: {{selectedCompany?.subscription?.status}}
+                <ng-container
+                    class="wrap-tab-content-pd-15"
+                    *ngIf="selectedCompany?.planVersion === 1 && selectedCompany?.subscription?.status !== 'expired'"
+                >
+                    <subscription
+                        [localeData]="localeData"
+                        [commonLocaleData]="commonLocaleData"
+                        (isSubscriptionLoading)="isSubscriptionLoading = $event"
+                        (subscriptionId)="subscriptionId = $event"
+                    ></subscription>
+                </ng-container>
+                <ng-container *ngIf="selectedCompany?.planVersion === 2 && selectedCompany?.subscription?.status !== 'expired'">
+                    <app-subscription></app-subscription>
+                </ng-container>
             </mat-tab>
         </mat-tab-group>
 

@@ -19,7 +19,7 @@ import { GeneralActions } from '../actions/general/general.actions';
 import { BuyPlanComponentStore } from './buy-plan/utility/buy-plan.store';
 import { ToasterService } from '../services/toaster.service';
 @Component({
-    selector: 'subscription',
+    selector: 'app-subscription',
     templateUrl: './subscription.component.html',
     styleUrls: ['./subscription.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
