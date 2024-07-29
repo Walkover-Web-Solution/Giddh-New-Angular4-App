@@ -107,7 +107,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
     });
 
     /**
-     * This will use for Export Variant Wise Report Data
+     * This will use for Export Group Wise Report Data
      *
      * @memberof InventoryComponentStore
      */
@@ -146,7 +146,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
     });
 
     /**
-     * This will use for Export Variant Wise Report Data
+     * This will use for Export Transaction Wise Report Data
      *
      * @memberof InventoryComponentStore
      */
