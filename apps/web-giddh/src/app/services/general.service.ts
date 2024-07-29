@@ -1587,24 +1587,6 @@ export class GeneralService {
     };
 
     /**
-     * This will be use for generating random URLs
-     *
-     * @param {string} value
-     * @return {*}  {string}
-     * @memberof GeneralService
-     */
-    public generateRandomString(value: string): string {
-        const randomLength = 8; // Adjust the length of the random string as needed
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let result = '';
-        for (let i = 0; i < randomLength; i++) {
-            const randomIndex = Math.floor(Math.random() * characters.length);
-            result += characters.charAt(randomIndex);
-        }
-        return result + '.' + value;
-    }
-
-    /**
      * Get current date/time in this format - 06-11-2023 02:08:45
      *
      * @returns {string}
@@ -1621,6 +1603,24 @@ export class GeneralService {
         const seconds = String(now.getSeconds()).padStart(2, '0');
 
         return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+    }
+
+    /**
+     * This will be use for generating random URLs
+     *
+     * @param {string} value
+     * @return {*}  {string}
+     * @memberof GeneralService
+     */
+    public generateRandomString(value: string): string {
+        const randomLength = 8; // Adjust the length of the random string as needed
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        for (let i = 0; i < randomLength; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            result += characters.charAt(randomIndex);
+        }
+        return result + '.' + value;
     }
 
     /**
@@ -1955,15 +1955,15 @@ export class GeneralService {
     }
 
     /**
-     * This will be use for open window in center
-     *
-     * @param {string} url
-     * @param {string} title
-     * @param {number} width
-     * @param {number} height
-     * @return {*}  {(Window | null)}
-     * @memberof GeneralService
-     */
+    * This will be use for open window in center
+    *
+    * @param {string} url
+    * @param {string} title
+    * @param {number} width
+    * @param {number} height
+    * @return {*}  {(Window | null)}
+    * @memberof GeneralService
+    */
     public openCenteredWindow(url: string, title: string, width: number, height: number): Window | null {
         const left = (window.screen.width / 2) - (width / 2);
         const top = (window.screen.height / 2) - (height / 2);
@@ -1977,12 +1977,12 @@ export class GeneralService {
     }
 
     /**
-     *Get Country Flag Image Url by 2 digit country code
-     *
-     * @param {string} countryCode
-     * @return {*}  {string}
-     * @memberof GeneralService
-     */
+    * Get Country Flag Image Url by 2 digit country code
+    *
+    * @param {string} countryCode
+    * @return {*}  {string}
+    * @memberof GeneralService
+    */
     public getCountryFlagUrl(countryCode: string): string {
         return countryCode ? `https://giddh-uploads-2.s3.ap-south-1.amazonaws.com/flags/${countryCode?.toLowerCase()}.svg` : '';
     }
@@ -2004,5 +2004,37 @@ export class GeneralService {
 
         // Construct the complete address string
         return `${address1} ${address2} ${address3} ${address4} ${address5}`.trim();
+    }
+
+    /**
+     * This will be use for delete inventory adjust configuration
+     *
+     * @param {*} localeData
+     * @param {*} commonLocaleData
+     * @return {*}  {ConfirmationModalConfiguration}
+     * @memberof GeneralService
+     */
+    public deleteInventoryAdjustAdjustConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
+
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: commonLocaleData?.app_yes,
+            color: 'primary'
+        },
+        {
+            text: commonLocaleData?.app_no
+        }];
+        const headerText: string = commonLocaleData?.app_confirmation;
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
+        return {
+            headerText,
+            headerCssClass,
+            messageText: localeData?.delete_confirmation_message,
+            messageCssClass,
+            footerText: localeData?.delete_message1,
+            footerCssClass,
+            buttons
+        };
     }
 }

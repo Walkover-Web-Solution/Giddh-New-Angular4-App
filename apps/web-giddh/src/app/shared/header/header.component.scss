@@ -592,15 +592,6 @@ aside-setting {
         position: absolute;
         top: 0;
     }
-
-    .gst-menu-icon,
-    .setting-menu-icon {
-        padding: 4px 8px;
-        display: none;
-        width: 32px;
-        text-align: center;
-    }
-
     .fixed-padding {
         padding-top: 87px;
 
@@ -831,7 +822,13 @@ aside-setting {
             margin: 0 15px;
         }
     }
-
+    .setting-menu-icon,
+    .gst-menu-icon {
+        padding: 4px 8px 4px 8px;
+        display: none;
+        width: 32px;
+        text-align: center;
+    }
     .mobile-back-btn {
         display: none;
         color: var(--color-white);

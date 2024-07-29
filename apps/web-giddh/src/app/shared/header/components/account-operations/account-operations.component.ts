@@ -183,9 +183,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                                 this.taxGroupForm.setValue({ taxes: applicableTaxes });
                             }
                             return differenceBy(taxes.map(p => {
-                                return { label: p.name, value: p?.uniqueName };
+                                return { label: p?.name, value: p?.uniqueName };
                             }), flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-                                return { label: p.name, value: p?.uniqueName };
+                                return { label: p?.name, value: p?.uniqueName };
                             }), 'value');
 
                         } else {
@@ -193,7 +193,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
                             this.taxGroupForm.setValue({ taxes: applicableTaxes });
 
                             return taxes.map(p => {
-                                return { label: p.name, value: p?.uniqueName };
+                                return { label: p?.name, value: p?.uniqueName };
                             });
 
                         }
@@ -410,7 +410,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             let result;
             newParents = union([], parents);
             newParents.push({
-                name: listItem.name,
+                name: listItem?.name,
                 uniqueName: listItem?.uniqueName
             });
             listItem = Object.assign({}, listItem, { parentGroups: [] });

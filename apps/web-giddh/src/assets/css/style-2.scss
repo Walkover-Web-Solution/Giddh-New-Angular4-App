@@ -19,30 +19,30 @@ $custom-typography: mat-typography-config($font-family: var(--font-regular),
 @import "../css/global/subscription.component.scss";
 @import "../css/global/custom-fields.scss";
 @import "../css/global/inventory.scss";
-@import "../css/global/mat-button.scss";
-@import "../css/global/search.scss";
 @import "../css/global/all-items.scss";
-@import "../css/global/vat-report.scss";
 @import "../css/global/header.scss";
-@import "../css/global/setting-integration.scss";
+@import "../css/global/search.scss";
+@import "../css/global/mat-button.scss";
+@import "../css/global/vat-report.scss";
 @import "../css/global/help-support.scss";
 @import "../css/global/sales-register-expand.scss";
+@import "../css/global/setting-integration.scss";
 @import "../css/global/input-dropdown-field.scss";
 @import "../css/global/voucher.scss";
 @import "../css/global/tabs.scss";
 @import "../css/global/table.scss";
 @import "../css/global/custom-price.scss";
+@import "../css/global/inventory-adjustment.scss";
+@import "../css/global/global-variable.scss";
 @import "../css/global/vouchers.scss";
 @import "../css/global/tax-dropdown.scss";
 @import "../css/global/discount-dropdown.scss";
 @import "../css/global/dialog.scss";
-
-@import "../css/global/dialog.scss";
 @import "../css/global/add-bulk-entry.scss";
-@import "../css/global/global-variable.scss";
 @import "../css/global/settings-sidebar.scss";
 @import "../css/global/mat-menu.scss";
 @import "../css/global/tax-authority.scss";
+@import "../css/global/adjustment-inventory.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -111,12 +111,6 @@ textarea {
     }
 }
 
-.billing-details {
-    .mat-form-field-infix {
-        border-top: 0 !important;
-    }
-}
-
 .all-table {
     .mat-column-contact {
         text-transform: lowercase;
@@ -132,6 +126,12 @@ textarea {
 
     .comment-header {
         min-width: 170px !important;
+    }
+}
+
+.billing-details {
+    .mat-form-field-infix {
+        border-top: 0 !important;
     }
 }
 
@@ -268,7 +268,9 @@ textarea {
                 }
             }
 
-            .mat-form-field-wrapper .mat-form-field-infix .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
+            .mat-form-field-wrapper
+                .mat-form-field-infix
+                .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
                 position: absolute;
                 height: 23px !important;
                 margin-top: 0;
@@ -847,6 +849,23 @@ textarea {
     }
 }
 
+/*--- custom ---*/
+.obj-gap {
+    column-gap: 5px;
+}
+
+/*---- custom -----*/
+.inline-adjustment {
+    .adjustments-list {
+        height: auto !important;
+        overflow-y: unset !important;
+    }
+
+    advance-receipt-adjustment-component {
+        min-width: 750px;
+    }
+}
+
 .select-domain {
     .mat-mdc-select {
         padding: 0px !important;
@@ -1051,6 +1070,12 @@ textarea {
 
 .iti__country-list--dropup {
     margin-bottom: -200px !important;
+}
+
+.adjust-inventory-list-page {
+    .td-search-box {
+        min-width: 160px !important;
+    }
 }
 
 @media screen and (max-width: 1366px) and (orientation: portrait) {
@@ -1823,6 +1848,16 @@ input {
     border-right: 5px solid transparent;
     border-left: 5px solid transparent;
     border-bottom: 5px solid transparent;
+}
+
+#content-wrapper {
+    .account-wrapper {
+
+        .from-or-to-acc[type="text"],
+        .form-control.debit-credit[type="text"] {
+            border: 1px solid var(--color-secondary-input-bar-border) !important;
+        }
+    }
 }
 
 .on-setting-page.setting-sidebar-open {
@@ -2655,7 +2690,7 @@ modal-container.modal {
 .form-box .btn {
     min-width: 73px;
     margin-right: 2px;
-    width: 95px;
+    width: 110px;
     color: var(--color-secondary-button-text);
 }
 
@@ -2903,6 +2938,7 @@ modal-container.modal {
 }
 
 /* my css end */
+
 /*input*/
 .form-control {
     background: var(--color-secondary-input-bar-background) !important;
@@ -4352,6 +4388,7 @@ a.btn.btn-xs.btn-link.pull-right {
     position: relative;
     background: var(--color-primary-header-background) !important;
     color: var(--color-white);
+    border-color: var(--color-primary-popup-list-header-bottom-border);
     height: 65px;
     display: flex;
     align-items: center;
@@ -4581,11 +4618,9 @@ select.form-control {
     overflow: hidden;
 }
 
-.grp-list,
-.new-btn-u {
+.grp-list, .new-btn-u {
     li {
         list-style: none;
-
         a {
             padding: 4px 15px !important;
             display: block;
@@ -7971,6 +8006,44 @@ footer#footer.absolute-footer {
                 }
             }
         }
+
+        .scroll-container {
+            .wrap-account-sidebar {
+                .grp-wrapper {
+                    .col-wrapper {
+                        border-color: var(--color-common-secondary-border);
+
+                        &:nth-child(1) {
+                            background-color: var(--color-common-primary-background-for-all-components);
+                        }
+                    }
+                }
+            }
+        }
+
+        .manage-group-acc {
+            account-operations {
+                #middleBody {
+                    .top-bar {
+                        border-color: var(--color-common-secondary-border) !important;
+                    }
+                }
+            }
+        }
+    }
+
+    login {
+        .modal.fade {
+            .modal-body.clearfix {
+                #authModal {
+                    button[type="login"].ladda-button {
+                        .ladda-label {
+                            color: var(--color-secondary-button-text);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -8814,10 +8887,6 @@ button.ladda-button .ladda-label {
 
 .panel {
     border-radius: 2px;
-}
-
-.invoice-modal-content .app-aside-menu-other-taxes:host {
-    top: 60px !important;
 }
 
 .mat-chip-list {
@@ -10263,6 +10332,7 @@ giddh-datepicker {
     }
 
     overflow-y: auto !important;
+    height: auto;
 
     .advance-search {
         #export-body {
@@ -11135,6 +11205,27 @@ body.update-scroll-hidden {
                     }
                 }
             }
+
+            .modal-body {
+                sh-select-menu {
+                    .menu {
+                        virtual-scroll {
+                            .total-padding {
+                                height: auto;
+                            }
+                        }
+
+                        .mat-dialog-container {
+                            .modal-body {
+                                input,
+                                textarea {
+                                    border: 1px solid var(--color-secondary-input-bar-border);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         .cdk-overlay-connected-position-bounding-box {
@@ -11293,8 +11384,14 @@ inventory-master {
     }
 
     .main-table {
-        tbody>tr>td:first-child {
-            min-width: 242px !important;
+        tbody {
+            tr {
+                td {
+                    &:first-child {
+                        min-width: 242px !important;
+                    }
+                }
+            }
         }
     }
 
@@ -13394,14 +13491,6 @@ body.prevent-body-scroll {
         }
     }
 
-    .mat-form-field-wrapper {
-        .mat-form-field-infix {
-            .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
-                padding-left: 32px !important;
-            }
-        }
-    }
-
     .invoice-date-due-date {
         .mat-datepicker-toggle {
             .mat-button-wrapper {
@@ -14115,6 +14204,10 @@ hamburger-menu {
 
     .cdk-overlay-container-z-index {
         z-index: 1000 !important;
+    }
+
+    .cdk-overlay-container {
+        z-index: 9999 !important;
     }
 }
 
@@ -14897,6 +14990,10 @@ activity-compare-json {
     }
 }
 
+.mat-snack-bar-wrapper {
+    z-index: 99999 !important;
+}
+
 .mat-select-btn{
     .mdc-button__label{
         width: 100%;
@@ -14923,6 +15020,7 @@ aside-menu-product-service {
         }
     }
 }
+
 .dialog-fixed-header{
     position: sticky !important;
     top: 0;
@@ -15061,7 +15159,6 @@ aside-menu-product-service {
         border-color: var(--color-field-hover) !important;
     }
 }
-
 // Ledger Create Panel text color
 .new-ledger-panel {
     color: var(--color-default-button) !important;
@@ -15079,7 +15176,6 @@ aside-menu-product-service {
         }
     }
 }
-
 // hsn description
 .tax-engine {
     .description-overlap {
@@ -15106,11 +15202,6 @@ aside-menu-product-service {
     color: var(--color-common-primary-text);
 }
 
-.bg-transparent {
-    background: var(--color-transparent-background) !important;
-    background-color: var(--color-transparent-background) !important;
-}
-
 .bg-grey {
     background-color: var(--color-wild-sand) !important;
 }
@@ -15118,6 +15209,10 @@ aside-menu-product-service {
 // color link light-dark theme
 .color-link {
     color: var(--color-link) !important;
+}
+.bg-transparent {
+    background: var(--color-transparent-background) !important;
+    background-color: var(--color-transparent-background) !important;
 }
 
 // Subscription Page Country List Dropdown

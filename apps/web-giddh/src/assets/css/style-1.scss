@@ -1879,15 +1879,6 @@ ul.pills li {
         flex-direction: column;
     }
 }
-.expense-ledger {
-    update-ledger-entry-panel {
-        #entryModal {
-            .modal-body {
-                padding: 15px 0px !important;
-            }
-        }
-    }
-}
 .advanced label {
     font-size: var(--font-size-15);
 }
@@ -3206,6 +3197,7 @@ td.mat-footer-cell {
         }
     }
 }
+
 .mat-menu-panel {
     background-color: var(--color-dropdown-primary-background) !important;
 }
@@ -3348,6 +3340,7 @@ td.mat-footer-cell {
 .border-radius-5 {
     border-radius: 5px !important;
 }
+
 /* material css for ledger end*/
 .form-control {
     &.custom-field {
@@ -3370,6 +3363,15 @@ td.mat-footer-cell {
         button {
             .mat-button-wrapper {
                 display: flex !important;
+            }
+        }
+    }
+}
+.aside-pane {
+    .help-aside-body {
+        .inventory-items {
+            h5 {
+                font-size: var(--font-size-15);
             }
         }
     }
@@ -3403,15 +3405,6 @@ td.mat-footer-cell {
             column-gap: 20px;
             .chip-svg-wrap {
                 min-width: 440px;
-            }
-        }
-    }
-}
-.aside-pane {
-    .help-aside-body {
-        .inventory-items {
-            h5 {
-                font-size: var(--font-size-15);
             }
         }
     }

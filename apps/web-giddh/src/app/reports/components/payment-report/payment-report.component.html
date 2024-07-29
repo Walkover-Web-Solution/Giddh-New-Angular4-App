@@ -18,7 +18,8 @@
                     <!-- <button
                         type="button"
                         class="btn btn-sky-blue dropdown-btn-new"
-                        [routerLink]="'/pages/voucher/payment/create'"
+                        [routerLink]="'/pages/vouchers/payment/create'"
+                        *ngIf="voucherApiVersion === 2"
                     >
                         {{ localeData?.new_voucher }}
                     </button> -->
@@ -381,7 +382,7 @@
                             </td>
                             <td
                                 width="13%"
-                                class="text-break"
+                                class="text-break cursor-pointer"
                                 [attr.data-title]="localeData?.payment_no_label"
                                 (click)="previewVoucher(payment)"
                             >

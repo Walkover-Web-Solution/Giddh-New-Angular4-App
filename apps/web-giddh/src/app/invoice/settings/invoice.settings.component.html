@@ -404,16 +404,24 @@
                                     <!-- <div class="clearfix pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-md-12 col-lg-3">
-                                            <input type="checkbox" [(ngModel)]="estimateSetting.sendSms" class="pull-left"
+                                            <input
+                                                type="checkbox"
+                                                [(ngModel)]="estimateSetting.sendSms"
+                                                class="pull-left"
                                                 name="invoiceCreatePaymentEntry"
-                                                class="show-on-mobile" /><label>{{localeData?.enable_sms_estimate}}</label>
+                                                class="show-on-mobile"
+                                            /><label>{{ localeData?.enable_sms_estimate }}</label
+                                            >
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9">
                                             <div class="form-group clearfix">
-                                                <input type="checkbox" [(ngModel)]="estimateSetting.sendSms"
-                                                    class="pull-left" name="invoiceCreatePaymentEntry"
-                                                    class="hide-on-mobile" />
-
+                                                <input
+                                                    type="checkbox"
+                                                    [(ngModel)]="estimateSetting.sendSms"
+                                                    class="pull-left"
+                                                    name="invoiceCreatePaymentEntry"
+                                                    class="hide-on-mobile"
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -695,22 +703,18 @@
                                         </div>
 
                                         <div class="col-sm-12 col-md-9">
-
                                             <div class="form-group clearfix">
-
                                                 <input type="checkbox" [(ngModel)]="invoiceSetting.sendInvLinkOnSms"
                                                     (ngModelChange)="onChangeSendInvoiceViaSms(invoiceSetting.sendInvLinkOnSms)"
                                                     name="invoiceSetting.sendInvLinkOnSms"
                                                     class="pull-left hide-on-mobile" />
 
                                                 <div class="pull-left sms-textarea" *ngIf="invoiceSetting.sendInvLinkOnSms">
-
                                                     <textarea [(ngModel)]="invoiceSetting.smsContent"
                                                         class="pull-left form-control"
                                                         name="invoiceSetting.sendInvLinkOnSms" rows="3"></textarea>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div> -->
@@ -900,6 +904,11 @@
                                                 <mat-slide-toggle
                                                     aria-label="gst invoice"
                                                     [(ngModel)]="invoiceSetting.gstEInvoiceEnable"
+                                                    (ngModelChange)="
+                                                        invoiceSetting.gstEInvoiceEnable
+                                                            ? null
+                                                            : (invoiceSetting.generateEinvoiceShowPopUp = false)
+                                                    "
                                                     class="show-on-mobile"
                                                     color="primary"
                                                     (change)="handleEInvoiceChange($event)"
@@ -913,6 +922,11 @@
                                                 <mat-slide-toggle
                                                     aria-label="gst invoice"
                                                     [(ngModel)]="invoiceSetting.gstEInvoiceEnable"
+                                                    (ngModelChange)="
+                                                        invoiceSetting.gstEInvoiceEnable
+                                                            ? null
+                                                            : (invoiceSetting.generateEinvoiceShowPopUp = false)
+                                                    "
                                                     class="hide-on-mobile"
                                                     color="primary"
                                                     (change)="handleEInvoiceChange($event)"
@@ -920,7 +934,7 @@
                                                 </mat-slide-toggle>
                                                 <div *ngIf="invoiceSetting.gstEInvoiceEnable" class="d-inline-flex">
                                                     <div class="d-inline-flex position-relative mr-l15">
-                                                        <label>Username</label>
+                                                        <label>{{ localeData?.e_invoice_username_label }}</label>
                                                         <input
                                                             [(ngModel)]="invoiceSetting.gstEInvoiceUserName"
                                                             type="text"
@@ -929,7 +943,7 @@
                                                         />
                                                     </div>
                                                     <div class="d-inline-flex position-relative mr-l15">
-                                                        <label>Password</label>
+                                                        <label>{{ localeData?.e_invoice_password_label }}</label>
                                                         <input
                                                             [(ngModel)]="invoiceSetting.gstEInvoiceUserPassword"
                                                             type="password"
@@ -938,7 +952,7 @@
                                                         />
                                                     </div>
                                                     <div class="d-inline-flex position-relative mr-l15">
-                                                        <label>GSTIN</label>
+                                                        <label>{{ localeData?.e_invoice_gstin_label }}</label>
                                                         <input
                                                             [(ngModel)]="invoiceSetting.gstEInvoiceGstin"
                                                             type="text"
@@ -950,11 +964,10 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div
-                                    class="clearfix pd-t1"
-                                    *ngIf="voucherApiVersion === 2 && invoiceSetting.gstEInvoiceEnable"
-                                >
+                                        class="clearfix pd-t1"
+                                        *ngIf="voucherApiVersion === 2 && invoiceSetting.gstEInvoiceEnable"
+                                    >
                                         <div class="row">
                                             <div class="col-sm-12 col-md-12 col-lg-3">
                                                 <mat-slide-toggle
@@ -987,7 +1000,6 @@
                         </div>
                     </tab>
                 </ng-container>
-                
                 <ng-container
                     *ngIf="
                         voucherApiVersion === 2 &&
@@ -1072,7 +1084,9 @@
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
-                                            <label class="left-gap">{{ localeData?.apply_debit_note_round_off }}</label>
+                                            <label class="left-gap">{{
+                                                localeData?.apply_debit_note_round_off
+                                            }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9">
                                             <mat-slide-toggle
