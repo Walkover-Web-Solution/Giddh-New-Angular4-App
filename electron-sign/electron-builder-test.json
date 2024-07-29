@@ -9,7 +9,7 @@
     ],
     "directories": {
         "buildResources": "resources",
-        "output": "./../electrongiddh-packages"
+        "output": "../electrongiddh-packages"
     },
     "afterSign": "./../../../electron-sign/notarize.js",
     "mac": {
