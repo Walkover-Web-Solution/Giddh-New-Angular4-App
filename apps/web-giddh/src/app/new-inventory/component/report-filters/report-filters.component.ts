@@ -344,7 +344,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.stockReportRequestExport.showOutwardsQty = true;
             }
             /* for value filter selected in item, variant & group */
-            if (this.searchPage === InventoryReportType.stock || InventoryReportType.variant || InventoryReportType.group) {
+            if (InventoryReportType.stock || InventoryReportType.variant || InventoryReportType.group) {
                 if (column === 'group_name') {
                     this.stockReportRequestExport.showGroupName = true;
                 }
@@ -368,25 +368,19 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 }
             }
             /* for value filter selected in item, variant & transaction */
-            if (this.searchPage === InventoryReportType.stock || InventoryReportType.variant || InventoryReportType.transaction) {
-                if (column === 'stock_name') {
-                    this.stockReportRequestExport.showStockName = true;
-                }
+            if ((InventoryReportType.stock || InventoryReportType.variant || InventoryReportType.transaction) && column === 'stock_name') {
+                this.stockReportRequestExport.showStockName = true;
             }
             /* for value filter selected in item & variant both */
-            if (this.searchPage === InventoryReportType.stock || InventoryReportType.variant) {
-                if (column === 'unit_name') {
-                    this.stockReportRequestExport.showUnitName = true;
-                }
+            if ((InventoryReportType.stock || InventoryReportType.variant) && column === 'unit_name') {
+                this.stockReportRequestExport.showUnitName = true;
             }
             /* for value filter selected in variant & transaction both */
-            if (this.searchPage === InventoryReportType.variant || InventoryReportType.transaction) {
-                if (column === 'variant_name') {
-                    this.stockReportRequestExport.showVariantName = true;
-                }
+            if ((InventoryReportType.variant || InventoryReportType.transaction) && column === 'variant_name') {
+                this.stockReportRequestExport.showVariantName = true;
             }
             /* for value filter selected in Transaction */
-            if (this.searchPage === InventoryReportType.transaction) {
+            if (InventoryReportType.transaction) {
                 if (column === 'entry_date') {
                     this.stockReportRequestExport.showDate = true;
                 }

@@ -1225,8 +1225,8 @@ export class InventoryService {
             this.companyUniqueName = this.generalService.companyUniqueName;
             return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_TRANSACTION_EXPORT
                 ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-                ?.replace(':from', encodeURIComponent(queryParams?.from))
-                ?.replace(':to', encodeURIComponent(queryParams?.to))
+                ?.replace(':from', encodeURIComponent(queryParams?.from ?? ''))
+                ?.replace(':to', encodeURIComponent(queryParams?.to ?? ''))
                 , stockReportRequest).pipe(
                     map((res) => {
                         let data: BaseResponse<InventoryReportRequestExport, InventoryReportRequest> = res;
@@ -1289,8 +1289,8 @@ export class InventoryService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_GROUP_WISE_EXPORT
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':from', encodeURIComponent(queryParams?.from))
-            ?.replace(':to', encodeURIComponent(queryParams?.to))
+            ?.replace(':from', encodeURIComponent(queryParams?.from ?? ''))
+            ?.replace(':to', encodeURIComponent(queryParams?.to ?? ''))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportRequestExport, InventoryReportRequest> = res;
@@ -1351,8 +1351,8 @@ export class InventoryService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_ITEM_WISE_EXPORT
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':from', encodeURIComponent(queryParams?.from))
-            ?.replace(':to', encodeURIComponent(queryParams?.to))
+            ?.replace(':from', encodeURIComponent(queryParams?.from ?? ''))
+            ?.replace(':to', encodeURIComponent(queryParams?.to ?? ''))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportRequestExport, InventoryReportRequest> = res;
@@ -1412,8 +1412,8 @@ export class InventoryService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_VARIANT_WISE_EXPORT
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':from', encodeURIComponent(queryParams?.from))
-            ?.replace(':to', encodeURIComponent(queryParams?.to))
+            ?.replace(':from', encodeURIComponent(queryParams?.from ?? ''))
+            ?.replace(':to', encodeURIComponent(queryParams?.to ?? ''))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportRequestExport, InventoryReportRequest> = res;
