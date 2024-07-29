@@ -141,7 +141,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     /** Observable to subscribe for refresh columns on select chiplist */
     public refreshColumns = new Subject<void>();
     /** This will hold if variant is selected on chip list */
-    public isVariantSelected : boolean = false;
+    public isVariantSelected: boolean = false;
     /** Loading Observable */
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
 
@@ -241,7 +241,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.searchInventory();
             }
         });
-        this.searchInventory();      
+        this.searchInventory();
     }
 
     /**
@@ -315,61 +315,89 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.changeDetection.detectChanges();
 
         /* This will use for table header from customise columns for export table */
-         this.stockReportRequestExport = {
-             ...this.stockReportRequestExport,
-             showStockName: false,
-             showGroupName: false,
-             showUnitName: false,
-             showOpeningStockQty: false,
-             showOpeningStockValue: false,
-             showInwardsQty: false,
-             showInwardsValue: false,
-             showOutwardsQty: false,
-             showOutwardsValue: false,
-             showClosingStockQty: false,
-             showClosingStockValue: false,
-             showVariantName: false
-         }
+        this.stockReportRequestExport = {
+            ...this.stockReportRequestExport,
+            showStockName: false,
+            showGroupName: false,
+            showUnitName: false,
+            showOpeningStockQty: false,
+            showOpeningStockValue: false,
+            showInwardsQty: false,
+            showInwardsValue: false,
+            showOutwardsQty: false,
+            showOutwardsValue: false,
+            showClosingStockQty: false,
+            showClosingStockValue: false,
+            showVariantName: false,
+            showDate: false,
+            showAccountUniqueName: false,
+            showRate: false,
+            showValue: false
+        }
 
-        /* for column value filter selected */
-         this.displayedColumns?.forEach(column => {
-             if (column === 'stock_name') {
-                this.stockReportRequestExport.showStockName = true;
-             }
-            else if (column === 'group_name') {
-                this.stockReportRequestExport.showGroupName = true;
-            }
-            else if (column === 'unit_name') {
-                this.stockReportRequestExport.showUnitName = true;
-            }
-            else if (column === 'opening_quantity') {
-                this.stockReportRequestExport.showOpeningStockQty = true;
-            }
-            else if (column === 'opening_amount') {
-                this.stockReportRequestExport.showOpeningStockValue = true;
-            }
-            else if (column === 'inward_quantity') {
+        /* for column value filter selected common */
+        this.displayedColumns?.forEach(column => {
+            if (column === 'inward_quantity') {
                 this.stockReportRequestExport.showInwardsQty = true;
-            }
-            else if (column === 'inward_amount') {
-                this.stockReportRequestExport.showInwardsValue = true;
             }
             else if (column === 'outward_quantity') {
                 this.stockReportRequestExport.showOutwardsQty = true;
             }
-            else if (column === 'outward_amount') {
-                this.stockReportRequestExport.showOutwardsValue = true;
+            /* for value filter selected in item, variant & group */
+            if (this.searchPage === InventoryReportType.stock || InventoryReportType.variant || InventoryReportType.group) {
+                if (column === 'group_name') {
+                    this.stockReportRequestExport.showGroupName = true;
+                }
+                else if (column === 'opening_quantity') {
+                    this.stockReportRequestExport.showOpeningStockQty = true;
+                }
+                else if (column === 'opening_amount') {
+                    this.stockReportRequestExport.showOpeningStockValue = true;
+                }
+                else if (column === 'inward_amount') {
+                    this.stockReportRequestExport.showInwardsValue = true;
+                }
+                else if (column === 'outward_amount') {
+                    this.stockReportRequestExport.showOutwardsValue = true;
+                }
+                else if (column === 'closing_quantity') {
+                    this.stockReportRequestExport.showClosingStockQty = true;
+                }
+                else if (column === 'closing_amount') {
+                    this.stockReportRequestExport.showClosingStockValue = true;
+                }
             }
-            else if (column === 'closing_quantity') {
-                this.stockReportRequestExport.showClosingStockQty = true;
+            /* for value filter selected in item, variant & transaction */
+            if (this.searchPage === InventoryReportType.stock || InventoryReportType.variant || InventoryReportType.transaction) {
+                if (column === 'stock_name') {
+                    this.stockReportRequestExport.showStockName = true;
+                }
             }
-            else if (column === 'closing_amount') {
-                this.stockReportRequestExport.showClosingStockValue = true;
+            /* for value filter selected in item & variant both */
+            if (this.searchPage === InventoryReportType.stock || InventoryReportType.variant) {
+                if (column === 'unit_name') {
+                    this.stockReportRequestExport.showUnitName = true;
+                }
             }
-            /* for value filter selected in variant */
-            if (InventoryReportType.variant) {
-                if(column === 'variant_name') {
+            /* for value filter selected in variant & transaction both */
+            if (this.searchPage === InventoryReportType.variant || InventoryReportType.transaction) {
+                if (column === 'variant_name') {
                     this.stockReportRequestExport.showVariantName = true;
+                }
+            }
+            /* for value filter selected in Transaction */
+            if (this.searchPage === InventoryReportType.transaction) {
+                if (column === 'entry_date') {
+                    this.stockReportRequestExport.showDate = true;
+                }
+                else if (column === 'account_name') {
+                    this.stockReportRequestExport.showAccountUniqueName = true;
+                }
+                else if (column === 'rate') {
+                    this.stockReportRequestExport.showRate = true;
+                }
+                else if (column === 'transaction_val') {
+                    this.stockReportRequestExport.showValue = true;
                 }
             }
         });
@@ -397,13 +425,13 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         });
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.advanceSearchModalResponse = response;                
+                this.advanceSearchModalResponse = response;
                 this.stockReportRequest.param = response.stockReportRequest?.param;
                 this.stockReportRequest.expression = response.stockReportRequest?.expression;
                 this.stockReportRequest.from = response.stockReportRequest?.fromDate;
                 this.stockReportRequest.to = response.stockReportRequest?.toDate;
                 this.stockReportRequest.val = response.stockReportRequest?.val;
-                
+
                 this.balanceStockReportRequest.param = response.stockReportRequest?.param;
                 this.balanceStockReportRequest.expression = response.stockReportRequest?.expression;
                 this.balanceStockReportRequest.val = response.stockReportRequest?.val;
@@ -869,34 +897,48 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
     */
     public exportReport(): void {
-        if (this.searchPage === InventoryReportType.stock) {
-            let stockReportRequestExport = this.stockReportRequestExport;
-            let queryParams = {
-                from: this.fromDate,
-                to: this.toDate
-            };
-            delete stockReportRequestExport.from;
-            delete stockReportRequestExport.to;
+        let stockReportRequestExport = this.stockReportRequestExport;
+        let queryParams = {
+            from: this.fromDate,
+            to: this.toDate
+        };
+        delete stockReportRequestExport.from;
+        delete stockReportRequestExport.to;
 
-            stockReportRequestExport.inventoryType = this.moduleType;
+        stockReportRequestExport.inventoryType = this.moduleType;
+
+        // this is for Item wise export
+        if (this.searchPage === InventoryReportType.stock) {
             // data is coming from inventory store
             this.componentStore.exportStock({
                 stockReportRequest: stockReportRequestExport,
                 queryParams: queryParams
             });
         }
-        else if (this.searchPage === InventoryReportType.variant) {
-            let stockReportRequestExport = this.stockReportRequestExport;
-            let queryParams = {
-                from: this.fromDate,
-                to: this.toDate
-            };
-            delete stockReportRequestExport.from;
-            delete stockReportRequestExport.to;
 
-            stockReportRequestExport.inventoryType = this.moduleType;
+        // this is for Variant wise export
+        else if (this.searchPage === InventoryReportType.variant) {
             // data is coming from inventory store
             this.componentStore.exportVariant({
+                stockReportRequest: stockReportRequestExport,
+                queryParams: queryParams
+            });
+        }
+
+        // this is for Group wise export
+        else if (this.searchPage === InventoryReportType.group) {
+            // data is coming from inventory store
+            this.componentStore.exportGroup({
+                stockReportRequest: stockReportRequestExport,
+                queryParams: queryParams
+            });
+        }
+
+        // this is for Transaction wise export
+        else if (this.searchPage === InventoryReportType.transaction) {
+            stockReportRequestExport.accountName = this.balanceStockReportRequest.accountName;
+            // data is coming from inventory store
+            this.componentStore.exportTransaction({
                 stockReportRequest: stockReportRequestExport,
                 queryParams: queryParams
             });

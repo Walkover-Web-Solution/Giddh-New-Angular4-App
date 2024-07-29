@@ -114,5 +114,7 @@ export const INVENTORY_API = {
         CREATE_INVENTORY: 'company/:companyUniqueName/inventory-adjustment?voucherVersion=2&branchUniqueName=:branchUniqueName', // POST call
         UPDATE_INVENTORY: 'company/:companyUniqueName/inventory-adjustment/:refNo?voucherVersion=2&branchUniqueName=:branchUniqueName'
     },
-    INVENTORY_VARIANT_WISE_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/variant-wise?from=:from&to=:to'
+    INVENTORY_VARIANT_WISE_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/variant-wise?from=:from&to=:to',
+    INVENTORY_GROUP_WISE_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/group-wise?from=:from&to=:to',
+    INVENTORY_TRANSACTION_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/transaction-wise?from=:from&to=:to'
 };
