@@ -15131,3 +15131,13 @@ aside-menu-product-service {
     margin-left: auto !important;
     margin-right: auto !important;
 }
+
+import-wizard {
+    sh-select {
+        sh-select-menu {
+            .menu {
+                min-width: 200px !important;
+            }
+        }
+    }
+}
