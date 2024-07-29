@@ -774,7 +774,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
 
     public calculateAmount() {
-        this.isInclusiveEntry = true;
         this.currentTxn.amount = this.calculateInclusiveAmount(this.currentTxn.total);
         if (this.currentTxn.inventory) {
             this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
