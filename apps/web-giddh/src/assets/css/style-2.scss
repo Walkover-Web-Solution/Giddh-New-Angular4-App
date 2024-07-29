@@ -1250,11 +1250,8 @@ aside-create-group {
                         overflow-y: auto;
                     }
                 }
-            }
-        }
-        // Units are not displaying after creation once the scroll comes on the page
-        mat-grid-list{
-            mat-grid-tile {
+                
+            // Units are not displaying after creation once the scroll comes on the page
                 &:first-child {
                     mat-list {
                         .cdk-virtual-scroll-viewport {
