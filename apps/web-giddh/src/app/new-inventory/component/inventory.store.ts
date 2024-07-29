@@ -105,4 +105,82 @@ export class InventoryComponentStore extends ComponentStore<any> {
             })
         );
     });
+
+    /**
+     * This will use for Export Variant Wise Report Data
+     *
+     * @memberof InventoryComponentStore
+     */
+    readonly exportGroup = this.effect((data$: Observable<{ stockReportRequest: any, queryParams: any }>) => {
+        return data$.pipe(
+            switchMap((req) => {
+                this.patchState({ isLoading: true });
+                return this.inventoryService.getGroupWiseReportExport(req.queryParams, req.stockReportRequest).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                if (typeof res?.body === "string") {
+                                    this.toaster.showSnackBar("success", res.body);
+                                    this.router.navigate(["/pages/downloads"]);
+                                    return this.patchState({
+                                        isLoading: false
+                                    });
+                                }
+                            } else {
+                                res?.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    isLoading: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                isLoading: false
+                            });
+                        }
+                    ),
+                )
+            })
+        );
+    });
+
+    /**
+     * This will use for Export Variant Wise Report Data
+     *
+     * @memberof InventoryComponentStore
+     */
+    readonly exportTransaction = this.effect((data$: Observable<{ stockReportRequest: any, queryParams: any }>) => {
+        return data$.pipe(
+            switchMap((req) => {
+                this.patchState({ isLoading: true });
+                return this.inventoryService.getTransactionReportExport(req.queryParams, req.stockReportRequest).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                if (typeof res?.body === "string") {
+                                    this.toaster.showSnackBar("success", res.body);
+                                    this.router.navigate(["/pages/downloads"]);
+                                    return this.patchState({
+                                        isLoading: false
+                                    });
+                                }
+                            } else {
+                                res?.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    isLoading: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                isLoading: false
+                            });
+                        }
+                    ),
+                )
+            })
+        );
+    });
 }

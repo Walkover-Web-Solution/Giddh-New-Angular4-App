@@ -105,5 +105,7 @@ export const INVENTORY_API = {
     UPDATE_DISCOUNT: 'company/:companyUniqueName/customer-vendor-discount/stock/:stockUniqueName/variant/:variantUniqueName/update-discount', // Patch Call
     GET_STOCK_DETAILS: 'v2/company/:companyUniqueName/stock/:stockUniqueName/details?userType=:userType', // GET call
     INVENTORY_ITEM_WISE_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/item-wise?from=:from&to=:to',
-    INVENTORY_VARIANT_WISE_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/variant-wise?from=:from&to=:to'
+    INVENTORY_VARIANT_WISE_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/variant-wise?from=:from&to=:to',
+    INVENTORY_GROUP_WISE_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/group-wise?from=:from&to=:to',
+    INVENTORY_TRANSACTION_EXPORT: 'company/:companyUniqueName/inventory/export-balance-report/transaction-wise?from=:from&to=:to'
 };
