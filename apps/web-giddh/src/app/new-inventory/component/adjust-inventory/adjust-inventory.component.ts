@@ -712,12 +712,11 @@ export class AdjustInventoryComponent implements OnInit {
         if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
             this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.QuantityWise
             && this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Value) {
-            let changeInValue = this.adjustInventoryCreateEditForm?.value?.changeInValue;
+            let changeInValue = this.adjustInventoryCreateEditForm?.value?.changeInValue * this.dataSource?.data?.length;
             let newValue = this.stockGroupClosingBalance.closing?.closing?.quantity - changeInValue;
 
             this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
             this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
-
             const data = this.dataSource.data.map(result => {
                 result.changeValue = this.adjustInventoryCreateEditForm?.value?.changeInValue;
                 result.newValue = giddhRoundOff(result.closing?.quantity - result.changeValue, this.giddhBalanceDecimalPlaces);
@@ -749,7 +748,7 @@ export class AdjustInventoryComponent implements OnInit {
             this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.ValueWise &&
             this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Value) {
 
-            let changeInValue = this.adjustInventoryCreateEditForm?.value?.changeInValue;
+            let changeInValue = this.adjustInventoryCreateEditForm?.value?.changeInValue * this.dataSource?.data?.length;
             let newValue = this.stockGroupClosingBalance.closing?.closing?.amount - changeInValue;
 
             this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
