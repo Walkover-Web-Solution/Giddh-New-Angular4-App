@@ -127,6 +127,6 @@
 @media (max-height: 700px) {
     .help-aside-body {
         height: 100%;
-        overflow-y: scroll;
+        overflow-y: auto;
     }
 }

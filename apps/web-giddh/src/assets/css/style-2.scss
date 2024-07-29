@@ -42,6 +42,7 @@ $custom-typography: mat-typography-config($font-family: var(--font-regular),
 @import "../css/global/global-variable.scss";
 @import "../css/global/settings-sidebar.scss";
 @import "../css/global/mat-menu.scss";
+@import "../css/global/tax-authority.scss";
 
 /* table css need to removed at last  (start)Don't touch this table css (If any body work on that contact shalinee..)
 */
@@ -1961,7 +1962,7 @@ input {
     padding: 20px;
     margin: 15px auto;
     box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
-    max-width: 1360px;
+    max-width: calc(var(--center-content-max-width) - 30px);
 }
 
 .vat-report .tab-content {
@@ -10595,9 +10596,14 @@ body {
     padding-left: 60px;
 }
 
-.setting-sidebar-open.on-setting-page .plan-wrapper,
-.setting-sidebar-open.on-user-page .plan-wrapper {
-    padding-left: 60px !important;
+.setting-sidebar-open {
+    &.on-setting-page, &.on-user-page {
+        &:not(.gst-sidebar-open) {
+            .plan-wrapper {
+                padding-left: 60px !important;
+            }
+        }
+    }
 }
 
 .setting-sidebar-open.aside-setting.on-setting-page .plan-wrapper,
@@ -10850,7 +10856,7 @@ body {
     }
 
     #content-wrapper {
-        padding-left: 300px;
+        padding-left: 300px !important;
     }
 
     .nav-left-bar {
@@ -15103,6 +15109,10 @@ aside-menu-product-service {
 .bg-transparent {
     background: var(--color-transparent-background) !important;
     background-color: var(--color-transparent-background) !important;
+}
+
+.bg-grey {
+    background-color: var(--color-wild-sand) !important;
 }
 
 // color link light-dark theme

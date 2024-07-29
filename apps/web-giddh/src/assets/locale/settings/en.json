@@ -9,5 +9,6 @@
     "setting_trigger": "Setting > Trigger",
     "setting_discount": "Setting > Discount",
     "setting_warehouse": "Setting > Warehouse",
-    "gmail_account_added": "Gmail account added successfully."
+    "gmail_account_added": "Gmail account added successfully.",
+    "setting_manage_tax_authority": "Setting > Manage Tax Authority"
 }

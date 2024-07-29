@@ -100,9 +100,8 @@
                                             <!-- static code added for the pincode -->
                                             <div class="col-sm-4">
                                                 <div class="form-group mr-b05">
-                                                    <input-field [label]="commonLocaleData?.app_pin_code"
+                                                    <input-field [label]="zipCodeSupportedCountryList.includes(activeCompanyCountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [placeholder]="zipCodeSupportedCountryList.includes(activeCompanyCountryCode) ? commonLocaleData?.app_enter_zip_code : commonLocaleData?.app_enter_pin_code"
                                                         [type]="'text'" [autocomplete]="'false'" [name]="'pinCodeNum'"
-                                                        [placeholder]="commonLocaleData?.app_enter_pin_code"
                                                         formControlName="pincode" [allowDecimalDigitsOnly]="true"
                                                         [preventDecimal]="true"></input-field>
                                                 </div>
