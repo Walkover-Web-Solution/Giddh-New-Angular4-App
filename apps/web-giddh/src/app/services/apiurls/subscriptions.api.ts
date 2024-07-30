@@ -23,4 +23,5 @@ export const SUBSCRIPTION_V2_API = {
     GET_CHANGE_PLAN_DETAILS: 'v2/subscription/change-plan',
     UPDATE_PLAN: 'v2/subscription/update',
     BUY_PLAN_BY_GOCARDLESS: 'v2/subscription/buy-plan',
+    GET_COMPANIES_BY_SUBSCRIPTION_ID: 'v2/subscription/:subscriptionId/company-list?page=:page&count=:count&q=:q'
 };

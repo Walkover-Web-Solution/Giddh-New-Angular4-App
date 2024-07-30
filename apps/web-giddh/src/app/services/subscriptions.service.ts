@@ -147,10 +147,18 @@ export class SubscriptionsService {
      * @memberof SubscriptionsService
      */
     public getAllSubscriptions(pagination: any, model: any): Observable<BaseResponse<any, any>> {
+        let reqObj: any;
+        if (model?.region) {
+            reqObj = {
+                region: model.region
+            }
+        } else {
+            reqObj = model;
+        }
         return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_ALL_SUBSCRIPTIONS
             ?.replace(':page', encodeURIComponent(pagination?.page ?? ''))
             ?.replace(':count', encodeURIComponent(pagination?.count ?? ''))
-            , model)
+            , reqObj)
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -447,6 +455,29 @@ export class SubscriptionsService {
     public buyPlanByGoCardless(model: any): Observable<BaseResponse<any, any>> {
         return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.BUY_PLAN_BY_GOCARDLESS,
             model)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    data.queryString = {};
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
+    }
+    /**
+     * This will be use for get all companies by subscription id
+     *
+     * @param {*} subscriptionId
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SubscriptionsService
+     */
+    public getCompaniesBySubscriptionId(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_COMPANIES_BY_SUBSCRIPTION_ID
+            ?.replace(':subscriptionId', encodeURIComponent(model?.subscriptionId))
+            ?.replace(":page", model.page)
+            ?.replace(":q", model.q ??'')
+            ?.replace(":count", model.count))
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;

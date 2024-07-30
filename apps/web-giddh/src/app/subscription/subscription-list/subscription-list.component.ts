@@ -18,6 +18,7 @@ import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-mod
 import { API_COUNT_LIMIT, PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { CompanyListDialogComponent } from '../company-list-dialog/company-list-dialog.component';
 import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.component';
+import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 @Component({
     selector: 'subscription-list',
     templateUrl: './subscription-list.component.html',
@@ -133,7 +134,8 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         private readonly componentStoreBuyPlan: BuyPlanComponentStore,
         private generalActions: GeneralActions,
         private router: Router,
-        private toasterService: ToasterService
+        private toasterService: ToasterService,
+        private settingsProfileActions: SettingsProfileActions
     ) {
         this.store.dispatch(this.generalActions.openSideMenu(true));
     }
@@ -145,6 +147,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public ngOnInit(): void {
+
         document.body?.classList?.add("subscription-page");
         this.initForm();
         this.getAllSubscriptions(false);
@@ -753,6 +756,29 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         const height = 900;
 
         this.openedWindow = this.generalService.openCenteredWindow(url, '', width, height);
+    }
+
+    public addCompanyInSubscription(company: any): void {
+        this.menu.closeMenu();
+        this.subscriptionMove = false;
+        this.selectedCompany = company;
+        this.dialog.open(this.moveCompany, {
+            width: '40%',
+            role: 'alertdialog',
+            ariaLabel: 'moveDialog'
+        });
+    }
+
+    /**
+    * This function will refresh the subscribed companies if move company was succesful and will close the popup
+    *
+    * @param {*} event
+    * @memberof SubscriptionComponent
+    */
+    public addOrMoveCompanyCallback(event: boolean): void {
+        if (event === true) {
+            this.getAllSubscriptions(false);
+        }
     }
 
     /**

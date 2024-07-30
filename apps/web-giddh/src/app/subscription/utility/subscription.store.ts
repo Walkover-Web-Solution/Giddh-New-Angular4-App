@@ -20,11 +20,15 @@ export interface SubscriptionState {
     verifyOwnershipSuccess: any;
     subscribedCompaniesInProgress: boolean;
     subscribedCompanies: any;
+    companiesListInProgress: boolean;
+    companiesList: any
 }
 
 export const DEFAULT_SUBSCRIPTION_STATE: SubscriptionState = {
     subscriptionListInProgress: null,
     subscriptionList: [],
+    companiesListInProgress: null,
+    companiesList: [],
     buyPlanSuccess: [],
     cancelSubscriptionInProgress: null,
     cancelSubscription: null,
@@ -49,6 +53,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
 
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
     public isUpdateCompanySuccess$ = this.select(this.store.select(state => state.settings.updateProfileSuccess), (response) => response);
+    public companyList$ = this.select((state) => state.companiesList);
 
     /**
      * Get All Subscriptions
@@ -90,7 +95,6 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
             })
         );
     });
-
 
     /**
     * Cancel Subscription
@@ -288,6 +292,45 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
 
                             return this.patchState({
                                 buyPlanSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+    * Get All Companies by subscription id
+    *
+    * @memberof SubscriptionComponentStore
+    */
+    readonly getAllCompaniesBySubscriptionId = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ companiesListInProgress: true });
+                return this.subscriptionService.getCompaniesBySubscriptionId(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                return this.patchState({
+                                    companiesList: res?.body ?? [],
+                                    companiesListInProgress: false
+                                });
+                            } else {
+                                this.toasterService.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    companiesList: [],
+                                    companiesListInProgress: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({
+                                companiesList: [],
+                                companiesListInProgress: false
                             });
                         }
                     ),

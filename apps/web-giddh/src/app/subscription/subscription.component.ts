@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../store';
@@ -94,6 +94,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private breakPointObservar: BreakpointObserver,
         private generalActions: GeneralActions,
+        private changeDetectionRef: ChangeDetectorRef,
         private clipboardService: ClipboardService) {
         this.contactNo$ = this.store.pipe(select(s => {
             if (s.session.user) {
@@ -225,8 +226,10 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 });
             }
         });
+
         this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
             this.isCreateAndSwitchCompanyInProcess = inProcess;
+            this.changeDetectionRef.detectChanges();
         });
 
     }

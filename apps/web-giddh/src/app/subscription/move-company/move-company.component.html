@@ -14,17 +14,41 @@
             <div class="row mb-2">
                 <div class="col-md-6 move-wrapper">
                     <label class="font-15"
-                        >{{ localeData?.subscription?.select_plan ? localeData?.subscription?.select_plan: localeData?.select_plan }}<span class="text-danger">*</span></label
+                        >{{
+                            localeData?.subscription?.select_plan
+                                ? localeData?.subscription?.select_plan
+                                : localeData?.select_plan
+                        }}<span class="text-danger">*</span></label
                     >
                     <div class="select-caret position-relative move-select">
                         <sh-select
-                            [placeholder]="localeData?.subscription?.select_plan ? localeData?.subscription?.select_plan : localeData?.select_plan"
+                            [placeholder]="
+                                localeData?.subscription?.select_plan
+                                    ? localeData?.subscription?.select_plan
+                                    : localeData?.select_plan
+                            "
                             name="availablePlans"
                             [options]="availablePlansOption"
                             [isFilterEnabled]="true"
                             [(ngModel)]="selectedPlan"
                             [isRequired]="true"
+                            *ngIf="subscriptionMove"
                         ></sh-select>
+                      <reactive-dropdown-field
+                       *ngIf="!subscriptionMove"
+                            [label]="'Company'"
+                            [placeholder]="'Select Company'"
+                            [options]="inventoryList$ | async"
+                            [labelValue]=""
+                            formControlName="searchCountry"
+                            [enableDynamicSearch]="true"
+                            [isPaginationEnabled]="true"
+                            (scrollEnd)="handleSearchInventoryScrollEnd()"
+                            (dynamicSearchedQuery)="searchInventory($event)"
+                            [required]="true"
+                            (selectedOption)="selectInventory($event)"
+                        >
+                        </reactive-dropdown-field>
                     </div>
                 </div>
             </div>

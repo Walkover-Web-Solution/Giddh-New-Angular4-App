@@ -48,16 +48,18 @@
                             *matHeaderCellDef
                             class="td-search-box"
                             #searchNameContainer
-                            (clickOutside)="handleClickOutside($event, searchNameContainer, commonLocaleData?.app_name)"
+                            (clickOutside)="
+                                handleClickOutside($event, searchNameContainer, commonLocaleData?.app_company)
+                            "
                         >
                             <ng-container
                                 *ngTemplateOutlet="
                                     searchTemplate;
                                     context: {
                                         $implicit: showName,
-                                        fieldName: commonLocaleData?.app_name,
+                                        fieldName: commonLocaleData?.app_company,
                                         formControl: subscriptionListForm.controls['companyName'],
-                                        title: commonLocaleData?.app_name
+                                        title: commonLocaleData?.app_company
                                     }
                                 "
                             ></ng-container>
@@ -67,7 +69,7 @@
                                 class="cursor-pointer underline"
                                 *ngIf="element?.companies?.length > 1"
                                 (click)="openCompanyDialog(element)"
-                                >{{ element?.companies?.length }} - {{ commonLocaleData?.app_company }}</a
+                                >{{ element?.companies?.length }} - {{ commonLocaleData?.app_companies }}</a
                             >
                             <span *ngIf="element?.companies?.length === 1">{{ element?.companies[0]?.name }}</span>
                         </td>
@@ -290,6 +292,9 @@
                                         *ngIf="element?.isOwner && element?.companies?.length < element?.totalCompanies"
                                         (click)="createCompanyInSubscription(element?.subscriptionId)"
                                     >
+                                        {{ commonLocaleData?.app_create + " " + commonLocaleData?.app_company }}
+                                    </button>
+                                    <button mat-menu-item (click)="addCompanyInSubscription(element)">
                                         {{ localeData?.add_company }}
                                     </button>
                                 </div>
@@ -346,6 +351,8 @@
     <move-company
         [moveSelectedCompany]="selectedCompany"
         [subscriptionMove]="subscriptionMove"
+        (moveCompany)="addOrMoveCompanyCallback($event)"
+        [moveCompany]
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"
     >
