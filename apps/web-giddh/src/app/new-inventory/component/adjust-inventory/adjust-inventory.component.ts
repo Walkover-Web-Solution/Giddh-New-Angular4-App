@@ -118,6 +118,8 @@ export class AdjustInventoryComponent implements OnInit {
     public fieldFilteredOptions: any[] = [];
     /** Hold inventory data */
     public inventoryData: any[] = [];
+    /** True if update mode */
+    public updateMode: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -141,6 +143,7 @@ export class AdjustInventoryComponent implements OnInit {
             }
             if (params?.refNo) {
                 this.referenceNumber = params?.refNo;
+                this.updateMode = true;
                 this.componentStore.getAdjustInventoryData(this.referenceNumber);
                 this.apiCallInProgress = true;
             }
@@ -180,7 +183,7 @@ export class AdjustInventoryComponent implements OnInit {
                                 name: this.adjustInventoryCreateEditForm.value.entityName,
                                 uniqueName: this.adjustInventoryCreateEditForm.value.entityUniqueName,
                             }
-                        });
+                        }, false);
                 }
             });
         }
@@ -256,7 +259,9 @@ export class AdjustInventoryComponent implements OnInit {
                         label: `${item.name} (${item?.type})`,
                         additional: item
                     }));
-                    this.inventoryList$ = observableOf(mappedIItemWise);
+
+                    let filterdVariantData = mappedIItemWise.filter(item => item?.additional?.type === 'STOCK' || item?.additional?.type === 'STOCK GROUP');
+                    this.inventoryList$ = observableOf(filterdVariantData);
                 }
 
                 if (variantWise) {
@@ -323,20 +328,11 @@ export class AdjustInventoryComponent implements OnInit {
 
                     }
                     this.dataSource = new MatTableDataSource<any>(data);
-                    const shouldMasterToggle = this.isEntityStockGroup || (this.referenceNumber && !this.isEntityStockGroup);
-
-                    if (shouldMasterToggle) {
-                        this.masterToggle();
-                    } else {
-                        this.selection.clear();
-                    }
-                    this.showHideTable = false;
-                    setTimeout(() => {
-                        this.showHideTable = true;
-                    });
+                    this.checkTableCheckBox();
                     this.componentStore.getStockGroupClosingBalance(this.balanceReqObj);
                 } else {
                     this.dataSource = new MatTableDataSource<any>([]);
+                    this.checkTableCheckBox();
                 }
             });
 
@@ -415,14 +411,16 @@ export class AdjustInventoryComponent implements OnInit {
                             }));
                             this.fieldFilteredOptions = nextPaginatedData;
                             let concatData = initialData.concat(nextPaginatedData);
-                            this.inventoryList$ = observableOf(concatData);
+                            let filterdVariantData = concatData.filter(item => item?.additional?.type === 'STOCK' || item?.additional?.type === 'STOCK GROUP');
+                            this.inventoryList$ = observableOf(filterdVariantData);
                         } else {
                             this.fieldFilteredOptions = response.results.map(item => ({
                                 value: item.uniqueName,
                                 label: `${item.name} (${item?.type})`,
                                 additional: item
                             }));
-                            this.inventoryList$ = observableOf(this.fieldFilteredOptions);
+                            let filterdVariantData = this.fieldFilteredOptions.filter(item => item?.additional?.type === 'STOCK' || item?.additional?.type === 'STOCK GROUP');
+                            this.inventoryList$ = observableOf(filterdVariantData);
                         }
                         this.searchRequest.totalItems = response.totalItems;
                         this.searchRequest.totalPages = response.totalPages;
@@ -549,7 +547,10 @@ export class AdjustInventoryComponent implements OnInit {
     * @param {boolean} [isClear=false]
     * @memberof AdjustInventoryComponent
     */
-    public selectInventory(event: any): void {
+    public selectInventory(event: any, update: boolean): void {
+        if (update) {
+            this.resetInventory(true);
+        }
         let reqObj: any;
         let toDate: any;
 
@@ -738,7 +739,7 @@ export class AdjustInventoryComponent implements OnInit {
             this.stockGroupClosingBalance.changeValue = 0;
             this.stockGroupClosingBalance.newValue = 0;
         } else {
-            this.dataSource.data =  this.dataSource.data.map(result =>( {
+            this.dataSource.data = this.dataSource?.data?.map(result => ({
                 ...result,
                 changeValue: this.adjustInventoryCreateEditForm?.value?.changeInValue
             }));
@@ -760,7 +761,7 @@ export class AdjustInventoryComponent implements OnInit {
             this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
             this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
 
-            const data = this.dataSource.data.map(result => {
+            const data = this.dataSource?.data?.map(result => {
                 result.changeValue = result.closing?.quantity * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
                 result.newValue = giddhRoundOff(result.closing?.quantity - result.changeValue, this.giddhBalanceDecimalPlaces);
                 return result
@@ -784,7 +785,7 @@ export class AdjustInventoryComponent implements OnInit {
 
             this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
             this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
-            const data = this.dataSource.data.map(result => {
+            const data = this.dataSource?.data?.map(result => {
 
                 if (this.referenceNumber) {
                     result.closingAfterAdjustment = Number(result.closingBeforeAdjustment) - Number(result.changeValue);
@@ -814,7 +815,7 @@ export class AdjustInventoryComponent implements OnInit {
             this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
             this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
 
-            const data = this.dataSource.data.map(result => {
+            const data = this.dataSource?.data?.map(result => {
                 result.changeValue = result.closing?.amount * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
                 result.newValue = giddhRoundOff(result.closing?.amount - result.changeValue, this.giddhBalanceDecimalPlaces);
                 return result
@@ -841,13 +842,14 @@ export class AdjustInventoryComponent implements OnInit {
             this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
             this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
 
-            const data = this.dataSource.data.map(result => {
+            const data = this.dataSource?.data?.map(result => {
                 result.changeValue = this.adjustInventoryCreateEditForm?.value?.changeInValue;
                 result.newValue = giddhRoundOff(result.closing?.amount - result.changeValue, this.giddhBalanceDecimalPlaces);
                 return result
             }) || [];
             this.dataSource.data = data;
         }
+        this.checkTableCheckBox();
     }
 
     /**
@@ -926,6 +928,67 @@ export class AdjustInventoryComponent implements OnInit {
                 }
             ];
         }
+    }
+
+    /**
+     * This will be use for reset Inventory in edit mode
+     *
+     * @memberof AdjustInventoryComponent
+     */
+    public resetInventory(bySelectInventory: boolean = false): void {
+        if (this.updateMode) {
+            this.updateMode = false;
+            if (!bySelectInventory) {
+                this.adjustInventoryCreateEditForm.get("entityName")?.patchValue(null);
+                this.adjustInventoryCreateEditForm.get("entityUniqueName")?.patchValue(null);
+
+            } else {
+                this.dataSource = [];
+                this.adjustInventoryCreateEditForm.get("changeInValue")?.patchValue(null);
+                this.adjustInventoryCreateEditForm.get("adjustmentMethod")?.patchValue(null);
+                this.adjustInventoryCreateEditForm.get("adjustmentMethodName")?.patchValue(null);
+                this.adjustInventoryCreateEditForm.get("calculationMethod")?.patchValue(null);
+                this.entity = {
+                    entityName: '',
+                    balance: ''
+                }
+                this.stockGroupClosingBalance = {
+                    newValue: 0,
+                    changeValue: 0,
+                    closing: 0
+                }
+            }
+        } else {
+            this.selectInventory(
+                {
+                    value: this.adjustInventoryCreateEditForm.value.entityUniqueName,
+                    label: this.adjustInventoryCreateEditForm.value.entityName,
+                    additional: {
+                        type: this.adjustInventoryCreateEditForm.value.entity,
+                        name: this.adjustInventoryCreateEditForm.value.entityName,
+                        uniqueName: this.adjustInventoryCreateEditForm.value.entityUniqueName,
+                    }
+                }, false);
+        }
+    }
+
+    /**
+     * This will be use for check table checkbox according to stock and stock group
+     *
+     * @memberof AdjustInventoryComponent
+     */
+    public checkTableCheckBox(): void {
+        const shouldMasterToggle = this.isEntityStockGroup || (this.referenceNumber && !this.isEntityStockGroup);
+
+        if (shouldMasterToggle) {
+            this.masterToggle();
+        } else {
+            this.selection.clear();
+        }
+        this.showHideTable = false;
+        setTimeout(() => {
+            this.showHideTable = true;
+        });
     }
 
 }
