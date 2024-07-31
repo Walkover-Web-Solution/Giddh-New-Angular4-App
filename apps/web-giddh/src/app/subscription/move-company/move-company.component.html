@@ -1,8 +1,9 @@
 <div class="modal-header d-flex align-items-center flex-row-reverse">
     <button aria-hidden="true" class="close" mat-dialog-close>×</button>
-    <h3>
+    <h3 *ngIf="subscriptionMove">
         {{ localeData?.subscription?.move_company ? localeData?.subscription?.move_company : localeData?.move_company }}
     </h3>
+    <h3 *ngIf="!subscriptionMove">Add Company</h3>
 </div>
 <div *ngIf="isLoading">
     <giddh-page-loader></giddh-page-loader>
@@ -13,7 +14,7 @@
             <p class="text-black mb-2" [innerHTML]="getMovePlanText()"></p>
             <div class="row mb-2">
                 <div class="col-md-6 move-wrapper">
-                    <label class="font-15"
+                    <label class="font-15" *ngIf="subscriptionMove"
                         >{{
                             localeData?.subscription?.select_plan
                                 ? localeData?.subscription?.select_plan
@@ -34,19 +35,17 @@
                             [isRequired]="true"
                             *ngIf="subscriptionMove"
                         ></sh-select>
-                      <reactive-dropdown-field
-                       *ngIf="!subscriptionMove"
-                            [label]="'Company'"
-                            [placeholder]="'Select Company'"
-                            [options]="inventoryList$ | async"
-                            [labelValue]=""
-                            formControlName="searchCountry"
+                        <reactive-dropdown-field
+                            *ngIf="!subscriptionMove"
+                            [label]="commonLocaleData?.app_company"
+                            [placeholder]="localeData?.select_company"
+                            [options]="companyList$ | async"
                             [enableDynamicSearch]="true"
                             [isPaginationEnabled]="true"
-                            (scrollEnd)="handleSearchInventoryScrollEnd()"
-                            (dynamicSearchedQuery)="searchInventory($event)"
+                            (scrollEnd)="handleSearchCompanyScrollEnd()"
+                            (dynamicSearchedQuery)="searchCompany($event)"
                             [required]="true"
-                            (selectedOption)="selectInventory($event)"
+                            (selectedOption)="selectCompany($event)"
                         >
                         </reactive-dropdown-field>
                     </div>
@@ -58,7 +57,7 @@
                     color="primary"
                     mat-dialog-close
                     (click)="moveCompanyInNewPlan()"
-                    [disabled]="!selectedPlan"
+                    [disabled]="subscriptionMove ? !selectedPlan : companyDetails?.value"
                 >
                     {{ localeData?.subscription?.move ? localeData?.subscription?.move : localeData?.move }}
                 </button>

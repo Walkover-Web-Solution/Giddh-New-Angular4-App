@@ -58,14 +58,17 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     /** Stores the default search results pagination details */
     public companyName: string;
     /** Inventory Observable */
-    public inventoryList$: Observable<any[]> = observableOf(null);
+    public companyList$: Observable<any[]> = observableOf(null);
     /** Stock Transactional Object */
     public searchRequest: SearchCompanyRequest = new SearchCompanyRequest();
-    SearchCompanyRequest
     /** Filtered options to show in autocomplete list */
     public fieldFilteredOptions: any[] = [];
-    /** control for the MatSelect filter keyword */
-    public searchCountry: UntypedFormControl = new UntypedFormControl();
+    /** Stores the company details */
+    public companyDetails: {
+        name: '',
+        uniqueName: '',
+        additional:''
+    };
 
     constructor(
         private store: Store<AppState>,
@@ -80,10 +83,10 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      * @memberof MoveCompanyComponent
      */
     public ngOnInit(): void {
-        this.inventoryList$ = observableOf([]);
-        this.searchInventory(false);
-        this.isLoading = true;
+        this.companyList$ = observableOf([]);
+        this.searchCompany(false);
         if (this.subscriptionMove) {
+            this.isLoading = true;
             let reqObj = {
                 model: {
                     region: this.moveSelectedCompany?.region?.code,
@@ -103,28 +106,30 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                 }
             });
         } else {
-            this.companiesList$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                console.log(data);
-                if (data) {
-                    const mappedIItemWise = data?.results.map(item => ({
-                        value: item.uniqueName,
-                        label: `${item.name} (${item?.type})`,
-                        additional: item
-                    }));
-                    this.inventoryList$ = observableOf(mappedIItemWise);
-                }
-
-        });
+            this.isLoading = true;
+            this.componentStore.companyList$.pipe(debounceTime(700),
+                distinctUntilChanged(),
+                takeUntil(this.destroyed$)).subscribe(data => {
+                    if (data) {
+                        this.isLoading = false;
+                        const mappedIItemWise = data?.results.map(item => ({
+                            value: item.uniqueName,
+                            label: item.name,
+                            additional: item
+                        }));
+                        this.companyList$ = observableOf(mappedIItemWise);
+                    }
+                });
         }
     }
 
     /**
-      * Searches the group/stock/variant
-      *
-      * @param {boolean} [loadMore]
-      * @memberof AdjustInventoryComponent
-      */
-    public searchInventory(searchedText: any, loadMore: boolean = false): void {
+    * Searches the companies
+    *
+    * @param {boolean} [loadMore]
+    * @memberof MoveCompanyComponent
+    */
+    public searchCompany(searchedText: any, loadMore: boolean = false): void {
         if (this.searchRequest.loadMore) {
             return;
         }
@@ -140,7 +145,6 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
         if (this.searchRequest.page === 1 || this.searchRequest.page <= this.searchRequest.totalPages) {
             delete this.searchRequest.totalItems;
             delete this.searchRequest.totalPages;
-            console.log(this.searchRequest);
             this.searchRequest.subscriptionId = this.moveSelectedCompany?.subscriptionId;
             this.componentStore.getAllCompaniesBySubscriptionId(this.searchRequest);
             this.searchRequest.loadMore = true;
@@ -148,45 +152,56 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
             this.componentStore.companyList$.pipe(debounceTime(700),
                 distinctUntilChanged(),
                 takeUntil(this.destroyed$)).subscribe(response => {
+                    this.isLoading = false;
                     this.searchRequest.loadMore = false;
                     if (response) {
                         if (loadMore) {
                             let nextPaginatedData = response.results.map(item => ({
                                 value: item.uniqueName,
-                                label: `${item.name} (${item?.type})`,
+                                label: item.name,
                                 additional: item
                             }));
-                            this.fieldFilteredOptions = nextPaginatedData;
-                            let concatData = initialData.concat(nextPaginatedData);
-                            this.inventoryList$ = observableOf(concatData);
+                            let concatData = [...initialData, ...nextPaginatedData]
+                            this.fieldFilteredOptions = concatData;
+                            this.companyList$ = observableOf(concatData);
                         } else {
                             this.fieldFilteredOptions = response.results.map(item => ({
                                 value: item.uniqueName,
-                                label: `${item.name} (${item?.type})`,
+                                label: item.name,
                                 additional: item
                             }));
-                            this.inventoryList$ = observableOf(this.fieldFilteredOptions);
+                            this.companyList$ = observableOf(this.fieldFilteredOptions);
                         }
                         this.searchRequest.totalItems = response.totalItems;
                         this.searchRequest.totalPages = response.totalPages;
                     } else {
-                        this.inventoryList$ = observableOf([]);
+                        this.companyList$ = observableOf([]);
                     }
                 });
+            this.changeDetection.detectChanges();
         }
     }
 
-    public selectInventory(company: any): void {
-        console.log(company);
+    /**
+     * This will be use for select company
+     *
+     * @param {*} company
+     * @memberof MoveCompanyComponent
+     */
+    public selectCompany(company: any): void {
+        if (company) {
+            this.companyDetails = company.additional;
+            this.getMovePlanText();
+        }
     }
 
     /**
-    * Callback for inventory scroll end
+    * Callback for company scroll end
     *
-    * @memberof AdjustInventoryComponent
+    * @memberof MoveCompanyComponent
     */
-    public handleSearchInventoryScrollEnd(): void {
-        this.searchInventory(this.searchRequest.q, true);
+    public handlesearchCompanyScrollEnd(): void {
+        this.searchCompany(this.searchRequest.q, true);
     }
 
     /**
@@ -197,11 +212,15 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     public moveCompanyInNewPlan(): void {
         this.subscriptionRequestObj = {
             planUniqueName: '',
-            subscriptionId: this.selectedPlan,
+            subscriptionId: this.subscriptionMove ? this.selectedPlan : this.moveSelectedCompany.subscriptionId,
             userUniqueName: this.moveSelectedCompany?.createdBy?.uniqueName,
             licenceKey: ''
         };
-        this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true, moveCompany: this.moveSelectedCompany?.uniqueName });
+        if (this.subscriptionMove) {
+            this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true, moveCompany: this.moveSelectedCompany?.uniqueName });
+        } else {
+            this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true, moveCompany: this.moveSelectedCompany?.uniqueName , companyUniqueName:this.companyDetails.uniqueName});
+        }
     }
 
     /**
@@ -232,7 +251,14 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      * @memberof MoveCompanyComponent
      */
     public getMovePlanText(): string {
-        let text = this.localeData?.subscription?.move_plan_note ? this.localeData?.subscription?.move_plan_note : this.localeData?.move_plan_note;
+        let text = '';
+        if (this.subscriptionMove) {
+            text = this.localeData?.subscription?.move_plan_note ? this.localeData?.subscription?.move_plan_note : this.localeData?.move_plan_note;
+            text = text?.replace("[COMPANY_NAME]", this.moveSelectedCompany?.name ? this.moveSelectedCompany?.name : (this.moveSelectedCompany?.companies && this.moveSelectedCompany?.companies[0]?.name ? this.moveSelectedCompany?.companies[0]?.name : this.moveSelectedCompany?.companiesList[0]?.name))?.replace("[PLAN_NAME]", this.moveSelectedCompany?.subscription?.planDetails?.name ? this.moveSelectedCompany?.subscription?.planDetails?.name : this.moveSelectedCompany?.plan?.name);
+        } else {
+            text = this.localeData.company_note;
+            text = text?.replace("[COMPANY_NAME]", this.companyDetails?.name ??'');
+        }
         return text;
     }
 }

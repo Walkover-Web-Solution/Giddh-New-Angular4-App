@@ -6,6 +6,7 @@
         "created_on": "Created on",
         "total_transactions": "Total Transactions",
         "move_plan_note": "Select the plan in which you want to move <strong>[COMPANY_NAME]</strong> from [PLAN_NAME] to…",
+        "company_note": "Select the company to which you want to add <strong>[COMPANY_NAME]</strong> in this subscription.",
         "select_plan": "Select Plan",
         "start_trial": "Start Trial",
         "move": "Move",
