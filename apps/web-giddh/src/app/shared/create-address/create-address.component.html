@@ -67,16 +67,11 @@
                                                     (input)="checkGstNumValidation()"
                                                 ></input-field>
                                             </div>
-                                            <div class="col-sm-4 form-group">
+                                            <div class="col-sm-4 form-group" (click)="fun()">
                                                 <ng-container *ngIf="addressConfiguration.stateList?.length">
                                                     <reactive-dropdown-field
                                                         [label]="commonLocaleData?.app_state"
-                                                        [readonly]="
-                                                            addressConfiguration?.type === 'editAddress' &&
-                                                            addressToUpdate?.taxNumber &&
-                                                            addressConfiguration?.tax?.name &&
-                                                            addressConfiguration?.tax?.name === 'GSTIN' || (addressForm?.get('stateLabel')?.value && addressForm?.get('taxNumber')?.value)
-                                                        "
+                                                        [readonly]="(addressForm?.get('stateLabel')?.value !== '' && addressForm?.get('taxNumber')?.value !== '')"
                                                         [options]="addressConfiguration?.stateList"
                                                         formControlName="state"
                                                         [labelValue]="addressForm?.get('stateLabel')?.value ? addressForm?.get('stateLabel')?.value : ''"

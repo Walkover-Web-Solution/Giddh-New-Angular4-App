@@ -66,6 +66,21 @@ report-filters,
             border-color: var(--color-fields-border) !important;
             border-left: none !important;
         }
+        
+        &:has(input:disabled, input:read-only) {
+            input {
+                position: relative;
+                z-index: 1;
+            }
+            .dropdown-bg {
+                background-color: unset;
+            }
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
+                background-color: var(--color-common-primary-disabled);
+            }
+        }
     }
 
     .mat-form-field-appearance-outline {
