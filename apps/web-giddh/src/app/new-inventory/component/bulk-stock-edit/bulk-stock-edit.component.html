@@ -36,7 +36,7 @@
                             <p *ngIf="!isLoading" class="mr-r3">
                                 {{ localeData?.total_inventory_count }} : <span>{{ totalInventoryCount }}</span>
                             </p>
-                            <div class="menu-btn-control" [matTooltip]="localeData?.customize_column">
+                            <div class="menu-btn-control" [matTooltip]="localeData?.customize_column" >
                                 <select-table-column
                                     [moduleName]="inventoryType"
                                     [moduleType]="moduleName"
