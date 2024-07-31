@@ -519,9 +519,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         const isGSTIN = this.addressConfiguration?.tax?.name === 'GSTIN';
         const stateLabelNotNull = this.addressForm?.get('stateLabel')?.value !== null;
         const taxNumberNotEmpty = this.addressForm?.get('taxNumber')?.value !== "";
-        const taxNumberNotNull = this.addressForm?.get('taxNumber')?.value !== null;
-        console.log(this.addressForm?.get('stateLabel')?.value , this.addressForm?.get('taxNumber')?.value);
-        
+        const taxNumberNotNull = this.addressForm?.get('taxNumber')?.value !== null;      
         return  (isGSTIN && stateLabelNotNull && taxNumberNotNull && taxNumberNotEmpty);
     }
 }
