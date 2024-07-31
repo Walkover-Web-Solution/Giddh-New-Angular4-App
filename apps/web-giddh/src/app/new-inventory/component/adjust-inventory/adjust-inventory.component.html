@@ -196,7 +196,7 @@
                                                     </mat-form-field>
                                                 </div>
                                             </td>
-    
+
                                             <td width="16%" class="text-right">
                                                 <div class="d-flex align-items-center column-gap5">
                                                     <text-field
@@ -215,7 +215,8 @@
                                                         [readonly]="
                                                             !adjustInventoryCreateEditForm?.get('adjustmentMethod')
                                                                 ?.value &&
-                                                            !adjustInventoryCreateEditForm?.get('calculationMethod')?.value
+                                                            !adjustInventoryCreateEditForm?.get('calculationMethod')
+                                                                ?.value
                                                         "
                                                         (click)="$event.preventDefault(); $event.stopPropagation()"
                                                         formControlName="changeInValue"
@@ -226,8 +227,8 @@
                                                     >
                                                     </text-field>
                                                     <span>{{
-                                                        adjustInventoryCreateEditForm.get("calculationMethod")?.value ===
-                                                        "PERCENTAGE"
+                                                        adjustInventoryCreateEditForm.get("calculationMethod")
+                                                            ?.value === "PERCENTAGE"
                                                             ? "%"
                                                             : ""
                                                     }}</span>
@@ -236,17 +237,22 @@
                                             <td [style.width]="'15.625%'" class="text-right">
                                                 {{
                                                     adjustInventoryCreateEditForm.get("adjustmentMethod")?.value
-                                                        ? adjustInventoryCreateEditForm.get("adjustmentMethod")?.value ===
-                                                          "QUANTITY_WISE"
-                                                            ? stockGroupClosingBalance?.closing?.closing?.quantity ?? 0
+                                                        ? adjustInventoryCreateEditForm.get("adjustmentMethod")
+                                                              ?.value === "QUANTITY_WISE"
+                                                            ? referenceNumber
+                                                                ? stockGroupClosingBalance?.closing
+                                                                : stockGroupClosingBalance?.closing?.closing
+                                                                      ?.quantity ?? 0
                                                             : giddhRoundOff(
-                                                                  stockGroupClosingBalance?.closing.closing?.amount ?? 0,
+                                                                  referenceNumber
+                                                                      ? stockGroupClosingBalance?.closing
+                                                                      : stockGroupClosingBalance?.closing.closing
+                                                                            ?.amount ?? 0,
                                                                   this.giddhBalanceDecimalPlaces
                                                               )
                                                         : 0
                                                 }}
                                             </td>
-    
                                             <td class="px-3" width="15.625%" class="text-right">
                                                 {{
                                                     stockGroupClosingBalance?.changeValue
@@ -329,9 +335,11 @@
                                             {{
                                                 adjustInventoryCreateEditForm.get("adjustmentMethod")?.value ===
                                                 "QUANTITY_WISE"
-                                                    ? element?.closing?.quantity
+                                                    ? element?.closingBeforeAdjustment ?? element?.closing?.quantity
                                                     : giddhRoundOff(
-                                                          element?.closing?.amount ?? 0,
+                                                          element?.closingBeforeAdjustment
+                                                              ? element?.closingBeforeAdjustment
+                                                              : element?.closing?.amount ?? 0,
                                                           this.giddhBalanceDecimalPlaces
                                                       )
                                             }}
@@ -346,7 +354,7 @@
                                     <ng-container matColumnDef="newValue">
                                         <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
                                         <td mat-cell *matCellDef="let element" class="text-right">
-                                            {{ element?.newValue }}
+                                            {{ element?.closingAfterAdjustment  ? element?.closingAfterAdjustment: element?.newValue }}
                                         </td>
                                     </ng-container>
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -382,7 +390,7 @@
                                 >
                                     {{ commonLocaleData?.app_update }}
                                 </button>
-    
+
                                 <button
                                     aria-label="close icon"
                                     mat-stroked-button
