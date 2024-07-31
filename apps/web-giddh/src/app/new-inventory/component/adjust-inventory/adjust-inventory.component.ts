@@ -116,6 +116,8 @@ export class AdjustInventoryComponent implements OnInit {
     public searchPage: string = "VARIANT";
     /** Filtered options to show in autocomplete list */
     public fieldFilteredOptions: any[] = [];
+    /** Hold inventory data */
+    public inventoryData: any[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -162,6 +164,13 @@ export class AdjustInventoryComponent implements OnInit {
                 if (response) {
                     this.initForm(response);
                     this.stockReportRequest.to = this.adjustInventoryCreateEditForm.value.date;
+                    this.inventoryData = response.variants;
+                    if (this.referenceNumber) {
+                        this.stockGroupClosingBalance.closing = response?.closingBeforeAdjustment;
+                        this.stockGroupClosingBalance.newValue = response?.closingAfterAdjustment;
+                        this.stockGroupClosingBalance.changeValue = response?.changeValue;
+                        this.apiCallInProgress = false;
+                    }
                     this.selectInventory(
                         {
                             value: this.adjustInventoryCreateEditForm.value.entityUniqueName,
@@ -230,16 +239,11 @@ export class AdjustInventoryComponent implements OnInit {
             });
 
         this.componentStore.stockGroupClosingBalance$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response && !this.referenceNumber) {
                 this.stockGroupClosingBalance.closing = response;
-                if (this.referenceNumber) {
-                    this.stockGroupClosingBalance.changeValue = 0;
-                    this.stockGroupClosingBalance.newValue = 0;
-                    this.calculateInventory();
-                    this.apiCallInProgress = false;
-                }
             }
         });
+
         combineLatest([
             this.componentStore.itemWiseReport$.pipe(map(response => response?.results)),
             this.componentStore.variantWiseReport$.pipe(map(response => response?.results))
@@ -256,11 +260,55 @@ export class AdjustInventoryComponent implements OnInit {
                 }
 
                 if (variantWise) {
-                    const data = variantWise?.map(result => ({
+                    let data;
+                    let variantMappedData = variantWise?.map(result => ({
                         ...result,
-                        newValue: 0,
-                        changeValue: 0
+                        newValue: this.adjustInventoryCreateEditForm.get("adjustmentMethod")?.value ===
+                            "QUANTITY_WISE" ? result.closing.quantity - this.adjustInventoryCreateEditForm.get("changeInValue")?.value : result.closing.amount - this.adjustInventoryCreateEditForm.get("changeInValue")?.value,
+                        changeValue: this.adjustInventoryCreateEditForm.get("changeInValue")?.value,
                     }));
+                    if (this.referenceNumber) {
+                        const inventoryMap = new Map(this.inventoryData.map(item => [item.variant.uniqueName, item]));
+                        const mainResult = [];
+                        const variantWiseOnly = [];
+                        variantMappedData.forEach(result => {
+                            const updatedVariant = inventoryMap.get(result.variant.uniqueName);
+                            if (updatedVariant) {
+                                mainResult.push(updatedVariant);
+                            } else {
+                                variantWiseOnly.push(result);
+                            }
+                        });
+                        data = [...mainResult, ...variantWiseOnly];
+                        let mappedData = cloneDeep(data);
+                        let totalClosing = 0;
+                        let totalChange = 0;
+                        let totalNewValue = 0;
+                        let oldTotalClosing = 0;
+                        let oldNewValue = 0;
+                        mappedData?.forEach(element => {
+                            totalClosing += element.closingBeforeAdjustment ?? 0;
+                            totalChange += element.changeValue ?? 0;
+                            totalNewValue += element.closingAfterAdjustment ?? 0;
+                            oldNewValue += element?.newValue ?? 0;
+                            if (this.adjustInventoryCreateEditForm.get("adjustmentMethod")?.value ===
+                                "QUANTITY_WISE") {
+                                oldTotalClosing += element.closing?.quantity ?? 0;
+                            } else {
+                                oldTotalClosing += element.closing?.amount ?? 0;
+                            }
+                        });
+                        this.stockGroupClosingBalance.closing = totalClosing + oldTotalClosing;
+                        this.stockGroupClosingBalance.changeValue = totalChange;
+                        this.stockGroupClosingBalance.newValue = totalNewValue + oldNewValue;
+                    } else {
+                        data = variantWise?.map(result => ({
+                            ...result,
+                            newValue: 0,
+                            changeValue: 0
+                        }));
+                    }
+
                     if (!this.referenceNumber) {
                         this.stockGroupClosingBalance = {
                             newValue: 0,
@@ -534,9 +582,6 @@ export class AdjustInventoryComponent implements OnInit {
         this.stockReportRequest.count = API_COUNT_LIMIT;
         this.stockReportRequest.inventoryType = this.inventoryType?.toUpperCase();
         this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
-        if (this.referenceNumber) {
-            this.stockReportRequest.inventoryAdjustmentRefNo = this.referenceNumber;
-        }
         if (event && event.additional?.type === 'STOCK GROUP') {
             this.isEntityStockGroup = true;
             this.stockReportRequest.stockUniqueNames = [];
@@ -689,14 +734,28 @@ export class AdjustInventoryComponent implements OnInit {
      * @memberof AdjustInventoryComponent
      */
     public calculateInventory(): void {
-        this.stockGroupClosingBalance.changeValue = 0;
-        this.stockGroupClosingBalance.newValue = 0;
+        if (!this.referenceNumber) {
+            this.stockGroupClosingBalance.changeValue = 0;
+            this.stockGroupClosingBalance.newValue = 0;
+        } else {
+            this.dataSource.data =  this.dataSource.data.map(result =>( {
+                ...result,
+                changeValue: this.adjustInventoryCreateEditForm?.value?.changeInValue
+            }));
+        }
         if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
             this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.QuantityWise &&
             this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Percentage) {
 
-            let changeInValue = this.stockGroupClosingBalance.closing?.closing?.quantity * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
-            let newValue = this.stockGroupClosingBalance.closing?.closing?.quantity - changeInValue;
+            let changeInValue;
+            let newValue;
+            if (this.referenceNumber) {
+                changeInValue = this.stockGroupClosingBalance.closing * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
+                newValue = this.stockGroupClosingBalance.closing - changeInValue;
+            } else {
+                changeInValue = this.stockGroupClosingBalance.closing?.closing?.quantity * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
+                newValue = this.stockGroupClosingBalance.closing?.closing?.quantity - changeInValue;
+            }
 
             this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
             this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
@@ -712,15 +771,27 @@ export class AdjustInventoryComponent implements OnInit {
         if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
             this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.QuantityWise
             && this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Value) {
-            let changeInValue = this.adjustInventoryCreateEditForm?.value?.changeInValue * this.dataSource?.data?.length;
-            let newValue = this.stockGroupClosingBalance.closing?.closing?.quantity - changeInValue;
+
+            let changeInValue;
+            let newValue;
+            if (this.referenceNumber) {
+                changeInValue = this.adjustInventoryCreateEditForm?.value?.changeInValue * this.dataSource?.data?.length;;
+                newValue = this.stockGroupClosingBalance.closing - changeInValue;
+            } else {
+                changeInValue = this.adjustInventoryCreateEditForm?.value?.changeInValue * this.dataSource?.data?.length;
+                newValue = this.stockGroupClosingBalance.closing?.closing?.quantity - changeInValue;
+            }
 
             this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
             this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
             const data = this.dataSource.data.map(result => {
+
+                if (this.referenceNumber) {
+                    result.closingAfterAdjustment = Number(result.closingBeforeAdjustment) - Number(result.changeValue);
+                }
                 result.changeValue = this.adjustInventoryCreateEditForm?.value?.changeInValue;
                 result.newValue = giddhRoundOff(result.closing?.quantity - result.changeValue, this.giddhBalanceDecimalPlaces);
-                return result
+                return result;
             }) || [];
             this.dataSource.data = data;
         }
@@ -729,8 +800,16 @@ export class AdjustInventoryComponent implements OnInit {
             this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.ValueWise &&
             this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Percentage) {
 
-            let changeInValue = this.stockGroupClosingBalance.closing?.closing?.amount * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
-            let newValue = this.stockGroupClosingBalance.closing?.closing?.amount - changeInValue;
+            let changeInValue;
+            let newValue;
+            if (this.referenceNumber) {
+                changeInValue = this.stockGroupClosingBalance.closing * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
+                newValue = this.stockGroupClosingBalance.closing - changeInValue;
+            } else {
+                changeInValue = this.stockGroupClosingBalance.closing?.closing?.amount * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
+                newValue = this.stockGroupClosingBalance.closing?.closing?.amount - changeInValue;
+            }
+
 
             this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
             this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
@@ -748,8 +827,16 @@ export class AdjustInventoryComponent implements OnInit {
             this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.ValueWise &&
             this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Value) {
 
-            let changeInValue = this.adjustInventoryCreateEditForm?.value?.changeInValue * this.dataSource?.data?.length;
-            let newValue = this.stockGroupClosingBalance.closing?.closing?.amount - changeInValue;
+
+            let changeInValue;
+            let newValue;
+            if (this.referenceNumber) {
+                changeInValue = this.adjustInventoryCreateEditForm?.value?.changeInValue * this.dataSource?.data?.length;
+                newValue = this.stockGroupClosingBalance.closing - changeInValue;
+            } else {
+                changeInValue = this.adjustInventoryCreateEditForm?.value?.changeInValue * this.dataSource?.data?.length;
+                newValue = this.stockGroupClosingBalance.closing?.closing?.amount - changeInValue;
+            }
 
             this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
             this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
