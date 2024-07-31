@@ -93,7 +93,7 @@
                             (scrollEnd)="handleSearchInventoryScrollEnd()"
                             (dynamicSearchedQuery)="searchInventory($event)"
                             [required]="true"
-                            (selectedOption)="selectInventory($event)"
+                            (selectedOption)="selectInventory($event, true)"
                             (onClear)="adjustInventoryCreateEditForm.get('entityUniqueName')?.patchValue(null)"
                             [showError]="
                                 isFormSubmitted && !adjustInventoryCreateEditForm.get('entityUniqueName')?.value
@@ -111,7 +111,9 @@
                             [required]="true"
                             [readonly]="apiCallInProgress"
                             (selectedOption)="
-                                calculateInventory(adjustInventoryCreateEditForm, stockGroupClosingBalance)
+                                updateMode
+                                    ? resetInventory()
+                                    : calculateInventory(adjustInventoryCreateEditForm, stockGroupClosingBalance)
                             "
                             (onClear)="adjustInventoryCreateEditForm.get('adjustmentMethod')?.patchValue(null)"
                             [showError]="
@@ -178,10 +180,12 @@
                                                             [name]="'calculationMethod'"
                                                             [placeholder]="commonLocaleData?.app_select_method"
                                                             (selectionChange)="
-                                                                calculateInventory(
-                                                                    adjustInventoryCreateEditForm,
-                                                                    stockGroupClosingBalance
-                                                                )
+                                                                updateMode
+                                                                    ? resetInventory()
+                                                                    : calculateInventory(
+                                                                          adjustInventoryCreateEditForm,
+                                                                          stockGroupClosingBalance
+                                                                      )
                                                             "
                                                         >
                                                             <mat-option
@@ -354,7 +358,11 @@
                                     <ng-container matColumnDef="newValue">
                                         <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
                                         <td mat-cell *matCellDef="let element" class="text-right">
-                                            {{ element?.closingAfterAdjustment  ? element?.closingAfterAdjustment: element?.newValue }}
+                                            {{
+                                                element?.closingAfterAdjustment
+                                                    ? element?.closingAfterAdjustment
+                                                    : element?.newValue
+                                            }}
                                         </td>
                                     </ng-container>
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
