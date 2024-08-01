@@ -19,6 +19,7 @@ import { API_COUNT_LIMIT, PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { CompanyListDialogComponent } from '../company-list-dialog/company-list-dialog.component';
 import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.component';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
+import { PaymentMethodDialogComponent } from '../payment-method-dialog/payment-method-dialog.component';
 @Component({
     selector: 'subscription-list',
     templateUrl: './subscription-list.component.html',
@@ -632,8 +633,13 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-
-    public addCompanyInSubscription(company: any): void {
+/**
+ * This will be use for add company in subscription
+ *
+ * @param {*} company
+ * @memberof SubscriptionListComponent
+ */
+public addCompanyInSubscription(company: any): void {
         this.menu.closeMenu();
         this.subscriptionMove = false;
         this.selectedCompany = company;
@@ -642,6 +648,31 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             role: 'alertdialog',
             ariaLabel: 'moveDialog'
         });
+}
+
+/**
+ * This will be use for manage payment methods
+ *
+ * @param {*} event
+ * @memberof SubscriptionListComponent
+ */
+public managePaymentMethod(event: any): void {
+    this.menu?.closeMenu();
+    this.subscriptionMove = true;
+    let data = {
+        rowData: event,
+        subscriptions: this.subscriptions,
+        selectedCompany: this.selectedCompany,
+        localeData: this.localeData,
+        commonLocaleData: this.commonLocaleData,
+        subscriptionMove: this.subscriptionMove
+    }
+    this.dialog.open(PaymentMethodDialogComponent, {
+        data: data,
+        panelClass: 'subscription-sidebar',
+        role: 'alertdialog',
+        ariaLabel: 'paymentDialog'
+    });
     }
 
     /**

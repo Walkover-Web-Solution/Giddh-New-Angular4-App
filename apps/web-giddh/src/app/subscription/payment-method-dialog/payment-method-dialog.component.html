@@ -1,0 +1,99 @@
+<div class="modal-header d-flex align-items-center activity-header">
+    <h3>{{ localeData?.company_list }}</h3>
+    <button aria-hidden="true" class="close" mat-dialog-close>×</button>
+</div>
+<mat-dialog-content class="w-100">
+    <div #companyList class="logs-content">
+        <div class="col-lg-12">
+            <div class="d-flex pd-t15 pd-b15 align-items-center justify-content-between">
+                <div class="d-flex align-items-center">
+                    <form [formGroup]="paymentMethodForm">
+                        <reactive-dropdown-field
+                            [label]="'Provider'"
+                            [placeholder]="'Select Provider'"
+                            [options]="paymentProviderList"
+                            formControlName="paymentProvider"
+                            [labelValue]="paymentProvideLabel ?? ''"
+                            (selectedOption)="paymentProvideLabel = $event?.label"
+                            [required]="true"
+                        >
+                        </reactive-dropdown-field>
+                    </form>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-sm-4 pr-0">
+                    <div class="d-flex column-gap15">
+                        <button
+                            aria-label="save"
+                            mat-stroked-button
+                            color="primary"
+                            type="button"
+                            (click)="savePaymentProvider()"
+                        >
+                            {{ commonLocaleData?.app_save }}
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="pull-right d-flex column-gap15">
+                        <button
+                            aria-label="clear"
+                            mat-stroked-button
+                            type="button"
+                            class="btn-sm mr-0"
+                            (click)="resetForm()"
+                        >
+                            {{ commonLocaleData?.app_clear }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- <div *ngIf="viewSubscriptionDataInProgress$ | async">
+                <giddh-page-loader></giddh-page-loader>
+            </div> -->
+            <!-- *ngIf="!(viewSubscriptionDataInProgress$ | async)" -->
+            <mat-card class="outline-card mt-4" *ngFor="let payment of paymentMethodList">
+                <mat-card-content>
+                    <div class="view-subscription">
+                        <div class="d-flex justify-content-between mr-b2 pt-3">
+                            <div class="view-right d-flex align-items-end">
+                                <p class="light-gray mb-1 font-12">Bank Name</p>
+                                <span class="font-20">
+                                    <p class="mb-1 font-16">{{ payment?.bankName }}</p>
+                                </span>
+                            </div>
+                            <div>
+                                <p class="light-gray mb-1 font-12">Account Holder Name</p>
+                                <span class="font-20">
+                                    <p class="mb-1 font-16">{{ payment?.accountHolderName }}</p>
+                                </span>
+                            </div>
+                            <div>
+                                <p class="light-gray mb-1 font-12">Account Number</p>
+                                <span class="font-20">
+                                    <p class="mb-1 font-16">{{ payment?.accountNumber }}</p>
+                                </span>
+                            </div>
+                            <div>
+                                <p class="light-gray mb-1 font-12">Currency</p>
+                                <span class="font-20">
+                                    <p class="mb-1 font-16">{{ payment?.currency }}</p>
+                                </span>
+                            </div>
+                            <div>
+                                <p class="light-gray mb-1 font-12">Action</p>
+                                <span class="font-20">
+                                    <p class="mb-1 font-16">{{ payment?.accountNumber }}</p>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <!-- <div class="no-data" *ngIf="!dataSource?.filteredData?.length">
+                <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
+            </div> -->
+        </div>
+    </div>
+</mat-dialog-content>

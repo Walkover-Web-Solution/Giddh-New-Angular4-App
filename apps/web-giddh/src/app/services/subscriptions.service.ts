@@ -488,4 +488,32 @@ export class SubscriptionsService {
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
+
+    public savePaymentProviderBySubscriptionID(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.SAVE_PAYMENT_METHOD,
+            model)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    data.queryString = {};
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
+    }
+
+    public getPaymentProviderListBySubscriptionID(subscriptionId: any): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_PAYMENT_METHODS
+            ?.replace(':subscriptionId', encodeURIComponent(subscriptionId)))
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    data.queryString = {};
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
+    }
 }

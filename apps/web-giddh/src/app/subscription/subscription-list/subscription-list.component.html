@@ -258,7 +258,6 @@
                                     <button mat-menu-item (click)="viewSubscription(element)">
                                         {{ localeData?.view_subscription }}
                                     </button>
-
                                     <button
                                         *ngIf="element?.isOwner"
                                         mat-menu-item
@@ -294,8 +293,23 @@
                                     >
                                         {{ commonLocaleData?.app_create + " " + commonLocaleData?.app_company }}
                                     </button>
-                                    <button *ngIf="element?.companies?.length === 1" mat-menu-item (click)="addCompanyInSubscription(element)">
+                                    <button
+                                        *ngIf="element?.companies?.length === 1"
+                                        mat-menu-item
+                                        (click)="addCompanyInSubscription(element)"
+                                    >
                                         {{ localeData?.add_company }}
+                                    </button>
+                                    <button
+                                        mat-menu-item
+                                        (click)="managePaymentMethod(element)"
+                                        *ngIf="
+                                            element?.isOwner &&
+                                            element?.region?.code === 'GBR' &&
+                                            activeCompany?.planVersion === 2
+                                        "
+                                    >
+                                        Manage Payment Methods
                                     </button>
                                 </div>
                             </mat-menu>
