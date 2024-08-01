@@ -77,6 +77,7 @@
                                                         [labelValue]="addressForm?.get('stateLabel')?.value ? addressForm?.get('stateLabel')?.value : ''"
                                                         [cssClass]="w-100"
                                                         [required]="true"
+                                                        [ngClass]="{ 'readonly-field': isReadonly()}"
                                                     >
                                                     </reactive-dropdown-field>
                                                 </ng-container>
