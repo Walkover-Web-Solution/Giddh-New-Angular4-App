@@ -266,55 +266,11 @@ export class AdjustInventoryComponent implements OnInit {
 
                 if (variantWise) {
                     let data;
-                    if (this.referenceNumber) {
-                        let variantMappedData = variantWise?.map(result => ({
-                            ...result,
-                            newValue: this.adjustInventoryCreateEditForm.get("adjustmentMethod")?.value ===
-                                "QUANTITY_WISE" ? result.closing.quantity - this.adjustInventoryCreateEditForm.get("changeInValue")?.value : result.closing.amount - this.adjustInventoryCreateEditForm.get("changeInValue")?.value,
-                            changeValue: this.adjustInventoryCreateEditForm.get("changeInValue")?.value,
-                        }));
-                        console.log(variantMappedData, this.inventoryData, this.adjustInventoryCreateEditForm.value);
-                        const inventoryMap = new Map(this.inventoryData.map(item => [item.variant.uniqueName, item]));
-                        const mainResult = [];
-                        const variantWiseOnly = [];
-                        variantMappedData.forEach(result => {
-                            const updatedVariant = inventoryMap.get(result.variant.uniqueName);
-                            if (updatedVariant) {
-                                mainResult.push(updatedVariant);
-                            } else {
-                                variantWiseOnly.push(result);
-                            }
-                        });
-                        data = [...mainResult, ...variantWiseOnly];
-                        let mappedData = cloneDeep(data);
-                        let totalClosing = 0;
-                        let totalChange = 0;
-                        let totalNewValue = 0;
-                        let oldTotalClosing = 0;
-                        let oldNewValue = 0;
-                        mappedData?.forEach(element => {
-                            totalClosing += element.closingBeforeAdjustment ?? 0;
-                            totalChange += element.changeValue ?? 0;
-                            totalNewValue += element.closingAfterAdjustment ?? 0;
-                            oldNewValue += element?.newValue ?? 0;
-                            if (this.adjustInventoryCreateEditForm.get("adjustmentMethod")?.value ===
-                                "QUANTITY_WISE") {
-                                oldTotalClosing += element.closing?.quantity ?? 0;
-                            } else {
-                                oldTotalClosing += element.closing?.amount ?? 0;
-                            }
-                        });
-                        this.stockGroupClosingBalance.closing = totalClosing + oldTotalClosing;
-                        this.stockGroupClosingBalance.changeValue = totalChange;
-                        this.stockGroupClosingBalance.newValue = totalNewValue + oldNewValue;
-                    } else {
-                        data = variantWise?.map(result => ({
-                            ...result,
-                            newValue: 0,
-                            changeValue: 0
-                        }));
-                    }
-
+                    data = variantWise?.map(result => ({
+                        ...result,
+                        newValue: 0,
+                        changeValue: 0
+                    }));
                     if (!this.referenceNumber) {
                         this.stockGroupClosingBalance = {
                             newValue: 0,
@@ -331,6 +287,9 @@ export class AdjustInventoryComponent implements OnInit {
                     this.dataSource = new MatTableDataSource<any>(data);
                     this.checkTableCheckBox();
                     this.componentStore.getStockGroupClosingBalance(this.balanceReqObj);
+                    if (this.referenceNumber) {
+                        this.calculateInventory();
+                    }
                 } else {
                     this.dataSource = new MatTableDataSource<any>([]);
                     this.checkTableCheckBox();
@@ -737,16 +696,51 @@ export class AdjustInventoryComponent implements OnInit {
      */
     public calculateInventory(): void {
         if (this.referenceNumber) {
-            console.log(this.dataSource.data, this.adjustInventoryCreateEditForm.value);
-            this.dataSource.data = this.dataSource?.data?.map(result => ({
-                ...result,
-                changeValue: this.adjustInventoryCreateEditForm?.value?.changeInValue
-            }));
+            let data;
+            const inventoryMap = new Map(this.inventoryData.map(item => [item.variant.uniqueName, item]));
+            const mainResult = [];
+            const variantWiseOnly = [];
+            this.dataSource.data.forEach(result => {
+                const updatedVariant = inventoryMap.get(result.variant.uniqueName);
+                if (updatedVariant) {
+                    mainResult.push(updatedVariant);
+                } else {
+                    variantWiseOnly.push(result);
+                }
+            });
+            data = [...mainResult, ...variantWiseOnly];
+            let mappedData = cloneDeep(data);
+            let totalClosing = 0;
+            let totalChange = 0;
+            let totalNewValue = 0;
+            let oldTotalClosing = 0;
+            let oldNewValue = 0;
+            mappedData?.forEach(element => {
+                totalClosing += element.closingBeforeAdjustment ?? 0;
+                totalChange += element.changeValue ?? 0;
+                totalNewValue += element.closingAfterAdjustment ?? 0;
+                oldNewValue += element?.newValue ?? 0;
+                if (this.adjustInventoryCreateEditForm.get("adjustmentMethod")?.value ===
+                    "QUANTITY_WISE") {
+                    oldTotalClosing += element.closing?.quantity ?? 0;
+                } else {
+                    oldTotalClosing += element.closing?.amount ?? 0;
+                }
+            });
+            this.stockGroupClosingBalance.closing = totalClosing + oldTotalClosing;
+            this.stockGroupClosingBalance.changeValue = totalChange;
+            this.stockGroupClosingBalance.newValue = totalNewValue + oldNewValue;
+            data = data.map(item => {
+                return {
+                    ...item,
+                    checked: item.hasOwnProperty('closingBeforeAdjustment')
+                };
+            });
+         this.dataSource = new MatTableDataSource<any>(data);
 
             if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
                 this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.QuantityWise &&
                 this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Percentage) {
-
                 let changeInValue = this.stockGroupClosingBalance.closing * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
                 let newValue = this.stockGroupClosingBalance.closing - changeInValue;
 
@@ -755,11 +749,12 @@ export class AdjustInventoryComponent implements OnInit {
                 this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
 
                 const data = this.dataSource?.data?.map(result => {
-                    result.changeValue = result.closing?.quantity * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
-                    result.newValue = giddhRoundOff(result.closing?.quantity - result.changeValue, this.giddhBalanceDecimalPlaces);
+                    result.changeValue = (result.closing?.quantity ?? result?.closingBeforeAdjustment) * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
+                    result.newValue = giddhRoundOff((result.closing?.quantity ?? result?.closingBeforeAdjustment) - result.changeValue, this.giddhBalanceDecimalPlaces);
+
                     return result
                 }) || [];
-                this.dataSource.data = data;
+                this.dataSource = new MatTableDataSource<any>(data);
             }
 
             if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
@@ -771,14 +766,14 @@ export class AdjustInventoryComponent implements OnInit {
 
                 this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
                 this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
-                const data = this.dataSource?.data?.map(result => {
 
+                const data = this.dataSource?.data?.map(result => {
                     result.closingAfterAdjustment = Number(result.closingBeforeAdjustment) - Number(result.changeValue);
                     result.changeValue = this.adjustInventoryCreateEditForm?.value?.changeInValue;
-                    result.newValue = giddhRoundOff(result.closing?.quantity - result.changeValue, this.giddhBalanceDecimalPlaces);
+                    result.newValue = giddhRoundOff((result.closing?.quantity ?? result?.closingBeforeAdjustment) - result.changeValue, this.giddhBalanceDecimalPlaces);
                     return result;
                 }) || [];
-                this.dataSource.data = data;
+                this.dataSource = new MatTableDataSource<any>(data);
             }
 
             if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
@@ -793,11 +788,11 @@ export class AdjustInventoryComponent implements OnInit {
                 this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
 
                 const data = this.dataSource?.data?.map(result => {
-                    result.changeValue = result.closing?.amount * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
-                    result.newValue = giddhRoundOff(result.closing?.amount - result.changeValue, this.giddhBalanceDecimalPlaces);
+                    result.changeValue = (result.closing?.amount ?? result?.closingBeforeAdjustment) * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
+                    result.newValue = giddhRoundOff((result.closing?.amount ?? result?.closingBeforeAdjustment) - result.changeValue, this.giddhBalanceDecimalPlaces);
                     return result
                 }) || [];
-                this.dataSource.data = data;
+                this.dataSource = new MatTableDataSource<any>(data);
             }
 
             if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
@@ -812,10 +807,10 @@ export class AdjustInventoryComponent implements OnInit {
 
                 const data = this.dataSource?.data?.map(result => {
                     result.changeValue = this.adjustInventoryCreateEditForm?.value?.changeInValue;
-                    result.newValue = giddhRoundOff(result.closing?.amount - result.changeValue, this.giddhBalanceDecimalPlaces);
+                    result.newValue = giddhRoundOff((result.closing?.amount ?? result?.closingBeforeAdjustment) - result.changeValue, this.giddhBalanceDecimalPlaces);
                     return result
                 }) || [];
-                this.dataSource.data = data;
+                this.dataSource = new MatTableDataSource<any>(data);
             }
         } else {
             this.stockGroupClosingBalance.changeValue = 0;
@@ -900,6 +895,7 @@ export class AdjustInventoryComponent implements OnInit {
      * @memberof AdjustInventoryComponent
      */
     public isAllSelected(): boolean {
+        console.log(this.selection, this.dataSource);
         const numSelected = this.selection.selected.length;
         const numRows = this.dataSource?.data?.length;
         return numSelected === numRows;
@@ -914,6 +910,7 @@ export class AdjustInventoryComponent implements OnInit {
         if (this.isEntityStockGroup) {
             this.dataSource?.filteredData?.forEach(row => this.selection.select(row));
         } else {
+            console.log(this.isAllSelected());
             // Toggle selection based on current state
             if (this.isAllSelected()) {
                 this.selection.clear();
@@ -982,13 +979,17 @@ export class AdjustInventoryComponent implements OnInit {
             if (!bySelectInventory) {
                 this.adjustInventoryCreateEditForm.get("entityName")?.patchValue(null);
                 this.adjustInventoryCreateEditForm.get("entityUniqueName")?.patchValue(null);
-
             } else {
                 this.dataSource = [];
+                this.selection.clear();
+                this.inventoryData = [];
+
                 this.adjustInventoryCreateEditForm.get("changeInValue")?.patchValue(null);
                 this.adjustInventoryCreateEditForm.get("adjustmentMethod")?.patchValue(null);
                 this.adjustInventoryCreateEditForm.get("adjustmentMethodName")?.patchValue(null);
                 this.adjustInventoryCreateEditForm.get("calculationMethod")?.patchValue(null);
+                this.adjustInventoryCreateEditForm.get("entityName")?.patchValue(null);
+                this.adjustInventoryCreateEditForm.get("entityUniqueName")?.patchValue(null);
                 this.entity = {
                     entityName: '',
                     balance: ''
@@ -1020,16 +1021,20 @@ export class AdjustInventoryComponent implements OnInit {
      */
     public checkTableCheckBox(): void {
         const shouldMasterToggle = this.isEntityStockGroup || (this.referenceNumber && !this.isEntityStockGroup);
-
-        if (shouldMasterToggle) {
+        if (this.referenceNumber) {
+            this.selection.clear();
             this.masterToggle();
         } else {
-            this.selection.clear();
+            if (shouldMasterToggle) {
+                this.masterToggle();
+            } else {
+                this.selection.clear();
+            }
+            this.showHideTable = false;
+            setTimeout(() => {
+                this.showHideTable = true;
+            });
         }
-        this.showHideTable = false;
-        setTimeout(() => {
-            this.showHideTable = true;
-        });
     }
 
 }
