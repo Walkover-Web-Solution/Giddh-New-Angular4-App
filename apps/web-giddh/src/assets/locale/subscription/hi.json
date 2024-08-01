@@ -146,5 +146,10 @@
         "gst_direct":"जीएसटी डायरेक्ट फिलिंग",
         "e_invoice":"ई-चालान",
         "plan_purchased_success_message":"योजना सफलतापूर्वक खरीदी गई",
-        "confirm_archive_message": "क्या आप वाकई कंपनी को संग्रहित करना चाहते हैं?"
+        "confirm_archive_message": "क्या आप वाकई कंपनी को संग्रहित करना चाहते हैं?",
+        "gocardless":"GOCARDLESS",
+        "confirm_payment_delete_message": "क्या आप वाकई भुगतान विधि को हटाना चाहते हैं?",
+        "manage_payment_methods": "भुगतान विधियों का प्रबंधन करें",
+        "select_provider": "प्रदाता चुनें",
+        "payment_provider": "भुगतान प्रदाता"
 	}

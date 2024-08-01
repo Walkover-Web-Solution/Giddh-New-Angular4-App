@@ -116,5 +116,9 @@
         "e_invoice":"E-invoice",
         "plan_purchased_success_message":"Plan purchased successfully",
         "confirm_archive_message": "Are you sure you want to archive the company?",
-        "gocardless":"GOCARDLESS"
+        "gocardless":"GOCARDLESS",
+        "confirm_payment_delete_message": "Are you sure you want to delete the payment method?",
+        "manage_payment_methods": "Manage Payment Methods",
+        "select_provider": "Select Provider",
+        "payment_provider": "Payment Provider"
     }

@@ -24,6 +24,8 @@ export const SUBSCRIPTION_V2_API = {
     UPDATE_PLAN: 'v2/subscription/update',
     BUY_PLAN_BY_GOCARDLESS: 'v2/subscription/buy-plan',
     GET_COMPANIES_BY_SUBSCRIPTION_ID: 'v2/subscription/:subscriptionId/company-list?page=:page&count=:count&q=:q',
+    SET_DEFAULT_PAYMENT_METHOD: 'v2/subscription/payment-method/:paymentUniqueName',
     SAVE_PAYMENT_METHOD: 'v2/subscription/add-payment-method',
-    GET_PAYMENT_METHODS:'v2/subscription/:subscriptionId/payment-methods'
+    GET_PAYMENT_METHODS: 'v2/subscription/:subscriptionId/payment-methods',
+    DELETE_PAYMENT_METHOD:'v2/subscription/payment-method/:paymentUniqueName'
 };

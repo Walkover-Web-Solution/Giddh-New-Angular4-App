@@ -476,7 +476,7 @@ export class SubscriptionsService {
         return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_COMPANIES_BY_SUBSCRIPTION_ID
             ?.replace(':subscriptionId', encodeURIComponent(model?.subscriptionId))
             ?.replace(":page", model.page)
-            ?.replace(":q", model.q ??'')
+            ?.replace(":q", model.q ?? '')
             ?.replace(":count", model.count))
             .pipe(
                 map((res) => {
@@ -511,6 +511,46 @@ export class SubscriptionsService {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
                     data.queryString = {};
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
+    }
+
+    /**
+     * Delete payment method
+     *
+     * @param {string} paymentUniqueName
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SubscriptionsService
+     */
+    public deletePaymentMethod(paymentUniqueName: string): Observable<BaseResponse<any, any>> {
+        return this.http.delete(this.config.apiUrl + SUBSCRIPTION_V2_API.DELETE_PAYMENT_METHOD
+            ?.replace(':paymentUniqueName', encodeURIComponent(paymentUniqueName ?? '')), '')
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
+    }
+
+    /**
+     * Set default method
+     *
+     * @param {string} paymentUniqueName
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SubscriptionsService
+     */
+    public setDetaultPaymentMethod(paymentUniqueName: string): Observable<BaseResponse<any, any>> {
+        return this.http.patch(this.config.apiUrl + SUBSCRIPTION_V2_API.SET_DEFAULT_PAYMENT_METHOD
+            ?.replace(':paymentUniqueName', encodeURIComponent(paymentUniqueName ?? '')), '')
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
                     return data;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
