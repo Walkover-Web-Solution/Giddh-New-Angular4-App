@@ -767,6 +767,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             scriptTag.src = 'https://cdn.headwayapp.co/widget.js';
             scriptTag.type = 'text/javascript';
             scriptTag.defer = true;
+            scriptTag.async = true;
             document.body.appendChild(scriptTag);
         } else {
             window['Headway'].init();
