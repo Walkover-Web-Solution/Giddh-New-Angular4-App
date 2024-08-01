@@ -266,13 +266,14 @@ export class AdjustInventoryComponent implements OnInit {
 
                 if (variantWise) {
                     let data;
-                    let variantMappedData = variantWise?.map(result => ({
-                        ...result,
-                        newValue: this.adjustInventoryCreateEditForm.get("adjustmentMethod")?.value ===
-                            "QUANTITY_WISE" ? result.closing.quantity - this.adjustInventoryCreateEditForm.get("changeInValue")?.value : result.closing.amount - this.adjustInventoryCreateEditForm.get("changeInValue")?.value,
-                        changeValue: this.adjustInventoryCreateEditForm.get("changeInValue")?.value,
-                    }));
                     if (this.referenceNumber) {
+                        let variantMappedData = variantWise?.map(result => ({
+                            ...result,
+                            newValue: this.adjustInventoryCreateEditForm.get("adjustmentMethod")?.value ===
+                                "QUANTITY_WISE" ? result.closing.quantity - this.adjustInventoryCreateEditForm.get("changeInValue")?.value : result.closing.amount - this.adjustInventoryCreateEditForm.get("changeInValue")?.value,
+                            changeValue: this.adjustInventoryCreateEditForm.get("changeInValue")?.value,
+                        }));
+                        console.log(variantMappedData, this.inventoryData, this.adjustInventoryCreateEditForm.value);
                         const inventoryMap = new Map(this.inventoryData.map(item => [item.variant.uniqueName, item]));
                         const mainResult = [];
                         const variantWiseOnly = [];
@@ -735,121 +736,161 @@ export class AdjustInventoryComponent implements OnInit {
      * @memberof AdjustInventoryComponent
      */
     public calculateInventory(): void {
-        if (!this.referenceNumber) {
-            this.stockGroupClosingBalance.changeValue = 0;
-            this.stockGroupClosingBalance.newValue = 0;
-        } else {
+        if (this.referenceNumber) {
+            console.log(this.dataSource.data, this.adjustInventoryCreateEditForm.value);
             this.dataSource.data = this.dataSource?.data?.map(result => ({
                 ...result,
                 changeValue: this.adjustInventoryCreateEditForm?.value?.changeInValue
             }));
-        }
-        if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
-            this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.QuantityWise &&
-            this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Percentage) {
 
-            let changeInValue;
-            let newValue;
-            if (this.referenceNumber) {
-                changeInValue = this.stockGroupClosingBalance.closing * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
-                newValue = this.stockGroupClosingBalance.closing - changeInValue;
-            } else {
-                changeInValue = this.stockGroupClosingBalance.closing?.closing?.quantity * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
-                newValue = this.stockGroupClosingBalance.closing?.closing?.quantity - changeInValue;
+            if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
+                this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.QuantityWise &&
+                this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Percentage) {
+
+                let changeInValue = this.stockGroupClosingBalance.closing * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
+                let newValue = this.stockGroupClosingBalance.closing - changeInValue;
+
+
+                this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
+                this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
+
+                const data = this.dataSource?.data?.map(result => {
+                    result.changeValue = result.closing?.quantity * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
+                    result.newValue = giddhRoundOff(result.closing?.quantity - result.changeValue, this.giddhBalanceDecimalPlaces);
+                    return result
+                }) || [];
+                this.dataSource.data = data;
             }
 
-            this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
-            this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
+            if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
+                this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.QuantityWise
+                && this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Value) {
 
-            const data = this.dataSource?.data?.map(result => {
-                result.changeValue = result.closing?.quantity * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
-                result.newValue = giddhRoundOff(result.closing?.quantity - result.changeValue, this.giddhBalanceDecimalPlaces);
-                return result
-            }) || [];
-            this.dataSource.data = data;
-        }
+                let changeInValue = this.adjustInventoryCreateEditForm?.value?.changeInValue * this.dataSource?.data?.length;;
+                let newValue = this.stockGroupClosingBalance.closing - changeInValue;
 
-        if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
-            this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.QuantityWise
-            && this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Value) {
+                this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
+                this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
+                const data = this.dataSource?.data?.map(result => {
 
-            let changeInValue;
-            let newValue;
-            if (this.referenceNumber) {
-                changeInValue = this.adjustInventoryCreateEditForm?.value?.changeInValue * this.dataSource?.data?.length;;
-                newValue = this.stockGroupClosingBalance.closing - changeInValue;
-            } else {
-                changeInValue = this.adjustInventoryCreateEditForm?.value?.changeInValue * this.dataSource?.data?.length;
-                newValue = this.stockGroupClosingBalance.closing?.closing?.quantity - changeInValue;
-            }
-
-            this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
-            this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
-            const data = this.dataSource?.data?.map(result => {
-
-                if (this.referenceNumber) {
                     result.closingAfterAdjustment = Number(result.closingBeforeAdjustment) - Number(result.changeValue);
-                }
-                result.changeValue = this.adjustInventoryCreateEditForm?.value?.changeInValue;
-                result.newValue = giddhRoundOff(result.closing?.quantity - result.changeValue, this.giddhBalanceDecimalPlaces);
-                return result;
-            }) || [];
-            this.dataSource.data = data;
-        }
-
-        if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
-            this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.ValueWise &&
-            this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Percentage) {
-
-            let changeInValue;
-            let newValue;
-            if (this.referenceNumber) {
-                changeInValue = this.stockGroupClosingBalance.closing * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
-                newValue = this.stockGroupClosingBalance.closing - changeInValue;
-            } else {
-                changeInValue = this.stockGroupClosingBalance.closing?.closing?.amount * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
-                newValue = this.stockGroupClosingBalance.closing?.closing?.amount - changeInValue;
+                    result.changeValue = this.adjustInventoryCreateEditForm?.value?.changeInValue;
+                    result.newValue = giddhRoundOff(result.closing?.quantity - result.changeValue, this.giddhBalanceDecimalPlaces);
+                    return result;
+                }) || [];
+                this.dataSource.data = data;
             }
 
+            if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
+                this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.ValueWise &&
+                this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Percentage) {
 
-            this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
-            this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
-
-            const data = this.dataSource?.data?.map(result => {
-                result.changeValue = result.closing?.amount * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
-                result.newValue = giddhRoundOff(result.closing?.amount - result.changeValue, this.giddhBalanceDecimalPlaces);
-                return result
-            }) || [];
-            this.dataSource.data = data;
-
-        }
-
-        if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
-            this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.ValueWise &&
-            this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Value) {
+                let changeInValue = this.stockGroupClosingBalance.closing * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
+                let newValue = this.stockGroupClosingBalance.closing - changeInValue;
 
 
-            let changeInValue;
-            let newValue;
-            if (this.referenceNumber) {
-                changeInValue = this.adjustInventoryCreateEditForm?.value?.changeInValue * this.dataSource?.data?.length;
-                newValue = this.stockGroupClosingBalance.closing - changeInValue;
-            } else {
-                changeInValue = this.adjustInventoryCreateEditForm?.value?.changeInValue * this.dataSource?.data?.length;
-                newValue = this.stockGroupClosingBalance.closing?.closing?.amount - changeInValue;
+                this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
+                this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
+
+                const data = this.dataSource?.data?.map(result => {
+                    result.changeValue = result.closing?.amount * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
+                    result.newValue = giddhRoundOff(result.closing?.amount - result.changeValue, this.giddhBalanceDecimalPlaces);
+                    return result
+                }) || [];
+                this.dataSource.data = data;
             }
 
-            this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
-            this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
+            if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
+                this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.ValueWise &&
+                this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Value) {
 
-            const data = this.dataSource?.data?.map(result => {
-                result.changeValue = this.adjustInventoryCreateEditForm?.value?.changeInValue;
-                result.newValue = giddhRoundOff(result.closing?.amount - result.changeValue, this.giddhBalanceDecimalPlaces);
-                return result
-            }) || [];
-            this.dataSource.data = data;
+                let changeInValue = this.adjustInventoryCreateEditForm?.value?.changeInValue * this.dataSource?.data?.length;
+                let newValue = this.stockGroupClosingBalance.closing - changeInValue;
+
+                this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
+                this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
+
+                const data = this.dataSource?.data?.map(result => {
+                    result.changeValue = this.adjustInventoryCreateEditForm?.value?.changeInValue;
+                    result.newValue = giddhRoundOff(result.closing?.amount - result.changeValue, this.giddhBalanceDecimalPlaces);
+                    return result
+                }) || [];
+                this.dataSource.data = data;
+            }
+        } else {
+            this.stockGroupClosingBalance.changeValue = 0;
+            this.stockGroupClosingBalance.newValue = 0;
+            if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
+                this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.QuantityWise &&
+                this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Percentage) {
+
+                let changeInValue = this.stockGroupClosingBalance.closing?.closing?.quantity * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
+                let newValue = this.stockGroupClosingBalance.closing?.closing?.quantity - changeInValue;
+
+                this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
+                this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
+
+                const data = this.dataSource.data.map(result => {
+                    result.changeValue = result.closing?.quantity * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
+                    result.newValue = giddhRoundOff(result.closing?.quantity - result.changeValue, this.giddhBalanceDecimalPlaces);
+                    return result
+                }) || [];
+                this.dataSource.data = data;
+            }
+
+            if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
+                this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.QuantityWise
+                && this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Value) {
+                let changeInValue = this.adjustInventoryCreateEditForm?.value?.changeInValue * this.dataSource?.data?.length;
+                let newValue = this.stockGroupClosingBalance.closing?.closing?.quantity - changeInValue;
+
+                this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
+                this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
+                const data = this.dataSource.data.map(result => {
+                    result.changeValue = this.adjustInventoryCreateEditForm?.value?.changeInValue;
+                    result.newValue = giddhRoundOff(result.closing?.quantity - result.changeValue, this.giddhBalanceDecimalPlaces);
+                    return result
+                }) || [];
+                this.dataSource.data = data;
+            }
+
+            if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
+                this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.ValueWise &&
+                this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Percentage) {
+
+                let changeInValue = this.stockGroupClosingBalance.closing?.closing?.amount * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
+                let newValue = this.stockGroupClosingBalance.closing?.closing?.amount - changeInValue;
+
+                this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
+                this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
+
+                const data = this.dataSource.data.map(result => {
+                    result.changeValue = result.closing?.amount * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
+                    result.newValue = giddhRoundOff(result.closing?.amount - result.changeValue, this.giddhBalanceDecimalPlaces);
+                    return result
+                }) || [];
+                this.dataSource.data = data;
+
+            }
+
+            if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
+                this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.ValueWise &&
+                this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Value) {
+
+                let changeInValue = this.adjustInventoryCreateEditForm?.value?.changeInValue * this.dataSource?.data?.length;
+                let newValue = this.stockGroupClosingBalance.closing?.closing?.amount - changeInValue;
+
+                this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
+                this.stockGroupClosingBalance.newValue = giddhRoundOff(newValue, this.giddhBalanceDecimalPlaces);
+
+                const data = this.dataSource.data.map(result => {
+                    result.changeValue = this.adjustInventoryCreateEditForm?.value?.changeInValue;
+                    result.newValue = giddhRoundOff(result.closing?.amount - result.changeValue, this.giddhBalanceDecimalPlaces);
+                    return result
+                }) || [];
+                this.dataSource.data = data;
+            }
         }
-        this.checkTableCheckBox();
     }
 
     /**
