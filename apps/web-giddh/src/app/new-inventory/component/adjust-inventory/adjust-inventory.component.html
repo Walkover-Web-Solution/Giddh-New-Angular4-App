@@ -112,7 +112,7 @@
                             [readonly]="apiCallInProgress"
                             (selectedOption)="
                                 updateMode
-                                    ? resetInventory()
+                                    ? resetInventory(true)
                                     : calculateInventory(adjustInventoryCreateEditForm, stockGroupClosingBalance)
                             "
                             (onClear)="adjustInventoryCreateEditForm.get('adjustmentMethod')?.patchValue(null)"
@@ -181,7 +181,7 @@
                                                             [placeholder]="commonLocaleData?.app_select_method"
                                                             (selectionChange)="
                                                                 updateMode
-                                                                    ? resetInventory()
+                                                                    ? resetInventory(true)
                                                                     : calculateInventory(
                                                                           adjustInventoryCreateEditForm,
                                                                           stockGroupClosingBalance
@@ -308,8 +308,10 @@
                                                 color="primary"
                                                 class="mr-2"
                                                 (click)="$event.stopPropagation()"
-                                                (change)="$event ? selection.toggle(element) : null"
-                                                [checked]="selection.isSelected(element)"
+                                                (change)="$event ? selection.toggle(element?.checked) : null"
+                                                [checked]="
+                                                    updateMode ? element?.checked : selection.isSelected(element)
+                                                "
                                                 [aria-label]="checkboxLabel(element)"
                                                 [disabled]="isEntityStockGroup"
                                             >
@@ -358,11 +360,7 @@
                                     <ng-container matColumnDef="newValue">
                                         <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
                                         <td mat-cell *matCellDef="let element" class="text-right">
-                                            {{
-                                                element?.closingAfterAdjustment
-                                                    ? element?.closingAfterAdjustment ?? 0
-                                                    : element?.newValue?? 0
-                                            }}
+                                            {{ element?.newValue ?? 0 }}
                                         </td>
                                     </ng-container>
                                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
