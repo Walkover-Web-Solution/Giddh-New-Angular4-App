@@ -154,17 +154,6 @@
                     "description": "अग्रिम, सामान्य, कुल, और अप्रयुक्त रसीदें"
                 },
                 {
-                    "label": "नई रसीद",
-                    "link": "/pages/vouchers/receipt/create",
-                    "icon": "icon-reciept-new",
-                    "description": "रसीद जनरेट करें",
-                    "additional": {
-                        "queryParams": {
-                            "voucherVersion": 2
-                        }
-                    }
-                },
-                {
                     "label": "बिक्री रजिस्टर",
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
