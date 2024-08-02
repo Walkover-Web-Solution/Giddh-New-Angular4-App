@@ -317,17 +317,6 @@
                     }
                 },
                 {
-                    "label": "New Payment",
-                    "link": "/pages/vouchers/payment/create",
-                    "icon": "icon-reciept-new",
-                    "description": "Generate payment",
-                    "additional": {
-                        "queryParams": {
-                            "voucherVersion": 2
-                        }
-                    }
-                },
-                {
                     "label": "Purchase Register",
                     "link": "/pages/reports/purchase-register",
                     "icon": "icon-register-new",

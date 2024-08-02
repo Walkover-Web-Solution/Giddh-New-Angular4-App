@@ -317,17 +317,6 @@
                     }
                 },
                 {
-                    "label": "नया भुगतान",
-                    "link": "/pages/vouchers/payment/create",
-                    "icon": "icon-reciept-new",
-                    "description": "भुगतान उत्पन्न करें",
-                    "additional": {
-                        "queryParams": {
-                            "voucherVersion": 2
-                        }
-                    }
-                },
-                {
                     "label": "खरीद रजिस्टर",
                     "link": "/pages/reports/purchase-register",
                     "icon": "icon-register-new",
