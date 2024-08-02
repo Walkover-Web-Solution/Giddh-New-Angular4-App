@@ -154,17 +154,6 @@
                     "description": "Advance, normal, total, & unused receipts"
                 },
                 {
-                    "label": "New Receipt",
-                    "link": "/pages/vouchers/receipt/create",
-                    "icon": "icon-reciept-new",
-                    "description": "Generate receipt",
-                    "additional": {
-                        "queryParams": {
-                            "voucherVersion": 2
-                        }
-                    }
-                },
-                {
                     "label": "Sales Register",
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
