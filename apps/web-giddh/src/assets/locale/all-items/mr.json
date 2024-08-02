@@ -317,17 +317,6 @@
                     }
                 },
                 {
-                    "label": "नवीन पेमेंट",
-                    "link": "/pages/vouchers/payment/create",
-                    "icon": "icon-reciept-new",
-                    "description": "पेमेंट व्युत्पन्न करा",
-                    "additional": {
-                        "queryParams": {
-                            "voucherVersion": 2
-                        }
-                    }
-                },
-                {
                     "label": "खरेदी नोंदणी",
                     "link": "/pages/reports/purchase-register",
                     "icon": "icon-register-new",
