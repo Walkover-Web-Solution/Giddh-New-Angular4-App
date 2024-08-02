@@ -265,8 +265,7 @@ export class AdjustInventoryComponent implements OnInit {
                 }
 
                 if (variantWise) {
-                    let data;
-                    data = variantWise?.map(result => ({
+                    let data = variantWise?.map(result => ({
                         ...result,
                         newValue: 0,
                         changeValue: 0
@@ -747,7 +746,7 @@ export class AdjustInventoryComponent implements OnInit {
                     result.changeValue = (result.closing?.quantity ?? result?.closingBeforeAdjustment) * (this.adjustInventoryCreateEditForm?.value?.changeInValue / 100);
                     result.newValue = giddhRoundOff((result.closing?.quantity ?? result?.closingBeforeAdjustment) - result.changeValue, this.giddhBalanceDecimalPlaces);
 
-                    return result
+                    return result;
                 }) || [];
                 this.dataSource = new MatTableDataSource<any>(data);
             }
@@ -756,7 +755,7 @@ export class AdjustInventoryComponent implements OnInit {
                 this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.QuantityWise
                 && this.adjustInventoryCreateEditForm.value.calculationMethod === AdjustmentInventory.Value) {
 
-                let changeInValue = this.adjustInventoryCreateEditForm?.value?.changeInValue * this.dataSource?.data?.length;;
+                let changeInValue = this.adjustInventoryCreateEditForm?.value?.changeInValue * this.dataSource?.data?.length;
                 let newValue = this.stockGroupClosingBalance.closing - changeInValue;
 
                 this.stockGroupClosingBalance.changeValue = giddhRoundOff(changeInValue, this.giddhBalanceDecimalPlaces);
@@ -803,7 +802,7 @@ export class AdjustInventoryComponent implements OnInit {
                 const data = this.dataSource?.data?.map(result => {
                     result.changeValue = this.adjustInventoryCreateEditForm?.value?.changeInValue;
                     result.newValue = giddhRoundOff((result.closing?.amount ?? result?.closingBeforeAdjustment) - result.changeValue, this.giddhBalanceDecimalPlaces);
-                    return result
+                    return result;
                 }) || [];
                 this.dataSource = new MatTableDataSource<any>(data);
             }
@@ -883,9 +882,6 @@ export class AdjustInventoryComponent implements OnInit {
             }
         }
     }
-
-
-
 
     /**
      * This will be use for select all variants
@@ -991,12 +987,12 @@ export class AdjustInventoryComponent implements OnInit {
                 this.entity = {
                     entityName: '',
                     balance: ''
-                }
+                };
                 this.stockGroupClosingBalance = {
                     newValue: 0,
                     changeValue: 0,
                     closing: 0
-                }
+                };
             }
         } else {
             this.selectInventory(
@@ -1006,7 +1002,7 @@ export class AdjustInventoryComponent implements OnInit {
                     additional: {
                         type: this.adjustInventoryCreateEditForm.value.entity,
                         name: this.adjustInventoryCreateEditForm.value.entityName,
-                        uniqueName: this.adjustInventoryCreateEditForm.value.entityUniqueName,
+                        uniqueName: this.adjustInventoryCreateEditForm.value.entityUniqueName
                     }
                 }, false);
         }
