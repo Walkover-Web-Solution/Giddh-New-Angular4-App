@@ -246,7 +246,7 @@ export class AdjustInventoryComponent implements OnInit {
                 this.stockGroupClosingBalance.closing = response;
             }
         });
-
+        this.dataSource = new MatTableDataSource<any>([]);
         combineLatest([
             this.componentStore.itemWiseReport$.pipe(map(response => response?.results)),
             this.componentStore.variantWiseReport$.pipe(map(response => response?.results))
@@ -285,14 +285,15 @@ export class AdjustInventoryComponent implements OnInit {
 
                     }
                     this.dataSource = new MatTableDataSource<any>(data);
-                    this.checkTableCheckBox();
+                    if (!this.referenceNumber) {
+                        this.checkTableCheckBox();
+                    }
                     this.componentStore.getStockGroupClosingBalance(this.balanceReqObj);
                     if (this.referenceNumber) {
                         this.calculateInventory();
                     }
                 } else {
                     this.dataSource = new MatTableDataSource<any>([]);
-                    this.checkTableCheckBox();
                 }
             });
 
@@ -730,13 +731,7 @@ export class AdjustInventoryComponent implements OnInit {
             this.stockGroupClosingBalance.closing = totalClosing + oldTotalClosing;
             this.stockGroupClosingBalance.changeValue = totalChange;
             this.stockGroupClosingBalance.newValue = totalNewValue + oldNewValue;
-            data = data.map(item => {
-                return {
-                    ...item,
-                    checked: item.hasOwnProperty('closingBeforeAdjustment')
-                };
-            });
-         this.dataSource = new MatTableDataSource<any>(data);
+            this.dataSource = new MatTableDataSource<any>(data);
 
             if (this.adjustInventoryCreateEditForm.value.entityUniqueName &&
                 this.adjustInventoryCreateEditForm.value.adjustmentMethod === AdjustmentInventory.QuantityWise &&
@@ -812,6 +807,7 @@ export class AdjustInventoryComponent implements OnInit {
                 }) || [];
                 this.dataSource = new MatTableDataSource<any>(data);
             }
+            this.checkTableCheckBox();
         } else {
             this.stockGroupClosingBalance.changeValue = 0;
             this.stockGroupClosingBalance.newValue = 0;
@@ -888,6 +884,9 @@ export class AdjustInventoryComponent implements OnInit {
         }
     }
 
+
+
+
     /**
      * This will be use for select all variants
      *
@@ -895,7 +894,6 @@ export class AdjustInventoryComponent implements OnInit {
      * @memberof AdjustInventoryComponent
      */
     public isAllSelected(): boolean {
-        console.log(this.selection, this.dataSource);
         const numSelected = this.selection.selected.length;
         const numRows = this.dataSource?.data?.length;
         return numSelected === numRows;
@@ -908,19 +906,19 @@ export class AdjustInventoryComponent implements OnInit {
      */
     public masterToggle(): void {
         if (this.isEntityStockGroup) {
-            this.dataSource?.filteredData?.forEach(row => this.selection.select(row));
+            this.dataSource?.filteredData.forEach(row => this.selection.select(row));
         } else {
-            console.log(this.isAllSelected());
-            // Toggle selection based on current state
             if (this.isAllSelected()) {
                 this.selection.clear();
             } else {
-                this.dataSource?.filteredData?.forEach(row => this.selection.select(row));
+                const data = this.referenceNumber && this.updateMode
+                    ? this.dataSource.filteredData.filter(data => data?.closingAfterAdjustment)
+                    : this.dataSource.filteredData;
+
+                data.forEach(row => this.selection.select(row));
             }
         }
     }
-
-
 
     /**
      * This will be use for checkbox label
@@ -1021,20 +1019,14 @@ export class AdjustInventoryComponent implements OnInit {
      */
     public checkTableCheckBox(): void {
         const shouldMasterToggle = this.isEntityStockGroup || (this.referenceNumber && !this.isEntityStockGroup);
-        if (this.referenceNumber) {
-            this.selection.clear();
+        if (shouldMasterToggle) {
             this.masterToggle();
         } else {
-            if (shouldMasterToggle) {
-                this.masterToggle();
-            } else {
-                this.selection.clear();
-            }
-            this.showHideTable = false;
-            setTimeout(() => {
-                this.showHideTable = true;
-            });
+            this.selection.clear();
         }
+        this.showHideTable = false;
+        setTimeout(() => {
+            this.showHideTable = true;
+        });
     }
-
 }
