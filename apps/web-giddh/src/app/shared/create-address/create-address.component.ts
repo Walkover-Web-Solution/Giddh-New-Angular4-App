@@ -516,11 +516,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public isStateReadonly(): boolean {
-        const isEditAddress = this.addressConfiguration?.type === 'editAddress';
-        const hasTaxNumber = this.addressToUpdate?.taxNumber?.length > 0;
         const isGSTIN = this.addressConfiguration?.tax?.name === 'GSTIN';
         const stateLabelNotNull = this.addressForm?.get('stateLabel')?.value !== null;
-        const taxNumberNotNull = this.addressForm?.get('taxNumber')?.value !== null;
-        return (isEditAddress && hasTaxNumber && isGSTIN) || (stateLabelNotNull && taxNumberNotNull);
+        const taxNumberNotEmpty = this.addressForm?.get('taxNumber')?.value !== "" && this.addressForm?.get('taxNumber')?.value !== null;      
+        return isGSTIN && stateLabelNotNull && taxNumberNotEmpty;
     }
 }
