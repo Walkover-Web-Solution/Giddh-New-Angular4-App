@@ -803,17 +803,27 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public updateTransactionActualAmount(transaction: FormGroup): void {
-        if (+transaction.get('amount')?.value > 9 && transaction.get('amount')?.value?.startsWith('0')) {
-            transaction.get('amount')?.patchValue(+transaction.get('amount')?.value?.replace(/^0+/, ''));
-        }
-        const amount = Number(transaction.get('amount')?.value);
-        transaction.get('amount')?.patchValue(amount);
-        transaction.get('actualAmount')?.patchValue(amount);
-        transaction.get('total')?.patchValue(amount);
-
         const totalCreditAndDebit = this.calculateTotalCreditAndDebit();
         this.totalCreditAmount = totalCreditAndDebit.totalCredit;
         this.totalDebitAmount = totalCreditAndDebit.totalDebit;
+    }
+
+    /**
+     * Update amount in number and remove 0 from starting
+     *
+     * @param {FormGroup} transaction
+     * @memberof AccountAsVoucherComponent
+     */
+    public updateValidNumber(transaction: FormGroup): void {
+        if (transaction) {
+            if (+transaction.get('amount')?.value > 9 && transaction.get('amount')?.value?.startsWith('0')) {
+                transaction.get('amount')?.patchValue(+transaction.get('amount')?.value?.replace(/^0+/, ''));
+            }
+            const amount = parseFloat(transaction.get('amount')?.value);
+            transaction.get('amount')?.patchValue(amount);
+            transaction.get('actualAmount')?.patchValue(amount);
+            transaction.get('total')?.patchValue(amount);
+        }
     }
 
     /**
