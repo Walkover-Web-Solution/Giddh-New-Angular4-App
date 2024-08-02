@@ -1,9 +1,9 @@
 <div class="modal-header d-flex align-items-center flex-row-reverse">
-    <button aria-hidden="true" class="close" mat-dialog-close>×</button>
+    <button class="close" mat-dialog-close>×</button>
     <h3 *ngIf="subscriptionMove">
         {{ localeData?.subscription?.move_company ? localeData?.subscription?.move_company : localeData?.move_company }}
     </h3>
-    <h3 *ngIf="!subscriptionMove">Add Company</h3>
+    <h3 *ngIf="!subscriptionMove">{{ localeData?.add_company }}</h3>
 </div>
 <div *ngIf="isLoading">
     <giddh-page-loader></giddh-page-loader>
@@ -21,7 +21,7 @@
                                 : localeData?.select_plan
                         }}<span class="text-danger">*</span></label
                     >
-                    <div class="select-caret position-relative move-select">
+                    <div *ngIf="subscriptionMove" class="select-caret position-relative move-select">
                         <sh-select
                             [placeholder]="
                                 localeData?.subscription?.select_plan
@@ -33,10 +33,10 @@
                             [isFilterEnabled]="true"
                             [(ngModel)]="selectedPlan"
                             [isRequired]="true"
-                            *ngIf="subscriptionMove"
                         ></sh-select>
+                    </div>
+                    <div *ngIf="!subscriptionMove" class="position-relative move-select">
                         <reactive-dropdown-field
-                            *ngIf="!subscriptionMove"
                             [label]="commonLocaleData?.app_company"
                             [placeholder]="localeData?.select_company"
                             [options]="companyList$ | async"
@@ -59,7 +59,13 @@
                     (click)="moveCompanyInNewPlan()"
                     [disabled]="subscriptionMove ? !selectedPlan : companyDetails?.value"
                 >
-                    {{ localeData?.subscription?.move ? localeData?.subscription?.move : localeData?.move }}
+                    {{
+                        subscriptionMove
+                            ? localeData?.subscription?.move
+                                ? localeData?.subscription?.move
+                                : localeData?.move
+                            : commonLocaleData?.app_add
+                    }}
                 </button>
             </div>
         </div>

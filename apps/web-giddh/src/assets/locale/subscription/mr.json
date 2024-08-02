@@ -146,7 +146,7 @@
         "gst_direct":"जीएसटी थेट भरणे",
         "e_invoice":"ई-चालन",
         "plan_purchased_success_message":"योजना यशस्वीरित्या खरेदी केली",
-        "confirm_archive_message": "तुमची खात्री आहे की तुम्ही कंपनी संग्रहित करू इच्छिता?",
+        "confirm_archive_message": "तुमची खात्री आहे की तुम्ही कंपनी  [TYPE]  करू इच्छिता?",
         "gocardless":"GOCARDLESS",
         "confirm_payment_delete_message": "आपण खरोखरच पेमेंट पद्धत हटवू इच्छिता?",
         "manage_payment_methods": "पेमेंट पद्धती व्यवस्थापित करा",

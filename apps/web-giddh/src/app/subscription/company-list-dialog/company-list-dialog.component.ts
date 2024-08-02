@@ -9,6 +9,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { SubscriptionComponentStore } from '../utility/subscription.store';
 import { CompanyListDialogComponentStore } from './utility/company-list-dialog.store';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
+import { ToasterService } from '../../services/toaster.service';
 
 export interface CompanyRequest {
     page: number;
@@ -67,6 +68,7 @@ export class CompanyListDialogComponent implements OnInit {
         public dialog: MatDialog,
         private fb: FormBuilder,
         private router: Router,
+        private toasterService: ToasterService,
         private componentStore: CompanyListDialogComponentStore,
         private subscriptionComponentStore: SubscriptionComponentStore,
         public dialogRef: MatDialogRef<any>
@@ -97,6 +99,8 @@ export class CompanyListDialogComponent implements OnInit {
 
         this.archiveCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                let message = response?.archiveStatus === 'USER_ARCHIVED' ? 'Company archived successfully': 'Company unarchived successfully';
+                this.toasterService.showSnackBar('success', message);
                 this.getAllCompaniesList();
             }
         });
@@ -109,7 +113,7 @@ export class CompanyListDialogComponent implements OnInit {
                     this.showClearFilter = true;
                     this.getAllCompaniesList();
                 }
-                if (searchedText === null ||searchedText === "" ) {
+                if (searchedText === null || searchedText === "") {
                     this.showClearFilter = false;
                 }
             });
@@ -240,11 +244,14 @@ export class CompanyListDialogComponent implements OnInit {
      * @memberof CompanyListDialogComponent
      */
     private openConfirmationDialog(request: any): void {
+        let text = this.localeData?.confirm_archive_message;
+        text = text?.replace("[TYPE]", request.status.archiveStatus === 'UNARCHIVED' ? this.commonLocaleData?.app_unarchive : this.commonLocaleData?.app_archive);
+
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
             width: '540px',
             data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.confirm_archive_message,
+                body: text,
                 ok: this.commonLocaleData?.app_yes,
                 cancel: this.commonLocaleData?.app_no
             }

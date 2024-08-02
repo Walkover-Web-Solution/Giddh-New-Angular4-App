@@ -391,9 +391,11 @@ export class SubscriptionsService {
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof SubscriptionsService
      */
-    public generateOrderBySubscriptionId(subscriptionId: any): Observable<BaseResponse<any, any>> {
+    public generateOrderBySubscriptionId(model: any): Observable<BaseResponse<any, any>> {
+        console.log(model);
         return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.GENERATE_ORDER_BY_SUBSCRIPTION_ID
-            ?.replace(':subscriptionId', encodeURIComponent(subscriptionId)))
+            ?.replace(':subscriptionId', encodeURIComponent(model?.subscriptionId))
+            ?.replace(':promocode', encodeURIComponent(model?.promoCode ?? '')))
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
@@ -489,6 +491,13 @@ export class SubscriptionsService {
             );
     }
 
+    /**
+     * Save payment provider by subscription id
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SubscriptionsService
+     */
     public savePaymentProviderBySubscriptionID(model: any): Observable<BaseResponse<any, any>> {
         return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.SAVE_PAYMENT_METHOD,
             model)
@@ -503,6 +512,13 @@ export class SubscriptionsService {
             );
     }
 
+    /**
+     * Get payment method list
+     *
+     * @param {*} subscriptionId
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SubscriptionsService
+     */
     public getPaymentProviderListBySubscriptionID(subscriptionId: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_PAYMENT_METHODS
             ?.replace(':subscriptionId', encodeURIComponent(subscriptionId)))
@@ -551,6 +567,40 @@ export class SubscriptionsService {
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
                     data.request = '';
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+            );
+    }
+
+    /**
+     * Set archive/unarchive company
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SubscriptionsService
+     */
+    public setArchiveUnarchiveCompany(model: any): Observable<BaseResponse<any, any>> {
+        return this.http.patch(this.config.apiUrl + SUBSCRIPTION_V2_API.SET_ARCHIVE_UNARCHIVE_COMPANY
+            ?.replace(':companyUniqueName', encodeURIComponent(model?.companyUniqueName ?? '')), model?.status)
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = model?.status;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model?.status, {}))
+            );
+    }
+
+    public activatePlan(subscriptionId: any): Observable<BaseResponse<any, any>> {
+        return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.ACTIVATE_PLAN
+            ?.replace(':subscriptionId', encodeURIComponent(subscriptionId)))
+            .pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.request = '';
+                    data.queryString = {};
                     return data;
                 }),
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))

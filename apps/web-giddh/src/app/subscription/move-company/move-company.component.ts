@@ -8,7 +8,7 @@ import { SubscriptionComponentStore } from '../../subscription/utility/subscript
 import { SearchCompanyRequest, SubscriptionRequest } from '../../models/api-models/Company';
 import { AppState } from '../../store';
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
-import { API_COUNT_LIMIT, PAGINATION_LIMIT } from '../../app.constant';
+import { PAGINATION_LIMIT } from '../../app.constant';
 import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
@@ -67,7 +67,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     public companyDetails: {
         name: '',
         uniqueName: '',
-        additional:''
+        additional: ''
     };
 
     constructor(
@@ -84,7 +84,6 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.companyList$ = observableOf([]);
-        this.searchCompany(false);
         if (this.subscriptionMove) {
             this.isLoading = true;
             let reqObj = {
@@ -101,24 +100,27 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                 this.isLoading = false;
                 if (response) {
                     response?.body?.results.forEach(subscription => {
-                        this.availablePlansOption.push({ label: `${subscription.plan?.name} -${subscription?.subscriptionId}`, value: `${subscription.subscriptionId}` });
+                        this.availablePlansOption.push({ label: `${subscription.plan?.name} -${subscription?.subscriptionId} (${subscription?.totalCompanies - subscription?.companyCount})`, value: `${subscription.subscriptionId}` });
                     });
                 }
+                this.changeDetection.detectChanges();
             });
         } else {
             this.isLoading = true;
+            this.searchCompany(false);
             this.componentStore.companyList$.pipe(debounceTime(700),
                 distinctUntilChanged(),
                 takeUntil(this.destroyed$)).subscribe(data => {
                     if (data) {
                         this.isLoading = false;
-                        const mappedIItemWise = data?.results.map(item => ({
+                        const mappedCompanyWise = data?.results.map(item => ({
                             value: item.uniqueName,
                             label: item.name,
                             additional: item
                         }));
-                        this.companyList$ = observableOf(mappedIItemWise);
+                        this.companyList$ = observableOf(mappedCompanyWise);
                     }
+                    this.changeDetection.detectChanges();
                 });
         }
     }
@@ -200,7 +202,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     *
     * @memberof MoveCompanyComponent
     */
-    public handlesearchCompanyScrollEnd(): void {
+    public handleSearchCompanyScrollEnd(): void {
         this.searchCompany(this.searchRequest.q, true);
     }
 
@@ -219,7 +221,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
         if (this.subscriptionMove) {
             this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true, moveCompany: this.moveSelectedCompany?.uniqueName });
         } else {
-            this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true, moveCompany: this.moveSelectedCompany?.uniqueName , companyUniqueName:this.companyDetails.uniqueName});
+            this.patchProfile({ subscriptionRequest: this.subscriptionRequestObj, callNewPlanApi: true, moveCompany: this.moveSelectedCompany?.uniqueName, companyUniqueName: this.companyDetails.uniqueName });
         }
     }
 
@@ -257,7 +259,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
             text = text?.replace("[COMPANY_NAME]", this.moveSelectedCompany?.name ? this.moveSelectedCompany?.name : (this.moveSelectedCompany?.companies && this.moveSelectedCompany?.companies[0]?.name ? this.moveSelectedCompany?.companies[0]?.name : this.moveSelectedCompany?.companiesList[0]?.name))?.replace("[PLAN_NAME]", this.moveSelectedCompany?.subscription?.planDetails?.name ? this.moveSelectedCompany?.subscription?.planDetails?.name : this.moveSelectedCompany?.plan?.name);
         } else {
             text = this.localeData.company_note;
-            text = text?.replace("[COMPANY_NAME]", this.companyDetails?.name ??'');
+            text = text?.replace("[COMPANY_NAME]", this.companyDetails?.name ?? '');
         }
         return text;
     }

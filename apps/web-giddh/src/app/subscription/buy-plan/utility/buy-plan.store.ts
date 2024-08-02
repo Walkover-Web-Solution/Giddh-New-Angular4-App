@@ -27,6 +27,7 @@ export interface BuyPlanState {
     subscriptionRazorpayOrderDetails: any;
     getChangePlanDetailsInProgress: boolean;
     changePlanDetails: any;
+    activatePlanSuccess: boolean;
 }
 
 export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
@@ -47,7 +48,8 @@ export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
     generateOrderBySubscriptionIdInProgress: false,
     subscriptionRazorpayOrderDetails: null,
     getChangePlanDetailsInProgress: null,
-    changePlanDetails: null
+    changePlanDetails: null,
+    activatePlanSuccess: false
 };
 
 @Injectable()
@@ -313,7 +315,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
         );
     });
 
-    readonly generateOrderBySubscriptionId = this.effect((data: Observable<string>) => {
+    readonly generateOrderBySubscriptionId = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ generateOrderBySubscriptionIdInProgress: true });
@@ -456,6 +458,42 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             return this.patchState({
                                 countryList: [],
                                 countryListInProgress: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+
+    readonly activatePlan = this.effect((data: Observable<string>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ activatePlanSuccess: false });
+                return this.subscriptionService.activatePlan(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    activatePlanSuccess: true
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    activatePlanSuccess: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
+
+                            return this.patchState({
+                                generateOrderBySubscriptionIdInProgress: false,
+                                subscriptionRazorpayOrderDetails: null
                             });
                         }
                     ),

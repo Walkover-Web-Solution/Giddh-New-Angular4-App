@@ -139,45 +139,78 @@
                                                                 {{ plan?.description }}
                                                             </span>
                                                         </p>
+
                                                         <ng-container
                                                             *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'"
                                                         >
-                                                            <p
-                                                                *ngIf="plan?.yearlyDiscountAmount > 0"
-                                                                [ngClass]="{
-                                                                    'feature-txt': !plan?.yearlyDiscountAmount > 0
-                                                                }"
+                                                            <ng-container
+                                                                *ngIf="
+                                                                    plan?.yearlyAmount === 0 && !plan?.yearlyDiscount
+                                                                "
                                                             >
-                                                                <s class="strong">
-                                                                    <amount-field
-                                                                        [useGiddhCurrencyPipe]="false"
-                                                                        [spaceAfterCurrencySymbol]="false"
-                                                                        [amount]="plan?.yearlyAmount"
-                                                                        [currencySymbol]="plan?.currency?.symbol"
-                                                                        [currencyCode]="false"
-                                                                    >
-                                                                    </amount-field>
-                                                                </s>
-                                                            </p>
-                                                            <p class="mb-3 mt-2">
                                                                 <span class="font-24">
-                                                                    <span class="strong">
+                                                                    <span class="strong">Free</span></span
+                                                                >
+                                                            </ng-container>
+                                                            <ng-container
+                                                                *ngIf="plan?.yearlyAmount === 0 && plan?.yearlyDiscount"
+                                                            >
+                                                                <span class="font-24">
+                                                                    <span class="strong"
+                                                                        >Free for <br />{{
+                                                                            plan?.yearlyDiscount?.duration
+                                                                        }}
+                                                                        {{
+                                                                            commonLocaleData?.app_duration?.year
+                                                                                | lowercase
+                                                                        }}</span
+                                                                    ></span
+                                                                >
+                                                            </ng-container>
+                                                            <ng-container
+                                                                *ngIf="plan?.yearlyAmount > 0 || plan?.yearlyDiscount"
+                                                            >
+                                                                <p
+                                                                    *ngIf="plan?.yearlyDiscountAmount > 0"
+                                                                    [ngClass]="{
+                                                                        'feature-txt': !plan?.yearlyDiscountAmount > 0
+                                                                    }"
+                                                                >
+                                                                    <s class="strong">
                                                                         <amount-field
                                                                             [useGiddhCurrencyPipe]="false"
                                                                             [spaceAfterCurrencySymbol]="false"
-                                                                            [amount]="plan?.yearlyAmountAfterDiscount"
+                                                                            [amount]="plan?.yearlyAmount"
                                                                             [currencySymbol]="plan?.currency?.symbol"
                                                                             [currencyCode]="false"
                                                                         >
                                                                         </amount-field>
+                                                                    </s>
+                                                                </p>
+                                                                <p class="mb-3 mt-2" *ngIf="plan?.yearlyAmount !== 0">
+                                                                    <span class="font-24">
+                                                                        <span class="strong">
+                                                                            <amount-field
+                                                                                [useGiddhCurrencyPipe]="false"
+                                                                                [spaceAfterCurrencySymbol]="false"
+                                                                                [amount]="
+                                                                                    plan?.yearlyAmountAfterDiscount
+                                                                                "
+                                                                                [currencySymbol]="
+                                                                                    plan?.currency?.symbol
+                                                                                "
+                                                                                [currencyCode]="false"
+                                                                            >
+                                                                            </amount-field>
+                                                                        </span>
+                                                                        <span class="font-14"
+                                                                            >/{{
+                                                                                commonLocaleData?.app_duration?.year
+                                                                            }}</span
+                                                                        >
                                                                     </span>
-                                                                    <span class="font-14"
-                                                                        >/{{
-                                                                            commonLocaleData?.app_duration?.year
-                                                                        }}</span
-                                                                    >
-                                                                </span>
-                                                            </p>
+                                                                </p>
+                                                            </ng-container>
                                                             <p class="mb-3" *ngIf="plan?.yearlyDiscountAmount > 0">
                                                                 <span>
                                                                     {{ localeData?.save }}
@@ -204,37 +237,71 @@
                                                         <ng-container
                                                             *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'"
                                                         >
-                                                            <p class="mb-2" *ngIf="plan?.monthlyDiscountAmount > 0">
-                                                                <s>
-                                                                    <span class="strong">
-                                                                        <amount-field
-                                                                            [useGiddhCurrencyPipe]="false"
-                                                                            [spaceAfterCurrencySymbol]="false"
-                                                                            [amount]="plan?.monthlyDiscountAmount"
-                                                                            [currencySymbol]="plan?.currency?.symbol"
-                                                                            [currencyCode]="false"
-                                                                        >
-                                                                        </amount-field>
-                                                                    </span>
-                                                                </s>
-                                                            </p>
-                                                            <p class="mb-3 mt-2">
+                                                            <ng-container
+                                                                *ngIf="
+                                                                    plan?.monthlyAmount === 0 && !plan?.monthlyDiscount
+                                                                "
+                                                            >
                                                                 <span class="font-24">
-                                                                    <span class="strong">
-                                                                        <amount-field
-                                                                            [useGiddhCurrencyPipe]="false"
-                                                                            [spaceAfterCurrencySymbol]="false"
-                                                                            [amount]="plan?.monthlyAmount"
-                                                                            [currencySymbol]="plan?.currency?.symbol"
-                                                                            [currencyCode]="false"
-                                                                        >
-                                                                        </amount-field>
+                                                                    <span class="strong">Free</span></span
+                                                                >
+                                                            </ng-container>
+                                                            <ng-container
+                                                                *ngIf="
+                                                                    plan?.monthlyAmount === 0 && plan?.monthlyDiscount
+                                                                "
+                                                            >
+                                                                <span class="font-24">
+                                                                    <span class="strong"
+                                                                        >Free for <br />{{
+                                                                            plan?.monthlyDiscount?.duration
+                                                                        }}
+                                                                        {{
+                                                                            commonLocaleData?.app_duration?.month
+                                                                                | lowercase
+                                                                        }}</span
+                                                                    ></span
+                                                                >
+                                                            </ng-container>
+                                                            <ng-container
+                                                                *ngIf="plan?.monthlyAmount > 0 || plan?.monthlyDiscount"
+                                                            >
+                                                                <p class="mb-2" *ngIf="plan?.monthlyDiscountAmount > 0">
+                                                                    <s>
+                                                                        <span class="strong">
+                                                                            <amount-field
+                                                                                [useGiddhCurrencyPipe]="false"
+                                                                                [spaceAfterCurrencySymbol]="false"
+                                                                                [amount]="plan?.monthlyDiscountAmount"
+                                                                                [currencySymbol]="
+                                                                                    plan?.currency?.symbol
+                                                                                "
+                                                                                [currencyCode]="false"
+                                                                            >
+                                                                            </amount-field>
+                                                                        </span>
+                                                                    </s>
+                                                                </p>
+                                                                <p class="mb-3 mt-2" *ngIf="plan?.monthlyAmount !== 0">
+                                                                    <span class="font-24">
+                                                                        <span class="strong">
+                                                                            <amount-field
+                                                                                [useGiddhCurrencyPipe]="false"
+                                                                                [spaceAfterCurrencySymbol]="false"
+                                                                                [amount]="plan?.monthlyAmount"
+                                                                                [currencySymbol]="
+                                                                                    plan?.currency?.symbol
+                                                                                "
+                                                                                [currencyCode]="false"
+                                                                            >
+                                                                            </amount-field>
+                                                                        </span>
+                                                                        <span class="font-12">
+                                                                            /{{ commonLocaleData?.app_duration?.month }}
+                                                                        </span>
                                                                     </span>
-                                                                    <span class="font-12">
-                                                                        /{{ commonLocaleData?.app_duration?.month }}
-                                                                    </span>
-                                                                </span>
-                                                            </p>
+                                                                </p>
+                                                            </ng-container>
                                                             <p *ngIf="plan?.monthlyDiscountAmount > 0">
                                                                 <span class="strong">
                                                                     {{ localeData?.save }}
@@ -306,7 +373,11 @@
                                                     <span class="sub-plan-name">
                                                         <amount-field
                                                             [useGiddhCurrencyPipe]="false"
-                                                            [amount]="plan?.invoicesAllowed"
+                                                            [amount]="
+                                                                firstStepForm.get('duration')?.value === 'YEARLY'
+                                                                    ? plan?.invoicesAllowed
+                                                                    : plan?.monthlyInvoicesAllowed
+                                                            "
                                                             [currencySymbol]="false"
                                                             [currencyCode]="false"
                                                         >
@@ -332,7 +403,11 @@
                                                     <span>
                                                         <amount-field
                                                             [useGiddhCurrencyPipe]="false"
-                                                            [amount]="plan?.billsAllowed"
+                                                            [amount]="
+                                                               firstStepForm.get('duration')?.value === 'YEARLY'
+                                                                    ? plan?.billsAllowed
+                                                                    : plan?.monthlyBillsAllowed
+                                                                    "
                                                             [currencySymbol]="false"
                                                             [currencyCode]="false"
                                                         >
@@ -357,7 +432,11 @@
                                                     <span>
                                                         <amount-field
                                                             [useGiddhCurrencyPipe]="false"
-                                                            [amount]="plan?.companiesLimit"
+                                                            [amount]="
+                                                               firstStepForm.get('duration')?.value === 'YEARLY'
+                                                                    ? plan?.companiesLimit
+                                                                    : plan?.monthlyCompaniesLimit
+                                                                    "
                                                             [currencySymbol]="false"
                                                             [currencyCode]="false"
                                                         >

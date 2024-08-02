@@ -71,7 +71,16 @@
                                 (click)="openCompanyDialog(element)"
                                 >{{ element?.companies?.length }} - {{ commonLocaleData?.app_companies }}</a
                             >
-                            <span *ngIf="element?.companies?.length === 1">{{ element?.companies[0]?.name }}</span>
+                            <span *ngIf="element?.companies && element?.companies?.length === 1">{{
+                                element?.companies[0]?.name
+                            }}</span>
+                            <a
+                                class="cursor-pointer"
+                                *ngIf="!element?.companies"
+                                (click)="createCompanyInSubscription(element?.subscriptionId)"
+                            >
+                                {{ commonLocaleData?.app_create + " " + commonLocaleData?.app_company }}</a
+                            >
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="billingAccountName">
@@ -294,7 +303,7 @@
                                         {{ commonLocaleData?.app_create + " " + commonLocaleData?.app_company }}
                                     </button>
                                     <button
-                                        *ngIf="element?.companies?.length === 1"
+                                        *ngIf="element?.isOwner "
                                         mat-menu-item
                                         (click)="addCompanyInSubscription(element)"
                                     >
