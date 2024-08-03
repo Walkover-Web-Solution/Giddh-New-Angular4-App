@@ -171,7 +171,7 @@ export class StockTransactionReportRequest {
     public stocks?: any[];
     public variants?: any[];
     public inventoryType?: string;
-    public inventoryAdjustmentRefNo?:string
+    public archived?: boolean;
     constructor() {
         this.count = PAGINATION_LIMIT;
         this.page = 1;
@@ -185,7 +185,6 @@ export class StockTransactionReportRequest {
         this.branchUniqueNames = [];
         this.variantUniqueNames = [];
         this.voucherTypes = [];
-        this.inventoryAdjustmentRefNo = null;
     }
 }
 
@@ -266,6 +265,11 @@ export class StockTransactionReportRequestExport {
     public showOutwardsValue?: boolean;
     public showClosingStockQty?: boolean;
     public showClosingStockValue?: boolean;
+    public showVariantName?: boolean;
+    public showDate?: boolean;
+    public showAccountUniqueName?: boolean;
+    public showRate?: boolean;
+    public showValue?: boolean;
     constructor() {
         this.stockGroupUniqueNames = [];
         this.stockUniqueNames = [];
@@ -288,6 +292,11 @@ export class StockTransactionReportRequestExport {
         this.showOutwardsValue = false;
         this.showClosingStockQty = false;
         this.showClosingStockValue = false;
+        this.showVariantName = false;
+        this.showDate = false;
+        this.showAccountUniqueName = false;
+        this.showRate = false;
+        this.showValue = false;
     }
 }
 
@@ -645,8 +654,9 @@ export class InventorytAdjustReportQueryRequest {
     public totalPages: number = 0;
     public totalItems: number = 0;
     public sortBy: string = '';
-    public sort: 'asc' | 'desc' = 'asc';
+    public sort: 'asc' | 'desc' = 'desc';
     public searchBy: string = '';
     public branchUniqueName?: string;
+    public inventoryType: string;
 }
 
