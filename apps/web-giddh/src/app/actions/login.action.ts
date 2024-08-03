@@ -214,8 +214,6 @@ export class LoginActions {
                             select(state => state.session.user),
                             take(1), // take only the first emission
                             tap(response => {
-                                console.log(response);
-
                                 const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
                                 if (hasSubscriptionPermission) {
                                     this._router.navigate(['/pages/subscription']);
@@ -292,7 +290,6 @@ export class LoginActions {
                             select(state => state.session.user),
                             take(1), // take only the first emission
                             tap(response => {
-                                console.log(response);
                                 const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
                                 if (hasSubscriptionPermission) {
                                     this._router.navigate(['/pages/subscription']);
