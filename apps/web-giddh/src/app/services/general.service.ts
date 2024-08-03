@@ -161,6 +161,9 @@ export class GeneralService {
         if (routerParams['region']) {
             localStorage.setItem('region', routerParams['region']);
         }
+        if (routerParams['region']) {
+            localStorage.setItem('region', routerParams['region']);
+        }
     }
 
     getUtmParameter(param: string): string {
