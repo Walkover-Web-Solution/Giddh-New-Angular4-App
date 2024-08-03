@@ -218,7 +218,7 @@ export class LoginActions {
                                 if (hasSubscriptionPermission) {
                                     this._router.navigate(['/pages/subscription']);
                                 } else {
-                                    this._router.navigate(['/pages/subscription/buy-plan']);
+                                    this._router.navigate(['/pages/subscription/buy-plan/' + (localStorage.getItem('Country-Region') ?? '')]);
                                 }
                             })
                         ).subscribe();
@@ -294,7 +294,7 @@ export class LoginActions {
                                 if (hasSubscriptionPermission) {
                                     this._router.navigate(['/pages/subscription']);
                                 } else {
-                                    this._router.navigate(['/pages/subscription/buy-plan']);
+                                    this._router.navigate(['/pages/subscription/buy-plan/' + (localStorage.getItem('Country-Region') ?? '')]);
                                 }
                             })
                         ).subscribe();
