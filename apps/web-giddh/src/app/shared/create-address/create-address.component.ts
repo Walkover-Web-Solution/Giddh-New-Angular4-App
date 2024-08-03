@@ -167,9 +167,9 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             const taxValidatorPatterns = this.addressConfiguration.tax.name ? this.addressConfiguration.tax.validation : [];
             this.addressForm = this.formBuilder.group({
                 name: ['', [Validators.required, Validators.maxLength(100)]],
-                taxNumber: ['', (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
+                taxNumber: [null, (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
                 state: ['', !this.addressConfiguration.countyList?.length ? Validators.required : null],
-                stateLabel: [''],
+                stateLabel: [null],
                 county: ['', this.addressConfiguration.countyList?.length ? Validators.required : null],
                 address: [''],
                 linkedEntity: [[]],
@@ -188,7 +188,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                     name: [this.addressToUpdate.name, [Validators.required, Validators.maxLength(100)]],
                     taxNumber: [this.addressToUpdate.taxNumber, (taxValidatorPatterns && taxValidatorPatterns.length) ? validateFieldWithPatterns(taxValidatorPatterns) : null],
                     state: [{ value: this.addressToUpdate.stateCode, disabled: !!this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' }, !this.addressConfiguration.countyList?.length ? Validators.required : null],
-                    stateLabel: [this.addressToUpdate?.stateName && this.addressToUpdate?.stateCode ? this.addressToUpdate?.stateCode + ' - ' + this.addressToUpdate?.stateName : ''],
+                    stateLabel: [this.addressToUpdate?.stateName && this.addressToUpdate?.stateCode ? this.addressToUpdate?.stateCode + ' - ' + this.addressToUpdate?.stateName : null],
                     county: [this.addressToUpdate.county?.code, this.addressConfiguration.countyList?.length ? Validators.required : null],
                     address: [this.addressToUpdate.address, this.addressToUpdate.taxNumber && this.addressConfiguration.tax && this.addressConfiguration.tax.name === 'GSTIN' ? [Validators.required] : []],
                     linkedEntity: [this.addressConfiguration.linkedEntities?.filter((item) => {
@@ -376,11 +376,11 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             if (gstVal.length >= 2) {
                 let currentState = this.addressConfiguration.stateList.find(state => state.code === gstVal.substring(0, 2));
                 if (currentState) {
-                    this.addressForm?.get('stateLabel')?.patchValue(currentState?.label);
+                    this.addressForm?.get('stateLabel')?.patchValue(currentState?.label ?? null);
                     this.addressForm.get('state')?.patchValue(currentState?.value);
                 } else {
                     this.addressForm.get('state')?.patchValue(null);
-                    this.addressForm?.get('stateLabel')?.patchValue('');
+                    this.addressForm?.get('stateLabel')?.patchValue(null);
                     if (this.addressConfiguration?.tax?.name && !this.addressForm.get('taxNumber')?.valid) {
                         let message = this.commonLocaleData?.app_invalid_tax_name;
                         message = message?.replace("[TAX_NAME]", this.addressConfiguration.tax.name);
@@ -389,11 +389,11 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 }
             } else {
                 this.addressForm.get('state')?.patchValue(null);
-                this.addressForm?.get('stateLabel')?.patchValue('');
+                this.addressForm?.get('stateLabel')?.patchValue(null);
             }
         } else {
             this.addressForm.get('state')?.patchValue(null);
-            this.addressForm?.get('stateLabel')?.patchValue('');
+            this.addressForm?.get('stateLabel')?.patchValue(null);
         }
     }
 
@@ -507,5 +507,18 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
             this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
             this.addressForm.markAsPristine();
         }
+    }
+
+    /**
+     * Return readonly status for state list dropdown
+     *
+     * @returns {boolean}
+     * @memberof CreateAddressComponent
+     */
+    public isStateReadonly(): boolean {
+        const isGSTIN = this.addressConfiguration?.tax?.name === 'GSTIN';
+        const stateLabelNotNull = this.addressForm?.get('stateLabel')?.value !== null;
+        const taxNumberNotEmpty = this.addressForm?.get('taxNumber')?.value !== "" && this.addressForm?.get('taxNumber')?.value !== null;
+        return isGSTIN && stateLabelNotNull && taxNumberNotEmpty;
     }
 }

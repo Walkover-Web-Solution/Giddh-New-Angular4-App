@@ -1300,12 +1300,21 @@ export class PaymentReceiptComponent implements OnInit, OnDestroy {
      */
     public sendEmail(event: any): void {
         if (event) {
-            this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.paymentReceiptResponse?.account?.uniqueName, {
-                emailId: event.email?.split(','),
-                voucherNumber: [this.paymentReceiptResponse?.number],
-                voucherType: this.paymentReceiptResponse?.type,
-                typeOfInvoice: event.downloadCopy ? event.downloadCopy : []
-            }));
+            if (this.generalService.voucherApiVersion === 2) {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.paymentReceiptResponse.account.uniqueName, {
+                    email: { to: event.email.split(',') },
+                    uniqueName: this.paymentReceiptResponse?.uniqueName,
+                    voucherType: this.paymentReceiptResponse?.type,
+                    copyTypes: event.downloadCopy ? event.downloadCopy : []
+                }));
+            } else {
+                this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.paymentReceiptResponse?.account?.uniqueName, {
+                    emailId: event.email?.split(','),
+                    voucherNumber: [this.paymentReceiptResponse?.number],
+                    voucherType: this.paymentReceiptResponse?.type,
+                    typeOfInvoice: event.downloadCopy ? event.downloadCopy : []
+                }));
+            }
         }
     }
 
