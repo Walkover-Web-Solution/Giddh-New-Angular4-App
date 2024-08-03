@@ -201,11 +201,11 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             /* RAZORPAY */
         }, 1000);
 
-        if (this._generalService.getUrlParameter("region") === "uk") {
+        if (this._generalService.getUrlParameter("region") === "UK") {
             this._generalService.setParameterInLocalStorage("Country-Region", "GB");
-        } else if (this._generalService.getUrlParameter("region") === "ae") {
+        } else if (this._generalService.getUrlParameter("region") === "AE") {
             this._generalService.setParameterInLocalStorage("Country-Region", "AE");
-        } else if (this._generalService.getUrlParameter("region") === "in") {
+        } else if (this._generalService.getUrlParameter("region") === "IN") {
             this._generalService.setParameterInLocalStorage("Country-Region", "IN");
         } else {
             this._generalService.setParameterInLocalStorage("Country-Region", "GL");
