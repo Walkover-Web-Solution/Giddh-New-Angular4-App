@@ -163,9 +163,11 @@ export class SalesService {
     public generatePendingVoucherGenericItem(model: any): Observable<BaseResponse<any, any>> {
         let accountUniqueName = model.account?.uniqueName;
         let url = `${this.config.apiUrl}${SALES_API_V4.GENERATE_GENERIC_ITEMS}-pending-vouchers`;
+        this.companyUniqueName = this.generalService.companyUniqueName;
+      
         url = url?.replace(':companyUniqueName', this.companyUniqueName)
             ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
-        this.companyUniqueName = this.generalService.companyUniqueName;
+        
         if (this.generalService.voucherApiVersion === 2) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }

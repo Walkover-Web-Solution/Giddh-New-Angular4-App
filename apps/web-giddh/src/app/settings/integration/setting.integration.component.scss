@@ -14,10 +14,6 @@
     font-weight: bold;
 }
 
-.pdBth20 {
-    padding: 0 20px;
-}
-
 .check-search {
     position: absolute;
     right: 10px;
@@ -72,6 +68,12 @@
     width: 100% !important;
 }
 
+.form-control {
+    width: 100% !important;
+}
+.linked-account {
+    width: calc(100% - 42px);
+}
 .payment-text {
     color: var(--color-abbey);
 }
@@ -430,6 +432,7 @@
 
 .connected-accounts {
     margin-left: 10px;
+    height: 100%;
 }
 
 .btn-light-blue {

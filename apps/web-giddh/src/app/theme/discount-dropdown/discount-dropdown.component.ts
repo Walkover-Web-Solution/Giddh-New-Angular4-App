@@ -78,11 +78,11 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     public ngOnChanges(changes: SimpleChanges): void {
         if ((!isEqual(changes?.selectedDiscountsList?.currentValue, changes?.selectedDiscountsList?.previousValue)) || (!isEqual(changes?.amount?.currentValue, changes?.amount?.previousValue))) {
             const hasManualDiscount = this.selectedDiscountsList?.filter(selectedDiscount => !selectedDiscount?.uniqueName);
-            if (hasManualDiscount?.length) {
-                if (hasManualDiscount[0].calculationMethod === 'FIX_AMOUNT') {
-                    this.discountForm.get('fixedValue').patchValue(hasManualDiscount[0].discountValue);
+            if (hasManualDiscount?.length && hasManualDiscount[0]) {
+                if (hasManualDiscount[0]?.calculationMethod === 'FIX_AMOUNT') {
+                    this.discountForm.get('fixedValue').patchValue(hasManualDiscount[0]?.discountValue);
                 } else {
-                    this.discountForm.get('percentage').patchValue(hasManualDiscount[0].discountValue);
+                    this.discountForm.get('percentage').patchValue(hasManualDiscount[0]?.discountValue);
                 }
             }
             this.addDiscountsInForm();
