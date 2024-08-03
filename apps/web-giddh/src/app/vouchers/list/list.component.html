@@ -44,7 +44,8 @@
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table mat-table [hidden]="getVouchersInProgress$ | async" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef> <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
+                                <th mat-header-cell *matHeaderCellDef width="50px"> 
+                                    <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
                                             color="primary"
@@ -78,6 +79,7 @@
                                                 context: {
                                                     $implicit: showInvoiceNoSearch,
                                                     fieldName: 'invoiceNumber',
+                                                    voucherType: 'estimate',
                                                     formControl: voucherNumberInput,
                                                     title: 'Estimate No.'
                                                 }
@@ -103,6 +105,7 @@
                                                 context: {
                                                     $implicit: showCustomerSearch,
                                                     fieldName: 'accountUniqueName',
+                                                    voucherType: 'estimate',
                                                     formControl: accountUniqueNameInput,
                                                     title: 'Customer'
                                                 }
@@ -111,11 +114,11 @@
                                     </div>    
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cp" (dblclick)="element.showAccountDetails = true">{{ element.account?.customerName }}</div>
+                                    <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">{{ element.account?.customerName | titlecase }}</div>
                                     <mat-card class="outline-card account-detail-wrapper" *ngIf="element.showAccountDetails" (clickOutside)="element.showAccountDetails = false">
                                         <div class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
-                                            <h3>{{ element.account?.customerName }}</h3>
-                                            <span class="cp" (click)="editAccount(element)">
+                                            <h3>{{ element.account?.customerName | titlecase }}</h3>
+                                            <span class="cursor-pointer" (click)="editAccount(element)">
                                                 <img src="./assets/images/path.svg" />
                                             </span>
                                         </div>
@@ -128,7 +131,7 @@
                                     </mat-card>
                                 </td>
                             </ng-container>
-                            <ng-container matColumnDef="estimateDate">
+                            <ng-container matColumnDef="proformaDate">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
                                     Estimate Date
                                 </th>
@@ -136,7 +139,7 @@
                                     {{ element.voucherDate }}
                                 </td>
                             </ng-container>
-                            <ng-container matColumnDef="amount">
+                            <ng-container matColumnDef="grandTotal">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
                                     Total Amt.
                                 </th>
@@ -150,7 +153,7 @@
                                     </amount-field>
                                 </td>
                             </ng-container>
-                            <ng-container matColumnDef="expiryDate">
+                            <ng-container matColumnDef="dueDate">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
                                     Expiry Date
                                 </th>
@@ -173,7 +176,7 @@
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5" *ngIf="element.action !== 'invoiced'">
                                         <p>{{ element.action ? (element.action | titlecase) : commonLocaleData?.app_select_action }}</p>
-                                        <span [matMenuTriggerFor]="menu" class="cp" *ngIf="!isCompany">
+                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf="!isCompany">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
@@ -296,13 +299,13 @@
                                     </div>    
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cp">{{element.customer}}</div>
+                                    <div class="cursor-pointer">{{element.customer}}</div>
                                     <!-- account-detail-double-click -->
                                     <!-- <mat-card class="outline-card account-detail-wrapper">
                                         <div class="p-3 border-bottom account-header">
                                             <div class="d-flex align-items-center justify-content-between column-gap15 ">
                                                 <h3>00000000</h3>
-                                                <span class="cp">
+                                                <span class="cursor-pointer">
                                                     <img src="./assets/images/path.svg" />
                                                 </span>
                                             </div>
@@ -361,7 +364,7 @@
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>Expired</p>
-                                        <span [matMenuTriggerFor]="menu" class="cp">
+                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
@@ -495,6 +498,7 @@
                                                 context: {
                                                     $implicit: showInvoiceNoSearch,
                                                     fieldName: 'invoiceNumber',
+                                                    voucherType: 'sales',
                                                     formControl: voucherNumberInput,
                                                     title: 'Invoice No.'
                                                 }
@@ -518,6 +522,7 @@
                                                 context: {
                                                     $implicit: showCustomerSearch,
                                                     fieldName: 'accountUniqueName',
+                                                    voucherType: 'sales',
                                                     formControl: accountUniqueNameInput,
                                                     title: 'Customer'
                                                 }
@@ -526,11 +531,11 @@
                                     </div>    
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cp" (dblclick)="element.showAccountDetails = true">{{ element.account?.customerName || element?.account?.name }}</div>
+                                    <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">{{ element.account?.customerName || element?.account?.name }}</div>
                                     <mat-card class="outline-card account-detail-wrapper" *ngIf="element.showAccountDetails" (clickOutside)="element.showAccountDetails = false">
                                         <div class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                             <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
-                                            <span class="cp" (click)="editAccount(element)">
+                                            <span class="cursor-pointer" (click)="editAccount(element)">
                                                 <img src="./assets/images/path.svg" />
                                             </span>
                                         </div>
@@ -604,7 +609,7 @@
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>{{ element.balanceStatus }}</p>
-                                        <span [matMenuTriggerFor]="menu" class="cp" *ngIf="element.balanceStatus !== 'cancel'">
+                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf="element.balanceStatus !== 'cancel'">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
@@ -734,12 +739,12 @@
                                     </div>    
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cp">00000000</div>
+                                    <div class="cursor-pointer">00000000</div>
                                     <!-- account-detail-double-click -->
                                     <!-- <mat-card class="outline-card account-detail-wrapper">
                                         <div class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                             <h3>00000000</h3>
-                                            <span class="cp">
+                                            <span class="cursor-pointer">
                                                 <img src="./assets/images/path.svg" />
                                             </span>
                                         </div>
@@ -794,7 +799,7 @@
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>Cancel</p>
-                                        <span [matMenuTriggerFor]="menu" class="cp">
+                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
@@ -913,12 +918,12 @@
                                     </div>    
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cp">00000000</div>
+                                    <div class="cursor-pointer">00000000</div>
                                     <!-- account-detail-double-click -->
                                     <!-- <mat-card class="outline-card account-detail-wrapper">
                                         <div class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                             <h3>00000000</h3>
-                                            <span class="cp">
+                                            <span class="cursor-pointer">
                                                 <img src="./assets/images/path.svg" />
                                             </span>
                                         </div>
@@ -973,7 +978,7 @@
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>Cancel</p>
-                                        <span [matMenuTriggerFor]="menu" class="cp">
+                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
@@ -1062,7 +1067,7 @@
                                     Account
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
-                                    <div class="cp">
+                                    <div class="cursor-pointer">
                                         {{element.account}}
                                     </div>
                                     <!-- account-detail-double-click -->
@@ -1070,7 +1075,7 @@
                                         <div class="p-3 border-bottom account-header">
                                             <div class="d-flex align-items-center justify-content-between column-gap15 ">
                                                 <h3>USA debtor</h3>
-                                                <span class="cp">
+                                                <span class="cursor-pointer">
                                                     <img src="./assets/images/path.svg" />
                                                 </span>
                                             </div>
@@ -1967,7 +1972,7 @@
                         <mat-card class="outline-card add-template-wrapper text-center">
                             <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
                                 <h3 class="fonr-16">Kriti - 28Sep</h3>
-                                <span class="default-wrap font-12 p-2 cp">
+                                <span class="default-wrap font-12 p-2 cursor-pointer">
                                     <i class="icon-favorite-selected"></i>
                                     Set as Default
                                 </span>
@@ -1991,7 +1996,7 @@
                         <mat-card class="outline-card add-template-wrapper text-center">
                             <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
                                 <h3 class="fonr-16">Kriti - 28Sep</h3>
-                                <span class="default-wrap font-12 p-2 cp active">
+                                <span class="default-wrap font-12 p-2 cursor-pointer active">
                                     <i class="icon-favorite-selected"></i>
                                     Set as Default
                                 </span>
@@ -2023,9 +2028,9 @@
         </div>
     </div>
     <!-- table-search -->
-    <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
-        <div class="align-items-center d-flex" [hidden]="show">
-            <span (click)="toggleSearch($event, fieldName)">
+    <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-voucherType="voucherType" let-formControl="formControl">
+        <div class="d-flex align-items-center column-gap1" [hidden]="show">
+            <span (click)="toggleSearch($event, fieldName, voucherType)">
                 <i class="icon-search icon-font-16"></i>
             </span>
             <span>{{ title }}</span>
@@ -2040,7 +2045,7 @@
             ></text-field>
         </div>
     </ng-template>
-    <!-- datepicker field -->
+    <!-- Universal Datepicker  -->
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">
             <div class="modal-body">

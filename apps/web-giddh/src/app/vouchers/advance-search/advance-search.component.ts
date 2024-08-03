@@ -2,7 +2,7 @@ import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, Temp
 import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
@@ -35,7 +35,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    @ViewChild('filterDatepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store modal reference */
     public modalRef: BsModalRef;
     /* This will store selected date range to use in api */
@@ -65,6 +65,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         dateRange: '',
         amountFieldSelector: ''
     };
+    public isLoading: boolean = true;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
@@ -132,6 +133,12 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             dateRange: [this.advanceFilters?.dateRange || ''],
         });
 
+        this.searchForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            if(res) {
+                console.log(res);
+            }
+        })
+
         this.selectedDateRange = { startDate: this.advanceFilters.from, endDate: this.advanceFilters.to };
         this.selectedDateRangeUi = this.advanceFilters.from + " - " + this.advanceFilters.to;
 
@@ -159,6 +166,11 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         if (amountFieldSelector?.length) {
             this.fieldLabelValues.amountFieldSelector = amountFieldSelector[0]?.label;
         }
+        setTimeout(() => {
+            this.isLoading = false;
+            console.log("localeData", this.localeData);
+            
+        }, 1000);
     }
 
     public ngOnDestroy(): void {
@@ -291,11 +303,21 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         if (this.searchForm.get('dueDate')?.value) {
             this.searchForm.get('dueDate')?.patchValue((typeof this.searchForm.get('dueDate')?.value === "object") ? dayjs(this.searchForm.get('dueDate')?.value).format(GIDDH_DATE_FORMAT) : dayjs(this.searchForm.get('dueDate')?.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
         }
+
+        if (this.searchForm.get('expireFrom')?.value) {
+            this.searchForm.get('expireFrom')?.patchValue((typeof this.searchForm.get('expireFrom')?.value === "object") ? dayjs(this.searchForm.get('expireFrom')?.value).format(GIDDH_DATE_FORMAT) : dayjs(this.searchForm.get('expireFrom')?.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
+        }
+
+        if (this.searchForm.get('expireTo')?.value) {
+            this.searchForm.get('expireTo')?.patchValue((typeof this.searchForm.get('expireTo')?.value === "object") ? dayjs(this.searchForm.get('expireTo')?.value).format(GIDDH_DATE_FORMAT) : dayjs(this.searchForm.get('expireTo')?.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
+        }
     }
 
     public search(): void {
         this.parseAllDateField();
-        this.applyFilterEvent.emit(this.searchForm?.value);
+        console.log(this.searchForm?.value);
+        
+        // this.applyFilterEvent.emit(this.searchForm?.value);
         this.closeModelEvent.emit();
     }
 
@@ -303,55 +325,13 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         this.closeModelEvent.emit(true);
     }
 
-    /**
-     *To show the datepicker
-     *
-     * @param {*} element
-     * @memberof InvoiceAdvanceSearchComponent
-     */
-    public showGiddhDatepicker(element: any): void {
-        if (element) {
-            this.dateFieldPosition = this.generalService.getPosition(element.target);
-        }
-        this.modalRef = this.modalService.show(
-            this.datepickerTemplate,
-            Object.assign({}, { class: 'modal-lg giddh-datepicker-modal', backdrop: false, ignoreBackdropClick: false })
-        );
-    }
+    public expiryDateChanges(event: any): void {
 
-    /**
-     * This will hide the datepicker
-     *
-     * @memberof InvoiceAdvanceSearchComponent
-     */
-    public hideGiddhDatepicker(): void {
-        this.modalRef.hide();
-    }
+            if(event) {
+                console.log("expiryDateChanges", event);
+            }
 
-    /**
-     * Call back function for date/range selection in datepicker
-     *
-     * @param {*} value
-     * @memberof InvoiceAdvanceSearchComponent
-     */
-    public dateSelectedCallback(value?: any): void {
-        if (value && value.event === "cancel") {
-            this.hideGiddhDatepicker();
-            return;
-        }
-        this.selectedRangeLabel = "";
-
-        if (value && value.name) {
-            this.selectedRangeLabel = value.name;
-        }
-        this.hideGiddhDatepicker();
-        if (value && value.startDate && value.endDate) {
-            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
-            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
-            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.searchForm.get('expiredFrom')?.patchValue(this.fromDate);
-            this.searchForm.get('expiredTo')?.patchValue(this.toDate);
-        }
+            // this.fromDate = dayjs(this.searchForm.get('expiredFrom')?.value).format(GIDDH_DATE_FORMAT);
+            // this.toDate = dayjs(this.searchForm.get('expiredFrom')?.value).format(GIDDH_DATE_FORMAT);
     }
 }

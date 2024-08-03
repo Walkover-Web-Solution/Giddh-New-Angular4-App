@@ -44,26 +44,26 @@ export interface PeriodicElement {
     status: string;
 }
 
-// estimate-table
-export interface PeriodicElementEstimate {
-    estimate: string;
-    position: number;
-    customer: string;
-    estimatedate: string;
-    amount: string;
-    expirydate: string;
-    status: string;
-    action: string;
-}
-// estimate-table
-const ESTIMATE_DATA: PeriodicElementEstimate[] = [
-    { position: 1, estimate: 'EST-20240111-1', customer: '00000000', estimatedate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status: '', action: '' },
-    { position: 2, estimate: 'EST-20240111-1', customer: '00000000', estimatedate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status: '', action: '' },
-    { position: 3, estimate: 'EST-20240111-1', customer: '00000000', estimatedate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status: '', action: '' },
-    { position: 4, estimate: 'EST-20240111-1', customer: '00000000', estimatedate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status: '', action: '' },
-    { position: 5, estimate: 'EST-20240111-1', customer: '00000000', estimatedate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status: '', action: '' },
-    { position: 6, estimate: 'EST-20240111-1', customer: '00000000', estimatedate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status: '', action: '' }
-];
+// // estimate-table
+// export interface PeriodicElementEstimate {
+//     estimate: string;
+//     position: number;
+//     customer: string;
+//     estimatedate: string;
+//     amount: string;
+//     expirydate: string;
+//     status: string;
+//     action: string;
+// }
+// // estimate-table
+// const ESTIMATE_DATA: PeriodicElementEstimate[] = [
+//     { position: 1, estimate: 'EST-20240111-1', customer: '00000000', estimatedate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status: '', action: '' },
+//     { position: 2, estimate: 'EST-20240111-1', customer: '00000000', estimatedate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status: '', action: '' },
+//     { position: 3, estimate: 'EST-20240111-1', customer: '00000000', estimatedate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status: '', action: '' },
+//     { position: 4, estimate: 'EST-20240111-1', customer: '00000000', estimatedate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status: '', action: '' },
+//     { position: 5, estimate: 'EST-20240111-1', customer: '00000000', estimatedate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status: '', action: '' },
+//     { position: 6, estimate: 'EST-20240111-1', customer: '00000000', estimatedate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status: '', action: '' }
+// ];
 
 // prforma-table
 export interface PeriodicElementProforma {
@@ -170,7 +170,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public displayedColumns: string[] = ['index', 'invoice', 'customer', 'voucherDate', 'grandTotal', 'balanceDue', 'dueDate', 'einvoicestatus', 'status'];
     public dataSource: any[] = [];
     // estimate-table
-    displayedColumnEstimate: string[] = ['index', 'estimate', 'customer', 'estimateDate', 'amount', 'expiryDate', 'status', 'action'];
+    displayedColumnEstimate: string[] = ['index', 'estimate', 'customer', 'proformaDate', 'grandTotal', 'dueDate', 'status', 'action'];
     // proforma-table
     displayedColumnProforma: string[] = ['position', 'proforma', 'customer', 'proformadate', 'amount', 'expirydate', 'status', 'action'];
     dataSourceProforma = new MatTableDataSource<PeriodicElementProforma>(PROFORMA_DATA);
@@ -951,14 +951,28 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
     }
 
-    public toggleSearch(event: any, fieldName: string): void {
-        if (fieldName === "accountUniqueName") {
-            this.showCustomerSearch = true;
-            this.showInvoiceNoSearch = false;
-        } else if (fieldName === "invoiceNumber") {
-            this.showInvoiceNoSearch = true;
-            this.showCustomerSearch = false;
+    public toggleSearch(event: any, fieldName: string, voucherType: string): void {
+        switch(voucherType) {
+            case VoucherTypeEnum.sales:  
+                            if (fieldName === "accountUniqueName") {
+                                this.showCustomerSearch = true;
+                                this.showInvoiceNoSearch = false;
+                            } else if (fieldName === "invoiceNumber") {
+                                this.showInvoiceNoSearch = true;
+                                this.showCustomerSearch = false;
+                            }
+                            break;
+            case VoucherTypeEnum.estimate:
+                            if (fieldName === "accountUniqueName") {
+                                this.showCustomerSearch = true;
+                                this.showInvoiceNoSearch = false;
+                            } else if (fieldName === "invoiceNumber") {
+                                this.showInvoiceNoSearch = true;
+                                this.showCustomerSearch = false;
+                            }
+                            break;
         }
+        
         event.stopPropagation();
     }
 

@@ -77,6 +77,8 @@ import { DecimalDigitsModule } from "../shared/helpers/directives/decimalDigits/
 import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
 import { GenerateEWayBillModule } from "../invoice/preview/models/generateEWayBill/generateEWayBill.module";
 import { DatepickerWrapperModule } from "../shared/datepicker-wrapper/datepicker.wrapper.module";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
 
 @NgModule({
     declarations: [
@@ -160,7 +162,9 @@ import { DatepickerWrapperModule } from "../shared/datepicker-wrapper/datepicker
         DecimalDigitsModule,
         NgxMaskModule,
         GenerateEWayBillModule,
-        DatepickerWrapperModule
+        DatepickerWrapperModule,
+        MatDatepickerModule,
+        MatNativeDateModule
     ],
     exports: [
 
