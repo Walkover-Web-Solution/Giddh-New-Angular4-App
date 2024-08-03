@@ -214,11 +214,13 @@ export class LoginActions {
                             select(state => state.session.user),
                             take(1), // take only the first emission
                             tap(response => {
+                                console.log(response);
+
                                 const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
                                 if (hasSubscriptionPermission) {
                                     this._router.navigate(['/pages/subscription']);
                                 } else {
-                                    this._router.navigate(['/pages/subscription/buy-plan']);
+                                    this._router.navigate(['/pages/subscription/buy-plan/' + localStorage.getItem('Country-Region')]);
                                 }
                             })
                         ).subscribe();
@@ -290,11 +292,12 @@ export class LoginActions {
                             select(state => state.session.user),
                             take(1), // take only the first emission
                             tap(response => {
+                                console.log(response);
                                 const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
                                 if (hasSubscriptionPermission) {
                                     this._router.navigate(['/pages/subscription']);
                                 } else {
-                                    this._router.navigate(['/pages/subscription/buy-plan']);
+                                    this._router.navigate(['/pages/subscription/buy-plan/' + localStorage.getItem('Country-Region')]);
                                 }
                             })
                         ).subscribe();
