@@ -1213,30 +1213,6 @@ export class InventoryService {
                 })));
     }
 
-    /**
-     * This will use for export inventory transaction report
-     *
-     * @param {*} queryParams
-     * @param {InventoryReportRequestExport} stockReportRequest
-     * @return {*}  {Observable<BaseResponse<InventoryReportRequestExport, InventoryReportRequest>>}
-     * @memberof InventoryService
-     */
-    public getTransactionReportExport(queryParams: any, stockReportRequest: InventoryReportRequestExport): Observable<BaseResponse<InventoryReportRequestExport, InventoryReportRequest>> {
-            this.companyUniqueName = this.generalService.companyUniqueName;
-            return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_TRANSACTION_EXPORT
-                ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-                ?.replace(':from', encodeURIComponent(queryParams?.from ?? ''))
-                ?.replace(':to', encodeURIComponent(queryParams?.to ?? ''))
-                , stockReportRequest).pipe(
-                    map((res) => {
-                        let data: BaseResponse<InventoryReportRequestExport, InventoryReportRequest> = res;
-                        return data;
-                    }), catchError((e) => this.errorHandler.HandleCatch<InventoryReportRequestExport, InventoryReportRequest>(e, stockReportRequest, {
-                        from: queryParams.from,
-                        to: queryParams.to
-                    })));
-    }
-
 
     /**
      * This will use for get inventory gorup report
@@ -1274,30 +1250,6 @@ export class InventoryService {
                     count: queryParams.count,
                     page: queryParams.page,
                     type: queryParams.type
-                })));
-    }
-
-    /**
-     * This will use for export inventory group report
-     *
-     * @param {*} queryParams
-     * @param {InventoryReportRequestExport} stockReportRequest
-     * @return {*}  {Observable<BaseResponse<InventoryReportRequestExport, InventoryReportRequest>>}
-     * @memberof InventoryService
-     */
-    public getGroupWiseReportExport(queryParams: any, stockReportRequest: InventoryReportRequestExport): Observable<BaseResponse<InventoryReportRequestExport, InventoryReportRequest>> {
-        this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_GROUP_WISE_EXPORT
-            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':from', encodeURIComponent(queryParams?.from ?? ''))
-            ?.replace(':to', encodeURIComponent(queryParams?.to ?? ''))
-            , stockReportRequest).pipe(
-                map((res) => {
-                    let data: BaseResponse<InventoryReportRequestExport, InventoryReportRequest> = res;
-                    return data;
-                }), catchError((e) => this.errorHandler.HandleCatch<InventoryReportRequestExport, InventoryReportRequest>(e, stockReportRequest, {
-                    from: queryParams.from,
-                    to: queryParams.to
                 })));
     }
 
@@ -1351,8 +1303,8 @@ export class InventoryService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_ITEM_WISE_EXPORT
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':from', encodeURIComponent(queryParams?.from ?? ''))
-            ?.replace(':to', encodeURIComponent(queryParams?.to ?? ''))
+            ?.replace(':from', encodeURIComponent(queryParams?.from))
+            ?.replace(':to', encodeURIComponent(queryParams?.to))
             , stockReportRequest).pipe(
                 map((res) => {
                     let data: BaseResponse<InventoryReportRequestExport, InventoryReportRequest> = res;
@@ -1396,30 +1348,6 @@ export class InventoryService {
                     count: queryParams.count,
                     page: queryParams.page,
                     type: queryParams.type
-                })));
-    }
-
-    /**
-     * This will use for export inventory variant report
-     *
-     * @param {*} queryParams
-     * @param {InventoryReportRequestExport} stockReportRequest
-     * @return {*}  {Observable<BaseResponse<InventoryReportRequestExport, InventoryReportRequest>>}
-     * @memberof InventoryService
-     */
-    public getVariantWiseReportExport(queryParams: any, stockReportRequest: InventoryReportRequestExport): Observable<BaseResponse<InventoryReportRequestExport, InventoryReportRequest>> {
-        this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_VARIANT_WISE_EXPORT
-            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':from', encodeURIComponent(queryParams?.from ?? ''))
-            ?.replace(':to', encodeURIComponent(queryParams?.to ?? ''))
-            , stockReportRequest).pipe(
-                map((res) => {
-                    let data: BaseResponse<InventoryReportRequestExport, InventoryReportRequest> = res;
-                    return data;
-                }), catchError((e) => this.errorHandler.HandleCatch<InventoryReportRequestExport, InventoryReportRequest>(e, stockReportRequest, {
-                    from: queryParams.from,
-                    to: queryParams.to
                 })));
     }
 
@@ -1754,6 +1682,7 @@ export class InventoryService {
      */
     public getAdjustmentInventoryReport(getParams: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
+
         let url = this.config.apiUrl + INVENTORY_API.INVENTORY_ADJUST.REPORT
             ?.replace(":companyUniqueName", this.companyUniqueName)
             ?.replace(":from", getParams.from)
@@ -1874,13 +1803,13 @@ export class InventoryService {
     }
 
     /**
-   * This will be use for update inventory adjust
-   *
-   * @param {*} model
-   * @param {string} branchUniqueName
-   * @return {*}  {Observable<BaseResponse<any, any>>}
-   * @memberof InventoryService
-   */
+    * This will be use for update inventory adjust
+    *
+    * @param {*} model
+    * @param {string} branchUniqueName
+    * @return {*}  {Observable<BaseResponse<any, any>>}
+    * @memberof InventoryService
+    */
     public updateInventoryAdjustment(model: any, branchUniqueName: string): Observable<BaseResponse<any, any>> {
         let refNo = model.refNo;
         delete model.refNo;
