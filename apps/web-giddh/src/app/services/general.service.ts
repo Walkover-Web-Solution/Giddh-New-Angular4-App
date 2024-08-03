@@ -158,6 +158,9 @@ export class GeneralService {
         if (routerParams['utm_content']) {
             localStorage.setItem('utm_content', routerParams['utm_content']);
         }
+        if (routerParams['region']) {
+            localStorage.setItem('region', routerParams['region']);
+        }
     }
 
     getUtmParameter(param: string): string {
@@ -174,6 +177,7 @@ export class GeneralService {
         localStorage.removeItem("utm_campaign");
         localStorage.removeItem("utm_term");
         localStorage.removeItem("utm_content");
+        localStorage.removeItem("region");
     }
 
     getLastElement(array) {
