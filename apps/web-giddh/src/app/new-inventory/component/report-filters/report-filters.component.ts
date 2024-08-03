@@ -141,7 +141,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     /** Observable to subscribe for refresh columns on select chiplist */
     public refreshColumns = new Subject<void>();
     /** This will hold if variant is selected on chip list */
-    public isVariantSelected : boolean = false;
+    public isVariantSelected: boolean = false;
     /** Loading Observable */
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
 
@@ -241,7 +241,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.searchInventory();
             }
         });
-        this.searchInventory();      
+        this.searchInventory();
     }
 
     /**
@@ -315,26 +315,26 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.changeDetection.detectChanges();
 
         /* This will use for table header from customise columns for export table */
-         this.stockReportRequestExport = {
-             ...this.stockReportRequestExport,
-             showStockName: false,
-             showGroupName: false,
-             showUnitName: false,
-             showOpeningStockQty: false,
-             showOpeningStockValue: false,
-             showInwardsQty: false,
-             showInwardsValue: false,
-             showOutwardsQty: false,
-             showOutwardsValue: false,
-             showClosingStockQty: false,
-             showClosingStockValue: false
-         }
+        this.stockReportRequestExport = {
+            ...this.stockReportRequestExport,
+            showStockName: false,
+            showGroupName: false,
+            showUnitName: false,
+            showOpeningStockQty: false,
+            showOpeningStockValue: false,
+            showInwardsQty: false,
+            showInwardsValue: false,
+            showOutwardsQty: false,
+            showOutwardsValue: false,
+            showClosingStockQty: false,
+            showClosingStockValue: false
+        }
 
         /* for column value filter selected */
-         this.displayedColumns?.forEach(column => {
-             if (column === 'stock_name') {
-                 this.stockReportRequestExport.showStockName = true;
-             }
+        this.displayedColumns?.forEach(column => {
+            if (column === 'stock_name') {
+                this.stockReportRequestExport.showStockName = true;
+            }
             else if (column === 'group_name') {
                 this.stockReportRequestExport.showGroupName = true;
             }
@@ -390,13 +390,13 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         });
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.advanceSearchModalResponse = response;                
+                this.advanceSearchModalResponse = response;
                 this.stockReportRequest.param = response.stockReportRequest?.param;
                 this.stockReportRequest.expression = response.stockReportRequest?.expression;
                 this.stockReportRequest.from = response.stockReportRequest?.fromDate;
                 this.stockReportRequest.to = response.stockReportRequest?.toDate;
                 this.stockReportRequest.val = response.stockReportRequest?.val;
-                
+
                 this.balanceStockReportRequest.param = response.stockReportRequest?.param;
                 this.balanceStockReportRequest.expression = response.stockReportRequest?.expression;
                 this.balanceStockReportRequest.val = response.stockReportRequest?.val;
@@ -423,7 +423,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     private emitFilters(): void {
-        this.filters.emit({ stockReportRequest: this.stockReportRequest, balanceStockReportRequest: this.balanceStockReportRequest, displayedColumns: this.displayedColumns, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter, advanceSearchModalResponse: this.advanceSearchModalResponse, stockReportRequestExport: this.stockReportRequestExport});
+        this.filters.emit({ stockReportRequest: this.stockReportRequest, balanceStockReportRequest: this.balanceStockReportRequest, displayedColumns: this.displayedColumns, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter, advanceSearchModalResponse: this.advanceSearchModalResponse, stockReportRequestExport: this.stockReportRequestExport });
     }
 
     /**
@@ -860,23 +860,22 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @return {*}  {void}
      * @memberof ReportFiltersComponent
     */
-        public exportReport(): void {
-            if (this.searchPage === InventoryReportType.stock) {
-                let stockReportRequestExport = this.stockReportRequestExport;
-                let queryParams = {
-                    from: this.fromDate,
-                    to: this.toDate
-                };
-                delete stockReportRequestExport.from;
-                delete stockReportRequestExport.to;
-    
-                stockReportRequestExport.inventoryType = this.moduleType;
-                // data is coming from inventory store
-                this.componentStore.exportStock({
-                    stockReportRequest: stockReportRequestExport,
-                    queryParams: queryParams
-                });
-            }
-        }
-}
+    public exportReport(): void {
+        if (this.searchPage === InventoryReportType.stock) {
+            let stockReportRequestExport = this.stockReportRequestExport;
+            let queryParams = {
+                from: this.fromDate,
+                to: this.toDate
+            };
+            delete stockReportRequestExport.from;
+            delete stockReportRequestExport.to;
 
+            stockReportRequestExport.inventoryType = this.moduleType;
+            // data is coming from inventory store
+            this.componentStore.exportStock({
+                stockReportRequest: stockReportRequestExport,
+                queryParams: queryParams
+            });
+        }
+    }
+}

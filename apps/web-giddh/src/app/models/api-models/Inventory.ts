@@ -171,7 +171,7 @@ export class StockTransactionReportRequest {
     public stocks?: any[];
     public variants?: any[];
     public inventoryType?: string;
-    public inventoryAdjustmentRefNo?:string
+    public archived?: boolean;
     constructor() {
         this.count = PAGINATION_LIMIT;
         this.page = 1;
@@ -185,7 +185,6 @@ export class StockTransactionReportRequest {
         this.branchUniqueNames = [];
         this.variantUniqueNames = [];
         this.voucherTypes = [];
-        this.inventoryAdjustmentRefNo = null;
     }
 }
 
@@ -649,4 +648,3 @@ export class InventorytAdjustReportQueryRequest {
     public searchBy: string = '';
     public branchUniqueName?: string;
 }
-

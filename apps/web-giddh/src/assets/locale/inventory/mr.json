@@ -20,7 +20,8 @@
         "create_branch_transfer":"शाखा हस्तांतरण तयार करा",
         "custom_price": "सानुकूल किंमत",
         "customer_wise":"ग्राहक शहाणे",
-        "vendor_wise":"विक्रेता शहाणे"
+        "vendor_wise":"विक्रेता शहाणे",
+        "inventory_adjustment":"इन्व्हेंटरी समायोजन"
     },
     "reports":{
         "transaction_count":"व्यवहाराची संख्या",

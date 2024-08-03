@@ -20,7 +20,8 @@
         "create_branch_transfer":"शाखा स्थानांतरण बनाएँ",
         "custom_price": "कस्टम कीमत",
         "customer_wise":"ग्राहक समझदार",
-        "vendor_wise":"विक्रेता समझदार"
+        "vendor_wise":"विक्रेता समझदार",
+        "inventory_adjustment":"माल - सूची का समायोजन"
     },
     "reports":{
         "transaction_count":"लेन-देन की संख्या",
