@@ -116,8 +116,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public isFormSubmitted: boolean = false;
     /** Hold selected plan*/
     public selectedPlan: any;
-    /** Hold popular plan*/
-    public popularPlan: any;
     /** Hold session source observable*/
     public session$: Observable<userLoginStateEnum>;
     /** Hold state source observable*/
@@ -182,6 +180,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     private openedWindow: Window | null = null;
     /** Holds Store Plan list API success state as observable*/
     public subscriptionRazorpayOrderDetails$ = this.componentStore.select(state => state.subscriptionRazorpayOrderDetails);
+    /** Holds Store Plan Calculation Plan Data API success state as observable*/
+    public calculateData$ = this.componentStore.select(state => state.calculateData);
     /** True if it is subscription region */
     public isSubscriptionRegion: boolean = false;
     /** Hold current time stamp  */
@@ -193,6 +193,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** Holds upgrade subscription id  */
     public upgradeSubscriptionId: any;
     public upgraderRegion: any;
+    public viewSubscriptionData: any;
+    public isAllPlans: any[] = [];
 
     constructor(
         public dialog: MatDialog,
@@ -250,7 +252,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.createSubscriptionResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
             if (response) {
                 this.responseSubscriptionId = response.subscriptionId;
                 // if (response.duration === "YEARLY") {
@@ -469,6 +470,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
         this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             console.log(response);
+            this.viewSubscriptionData = response;
             if (this.subscriptionId && response?.region) {
                 this.newUserSelectCountry({
                     "label": response.region?.code + " - " + response.region?.name,
@@ -643,7 +645,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public toggleDuration(event: any): void {
         if (event) {
             this.firstStepForm.get('duration').setValue(event?.value);
-            this.setPlans();
+            if (!this.subscriptionId) {
+                this.setPlans();
+            }
         }
     }
 
@@ -1111,6 +1115,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public getAllPlans(): void {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length) {
+                this.isAllPlans = response;
                 this.monthlyPlans = response?.filter(plan =>
                     plan.hasOwnProperty('monthlyAmount') && plan?.monthlyAmount !== null
                 );
@@ -1120,10 +1125,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 );
                 this.monthlyPlans = this.monthlyPlans.sort((a, b) => a.monthlyAmount - b.monthlyAmount);
                 this.yearlyPlans = this.yearlyPlans.sort((a, b) => a.yearlyAmount - b.yearlyAmount);
-                if (this.yearlyPlans?.length) {
-                    this.firstStepForm.get('duration').setValue('YEARLY');
+                if (!this.subscriptionId) {
+                    if (this.yearlyPlans?.length) {
+                        this.firstStepForm.get('duration').setValue('YEARLY');
+                    } else {
+                        this.firstStepForm.get('duration').setValue('MONTHLY');
+                    }
                 } else {
-                    this.firstStepForm.get('duration').setValue('MONTHLY');
+                    this.firstStepForm.get('duration').setValue(this.viewSubscriptionData?.period);
                 }
                 this.setPlans();
             } else {
@@ -1143,15 +1152,22 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     private setPlans(): void {
         this.inputData = [];
-        const filteredPlans = this.firstStepForm.get('duration').value === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
-        this.selectedPlan = filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1];
-        this.popularPlan = filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1];
-
+        if (!this.subscriptionId) {
+            const filteredPlans = this.firstStepForm.get('duration').value === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
+            this.selectedPlan = filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1];
+            filteredPlans?.forEach(plan => {
+                this.inputData.push(plan);
+            });
+        } else {
+            let subscriptionPlan = this.isAllPlans?.filter(plan => plan?.uniqueName === this.viewSubscriptionData?.planUniqueName);
+            this.selectedPlan = subscriptionPlan[0];
+            const filteredPlans = this.viewSubscriptionData?.period === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
+            filteredPlans?.forEach(plan => {
+                this.inputData.push(plan);
+            });
+        }
         this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan?.uniqueName);
 
-        filteredPlans?.forEach(plan => {
-            this.inputData.push(plan);
-        });
 
         this.setFinalAmount();
     }
@@ -1162,33 +1178,25 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public setFinalAmount(): void {
-        if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in' && !this.promoCodeResponse?.length) {
-            this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
-                if (result) {
-                    this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
-                    if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                        this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
-                    } else {
-                        this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
-                    }
-                    if (this.selectedPlan?.currency?.code?.toLowerCase() === 'inr' && this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
-                        this.finalPlanAmount = this.finalPlanAmount + (this.finalPlanAmount * this.taxPercentage);
-                    } else {
-                        if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                            this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
-                        } else {
-                            this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
-                        }
-                    }
-                }
-            });
-        } else {
-            if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
-            } else {
-                this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
-            }
+        console.log(this.selectedPlan);
+        let reqObj = {
+            planUniqueName: this.selectedPlan?.uniqueName,
+            promoCode: this.firstStepForm?.get('promoCode')?.value,
+            duration: this.firstStepForm.get('duration').value
         }
+        if (this.selectedPlan?.uniqueName) {
+            this.componentStore.getCalculationData(reqObj);
+        }
+        this.calculateData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            console.log(response);
+            if (response) {
+                this.finalPlanAmount = response?.planAmountToCharge;
+                this.selectedPlan = { ...this.selectedPlan, ...response };
+                console.log(this.selectedPlan);
+            }
+        });
+
+
     }
 
     /**

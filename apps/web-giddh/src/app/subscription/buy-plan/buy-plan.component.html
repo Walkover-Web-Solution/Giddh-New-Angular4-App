@@ -1001,8 +1001,7 @@
                             <p
                                 class="text-right"
                                 *ngIf="
-                                    selectedPlan?.currency?.code?.toLowerCase() === 'inr' &&
-                                    secondStepForm.get('country')?.value?.value?.toLowerCase() === 'in' &&
+                                  selectedPlan?.taxTotal > 0 &&
                                     promoCodeResponse[0]?.discountValue
                                 "
                             >

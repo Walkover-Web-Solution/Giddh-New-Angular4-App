@@ -28,6 +28,8 @@ export interface BuyPlanState {
     getChangePlanDetailsInProgress: boolean;
     changePlanDetails: any;
     activatePlanSuccess: boolean;
+    calculateDataInProgress: boolean;
+    calculateData: any;
 }
 
 export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
@@ -49,7 +51,9 @@ export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
     subscriptionRazorpayOrderDetails: null,
     getChangePlanDetailsInProgress: null,
     changePlanDetails: null,
-    activatePlanSuccess: false
+    activatePlanSuccess: false,
+    calculateDataInProgress: false,
+    calculateData:null
 };
 
 @Injectable()
@@ -494,6 +498,40 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             return this.patchState({
                                 generateOrderBySubscriptionIdInProgress: false,
                                 subscriptionRazorpayOrderDetails: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly getCalculationData = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ calculateDataInProgress: true });
+                return this.subscriptionService.getPlanAmountCalculation(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                return this.patchState({
+                                    calculateData: res?.body ?? [],
+                                    calculateDataInProgress: false
+                                });
+                            } else {
+                                this.toasterService.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    calculateData: [],
+                                    calculateDataInProgress: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({
+                                calculateData: [],
+                                calculateDataInProgress: false
                             });
                         }
                     ),
