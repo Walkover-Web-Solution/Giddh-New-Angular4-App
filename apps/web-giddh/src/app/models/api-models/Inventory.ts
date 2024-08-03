@@ -265,11 +265,6 @@ export class StockTransactionReportRequestExport {
     public showOutwardsValue?: boolean;
     public showClosingStockQty?: boolean;
     public showClosingStockValue?: boolean;
-    public showVariantName?: boolean;
-    public showDate?: boolean;
-    public showAccountUniqueName?: boolean;
-    public showRate?: boolean;
-    public showValue?: boolean;
     constructor() {
         this.stockGroupUniqueNames = [];
         this.stockUniqueNames = [];
@@ -292,11 +287,6 @@ export class StockTransactionReportRequestExport {
         this.showOutwardsValue = false;
         this.showClosingStockQty = false;
         this.showClosingStockValue = false;
-        this.showVariantName = false;
-        this.showDate = false;
-        this.showAccountUniqueName = false;
-        this.showRate = false;
-        this.showValue = false;
     }
 }
 
