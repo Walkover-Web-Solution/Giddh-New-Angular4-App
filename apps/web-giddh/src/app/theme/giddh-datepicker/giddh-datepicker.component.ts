@@ -59,6 +59,8 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     private innerValue: any = '';
     /** This is used to show default date */
     public calendarDate: any = '';
+    /** This is used to show change date */
+    public inputChange : any ='';
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
@@ -95,6 +97,11 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+    public dateInputChange(event: Event): void {
+        const inputElement = event.target as HTMLInputElement;
+        const inputValue = inputElement.value;
+        this.inputChange= inputValue;
+    }
 
     /**
      * Callback for date change
@@ -103,7 +110,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @memberof GiddhDatepickerComponent
      */
     public dateChange(event: MatDatepickerInputEvent<Date>): void {
-        let selectedDate = (typeof(event?.value) === "object") ? dayjs(event?.value).toDate() : dayjs(event?.value, GIDDH_DATE_FORMAT).toDate();
+        let selectedDate = (event?.value != null) ? dayjs(event?.value).toDate() : dayjs(this.inputChange , GIDDH_DATE_FORMAT).toDate();    
         this.onChangeCallback(selectedDate);
         this.dateSelected.emit(selectedDate);
     }
@@ -161,16 +168,11 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @memberof GiddhDatepickerComponent
      */
     public writeValue(value: any): void {
-        if (value) {
-            this.innerValue = value;
-            this.calendarDate = (typeof(value) === "object") ? dayjs(value).toDate() : dayjs(value, GIDDH_DATE_FORMAT).toDate();
-            this.changeDetectorRef.detectChanges();
-        } else {
-            this.innerValue = "";
-            this.calendarDate = "";
-            this.changeDetectorRef.detectChanges();
-        }
-    }
+        let selectvalue= typeof(value) === "object" ? value: this.inputChange;
+        this.innerValue = selectvalue;
+        this.calendarDate = dayjs(selectvalue, GIDDH_DATE_FORMAT).toDate();
+        this.changeDetectorRef.detectChanges();
+     }
 
     /**
      * Form ControlValueAccessor interface
