@@ -38,7 +38,6 @@
 		"created_on": "पर बनाया",
 		"total_transactions": "कुल लेनदेन",
 		"move_plan_note": "उस योजना का चयन करें जिसमें आप <strong>[COMPANY_NAME]</strong> को [PLAN_NAME] से स्थानांतरित करना चाहते हैं",
-        "company_note": "उस कंपनी का चयन करें जिसे आप इस सदस्यता में <strong>[COMPANY_NAME]</strong> जोड़ना चाहते हैं।",
 		"select_plan": "प्लान का चयन करें",
         "start_trial": "शुरू परीक्षण",
 		"move": "मूव",
@@ -151,5 +150,9 @@
         "confirm_payment_delete_message": "क्या आप वाकई भुगतान विधि को हटाना चाहते हैं?",
         "manage_payment_methods": "भुगतान विधियों का प्रबंधन करें",
         "select_provider": "प्रदाता चुनें",
-        "payment_provider": "भुगतान प्रदाता"
+        "payment_provider": "भुगतान प्रदाता",
+        "company_note": "उस कंपनी का चयन करें जिसे आप इस सदस्यता में <strong>[COMPANY_NAME]</strong> जोड़ना चाहते हैं।",
+        "free_for": "मुफ़्त के लिए",
+        "company_message": "कंपनी [TYPE] सफलतापूर्वक",
+        "manage_payment": "भुगतान विधियों का प्रबंधन करें"
 	}

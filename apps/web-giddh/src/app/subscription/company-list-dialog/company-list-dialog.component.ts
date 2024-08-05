@@ -99,8 +99,9 @@ export class CompanyListDialogComponent implements OnInit {
 
         this.archiveCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                let message = response?.archiveStatus === 'USER_ARCHIVED' ? 'Company archived successfully': 'Company unarchived successfully';
-                this.toasterService.showSnackBar('success', message);
+                let text = this.localeData?.company_message;
+                text = text?.replace("[TYPE]", response?.archiveStatus === 'USER_ARCHIVED' ? this.commonLocaleData?.app_unarchive : this.commonLocaleData?.app_archive);
+                this.toasterService.showSnackBar('success', text);
                 this.getAllCompaniesList();
             }
         });
@@ -246,7 +247,6 @@ export class CompanyListDialogComponent implements OnInit {
     private openConfirmationDialog(request: any): void {
         let text = this.localeData?.confirm_archive_message;
         text = text?.replace("[TYPE]", request.status.archiveStatus === 'UNARCHIVED' ? this.commonLocaleData?.app_unarchive : this.commonLocaleData?.app_archive);
-
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
             width: '540px',
             data: {

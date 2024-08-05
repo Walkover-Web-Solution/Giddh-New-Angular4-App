@@ -26,7 +26,7 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
     public imgPath: string = '';
     /** Instance of modal */
     public modalDialogRef: any;
-    /** Instance of modal */
+    /** Instance of reject modal */
     public rejectModalDialogRef: any;
     /** Hold for accepted subscription*/
     public acceptedSubscription: boolean = false;
@@ -123,9 +123,9 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
         });
     }
 
-    public closeReject(): void  {
+    public closeReject(): void {
         this.rejectModalDialogRef?.close();
-     }
+    }
 
     /**
      * Releases the memory

@@ -36,7 +36,6 @@
 		"created_on": "रोजी तयार केले",
 		"total_transactions": "एकूण व्यवहार",
 		"move_plan_note": "आपण ज्या योजनेत [PLAN_NAME] वरून… <strong>[COMPANY_NAME]</strong> हलवू इच्छिता ते निवडा.",
-        "company_note": "तुम्ही या सदस्यत्वामध्ये <strong>[COMPANY_NAME]</strong> जोडू इच्छित असलेली कंपनी निवडा.",
 		"select_plan": "योजना निवडा",
         "start_trial": "चाचणी सुरू करा",
 		"move": "हलवा",
@@ -151,5 +150,9 @@
         "confirm_payment_delete_message": "आपण खरोखरच पेमेंट पद्धत हटवू इच्छिता?",
         "manage_payment_methods": "पेमेंट पद्धती व्यवस्थापित करा",
         "select_provider": "प्रदाता निवडा",
-        "payment_provider": "पेमेंट प्रदाता"
+        "payment_provider": "पेमेंट प्रदाता",
+       "company_note": "तुम्ही या सदस्यत्वामध्ये <strong>[COMPANY_NAME]</strong> जोडू इच्छित असलेली कंपनी निवडा.",
+        "free_for": "मुफ़्त साठी",
+        "company_message": "कंपनी [TYPE] यशस्वीरित्या",
+        "manage_payment": "भरणा पद्धतींचे व्यवस्थापन करा"
 	}

@@ -57,9 +57,9 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     public companiesList$ = this.componentStore.select(state => state.companiesList);
     /** Stores the default search results pagination details */
     public companyName: string;
-    /** Inventory Observable */
+    /** Company list Observable */
     public companyList$: Observable<any[]> = observableOf(null);
-    /** Stock Transactional Object */
+    /**  Search company request object */
     public searchRequest: SearchCompanyRequest = new SearchCompanyRequest();
     /** Filtered options to show in autocomplete list */
     public fieldFilteredOptions: any[] = [];

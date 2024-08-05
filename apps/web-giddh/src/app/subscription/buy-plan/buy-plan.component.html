@@ -149,15 +149,17 @@
                                                                 "
                                                             >
                                                                 <span class="font-24">
-                                                                    <span class="strong">Free</span></span
+                                                                    <span class="strong">{{
+                                                                        localeData?.free
+                                                                    }}</span></span
                                                                 >
                                                             </ng-container>
                                                             <ng-container
                                                                 *ngIf="plan?.yearlyAmount === 0 && plan?.yearlyDiscount"
                                                             >
                                                                 <span class="font-24">
-                                                                    <span class="strong"
-                                                                        >Free for <br />{{
+                                                                    <span class="strong">
+                                                                        {{ localeData?.free_for }} <br />{{
                                                                             plan?.yearlyDiscount?.duration
                                                                         }}
                                                                         {{
@@ -243,7 +245,9 @@
                                                                 "
                                                             >
                                                                 <span class="font-24">
-                                                                    <span class="strong">Free</span></span
+                                                                    <span class="strong">{{
+                                                                        localeData?.free
+                                                                    }}</span></span
                                                                 >
                                                             </ng-container>
                                                             <ng-container
@@ -252,8 +256,8 @@
                                                                 "
                                                             >
                                                                 <span class="font-24">
-                                                                    <span class="strong"
-                                                                        >Free for <br />{{
+                                                                    <span class="strong">
+                                                                        {{ localeData?.free_for }} <br />{{
                                                                             plan?.monthlyDiscount?.duration
                                                                         }}
                                                                         {{
@@ -404,10 +408,10 @@
                                                         <amount-field
                                                             [useGiddhCurrencyPipe]="false"
                                                             [amount]="
-                                                               firstStepForm.get('duration')?.value === 'YEARLY'
+                                                                firstStepForm.get('duration')?.value === 'YEARLY'
                                                                     ? plan?.billsAllowed
                                                                     : plan?.monthlyBillsAllowed
-                                                                    "
+                                                            "
                                                             [currencySymbol]="false"
                                                             [currencyCode]="false"
                                                         >
@@ -433,10 +437,10 @@
                                                         <amount-field
                                                             [useGiddhCurrencyPipe]="false"
                                                             [amount]="
-                                                               firstStepForm.get('duration')?.value === 'YEARLY'
+                                                                firstStepForm.get('duration')?.value === 'YEARLY'
                                                                     ? plan?.companiesLimit
                                                                     : plan?.monthlyCompaniesLimit
-                                                                    "
+                                                            "
                                                             [currencySymbol]="false"
                                                             [currencyCode]="false"
                                                         >
@@ -900,12 +904,12 @@
                                     }}</span>
                                     {{ commonLocaleData?.app_amount }}</span
                                 >
-                                    <amount-field
-                                        [amount]="selectedPlan?.planAmountBeforeDiscount"
-                                        [currencySymbol]="selectedPlan?.currency?.symbol"
-                                        [currencyCode]="selectedPlan?.currency?.code"
-                                    >
-                                    </amount-field>
+                                <amount-field
+                                    [amount]="selectedPlan?.planAmountBeforeDiscount"
+                                    [currencySymbol]="selectedPlan?.currency?.symbol"
+                                    [currencyCode]="selectedPlan?.currency?.code"
+                                >
+                                </amount-field>
                             </div>
                         </div>
                         <div
@@ -921,25 +925,25 @@
                                     {{ commonLocaleData?.app_discount }} {{ commonLocaleData?.app_amount }}</span
                                 >
                             </p>
-                                <amount-field
-                                    [amount]="
-                                        promoCodeResponse?.length
-                                            ? promoCodeResponse[0]?.discountValue
-                                            : selectedPlan?.discount?.discountValue
-                                    "
-                                    [currencySymbol]="selectedPlan?.currency?.symbol"
-                                    [currencyCode]="selectedPlan?.currency?.code"
-                                >
-                                </amount-field>
+                            <amount-field
+                                [amount]="
+                                    promoCodeResponse?.length
+                                        ? promoCodeResponse[0]?.discountValue
+                                        : selectedPlan?.discount?.discountValue
+                                "
+                                [currencySymbol]="selectedPlan?.currency?.symbol"
+                                [currencyCode]="selectedPlan?.currency?.code"
+                            >
+                            </amount-field>
                         </div>
                         <div class="d-flex justify-content-between border-bottom py-3">
                             <p>{{ commonLocaleData?.app_subtotal }}</p>
-                                <amount-field
-                                    [amount]="selectedPlan?.planAmountBeforeTax"
-                                    [currencySymbol]="selectedPlan?.currency?.symbol"
-                                    [currencyCode]="selectedPlan?.currency?.code"
-                                >
-                                </amount-field>
+                            <amount-field
+                                [amount]="selectedPlan?.planAmountBeforeTax"
+                                [currencySymbol]="selectedPlan?.currency?.symbol"
+                                [currencyCode]="selectedPlan?.currency?.code"
+                            >
+                            </amount-field>
                         </div>
                         <div *ngIf="firstStepForm.get('planUniqueName').value">
                             <div class="d-flex justify-content-between py-3">
@@ -955,19 +959,13 @@
                             </div>
                             <p
                                 class="text-right"
-                                *ngIf="
-                                   selectedPlan?.taxTotal > 0 &&
-                                    !promoCodeResponse[0]?.discountValue
-                                "
+                                *ngIf="selectedPlan?.taxTotal > 0 && !promoCodeResponse[0]?.discountValue"
                             >
                                 {{ localeData?.including_tax }}
                             </p>
                             <p
                                 class="text-right"
-                                *ngIf="
-                                  selectedPlan?.taxTotal > 0 &&
-                                    promoCodeResponse[0]?.discountValue
-                                "
+                                *ngIf="selectedPlan?.taxTotal > 0 && promoCodeResponse[0]?.discountValue"
                             >
                                 {{ localeData?.including_tax }}
                             </p>

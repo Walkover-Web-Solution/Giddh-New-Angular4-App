@@ -633,13 +633,13 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-/**
- * This will be use for add company in subscription
- *
- * @param {*} company
- * @memberof SubscriptionListComponent
- */
-public addCompanyInSubscription(company: any): void {
+    /**
+     * This will be use for add company in subscription
+     *
+     * @param {*} company
+     * @memberof SubscriptionListComponent
+     */
+    public addCompanyInSubscription(company: any): void {
         this.menu.closeMenu();
         this.subscriptionMove = false;
         this.selectedCompany = company;
@@ -648,41 +648,41 @@ public addCompanyInSubscription(company: any): void {
             role: 'alertdialog',
             ariaLabel: 'moveDialog'
         });
-}
-
-/**
- * This will be use for manage payment methods
- *
- * @param {*} event
- * @memberof SubscriptionListComponent
- */
-public managePaymentMethod(event: any): void {
-    this.menu?.closeMenu();
-    this.subscriptionMove = true;
-    let data = {
-        rowData: event,
-        subscriptions: this.subscriptions,
-        selectedCompany: this.selectedCompany,
-        localeData: this.localeData,
-        commonLocaleData: this.commonLocaleData,
-        subscriptionMove: this.subscriptionMove
     }
-    this.dialog.open(PaymentMethodDialogComponent, {
-        data: data,
-        panelClass: 'subscription-sidebar',
-        role: 'alertdialog',
-        ariaLabel: 'paymentDialog'
-    });
+
+    /**
+     * This will be use for manage payment methods
+     *
+     * @param {*} event
+     * @memberof SubscriptionListComponent
+     */
+    public managePaymentMethod(event: any): void {
+        this.menu?.closeMenu();
+        this.subscriptionMove = true;
+        let data = {
+            rowData: event,
+            subscriptions: this.subscriptions,
+            selectedCompany: this.selectedCompany,
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData,
+            subscriptionMove: this.subscriptionMove
+        }
+        this.dialog.open(PaymentMethodDialogComponent, {
+            data: data,
+            panelClass: 'subscription-sidebar',
+            role: 'alertdialog',
+            ariaLabel: 'paymentDialog'
+        });
     }
 
     /**
     * This function will refresh the subscribed companies if move company was succesful and will close the popup
     *
     * @param {*} event
-    * @memberof SubscriptionComponent
+    * @memberof SubscriptionListComponent
     */
     public addOrMoveCompanyCallback(event: boolean): void {
-        if (event === true) {
+        if (event) {
             this.getAllSubscriptions(false);
         }
     }

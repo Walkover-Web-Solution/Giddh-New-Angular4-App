@@ -52,7 +52,6 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
      * @memberof MoveCompanyComponent
      */
     public ngOnInit(): void {
-        console.log(this.moveSelectedCompany);
         if (this.moveSelectedCompany) {
             this.getCompanyDetails();
         }

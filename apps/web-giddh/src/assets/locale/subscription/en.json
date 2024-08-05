@@ -6,7 +6,6 @@
         "created_on": "Created on",
         "total_transactions": "Total Transactions",
         "move_plan_note": "Select the plan in which you want to move <strong>[COMPANY_NAME]</strong> from [PLAN_NAME] to…",
-        "company_note": "Select the company to which you want to add <strong>[COMPANY_NAME]</strong> in this subscription.",
         "select_plan": "Select Plan",
         "start_trial": "Start Trial",
         "move": "Move",
@@ -120,5 +119,9 @@
         "confirm_payment_delete_message": "Are you sure you want to delete the payment method?",
         "manage_payment_methods": "Manage Payment Methods",
         "select_provider": "Select Provider",
-        "payment_provider": "Payment Provider"
+        "payment_provider": "Payment Provider",
+        "company_note": "Select the company to which you want to add <strong>[COMPANY_NAME]</strong> in this subscription.",
+        "free_for":"Free for",
+        "company_message": "Company [TYPE] successfully",
+        "manage_payment":"Manage Payment Methods"
     }

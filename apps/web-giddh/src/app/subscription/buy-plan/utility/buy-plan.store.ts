@@ -53,7 +53,7 @@ export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
     changePlanDetails: null,
     activatePlanSuccess: false,
     calculateDataInProgress: false,
-    calculateData:null
+    calculateData: null
 };
 
 @Injectable()
@@ -471,7 +471,11 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
         );
     });
 
-
+    /**
+     * Activate plan
+     *
+     * @memberof BuyPlanComponentStore
+     */
     readonly activatePlan = this.effect((data: Observable<string>) => {
         return data.pipe(
             switchMap((req) => {
@@ -507,6 +511,11 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
         );
     });
 
+    /**
+     * Get plan calculation details
+     *
+     * @memberof BuyPlanComponentStore
+     */
     readonly getCalculationData = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {

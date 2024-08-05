@@ -298,8 +298,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-
-
         this.subscriptionRazorpayOrderDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 if (response.dueAmount > 0) {
@@ -337,11 +335,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             if (response) {
                 this.isLoading = false;
                 if (this.isChangePlan && !this.isUserManualChangePlan) {
-                        this.router.navigate(['/pages/user-details/subscription']);
-                    } else {
-                        this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
-                    };
-                }
+                    this.router.navigate(['/pages/user-details/subscription']);
+                } else {
+                    this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                };
+            }
         });
 
         this.getCountryList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -1182,8 +1180,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.selectedPlan = { ...this.selectedPlan, ...response };
             }
         });
-
-
     }
 
     /**

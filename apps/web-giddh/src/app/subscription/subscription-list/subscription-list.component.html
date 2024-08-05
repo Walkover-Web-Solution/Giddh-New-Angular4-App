@@ -303,7 +303,7 @@
                                         {{ commonLocaleData?.app_create + " " + commonLocaleData?.app_company }}
                                     </button>
                                     <button
-                                        *ngIf="element?.isOwner "
+                                        *ngIf="element?.isOwner"
                                         mat-menu-item
                                         (click)="addCompanyInSubscription(element)"
                                     >
@@ -318,7 +318,7 @@
                                             activeCompany?.planVersion === 2
                                         "
                                     >
-                                        Manage Payment Methods
+                                        {{ localeData?.manage_payment }}
                                     </button>
                                 </div>
                             </mat-menu>

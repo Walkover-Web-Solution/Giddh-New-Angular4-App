@@ -26,7 +26,7 @@ export class PaymentMethodDialogComponent implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds Store Payment method list API success state as observable*/
     public paymentMethodList$ = this.componentStore.select(state => state.providerList);
-    /** Holds Store Provider  list API success state as observable*/
+    /** Holds Store Provider list API success state as observable*/
     public providerListInProgress$ = this.componentStore.select(state => state.providerListInProgress);
     /** Holds Store Save payment provider company API success state as observable*/
     public saveProviderSuccess$ = this.componentStore.select(state => state.saveProviderSuccess);

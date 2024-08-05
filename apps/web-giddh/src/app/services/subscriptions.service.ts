@@ -147,14 +147,7 @@ export class SubscriptionsService {
      * @memberof SubscriptionsService
      */
     public getAllSubscriptions(pagination: any, model: any): Observable<BaseResponse<any, any>> {
-        let reqObj: any;
-        if (model?.region) {
-            reqObj = {
-                region: model.region
-            }
-        } else {
-            reqObj = model;
-        }
+        const reqObj = model?.region ? { region: model.region } : model;
         return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_ALL_SUBSCRIPTIONS
             ?.replace(':page', encodeURIComponent(pagination?.page ?? ''))
             ?.replace(':count', encodeURIComponent(pagination?.count ?? ''))
@@ -301,7 +294,6 @@ export class SubscriptionsService {
      * @memberof SubscriptionsService
      */
     public verifyOwnership(model: any): Observable<BaseResponse<any, any>> {
-        console.log(model);
         return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.VERIFY_OWNERSHIP
             ?.replace(':requestId', encodeURIComponent(model?.reqId ? model?.reqId : model))
             ?.replace(':reject', encodeURIComponent(model?.reason ? true : false)), model?.reason)
@@ -394,7 +386,6 @@ export class SubscriptionsService {
      * @memberof SubscriptionsService
      */
     public generateOrderBySubscriptionId(model: any): Observable<BaseResponse<any, any>> {
-        console.log(model);
         return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.GENERATE_ORDER_BY_SUBSCRIPTION_ID
             ?.replace(':subscriptionId', encodeURIComponent(model?.subscriptionId))
             ?.replace(':promocode', encodeURIComponent(model?.promoCode ?? '')))
@@ -595,6 +586,13 @@ export class SubscriptionsService {
             );
     }
 
+    /**
+     * Activate plan
+     *
+     * @param {*} subscriptionId
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SubscriptionsService
+     */
     public activatePlan(subscriptionId: any): Observable<BaseResponse<any, any>> {
         return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.ACTIVATE_PLAN
             ?.replace(':subscriptionId', encodeURIComponent(subscriptionId)))
@@ -609,6 +607,13 @@ export class SubscriptionsService {
             );
     }
 
+    /**
+     *Get plan amount calculation
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SubscriptionsService
+     */
     public getPlanAmountCalculation(model: any): Observable<BaseResponse<any, any>> {
         console.log(model);
         return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.CALCULATION_PLAN_AMOUNT, model)
