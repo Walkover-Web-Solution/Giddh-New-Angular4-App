@@ -158,6 +158,9 @@ export class GeneralService {
         if (routerParams['utm_content']) {
             localStorage.setItem('utm_content', routerParams['utm_content']);
         }
+        if (routerParams['region']) {
+            localStorage.setItem('region', routerParams['region']);
+        }
     }
 
     getUtmParameter(param: string): string {
@@ -174,6 +177,7 @@ export class GeneralService {
         localStorage.removeItem("utm_campaign");
         localStorage.removeItem("utm_term");
         localStorage.removeItem("utm_content");
+        localStorage.removeItem("region");
     }
 
     getLastElement(array) {
@@ -1587,24 +1591,6 @@ export class GeneralService {
     };
 
     /**
-     * This will be use for generating random URLs
-     *
-     * @param {string} value
-     * @return {*}  {string}
-     * @memberof GeneralService
-     */
-    public generateRandomString(value: string): string {
-        const randomLength = 8; // Adjust the length of the random string as needed
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let result = '';
-        for (let i = 0; i < randomLength; i++) {
-            const randomIndex = Math.floor(Math.random() * characters.length);
-            result += characters.charAt(randomIndex);
-        }
-        return result + '.' + value;
-    }
-
-    /**
      * Get current date/time in this format - 06-11-2023 02:08:45
      *
      * @returns {string}
@@ -1621,6 +1607,24 @@ export class GeneralService {
         const seconds = String(now.getSeconds()).padStart(2, '0');
 
         return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+    }
+
+    /**
+     * This will be use for generating random URLs
+     *
+     * @param {string} value
+     * @return {*}  {string}
+     * @memberof GeneralService
+     */
+    public generateRandomString(value: string): string {
+        const randomLength = 8; // Adjust the length of the random string as needed
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        for (let i = 0; i < randomLength; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            result += characters.charAt(randomIndex);
+        }
+        return result + '.' + value;
     }
 
     /**
@@ -1955,15 +1959,15 @@ export class GeneralService {
     }
 
     /**
-     * This will be use for open window in center
-     *
-     * @param {string} url
-     * @param {string} title
-     * @param {number} width
-     * @param {number} height
-     * @return {*}  {(Window | null)}
-     * @memberof GeneralService
-     */
+    * This will be use for open window in center
+    *
+    * @param {string} url
+    * @param {string} title
+    * @param {number} width
+    * @param {number} height
+    * @return {*}  {(Window | null)}
+    * @memberof GeneralService
+    */
     public openCenteredWindow(url: string, title: string, width: number, height: number): Window | null {
         const left = (window.screen.width / 2) - (width / 2);
         const top = (window.screen.height / 2) - (height / 2);
@@ -1977,12 +1981,12 @@ export class GeneralService {
     }
 
     /**
-     *Get Country Flag Image Url by 2 digit country code
-     *
-     * @param {string} countryCode
-     * @return {*}  {string}
-     * @memberof GeneralService
-     */
+    * Get Country Flag Image Url by 2 digit country code
+    *
+    * @param {string} countryCode
+    * @return {*}  {string}
+    * @memberof GeneralService
+    */
     public getCountryFlagUrl(countryCode: string): string {
         return countryCode ? `https://giddh-uploads-2.s3.ap-south-1.amazonaws.com/flags/${countryCode?.toLowerCase()}.svg` : '';
     }

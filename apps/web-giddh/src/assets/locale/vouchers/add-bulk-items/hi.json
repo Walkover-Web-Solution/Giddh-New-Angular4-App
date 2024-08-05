@@ -1,7 +1,7 @@
 {
     "item_selected": "यह आइटम पहले से ही चयनित है कृपया इसकी मात्रा बढ़ाएं",
     "add_bulk_items": "थोक आइटम जोड़ें",
-    "search_stock": "शेयर खोजें",
-    "selected_stocks": "चयनित स्टॉक",
+    "search_stock": "आइटम खोजें",
+    "selected_stocks": "चयनित आइटम",
     "select_variant": "वेरिएंट चुनें"
 }

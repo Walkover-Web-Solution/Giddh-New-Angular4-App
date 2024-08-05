@@ -36,7 +36,7 @@ class FormatCsv implements IFormatable {
     }
 
     public setHeader(selectedCompany: CompanyResponse) {
-        this.header = `${selectedCompany.name}\r\n"${selectedCompany.address}"\r\n${selectedCompany.city}-${selectedCompany.pincode}\r\n${this.localeData?.csv.trial_balance.trial_balance} ${this.request.from} ${this.localeData?.csv.trial_balance.to} ${this.request.to}\r\n`;
+        this.header = `${selectedCompany.name ?? ''}\r\n"${selectedCompany.address ?? ''}"\r\n${selectedCompany.city ?? ''}${selectedCompany?.pincode ? '-' : ''}${selectedCompany?.pincode ?? ''}\r\n${this.localeData?.csv.trial_balance.trial_balance} ${this.request.from ?? ''} ${this.localeData?.csv.trial_balance.to} ${this.request.to  ?? ''}\r\n`;
     }
 
     public setRowData(data: any[], padding: number) {
@@ -99,10 +99,10 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
         this.showCsvDownloadOptions = false;
         let csv = '';
         let name = '';
-        let formatCsv = new FormatCsv(this.trialBalanceRequest, this.localeData);
+        let formatCsv = new FormatCsv(this.trialBalanceRequest, this.localeData);        
         switch (value) {
             case 'group-wise':
-                csv = this.dataFormatter.formatDataGroupWise(this.localeData);
+                csv = this.dataFormatter.formatDataGroupWise(this.localeData, this.trialBalanceRequest.from, this.trialBalanceRequest.to);
                 name = this.localeData?.csv.trial_balance_group_wise_report_file_name;
                 break;
             case 'condensed':
@@ -112,7 +112,7 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
                 break;
             case 'account-wise':
                 this.dataFormatter.formatDataAccountWise(formatCsv);
-                csv = formatCsv.csv();
+                csv = formatCsv.csv();                
                 name = this.localeData?.csv.trial_balance_account_wise_report_file_name;
                 break;
             default:

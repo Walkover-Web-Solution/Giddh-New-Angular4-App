@@ -65,7 +65,7 @@ report-filters,
         .mdc-notched-outline__notch {
             border-color: var(--color-fields-border) !important;
             border-left: none !important;
-        }
+        }          
     }
 
     .mat-form-field-appearance-outline {
@@ -621,7 +621,6 @@ app-cdk-scroll {
     &:not(.mdc-text-field--disabled) {
         .mdc-text-field__input {
             color: var(--color-common-primary-text);
-
             &::placeholder {
                 color: var(--color-gray) !important;
             }

@@ -306,7 +306,7 @@
                     "description": "डेबिट नोट रेकॉर्ड करा आणि अद्यतनित करा"
                 },
                 {
-                    "label": "फेड",
+                    "label": "पेमेंट",
                     "link": "/pages/reports/payment",
                     "icon": "icon-reciept-new",
                     "description": "एकूण, आणि न वापरलेली देयके",

@@ -19,27 +19,26 @@ $custom-typography: mat-typography-config($font-family: var(--font-regular),
 @import "../css/global/subscription.component.scss";
 @import "../css/global/custom-fields.scss";
 @import "../css/global/inventory.scss";
-@import "../css/global/mat-button.scss";
-@import "../css/global/search.scss";
 @import "../css/global/all-items.scss";
-@import "../css/global/vat-report.scss";
 @import "../css/global/header.scss";
-@import "../css/global/setting-integration.scss";
+@import "../css/global/search.scss";
+@import "../css/global/mat-button.scss";
+@import "../css/global/vat-report.scss";
 @import "../css/global/help-support.scss";
 @import "../css/global/sales-register-expand.scss";
+@import "../css/global/setting-integration.scss";
 @import "../css/global/input-dropdown-field.scss";
 @import "../css/global/voucher.scss";
 @import "../css/global/tabs.scss";
 @import "../css/global/table.scss";
 @import "../css/global/custom-price.scss";
+@import "../css/global/inventory-adjustment.scss";
+@import "../css/global/global-variable.scss";
 @import "../css/global/vouchers.scss";
 @import "../css/global/tax-dropdown.scss";
 @import "../css/global/discount-dropdown.scss";
 @import "../css/global/dialog.scss";
-
-@import "../css/global/dialog.scss";
 @import "../css/global/add-bulk-entry.scss";
-@import "../css/global/global-variable.scss";
 @import "../css/global/settings-sidebar.scss";
 @import "../css/global/mat-menu.scss";
 @import "../css/global/adjustment-inventory.scss";
@@ -112,12 +111,6 @@ textarea {
     }
 }
 
-.billing-details {
-    .mat-form-field-infix {
-        border-top: 0 !important;
-    }
-}
-
 .all-table {
     .mat-column-contact {
         text-transform: lowercase;
@@ -133,6 +126,12 @@ textarea {
 
     .comment-header {
         min-width: 170px !important;
+    }
+}
+
+.billing-details {
+    .mat-form-field-infix {
+        border-top: 0 !important;
     }
 }
 
@@ -269,7 +268,9 @@ textarea {
                 }
             }
 
-            .mat-form-field-wrapper .mat-form-field-infix .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
+            .mat-form-field-wrapper
+                .mat-form-field-infix
+                .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
                 position: absolute;
                 height: 23px !important;
                 margin-top: 0;
@@ -848,6 +849,23 @@ textarea {
     }
 }
 
+/*--- custom ---*/
+.obj-gap {
+    column-gap: 5px;
+}
+
+/*---- custom -----*/
+.inline-adjustment {
+    .adjustments-list {
+        height: auto !important;
+        overflow-y: unset !important;
+    }
+
+    advance-receipt-adjustment-component {
+        min-width: 750px;
+    }
+}
+
 .select-domain {
     .mat-mdc-select {
         padding: 0px !important;
@@ -1270,13 +1288,24 @@ aside-create-group {
                         overflow-y: auto;
                     }
                 }
-            }
-        }
 
-        mat-list {
-            .cdk-virtual-scroll-viewport {
-                height: 100% !important;
-                min-height: calc(100vh - 160px);
+            // Units are not displaying after creation once the scroll comes on the page
+                &:first-child {
+                    mat-list {
+                        .cdk-virtual-scroll-viewport {
+                            height: 100% !important;
+                            min-height: calc(100vh - 160px);
+                        }
+                    }
+                }
+                &:nth-child(2) {
+                    mat-list {
+                        .cdk-virtual-scroll-viewport {
+                            height: 100% !important;
+                            min-height: calc(100vh - 205px);
+                        }
+                    }
+                }
             }
         }
     }
@@ -1355,225 +1384,6 @@ aside-create-group {
         .mat-grid-tile-content {
             display: block;
             padding: 0 20px;
-        }
-    }
-}
-
-@media (max-width: 768px) {
-    .trigger-form-left-side {
-        width: 38% !important;
-    }
-
-    .small-button {
-        width: 100% !important;
-        margin-right: 0 !important;
-        float: left !important;
-        margin-bottom: 12px !important;
-        min-width: auto !important;
-    }
-
-    .trigger-input {
-        mat-select {
-            float: left;
-            width: 100%;
-        }
-    }
-
-    .trigger-form-right-side {
-        width: 60% !important;
-    }
-
-    .verify-form {
-        float: left;
-        width: 100%;
-
-        .input-field {
-            width: 50% !important;
-        }
-    }
-
-    .select-multiple-chiplist {
-        mat-chip.mat-standard-chip {
-            font-size: var(--font-size-9) !important;
-        }
-    }
-
-    .dropdown-box-1 {
-        width: 60% !important;
-    }
-
-    .dropdown-box-2 {
-        width: 40% !important;
-    }
-
-    .dropdown-box-3 {
-        display: none !important;
-    }
-
-    .text-left-sm {
-        text-align: left !important;
-    }
-
-    .edit-icon-custom-entry-date {
-        position: absolute !important;
-        right: 78% !important;
-        margin-top: 6px !important;
-        z-index: 0 !important;
-    }
-
-    .on-mobile-view tbody tr,
-    .on-mobile-view tbody .mat-row {
-        box-shadow: 0 0px 5px var(--color-primary-common-box-shadow);
-        background: var(--color-white);
-        border-bottom: none;
-        cursor: pointer;
-        display: block !important;
-        padding: 5px 0 10px 0px;
-        margin: 10px auto 22px;
-        width: 100%;
-        max-width: 100%;
-    }
-
-    .on-mobile-view tbody .mat-row[hidden] {
-        display: none !important;
-    }
-
-    tr.mat-row,
-    tr.mat-footer-row {
-        height: auto !important;
-    }
-
-    .on-mobile-view table {
-        background: transparent;
-        margin-bottom: 0;
-        width: 100%;
-        display: block;
-    }
-
-    .on-mobile-view table tbody {
-        display: block;
-        width: 100%;
-    }
-
-    .on-mobile-view table thead {
-        display: none;
-    }
-
-    .on-mobile-view tbody>tr>td,
-    .on-mobile-view tbody>.mat-row>td {
-        border: 0 !important;
-        display: block !important;
-        padding: 5px 10px 5px 50% !important;
-        position: relative;
-        text-align: left !important;
-        height: auto !important;
-        min-height: 30px !important;
-        word-wrap: inherit !important;
-        max-width: 100%;
-        white-space: inherit;
-        margin-bottom: 14px;
-        width: 100%;
-
-        &.child-td {
-            display: table !important;
-
-            tr {
-                border-bottom: 1px solid var(--color-iron);
-                box-shadow: 0 0px 0px var(--color-primary-common-box-shadow) !important;
-            }
-
-            tr:last-child {
-                border-bottom: 0px !important;
-                margin-bottom: 0px;
-            }
-        }
-
-        &.hide-td {
-            display: none !important;
-        }
-
-        .justify-content-end {
-            justify-content: flex-start !important;
-        }
-    }
-
-    .on-mobile-view tbody td:after {
-        content: "";
-        width: calc(100% - 30px);
-        display: block;
-        margin: 0 auto;
-        height: 1px;
-        background: transparent;
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: -6px;
-    }
-
-    .on-mobile-view tbody td:before {
-        color: var(--color-gray);
-        font-size: var(--font-size-15);
-        content: attr(data-title);
-        display: table-cell;
-        font-weight: 500;
-        height: 100%;
-        left: 15px;
-        margin: auto;
-        position: absolute;
-        vertical-align: middle;
-        white-space: nowrap;
-        width: 40%;
-        text-align: left;
-    }
-
-    .on-mobile-view .table-bordered>tfoot>tr>td,
-    .on-mobile-view .table-bordered>tfoot>.mat-row>td {
-        border: none;
-    }
-
-    .on-mobile-view th {
-        display: none;
-    }
-
-    .on-mobile-view.basic>tbody>tr:hover td,
-    .on-mobile-view .basic>tbody>tr:hover td {
-        background: transparent;
-    }
-
-    .on-mobile-view.table-bordered {
-        border: none;
-        background: transparent;
-        margin-top: 0;
-    }
-
-    .no-records.on-mobile-view td:before {
-        display: none !important;
-    }
-
-    .no-records.on-mobile-view td {
-        text-align: center !important;
-        padding: 5px 10px 5px 0% !important;
-    }
-
-    .on-mobile-view tbody td::first-letter {
-        text-transform: uppercase;
-    }
-
-    .on-mobile-view,
-    .on-mobile-view tbody {
-        display: block;
-    }
-
-    .hamburger-menu h4 {
-        line-height: 1.4;
-    }
-
-    aside-create-unit,
-    aside-create-group {
-        max-width: 600px;
-
-        .aside-pane {
-            max-width: 600px;
         }
     }
 }
@@ -1843,6 +1653,16 @@ input {
     border-right: 5px solid transparent;
     border-left: 5px solid transparent;
     border-bottom: 5px solid transparent;
+}
+
+#content-wrapper {
+    .account-wrapper {
+
+        .from-or-to-acc[type="text"],
+        .form-control.debit-credit[type="text"] {
+            border: 1px solid var(--color-secondary-input-bar-border) !important;
+        }
+    }
 }
 
 .on-setting-page.setting-sidebar-open {
@@ -2675,7 +2495,7 @@ modal-container.modal {
 .form-box .btn {
     min-width: 73px;
     margin-right: 2px;
-    width: 95px;
+    width: 110px;
     color: var(--color-secondary-button-text);
 }
 
@@ -2923,6 +2743,7 @@ modal-container.modal {
 }
 
 /* my css end */
+
 /*input*/
 .form-control {
     background: var(--color-secondary-input-bar-background) !important;
@@ -4372,6 +4193,7 @@ a.btn.btn-xs.btn-link.pull-right {
     position: relative;
     background: var(--color-primary-header-background) !important;
     color: var(--color-white);
+    border-color: var(--color-primary-popup-list-header-bottom-border);
     height: 65px;
     display: flex;
     align-items: center;
@@ -4601,11 +4423,9 @@ select.form-control {
     overflow: hidden;
 }
 
-.grp-list,
-.new-btn-u {
+.grp-list, .new-btn-u {
     li {
         list-style: none;
-
         a {
             padding: 4px 15px !important;
             display: block;
@@ -7991,6 +7811,44 @@ footer#footer.absolute-footer {
                 }
             }
         }
+
+        .scroll-container {
+            .wrap-account-sidebar {
+                .grp-wrapper {
+                    .col-wrapper {
+                        border-color: var(--color-common-secondary-border);
+
+                        &:nth-child(1) {
+                            background-color: var(--color-common-primary-background-for-all-components);
+                        }
+                    }
+                }
+            }
+        }
+
+        .manage-group-acc {
+            account-operations {
+                #middleBody {
+                    .top-bar {
+                        border-color: var(--color-common-secondary-border) !important;
+                    }
+                }
+            }
+        }
+    }
+
+    login {
+        .modal.fade {
+            .modal-body.clearfix {
+                #authModal {
+                    button[type="login"].ladda-button {
+                        .ladda-label {
+                            color: var(--color-secondary-button-text);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -8836,10 +8694,6 @@ button.ladda-button .ladda-label {
     border-radius: 2px;
 }
 
-.invoice-modal-content .app-aside-menu-other-taxes:host {
-    top: 60px !important;
-}
-
 .mat-chip-list {
     .mat-chip-list-wrapper {
         .mat-chip.mat-standard-chip {
@@ -9535,36 +9389,30 @@ ngx-daterangepicker-material {
 }
 
 /*notofication css*/
-.HW_badge.HW_visible {
-    position: absolute;
-    top: 0px;
-    left: 14px;
-}
-
-.HW_badge {
+#HW_badge {
     transition: none !important;
     transform: scale(1) !important;
     position: absolute !important;
 }
 
-.HW_badge_cont {
+#HW_badge_cont {
     visibility: visible !important;
     width: auto !important;
-    top: 0;
+    top: -5px;
     width: 30px !important;
     display: flex !important;
-    left: 0 !important;
+    right: -5px !important;
     position: absolute !important;
 }
 
-.HW_badge {
-    background: var(--color-danger);
+#HW_badge {
+    background: var(--color-danger) !important;
     width: 14px !important;
     height: 14px !important;
     line-height: 14px !important;
 }
 
-.HW_badge.HW_softHidden {
+#HW_badge.HW_softHidden {
     display: none !important;
 }
 
@@ -9650,10 +9498,6 @@ ul {
     left: 0;
     top: 0;
     z-index: 9;
-}
-
-.HW_badge.HW_softHidden {
-    display: none !important;
 }
 
 span#HW_badge_cont:nth-child(3) {
@@ -10283,6 +10127,7 @@ giddh-datepicker {
     }
 
     overflow-y: auto !important;
+    height: auto;
 
     .advance-search {
         #export-body {
@@ -11155,6 +11000,27 @@ body.update-scroll-hidden {
                     }
                 }
             }
+
+            .modal-body {
+                sh-select-menu {
+                    .menu {
+                        virtual-scroll {
+                            .total-padding {
+                                height: auto;
+                            }
+                        }
+
+                        .mat-dialog-container {
+                            .modal-body {
+                                input,
+                                textarea {
+                                    border: 1px solid var(--color-secondary-input-bar-border);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         .cdk-overlay-connected-position-bounding-box {
@@ -11313,8 +11179,14 @@ inventory-master {
     }
 
     .main-table {
-        tbody>tr>td:first-child {
-            min-width: 242px !important;
+        tbody {
+            tr {
+                td {
+                    &:first-child {
+                        min-width: 242px !important;
+                    }
+                }
+            }
         }
     }
 
@@ -11675,259 +11547,6 @@ inventory-master {
     }
 }
 
-@media (max-width: 768px) {
-    .gst-sidebar-open {
-        .daterangepicker.show-calendar {
-            z-index: 998 !important;
-        }
-    }
-
-    .setting-sidebar {
-        display: none;
-    }
-
-    .setting-sidebar-open {
-        #content-wrapper {
-            padding-right: 0;
-            padding-left: 60px;
-
-            &.menu_open {
-                padding-right: 0;
-                padding-left: 60px;
-            }
-        }
-    }
-
-    .tax-engine .transactions-list .filter-row+.filter-row {
-        margin-left: 5px;
-    }
-
-    .menu_open .sales-register {
-        width: 100% !important;
-        padding-right: 0 !important;
-    }
-
-    .sales-register {
-        width: 100% !important;
-        padding-right: 0 !important;
-    }
-
-    .bulk-create-table sh-select input,
-    .bulk-create-table .mat-form-field-wrapper input,
-    .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex {
-        border: 1px solid var(--color-iron) !important;
-        padding: 0 11px !important;
-    }
-
-    .bulk-create-table .mat-form-field-wrapper input {
-        border: none !important;
-        padding: 0 !important;
-    }
-
-    ul.dropdown-menu.action-dropdown {
-        left: auto;
-        right: 0 !important;
-    }
-
-    #setting-tab .tab-integration .nav-tabs {
-        padding-top: 0 !important;
-    }
-
-    #setting-tab .tab-integration .nav-tabs>li>a {
-        width: 70px;
-        height: 70px !important;
-    }
-
-    .tab-integration .nav-tabs>li>a>span {
-        font-size: var(--font-size-24);
-    }
-
-    .tab-integration .nav-tabs>li>a span:first-child {
-        display: none;
-    }
-
-    #setting-tab .tab-integration .nav-tabs>li {
-        width: 70px;
-        margin-bottom: 15px;
-        margin-top: 15px;
-    }
-
-    .aging-table tr td:first-child,
-    .aging-table tr th:first-child,
-    .aging-table.table-aging-report tr td:first-child,
-    .aging-table.table-aging-report tr th:first-child {
-        padding-left: 50% !important;
-        width: auto;
-    }
-
-    .basic>tbody>tr td:first-child,
-    .basic>thead>tr th:first-child {
-        border-left: none !important;
-    }
-
-    .auto-save {
-        top: 124px;
-    }
-
-    .justify-content-sm-start {
-        justify-content: left !important;
-    }
-
-    .top-aging-table-top .top-aging-table-top1 {
-        top: 38px;
-    }
-
-    .top-aging-table-box {
-        text-align: left;
-        margin-bottom: 10px;
-    }
-
-    .pagination-wrapper {
-        margin-top: 20px;
-        border: none;
-        background-color: transparent;
-        padding: 0;
-        margin-bottom: 50px !important;
-    }
-
-    .overlayBg:after {
-        position: fixed;
-        content: "";
-        width: 100%;
-        height: 100%;
-        background-color: var(--color-gray);
-        top: var(--top-distance);
-        z-index: 4;
-    }
-
-    .tax-engine .table.transactions-table.on-mobile-view tbody>tr>td {
-        max-width: 100% !important;
-        white-space: normal !important;
-        word-break: break-all !important;
-    }
-
-    .tax-engine .gstr-transactions-summary .table>tbody>tr.row-hover:hover {
-        background-color: transparent;
-    }
-
-    .nav-tabs>li {
-        float: left;
-        margin-bottom: 0px;
-    }
-
-    .tab-container .nav-tabs>li {
-        float: none;
-        display: inline-block;
-        cursor: grab;
-    }
-
-    .table-responsive {
-        padding: 0 3px;
-        border: none;
-    }
-
-    table.table td.text-center.empty-table {
-        padding: 5px 10px 5px 0% !important;
-        text-align: center !important;
-        width: 100%;
-        margin-bottom: 0;
-    }
-
-    #middleBody .horizontal-form,
-    .view-forms .horizontal-form {
-        max-width: 100%;
-        width: 100%;
-    }
-
-    .table>tbody>tr>td,
-    .table>tbody>tr>th,
-    .table>tfoot>tr>td,
-    .table>tfoot>tr>th,
-    .table>thead>tr>td,
-    .table>thead>tr>th {
-        white-space: initial !important;
-    }
-
-    .universal-date label.btn.btn-link {
-        display: none;
-    }
-
-    overview-summary .transactions-overview {
-        background: transparent;
-    }
-
-    .tax-engine .transactions-overview .gstr-transactions-summary .transactions-table {
-        border: none;
-    }
-
-    .tax-engine .table-striped>tbody>tr:nth-child(odd)>td,
-    .tax-engine .table-striped>tbody>tr:nth-child(odd)>th {
-        background-color: var(--color-white);
-    }
-
-    .tax-engine .table-striped>tbody>tr:nth-of-type(odd) {
-        background-color: var(--color-white);
-    }
-
-    .modal-header {
-        padding: 12px 15px !important;
-
-        h3,
-        h4 {
-            font-size: var(--font-size-15) !important;
-        }
-
-        .close {
-            font-size: 26px;
-        }
-    }
-
-    .on-setting-page aside-setting.setting-sidebar {
-        left: -250px;
-    }
-
-    .setting-sidebar-open .desktop-header {
-        padding-left: 0;
-    }
-
-    .setting-data,
-    .setting-sidebar-open .white-row {
-        padding-left: 15px !important;
-    }
-
-    .setting-data,
-    .setting-sidebar-open .white-row {
-        padding-left: 15px !important;
-    }
-
-    .aging-table {
-        background: transparent !important;
-    }
-
-    .invoice-preview table {
-        margin-top: 0 !important;
-    }
-
-    .unit-mapping-page {
-        .unit-mapping-grid-list {
-            .grid-box-content {
-                .map-unit-value {
-                    .map-unit-select-field {
-                        input {
-                            width: 83px;
-                            min-width: 83px;
-                        }
-                    }
-                }
-            }
-        }
-
-        .mat-autocomplete-panel {
-            min-width: 83px;
-        }
-    }
-}
-
 @media (max-width: 1280px) {
     .multi-select input.form-control {
         padding-right: 18px !important;
@@ -11939,977 +11558,6 @@ inventory-master {
 
     #dashboard .panel-heading i {
         margin-left: 10px;
-    }
-}
-
-@media (max-width: 767px) {
-    .contact-body .contact-modal {
-        margin-top: 23%;
-    }
-
-    .customer-form-inline {
-        float: left;
-        width: 100%;
-        bottom: 34%;
-
-        .search-field {
-            margin-top: 2px;
-        }
-
-        .btn-sky-blue {
-            margin-bottom: 11px;
-        }
-    }
-
-    .top-content {
-        .count-box {
-            min-width: auto !important;
-        }
-    }
-
-    .top-aging-table-top {
-        float: left;
-        width: 100%;
-    }
-
-    .mobile-setting-sidebar {
-        overflow-y: hidden;
-    }
-
-    .customer-aging .nav.nav-tabs {
-        display: flex !important;
-    }
-
-    .setting-sidebar-open {
-        #content-wrapper {
-            padding-left: 0 !important;
-
-            &.menu_open {
-                padding-left: 0 !important;
-            }
-        }
-    }
-
-    .gst-sidebar-open {
-        &.on-setting-page {
-            .gst-menu-icon {
-                display: none !important;
-            }
-        }
-    }
-
-    .setting-sidebar {
-        display: block;
-    }
-
-    .on-setting-page .nav-left-bar.open,
-    .on-user-page .nav-left-bar.open on-user-page {
-        left: 0 !important;
-        display: none !important;
-    }
-
-    .setting-sidebar-open .nav-left-bar,
-    .on-user-page .nav-left-bar,
-    .on-setting-page .nav-left-bar {
-        display: none;
-    }
-
-    .on-setting-page,
-    .gst-sidebar-open,
-    .on-user-page {
-        .hamburger-menu-icon {
-            left: 80px !important;
-            width: calc(100% - 160px) !important;
-        }
-    }
-
-    .all-features-modal {
-        height: 100vh;
-    }
-
-    .tax-engine .transactions-overview .gstr-transactions-summary .title {
-        margin-bottom: 15px;
-    }
-
-    .gst-sidebar-open {
-        .menu_open {
-            .gst-sidebar {
-                left: 0 !important;
-            }
-        }
-
-        .gst-sidebar {
-            left: 0 !important;
-        }
-    }
-
-    .gst-sidebar-wrapper {
-        &:after {
-            position: absolute;
-            content: "";
-            background-color: var(--color-nero);
-            width: 100%;
-            height: 100vh;
-            z-index: 999;
-            top: -10px;
-            left: 0;
-            opacity: 0.5;
-        }
-    }
-
-    .tax-engine .transactions-list .filter-row .name {
-        min-width: 120px;
-    }
-
-    #setting-tab-wrapper .purchase-setting-tab.tab-integration .nav-tabs {
-        display: inline-block;
-    }
-
-    .e-waybill-tabs.custom-tabs .nav-tabs {
-        position: fixed !important;
-    }
-
-    .invoice-modal-content {
-        left: 0 !important;
-        width: 100% !important;
-    }
-
-    .invoice-footer,
-    .sticky-footer.sticky-footer-sale-amount {
-        left: 0;
-    }
-
-    .custom-tabs.create-item-tab .nav-tabs {
-        display: inline-block;
-        white-space: nowrap;
-        overflow-x: auto;
-        overflow-y: hidden;
-    }
-
-    .sub-detail-sidebar.fixed-sidebar-top {
-        top: 100px;
-    }
-
-    .new-inventory-page .custom-tabs .nav.nav-tabs {
-        white-space: nowrap;
-        overflow-y: hidden;
-        display: inline-block;
-        overflow-x: scroll;
-    }
-
-    .invoice-control .nav.nav-tabs {
-        margin-bottom: 15px;
-        padding: 0 0px 0 15px !important;
-    }
-
-    #setting-tab .tab-integration .nav-tabs>li {
-        margin-top: 0 !important;
-    }
-
-    .hamburger-menu-icon {
-        display: none !important;
-    }
-
-    .hamburger-menu-icon {
-        display: none !important;
-    }
-
-    .custom-tabs .nav.nav-tabs,
-    .invoice-control .nav.nav-tabs {
-        padding-left: 15px !important;
-        top: 90px !important;
-        position: fixed !important;
-    }
-
-    bs-datepicker-container {
-        position: fixed !important;
-        left: 50% !important;
-        top: 50% !important;
-        transform: translate(-50%, -50%) !important;
-    }
-
-    .custom-tabs .nav.nav-tabs,
-    .invoice-control .nav.nav-tabs,
-    .setting-page ul.nav.nav-tabs {
-        padding: 7px 0px 0 15px !important;
-
-        li {
-            a {
-                padding: 0 !important;
-                height: 30px;
-            }
-        }
-
-        .rcm-entry .popover {
-            max-width: 550px;
-        }
-    }
-
-    .setting-page ul.nav.nav-tabs {
-        padding: 2px 0px 0 15px !important;
-    }
-
-    #setting-tab .settings-profile-tabs .tab-container .nav.nav-tabs {
-        top: 90px !important;
-        padding-top: 8px !important;
-    }
-
-    .sticky-footer {
-        position: relative;
-    }
-
-    .custom-tabs.combo-page-tab .nav-tabs,
-    .custom-tabs.about-group-tab .nav-tabs,
-    .custom-tabs.product-service-page-tab .nav-tabs,
-    .custom-tabs.create-inventory-tab .nav-tabs,
-    .custom-tabs.location-data-tabs .nav-tabs {
-        padding-left: 0 !important;
-        margin-left: 0;
-        margin-top: 5px;
-        position: static !important;
-        display: inline-block;
-        overflow-x: auto;
-        white-space: nowrap;
-        overflow-y: hidden;
-    }
-
-    .top-bar.aging-top-bar,
-    .top-bar.customer-top-bar {
-        padding-top: 18px !important;
-    }
-
-    #setting-tab>.tab-container>.tab-content {
-        padding-top: 15px !important;
-    }
-}
-
-@media (max-width: 767px) {
-    .gst-sidebar-open {
-        .gst-sidebar {
-            left: 0 !important;
-        }
-    }
-
-    .settings-profile-tabs {
-        .tab-content {
-            padding-top: 25px;
-        }
-    }
-
-    .invoice-control #setting-tab .setting-container .settings-profile .settings-profile-tabs {
-        .profile-tab-container {
-            .nav.nav-tabs {
-                padding-left: 15px !important;
-                left: 0;
-            }
-        }
-    }
-
-    .universal-date {
-        padding-top: 0;
-    }
-
-    #inventory-sidebar {
-        padding: 15px 0;
-    }
-
-    bs-datepicker-container {
-        position: fixed !important;
-        left: 50% !important;
-        top: 50% !important;
-        transform: translate(-50%, -50%) !important;
-    }
-
-    .modal-backdrop+.modal {
-        margin-top: 5px;
-    }
-
-    .daterangepicker.ltr .ranges {
-        ul {
-            width: 100%;
-
-            li {
-                display: inline-block;
-                margin-right: 5px;
-            }
-        }
-    }
-
-    .remove-header-lower-layer {
-        .mobile-back-btn {
-            display: inline-flex !important;
-        }
-
-        .hamburger-menu {
-            .btn {
-                display: none !important;
-            }
-        }
-    }
-
-    .HW_badge_cont {
-        left: -6px !important;
-        z-index: 991;
-        top: -25px !important;
-        position: absolute;
-    }
-
-    .setting-sidebar-open .setting-data,
-    .setting-sidebar-open .white-row {
-        padding-left: 15px !important;
-    }
-
-    .overlay-cal {
-        .modal-body {
-            padding: 50px 15px;
-        }
-    }
-
-    .btn {
-        padding: 7px 8px;
-    }
-
-    .setting-container {
-        margin-top: 20px;
-    }
-
-    .hide-lable-on-mobile button {
-        margin-top: 0 !important;
-    }
-
-    .basic>tbody>tr td:last-child,
-    .basic>thead>tr th:last-child {
-        border-right: none;
-    }
-
-    header .navbar {
-        background-color: var(--color-giddh-blue) !important;
-        border-bottom: none !important;
-    }
-
-    header .hamburger-menu h4 {
-        color: var(--color-white);
-        font-size: var(--font-size-15);
-        white-space: normal;
-        word-break: break-word;
-        width: 100%;
-    }
-
-    header .hamburger-menu i.icon-bar {
-        color: var(--color-white);
-    }
-
-    .dropdown-width ul.dropdown-menu.pd {
-        min-width: 150px !important;
-    }
-
-    #invoice-setting ul.nav.nav-tabs {
-        border-bottom: none !important;
-    }
-
-    .company-box .inner-company-box>ul>li>span {
-        width: 100px;
-    }
-
-    .xs-pl-0 {
-        padding-left: 0px;
-    }
-
-    .xs-pr-0 {
-        padding-right: 0px;
-    }
-
-    .xs-pt-0 {
-        padding-top: 0px;
-    }
-
-    .xs-width-100 {
-        width: 100%;
-    }
-
-    .ledger-book .right-col-new .entry-modal {
-        width: 100%;
-        left: 0%;
-    }
-
-    .card-table tbody tr td {
-        display: block;
-        width: 100%;
-        min-width: 100%;
-        position: relative;
-        padding-left: 60px !important;
-        border: 0px !important;
-    }
-
-    .card-table tbody tr td:after {
-        content: attr(data-title);
-        position: absolute;
-        left: 10px;
-        top: 10px;
-        font-weight: bold;
-    }
-
-    .card-table thead {
-        display: none;
-    }
-
-    .card-table tbody tr {
-        border-bottom: 1px solid var(--color-iron);
-    }
-
-    .card-table,
-    .card-table tbody,
-    .card-table tbody tr {
-        display: block;
-    }
-
-    .blank-label {
-        display: none;
-    }
-
-    .select2-ledger .menu {
-        width: 210px !important;
-    }
-
-    .menu_open {
-        padding-left: 0;
-    }
-
-    .menu_open:before {
-        position: absolute;
-        content: "";
-        background: var(--color-gray);
-        z-index: 990;
-        height: 100%;
-        width: 100%;
-        top: 0;
-        display: none;
-    }
-
-    .user-dropdown-header>li>a .icon-arrow-down {
-        transform: rotate(90deg);
-    }
-
-    #setting-tab .tab-container .nav.nav-tabs,
-    #purchase-tab .purchase-tabset.tab-container>.nav.nav-tabs,
-    .invoice-control .nav.nav-tabs,
-    .setting-page ul.nav.nav-tabs {
-        position: fixed !important;
-        width: 100%;
-        top: 90px !important;
-    }
-
-    #setting-tab.user-detail-page .tab-container .nav.nav-tabs {
-        top: 88px;
-        z-index: 99;
-    }
-
-    .custom-tabs .nav.nav-tabs {
-        position: fixed;
-        width: 100%;
-        top: calc(var(--top-distance) + 90px);
-    }
-
-    .ledg-head.entry-popup .custom-tabs .nav.nav-tabs {
-        position: relative;
-        width: 100%;
-        top: 0;
-    }
-
-    .custom-tabs .top-bar {
-        margin-top: 45px;
-    }
-
-    .page-has-tabs .custom-tabs .top-bar {
-        margin-top: 15px;
-        padding-top: 0;
-    }
-
-    .page-has-tabs .custom-tabs .top-bar.customer-top-bar,
-    .page-has-tabs .custom-tabs .top-bar.aging-top-bar {
-        margin-top: 0px;
-    }
-
-    .custom-tabs.hide-header .top-bar {
-        margin-top: 28px;
-    }
-
-    .invoice-control .nav.nav-tabs {
-        padding: 0 0 0 15px !important;
-    }
-
-    #setting-tab setting-integration .tab-container .nav.nav-tabs,
-    #setting-tab app-invoice-setting .tab-container .nav.nav-tabs {
-        position: inherit !important;
-        white-space: nowrap;
-    }
-
-    #setting-tab app-invoice-setting .tab-container .nav.nav-tabs {
-        margin-top: 45px;
-        white-space: nowrap;
-        padding-left: 15px !important;
-    }
-
-    .setting-page .nav>li>a,
-    .custom-tabs .nav.nav-tabs>li a {
-        padding-top: 7px;
-    }
-
-    .ledg-head .custom-tabs .nav.nav-tabs {
-        left: 0;
-        top: calc(var(--top-distance) + 95px);
-        padding-top: 0 !important;
-        position: fixed;
-    }
-
-    .daterangepicker.dropdown-menu.show-calendar {
-        z-index: 9 !important;
-    }
-
-    .daterangepicker.dropdown-menu.opensright.show-calendar {
-        z-index: 9992 !important;
-    }
-
-    .mt-xs-60 {
-        margin-top: 60px;
-    }
-
-    .tooltip.bs-tooltip-top {
-        display: none !important;
-    }
-
-    .custom-body #setting-tab .tab-container .nav.nav-tabs {
-        position: inherit;
-    }
-
-    .aside-pane-form .custom-tabs ul.nav.nav-tabs {
-        white-space: nowrap;
-        display: inline-block;
-        overflow-y: hidden;
-    }
-
-    .basic>tbody>tr td:last-child,
-    .basic>thead>tr th:last-child {
-        border-right: none !important;
-    }
-
-    #content-wrapper {
-        height: 100vh;
-    }
-
-    .tax-engine .nav-band .nav-tabs {
-        white-space: nowrap;
-        padding-top: 0 !important;
-        position: static !important;
-    }
-
-    .gst-filing-container {
-        padding-top: 0;
-    }
-
-    .tax-engine .transactions-overview .gstr-transactions-summary .title {
-        padding: 0;
-    }
-
-    .tax-engine .list-filter {
-        padding: 15px !important;
-        border-bottom: 1px solid var(--color-common-secondary-border) !important;
-        height: auto;
-    }
-
-    .list-style ul.list-inline.list-middle.download-drop-down {
-        text-align: left;
-    }
-
-    .checkbox-custom-label,
-    .radio-custom-label {
-        display: inline;
-    }
-
-    #cmpWrp {
-        display: block;
-    }
-
-    .c-text span.c-name {
-        color: var(--color-white) !important;
-    }
-
-    .user-dropdown-header {
-        left: 0px !important;
-    }
-
-    .xs-d-block {
-        display: block;
-    }
-
-    .xs-mb-1 {
-        margin-bottom: 10px;
-    }
-
-    .xs-mt-1 {
-        margin-top: 10px;
-    }
-
-    .xs-mb-2 {
-        margin-bottom: 20px;
-    }
-
-    .xs-mt-2 {
-        margin-top: 20px;
-    }
-
-    .xs-mt-4 {
-        margin-top: 40px;
-    }
-
-    .xs-mr-0 {
-        margin-right: 0px;
-    }
-
-    .xs-pull-left {
-        float: left !important;
-    }
-
-    body.hide-scroll-body {
-        overflow-y: hidden !important;
-    }
-
-    body.hide-scroll-body.on-setting-page {
-        overflow-y: auto !important;
-    }
-
-    .panel-block .mat-card-content {
-        min-height: auto;
-    }
-
-    .page-has-tabs .fixed-padding,
-    .on-user-page .fixed-padding {
-        padding-top: 130px !important;
-    }
-
-    .page-has-tabs.setting-sidebar-open .fixed-padding {
-        padding-top: 85px !important;
-    }
-
-    .on-setting-page .fixed-padding,
-    .page-has-tabs.gst-sidebar-open .fixed-padding {
-        padding-top: 90px !important;
-    }
-
-    .gst-sidebar-open .gst-menu-icon {
-        display: inline-flex !important;
-    }
-
-    .fixed-padding {
-        padding-top: 90px;
-    }
-
-    ngx-daterangepicker-material {
-        position: fixed;
-        top: var(--top-distance) !important;
-        left: 0 !important;
-        z-index: 999;
-        width: 100%;
-        height: 100vh;
-        max-width: 100% !important;
-    }
-
-    .giddh-datepicker-modal {
-        position: fixed;
-        width: 100%;
-        left: 0;
-        top: var(--top-distance);
-        margin: 0;
-    }
-
-    .edit-modal {
-        max-width: 100%;
-        margin: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        width: 100%;
-        padding-top: 40px;
-
-        &:after {
-            position: absolute;
-            content: "";
-            background-color: var(--color-gray);
-            width: 100% !important;
-            height: 125%;
-            z-index: -1;
-            left: 0;
-            top: 0;
-        }
-    }
-
-    .hide-scroll-body:last-child .modal {
-        z-index: 992;
-    }
-
-    .page-has-tabs .invoice-generate-container,
-    .page-has-tabs .proforma-container,
-    .page-has-tabs .proforma-container {
-        padding-top: 15px !important;
-    }
-
-    .page-has-tabs .proforma-container,
-    .page-has-tabs .invoice-container {
-        padding-top: 0 !important;
-    }
-
-    .page-has-tabs #setting-tab app-invoice-setting .tab-container .nav.nav-tabs,
-    .on-user-page .search-subscription {
-        margin-top: 0 !important;
-    }
-
-    .page-has-tabs .recurring-container {
-        margin-top: 0px !important;
-    }
-
-    .on-user-page .user-detail-page.company-page {
-        padding-top: 15px !important;
-    }
-
-    .HW_frame_cont.HW_visible.HW_bottom {
-        right: 0 !important;
-        left: auto !important;
-        max-width: 320px;
-        width: 100%;
-        top: 40px !important;
-    }
-
-    .on-setting-page .setting-menu-icon,
-    .on-user-page .setting-menu-icon {
-        display: inline-flex !important;
-    }
-
-    .setting-data {
-        padding-left: 15px !important;
-    }
-
-    .mobile-setting-sidebar {
-        position: relative;
-        overflow-y: hidden;
-    }
-
-    .mobile-setting-sidebar:after {
-        position: absolute;
-        content: "";
-        background-color: var(--color-gray);
-        width: 100%;
-        height: 100vh;
-        top: 0;
-        left: 0;
-        z-index: 999;
-    }
-
-    .ledg-head .custom-tabs .nav.nav-tabs {
-        padding-top: 0 !important;
-    }
-
-    .digit-blue .tooltip.bs-tooltip-top {
-        display: block !important;
-    }
-
-    .on-setting-page aside-setting.setting-sidebar,
-    .on-user-page aside-setting.setting-sidebar {
-        left: 0;
-    }
-}
-
-@media (max-width: 575px) {
-    .gst-sidebar-open .daterangepicker {
-        left: 15px !important;
-        right: 0 !important;
-    }
-
-    .filter-band ul {
-        left: auto !important;
-        right: 0 !important;
-    }
-
-    .purchase-setting-tab ul.nav.nav-tabs {
-        padding-bottom: 30px !important;
-        min-height: 100px;
-    }
-
-    .invoice-control .nav.nav-tabs {
-        white-space: nowrap;
-        overflow-y: hidden;
-        display: inline-block;
-    }
-
-    .linked-add .popover {
-        width: 180px;
-        transform: none !important;
-        right: 0;
-        left: auto !important;
-    }
-
-    .daterangepicker.ltr .ranges {
-        float: left;
-
-        ul {
-            li {
-                font-size: var(--font-size-12);
-                padding: 3px 4px;
-            }
-        }
-    }
-
-    .mat-form-field {
-        min-width: auto;
-    }
-
-    .custom-tabs .top-bar {
-        padding-top: 10px;
-        padding-bottom: 10px;
-    }
-
-    #content-wrapper {
-        overflow-x: hidden;
-    }
-
-    #companyList {
-        background: var(--color-white);
-        padding-bottom: 4px;
-        left: 0px;
-        top: 30px;
-        padding-top: 0;
-    }
-
-    .page-has-tabs .custom-tabs .top-bar.customer-top-bar,
-    .page-has-tabs .custom-tabs .top-bar.aging-top-bar {
-        margin-top: -10px;
-    }
-
-    aside-create-unit,
-    aside-create-group {
-        max-width: 370px;
-
-        .aside-pane {
-            max-width: 370px;
-        }
-    }
-
-    aside-create-unit,
-    aside-create-group {
-        max-width: 370px;
-
-        .aside-pane {
-            max-width: 370px;
-        }
-    }
-}
-
-@media (max-width: 500px) {
-    .daterangepicker.dropdown-menu {
-        max-width: 100% !important;
-        z-index: 9999;
-        text-align: left;
-        float: left;
-    }
-}
-
-@media (max-width: 375px) {
-    .gst-sidebar-open .daterangepicker {
-        left: 15px !important;
-        right: auto !important;
-    }
-
-    .mobile-invoice-date-due-date {
-        .mat-datepicker-toggle .mat-button-wrapper .mat-datepicker-toggle-default-icon {
-            color: var(--color-datepicker-date-icon);
-            position: absolute;
-            bottom: 8px !important;
-            right: 10px !important;
-        }
-
-        .mat-form-field-wrapper .mat-form-field-infix .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
-            position: absolute;
-            padding-top: 11px !important;
-        }
-    }
-
-    .setting-page.tb-pl-bs-tabs ul.nav.nav-tabs {
-        overflow-x: auto;
-        white-space: nowrap;
-        display: inline-block;
-
-        li {
-            float: none !important;
-        }
-    }
-
-    #rcw-p91-widget-chats {
-        min-width: 300px !important;
-    }
-
-    .aside-pane-form .custom-tabs .nav.nav-tabs>li {
-        padding-right: 20px;
-    }
-
-    .pagination>li>a,
-    .pagination>li>span {
-        padding: 6px 6px;
-    }
-
-    .pagination {
-        justify-content: flex-start;
-        flex-wrap: wrap;
-    }
-
-    aside-create-unit,
-    aside-create-group {
-        max-width: 310px;
-
-        .aside-pane {
-            max-width: 310px;
-        }
-    }
-}
-
-@media (max-width: 360px) {
-    .on-setting-page {
-        .hamburger-menu-icon.page-has-heading {
-            li {
-                h4 {
-                    min-width: 150px !important;
-                }
-            }
-        }
-    }
-
-    .pagination-sm>li>a,
-    .pagination-sm>li>span {
-        padding: 5px 8px;
-    }
-
-    .branch .box h1 {
-        font-size: var(--font-size-15);
-        padding-right: 0;
-        display: block;
-    }
-
-    .branch .box .btn-default {
-        float: none !important;
-        position: static;
-        margin-top: 10px;
-        margin-bottom: 5px;
-    }
-
-    .welcome-header h1 {
-        font-size: var(--font-size-24) !important;
-    }
-
-    .welcome-header:after {
-        bottom: 0;
-    }
-
-    #setting-tab-wrapper .tab-integration .nav-tabs {
-        overflow-y: hidden;
     }
 }
 
@@ -13414,14 +12062,6 @@ body.prevent-body-scroll {
         }
     }
 
-    .mat-form-field-wrapper {
-        .mat-form-field-infix {
-            .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
-                padding-left: 32px !important;
-            }
-        }
-    }
-
     .invoice-date-due-date {
         .mat-datepicker-toggle {
             .mat-button-wrapper {
@@ -13764,87 +12404,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
     }
 }
 
-@media screen and (max-width: 768px) {
-    .move-select {
-        .menu {
-            width: 36% !important;
-        }
-    }
-
-    .move-wrapper {
-        float: left;
-        max-width: 100% !important;
-        flex: 100% !important;
-    }
-
-    .ipad-responsive-modal {
-        .pull-right {
-            .mat-raised-button {
-                width: 100%;
-                padding-left: 0.7rem !important;
-                box-shadow: none !important;
-                margin-right: 0 !important;
-                margin-left: 11px !important;
-            }
-        }
-    }
-
-    .select-subscription {
-        float: left;
-        width: 100% !important;
-
-        .mat-form-field-wrapper {
-            height: 100% !important;
-            padding-bottom: 0 !important;
-        }
-
-        .mat-form-field-flex {
-            float: left !important;
-            width: 100% !important;
-        }
-
-        .mat-form-field-infix {
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-            margin-top: 0 !important;
-            border: none !important;
-        }
-
-        .mat-select {
-            margin-top: 0 !important;
-            z-index: 9991 !important;
-        }
-    }
-
-    .subscription-form-select {
-        float: left !important;
-        width: 100% !important;
-        height: 29px !important;
-
-        .mat-form-field-wrapper {
-            height: 100% !important;
-            padding-bottom: 0 !important;
-        }
-
-        .mat-form-field-flex {
-            float: left !important;
-            width: 100% !important;
-        }
-
-        .mat-form-field-infix {
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-            margin-top: 0 !important;
-            border: none !important;
-        }
-
-        .mat-select {
-            margin-top: 0 !important;
-            z-index: 9991 !important;
-        }
-    }
-}
-
 .stock-balance-wrapper {
     .search-warehouse-bar {
         .mat-form-field-infix {
@@ -14135,6 +12694,10 @@ hamburger-menu {
 
     .cdk-overlay-container-z-index {
         z-index: 1000 !important;
+    }
+
+    .cdk-overlay-container {
+        z-index: 9999 !important;
     }
 }
 
@@ -14917,6 +13480,10 @@ activity-compare-json {
     }
 }
 
+.mat-snack-bar-wrapper {
+    z-index: 99999 !important;
+}
+
 .mat-select-btn{
     .mdc-button__label{
         width: 100%;
@@ -14943,6 +13510,7 @@ aside-menu-product-service {
         }
     }
 }
+
 .dialog-fixed-header{
     position: sticky !important;
     top: 0;
@@ -15081,7 +13649,6 @@ aside-menu-product-service {
         border-color: var(--color-field-hover) !important;
     }
 }
-
 // Ledger Create Panel text color
 .new-ledger-panel {
     color: var(--color-default-button) !important;
@@ -15099,7 +13666,6 @@ aside-menu-product-service {
         }
     }
 }
-
 // hsn description
 .tax-engine {
     .description-overlap {
@@ -15126,11 +13692,6 @@ aside-menu-product-service {
     color: var(--color-common-primary-text);
 }
 
-.bg-transparent {
-    background: var(--color-transparent-background) !important;
-    background-color: var(--color-transparent-background) !important;
-}
-
 .bg-grey {
     background-color: var(--color-wild-sand) !important;
 }
@@ -15138,6 +13699,10 @@ aside-menu-product-service {
 // color link light-dark theme
 .color-link {
     color: var(--color-link) !important;
+}
+.bg-transparent {
+    background: var(--color-transparent-background) !important;
+    background-color: var(--color-transparent-background) !important;
 }
 
 // Subscription Page Country List Dropdown
@@ -15150,4 +13715,14 @@ aside-menu-product-service {
     max-width: var(--center-content-max-width) !important;
     margin-left: auto !important;
     margin-right: auto !important;
+}
+// Dropdown data is not getting visible properly on import
+import-wizard {
+    sh-select {
+        sh-select-menu {
+            .menu {
+                min-width: 200px !important;
+            }
+        }
+    }
 }
