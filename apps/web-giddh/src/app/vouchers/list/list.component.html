@@ -27,6 +27,9 @@
                                 </div>
                             </div>
                         </div>
+                        <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied">
+                            <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                        </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreEstimate" *ngIf="selectedVouchers?.length">
                                 <span>More</span>

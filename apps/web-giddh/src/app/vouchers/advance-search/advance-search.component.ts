@@ -3,7 +3,7 @@ import { IOption } from '../../theme/ng-virtual-select/sh-options.interface';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
-import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import * as dayjs from 'dayjs';
@@ -69,9 +69,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
-        private formBuilder: FormBuilder,
-        private generalService: GeneralService,
-        private modalService: BsModalService
+        private formBuilder: FormBuilder
     ) {
 
     }
@@ -97,47 +95,45 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             { label: this.commonLocaleData?.app_date_options?.after, value: 'after' },
             { label: this.commonLocaleData?.app_date_options?.before, value: 'before' },
         ];
-
+       
+        
         this.searchForm = this.formBuilder.group({
-            total: [this.advanceFilters?.total || ''],
-            totalEqual: [this.advanceFilters?.totalEqual || ''],
-            totalLessThan: [this.advanceFilters?.totalLessThan || ''],
-            totalMoreThan: [this.advanceFilters?.totalMoreThan || ''],
-            amountEquals: [this.advanceFilters?.amountEquals || ''],
-            amountExclude: [this.advanceFilters?.amountExclude || ''],
-            amountGreaterThan: [this.advanceFilters?.amountGreaterThan || ''],
-            amountLessThan: [this.advanceFilters?.amountLessThan || ''],
-            balanceEqual: [this.advanceFilters?.balanceEqual || ''],
-            balanceLessThan: [this.advanceFilters?.balanceLessThan || ''],
-            balanceMoreThan: [this.advanceFilters?.balanceMoreThan || ''],
-            voucherDateEqual: [this.advanceFilters?.voucherDateEqual || ''],
-            voucherDateAfter: [this.advanceFilters?.voucherDateAfter || ''],
-            voucherDateBefore: [this.advanceFilters?.voucherDateBefore || ''],
-            dueDateEqual: [this.advanceFilters?.dueDateEqual || ''],
-            dueDateAfter: [this.advanceFilters?.dueDateAfter || ''],
-            dueDateBefore: [this.advanceFilters?.dueDateBefore || ''],
-            expireFrom: [this.advanceFilters?.expireFrom || ''],
-            expireTo: [this.advanceFilters?.expireTo || ''],
-            invoiceDateRange: [this.advanceFilters?.invoiceDateRange || ''],
-            voucherDate: [this.advanceFilters?.voucherDate || ''],
-            dueDate: [this.advanceFilters?.dueDate || ''],
-            amountFieldSelector: [this.advanceFilters?.amountFieldSelector || ''],
-            balanceDue: [this.advanceFilters?.balanceDue || ''],
-            balanceStatus: [this.advanceFilters?.balanceStatus || ''],
-            eInvoiceStatus: [this.advanceFilters?.eInvoiceStatus || ''],
-            description: [this.advanceFilters?.description || ''],
-            amount: [this.advanceFilters?.amount || ''],
-            invoiceTotalAmount: [this.advanceFilters?.invoiceTotalAmount || ''],
-            dueDateRange: [this.advanceFilters?.dueDateRange || ''],
-            dueAmount: [this.advanceFilters?.dueAmount || ''],
-            dateRange: [this.advanceFilters?.dateRange || ''],
+            total: [this.advanceFilters?.total ?? ''],
+            totalEqual: [this.advanceFilters?.totalEqual ?? ''],
+            totalLessThan: [this.advanceFilters?.totalLessThan ?? ''],
+            totalMoreThan: [this.advanceFilters?.totalMoreThan ?? ''],
+            amountEquals: [this.advanceFilters?.amountEquals ?? ''],
+            amountExclude: [this.advanceFilters?.amountExclude ?? ''],
+            amountGreaterThan: [this.advanceFilters?.amountGreaterThan ?? ''],
+            amountLessThan: [this.advanceFilters?.amountLessThan ?? ''],
+            balanceEqual: [this.advanceFilters?.balanceEqual ?? ''],
+            balanceLessThan: [this.advanceFilters?.balanceLessThan ?? ''],
+            balanceMoreThan: [this.advanceFilters?.balanceMoreThan ?? ''],
+            voucherDateEqual: [this.advanceFilters?.voucherDateEqual ?? ''],
+            voucherDateAfter: [this.advanceFilters?.voucherDateAfter ?? ''],
+            voucherDateBefore: [this.advanceFilters?.voucherDateBefore ?? ''],
+            dueDateEqual: [this.advanceFilters?.dueDateEqual ?? ''],
+            dueDateAfter: [this.advanceFilters?.dueDateAfter ?? ''],
+            dueDateBefore: [this.advanceFilters?.dueDateBefore ?? ''],
+            expireFrom: [(this.advanceFilters?.expireFrom && dayjs(this.advanceFilters?.expireFrom, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD)) ?? ''],
+            expireTo: [(this.advanceFilters?.expireTo && dayjs(this.advanceFilters?.expireTo, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD)) ?? ''],
+            invoiceDateRange: [this.advanceFilters?.invoiceDateRange ?? ''],
+            voucherDate: [this.advanceFilters?.voucherDate ?? ''],
+            dueDate: [this.advanceFilters?.dueDate ?? ''],
+            amountFieldSelector: [this.advanceFilters?.amountFieldSelector ?? ''],
+            balanceDue: [this.advanceFilters?.balanceDue ?? ''],
+            balanceStatus: [this.advanceFilters?.balanceStatus ?? ''],
+            eInvoiceStatus: [this.advanceFilters?.eInvoiceStatus ?? ''],
+            description: [this.advanceFilters?.description ?? ''],
+            amount: [this.advanceFilters?.amount ?? ''],
+            invoiceTotalAmount: [this.advanceFilters?.invoiceTotalAmount ?? ''],
+            dueDateRange: [this.advanceFilters?.dueDateRange ?? ''],
+            dueAmount: [this.advanceFilters?.dueAmount ?? ''],
+            dateRange: [this.advanceFilters?.dateRange ?? ''],
         });
 
-        this.searchForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(res => {
-            if(res) {
-                console.log(res);
-            }
-        })
+        console.log("this.advanceFilters", this.advanceFilters);
+        console.log("Form", this.searchForm.value);
 
         this.selectedDateRange = { startDate: this.advanceFilters.from, endDate: this.advanceFilters.to };
         this.selectedDateRangeUi = this.advanceFilters.from + " - " + this.advanceFilters.to;
@@ -166,11 +162,6 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         if (amountFieldSelector?.length) {
             this.fieldLabelValues.amountFieldSelector = amountFieldSelector[0]?.label;
         }
-        setTimeout(() => {
-            this.isLoading = false;
-            console.log("localeData", this.localeData);
-            
-        }, 1000);
     }
 
     public ngOnDestroy(): void {
@@ -288,13 +279,6 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         }
     }
 
-    public dateRangeChanged(event: any) {
-        if (event) {
-            this.searchForm.get('expiredFrom')?.patchValue(dayjs(event.picker.startDate).format(GIDDH_DATE_FORMAT));
-            this.searchForm.get('expiredTo')?.patchValue(dayjs(event.picker.endDate).format(GIDDH_DATE_FORMAT));
-        }
-    }
-
     public parseAllDateField() {
         if (this.searchForm.get('voucherDate')?.value) {
             this.searchForm.get('voucherDate')?.patchValue((typeof this.searchForm.get('voucherDate')?.value === "object") ? dayjs(this.searchForm.get('voucherDate')?.value).format(GIDDH_DATE_FORMAT) : dayjs(this.searchForm.get('voucherDate')?.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
@@ -305,19 +289,17 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         }
 
         if (this.searchForm.get('expireFrom')?.value) {
-            this.searchForm.get('expireFrom')?.patchValue((typeof this.searchForm.get('expireFrom')?.value === "object") ? dayjs(this.searchForm.get('expireFrom')?.value).format(GIDDH_DATE_FORMAT) : dayjs(this.searchForm.get('expireFrom')?.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
+            this.searchForm.get('expireFrom')?.patchValue(dayjs(this.searchForm.get('expireFrom')?.value).format(GIDDH_DATE_FORMAT));
         }
 
         if (this.searchForm.get('expireTo')?.value) {
-            this.searchForm.get('expireTo')?.patchValue((typeof this.searchForm.get('expireTo')?.value === "object") ? dayjs(this.searchForm.get('expireTo')?.value).format(GIDDH_DATE_FORMAT) : dayjs(this.searchForm.get('expireTo')?.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
+            this.searchForm.get('expireTo')?.patchValue(dayjs(this.searchForm.get('expireTo')?.value).format(GIDDH_DATE_FORMAT));
         }
     }
 
     public search(): void {
         this.parseAllDateField();
-        console.log(this.searchForm?.value);
-        
-        // this.applyFilterEvent.emit(this.searchForm?.value);
+        this.applyFilterEvent.emit(this.searchForm?.value);
         this.closeModelEvent.emit();
     }
 
@@ -325,13 +307,8 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         this.closeModelEvent.emit(true);
     }
 
-    public expiryDateChanges(event: any): void {
-
-            if(event) {
-                console.log("expiryDateChanges", event);
-            }
-
-            // this.fromDate = dayjs(this.searchForm.get('expiredFrom')?.value).format(GIDDH_DATE_FORMAT);
-            // this.toDate = dayjs(this.searchForm.get('expiredFrom')?.value).format(GIDDH_DATE_FORMAT);
+    public expiryDateChanges(): void {
+            this.fromDate = dayjs(this.searchForm.get('expireFrom')?.value).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(this.searchForm.get('expireTo')?.value).format(GIDDH_DATE_FORMAT);
     }
 }

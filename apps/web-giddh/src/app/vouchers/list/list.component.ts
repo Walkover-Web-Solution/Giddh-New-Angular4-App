@@ -251,16 +251,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public selectedTabIndex: number = 2;
     /** Holds universal date */
     public universalDate: any;
-    public advanceFilters: any = {
-        sortBy: 'voucherDate',
-        sort: 'desc',
-        type: 'sales',
-        from: '',
-        to: '',
-        page: 1,
-        count: PAGINATION_LIMIT,
-        q: ''
-    };
+    public advanceFilters: any = {}
+    public advanceFiltersApplied: boolean = false;
     public voucherBalances: any = {
         grandTotal: 0,
         totalDue: 0
@@ -327,6 +319,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        this.setInitialAdvanceFilter();
         this.getInvoiceSettings();
 
         this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -1062,6 +1055,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
     public applyAdvanceSearch(event: any): void {
         this.advanceSearchDialogRef?.close();
+        this.advanceFiltersApplied = true;
 
         let advanceFilters = {
             sortBy: this.advanceFilters.sortBy,
@@ -1188,6 +1182,21 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 top: '0'
             }
         });
+    }
+
+    public setInitialAdvanceFilter(): void {
+        this.advanceFilters = {
+            sortBy: 'voucherDate',
+            sort: 'desc',
+            type: 'sales',
+            from: '',
+            to: '',
+            page: 1,
+            count: PAGINATION_LIMIT,
+            q: ''
+        };
+        this.advanceFiltersApplied = false;
+        this.getVouchers(false);
     }
 
     /**
