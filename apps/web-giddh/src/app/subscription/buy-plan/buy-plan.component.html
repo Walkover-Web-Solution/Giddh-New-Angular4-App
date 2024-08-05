@@ -900,23 +900,12 @@
                                     }}</span>
                                     {{ commonLocaleData?.app_amount }}</span
                                 >
-
-                                <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">
                                     <amount-field
-                                        [amount]="selectedPlan?.yearlyAmount"
+                                        [amount]="selectedPlan?.planAmountBeforeDiscount"
                                         [currencySymbol]="selectedPlan?.currency?.symbol"
                                         [currencyCode]="selectedPlan?.currency?.code"
                                     >
                                     </amount-field>
-                                </span>
-                                <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">
-                                    <amount-field
-                                        [amount]="selectedPlan?.monthlyAmount"
-                                        [currencySymbol]="selectedPlan?.currency?.symbol"
-                                        [currencyCode]="selectedPlan?.currency?.code"
-                                    >
-                                    </amount-field>
-                                </span>
                             </div>
                         </div>
                         <div
@@ -932,49 +921,25 @@
                                     {{ commonLocaleData?.app_discount }} {{ commonLocaleData?.app_amount }}</span
                                 >
                             </p>
-                            <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">
                                 <amount-field
                                     [amount]="
                                         promoCodeResponse?.length
                                             ? promoCodeResponse[0]?.discountValue
-                                            : selectedPlan?.yearlyDiscountAmount
+                                            : selectedPlan?.discount?.discountValue
                                     "
                                     [currencySymbol]="selectedPlan?.currency?.symbol"
                                     [currencyCode]="selectedPlan?.currency?.code"
                                 >
                                 </amount-field>
-                            </span>
-                            <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">
-                                <amount-field
-                                    [amount]="
-                                        promoCodeResponse?.length
-                                            ? promoCodeResponse[0]?.discountValue
-                                            : selectedPlan?.monthlyDiscountAmount
-                                    "
-                                    [currencySymbol]="selectedPlan?.currency?.symbol"
-                                    [currencyCode]="selectedPlan?.currency?.code"
-                                >
-                                </amount-field>
-                            </span>
                         </div>
                         <div class="d-flex justify-content-between border-bottom py-3">
                             <p>{{ commonLocaleData?.app_subtotal }}</p>
-                            <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">
                                 <amount-field
-                                    [amount]="selectedPlan?.yearlyAmountAfterDiscount"
+                                    [amount]="selectedPlan?.planAmountBeforeTax"
                                     [currencySymbol]="selectedPlan?.currency?.symbol"
                                     [currencyCode]="selectedPlan?.currency?.code"
                                 >
                                 </amount-field>
-                            </span>
-                            <span *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY'">
-                                <amount-field
-                                    [amount]="selectedPlan?.monthlyAmountAfterDiscount"
-                                    [currencySymbol]="selectedPlan?.currency?.symbol"
-                                    [currencyCode]="selectedPlan?.currency?.code"
-                                >
-                                </amount-field>
-                            </span>
                         </div>
                         <div *ngIf="firstStepForm.get('planUniqueName').value">
                             <div class="d-flex justify-content-between py-3">
@@ -991,8 +956,7 @@
                             <p
                                 class="text-right"
                                 *ngIf="
-                                    selectedPlan?.currency?.code?.toLowerCase() === 'inr' &&
-                                    secondStepForm.get('country')?.value?.value?.toLowerCase() === 'in' &&
+                                   selectedPlan?.taxTotal > 0 &&
                                     !promoCodeResponse[0]?.discountValue
                                 "
                             >

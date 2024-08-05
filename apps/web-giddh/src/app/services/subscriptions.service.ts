@@ -300,16 +300,18 @@ export class SubscriptionsService {
      * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
      * @memberof SubscriptionsService
      */
-    public verifyOwnership(id: any): Observable<BaseResponse<any, any>> {
-        return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.VERIFY_OWNERSHIP
-            ?.replace(':requestId', encodeURIComponent(id ?? '')))
+    public verifyOwnership(model: any): Observable<BaseResponse<any, any>> {
+        console.log(model);
+        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.VERIFY_OWNERSHIP
+            ?.replace(':requestId', encodeURIComponent(model?.reqId ? model?.reqId : model))
+            ?.replace(':reject', encodeURIComponent(model?.reason ? true : false)), model?.reason)
             .pipe(
                 map((res) => {
                     let data: BaseResponse<any, any> = res;
-                    data.request = '';
+                    data.request = model?.reason;
                     return data;
                 }),
-                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model?.reason, {}))
             );
     }
 
@@ -617,7 +619,7 @@ export class SubscriptionsService {
                     data.queryString = {};
                     return data;
                 }),
-                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model,{}))
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model, {}))
             );
     }
 }

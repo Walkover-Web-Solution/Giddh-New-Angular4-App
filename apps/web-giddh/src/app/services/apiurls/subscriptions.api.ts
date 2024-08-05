@@ -15,7 +15,7 @@ export const SUBSCRIPTION_V2_API = {
     SUBSCRIPTION_BY_ID: 'v2/subscription/:subscriptionId',
     CANCEL_SUBSCRIPTION_BY_ID: 'v2/subscription/:subscriptionId/cancel',
     TRANSFER: 'v2/subscription/transfer/ownership?subscriptionId=:subscriptionId',
-    VERIFY_OWNERSHIP: 'v2/subscription/verify/ownership?requestId=:requestId',
+    VERIFY_OWNERSHIP: 'v2/subscription/verify/ownership?requestId=:requestId&reject=:reject',
     GET_BILLING_DETAILS: 'v2/subscription/billing-account/get?billingAccountUnqiueName=:billingAccountUnqiueName',
     UPDATE_BILLING_DETAILS: 'v2/subscription/billing-account/:billingAccountUnqiueName',
     GET_COMPANIES_LIST_BY_SUBSCRIPTION_ID: 'v2/subscription/company-list/:subscriptionId?sort=:sort&sortBy=:sortBy&page=:page&count=:count&q=:query',

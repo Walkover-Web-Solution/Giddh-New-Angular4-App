@@ -37,6 +37,7 @@ import { PageModule } from './page/page.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { VerifySubscriptionTransferOwnershipComponent } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.component';
 import { MatButtonModule } from '@angular/material/button';
+import { FormFieldsModule } from './theme/form-fields/form-fields.module';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -75,6 +76,7 @@ if (!environment.production) {
         BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
+        FormFieldsModule,
         HttpClientModule,
         ModalModule.forRoot(),
         ServiceModule.forRoot(),

@@ -21,7 +21,8 @@ export interface SubscriptionState {
     subscribedCompaniesInProgress: boolean;
     subscribedCompanies: any;
     companiesListInProgress: boolean;
-    companiesList: any
+    companiesList: any;
+    rejectReason: any;
 }
 
 export const DEFAULT_SUBSCRIPTION_STATE: SubscriptionState = {
@@ -38,6 +39,7 @@ export const DEFAULT_SUBSCRIPTION_STATE: SubscriptionState = {
     verifyOwnershipSuccess: null,
     subscribedCompanies: null,
     subscribedCompaniesInProgress: null,
+    rejectReason:null
 
 };
 
@@ -188,7 +190,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
     readonly verifyOwnership = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
-                this.patchState({ verifyOwnershipInProgress: true });
+                this.patchState({ verifyOwnershipInProgress: true, rejectReason:null });
                 return this.subscriptionService.verifyOwnership(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
@@ -196,6 +198,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                                 this.toasterService.showSnackBar('success', 'Subscription ownership verified successfully.');
                                 return this.patchState({
                                     verifyOwnershipSuccess: res?.body ?? null,
+                                    rejectReason:req,
                                     verifyOwnershipInProgress: false,
                                 });
                             } else {
@@ -204,6 +207,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                                 }
                                 return this.patchState({
                                     verifyOwnershipSuccess: null,
+                                    rejectReason: null,
                                     verifyOwnershipInProgress: false,
                                 });
                             }

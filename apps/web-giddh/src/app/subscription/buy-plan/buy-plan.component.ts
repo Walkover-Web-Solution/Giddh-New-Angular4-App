@@ -190,11 +190,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public activatePlanSuccess$ = this.componentStore.select(state => state.activatePlanSuccess);
     /** True if it is upgrade plan */
     public upgradePlan: boolean = false;
-    /** Holds upgrade subscription id  */
+    /** Hold upgrade subscription id  */
     public upgradeSubscriptionId: any;
+    /** Hold upgrade region  */
     public upgraderRegion: any;
+    /** Hold get subscription data */
     public viewSubscriptionData: any;
+    /** Hold all plans */
     public isAllPlans: any[] = [];
+    /** True if user change manualy plan */
+    public isUserManualChangePlan: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -262,7 +267,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 //     this.openCashfreeDialog(response?.redirectLink);
                 // }
                 this.subscriptionId = response.subscriptionId;
-                if (this.isChangePlan) {
+                if (this.isChangePlan && !this.isUserManualChangePlan) {
                     this.router.navigate(['/pages/user-details/subscription']);
                 } else {
                     if (this.payType === 'trial') {
@@ -300,7 +305,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 if (response.dueAmount > 0) {
                     this.initializePayment(response);
                 } else {
-                    if (this.isChangePlan) {
+                    if (this.isChangePlan && !this.isUserManualChangePlan) {
                         this.router.navigate(['/pages/user-details/subscription']);
                     } else {
                         this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
@@ -319,7 +324,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 // } else {
                 //     this.openCashfreeDialog(response?.redirectLink);
                 // }
-                if (this.isChangePlan) {
+                if (this.isChangePlan && !this.isUserManualChangePlan) {
                     this.router.navigate(['/pages/user-details/subscription']);
                 } else {
                     this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
@@ -331,7 +336,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.updateSubscriptionPaymentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isLoading = false;
-                    if (this.isChangePlan) {
+                if (this.isChangePlan && !this.isUserManualChangePlan) {
                         this.router.navigate(['/pages/user-details/subscription']);
                     } else {
                         this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
@@ -401,9 +406,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     if (this.upgradePlan && this.upgraderRegion === 'GBR') {
                         this.componentStore.activatePlan(this.upgradeSubscriptionId);
                         this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                            console.log('acrivate res', response);
                             if (response) {
-                                if (this.isChangePlan) {
+                                if (this.isChangePlan && !this.isUserManualChangePlan) {
                                     this.router.navigate(['/pages/user-details/subscription']);
                                 } else {
                                     this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
@@ -411,7 +415,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                             }
                         });
                     } else {
-                        if (this.isChangePlan) {
+                        if (this.isChangePlan && !this.isUserManualChangePlan) {
                             this.router.navigate(['/pages/user-details/subscription']);
                         } else {
                             this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
@@ -440,7 +444,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.changePlanDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log('changePlanDetails', response);
             if (response?.upgrade) {
                 this.upgradePlan = response?.upgrade;
                 this.upgradeSubscriptionId = response?.subscriptionId;
@@ -469,7 +472,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
         this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
             this.viewSubscriptionData = response;
             if (this.subscriptionId && response?.region) {
                 this.newUserSelectCountry({
@@ -1037,24 +1039,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public selectPlan(plan: any): void {
         this.firstStepForm.get('planUniqueName').setValue(plan?.uniqueName);
+        if (this.firstStepForm?.get('promoCode')?.value) {
+            this.applyPromoCode('remove');
+        }
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result) {
                 this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
-                if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                    this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
-                } else {
-                    this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
-                }
-
-                if (this.selectedPlan?.currency?.code?.toLowerCase() === 'inr' && this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
-                    this.finalPlanAmount = this.finalPlanAmount + this.finalPlanAmount * this.taxPercentage;
-                } else {
-                    if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                        this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
-                    } else {
-                        this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
-                    }
-                }
+                this.isUserManualChangePlan = this.selectedPlan.uniqueName !== this.viewSubscriptionData?.planUniqueName;
+                this.setFinalAmount();
             }
         });
     }
@@ -1167,8 +1159,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             });
         }
         this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan?.uniqueName);
-
-
         this.setFinalAmount();
     }
 
@@ -1178,7 +1168,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public setFinalAmount(): void {
-        console.log(this.selectedPlan);
         let reqObj = {
             planUniqueName: this.selectedPlan?.uniqueName,
             promoCode: this.firstStepForm?.get('promoCode')?.value,
@@ -1188,11 +1177,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.componentStore.getCalculationData(reqObj);
         }
         this.calculateData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log(response);
             if (response) {
-                this.finalPlanAmount = response?.planAmountToCharge;
+                this.finalPlanAmount = response?.planAmountAfterTax;
                 this.selectedPlan = { ...this.selectedPlan, ...response };
-                console.log(this.selectedPlan);
             }
         });
 
@@ -1305,7 +1292,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             };
         }
         request['payNow'] = (type === 'trial') ? false : true;
-        if (this.isChangePlan) {
+        if (this.isChangePlan && !this.isUserManualChangePlan) {
             request.subscriptionId = this.subscriptionId;
             this.subscriptionRequest = request;
             this.componentStore.getChangePlanDetails(request);
