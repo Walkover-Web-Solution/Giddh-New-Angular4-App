@@ -23,7 +23,7 @@
                                 aria-label="buy"
                                 mat-stroked-button
                                 color="primary"
-                                (click)="buyPlan(viewSubscriptionData)"
+                                (click)="buyPlan()"
                                 *ngIf="
                                     viewSubscriptionData?.isOwner &&
                                     viewSubscriptionData?.status?.toLowerCase() === 'trial'
