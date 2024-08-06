@@ -145,6 +145,8 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             this.filterParam.entityType = params.entityType;
             this.filterParam.type = params.type;
             this.filterParam.status = params?.status;
+            this.filterParam.from = params.from;
+            this.filterParam.to = params.to;
             this.viewFilteredTxn('page', 1);
         });
         this.voucherApiVersion = this.generalService.voucherApiVersion;

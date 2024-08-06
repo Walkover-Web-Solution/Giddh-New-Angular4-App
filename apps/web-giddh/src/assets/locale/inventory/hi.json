@@ -13,13 +13,15 @@
         "manufacturing":"उत्पादन",
         "warehouse_balance":"वेयरहाउस ओपनिंग बैलेंस",
         "custom_units":"कस्टम इकाई",
+        "master":"मास्टर",
         "recipe":"व्यंजन विधि",
         "create_manufacturing":"मैन्युफैक्चरिंग बनाएं",
         "report":"प्रतिवेदन",
-        "master":"मास्टर",
+        "create_branch_transfer":"शाखा स्थानांतरण बनाएँ",
         "custom_price": "कस्टम कीमत",
         "customer_wise":"ग्राहक समझदार",
-        "vendor_wise":"विक्रेता समझदार"
+        "vendor_wise":"विक्रेता समझदार",
+        "inventory_adjustment":"माल - सूची का समायोजन"
     },
     "reports":{
         "transaction_count":"लेन-देन की संख्या",

@@ -589,7 +589,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             txn.inventory = null;
             txn.particular.name = undefined;
             txn.particular.uniqueName = undefined;
-            txn.amount = 0;
+            txn.amount = txn.amount ?? 0;
             txn.particular.parentGroups = undefined;
             txn.particular.category = undefined;
 
@@ -1226,6 +1226,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     }
                 }
             }
+            this.vm.selectedLedger.generateInvoice = true;
         } else {
             if (this.vm.selectedLedger) {
                 if (this.voucherApiVersion === 2) {

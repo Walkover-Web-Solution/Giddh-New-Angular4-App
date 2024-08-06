@@ -8,6 +8,7 @@ import { giddhRoundOff } from "../../../../shared/helpers/helperFunctions";
     selector: '[entryAmount]'
 })
 export class EntryAmountDirective implements OnChanges, OnDestroy {
+    @Input() public calculateAmount: boolean = true;
     /** Default rate */
     @Input() public rate: number = 0;
     /** Default quantity */
@@ -37,9 +38,11 @@ export class EntryAmountDirective implements OnChanges, OnDestroy {
      * @memberof EntryAmountDirective
      */
     public ngOnChanges(): void {
-        const qtyRate = Number(this.quantity) * Number(this.rate);
-        const amount = giddhRoundOff(qtyRate, this.balanceDecimalPlaces);
-        this.calculatedAmount.emit(amount);
+        if (this.calculateAmount) {
+            const qtyRate = Number(this.quantity) * Number(this.rate);
+            const amount = giddhRoundOff(qtyRate, this.balanceDecimalPlaces);
+            this.calculatedAmount.emit(amount);
+        }
     }
 
     /**

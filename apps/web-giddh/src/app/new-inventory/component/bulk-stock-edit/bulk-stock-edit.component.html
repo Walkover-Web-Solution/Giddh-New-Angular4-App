@@ -9,7 +9,10 @@
     (translationComplete)="translationComplete($event)"
 >
     <div class="bulk-stock pd-15 pb-0">
-        <div class="bulk-stock-warpper">
+        <div *ngIf="isLoading">
+            <giddh-page-loader></giddh-page-loader>
+        </div>
+        <div class="bulk-stock-warpper" *ngIf="!(noDataFound && !(advanceSearchData || searchString)) && !isLoading">
             <div class="bulk-stock-header">
                 <div class="d-flex justify-content-end align-items-center">
                     <div class="mr-5">
@@ -64,16 +67,11 @@
             </div>
             <div class="bulk-stock-body">
                 <div class="bulk-stock-table d-flex flex-column">
-                    <ng-container *ngIf="isLoading">
-                        <div>
-                            <giddh-page-loader></giddh-page-loader>
-                        </div>
-                    </ng-container>
-                    <ng-container *ngIf="!isLoading">
+                    <ng-container *ngIf="(!noDataFound || searchString) && !isLoading">
                         <div class="table-responsive">
                             <form [formGroup]="bulkStockEditForm" (ngSubmit)="onFormSubmit()">
-                                <table class="table table-bordered">
-                                    <thead>
+                                <table class="table table-bordered" >
+                                    <thead >
                                         <tr (clickOutside)="hideTableHeadInput()">
                                             <!-- Variant Name -->
                                             <th class="cursor-pointer" *ngIf="tableHeaderShowHide.variantName">
@@ -1107,7 +1105,7 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                        </ng-container>
+                                        </ng-container>                                
                                         <tr *ngIf="noDataFound && !isLoading">
                                             <td colspan="100%">
                                                 <div class="no-data mb-5">
@@ -1115,8 +1113,8 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    </tbody>
-                                </table>
+                                    </tbody>                                   
+                                </table>  
                             </form>
                         </div>
 
@@ -1137,8 +1135,14 @@
                             ></pagination>
                         </div>
                     </ng-container>
+                    <div *ngIf="!(!noDataFound || searchString) && !isLoading" class="no-data mb-5">
+                        <h1>{{ commonLocaleData?.app_no_entries_found }}</h1>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div *ngIf="noDataFound && !(advanceSearchData || searchString) && !isLoading" class="no-data mb-5">
+            <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
         </div>
     </div>
 </ng-container>

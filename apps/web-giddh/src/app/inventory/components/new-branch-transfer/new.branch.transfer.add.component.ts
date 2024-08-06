@@ -1322,7 +1322,7 @@ export class NewBranchTransferAddComponent implements OnInit, OnChanges, OnDestr
             branchName = hoBranch ? hoBranch.alias : '';
         }
         if (!this.editBranchTransferUniqueName) {
-            this.myCurrentCompany = this.isBranch ? branchName : hoBranch.alias;
+            this.myCurrentCompany = this.isBranch ? branchName : hoBranch?.alias;
             if (this.branchTransferMode === "deliverynote") {
                 this.branchTransfer.sources[0].uniqueName = selectedBranch ? selectedBranch.uniqueName : hoBranch?.uniqueName;
                 this.branchTransfer.sources[0].name = selectedBranch ? selectedBranch.name : hoBranch?.name;
