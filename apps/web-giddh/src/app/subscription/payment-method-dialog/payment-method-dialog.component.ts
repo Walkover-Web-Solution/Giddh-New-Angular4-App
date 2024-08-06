@@ -51,7 +51,7 @@ export class PaymentMethodDialogComponent implements OnInit {
         @Inject(MAT_DIALOG_DATA) public inputData,
         private changeDetection: ChangeDetectorRef,
         public dialog: MatDialog,
-        private fb: FormBuilder,
+        private formBuilder: FormBuilder,
         private router: Router,
         private componentStore: PaymentMethodDialogComponentStore,
         private generalService: GeneralService,
@@ -172,7 +172,7 @@ export class PaymentMethodDialogComponent implements OnInit {
      * @memberof PaymentMethodDialogComponent
      */
     public initForm(): void {
-        this.paymentMethodForm = this.fb.group({
+        this.paymentMethodForm = this.formBuilder.group({
             paymentProvider: ['', Validators.required],
             subscriptionId: ['']
         });
@@ -216,5 +216,4 @@ export class PaymentMethodDialogComponent implements OnInit {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-
 }

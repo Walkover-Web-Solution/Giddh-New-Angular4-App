@@ -367,8 +367,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
                 this.showBillingAccount = false;
             } else if (searchedFieldName === 'Subscriber') {
                 this.showSubscriber = false;
-            }
-            else if (searchedFieldName === 'Country') {
+            } else if (searchedFieldName === 'Country') {
                 this.showCountry = false;
             } else if (searchedFieldName === 'Plan Name') {
                 this.showPlanSubName = false;

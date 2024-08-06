@@ -55,7 +55,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     public subscriptionList$ = this.componentStore.select(state => state.subscriptionList);
     /** Holds Store Companies list observable*/
     public companiesList$ = this.componentStore.select(state => state.companiesList);
-    /** Stores the default search results pagination details */
+    /** Hold company name */
     public companyName: string;
     /** Company list Observable */
     public companyList$: Observable<any[]> = observableOf(null);
@@ -135,7 +135,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
         if (this.searchRequest.loadMore) {
             return;
         }
-        if (searchedText !== null && searchedText !== undefined && typeof searchedText === 'string') {
+        if (typeof searchedText === 'string' && searchedText) {
             this.searchRequest.q = searchedText;
         }
 
@@ -144,7 +144,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
         } else {
             this.searchRequest.page = 1;
         }
-        if (this.searchRequest.page === 1 || this.searchRequest.page <= this.searchRequest.totalPages) {
+        if (this.searchRequest.page === 1 || (this.searchRequest.page <= this.searchRequest.totalPages)) {
             delete this.searchRequest.totalItems;
             delete this.searchRequest.totalPages;
             this.searchRequest.subscriptionId = this.moveSelectedCompany?.subscriptionId;

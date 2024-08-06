@@ -32,7 +32,6 @@ export class PaymentMethodDialogComponentStore extends ComponentStore<PaymentSta
         super(DEFAULT_PAYMENT_STATE);
     }
 
-
     /**
      * Get payment method list by subscription id
      *
@@ -51,7 +50,7 @@ export class PaymentMethodDialogComponentStore extends ComponentStore<PaymentSta
                                     providerListInProgress: false
                                 });
                             } else {
-                                this.toasterService.showSnackBar("error", res.message);
+                                res?.message && this.toasterService.showSnackBar("error", res.message);
                                 return this.patchState({
                                     providerList: [],
                                     providerListInProgress: false
@@ -89,7 +88,7 @@ export class PaymentMethodDialogComponentStore extends ComponentStore<PaymentSta
                                 });
                             } else {
                                 if (res.message) {
-                                    this.toasterService.showSnackBar('error', res.message);
+                                    res?.message && this.toasterService.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
                                     saveProviderSuccess: []
@@ -122,7 +121,7 @@ export class PaymentMethodDialogComponentStore extends ComponentStore<PaymentSta
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.toasterService.showSnackBar('success', res?.body);
+                                res.body && this.toasterService.showSnackBar('success', res.body);
                                 return this.patchState({
                                     deletePaymentSuccess: true
                                 });
@@ -161,7 +160,7 @@ export class PaymentMethodDialogComponentStore extends ComponentStore<PaymentSta
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.toasterService.showSnackBar('success', res?.body);
+                                res.body && this.toasterService.showSnackBar('success', res.body);
                                 return this.patchState({
                                     setDetaultPaymentMethodIsSuccess: true
                                 });

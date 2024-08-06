@@ -287,7 +287,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                                 this.subscriptionComponentStore.buyPlanByGoCardless(model);
                             }
                         } else {
-                            let reqObj = {
+                            const reqObj = {
                                 subscriptionId: response?.subscriptionId,
                                 promoCode: this.firstStepForm?.get('promoCode')?.value ?? null
                             }
@@ -1166,7 +1166,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public setFinalAmount(): void {
-        let reqObj = {
+        const reqObj = {
             planUniqueName: this.selectedPlan?.uniqueName,
             promoCode: this.firstStepForm?.get('promoCode')?.value,
             duration: this.firstStepForm.get('duration').value

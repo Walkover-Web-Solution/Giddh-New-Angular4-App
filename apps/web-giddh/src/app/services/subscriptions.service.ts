@@ -615,7 +615,6 @@ export class SubscriptionsService {
      * @memberof SubscriptionsService
      */
     public getPlanAmountCalculation(model: any): Observable<BaseResponse<any, any>> {
-        console.log(model);
         return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.CALCULATION_PLAN_AMOUNT, model)
             .pipe(
                 map((res) => {
