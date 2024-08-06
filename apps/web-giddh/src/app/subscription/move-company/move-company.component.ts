@@ -100,7 +100,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                 this.isLoading = false;
                 if (response) {
                     response?.body?.results.forEach(subscription => {
-                        this.availablePlansOption.push({ label: `${subscription.plan?.name} -${subscription?.subscriptionId} (${subscription?.totalCompanies - subscription?.companyCount})`, value: `${subscription.subscriptionId}` });
+                        this.availablePlansOption.push({ label: `${subscription.plan?.name} , ${subscription?.subscriptionId} (Left Companies : ${subscription?.totalCompanies - subscription?.companyCount})`, value: `${subscription.subscriptionId}` });
                     });
                 }
                 this.changeDetection.detectChanges();
