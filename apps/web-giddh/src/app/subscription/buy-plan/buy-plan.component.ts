@@ -1180,6 +1180,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.selectedPlan = { ...this.selectedPlan, ...response };
             }
         });
+        this.changeDetection.detectChanges();
     }
 
     /**
