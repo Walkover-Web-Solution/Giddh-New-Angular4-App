@@ -1693,6 +1693,7 @@ export class InventoryService {
             ?.replace(":sort", getParams.sort ? getParams.sort?.toString() : '')
             ?.replace(":q", getParams.q ? getParams.q?.toString() : '')
             ?.replace(":searchBy", getParams.q ? getParams.searchBy?.toString() : '')
+            ?.replace(":inventoryType", getParams.inventoryType ? getParams.inventoryType?.toString() : '');
         if (getParams.branchUniqueName) {
             const branchUniqueName = getParams.branchUniqueName !== this.companyUniqueName ? getParams.branchUniqueName : '';
             url = url.concat(`&branchUniqueName=${encodeURIComponent(branchUniqueName)}`);
@@ -1794,6 +1795,29 @@ export class InventoryService {
         return this.http.post(this.config.apiUrl + INVENTORY_API.INVENTORY_ADJUST.CREATE_INVENTORY
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':branchUniqueName', encodeURIComponent(branchUniqueName))
+            , model).pipe(map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = { model };
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<StockGroupResponse, StockGroupRequest>(e, model)));
+    }
+
+    /**
+    * This will be use for update inventory adjust
+    *
+    * @param {*} model
+    * @param {string} branchUniqueName
+    * @return {*}  {Observable<BaseResponse<any, any>>}
+    * @memberof InventoryService
+    */
+    public updateInventoryAdjustment(model: any, branchUniqueName: string): Observable<BaseResponse<any, any>> {
+        let refNo = model.refNo;
+        delete model.refNo;
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.put(this.config.apiUrl + INVENTORY_API.INVENTORY_ADJUST.UPDATE_INVENTORY
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':branchUniqueName', encodeURIComponent(branchUniqueName))
+            ?.replace(':refNo', encodeURIComponent(refNo))
             , model).pipe(map((res) => {
                 let data: BaseResponse<any, any> = res;
                 data.request = { model };

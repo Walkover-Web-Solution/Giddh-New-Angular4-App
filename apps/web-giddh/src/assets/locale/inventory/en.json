@@ -20,7 +20,8 @@
         "create_branch_transfer": "Create Branch Transfer",
         "custom_price":"Custom Price",
         "customer_wise":"Customer Wise",
-        "vendor_wise":"Vendor Wise"
+        "vendor_wise":"Vendor Wise",
+        "inventory_adjustment":"Inventory Adjustment"
     },
     "reports":{
         "transaction_count":"Transaction Count",

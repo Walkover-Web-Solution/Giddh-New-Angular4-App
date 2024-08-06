@@ -154,17 +154,6 @@
                     "description": "आगाऊ, सामान्य, एकूण आणि न वापरलेल्या पावत्या"
                 },
                 {
-                    "label": "नवीन पावती",
-                    "link": "/pages/vouchers/receipt/create",
-                    "icon": "icon-reciept-new",
-                    "description": "पावती तयार करा",
-                    "additional": {
-                        "queryParams": {
-                            "voucherVersion": 2
-                        }
-                    }
-                },
-                {
                     "label": "विक्री नोंदणी",
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
@@ -321,17 +310,6 @@
                     "link": "/pages/reports/payment",
                     "icon": "icon-reciept-new",
                     "description": "एकूण, आणि न वापरलेली देयके",
-                    "additional": {
-                        "queryParams": {
-                            "voucherVersion": 2
-                        }
-                    }
-                },
-                {
-                    "label": "नवीन पेमेंट",
-                    "link": "/pages/vouchers/payment/create",
-                    "icon": "icon-reciept-new",
-                    "description": "पेमेंट व्युत्पन्न करा",
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2

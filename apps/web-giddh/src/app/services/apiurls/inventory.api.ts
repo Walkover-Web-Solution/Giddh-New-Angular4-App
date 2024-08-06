@@ -111,6 +111,7 @@ export const INVENTORY_API = {
         GET_REASON: 'company/:companyUniqueName/inventory-adjustment/reason/get-all?count=200',// GET call
         CREATE_REASON: 'company/:companyUniqueName/inventory-adjustment/reason', // GET call
         GET: 'company/:companyUniqueName/inventory-adjustment/:referenceNo', // GET call
-        CREATE_INVENTORY: 'company/:companyUniqueName/inventory-adjustment?voucherVersion=2&branchUniqueName=:branchUniqueName' // POST call
+        CREATE_INVENTORY: 'company/:companyUniqueName/inventory-adjustment?voucherVersion=2&branchUniqueName=:branchUniqueName', // POST call
+        UPDATE_INVENTORY: 'company/:companyUniqueName/inventory-adjustment/:refNo?voucherVersion=2&branchUniqueName=:branchUniqueName'
     }
 };
