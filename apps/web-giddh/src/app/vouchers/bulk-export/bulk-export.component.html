@@ -6,7 +6,7 @@
     <div mat-dialog-content class="dialog-body">
         <giddh-page-loader *ngIf="bulkExportVoucherInProgress$ | async"></giddh-page-loader>
         <div [formGroup]="exportForm" [hidden]="bulkExportVoucherInProgress$ | async">
-            <div class="border-bottom pd-b15">
+            <div class="border-bottom pd-b15 custom-mat-form-field">
                 <mat-form-field appearance="outline" class="w-100 mr-b15">
                     <mat-label>{{ localeData?.select_copy }}</mat-label>
                     <mat-select multiple [placeholder]="localeData?.select_copy" formControlName="copyTypes">

@@ -65,21 +65,21 @@ export interface PeriodicElement {
 //     { position: 6, estimate: 'EST-20240111-1', customer: '00000000', estimatedate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status: '', action: '' }
 // ];
 
-// prforma-table
-export interface PeriodicElementProforma {
-    proforma: string;
-    position: number;
-    customer: string;
-    proformadate: string;
-    amount: string;
-    expirydate: string;
-    status: string;
-    action: string;
-}
-// prforma-table
-const PROFORMA_DATA: PeriodicElementProforma[] = [
-    { position: 1, proforma: 'PR-20240111-2', customer: '00000000', proformadate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status: '', action: '' }
-];
+// // prforma-table
+// export interface PeriodicElementProforma {
+//     proforma: string;
+//     position: number;
+//     customer: string;
+//     proformadate: string;
+//     amount: string;
+//     expirydate: string;
+//     status: string;
+//     action: string;
+// }
+// // prforma-table
+// const PROFORMA_DATA: PeriodicElementProforma[] = [
+//     { position: 1, proforma: 'PR-20240111-2', customer: '00000000', proformadate: '11-01-2024', amount: 'H', expirydate: '11-01-2024', status: '', action: '' }
+// ];
 
 // pending-table
 export interface PeriodicElementPending {
@@ -173,7 +173,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     displayedColumnEstimate: string[] = ['index', 'estimate', 'customer', 'proformaDate', 'grandTotal', 'dueDate', 'status', 'action'];
     // proforma-table
     displayedColumnProforma: string[] = ['position', 'proforma', 'customer', 'proformadate', 'amount', 'expirydate', 'status', 'action'];
-    dataSourceProforma = new MatTableDataSource<PeriodicElementProforma>(PROFORMA_DATA);
     // pending-table
     displayedColumnPending: string[] = ['position', 'date', 'particular', 'amount', 'account', 'total', 'description'];
     dataSourcePending = new MatTableDataSource<PeriodicElementPending>(PENDING_DATA);
@@ -319,6 +318,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        console.log(this.activeTabGroup, this.selectedTabIndex);
+        
         this.setInitialAdvanceFilter();
         this.getInvoiceSettings();
 
@@ -332,21 +333,23 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
-            this.urlVoucherType = params?.voucherType;
-            this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
-            this.activeModule = params.module;
-            this.advanceFilters.type = this.voucherType;
-
-            this.activeTabGroup = this.tabsGroups.findIndex(group => group.includes(this.voucherType));
-            if (this.activeTabGroup === -1) {
-                this.activeTabGroup = 0; // default to the first group if not found
-            }
-
-            this.getSelectedTabIndex();
-
-            if (this.universalDate) {
-                this.getVouchers(true);
-                this.getVoucherBalances();
+            if (params) {
+                this.urlVoucherType = params?.voucherType;
+                this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
+                this.activeModule = params.module;
+                this.advanceFilters.type = this.voucherType;
+                
+                this.activeTabGroup = this.tabsGroups.findIndex(group => group.includes(this.voucherType));
+                if (this.activeTabGroup === -1) {
+                    this.activeTabGroup = 0; // default to the first group if not found
+                }
+    
+                this.getSelectedTabIndex();
+    
+                if (this.universalDate) {
+                    this.getVouchers(true);
+                    this.getVoucherBalances();
+                }
             }
         });
 
@@ -682,10 +685,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     private getAllVouchers(): void {
-        if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
-            this.componentStore.getPreviousProformaEstimates({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
-        } else {
-            this.componentStore.getPreviousVouchers({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
+        if (this.voucherType?.length) {
+            if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
+                this.componentStore.getPreviousProformaEstimates({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
+            } else {
+                this.componentStore.getPreviousVouchers({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
+            }
         }
     }
 
@@ -1186,7 +1191,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
     public setInitialAdvanceFilter(): void {
         this.advanceFilters = {
-            sortBy: 'voucherDate',
+            sortBy: '', // need to set voucherDate
             sort: 'desc',
             type: 'sales',
             from: '',
