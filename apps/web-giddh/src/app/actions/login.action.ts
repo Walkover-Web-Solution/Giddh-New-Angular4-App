@@ -216,9 +216,9 @@ export class LoginActions {
                             tap(response => {
                                 const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
                                 if (hasSubscriptionPermission) {
-                                    this._router.navigate(['/pages/subscription']);
+                                    this._router.navigate(['/pages/user-details/subscription']);
                                 } else {
-                                    this._router.navigate(['/pages/subscription/buy-plan/' + (this._generalService.getUtmParameter('region') ?? '')]);
+                                    this._router.navigate(['/pages/user-details/subscription/buy-plan/' + (this._generalService.getUtmParameter('region') ?? '')]);
                                 }
                             })
                         ).subscribe();
@@ -292,9 +292,9 @@ export class LoginActions {
                             tap(response => {
                                 const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
                                 if (hasSubscriptionPermission) {
-                                    this._router.navigate(['/pages/subscription']);
+                                    this._router.navigate(['/pages/user-details/subscription']);
                                 } else {
-                                    this._router.navigate(['/pages/subscription/buy-plan/' + (this._generalService.getUtmParameter('region') ?? '')]);
+                                    this._router.navigate(['/pages/user-details/subscription/buy-plan/' + (this._generalService.getUtmParameter('region') ?? '')]);
                                 }
                             })
                         ).subscribe();

@@ -1512,7 +1512,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public back(): void {
-        this.router.navigate(['/pages/subscription']);
+        this.router.navigate(['/pages/user-details/subscription']);
     }
 
     /**

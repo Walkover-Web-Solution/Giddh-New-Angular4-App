@@ -114,5 +114,14 @@
         "gst_direct":"GST Direct Filling",
         "e_invoice":"E-invoice",
         "plan_purchased_success_message":"Plan purchased successfully",
-        "confirm_archive_message": "Are you sure you want to archive the company?"
+        "confirm_archive_message": "Are you sure you want to [TYPE] the company?",
+        "gocardless":"GOCARDLESS",
+        "confirm_payment_delete_message": "Are you sure you want to delete the payment method?",
+        "manage_payment_methods": "Manage Payment Methods",
+        "select_provider": "Select Provider",
+        "payment_provider": "Payment Provider",
+        "company_note": "Select the company to which you want to add <strong>[COMPANY_NAME]</strong> in this subscription.",
+        "free_for":"Free for",
+        "company_message": "Company [TYPE] successfully",
+        "manage_payment":"Manage Payment Methods"
     }

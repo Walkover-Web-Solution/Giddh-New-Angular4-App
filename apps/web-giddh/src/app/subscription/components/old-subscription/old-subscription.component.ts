@@ -35,12 +35,12 @@ const MONTHLY_DATA: MonthlyData[] = [
 ];
 
 @Component({
-    selector: 'subscription',
-    templateUrl: './subscription.component.html',
-    styleUrls: ['./subscription.component.scss'],
+    selector: 'old-subscription',
+    templateUrl: './old-subscription.component.html',
+    styleUrls: ['./old-subscription.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
+export class OldSubscriptionComponent implements OnInit, OnDestroy, OnChanges {
     /** This will hold local JSON data */
     @Input() public localeData: any = {};
     /** This will hold common JSON data */
@@ -450,6 +450,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof SubscriptionComponent
      */
     public goToBuyNow(subscriptionId: any): void {
-        this.route.navigate(['/pages/subscription/buy-plan/' + subscriptionId]);
+        this.route.navigate(['/pages/user-details/subscription/buy-plan/' + subscriptionId]);
     }
 }
