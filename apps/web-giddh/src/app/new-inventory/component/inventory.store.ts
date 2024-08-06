@@ -41,7 +41,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
                 return this.inventoryService.getItemWiseReportExport(req.queryParams, req.stockReportRequest).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            if (res.status === "success" && typeof res?.body === "string") {
+                            if (res?.status === "success" && typeof res?.body === "string") {
                                 this.toaster.showSnackBar("success", res.body);
                                 this.router.navigate(["/pages/downloads"]);
                                 return this.patchState({
@@ -77,7 +77,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
                 return this.inventoryService.getVariantWiseReportExport(req.queryParams, req.stockReportRequest).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            if (res.status === "success" && typeof res?.body === "string") {
+                            if (res?.status === "success" && typeof res?.body === "string") {
                                 this.toaster.showSnackBar("success", res.body);
                                 this.router.navigate(["/pages/downloads"]);
                                 return this.patchState({
@@ -114,7 +114,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
                 return this.inventoryService.getGroupWiseReportExport(req.queryParams, req.stockReportRequest).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            if (res.status === "success" && typeof res?.body === "string") {
+                            if (res?.status === "success" && typeof res?.body === "string") {
                                     this.toaster.showSnackBar("success", res.body);
                                     this.router.navigate(["/pages/downloads"]);
                                     return this.patchState({
@@ -151,7 +151,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
                 return this.inventoryService.getTransactionReportExport(req.queryParams, req.stockReportRequest).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            if (res.status === "success" && typeof res?.body === "string") {
+                            if (res?.status === "success" && typeof res?.body === "string") {
                                     this.toaster.showSnackBar("success", res.body);
                                     this.router.navigate(["/pages/downloads"]);
                                     return this.patchState({
