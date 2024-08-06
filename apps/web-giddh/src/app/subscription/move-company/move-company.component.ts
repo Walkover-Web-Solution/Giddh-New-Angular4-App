@@ -88,7 +88,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
             this.isLoading = true;
             let reqObj = {
                 model: {
-                    region: this.moveSelectedCompany?.region?.code,
+                    region: this.moveSelectedCompany?.region?.code
                 },
                 pagination: {
                     page: 1,

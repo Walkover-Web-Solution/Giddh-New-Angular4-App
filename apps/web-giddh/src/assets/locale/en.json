@@ -743,5 +743,6 @@
     "app_gst_confirm_message2":"When you select Yes, the content you entered will be overwritten. However, you can modify it later.",
     "app_tax_authority": "Tax Authority",
     "app_select_year": "Select Year",
-    "app_select_month": "Select Month"
+    "app_select_month": "Select Month",
+    "app_user_settings": "User Settings"
 }
