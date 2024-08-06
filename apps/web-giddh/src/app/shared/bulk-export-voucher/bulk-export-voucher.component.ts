@@ -37,7 +37,6 @@ export class BulkExportVoucherComponent implements OnDestroy {
     public commonLocaleData: any = {};
     /** Download Voucher Copy Options */
     public downloadCopyOptions: any[] = [];
-
     /** Selected download Voucher Copy Options */
     public copyTypes: any = [];
     /** Email Receivers */
