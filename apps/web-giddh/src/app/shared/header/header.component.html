@@ -396,6 +396,32 @@
                                                     </a>
                                                 </span>
                                             </div>
+                                            <!-- <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                                <span class="d-flex">
+                                                    <i class="icon-invoice-new mr-r1"></i>
+                                                </span>
+                                                <span>
+                                                    <a
+                                                        class="cursor-pointer"
+                                                        (click)="navigateToSubItemLink('/vouchers/receipt/create')"
+                                                    >
+                                                        {{ commonLocaleData?.app_voucher_types?.receipt }}
+                                                    </a>
+                                                </span>
+                                            </div> -->
+                                            <!-- <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
+                                                <span class="d-flex">
+                                                    <i class="icon-invoice-new mr-r1"></i>
+                                                </span>
+                                                <span>
+                                                    <a
+                                                        class="cursor-pointer"
+                                                        (click)="navigateToSubItemLink('/vouchers/payment/create')"
+                                                    >
+                                                        {{ commonLocaleData?.app_voucher_types?.payment }}
+                                                    </a>
+                                                </span>
+                                            </div> -->
                                             <div class="menu-link mr-t1 mr-b05 d-flex align-items-center">
                                                 <span class="d-flex">
                                                     <i class="icon-manufacturing1 mr-r1"></i>
@@ -716,6 +742,13 @@
             }"
             (closeAsideEvent)="toggleSidebarPane(false, false)"
         ></aside-setting>
+    </div>
+    <div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideInventorySidebarMenuState === 'in'">
+        <inventory-sidebar
+            class="inventory-sidebar"
+            [ngClass]="{ 'inventory-sidebar': isMobileSidebar }"
+            (closeAsideEvent)="toggleSidebarPane(false, false)"
+        ></inventory-sidebar>
     </div>
     <ng-template #datepickerTemplate>
         <div class="datepicker-modal">

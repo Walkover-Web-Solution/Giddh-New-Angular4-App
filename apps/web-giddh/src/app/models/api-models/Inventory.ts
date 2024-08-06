@@ -171,6 +171,7 @@ export class StockTransactionReportRequest {
     public stocks?: any[];
     public variants?: any[];
     public inventoryType?: string;
+    public archived?: boolean;
     constructor() {
         this.count = PAGINATION_LIMIT;
         this.page = 1;
@@ -199,6 +200,7 @@ export class SearchStockTransactionReportRequest {
     public totalPages?: number;
     public searchPage?: string;
     public inventoryType?: string;
+    public loadMore?: boolean;
     constructor() {
         this.count = API_COUNT_LIMIT;
         this.page = 1;
@@ -263,6 +265,11 @@ export class StockTransactionReportRequestExport {
     public showOutwardsValue?: boolean;
     public showClosingStockQty?: boolean;
     public showClosingStockValue?: boolean;
+    public showVariantName?: boolean;
+    public showDate?: boolean;
+    public showAccountUniqueName?: boolean;
+    public showRate?: boolean;
+    public showValue?: boolean;
     constructor() {
         this.stockGroupUniqueNames = [];
         this.stockUniqueNames = [];
@@ -285,6 +292,11 @@ export class StockTransactionReportRequestExport {
         this.showOutwardsValue = false;
         this.showClosingStockQty = false;
         this.showClosingStockValue = false;
+        this.showVariantName = false;
+        this.showDate = false;
+        this.showAccountUniqueName = false;
+        this.showRate = false;
+        this.showValue = false;
     }
 }
 
@@ -607,3 +619,44 @@ export class CreateDiscount {
         this.customerVendorGroupUniqueName = customerVendorGroupUniqueName;
     }
 }
+
+export class AdjustInventoryListResponse {
+    public count: number;
+    public page: number;
+    public totalItems: number;
+    public totalPages: number;
+    public results: InventorytAdjustReport[];
+}
+
+export class InventorytAdjustReport {
+    public date: string;
+    public refNo: string;
+    public reason: InventoryAdjustCommonUse;
+    public adjustmentMethod: string;
+    public entity: string;
+    public status: string;
+    public adjustedProduct: InventoryAdjustCommonUse;
+    public adjustedBy: InventoryAdjustCommonUse;
+    public failureReason: string;
+}
+
+export class InventoryAdjustCommonUse {
+    name: string;
+    uniqueName: string;
+}
+
+export class InventorytAdjustReportQueryRequest {
+    public q: string = '';
+    public from?: string = '';
+    public to?: string = '';
+    public page: number = 1;
+    public count: number = API_COUNT_LIMIT;
+    public totalPages: number = 0;
+    public totalItems: number = 0;
+    public sortBy: string = '';
+    public sort: 'asc' | 'desc' = 'desc';
+    public searchBy: string = '';
+    public branchUniqueName?: string;
+    public inventoryType: string;
+}
+

@@ -37,13 +37,10 @@
                                 </vat-report-filters>
                             </div>
                         </div>
-                   
                         <ng-container *ngIf="!isUKCompany && !isZimbabweCompany && !isLoading">
                             <div *ngFor="let report of vatReport; let i = index" class="pd-l15 pd-r15">
                                 <div class="white-box" *ngIf="i < 2">
-                                    <p>
-                                        <strong class="table-heading">{{ report.section }}</strong>
-                                    </p>
+                                    <p><strong class="table-heading">{{ report.section }}</strong></p>
                                     <div class="table-responsive">
                                         <table mat-table [dataSource]="report.sections" [ngClass]="{'hide-last-row bordered-table': isKenyaCompany}"
                                             class="table basic mr-t2 on-mobile-view vat-report-table">
@@ -533,7 +530,7 @@
                                             <ng-container matColumnDef="output-tax">
                                                 <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" class="font-weight-bold">{{ localeData?.output_tax }}</th>
                                             </ng-container>
-                                            
+
                                             <!-- For Header row 1 -->
                                             <tr mat-header-row *matHeaderRowDef="zwDisplayedHeaderColumns"></tr>
                                             <!-- For Header row 2 -->

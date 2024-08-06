@@ -27,7 +27,7 @@ export class EsignModalComponent implements OnInit, OnDestroy {
         private _toasty: ToasterService,
         private store: Store<AppState>
     ) {
-        
+
     }
 
     public ngOnInit() {

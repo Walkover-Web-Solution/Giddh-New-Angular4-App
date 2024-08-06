@@ -20,6 +20,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal';
 import { GeneralActions } from '../actions/general/general.actions';
 import { API_POSTMAN_DOC_URL, BootstrapToggleSwitch } from '../app.constant';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 import { ClipboardService } from 'ngx-clipboard';
 
 
@@ -96,7 +97,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         private sessionAction: SessionActions,
         private route: ActivatedRoute,
         private breakPointObservar: BreakpointObserver,
-        private generalActions: GeneralActions,
+        private generalActions: GeneralActions, 
+        private settingsProfileActions: SettingsProfileActions,
         private clipboardService: ClipboardService) {
         this.contactNo$ = this.store.pipe(select(s => {
             if (s.session.user) {
@@ -138,6 +140,8 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public ngOnInit() {
         document.querySelector('body').classList.add('setting-sidebar-open');
+        /** To reset isUpdateCompanyInProgress in case of subscription module */
+        this.store.dispatch(this.settingsProfileActions.resetPatchProfile());
 
         this.breakPointObservar.observe([
             '(max-width:767px)'
