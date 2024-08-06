@@ -608,12 +608,12 @@ export class SubscriptionsService {
     }
 
     /**
-     *Get plan amount calculation
-     *
-     * @param {*} model
-     * @return {*}  {Observable<BaseResponse<any, any>>}
-     * @memberof SubscriptionsService
-     */
+    * Get plan amount calculation
+    *
+    * @param {*} model
+    * @return {*}  {Observable<BaseResponse<any, any>>}
+    * @memberof SubscriptionsService
+    */
     public getPlanAmountCalculation(model: any): Observable<BaseResponse<any, any>> {
         return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.CALCULATION_PLAN_AMOUNT, model)
             .pipe(

@@ -743,5 +743,6 @@
     "app_export_note": "The default columns <b class='fw-bold'>'Stock Group Name, Stock Name , Unique Name, Parent Group Name, Parent Group Unique Name, Stock Unit Code, Stock Unit Unique Name' </b>will be exported, you also have the option to add custom columns as needed.",
     "app_tax_authority": "Tax Authority",
     "app_select_year": "Select Year",
-    "app_select_month": "Select Month"
+    "app_select_month": "Select Month",
+    "app_user_settings": "User Settings"
 }
