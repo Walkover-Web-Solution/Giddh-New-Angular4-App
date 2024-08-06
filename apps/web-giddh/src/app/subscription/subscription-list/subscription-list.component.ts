@@ -361,7 +361,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         if (this.generalService.childOf(event?.target, element)) {
             return;
         } else {
-            if (searchedFieldName === 'Name') {
+            if (searchedFieldName === 'Company') {
                 this.showName = false;
             } else if (searchedFieldName === 'Billing Account') {
                 this.showBillingAccount = false;
@@ -388,7 +388,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public toggleSearch(fieldName: string): void {
-        if (fieldName === 'Name') {
+        if (fieldName === 'Company') {
             this.showName = true;
         }
         if (fieldName === 'Billing Account') {

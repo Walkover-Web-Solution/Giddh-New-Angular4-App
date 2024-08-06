@@ -1008,6 +1008,7 @@
                         </div>
                         <div class="mt-3">
                             <button
+                                [disabled]="isChangePlan && !isUserManualChangePlan"
                                 mat-stroked-button
                                 aria-label="next"
                                 color="primary"
