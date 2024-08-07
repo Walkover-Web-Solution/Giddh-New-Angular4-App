@@ -37,6 +37,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     @Input() public isDebtorCreditor: boolean = true;
     /** this will hold if it's bank account */
     @Input() public isBankAccount: boolean = true;
+    @Input() public includeSearchedGroup: boolean = false;
     /** True, if new service is created through this component.
      * Used to differentiate between new customer/vendor creation and service creation
      * as they both need the groups to be shown in a particular category,
@@ -91,7 +92,6 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
             this.isCustomerCreation = undefined;
         }
         this.showBankDetail = this.activeGroupUniqueName === 'sundrycreditors';
-
         this.store.pipe(select(state => state.groupwithaccounts.activeTab), takeUntil(this.destroyed$)).subscribe(activeTab => {
             if (activeTab === 1) {
                 this.isMasterOpen = true;
@@ -159,6 +159,8 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
             this.flatAccountWGroupsList = undefined;
             if (this.selectedGroupUniqueName === 'purchase') {
                 this.activeGroupUniqueName = 'operatingcost';
+            } else if (this.selectedGroupUniqueName === 'receipt' || this.selectedGroupUniqueName === 'payment') {
+                this.activeGroupUniqueName = 'bankaccounts,cash,loanandoverdraft';
             } else {
                 this.activeGroupUniqueName = 'revenuefromoperations';
             }

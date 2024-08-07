@@ -71,17 +71,13 @@
                                                 <ng-container *ngIf="addressConfiguration.stateList?.length">
                                                     <reactive-dropdown-field
                                                         [label]="commonLocaleData?.app_state"
-                                                        [readonly]="
-                                                            addressConfiguration?.type === 'editAddress' &&
-                                                            addressToUpdate?.taxNumber &&
-                                                            addressConfiguration?.tax?.name &&
-                                                            addressConfiguration?.tax?.name === 'GSTIN' || (addressForm?.get('stateLabel')?.value && addressForm?.get('taxNumber')?.value)
-                                                        "
+                                                        [readonly]="isStateReadonly()"
                                                         [options]="addressConfiguration?.stateList"
                                                         formControlName="state"
                                                         [labelValue]="addressForm?.get('stateLabel')?.value ? addressForm?.get('stateLabel')?.value : ''"
                                                         [cssClass]="w-100"
                                                         [required]="true"
+                                                        [ngClass]="{ 'readonly-field': isStateReadonly()}"
                                                     >
                                                     </reactive-dropdown-field>
                                                 </ng-container>
