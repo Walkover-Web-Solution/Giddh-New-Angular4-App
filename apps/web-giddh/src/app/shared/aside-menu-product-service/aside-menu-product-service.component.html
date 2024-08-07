@@ -87,6 +87,7 @@
                 [selectedGroupUniqueName]="selectedVoucherType"
                 [isDebtorCreditor]="false"
                 [isBankAccount]="false"
+                [includeSearchedGroup]="includeSearchedGroup"
                 [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' && !hasUnsavedChanges }"
                 *ngIf="accountAsideMenuState === 'in'"
                 (addEvent)="addNewServiceAccount($event)"

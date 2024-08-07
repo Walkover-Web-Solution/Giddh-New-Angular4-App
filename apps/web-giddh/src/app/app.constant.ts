@@ -16,6 +16,12 @@ export enum BusinessTypes {
     Unregistered = 'Unregistered'
 };
 
+
+/** Regex for mobile number */
+export const PHONE_NUMBER_REGEX = /^[0-9-+()\/\\ ]+$/;
+export const MOBILE_NUMBER_SELF_URL = 'https://api.db-ip.com/v2/free/self';
+export const MOBILE_NUMBER_IP_ADDRESS_URL = 'http://ip-api.com/json/';
+export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
 export const MOBILE_NUMBER_UTIL_URL = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js';
 export const INTL_INPUT_OPTION = {
     nationalMode: true,
@@ -142,6 +148,14 @@ export const ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT = 200;
 export enum SubVoucher {
     ReverseCharge = 'REVERSE_CHARGE',
     AdvanceReceipt = 'ADVANCE_RECEIPT'
+}
+
+/** Adjustment inventory */
+export enum AdjustmentInventory {
+    QuantityWise = 'QUANTITY_WISE',
+    ValueWise = 'VALUE_WISE',
+    Percentage = 'PERCENTAGE',
+    Value = 'VALUE'
 }
 
 /**
@@ -328,10 +342,6 @@ export const HIGH_RATE_FIELD_PRECISION = 16;
 /** Regex to remove trailing zeros from a string representation of number */
 export const REMOVE_TRAILING_ZERO_REGEX = /^([\d,' ]*)$|^([\d,' ]*)\.0*$|^([\d,' ]+\.[0-9]*?)0*$/;
 
-/** Regex for mobile number */
-export const PHONE_NUMBER_REGEX = /^[0-9-+()\/\\ ]+$/;
-
-
 /** Type of voucher that is adjusted */
 export enum AdjustedVoucherType {
     Receipt = 'rcpt',
@@ -406,7 +416,6 @@ export enum EInvoiceStatus {
 
 /** Length of entry description on vouchers */
 export const ENTRY_DESCRIPTION_LENGTH = 300;
-
 export const EMAIL_REGEX_PATTERN = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 /** This will hold error status code for permission error from API */
 export const UNAUTHORISED = 401;
@@ -616,9 +625,6 @@ export enum BootstrapToggleSwitch {
     Off = 'gray',
     Size = 'mini'
 }
-export const MOBILE_NUMBER_SELF_URL = `https://api.db-ip.com/v2/free/self`;
-export const MOBILE_NUMBER_IP_ADDRESS_URL = 'http://ip-api.com/json/';
-export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
 export const OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
 export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1.amazonaws.com/sample-file-';

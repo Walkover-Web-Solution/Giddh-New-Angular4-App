@@ -28,6 +28,7 @@
                     [showBankDetail]="showBankDetail"
                     [isServiceCreation]="isServiceCreation"
                     [isCustomerCreation]="isCustomerCreation"
+                    [includeSearchedGroup]="includeSearchedGroup"
                     (closeAccountModal)="closeAccountModal?.emit($event)"
                 >
                 </account-add-new-details>
@@ -64,6 +65,7 @@
                     [isServiceCreation]="isServiceCreation"
                     [isCustomerCreation]="isCustomerCreation"
                     [fromCommandK]="true"
+                    [includeSearchedGroup]="includeSearchedGroup"
                     (closeAccountModal)="closeAccountModal?.emit($event)"
                 >
                 </account-add-new-details>
