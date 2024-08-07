@@ -99,6 +99,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     }
 
     /**
+     * get current value on input
      * 
      * @param event 
      */
