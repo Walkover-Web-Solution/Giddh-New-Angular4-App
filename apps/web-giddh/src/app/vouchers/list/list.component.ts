@@ -172,7 +172,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     // estimate-table
     displayedColumnEstimate: string[] = ['index', 'estimate', 'customer', 'proformaDate', 'grandTotal', 'dueDate', 'status', 'action'];
     // proforma-table
-    displayedColumnProforma: string[] = ['position', 'proforma', 'customer', 'proformadate', 'amount', 'expirydate', 'status', 'action'];
+    displayedColumnProforma: string[] = ['position', 'proforma', 'customer', 'proformaDate', 'grandTotal', 'dueDate', 'status', 'action'];
     // pending-table
     displayedColumnPending: string[] = ['position', 'date', 'particular', 'amount', 'account', 'total', 'description'];
     dataSourcePending = new MatTableDataSource<PeriodicElementPending>(PENDING_DATA);
@@ -318,8 +318,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
-        console.log(this.activeTabGroup, this.selectedTabIndex);
-        
         this.setInitialAdvanceFilter();
         this.getInvoiceSettings();
 
@@ -496,7 +494,20 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.componentStore.actionVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.dialog.closeAll();
-                this.toasterService.showSnackBar("success", this.commonLocaleData?.app_messages?.invoice_updated);
+                this.toasterService.showSnackBar("success", (this.voucherType === 'estimates' || this.voucherType === 'proformas') ? this.localeData?.status_updated : this.commonLocaleData?.app_messages?.invoice_updated);
+                this.getVouchers(this.isUniversalDateApplicable);
+            }
+        });
+
+        this.componentStore.convertToInvoiceIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.getVouchers(this.isUniversalDateApplicable);
+            }
+        });
+
+        this.componentStore.convertToProformaIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.toasterService.showSnackBar("success", this.localeData?.proforma_generated);
                 this.getVouchers(this.isUniversalDateApplicable);
             }
         });
@@ -685,7 +696,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     private getAllVouchers(): void {
+        console.log("getAllVouchers", this.voucherType);
         if (this.voucherType?.length) {
+            
             if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                 this.componentStore.getPreviousProformaEstimates({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
             } else {
@@ -952,21 +965,30 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public toggleSearch(event: any, fieldName: string, voucherType: string): void {
         switch(voucherType) {
             case VoucherTypeEnum.sales:  
+                            this.showCustomerSearch = false;
+                            this.showInvoiceNoSearch = false;
                             if (fieldName === "accountUniqueName") {
                                 this.showCustomerSearch = true;
-                                this.showInvoiceNoSearch = false;
                             } else if (fieldName === "invoiceNumber") {
                                 this.showInvoiceNoSearch = true;
-                                this.showCustomerSearch = false;
                             }
                             break;
             case VoucherTypeEnum.estimate:
+                            this.showCustomerSearch = false;
+                            this.showInvoiceNoSearch = false;
                             if (fieldName === "accountUniqueName") {
                                 this.showCustomerSearch = true;
-                                this.showInvoiceNoSearch = false;
-                            } else if (fieldName === "invoiceNumber") {
+                            } else if (fieldName === "estimateNumber") {
                                 this.showInvoiceNoSearch = true;
-                                this.showCustomerSearch = false;
+                            }
+                            break;
+            case VoucherTypeEnum.proforma:
+                            this.showCustomerSearch = false;
+                            this.showInvoiceNoSearch = false;
+                            if (fieldName === "accountUniqueName") {
+                                this.showCustomerSearch = true;
+                            } else if (fieldName === "proformaNumber") {
+                                this.showInvoiceNoSearch = true;
                             }
                             break;
         }
@@ -997,7 +1019,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         if (this.generalService.childOf(event?.target, element)) {
             return;
         } else {
-            if (searchedFieldName === 'invoiceNumber') {
+            if (['invoiceNumber', 'estimateNumber', 'proformaNumber'].includes(searchedFieldName)) {
                 this.showInvoiceNoSearch = false;
             } else if (searchedFieldName === 'accountUniqueName') {
                 this.showCustomerSearch = false;
@@ -1098,6 +1120,42 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
     public actionVoucher(voucher: any, action: string): void {
         this.componentStore.actionVoucher({ voucherUniqueName: voucher?.uniqueName, payload: { action: action, voucherType: voucher?.voucherType ?? this.voucherType } });
+    }
+
+    public actionEstimateProforma(voucher: any, action: string): void {
+        const model = { 
+            accountUniqueName: voucher.customerUniqueName,
+            action: action
+        };
+        if (voucher === 'estimates' ) {
+            model['estimateNumber'] = voucher.voucherNumber;
+        } else {
+            model['proformaNumber'] = voucher.voucherNumber;
+        }
+        this.componentStore.actionEstimateProforma({ 
+            request: model,
+            voucherType: voucher?.voucherType ?? this.voucherType 
+        });
+    }
+
+    public convertToInvoice(voucher): void {
+        this.componentStore.convertToInvoice({ 
+            request: { 
+                accountUniqueName: voucher.customerUniqueName, 
+                estimateNumber: voucher.voucherNumber,
+            },
+            voucherType: voucher?.voucherType ?? this.voucherType 
+        });
+    }
+
+    public convertToProforma(voucher): void {
+        this.componentStore.convertToProforma({ 
+            request: { 
+                accountUniqueName: voucher.customerUniqueName, 
+                estimateNumber: voucher.voucherNumber,
+            },
+            voucherType: voucher?.voucherType ?? this.voucherType 
+        });
     }
 
     public paymentSubmitted(event: any): void {

@@ -190,13 +190,13 @@
             "message2": "It will be deleted permanently and will no longer be accessible from any other module."
         },
         {
-            "module": "proformaslist",
+            "module": "proformas",
             "title": "Confirmation",
             "message1": "Do you want to delete the voucher(s)?",
             "message2": "They will be deleted permanently and will no longer be accessible from any other module."
         },
         {
-            "module": "estimateslist",
+            "module": "estimates",
             "title": "Confirmation",
             "message1": "Do you want to delete the voucher(s)?",
             "message2": "They will be deleted permanently and will no longer be accessible from any other module."
@@ -237,5 +237,7 @@
             "message1": "Do you want to delete the selected orders?",
             "message2": "They will be deleted permanently and will no longer be accessible from any other module."
         }
-    ]
+    ],
+    "proforma_generated": "Proforma generated successfully.",
+    "status_updated": "Status updated successfully."
 }

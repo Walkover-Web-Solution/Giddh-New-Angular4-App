@@ -510,7 +510,7 @@ export class VouchersUtilityService {
         return selectedAddressIndex;
     }
 
-    public addEstimateProformaToolTiptext(item: any, giddhBalanceDecimalPlaces: any, baseCurrency: string): any {
+    public addEstimateProformaToolTiptext(item: any, giddhBalanceDecimalPlaces: any, baseCurrency: string): string {
         try {
             let grandTotalAmountForCompany,
                 grandTotalAmountForAccount;
@@ -525,7 +525,7 @@ export class VouchersUtilityService {
                 grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
             }
 
-            item['grandTotalTooltipText'] = `In ${baseCurrency}: ${grandTotalAmountForCompany}<br />(Conversion Rate: ${grandTotalConversionRate})`;
+            item['grandTotalTooltipText'] = `In ${baseCurrency}: ${grandTotalAmountForCompany}\n(Conversion Rate: ${grandTotalConversionRate})`;
         } catch (error) {
 
         }

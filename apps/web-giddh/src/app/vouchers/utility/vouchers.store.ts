@@ -21,6 +21,7 @@ import { SearchService } from "../../services/search.service";
 import { InvoiceBulkUpdateService } from "../../services/invoice.bulkupdate.service";
 import { BulkVoucherExportService } from "../../services/bulkvoucherexport.service";
 import { SalesService } from "../../services/sales.service";
+import { ProformaService } from "../../services/proforma.service";
 
 export interface VoucherState {
     isLoading: boolean;
@@ -61,6 +62,8 @@ export interface VoucherState {
     adjustVoucherIsSuccess: boolean;
     uploadImageBase64InProgress: boolean;
     uploadImageBase64Response: any;
+    convertToInvoice: boolean;
+    convertToProforma: boolean;
 }
 
 const DEFAULT_STATE: VoucherState = {
@@ -101,7 +104,9 @@ const DEFAULT_STATE: VoucherState = {
     actionVoucherIsSuccess: null,
     adjustVoucherIsSuccess: null,
     uploadImageBase64InProgress: false,
-    uploadImageBase64Response: null
+    uploadImageBase64Response: null,
+    convertToInvoice: null,
+    convertToProforma: null
 };
 
 @Injectable()
@@ -118,7 +123,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         private searchService: SearchService,
         private bulkUpdateInvoiceService: InvoiceBulkUpdateService,
         private bulkVoucherExportService: BulkVoucherExportService,
-        private salesService: SalesService
+        private salesService: SalesService,
+        private proformaService: ProformaService
     ) {
         super(DEFAULT_STATE);
     }
@@ -159,6 +165,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public adjustVoucherIsSuccess$ = this.select((state) => state.adjustVoucherIsSuccess);
     public uploadImageBase64InProgress$ = this.select((state) => state.uploadImageBase64InProgress);
     public uploadImageBase64Response$ = this.select((state) => state.uploadImageBase64Response);
+    public convertToInvoiceIsSuccess$ = this.select((state) => state.convertToInvoice);
+    public convertToProformaIsSuccess$ = this.select((state) => state.convertToProforma);
 
     public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
@@ -993,6 +1001,105 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             this.toaster.showSnackBar("error", error);
                             this.patchState({
                                 actionVoucherIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly actionEstimateProforma = this.effect((data: Observable<{ request: any, voucherType: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    actionVoucherIsSuccess: false
+                });
+                return this.proformaService.updateAction(req.request, req.voucherType).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                this.patchState({
+                                    actionVoucherIsSuccess: true
+                                });
+                            } else {
+                                res.message && this.toaster.showSnackBar("error", res.message);
+                                this.patchState({
+                                    actionVoucherIsSuccess: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            this.patchState({
+                                actionVoucherIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly convertToInvoice = this.effect((data: Observable<{ request: any, voucherType: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    convertToInvoice: false
+                });
+                return this.proformaService.generateInvoice(req.request, req.voucherType).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                this.patchState({
+                                    convertToInvoice: true
+                                });
+                            } else {
+                                res.message && this.toaster.showSnackBar("error", res.message);
+                                this.patchState({
+                                    convertToInvoice: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            this.patchState({
+                                convertToInvoice: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly convertToProforma = this.effect((data: Observable<{ request: any, voucherType: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    convertToProforma: false
+                });
+                return this.proformaService.generateProforma(req.request, req.voucherType).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                this.patchState({
+                                    convertToProforma: true
+                                });
+                            } else {
+                                res.message && this.toaster.showSnackBar("error", res.message);
+                                this.patchState({
+                                    convertToProforma: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            this.patchState({
+                                convertToProforma: null
                             });
                         }
                     ),
