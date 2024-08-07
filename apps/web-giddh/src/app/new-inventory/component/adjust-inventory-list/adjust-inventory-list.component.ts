@@ -39,7 +39,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** This will use for table display columns */
-    public displayedColumns: string[] = ['date', 'referenceNo', 'name', 'reason', 'status', 'adjustedBy', 'adjustmentMethod', 'type', 'action'];
+    public displayedColumns: string[] = ['date', 'referenceNo', 'name', 'reason', 'status', 'adjustedBy', 'adjustmentMethod', 'type'];
     /** Hold the data of inventory list */
     public dataSource: any;
     /** True if translations loaded */
@@ -110,6 +110,8 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     public activeCompany: any;
     /** Holds Inventory Type */
     public inventoryType: string;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
 
     constructor(
         private generalService: GeneralService,
@@ -155,6 +157,16 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
                 this.getAllAdjustReports(false);
             }
         });
+
+        this.componentStore.organistationMode$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
+            }
+        });
+
+        if (!this.isCompany) {
+            this.displayedColumns.push('action');
+        }
 
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             this.activeCompany = activeCompany;
