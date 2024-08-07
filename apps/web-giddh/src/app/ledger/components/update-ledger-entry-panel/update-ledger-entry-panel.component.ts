@@ -588,7 +588,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             txn.selectedAccount = null;
             txn.inventory = null;
             txn.particular.name = undefined;
-            txn.particular.uniqueName = undefined;
             txn.amount = txn.amount ?? 0;
             txn.particular.parentGroups = undefined;
             txn.particular.category = undefined;
