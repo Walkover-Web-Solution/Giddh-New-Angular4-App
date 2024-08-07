@@ -224,6 +224,10 @@ export class AdjustInventoryComponent implements OnInit {
                         label: item.label,
                         additional: item
                     }));
+                    if (mappedWarehouses.length === 1) {
+                        this.adjustInventoryCreateEditForm.get('warehouseName')?.patchValue(mappedWarehouses[0]?.label);
+                        this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.patchValue(mappedWarehouses[0]?.value);
+                    }
                     this.warehouses$ = observableOf(mappedWarehouses);
                 }
 
@@ -236,6 +240,10 @@ export class AdjustInventoryComponent implements OnInit {
                         label: item.name,
                         additional: item
                     }));
+                    if (mappedAccounts.length === 1) {
+                        this.adjustInventoryCreateEditForm.get('expenseAccountName')?.patchValue(mappedAccounts[0]?.label);
+                        this.adjustInventoryCreateEditForm.get('expenseAccountUniqueName')?.patchValue(mappedAccounts[0]?.value);
+                    }
                     this.expenseAccounts$ = observableOf(mappedAccounts);
                 }
 
@@ -543,6 +551,7 @@ export class AdjustInventoryComponent implements OnInit {
         this.stockReportRequest.count = API_COUNT_LIMIT;
         this.stockReportRequest.inventoryType = this.inventoryType?.toUpperCase();
         this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
+        this.stockReportRequest.warehouseUniqueNames = this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.value ? [this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.value] : [];
         if (event && event.additional?.type === 'STOCK GROUP') {
             this.isEntityStockGroup = true;
             this.stockReportRequest.stockUniqueNames = [];
@@ -558,6 +567,7 @@ export class AdjustInventoryComponent implements OnInit {
             this.balanceStockReportRequest.stockGroupUniqueNames = [event.value];
             this.balanceStockReportRequest.stockUniqueNames = [];
             this.balanceStockReportRequest['inventoryType'] = this.inventoryType?.toUpperCase();
+            this.balanceStockReportRequest.warehouseUniqueNames = this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.value ? [this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.value] : [];
             let balanceReqObj = {
                 queryParams: balanceQueryParams,
                 balanceStockReportRequest: this.balanceStockReportRequest
@@ -578,6 +588,7 @@ export class AdjustInventoryComponent implements OnInit {
             this.balanceStockReportRequest.stockGroupUniqueNames = [];
             this.balanceStockReportRequest.stockUniqueNames = [event.value];
             this.balanceStockReportRequest['inventoryType'] = this.inventoryType?.toUpperCase();
+            this.balanceStockReportRequest.warehouseUniqueNames = this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.value ? [this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.value] : [];
             let balanceReqObj = {
                 queryParams: balanceQueryParams,
                 balanceStockReportRequest: this.balanceStockReportRequest

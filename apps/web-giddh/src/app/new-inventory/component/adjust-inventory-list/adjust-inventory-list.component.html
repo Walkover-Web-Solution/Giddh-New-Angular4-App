@@ -51,7 +51,7 @@
                 {{ commonLocaleData?.app_clear }}
             </button>
             <button
-                *ngIf="currentOrganizationType !== 'COMPANY'"
+              *ngIf="!isCompany"
                 id="add-adjustment-btn"
                 mat-stroked-button
                 color="primary"
@@ -289,7 +289,7 @@
                                     </span>
                                 </button>
                                 <mat-menu #beforeMenu="matMenu" xPosition="before">
-                                    <button class="no-box-shadow" mat-menu-item (click)="editInventoryAdjust(element)">
+                                    <button   class="no-box-shadow" mat-menu-item (click)="editInventoryAdjust(element)">
                                         {{ commonLocaleData?.app_edit }}
                                     </button>
                                     <button

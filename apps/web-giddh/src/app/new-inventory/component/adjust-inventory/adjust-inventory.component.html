@@ -34,6 +34,7 @@
                     </div>
                     <div class="col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6">
                         <input-field
+                            [readonly]="referenceNumber"
                             [name]="'reference'"
                             [label]="localeData?.reference_no"
                             [placeholder]="localeData?.enter_reference_no"
@@ -305,19 +306,23 @@
                                         </th>
                                         <td mat-cell *matCellDef="let element">
                                             <mat-checkbox
+                                                *ngIf="!updateMode"
                                                 color="primary"
                                                 class="mr-2"
                                                 (click)="$event.stopPropagation()"
-                                                (change)="
-                                                    $event
-                                                        ? selection.toggle(element)
-                                                        : null
-                                                "
-                                                [checked]="
-                                                    selection.isSelected(element)
-                                                "
+                                                (change)="$event ? selection.toggle(element) : null"
+                                                [checked]="selection.isSelected(element)"
                                                 [aria-label]="checkboxLabel(element)"
                                                 [disabled]="isEntityStockGroup"
+                                            >
+                                                {{ element.variant?.name }}
+                                            </mat-checkbox>
+                                            <mat-checkbox
+                                                *ngIf="updateMode"
+                                                color="primary"
+                                                [checked]="true"
+                                                class="mr-2"
+                                                [disabled]="true"
                                             >
                                                 {{ element.variant?.name }}
                                             </mat-checkbox>
