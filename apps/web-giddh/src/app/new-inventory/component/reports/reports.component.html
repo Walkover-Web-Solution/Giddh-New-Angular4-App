@@ -642,12 +642,13 @@
                             <!-- Opening Stock group -->
                             <ng-container matColumnDef="opening_stock">
                                 <th
-                                    class="text-center"
                                     mat-header-cell
                                     *matHeaderCellDef
                                     [attr.colspan]="headerColumns['opening_stock'].colSpan"
                                 >
-                                    {{ localeData?.reports?.opening_stock }}
+                                    <span class="d-flex justify-content-center ml-5">
+                                        {{ localeData?.reports?.opening_stock }}
+                                    </span>
                                 </th>
                             </ng-container>
 
@@ -678,12 +679,13 @@
                             <!-- Closing Stock group -->
                             <ng-container matColumnDef="closing_stock">
                                 <th
-                                    class="text-center"
                                     mat-header-cell
                                     *matHeaderCellDef
                                     [attr.colspan]="headerColumns['closing_stock'].colSpan"
                                 >
-                                    {{ localeData?.reports?.closing_stock }}
+                                    <span class="d-flex justify-content-center ml-5">
+                                        {{ localeData?.reports?.closing_stock }}
+                                    </span>
                                 </th>
                             </ng-container>
                             <tr mat-header-row *matHeaderRowDef="tableHeaderColumns"></tr>
