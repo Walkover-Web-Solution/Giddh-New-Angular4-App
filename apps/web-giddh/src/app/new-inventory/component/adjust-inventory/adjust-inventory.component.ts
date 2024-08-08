@@ -224,7 +224,7 @@ export class AdjustInventoryComponent implements OnInit {
                         label: item.label,
                         additional: item
                     }));
-                    if (mappedWarehouses.length === 1) {
+                    if (mappedWarehouses?.length === 1) {
                         this.adjustInventoryCreateEditForm.get('warehouseName')?.patchValue(mappedWarehouses[0]?.label);
                         this.adjustInventoryCreateEditForm.get('warehouseUniqueName')?.patchValue(mappedWarehouses[0]?.value);
                     }
@@ -240,7 +240,7 @@ export class AdjustInventoryComponent implements OnInit {
                         label: item.name,
                         additional: item
                     }));
-                    if (mappedAccounts.length === 1) {
+                    if (mappedAccounts?.length === 1) {
                         this.adjustInventoryCreateEditForm.get('expenseAccountName')?.patchValue(mappedAccounts[0]?.label);
                         this.adjustInventoryCreateEditForm.get('expenseAccountUniqueName')?.patchValue(mappedAccounts[0]?.value);
                     }

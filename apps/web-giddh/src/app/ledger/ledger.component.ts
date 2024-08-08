@@ -332,7 +332,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private invoiceAction: InvoiceActions,
         private commonAction: CommonActions,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        private router :Router
+        private router: Router
     ) {
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
