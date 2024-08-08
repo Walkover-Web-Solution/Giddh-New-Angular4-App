@@ -158,15 +158,14 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStore.organistationMode$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.organisationMode$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
+                if (!this.isCompany) {
+                    this.displayedColumns.push('action');
+                }
             }
         });
-
-        if (!this.isCompany) {
-            this.displayedColumns.push('action');
-        }
 
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             this.activeCompany = activeCompany;

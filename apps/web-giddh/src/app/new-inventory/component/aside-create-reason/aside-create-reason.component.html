@@ -6,7 +6,7 @@
 >
     <div class="dialog-header d-flex align-items-center form-header">
         <h3>{{ localeData?.create_reason }}</h3>
-        <button aria-hidden="true" class="close" mat-dialog-close>×</button>
+        <button id="closedialog" mat-dialog-close aria-label="close icon"><i class="icon-cross"></i></button>
     </div>
     <mat-dialog-content class="dialog-body">
         <giddh-page-loader *ngIf="createReasonInProgress$ | async"></giddh-page-loader>
