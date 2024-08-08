@@ -96,22 +96,6 @@ const PENDING_DATA: PeriodicElementPending[] = [
     { position: 1, date: '08-04-2023', particular: 'Sales', amount: 'H', account: 'USA debtor', total: '₹23.1', description: '' }
 ];
 
-// credit-table
-export interface PeriodicElementCredit {
-    credit: string;
-    position: number;
-    customer: string;
-    date: string;
-    linked: string;
-    amount: string;
-    einvoicestatus: string;
-    status: string;
-}
-// credit-table
-const CREDIT_DATA: PeriodicElementCredit[] = [
-    { position: 1, credit: 'Hydrogen', customer: '1.0079', date: 'H', linked: 'H', amount: '', einvoicestatus: '', status: '' }
-];
-
 // purchase-table
 export interface PeriodicElementPurchase {
     date: string;
@@ -177,14 +161,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     displayedColumnPending: string[] = ['position', 'date', 'particular', 'amount', 'account', 'total', 'description'];
     dataSourcePending = new MatTableDataSource<PeriodicElementPending>(PENDING_DATA);
     // credit-table
-    displayedColumnsCredit: string[] = ['position', 'credit', 'customer', 'date', 'linked', 'amount', 'einvoicestatus', 'status'];
-    dataSourceCredit = new MatTableDataSource<PeriodicElementCredit>(CREDIT_DATA);
+    displayedColumnsCredit: string[] = ['index', 'credit', 'customer', 'voucherDate', 'linked', 'grandTotal', 'status'];
     // purchase-table
-    displayedColumnPurchase: string[] = ['position', 'date', 'purchase', 'vendorname', 'amount', 'delivery', 'status'];
+    displayedColumnPurchase: string[] = ['index', 'date', 'purchase', 'vendorname', 'amount', 'delivery', 'status'];
     dataSourcePurchase = new MatTableDataSource<PeriodicElementPurchase>(PURCHASE_DATA);
     // bill-table
-    displayedColumnsBill: string[] = ['position', 'bill', 'vendor', 'billdate', 'order', 'amount', 'duedate', 'status'];
-    dataSourceBill = new MatTableDataSource<PeriodicElementBill>(BILL_DATA);
+    displayedColumnsBill: string[] = ['index', 'bill', 'vendor', 'voucherDate', 'order', 'grandTotal', 'dueDate', 'status'];
 
     /** Template Reference for Generic aside menu account */
     @ViewChild("accountAsideMenu") public accountAsideMenu: TemplateRef<any>;
@@ -460,6 +442,20 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         item = this.vouchersUtilityService.addEstimateProformaToolTiptext(item, this.company.giddhBalanceDecimalPlaces, this.company.baseCurrency);
                     }
 
+                    if (this.voucherType === VoucherTypeEnum.purchase) {
+                        let dueDate = item.dueDate ? dayjs(item.dueDate, GIDDH_DATE_FORMAT) : null;
+                        if (dueDate) {
+                            if (dueDate.isAfter(dayjs()) || ['paid', 'cancel'].includes(item.balanceStatus)) {
+                                item.dueDays = null;
+                            } else {
+                                let dueDays = dueDate ? dayjs().diff(dueDate, 'day') : null;
+                                item.dueDays = dueDays;
+                            }
+                        } else {
+                            item.dueDays = null;
+                        }
+                    }
+
                     this.dataSource.push(item);
                 });
             }
@@ -490,6 +486,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.getVouchers(this.isUniversalDateApplicable);
             }
         });
+
+        this.componentStore.deleteVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.dialog.closeAll();
+                this.getVouchers(this.isUniversalDateApplicable);
+            }
+        });
+
 
         this.componentStore.actionVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
@@ -696,9 +700,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     private getAllVouchers(): void {
-        console.log("getAllVouchers", this.voucherType);
         if (this.voucherType?.length) {
-            
             if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                 this.componentStore.getPreviousProformaEstimates({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
             } else {
@@ -922,7 +924,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     // delete confirmation dialog
-    public deleteVoucherDialog(): void {
+    public deleteVoucherDialog(voucher?: any): void {
         let confirmationMessages = [];
         this.localeData?.confirmation_messages?.map(message => {
             confirmationMessages[message.module] = message;
@@ -944,7 +946,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     voucherType: this.voucherType
                 };
 
-                this.componentStore.bulkUpdateInvoice({ payload: payload, actionType: 'delete' });
+                if (this.voucherType === VoucherTypeEnum.purchase) {
+                    this.componentStore.deleteVoucher({ accountUniqueName: voucher?.account?.uniqueName, model: {
+                        uniqueName: voucher?.uniqueName,
+                        voucherType: this.voucherType
+                    }});
+                } else {
+                    this.componentStore.bulkUpdateInvoice({ payload: payload, actionType: 'delete' });
+                }
             }
         });
     }

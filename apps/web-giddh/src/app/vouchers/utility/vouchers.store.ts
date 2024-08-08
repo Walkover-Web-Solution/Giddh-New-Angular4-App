@@ -22,12 +22,14 @@ import { InvoiceBulkUpdateService } from "../../services/invoice.bulkupdate.serv
 import { BulkVoucherExportService } from "../../services/bulkvoucherexport.service";
 import { SalesService } from "../../services/sales.service";
 import { ProformaService } from "../../services/proforma.service";
+import { ReceiptService } from "../../services/receipt.service";
 
 export interface VoucherState {
     isLoading: boolean;
     createUpdateInProgress: boolean;
     deleteAttachmentInProgress: boolean;
     deleteAttachmentIsSuccess: boolean;
+    deleteVoucherIsSuccess: boolean;
     getLastVouchersInProgress: boolean;
     discountsList: IDiscountList[];
     invoiceSettings: InvoiceSetting;
@@ -71,6 +73,7 @@ const DEFAULT_STATE: VoucherState = {
     createUpdateInProgress: null,
     deleteAttachmentInProgress: null,
     deleteAttachmentIsSuccess: null,
+    deleteVoucherIsSuccess: null,
     getLastVouchersInProgress: null,
     discountsList: null,
     invoiceSettings: null,
@@ -124,7 +127,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         private bulkUpdateInvoiceService: InvoiceBulkUpdateService,
         private bulkVoucherExportService: BulkVoucherExportService,
         private salesService: SalesService,
-        private proformaService: ProformaService
+        private proformaService: ProformaService,
+        private receiptService: ReceiptService
     ) {
         super(DEFAULT_STATE);
     }
@@ -153,6 +157,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public pendingPurchaseOrders$ = this.select((state) => state.pendingPurchaseOrders);
     public countryList$ = this.select((state) => state.countryList);
     public deleteAttachmentIsSuccess$ = this.select((state) => state.deleteAttachmentIsSuccess);
+    public deleteVoucherIsSuccess$ = this.select((state) => state.deleteVoucherIsSuccess);
     public ledgerEntries$ = this.select((state) => state.ledgerEntries);
     public voucherBalances$ = this.select((state) => state.voucherBalances);
     public exportVouchersFile$ = this.select((state) => state.exportVouchersFile);
@@ -238,6 +243,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                 return this.voucherService.getAllVouchers(req.model, req.type).pipe(
                     tapResponse(
                         (res: BaseResponse<LastVouchersResponse, any>) => {
+                            if (res.status === "error" && res.message) {
+                                this.toaster.showSnackBar("error", res.message);
+                            }
                             return this.patchState({
                                 getLastVouchersInProgress: false,
                                 lastVouchers: res?.body ?? {}
@@ -264,6 +272,9 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                 return this.voucherService.getAllProformaEstimate(req.model, req.type).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
+                            if (res.status === "error" && res.message) {
+                                this.toaster.showSnackBar("error", res.message);
+                            }
                             return this.patchState({
                                 getLastVouchersInProgress: false,
                                 lastVouchers: res?.body ?? {}
@@ -1208,6 +1219,35 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     eInvoiceGenerated: null
                 });
                 return of(null);
+            })
+        );
+    });
+
+    readonly deleteVoucher = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ deleteVoucherIsSuccess: false });
+                return this.receiptService.DeleteReceipt(req.accountUniqueName, req.model).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success" && typeof res.body === "string") {
+                                this.toaster.showSnackBar("success", res.body);
+                            } else if (res.status === "error" && res.message) {
+                                this.toaster.showSnackBar("error", res.message);
+                            }
+                            return this.patchState({
+                                deleteVoucherIsSuccess: true
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                deleteVoucherIsSuccess: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
             })
         );
     });

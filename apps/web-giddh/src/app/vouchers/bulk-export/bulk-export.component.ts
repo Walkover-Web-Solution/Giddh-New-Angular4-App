@@ -43,9 +43,14 @@ export class BulkExportComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.exportForm = this.formBuilder.group({
-            copyTypes: ['', Validators.required],
+            copyTypes: [''],
             recipients: ['']
         });
+
+        if (this.inputData?.voucherType === VoucherTypeEnum.sales) {
+            this.exportForm.get('copyTypes').setValidators(Validators.required);
+            this.exportForm.get('copyTypes').updateValueAndValidity(); 
+        }
 
         this.componentStore.bulkExportVoucherResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
