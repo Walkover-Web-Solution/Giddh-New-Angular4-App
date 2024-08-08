@@ -306,19 +306,37 @@
                                         </th>
                                         <td mat-cell *matCellDef="let element">
                                             <mat-checkbox
-                                                *ngIf="!updateMode"
+                                                *ngIf="!updateMode && !isEntityStockGroup"
                                                 color="primary"
                                                 class="mr-2"
                                                 (click)="$event.stopPropagation()"
                                                 (change)="$event ? selection.toggle(element) : null"
                                                 [checked]="selection.isSelected(element)"
-                                                [aria-label]="checkboxLabel(element)"
                                                 [disabled]="isEntityStockGroup"
                                             >
                                                 {{ element.variant?.name }}
                                             </mat-checkbox>
                                             <mat-checkbox
-                                                *ngIf="updateMode"
+                                                *ngIf="isEntityStockGroup && !updateMode"
+                                                color="primary"
+                                                [checked]="true"
+                                                class="mr-2"
+                                                [disabled]="true"
+                                            >
+                                                {{ element.variant?.name }}
+                                            </mat-checkbox>
+                                            <mat-checkbox
+                                                *ngIf="updateMode && !isEntityStockGroup"
+                                                color="primary"
+                                                class="mr-2"
+                                                (click)="$event.stopPropagation()"
+                                                (change)="$event ? selection.toggle(element) : null"
+                                                [checked]="selection.isSelected(element)"
+                                            >
+                                                {{ element.variant?.name }}
+                                            </mat-checkbox>
+                                            <mat-checkbox
+                                                *ngIf="updateMode && isEntityStockGroup"
                                                 color="primary"
                                                 [checked]="true"
                                                 class="mr-2"
