@@ -174,7 +174,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @memberof GiddhDatepickerComponent
      */
     public writeValue(value: any): void {
-        let selectvalue = (typeof(value) === "object") ? value: this.inputChange;
+        let selectvalue = (typeof(value) !== "object") ? value: this.inputChange;
         this.innerValue = selectvalue;
         this.calendarDate = dayjs(selectvalue, GIDDH_DATE_FORMAT).toDate();
         this.changeDetectorRef.detectChanges();
