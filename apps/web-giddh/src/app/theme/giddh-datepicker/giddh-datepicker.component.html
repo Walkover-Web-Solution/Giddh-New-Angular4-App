@@ -6,7 +6,6 @@
             [matDatepicker]="picker"
             [placeholder]="placeholder"
             [value]="calendarDate"
-            (input)="dateInputChange($event)"
             [min]="minDate"
             autocomplete="off"
             (focus)="emitDatepickerState(true); picker.open()"
