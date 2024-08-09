@@ -383,7 +383,7 @@
                                     "externals": "replace"
                                 }
                             },
-                            "baseHref": "https://books.giddh.com/",
+                            "baseHref": "https://app.giddh.com/",
                             "fileReplacements": [
                                 {
                                     "replace": "apps/web-giddh/src/environments/environment.ts",

@@ -325,7 +325,6 @@ export class ContentFilterComponent implements DoCheck, OnInit, OnChanges, OnDes
      */
     public changeInvoiceHeader(event: boolean): void {
         this.customTemplate.sections['header'].data['formNameInvoice'].display = event;
-        this.onChangeFieldVisibility(null, null, null);
     }
 
     /**

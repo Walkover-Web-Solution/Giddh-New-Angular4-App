@@ -101,6 +101,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.gstr1entityType = [
+            { label: this.localeData?.all_transactions, value: '' },
             { label: this.commonLocaleData?.app_invoices, value: 'invoices' },
             { label: this.commonLocaleData?.app_credit_notes, value: 'credit-notes' },
             { label: this.commonLocaleData?.app_debit_notes, value: 'debit-notes' },
@@ -142,14 +143,18 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
 
         this.activatedRoute.firstChild.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.selectedGstNumber = params.selectedGst;
-            this.filterParam.entityType = params.entityType;
+        //  this.filterParam.entityType = params.entityType;
+        // set default this.filterParam.entityType = "", value = All;
+            this.filterParam.entityType = "";
             this.filterParam.type = params.type;
             this.filterParam.status = params?.status;
             this.filterParam.from = params.from;
             this.filterParam.to = params.to;
             this.viewFilteredTxn('page', 1);
         });
+        
         this.voucherApiVersion = this.generalService.voucherApiVersion;
+        console.log(this.filterParam.type);
     }
 
     public viewFilteredTxn(filter, val) {
