@@ -101,7 +101,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         this.gstr1entityType = [
-            { label: this.localeData?.all_transactions, value: '' },
+            { label: this.commonLocaleData?.app_all, value: '' },
             { label: this.commonLocaleData?.app_invoices, value: 'invoices' },
             { label: this.commonLocaleData?.app_credit_notes, value: 'credit-notes' },
             { label: this.commonLocaleData?.app_debit_notes, value: 'debit-notes' },
