@@ -35,6 +35,7 @@ export class AdjustInventoryListComponentStore extends ComponentStore<AdjustInve
 
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
     public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
+    public organisationMode$: Observable<any> = this.select(this.store.select(state => state.settings.branches), (response) => response);
     public deleteAdjustInventoryIsSuccess$: Observable<any> = this.select((state) => state.deleteAdjustInventoryIsSuccess);
     public branchList$: Observable<any> = this.select(this.store.select(state => state.settings.branches), (response) => response);
 
