@@ -1,20 +1,3 @@
-    <!-- <textarea
-        [froalaEditor]="froalaSavedOptionsEmail"
-        [formControl]="text"
-        *ngIf="type === 'mail'"
-        #inputFroalaTextArea
-        class="default-text-editor"
-        (closed)="closed()"
-        (opened)="opened($event)"
-        (keydown)="triggerNormalTextArea($event)"
-    ></textarea> -->
-<!-- <div class="editor-container">
-  <h2>Angular Froala WYSIWYG Editor</h2>
-  <div>
- <textarea froalaEditor [(ngModel)]="editorContent"></textarea>
-  </div>
-  <h3>Content Output</h3>
-  <div [froalaView]="editorContent"></div>
-</div> -->
-<textarea #froalaTextarea [(ngModel)]="editorContent" id="example" placeholder="Start typing..."></textarea>
-
+<div class="editor-container">
+  <textarea #froalaTextarea [(ngModel)]="editorContent" id="example" placeholder="Start typing..."></textarea>
+</div>

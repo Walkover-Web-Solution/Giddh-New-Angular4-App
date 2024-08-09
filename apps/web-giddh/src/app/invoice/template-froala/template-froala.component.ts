@@ -9,7 +9,7 @@ import Tribute from 'tributejs';
 })
 export class TemplateFroalaComponent implements OnInit, AfterViewInit {
     public editorContent: string = '';
-    public tribute: any;
+    public tribute: Tribute<any>;
 
     @ViewChild('froalaTextarea', { static: true }) froalaTextarea: ElementRef<HTMLTextAreaElement>;
     public editor: any;
@@ -69,6 +69,14 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
         },
         focusOnInit: true,
         placeholderText: 'Start typing...',
+        events: {
+            'initialized': () => {
+                const editorElement = document.querySelector('.fr-view');
+                if (editorElement) {
+                    this.tribute.attach(editorElement);
+                }
+            }
+        }
     };
 
     constructor() { }
@@ -78,23 +86,20 @@ export class TemplateFroalaComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit(): void {
+        // Configure Tribute.js
+        this.tribute = new Tribute({
+            values: [
+                { key: 'John Doe', value: 'john_doe' },
+                { key: 'Jane Doe', value: 'jane_doe' },
+                { key: 'Jack Doe', value: 'jack_doe' }
+            ]
+        });
+
         // Initialize Froala Editor on the textarea
         if (this.froalaTextarea && this.froalaTextarea.nativeElement) {
             this.editor = new FroalaEditor(this.froalaTextarea.nativeElement, this.froalaOptions, () => {
                 console.log('Froala Editor Initialized');
             });
-
-            // Configure Tribute.js
-            this.tribute = new Tribute({
-                values: [
-                    { key: 'John Doe', value: 'john_doe' },
-                    { key: 'Jane Doe', value: 'jane_doe' },
-                    { key: 'Jack Doe', value: 'jack_doe' }
-                ]
-            });
-
-            // Attach Tribute.js to the Froala editor instance (to the textarea element)
-            this.tribute.attach(this.froalaTextarea.nativeElement);
         } else {
             console.error('Froala textarea element is not available.');
         }
