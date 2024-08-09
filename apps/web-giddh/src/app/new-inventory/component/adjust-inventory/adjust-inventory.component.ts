@@ -84,8 +84,8 @@ export class AdjustInventoryComponent implements OnInit {
     };
     /** False if show hide  */
     public showHideTable: boolean = true;
-    /** False if show reason field hide  */
-    public showReason: boolean = true;
+    /** Show/Hide div section  */
+    public showHideDiv: boolean = true;
     /** True if form is submitted to show error if available */
     public isFormSubmitted: boolean = false;
     /** Holds Store create adjust inventory is success API success state as observable*/
@@ -437,10 +437,13 @@ export class AdjustInventoryComponent implements OnInit {
             changeValue: 0,
             closing: 0
         };
+        this.dataSource = [];
+        this.selection.clear();
+        this.inventoryData = [];
         this.clearForm();
-        this.showReason = false;
+        this.showHideDiv = false;
         setTimeout(() => {
-            this.showReason = true;
+            this.showHideDiv = true;
         });
         this.adjustInventoryCreateEditForm.updateValueAndValidity();
     }
