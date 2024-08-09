@@ -78,6 +78,9 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { MatTabsModule } from '@angular/material/tabs';
 import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
+import { MatDividerModule } from '@angular/material/divider';
+import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
+import { TemplateFroalaComponent } from './template-froala/template-froala.component';
 
 @NgModule({
     declarations: [
@@ -104,7 +107,8 @@ import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-expo
         EWayBillCredentialsComponent,
         InvoicePreviewDetailsComponent,
         ProformaListComponent,
-        DownloadVoucherComponent
+        DownloadVoucherComponent,
+        TemplateFroalaComponent
     ],
     imports: [
         InvoiceRoutingModule,
@@ -112,6 +116,9 @@ import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-expo
         DigitsOnlyModule,
         FormsModule,
         CommonModule,
+        FroalaEditorModule.forRoot(),
+        FroalaViewModule.forRoot(),
+        MatDividerModule,
         TabsModule.forRoot(),
         ReactiveFormsModule,
         ModalModule.forRoot(),
@@ -172,7 +179,10 @@ import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-expo
         InvoiceRoutingModule,
         TooltipModule,
         DownloadOrSendInvoiceOnMailComponent,
-        InvoicePreviewComponent
+        InvoicePreviewComponent,
+        TemplateFroalaComponent,
+        FroalaEditorModule,
+        FroalaViewModule
     ],
     providers: [
         InvoiceUiDataService
