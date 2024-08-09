@@ -170,7 +170,7 @@
                                             [defaultValue]="entry.voucherNumber"
                                             [enableDynamicSearch]="true"
                                             (dynamicSearchedQuery)="
-                                                searchReferenceVoucher = $event; resetInvoiceList(); loadVouchers()
+                                                searchReferenceVoucher = $event; resetInvoiceList(); $event && loadVouchers()
                                             "
                                             (onClear)="onClearSalesAccount(transaction)"
                                             (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm)"
