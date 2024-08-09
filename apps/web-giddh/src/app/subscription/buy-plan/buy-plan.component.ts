@@ -267,7 +267,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 //     this.openCashfreeDialog(response?.redirectLink);
                 // }
                 this.subscriptionId = response.subscriptionId;
-                if (this.isChangePlan && !this.isUserManualChangePlan) {
+                if (this.subscriptionId && this.isChangePlan) {
                     this.router.navigate(['/pages/user-details/subscription']);
                 } else {
                     if (this.payType === 'trial') {
@@ -303,7 +303,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 if (response.dueAmount > 0) {
                     this.initializePayment(response);
                 } else {
-                    if (this.isChangePlan && !this.isUserManualChangePlan) {
+                    if (this.subscriptionId && this.isChangePlan) {
                         this.router.navigate(['/pages/user-details/subscription']);
                     } else {
                         this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
@@ -322,7 +322,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 // } else {
                 //     this.openCashfreeDialog(response?.redirectLink);
                 // }
-                if (this.isChangePlan && !this.isUserManualChangePlan) {
+                if (this.subscriptionId && this.isChangePlan) {
                     this.router.navigate(['/pages/user-details/subscription']);
                 } else {
                     this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
@@ -334,7 +334,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.updateSubscriptionPaymentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isLoading = false;
-                if (this.isChangePlan && !this.isUserManualChangePlan) {
+                if (this.subscriptionId && this.isChangePlan) {
                     this.router.navigate(['/pages/user-details/subscription']);
                 } else {
                     this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
@@ -405,7 +405,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                         this.componentStore.activatePlan(this.upgradeSubscriptionId);
                         this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                             if (response) {
-                                if (this.isChangePlan && !this.isUserManualChangePlan) {
+                                if (this.subscriptionId && this.isChangePlan) {
                                     this.router.navigate(['/pages/user-details/subscription']);
                                 } else {
                                     this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
@@ -413,7 +413,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                             }
                         });
                     } else {
-                        if (this.isChangePlan && !this.isUserManualChangePlan) {
+                        if (this.subscriptionId && this.isChangePlan) {
                             this.router.navigate(['/pages/user-details/subscription']);
                         } else {
                             this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
@@ -1289,7 +1289,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             };
         }
         request['payNow'] = (type === 'trial') ? false : true;
-        if (this.isChangePlan && !this.isUserManualChangePlan) {
+        if (this.subscriptionId && this.isChangePlan) {
             request.subscriptionId = this.subscriptionId;
             this.subscriptionRequest = request;
             this.componentStore.getChangePlanDetails(request);
