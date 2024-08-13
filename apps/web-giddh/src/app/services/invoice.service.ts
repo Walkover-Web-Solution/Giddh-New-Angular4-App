@@ -4,7 +4,7 @@ import { HttpWrapperService } from './http-wrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
-import { EWAYBILL_API, INVOICE_API, INVOICE_API_2 } from './apiurls/invoice.api';
+import { CUSTOM_EMAIL_TEMPLATE, EWAYBILL_API, INVOICE_API, INVOICE_API_2 } from './apiurls/invoice.api';
 import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, IEwayBillAllList, IEwayBillCancel, IEwayBillfilter, IEwayBillTransporter, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass, UpdateEwayVehicle } from '../models/api-models/Invoice';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../models/api-models/SettingsIntegraion';
@@ -799,5 +799,62 @@ export class InvoiceService {
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
+    public createCustomEmailTemplate(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.CREATE_EMAIL_TEMPLATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(model)));
+    }
+
+    public updateCustomEmailTemplate(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.UPDATE_EMAIL_TEMPLATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(model)));
+    }
+
+    public getEmailContent(): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.GET_EMAIL_CONTENT;
+        url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    public getEmailConditions(): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.GET_EMAIL_CONDITIONS;
+        url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    public getEmailTemplate(): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.GET_EMAIL_TEMPLATE;
+        url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 }
