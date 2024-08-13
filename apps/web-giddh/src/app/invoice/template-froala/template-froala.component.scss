@@ -9,3 +9,39 @@
         resize: none;
     }
 }
+.dialog-body {
+    display: flex;
+    flex-direction: column;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+
+textarea#example {
+    min-height: 150px;
+}
+
+#closedialog {
+    position: absolute;
+    left: auto;
+    right: 10px;
+    z-index: 9999999;
+    background-color: transparent;
+    color: var(--color-white);
+    font-size: 17px;
+    top: 10px;
+    margin-right: 0;
+    border: 0;
+    border-radius: 0;
+}
+
+.form-header {
+    height: 40px !important;
+}
+.form-div {
+    overflow: scroll !important;
+}

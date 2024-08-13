@@ -79,8 +79,14 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { MatTabsModule } from '@angular/material/tabs';
 import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
 import { MatDividerModule } from '@angular/material/divider';
-import { FroalaEditorModule, FroalaViewModule } from 'angular-froala-wysiwyg';
 import { TemplateFroalaComponent } from './template-froala/template-froala.component';
+import { MatInputModule } from '@angular/material/input';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { FroalaTemplateEditorModule } from '../shared/froala-editor/froala-editor.module';
 
 @NgModule({
     declarations: [
@@ -116,8 +122,6 @@ import { TemplateFroalaComponent } from './template-froala/template-froala.compo
         DigitsOnlyModule,
         FormsModule,
         CommonModule,
-        FroalaEditorModule.forRoot(),
-        FroalaViewModule.forRoot(),
         MatDividerModule,
         TabsModule.forRoot(),
         ReactiveFormsModule,
@@ -173,7 +177,14 @@ import { TemplateFroalaComponent } from './template-froala/template-froala.compo
         MatDialogModule,
         WatchVideoModule,
         MatTabsModule,
-        BulkExportVoucherModule
+        BulkExportVoucherModule,
+        MatInputModule,
+        FormFieldsModule,
+        MatChipsModule,
+        MatFormFieldModule,
+        MatAutocompleteModule,
+        MatButtonModule,
+        FroalaTemplateEditorModule
     ],
     exports: [
         InvoiceRoutingModule,
@@ -181,8 +192,9 @@ import { TemplateFroalaComponent } from './template-froala/template-froala.compo
         DownloadOrSendInvoiceOnMailComponent,
         InvoicePreviewComponent,
         TemplateFroalaComponent,
-        FroalaEditorModule,
-        FroalaViewModule
+        MatChipsModule,
+        FormFieldsModule,
+        MatInputModule
     ],
     providers: [
         InvoiceUiDataService

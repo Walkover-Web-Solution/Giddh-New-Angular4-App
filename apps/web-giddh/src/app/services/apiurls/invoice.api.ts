@@ -63,3 +63,11 @@ export const EWAYBILL_API = {
 export const BULK_UPDATE_VOUCHER = {
     BULK_UPDATE_VOUCHER_ACTION: COMMON_URL + 'vouchers/bulk-update?action=:actionType'
 }
+
+export const CUSTOM_EMAIL_TEMPLATE = {
+    GET_EMAIL_CONTENT: COMMON_URL + 'communication/email-content-suggestion',
+    GET_EMAIL_CONDITIONS: COMMON_URL + 'communication/condition-suggestion?triggerModule=:triggerModule',
+    CREATE_EMAIL_TEMPLATE: PART_A + 'communication/email-template',
+    UPDATE_EMAIL_TEMPLATE: PART_A + 'communication/email-template/:emailTemplateUniqueName',
+    GET_EMAIL_TEMPLATE: PART_A + 'communication/email-template/all'
+}

@@ -588,7 +588,6 @@
                                 <h4 class="clearfix bd-rb font-16">
                                     {{ commonLocaleData?.app_invoice }} <span></span>
                                 </h4>
-                                  <template-froala></template-froala>
                                 <div class="clearfix">
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-12 col-lg-3 lh-34">
@@ -678,7 +677,7 @@
                                                 </mat-slide-toggle>
                                                 <label class="left-gap">{{ localeData?.auto_mail_update }}</label>
                                             </div>
-                                            <div class="col-sm-12 col-md-9 form-group">
+                                            <div class="col-sm-12 col-md-9 form-group d-flex column-gap-1">
                                                 <mat-slide-toggle
                                                     aria-label="invoice mail"
                                                     [(ngModel)]="invoiceSetting.autoMail"
@@ -687,6 +686,12 @@
                                                     color="primary"
                                                 >
                                                 </mat-slide-toggle>
+                                                <a
+                                                    href="javascript:void(0)"
+                                                    class="cursor-pointer"
+                                                    (click)="opneCustomEmailDialog()"
+                                                    >Custom Email</a
+                                                >
                                             </div>
                                         </div>
                                     </div>
@@ -1085,9 +1090,7 @@
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
-                                            <label class="left-gap">{{
-                                                localeData?.apply_debit_note_round_off
-                                            }}</label>
+                                            <label class="left-gap">{{ localeData?.apply_debit_note_round_off }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9">
                                             <mat-slide-toggle
