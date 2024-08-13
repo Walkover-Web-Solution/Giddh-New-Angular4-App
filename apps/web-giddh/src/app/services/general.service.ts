@@ -1059,6 +1059,8 @@ export class GeneralService {
      */
     public addToolTipText(selectedVoucher: any, baseCurrency: string, item: any, localeData: any, commonLocaleData: any, giddhBalanceDecimalPlaces: number): any {
         try {
+            console.log("selectedVoucher", selectedVoucher, item);
+            
             let balanceDueAmountForCompany, balanceDueAmountForAccount, grandTotalAmountForCompany,
                 grandTotalAmountForAccount;
 
@@ -1066,13 +1068,14 @@ export class GeneralService {
                 balanceDueAmountForCompany = Number(item.totalBalance.amountForCompany) || 0;
                 balanceDueAmountForAccount = Number(item.totalBalance.amountForAccount) || 0;
             }
-            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.receipt, VoucherTypeEnum.payment]?.indexOf(selectedVoucher) > -1 && item.grandTotal) {
+            if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase, VoucherTypeEnum.receipt, VoucherTypeEnum.payment, 'purchase-order']?.indexOf(selectedVoucher) > -1 && item.grandTotal) {
                 grandTotalAmountForCompany = Number(item.grandTotal.amountForCompany) || 0;
                 grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
             }
-
+                                // [amount]="element?.grandTotal?.amountForAccount"
+                                // [currencySymbol]="element?.grandTotal?.currencyForAccount?.symbol"
             let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
-            if (this.voucherApiVersion === 2) {
+            if (this.voucherApiVersion === 2 && item.exchangeRate !== undefined) {
                 grandTotalConversionRate = item.exchangeRate;
             } else if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
                 grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);

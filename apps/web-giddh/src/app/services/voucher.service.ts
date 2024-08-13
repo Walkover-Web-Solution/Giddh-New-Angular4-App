@@ -88,7 +88,13 @@ export class VoucherService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         const requestPayload = body;
         const requestParameter = {
-            page: body?.page, count: body?.count, from: body?.from, to: body?.to, q: (body?.q) ? encodeURIComponent(body?.q) : body?.q, sort: body?.sort, sortBy: body?.sortBy
+            page: body?.page, 
+            count: body?.count, 
+            from: body?.from, 
+            to: body?.to, 
+            q: ((body?.q) ? encodeURIComponent(body?.q) : body?.q), 
+            sort: body?.sort, 
+            sortBy: body?.sortBy
         };
 
         delete body.from;
@@ -98,7 +104,6 @@ export class VoucherService {
 
         let url = this.vouchersUtilityService.createQueryString(this.config.apiUrl + contextPath, { ...requestParameter, type });
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
-
         return this.http.post(url
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), requestPayload).pipe(
                 map((res) => {
@@ -306,6 +311,29 @@ export class VoucherService {
     }
 
     /**
+     * This will send the api request to get all purchase orders
+     *
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public getPurchaseOrderList(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_ALL;
+        url = url?.replace(':companyUniqueName', this.companyUniqueName);
+        url = url?.replace(':from', model.from ?? '');
+        url = url?.replace(':to', model.to ?? '');
+        url = url?.replace(':page', model.page ?? 1);
+        url = url?.replace(':count', model.count ?? '');
+        url = url?.replace(':sort', model.sort ?? '');
+        url = url?.replace(':sortBy', model.sortBy ?? 'purchaseDate');
+        
+        const { vendorName, type, purchaseOrderNumber } = model;
+
+        return this.http.post(url, { vendorName, type, purchaseOrderNumber }).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    /**
      * Get entries by entry unique name to convert pending entries to voucher
      *
      * @param {string} accountUniqueName
@@ -452,5 +480,21 @@ export class VoucherService {
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<string, string>(e, voucherUniqueName)));
+    }
+
+    /**
+     * This will delete the order
+     *
+     * @param {*} getRequestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public deleteSinglePOVoucher(uniqueName: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.DELETE;
+        url = url?.replace(':companyUniqueName', this.companyUniqueName);
+        url = url?.replace(':poUniqueName', uniqueName);
+
+        return this.http.delete(url).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, uniqueName)));
     }
 }

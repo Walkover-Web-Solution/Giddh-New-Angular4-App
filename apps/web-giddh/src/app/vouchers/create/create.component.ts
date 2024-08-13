@@ -3571,6 +3571,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 });
             } else {
+                console.log(invoiceForm);
                 this.purchaseOrderService.create(getRequestObject, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.startLoader(false);
                     if (response && response.status === "success") {
@@ -3684,6 +3685,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 });
             } else {
+                console.log(invoiceForm);
+                
                 this.voucherService.generateVoucher(invoiceForm.account.uniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.startLoader(false);
                     if (response?.status === "success") {

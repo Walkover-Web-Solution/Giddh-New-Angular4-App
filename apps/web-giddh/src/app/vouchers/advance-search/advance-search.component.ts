@@ -20,7 +20,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
-    @Input() public type: 'invoice' | 'drcr' | 'receipt' | 'proforma' | 'purchase';
+    @Input() public type: 'invoice' | 'drcr' | 'receipt' | 'proforma' | 'purchase' | 'purchase-order';
     @Input() public advanceFilters: any;
     @Output() public applyFilterEvent: EventEmitter<InvoiceFilterClassForInvoicePreview> = new EventEmitter<InvoiceFilterClassForInvoicePreview>();
     @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
@@ -130,6 +130,11 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             dueDateRange: [this.advanceFilters?.dueDateRange ?? ''],
             dueAmount: [this.advanceFilters?.dueAmount ?? ''],
             dateRange: [this.advanceFilters?.dateRange ?? ''],
+            grandTotal: [this.advanceFilters?.grandTotal ?? ''],
+            grandTotalOperation: [this.advanceFilters?.grandTotalOperation ?? ''],
+            statuses: [this.advanceFilters?.statuses ?? []],
+            dueFrom: [this.advanceFilters?.dueFrom ?? ''],
+            dueTo: [this.advanceFilters?.dueTo ?? '']
         });
 
         console.log("this.advanceFilters", this.advanceFilters);

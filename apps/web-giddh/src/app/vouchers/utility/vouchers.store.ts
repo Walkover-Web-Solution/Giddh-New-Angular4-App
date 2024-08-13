@@ -51,6 +51,7 @@ export interface VoucherState {
     vouchersForAdjustment: any;
     voucherListForCreditDebitNote: any;
     pendingPurchaseOrders: any[];
+    purchaseOrdersList: any[];
     countryList: any[];
     ledgerEntries: any[];
     voucherBalances: any[];
@@ -95,6 +96,7 @@ const DEFAULT_STATE: VoucherState = {
     vouchersForAdjustment: null,
     voucherListForCreditDebitNote: null,
     pendingPurchaseOrders: null,
+    purchaseOrdersList: null,
     countryList: null,
     ledgerEntries: null,
     voucherBalances: null,
@@ -155,6 +157,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public vouchersForAdjustment$ = this.select((state) => state.vouchersForAdjustment);
     public voucherListForCreditDebitNote$ = this.select((state) => state.voucherListForCreditDebitNote);
     public pendingPurchaseOrders$ = this.select((state) => state.pendingPurchaseOrders);
+    public purchaseOrdersList$ = this.select((state) => state.purchaseOrdersList);
     public countryList$ = this.select((state) => state.countryList);
     public deleteAttachmentIsSuccess$ = this.select((state) => state.deleteAttachmentIsSuccess);
     public deleteVoucherIsSuccess$ = this.select((state) => state.deleteVoucherIsSuccess);
@@ -789,6 +792,32 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
+    readonly getPurchaseOrders = this.effect((data: Observable<{ request: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ getLastVouchersInProgress: true });
+                return this.voucherService.getPurchaseOrderList(req.request).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            return this.patchState({
+                                purchaseOrdersList: res.body,
+                                getLastVouchersInProgress: false
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                purchaseOrdersList: null,
+                                getLastVouchersInProgress: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
     readonly getCountryList = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -1228,6 +1257,35 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({ deleteVoucherIsSuccess: false });
                 return this.receiptService.DeleteReceipt(req.accountUniqueName, req.model).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success" && typeof res.body === "string") {
+                                this.toaster.showSnackBar("success", res.body);
+                            } else if (res.status === "error" && res.message) {
+                                this.toaster.showSnackBar("error", res.message);
+                            }
+                            return this.patchState({
+                                deleteVoucherIsSuccess: true
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                deleteVoucherIsSuccess: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly deleteSinglePOVoucher = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ deleteVoucherIsSuccess: false });
+                return this.voucherService.deleteSinglePOVoucher(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success" && typeof res.body === "string") {

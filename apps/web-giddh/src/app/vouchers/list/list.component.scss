@@ -125,6 +125,10 @@ table {
     }
 }
 
+.ontime-delivery {
+    color: var(--color-secondary-success);
+}
+
 @media screen and (max-width: 1199px) {
     .vouchers-wrapper {
         .invoice-video {
