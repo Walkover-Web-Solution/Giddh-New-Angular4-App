@@ -10,7 +10,7 @@
     </div>
     <mat-dialog-content class="dialog-body d-flex flex-column">
         <div class="form-div">
-            <form [formGroup]="emailForm" (ngSubmit)="onSubmit()" class="d-flex flex-column" style="flex-grow: 1">
+            <form [formGroup]="emailForm" class="d-flex flex-column" style="flex-grow: 1">
                 <div class="chip-gap">
                     <div class="form-group position-relative">
                         <select-multiple-fields
@@ -23,11 +23,23 @@
                             class="select-multiple-chiplist mb-3"
                         ></select-multiple-fields>
                         <div class="d-flex column-gap1 position-absolute" style="right: 0; z-index: 999; top: 0">
-                            <a class="btn-link under" href="javascript:void(0);" (click)="showCc = true">Cc</a>
-                            <a class="btn-link" href="javascript:void(0);" (click)="showBcc = true">Bcc</a>
+                            <a
+                                class="btn-link under"
+                                href="javascript:void(0);"
+                                (click)="showCc = true"
+                                *ngIf="!selectedCcEmails?.length"
+                                >Cc</a
+                            >
+                            <a
+                                class="btn-link"
+                                href="javascript:void(0);"
+                                (click)="showBcc = true"
+                                *ngIf="!selectedBccEmails?.length"
+                                >Bcc</a
+                            >
                         </div>
                     </div>
-                    <div class="form-group" *ngIf="showCc">
+                    <div class="form-group" *ngIf="showCc || selectedCcEmails?.length">
                         <select-multiple-fields
                             [placeholder]="'Select CC'"
                             [options]="toEmails"
@@ -38,7 +50,7 @@
                             class="select-multiple-chiplist mb-3"
                         ></select-multiple-fields>
                     </div>
-                    <div class="form-group" *ngIf="showBcc">
+                    <div class="form-group" *ngIf="showBcc || selectedBccEmails?.length">
                         <select-multiple-fields
                             [placeholder]="'Select BCC'"
                             [options]="toEmails"
@@ -50,7 +62,14 @@
                         ></select-multiple-fields>
                     </div>
                     <div class="form-group">
-                        <input type="text" matInput formControlName="emailSubject" class="form-control border-bottom" />
+                        <input
+                            type="text"
+                            #subjectInputField
+                            matInput
+                            formControlName="emailSubject"
+                            placeholder="Type '@' to see suggestions"
+                            class="form-control border-bottom"
+                        />
                     </div>
                 </div>
                 <div class="form-group editor-container">
@@ -60,7 +79,7 @@
         </div>
         <div class="row position-sticky mt-1">
             <div class="col-sm-4 pr-0">
-                <button aria-label="save" mat-stroked-button color="primary" type="button">
+                <button aria-label="save" mat-stroked-button color="primary" type="button" (click)="onSubmit()">
                     {{ commonLocaleData?.app_save }}
                 </button>
             </div>

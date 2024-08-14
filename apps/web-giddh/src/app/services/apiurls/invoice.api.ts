@@ -68,6 +68,6 @@ export const CUSTOM_EMAIL_TEMPLATE = {
     GET_EMAIL_CONTENT: COMMON_URL + 'communication/email-content-suggestion',
     GET_EMAIL_CONDITIONS: COMMON_URL + 'communication/condition-suggestion?triggerModule=:triggerModule',
     CREATE_EMAIL_TEMPLATE: PART_A + 'communication/email-template',
-    UPDATE_EMAIL_TEMPLATE: PART_A + 'communication/email-template/:emailTemplateUniqueName',
-    GET_EMAIL_TEMPLATE: PART_A + 'communication/email-template/all'
+    UPDATE_EMAIL_TEMPLATE: PART_A + 'communication/email-template/:invoiceType',
+    GET_EMAIL_TEMPLATE: PART_A + 'communication/email-template/:invoiceType'
 }
