@@ -801,28 +801,19 @@ export class InvoiceService {
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
 
-    public createCustomEmailTemplate(model: any): Observable<BaseResponse<any, any>> {
+    public updateCustomEmailTemplate(templateReq: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.CREATE_EMAIL_TEMPLATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
-        return this.http.post(url, model).pipe(
+        let invoiceType = templateReq?.invoiceType;
+        delete templateReq?.invoiceType;
+        let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.UPDATE_EMAIL_TEMPLATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':invoiceType', invoiceType);
+        return this.http.put(url, templateReq.model).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
-                data.request = model;
+                data.request = templateReq?.model;
                 return data;
             }),
-            catchError((e) => this.errorHandler.HandleCatch<any, any>(model)));
-    }
-
-    public updateCustomEmailTemplate(model: any): Observable<BaseResponse<any, any>> {
-        this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.UPDATE_EMAIL_TEMPLATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
-        return this.http.post(url, model).pipe(
-            map((res) => {
-                let data: BaseResponse<any, any> = res;
-                data.request = model;
-                return data;
-            }),
-            catchError((e) => this.errorHandler.HandleCatch<any, any>(model)));
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(templateReq?.model)));
     }
 
     public getEmailContent(): Observable<BaseResponse<any, any>> {
@@ -847,9 +838,10 @@ export class InvoiceService {
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
-    public getEmailTemplate(): Observable<BaseResponse<any, any>> {
+    public getEmailTemplate(invoiceType:string): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.GET_EMAIL_TEMPLATE;
         url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
+        url = url?.replace(':invoiceType', invoiceType);
         return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;

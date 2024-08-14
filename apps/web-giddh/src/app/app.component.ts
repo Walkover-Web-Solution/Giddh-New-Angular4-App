@@ -80,7 +80,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }
 
         if (!(this._generalService.user && this._generalService.sessionId)) {
-            if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download') && !window.location.href.includes('verify-subscription-ownership')  && !window.location.href.includes('dns')) {
+            if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download') && !window.location.href.includes('verify-subscription-ownership') && !window.location.href.includes('dns')) {
                 if (PRODUCTION_ENV && !isElectron) {
                     window.location.href = 'https://giddh.com/login/';
                 } else {
@@ -189,6 +189,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._generalService.addLinkTag("./assets/css/ngx-bootstrap/bs-datepicker.css");
             this._generalService.addLinkTag("./assets/css/ladda-themeless.min.css");
             this._generalService.addLinkTag("./assets/css/lightbox.css");
+            this._generalService.addLinkTag("../assets/css/code-mirror.scss");
 
             /* RAZORPAY */
             if (window['Razorpay'] === undefined) {
@@ -199,6 +200,22 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 document.body.appendChild(scriptTag);
             }
             /* RAZORPAY */
+
+            /* Xml */
+            let xmlScriptTag = document.createElement('script');
+            xmlScriptTag.src = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/mode/xml/xml.min.js';
+            xmlScriptTag.type = 'text/javascript';
+            xmlScriptTag.defer = true;
+            document.body.appendChild(xmlScriptTag);
+            /* Xml */
+
+            /* Codemirror */
+            let codeMirrorScriptTag = document.createElement('script');
+            codeMirrorScriptTag.src = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.js';
+            codeMirrorScriptTag.type = 'text/javascript';
+            codeMirrorScriptTag.defer = true;
+            document.body.appendChild(codeMirrorScriptTag);
+            /* Codemirror */
         }, 1000);
 
         if (this._generalService.getUrlParameter("region") === "UK") {

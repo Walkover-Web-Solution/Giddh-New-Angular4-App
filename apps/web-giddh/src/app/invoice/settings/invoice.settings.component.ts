@@ -20,7 +20,7 @@ import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
 import { BootstrapToggleSwitch } from '../../app.constant';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { TemplateFroalaComponent } from '../template-froala/template-froala.component';
+import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
 
 @Component({
     selector: 'app-invoice-setting',
@@ -112,7 +112,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
         this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
@@ -601,17 +600,18 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * @memberof InvoiceSettingComponent
      */
     public tabChanged(event: any): void {
+        console.log(event);
         this.selectedTabIndex = event?.index;
     }
 
-
     /**
-* Opens create reason modal
-*
-* @memberof AdjustInventoryComponent
-*/
+    * Opens custom email dialog
+    *
+    * @memberof InvoiceSettingComponent
+    */
     public opneCustomEmailDialog(): void {
-        this.matDialogRef = this.dialog.open(TemplateFroalaComponent, {
+        this.dialog.open(TemplateFroalaComponent, {
+            data: this.selectedVoucher,
             width: 'var(--aside-pane-width)',
             height: '70vh',
             position: {

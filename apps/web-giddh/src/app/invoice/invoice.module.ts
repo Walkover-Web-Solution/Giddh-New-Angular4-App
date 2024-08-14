@@ -79,14 +79,8 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { MatTabsModule } from '@angular/material/tabs';
 import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
 import { MatDividerModule } from '@angular/material/divider';
-import { TemplateFroalaComponent } from './template-froala/template-froala.component';
-import { MatInputModule } from '@angular/material/input';
-import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatButtonModule } from '@angular/material/button';
-import { FroalaTemplateEditorModule } from '../shared/froala-editor/froala-editor.module';
+import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
+
 
 @NgModule({
     declarations: [
@@ -113,8 +107,7 @@ import { FroalaTemplateEditorModule } from '../shared/froala-editor/froala-edito
         EWayBillCredentialsComponent,
         InvoicePreviewDetailsComponent,
         ProformaListComponent,
-        DownloadVoucherComponent,
-        TemplateFroalaComponent
+        DownloadVoucherComponent
     ],
     imports: [
         InvoiceRoutingModule,
@@ -178,23 +171,13 @@ import { FroalaTemplateEditorModule } from '../shared/froala-editor/froala-edito
         WatchVideoModule,
         MatTabsModule,
         BulkExportVoucherModule,
-        MatInputModule,
-        FormFieldsModule,
-        MatChipsModule,
-        MatFormFieldModule,
-        MatAutocompleteModule,
-        MatButtonModule,
         FroalaTemplateEditorModule
     ],
     exports: [
         InvoiceRoutingModule,
         TooltipModule,
         DownloadOrSendInvoiceOnMailComponent,
-        InvoicePreviewComponent,
-        TemplateFroalaComponent,
-        MatChipsModule,
-        FormFieldsModule,
-        MatInputModule
+        InvoicePreviewComponent
     ],
     providers: [
         InvoiceUiDataService

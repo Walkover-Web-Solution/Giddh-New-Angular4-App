@@ -397,6 +397,12 @@
                                                     color="primary"
                                                 >
                                                 </mat-slide-toggle>
+                                                <a
+                                                    href="javascript:void(0)"
+                                                    class="cursor-pointer"
+                                                    (click)="opneCustomEmailDialog()"
+                                                    >Custom Email</a
+                                                >
                                             </div>
                                         </div>
                                     </div>
@@ -549,6 +555,12 @@
                                                     color="primary"
                                                 >
                                                 </mat-slide-toggle>
+                                                <a
+                                                    href="javascript:void(0)"
+                                                    class="cursor-pointer"
+                                                    (click)="opneCustomEmailDialog()"
+                                                    >Custom Email</a
+                                                >
                                             </div>
                                         </div>
                                     </div>
@@ -1091,6 +1103,21 @@
                                             >
                                             </mat-slide-toggle>
                                             <label class="left-gap">{{ localeData?.apply_debit_note_round_off }}</label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-9">
+                                            <mat-slide-toggle
+                                                aria-label="debit note"
+                                                [(ngModel)]="invoiceSetting.debitNoteRoundOff"
+                                                name="debitNoteRoundOff"
+                                                class="hide-on-mobile"
+                                                color="primary"
+                                            >
+                                            </mat-slide-toggle>
+                                        </div>
+                                    </div>
+                                    <div class="row ml-0 mr-0">
+                                        <div class="col-sm-12 col-md-12 col-lg-2 flex-container pl-0 pr-0">
+                                            <label class="left-gap">Auto Email</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9">
                                             <mat-slide-toggle
