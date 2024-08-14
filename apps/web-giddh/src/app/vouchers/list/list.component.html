@@ -1204,9 +1204,9 @@
                             </button>
                             <mat-menu #morepurchase="matMenu">
                                 <button mat-menu-item (click)="bulkUpdateDialog()">Bulk Update</button>
-                                <button mat-menu-item (click)="ConvertBillDialog()">Convert to bill</button>
-                                <button mat-menu-item>Expired</button>
-                                <button mat-menu-item (click)="deleteVoucherDialog()">Delete</button>
+                                <button mat-menu-item (click)="convertBillDialog()" *ngIf="selectedVouchers?.length">Convert to bill</button>
+                                <button mat-menu-item (click)="poBulkAction('expire')" *ngIf="selectedVouchers?.length">Expired</button>
+                                <button mat-menu-item (click)="deleteVoucherDialog()" *ngIf="selectedVouchers?.length">Delete</button>
                             </mat-menu>
                             <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">Filter
                                 <i class="icon-advance-filter"></i>
@@ -1217,16 +1217,30 @@
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100 purchase-table">
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef> # </th>
+                                <th mat-header-cell *matHeaderCellDef width="50px"> 
+                                    <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
+                                    <span *ngIf="selectedVouchers?.length">
+                                        <mat-checkbox
+                                            color="primary"
+                                            [value]="true"
+                                            (change)="selectAllVouchers($event)"
+                                        ></mat-checkbox>
+                                    </span>
+                                </th>
                                 <td mat-cell *matCellDef="let element; let i = index">
                                     <div class="d-flex align-items-center">
-                                        <div class="invoice-number">
-                                            {{ i + 1 }}
-                                        </div>
-                                        <div class="checkbox-hide">
-                                            <mat-checkbox
-                                                color="primary"
-                                            ></mat-checkbox>
+                                        <div class="d-flex align-items-center">
+                                            <div class="invoice-number" *ngIf="!selectedVouchers?.length">
+                                                {{ i + 1 }}
+                                            </div>
+                                            <div [ngClass]="{'checkbox-hide': !selectedVouchers?.length }">
+                                                <mat-checkbox
+                                                    color="primary"
+                                                    [checked]="isVoucherSelected(element)"
+                                                    [value]="element.voucherNumber"
+                                                    (change)="selectVoucher($event, element)"
+                                                ></mat-checkbox>
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
@@ -1317,10 +1331,14 @@
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>{{ element?.status | titlecase }}</p>
                                         <div class="d-flex action-btn column-gap5">
-                                            <button mat-stroked-button color="primary" class="mat-icon-sm-btn icon-font-11" [matTooltip]="'Convert to bill'"
-                                                [matTooltipPosition]="'above'"><i class="icon-tick"></i></button>
+                                            <button *ngIf="element?.status === 'open'" mat-stroked-button color="primary" class="mat-icon-sm-btn icon-font-11" [matTooltip]="'Convert to bill'"
+                                                [matTooltipPosition]="'above'" (click)="convertBillDialog(element, 'create_purchase_bill')">
+                                                <i class="icon-tick"></i>
+                                            </button>
                                             <button mat-stroked-button color="primary" class="mat-icon-sm-btn icon-font-11" [matTooltip]="'Send Email'"
-                                                [matTooltipPosition]="'above'"><i class="icon-envelope"></i></button>
+                                                [matTooltipPosition]="'above'" (click)="openEmailSendDialog(element)">
+                                                <i class="icon-envelope"></i>
+                                            </button>
                                             <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Copy'" [matTooltipPosition]="'above'" 
                                                 [routerLink]="['/pages/purchase-management/purchase-order/new/' + element.uniqueName]">
                                                 <i class="icon-copy-small"></i>
@@ -2262,7 +2280,7 @@
 
     <!-- convert-bill-dialog -->
     <ng-template #convertBill>
-        <app-convert-bill-dialog></app-convert-bill-dialog>
+        <app-convert-bill-dialog (convertToBill)="poBulkAction('create_purchase_bill', $event)"></app-convert-bill-dialog>
     </ng-template>
     
     <ng-template #ewayBill>
@@ -2296,3 +2314,12 @@
     ></no-data>
 </ng-template>
 <!-- No Date Found Message Template  END-->
+
+<ng-template #sendEmailModal>
+    <app-email-send-dialog 
+        [voucherType]="'purchase-order'" 
+        (cancelEvent)="sendEmailModalDialogRef.close()"
+        (successEvent)="sendEmail($event)"
+    >
+    </app-email-send-dialog>
+</ng-template>

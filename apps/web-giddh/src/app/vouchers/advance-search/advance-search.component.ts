@@ -133,12 +133,9 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             grandTotal: [this.advanceFilters?.grandTotal ?? ''],
             grandTotalOperation: [this.advanceFilters?.grandTotalOperation ?? ''],
             statuses: [this.advanceFilters?.statuses ?? []],
-            dueFrom: [this.advanceFilters?.dueFrom ?? ''],
-            dueTo: [this.advanceFilters?.dueTo ?? '']
+            dueFrom: [(this.advanceFilters?.dueFrom && dayjs(this.advanceFilters?.dueFrom, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD)) ?? ''],
+            dueTo: [(this.advanceFilters?.dueTo && dayjs(this.advanceFilters?.dueTo, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD)) ?? '']
         });
-
-        console.log("this.advanceFilters", this.advanceFilters);
-        console.log("Form", this.searchForm.value);
 
         this.selectedDateRange = { startDate: this.advanceFilters.from, endDate: this.advanceFilters.to };
         this.selectedDateRangeUi = this.advanceFilters.from + " - " + this.advanceFilters.to;
@@ -299,6 +296,14 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
 
         if (this.searchForm.get('expireTo')?.value) {
             this.searchForm.get('expireTo')?.patchValue(dayjs(this.searchForm.get('expireTo')?.value).format(GIDDH_DATE_FORMAT));
+        }
+
+        if (this.searchForm.get('dueFrom')?.value) {
+            this.searchForm.get('dueFrom')?.patchValue(dayjs(this.searchForm.get('dueFrom')?.value).format(GIDDH_DATE_FORMAT));
+        }
+
+        if (this.searchForm.get('dueTo')?.value) {
+            this.searchForm.get('dueTo')?.patchValue(dayjs(this.searchForm.get('dueTo')?.value).format(GIDDH_DATE_FORMAT));
         }
     }
 

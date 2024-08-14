@@ -170,7 +170,7 @@
                         (click)="picker.open()"
                         class="w-100"                                                     
                     >
-                        <mat-label>{{ localeData?.expiry_date }}</mat-label>
+                        <mat-label>{{ localeData?.expected_delivery_date }}</mat-label>
                         <mat-date-range-input [rangePicker]="picker">
                             <input
                                 matStartDate
@@ -192,20 +192,20 @@
             <div class="custom-mat-form-field w-50">
                 <mat-form-field appearance="outline" class="w-100 mr-b15">
                     <mat-label>{{ commonLocaleData?.app_status }}</mat-label>
-                    <mat-select multiple [placeholder]="commonLocaleData?.app_select_action" formControlName="balanceStatus">
-                        <mat-option value="paid">{{ commonLocaleData?.app_payment_status?.open }}</mat-option>
-                        <mat-option value="partial-paid">{{ commonLocaleData?.app_payment_status?.converted }}</mat-option>
-                        <mat-option value="hold">{{ commonLocaleData?.app_payment_status?.partially_converted }}</mat-option>
-                        <mat-option value="unpaid">{{ commonLocaleData?.app_payment_status?.expired }}</mat-option>
+                    <mat-select multiple [placeholder]="commonLocaleData?.app_select_action" formControlName="statuses">
+                        <mat-option value="open">{{ commonLocaleData?.app_payment_status?.open }}</mat-option>
+                        <mat-option value="converted">{{ commonLocaleData?.app_payment_status?.converted }}</mat-option>
+                        <mat-option value="partially-converted">{{ commonLocaleData?.app_payment_status?.partially_converted }}</mat-option>
+                        <mat-option value="expired">{{ commonLocaleData?.app_payment_status?.expired }}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
         </div>
         <div class="d-flex column-gap1 mr-b15 w-100">
-            <reactive-dropdown-field [name]="'app_due_amount'" [label]="commonLocaleData?.app_due_amount" [placeholder]="commonLocaleData?.app_select"
-                [options]="filtersForEntryTotal" class="w-50" (selectedOption)="dueTotalRangeChanged($event)" formControlName="dueAmount" [labelValue]="fieldLabelValues.dueAmount">
+            <reactive-dropdown-field [name]="'grandTotalOperation'" [label]="commonLocaleData?.app_total_amount" [placeholder]="commonLocaleData?.app_select"
+                [options]="filtersForEntryTotal" class="w-50" (selectedOption)="dueTotalRangeChanged($event)" formControlName="grandTotalOperation" [labelValue]="fieldLabelValues.dueAmount">
             </reactive-dropdown-field>
-            <input-field [type]="'tel'" [placeholder]="'00'" [label]="commonLocaleData?.app_amount" class="w-50" name="balanceDue" formControlName="balanceDue">
+            <input-field [type]="'tel'" [placeholder]="'00'" [label]="commonLocaleData?.app_amount" class="w-50" name="grandTotal" formControlName="grandTotal">
             </input-field>
         </div>
     </ng-container>

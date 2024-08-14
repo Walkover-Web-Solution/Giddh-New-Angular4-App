@@ -226,7 +226,7 @@
             "message2": "They will be deleted permanently and will no longer be accessible from any other module."
         },
         {
-            "module": "purchaseorder",
+            "module": "purchase-order",
             "title": "Confirmation",
             "message1": "Do you want to delete the order?",
             "message2": "It will be deleted permanently and will no longer be accessible from any other module."
@@ -242,5 +242,6 @@
     "status_updated": "Status updated successfully.",
     "delayed_by_days": "Delayed by [DAYS] days",
     "delivery_in_day": "delivery_in_day[DAYS] day",
-    "delivery_in_days": "Delivery in [DAYS] days"
+    "delivery_in_days": "Delivery in [DAYS] days",
+    "expected_delivery_date": "Expected Delivery Date"
 }

@@ -111,7 +111,7 @@ const DEFAULT_STATE: VoucherState = {
     uploadImageBase64InProgress: false,
     uploadImageBase64Response: null,
     convertToInvoice: null,
-    convertToProforma: null
+    convertToProforma: null,
 };
 
 @Injectable()
@@ -1290,17 +1290,92 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success" && typeof res.body === "string") {
                                 this.toaster.showSnackBar("success", res.body);
+                                return this.patchState({
+                                    deleteVoucherIsSuccess: true
+                                });
                             } else if (res.status === "error" && res.message) {
                                 this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    deleteVoucherIsSuccess: false
+                                });
                             }
-                            return this.patchState({
-                                deleteVoucherIsSuccess: true
-                            });
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({
                                 deleteVoucherIsSuccess: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly sendEmail = this.effect((data: Observable<{ request: any, model: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    sendEmailInProgress: true, sendEmailIsSuccess: null
+                });
+                return this.voucherService.sendEmail(req.request, req.model).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                res.body && this.toaster.showSnackBar("success", res.body);
+                                this.patchState({
+                                    sendEmailInProgress: true, 
+                                    sendEmailIsSuccess: null
+                                });
+                            } else {
+                                res.message && this.toaster.showSnackBar("error", res.message);
+                                this.patchState({
+                                    sendEmailInProgress: false, 
+                                    sendEmailIsSuccess: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            this.patchState({
+                                sendEmailInProgress: false, 
+                                sendEmailIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly POBulkUpdateAction = this.effect((data: Observable<{ payload: any, actionType: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ bulkUpdateVoucherIsSuccess: false, bulkUpdateVoucherInProgress: true });
+                return this.voucherService.bulkUpdate(req.actionType, req.payload).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                res.body && this.toaster.showSnackBar("success", res.body);
+                                return this.patchState({
+                                    bulkUpdateVoucherIsSuccess: true,
+                                    bulkUpdateVoucherInProgress: false
+                                });
+                            } else {
+                                res.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    bulkUpdateVoucherIsSuccess: false,
+                                    bulkUpdateVoucherInProgress: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                bulkUpdateVoucherIsSuccess: false,
+                                bulkUpdateVoucherInProgress: false
                             });
                         }
                     ),

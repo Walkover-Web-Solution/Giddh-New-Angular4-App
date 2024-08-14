@@ -1059,8 +1059,6 @@ export class GeneralService {
      */
     public addToolTipText(selectedVoucher: any, baseCurrency: string, item: any, localeData: any, commonLocaleData: any, giddhBalanceDecimalPlaces: number): any {
         try {
-            console.log("selectedVoucher", selectedVoucher, item);
-            
             let balanceDueAmountForCompany, balanceDueAmountForAccount, grandTotalAmountForCompany,
                 grandTotalAmountForAccount;
 

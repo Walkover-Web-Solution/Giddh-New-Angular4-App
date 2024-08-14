@@ -129,6 +129,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     @ViewChild('convertBill', { static: true }) public convertBill: TemplateRef<any>;
     // E-way bill dialog
     @ViewChild('ewayBill', { static: true }) public ewayBill: TemplateRef<any>;
+    /* Selector for send email modal */
+    @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: any;
     // table sorting
     @ViewChild(MatSort) sort: MatSort;
     public showCustomerSearch: boolean = false;
@@ -224,6 +226,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public accountParentGroup: string = "";
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    public sendEmailModalDialogRef: MatDialogRef<any>;
+    private currentVoucher: any = null;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -262,14 +266,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 this.activeModule = params.module;
                 this.advanceFilters.type = this.voucherType;
-                
+
                 this.activeTabGroup = this.tabsGroups.findIndex(group => group.includes(this.voucherType));
                 if (this.activeTabGroup === -1) {
                     this.activeTabGroup = 0; // default to the first group if not found
                 }
-    
+
                 this.getSelectedTabIndex();
-    
+
                 if (this.universalDate) {
                     this.getVouchers(true);
                     this.getVoucherBalances();
@@ -349,9 +353,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.componentStore.lastVouchers$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.handleGetAllVoucherResponse(response);
         });
-        
+
         this.componentStore.purchaseOrdersList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log("purchaseOrdersList", response);
             this.handleGetAllVoucherResponse(response);
         });
 
@@ -406,6 +409,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.componentStore.convertToProformaIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.toasterService.showSnackBar("success", this.localeData?.proforma_generated);
+                this.getVouchers(this.isUniversalDateApplicable);
+            }
+        });
+
+        this.componentStore.sendEmailIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
                 this.getVouchers(this.isUniversalDateApplicable);
             }
         });
@@ -466,7 +475,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
             if ((!this.voucherNumberInput.value && this.voucherNumberInput.value === "") || (!this.accountUniqueNameInput.value && this.accountUniqueNameInput.value === "")) {
                 this.isSearching = false;
-            } 
+            }
         });
 
         this.accountUniqueNameInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
@@ -481,7 +490,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
             if ((!this.voucherNumberInput.value && this.voucherNumberInput.value === "") || (!this.accountUniqueNameInput.value && this.accountUniqueNameInput.value === "")) {
                 this.isSearching = false;
-            } 
+            }
         });
 
         this.componentStore.updatedAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -915,12 +924,19 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 };
 
                 if (this.voucherType === VoucherTypeEnum.purchase) {
-                    this.componentStore.deleteVoucher({ accountUniqueName: voucher?.account?.uniqueName, model: {
-                        uniqueName: voucher?.uniqueName,
-                        voucherType: this.voucherType
-                    }});
+                    this.componentStore.deleteVoucher({
+                        accountUniqueName: voucher?.account?.uniqueName, model: {
+                            uniqueName: voucher?.uniqueName,
+                            voucherType: this.voucherType
+                        }
+                    });
                 } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-                    this.componentStore.deleteSinglePOVoucher(voucher?.uniqueName);
+                    if (voucher?.uniqueName) {
+                        this.componentStore.deleteSinglePOVoucher(voucher?.uniqueName);
+                    } else {
+                        this.poBulkAction('delete');
+                    }
+
                 } else {
                     this.componentStore.bulkUpdateInvoice({ payload: payload, actionType: 'delete' });
                 }
@@ -942,45 +958,45 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     public toggleSearch(event: any, fieldName: string, voucherType: string): void {
-        switch(voucherType) {
-            case VoucherTypeEnum.sales:  
-                            this.showCustomerSearch = false;
-                            this.showInvoiceNoSearch = false;
-                            if (fieldName === "accountUniqueName") {
-                                this.showCustomerSearch = true;
-                            } else if (fieldName === "invoiceNumber") {
-                                this.showInvoiceNoSearch = true;
-                            }
-                            break;
+        switch (voucherType) {
+            case VoucherTypeEnum.sales:
+                this.showCustomerSearch = false;
+                this.showInvoiceNoSearch = false;
+                if (fieldName === "accountUniqueName") {
+                    this.showCustomerSearch = true;
+                } else if (fieldName === "invoiceNumber") {
+                    this.showInvoiceNoSearch = true;
+                }
+                break;
             case VoucherTypeEnum.estimate:
-                            this.showCustomerSearch = false;
-                            this.showInvoiceNoSearch = false;
-                            if (fieldName === "accountUniqueName") {
-                                this.showCustomerSearch = true;
-                            } else if (fieldName === "estimateNumber") {
-                                this.showInvoiceNoSearch = true;
-                            }
-                            break;
+                this.showCustomerSearch = false;
+                this.showInvoiceNoSearch = false;
+                if (fieldName === "accountUniqueName") {
+                    this.showCustomerSearch = true;
+                } else if (fieldName === "estimateNumber") {
+                    this.showInvoiceNoSearch = true;
+                }
+                break;
             case VoucherTypeEnum.proforma:
-                            this.showCustomerSearch = false;
-                            this.showInvoiceNoSearch = false;
-                            if (fieldName === "accountUniqueName") {
-                                this.showCustomerSearch = true;
-                            } else if (fieldName === "proformaNumber") {
-                                this.showInvoiceNoSearch = true;
-                            }
-                            break;
+                this.showCustomerSearch = false;
+                this.showInvoiceNoSearch = false;
+                if (fieldName === "accountUniqueName") {
+                    this.showCustomerSearch = true;
+                } else if (fieldName === "proformaNumber") {
+                    this.showInvoiceNoSearch = true;
+                }
+                break;
             case VoucherTypeEnum.purchaseOrder:
-                            this.showCustomerSearch = false;
-                            this.showInvoiceNoSearch = false;
-                            if (fieldName === "accountUniqueName") {
-                                this.showCustomerSearch = true;
-                            } else if (fieldName === "purchaseOrderNumber") {
-                                this.showInvoiceNoSearch = true;
-                            }
-                            break;
+                this.showCustomerSearch = false;
+                this.showInvoiceNoSearch = false;
+                if (fieldName === "accountUniqueName") {
+                    this.showCustomerSearch = true;
+                } else if (fieldName === "purchaseOrderNumber") {
+                    this.showInvoiceNoSearch = true;
+                }
+                break;
         }
-        
+
         event.stopPropagation();
     }
 
@@ -1013,13 +1029,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.showCustomerSearch = false;
             }
         }
-    }
-
-    // convert bill dialog
-    public ConvertBillDialog(): void {
-        this.dialog.open(this.convertBill, {
-            width: '600px'
-        })
     }
 
     public showEwayBillDialog(voucher?: any): void {
@@ -1111,38 +1120,38 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     public actionEstimateProforma(voucher: any, action: string): void {
-        const model = { 
+        const model = {
             accountUniqueName: voucher.customerUniqueName,
             action: action
         };
-        if (voucher === 'estimates' ) {
+        if (voucher === 'estimates') {
             model['estimateNumber'] = voucher.voucherNumber;
         } else {
             model['proformaNumber'] = voucher.voucherNumber;
         }
-        this.componentStore.actionEstimateProforma({ 
+        this.componentStore.actionEstimateProforma({
             request: model,
-            voucherType: voucher?.voucherType ?? this.voucherType 
+            voucherType: voucher?.voucherType ?? this.voucherType
         });
     }
 
     public convertToInvoice(voucher): void {
-        this.componentStore.convertToInvoice({ 
-            request: { 
-                accountUniqueName: voucher.customerUniqueName, 
+        this.componentStore.convertToInvoice({
+            request: {
+                accountUniqueName: voucher.customerUniqueName,
                 estimateNumber: voucher.voucherNumber,
             },
-            voucherType: voucher?.voucherType ?? this.voucherType 
+            voucherType: voucher?.voucherType ?? this.voucherType
         });
     }
 
     public convertToProforma(voucher): void {
-        this.componentStore.convertToProforma({ 
-            request: { 
-                accountUniqueName: voucher.customerUniqueName, 
+        this.componentStore.convertToProforma({
+            request: {
+                accountUniqueName: voucher.customerUniqueName,
                 estimateNumber: voucher.voucherNumber,
             },
-            voucherType: voucher?.voucherType ?? this.voucherType 
+            voucherType: voucher?.voucherType ?? this.voucherType
         });
     }
 
@@ -1283,5 +1292,41 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
 
         return text;
+    }
+
+    public openEmailSendDialog(voucher: any): void {
+        this.sendEmailModalDialogRef = this.dialog.open(this.sendEmailModal, {
+            panelClass: ['mat-dialog-sm']
+        });
+        this.currentVoucher = voucher;
+    }
+
+    public sendEmail(email: any): void {
+        if (email && email.length) {
+            const request = {
+                accountUniqueName: this.currentVoucher?.vendor?.uniqueName,
+                uniqueName: this.currentVoucher?.uniqueName
+            };
+            this.componentStore.sendEmail({ request, model: { emailId: [email] } });
+        }
+    }
+
+    // convert bill dialog
+    public convertBillDialog(voucher?: any, action?: string): void {
+        const vouchers = voucher ?? this.selectedVouchers;
+        this.dialog.open(this.convertBill, {
+            data: vouchers,
+            width: '600px',
+            maxHeight: '80vh'
+        });
+    }
+
+    public poBulkAction(actionType: string, event?: any): void {
+        if (actionType === 'delete' || actionType === 'expire') {
+            const purchaseNumbers = this.selectedVouchers.map(voucher => voucher?.voucherNumber);
+            this.componentStore.POBulkUpdateAction({ payload: {purchaseNumbers}, actionType: actionType });
+        } else if (event?.purchaseOrders) {
+            this.componentStore.POBulkUpdateAction({ payload: event, actionType: actionType });
+        }
     }
 }

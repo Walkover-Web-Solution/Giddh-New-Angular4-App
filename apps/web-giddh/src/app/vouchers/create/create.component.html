@@ -1664,7 +1664,7 @@
                                     <ng-container *ngIf="!isUpdateMode">
                                         <button mat-stroked-button (click)="resetVoucherForm()">{{ commonLocaleData?.app_clear }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isSalesInvoice" (click)="updateAccountAndGenerateVoucher()">{{ localeData?.generate_sales_update_account }}</button>
-                                        <button mat-stroked-button color="primary" *ngIf="invoiceType.isEstimateInvoice || true" (click)="generateVoucher()">{{ commonLocaleData?.app_create }}</button>
+                                        <button mat-stroked-button color="primary" *ngIf="invoiceType.isEstimateInvoice" (click)="generateVoucher()">{{ commonLocaleData?.app_create }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isProformaInvoice" (click)="generateVoucher()">{{ commonLocaleData?.app_create }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isSalesInvoice" (click)="generateVoucher()">{{ localeData?.generate_sales }}</button>
                                         <button mat-stroked-button color="primary" *ngIf="invoiceType.isCashInvoice && !invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote" (click)="generateVoucher()">{{ localeData?.generate_cash }}</button>
