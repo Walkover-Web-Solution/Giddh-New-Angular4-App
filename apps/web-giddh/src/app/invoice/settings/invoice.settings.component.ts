@@ -609,9 +609,9 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     *
     * @memberof InvoiceSettingComponent
     */
-    public opneCustomEmailDialog(): void {
+    public opneCustomEmailDialog(voucherType:string): void {
         this.dialog.open(TemplateFroalaComponent, {
-            data: this.selectedVoucher,
+            data: voucherType,
             width: 'var(--aside-pane-width)',
             height: '70vh',
             position: {

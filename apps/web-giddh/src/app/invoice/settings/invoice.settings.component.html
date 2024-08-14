@@ -400,7 +400,7 @@
                                                 <a
                                                     href="javascript:void(0)"
                                                     class="cursor-pointer"
-                                                    (click)="opneCustomEmailDialog()"
+                                                    (click)="opneCustomEmailDialog('sales')"
                                                     >Custom Email</a
                                                 >
                                             </div>
@@ -558,7 +558,7 @@
                                                 <a
                                                     href="javascript:void(0)"
                                                     class="cursor-pointer"
-                                                    (click)="opneCustomEmailDialog()"
+                                                    (click)="opneCustomEmailDialog('sales')"
                                                     >Custom Email</a
                                                 >
                                             </div>
@@ -701,7 +701,7 @@
                                                 <a
                                                     href="javascript:void(0)"
                                                     class="cursor-pointer"
-                                                    (click)="opneCustomEmailDialog()"
+                                                    (click)="opneCustomEmailDialog('sales')"
                                                     >Custom Email</a
                                                 >
                                             </div>
@@ -1115,19 +1115,25 @@
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
-                                    <div class="row ml-0 mr-0">
+                                    <div class="row ml-0 mr-0" *ngIf="voucherApiVersion === 2">
                                         <div class="col-sm-12 col-md-12 col-lg-2 flex-container pl-0 pr-0">
-                                            <label class="left-gap">Auto Email</label>
+                                            <label class="left-gap">Auto mail when generated</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9">
                                             <mat-slide-toggle
                                                 aria-label="debit note"
-                                                [(ngModel)]="invoiceSetting.debitNoteRoundOff"
-                                                name="debitNoteRoundOff"
+                                                [(ngModel)]="invoiceSetting.autoMailDebitNote"
+                                                name="autoMailDebitNote"
                                                 class="hide-on-mobile"
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
+                                            <a
+                                                href="javascript:void(0)"
+                                                class="cursor-pointer"
+                                                (click)="opneCustomEmailDialog('debit note')"
+                                                >Custom Email</a
+                                            >
                                         </div>
                                     </div>
                                 </div>
@@ -1228,6 +1234,27 @@
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
+                                        </div>
+                                    </div>
+                                    <div class="row ml-0 mr-0" *ngIf="voucherApiVersion === 2">
+                                        <div class="col-sm-12 col-md-12 col-lg-2 flex-container pl-0 pr-0">
+                                            <label class="left-gap">Auto mail when generated</label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-9">
+                                            <mat-slide-toggle
+                                                aria-label="debit note"
+                                                [(ngModel)]="invoiceSetting.autoMailCreditNote"
+                                                name="autoMailCreditNote"
+                                                class="hide-on-mobile"
+                                                color="primary"
+                                            >
+                                            </mat-slide-toggle>
+                                            <a
+                                                href="javascript:void(0)"
+                                                class="cursor-pointer"
+                                                (click)="opneCustomEmailDialog('credit note')"
+                                                >Custom Email</a
+                                            >
                                         </div>
                                     </div>
                                 </div>
