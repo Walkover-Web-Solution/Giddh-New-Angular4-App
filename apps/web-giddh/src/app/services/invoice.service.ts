@@ -4,7 +4,7 @@ import { HttpWrapperService } from './http-wrapper.service';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
-import { EWAYBILL_API, INVOICE_API, INVOICE_API_2 } from './apiurls/invoice.api';
+import { CUSTOM_EMAIL_TEMPLATE, EWAYBILL_API, INVOICE_API, INVOICE_API_2 } from './apiurls/invoice.api';
 import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, IEwayBillAllList, IEwayBillCancel, IEwayBillfilter, IEwayBillTransporter, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass, UpdateEwayVehicle } from '../models/api-models/Invoice';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../models/api-models/SettingsIntegraion';
@@ -799,5 +799,80 @@ export class InvoiceService {
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
+    /**
+     * Update custom email template
+     *
+     * @param {*} templateReq
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InvoiceService
+     */
+    public updateCustomEmailTemplate(templateReq: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let invoiceType = templateReq?.invoiceType;
+        delete templateReq?.invoiceType;
+        let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.UPDATE_EMAIL_TEMPLATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':invoiceType', invoiceType);
+        return this.http.put(url, templateReq.model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = templateReq?.model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(templateReq?.model)));
+    }
+
+    /**
+     * Get email content suggestions
+     *
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InvoiceService
+     */
+    public getEmailContent(): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.GET_EMAIL_CONTENT;
+        url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * Get email condition suggestions
+     *
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InvoiceService
+     */
+    public getEmailConditions(): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.GET_EMAIL_CONDITIONS;
+        url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * Get email template
+     *
+     * @param {string} invoiceType
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InvoiceService
+     */
+    public getEmailTemplate(invoiceType: string): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.GET_EMAIL_TEMPLATE;
+        url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
+        url = url?.replace(':invoiceType', invoiceType);
+        return this.http.get(url).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 }

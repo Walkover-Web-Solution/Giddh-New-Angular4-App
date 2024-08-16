@@ -1,0 +1,80 @@
+<ng-container
+    appTranslate
+    [file]="'template-froala'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
+    <div class="dialog-header d-flex align-items-center form-header">
+        <h3>{{ commonLocaleData?.app_custom_email_template }}</h3>
+        <button id="closedialog" mat-dialog-close aria-label="close icon"><i class="icon-cross"></i></button>
+    </div>
+    <mat-dialog-content class="dialog-body d-flex flex-column">
+        <div class="form-div">
+            <form [formGroup]="emailForm" class="d-flex flex-column" style="flex-grow: 1">
+                <div class="chip-gap">
+                    <div class="form-group position-relative">
+                        <select-multiple-fields
+                            [placeholder]="localeData?.select_to"
+                            [options]="toEmails"
+                            (selectedOption)="selectedToEmails = $event"
+                            [selectedValues]="selectedToEmails"
+                            [validations]="['email']"
+                            [name]="'to'"
+                            class="select-multiple-chiplist mb-3"
+                        ></select-multiple-fields>
+                        <div class="d-flex column-gap1 position-absolute chiplist-section">
+                            <a class="btn-link under" href="javascript:void(0);" (click)="showHideBccCc('cc')">{{
+                                localeData?.cc
+                            }}</a>
+                            <a class="btn-link" href="javascript:void(0);" (click)="showHideBccCc('bcc')">{{
+                                localeData?.bcc
+                            }}</a>
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="!showCc">
+                        <select-multiple-fields
+                            [placeholder]="localeData?.select_cc"
+                            [options]="ccEmails"
+                            (selectedOption)="selectedCcEmails = $event"
+                            [selectedValues]="selectedCcEmails"
+                            [validations]="['email']"
+                            [name]="'cc'"
+                            class="select-multiple-chiplist mb-3"
+                        ></select-multiple-fields>
+                    </div>
+                    <div class="form-group" *ngIf="!showBcc">
+                        <select-multiple-fields
+                            [placeholder]="localeData?.select_bcc"
+                            [options]="bccEmails"
+                            (selectedOption)="selectedBccEmails = $event"
+                            [selectedValues]="selectedBccEmails"
+                            [validations]="['email']"
+                            [name]="'bcc'"
+                            class="select-multiple-chiplist mb-3"
+                        ></select-multiple-fields>
+                    </div>
+                    <div class="form-group">
+                        <input
+                            type="text"
+                            #subjectInputField
+                            name="emailSubject"
+                            matInput
+                            formControlName="emailSubject"
+                            class="form-control border-bottom"
+                        />
+                    </div>
+                </div>
+                <div class="form-group editor-container">
+                    <textarea [froalaEditor]="froalaOptions" formControlName="html"></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="row position-sticky mt-1">
+            <div class="col-sm-4 pr-0">
+                <button aria-label="save" mat-stroked-button color="primary" type="button" (click)="onSubmit()">
+                    {{ commonLocaleData?.app_save }}
+                </button>
+            </div>
+        </div>
+    </mat-dialog-content>
+</ng-container>

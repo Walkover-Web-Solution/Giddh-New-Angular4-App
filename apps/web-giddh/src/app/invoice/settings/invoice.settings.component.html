@@ -397,6 +397,13 @@
                                                     color="primary"
                                                 >
                                                 </mat-slide-toggle>
+                                                <a
+                                                    *ngIf="voucherApiVersion === 2"
+                                                    href="javascript:;"
+                                                    class="cursor-pointer"
+                                                    (click)="openCustomEmailDialog('sales')"
+                                                    >{{ commonLocaleData?.app_custom_email }}</a
+                                                >
                                             </div>
                                         </div>
                                     </div>
@@ -549,6 +556,13 @@
                                                     color="primary"
                                                 >
                                                 </mat-slide-toggle>
+                                                <a
+                                                    *ngIf="voucherApiVersion === 2"
+                                                    href="javascript:;"
+                                                    class="cursor-pointer"
+                                                    (click)="openCustomEmailDialog('sales')"
+                                                    >{{ commonLocaleData?.app_custom_email }}</a
+                                                >
                                             </div>
                                         </div>
                                     </div>
@@ -677,7 +691,7 @@
                                                 </mat-slide-toggle>
                                                 <label class="left-gap">{{ localeData?.auto_mail_update }}</label>
                                             </div>
-                                            <div class="col-sm-12 col-md-9 form-group">
+                                            <div class="col-sm-12 col-md-9 form-group d-flex column-gap-1">
                                                 <mat-slide-toggle
                                                     aria-label="invoice mail"
                                                     [(ngModel)]="invoiceSetting.autoMail"
@@ -686,6 +700,13 @@
                                                     color="primary"
                                                 >
                                                 </mat-slide-toggle>
+                                                <a
+                                                    *ngIf="voucherApiVersion === 2"
+                                                    href="javascript:;"
+                                                    class="cursor-pointer"
+                                                    (click)="openCustomEmailDialog('sales')"
+                                                    >{{ commonLocaleData?.app_custom_email }}</a
+                                                >
                                             </div>
                                         </div>
                                     </div>
@@ -1084,9 +1105,7 @@
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
-                                            <label class="left-gap">{{
-                                                localeData?.apply_debit_note_round_off
-                                            }}</label>
+                                            <label class="left-gap">{{ localeData?.apply_debit_note_round_off }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9">
                                             <mat-slide-toggle
@@ -1097,6 +1116,28 @@
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
+                                        </div>
+                                    </div>
+                                    <div class="row ml-0 mr-0" *ngIf="voucherApiVersion === 2">
+                                        <div class="col-sm-12 col-md-12 col-lg-2 flex-container pl-0 pr-0">
+                                            <label class="left-gap">{{ localeData?.auto_email_generate }}</label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-9">
+                                            <mat-slide-toggle
+                                                aria-label="debit note"
+                                                [(ngModel)]="invoiceSetting.autoMailDebitNote"
+                                                name="autoMailDebitNote"
+                                                class="hide-on-mobile"
+                                                color="primary"
+                                            >
+                                            </mat-slide-toggle>
+                                            <a
+                                                *ngIf="voucherApiVersion === 2"
+                                                href="javascript:;"
+                                                class="cursor-pointer"
+                                                (click)="openCustomEmailDialog('debit note')"
+                                                >{{ commonLocaleData?.app_custom_email }}</a
+                                            >
                                         </div>
                                     </div>
                                 </div>
@@ -1197,6 +1238,28 @@
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
+                                        </div>
+                                    </div>
+                                    <div class="row ml-0 mr-0" *ngIf="voucherApiVersion === 2">
+                                        <div class="col-sm-12 col-md-12 col-lg-2 flex-container pl-0 pr-0">
+                                            <label class="left-gap">{{ localeData?.auto_email_generate }}</label>
+                                        </div>
+                                        <div class="col-sm-12 col-md-9">
+                                            <mat-slide-toggle
+                                                aria-label="credit note"
+                                                [(ngModel)]="invoiceSetting.autoMailCreditNote"
+                                                name="autoMailCreditNote"
+                                                class="hide-on-mobile"
+                                                color="primary"
+                                            >
+                                            </mat-slide-toggle>
+                                            <a
+                                                *ngIf="voucherApiVersion === 2"
+                                                href="javascript:;"
+                                                class="cursor-pointer"
+                                                (click)="openCustomEmailDialog('credit note')"
+                                                >{{ commonLocaleData?.app_custom_email }}</a
+                                            >
                                         </div>
                                     </div>
                                 </div>
