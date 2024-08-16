@@ -77,7 +77,6 @@ jobs:
                   GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
                   GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
                   RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
-                  FROALA_EDITOR_KEY: ${{ secrets.FROALA_EDITOR_KEY }}
                   GOOGLE_CLIENT_ID_PROD: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
                   GOOGLE_CLIENT_SECRET_PROD: ${{ secrets.GOOGLE_CLIENT_SECRET_PROD }}
                   TWITTER_CLIENT_ID_PROD: ${{ secrets.TWITTER_CLIENT_ID_PROD }}
@@ -98,7 +97,6 @@ jobs:
                   GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
                   GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
                   RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
-                  FROALA_EDITOR_KEY: ${{ secrets.FROALA_EDITOR_KEY }}
                   GOOGLE_CLIENT_ID_PROD: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
                   GOOGLE_CLIENT_SECRET_PROD: ${{ secrets.GOOGLE_CLIENT_SECRET_PROD }}
                   TWITTER_CLIENT_ID_PROD: ${{ secrets.TWITTER_CLIENT_ID_PROD }}
@@ -127,7 +125,6 @@ jobs:
                   GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
                   GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
                   RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
-                  FROALA_EDITOR_KEY: ${{ secrets.FROALA_EDITOR_KEY }}
                   GOOGLE_CLIENT_ID_PROD: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
                   GOOGLE_CLIENT_SECRET_PROD: ${{ secrets.GOOGLE_CLIENT_SECRET_PROD }}
                   TWITTER_CLIENT_ID_PROD: ${{ secrets.TWITTER_CLIENT_ID_PROD }}
@@ -150,7 +147,6 @@ jobs:
                   GOOGLE_CLIENT_ID_TEST: ${{ secrets.GOOGLE_CLIENT_ID_TEST }}
                   GOOGLE_CLIENT_SECRET_TEST: ${{ secrets.GOOGLE_CLIENT_SECRET_TEST }}
                   RAZORPAY_KEY_TEST: ${{ secrets.RAZORPAY_KEY_TEST }}
-                  FROALA_EDITOR_KEY: ${{ secrets.FROALA_EDITOR_KEY }}
                   GOOGLE_CLIENT_ID_PROD: ${{ secrets.GOOGLE_CLIENT_ID_PROD }}
                   GOOGLE_CLIENT_SECRET_PROD: ${{ secrets.GOOGLE_CLIENT_SECRET_PROD }}
                   TWITTER_CLIENT_ID_PROD: ${{ secrets.TWITTER_CLIENT_ID_PROD }}
