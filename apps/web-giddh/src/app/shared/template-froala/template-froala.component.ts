@@ -144,9 +144,11 @@ export class TemplateFroalaComponent implements OnInit {
                 setTimeout(() => {
                     this.initializeTribute(tributeSuggestions);
                 }, 300);
-                this.toEmails = this.mapEmailSuggestions(response.emailSuggestions);
-                this.ccEmails = this.mapEmailSuggestions(response.emailSuggestions);
-                this.bccEmails = this.mapEmailSuggestions(response.emailSuggestions);
+
+                const mappedEmail = this.mapEmailSuggestions(response.emailSuggestions);
+                this.toEmails = mappedEmail;
+                this.ccEmails = mappedEmail;
+                this.bccEmails = mappedEmail;
             }
         });
 
@@ -287,9 +289,9 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public onSubmit(): void {
-        this.emailForm.value.to = this.selectedToEmails;
-        this.emailForm.value.bcc = this.selectedBccEmails;
-        this.emailForm.value.cc = this.selectedCcEmails;
+        this.emailForm.get('to')?.patchValue(this.selectedToEmails);
+        this.emailForm.get('bcc')?.patchValue(this.selectedBccEmails);
+        this.emailForm.get('cc')?.patchValue(this.selectedCcEmails);
         if (this.emailForm.invalid) {
             return;
         }
