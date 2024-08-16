@@ -1,15 +1,214 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import * as dayjs from 'dayjs';
+import { Observable, ReplaySubject, takeUntil, of as observableOf } from 'rxjs';
+import { VoucherComponentStore } from '../utility/vouchers.store';
+import { SettingsTagService } from '../../services/settings.tag.service';
+import { orderBy } from '../../lodash-optimized';
+import { BriedAccountsGroup } from '../utility/vouchers.const';
+import { OptionInterface } from '../../models/api-models/Voucher';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { SearchService } from '../../services/search.service';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { InvoicePaymentRequest } from '../../models/api-models/Invoice';
 
 @Component({
-  selector: 'app-payment-dialog',
-  templateUrl: './payment-dialog.component.html',
-  styleUrls: ['./payment-dialog.component.scss']
+    selector: 'app-payment-dialog',
+    templateUrl: './payment-dialog.component.html',
+    styleUrls: ['./payment-dialog.component.scss'],
+    providers: [VoucherComponentStore]
 })
-export class PaymentDialogComponent implements OnInit {
+export class PaymentDialogComponent implements OnInit, OnDestroy {
+    @Input() public voucherDetails: any;
+    /* This will hold local JSON data */
+    @Input() public localeData: any = {};
+    /* This will hold common JSON data */
+    @Input() public commonLocaleData: any = {};
+    @Output() public paymentSubmitted: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
+    @Output() public closeModelEvent: EventEmitter<void> = new EventEmitter();
+    public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    public dayjs = dayjs;
+    /** Holds company specific data */
+    public company: any = {
+        baseCurrency: '',
+        baseCurrencySymbol: '',
+        inputMaskFormat: '',
+        giddhBalanceDecimalPlaces: 0
+    };
+    public tags: any[] = [];
+    /** Brief accounts Observable */
+    public briefAccounts$: Observable<OptionInterface[]> = observableOf(null);
+    public paymentForm: FormGroup;
+    public amountCurrency: string = "";
+    public isMulticurrencyAccount = false;
+    /** Selected payment mode */
+    public selectedPaymentMode: any;
+    public isBankSelected: boolean = false;
+    /** True if currency switched */
+    private currencySwitched: boolean = false;
+    /** True if we need to show exchange rate edit field */
+    public showExchangeRateEditField: boolean = false;
+    public saveInProgress: boolean = false;
 
-  constructor() { }
+    constructor(
+        private componentStore: VoucherComponentStore,
+        private settingsTagService: SettingsTagService,
+        private searchService: SearchService,
+        private formBuilder: FormBuilder
+    ) {
 
-  ngOnInit() {
-  }
+    }
 
+    public ngOnInit(): void {
+        this.paymentForm = this.formBuilder.group({
+            action: ['paid'],
+            date: [''],
+            amount: ['', Validators.required],
+            accountUniqueName: ['', Validators.required],
+            tagUniqueName: [''],
+            chequeNumber: [''],
+            chequeClearanceDate: [''],
+            description: [''],
+            exchangeRate: [1],
+            uniqueName: [this.voucherDetails?.uniqueName]
+        });
+
+        this.isMulticurrencyAccount = this.voucherDetails?.accountCurrencySymbol !== this.voucherDetails?.companyCurrencySymbol;
+
+        this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.accountCurrencySymbol);
+
+        this.componentStore.getBriefAccounts({ currency: this.company.baseCurrency, group: BriedAccountsGroup });
+
+        this.componentStore.briefAccounts$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.briefAccounts$ = observableOf(response);
+            }
+        });
+
+        this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.company.baseCurrency = response.baseCurrency;
+                this.company.baseCurrencySymbol = response.baseCurrencySymbol;
+                this.company.inputMaskFormat = response.balanceDisplayFormat?.toLowerCase() || '';
+                this.company.giddhBalanceDecimalPlaces = response.balanceDecimalPlaces;
+
+                if (this.isMulticurrencyAccount) {
+                    this.getExchangeRate(this.voucherDetails?.account?.currency?.code, this.company.baseCurrency);
+                }
+            }
+        });
+
+        /** Exchange rate */
+        this.componentStore.exchangeRate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.paymentForm.get('exchangeRate')?.patchValue(response);
+            }
+        });
+
+        this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body?.length > 0) {
+                let arr: any[] = [];
+                response?.body.forEach(tag => {
+                    arr.push({ value: tag.name, label: tag.name });
+                });
+                this.tags = orderBy(arr, 'name');
+            }
+        });
+
+        this.componentStore.actionVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.saveInProgress = response;
+        });
+    }
+
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+
+    public onSelectPaymentMode(event: any): void {
+        if (event && event.value) {
+            if (!this.isMulticurrencyAccount || this.voucherDetails?.account?.currency?.code === event?.additional?.currency) {
+                this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.account?.currency?.symbol);
+            } else {
+                this.assignAmount(this.voucherDetails?.balanceDue?.amountForCompany, event?.additional?.currencySymbol);
+            }
+            this.selectedPaymentMode = event;
+
+            this.searchService.loadDetails(event.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response && response.body) {
+                    const parentGroups = response.body.parentGroups;
+                    if (parentGroups && parentGroups[1] === 'bankaccounts') {
+                        this.isBankSelected = true;
+                    } else {
+                        this.isBankSelected = false;
+                        this.paymentForm.get('chequeClearanceDate')?.patchValue('');
+                        this.paymentForm.get('chequeNumber')?.patchValue('');
+                    }
+                } else {
+                    this.isBankSelected = false;
+                    this.paymentForm.get('accountUniqueName')?.patchValue('');
+                    this.paymentForm.get('chequeClearanceDate')?.patchValue('');
+                    this.paymentForm.get('chequeNumber')?.patchValue('');
+                }
+            })
+            this.paymentForm.get('accountUniqueName')?.patchValue(event.value);
+        } else {
+            this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.account?.currency?.symbol);
+            this.selectedPaymentMode = null;
+            this.isBankSelected = false;
+            this.paymentForm.get('accountUniqueName')?.patchValue('');
+            this.paymentForm.get('chequeClearanceDate')?.patchValue('');
+            this.paymentForm.get('chequeNumber')?.patchValue('');
+        }
+    }
+
+    private assignAmount(amount: number, currencySymbol: string): void {
+        this.paymentForm.get('amount')?.patchValue(amount);
+        this.amountCurrency = currencySymbol;
+    }
+
+    /**
+     * Switches currency
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public switchCurrency(): void {
+        this.currencySwitched = !this.currencySwitched;
+        this.paymentForm.get('exchangeRate')?.patchValue(1 / this.paymentForm.get('exchangeRate')?.value);
+    }
+
+    /**
+     * Gets exchange rate
+     *
+     * @param {string} fromCurrency
+     * @param {string} toCurrency
+     * @param {*} voucherDate
+     * @memberof VoucherCreateComponent
+     */
+    public getExchangeRate(fromCurrency: string, toCurrency: string): void {
+        if (fromCurrency && toCurrency) {
+            let date = dayjs().format(GIDDH_DATE_FORMAT);
+            this.componentStore.getExchangeRate({ fromCurrency, toCurrency, date });
+        }
+    }
+
+    public savePayment(): void {
+        let newFormObj = this.paymentForm?.value;
+        newFormObj.date = dayjs(newFormObj.date).format(GIDDH_DATE_FORMAT);
+        if (newFormObj.chequeClearanceDate) {
+            newFormObj.chequeClearanceDate = dayjs(newFormObj.chequeClearanceDate).format(GIDDH_DATE_FORMAT);
+        }
+
+        if (this.voucherDetails?.account?.currency?.code === this.selectedPaymentMode?.additional?.currency) {
+            newFormObj.amountForAccount = newFormObj.amount;
+        } else {
+            newFormObj.amountForCompany = newFormObj.amount;
+        }
+
+        newFormObj.tagNames = (newFormObj.tagUniqueName) ? [newFormObj.tagUniqueName] : [];
+
+        delete newFormObj.amount;
+        delete newFormObj.tagUniqueName;
+
+        this.paymentSubmitted.emit(newFormObj);
+    }
 }

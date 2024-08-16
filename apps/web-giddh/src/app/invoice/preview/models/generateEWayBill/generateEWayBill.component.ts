@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Router } from '@angular/router';
 import { SelectedInvoices } from 'apps/web-giddh/src/app/models/api-models/Invoice';
 import { TemplateRef } from '@angular/core';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
@@ -22,7 +21,7 @@ export class GenerateEWayBillComponent {
     public invoiceList: SelectedInvoices[] = [];
     public modalRef: BsModalRef;
 
-    constructor(private router: Router, private modalService: BsModalService) {
+    constructor(private modalService: BsModalService) {
 
     }
 

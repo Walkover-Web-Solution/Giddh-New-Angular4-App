@@ -43,7 +43,7 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy {
         this.breakPointObservar.observe([
             '(max-width: 767px)'
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileView = result?.matches;
+            this.isMobileView = result?.breakpoints['(max-width: 767px)'];
         });
     }
 

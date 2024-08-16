@@ -13,7 +13,6 @@ import { InvoiceBulkUpdateModalComponent } from './preview/models/bulkUpdateModa
 import { DownloadOrSendInvoiceOnMailComponent } from './preview/models/download-or-send-mail/download-or-send-mail.component';
 import { DownloadVoucherComponent } from './preview/models/download-voucher/download-voucher.component';
 import { EsignModalComponent } from './preview/models/e-Sign/e-Sign.component';
-import { GenerateEWayBillComponent } from './preview/models/generateEWayBill/generateEWayBill.component';
 import { InvoicePreviewDetailsComponent } from './preview/models/invoice-preview-details/invoice-preview-details.component';
 import { InvoicePaymentModelComponent } from './preview/models/invoicePayment/invoice.payment.model.component';
 import { ProformaListComponent } from './proforma/proforma-list.component';
@@ -80,7 +79,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
 import { MatDividerModule } from '@angular/material/divider';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
-
+import { GenerateEWayBillModule } from './preview/models/generateEWayBill/generateEWayBill.module';
 
 @NgModule({
     declarations: [
@@ -101,7 +100,6 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         InvoiceAdvanceSearchComponent,
         InvoiceRendererComponent,
         InvoiceBulkUpdateModalComponent,
-        GenerateEWayBillComponent,
         EWayBillCreateComponent,
         EWayBillComponent,
         EWayBillCredentialsComponent,
@@ -171,7 +169,8 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         WatchVideoModule,
         MatTabsModule,
         BulkExportVoucherModule,
-        FroalaTemplateEditorModule
+        FroalaTemplateEditorModule,
+        GenerateEWayBillModule
     ],
     exports: [
         InvoiceRoutingModule,

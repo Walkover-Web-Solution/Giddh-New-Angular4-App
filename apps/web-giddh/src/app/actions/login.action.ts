@@ -218,7 +218,11 @@ export class LoginActions {
                                 if (hasSubscriptionPermission) {
                                     this._router.navigate(['/pages/user-details/subscription']);
                                 } else {
+<<<<<<< HEAD
                                     this._router.navigate(['/pages/user-details/subscription/buy-plan/' + (this._generalService.getUtmParameter('region') ?? '')]);
+=======
+                                    this._router.navigate(['/pages/subscription/buy-plan/' + (this._generalService.getUtmParameter('region') ?? '')]);
+>>>>>>> 865a9b290d45b6f8cd218496ca4e418813cfc4dc
                                 }
                             })
                         ).subscribe();
@@ -294,7 +298,11 @@ export class LoginActions {
                                 if (hasSubscriptionPermission) {
                                     this._router.navigate(['/pages/user-details/subscription']);
                                 } else {
+<<<<<<< HEAD
                                     this._router.navigate(['/pages/user-details/subscription/buy-plan/' + (this._generalService.getUtmParameter('region') ?? '')]);
+=======
+                                    this._router.navigate(['/pages/subscription/buy-plan/' + (this._generalService.getUtmParameter('region') ?? '')]);
+>>>>>>> 865a9b290d45b6f8cd218496ca4e418813cfc4dc
                                 }
                             })
                         ).subscribe();
@@ -342,7 +350,7 @@ export class LoginActions {
             ofType(LoginActions.LogOut),
             map((action: CustomActions) => {
                 if (PRODUCTION_ENV && !isElectron) {
-                    window.location.href = 'https://test.giddh.com/login/';
+                    window.location.href = 'https://giddh.com/login/';
                 } else if (isElectron) {
                     this._router.navigate(['/login']);
                     window.location.reload();

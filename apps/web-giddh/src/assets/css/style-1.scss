@@ -14,7 +14,6 @@ AUTHOR:   @THEMECHANIC
 VERSION:  1
 */
 @import "../css/giddh-common.scss";
-@import "./color.scss";
 
 html,
 body {
@@ -3114,6 +3113,9 @@ td.mat-footer-cell {
     opacity: 1 !important;
     transform: none !important;
 }
+.double-popup-zindex {
+    z-index: 99 !important;
+}
 .receipt-card {
     .mat-form-field {
         .mat-form-field-wrapper {
@@ -3195,62 +3197,7 @@ td.mat-footer-cell {
         }
     }
 }
-.select-physical-product {
-    .product-detail-content,
-    .service-detail-content,
-    .combo-detail-content,
-    .text-field-container {
-        input {
-            width: 100%;
-            display: inline-block;
-        }
-        input[placeholder="Search"][type="text"] {
-            border: none;
-        }
-        input[placeholder="Product Unit"],
-        input[placeholder="Under Group"],
-        input[placeholder="Service Unit"],
-        .default-input-field {
-            width: 100%;
-            height: 36px;
-            border-radius: 5px;
-            padding-left: 6px;
-            font-size: var(--font-size-15);
-        }
-    }
-    .product-detail-content {
-        mat-select {
-            .mat-select-placeholder {
-                color: var(--color-common-primary-input-placeholder);
-            }
-        }
-        .mat-tab-label {
-            .mat-tab-label-content {
-                letter-spacing: 0px;
-                font: normal normal normal 16px/22px Open Sans;
-                color: var(--color-tab-primary-inactive) !important;
-            }
-            &:focus,
-            :active {
-                .mat-tab-label-content {
-                    letter-spacing: 0px;
-                    font: normal normal 600 16px/22px Open Sans;
-                    color: var(--color-tab-primary-active) !important;
-                }
-            }
-        }
-    }
-}
 
-.mat-chip-list-wrapper {
-    input.mat-input-element {
-        border: none;
-    }
-}
-
-.mat-select-arrow {
-    color: var(--color-primary-checkbox-and-expansion-panel-arrow) !important;
-}
 .mat-menu-panel {
     background-color: var(--color-dropdown-primary-background) !important;
 }
@@ -3393,9 +3340,6 @@ td.mat-footer-cell {
 .border-radius-5 {
     border-radius: 5px !important;
 }
-.double-popup-zindex {
-    z-index: 99 !important;
-}
 
 /* material css for ledger end*/
 .form-control {
@@ -3461,15 +3405,6 @@ td.mat-footer-cell {
             column-gap: 20px;
             .chip-svg-wrap {
                 min-width: 440px;
-            }
-        }
-    }
-}
-.aside-pane {
-    .help-aside-body {
-        .inventory-items {
-            h5 {
-                font-size: var(--font-size-15);
             }
         }
     }

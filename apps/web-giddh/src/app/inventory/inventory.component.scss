@@ -59,10 +59,9 @@
 .right-bar.welcome-inventory-page {
     width: 100%;
 }
-// .inventory-control ::ng-deep.nav-tabs > li:nth-child(2) {
-//     display: none;
-// }
-
+.inventory-control ::ng-deep.nav-tabs > li:nth-child(2) {
+    display: none;
+}
 .inventory-control .container-fluid {
     .branch-warehouse-filter {
         width: 100%;

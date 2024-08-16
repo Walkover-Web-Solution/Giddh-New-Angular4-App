@@ -1,17 +1,29 @@
-<div class="dialog-header">
-  <span mat-dialog-title class="font-16">Convert to Bill</span>
-  <i mat-dialog-close class="icon-cross icon-font-16"></i>
-</div>
-<div mat-dialog-content class="dialog-body">
-  <input-field
-    [type]="'tel'"
-    [label]="'Purchase Bill Number'"
-    class="w-50"
-  >
-  </input-field>
-  <span class="ml-1">2116</span>
-  <div class="d-flex column-gap1 justify-content-end">
-    <button mat-stroked-button color="primary">Save</button>
-    <button mat-stroked-button>Cancel</button>
-  </div>
-</div>
+<form [formGroup]="form" autocomplete="off" novalidate *ngIf="showForm" (ngSubmit)="onFormSubmit()">
+    <div class="dialog-header">
+        <span mat-dialog-title class="font-16">Convert to Bill</span>
+        <i mat-dialog-close class="icon-cross icon-font-16"></i>
+    </div>
+    <mat-dialog-content class="dialog-body custom-height">
+        <ng-container
+            formArrayName="purchaseOrders"
+            *ngFor="let voucher of form.get('purchaseOrders').controls; let i = index"
+        >
+            <div [formGroupName]="i">
+                <input-field
+                    [type]="'tel'"
+                    [label]="'Purchase Bill Number'"
+                    class="w-50"
+                    formControlName="purchaseNumber"
+                >
+                </input-field>
+                <span class="ml-1">{{ form?.get("purchaseOrders")?.value[i]?.orderNumber }}</span>
+            </div>
+        </ng-container>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <div class="d-flex column-gap1 justify-content-end mt-4">
+            <button mat-stroked-button color="primary" type="submit">Save</button>
+            <button mat-stroked-button mat-dialog-close type="button">Cancel</button>
+        </div>
+    </mat-dialog-actions>
+</form>

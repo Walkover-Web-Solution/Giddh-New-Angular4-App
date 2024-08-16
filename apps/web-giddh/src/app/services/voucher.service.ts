@@ -87,17 +87,23 @@ export class VoucherService {
     public getAllVouchers(body: InvoiceReceiptFilter, type: string): Observable<BaseResponse<ReciptResponse, InvoiceReceiptFilter>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         const requestPayload = body;
-        const contextPath = RECEIPT_API.GET_ALL;
         const requestParameter = {
-            page: body?.page, count: body?.count, from: body?.from, to: body?.to, q: (body?.q) ? encodeURIComponent(body?.q) : body?.q, sort: body?.sort, sortBy: body?.sortBy
+            page: body?.page, 
+            count: body?.count, 
+            from: body?.from, 
+            to: body?.to, 
+            q: ((body?.q) ? encodeURIComponent(body?.q) : body?.q), 
+            sort: body?.sort, 
+            sortBy: body?.sortBy
         };
 
         delete body.from;
         delete body.to;
 
-        let url = this.vouchersUtilityService.createQueryString(this.config.apiUrl + contextPath, (type === VoucherTypeEnum.purchase && this.generalService.voucherApiVersion !== 2) ? requestParameter : { ...requestParameter, type });
-        url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        let contextPath = RECEIPT_API.GET_ALL?.replace("?", "");
 
+        let url = this.vouchersUtilityService.createQueryString(this.config.apiUrl + contextPath, { ...requestParameter, type });
+        url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         return this.http.post(url
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), requestPayload).pipe(
                 map((res) => {
@@ -305,6 +311,46 @@ export class VoucherService {
     }
 
     /**
+     * This will send the api request to get all purchase orders
+     *
+     * @param {*} model
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public getPurchaseOrderList(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_ALL;
+        url = url?.replace(':companyUniqueName', this.companyUniqueName);
+        url = url?.replace(':from', model.from ?? '');
+        url = url?.replace(':to', model.to ?? '');
+        url = url?.replace(':page', model.page ?? 1);
+        url = url?.replace(':count', model.count ?? '');
+        url = url?.replace(':sort', model.sort ?? '');
+        url = url?.replace(':sortBy', model.sortBy ?? 'purchaseDate');
+        
+        const { vendorName, type, purchaseOrderNumber, grandTotal, grandTotalOperation, statuses, dueFrom, dueTo } = model;
+
+        return this.http.post(url, { vendorName, type, purchaseOrderNumber, grandTotal, grandTotalOperation, statuses, dueFrom, dueTo }).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    /**
+     * This will send email
+     *
+     * @param {*} getRequestObject
+     * @param {*} postRequestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public sendEmail(getRequestObject: any, postRequestObject: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.EMAIL;
+        url = url?.replace(':companyUniqueName', this.companyUniqueName);
+        url = url?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
+        url = url?.replace(':poUniqueName', encodeURIComponent(getRequestObject.uniqueName));
+        return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+    }
+
+    /**
      * Get entries by entry unique name to convert pending entries to voucher
      *
      * @param {string} accountUniqueName
@@ -388,5 +434,100 @@ export class VoucherService {
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, request)));
+    }
+
+    /**
+     * Get voucher balances
+     *
+     * @param {*} payload
+     * @param {string} requestType
+     * @return {*}  {Observable<BaseResponse<ReciptResponse, any>>}
+     * @memberof VoucherService
+     */
+    public getVoucherBalances(payload: any, requestType: string): Observable<BaseResponse<ReciptResponse, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let contextPath = RECEIPT_API.GET_ALL_BAL_SALE_DUE?.replace("?", "");
+        let url = this.generalService.createQueryString(this.config.apiUrl + contextPath, {
+            page: payload?.page, count: payload?.count, from: payload?.from, to: payload?.to, type: requestType, q: payload?.q ? encodeURIComponent(payload?.q) : payload?.q, sort: payload?.sort, sortBy: payload?.sortBy
+        });
+
+        url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+
+        delete payload.from;
+        delete payload.to;
+
+        return this.http.post(url
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), payload).pipe(
+                map((res) => {
+                    let data: BaseResponse<ReciptResponse, any> = res;
+                    data.queryString = { page: payload?.page, count: payload?.count, from: payload?.from, to: payload?.to };
+                    data.request = payload;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<ReciptResponse, any>(e, payload)));
+    }
+
+    public exportVouchers(model: any): Observable<BaseResponse<string, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + INVOICE_API.DOWNLOAD_INVOICE_EXPORT_CSV?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':from', encodeURIComponent(model.from))?.replace(':to', encodeURIComponent(model.to));
+
+        delete model.dataToSend.from;
+        delete model.dataToSend.to;
+        url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+
+        return this.http.post(url, model.dataToSend).pipe(
+            map((res) => {
+                let data: BaseResponse<string, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, any>(model)));
+    }
+
+    public actionVoucher(voucherUniqueName: string, action: { action: string, amount?: number }): Observable<BaseResponse<string, string>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + INVOICE_API.ACTION_ON_INVOICE?.replace(':companyUniqueName', this.companyUniqueName)?.replace(':invoiceUniqueName', voucherUniqueName);
+        url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+
+        return this.http.post(url, action).pipe(
+            map((res) => {
+                let data: BaseResponse<string, string> = res;
+                data.request = voucherUniqueName;
+                data.queryString = { voucherUniqueName, action };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, string>(e, voucherUniqueName)));
+    }
+
+    /**
+     * This will delete the order
+     *
+     * @param {*} getRequestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public deleteSinglePOVoucher(uniqueName: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.DELETE;
+        url = url?.replace(':companyUniqueName', this.companyUniqueName);
+        url = url?.replace(':poUniqueName', uniqueName);
+
+        return this.http.delete(url).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, uniqueName)));
+    }
+
+    /**
+     * This will bulk update the data
+     *
+     * @param {*} getRequestObject
+     * @param {*} postRequestObject
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public bulkUpdate(actionType: string, postRequestObject: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url: string = this.config.apiUrl + PURCHASE_ORDER_API.BULK_UPDATE;
+        url = url?.replace(':companyUniqueName', this.companyUniqueName);
+        url = url?.replace(':action', actionType);
+        return this.http.patch(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, actionType)));
     }
 }

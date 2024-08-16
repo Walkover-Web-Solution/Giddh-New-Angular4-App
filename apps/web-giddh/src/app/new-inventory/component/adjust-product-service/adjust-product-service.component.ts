@@ -32,7 +32,6 @@ export class AdjustProductServiceComponent implements OnInit {
      * @memberof AdjustProductServiceComponent
      */
     public selectDate(event: any): void {
-        console.log('selectDate: ', event);
     }
 
     public ngOnInit() {
