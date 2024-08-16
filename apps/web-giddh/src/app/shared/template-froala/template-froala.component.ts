@@ -33,7 +33,7 @@ export class TemplateFroalaComponent implements OnInit {
     public emailContentSuggestions$ = this.componentStore.select(state => state.emailContentSuggestions);
     /* Instance of formgroup */
     public emailForm: FormGroup;
-    /* Instance of Froala froalaEditor froalaTribute */
+    /* Instance of Froala Tribute */
     public froalaTribute: any;
     /* Instance of subject field tribute */
     public subjectTribute: any;
@@ -301,11 +301,11 @@ export class TemplateFroalaComponent implements OnInit {
     }
 
     /**
-     *Show bcc/cc field
-     *
-     * @param {string} type
-     * @memberof TemplateFroalaComponent
-     */
+    * Show/Hide bcc/cc field
+    *
+    * @param {string} type
+    * @memberof TemplateFroalaComponent
+    */
     public showHideBccCc(type: string): void {
         if (type == "bcc") {
             this.showBcc = !this.showBcc;

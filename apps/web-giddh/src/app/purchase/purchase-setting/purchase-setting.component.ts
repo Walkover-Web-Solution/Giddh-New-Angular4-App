@@ -271,7 +271,7 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
     *
     * @memberof PurchaseSettingComponent
     */
-    public opneCustomEmailDialog(): void {
+    public openCustomEmailDialog(): void {
         this.dialog.open(TemplateFroalaComponent, {
             data: 'purchase',
             width: 'var(--aside-pane-width)',
