@@ -243,5 +243,10 @@
     "delayed_by_days": "Delayed by [DAYS] days",
     "delivery_in_day": "delivery_in_day[DAYS] day",
     "delivery_in_days": "Delivery in [DAYS] days",
-    "expected_delivery_date": "Expected Delivery Date"
+    "expected_delivery_date": "Expected Delivery Date",
+    "order_date": "Order Date",
+    "po_date_error": "Please select Purchase date",
+    "po_expirydate_error": "Please select Expected delivery date",
+    "po_warehouse_error": "Please select Warehouse",
+    "po_bulkupdate_error": "Please choose a field to update"
 }

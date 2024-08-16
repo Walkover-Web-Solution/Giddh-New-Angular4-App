@@ -37,10 +37,13 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         private toasterService: ToasterService,
         private generalService: GeneralService,
         private componentStore: VoucherComponentStore
-    ) {
+    ) { }
 
-    }
-
+    /**
+     * Initializes the component
+     *
+     * @memberof BulkExportComponent
+     */
     public ngOnInit(): void {
         this.exportForm = this.formBuilder.group({
             copyTypes: [''],
@@ -49,7 +52,7 @@ export class BulkExportComponent implements OnInit, OnDestroy {
 
         if (this.inputData?.voucherType === VoucherTypeEnum.sales) {
             this.exportForm.get('copyTypes').setValidators(Validators.required);
-            this.exportForm.get('copyTypes').updateValueAndValidity(); 
+            this.exportForm.get('copyTypes').updateValueAndValidity();
         }
 
         this.componentStore.bulkExportVoucherResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -69,16 +72,28 @@ export class BulkExportComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Lifecycle hook for destroy
+     *
+     * @memberof BulkExportComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Export Vouchers API Call
+     *
+     * @param {boolean} sendMail
+     * @return {*}  {void}
+     * @memberof BulkExportComponent
+     */
     public exportVouchers(sendMail: boolean): void {
         if (this.exportForm.invalid) {
             return;
         }
-        
+
         let getRequest: any = { from: "", to: "", type: "", mail: false, q: "" };
         let postRequest: any;
         getRequest.from = this.inputData?.advanceFilters?.from;

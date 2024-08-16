@@ -95,61 +95,71 @@ const BILL_DATA: PeriodicElementBill[] = [
     ]
 })
 export class VoucherListComponent implements OnInit, OnDestroy {
-    public moduleType: string = "";
-    // invoice table data
-    public displayedColumns: string[] = ['index', 'invoice', 'customer', 'voucherDate', 'grandTotal', 'balanceDue', 'dueDate', 'einvoicestatus', 'status'];
+    /** Hold all voucher list data source for table */
     public dataSource: any[] = [];
-    // estimate-table
-    displayedColumnEstimate: string[] = ['index', 'estimate', 'customer', 'proformaDate', 'grandTotal', 'dueDate', 'status', 'action'];
-    // proforma-table
-    displayedColumnProforma: string[] = ['position', 'proforma', 'customer', 'proformaDate', 'grandTotal', 'dueDate', 'status', 'action'];
-    // pending-table
-    displayedColumnPending: string[] = ['position', 'date', 'particular', 'amount', 'account', 'total', 'description'];
-    dataSourcePending = new MatTableDataSource<PeriodicElementPending>(PENDING_DATA);
-    // credit-table
-    displayedColumnsCredit: string[] = ['index', 'credit', 'customer', 'voucherDate', 'linked', 'grandTotal', 'status'];
-    // purchase-table
-    displayedColumnPurchase: string[] = ['index', 'date', 'purchase', 'vendorname', 'grandTotal', 'dueDate', 'status'];
-    // bill-table
-    displayedColumnsBill: string[] = ['index', 'bill', 'vendor', 'voucherDate', 'order', 'grandTotal', 'dueDate', 'status'];
+    /** Holds Table Display columns for Sales Voucher */
+    public displayedColumns: string[] = ['index', 'invoice', 'customer', 'voucherDate', 'grandTotal', 'balanceDue', 'dueDate', 'einvoicestatus', 'status'];
+    /** Holds Table data source for Pending */
+    public dataSourcePending = new MatTableDataSource<PeriodicElementPending>(PENDING_DATA);
+    /** Holds Table Display columns for Estimate Voucher */
+    public displayedColumnEstimate: string[] = ['index', 'estimate', 'customer', 'proformaDate', 'grandTotal', 'dueDate', 'status', 'action'];
+    /** Holds Table Display columns for Proforma Voucher */
+    public displayedColumnProforma: string[] = ['position', 'proforma', 'customer', 'proformaDate', 'grandTotal', 'dueDate', 'status', 'action'];
+    /** Holds Table Display columns for Pending Voucher */
+    public displayedColumnPending: string[] = ['position', 'date', 'particular', 'amount', 'account', 'total', 'description'];
+    /** Holds Table Display columns for Credit Voucher */
+    public displayedColumnsCredit: string[] = ['index', 'credit', 'customer', 'voucherDate', 'linked', 'grandTotal', 'status'];
+    /** Holds Table Display columns for Purchase Order Voucher */
+    public displayedColumnPurchase: string[] = ['index', 'date', 'purchase', 'vendorname', 'grandTotal', 'dueDate', 'status'];
+    /** Holds Table Display columns for Purchase Bill Voucher */
+    public displayedColumnsBill: string[] = ['index', 'bill', 'vendor', 'voucherDate', 'order', 'grandTotal', 'dueDate', 'status'];
 
     /** Template Reference for Generic aside menu account */
     @ViewChild("accountAsideMenu") public accountAsideMenu: TemplateRef<any>;
-    // advance search dialog
+    /** Holds advance search dailog template reference */
     @ViewChild('advanceSearch', { static: true }) public advanceSearch: TemplateRef<any>;
-    // export dialog
+    /** Holds export dailog template reference */
     @ViewChild('bulkExport', { static: true }) public bulkExport: TemplateRef<any>;
-    // export dialog
+    /** Holds Payment template reference */
     @ViewChild('paymentDialog', { static: true }) public paymentDialog: TemplateRef<any>;
-    // adjust payment dialog
+    /** Holds adjust payment dailog template reference */
     @ViewChild('adjustPaymentDialog', { static: true }) public adjustPaymentDialog: TemplateRef<any>;
-    // table paginator
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    // convert bill dialog
-    @ViewChild('convertBill', { static: true }) public convertBill: TemplateRef<any>;
-    // E-way bill dialog
-    @ViewChild('ewayBill', { static: true }) public ewayBill: TemplateRef<any>;
-    /* Selector for send email modal */
-    @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: any;
-    // table sorting
+    // Holds table sorting reference
     @ViewChild(MatSort) sort: MatSort;
+    /** Holds table paginator reference */
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+    /** Holds bill dailog template reference */
+    @ViewChild('convertBill', { static: true }) public convertBill: TemplateRef<any>;
+    /** Holds E-way bill dailog template reference */
+    @ViewChild('ewayBill', { static: true }) public ewayBill: TemplateRef<any>;
+    /** Directive to get reference of element */
+    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
+    /** Holds send email dailog template reference send email */
+    @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: any;
+    /** Holds show Customer Search input visibility status */
     public showCustomerSearch: boolean = false;
+    /** Holds show Invoice No Search input visibility status */
     public showInvoiceNoSearch: boolean = false;
+    /** Holds voucher Number form control */
     public voucherNumberInput: FormControl = new FormControl();
+    /** Holds account Unique Name form control */
     public accountUniqueNameInput: FormControl = new FormControl();
+    /** Holds searched Name form control */
     public searchedName: FormControl = new FormControl();
+    /** Holds true if searching is in progress */
     public isSearching: boolean = false;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /* Hold invoice  type*/
+    /** Hold invoice  type */
     public voucherType: any = '';
+    /** Hold url Voucher Type */
     public urlVoucherType: any = '';
+    /** Hold day js reference */
     public dayjs = dayjs;
+    /** Hold Bootstrap Modal Reference */
     public modalRef: BsModalRef;
-    /** directive to get reference of element */
-    @ViewChild('datepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     public selectedDateRange: any;
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
@@ -163,23 +173,32 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Last vouchers get in progress Observable */
     public getVouchersInProgress$: Observable<any> = this.componentStore.getLastVouchersInProgress$;
+    /** Holds invoice Selected Date range  */
     public invoiceSelectedDate: any = {
         fromDates: '',
         toDates: ''
     };
+    /** Holds true if universal date is applied */
     public isUniversalDateApplicable: boolean = false;
+    /** Holds active tab group number */
     public activeTabGroup: number = 0;
+    /** Holds active Module */
     public activeModule: string = "list";
+    /** Holds list tabs groups */
     public tabsGroups: any[][] = [
         ["estimates", "proformas", "sales"],
         ["debit note", "credit note"],
         ["purchase-order", "purchase"]
     ];
+    /** Holds active selected Tab Index  */
     public selectedTabIndex: number = 2;
     /** Holds universal date */
     public universalDate: any;
-    public advanceFilters: any = {}
+    /** Holds advance Filters keys */
+    public advanceFilters: any = {};
+    /** Holds Advance Filters Applied Status */
     public advanceFiltersApplied: boolean = false;
+    /** Holds Voucher Balances */
     public voucherBalances: any = {
         grandTotal: 0,
         totalDue: 0
@@ -193,17 +212,25 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     };
     /** True, if user has enable GST E-invoice */
     public isEInvoiceEnabled: boolean;
+    /** Holds page Size Options for pagination */
     public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
+    /** Holds Total Results Count */
     public totalResults: number = 0;
+    /** Holds Selected Vouchers */
     public selectedVouchers: any[] = [];
     /** Holds Voucher Name that suports csv file export */
     public csvSupportVoucherType: string[] = ['sales', 'debit note', 'credit note', 'purchase'];
+    /** Holds True if all Vouchers are Selected */
     public allVouchersSelected: boolean = false;
+    /** Holds Eway Bill Dialog Ref */
     public ewayBillDialogRef: any;
+    /** Holds Advance Search Dialog Ref */
     public advanceSearchDialogRef: any;
+    /** Holds Voucher Details Dialog Ref */
     public voucherDetails: any;
     /** Stores the adjustment data */
     public advanceReceiptAdjustmentData: VoucherAdjustments;
+    /** Holds true if update mode */
     public isUpdateMode: boolean;
     /** Holds voucher totals */
     public voucherTotals: any = {
@@ -220,13 +247,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     };
     /** True if round off will be applicable */
     public applyRoundOff: boolean = true;
+    /** Deposit Amount */
     public depositAmount: number = 0;
     /** Hold account aside menu reference  */
     public accountAsideMenuRef: MatDialogRef<any>;
+    /** Holds Account Parent Group */
     public accountParentGroup: string = "";
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
+    /** Send Email Dialog Ref */
     public sendEmailModalDialogRef: MatDialogRef<any>;
+    /** Holds Currently used Voucher */
     private currentVoucher: any = null;
 
     constructor(
@@ -247,6 +278,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
     }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof VoucherListComponent
+     */
     public ngOnInit(): void {
         this.setInitialAdvanceFilter();
         this.getInvoiceSettings();
@@ -506,6 +542,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handle Get All Voucher Response
+     * 
+     * @private
+     * @param {*} response
+     * @memberof VoucherListComponent
+     */
     private handleGetAllVoucherResponse(response: any): void {
         if (response) {
             this.dataSource = [];
@@ -565,6 +608,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Set Selected Tab Index
+     *
+     * @private
+     * @memberof VoucherListComponent
+     */
     private getSelectedTabIndex(): void {
         if (this.activeTabGroup === 0) {
             if (this.voucherType === 'estimates' && this.activeModule === 'list') {
@@ -603,6 +652,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Redirect To Selected Tab
+     *
+     * @private
+     * @param {number} selectedTabIndex
+     * @memberof VoucherListComponent
+     */
     private redirectToSelectedTab(selectedTabIndex: number): void {
         let voucherType = "";
         let activeModule = "";
@@ -658,22 +714,44 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         this.router.navigate(['/pages/vouchers/preview/' + voucherType + '/' + activeModule]);
     }
-
+    /**
+     * Handle Tab Change event
+     *
+     * @param {*} selectedTabIndex
+     * @memberof VoucherListComponent
+     */
     public tabChanged(selectedTabIndex: any): void {
         this.selectedTabIndex = selectedTabIndex;
         this.redirectToSelectedTab(selectedTabIndex);
     }
 
+    /**
+     * Call function for Get all Vouchers
+     *
+     * @param {boolean} isUniversalDateApplicable
+     * @memberof VoucherListComponent
+     */
     public getVouchers(isUniversalDateApplicable: boolean): void {
         this.getAllVouchers();
     }
 
+    /**
+     * API Call Get Voucher Balances
+     *
+     * @memberof VoucherListComponent
+     */
     public getVoucherBalances(): void {
         if (this.voucherType === VoucherTypeEnum.sales) {
             this.componentStore.getVoucherBalances({ requestType: this.voucherType, payload: cloneDeep(this.advanceFilters) });
         }
     }
 
+    /**
+     * API Call Get All Vouchers
+     *
+     * @private
+     * @memberof VoucherListComponent
+     */
     private getAllVouchers(): void {
         if (this.voucherType?.length) {
             if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
@@ -686,6 +764,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     *  Handle Mat table sort event
+     *
+     * @param {*} event
+     * @memberof VoucherListComponent
+     */
     public sortChange(event: any): void {
         this.advanceFilters.sort = event?.direction ? event?.direction : 'asc';
         this.advanceFilters.sortBy = event?.active;
@@ -693,12 +777,25 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.getVouchers(false);
     }
 
+    /**
+     * Handle Page Change event and Make API Call
+     *
+     * @param {*} event
+     * @memberof VoucherListComponent
+     */
     public handlePageChange(event: any): void {
         this.advanceFilters.count = event.pageSize;
         this.advanceFilters.page = event.pageIndex + 1;
         this.getVouchers(false);
     }
 
+    /**
+     * Handle Select table item event
+     *
+     * @param {*} event
+     * @param {*} voucher
+     * @memberof VoucherListComponent
+     */
     public selectVoucher(event: any, voucher: any): void {
         if (event?.checked) {
             this.selectedVouchers.push(voucher);
@@ -707,6 +804,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handle Select All Items 
+     *
+     * @param {*} event
+     * @memberof VoucherListComponent
+     */
     public selectAllVouchers(event: any): void {
         this.selectedVouchers = [];
         this.allVouchersSelected = event?.checked;
@@ -717,6 +820,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Export CSV File and Download
+     *
+     * @return {*}  {*}
+     * @memberof VoucherListComponent
+     */
     public exportCsvDownload(): any {
         let exportCsvRequest = { from: '', to: '', dataToSend: null };
         exportCsvRequest.from = this.advanceFilters.from;
@@ -729,6 +838,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Generate E-Invoice API Call
+     * 
+     * @memberof VoucherListComponent
+     */
     public generateEInvoice(): void {
         this.componentStore.generateEInvoice({ payload: { voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }), voucherType: this.voucherType }, actionType: 'einvoice' });
     }
@@ -836,6 +950,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Lifecycle hook for destroy
+     *
+     * @memberof VoucherListComponent
+     */
     public ngOnDestroy(): void {
         if (window.localStorage) {
             localStorage.removeItem('universalSelectedDate');
@@ -845,14 +964,22 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    // filter dialog 
+    /**
+     * Open Advance Search Dialog
+     *
+     * @memberof VoucherListComponent
+     */
     public advanceSearchDialog(): void {
         this.advanceSearchDialogRef = this.dialog.open(this.advanceSearch, {
             panelClass: ['mat-dialog-md']
         });
     }
 
-    // export dialog
+    /**
+     * Open Bulk Export Dialog
+     *
+     * @memberof VoucherListComponent
+     */
     public showBulkExportDialog(): void {
         this.dialog.open(this.bulkExport, {
             width: '600px',
@@ -865,7 +992,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
     }
 
-    // paid dialog
+    /**
+     * Open Payment Dialog
+     *
+     * @param {*} voucher
+     * @memberof VoucherListComponent
+     */
     public showPaymentDialog(voucher: any): void {
         this.voucherDetails = voucher;
 
@@ -874,21 +1006,39 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
     }
 
-    // adjust payment dialog
+    /**
+     * Open Adjust payment dialog
+     *
+     * @param {*} voucher
+     * @memberof VoucherListComponent
+     */
     public showAdjustmentDialog(voucher: any): void {
         this.componentStore.getVoucherDetails({ isCopyVoucher: false, accountUniqueName: voucher?.account?.uniqueName, payload: { uniqueName: voucher?.uniqueName, voucherType: this.voucherType } });
     }
 
-    // bulk update dialog 
-    public bulkUpdateDialog(): void {
+    /**
+     * Open bulk update dialog for Purchase order
+     *
+     * @param {boolean} [isPOBulkUpdate=false]
+     * @memberof VoucherListComponent
+     */
+    public bulkUpdateDialog(isPOBulkUpdate: boolean = false): void {
+        const dataToSend = {
+            voucherType: this.voucherType,
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData
+        };
+
+        if (isPOBulkUpdate) {
+            dataToSend['purchaseNumbers'] = this.selectedVouchers?.map(voucher => { return voucher?.voucherNumber });
+        } else {
+            dataToSend['voucherUniqueNames'] = this.selectedVouchers?.map(voucher => { return voucher?.uniqueName });
+        }
+
+
         let dialogRef = this.dialog.open(BulkUpdateComponent, {
             panelClass: ['mat-dialog-md'],
-            data: {
-                voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
-                voucherType: this.voucherType,
-                localeData: this.localeData,
-                commonLocaleData: this.commonLocaleData
-            }
+            data: dataToSend
         });
 
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -900,7 +1050,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         })
     }
 
-    // delete confirmation dialog
+    /**
+     * Handle Delete Voucher Dialog
+     *
+     * @param {*} [voucher]
+     * @memberof VoucherListComponent
+     */
     public deleteVoucherDialog(voucher?: any): void {
         let confirmationMessages = [];
         this.localeData?.confirmation_messages?.map(message => {
@@ -943,13 +1098,23 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
     }
-    // template dialog
+
+    /**
+     * Open template dialog
+     *
+     * @memberof VoucherListComponent
+     */
     public templateDialog(): void {
         this.dialog.open(TemplatePreviewDialogComponent, {
             width: '980px'
         });
     }
-    // template edit dialog
+
+    /**
+     * Open template edit dialog
+     *
+     * @memberof VoucherListComponent
+     */
     public templateEdit(): void {
         this.dialog.open(TemplateEditDialogComponent, {
             width: '100%',
@@ -957,6 +1122,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Toggle between table header title and search input field
+     *
+     * @param {*} event
+     * @param {string} fieldName
+     * @param {string} voucherType
+     * @memberof VoucherListComponent
+     */
     public toggleSearch(event: any, fieldName: string, voucherType: string): void {
         switch (voucherType) {
             case VoucherTypeEnum.sales:
@@ -1031,6 +1204,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Open Eway Bill Dialog
+     *
+     * @param {*} [voucher]
+     * @memberof VoucherListComponent
+     */
     public showEwayBillDialog(voucher?: any): void {
         if (this.voucherType === VoucherTypeEnum.sales) {
             this.store.dispatch(this.invoiceReceiptActions.ResetVoucherDetails());
@@ -1062,6 +1241,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Create Eway Bill Dailog
+     *
+     * @memberof VoucherListComponent
+     */
     public createEwayBill(): void {
         this.componentStore.createEwayBill$.pipe(take(1)).subscribe(response => {
             if (!response?.account?.billingDetails?.pincode) {
@@ -1072,11 +1256,24 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Check voucher is selected
+     *
+     * @param {*} voucher
+     * @return {*}  {boolean}
+     * @memberof VoucherListComponent
+     */
     public isVoucherSelected(voucher: any): boolean {
         const isSelected = this.selectedVouchers?.filter(selectedVoucher => selectedVoucher?.uniqueName === voucher?.uniqueName);
         return isSelected?.length ? true : false;
     }
 
+    /**
+     * Apply Advance Search/ Filter
+     *
+     * @param {*} event
+     * @memberof VoucherListComponent
+     */
     public applyAdvanceSearch(event: any): void {
         this.advanceSearchDialogRef?.close();
         this.advanceFiltersApplied = true;
@@ -1108,6 +1305,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.getVoucherBalances();
     }
 
+    /**
+     * Close Advance Search Dialog
+     *
+     * @param {boolean} isClosed
+     * @memberof VoucherListComponent
+     */
     public closeAdvanceSearchDialog(isClosed: boolean): void {
         if (isClosed) {
             this.selectAllVouchers({ checked: false });
@@ -1115,10 +1318,24 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.advanceSearchDialogRef?.close();
     }
 
+    /**
+     * Handle Voucher Actions API Call
+     *
+     * @param {*} voucher
+     * @param {string} action
+     * @memberof VoucherListComponent
+     */
     public actionVoucher(voucher: any, action: string): void {
         this.componentStore.actionVoucher({ voucherUniqueName: voucher?.uniqueName, payload: { action: action, voucherType: voucher?.voucherType ?? this.voucherType } });
     }
 
+    /**
+     * Handle Estimate Proforma Actions API Call
+     *
+     * @param {*} voucher
+     * @param {string} action
+     * @memberof VoucherListComponent
+     */
     public actionEstimateProforma(voucher: any, action: string): void {
         const model = {
             accountUniqueName: voucher.customerUniqueName,
@@ -1135,6 +1352,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Convert To Invoice API Call
+     *
+     * @param {*} voucher
+     * @memberof VoucherListComponent
+     */
     public convertToInvoice(voucher): void {
         this.componentStore.convertToInvoice({
             request: {
@@ -1145,6 +1368,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Convert To Proforma API Call
+     *
+     * @param {*} voucher
+     * @memberof VoucherListComponent
+     */
     public convertToProforma(voucher): void {
         this.componentStore.convertToProforma({
             request: {
@@ -1155,10 +1384,21 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handle Payment Submit
+     *
+     * @param {*} event
+     * @memberof VoucherListComponent
+     */
     public paymentSubmitted(event: any): void {
         this.componentStore.actionVoucher({ voucherUniqueName: event?.uniqueName, payload: event });
     }
 
+    /**
+     * Close Advance Receipt Dialog
+     *
+     * @memberof VoucherListComponent
+     */
     public closeAdvanceReceiptDialog(): void {
         this.advanceReceiptAdjustmentData = null;
         this.dialog.closeAll();
@@ -1188,11 +1428,23 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.componentStore.adjustVoucherWithAdvanceReceipts({ adjustments: advanceReceiptAdjustmentData.adjustments, voucherUniqueName: this.voucherDetails?.uniqueName });
     }
 
+    /**
+     * Go to ledger account with date range
+     *
+     * @param {*} voucher
+     * @memberof VoucherListComponent
+     */
     public goToLedger(voucher: any): void {
         let url = '/pages/ledger/' + voucher?.account?.uniqueName + '/' + this.advanceFilters.from + '/' + this.advanceFilters.to;
         this.openUrl(url);
     }
 
+    /**
+     * Create Generate Voucher Url based on Voucher type
+     *
+     * @param {*} voucher
+     * @memberof VoucherListComponent
+     */
     public generateVoucher(voucher: any): void {
         let url = "";
         if (this.voucherType === VoucherTypeEnum.sales) {
@@ -1214,6 +1466,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.openUrl(url);
     }
 
+    /**
+     * Redirect to URL
+     *
+     * @private
+     * @param {string} url
+     * @memberof VoucherListComponent
+     */
     private openUrl(url: string): void {
         if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
@@ -1224,6 +1483,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Get Parent Group For Account Create
+     *
+     * @param {string} voucherType
+     * @return {*}  {string}
+     * @memberof VoucherListComponent
+     */
     public getParentGroupForAccountCreate(voucherType: string): string {
         if (voucherType === VoucherTypeEnum.debitNote || voucherType === VoucherTypeEnum.purchase || voucherType === VoucherTypeEnum.purchaseOrder || voucherType === VoucherTypeEnum.cashBill || voucherType === VoucherTypeEnum.cashDebitNote) {
             return 'sundrycreditors';
@@ -1232,6 +1498,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Handle Edit Account
+     *
+     * @param {*} voucher
+     * @memberof VoucherListComponent
+     */
     public editAccount(voucher: any): void {
         this.voucherDetails = voucher;
         this.accountParentGroup = this.getParentGroupForAccountCreate(this.voucherType);
@@ -1244,6 +1516,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Reset Advance Filter
+     *
+     * @memberof VoucherListComponent
+     */
     public setInitialAdvanceFilter(): void {
         this.advanceFilters = {
             sortBy: '', // need to set voucherDate
@@ -1294,6 +1571,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         return text;
     }
 
+    /**
+     * Open Send Email Dialog
+     *
+     * @param {*} voucher
+     * @memberof VoucherListComponent
+     */
     public openEmailSendDialog(voucher: any): void {
         this.sendEmailModalDialogRef = this.dialog.open(this.sendEmailModal, {
             panelClass: ['mat-dialog-sm']
@@ -1301,6 +1584,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.currentVoucher = voucher;
     }
 
+    /**
+     * Send Email API Call
+     *
+     * @param {*} email
+     * @memberof VoucherListComponent
+     */
     public sendEmail(email: any): void {
         if (email && email.length) {
             const request = {
@@ -1311,7 +1600,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 
-    // convert bill dialog
+    /**
+     * Open convert bill dialog
+     *
+     * @param {*} [voucher]
+     * @param {string} [action]
+     * @memberof VoucherListComponent
+     */
     public convertBillDialog(voucher?: any, action?: string): void {
         const vouchers = voucher ?? this.selectedVouchers;
         this.dialog.open(this.convertBill, {
@@ -1321,10 +1616,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Handle Purchase Order Bulk Actions
+     *
+     * @param {string} actionType
+     * @param {*} [event]
+     * @memberof VoucherListComponent
+     */
     public poBulkAction(actionType: string, event?: any): void {
         if (actionType === 'delete' || actionType === 'expire') {
             const purchaseNumbers = this.selectedVouchers.map(voucher => voucher?.voucherNumber);
-            this.componentStore.POBulkUpdateAction({ payload: {purchaseNumbers}, actionType: actionType });
+            this.componentStore.POBulkUpdateAction({ payload: { purchaseNumbers }, actionType: actionType });
         } else if (event?.purchaseOrders) {
             this.componentStore.POBulkUpdateAction({ payload: event, actionType: actionType });
         }

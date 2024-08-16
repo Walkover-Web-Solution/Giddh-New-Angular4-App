@@ -1197,16 +1197,16 @@
                         <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied">
                             <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
                         </button>
-                        <div class="d-flex align-items-center column-gap1">
+                        <div class="d-flex align-items-center column-gap1"  *ngIf="selectedVouchers?.length">
                             <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase">
                                 <span>More</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
                             <mat-menu #morepurchase="matMenu">
-                                <button mat-menu-item (click)="bulkUpdateDialog()">Bulk Update</button>
-                                <button mat-menu-item (click)="convertBillDialog()" *ngIf="selectedVouchers?.length">Convert to bill</button>
-                                <button mat-menu-item (click)="poBulkAction('expire')" *ngIf="selectedVouchers?.length">Expired</button>
-                                <button mat-menu-item (click)="deleteVoucherDialog()" *ngIf="selectedVouchers?.length">Delete</button>
+                                <button mat-menu-item (click)="bulkUpdateDialog(true)">Bulk Update</button>
+                                <button mat-menu-item (click)="convertBillDialog()">Convert to bill</button>
+                                <button mat-menu-item (click)="poBulkAction('expire')">Expired</button>
+                                <button mat-menu-item (click)="deleteVoucherDialog()">Delete</button>
                             </mat-menu>
                             <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">Filter
                                 <i class="icon-advance-filter"></i>

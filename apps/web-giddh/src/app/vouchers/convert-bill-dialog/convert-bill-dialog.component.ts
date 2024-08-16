@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
@@ -8,6 +8,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./convert-bill-dialog.component.scss']
 })
 export class ConvertBillDialogComponent implements OnInit {
+  /** Emits convert To Bill form value */
   @Output() public convertToBill = new EventEmitter<any>();
   public form: FormGroup;
   public showForm: boolean = true;
@@ -20,6 +21,11 @@ export class ConvertBillDialogComponent implements OnInit {
     this.initForm();
   }
 
+  /**
+   * Lifecycle hook for destroy
+   *
+   * @memberof ConvertBillDialogComponent
+   */
   public ngOnInit(): void {
     if (this.vouchers) {
       let formArray = this.form.get('purchaseOrders') as FormArray;
@@ -34,12 +40,26 @@ export class ConvertBillDialogComponent implements OnInit {
     }
   }
 
+  /**
+   * Initialise Form
+   *
+   * @private
+   * @memberof ConvertBillDialogComponent
+   */
   private initForm(): void {
     this.form = this.formBuilder.group({
       purchaseOrders: this.formBuilder.array([]) // Properly initialize the FormArray
     });
   }
 
+  /**
+   * Set Purchase Order Value
+   *
+   * @private
+   * @param {*} voucher
+   * @return {*}  {FormGroup}
+   * @memberof ConvertBillDialogComponent
+   */
   private setPurchaseOrderValue(voucher): FormGroup {
     return this.formBuilder.group({
       orderNumber: [voucher?.voucherNumber ?? ''],
@@ -47,6 +67,11 @@ export class ConvertBillDialogComponent implements OnInit {
     });
   }
 
+  /**
+   * Handle Form Submit 
+   *
+   * @memberof ConvertBillDialogComponent
+   */
   public onFormSubmit(): void {
     this.convertToBill.emit(this.form.value);
   }
