@@ -45,7 +45,7 @@ export class VerifyOwnershipDialogComponent implements OnInit {
 
         this.verifyOwnershipSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.router.navigate(['/pages/subscription']);
+                this.router.navigate(['/pages/user-details/subscription']);
             }
         });
     }

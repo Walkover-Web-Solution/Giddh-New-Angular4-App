@@ -414,7 +414,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="unit_name">
-                                <th class="group-column" mat-header-cell *matHeaderCellDef>
+                                <th class="group-column text-right" mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.reports?.unit_name }}
                                 </th>
                                 <td
@@ -633,7 +633,7 @@
 
                             <ng-container matColumnDef="entity_group_name">
                                 <th
-                                    class="text-right"
+                                    class="text-center"
                                     mat-header-cell
                                     *matHeaderCellDef
                                     [attr.colspan]="headerColumns['entity_group_name'].colSpan"
@@ -642,19 +642,20 @@
                             <!-- Opening Stock group -->
                             <ng-container matColumnDef="opening_stock">
                                 <th
-                                    class="text-right"
                                     mat-header-cell
                                     *matHeaderCellDef
                                     [attr.colspan]="headerColumns['opening_stock'].colSpan"
                                 >
-                                    {{ localeData?.reports?.opening_stock }}
+                                    <span class="d-flex justify-content-center ml-5">
+                                        {{ localeData?.reports?.opening_stock }}
+                                    </span>
                                 </th>
                             </ng-container>
 
                             <!-- Inwards group -->
                             <ng-container matColumnDef="inwards">
                                 <th
-                                    class="text-right"
+                                    class="text-center"
                                     mat-header-cell
                                     *matHeaderCellDef
                                     [attr.colspan]="headerColumns['inwards'].colSpan"
@@ -666,7 +667,7 @@
                             <!-- Outwards group -->
                             <ng-container matColumnDef="outwards">
                                 <th
-                                    class="text-right"
+                                    class="text-center"
                                     mat-header-cell
                                     *matHeaderCellDef
                                     [attr.colspan]="headerColumns['outwards'].colSpan"
@@ -678,12 +679,13 @@
                             <!-- Closing Stock group -->
                             <ng-container matColumnDef="closing_stock">
                                 <th
-                                    class="text-right"
                                     mat-header-cell
                                     *matHeaderCellDef
                                     [attr.colspan]="headerColumns['closing_stock'].colSpan"
                                 >
-                                    {{ localeData?.reports?.closing_stock }}
+                                    <span class="d-flex justify-content-center ml-5">
+                                        {{ localeData?.reports?.closing_stock }}
+                                    </span>
                                 </th>
                             </ng-container>
                             <tr mat-header-row *matHeaderRowDef="tableHeaderColumns"></tr>

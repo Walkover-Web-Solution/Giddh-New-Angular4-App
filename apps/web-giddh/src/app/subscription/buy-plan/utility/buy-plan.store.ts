@@ -27,6 +27,9 @@ export interface BuyPlanState {
     subscriptionRazorpayOrderDetails: any;
     getChangePlanDetailsInProgress: boolean;
     changePlanDetails: any;
+    activatePlanSuccess: boolean;
+    calculateDataInProgress: boolean;
+    calculateData: any;
 }
 
 export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
@@ -47,7 +50,10 @@ export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
     generateOrderBySubscriptionIdInProgress: false,
     subscriptionRazorpayOrderDetails: null,
     getChangePlanDetailsInProgress: null,
-    changePlanDetails: null
+    changePlanDetails: null,
+    activatePlanSuccess: false,
+    calculateDataInProgress: false,
+    calculateData: null
 };
 
 @Injectable()
@@ -313,7 +319,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
         );
     });
 
-    readonly generateOrderBySubscriptionId = this.effect((data: Observable<string>) => {
+    readonly generateOrderBySubscriptionId = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ generateOrderBySubscriptionIdInProgress: true });
@@ -456,6 +462,85 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             return this.patchState({
                                 countryList: [],
                                 countryListInProgress: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     * Activate plan
+     *
+     * @memberof BuyPlanComponentStore
+     */
+    readonly activatePlan = this.effect((data: Observable<string>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ activatePlanSuccess: false });
+                return this.subscriptionService.activatePlan(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    activatePlanSuccess: true
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    activatePlanSuccess: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
+
+                            return this.patchState({
+                                generateOrderBySubscriptionIdInProgress: false,
+                                subscriptionRazorpayOrderDetails: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     * Get plan calculation details
+     *
+     * @memberof BuyPlanComponentStore
+     */
+    readonly getCalculationData = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ calculateDataInProgress: true });
+                return this.subscriptionService.getPlanAmountCalculation(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                return this.patchState({
+                                    calculateData: res?.body ?? [],
+                                    calculateDataInProgress: false
+                                });
+                            } else {
+                                this.toasterService.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    calculateData: [],
+                                    calculateDataInProgress: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar("error", error);
+                            return this.patchState({
+                                calculateData: [],
+                                calculateDataInProgress: false
                             });
                         }
                     ),

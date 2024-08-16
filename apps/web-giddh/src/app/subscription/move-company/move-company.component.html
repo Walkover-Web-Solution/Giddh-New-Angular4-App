@@ -1,8 +1,9 @@
 <div class="modal-header d-flex align-items-center flex-row-reverse">
-    <button aria-hidden="true" class="close" mat-dialog-close>×</button>
-    <h3>
+    <button class="close" mat-dialog-close>×</button>
+    <h3 *ngIf="subscriptionMove">
         {{ localeData?.subscription?.move_company ? localeData?.subscription?.move_company : localeData?.move_company }}
     </h3>
+    <h3 *ngIf="!subscriptionMove">{{ localeData?.add_company }}</h3>
 </div>
 <div *ngIf="isLoading">
     <giddh-page-loader></giddh-page-loader>
@@ -13,18 +14,40 @@
             <p class="text-black mb-2" [innerHTML]="getMovePlanText()"></p>
             <div class="row mb-2">
                 <div class="col-md-6 move-wrapper">
-                    <label class="font-15"
-                        >{{ localeData?.subscription?.select_plan ? localeData?.subscription?.select_plan: localeData?.select_plan }}<span class="text-danger">*</span></label
+                    <label class="font-15" *ngIf="subscriptionMove"
+                        >{{
+                            localeData?.subscription?.select_plan
+                                ? localeData?.subscription?.select_plan
+                                : localeData?.select_plan
+                        }}<span class="text-danger">*</span></label
                     >
-                    <div class="select-caret position-relative move-select">
+                    <div *ngIf="subscriptionMove" class="select-caret position-relative move-select">
                         <sh-select
-                            [placeholder]="localeData?.subscription?.select_plan ? localeData?.subscription?.select_plan : localeData?.select_plan"
+                            [placeholder]="
+                                localeData?.subscription?.select_plan
+                                    ? localeData?.subscription?.select_plan
+                                    : localeData?.select_plan
+                            "
                             name="availablePlans"
                             [options]="availablePlansOption"
                             [isFilterEnabled]="true"
                             [(ngModel)]="selectedPlan"
                             [isRequired]="true"
                         ></sh-select>
+                    </div>
+                    <div *ngIf="!subscriptionMove" class="position-relative move-select">
+                        <reactive-dropdown-field
+                            [label]="commonLocaleData?.app_company"
+                            [placeholder]="localeData?.select_company"
+                            [options]="companyList$ | async"
+                            [enableDynamicSearch]="true"
+                            [isPaginationEnabled]="true"
+                            (scrollEnd)="handleSearchCompanyScrollEnd()"
+                            (dynamicSearchedQuery)="searchCompany($event)"
+                            [required]="true"
+                            (selectedOption)="selectCompany($event)"
+                        >
+                        </reactive-dropdown-field>
                     </div>
                 </div>
             </div>
@@ -34,9 +57,15 @@
                     color="primary"
                     mat-dialog-close
                     (click)="moveCompanyInNewPlan()"
-                    [disabled]="!selectedPlan"
+                    [disabled]="subscriptionMove ? !selectedPlan : companyDetails?.value"
                 >
-                    {{ localeData?.subscription?.move ? localeData?.subscription?.move : localeData?.move }}
+                    {{
+                        subscriptionMove
+                            ? localeData?.subscription?.move
+                                ? localeData?.subscription?.move
+                                : localeData?.move
+                            : commonLocaleData?.app_add
+                    }}
                 </button>
             </div>
         </div>

@@ -116,8 +116,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public isFormSubmitted: boolean = false;
     /** Hold selected plan*/
     public selectedPlan: any;
-    /** Hold popular plan*/
-    public popularPlan: any;
     /** Hold session source observable*/
     public session$: Observable<userLoginStateEnum>;
     /** Hold state source observable*/
@@ -182,10 +180,26 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     private openedWindow: Window | null = null;
     /** Holds Store Plan list API success state as observable*/
     public subscriptionRazorpayOrderDetails$ = this.componentStore.select(state => state.subscriptionRazorpayOrderDetails);
+    /** Holds Store Plan Calculation Plan Data API success state as observable*/
+    public calculateData$ = this.componentStore.select(state => state.calculateData);
     /** True if it is subscription region */
     public isSubscriptionRegion: boolean = false;
     /** Hold current time stamp  */
     public currentTimeStamp: string;
+    /** Holds Store Activate Plan Success observable*/
+    public activatePlanSuccess$ = this.componentStore.select(state => state.activatePlanSuccess);
+    /** True if it is upgrade plan */
+    public upgradePlan: boolean = false;
+    /** Hold upgrade subscription id  */
+    public upgradeSubscriptionId: any;
+    /** Hold upgrade region  */
+    public upgraderRegion: any;
+    /** Hold get subscription data */
+    public viewSubscriptionData: any;
+    /** Hold all plans */
+    public isAllPlans: any[] = [];
+    /** True if user change manualy plan */
+    public isUserManualChangePlan: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -253,8 +267,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 //     this.openCashfreeDialog(response?.redirectLink);
                 // }
                 this.subscriptionId = response.subscriptionId;
-                if (this.isChangePlan) {
-                    this.router.navigate(['/pages/subscription']);
+                if (this.subscriptionId && this.isChangePlan) {
+                    this.router.navigate(['/pages/user-details/subscription']);
                 } else {
                     if (this.payType === 'trial') {
                         this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
@@ -264,7 +278,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                                 planUniqueName: response?.planDetails?.uniqueName,
                                 paymentProvider: "GOCARDLESS",
                                 subscriptionId: response.subscriptionId,
-                                duration: response?.duration
+                                duration: response?.duration,
+                                promoCode: this.firstStepForm?.get('promoCode')?.value ?? null
                             };
                             if (response?.status?.toLowerCase() === 'active') {
                                 this.router.navigate(['/pages/new-company/' + response?.subscriptionId]);
@@ -272,7 +287,11 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                                 this.subscriptionComponentStore.buyPlanByGoCardless(model);
                             }
                         } else {
-                            this.componentStore.generateOrderBySubscriptionId(response?.subscriptionId);
+                            const reqObj = {
+                                subscriptionId: response?.subscriptionId,
+                                promoCode: this.firstStepForm?.get('promoCode')?.value ?? null
+                            }
+                            this.componentStore.generateOrderBySubscriptionId(reqObj);
                         }
                     }
                 };
@@ -284,8 +303,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 if (response.dueAmount > 0) {
                     this.initializePayment(response);
                 } else {
-                    if (this.isChangePlan) {
-                        this.router.navigate(['/pages/subscription']);
+                    if (this.subscriptionId && this.isChangePlan) {
+                        this.router.navigate(['/pages/user-details/subscription']);
                     } else {
                         this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
                     };
@@ -303,8 +322,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 // } else {
                 //     this.openCashfreeDialog(response?.redirectLink);
                 // }
-                if (this.isChangePlan) {
-                    this.router.navigate(['/pages/subscription']);
+                if (this.subscriptionId && this.isChangePlan) {
+                    this.router.navigate(['/pages/user-details/subscription']);
                 } else {
                     this.router.navigate(['/pages/new-company/' + this.responseSubscriptionId]);
                 };
@@ -315,8 +334,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.updateSubscriptionPaymentIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isLoading = false;
-                if (this.isChangePlan) {
-                    this.router.navigate(['/pages/subscription']);
+                if (this.subscriptionId && this.isChangePlan) {
+                    this.router.navigate(['/pages/user-details/subscription']);
                 } else {
                     this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
                 };
@@ -379,13 +398,26 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-        if (this.router.url === '/pages/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/subscription/buy-plan') {
+        if (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan') {
             window.addEventListener('message', event => {
                 if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
-                    if (this.isChangePlan) {
-                        this.router.navigate(['/pages/subscription']);
+                    if (this.upgradePlan && this.upgraderRegion === 'GBR') {
+                        this.componentStore.activatePlan(this.upgradeSubscriptionId);
+                        this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                            if (response) {
+                                if (this.subscriptionId && this.isChangePlan) {
+                                    this.router.navigate(['/pages/user-details/subscription']);
+                                } else {
+                                    this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                                };
+                            }
+                        });
                     } else {
-                        this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                        if (this.subscriptionId && this.isChangePlan) {
+                            this.router.navigate(['/pages/user-details/subscription']);
+                        } else {
+                            this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                        }
                     }
                 }
             });
@@ -410,13 +442,19 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         this.changePlanDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.upgrade) {
+                this.upgradePlan = response?.upgrade;
+                this.upgradeSubscriptionId = response?.subscriptionId;
+                this.upgraderRegion = response?.region?.code;
+            }
             if (response && response.dueAmount > 0) {
                 if (response?.region?.code === 'GBR') {
                     let model = {
                         planUniqueName: response?.planDetails?.uniqueName,
                         paymentProvider: "GOCARDLESS",
                         subscriptionId: response.subscriptionId,
-                        duration: response?.duration
+                        duration: response?.duration,
+                        promoCode: this.firstStepForm?.get('promoCode')?.value ?? null
                     };
                     this.subscriptionComponentStore.buyPlanByGoCardless(model);
                 } else {
@@ -425,13 +463,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             } else {
                 if (response?.region?.code === 'GBR') {
                     this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
-                    this.router.navigate(['/pages/subscription']);
+                    this.router.navigate(['/pages/user-details/subscription']);
                 } else {
                     this.updateSubscriptionPayment(response, true);
                 }
             }
         });
         this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.viewSubscriptionData = response;
             if (this.subscriptionId && response?.region) {
                 this.newUserSelectCountry({
                     "label": response.region?.code + " - " + response.region?.name,
@@ -606,7 +645,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public toggleDuration(event: any): void {
         if (event) {
             this.firstStepForm.get('duration').setValue(event?.value);
-            this.setPlans();
+            if (!this.subscriptionId) {
+                this.setPlans();
+            }
         }
     }
 
@@ -996,24 +1037,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public selectPlan(plan: any): void {
         this.firstStepForm.get('planUniqueName').setValue(plan?.uniqueName);
+        if (this.firstStepForm?.get('promoCode')?.value) {
+            this.applyPromoCode('remove');
+        }
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result) {
                 this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
-                if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                    this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
-                } else {
-                    this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
-                }
-
-                if (this.selectedPlan?.currency?.code?.toLowerCase() === 'inr' && this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
-                    this.finalPlanAmount = this.finalPlanAmount + this.finalPlanAmount * this.taxPercentage;
-                } else {
-                    if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                        this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
-                    } else {
-                        this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
-                    }
-                }
+                this.isUserManualChangePlan = this.selectedPlan.uniqueName !== this.viewSubscriptionData?.planUniqueName;
+                this.setFinalAmount();
             }
         });
     }
@@ -1074,6 +1105,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public getAllPlans(): void {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length) {
+                this.isAllPlans = response;
                 this.monthlyPlans = response?.filter(plan =>
                     plan.hasOwnProperty('monthlyAmount') && plan?.monthlyAmount !== null
                 );
@@ -1083,10 +1115,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 );
                 this.monthlyPlans = this.monthlyPlans.sort((a, b) => a.monthlyAmount - b.monthlyAmount);
                 this.yearlyPlans = this.yearlyPlans.sort((a, b) => a.yearlyAmount - b.yearlyAmount);
-                if (this.yearlyPlans?.length) {
-                    this.firstStepForm.get('duration').setValue('YEARLY');
+                if (!this.subscriptionId) {
+                    if (this.yearlyPlans?.length) {
+                        this.firstStepForm.get('duration').setValue('YEARLY');
+                    } else {
+                        this.firstStepForm.get('duration').setValue('MONTHLY');
+                    }
                 } else {
-                    this.firstStepForm.get('duration').setValue('MONTHLY');
+                    this.firstStepForm.get('duration').setValue(this.viewSubscriptionData?.period);
                 }
                 this.setPlans();
             } else {
@@ -1106,16 +1142,21 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     private setPlans(): void {
         this.inputData = [];
-        const filteredPlans = this.firstStepForm.get('duration').value === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
-        this.selectedPlan = filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1];
-        this.popularPlan = filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1];
-
+        if (!this.subscriptionId) {
+            const filteredPlans = this.firstStepForm.get('duration').value === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
+            this.selectedPlan = filteredPlans?.length === 1 ? filteredPlans[0] : filteredPlans[1];
+            filteredPlans?.forEach(plan => {
+                this.inputData.push(plan);
+            });
+        } else {
+            let subscriptionPlan = this.isAllPlans?.filter(plan => plan?.uniqueName === this.viewSubscriptionData?.planUniqueName);
+            this.selectedPlan = subscriptionPlan[0];
+            const filteredPlans = this.viewSubscriptionData?.period === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
+            filteredPlans?.forEach(plan => {
+                this.inputData.push(plan);
+            });
+        }
         this.firstStepForm.get('planUniqueName').setValue(this.selectedPlan?.uniqueName);
-
-        filteredPlans?.forEach(plan => {
-            this.inputData.push(plan);
-        });
-
         this.setFinalAmount();
     }
 
@@ -1125,33 +1166,21 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public setFinalAmount(): void {
-        if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in' && !this.promoCodeResponse?.length) {
-            this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
-                if (result) {
-                    this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
-                    if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                        this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
-                    } else {
-                        this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
-                    }
-                    if (this.selectedPlan?.currency?.code?.toLowerCase() === 'inr' && this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in') {
-                        this.finalPlanAmount = this.finalPlanAmount + (this.finalPlanAmount * this.taxPercentage);
-                    } else {
-                        if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                            this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
-                        } else {
-                            this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
-                        }
-                    }
-                }
-            });
-        } else {
-            if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
-            } else {
-                this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
-            }
+        const reqObj = {
+            planUniqueName: this.selectedPlan?.uniqueName,
+            promoCode: this.firstStepForm?.get('promoCode')?.value,
+            duration: this.firstStepForm.get('duration').value
         }
+        if (this.selectedPlan?.uniqueName) {
+            this.componentStore.getCalculationData(reqObj);
+        }
+        this.calculateData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.finalPlanAmount = response?.planAmountAfterTax;
+                this.selectedPlan = { ...this.selectedPlan, ...response };
+            }
+        });
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -1260,7 +1289,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             };
         }
         request['payNow'] = (type === 'trial') ? false : true;
-        if (this.isChangePlan) {
+        if (this.subscriptionId && this.isChangePlan) {
             request.subscriptionId = this.subscriptionId;
             this.subscriptionRequest = request;
             this.componentStore.getChangePlanDetails(request);

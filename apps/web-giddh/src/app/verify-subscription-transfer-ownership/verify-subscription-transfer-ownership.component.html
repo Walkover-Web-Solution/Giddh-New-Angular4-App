@@ -40,17 +40,50 @@
                 </p>
             </div>
             <div class="modal-footer">
-                <button
-                    aria-label="yes"
-                    mat-stroked-button
-                    color="primary"
-                    (click)="onSuccess($event)"
-                >
+                <button aria-label="yes" mat-stroked-button color="primary" (click)="onSubmit($event)">
                     Accept Subscription
                 </button>
-                <button aria-label="no" mat-stroked-button (click)="closeAllDialogs()" >
-                    Decline Subscription
+                <button aria-label="no" mat-stroked-button (click)="onReject($event)">Decline Subscription</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!--Modal for Transfer Ownership -->
+<ng-template #rejectConfirmation>
+    <div (click)="$event.stopPropagation()">
+        <div>
+            <div class="modal-header">
+                <h2 class="modal-title">Reject</h2>
+                <button
+                    aria-label="cross"
+                    mat-icon-button
+                    class="close"
+                    data-dismiss="modal"
+                    (click)="closeReject($event)"
+                >
+                    ×
                 </button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="rejectForm">
+                    <div class="w-50">
+                        <input-field
+                            [name]="'reason'"
+                            [label]="Reason"
+                            [placeholder]="'Enter reason'"
+                            [type]="'text'"
+                            formControlName="reason"
+                        >
+                        </input-field>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button aria-label="yes" mat-stroked-button color="primary" (click)="onSubmit($event, true)">
+                    Submit
+                </button>
+                <button aria-label="no" mat-stroked-button (click)="closeReject($event)">Cancel</button>
             </div>
         </div>
     </div>
