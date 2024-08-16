@@ -21,8 +21,9 @@
                                     [id]="activeTab === 'debit note' ? 'giddh-page-heading' : ''"
                                 >
                                     <div *ngIf="activeTab === 'debit note'" class="debit-note">
-                                        <app-invoice-preview [selectedVoucher]="selectedVoucherType">
-                                        </app-invoice-preview>
+                                        <app-invoice-preview
+                                            [selectedVoucher]="selectedVoucherType"
+                                        ></app-invoice-preview>
                                     </div>
                                 </tab>
 
@@ -33,8 +34,9 @@
                                     [id]="activeTab === 'credit note' ? 'giddh-page-heading' : ''"
                                 >
                                     <div *ngIf="activeTab === 'credit note'">
-                                        <app-invoice-preview [selectedVoucher]="selectedVoucherType">
-                                        </app-invoice-preview>
+                                        <app-invoice-preview
+                                            [selectedVoucher]="selectedVoucherType"
+                                        ></app-invoice-preview>
                                     </div>
                                 </tab>
 
@@ -111,8 +113,9 @@
                                     [id]="activeTab === 'sales' ? 'giddh-page-heading' : ''"
                                 >
                                     <div *ngIf="activeTab === 'sales'">
-                                        <app-invoice-preview [selectedVoucher]="selectedVoucherType">
-                                        </app-invoice-preview>
+                                        <app-invoice-preview
+                                            [selectedVoucher]="selectedVoucherType"
+                                        ></app-invoice-preview>
                                     </div>
                                 </tab>
 

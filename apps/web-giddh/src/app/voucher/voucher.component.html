@@ -280,7 +280,6 @@
                                                 : localeData?.vendor_details
                                         }}</span
                                     >
-
                                     <ng-container *ngIf="isSalesInvoice && !isCashInvoice">
                                         <img
                                             src="{{ imgPath }}new/search_customer.svg"
@@ -352,7 +351,6 @@
                             />
                         </ng-container>
                         <!-- endregion -->
-
                         <!-- Voucher Form Main Section -->
                         <div
                             class="vouchers-secondary-form position-relative"
@@ -768,8 +766,7 @@
                                                                                       : showTRNNo
                                                                                       ? commonLocaleData?.app_trn + ":"
                                                                                       : showVATNo
-                                                                                      ? commonLocaleData?.app_vat +
-                                                                                        ":"
+                                                                                      ? commonLocaleData?.app_vat + ":"
                                                                                       : "") + address.gstNumber
                                                                                 : ""
                                                                         }}
@@ -780,32 +777,45 @@
                                                                     onLoad
                                                                     (elementLoaded)="setIndex('accountShipping', i)"
                                                                     *ngIf="
-                                                                        (invFormData.accountDetails.shippingDetails?.state?.name ||
-                                                                            invFormData.accountDetails.shippingDetails?.stateName ||
-                                                                            invFormData.accountDetails.shippingDetails?.county?.name ||
-                                                                            invFormData.accountDetails.shippingDetails?.gstNumber ||
-                                                                            invFormData.accountDetails.shippingDetails?.taxNumber ||
+                                                                        (invFormData.accountDetails.shippingDetails
+                                                                            ?.state?.name ||
+                                                                            invFormData.accountDetails.shippingDetails
+                                                                                ?.stateName ||
+                                                                            invFormData.accountDetails.shippingDetails
+                                                                                ?.county?.name ||
+                                                                            invFormData.accountDetails.shippingDetails
+                                                                                ?.gstNumber ||
+                                                                            invFormData.accountDetails.shippingDetails
+                                                                                ?.taxNumber ||
                                                                             invFormData.accountDetails.shippingDetails?.address[0]?.trim()) &&
-                                                                        (!invFormData.accountDetails.shippingDetails?.state?.name ||
-                                                                            (invFormData.accountDetails.shippingDetails?.state?.name &&
+                                                                        (!invFormData.accountDetails.shippingDetails
+                                                                            ?.state?.name ||
+                                                                            (invFormData.accountDetails.shippingDetails
+                                                                                ?.state?.name &&
                                                                                 (invFormData.accountDetails
                                                                                     .shippingDetails?.state?.name ===
                                                                                     address.state?.name ||
                                                                                     invFormData.accountDetails
                                                                                         .shippingDetails?.stateName ===
                                                                                         address.state?.name))) &&
-                                                                        (!invFormData.accountDetails.shippingDetails?.county?.name ||
-                                                                            (invFormData.accountDetails.shippingDetails?.county?.name &&
+                                                                        (!invFormData.accountDetails.shippingDetails
+                                                                            ?.county?.name ||
+                                                                            (invFormData.accountDetails.shippingDetails
+                                                                                ?.county?.name &&
                                                                                 invFormData.accountDetails
                                                                                     .shippingDetails?.county?.name ===
                                                                                     address.county?.name)) &&
-                                                                        (!invFormData.accountDetails.shippingDetails?.gstNumber ||
-                                                                            (invFormData.accountDetails.shippingDetails?.gstNumber &&
+                                                                        (!invFormData.accountDetails.shippingDetails
+                                                                            ?.gstNumber ||
+                                                                            (invFormData.accountDetails.shippingDetails
+                                                                                ?.gstNumber &&
                                                                                 invFormData.accountDetails
                                                                                     .shippingDetails?.gstNumber ===
                                                                                     address.gstNumber)) &&
-                                                                        (!invFormData.accountDetails.shippingDetails?.taxNumber ||
-                                                                            (invFormData.accountDetails.shippingDetails?.taxNumber &&
+                                                                        (!invFormData.accountDetails.shippingDetails
+                                                                            ?.taxNumber ||
+                                                                            (invFormData.accountDetails.shippingDetails
+                                                                                ?.taxNumber &&
                                                                                 invFormData.accountDetails
                                                                                     .shippingDetails?.taxNumber ===
                                                                                     address.gstNumber)) &&
@@ -958,7 +968,6 @@
                                             </div>
                                         </ng-container>
                                     </div>
-
                                     <!-- Attention to -->
                                     <div class="col-6 mr-t15">
                                         <input-field
@@ -969,7 +978,6 @@
                                             [(ngModel)]="invFormData.accountDetails.attentionTo"
                                         ></input-field>
                                     </div>
-
                                     <!-- Email Id -->
                                     <div class="col-6 mr-t15">
                                         <input-field
@@ -980,7 +988,6 @@
                                             [(ngModel)]="invFormData.accountDetails.email"
                                         ></input-field>
                                     </div>
-
                                     <!-- Mobile Number -->
                                     <div class="col-6 mr-t15 mobile-number-wrapper">
                                         <div id="init-contact-wrapper" class="position-relative w-100">
@@ -1000,7 +1007,6 @@
                                             <span id="init-contact-proforma-error-msg" class="d-none"></span>
                                         </div>
                                     </div>
-
                                     <!-- Warehouse -->
                                     <div
                                         class="col-6 mr-t15"
@@ -1020,12 +1026,10 @@
                                         </dropdown-field>
                                     </div>
                                 </div>
-
                                 <div class="row" *ngIf="isPurchaseInvoice">
                                     <div class="col-12 mr-t15">
                                         <span class="billing-deliver-label">{{ localeData?.deliver_to }}</span>
                                     </div>
-
                                     <!-- Billing Address -->
                                     <div class="col-6">
                                         <label for="billingAddress" class="billing-label p-0">
@@ -1245,8 +1249,7 @@
                                                                                       : showTRNNo
                                                                                       ? commonLocaleData?.app_trn + ":"
                                                                                       : showVATNo
-                                                                                      ? commonLocaleData?.app_vat +
-                                                                                        ":"
+                                                                                      ? commonLocaleData?.app_vat + ":"
                                                                                       : "") + address.gstNumber
                                                                                 : ""
                                                                         }}
@@ -1260,8 +1263,7 @@
                                                                                       : showTRNNo
                                                                                       ? commonLocaleData?.app_trn + ":"
                                                                                       : showVATNo
-                                                                                      ? commonLocaleData?.app_vat +
-                                                                                        ":"
+                                                                                      ? commonLocaleData?.app_vat + ":"
                                                                                       : "") + address.taxNumber
                                                                                 : ""
                                                                         }}
@@ -1272,55 +1274,55 @@
                                                                     onLoad
                                                                     (elementLoaded)="setIndex('purchaseShipping', i)"
                                                                     *ngIf="
-                                                                        (purchaseBillCompany.shippingDetails.state
+                                                                        (purchaseBillCompany.shippingDetails?.state
                                                                             ?.name ||
                                                                             purchaseBillCompany.shippingDetails
-                                                                                .stateName ||
-                                                                            purchaseBillCompany.shippingDetails.county
+                                                                                ?.stateName ||
+                                                                            purchaseBillCompany.shippingDetails?.county
                                                                                 ?.name ||
                                                                             purchaseBillCompany.shippingDetails
-                                                                                .gstNumber ||
+                                                                                ?.gstNumber ||
                                                                             purchaseBillCompany.shippingDetails
-                                                                                .taxNumber ||
-                                                                            purchaseBillCompany.shippingDetails.address[0]?.trim()) &&
-                                                                        (!purchaseBillCompany.shippingDetails.state
+                                                                                ?.taxNumber ||
+                                                                            purchaseBillCompany.shippingDetails?.address[0]?.trim()) &&
+                                                                        (!purchaseBillCompany.shippingDetails?.state
                                                                             ?.name ||
-                                                                            (purchaseBillCompany.shippingDetails.state
+                                                                            (purchaseBillCompany.shippingDetails?.state
                                                                                 ?.name &&
                                                                                 (purchaseBillCompany.shippingDetails
-                                                                                    .state?.name ===
+                                                                                    ?.state?.name ===
                                                                                     address.stateName ||
                                                                                     purchaseBillCompany.shippingDetails
-                                                                                        .stateName ===
+                                                                                        ?.stateName ===
                                                                                         address.stateName))) &&
-                                                                        (!purchaseBillCompany.shippingDetails.county
+                                                                        (!purchaseBillCompany.shippingDetails?.county
                                                                             ?.name ||
-                                                                            (purchaseBillCompany.shippingDetails.county
+                                                                            (purchaseBillCompany.shippingDetails?.county
                                                                                 ?.name &&
                                                                                 purchaseBillCompany.shippingDetails
-                                                                                    .county?.name ===
+                                                                                    ?.county?.name ===
                                                                                     address.county?.name)) &&
                                                                         (!purchaseBillCompany.shippingDetails
-                                                                            .gstNumber ||
+                                                                            ?.gstNumber ||
                                                                             (purchaseBillCompany.shippingDetails
-                                                                                .gstNumber &&
+                                                                                ?.gstNumber &&
                                                                                 (purchaseBillCompany.shippingDetails
-                                                                                    .gstNumber === address.gstNumber ||
+                                                                                    ?.gstNumber === address.gstNumber ||
                                                                                     purchaseBillCompany.shippingDetails
-                                                                                        .gstNumber ===
+                                                                                        ?.gstNumber ===
                                                                                         address.taxNumber))) &&
                                                                         (!purchaseBillCompany.shippingDetails
-                                                                            .taxNumber ||
+                                                                            ?.taxNumber ||
                                                                             (purchaseBillCompany.shippingDetails
-                                                                                .taxNumber &&
+                                                                                ?.taxNumber &&
                                                                                 (purchaseBillCompany.shippingDetails
-                                                                                    .taxNumber === address.gstNumber ||
+                                                                                    ?.taxNumber === address.gstNumber ||
                                                                                     purchaseBillCompany.shippingDetails
-                                                                                        .taxNumber ===
+                                                                                        ?.taxNumber ===
                                                                                         address.taxNumber))) &&
-                                                                        (!purchaseBillCompany.shippingDetails.address[0]?.trim() ||
-                                                                            (purchaseBillCompany.shippingDetails.address[0]?.trim() &&
-                                                                                purchaseBillCompany.shippingDetails.address[0]?.trim() ===
+                                                                        (!purchaseBillCompany.shippingDetails?.address[0]?.trim() ||
+                                                                            (purchaseBillCompany.shippingDetails?.address[0]?.trim() &&
+                                                                                purchaseBillCompany.shippingDetails?.address[0]?.trim() ===
                                                                                     address.address?.trim()))
                                                                     "
                                                                 ></i>
@@ -1364,7 +1366,6 @@
                                                     <i class="icon-cross" ngxMatSelectSearchClear></i>
                                                 </ngx-mat-select-search>
                                             </mat-option>
-
                                             <mat-option
                                                 *ngFor="let option of fieldFilteredOptions"
                                                 [value]="option?.value"
@@ -1383,7 +1384,6 @@
                                         </mat-select>
                                     </div>
                                 </div>
-
                                 <!-- Row 4 -->
                                 <div class="row row-gap mr-t15">
                                     <!-- Voucher Number -->
@@ -1454,7 +1454,6 @@
                                             {{ localeData?.invalid_date }}
                                         </p>
                                     </div>
-
                                     <!-- Due Date -->
                                     <div
                                         class="col-3 pl-2"
@@ -1544,7 +1543,6 @@
                                                         </a>
                                                     </ng-template>
                                                 </dropdown-field>
-
                                                 <dropdown-field
                                                     #invoiceListDropdown
                                                     *ngIf="voucherApiVersion !== 2"
@@ -1628,7 +1626,7 @@
                                     </ng-container>
                                     <!-- For Tourist Scheme end -->
                                     <!-- <div class="col-12"
-                                        *ngIf="!isCreditNote && !isDebitNote || companyCountryCode === 'AE'"></div> -->
+                *ngIf="!isCreditNote && !isDebitNote || companyCountryCode === 'AE'"></div> -->
                                 </div>
                                 <div
                                     class="row mr-t15 pb-1"
@@ -1666,7 +1664,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="vouchers-large-container mt-3 pt-4">
                                 <div
                                     class="change-currency d-flex justify-content-end align-items-center column-gap1 text-uppercase pb-2"
@@ -1721,7 +1718,6 @@
                                         aria-label="edit currency"
                                     ></i>
                                 </div>
-
                                 <div
                                     class="change-currency d-flex justify-content-end align-items-center column-gap1 text-uppercase pb-2"
                                     *ngIf="isMulticurrencyAccount && showSwitchedCurr"
@@ -1762,7 +1758,6 @@
                                         role="button"
                                     ></i>
                                 </div>
-
                                 <!-- Voucher Table for Multiple Entries-->
                                 <div class="vouchers-entry-table">
                                     <table class="w-100">
@@ -2875,7 +2870,6 @@
                                         localeData?.add_bulk_entries
                                     }}</span>
                                 </div>
-
                                 <div class="vouchers-other-detail container-lg mt-4 px-0">
                                     <div class="row mx-0 row-gap-25">
                                         <div class="col-lg-8 col-md-7 col-12 px-0">
@@ -3157,7 +3151,6 @@
                                                                         {{ commonLocaleData?.app_other_details }}
                                                                     </mat-panel-title>
                                                                 </mat-expansion-panel-header>
-
                                                                 <div class="row row-gap mx-0 px-2 pb-3">
                                                                     <div class="col-4 px-2">
                                                                         <giddh-datepicker
@@ -3283,8 +3276,7 @@
                                                                                     invFormData.templateDetails.other
                                                                                         .message2
                                                                                 "
-                                                                            >
-                                                                            </textarea>
+                                                                            ></textarea>
                                                                         </mat-form-field>
                                                                         <ng-container
                                                                             *ngIf="
@@ -3374,7 +3366,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="col-lg-4 col-md-5 col-12 px-0">
                                             <div class="row text-right row-gap total-amount-wrapper">
                                                 <div class="col-7 pr-0">
@@ -3646,7 +3637,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4">
                                     <div
                                         class="pull-right pr update-mode d-flex d-flex column-gap15"
@@ -3873,7 +3863,6 @@
             </mat-card-content>
         </mat-card>
     </div>
-
     <div
         class="aside-overlay"
         *ngIf="

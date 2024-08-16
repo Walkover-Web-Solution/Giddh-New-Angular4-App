@@ -13,13 +13,15 @@
         "manufacturing":"Manufacturing",
         "warehouse_balance":"Warehouse Opening Balance",
         "custom_units":"Custom Units",
+        "master":"Master",
         "recipe":"Recipe",
         "create_manufacturing":"Create Manufacturing",
         "report":"Report",
-        "master":"Master",
+        "create_branch_transfer": "Create Branch Transfer",
         "custom_price":"Custom Price",
         "customer_wise":"Customer Wise",
-        "vendor_wise":"Vendor Wise"
+        "vendor_wise":"Vendor Wise",
+        "inventory_adjustment":"Inventory Adjustment"
     },
     "reports":{
         "transaction_count":"Transaction Count",
