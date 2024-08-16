@@ -38,7 +38,7 @@
                             <mat-menu #moreEstimate="matMenu">
                                 <button mat-menu-item (click)="deleteVoucherDialog()">Delete</button>
                             </mat-menu>
-                            <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">Filter
+                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">Filter
                                 <i class="icon-advance-filter"></i>
                             </button>
                         </div>
@@ -246,7 +246,7 @@
                             <mat-menu #moreProforma="matMenu">
                                 <button mat-menu-item (click)="deleteVoucherDialog()">Delete</button>
                             </mat-menu> -->
-                            <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">Filter
+                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">Filter
                                 <i class="icon-advance-filter"></i>
                             </button>
                         </div>
@@ -450,7 +450,7 @@
                             <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
                         </button>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button colo="primary" [matTooltip]="'Export'"
+                            <button mat-stroked-button color="primary" [matTooltip]="'Export'"
                             [matTooltipPosition]="'above'" *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length" [tooltip]="commonLocaleData?.app_export" (click)="exportCsvDownload()">
                                 <i class="icon-export-icon"></i>
                             </button>
@@ -700,7 +700,7 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">Filter
+                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">Filter
                                 <i class="icon-advance-filter"></i>
                             </button>
                             <button *ngIf="dataSource?.length" mat-stroked-button color="primary" (click)="showBulkExportDialog()">Export</button>
@@ -882,7 +882,7 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">Filter
+                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">Filter
                                 <i class="icon-advance-filter"></i>
                             </button>
                             <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">Export</button>
@@ -1208,7 +1208,7 @@
                                 <button mat-menu-item (click)="poBulkAction('expire')">Expired</button>
                                 <button mat-menu-item (click)="deleteVoucherDialog()">Delete</button>
                             </mat-menu>
-                            <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">Filter
+                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">Filter
                                 <i class="icon-advance-filter"></i>
                             </button>
                         </div>
@@ -1394,7 +1394,7 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">Filter
+                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">Filter
                                 <i class="icon-advance-filter"></i>
                             </button>
                             <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">Export</button>
