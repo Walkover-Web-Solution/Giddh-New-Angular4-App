@@ -17,6 +17,4 @@ import { ModalModule } from "ngx-bootstrap/modal";
         GenerateEWayBillComponent
     ]
 })
-export class GenerateEWayBillModule {
-
-}
+export class GenerateEWayBillModule { }

@@ -1073,8 +1073,8 @@ export class GeneralService {
                 grandTotalAmountForCompany = Number(item.grandTotal.amountForCompany) || 0;
                 grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
             }
-                                // [amount]="element?.grandTotal?.amountForAccount"
-                                // [currencySymbol]="element?.grandTotal?.currencyForAccount?.symbol"
+
+            
             let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
             if (this.voucherApiVersion === 2 && item.exchangeRate !== undefined) {
                 grandTotalConversionRate = item.exchangeRate;
