@@ -16,6 +16,12 @@ export enum BusinessTypes {
     Unregistered = 'Unregistered'
 };
 
+
+/** Regex for mobile number */
+export const PHONE_NUMBER_REGEX = /^[0-9-+()\/\\ ]+$/;
+export const MOBILE_NUMBER_SELF_URL = 'https://api.db-ip.com/v2/free/self';
+export const MOBILE_NUMBER_IP_ADDRESS_URL = 'http://ip-api.com/json/';
+export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
 export const MOBILE_NUMBER_UTIL_URL = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js';
 export const INTL_INPUT_OPTION = {
     nationalMode: true,
@@ -131,6 +137,8 @@ export enum OnBoardingType {
 
 /** Pagination limit for every module */
 export const PAGINATION_LIMIT = 50;
+/** Pagination count options */
+export const PAGE_SIZE_OPTIONS = [20, 50, 100];
 /** API default count limit */
 export const API_COUNT_LIMIT = 20;
 /** Vouchers pagination limit  */
@@ -140,6 +148,14 @@ export const ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT = 200;
 export enum SubVoucher {
     ReverseCharge = 'REVERSE_CHARGE',
     AdvanceReceipt = 'ADVANCE_RECEIPT'
+}
+
+/** Adjustment inventory */
+export enum AdjustmentInventory {
+    QuantityWise = 'QUANTITY_WISE',
+    ValueWise = 'VALUE_WISE',
+    Percentage = 'PERCENTAGE',
+    Value = 'VALUE'
 }
 
 /**
@@ -292,10 +308,26 @@ export const FILE_ATTACHMENT_TYPE = {
 /** Error message to display if the stock is invalid */
 export const INVALID_STOCK_ERROR_MESSAGE = 'Both Unit and Rate fields are mandatory if you provide data for either of them.';
 
-/** Vat supported country codes */
-export const VAT_SUPPORTED_COUNTRIES = [
-    'QA', 'BH', 'AE', 'SA', 'OM', 'KW', 'GB', 'ZW', 'KE'
+/** Tax supported country codes */
+export const TAX_SUPPORTED_COUNTRIES = [
+    'QA', 'BH', 'AE', 'SA', 'OM', 'KW', 'GB', 'ZW', 'KE', 'US'
 ];
+
+/** VAT supported country codes */
+export const VAT_SUPPORTED_COUNTRIES = [
+    'GB', 'ZW', 'KE'
+];
+
+/** TRN supported country codes */
+export const TRN_SUPPORTED_COUNTRIES = [
+    'QA', 'BH', 'AE', 'SA', 'OM', 'KW'
+];
+
+/** Sales tax supported country codes */
+export const SALES_TAX_SUPPORTED_COUNTRIES = ['US'];
+
+/** ZIP Code supported country codes */
+export const ZIP_CODE_SUPPORTED_COUNTRIES = ['US', 'GB'];
 
 export const API_POSTMAN_DOC_URL = 'https://apidoc.giddh.com/';
 
@@ -309,10 +341,6 @@ export const HIGH_RATE_FIELD_PRECISION = 16;
 
 /** Regex to remove trailing zeros from a string representation of number */
 export const REMOVE_TRAILING_ZERO_REGEX = /^([\d,' ]*)$|^([\d,' ]*)\.0*$|^([\d,' ]+\.[0-9]*?)0*$/;
-
-/** Regex for mobile number */
-export const PHONE_NUMBER_REGEX = /^[0-9-+()\/\\ ]+$/;
-
 
 /** Type of voucher that is adjusted */
 export enum AdjustedVoucherType {
@@ -388,7 +416,6 @@ export enum EInvoiceStatus {
 
 /** Length of entry description on vouchers */
 export const ENTRY_DESCRIPTION_LENGTH = 300;
-
 export const EMAIL_REGEX_PATTERN = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
 /** This will hold error status code for permission error from API */
 export const UNAUTHORISED = 401;
@@ -598,11 +625,6 @@ export enum BootstrapToggleSwitch {
     Off = 'gray',
     Size = 'mini'
 }
-export const MOBILE_NUMBER_SELF_URL = `https://api.db-ip.com/v2/free/self`;
-export const MOBILE_NUMBER_IP_ADDRESS_URL = 'http://ip-api.com/json/';
-export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
-
-
 
 export const OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];

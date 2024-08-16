@@ -1,6 +1,6 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { combineLatest, ReplaySubject } from 'rxjs';
@@ -22,24 +22,10 @@ import { PageLeaveUtilityService } from '../../../services/page-leave-utility.se
 @Component({
     selector: 'create-warehouse',
     templateUrl: './create-warehouse.component.html',
-    styleUrls: ['./create-warehouse.component.scss'],
-    animations: [
-        trigger('slideInOut', [
-            state('in', style({
-                transform: 'translate3d(0, 0, 0)'
-            })),
-            state('out', style({
-                transform: 'translate3d(100%, 0, 0)'
-            })),
-            transition('in => out', animate('400ms ease-in-out')),
-            transition('out => in', animate('400ms ease-in-out'))
-        ]),
-    ]
+    styleUrls: ['./create-warehouse.component.scss']
 })
 
 export class CreateWarehouseComponent implements OnInit, OnDestroy {
-    /** Address aside menu state */
-    public addressAsideMenuState: string = 'out';
     /** Stores the comapny details */
     public companyDetails: any = {
         name: '',
@@ -64,7 +50,10 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     /** Warehouse form */
     public warehouseForm: UntypedFormGroup;
     /** Stores the addresses */
-    public addresses: Array<any>;
+    public addresses: any = {
+        addressToShow: null,
+        address: null
+    };
     /** True, if address change is in progress */
     public isAddressChangeInProgress: boolean = false;
     /** Stores the current organization uniqueName */
@@ -81,10 +70,14 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if need to hide link entity */
     public hideLinkEntity: boolean = true;
+    /*-- mat-dialog --*/
+    @ViewChild('asideAccountAsidePane', { static: true }) public asideAccountAsidePane: any;
     /** Returns true if form is dirty else false */
     public get showPageLeaveConfirmation(): boolean {
         return this.warehouseForm?.dirty;
-    }
+    };
+    /** Holds Create Account Asidepane Dialog Ref */
+    public asideAccountAsidePaneDialogRef: MatDialogRef<any>;
 
     constructor(
         private commonService: CommonService,
@@ -98,6 +91,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         private toastService: ToasterService,
         private warehouseActions: WarehouseActions,
         private settingsBranchActions: SettingsBranchActions,
+        public dialog: MatDialog,
         private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         this.warehouseForm = this.formBuilder.group({
@@ -132,7 +126,6 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                 }
             }
         });
-
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
         this.loadLinkedEntities();
         this.loadAddresses('GET', { count: 0 });
@@ -171,23 +164,13 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Toggles aside component
-     *
-     * @memberof CreateWarehouseComponent
-     */
-    public toggleAsidePane(): void {
-        this.addressAsideMenuState = this.addressAsideMenuState === 'out' ? 'in' : 'out';
-        this.toggleBodyClass();
-    }
-
-    /**
      * Handles final selection of addresses
      *
      * @param {Array<any>} selectedAddresses Selected address unique names
      * @memberof CreateWarehouseComponent
      */
     public handleFinalSelection(selectedAddresses: Array<any>): void {
-        this.addresses.forEach(address => {
+        this.addresses?.addressToShow?.forEach(address => {
             if (!selectedAddresses.includes(address?.uniqueName)) {
                 address.isDefault = false;
             }
@@ -217,7 +200,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
         event.stopPropagation();
         event.preventDefault();
         if (!option.isDefault) {
-            this.addresses.forEach(address => {
+            this.addresses?.addressToShow?.forEach(address => {
                 if (address?.value !== option?.value) {
                     address.isDefault = false;
                 }
@@ -240,7 +223,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     public handleFormSubmit(): void {
         const requestObj = {
             name: this.warehouseForm?.value.name,
-            linkAddresses: this.addresses?.filter(address => this.warehouseForm?.value.address.includes(address?.uniqueName))?.map(filteredAddress => ({
+            linkAddresses: this.addresses?.addressToShow?.filter(address => this.warehouseForm?.value.address?.includes(address?.uniqueName))?.map(filteredAddress => ({
                 uniqueName: filteredAddress?.uniqueName,
                 isDefault: filteredAddress.isDefault
             }))
@@ -250,6 +233,8 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                 if (response.status === 'success') {
                     this.toastService.successToast(this.localeData?.warehouse_created);
                     this.warehouseForm.reset();
+                    this.warehouseForm.markAsPristine();
+                    this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                     this.router.navigate(['/pages/settings/warehouse']);
                 } else {
                     this.toastService.errorToast(response.message);
@@ -264,22 +249,14 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      * @memberof CreateWarehouseComponent
      */
     public handleFormClear(): void {
-        this.addresses.forEach(address => {
+        this.addresses?.addressToShow?.forEach(address => {
             if (address) {
                 address.isDefault = false;
             }
         });
+        this.warehouseForm.reset();
         this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
         this.warehouseForm.markAsPristine();
-    }
-
-    /**
-     * Displays the add address side pane
-     *
-     * @memberof CreateWarehouseComponent
-     */
-    public addNewAddress(): void {
-        this.addressAsideMenuState = 'in';
     }
 
     /**
@@ -324,7 +301,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     public createNewAddress(addressDetails: any): void {
         this.isAddressChangeInProgress = true;
         const chosenState = addressDetails.addressDetails.stateList.find(selectedState => selectedState?.value === addressDetails.formValue.state);
-        const linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity.includes(entity?.uniqueName))).map(filteredEntity => ({
+        const linkEntity = addressDetails.addressDetails.linkedEntities?.filter(entity => (addressDetails.formValue.linkedEntity?.includes(entity?.uniqueName))).map(filteredEntity => ({
             uniqueName: filteredEntity?.uniqueName,
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
@@ -341,13 +318,12 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
 
         this.settingsProfileService.createNewAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === 'success' && response?.body) {
-                this.toggleAddressAsidePane();
-                this.addresses.push({
+                this.closeAddressAsidePane();
+                this.addresses?.addressToShow?.push({
                     ...response.body,
                     label: response.body.name,
                     value: response.body?.uniqueName
-                })
-                
+                });
                 this.toastService.successToast(this.localeData?.address_created);
             } else {
                 this.toastService.errorToast(response?.message);
@@ -403,18 +379,22 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Shortcut (Alt+C) handler
-     *
-     * @memberof CreateWarehouseComponent
-     */
-    public handleShortcutPress(): void {
-        if (this.addressAsideMenuState === 'out') {
-            this.loadLinkedEntities(() => {
-                this.toggleAsidePane();
+    * Shortcut (Alt+C) handler
+    *
+    * @memberof CreateWarehouseComponent
+    */
+    public handleShortcutPress(): void  {
+        this.loadLinkedEntities(() => {
+            this.asideAccountAsidePaneDialogRef = this.dialog.open(this.asideAccountAsidePane, {
+                width: '760px',
+                height: '100vh !important',
+                disableClose: true,
+                position: {
+                    right: '0',
+                    top: '0'
+                }
             });
-        } else {
-            this.toggleAsidePane();
-        }
+        });
     }
 
     /**
@@ -428,25 +408,18 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
     private loadAddresses(method: string, params?: any): void {
         this.settingsProfileService.getCompanyAddresses(method, params).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.body && response.status === 'success') {
-                this.addresses = this.settingsUtilityService.getFormattedCompanyAddresses(response.body.results).map(address => (
+                const modifiedAddresses = this.settingsUtilityService.getFormattedCompanyAddresses(response.body.results).map(address => (
                     {
                         ...address,
                         isDefault: false,
                         label: address.name,
                         value: address?.uniqueName
                     }));
+                this.addresses.addressToShow = modifiedAddresses;
+                this.addresses.address = modifiedAddresses;
                 this.checkLinkEntity();
             }
         });
-    }
-
-    /**
-     * Opens create address aside menu
-     *
-     * @memberof CreateWarehouseComponent
-     */
-    public openCreateAddressAside(): void {
-        this.toggleAddressAsidePane();
     }
 
     /**
@@ -455,26 +428,9 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
      * @param {*} [event] Toggle event
      * @memberof CreateWarehouseComponent
      */
-    public toggleAddressAsidePane(event?: any): void {
-        if (event) {
-            event.preventDefault();
-        }
-        this.addressAsideMenuState = this.addressAsideMenuState === 'out' ? 'in' : 'out';
+    public closeAddressAsidePane(event?: any): void {
         this.isAddressChangeInProgress = false;
-        this.toggleBodyClass();
-    }
-
-    /**
-     * Toggles the fixed body class
-     *
-     * @memberof CreateWarehouseComponent
-     */
-    public toggleBodyClass(): void {
-        if (this.addressAsideMenuState === 'in') {
-            document.querySelector('body').classList.add('fixed');
-        } else {
-            document.querySelector('body').classList.remove('fixed');
-        }
+        this.asideAccountAsidePaneDialogRef?.close();
     }
 
     /**
@@ -515,7 +471,7 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
 
         this.hideLinkEntity = true;
 
-        if (this.addresses?.length > 1) {
+        if (this.addresses?.addressToShow?.length > 1) {
             this.hideLinkEntity = false;
         } else {
             combineLatest([this.store.pipe(select(state => state.warehouse.warehouses)), this.store.pipe(select(state => state.settings.branches))]).pipe(takeUntil(this.destroyed$)).subscribe((response: any[]) => {
@@ -526,5 +482,26 @@ export class CreateWarehouseComponent implements OnInit, OnDestroy {
                 }
             });
         }
+    }
+
+    /**
+     * Handle Addresses Search
+     *
+     * @param {*} event
+     * @memberof CreateWarehouseComponent
+     */
+    public onSearchQueryChanged(event: any): void {
+        if (event) {
+            this.addresses.addressToShow = this.addresses?.addressToShow?.filter(address => address.label.toUpperCase().indexOf(event.toUpperCase()) > -1);
+        }
+    }
+
+    /**
+     * Handle Addresses Search Clear
+     *
+     * @memberof CreateWarehouseComponent
+     */
+    public onSearchClear(): void {
+            this.addresses.addressToShow = this.addresses.address;
     }
 }

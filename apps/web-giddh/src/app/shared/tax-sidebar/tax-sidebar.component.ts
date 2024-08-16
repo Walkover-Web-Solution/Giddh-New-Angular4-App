@@ -6,7 +6,7 @@ import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
 import { Observable, of, ReplaySubject } from 'rxjs';
-import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { SALES_TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { GstReconcileService } from '../../services/gst-reconcile.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
@@ -48,12 +48,16 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** True if we need to show GST menus */
     public showGstMenus: boolean = false;
-    /** True if we need to show VAT menus */
-    public showVatMenus: boolean = false;
+    /** True if we need to show Tax menus */
+    public showTaxMenus: boolean = false;
+    /** True if we need to show Sales Tax menus */
+    public showSalesTaxMenus: boolean = false;
     /** Holds Tax Type Translated Label for sidebar menu */
     public taxTypeSidebarLabel: string;
     /* This will hold list of vat supported countries */
-    public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
+    public vatSupportedCountries: string[] = VAT_SUPPORTED_COUNTRIES;
+    /* This will hold list of sales tax supported countries */
+    public salesTaxSupportedCountries: string[] = SALES_TAX_SUPPORTED_COUNTRIES;
     /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
     public isCompany: boolean;
     /** Holds current date period for GST report */
@@ -68,6 +72,10 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public isZimbabweCompany: boolean;
     /** True if active country is Kenya */
     public isKenyaCompany: boolean;
+    /** True if active country is US */
+    public isUSCompany: boolean;
+    /** Holds active company information */
+    public activeCompany: any;
 
     constructor(
         private router: Router,
@@ -84,6 +92,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
      * @memberof TaxSidebarComponent
      */
     public ngOnInit(): void {
+        document.querySelector('body').classList.add('gst-sidebar-open');
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
         this.getCurrentPeriod$ = this.store.pipe(select(store => store.gstR.currentPeriod), take(1));
 
@@ -95,19 +104,21 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
+                this.activeCompany = activeCompany;
                 this.isUKCompany = activeCompany?.country === "United Kingdom";
                 this.isZimbabweCompany = activeCompany?.country === "Zimbabwe";
                 this.isKenyaCompany = activeCompany?.country === "Kenya";
-                
+                this.isUSCompany = activeCompany.countryV2?.alpha2CountryCode === "US";
+
+                this.showGstMenus = false;
+                this.showTaxMenus = false;
+                this.showTaxMenus = false;
                 if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
-                    this.showVatMenus = true;
-                    this.showGstMenus = false;
-                } else if (activeCompany.countryV2?.alpha2CountryCode ==='IN'){
+                    this.showTaxMenus = true;
+                } else if (activeCompany.countryV2?.alpha2CountryCode === 'IN') {
                     this.showGstMenus = true;
-                    this.showVatMenus = false;
-                } else{
-                    this.showVatMenus = false;
-                    this.showGstMenus = false;
+                } else if (this.salesTaxSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
+                    this.showSalesTaxMenus = true;
                 }
             }
             this.changeDetectionRef.detectChanges();
@@ -145,6 +156,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
      * @memberof TaxSidebarComponent
      */
     public ngOnDestroy(): void {
+        document.querySelector('body').classList.remove('gst-sidebar-open');
         this.destroyed$.next(true);
         this.destroyed$.complete();
         if (!this.router.url.includes('pages/gstfiling') && !this.router.url.includes('pages/invoice/ewaybill') && !this.router.url.includes('pages/reports/reverse-charge') && !this.router.url.includes('pages/settings/taxes') && !this.router.url.includes('pages/settings/addresses')) {
@@ -248,12 +260,16 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
      * @memberof TaxSidebarComponent
      */
     public translationComplete(event: any): void {
-        if(event) {
+        if (event && this.activeCompany) {
+            const alpha2CountryCode = this.activeCompany?.countryV2?.alpha2CountryCode;
             let label = '';
-            if (this.showVatMenus && (this.isZimbabweCompany || this.isKenyaCompany)) {
+
+            if (VAT_SUPPORTED_COUNTRIES.includes(alpha2CountryCode)) {
                 label = this.localeData?.add_vat;
-            } else if (this.showVatMenus) {
+            } else if (TRN_SUPPORTED_COUNTRIES.includes(alpha2CountryCode)) {
                 label = this.localeData?.add_trn;
+            } else if (SALES_TAX_SUPPORTED_COUNTRIES.includes(alpha2CountryCode)) {
+                label = this.localeData?.add_sales_tax;
             } else if (this.showGstMenus) {
                 label = this.localeData?.add_gst;
             } else {

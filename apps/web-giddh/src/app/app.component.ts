@@ -188,7 +188,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._generalService.addLinkTag("./assets/css/toastr.css");
             this._generalService.addLinkTag("./assets/css/ngx-bootstrap/bs-datepicker.css");
             this._generalService.addLinkTag("./assets/css/ladda-themeless.min.css");
-            this._generalService.addLinkTag("./assets/css/lightbox.scss");
+            this._generalService.addLinkTag("./assets/css/lightbox.css");
 
             /* RAZORPAY */
             if (window['Razorpay'] === undefined) {
@@ -201,15 +201,21 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             /* RAZORPAY */
         }, 1000);
 
-        if (this._generalService.getUrlParameter("region") === "uk") {
+        if (this._generalService.getUrlParameter("region") === "UK") {
             this._generalService.setParameterInLocalStorage("Country-Region", "GB");
-        } else if (this._generalService.getUrlParameter("region") === "ae") {
+        } else if (this._generalService.getUrlParameter("region") === "AE") {
             this._generalService.setParameterInLocalStorage("Country-Region", "AE");
-        } else if (this._generalService.getUrlParameter("region") === "in") {
+        } else if (this._generalService.getUrlParameter("region") === "IN") {
             this._generalService.setParameterInLocalStorage("Country-Region", "IN");
         } else {
             this._generalService.setParameterInLocalStorage("Country-Region", "GL");
         }
+
+        // if (this._generalService.getUrlParameter("region") === "uk") {
+        //     this._generalService.setParameterInLocalStorage("X-Tenant", "GB");
+        // } else {
+        //     this._generalService.setParameterInLocalStorage("X-Tenant", "GL");
+        // }
     }
 
     public ngAfterViewInit() {

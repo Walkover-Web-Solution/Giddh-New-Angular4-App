@@ -143,5 +143,7 @@
         "support":"सहायता",
         "chat_voice":"चैट/आवाज",
         "gst_direct":"जीएसटी डायरेक्ट फिलिंग",
-        "e_invoice":"ई-चालान"
+        "e_invoice":"ई-चालान",
+        "plan_purchased_success_message":"योजना सफलतापूर्वक खरीदी गई",
+        "confirm_archive_message": "क्या आप वाकई कंपनी को संग्रहित करना चाहते हैं?"
 	}

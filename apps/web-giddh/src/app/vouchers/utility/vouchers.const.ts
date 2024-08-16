@@ -4,13 +4,15 @@ export enum TaxSupportedCountries {
     'GB' = 'GB',
     'ZW' = 'ZW',
     'KE' = 'KE',
-    'UK' = 'UK'
+    'UK' = 'UK',
+    'US' = 'US'
 };
 
 export enum TaxType {
     'GST' = 'GST',
     'TRN' = 'TRN',
-    'VAT' = 'VAT'
+    'VAT' = 'VAT',
+    'SALES_TAX' = 'SALES_TAX'
 };
 
 export enum VoucherTypeEnum {

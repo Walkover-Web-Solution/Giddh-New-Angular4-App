@@ -17,5 +17,12 @@
     "filing_status": "दाखल स्थिती",
     "vat_obligations": "व्हॅट बंधने",
     "with_held_setting": "धरलेल्या सेटिंगसह",
-    "add_vat": "व्हॅट जोडा"
+    "add_vat": "व्हॅट जोडा",
+    "liability_report": "दायित्व अहवाल",
+    "gst_setting": "जीएसटी सेटिंग",
+    "manage_tax": "कर व्यवस्थापित करा",
+    "add_sales_tax": "विक्रीकर जोडा",
+    "manage_tax_authority": "कर प्राधिकरण व्यवस्थापित करा",
+    "rate_wise": "दरानुसार",
+    "account_wise": "खातेनिहाय"
 }

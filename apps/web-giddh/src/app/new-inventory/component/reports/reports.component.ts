@@ -2,9 +2,9 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { select, Store } from '@ngrx/store';
-import { ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { BalanceStockTransactionReportRequest, InventoryReportRequest, InventoryReportBalanceResponse, StockReportRequest } from '../../../models/api-models/Inventory';
+import { BalanceStockTransactionReportRequest, InventoryReportRequest, InventoryReportBalanceResponse, StockReportRequest, InventoryReportRequestExport } from '../../../models/api-models/Inventory';
 import { InventoryService } from '../../../services/inventory.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store';
@@ -40,6 +40,8 @@ export class ReportsComponent implements OnInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Stock Transactional Object */
     public stockReportRequest: InventoryReportRequest = new InventoryReportRequest();
+    /** Stock Stock Export Table Data */
+    public stockReportRequestExport: InventoryReportRequestExport = new InventoryReportRequestExport();
     /** Stock Transactional Object */
     public balanceStockReportRequest: BalanceStockTransactionReportRequest = new BalanceStockTransactionReportRequest();
     /** Stock Transactional Report Balance Response */
@@ -142,7 +144,8 @@ export class ReportsComponent implements OnInit {
         private toaster: ToasterService,
         private generalService: GeneralService,
         private store: Store<AppState>,
-        private commonAction: CommonActions) {
+        private commonAction: CommonActions
+    ) {
         this.store.pipe(select(state => state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             if (profile) {
                 this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
@@ -571,6 +574,7 @@ export class ReportsComponent implements OnInit {
             this.storeFilters[this.currentUrl] = event;
             this.store.dispatch(this.commonAction.setFilters(this.storeFilters));
             this.stockReportRequest = event?.stockReportRequest;
+            this.stockReportRequestExport = event?.stockReportRequestExport;
             this.balanceStockReportRequest = event?.balanceStockReportRequest;
             this.todaySelected = event?.todaySelected;
             this.showClearFilter = event?.showClearFilter;
@@ -662,7 +666,6 @@ export class ReportsComponent implements OnInit {
             this.store.dispatch(this.commonAction.setFilters(this.storeFilters));
             this.router.navigate(['/pages/inventory/v2/reports/', this.moduleType?.toLowerCase(), 'transaction', element?.variant?.uniqueName]);
         }
-
     }
 
     /**

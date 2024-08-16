@@ -17,5 +17,12 @@
     "filing_status": "दाखिल स्थिति",
     "vat_obligations": "वैट दायित्व",
     "with_held_setting": "हेल्ड सेटिंग के साथ",
-    "add_vat": "वैट जोड़ें"
+    "add_vat": "वैट जोड़ें",
+    "liability_report": "दायित्व रिपोर्ट",
+    "gst_setting": "जीएसटी सेटिंग",
+    "manage_tax": "कर का प्रबंधन करें",
+    "add_sales_tax": "बिक्री कर जोड़ें",
+    "manage_tax_authority": "कर प्राधिकरण प्रबंधित करें",
+    "rate_wise": "रेट वाइज",
+    "account_wise": "खातावार"
 }

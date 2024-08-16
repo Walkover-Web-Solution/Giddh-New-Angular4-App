@@ -18,7 +18,6 @@ import { InventoryComboListComponent } from "./component/combo-list/inventory-co
 import { AboutComboDetailComponent } from "./component/about-combo-detail/about-combo-detail.component";
 import { InventoryTransactionListComponent } from "./component/inventory-transaction-list/inventory-transaction-list.component";
 import { CreateCustomFieldComponent } from "./component/create-custom-field/create-custom-field.component";
-import { AdjustInventoryComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
 import { AsideAdjustInventoryComponent } from "./component/adjust-inventory-aside/adjust-inventory-aside.component";
 import { AdjustGroupComponent } from "./component/adjust-group/adjust-group.component";
 import { AdjustProductServiceComponent } from "./component/adjust-product-service/adjust-product-service.component";
@@ -76,7 +75,7 @@ import { RecipeModule } from "./component/recipe/recipe.module";
 import { ManufacturingModule } from "../manufacturing/manufacturing.module";
 import { InventoryMasterComponent } from "./component/inventory-master/inventory-master.component";
 import { SelectTableColumnModule } from "../shared/select-table-column/select-table-column.module";
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { NoDataModule } from "../shared/no-data/no-data.module";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
@@ -84,6 +83,13 @@ import { CustomPriceModule } from "./component/custom-price/custom-price.module"
 import { BulkStockEditComponent } from "./component/bulk-stock-edit/bulk-stock-edit.component";
 import { BulkStockAdvanceFilterComponent } from "./component/bulk-stock-advance-filter/bulk-stock-advance-filter.component";
 import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
+import { ExportInventoryMasterComponent } from "./component/export-inventory-master/export-inventory-master.component";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { AdjustInventoryComponent } from "./component/adjust-inventory/adjust-inventory.component";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { AdjustInventoryListComponent } from "./component/adjust-inventory-list/adjust-inventory-list.component";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { AsideCreateNewReasonComponent } from "./component/aside-create-reason/aside-create-reason.component";
 
 @NgModule({
     declarations: [
@@ -102,6 +108,7 @@ import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
         InventoryTransactionListComponent,
         CreateCustomFieldComponent,
         AdjustInventoryComponent,
+        AdjustInventoryListComponent,
         AsideAdjustInventoryComponent,
         AdjustGroupComponent,
         AdjustProductServiceComponent,
@@ -130,7 +137,10 @@ import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
         CustomUnitsComponent,
         InventoryMasterComponent,
         BulkStockEditComponent,
-        BulkStockAdvanceFilterComponent
+        BulkStockAdvanceFilterComponent,
+        ExportInventoryMasterComponent,
+        AdjustInventoryComponent,
+        AsideCreateNewReasonComponent
     ],
     imports: [
         NewInventoryRoutingModule,
@@ -162,17 +172,21 @@ import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
         MatDialogModule,
         MatAutocompleteModule,
         MatTooltipModule,
+        SelectTableColumnModule,
         MatGridListModule,
         MatListModule,
         RecipeModule,
         ManufacturingModule,
-        SelectTableColumnModule,
         CdkScrollModule,
         FormsModule,
         NoDataModule,
         DragDropModule,
         CustomPriceModule,
-        WatchVideoModule
+        WatchVideoModule,
+        MatSlideToggleModule,
+        MatExpansionModule,
+        MatPaginatorModule,
+        ReactiveFormsModule
     ],
     exports: [
         NewInventoryComponent,
@@ -191,6 +205,7 @@ import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
         InventoryTransactionListComponent,
         CreateCustomFieldComponent,
         AdjustInventoryComponent,
+        AdjustInventoryListComponent,
         AsideAdjustInventoryComponent,
         AdjustGroupComponent,
         AdjustProductServiceComponent,
@@ -208,7 +223,8 @@ import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
         DashboardSellingReport,
         ReportFiltersComponent,
         MatDivider,
-        BulkStockAdvanceFilterComponent
+        BulkStockAdvanceFilterComponent,
+        AdjustInventoryComponent
     ]
 })
 export class NewInventoryModule { }

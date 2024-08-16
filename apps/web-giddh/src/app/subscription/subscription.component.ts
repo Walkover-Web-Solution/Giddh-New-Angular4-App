@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { SubscriptionComponentStore } from './utility/subscription.store';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import { API_COUNT_LIMIT } from '../app.constant';
+import { API_COUNT_LIMIT, PAGE_SIZE_OPTIONS } from '../app.constant';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AppState } from '../store';
 import { Store } from '@ngrx/store';
@@ -17,6 +17,7 @@ import { CompanyListDialogComponent } from './company-list-dialog/company-list-d
 import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.component';
 import { GeneralActions } from '../actions/general/general.actions';
 import { BuyPlanComponentStore } from './buy-plan/utility/buy-plan.store';
+import { ToasterService } from '../services/toaster.service';
 @Component({
     selector: 'subscription',
     templateUrl: './subscription.component.html',
@@ -61,9 +62,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     /** Hold table page index number*/
     public pageIndex: number = 0;
     /** Holds page size options */
-    public pageSizeOptions: any[] = [20,
-        50,
-        100];
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
     /** Holds Total number of discounts */
     public totalDiscountCount: number = 0;
     /* Hold list searching value */
@@ -133,7 +132,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private formBuilder: FormBuilder,
         private readonly componentStoreBuyPlan: BuyPlanComponentStore,
         private generalActions: GeneralActions,
-        private router: Router
+        private router: Router,
+        private toasterService: ToasterService
     ) {
         this.store.dispatch(this.generalActions.openSideMenu(true));
     }
@@ -193,12 +193,15 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             }
         });
 
-        window.addEventListener('message', event => {
-            if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
-                this.closeWindow();
-                this.getAllSubscriptions(false);
-            }
-        });
+        if (this.router.url === '/pages/subscription') {
+            window.addEventListener('message', event => {
+                if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
+                    this.toasterService.showSnackBar("success", this.localeData?.plan_purchased_success_message);
+                    this.closeWindow();
+                    this.getAllSubscriptions(false);
+                }
+            });
+        }
 
         this.subscriptionRazorpayOrderDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -608,7 +611,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             if (action) {
                 this.componentStore.cancelSubscription(id);
             } else {
-                cancelDialogRef.close();
+                cancelDialogRef?.close();
             }
         });
     }
@@ -639,17 +642,17 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public buyPlan(subscription: any): void {
-        // if (this.activeCompany.subscription?.country?.countryCode === 'GB') {
-        //     let model = {
-        //         planUniqueName: subscription?.plan?.uniqueName,
-        //         paymentProvider: "GOCARDLESS",
-        //         subscriptionId: subscription?.subscriptionId,
-        //         duration: subscription?.period
-        //     }
-        //     this.componentStore.buyPlanByGoCardless(model);
-        // } else {
+        if (subscription?.region?.code === 'GBR') {
+            let model = {
+                planUniqueName: subscription?.plan?.uniqueName,
+                paymentProvider: "GOCARDLESS",
+                subscriptionId: subscription?.subscriptionId,
+                duration: subscription?.period
+            };
+            this.componentStore.buyPlanByGoCardless(model);
+        } else {
             this.componentStoreBuyPlan.generateOrderBySubscriptionId(subscription?.subscriptionId);
-        // }
+        }
     }
 
     /**
@@ -749,7 +752,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         const width = 700;
         const height = 900;
 
-        this.openedWindow = this.generalService.openCenteredWindow(url, '',width, height);
+        this.openedWindow = this.generalService.openCenteredWindow(url, '', width, height);
     }
 
     /**

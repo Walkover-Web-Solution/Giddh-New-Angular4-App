@@ -1,5 +1,5 @@
-import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, take, takeUntil, pairwise } from 'rxjs/operators';
+import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import {
     AfterViewInit,
     ChangeDetectorRef,
@@ -28,7 +28,7 @@ import { CommonActions } from '../../../../actions/common.actions';
 import { GeneralActions } from "../../../../actions/general/general.actions";
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
-import { API_COUNT_LIMIT, BootstrapToggleSwitch, EMAIL_VALIDATION_REGEX, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL } from 'apps/web-giddh/src/app/app.constant';
+import { API_COUNT_LIMIT, BootstrapToggleSwitch, EMAIL_VALIDATION_REGEX, MOBILE_NUMBER_ADDRESS_JSON_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, ZIP_CODE_SUPPORTED_COUNTRIES } from 'apps/web-giddh/src/app/app.constant';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -37,7 +37,9 @@ import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fiel
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 import { HttpClient } from '@angular/common/http';
 import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
-import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
+import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
+import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'account-add-new-details',
@@ -88,6 +90,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @Input() public isBankAccount: boolean = true;
     /** True if account creation is from command k */
     @Input() public fromCommandK: boolean = false;
+    @Input() public includeSearchedGroup: boolean = false;
     @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
     @Output() public isGroupSelected: EventEmitter<IOption> = new EventEmitter();
     /** Emiting true if account modal needs to be closed */
@@ -134,7 +137,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     private activeGroup$: Observable<any>;
     /** This will hold active parent group */
     public activeParentGroup: string = "";
-
     /** Stores the search results pagination details for group dropdown */
     public groupsSearchResultsPaginationData = {
         page: 0,
@@ -151,16 +153,16 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         totalPages: 0,
         query: ''
     };
-    /** This will hold inventory settings */
-    public inventorySettings: any;
-    /** This will hold parent unique name */
-    public activeParentGroupUniqueName: string = '';
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** This will hold placeholder for tax */
     public taxNamePlaceholder: string = "";
+    /** This will hold inventory settings */
+    public inventorySettings: any;
+    /** This will hold parent unique name */
+    public activeParentGroupUniqueName: string = '';
     /** True if custom fields api call in progress */
     public isCustomFieldLoading: boolean = false;
     /** Custom fields request */
@@ -183,22 +185,27 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public portalIndex: number;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    /** Hold active index of form group */
+    public activeIndex: number;
+    /** Holds list of countries which use ZIP Code in address */
+    public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
 
     constructor(
         private _fb: UntypedFormBuilder,
-        private accountService: AccountService,
         private store: Store<AppState>,
         private _toaster: ToasterService,
         private commonActions: CommonActions,
         private _generalActions: GeneralActions,
+        private changeDetectorRef: ChangeDetectorRef,
         private generalService: GeneralService,
         private groupService: GroupService,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private invoiceService: InvoiceService,
-        private changeDetectorRef: ChangeDetectorRef,
         private customFieldsService: CustomFieldsService,
         private http: HttpClient,
-        private accountsAction: AccountsAction) {
+        private accountsAction: AccountsAction,
+        public dialog: MatDialog,
+        private commonService: CommonService) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
     }
 
@@ -257,11 +264,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                         this.isHsnSacEnabledAcc = (response.parentGroups) ? HSN_SAC_PARENT_GROUPS.includes(response?.parentGroups[0]?.uniqueName) : false;
                         this.isParentDebtorCreditor(response?.uniqueName);
                     }
-
                     this.showHideAddressTab();
                 }
             }
         });
+
 
         this.addAccountForm.get('hsnOrSac').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
@@ -426,6 +433,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }, 500);
             }
         }
+        setTimeout(() => {
+            let addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
+            addresses.controls[0].get('isDefault')?.patchValue(true);
+        }, 500);
     }
 
     public ngAfterViewInit() {
@@ -456,6 +467,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     public setCountryByCompany(company: CompanyResponse) {
+
         if (this.activeCompany && this.activeCompany.countryV2) {
             const countryCode = this.activeCompany.countryV2.alpha2CountryCode;
             const countryName = this.activeCompany.countryV2.countryName;
@@ -649,14 +661,21 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             addresses.push(this.initialGstDetailsForm());
         }
     }
-
-    public isDefaultAddressSelected(val: boolean, i: number) {
+    /**
+     * This will be use for is default address selected
+     *
+     * @param {boolean} val
+     * @param {number} i
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public isDefaultAddressSelected(val: boolean, activeIndex: number): void {
+        this.activeIndex = activeIndex;
         if (val) {
             let addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
             for (let control of addresses.controls) {
                 control.get('isDefault')?.patchValue(false);
             }
-            addresses.controls[i].get('isDefault')?.patchValue(true);
+            addresses.controls[activeIndex].get('isDefault')?.patchValue(true);
         }
     }
 
@@ -898,6 +917,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.isShowBankDetails(activeParentgroup);
             this.isDebtorCreditor = true;
         } else {
+            this.isBankAccount = false;
             this.isDebtorCreditor = false;
             this.showBankDetail = false;
         }
@@ -986,6 +1006,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             } else {
                 ele.classList.remove('error-box');
                 this.isGstValid$ = observableOf(true);
+                if (this.selectedCountryCode === 'IN') {
+                    this.getGstConfirmationPopup();
+                }
             }
         } else {
             ele.classList.remove('error-box');
@@ -1049,7 +1072,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
     }
-    
+
     /**
      * Get Party Type List
      *
@@ -1228,7 +1251,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @returns {FormGroup}
      * @memberof AccountAddNewDetailsComponent
      */
-    public initialCustomFieldDetailsForm(value: any = null): UntypedFormGroup {
+    public initialCustomFieldDetailsForm(value: CustomFieldsData = null): UntypedFormGroup {
         let customFields = this._fb.group({
             uniqueName: [''],
             value: ['', (value?.isMandatory) ? Validators.required : undefined],
@@ -1237,7 +1260,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (value) {
             customFields?.patchValue(value);
         }
-
         return customFields;
     }
 
@@ -1298,6 +1320,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 requestObject.group = this.activeGroupUniqueName;
                 // Include the parent group provided in 'group' param in fetched results
                 // The result will include this group and its children
+                requestObject.includeSearchedGroup = true;
+            }
+            if (this.includeSearchedGroup) {
                 requestObject.includeSearchedGroup = true;
             }
             let activeGroup;
@@ -1400,26 +1425,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     /**
-     * This will get invoice settings
-     *
-     * @memberof AccountAddNewDetailsComponent
-     */
-    public getInvoiceSettings(): void {
-        this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.status === "success" && response.body) {
-                let invoiceSettings = _.cloneDeep(response.body);
-                this.inventorySettings = invoiceSettings.companyInventorySettings;
-
-                if (this.inventorySettings?.manageInventory) {
-                    this.addAccountForm.get("hsnOrSac").patchValue("hsn");
-                } else {
-                    this.addAccountForm.get("hsnOrSac").patchValue("sac");
-                }
-            }
-        });
-    }
-
-    /*
      * Callback for translation response complete
      *
      * @param {boolean} event
@@ -1450,6 +1455,26 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             });
         }
+    }
+
+    /*
+     * This will get invoice settings
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public getInvoiceSettings(): void {
+        this.invoiceService.GetInvoiceSetting().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.status === "success" && response.body) {
+                let invoiceSettings = cloneDeep(response.body);
+                this.inventorySettings = invoiceSettings.companyInventorySettings;
+
+                if (this.inventorySettings?.manageInventory) {
+                    this.addAccountForm.get("hsnOrSac")?.patchValue("hsn");
+                } else {
+                    this.addAccountForm.get("hsnOrSac")?.patchValue("sac");
+                }
+            }
+        });
     }
 
     /**
@@ -1594,5 +1619,39 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
+    /**
+      * This will open for get gst information confirmation dialog
+      *
+      * @memberof AccountAddNewDetailsComponent
+      */
+    public getGstConfirmationPopup(): void {
+        let addresses = (this.addAccountForm.get('addresses') as UntypedFormArray).at(this.activeIndex);
+        if (addresses.get('gstNumber')?.value) {
+            this.commonService.getGstInformationDetails(addresses.get('gstNumber')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                if (result?.body) {
+                    let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                        width: '40%',
+                        data: {
+                            title: this.commonLocaleData?.app_confirmation,
+                            body: this.commonLocaleData?.app_gst_confirm_message1,
+                            ok: this.commonLocaleData?.app_yes,
+                            cancel: this.commonLocaleData?.app_no,
+                            permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
+                        }
+                    });
+                    dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                        if (response) {
+                            if (addresses?.get('isDefault')?.value) {
+                                this.addAccountForm.get('name')?.patchValue(result.body?.lgnm);
+                            }
+                            let completeAddress = this.generalService.getCompleteAddress(result.body?.pradr?.addr);
+                            addresses.get('address')?.patchValue(completeAddress);
+                            addresses.get('pincode')?.patchValue(result.body?.pradr?.addr?.pncd);
+                        }
+                    });
+                }
+            });
+        }
+    }
 }
 

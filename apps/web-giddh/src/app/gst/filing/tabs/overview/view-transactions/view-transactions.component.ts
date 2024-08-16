@@ -145,6 +145,8 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             this.filterParam.entityType = params.entityType;
             this.filterParam.type = params.type;
             this.filterParam.status = params?.status;
+            this.filterParam.from = params.from;
+            this.filterParam.to = params.to;
             this.viewFilteredTxn('page', 1);
         });
         this.voucherApiVersion = this.generalService.voucherApiVersion;
@@ -153,7 +155,7 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     public viewFilteredTxn(filter, val) {
         this.filterParam[filter] = val;
         if (filter === 'entityType') {
-            this.filterParam.type = 'all';
+            this.filterParam.type = this.filterParam.type ?? 'all';
             this.filterParam.status = 'all';
         }
         this.store.dispatch(this.gstAction.GetSummaryTransaction(this.selectedGst, this.filterParam));

@@ -34,7 +34,7 @@ import { userLoginStateEnum, OrganizationType } from '../../models/user-login-st
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { environment } from 'apps/web-giddh/src/environments/environment';
 import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
-import { CALENDLY_URL, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { CALENDLY_URL, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
 import { SettingsProfileService } from '../../services/settings.profile.service';
@@ -170,8 +170,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public forceOpenNavigation: boolean = false;
     /** True, if GST side menu is opened in responsive mode */
     public isGstSideMenuOpened: boolean = false;
-    /** VAT supported countries to show the Vat Report section in all modules */
-    public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
     @ViewChild('datepickerTemplate', { static: true }) public datepickerTemplate: TemplateRef<any>;
 
     /* This will store modal reference */
@@ -206,26 +204,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public searchBranchQuery: string;
     /** Current organization type */
     public currentOrganizationType: OrganizationType;
+    /** Version of lated mac app  */
+    public macAppVersion: string;
     /** This will hold the time when last session renewal was checked or updated */
     public lastSessionRenewalTime: any;
     /** All modules data with routing shared with user */
     public allModulesList = [];
-    /** Version of lated mac app  */
-    public macAppVersion: string;
-    /** Hold plan version  */
-    public planVersion: number;
-
-    /**
-     * Returns whether the account section needs to be displayed or not
-     *
-     * @readonly
-     * @type {boolean} True, if either branch is switched or company is switched and only HO is there (single branch)
-     * @memberof HeaderComponent
-     */
-    public get shouldShowAccounts(): boolean {
-        return this.currentOrganizationType === OrganizationType.Branch ||
-            (this.currentOrganizationType === OrganizationType.Company && this.currentCompanyBranches && this.currentCompanyBranches.length === 1);
-    }
     /** This will hold that how many days are left for subscription expiration */
     public remainingSubscriptionDays: any = false;
     /** Menu items received from API */
@@ -240,7 +224,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isSidebarExpanded: boolean = false;
     /** This will hold if setting icon is disabled */
     public isSettingsIconDisabled: boolean = false;
-    /* This will hold if resolution is 768 consider as ipad screen */
+    /* This will hold if resolution is more than 768 to consider as ipad screen */
     public isIpadScreen: boolean = false;
     /** True if sidebar is forcely expanded */
     public sidebarForcelyExpanded: boolean = false;
@@ -268,6 +252,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isSubscriptionModule: boolean = false;
     /** True if it's a subscription get all plans or view subscription page */
     public isSubscriptionPage: boolean = false;
+    /** Hold plan version  */
+    public planVersion: number;
 
     /**
      * Returns whether the back button in header should be displayed or not
@@ -339,10 +325,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 if (!this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details") && !this.router.url.includes("/billing-detail")) {
                     this.currentPageUrl = this.router.url;
                 }
-              
+
                 this.isSubscriptionModule = this.router.url.includes("/pages/subscription");
                 this.isSubscriptionPage = this.router.url.includes("/pages/subscription/buy-plan") || this.router.url.includes("/pages/subscription/view-subscription");
-                
+
                 this.setCurrentPage();
                 this.addClassInBodyIfPageHasTabs();
                 this.checkIfPageHasTabs();
@@ -495,10 +481,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             if (res) {
                 this.createNewCompanyUser = res;
             }
-        });
-        this.generalService.isMobileSite.pipe(takeUntil(this.destroyed$)).subscribe(s => {
-            this.isMobileSite = s;
-            this.accountItemsFromIndexDB = DEFAULT_AC;
         });
         this.totalNumberOfcompanies$ = this.store.pipe(select(state => state.session.totalNumberOfcompanies), takeUntil(this.destroyed$));
 
@@ -657,7 +639,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             .subscribe((state: BreakpointState) => {
                 this.isLargeWindow = state.matches;
                 this.adjustNavigationBar();
-                   if(state.matches){
+                if (state.matches) {
                     this.expandSidebar(true);
                 } else {
                     this.collapseSidebar(true);
@@ -783,6 +765,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             scriptTag.src = 'https://cdn.headwayapp.co/widget.js';
             scriptTag.type = 'text/javascript';
             scriptTag.defer = true;
+            scriptTag.async = true;
             document.body.appendChild(scriptTag);
         } else {
             window['Headway'].init();
@@ -872,9 +855,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                                 if (this.selectedDateRange?.endDate >= dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT) && this.selectedDateRange?.endDate <= dayjs(key.financialYearEnds, GIDDH_DATE_FORMAT)) {
                                     activeFinancialYear = {
                                         uniqueName: key?.uniqueName,
-                                        isLocked: key.isLocked,
-                                        financialYearStarts: dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
-                                        financialYearEnds: dayjs(key.financialYearEnds, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)
+                                        isLocked: key?.isLocked,
+                                        financialYearStarts: dayjs(key?.financialYearStarts, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT),
+                                        financialYearEnds: dayjs(key?.financialYearEnds, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)
                                     };
                                 }
                             });
@@ -902,11 +885,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public toggleHelpSupportPane(event: boolean): void {
         if (event) {
+            this.toggleSidebarPane(false, false);
             if (this.asideHelpSupportDialogRef?.id && this.dialog.getDialogById(this.asideHelpSupportDialogRef?.id)) {
                 this.asideHelpSupportDialogRef?.close();
             } else {
                 this.asideHelpSupportDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef, {
                     width: '1000px',
+                    panelClass: 'aside-help-panel',
                     hasBackdrop: false,
                     position: {
                         right: '0',
@@ -1338,10 +1323,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.isLedgerAccSelected = false;
         } else if (entity === 'accounts') {
             this.isLedgerAccSelected = true;
-            this.selectedLedgerName = item.uniqueName;
+            this.selectedLedgerName = item?.uniqueName;
         }
 
-        if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
+        if (this.activeCompanyForDb?.uniqueName) {
             let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
             let branches = [];
             this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
@@ -1417,9 +1402,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public setCurrentPageTitle(menu) {
         let currentPageObj = new CurrentPage();
-        currentPageObj.name = menu.name;
-        currentPageObj.url = menu.uniqueName;
-        currentPageObj.additional = menu.additional;
+        currentPageObj.name = menu?.name;
+        currentPageObj.url = menu?.uniqueName;
+        currentPageObj.additional = menu?.additional;
         this.store.dispatch(this._generalActions.setPageTitle(currentPageObj));
     }
 
@@ -1502,8 +1487,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
                 document.querySelector('body').classList.remove('mobile-setting-sidebar');
-            }
-            else {
+            } else {
                 document.querySelector('body').classList.remove('page-has-tabs');
                 document.querySelector('body').classList.remove('on-setting-page');
                 document.querySelector('body').classList.remove('on-user-page');
@@ -1720,6 +1704,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         })
     }
+    
     /**
      * This function will check if page has tabs to show/hide page heading
      *
@@ -1766,9 +1751,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public getSubscriptionEndNote(): string {
         let text = this.localeData?.subscription_end_note;
         if (this.planVersion === 2) {
-            text = text?.replace("[PLAN_DURATION]", this.subscribedPlan?.duration)?.replace("[PLAN_DURATION_UNIT]", '')?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry);
+            text = text
+                ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
+                ?.replace("[PLAN_DURATION_UNIT]", '')
+                ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
+                ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
         } else {
-            text = text?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration)?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit)?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry);
+            text = text
+                ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
+                ?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase() ?? '')
+                ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
+                ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
         }
         return text;
     }
@@ -1781,7 +1774,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public getSubscriptionEndedNote(): string {
         let text = this.localeData?.subscription_ended_note;
-        text = text?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration)?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit)?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry);
+        text = text
+            ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
+            ?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase() ?? '')
+            ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
+            ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
         return text;
     }
 
@@ -1793,7 +1790,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public getSubscriptionTransactionEndedNote(): string {
         let text = this.localeData?.subscription_transaction_limit_ended;
-        text = text?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[PLAN_START_DATE]", this.subscribedPlan?.startedAt);
+        text = text
+            ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
+            ?.replace("[PLAN_START_DATE]", this.subscribedPlan?.startedAt ?? '');
         return text;
     }
 
@@ -1805,7 +1804,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public getPlanExpiredNote(): string {
         let text = this.localeData?.plan_expired_note;
-        text = text?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration)?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase())?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry);
+        text = text
+            ?.replace("[PLAN_DURATION]", this.subscribedPlan?.planDetails?.duration ?? this.subscribedPlan?.duration ?? '')
+            ?.replace("[PLAN_DURATION_UNIT]", this.subscribedPlan?.planDetails?.durationUnit?.toLowerCase() ?? '')
+            ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
+            ?.replace("[EXPIRY_DATE]", this.subscribedPlan?.expiry ?? '');
         return text;
     }
 
@@ -1817,7 +1820,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      */
     public getTransactionLimitCrossedNote(): string {
         let text = this.localeData?.transaction_limit_crossed;
-        text = text?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name)?.replace("[PLAN_START_DATE]", this.subscribedPlan?.startedAt);
+        text = text
+            ?.replace("[PLAN_NAME]", this.subscribedPlan?.planDetails?.name ?? '')
+            ?.replace("[PLAN_START_DATE]", this.subscribedPlan?.startedAt ?? '');
         return text;
     }
 
@@ -1905,7 +1910,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     */
     public closeEvent(): void {
         setTimeout(() => {
-            this.commandkDialogRef.close();
+            this.commandkDialogRef?.close();
         }, 600);
     }
 

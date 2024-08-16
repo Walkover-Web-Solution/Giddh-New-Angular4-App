@@ -195,12 +195,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     public openingBalance: any;
     /** This will hold closing balance amount */
     public closingBalance: number = 0;
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
     /** This will store screen size */
@@ -271,7 +271,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.renderer.addClass(document.body, 'contact-body');
-        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
         this.store.dispatch(this.companyActions.getAllRegistrations());
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
@@ -291,7 +291,7 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.moduleType = (params.type)?.toUpperCase();
 
             if (params) {
-               if ((params["type"] && params["type"].indexOf("customer") > -1) || (queryParams && queryParams.tab && queryParams.tab === "customer")) {
+                if ((params["type"] && params["type"].indexOf("customer") > -1) || (queryParams && queryParams.tab && queryParams.tab === "customer")) {
                     const activeTab = this.activeTab;
                     if (activeTab !== "customer") {
                         this.setActiveTab("customer");
@@ -550,7 +550,12 @@ export class ContactComponent implements OnInit, OnDestroy {
     public performActions(type: number, account: any, event?: any) {
         switch (type) {
             case 1: // go to ledger
-                this.goToRoute("ledger", `/${this.fromDate}/${this.toDate}`, account?.uniqueName);
+                if (this.voucherApiVersion === 2) {
+                    const additionalParams = this.fromDate && this.toDate ? `/${account?.uniqueName}/${this.fromDate}/${this.toDate}` : `/${account?.uniqueName}`;
+                    this.goToRoute("ledger", additionalParams, account?.uniqueName);
+                } else {
+                    this.goToRoute("ledger", `/${this.fromDate}/${this.toDate}`, account?.uniqueName);
+                }
                 break;
 
             case 2: // go to sales or purchase
@@ -592,7 +597,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     public goToRoute(part: string, additionalParams: string = "", accUniqueName: string) {
-        let url = (this.generalService.voucherApiVersion === 2) ? "/pages/" + part : location.href + `?returnUrl=${part}/${accUniqueName}`;
+        let url = (this.generalService.voucherApiVersion === 2) ? `/pages/${part}` : location.href + `?returnUrl=${part}/${accUniqueName}`;
         if (additionalParams) {
             url = `${url}${additionalParams}`;
         }

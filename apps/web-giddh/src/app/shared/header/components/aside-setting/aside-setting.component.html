@@ -1,4 +1,4 @@
-<cdk-virtual-scroll-viewport [itemSize]="100" class="setting-scroll">
+<cdk-virtual-scroll-viewport [itemSize]="100" class="h-100">
     <ng-container
     appTranslate
     [file]="'aside-setting'"
@@ -7,8 +7,8 @@
     (translationComplete)="translationComplete($event)"
 >
     <div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)">
-        <div class="aside-help-header relative">
-            <h4 class="font-15" *ngIf="showSettingHeading">{{ localeData?.page_heading }}</h4>
+        <div class="aside-help-header relative" *ngIf="showSettingHeading">
+            <h4 class="font-15">{{ localeData?.page_heading }}</h4>
             <div hidden id="close" class="cursor-pointer" (click)="closeAsidePane($event)">
                 <i class="icon-cross"></i>
             </div>
@@ -20,6 +20,8 @@
                         class="d-flex align-items-center"
                         *ngIf="!isMobileScreen && !showSettingHeading"
                         (click)="goToPreviousPage()"
+                        aria-label="back"
+                        role="button"
                     >
                         <i class="icon-left font-22"></i>
                         <span>{{ commonLocaleData?.app_back }}</span>
@@ -31,20 +33,37 @@
                 </a>
             </div>
             <div class="setting-items">
-                <ul class="mb-3" *ngFor="let section of filteredSettingsPageTabs">
-                    <li
-                        *ngFor="let tab of section"
-                        [ngClass]="{ 'active-link': tab.link === routerUrl || tab?.linked_pages?.includes(routerUrl) }"
-                    >
-                        <a href="javascript:;" aria-label="icon" class="d-block clearfix" [routerLink]="[tab.link]">
-                            <span [innerHTML]="tab.icon"></span>
-                            <span>{{ tab.label }}</span>
-                        </a>
-                    </li>
-                </ul>
+                <mat-list role="list" *ngFor="let section of filteredSettingsPageTabs">
+                    <ng-container *ngFor="let tab of section">
+                        <ng-container *ngIf="tab?.link !== '/pages/settings/tag'; else tagsListItem">
+                            <mat-list-item role="listitem" [ngClass]="{ 'active-link': (tab?.link === routerUrl || tab?.linked_pages?.includes(routerUrl)) && !isTagMenuOpened }">
+                                <a href="javascript:;" aria-label="icon" class="d-block clearfix" [routerLink]="tab?.link">
+                                    <span [innerHTML]="tab?.icon"></span>
+                                    <span>{{ tab?.label }}</span>
+                                </a>
+                            </mat-list-item>
+                        </ng-container>
+                        <ng-template #tagsListItem>
+                            <mat-list-item role="listitem" [ngClass]="{ 'active-link': isTagMenuOpened }">
+                                <a href="javascript:;" aria-label="icon" class="d-block clearfix" [matMenuTriggerFor]="tagsMenu" #tagsMenuTrigger="matMenuTrigger" (menuOpened)="isTagMenuOpened = true" (menuClosed)="isTagMenuOpened = false">
+                                    <span [innerHTML]="tab?.icon"></span>
+                                    <span>{{ tab?.label }}</span>
+                                </a>
+                            </mat-list-item>
+                        </ng-template>
+                    </ng-container>
+                </mat-list>
             </div>
         </div>
     </div>
 </ng-container>
 </cdk-virtual-scroll-viewport>
+
+<!-- Show All Tags Menu  -->
+<mat-menu #tagsMenu="matMenu" xPosition="before">
+    <div class="tags-menu-contianer" (click)="$event.stopPropagation()">
+        <setting-tags></setting-tags>
+    </div>    
+</mat-menu>
+
 

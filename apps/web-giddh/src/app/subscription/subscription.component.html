@@ -245,7 +245,7 @@
                                         *ngIf="
                                             element?.status?.toLowerCase() === 'expired' &&
                                             element?.isOwner &&
-                                            activeCompany.subscription?.country?.countryCode !== 'GB' &&
+                                            element?.region?.code !== 'GBR' &&
                                             activeCompany?.planVersion === 2
                                         "
                                         mat-menu-item
@@ -301,7 +301,7 @@
                         mat-header-row
                         *matHeaderRowDef="displayedColumns; sticky: true"
                     ></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    <tr class="table-row" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
             </form>
         </section>

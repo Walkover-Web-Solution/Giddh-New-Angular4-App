@@ -71,6 +71,24 @@ export class LedgerActions {
                 payload: res
             }, true))));
 
+    /**
+     * Create Bulk Blank Ledgers
+     *
+     * @type {Observable<Action>}
+     * @memberof LedgerActions
+     */
+    public CreateBulkBlankLedgers$: Observable<Action> = createEffect(() => this.action$
+    .pipe(
+        ofType(LEDGER.CREATE_BULK_BLANK_LEDGER_REQUEST),
+        switchMap((action: CustomActions) => this.ledgerService.createBulkLedger(action.payload.model, action.payload.accountUniqueName)),
+        map(res => this.validateResponse<LedgerResponse[], BlankLedgerVM>(res, {
+            type: LEDGER.CREATE_BULK_BLANK_LEDGER_RESPONSE,
+            payload: res
+        }, true, {
+            type: LEDGER.CREATE_BULK_BLANK_LEDGER_RESPONSE,
+            payload: res
+        }, true))));
+
     public DeleteTrxEntry$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(LEDGER.DELETE_TRX_ENTRY),
@@ -401,6 +419,33 @@ export class LedgerActions {
     public CreateBlankLedger(model: BlankLedgerVM, accountUniqueName: string): CustomActions {
         return {
             type: LEDGER.CREATE_BLANK_LEDGER_REQUEST,
+            payload: { model, accountUniqueName }
+        };
+    }
+
+    /**
+     * Used to Reset Blank Ledger
+     *
+     * @returns {CustomActions}
+     * @memberof LedgerActions
+     */
+    public ResetBlankLedger(): CustomActions {
+        return {
+            type: LEDGER.RESET_BLANK_LEDGER_REQUEST
+        };
+    }
+
+    /**
+     * Create Bulk Blank Ledgers action
+     *
+     * @param {BlankLedgerVM} model
+     * @param {string} accountUniqueName
+     * @returns {CustomActions}
+     * @memberof LedgerActions
+     */
+    public CreateBulkBlankLedgers(model: BlankLedgerVM, accountUniqueName: string): CustomActions {
+        return {
+            type: LEDGER.CREATE_BULK_BLANK_LEDGER_REQUEST,
             payload: { model, accountUniqueName }
         };
     }

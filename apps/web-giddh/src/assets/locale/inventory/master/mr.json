@@ -1,4 +1,22 @@
 {
     "no_inventory_found_primary_message": "दिलेल्या कीवर्डसह कोणताही डेटा आढळला नाही.",
-    "no_inventory_found_secondary_message": "इतर काही कीवर्डसह शोधा"
+    "no_inventory_found_secondary_message": "इतर काही कीवर्डसह शोधा",
+    "export_note": "<b class='fw-bold'>'स्टॉक ग्रुपचे नाव, स्टॉकचे नाव, युनिक नेम, पॅरेंट ग्रुपचे नाव, पॅरेंट ग्रुप युनिक नेम, स्टॉक युनिट कोड, स्टॉक युनिट युनिक नेम' </b> हे डिफॉल्ट कॉलम एक्सपोर्ट केले जातील, तुमच्याकडे गरजेनुसार कस्टम कॉलम जोडण्याचा पर्याय देखील आहे.",
+    "export_inventory_master": "निर्यात इन्व्हेंटरी मास्टर",
+    "opening_amount": "उघडण्याची रक्कम",
+    "opening_quantity": "उघडण्याचे प्रमाण",
+    "hsn_number": "एचएसएन क्रमांक",
+    "sac_number": "एसएसी क्रमांक",
+    "tax": "कर",
+    "purchase_account": "खरेदी खाते",
+    "purchase_rate": "खरेदी दर",
+    "purchase_stock_unit_code": "स्टॉक युनिट कोड खरेदी करा",
+    "sales_account": "विक्री खाते",
+    "sales_rate": "विक्री दर",
+    "sales_stock_unit_code": "विक्री स्टॉक युनिट कोड",
+    "custom_field_1_heading": "सानुकूल फील्ड 1 शीर्षक",
+    "custom_field_1_value": "सानुकूल फील्ड 1 शीर्षक मूल्य",
+    "custom_field_2_heading": "सानुकूल फील्ड 2 शीर्षक",
+    "custom_field_2_value": "सानुकूल फील्ड 2 शीर्षक मूल्य",
+    "sku_code": "एसकेयू कोड"
 }

@@ -1,5 +1,5 @@
 .dialog-header{
-    height: 60px;
+    height: var(--header-height);
     padding: 15px;
     display: flex;
     align-items: center;
@@ -9,6 +9,7 @@
 
     .icon-cross{
         color: var(--color-primary-header-icons) !important;
+        font-size: var(--font-size-16);
     }
 }
 .dialog-body{
@@ -33,4 +34,17 @@
 .dialog-asidepan {
     width: 760px;
     height: 100vh;
+}
+
+// modal width
+.master-export {
+    .modal-body {
+        overflow: scroll;
+        height: calc(100vh - 370px) !important;
+    }
+    .modal-dialog {
+        &.modal-lg {
+            max-width: 750px !important;
+        }
+    }
 }

@@ -1223,7 +1223,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     voucherDetails: null,
                     vouchersForAdjustment: null,
                     voucherListForCreditDebitNote: null,
-                    pendingPurchaseOrders: null
+                    pendingPurchaseOrders: null,
+                    exchangeRate: null
                 });
                 return of(null);
             })

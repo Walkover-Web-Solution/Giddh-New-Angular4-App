@@ -9,7 +9,6 @@ input-field,
 stock-balance,
 mat-form-field,
 reactive-dropdown-field,
-select-multiple-fields,
 report-filters,
 .custom-mat-form-field {
     .mat-mdc-form-field {
@@ -65,8 +64,8 @@ report-filters,
 
         .mdc-notched-outline__notch {
             border-color: var(--color-fields-border) !important;
-            border-left: 0 !important;
-        }
+            border-left: none !important;
+        }          
     }
 
     .mat-form-field-appearance-outline {
@@ -93,6 +92,7 @@ report-filters,
 
                 .mdc-notched-outline__notch {
                     border-color: var(--color-border-focus) !important;
+                    border-left: none !important;
                 }
 
                 .mdc-notched-outline__trailing {
@@ -105,6 +105,7 @@ report-filters,
                     .mdc-notched-outline {
                         .mdc-notched-outline__notch {
                             border-color: var(--color-field-hover) !important;
+                            border-left: none !important;
                         }
 
                         .mdc-notched-outline__trailing {
@@ -120,6 +121,7 @@ report-filters,
 
             .mdc-notched-outline__notch {
                 border-color: var(--color-fields-border) !important;
+                border-left: none !important;
             }
         }
 
@@ -196,6 +198,9 @@ report-filters,
         .mdc-notched-outline__notch,
         .mdc-notched-outline__trailing {
             border-width: 1px;
+        }
+        .mdc-notched-outline__notch {
+            border-left: none !important;
         }
     }
 
@@ -616,7 +621,6 @@ app-cdk-scroll {
     &:not(.mdc-text-field--disabled) {
         .mdc-text-field__input {
             color: var(--color-common-primary-text);
-
             &::placeholder {
                 color: var(--color-gray) !important;
             }
@@ -627,22 +631,6 @@ app-cdk-scroll {
 // Reactive Dropdown Create New Text Position
 .create-new-wrapper {
     left: 0;
-    bottom: -8px;
+    bottom: 0px;
     background-color: var(--color-body-background);
-}
-
-// Height of Mat form field with mat-chip
-select-multiple-fields {
-
-    // Add 'value-filled' class to make form-field height 48px
-    &.value-filled {
-        .mat-mdc-form-field-type-mat-chip-grid {
-            .mat-mdc-text-field-wrapper {
-                .mat-mdc-form-field-infix {
-                    min-height: 48px;
-                    padding: 4px 0 ! important;
-                }
-            }
-        }
-    }
 }

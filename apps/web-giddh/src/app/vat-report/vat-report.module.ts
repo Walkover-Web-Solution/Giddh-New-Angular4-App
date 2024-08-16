@@ -32,6 +32,9 @@ import { ViewReturnComponent } from './view-return/view-return.component';
 import { FileReturnComponent } from './file-return/file-return.component';
 import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
 import { WithHeldSettingComponent } from './with-held-setting/with-held-setting.component';
+import { LiabilityReportComponent } from './liability-report/liability-report.component';
+import { LiabilityDetailedReportComponent } from './liability-detailed-report/liability-detailed-report.component';
+import { VatReportFiltersComponent } from './vat-report-filters/vat-report-filters.component';
 
 @NgModule({
     declarations: [
@@ -40,7 +43,10 @@ import { WithHeldSettingComponent } from './with-held-setting/with-held-setting.
         ObligationsComponent,
         ViewReturnComponent,
         FileReturnComponent,
-        WithHeldSettingComponent
+        WithHeldSettingComponent,
+        LiabilityReportComponent,
+        LiabilityDetailedReportComponent,
+        VatReportFiltersComponent
     ],
     imports: [
         VatReportRoutingModule,
@@ -72,7 +78,8 @@ import { WithHeldSettingComponent } from './with-held-setting/with-held-setting.
         NewConfirmationModalModule
     ],
     exports: [
-        VatReportRoutingModule
+        VatReportRoutingModule,
+        VatReportFiltersComponent
     ]
 })
 export class VatReportModule {

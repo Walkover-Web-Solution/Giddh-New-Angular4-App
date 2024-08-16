@@ -32,9 +32,9 @@ import { FilingOverviewComponent } from './filing/tabs/overview/overview.compone
 import { GstRoutingModule } from './gst.routing.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { GstAsideMenuComponent } from './modals/gst-aside-menu/gst-aside-menu.component';
+import { SharedModule } from '../shared/shared.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
-import { SharedModule } from '../shared/shared.module';
 import { UnitMappingComponent } from './unit-mapping/unit-mapping.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
@@ -49,6 +49,9 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { GstSettingComponent } from './gst-setting/gst-setting.component';
+import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
     declarations: [FileGstR3Component,
@@ -56,7 +59,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent,
         OverviewSummaryComponent, TransactionSummaryComponent,
         PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent,
-        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, UnitMappingComponent, PushToPortalComponent,FilingStatusComponent],
+        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, UnitMappingComponent, PushToPortalComponent,FilingStatusComponent, GstSettingComponent],
     imports: [
         GstRoutingModule,
         CollapseModule,
@@ -75,6 +78,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         ElementViewChildModule,
         DecimalDigitsModule,
         ModalModule.forRoot(),
+        TranslateDirectiveModule,
         PurchaseModule,
         InvoiceModule,
         CurrencyModule,
@@ -91,7 +95,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         MatDatepickerModule,
         MatNativeDateModule,
         WatchVideoModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatDividerModule
     ],
     providers: [],
     exports: [ViewTransactionsComponent]

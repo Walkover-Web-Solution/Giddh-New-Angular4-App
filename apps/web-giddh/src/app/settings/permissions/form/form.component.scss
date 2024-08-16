@@ -1,108 +1,60 @@
-.btn-group.btn-group-liq {
-    width: 100%;
+.field-wrapper {
+    &>div {
+        flex: 1 0 240px;
+        max-width: 240px;
+
+        @media screen and (width <=1024px) {
+            flex-basis: 50% !important;
+        }
+    }
+
+    &.permission-update-mode {
+        .action-button {
+            flex-basis: auto !important;
+        }
+    }
+
+    .mat-select-btn {
+        background: var(--color-secondary-input-bar-background) !important;
+        border: 1px solid var(--color-fields-border) !important;
+        border-radius: 4px !important;
+        padding: 6px !important;
+        outline: 0;
+        color: var(--color-nero) !important;
+        box-shadow: none;
+        font-size: var(--font-size-15) !important;
+        height: 48px;
+        justify-content: space-between;
+
+        &.range-wrapper {
+            width: 238px;
+        }
+    }
 }
 
-.custom-dropdown {
-    width: 100%;
-    border-radius: 0;
-    margin: 0px 0;
-    margin-top: 0px;
-    box-shadow: none;
-    transition: all 0.7s ease;
-    background: var(--color-dropdown-primary-background) !important;
-    opacity: 1;
-    box-shadow: 0px 2px 6px var(--color-dropdown-list-box-shadow);
-    padding: 0;
-    min-width: 180px;
+.date-range-wrapper {
+    width: 206px;
 }
 
-.custom-dropdown.open {
-    transform: translateY(5px);
+.custom-date-range-menu {
+    width: 237px;
 }
+
+.ip-addresses-dropdown {
+    width: 239px;
+}
+
 
 .lh-34 {
     line-height: 34px;
 }
-.permission-form {
-    .form-group {
-        width: 100%;
-        display: inline-block;
-        margin: 0;
-        position: relative;
-        .btn-group {
-            width: 100%;
-        }
-    }
-    .add-btn {
-        width: auto !important;
-    }
-}
 
-.periods {
-    label {
-        margin-bottom: 5px;
-    }
-}
 
-.permission-form .btn-group.open .dropdown-toggle {
-    box-shadow: none;
-    background: transparent;
-}
-
-.custom-dropdown > li > a {
-    padding: 6px;
-}
-
-.custom-dropdown > li > a:focus,
-.custom-dropdown > li > a:hover {
-    background: var(--color-iron) !important;
-}
-
-.custom-dropdown .caret {
-    transform: rotate(-90deg);
-}
-.transactions-popup {
-    width: 360px;
-    background: var(--color-white);
-    box-shadow: 0px 3px 6px var(--color-primary-common-box-shadow);
-    padding: 15px;
-    z-index: 9;
-    position: absolute;
-    top: 5px;
-    left: 20px;
-    margin-top: 7px;
-    display: none;
-    opacity: 0;
-    visibility: hidden;
-    transition: 0.5s all ease-in;
-    border: 1px solid var(--color-iron);
-}
-.permission-main .transactions-popup {
-    right: 20px;
-    left: auto;
-}
-.transactions-limit-box:hover .transactions-popup {
-    display: block;
-    opacity: 1;
-    visibility: visible;
-}
-i.icon-add {
-    color: var(--color-abbey);
-    font-size: var(--font-size-16);
-}
-i.icon-cross {
-    color: var(--color-abbey);
-}
-.permission-row .col-xs-12,
-.permission-row .col-sm-6,
-.permission-row .col-sm-3 {
-    padding-right: 5px;
-    padding-left: 5px;
-}
 .permission-row {
     margin-right: -5px;
     margin-left: -5px;
 }
+
 .ip-range {
     i {
         position: relative;
@@ -110,15 +62,32 @@ i.icon-cross {
         color: var(--color-dropdown-list-icon);
     }
 }
+
+@media (max-width: 1366px) {
+    .form-wrapper {
+        align-items: start !important;
+
+        .field-wrapper {
+            flex-wrap: wrap;
+        }
+    }
+}
+
 @media (max-width: 1199px) {
+    .field-wrapper {
+        flex-wrap: wrap;
+    }
+
     .create-btn {
         float: none !important;
         margin-top: 10px;
     }
+
     .permission-form {
         .form-group {
             margin-bottom: 15px;
         }
+
         .pr-0 {
             padding-right: 15px !important;
         }
@@ -131,64 +100,9 @@ i.icon-cross {
             margin-left: 0;
             margin-top: 5px;
         }
+
         .create-btn {
             margin-top: 0px;
         }
-        .add-btn {
-            width: initial !important;
-        }
-    }
-}
-
-@media (max-width: 991px) {
-    .permission-row {
-        flex-wrap: wrap;
-    }
-    .permission-row .col-xs-12,
-    .permission-row .col-sm-6,
-    .permission-row .col-sm-3 {
-        flex: 0 0 50%;
-    }
-    .transactions-popup {
-        width: 250px;
-    }
-    .permission-main .transactions-popup {
-        width: 250px;
-    }
-}
-
-@media (max-width: 768px) {
-    .permission-form {
-        .form-group {
-            width: 100%;
-            display: block;
-            margin-top: 15px;
-            position: relative;
-            .btn-group {
-                width: 100%;
-            }
-        }
-        .create-btn {
-            float: none !important;
-        }
-        .add-btn {
-            width: auto;
-            display: inline-block;
-        }
-    }
-}
-@media (max-width: 767px) {
-    .transactions-popup {
-        top: 13px;
-        right: 0;
-        width: 170px;
-        left: auto;
-    }
-}
-@media (max-width: 640px) {
-    .permission-row .col-xs-12,
-    .permission-row .col-sm-6,
-    .permission-row .col-sm-3 {
-        flex: 0 0 100%;
     }
 }

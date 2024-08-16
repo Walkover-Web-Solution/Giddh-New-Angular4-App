@@ -8,7 +8,7 @@ import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { LoginActions } from "../actions/login.action";
-import { BusinessTypes, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, OTP_PROVIDER_URL, OTP_WIDGET_ID_NEW, OTP_WIDGET_TOKEN_NEW } from '../app.constant';
+import { BusinessTypes, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, OTP_PROVIDER_URL, OTP_WIDGET_ID_NEW, OTP_WIDGET_TOKEN_NEW, ZIP_CODE_SUPPORTED_COUNTRIES } from '../app.constant';
 import { CountryRequest, OnboardingFormRequest } from "../models/api-models/Common";
 import { Addresses, CompanyCreateRequest, CompanyResponse, SocketNewCompanyRequest, StatesRequest } from "../models/api-models/Company";
 import { UserDetails } from "../models/api-models/loginModels";
@@ -26,6 +26,7 @@ import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-
 import { HttpClient } from "@angular/common/http";
 import { AddCompanyComponentStore } from "./utility/add-company.store";
 import { userLoginStateEnum } from "../models/user-login-state";
+import { CommonService } from "../services/common.service";
 
 declare var initSendOTP: any;
 declare var window: any;
@@ -169,7 +170,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     /** List of counties of country */
     public countyList: IOption[] = [];
     /** List of registered business type countries */
-    public registeredTypeCountryList: any[] = ["IN", "GB", "AE", "ZW", "KE"];
+    public registeredTypeCountryList: any[] = ["IN", "GB", "AE", "ZW", "KE", "US"];
     /** This will hold disable State */
     public disabledState: boolean = false;
     /** Returns true if company created */
@@ -214,7 +215,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public isNewUserLoggedIn: boolean = false;
     /** True if is come from subscription */
     public isCreateBySubscription: boolean = false;
-
+    /** Holds list of countries where hide applicable tax input field */
+    public hideApplicableTaxCountryList: string[] = ['US'];
+    /** Holds list of countries which use ZIP Code in address */
+    public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
 
     /** Returns true if form is dirty else false */
     public get showPageLeaveConfirmation(): boolean {
@@ -240,7 +244,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         private verifyActions: VerifyMobileActions,
         private socialAuthService: AuthService,
         private activateRoute: ActivatedRoute,
-        public router: Router
+        public router: Router,
+        private commonService: CommonService
     ) {
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
         this.session$ = this.store.pipe(select(state => state.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
@@ -366,7 +371,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.companyService.countryListBySubscriptionId(subscriptionId).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response) {
                 this.countries = [];
-                Object.keys(response?.body).forEach(key => {
+                Object.keys(response?.body)?.forEach(key => {
                     this.countries.push({
                         value: response?.body[key]?.alpha2CountryCode,
                         label: response?.body[key]?.alpha2CountryCode + ' - ' + response?.body[key]?.countryName,
@@ -688,6 +693,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isGstinValid = false;
             } else {
                 this.isGstinValid = true;
+                if (this.selectedCountryCode === 'IN') {
+                    this.getGstConfirmationPopup();
+                }
             }
         }
 
@@ -711,6 +719,39 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.selectedStateCode = '';
         }
         this.changeDetection.detectChanges();
+    }
+
+
+    /**
+     * This will open for get gst information confirmation dialog
+     *
+     * @memberof AddCompanyComponent
+     */
+    public getGstConfirmationPopup(): void {
+        if (this.secondStepForm.get('gstin')?.value) {
+            this.commonService.getGstInformationDetails(this.secondStepForm.get('gstin')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                if (result?.body) {
+                    let dialogRef = this.dialog.open(ConfirmModalComponent, {
+                        width: '40%',
+                        data: {
+                            title: this.commonLocaleData?.app_confirmation,
+                            body: this.commonLocaleData?.app_gst_confirm_message1,
+                            ok: this.commonLocaleData?.app_yes,
+                            cancel: this.commonLocaleData?.app_no,
+                            permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
+                        }
+                    });
+                    dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+                        if (response) {
+                            let completeAddress = this.generalService.getCompleteAddress(result.body?.pradr?.addr);
+                            this.firstStepForm.get('name')?.patchValue(result.body?.lgnm);
+                            this.secondStepForm.get('address')?.patchValue(completeAddress);
+                            this.secondStepForm.get('pincode')?.patchValue(result.body?.pradr?.addr?.pncd);
+                        }
+                    });
+                }
+            });
+        }
     }
 
     /**

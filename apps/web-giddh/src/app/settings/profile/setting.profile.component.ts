@@ -25,7 +25,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LocaleService } from '../../services/locale.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { cloneDeep, uniqBy, without } from '../../lodash-optimized';
-import { VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { SALES_TAX_SUPPORTED_COUNTRIES, TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 export interface IGstObj {
     newGstNumber: string;
     newstateCode: number;
@@ -33,7 +33,6 @@ export interface IGstObj {
     newaddress: string;
     isDefault: boolean;
 }
-
 @Component({
     selector: 'setting-profile',
     templateUrl: './setting.profile.component.html',
@@ -158,9 +157,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public isAddressChangeInProgress: boolean;
     /** Stores the current organization uniqueName */
     public currentOrganizationUniqueName: string;
-
     public imgPath: string = '';
-
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -176,14 +173,26 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     private initialDataFetched: boolean = false;
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
+    /* This will hold list of tax (trn/vat) supported countries */
+    public taxSupportedCountries = TAX_SUPPORTED_COUNTRIES;
     /* This will hold list of vat supported countries */
-    public vatSupportedCountries = VAT_SUPPORTED_COUNTRIES;
+    public vatSupportedCountries: string[] = VAT_SUPPORTED_COUNTRIES;
+    /* This will hold list of trn supported countries */
+    public trnSupportedCountries: string[] = TRN_SUPPORTED_COUNTRIES;
+    /* This will hold list of sales tax supported countries */
+    public salesTaxSupportedCountries: string[] = SALES_TAX_SUPPORTED_COUNTRIES;
     /** Tax type (gst/trn) */
     public taxType: string = '';
     /** True if initial data is fetched */
     public showTaxColumn: boolean;
     /** Stores the voucher API version of company */
     public voucherApiVersion: 1 | 2;
+    /** Holds Active Tab Index */
+    public activeTabIndex: number = 0;
+    /** Holds true if get Linkied Entities API call in progress */
+    private isGetLinkedEntitiesInProgress: boolean = false;
+    /** Holds true if get states API call in progress */
+    private isGetStatesInProgress: boolean = false;
 
     constructor(
         private commonService: CommonService,
@@ -219,7 +228,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.getCountry();
         this.getCurrency();
-
         currencyNumberSystems.map(currency => {
             this.numberSystemSource.push({ value: currency?.value, label: `${currency.name}`, additional: currency });
         });
@@ -257,6 +265,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             .pipe(debounceTime(5000), distinctUntilChanged(), takeUntil(this.destroyed$))
             .subscribe((event: any) => {
                 this.patchProfile(this.dataToSave);
+
             });
 
         this.gstKeyDownSubject$
@@ -276,12 +285,19 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.currentTab = (params['referrer']) ? params['referrer'] : "personal";
+            if ((params['referrer']) === 'personal') {
+                this.activeTabIndex = 0;
+            } else if ((params['referrer']) === 'address') {
+                this.activeTabIndex = 1;
+            } else if ((params['referrer']) === 'other') {
+                this.activeTabIndex = 2;
+            }
         });
 
         this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
-            if (this.activeLocale && this.activeLocale !== response?.value) {
+            if(this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('settings/profile', response?.value).subscribe(response => {
                     this.localeData = response;
                     this.translationComplete(true);
@@ -303,6 +319,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
                         this.currentOrganizationType = OrganizationType.Company;
                     }
+                    this.loadTaxLinkedEnitiesAndStates();
                 } else {
                     // Treat it as company
                     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
@@ -324,7 +341,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.isMobileNumberValid = true;
 
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
-
         this.store.pipe(select(p => p.settings.inventory), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.profileRequest || 1 === 1) {
                 let inventorySetting = cloneDeep(o);
@@ -374,6 +390,23 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     }
 
+    /**
+     * This will use for on tab changes
+     *
+     * @param {*} event
+     * @memberof SettingProfileComponent
+     */
+    public onTabChange(event: any): void {
+        this.activeTabIndex = event?.index;
+        if (event.index === 0) {
+            this.handleTabChanged("personal");
+        } else if (event.index === 1) {
+            this.handleTabChanged("address");
+        } else {
+            this.handleTabChanged("other");
+        }
+    }
+
     public addGst() {
         let addresses = cloneDeep(this.companyProfileObj.addresses);
         let gstNumber;
@@ -395,7 +428,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         } else {
             isValid = true;
         }
-
         if (isValid) {
             let companyDetails = cloneDeep(this.companyProfileObj);
             let newGstObj = {
@@ -441,7 +473,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
 
         this.store.dispatch(this.settingsProfileActions.UpdateProfile(dataToSave));
-
     }
 
     public updateInventorySetting(data) {
@@ -530,7 +561,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 uniqBy(s, 'value');
                 if (s) {
                     this.companyProfileObj.addresses[index].stateCode = s.value;
-                } else {
                     this.companyProfileObj.addresses[index].stateCode = '';
                 }
             });
@@ -559,6 +589,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 ele.classList.remove('error-box');
                 this.isPANValid = true;
                 this.patchProfile({ panNumber: ele.value });
+
             } else {
                 this.isPANValid = false;
                 this._toasty.errorToast('Invalid PAN number');
@@ -669,6 +700,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             return;
         }
         this.patchProfile({ balanceDecimalPlaces: this.companyProfileObj.balanceDecimalPlaces });
+
     }
 
     public nameAlisPush(event) {
@@ -677,6 +709,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         }
 
         this.patchProfile({ nameAlias: this.companyProfileObj.nameAlias });
+
     }
 
     public savePincode(event) {
@@ -705,7 +738,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     public getStates(countryCode) {
         this.store.dispatch(this._generalActions.resetStatesList());
-
         this.store.pipe(select(s => s.general.states), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.states = [];
@@ -768,9 +800,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             }
         });
     }
-
-
-
     /**
      * This will return the state code/name if available
      *
@@ -800,7 +829,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.patchProfile({ ...value });
             }
         } else if (this.currentOrganizationType === OrganizationType.Branch) {
-            this.updateBranchProfile();
+            this.updateBranchProfile(value);
         }
     }
 
@@ -810,15 +839,16 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @param {*} [params] Request payload for API
      * @memberof SettingProfileComponent
      */
-    public updateBranchProfile(params?: any): void {
+    public updateBranchProfile(value: any): void {
         this.currentBranchDetails.name = this.companyProfileObj.name;
-        this.currentBranchDetails.alias = this.companyProfileObj.alias;
-        this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(params ? params : this.currentBranchDetails))
+        this.currentBranchDetails.alias = this.companyProfileObj.alias = value?.alias ?? this.companyProfileObj.alias;
+
+        this.settingsProfileService.updateBranchInfo(this.settingsUtilityService.getUpdateBranchRequestObject(this.currentBranchDetails))
             .pipe(takeUntil(this.destroyed$))
             .subscribe(response => {
                 if (response) {
                     if (response.status === 'success') {
-                        this._toasty.successToast('Profile Updated Successfully.');
+                        this._toasty.showSnackBar("success", this.commonLocaleData?.app_messages.profile_updated);
                     } else {
                         this._toasty.errorToast(response.message);
                     }
@@ -836,41 +866,53 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.currentTab = tabName;
         if (tabName === 'address') {
             this.loadAddresses('GET');
-            this.loadLinkedEntities();
-            if (this.currentCompanyDetails && this.currentCompanyDetails.countryV2) {
-                this.loadTaxDetails(this.currentCompanyDetails.countryV2.alpha2CountryCode);
-                this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
-            }
+            this.loadTaxLinkedEnitiesAndStates();
         }
-        this.getPageHeading();
         this.router.navigateByUrl('/pages/settings/profile/' + tabName);
     }
 
     /**
-     * Loads all the entities of an company
+     * This function used to load taxes and states
      *
+     * @private
+     * @memberof SettingProfileComponent
+     */
+    private loadTaxLinkedEnitiesAndStates(): void {
+        if (this.currentCompanyDetails && this.currentCompanyDetails.countryV2) {
+            this.loadLinkedEntities();
+            this.loadTaxDetails(this.currentCompanyDetails.countryV2.alpha2CountryCode);
+            this.loadStates(this.currentCompanyDetails.countryV2.alpha2CountryCode);
+        }
+    }
+
+    /**
+     * Loads all the entities of an company
      * @memberof SettingProfileComponent
      */
     public loadLinkedEntities(): void {
-        this.settingsProfileService.getAllLinkedEntities().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.body && response.status === 'success') {
-                this.addressConfiguration.linkedEntities = response.body.map(result => ({
-                    ...result,
-                    isDefault: false,
-                    label: result.alias,
-                    value: result?.uniqueName
-                }));
-            }
-        });
+        if (!this.isGetLinkedEntitiesInProgress) {
+            this.isGetLinkedEntitiesInProgress = true;
+            this.settingsProfileService.getAllLinkedEntities().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response && response.body && response.status === 'success') {
+                    this.addressConfiguration.linkedEntities = response.body.map(result => ({
+                        ...result,
+                        isDefault: false,
+                        label: result.alias,
+                        value: result?.uniqueName
+                    }));
+                }
+                this.isGetLinkedEntitiesInProgress = false;
+            });
+        }
     }
 
     /**
      * Loads all the states of a country
-     *
      * @param {string} countryCode Country code
      * @memberof SettingProfileComponent
      */
     public loadStates(countryCode: string): void {
+        this.isGetStatesInProgress = true;
         this.companyService.getAllStates({ country: countryCode }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body && response.status === 'success') {
                 const result = response.body;
@@ -894,6 +936,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     });
                 }
             }
+            this.isGetStatesInProgress = false;
         });
     }
 
@@ -964,7 +1007,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             isDefault: filteredEntity.isDefault,
             entity: filteredEntity.entity
         }));
-
         const requestObj = {
             taxNumber: addressDetails.formValue.taxNumber,
             stateCode: addressDetails.formValue.state,
@@ -1024,6 +1066,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.settingsProfileService.updateAddress(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 this.closeAddressSidePane = true;
+                setTimeout(() => { this.closeAddressSidePane = false; }, 500);
                 this.loadAddresses('GET');
                 this._toasty.successToast('Address updated successfully');
             } else {
@@ -1130,7 +1173,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
             if (profileObj.countryV2 !== undefined && profileObj.countryV2.alpha2CountryCode !== undefined) {
                 profileObj.country = profileObj.countryV2.alpha2CountryCode;
             }
-
             this.companyProfileObj = {
                 ...this.companyProfileObj,
                 name: profileObj.name,
@@ -1248,15 +1290,20 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
                 this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                     if (activeCompany) {
-                        if (activeCompany?.countryV2?.alpha2CountryCode === 'ZW' || activeCompany?.countryV2?.alpha2CountryCode === 'KE') {
+                        const alpha2CountryCode = activeCompany.countryV2?.alpha2CountryCode;
+
+                        if (this.vatSupportedCountries.includes(alpha2CountryCode)) {
                             this.taxType = this.commonLocaleData?.app_vat;
-                        } else if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
+                        } else if (this.trnSupportedCountries.includes(alpha2CountryCode)) {
                             this.taxType = this.commonLocaleData?.app_trn;
+                        } else if (this.salesTaxSupportedCountries.includes(alpha2CountryCode)) {
+                            this.taxType = this.commonLocaleData?.app_sales_tax;
                         } else {
                             this.taxType = this.commonLocaleData?.app_gstin;
                         }
-                        if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode) || activeCompany.countryV2?.alpha2CountryCode === 'IN') {
-                            this.showTaxColumn = true;                      
+
+                        if (this.taxSupportedCountries.includes(alpha2CountryCode) || alpha2CountryCode === 'IN') {
+                            this.showTaxColumn = true;
                         } else {
                             this.showTaxColumn = false;
                         }
@@ -1282,21 +1329,28 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
                     this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
                         if (activeCompany) {
-                            if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
-                                if(activeCompany?.countryV2?.alpha2CountryCode === 'ZW' || activeCompany?.countryV2?.alpha2CountryCode === 'KE') {
+                            if (this.taxSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
+                                if (this.vatSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                                     this.taxType = this.commonLocaleData?.app_vat;
                                     this.localeData.company_address_list = this.localeData.company_vat_list;
                                     this.localeData.add_address = this.localeData.add_vat;
                                     this.localeData.address_list = this.localeData.vat_list;
                                     this.localeData.create_address = this.localeData.create_vat;
                                     this.localeData.update_address = this.localeData.update_vat;
-                                } else {
+                                } else if (this.trnSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                                     this.taxType = this.commonLocaleData?.app_trn;
                                     this.localeData.company_address_list = this.localeData.company_trn_list;
                                     this.localeData.add_address = this.localeData.add_trn;
                                     this.localeData.address_list = this.localeData.trn_list;
                                     this.localeData.create_address = this.localeData.create_trn;
                                     this.localeData.update_address = this.localeData.update_trn;
+                                } else if (this.salesTaxSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
+                                    this.taxType = this.commonLocaleData?.app_sales_tax;
+                                    this.localeData.company_address_list = this.localeData.company_sales_tax_list;
+                                    this.localeData.add_address = this.localeData.add_sales_tax;
+                                    this.localeData.address_list = this.localeData.sales_tax_list;
+                                    this.localeData.create_address = this.localeData.create_sales_tax;
+                                    this.localeData.update_address = this.localeData.update_sales_tax;
                                 }
                             } else if (activeCompany.countryV2?.alpha2CountryCode === 'IN') {
                                 this.taxType = this.commonLocaleData?.app_gstin;
@@ -1316,37 +1370,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                     });
                 }
             });
-
-            this.getPageHeading();
         }
-    }
-
-    /**
-     * This will return page heading based on active tab
-     *
-     * @param {boolean} event
-     * @memberof SettingProfileComponent
-     */
-    public getPageHeading(): void {
-        let pageHeading = "";
-
-        if (this.isMobileScreen) {
-            switch (this.currentTab) {
-                case 'personal':
-                    pageHeading = this.personalInformationTabHeading;
-                    break;
-                case 'address':
-                    pageHeading = this.companyProfileObj?.taxType ? (this.localeData?.address + this.companyProfileObj?.taxType) : this.localeData?.addresses;
-                    break;
-                case 'portal':
-                    pageHeading = this.localeData?.portal_heading;
-                    break;
-                case 'other':
-                    pageHeading = this.localeData?.other;
-                    break;
-            }
-        }
-        this.pageHeading.emit(pageHeading);
     }
 
     /**

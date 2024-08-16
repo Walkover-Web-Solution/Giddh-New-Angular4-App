@@ -1,0 +1,85 @@
+<div class="advance-search-by-date date-advance-search d-flex justify-content-center row-gap column-gap15">
+    <div class="input-width">
+        <dropdown-field [options]="financialYears" (selectedOption)="getYearStartAndEndDate($event)"
+            [placeholder]="commonLocaleData?.app_select_year" [defaultValue]="selectedYear"></dropdown-field>
+    </div>
+    <div class="input-width" *ngIf="year && selectedYear">
+        <dropdown-field [options]="months" (selectedOption)="getMonthStartAndEndDate($event)"
+            [placeholder]="commonLocaleData?.app_select_month" [defaultValue]="selectedMonth?.label"></dropdown-field>
+    </div>
+    <div>
+        <div class="input-group custom-datepicker custom-new-datepicker" (click)="showGiddhDatepicker($event)">
+            <input type="text" name="selectedDateRange" [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                class="giddh-datepicker date-range-picker border-radius-2" />
+        </div>
+    </div>
+    <div *ngIf="
+            currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'
+        " class="input-width">
+        <dropdown-field [label]="commonLocaleData?.app_entity" [options]="currentCompanyBranches" width="100%"
+            (selectedOption)="
+                currentBranch.uniqueName = $event.value; handleBranchChange($event)
+            " [placeholder]="commonLocaleData?.app_select_entity"></dropdown-field>
+    </div>
+    <div *ngIf="taxes?.length > 1" class="input-width">
+        <dropdown-field
+            [label]="taxType.label"
+            [options]="taxes" (selectedOption)="getVatReport($event)" [placeholder]="taxType.placeholder"
+            [defaultValue]="taxes[0]?.label" [required]="true">
+        </dropdown-field>
+    </div>
+
+    <div class="ml-auto d-flex justify-content-center column-gap1 align-items-center">
+        <div *ngIf="isZimbabweCompany && taxNumber" class="input-width">
+            <dropdown-field [label]="commonLocaleData?.app_currency" [options]="vatReportCurrencyList"
+                (selectedOption)="onCurrencyChange($event)" [placeholder]="commonLocaleData?.app_select"
+                [defaultValue]="vatReportCurrencyCode" [required]="true">
+            </dropdown-field>
+        </div>
+        <ng-container *ngIf="isUSCompany && taxNumber">
+            <div *ngIf="isSalesTaxRateWise || isSalesTaxAccountWise" class="input-width">
+                <dropdown-field [label]="commonLocaleData?.app_tax_authority" [options]="taxAuthorityList"
+                    (selectedOption)="onTaxAuthorityChange($event)" [placeholder]="commonLocaleData?.app_select + ' ' + commonLocaleData?.app_tax_authority"
+                    [defaultValue]="taxAuthority.taxAuthorityName" [required]="true">
+                </dropdown-field>
+            </div>
+            <div *ngIf="isSalesTaxAccountWise" class="input-width">
+                <dropdown-field [label]="commonLocaleData?.app_tax" [options]="taxList"
+                    (selectedOption)="onTaxChange($event)" [placeholder]="commonLocaleData?.app_select + ' ' + commonLocaleData?.app_tax"
+                    [defaultValue]="taxAuthority.taxName" [required]="true">
+                </dropdown-field>
+            </div>
+        </ng-container>
+        <div *ngIf="taxNumber && (isZimbabweCompany || isKenyaCompany || isUSCompany)" class="export-btn d-flex justify-content-end w100">
+            <button mat-stroked-button color="primary" (click)="downloadVatReport()">
+                <i class="icon-download1"></i>
+                {{ commonLocaleData?.app_export }}
+            </button>
+        </div>
+        <div *ngIf="isUKCompany">
+            <a mat-stroked-button color="primary" class="text-right" [href]="connectToHMRCUrl"
+                [disabled]="!connectToHMRCUrl">
+                <ng-container *ngIf="connectToHMRCUrl">
+                    {{ localeData?.connect_to_hmrc }}
+                </ng-container>
+                <ng-container *ngIf="!connectToHMRCUrl">
+                    {{ localeData?.connected_to_hmrc }}
+                </ng-container>
+            </a>
+        </div>
+    </div>
+</div>
+
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate" [alwaysShowCalendars]="true" [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel" [showCustomRangeLabel]="true" [showClearButton]="false"
+                [showCancel]="true" [linkedCalendars]="true" [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)" (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false" [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"></app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

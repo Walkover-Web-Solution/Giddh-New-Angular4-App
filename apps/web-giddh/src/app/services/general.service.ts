@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../theme/confirmation-modal/confirmation-modal.interface';
 import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
@@ -15,7 +15,6 @@ import { ITaxControlData, ITaxDetail, ITaxUtilRequest } from '../models/interfac
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { IDiscountUtilRequest, LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { HttpHeaders } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable()
@@ -159,6 +158,9 @@ export class GeneralService {
         if (routerParams['utm_content']) {
             localStorage.setItem('utm_content', routerParams['utm_content']);
         }
+        if (routerParams['region']) {
+            localStorage.setItem('region', routerParams['region']);
+        }
     }
 
     getUtmParameter(param: string): string {
@@ -175,6 +177,7 @@ export class GeneralService {
         localStorage.removeItem("utm_campaign");
         localStorage.removeItem("utm_term");
         localStorage.removeItem("utm_content");
+        localStorage.removeItem("region");
     }
 
     getLastElement(array) {
@@ -1589,24 +1592,6 @@ export class GeneralService {
     };
 
     /**
-     * This will be use for generating random URLs
-     *
-     * @param {string} value
-     * @return {*}  {string}
-     * @memberof GeneralService
-     */
-    public generateRandomString(value: string): string {
-        const randomLength = 8; // Adjust the length of the random string as needed
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let result = '';
-        for (let i = 0; i < randomLength; i++) {
-            const randomIndex = Math.floor(Math.random() * characters.length);
-            result += characters.charAt(randomIndex);
-        }
-        return result + '.' + value;
-    }
-
-    /**
      * Get current date/time in this format - 06-11-2023 02:08:45
      *
      * @returns {string}
@@ -1623,6 +1608,24 @@ export class GeneralService {
         const seconds = String(now.getSeconds()).padStart(2, '0');
 
         return `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
+    }
+
+    /**
+     * This will be use for generating random URLs
+     *
+     * @param {string} value
+     * @return {*}  {string}
+     * @memberof GeneralService
+     */
+    public generateRandomString(value: string): string {
+        const randomLength = 8; // Adjust the length of the random string as needed
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        for (let i = 0; i < randomLength; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            result += characters.charAt(randomIndex);
+        }
+        return result + '.' + value;
     }
 
     /**
@@ -1758,7 +1761,7 @@ export class GeneralService {
      * @returns {string} The current timestamp.
      * @memberof GeneralService
      */
-    public getTimesStamp(): any {
+    public getTimeStamp(): any {
         const timestamp = new Date().toISOString();
         return timestamp;
     }
@@ -1940,7 +1943,7 @@ export class GeneralService {
      */
     public getUserAgentData(): any {
         let args: any = {};
-        args["timestamp"] = this.getTimesStamp();
+        args["timestamp"] = this.getTimeStamp();
         args["Gov-Client-Timezone"] = 'UTC' + this.getUserTimeZone();
         args["Gov-client-screens"] = this.getClientScreens();
         args["Gov-client-window-size"] = this.getClientWindowSize();
@@ -1952,20 +1955,20 @@ export class GeneralService {
      *
      * @memberof GeneralService
      */
-    public getClientIp(): any {
+    public getClientIp(): Observable<any> {
         return this.http.get<any>(MOBILE_NUMBER_SELF_URL);
     }
 
     /**
-     * This will be use for open window in center
-     *
-     * @param {string} url
-     * @param {string} title
-     * @param {number} width
-     * @param {number} height
-     * @return {*}  {(Window | null)}
-     * @memberof GeneralService
-     */
+    * This will be use for open window in center
+    *
+    * @param {string} url
+    * @param {string} title
+    * @param {number} width
+    * @param {number} height
+    * @return {*}  {(Window | null)}
+    * @memberof GeneralService
+    */
     public openCenteredWindow(url: string, title: string, width: number, height: number): Window | null {
         const left = (window.screen.width / 2) - (width / 2);
         const top = (window.screen.height / 2) - (height / 2);
@@ -1979,26 +1982,45 @@ export class GeneralService {
     }
 
     /**
-     *Get Country Flag Image Url by 2 digit country code
-     *
-     * @param {string} countryCode
-     * @return {*}  {string}
-     * @memberof GeneralService
-     */
+    * Get Country Flag Image Url by 2 digit country code
+    *
+    * @param {string} countryCode
+    * @return {*}  {string}
+    * @memberof GeneralService
+    */
     public getCountryFlagUrl(countryCode: string): string {
         return countryCode ? `https://giddh-uploads-2.s3.ap-south-1.amazonaws.com/flags/${countryCode?.toLowerCase()}.svg` : '';
     }
 
     /**
-     * This will use for confirmation delete vocher
+     *This will be use for get complete address information
+     *
+     * @param {*} addr
+     * @return {*}  {string}
+     * @memberof GeneralService
+     */
+    public getCompleteAddress(addr: any): string {
+        // Check each property and assign to a variable with a fallback to empty string
+        let address1 = addr?.bno ? addr.bno : '';
+        let address2 = addr?.bnm ? addr.bnm : '';
+        let address3 = addr?.st ? addr.st : '';
+        let address4 = addr?.landMark ? addr.landMark : '';
+        let address5 = addr?.loc ? addr.loc : '';
+
+        // Construct the complete address string
+        return `${address1} ${address2} ${address3} ${address4} ${address5}`.trim();
+    }
+
+    /**
+     * This will be use for delete inventory adjust configuration
      *
      * @param {*} localeData
      * @param {*} commonLocaleData
-     * @param {boolean} isVoucherDateSelected
      * @return {*}  {ConfirmationModalConfiguration}
      * @memberof GeneralService
      */
-    public getVoucherDeleteConfiguration(headerText: string, messageText: string, footerText: string, commonLocaleData: any): ConfirmationModalConfiguration {
+    public deleteInventoryAdjustAdjustConfiguration(localeData: any, commonLocaleData: any): ConfirmationModalConfiguration {
+
         const buttons: Array<ConfirmationModalButton> = [{
             text: commonLocaleData?.app_yes,
             color: 'primary'
@@ -2006,15 +2028,16 @@ export class GeneralService {
         {
             text: commonLocaleData?.app_no
         }];
+        const headerText: string = commonLocaleData?.app_confirmation;
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mr-b1 text-light';
         const footerCssClass: string = 'mr-b1';
         return {
             headerText,
             headerCssClass,
-            messageText: messageText,
+            messageText: localeData?.delete_confirmation_message,
             messageCssClass,
-            footerText: footerText,
+            footerText: localeData?.delete_message1,
             footerCssClass,
             buttons
         };

@@ -22,8 +22,16 @@
                     top: $i + px !important;
                 }
             }
-            &:hover {
-                background-color: transparent;
+
+            &.highlighted-transaction {
+                .mat-grid-tile {
+                    background-color: var(--color-success-enable-bg-light);
+                }
+            }
+            &:not(.highlighted-transaction) {
+                &:hover {
+                    background-color: var(--color-transparent-background);
+                }
             }
         }
         .entry-modal-height {
@@ -762,7 +770,6 @@ sh-select:focus {
 
 .ledger-row {
     .text-ellipsis {
-        min-width: 160px;
         max-width: 400px;
         width: 100%;
     }

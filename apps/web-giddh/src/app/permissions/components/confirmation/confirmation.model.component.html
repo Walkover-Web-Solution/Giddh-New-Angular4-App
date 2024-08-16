@@ -1,16 +1,16 @@
 <div>
-    <div class="modal-header clearfix">
+    <div class="modal-header d-flex justify-content-between">
         <h3>{{ commonLocaleData?.app_confirmation }}</h3>
-        <button aria-hidden="true" class="close" data-dismiss="modal" (click)="onCancel()">×</button>
+        <button aria-label="close" mat-button class="close" (click)="onCancel()">×</button>
     </div>
     <div class="modal-body clearfix" id="export-body">
         <form name="newRole" novalidate autocomplete="off">
             <h3 [innerHTML]="confirmationMessage"></h3>
             <div class="text-right mr-t4 clearfix">
-                <button type="submit" class="btn btn-sm btn-success" (click)="onConfirmation()">
+                <button mat-stroked-button color="primary" class="mr-r1" (click)="onConfirmation()">
                     {{ commonLocaleData?.app_yes }}
                 </button>
-                <button type="submit" class="btn btn-sm btn-danger" (click)="onCancel()">
+                <button mat-stroked-button (click)="onCancel()">
                     {{ commonLocaleData?.app_no }}
                 </button>
             </div>

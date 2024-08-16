@@ -6,7 +6,7 @@ import { BsModalRef, BsModalService } from "ngx-bootstrap/modal";
 import { Observable, ReplaySubject, of as observableOf, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from "../../../app.constant";
-import { BalanceStockTransactionReportRequest, SearchStockTransactionReportRequest, StockTransactionReportRequest } from "../../../models/api-models/Inventory";
+import { BalanceStockTransactionReportRequest, SearchStockTransactionReportRequest, StockTransactionReportRequest, StockTransactionReportRequestExport } from "../../../models/api-models/Inventory";
 import { NewInventoryAdvanceSearch } from "../new-inventory-advance-search/new-inventory-advance-search.component";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
@@ -19,13 +19,15 @@ import { AppState } from "../../../store";
 import { select, Store } from "@ngrx/store";
 import { Location } from '@angular/common';
 import { Router } from "@angular/router";
-import { InventoryModuleName } from "../../inventory.enum";
+import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
+import { InventoryComponentStore } from "../inventory.store";
 
 @Component({
     selector: "report-filters",
     templateUrl: "./report-filters.component.html",
     styleUrls: ["./report-filters.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [InventoryComponentStore]
 })
 export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     /** Instance of datepicker */
@@ -42,6 +44,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     @Input() public fromToDate: any = {};
     /** Stock Transactional Object */
     @Input() public stockReportRequest: StockTransactionReportRequest = new StockTransactionReportRequest();
+    /** Stock Export Table Data*/
+    @Input() public stockReportRequestExport: StockTransactionReportRequestExport = new StockTransactionReportRequestExport();
     /** Stock Transactional Object */
     @Input() public balanceStockReportRequest: BalanceStockTransactionReportRequest = new BalanceStockTransactionReportRequest();
     /** Holds report type */
@@ -137,7 +141,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     /** Observable to subscribe for refresh columns on select chiplist */
     public refreshColumns = new Subject<void>();
     /** This will hold if variant is selected on chip list */
-    public isVariantSelected : boolean = false;
+    public isVariantSelected: boolean = false;
+    /** Loading Observable */
+    public isLoading$: Observable<any> = this.componentStore.isLoading$;
 
     constructor(
         public dialog: MatDialog,
@@ -148,7 +154,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         private generalService: GeneralService,
         private toaster: ToasterService,
         private store: Store<AppState>,
-        public router: Router
+        public router: Router,
+        private componentStore: InventoryComponentStore
     ) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -234,7 +241,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.searchInventory();
             }
         });
-        this.searchInventory();      
+        this.searchInventory();
     }
 
     /**
@@ -284,11 +291,14 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.selectedBranch = changes?.stockReportRequest?.currentValue?.branchUniqueNames;
                 this.stockReportRequest.branchUniqueNames = this.selectedBranch;
                 this.balanceStockReportRequest.branchUniqueNames = this.selectedBranch;
+                this.selectedBranch = changes?.stockReportRequestExport?.currentValue?.branchUniqueNames;
+                this.stockReportRequestExport.branchUniqueNames = this.selectedBranch;
             }
             if (changes?.stockReportRequest?.currentValue?.warehouseUniqueNames?.length) {
                 this.selectedWarehouse = changes?.stockReportRequest?.currentValue?.warehouseUniqueNames;
                 this.stockReportRequest.warehouseUniqueNames = this.selectedWarehouse;
-                this.balanceStockReportRequest.warehouseUniqueNames = this.selectedWarehouse;
+                this.selectedWarehouse = changes?.stockReportRequestExport?.currentValue?.warehouseUniqueNames;
+                this.stockReportRequestExport.warehouseUniqueNames = this.selectedWarehouse;
             }
         }
         this.isFilterActive();
@@ -303,6 +313,88 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.displayedColumns = columns;
         this.selectedColumns.emit(this.displayedColumns);
         this.changeDetection.detectChanges();
+
+        /* This will use for table header from customise columns for export table */
+        this.stockReportRequestExport = {
+            ...this.stockReportRequestExport,
+            showStockName: false,
+            showGroupName: false,
+            showUnitName: false,
+            showOpeningStockQty: false,
+            showOpeningStockValue: false,
+            showInwardsQty: false,
+            showInwardsValue: false,
+            showOutwardsQty: false,
+            showOutwardsValue: false,
+            showClosingStockQty: false,
+            showClosingStockValue: false,
+            showVariantName: false,
+            showDate: false,
+            showAccountUniqueName: false,
+            showRate: false,
+            showValue: false
+        }
+
+        /* for column value filter selected common */
+        this.displayedColumns?.forEach(column => {
+            if (column === 'inward_quantity') {
+                this.stockReportRequestExport.showInwardsQty = true;
+            }
+            else if (column === 'outward_quantity') {
+                this.stockReportRequestExport.showOutwardsQty = true;
+            }
+            /* for value filter selected in item, variant & group */
+            if (InventoryReportType.stock || InventoryReportType.variant || InventoryReportType.group) {
+                if (column === 'group_name') {
+                    this.stockReportRequestExport.showGroupName = true;
+                }
+                else if (column === 'opening_quantity') {
+                    this.stockReportRequestExport.showOpeningStockQty = true;
+                }
+                else if (column === 'opening_amount') {
+                    this.stockReportRequestExport.showOpeningStockValue = true;
+                }
+                else if (column === 'inward_amount') {
+                    this.stockReportRequestExport.showInwardsValue = true;
+                }
+                else if (column === 'outward_amount') {
+                    this.stockReportRequestExport.showOutwardsValue = true;
+                }
+                else if (column === 'closing_quantity') {
+                    this.stockReportRequestExport.showClosingStockQty = true;
+                }
+                else if (column === 'closing_amount') {
+                    this.stockReportRequestExport.showClosingStockValue = true;
+                }
+            }
+            /* for value filter selected in item, variant & transaction */
+            if ((InventoryReportType.stock || InventoryReportType.variant || InventoryReportType.transaction) && column === 'stock_name') {
+                this.stockReportRequestExport.showStockName = true;
+            }
+            /* for value filter selected in item & variant both */
+            if ((InventoryReportType.stock || InventoryReportType.variant) && column === 'unit_name') {
+                this.stockReportRequestExport.showUnitName = true;
+            }
+            /* for value filter selected in variant & transaction both */
+            if ((InventoryReportType.variant || InventoryReportType.transaction) && column === 'variant_name') {
+                this.stockReportRequestExport.showVariantName = true;
+            }
+            /* for value filter selected in Transaction */
+            if (InventoryReportType.transaction) {
+                if (column === 'entry_date') {
+                    this.stockReportRequestExport.showDate = true;
+                }
+                else if (column === 'account_name') {
+                    this.stockReportRequestExport.showAccountUniqueName = true;
+                }
+                else if (column === 'rate') {
+                    this.stockReportRequestExport.showRate = true;
+                }
+                else if (column === 'transaction_val') {
+                    this.stockReportRequestExport.showValue = true;
+                }
+            }
+        });
     }
 
     /**
@@ -333,11 +425,17 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
                 this.stockReportRequest.from = response.stockReportRequest?.fromDate;
                 this.stockReportRequest.to = response.stockReportRequest?.toDate;
                 this.stockReportRequest.val = response.stockReportRequest?.val;
+
                 this.balanceStockReportRequest.param = response.stockReportRequest?.param;
                 this.balanceStockReportRequest.expression = response.stockReportRequest?.expression;
                 this.balanceStockReportRequest.val = response.stockReportRequest?.val;
                 this.balanceStockReportRequest.from = response.stockReportRequest?.fromDate;
                 this.balanceStockReportRequest.to = response.stockReportRequest?.toDate;
+
+                this.stockReportRequestExport.param = response.stockReportRequestExport?.param;
+                this.stockReportRequestExport.expression = response.stockReportRequestExport?.expression;
+                this.stockReportRequestExport.val = response.stockReportRequestExport?.val;
+
                 this.stockReportRequest.page = 1;
                 this.showAdvanceSearchModal = true;
                 this.isFilterActive();
@@ -354,7 +452,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     private emitFilters(): void {
-        this.filters.emit({ stockReportRequest: this.stockReportRequest, balanceStockReportRequest: this.balanceStockReportRequest, displayedColumns: this.displayedColumns, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter, advanceSearchModalResponse: this.advanceSearchModalResponse });
+        this.filters.emit({ stockReportRequest: this.stockReportRequest, balanceStockReportRequest: this.balanceStockReportRequest, displayedColumns: this.displayedColumns, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter, advanceSearchModalResponse: this.advanceSearchModalResponse, stockReportRequestExport: this.stockReportRequestExport });
     }
 
     /**
@@ -380,6 +478,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.showClearFilter = false;
         this.advanceSearchModalResponse = null;
         this.stockReportRequest = new StockTransactionReportRequest();
+        this.stockReportRequestExport = new StockTransactionReportRequestExport();
         this.balanceStockReportRequest = new BalanceStockTransactionReportRequest();
         this.searchInventory();
         this.filtersChipList = [];
@@ -428,6 +527,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      */
     public getWarehouses(): void {
         this.stockReportRequest.warehouseUniqueNames = this.selectedWarehouse;
+        this.stockReportRequestExport.warehouseUniqueNames = this.selectedWarehouse;
         this.balanceStockReportRequest.warehouseUniqueNames = this.selectedWarehouse;
         this.stockReportRequest.page = 1;
         this.isFilterActive();
@@ -450,6 +550,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
 
                 if (!this.isCompany) {
                     this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
+                    this.stockReportRequestExport.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
                     this.balanceStockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
                 }
             }
@@ -485,11 +586,13 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         }
         this.currentWarehouses = this.warehouses;
         this.stockReportRequest.branchUniqueNames = this.selectedBranch?.length ? this.selectedBranch : [];
+        this.stockReportRequestExport.branchUniqueNames = this.selectedBranch?.length ? this.selectedBranch : [];
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
 
         if (!this.isCompany) {
             this.stockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
             this.balanceStockReportRequest.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
+            this.stockReportRequestExport.branchUniqueNames = this.generalService.currentBranchUniqueName ? [this.generalService.currentBranchUniqueName] : [];
         }
         this.balanceStockReportRequest.branchUniqueNames = cloneDeep(this.stockReportRequest.branchUniqueNames);
         this.balanceStockReportRequest.warehouseUniqueNames = cloneDeep(this.stockReportRequest.warehouseUniqueNames);
@@ -616,6 +719,9 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.balanceStockReportRequest.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
         this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
         this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
+        this.stockReportRequestExport.stockGroupUniqueNames = this.stockReportRequest.stockGroupUniqueNames;
+        this.stockReportRequestExport.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
+        this.stockReportRequestExport.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
         this.filtersChipList?.push(selectOptionValue);
         this.searchRequest.q = "";
         this.searchInventory();
@@ -777,5 +883,59 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.router.navigate(['/pages/inventory/v2/stock', this.moduleType?.toLowerCase(), 'edit', uniqueName]);
         }
     }
-}
 
+    /**
+     * This will use for export stock report data
+     *
+     * @return {*}  {void}
+     * @memberof ReportFiltersComponent
+    */
+    public exportReport(): void {
+        let stockReportRequestExport = this.stockReportRequestExport;
+        let queryParams = {
+            from: this.fromDate,
+            to: this.toDate
+        };
+        delete stockReportRequestExport.from;
+        delete stockReportRequestExport.to;
+
+        stockReportRequestExport.inventoryType = this.moduleType;
+
+        // this is for Item wise export
+        if (this.searchPage === InventoryReportType.stock) {
+            // data is coming from inventory store
+            this.componentStore.exportStock({
+                stockReportRequest: stockReportRequestExport,
+                queryParams: queryParams
+            });
+        }
+
+        // this is for Variant wise export
+        else if (this.searchPage === InventoryReportType.variant) {
+            // data is coming from inventory store
+            this.componentStore.exportVariant({
+                stockReportRequest: stockReportRequestExport,
+                queryParams: queryParams
+            });
+        }
+
+        // this is for Group wise export
+        else if (this.searchPage === InventoryReportType.group) {
+            // data is coming from inventory store
+            this.componentStore.exportGroup({
+                stockReportRequest: stockReportRequestExport,
+                queryParams: queryParams
+            });
+        }
+
+        // this is for Transaction wise export
+        else if (this.searchPage === InventoryReportType.transaction) {
+            stockReportRequestExport.accountName = this.balanceStockReportRequest.accountName;
+            // data is coming from inventory store
+            this.componentStore.exportTransaction({
+                stockReportRequest: stockReportRequestExport,
+                queryParams: queryParams
+            });
+        }
+    }
+}

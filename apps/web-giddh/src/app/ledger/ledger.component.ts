@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
 import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS } from 'apps/web-giddh/src/app/app.constant';
@@ -304,7 +304,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public selectedCreditTransactionIds = new Set<string>();
     /** String representing the selected bank transaction while hovering. */
     public selectedBankTrxWhileHovering: string;
-
+    /** Holds transaction count convert to entries */
+    public transactionCountConvertToEntries: number = null;
+    /** Holds bank transactions account name */
+    private bankTransactionsWithAccountName: any[] = [];
 
     constructor(
         private store: Store<AppState>,
@@ -328,9 +331,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private adjustmentUtilityService: AdjustmentUtilityService,
         private invoiceAction: InvoiceActions,
         private commonAction: CommonActions,
-        private pageLeaveUtilityService: PageLeaveUtilityService
+        private pageLeaveUtilityService: PageLeaveUtilityService,
+        private router: Router
     ) {
-
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
         this.trxRequest = new TransactionsRequest();
@@ -404,6 +407,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.selectedTxnAccUniqueName = '';
         this.selectedAccountDetails = e;
         if (!e?.value || clearAccount) {
+            if (clearAccount) {
+                this.getTransactionCountConvertToEntries(txn);
+            } else {
+                this.getTransactionCountConvertToEntries();
+            }
             // if there's no selected account set selectedAccount to null
             txn.selectedAccount = null;
             this.lc.currentBlankTxn = null;
@@ -754,6 +762,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.getTransactionData();
                 this.resetBlankTransaction();
                 this.resetPreviousSearchResults();
+                this.transactionCountConvertToEntries = null;
+                this.bankTransactionsWithAccountName = [];
                 // After the success of the entrance call for bank transactions
                 this.lc.activeAccount$.pipe(take(1)).subscribe((data: AccountResponse) => {
                     this.loaderService.show();
@@ -953,6 +963,40 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Prepare array and count the selected bank transaction to save.
+     *
+     * @param {*} [transaction]
+     * @memberof LedgerComponent
+     */
+    public getTransactionCountConvertToEntries(transaction?: any): void {
+        if (this.lc.bankTransactionsDebitData?.length || this.lc.bankTransactionsCreditData?.length) {
+            if (!transaction) {
+                let bankTransactions: any[] = [];
+
+                this.lc.bankTransactionsDebitData.forEach(transaction => {
+                    if (transaction.transactions[0].selectedAccount?.name) {
+                        bankTransactions.push(transaction);
+                    }
+                });
+                this.lc.bankTransactionsCreditData.forEach(transaction => {
+                    if (transaction.transactions[0].selectedAccount?.name) {
+                        bankTransactions.push(transaction);
+                    }
+                });
+                this.transactionCountConvertToEntries = bankTransactions.length;
+                this.bankTransactionsWithAccountName = bankTransactions;
+            } else {
+                const beforeFilterLength = this.bankTransactionsWithAccountName.length;
+                this.bankTransactionsWithAccountName = this.bankTransactionsWithAccountName.filter(item => (transaction?.id !== item?.id));
+                const afterFilterLength = this.bankTransactionsWithAccountName.length;
+                if (afterFilterLength !== beforeFilterLength) {
+                    this.transactionCountConvertToEntries--;
+                }
+            }
+        }
+    }
+
+    /**
      * Loop through bank transactions and prepare model to send data to api
      *
      * @param {*} bankTransactions
@@ -1143,6 +1187,33 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Save bulk bank transaction
+     *
+     * @returns {void}
+     * @memberof LedgerComponent
+     */
+    public saveBulkBankTransaction(): void {
+        let blankTransactionsObjArray: BlankLedgerVM[] = [];
+
+        this.bankTransactionsWithAccountName.forEach(currentBankEntry => {
+            let blankTransactionObj: BlankLedgerVM = this.lc.prepareBankLedgerRequestObject(currentBankEntry);
+            blankTransactionObj.invoicesToBePaid = this.selectedInvoiceList;
+            delete blankTransactionObj['voucherType'];
+
+            if (blankTransactionObj && blankTransactionObj?.transactions && blankTransactionObj?.transactions.length > 0) {
+                blankTransactionsObjArray.push(blankTransactionObj);
+            }
+        })
+
+        if (blankTransactionsObjArray.length) {
+            this.store.dispatch(this.ledgerActions.ResetBlankLedger());
+            this.store.dispatch(this.ledgerActions.CreateBulkBlankLedgers(cloneDeep(blankTransactionsObjArray), this.lc.accountUnq));
+        } else {
+            this.toaster.showSnackBar("error", this.localeData?.transaction_required, this.commonLocaleData?.app_error);
+        }
+    }
+
     public getselectedInvoice(event: string[]) {
         this.selectedInvoiceList = event;
     }
@@ -1322,15 +1393,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public showUpdateLedgerModal(txn: ITransactionItem, type: string) {
-        let transactions: TransactionsResponse = null;
-        this.store.pipe(select(t => t?.ledger?.transactionsResponse), take(1)).subscribe(trx => transactions = trx);
-        if (transactions) {
-            this.store.dispatch(this.ledgerActions.setAccountForEdit(this.lc.accountUnq));
+        if (txn?.adjustmentEntry) {
+            this.router.navigate([`/pages/inventory/v2/product/adjust/${txn?.description}`]);
+        } else {
+            let transactions: TransactionsResponse = null;
+            this.store.pipe(select(t => t?.ledger?.transactionsResponse), take(1)).subscribe(trx => transactions = trx);
+            if (transactions) {
+                this.store.dispatch(this.ledgerActions.setAccountForEdit(this.lc.accountUnq));
+            }
+            this.store.dispatch(this.ledgerActions.setTxnForEdit(txn.entryUniqueName));
+            this.lc.selectedTxnUniqueName = txn.entryUniqueName;
+            this.entrySide = type;
+            this.loadUpdateLedgerComponent();
         }
-        this.store.dispatch(this.ledgerActions.setTxnForEdit(txn.entryUniqueName));
-        this.lc.selectedTxnUniqueName = txn.entryUniqueName;
-        this.entrySide = type;
-        this.loadUpdateLedgerComponent();
     }
 
     public hideUpdateLedgerModal() {
@@ -2930,6 +3005,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 if (allowChangeDetection) {
                     this.cdRf.detectChanges();
                 }
+                this.getTransactionCountConvertToEntries();
             }
         });
     }

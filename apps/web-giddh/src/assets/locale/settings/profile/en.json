@@ -58,6 +58,7 @@
     "select_language": "Select Language",
     "theme": "Theme",
     "select_theme": "Select Theme",
+    "select_inventory": "Select Inventory Type",
     "portal_domain": "Portal Domain",
     "portal_url": "Portal URL",
     "domain_error_message":"Special characters other than Hyphen (-) are not allowed",
@@ -69,7 +70,7 @@
     "add_domain": "Add Domain",
     "hostname": "Hostname",
     "no_domains_found": "No domains found",
-    "copied": "Copied..",
+    "copied": "Copied...",
     "select_domain": "Select Domain",
     "share_dns_record_to_developer": "Share DNS record to developer",
     "add_subdomain_or_domain": "Add subdomain/domain",
@@ -82,5 +83,10 @@
     "select_export_type": "Select Export Type",
     "with_pay": "With payment of IGST",
     "without_pay": "Without payment of IGST/LUT Bond",
-    "add_vat": "+ Add VAT"
+    "add_vat": "+ Add VAT",
+    "add_sales_tax": "+ Add Sales Tax",
+    "sales_tax_list": "List of all the Sales Tax's created",
+    "create_sales_tax": "Create Sales Tax",
+    "update_sales_tax": "Update Sales Tax",
+    "company_sales_tax_list": "List of all the Sales Tax's created and linked in the company"
 }

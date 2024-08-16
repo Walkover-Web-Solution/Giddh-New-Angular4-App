@@ -19,9 +19,9 @@
                             class="giddh-datepicker date-range-picker" />
                     </div>
                 </div>
-                <div class="col flex-grow-0">
-                    <dropdown-field [label]="commonLocaleData?.app_tax_number" [options]="taxesList"
-                        (selectedOption)="taxNumberSelected($event)" [placeholder]="localeData?.select_tax_number">
+                <div class="col flex-grow-0" *ngIf="taxesList?.length > 1" >
+                    <dropdown-field [label]="commonLocaleData?.app_vat" [options]="taxesList"
+                        (selectedOption)="taxNumberSelected($event)" [placeholder]="commonLocaleData?.app_enter_vat">
                     </dropdown-field>
                 </div>
                 <div class="col flex-grow-0">

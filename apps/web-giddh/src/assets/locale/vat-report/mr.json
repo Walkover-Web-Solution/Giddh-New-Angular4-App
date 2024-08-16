@@ -11,7 +11,6 @@
     "no_vrn_available": "कृपया अहवाल पाहण्यासाठी आपल्या डीफॉल्ट पत्त्यावर वीआरएन जोडा.",
     "no_vat_available": "अहवाल पाहण्यासाठी कृपया तुमच्या डीफॉल्ट पत्त्यावर वैट जोडा.",
     "select_trn": "टीआरएन निवडा",
-    "select_entity": "अस्तित्व निवडा",
     "a": "अ =",
     "b": "बी =",
     "c": "सी =",
@@ -20,7 +19,6 @@
     "invoice_number": "बील क्रमांक",
     "customer_name": "ग्राहकाचे नाव",
     "reverse_charge": "उलट शुल्क",
-    "select_month_label": "महिना निवडा",
     "box":"बॉक्स",
     "period_key": "काळ की",
     "view_return": "परत बघा",
@@ -28,10 +26,8 @@
     "status_open": "उघडा",
     "status_fulfilled": "पूर्ण",
     "select_status": "स्थिति चुनें",
-    "select_tax_number": "कर संख्या चुनें",
     "connect_to_hmrc": "एचएमआरसीसह कनेक्ट करा",
     "connected_to_hmrc": "एचएमआरसीसह कनेक्ट केलं आहे",
-    "select_year_label": "वर्ष निवडा",
     "file_return_confirmation":"जेव्हा तुम्ही ही व्हॅट माहिती सबमिट करता तेव्हा तुम्ही कायदेशीर घोषणा करत आहात की माहिती खरी आणि पूर्ण आहे. खोट्या घोषणेमुळे खटला भरू शकतो.",
     "tax_percentage": "कर टक्केवारी",
     "for_office_use": "कार्यालयात वापरण्यासाठी",
@@ -42,5 +38,7 @@
     "detailsOfPurchases": "खरेदीचे तपशील",
     "amountExclVat": "रक्कम (व्हॅट वगळून)",
     "amountOfOutputTax": "आउटपुट कराची रक्कम",
-    "amountOfInputTax": "इनपुट टॅक्सची रक्कम"
+    "amountOfInputTax": "इनपुट टॅक्सची रक्कम",
+    "inclusive": "समावेशक",
+    "exclusive": "अनन्य"
 }

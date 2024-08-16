@@ -179,6 +179,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type) {
                 this.hideShowColumnList = [];
+                this.resetSearch();
+                
                 this.inventoryType = params.type == 'fixedassets' ? 'FIXED_ASSETS' : params?.type.toUpperCase();
                 /** Holds list of all hide show column common in inventory type*/
                 let commonHideShowColumnList = [
@@ -500,6 +502,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy {
         if (!(this.tableHeadInput[key] && this.searchString && this.searchStringKey)) {
             this.tableHeadInput[key] = !this.tableHeadInput[key];
         }
+        
     }
 
     /**

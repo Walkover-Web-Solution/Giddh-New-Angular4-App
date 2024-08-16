@@ -150,7 +150,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
                 }, 0);
             }
 
-            if (this.activeTab === "taxes" || this.activeTab === "addresses") {
+            if (this.activeTab === "taxes" || this.activeTab === "addresses" || this.activeTab === "reports") {
                 this.asideGstSidebarMenuState = "in";
                 document.querySelector('body').classList.remove('setting-sidebar-open');
                 document.querySelector('body').classList.add('gst-sidebar-open');
@@ -177,7 +177,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
-            if (this.activeLocale && this.activeLocale !== response?.value) {
+            if(this.activeLocale && this.activeLocale !== response?.value) {
                 this.localeService.getLocale('settings', response?.value).subscribe(response => {
                     this.localeData = response;
                 });
@@ -249,7 +249,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab + '/' + this.integrationtab));
             this.loadModuleData(tab);
             this.router.navigate(['pages/settings/', tab, this.integrationtab], { replaceUrl: true });
-        } else {
+        } else if (tab !== 'reports') {
             this.store.dispatch(this._generalActions.setAppTitle('/pages/settings/' + tab));
             this.loadModuleData(tab);
             this.router.navigate(['pages/settings/', tab], { replaceUrl: true });

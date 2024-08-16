@@ -77,5 +77,20 @@
     "export_group_ledger": "निर्यात समूह लेजर",
     "bank_details_error_message": "यदि आप उनमें से किसी के लिए डेटा प्रदान करते हैं तो सभी बैंक फ़ील्ड अनिवार्य हैं",
     "item_no": "मद #[ITEM_NO]",
-    "duplicate_email":"डुप्लिकेट ईमेल स्वीकृत नहीं हैं"
+    "duplicate_email":"डुप्लिकेट ईमेल स्वीकृत नहीं हैं",
+    "tax_number": "कर नंबर",
+    "opening_balance_type": "ओपनिंग बैलेंस प्रकार",
+    "foreign_opening_balance_type": "विदेशी प्रारंभिक शेष प्रकार",
+    "currency_title": "मुद्रा",
+    "mobile_number": "मोबाइल नंबर",
+    "attention_to_master": "पर ध्यान",
+    "remark": "टिप्पणी",
+    "address": "पता",
+    "pin_code": "पिन कोड",
+    "bank_name": "बैंक का नाम",
+    "bank_account_number": "बैंक खाता संख्या",
+    "ifsc_code": "आईएफएससी कोड",
+    "beneficiary_name": "लाभार्थी का नाम",
+    "branch_name": "शाखा का नाम",
+    "swift_code": "स्विफ्ट कोड"
 }

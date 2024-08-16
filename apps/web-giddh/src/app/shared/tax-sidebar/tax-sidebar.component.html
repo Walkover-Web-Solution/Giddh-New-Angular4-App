@@ -118,7 +118,7 @@
                             [class.active]="taxes.isActive"
                         >
                             <span><i class="icon-settings-cog"></i></span>
-                            <span>{{ localeData?.setting }}</span>
+                            <span>{{ localeData?.manage_tax }}</span>
                         </a>
                     </li>
                     <li *ngIf="showGstMenus">
@@ -136,7 +136,7 @@
                             <span>{{ localeData?.unit_mapping }}</span>
                         </a>
                     </li>
-                    <li *ngIf="showVatMenus">
+                    <li *ngIf="showTaxMenus">
                         <a
                             href="javascript:;"
                             class="d-block clearfix"
@@ -144,10 +144,24 @@
                             #vatReport="routerLinkActive"
                             [class.active]="vatReport.isActive"
                             [routerLink]="['/pages/vat-report']"
-                            [routerLinkActiveOptions]="{exact: true}"
+                            [routerLinkActiveOptions]="{ exact: true }"
                         >
                             <span><i class="icon-vat1"></i></span>
                             <span>{{ localeData?.vat_report }}</span>
+                        </a>
+                    </li>
+                    <li *ngIf="showTaxMenus && isZimbabweCompany">
+                        <a
+                            href="javascript:;"
+                            class="d-block clearfix"
+                            routerLinkActive
+                            #vatReport="routerLinkActive"
+                            [class.active]="vatReport.isActive"
+                            [routerLink]="['/pages/vat-report/liability-report']"
+                            [routerLinkActiveOptions]="{ exact: false }"
+                        >
+                            <span><i class="icon-balance-sheet-new"></i></span>
+                            <span>{{ localeData?.liability_report }}</span>
                         </a>
                     </li>
                     <li>
@@ -163,7 +177,7 @@
                             <span>{{ taxTypeSidebarLabel }}</span>
                         </a>
                     </li>
-                    <li *ngIf="showVatMenus && isUKCompany">
+                    <li *ngIf="showTaxMenus && isUKCompany">
                         <a
                             href="javascript:;"
                             class="d-block clearfix"
@@ -176,7 +190,7 @@
                             <span>{{ localeData?.vat_obligations }}</span>
                         </a>
                     </li>
-                    <li *ngIf="showVatMenus && (isZimbabweCompany || isKenyaCompany)">
+                    <li *ngIf="showTaxMenus && (isZimbabweCompany || isKenyaCompany)">
                         <a
                             href="javascript:;"
                             class="d-block clearfix"
@@ -187,6 +201,19 @@
                         >
                             <span><i class="icon-settings-cog"></i></span>
                             <span>{{ localeData?.with_held_setting }}</span>
+                        </a>
+                    </li>
+                    <li *ngIf="isCompany && showGstMenus">
+                        <a
+                            href="javascript:;"
+                            class="d-block clearfix"
+                            routerLinkActive
+                            #gstSetting="routerLinkActive"
+                            [class.active]="gstSetting.isActive"
+                            [routerLink]="['/pages/gstfiling/gst-setting']"
+                        >
+                            <span><i class="icon-settings-cog"></i></span>
+                            <span>{{ localeData?.gst_setting }}</span>
                         </a>
                     </li>
                     <li *ngIf="showGstMenus">
@@ -202,6 +229,60 @@
                             <span>{{ localeData?.filing_status }}</span>
                         </a>
                     </li>
+                    <ng-container *ngIf="showSalesTaxMenus && isUSCompany">
+                        <li>
+                            <a
+                                href="javascript:;"
+                                [routerLink]="['/pages/settings/manage-tax-authority']"
+                                class="d-block clearfix pd-r1"
+                                routerLinkActive
+                                #taxAuthority="routerLinkActive"
+                                [class.active]="taxAuthority.isActive"
+                            >
+                                <span><i class="icon-settings-cog"></i></span>
+                                <span>{{ localeData?.manage_tax_authority }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                href="javascript:;"
+                                [routerLink]="['/pages/settings/reports/tax-authority']"
+                                class="d-block clearfix pd-r1"
+                                routerLinkActive
+                                #taxAuthorityReport="routerLinkActive"
+                                [class.active]="taxAuthorityReport.isActive"
+                            >
+                                <span><i class="icon-reports"></i></span>
+                                <span>{{ commonLocaleData?.app_tax_authority }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                href="javascript:;"
+                                [routerLink]="['/pages/settings/reports/rate-wise']"
+                                class="d-block clearfix pd-r1"
+                                routerLinkActive
+                                #rateWiseReport="routerLinkActive"
+                                [class.active]="rateWiseReport.isActive"
+                            >
+                                <span><i class="icon-reports"></i></span>
+                                <span>{{ localeData?.rate_wise }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                href="javascript:;"
+                                [routerLink]="['/pages/settings/reports/account-wise']"
+                                class="d-block clearfix pd-r1"
+                                routerLinkActive
+                                #accountWise="routerLinkActive"
+                                [class.active]="accountWise.isActive"
+                            >
+                                <span><i class="icon-reports"></i></span>
+                                <span>{{ localeData?.account_wise }}</span>
+                            </a>
+                        </li>
+                    </ng-container>
                 </ul>
             </div>
         </div>

@@ -30,7 +30,8 @@
                 </div>
                 <button
                     *ngIf="
-                        inputData?.rowData?.isOwner && inputData.rowData?.companies?.length < inputData.rowData?.totalCompanies
+                        inputData?.rowData?.isOwner &&
+                        inputData.rowData?.companies?.length < inputData.rowData?.totalCompanies
                     "
                     (click)="createCompanyInSubscription()"
                     mat-stroked-button
@@ -86,7 +87,7 @@
                                 <div class="d-flex align-items-center">
                                     {{ element.status }}
                                     <button
-                                        *ngIf="inputData?.rowData?.isOwner"
+                                        *ngIf="inputData?.rowData?.isOwner && element?.status === 'UNARCHIVED'"
                                         mat-icon-button
                                         id="edit-model-basic"
                                         class="table-menu-first-td"
@@ -122,7 +123,7 @@
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    <tr class="table-row" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
             </section>
             <div class="no-data" *ngIf="!dataSource?.filteredData?.length">

@@ -58,6 +58,7 @@
 	"select_language": "भाषा निवडा",
     "theme": "थीम",
     "select_theme": "थीम निवडा",
+	"select_inventory": "यादीचा प्रकार निवडा",
     "portal_domain": "पोर्टल डोमेन",
     "portal_url": "पोर्टल यूआरएल",
     "domain_error_message":"हायफन (-) व्यतिरिक्त इतर विशेष वर्णांना परवानगी नाही",
@@ -69,7 +70,7 @@
     "add_domain": "डोमेन जोडा",
     "hostname": "होस्टनेम",
     "no_domains_found": "कोणतेही डोमेन सापडले नाहीत",
-    "copied": "कॉपी केले..",
+    "copied": "कॉपी केले...",
     "select_domain": "डोमेन निवडा",
     "share_dns_record_to_developer": "डेव्हेलपरसोबत DNS रेकॉर्ड सामायिक करा",
     "add_subdomain_or_domain": "सबडोमेन/डोमेन जोडा",
@@ -82,5 +83,10 @@
     "select_export_type": "निर्यात प्रकार निवडा",
     "with_pay": "आईजीएसटी च्या पेमेंटसह",
     "without_pay": "आईजीएसटी/एलयूटी बाँड भरल्याशिवाय",
-    "add_vat": "+ व्हॅट जोडा"
+    "add_vat": "+ व्हॅट जोडा",
+    "add_sales_tax": "+ विक्री कर जोडा",
+    "sales_tax_list": "तयार केलेल्या सर्व विक्रीकरांची यादी",
+    "create_sales_tax": "विक्री कर तयार करा",
+    "update_sales_tax": "विक्री कर अद्यतनित करा",
+    "company_sales_tax_list": "कंपनीमध्ये तयार केलेल्या आणि लिंक केलेल्या सर्व विक्रीकरांची यादी"
 }
