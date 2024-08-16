@@ -47,7 +47,7 @@
                             "node_modules/froala-editor/css/froala_editor.pkgd.min.css",
                             "node_modules/froala-editor/css/froala_style.min.css",
                             "node_modules/tributejs/dist/tribute.css",
-                           "node_modules/froala-editor/css/themes/gray.min.css"
+                            "node_modules/froala-editor/css/themes/gray.min.css"
                         ],
                         "scripts": [
                             "node_modules/bootstrap-daterangepicker/daterangepicker.js",

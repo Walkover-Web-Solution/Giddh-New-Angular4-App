@@ -801,6 +801,13 @@ export class InvoiceService {
             catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
     }
 
+    /**
+     * Update custom email template
+     *
+     * @param {*} templateReq
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InvoiceService
+     */
     public updateCustomEmailTemplate(templateReq: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let invoiceType = templateReq?.invoiceType;
@@ -816,6 +823,12 @@ export class InvoiceService {
             catchError((e) => this.errorHandler.HandleCatch<any, any>(templateReq?.model)));
     }
 
+    /**
+     * Get email content suggestions
+     *
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InvoiceService
+     */
     public getEmailContent(): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.GET_EMAIL_CONTENT;
         url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
@@ -827,6 +840,12 @@ export class InvoiceService {
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
+    /**
+     * Get email condition suggestions
+     *
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InvoiceService
+     */
     public getEmailConditions(): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.GET_EMAIL_CONDITIONS;
         url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
@@ -838,7 +857,14 @@ export class InvoiceService {
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
-    public getEmailTemplate(invoiceType:string): Observable<BaseResponse<any, any>> {
+    /**
+     * Get email template
+     *
+     * @param {string} invoiceType
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof InvoiceService
+     */
+    public getEmailTemplate(invoiceType: string): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.GET_EMAIL_TEMPLATE;
         url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
         url = url?.replace(':invoiceType', invoiceType);

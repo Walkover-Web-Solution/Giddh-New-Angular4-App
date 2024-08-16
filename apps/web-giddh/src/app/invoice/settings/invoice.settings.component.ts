@@ -19,7 +19,7 @@ import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
 import { BootstrapToggleSwitch } from '../../app.constant';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
 
 @Component({
@@ -86,8 +86,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     public selectedTabIndex: number = 0;
     /** Active tab name */
     public activeTab: string;
-    /** Modal instance */
-    public matDialogRef: MatDialogRef<any>;
 
     constructor(
         private commonActions: CommonActions,
@@ -600,18 +598,17 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      * @memberof InvoiceSettingComponent
      */
     public tabChanged(event: any): void {
-        console.log(event);
         this.selectedTabIndex = event?.index;
     }
 
     /**
-    * Opens custom email dialog
+    * Open custom email dialog
     *
     * @memberof InvoiceSettingComponent
     */
-    public opneCustomEmailDialog(voucherType:string): void {
+    public opneCustomEmailDialog(invoiceType: string): void {
         this.dialog.open(TemplateFroalaComponent, {
-            data: voucherType,
+            data: invoiceType,
             width: 'var(--aside-pane-width)',
             height: '70vh',
             position: {

@@ -9,6 +9,7 @@
         resize: none;
     }
 }
+
 .dialog-body {
     display: flex;
     flex-direction: column;
@@ -42,6 +43,20 @@ textarea#example {
 .form-header {
     height: 40px !important;
 }
+
 .form-div {
     overflow: scroll !important;
+}
+
+.chiplist-section {
+    right: 0;
+    z-index: 999;
+    top: 0;
+}
+
+.form-control {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
 }

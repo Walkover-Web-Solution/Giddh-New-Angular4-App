@@ -189,7 +189,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._generalService.addLinkTag("./assets/css/ngx-bootstrap/bs-datepicker.css");
             this._generalService.addLinkTag("./assets/css/ladda-themeless.min.css");
             this._generalService.addLinkTag("./assets/css/lightbox.css");
-            this._generalService.addLinkTag("../assets/css/code-mirror.scss");
 
             /* RAZORPAY */
             if (window['Razorpay'] === undefined) {
@@ -201,22 +200,25 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             }
             /* RAZORPAY */
 
-            /* Xml */
-            let xmlScriptTag = document.createElement('script');
-            xmlScriptTag.src = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/mode/xml/xml.min.js';
-            xmlScriptTag.type = 'text/javascript';
-            xmlScriptTag.defer = true;
-            document.body.appendChild(xmlScriptTag);
-            /* Xml */
-
-            /* Codemirror */
-            let codeMirrorScriptTag = document.createElement('script');
-            codeMirrorScriptTag.src = 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.js';
-            codeMirrorScriptTag.type = 'text/javascript';
-            codeMirrorScriptTag.defer = true;
-            document.body.appendChild(codeMirrorScriptTag);
-            /* Codemirror */
         }, 1000);
+
+        this._generalService.addLinkTag("./assets/css/code-mirror.css");
+
+        /* Codemirror */
+        let codeMirrorScriptTag = document.createElement('script');
+        codeMirrorScriptTag.src = './assets/js/codemirror.min.js';
+        codeMirrorScriptTag.type = 'text/javascript';
+        codeMirrorScriptTag.defer = true;
+        document.body.appendChild(codeMirrorScriptTag);
+        /* Codemirror */
+
+        /* Xml */
+        let xmlScriptTag = document.createElement('script');
+        xmlScriptTag.src = './assets/js/xml.min.js';
+        xmlScriptTag.type = 'text/javascript';
+        xmlScriptTag.defer = true;
+        document.body.appendChild(xmlScriptTag);
+        /* Xml */
 
         if (this._generalService.getUrlParameter("region") === "uk") {
             this._generalService.setParameterInLocalStorage("X-Tenant", "GB");

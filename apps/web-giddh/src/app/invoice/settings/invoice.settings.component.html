@@ -398,10 +398,11 @@
                                                 >
                                                 </mat-slide-toggle>
                                                 <a
-                                                    href="javascript:void(0)"
+                                                    *ngIf="voucherApiVersion === 2"
+                                                    href="javascript:;"
                                                     class="cursor-pointer"
                                                     (click)="opneCustomEmailDialog('sales')"
-                                                    >Custom Email</a
+                                                    >{{ commonLocaleData?.app_custom_email }}</a
                                                 >
                                             </div>
                                         </div>
@@ -556,10 +557,11 @@
                                                 >
                                                 </mat-slide-toggle>
                                                 <a
-                                                    href="javascript:void(0)"
+                                                    *ngIf="voucherApiVersion === 2"
+                                                    href="javascript:;"
                                                     class="cursor-pointer"
                                                     (click)="opneCustomEmailDialog('sales')"
-                                                    >Custom Email</a
+                                                    >{{ commonLocaleData?.app_custom_email }}</a
                                                 >
                                             </div>
                                         </div>
@@ -699,10 +701,11 @@
                                                 >
                                                 </mat-slide-toggle>
                                                 <a
-                                                    href="javascript:void(0)"
+                                                    *ngIf="voucherApiVersion === 2"
+                                                    href="javascript:;"
                                                     class="cursor-pointer"
                                                     (click)="opneCustomEmailDialog('sales')"
-                                                    >Custom Email</a
+                                                    >{{ commonLocaleData?.app_custom_email }}</a
                                                 >
                                             </div>
                                         </div>
@@ -1117,7 +1120,7 @@
                                     </div>
                                     <div class="row ml-0 mr-0" *ngIf="voucherApiVersion === 2">
                                         <div class="col-sm-12 col-md-12 col-lg-2 flex-container pl-0 pr-0">
-                                            <label class="left-gap">Auto mail when generated</label>
+                                            <label class="left-gap">{{ localeData?.auto_email_generate }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9">
                                             <mat-slide-toggle
@@ -1129,10 +1132,11 @@
                                             >
                                             </mat-slide-toggle>
                                             <a
-                                                href="javascript:void(0)"
+                                                *ngIf="voucherApiVersion === 2"
+                                                href="javascript:;"
                                                 class="cursor-pointer"
                                                 (click)="opneCustomEmailDialog('debit note')"
-                                                >Custom Email</a
+                                                >{{ commonLocaleData?.app_custom_email }}</a
                                             >
                                         </div>
                                     </div>
@@ -1238,7 +1242,7 @@
                                     </div>
                                     <div class="row ml-0 mr-0" *ngIf="voucherApiVersion === 2">
                                         <div class="col-sm-12 col-md-12 col-lg-2 flex-container pl-0 pr-0">
-                                            <label class="left-gap">Auto mail when generated</label>
+                                            <label class="left-gap">{{ localeData?.auto_email_generate }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-9">
                                             <mat-slide-toggle
@@ -1250,10 +1254,11 @@
                                             >
                                             </mat-slide-toggle>
                                             <a
-                                                href="javascript:void(0)"
+                                                *ngIf="voucherApiVersion === 2"
+                                                href="javascript:;"
                                                 class="cursor-pointer"
                                                 (click)="opneCustomEmailDialog('credit note')"
-                                                >Custom Email</a
+                                                >{{ commonLocaleData?.app_custom_email }}</a
                                             >
                                         </div>
                                     </div>
