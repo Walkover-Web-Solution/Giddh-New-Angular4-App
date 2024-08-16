@@ -606,7 +606,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
     *
     * @memberof InvoiceSettingComponent
     */
-    public opneCustomEmailDialog(invoiceType: string): void {
+    public openCustomEmailDialog(invoiceType: string): void {
         this.dialog.open(TemplateFroalaComponent, {
             data: invoiceType,
             width: 'var(--aside-pane-width)',

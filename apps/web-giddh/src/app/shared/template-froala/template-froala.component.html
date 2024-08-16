@@ -34,7 +34,7 @@
                     <div class="form-group" *ngIf="!showCc">
                         <select-multiple-fields
                             [placeholder]="localeData?.select_cc"
-                            [options]="toEmails"
+                            [options]="ccEmails"
                             (selectedOption)="selectedCcEmails = $event"
                             [selectedValues]="selectedCcEmails"
                             [validations]="['email']"
@@ -45,7 +45,7 @@
                     <div class="form-group" *ngIf="!showBcc">
                         <select-multiple-fields
                             [placeholder]="localeData?.select_bcc"
-                            [options]="toEmails"
+                            [options]="bccEmails"
                             (selectedOption)="selectedBccEmails = $event"
                             [selectedValues]="selectedBccEmails"
                             [validations]="['email']"
