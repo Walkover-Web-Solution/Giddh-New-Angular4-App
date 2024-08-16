@@ -171,7 +171,7 @@
                                     [heading]="localeData?.tabs?.settings"
                                     (selectTab)="tabChanged('settings', $event, 'sales')"
                                     [active]="activeTab === 'settings'"
-                                    [id]="activeTab === 'settings' ? 'giddh-page-heading h1' : ''"
+                                    [id]="activeTab === 'settings' ? 'giddh-page-heading' : ''"
                                 >
                                     <div *ngIf="activeTab === 'settings'">
                                         <app-invoice-setting

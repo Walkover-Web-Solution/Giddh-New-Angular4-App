@@ -43,7 +43,7 @@ export class TemplateFroalaComponent implements OnInit {
     public showBcc: boolean = false;
     /* Hold froala editor options */
     public froalaOptions = {
-        key: 'oc1F2vD1B1D1B3C1B5mEZXQUVJb1EZf1IWIAUKLJZMBQuD3E2D1C1C4G1H4F1A11C7==', // Replace with your Froala froalaEditor license key
+        key: FROALA_EDITOR_KEY,
         attribution: false,
         heightMin: 300,
         heightMax: 300,
@@ -76,7 +76,7 @@ export class TemplateFroalaComponent implements OnInit {
                 buttonsVisible: 13
             }
         },
-        placeholderText: 'Start typing...',
+        placeholderText: this.localeData?.email_content_suggestions,
         charCounterCount: false,
         wordCount: false,
         htmlAllowedTags: ['.*'],
@@ -112,7 +112,7 @@ export class TemplateFroalaComponent implements OnInit {
     public selectedBccEmails: any[] = [];
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) public inputData,
+        @Inject(MAT_DIALOG_DATA) public invoiceType,
         private fb: FormBuilder,
         private componentStore: CustomEmailComponentStore,
         private dialog: MatDialog,
@@ -239,8 +239,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public getEmailTemplates(): void {
-        console.log(this.inputData);
-        this.componentStore.getAllEmailTemplate(this.inputData);
+        this.componentStore.getAllEmailTemplate(this.invoiceType);
     }
 
     /**
@@ -269,7 +268,7 @@ export class TemplateFroalaComponent implements OnInit {
             to: [template?.to ?? ''],
             cc: [template?.cc ?? '',],
             bcc: [template?.bcc ?? ''],
-            voucherTypes: [[this.inputData]],
+            voucherTypes: [[this.invoiceType]],
             emailSubject: [template?.emailSubject ?? ''],
             html: [template?.html ?? '']
         });
@@ -291,15 +290,28 @@ export class TemplateFroalaComponent implements OnInit {
         this.emailForm.value.to = this.selectedToEmails;
         this.emailForm.value.bcc = this.selectedBccEmails;
         this.emailForm.value.cc = this.selectedCcEmails;
-        console.log(this.emailForm);
         if (this.emailForm.invalid) {
             return;
         }
         let req = {
-            invoiceType: this.inputData,
+            invoiceType: this.invoiceType,
             model: this.emailForm.value
         }
         this.componentStore.updateCustomTemplate(req);
+    }
+
+    /**
+     *Show bcc/cc field
+     *
+     * @param {string} type
+     * @memberof TemplateFroalaComponent
+     */
+    public showHideBccCc(type: string): void {
+        if (type == "bcc") {
+            this.showBcc = !this.showBcc;
+        } else {
+            this.showCc = !this.showCc;
+        }
     }
 
     /**

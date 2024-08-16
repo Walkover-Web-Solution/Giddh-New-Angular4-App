@@ -19,7 +19,7 @@ export const DEFAULT_CUSTOM_EMAIL_STATE: CustomEmailState = {
     emailContentSuggestions: null,
     emailConditionSuggestions: null,
     updateCustomEmailIsSuccess: null,
-    emailTemplates:null
+    emailTemplates: null
 };
 
 @Injectable()
@@ -27,17 +27,22 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
 
     constructor(
         private toaster: ToasterService,
-        private invoiceService: InvoiceService,
-        private store: Store<AppState>
+        private invoiceService: InvoiceService
     ) {
         super(DEFAULT_CUSTOM_EMAIL_STATE);
     }
 
     public updateCustomEmailIsSuccess$ = this.select((state) => state.updateCustomEmailIsSuccess);
 
+    /**
+     * Get email condition suggestions
+     *
+     * @memberof CustomEmailComponentStore
+     */
     readonly getEmailConditionSuggestion = this.effect((data: Observable<any>) => {
         return data.pipe(
             mergeMap(() => {
+                this.patchState({ emailConditionSuggestions: null });
                 return this.invoiceService.getEmailConditions().pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
@@ -67,6 +72,11 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
         );
     });
 
+    /**
+     * Update custom email template
+     *
+     * @memberof CustomEmailComponentStore
+     */
     readonly updateCustomTemplate = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -99,9 +109,15 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
         );
     });
 
+    /**
+     * Get email content suggestions
+     *
+     * @memberof CustomEmailComponentStore
+     */
     readonly getEmailContentSuggestions = this.effect((data: Observable<any>) => {
         return data.pipe(
             mergeMap(() => {
+                this.patchState({ emailContentSuggestions: null });
                 return this.invoiceService.getEmailContent().pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
@@ -131,9 +147,15 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
         );
     });
 
+    /**
+     * Get email template
+     *
+     * @memberof CustomEmailComponentStore
+     */
     readonly getAllEmailTemplate = this.effect((data: Observable<any>) => {
         return data.pipe(
             mergeMap((req) => {
+                this.patchState({ emailTemplates: null });
                 return this.invoiceService.getEmailTemplate(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
@@ -166,7 +188,7 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
     /**
      * Lifecycle hook for component destroy
      *
-     * @memberof AdjustInventoryComponentStore
+     * @memberof CustomEmailComponentStore
      */
     public ngOnDestroy(): void {
         super.ngOnDestroy();
