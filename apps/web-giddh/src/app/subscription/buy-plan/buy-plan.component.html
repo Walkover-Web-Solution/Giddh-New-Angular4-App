@@ -768,6 +768,27 @@
                                         </mat-card-content>
                                     </mat-card>
                                 </div>
+                                <div class="new-plan mt-4" *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY' && selectedPlan?.entityCode !== 'GBR'" >
+                                    <mat-card class="outline-card">
+                                        <mat-card-content>
+                                            <mat-radio-group 
+                                            class="d-flex flex-column mt-2" 
+                                            formControlName="razorpayAuthType"
+                                        >
+                                            <mat-radio-button
+                                                color="primary"
+                                                value="CARD"      
+                                                >Credit/Debit Card</mat-radio-button
+                                            >
+                                            <mat-radio-button
+                                                color="primary"  
+                                                value="UPI" 
+                                                >UPI</mat-radio-button
+                                            >
+                                        </mat-radio-group> 
+                                        </mat-card-content>
+                                    </mat-card>
+                                </div>
                             </div>
                             <ng-container *ngTemplateOutlet="planSummary"></ng-container>
                         </div>
