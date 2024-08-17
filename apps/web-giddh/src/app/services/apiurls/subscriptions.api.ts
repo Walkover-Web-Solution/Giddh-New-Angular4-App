@@ -23,4 +23,5 @@ export const SUBSCRIPTION_V2_API = {
     GET_CHANGE_PLAN_DETAILS: 'v2/subscription/change-plan',
     UPDATE_PLAN: 'v2/subscription/update',
     BUY_PLAN_BY_GOCARDLESS: 'v2/subscription/buy-plan',
+    SAVE_RAZORPAY_TOKEN: 'v2/subscription/:subscriptionId/payment/:paymentId/save-razorpay-token',
 };

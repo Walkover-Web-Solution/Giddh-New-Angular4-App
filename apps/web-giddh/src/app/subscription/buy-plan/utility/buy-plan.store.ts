@@ -27,6 +27,7 @@ export interface BuyPlanState {
     subscriptionRazorpayOrderDetails: any;
     getChangePlanDetailsInProgress: boolean;
     changePlanDetails: any;
+    razorpaySuccess:boolean;
 }
 
 export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
@@ -47,7 +48,8 @@ export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
     generateOrderBySubscriptionIdInProgress: false,
     subscriptionRazorpayOrderDetails: null,
     getChangePlanDetailsInProgress: null,
-    changePlanDetails: null
+    changePlanDetails: null,
+    razorpaySuccess: false
 };
 
 @Injectable()
@@ -65,7 +67,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
     public onboardingForm$: Observable<any> = this.select(this.store.select(state => state.common.onboardingform), (response) => response);
     public commonCountries$: Observable<any> = this.select(this.store.select(state => state.common.countries), (response) => response);
     public generalState$: Observable<any> = this.select(this.store.select(state => state.general.states), (response) => response);
-
+    public razorpaySuccess$ = this.select((state) => state.razorpaySuccess);
     /**
      * Get All Plans
      *
@@ -386,7 +388,40 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
             })
         );
     });
-
+    
+    readonly saveRazorpayToken  = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ razorpaySuccess: null });
+                return this.subscriptionService.getChangePlanDetails(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    razorpaySuccess: true,
+                                });
+                            } else {
+                                if (res.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    razorpaySuccess: false,
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
+                            return this.patchState({
+                                razorpaySuccess: false,
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+    
     readonly changePlan = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
