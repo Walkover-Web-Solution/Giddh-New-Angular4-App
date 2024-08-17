@@ -744,5 +744,6 @@
     "app_tax_authority": "Tax Authority",
     "app_select_year": "Select Year",
     "app_select_month": "Select Month",
-    "app_user_settings": "User Settings"
+    "app_user_settings": "User Settings",
+    "app_subscription": "Subscription"
 }

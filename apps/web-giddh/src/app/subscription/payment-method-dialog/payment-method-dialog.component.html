@@ -50,10 +50,11 @@
                     </div>
                 </div>
             </div>
-            <ng-container *ngIf="providerListInProgress$ | async">
+            {{isLoading}}
+            <ng-container *ngIf="isLoading">
                 <giddh-page-loader></giddh-page-loader>
             </ng-container>
-            <ng-container *ngIf="!(providerListInProgress$ | async)">
+            <ng-container *ngIf="!isLoading">
                 <mat-card class="outline-card mt-3" *ngFor="let payment of paymentMethodList">
                     <mat-card-content>
                         <div class="view-subscription">
