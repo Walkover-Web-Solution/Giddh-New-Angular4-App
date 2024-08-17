@@ -200,6 +200,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public isAllPlans: any[] = [];
     /** True if user change manualy plan */
     public isUserManualChangePlan: boolean = false;
+    /** True if user renew  plan */
+    public isRenewPlan: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -245,6 +247,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.subscriptionId = params.id;
                 this.viewSubscriptionComponentStore.viewSubscriptionsById(this.subscriptionId);
                 this.isChangePlan = true;
+            }
+        });
+
+        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((queryParams: any) => {
+            if (queryParams?.renew) {
+                this.isRenewPlan = true;
             }
         });
 

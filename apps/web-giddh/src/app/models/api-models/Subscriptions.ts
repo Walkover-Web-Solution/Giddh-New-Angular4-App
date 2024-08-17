@@ -1,4 +1,4 @@
-import { PAGINATION_LIMIT } from "../../app.constant";
+import { API_COUNT_LIMIT, PAGINATION_LIMIT } from "../../app.constant";
 
 export interface SubscriptionPlan {
     amount: number;
@@ -77,6 +77,19 @@ export class SubscriptionReportRequest {
     public sortBy: string;
     constructor() {
         this.count = PAGINATION_LIMIT;
+        this.page = 1;
+    }
+}
+
+export class SearchSubscriptionRequest {
+    public q: any;
+    public count: number;
+    public page: number;
+    public totalItems?: number;
+    public totalPages?: number;
+    public loadMore?: boolean;
+    constructor() {
+        this.count = API_COUNT_LIMIT;
         this.page = 1;
     }
 }

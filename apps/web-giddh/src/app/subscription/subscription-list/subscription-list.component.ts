@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { debounceTime, distinctUntilChanged, ReplaySubject, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, ReplaySubject, take, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -20,12 +20,13 @@ import { CompanyListDialogComponent } from '../company-list-dialog/company-list-
 import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.component';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { PaymentMethodDialogComponent } from '../payment-method-dialog/payment-method-dialog.component';
+import { CompanyListDialogComponentStore } from '../company-list-dialog/utility/company-list-dialog.store';
 @Component({
     selector: 'subscription-list',
     templateUrl: './subscription-list.component.html',
     styleUrls: ['./subscription-list.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [SubscriptionComponentStore, BuyPlanComponentStore]
+    providers: [SubscriptionComponentStore, BuyPlanComponentStore, CompanyListDialogComponentStore]
 })
 export class SubscriptionListComponent implements OnInit, OnDestroy {
     /** Mat menu instance reference */
@@ -114,6 +115,8 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     public activeCompany: any = {};
     /** True if subscription will move */
     public subscriptionMove: boolean = false;
+    /** Holds Store Archive company API success state as observable*/
+    public archiveCompanySuccess$ = this.componentStoreCompanyListDialog.select(state => state.archiveCompanySuccess);
 
     constructor(public dialog: MatDialog,
         private changeDetection: ChangeDetectorRef,
@@ -122,6 +125,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private formBuilder: FormBuilder,
         private readonly componentStoreBuyPlan: BuyPlanComponentStore,
+        private readonly componentStoreCompanyListDialog: CompanyListDialogComponentStore,
         private generalActions: GeneralActions,
         private router: Router,
         private toasterService: ToasterService,
@@ -283,6 +287,15 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
 
         this.componentStore.isUpdateCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.getAllSubscriptions(null);
+            }
+        });
+
+        this.archiveCompanySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                let text = this.localeData?.company_message;
+                text = text?.replace("[TYPE]", response?.archiveStatus === 'USER_ARCHIVED' ? this.commonLocaleData?.app_unarchive : this.commonLocaleData?.app_archive);
+                this.toasterService.showSnackBar('success', text);
                 this.getAllSubscriptions(null);
             }
         });
@@ -597,8 +610,15 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      *
      * @memberof SubscriptionComponent
      */
-    public buyPlan(subscription: any): void {
-        this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscription?.subscriptionId]);
+    public buyPlan(subscription: any, type: string): void {
+        if (type === 'renew') {
+            this.router.navigate(
+                ['/pages/user-details/subscription/buy-plan/' + subscription?.subscriptionId],
+                { queryParams: { renew: 'true' } }
+            );
+        } else {
+            this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscription?.subscriptionId]);
+        }
     }
 
     /**
@@ -684,5 +704,47 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         if (event) {
             this.getAllSubscriptions(false);
         }
+    }
+
+    /**
+     * Archives or unarchives a company in the SubscriptionListComponent.
+     *
+     * @param data - The data of the company to be archived or unarchived.
+     * @param type - The type of action, whether to archive or unarchive.
+     * @memberof SubscriptionListComponent
+     */
+    public archiveCompany(data: any, type: string): void {
+        let request = {
+            companyUniqueName: data?.companies[0]?.uniqueName,
+            status: { archiveStatus: type }
+        };
+        this.openConfirmationDialog(request);
+    }
+
+    /**
+     * Open confirmation dialog for archive company
+     *
+     * @private
+     * @param {*} request
+     * @memberof SubscriptionListComponent
+     */
+    private openConfirmationDialog(request: any): void {
+        let text = this.localeData?.confirm_archive_message;
+        text = text?.replace("[TYPE]", request.status.archiveStatus === 'UNARCHIVED' ? this.commonLocaleData?.app_unarchive : this.commonLocaleData?.app_archive);
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '540px',
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: text,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.componentStoreCompanyListDialog.archiveCompany(request);
+            }
+        });
     }
 }

@@ -101,7 +101,6 @@ export class SearchCompanyRequest {
         this.page = 1;
     }
 }
-
 export class CompanyResponse {
     public canUserSwitch: boolean;
     public companyIdentity: any[];

@@ -746,5 +746,6 @@
     "app_select_month": "Select Month",
     "app_user_settings": "User Settings",
     "app_custom_email": "Custom Email",
-    "app_custom_email_template":"Custom Email Template"
+    "app_custom_email_template":"Custom Email Template",
+    "app_subscription": "Subscription"
 }
