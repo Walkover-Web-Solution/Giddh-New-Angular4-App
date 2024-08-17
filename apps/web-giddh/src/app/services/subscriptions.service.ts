@@ -50,6 +50,16 @@ export class SubscriptionsService {
             }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
 
+    public saveRazorpayToken(subscriptionId: string , paymentId: string): Observable<BaseResponse<string, string>> {
+
+        return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.SAVE_RAZORPAY_TOKEN
+            ?.replace(':subscriptionId', subscriptionId)
+            ?.replace(':paymentId', paymentId))
+            .pipe(map((res) => {
+                return  BaseResponse<string, string> = res;
+            }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
+    }
+
     public GetSubScribedCompanyTransaction(params): Observable<BaseResponse<string, string>> {
         let paymentFrequency = 'daily';
         if (params.subscription.plan && params.subscription.plan.paymentFrequency) {

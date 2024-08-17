@@ -30,5 +30,6 @@ export const SUBSCRIPTION_V2_API = {
     DELETE_PAYMENT_METHOD: 'v2/subscription/payment-method/:paymentUniqueName',
     SET_ARCHIVE_UNARCHIVE_COMPANY: 'company/:companyUniqueName',
     ACTIVATE_PLAN: 'v2/subscription/:subscriptionId/activate?upgrade=true',
-    CALCULATION_PLAN_AMOUNT: 'v2/subscription/get-amount'
+    CALCULATION_PLAN_AMOUNT: 'v2/subscription/get-amount',
+    SAVE_RAZORPAY_TOKEN: 'v2/subscription/:subscriptionId/payment/:paymentId/save-razorpay-token',
 };
