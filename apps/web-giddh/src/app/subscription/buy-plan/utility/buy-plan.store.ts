@@ -393,10 +393,10 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ razorpaySuccess: null });
-                return this.subscriptionService.getChangePlanDetails(req).pipe(
+                return this.subscriptionService.saveRazorpayToken(req.subscriptionId,req.paymentId).pipe(
                     tapResponse(
-                        (res: BaseResponse<any, any>) => {
-                            if (res?.status === 'success') {
+                        (res: any) => {
+                            if (res?.status === 'success') {                               
                                 return this.patchState({
                                     razorpaySuccess: true,
                                 });

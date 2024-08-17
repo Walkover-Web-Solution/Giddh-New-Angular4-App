@@ -1,0 +1,25 @@
+.btn-primary {
+    padding: 8px 20px;
+}
+
+.move-content {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.move-wrapper {
+    .mat-input-field {
+        float: left;
+        width: 100%;
+        height: 37px;
+        border: 1px solid var(--color-dark-fog);
+        color: var(--color-nero) !important;
+    }
+}
+
+.move-company-modal-body {
+    p {
+        white-space: normal;
+        word-break: break-word;
+    }
+}

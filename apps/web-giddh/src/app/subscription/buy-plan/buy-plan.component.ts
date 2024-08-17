@@ -258,10 +258,10 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 // } else {
                 //     this.openCashfreeDialog(response?.redirectLink);
                 // }
+                this.subscriptionId = response.subscriptionId;
                 if(response?.duration==='MONTHLY' && response?.region?.code !== 'GBR' ){
                   this.initializePayment(response);
-                }
-                this.subscriptionId = response.subscriptionId;
+                } 
                 if (this.isChangePlan) {
                     this.router.navigate(['/pages/subscription']);
                 } else {
@@ -1358,9 +1358,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             customer_id: request.razorpayCustomerId,
             recurring: "1",
             handler: (response: any) => {
-                alert(response.razorpay_payment_id);
-                alert(response.razorpay_order_id);
-                alert(response.razorpay_signature);
                 that.updateSubscriptionPayment(response, false, request);
             },
             "notes": {

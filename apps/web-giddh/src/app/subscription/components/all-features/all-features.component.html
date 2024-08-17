@@ -1,0 +1,797 @@
+<ng-container
+    appTranslate
+    [file]="'all-features'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <div class="modal-header d-flex align-items-center">
+        <h3>{{ localeData?.page_heading }}</h3>
+        <button aria-hidden="true" class="close" mat-dialog-close>×</button>
+    </div>
+    <p class="mb-2 money-back-guarantee py-2" [innerHTML]="localeData?.money_back_guarantee"></p>
+    <mat-dialog-content class="all-features-content w-100">
+        <div id="my-frame" class="container all-feature-modal clearfix">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-shortcut-key mr-r1"></i>
+                            <span class="bold">{{ localeData?.shortcut_key }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i>
+                                <span>{{ localeData?.command_control_g }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i> <span>{{ commonLocaleData?.app_alt_c }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-unique-code mr-r1"></i
+                            ><span class="bold">{{ localeData?.unique_code }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.unique_name_everything }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-sales-order1 mr-r1"></i>
+                            <span class="bold">{{ commonLocaleData?.app_sales }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li [routerLink]="['/pages/proforma-invoice/invoice/sales']">
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.sales_invoice }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.copy_from_previous_invoice }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i
+                                ><span>{{ localeData?.generate_sales_update_account }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.recurring_invoice }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.eway_bill_generation }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.edit_invoice }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.invoice_copies }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.generate_bulk_invoice }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.generate_compound_invoice }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.bulk_update_invoice }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.default_expiry_date }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.invoice_lock_date }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.show_seal }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.auto_paid }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.auto_email }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.invoice_through_sms }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.custom_invoice_number }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.custom_invoice_template }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.integrate_gmail_invoice }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.set_default_email }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.download_invoice_ledger }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.customer_invoice_report }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.search_description }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.income_account }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.zero_value_invoice }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.multicurrency_support }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.e_invoice }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-invoice-new mr-r1"></i>
+                            <span class="bold"> {{ localeData?.cash_invoice }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.generate_cash_invoice }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-branch1 mr-r1"></i>
+                            <span class="bold">{{ commonLocaleData?.app_branch }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.add_branch }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.inventory_branch_transfer }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.consolidate_report }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.separate_report }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-warehouse1 mr-r1"></i>
+                            <span class="bold"> {{ commonLocaleData?.app_warehouse }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.create_edit_warehouse }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.warehouse_management }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-settings-cog mr-r1"></i>
+                            <span class="bold">{{ commonLocaleData?.app_settings }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ commonLocaleData?.app_taxes }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.integration }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.payment_gateway }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.profile }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ commonLocaleData?.app_financial_year }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.permission }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-branch1 mr-r1"></i>
+                            <span class="bold">{{ localeData?.branch_accounting }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.file_gst_all_branch }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.manage_inventory }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.view_branch_data }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.file_gst_different_gstin }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-estimate-new mr-r1"></i>
+                            <span class="bold">{{ localeData?.estimate_proforma }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.custom_heading_name }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.default_expiry_days }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.next_step_estimate }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.auto_change_status }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.auto_email }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.enable_send_sms }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-purchase-order mr-r1"></i>
+                            <span class="bold">{{ commonLocaleData?.app_purchase }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.purchase_bill }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.purchase_management }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.reverse_charge_option }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.edit_purchase_bill }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.attached_purchase_bill }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.expense_account }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.create_edit_delete_po }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.advance_search_vendor }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.send_email }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.multicurrency_support }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-subscription2 mr-r1"></i>
+                            <span class="bold">{{ localeData?.credit_debit_note }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.create_credit_note }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.edit_credit_note }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i
+                                ><span>{{ localeData?.custom_template_credit_debit_note }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.e_invoice }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-manage-group-acc mr-r1"></i>
+                            <span class="bold">{{ localeData?.manage_group_accounts }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.create_financial_groups }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.create_financial_accounts }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.share_groups }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.export_groups }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.share_accounts }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.edit_groups_accounts }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.delete_groups_accounts }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-tag-new mr-r1"></i> <span class="bold">{{ localeData?.tags }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.manage_tags }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-trigger-new mr-r1"></i>
+                            <span class="bold">{{ localeData?.trigger }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.manage_trigger }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-discount-new mr-r1"></i>
+                            <span class="bold">{{ commonLocaleData?.app_discount }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.manage_discount }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="clearfix">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-subscription2 mr-r1"></i>
+                            <span class="bold">{{ localeData?.subscription }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ commonLocaleData?.app_buy_plan }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.update_plan }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.renew_plan }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.check_transactions }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-import mr-r1"></i>
+                            <span class="bold">{{ localeData?.import_data }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.import_groups }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.import_accounts }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.import_inventory }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.import_entries }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.import_trial_balance }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-company-impex mr-r1"></i>
+                            <span class="bold">{{ localeData?.export_data }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.company_import_export }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-inventory mr-r1"></i>
+                            <span class="bold">{{ commonLocaleData?.app_inventory }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.create_stock_group }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.create_custom_unit }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.custom_field_inventory }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.fix_tax_stock }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.manage_receipt_note }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.manage_delivery_challan }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.account_wise_report }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.group_wise_report }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.stock_wise_report }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-journal-voucher-new mr-r1"></i>
+                            <span class="bold">{{ localeData?.ledger }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.export_ledger }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.columnar_report }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.email_ledger }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.share_ledger }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.generate_vouchers_ledger }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.download_vouchers_ledger }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.edit_delete_entry }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.edit_voucher_generate }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.bulk_voucher_delete }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.attach_file }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.check_cancelled_entries }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.multicurrency_support }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-journal-voucher-new mr-r1"></i>
+                            <span class="bold">{{ localeData?.advance_search_ledger }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.temporary_merge_accounts }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.temporary_merge_groups }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.search_with_description }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-customer mr-r1"></i>
+                            <span class="bold">{{ localeData?.customer_page }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.customer_report_note }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.bulk_emails_sms }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.download_report_csv }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.create_customer }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.add_comment }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.aging_report }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-vendor mr-r1"></i>
+                            <span class="bold">{{ localeData?.vendor_page }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.vendor_report_note }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.bulk_email_sms }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.download_report_csv }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.create_vendor }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.add_comment }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-audit-log mr-r1"></i>
+                            <span class="bold">{{ localeData?.audit_logs }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.user_wise }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-dashboard-new mr-r1"></i>
+                            <span class="bold">{{ commonLocaleData?.app_dashboard }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i
+                                ><span>{{ localeData?.overdue_pl_bank_account_ratio_analysis }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-e-commerce mr-r1"></i>
+                            <span class="bold">{{ localeData?.e_commerce }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.shopify }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.woocommerce }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.zencommerce }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-manufacturing1 mr-r1"></i>
+                            <span class="bold">{{ localeData?.manufacturing }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i
+                                ><span>{{ localeData?.define_manufacturing_process }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.create_manufacturing }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.manufacturing_report }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-search mr-r1"></i>
+                            <span class="bold">{{ commonLocaleData?.app_search }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.accounting_group_search }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-GSTR mr-r1"></i> <span class="bold">{{ localeData?.gstr }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.gstr1 }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.gstr2 }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.gstr3b }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-reports mr-r1"></i>
+                            <span class="bold">{{ commonLocaleData?.app_report }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.daybook }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.trial_balance }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.profit_loss }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.balance_sheet }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.customer_report }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.vendor_report }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ commonLocaleData?.app_inventory }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.sales_register }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.purchase_register }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.new_vs_old_invoice }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.eway_bill }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ commonLocaleData?.app_reverse_charge }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.petty_cash_management }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ commonLocaleData?.app_receipt }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.monthly_columnar_report }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-desktop mr-r1"></i>
+                            <span class="bold"> {{ localeData?.desktop_app }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.windows }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.mac }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-mobile mr-r1"></i> <span class="bold">{{ localeData?.mobile_app }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.android }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-security mr-r1"></i> <span class="bold">{{ localeData?.security }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.two_way_auth }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.auth_key }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.session }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ commonLocaleData?.app_upcoming }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.feature_request }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.changelog }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-tally-import1 mr-r1"></i>
+                            <span class="bold">{{ commonLocaleData?.app_tally }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.tally_giddh_plugin }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <p class="font-15 d-flex align-items-center">
+                            <i class="icon-support1 mr-r1"></i> <span class="bold">{{ localeData?.support }}</span>
+                        </p>
+                        <ul class="all-features-list">
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.talk_to_sales }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ commonLocaleData?.app_send_email }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.help_doc }}</span>
+                            </li>
+                            <li>
+                                <i class="icon-tick mr-r1"></i><span>{{ localeData?.schedule_demo }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+</ng-container>

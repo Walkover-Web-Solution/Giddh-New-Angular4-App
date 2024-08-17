@@ -50,13 +50,13 @@ export class SubscriptionsService {
             }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
 
-    public saveRazorpayToken(subscriptionId: string , paymentId: string): Observable<BaseResponse<string, string>> {
+    public saveRazorpayToken(subscriptionId: string , paymentId: string): Observable<any> {
 
         return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.SAVE_RAZORPAY_TOKEN
             ?.replace(':subscriptionId', subscriptionId)
             ?.replace(':paymentId', paymentId))
             .pipe(map((res) => {
-                return  BaseResponse<string, string> = res;
+                return res;
             }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
 
