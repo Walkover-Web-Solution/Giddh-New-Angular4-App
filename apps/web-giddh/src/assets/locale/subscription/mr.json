@@ -145,5 +145,7 @@
         "gst_direct":"जीएसटी थेट भरणे",
         "e_invoice":"ई-चालन",
         "plan_purchased_success_message":"योजना यशस्वीरित्या खरेदी केली",
-        "confirm_archive_message": "तुमची खात्री आहे की तुम्ही कंपनी संग्रहित करू इच्छिता?"
+        "confirm_archive_message": "तुमची खात्री आहे की तुम्ही कंपनी संग्रहित करू इच्छिता?",
+		"UPI": "यूपीआई",
+        "credit_debit_card": "क्रेडिट/डेबिट कार्ड"
 	}
