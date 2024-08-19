@@ -186,6 +186,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public isSubscriptionRegion: boolean = false;
     /** Hold current time stamp  */
     public currentTimeStamp: string;
+    /** Razorpay API success state as observable  */
+    public razorpaySuccess$ = this.componentStore.select((state) => state.razorpaySuccess);
 
     constructor(
         public dialog: MatDialog,
@@ -242,7 +244,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStore.razorpaySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.razorpaySuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
             } 
@@ -1416,7 +1418,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.subscriptionId = subscription?.subscriptionId;
             let data = { ...request, ...this.subscriptionRequest };
             if(subscription?.duration === 'MONTHLY' && subscription?.region?.code !== 'GBR') {
-               this.componentStore.saveRazorpayToken({subscriptionId:this.subscriptionId, paymentId: !zeroAmount ? payResponse.razorpay_payment_id : null});
+               this.componentStore.saveRazorpayToken({subscriptionId:this.subscriptionId, paymentId: request.paymentId});
             } else {
                this.componentStore.changePlan(data);
             }
