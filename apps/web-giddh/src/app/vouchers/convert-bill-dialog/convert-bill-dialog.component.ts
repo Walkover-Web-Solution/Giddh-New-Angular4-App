@@ -8,6 +8,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./convert-bill-dialog.component.scss']
 })
 export class ConvertBillDialogComponent implements OnInit {
+  /* This will hold local JSON data */
+  @Input() public localeData: any = {};
+  /* This will hold common JSON data */
+  @Input() public commonLocaleData: any = {};
   /** Emits convert To Bill form value */
   @Output() public convertToBill = new EventEmitter<any>();
   public form: FormGroup;

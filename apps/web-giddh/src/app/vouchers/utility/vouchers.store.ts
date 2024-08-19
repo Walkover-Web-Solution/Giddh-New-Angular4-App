@@ -54,7 +54,7 @@ export interface VoucherState {
     purchaseOrdersList: any[];
     countryList: any[];
     ledgerEntries: any[];
-    voucherBalances: any[];
+    voucherBalances: any;
     exportVouchersFile: any;
     eInvoiceGenerated: boolean;
     bulkUpdateVoucherInProgress: boolean;
@@ -189,6 +189,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public updatedAccountDetails$: Observable<any> = this.select(this.store.select(state => state.sales.updatedAccountDetails), (response) => response);
     public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
     public createEwayBill$: Observable<any> = this.select(this.store.select(state => state.receipt.voucher), (response) => response);
+    public sessionUserEmail$: Observable<any> = this.select(this.store.select(state => state.session.user), (response) => response);
 
     readonly getDiscountsList = this.effect((data: Observable<void>) => {
         return data.pipe(
@@ -1258,6 +1259,35 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({ deleteVoucherIsSuccess: false });
                 return this.receiptService.DeleteReceipt(req.accountUniqueName, req.model).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success" && typeof res.body === "string") {
+                                this.toaster.showSnackBar("success", res.body);
+                            } else if (res.status === "error" && res.message) {
+                                this.toaster.showSnackBar("error", res.message);
+                            }
+                            return this.patchState({
+                                deleteVoucherIsSuccess: true
+                            });
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                deleteVoucherIsSuccess: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    readonly deleteEstimsteProformaVoucher = this.effect((data: Observable<{ payload: any, voucherType: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ deleteVoucherIsSuccess: false });
+                return this.proformaService.delete(req.payload, req.voucherType).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success" && typeof res.body === "string") {

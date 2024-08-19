@@ -248,5 +248,7 @@
     "po_date_error": "Please select Purchase date",
     "po_expirydate_error": "Please select Expected delivery date",
     "po_warehouse_error": "Please select Warehouse",
-    "po_bulkupdate_error": "Please choose a field to update"
+    "po_bulkupdate_error": "Please choose a field to update",
+    "purchase_bill_number": "Purchase Bill Number",
+    "convert_to_bill": "Convert to bill"
 }

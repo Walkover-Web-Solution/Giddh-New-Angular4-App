@@ -50,6 +50,8 @@ export class BulkExportComponent implements OnInit, OnDestroy {
             recipients: ['']
         });
 
+        this.getRecipientEmail();
+
         if (this.inputData?.voucherType === VoucherTypeEnum.sales) {
             this.exportForm.get('copyTypes').setValidators(Validators.required);
             this.exportForm.get('copyTypes').updateValueAndValidity();
@@ -68,6 +70,19 @@ export class BulkExportComponent implements OnInit, OnDestroy {
                 } else {
                     this.dialogRef.close();
                 }
+            }
+        });
+    }
+
+    /**
+     * Get company email
+     *
+     * @memberof BulkExportComponent
+     */
+    public getRecipientEmail(): void {
+        this.componentStore.sessionUserEmail$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+            if (result && result.user) {
+                this.exportForm.get('recipients').patchValue(result.user.email);
             }
         });
     }
