@@ -124,6 +124,6 @@
         "free_for":"Free for",
         "company_message": "Company [TYPE] successfully",
         "manage_payment":"Manage Payment Methods",
-        "UPI": "UPI",
+        "upi": "UPI",
         "credit_debit_card": "Credit/Debit Card"
     }
