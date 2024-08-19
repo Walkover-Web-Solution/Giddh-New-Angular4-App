@@ -156,6 +156,7 @@
                             <div class="col-sm-3">
                                 <div class="form-group">
                                     <div class="select-error select-caret relative">
+                                        
                                         <select-field
                                             [autocomplete]="'off'"
                                             [readonly]="
@@ -170,7 +171,7 @@
                                             [defaultValue]="entry.voucherNumber"
                                             [enableDynamicSearch]="true"
                                             (dynamicSearchedQuery)="
-                                                searchReferenceVoucher = $event; resetInvoiceList(); $event && loadVouchers()
+                                                searchReferenceVoucher = $event; resetInvoiceList(); (isClick==true && loadVouchers());
                                             "
                                             (onClear)="onClearSalesAccount(transaction)"
                                             (click)="clickSelectVoucher(entryIdx, adjustAdvancePaymentForm)"

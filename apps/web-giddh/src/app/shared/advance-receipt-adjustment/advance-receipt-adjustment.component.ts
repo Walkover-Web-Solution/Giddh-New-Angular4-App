@@ -116,6 +116,8 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
     private paginationLimit: number = PAGINATION_LIMIT;
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
+    /** click on sh-select */
+    public isClick: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -610,6 +612,7 @@ export class AdvanceReceiptAdjustmentComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public clickSelectVoucher(index: number, form: NgForm): any {
+        this.isClick = true;
         this.currentAdjustmentRowIndex = index;
         if (form.controls[`voucherName${index}`]) {
             form.controls[`voucherName${index}`].markAsTouched();
