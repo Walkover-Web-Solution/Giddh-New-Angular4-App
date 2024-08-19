@@ -73,7 +73,6 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
     public onboardingForm$: Observable<any> = this.select(this.store.select(state => state.common.onboardingform), (response) => response);
     public commonCountries$: Observable<any> = this.select(this.store.select(state => state.common.countries), (response) => response);
     public generalState$: Observable<any> = this.select(this.store.select(state => state.general.states), (response) => response);
-    public razorpaySuccess$ = this.select((state) => state.razorpaySuccess);
 
     /**
      * Get All Plans
@@ -410,21 +409,21 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                         (res: any) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
-                                    razorpaySuccess: true,
+                                    razorpaySuccess: true
                                 });
                             } else {
                                 if (res.message) {
                                     this.toasterService.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
-                                    razorpaySuccess: false,
+                                    razorpaySuccess: false
                                 });
                             }
                         },
                         (error: any) => {
                             this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
                             return this.patchState({
-                                razorpaySuccess: false,
+                                razorpaySuccess: false
                             });
                         }
                     ),
