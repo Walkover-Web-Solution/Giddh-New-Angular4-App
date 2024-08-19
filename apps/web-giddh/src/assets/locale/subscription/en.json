@@ -123,5 +123,7 @@
         "company_note": "Select the company to which you want to add <strong>[COMPANY_NAME]</strong> in this subscription.",
         "free_for":"Free for",
         "company_message": "Company [TYPE] successfully",
-        "manage_payment":"Manage Payment Methods"
+        "manage_payment":"Manage Payment Methods",
+        "upi": "UPI",
+        "credit_debit_card": "Credit/Debit Card"
     }

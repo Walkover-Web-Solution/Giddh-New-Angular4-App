@@ -154,5 +154,7 @@
        "company_note": "तुम्ही या सदस्यत्वामध्ये <strong>[COMPANY_NAME]</strong> जोडू इच्छित असलेली कंपनी निवडा.",
         "free_for": "मुफ़्त साठी",
         "company_message": "कंपनी [TYPE] यशस्वीरित्या",
-        "manage_payment": "भरणा पद्धतींचे व्यवस्थापन करा"
+        "manage_payment": "भरणा पद्धतींचे व्यवस्थापन करा",
+		"upi": "यूपीआई",
+        "credit_debit_card": "क्रेडिट/डेबिट कार्ड"
 	}

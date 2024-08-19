@@ -154,5 +154,7 @@
         "company_note": "उस कंपनी का चयन करें जिसे आप इस सदस्यता में <strong>[COMPANY_NAME]</strong> जोड़ना चाहते हैं।",
         "free_for": "मुफ़्त के लिए",
         "company_message": "कंपनी [TYPE] सफलतापूर्वक",
-        "manage_payment": "भुगतान विधियों का प्रबंधन करें"
+        "manage_payment": "भुगतान विधियों का प्रबंधन करें",
+		"upi": "यूपीआई",
+        "credit_debit_card": "क्रेडिट/डेबिट कार्ड"
 	}
