@@ -49,6 +49,14 @@ export class SubscriptionsService {
                 return data;
             }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, '')));
     }
+
+    /**
+     * Save Razorpay Token
+     * 
+     * @param subscriptionId 
+     * @param paymentId 
+     * @returns 
+     */
     public saveRazorpayToken(subscriptionId: string , paymentId: string): Observable<any> {
         return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.SAVE_RAZORPAY_TOKEN
             ?.replace(':subscriptionId', subscriptionId)
