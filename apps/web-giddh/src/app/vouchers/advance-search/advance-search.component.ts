@@ -115,8 +115,8 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             dueDateEqual: [this.advanceFilters?.dueDateEqual ?? ''],
             dueDateAfter: [this.advanceFilters?.dueDateAfter ?? ''],
             dueDateBefore: [this.advanceFilters?.dueDateBefore ?? ''],
-            expireFrom: [(this.advanceFilters?.expireFrom && dayjs(this.advanceFilters?.expireFrom, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD)) ?? ''],
-            expireTo: [(this.advanceFilters?.expireTo && dayjs(this.advanceFilters?.expireTo, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD)) ?? ''],
+            expireFrom: [(this.advanceFilters?.expireFrom && dayjs(this.advanceFilters?.expireFrom, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD)) ?? dayjs(this.advanceFilters?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD) ?? ''],
+            expireTo: [(this.advanceFilters?.expireTo && dayjs(this.advanceFilters?.expireTo, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD)) ?? dayjs(this.advanceFilters?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD) ?? ''],
             invoiceDateRange: [this.advanceFilters?.invoiceDateRange ?? ''],
             voucherDate: [this.advanceFilters?.voucherDate ?? ''],
             dueDate: [this.advanceFilters?.dueDate ?? ''],
@@ -133,8 +133,8 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             grandTotal: [this.advanceFilters?.grandTotal ?? ''],
             grandTotalOperation: [this.advanceFilters?.grandTotalOperation ?? ''],
             statuses: [this.advanceFilters?.statuses ?? []],
-            dueFrom: [(this.advanceFilters?.dueFrom && dayjs(this.advanceFilters?.dueFrom, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD)) ?? ''],
-            dueTo: [(this.advanceFilters?.dueTo && dayjs(this.advanceFilters?.dueTo, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD)) ?? '']
+            dueFrom: [(this.advanceFilters?.dueFrom && dayjs(this.advanceFilters?.dueFrom, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD)) ?? dayjs(this.advanceFilters?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD) ?? ''],
+            dueTo: [(this.advanceFilters?.dueTo && dayjs(this.advanceFilters?.dueTo, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD)) ?? dayjs(this.advanceFilters?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD) ?? '']
         });
 
         this.selectedDateRange = { startDate: this.advanceFilters.from, endDate: this.advanceFilters.to };

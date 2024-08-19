@@ -2042,4 +2042,36 @@ export class GeneralService {
             buttons
         };
     }
+
+    /**
+     * This will use for confirmation delete vocher
+     *
+     * @param {string} headerText
+     * @param {string} messageText
+     * @param {string} footerText
+     * @param {*} commonLocaleData
+     * @return {*}  {ConfirmationModalConfiguration}
+     * @memberof GeneralService
+     */
+    public getVoucherDeleteConfiguration(headerText: string, messageText: string, footerText: string, commonLocaleData: any): ConfirmationModalConfiguration {
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: commonLocaleData?.app_yes,
+            color: 'primary'
+        },
+        {
+            text: commonLocaleData?.app_no
+        }];
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1 text-light';
+        const footerCssClass: string = 'mr-b1';
+        return {
+            headerText,
+            headerCssClass,
+            messageText: messageText,
+            messageCssClass,
+            footerText: footerText,
+            footerCssClass,
+            buttons
+        };
+    }
 }

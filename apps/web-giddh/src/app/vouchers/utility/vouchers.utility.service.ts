@@ -1,11 +1,12 @@
 import { Injectable } from "@angular/core";
 import { SearchType, TaxSupportedCountries, TaxType, VoucherTypeEnum } from "./vouchers.const";
 import { VoucherForm } from "../../models/api-models/Voucher";
-import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, GIDDH_VOUCHER_FORM } from "../../app.constant";
+import { ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, EInvoiceStatus, GIDDH_VOUCHER_FORM } from "../../app.constant";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import * as dayjs from "dayjs";
 import * as cleaner from 'fast-clean';
+import { ReceiptItem } from "../../models/api-models/recipt";
 
 @Injectable()
 export class VouchersUtilityService {
@@ -498,5 +499,85 @@ export class VouchersUtilityService {
         });
 
         return selectedAddressIndex;
+    }
+
+    /**
+     * Get Translated file name respect to given voucher
+     *
+     * @private
+     * @param {string} type
+     * @param {boolean} isAllItemsSelected
+     * @param {*} localeData
+     * @returns {string}
+     * @memberof VouchersUtilityService
+     */
+    public getExportFileNameByVoucherType(type: string, isAllItemsSelected: boolean, localeData: any): string {
+        switch (type) {
+            case 'sales': return isAllItemsSelected ? localeData?.all_invoices : localeData?.invoices;
+            case 'purchase': return isAllItemsSelected ? localeData?.all_purchases : localeData?.purchases;
+            case 'credit note': return isAllItemsSelected ? localeData?.all_credit_notes : localeData?.credit_notes;
+            case 'debit note': return isAllItemsSelected ? localeData?.all_debit_notes : localeData?.debit_notes;
+        }
+    }
+
+    /**
+     * Returns the Estimate Proforma tooltip text
+     *
+     * @param {*} item
+     * @param {*} giddhBalanceDecimalPlaces
+     * @param {string} baseCurrency
+     * @return {*}  {string}
+     * @memberof VouchersUtilityService
+     */
+    public addEstimateProformaToolTiptext(item: any, giddhBalanceDecimalPlaces: any, baseCurrency: string): string {
+        try {
+            let grandTotalAmountForCompany,
+                grandTotalAmountForAccount;
+
+            if (item.amount) {
+                grandTotalAmountForCompany = Number(item.amount.amountForCompany) || 0;
+                grandTotalAmountForAccount = Number(item.amount.amountForAccount) || 0;
+            }
+
+            let grandTotalConversionRate = 0;
+            if (grandTotalAmountForCompany && grandTotalAmountForAccount) {
+                grandTotalConversionRate = +((grandTotalAmountForCompany / grandTotalAmountForAccount) || 0).toFixed(giddhBalanceDecimalPlaces);
+            }
+
+            item['grandTotalTooltipText'] = `In ${baseCurrency}: ${grandTotalAmountForCompany}\n(Conversion Rate: ${grandTotalConversionRate})`;
+        } catch (error) {
+
+        }
+        return item;
+    }
+
+    /**
+     * Returns the E-invoice tooltip text
+     *
+     * @param {ReceiptItem} item
+     * @param {*} localeData
+     * @return {*}  {string}
+     * @memberof VouchersUtilityService
+     */
+    public getEInvoiceTooltipText(item: ReceiptItem, localeData: any): string {
+        switch (item?.status?.toLowerCase()) {
+            case EInvoiceStatus.YetToBePushed:
+                return localeData?.e_invoice_statuses.yet_to_be_pushed;
+            case EInvoiceStatus.Pushed:
+                return localeData?.e_invoice_statuses.pushed;
+            case EInvoiceStatus.PushInitiated:
+                return localeData?.e_invoice_statuses.push_initiated;
+            case EInvoiceStatus.Cancelled:
+                // E-invoice got cancelled but invoice didn't cancel
+                return item.balanceStatus !== 'cancel' ? localeData?.e_invoice_statuses.giddh_invoice_not_cancelled : localeData?.e_invoice_statuses.cancelled;
+            case EInvoiceStatus.MarkedAsCancelled:
+                return localeData?.e_invoice_statuses.mark_as_cancelled;
+            case EInvoiceStatus.Failed:
+                return item.errorMessage ?? localeData?.e_invoice_statuses.failed;
+            case EInvoiceStatus.NA:
+                // When invoice is B2C or B2B cancelled invoice
+                return item.errorMessage ?? localeData?.e_invoice_statuses.na;
+            default: return '';
+        }
     }
 }

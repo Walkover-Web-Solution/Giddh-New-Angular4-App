@@ -76,6 +76,13 @@ const BILL_DATA: PeriodicElementBill[] = [
     { position: 1, bill: 'Hydrogen', vendor: 'Ashish RANJAN', billdate: 'H', order: 'H', amount: '', duedate: '', status: '' }
 ];
 
+export interface VoucherBalances {
+    grandTotal: Number;
+    totalDue?: Number;
+    advanceReceiptTotal?: Number;
+    normalReceiptTotal?: Number;
+}
+
 @Component({
     selector: "list",
     templateUrl: "./list.component.html",
@@ -199,9 +206,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Holds Advance Filters Applied Status */
     public advanceFiltersApplied: boolean = false;
     /** Holds Voucher Balances */
-    public voucherBalances: any = {
+    public voucherBalances: VoucherBalances = {
         grandTotal: 0,
-        totalDue: 0
+        totalDue: 0,
+        advanceReceiptTotal: 0,
+        normalReceiptTotal: 0
     };
     /** Holds company specific data */
     public company: any = {
@@ -741,7 +750,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public getVoucherBalances(): void {
-        if (this.voucherType === VoucherTypeEnum.sales) {
+        if (this.voucherType === VoucherTypeEnum.sales || this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote || this.voucherType === VoucherTypeEnum.purchase || this.voucherType === VoucherTypeEnum.payment || this.voucherType === VoucherTypeEnum.receipt) {
             this.componentStore.getVoucherBalances({ requestType: this.voucherType, payload: cloneDeep(this.advanceFilters) });
         }
     }
@@ -1073,11 +1082,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response === this.commonLocaleData?.app_yes) {
-                let payload = {
-                    voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
-                    voucherType: this.voucherType
-                };
-
                 if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.componentStore.deleteVoucher({
                         accountUniqueName: voucher?.account?.uniqueName, model: {
@@ -1091,8 +1095,22 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     } else {
                         this.poBulkAction('delete');
                     }
-
+                } else if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
+                    const voucher = this.selectedVouchers[0];
+                    const payload = {
+                        accountUniqueName: voucher.customerUniqueName
+                    }
+                    if (this.voucherType === VoucherTypeEnum.generateEstimate) {
+                        payload['estimateNumber'] = voucher?.estimateNumber;
+                    } else {
+                        payload['proformaNumber'] = voucher?.proformaNumber;
+                    }
+                    this.componentStore.deleteEstimsteProformaVoucher({ payload: payload, voucherType: this.voucherType });
                 } else {
+                    const payload = {
+                        voucherUniqueNames: this.selectedVouchers?.map(voucher => { return voucher?.uniqueName }),
+                        voucherType: this.voucherType
+                    };
                     this.componentStore.bulkUpdateInvoice({ payload: payload, actionType: 'delete' });
                 }
             }
@@ -1341,7 +1359,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             accountUniqueName: voucher.customerUniqueName,
             action: action
         };
-        if (voucher === 'estimates') {
+        if (voucher === VoucherTypeEnum.generateEstimate) {
             model['estimateNumber'] = voucher.voucherNumber;
         } else {
             model['proformaNumber'] = voucher.voucherNumber;
@@ -1526,8 +1544,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             sortBy: '', // need to set voucherDate
             sort: 'desc',
             type: 'sales',
-            from: '',
-            to: '',
+            from: dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT) ?? '',
+            to: dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT) ?? '',
             page: 1,
             count: PAGINATION_LIMIT,
             q: ''

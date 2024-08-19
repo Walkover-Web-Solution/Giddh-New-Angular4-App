@@ -75,7 +75,7 @@ export class HttpWrapperService {
         options.headers["Session-Id"] = this.generalService.sessionId;
         options.headers["Content-Type"] = "application/json";
         options.headers["Accept"] = "application/json";
-        // options.headers["X-Tenant"] = this.generalService.getUtmParameter("X-Tenant");
+        options.headers["X-Tenant"] = this.generalService.getUtmParameter("X-Tenant");
         options.headers = new HttpHeaders(options.headers);
         options.body = request;
         this.showLoader();
@@ -134,7 +134,7 @@ export class HttpWrapperService {
             delete options.headers["cache-control"];
             delete options.headers["Session-Id"];
         }
-        // options.headers["X-Tenant"] = this.generalService.getUtmParameter("X-Tenant");
+        options.headers["X-Tenant"] = this.generalService.getUtmParameter("X-Tenant");
         options.headers = new HttpHeaders(options.headers);
         return options;
     }

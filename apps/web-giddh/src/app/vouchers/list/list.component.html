@@ -13,7 +13,7 @@
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" [routerLink]="['/pages/vouchers/estimates/create']">
+                            <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/estimates/create']">
                                 <span>+ New Estimate</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
@@ -31,14 +31,15 @@
                             <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
                         </button>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreEstimate" *ngIf="selectedVouchers?.length">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreEstimate" *ngIf="selectedVouchers?.length === 1">
                                 <span>More</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
                             <mat-menu #moreEstimate="matMenu">
-                                <button mat-menu-item (click)="deleteVoucherDialog()">Delete</button>
+                                <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
                             </mat-menu>
-                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">Filter
+                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
+                                {{ commonLocaleData?.app_filter }}
                                 <i class="icon-advance-filter"></i>
                             </button>
                         </div>
@@ -57,10 +58,10 @@
                                         ></mat-checkbox>
                                     </span>
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element; let i = index">
                                     <div class="d-flex align-items-center">
                                         <div class="invoice-number" *ngIf="!selectedVouchers?.length">
-                                            {{element.index}}
+                                            {{ i+1 }}
                                         </div>
                                         <div [ngClass]="{'checkbox-hide': !selectedVouchers?.length }">
                                             <mat-checkbox
@@ -166,7 +167,7 @@
                             </ng-container>
                             <ng-container matColumnDef="status">
                                 <th mat-header-cell *matHeaderCellDef>
-                                    Status
+                                    {{ commonLocaleData?.app_status }}
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
                                     {{ element.status }}
@@ -177,7 +178,6 @@
                                     Action
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
-                                    <!-- *ngIf="element.action !== 'invoiced'" ========== NEED TO ASK WHY THIS -->
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>{{ element.action | titlecase  }}</p>
                                         <ng-container *ngIf="element.action !== 'invoiced'">
@@ -223,7 +223,7 @@
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" [routerLink]="['/pages/vouchers/proformas/create']">
+                            <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/proformas/create']">
                                 <span>+ New Proforma</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
@@ -237,16 +237,19 @@
                                 </div>
                             </div>
                         </div>
+                        <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied">
+                            <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                        </button>
                         <div class="d-flex align-items-center column-gap1">
-                            <!-- ======================= Ask what is use of this ======================= -->
-                            <!-- <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma" *ngIf="selectedVouchers?.length">
                                 <span>More</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
                             <mat-menu #moreProforma="matMenu">
-                                <button mat-menu-item (click)="deleteVoucherDialog()">Delete</button>
-                            </mat-menu> -->
-                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">Filter
+                                <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
+                            </mat-menu>
+                            <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">
+                                {{ commonLocaleData?.app_filter }}
                                 <i class="icon-advance-filter"></i>
                             </button>
                         </div>
@@ -255,21 +258,27 @@
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
                             <ng-container matColumnDef="position">
-                                <th mat-header-cell *matHeaderCellDef> #
-                                    <span>
+                                <th mat-header-cell *matHeaderCellDef width="50px"> 
+                                    <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
+                                    <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
                                             color="primary"
+                                            [value]="true"
+                                            (change)="selectAllVouchers($event)"
                                         ></mat-checkbox>
                                     </span>
                                 </th>
                                 <td mat-cell *matCellDef="let element; let i = index">
                                     <div class="d-flex align-items-center">
-                                        <div class="invoice-number">
+                                        <div class="invoice-number" *ngIf="!selectedVouchers?.length">
                                             {{ i+1 }}
                                         </div>
-                                        <div class="checkbox-hide">
+                                        <div [ngClass]="{'checkbox-hide': !selectedVouchers?.length }">
                                             <mat-checkbox
                                                 color="primary"
+                                                [checked]="isVoucherSelected(element)"
+                                                [value]="element.uniqueName"
+                                                (change)="selectVoucher($event, element)"
                                             ></mat-checkbox>
                                         </div>
                                     </div>
@@ -372,7 +381,7 @@
                             </ng-container>
                             <ng-container matColumnDef="status">
                                 <th mat-header-cell *matHeaderCellDef>
-                                    Status
+                                    {{ commonLocaleData?.app_status }}
                                 </th>
                                 <td mat-cell *matCellDef="let element">
                                     <div [matTooltip]="'Credential are Invalid, please add valid credentials.'" [matTooltipPosition]="'above'">
@@ -427,7 +436,7 @@
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15 flex-wrap row-gap1">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="createNewVoucher">
+                            <button mat-raised-button color="primary" [matMenuTriggerFor]="createNewVoucher">
                                 <span>+ New Invoice</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -450,7 +459,7 @@
                             <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
                         </button>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" [matTooltip]="'Export'"
+                            <button mat-stroked-button color="primary" [matTooltip]="commonLocaleData?.app_export"
                             [matTooltipPosition]="'above'" *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length" [tooltip]="commonLocaleData?.app_export" (click)="exportCsvDownload()">
                                 <i class="icon-export-icon"></i>
                             </button>
@@ -462,12 +471,13 @@
                                 <button mat-menu-item (click)="bulkUpdateDialog()">Bulk Update</button>
                                 <button mat-menu-item *ngIf="selectedVouchers?.length === 1" (click)="showEwayBillDialog()">{{ localeData?.generate_eway_bill }}</button>
                                 <button mat-menu-item *ngIf="isEInvoiceEnabled && (voucherType === 'credit note' || voucherType === 'debit note' || voucherType === 'sales')" (click)="generateEInvoice()">Create E-invoice</button>
-                                <button mat-menu-item (click)="deleteVoucherDialog()">Delete</button>
+                                <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
                             </mat-menu>
-                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">Filter
+                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
+                                {{ commonLocaleData?.app_filter }}
                                 <i class="icon-advance-filter"></i>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">Export</button>
+                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">{{ commonLocaleData?.app_export }}</button>
                         </div>
                     </div>
                     <div class="total-wrapper d-flex column-gap5 w-100">
@@ -498,7 +508,8 @@
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef> <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
+                                <th mat-header-cell *matHeaderCellDef width="50px"> 
+                                    <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
                                             color="primary"
@@ -507,10 +518,10 @@
                                         ></mat-checkbox>
                                     </span>
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element; let i = index">
                                     <div class="d-flex align-items-center">
                                         <div class="invoice-number" *ngIf="!selectedVouchers?.length">
-                                            {{element.index}}
+                                            {{ i+1 }}
                                         </div>
                                         <div [ngClass]="{'checkbox-hide': !selectedVouchers?.length }">
                                             <mat-checkbox
@@ -592,7 +603,7 @@
                             </ng-container>
                             <ng-container matColumnDef="grandTotal">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
-                                    Amount
+                                    {{ commonLocaleData?.app_amount }}
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element.grandTotalTooltipText"
                                 matTooltipPosition="above"> 
@@ -638,7 +649,7 @@
                             </ng-container>
                             <ng-container matColumnDef="status">
                                 <th mat-header-cell *matHeaderCellDef>
-                                    Status
+                                    {{ commonLocaleData?.app_status }}
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
@@ -685,7 +696,7 @@
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" [routerLink]="['/pages/vouchers/debit-note/create']">
+                            <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/debit-note/create']">
                                 <span>+ New Dr. Note</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
@@ -700,37 +711,51 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">Filter
+                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
+                                {{ commonLocaleData?.app_filter }}
                                 <i class="icon-advance-filter"></i>
                             </button>
-                            <button *ngIf="dataSource?.length" mat-stroked-button color="primary" (click)="showBulkExportDialog()">Export</button>
+                            <button *ngIf="dataSource?.length" mat-stroked-button color="primary" (click)="showBulkExportDialog()">{{ commonLocaleData?.app_export }}</button>
                         </div>
                     </div>
                     <div class="total-wrapper d-flex column-gap5 w-100">
                         <div class="total-sale opening-box pd-1 w-100">
                             <p class="font-12">Total Sale:</p>
-                            <span class="font-16">₹4,17,193.26/-</span>
+                            <span class="font-16">
+                                <amount-field
+                                    [amount]="voucherBalances.grandTotal"
+                                    [currencySymbol]="company.baseCurrencySymbol"
+                                    [currencyCode]="company.baseCurrency"
+                                >
+                                </amount-field>
+                            </span>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef> # 
-                                    <!-- <span>
+                                <th mat-header-cell *matHeaderCellDef width="50px"> 
+                                    <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
+                                    <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
                                             color="primary"
+                                            [value]="true"
+                                            (change)="selectAllVouchers($event)"
                                         ></mat-checkbox>
-                                    </span> -->
+                                    </span>
                                 </th>
                                 <td mat-cell *matCellDef="let element; let i = index">
                                     <div class="d-flex align-items-center">
-                                        <div class="invoice-number">
-                                            {{ i + 1 }}
+                                        <div class="invoice-number" *ngIf="!selectedVouchers?.length">
+                                            {{ i+1 }}
                                         </div>
-                                        <div class="checkbox-hide">
+                                        <div [ngClass]="{'checkbox-hide': !selectedVouchers?.length }">
                                             <mat-checkbox
                                                 color="primary"
+                                                [checked]="isVoucherSelected(element)"
+                                                [value]="element.uniqueName"
+                                                (change)="selectVoucher($event, element)"
                                             ></mat-checkbox>
                                         </div>
                                     </div>
@@ -795,7 +820,7 @@
                             </ng-container>
                             <ng-container matColumnDef="voucherDate">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                                    Date
+                                    {{ commonLocaleData?.app_date }}
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
                                     {{ element?.voucherDate }}
@@ -811,7 +836,7 @@
                             </ng-container>
                             <ng-container matColumnDef="grandTotal">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
-                                    Total Amount
+                                    {{ commonLocaleData?.app_total_amount }}
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element.balanceDueTooltipText"
                                 matTooltipPosition="above"> 
@@ -825,7 +850,7 @@
                             </ng-container>
                             <ng-container matColumnDef="status">
                                 <th mat-header-cell *matHeaderCellDef>
-                                    Status
+                                    {{ commonLocaleData?.app_status }}
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
@@ -869,7 +894,7 @@
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" class="w-100" [routerLink]="['/pages/vouchers/credit-note/create']">
+                            <button mat-raised-button color="primary" class="w-100" [routerLink]="['/pages/vouchers/credit-note/create']">
                                 <span>+ New Cr. Note</span>
                             </button>
                             <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
@@ -882,37 +907,51 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">Filter
+                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
+                                {{ commonLocaleData?.app_filter }}
                                 <i class="icon-advance-filter"></i>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">Export</button>
+                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">{{ commonLocaleData?.app_export }}</button>
                         </div>
                     </div>
                     <div class="total-wrapper d-flex column-gap5 w-100">
                         <div class="total-sale opening-box pd-1 w-100">
                             <p class="font-12">Total Sale:</p>
-                            <span class="font-16">₹4,17,193.26/-</span>
+                            <span class="font-16">
+                                <amount-field
+                                    [amount]="voucherBalances.grandTotal"
+                                    [currencySymbol]="company.baseCurrencySymbol"
+                                    [currencyCode]="company.baseCurrency"
+                                >
+                                </amount-field>
+                            </span>
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <!-- <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader> -->
+                        <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef> # 
-                                    <!-- <span>
+                                <th mat-header-cell *matHeaderCellDef width="50px"> 
+                                    <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
+                                    <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
                                             color="primary"
+                                            [value]="true"
+                                            (change)="selectAllVouchers($event)"
                                         ></mat-checkbox>
-                                    </span> -->
+                                    </span>
                                 </th>
                                 <td mat-cell *matCellDef="let element; let i = index">
                                     <div class="d-flex align-items-center">
-                                        <div class="invoice-number">
-                                            {{ i + 1 }}
+                                        <div class="invoice-number" *ngIf="!selectedVouchers?.length">
+                                            {{ i+1 }}
                                         </div>
-                                        <div class="checkbox-hide">
+                                        <div [ngClass]="{'checkbox-hide': !selectedVouchers?.length }">
                                             <mat-checkbox
                                                 color="primary"
+                                                [checked]="isVoucherSelected(element)"
+                                                [value]="element.uniqueName"
+                                                (change)="selectVoucher($event, element)"
                                             ></mat-checkbox>
                                         </div>
                                     </div>
@@ -977,7 +1016,7 @@
                             </ng-container>
                             <ng-container matColumnDef="voucherDate">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                                    Date
+                                    {{ commonLocaleData?.app_date }}
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
                                     {{ element?.voucherDate }}
@@ -993,7 +1032,7 @@
                             </ng-container>
                             <ng-container matColumnDef="grandTotal">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
-                                    Total Amount
+                                    {{ commonLocaleData?.app_total_amount }}
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element.balanceDueTooltipText"
                                 matTooltipPosition="above"> 
@@ -1007,7 +1046,7 @@
                             </ng-container>
                             <ng-container matColumnDef="status">
                                 <th mat-header-cell *matHeaderCellDef>
-                                    Status
+                                    {{ commonLocaleData?.app_status }}
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
@@ -1087,7 +1126,7 @@
                             </ng-container>
                             <ng-container matColumnDef="date">
                                 <th mat-header-cell *matHeaderCellDef>
-                                    Date
+                                    {{ commonLocaleData?.app_date }}
                                 </th>
                                 <td mat-cell *matCellDef="let element">
                                     {{element.date}}
@@ -1103,7 +1142,7 @@
                             </ng-container>
                             <ng-container matColumnDef="amount">
                                 <th mat-header-cell *matHeaderCellDef class="text-right">
-                                    Amount
+                                    {{ commonLocaleData?.app_amount }}
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="text-right"> 
                                     $ 10.00
@@ -1180,7 +1219,7 @@
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" [routerLink]="['/pages/vouchers/purchase-order/create']">
+                            <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/purchase-order/create']">
                                 <span>+ New Order</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
@@ -1197,8 +1236,8 @@
                         <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied">
                             <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
                         </button>
-                        <div class="d-flex align-items-center column-gap1"  *ngIf="selectedVouchers?.length">
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase">
+                        <div class="d-flex align-items-center column-gap1">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase"  *ngIf="selectedVouchers?.length">
                                 <span>More</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -1206,9 +1245,10 @@
                                 <button mat-menu-item (click)="bulkUpdateDialog(true)">Bulk Update</button>
                                 <button mat-menu-item (click)="convertBillDialog()">Convert to bill</button>
                                 <button mat-menu-item (click)="poBulkAction('expire')">Expired</button>
-                                <button mat-menu-item (click)="deleteVoucherDialog()">Delete</button>
+                                <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
                             </mat-menu>
-                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">Filter
+                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
+                                {{ commonLocaleData?.app_filter }}
                                 <i class="icon-advance-filter"></i>
                             </button>
                         </div>
@@ -1229,25 +1269,23 @@
                                 </th>
                                 <td mat-cell *matCellDef="let element; let i = index">
                                     <div class="d-flex align-items-center">
-                                        <div class="d-flex align-items-center">
-                                            <div class="invoice-number" *ngIf="!selectedVouchers?.length">
-                                                {{ i + 1 }}
-                                            </div>
-                                            <div [ngClass]="{'checkbox-hide': !selectedVouchers?.length }">
-                                                <mat-checkbox
-                                                    color="primary"
-                                                    [checked]="isVoucherSelected(element)"
-                                                    [value]="element.voucherNumber"
-                                                    (change)="selectVoucher($event, element)"
-                                                ></mat-checkbox>
-                                            </div>
+                                        <div class="invoice-number" *ngIf="!selectedVouchers?.length">
+                                            {{ i+1 }}
+                                        </div>
+                                        <div [ngClass]="{'checkbox-hide': !selectedVouchers?.length }">
+                                            <mat-checkbox
+                                                color="primary"
+                                                [checked]="isVoucherSelected(element)"
+                                                [value]="element.uniqueName"
+                                                (change)="selectVoucher($event, element)"
+                                            ></mat-checkbox>
                                         </div>
                                     </div>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="date">
                                 <th mat-header-cell *matHeaderCellDef> 
-                                    Date
+                                    {{ commonLocaleData?.app_date }}
                                 </th>
                                 <td mat-cell *matCellDef="let element">
                                     {{ element?.voucherDate }}
@@ -1325,7 +1363,7 @@
                             </ng-container>
                             <ng-container matColumnDef="status">
                                 <th mat-header-cell *matHeaderCellDef>
-                                    Status
+                                    {{ commonLocaleData?.app_status }}
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
@@ -1379,7 +1417,7 @@
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" [routerLink]="['/pages/vouchers/purchase/create']">
+                            <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/purchase/create']">
                                 <span>+ New Bill</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
@@ -1394,37 +1432,51 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">Filter
+                            <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
+                                {{ commonLocaleData?.app_filter }}
                                 <i class="icon-advance-filter"></i>
                             </button>
-                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">Export</button>
+                            <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">{{ commonLocaleData?.app_export }}</button>
                         </div>
                     </div>
                     <div class="total-wrapper d-flex column-gap5 w-100">
                         <div class="total-sale opening-box pd-1 w-100">
                             <p class="font-12">Total Purchases:</p>
-                            <span class="font-16">₹491.00/-</span>
+                            <span class="font-16">
+                                <amount-field
+                                    [amount]="voucherBalances.grandTotal"
+                                    [currencySymbol]="company.baseCurrencySymbol"
+                                    [currencyCode]="company.baseCurrency"
+                                >
+                                </amount-field>
+                            </span>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort class="w-100">
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef> # 
-                                    <!-- <span>
+                                <th mat-header-cell *matHeaderCellDef width="50px"> 
+                                    <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
+                                    <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
                                             color="primary"
+                                            [value]="true"
+                                            (change)="selectAllVouchers($event)"
                                         ></mat-checkbox>
-                                    </span> -->
+                                    </span>
                                 </th>
-                                <td mat-cell *matCellDef="let element">
+                                <td mat-cell *matCellDef="let element; let i = index">
                                     <div class="d-flex align-items-center">
-                                        <div class="invoice-number">
-                                            {{element.position}}
+                                        <div class="invoice-number" *ngIf="!selectedVouchers?.length">
+                                            {{ i+1 }}
                                         </div>
-                                        <div class="checkbox-hide">
+                                        <div [ngClass]="{'checkbox-hide': !selectedVouchers?.length }">
                                             <mat-checkbox
                                                 color="primary"
+                                                [checked]="isVoucherSelected(element)"
+                                                [value]="element.uniqueName"
+                                                (change)="selectVoucher($event, element)"
                                             ></mat-checkbox>
                                         </div>
                                     </div>
@@ -1509,7 +1561,7 @@
                             </ng-container>
                             <ng-container matColumnDef="grandTotal">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
-                                    Amount
+                                    {{ commonLocaleData?.app_amount }}
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element.balanceDueTooltipText"
                                 matTooltipPosition="above"> 
@@ -1531,7 +1583,7 @@
                             </ng-container>
                             <ng-container matColumnDef="status">
                                 <th mat-header-cell *matHeaderCellDef>
-                                    Status
+                                    {{ commonLocaleData?.app_status }}
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
@@ -1548,9 +1600,9 @@
                                                 [routerLink]="['/pages/proforma-invoice/invoice/purchase/' + element.account?.uniqueName + '/' 
                                                 + element?.uniqueName + '/copy']"
                                             >
-                                            Copy
+                                            {{ commonLocaleData?.app_copy }}
                                             </button>
-                                            <button mat-menu-item (click)="deleteVoucherDialog(element)">Delete</button>
+                                            <button mat-menu-item (click)="deleteVoucherDialog(element)">{{ commonLocaleData?.app_delete }}</button>
                                         </mat-menu>
                                     </div>
                                 </td>
@@ -1739,7 +1791,7 @@
                                     [matSuffix]="'days'"
                                 ></input-field>
                                 <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()" [label]="'Invoice Lock Date'"
-                                    [placeholder]="'Select Date'" name="voucherDate" [showToggleIcon]="false" [appearance]="'outline'" class="settings-field d-block">
+                                    [placeholder]="'DD-MM-YYYY'" name="voucherDate" [showToggleIcon]="false" [appearance]="'outline'" class="settings-field d-block">
                                 </giddh-datepicker>
                             </div>
                             <mat-slide-toggle
@@ -2042,7 +2094,7 @@
                         <div class="tabs-box-content py-3">
                             <h4 class="font-16 border-bottom pb-2 mb-3">Purchase Bill</h4>
                                 <giddh-datepicker type="text" (keydown.enter)="$event.preventDefault()" [label]="'Bill Lock Date'"
-                                    [placeholder]="'Select Date'" name="voucherDate" [showToggleIcon]="false" [appearance]="'outline'" class="settings-field d-block mb-3">
+                                    [placeholder]="'DD-MM-YYYY'" name="voucherDate" [showToggleIcon]="false" [appearance]="'outline'" class="settings-field d-block mb-3">
                                 </giddh-datepicker>
                             <mat-slide-toggle
                                 name=""
@@ -2270,7 +2322,11 @@
 
     <!-- convert-bill-dialog -->
     <ng-template #convertBill>
-        <app-convert-bill-dialog (convertToBill)="poBulkAction('create_purchase_bill', $event)"></app-convert-bill-dialog>
+        <app-convert-bill-dialog  
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+            (convertToBill)="poBulkAction('create_purchase_bill', $event)"
+        ></app-convert-bill-dialog>
     </ng-template>
     
     <ng-template #ewayBill>
