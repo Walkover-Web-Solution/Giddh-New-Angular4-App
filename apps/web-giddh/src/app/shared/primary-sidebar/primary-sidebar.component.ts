@@ -111,8 +111,8 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     /** True if account has unsaved changes */
     public hasUnsavedChanges: boolean = false;
     public commandkDialogRef: MatDialogRef<any>;
-    /** The company has no branch */
-    public isCompanyWithNoBranch: boolean = false;
+    /** Holds true if company has no branch */
+    public isCompanyWithoutBranch: boolean = false;
 
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
@@ -257,7 +257,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         });
         this.currentCompanyBranches$.subscribe(response => {
             if (response && response.length) {
-                this.isCompanyWithNoBranch = response?.length === 1;
+                this.isCompanyWithoutBranch = response?.length === 1;
                 this.currentCompanyBranches = response;
                 if (this.generalService.currentBranchUniqueName) {
                     this.currentBranch = response.find(branch => (this.generalService.currentBranchUniqueName === branch?.uniqueName)) || {};
