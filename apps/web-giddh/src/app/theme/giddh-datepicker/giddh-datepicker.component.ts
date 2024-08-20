@@ -104,10 +104,10 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
      * @param event 
      */
     public dateInputChange(event: Event): void {
-        if(event){
-        const inputElement = event.target as HTMLInputElement;
-        const inputValue = inputElement.value;
-        this.inputChange = inputValue;
+        if (event) {
+           const inputElement = event.target as HTMLInputElement;
+           const inputValue = inputElement.value;
+           this.inputChange = inputValue;
         }
     } 
     /**
