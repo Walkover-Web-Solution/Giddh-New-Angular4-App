@@ -7,9 +7,9 @@ import { Observable, map, catchError } from "rxjs";
 import { BaseResponse } from "../models/api-models/BaseResponse";
 import { InvoiceSetting } from "../models/interfaces/invoice.setting.interface";
 import { INVOICE_API, INVOICE_API_2 } from "./apiurls/invoice.api";
-import { ProformaFilter, ProformaGetRequest, ProformaResponse } from "../models/api-models/proforma";
-import { PROFORMA_API } from "./apiurls/proforma.api";
-import { InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptResponse, Voucher, VoucherRequest } from "../models/api-models/recipt";
+import { ProformaFilter, ProformaGetRequest, ProformaResponse, ProformaUpdateActionRequest } from "../models/api-models/proforma";
+import { ESTIMATES_API, PROFORMA_API } from "./apiurls/proforma.api";
+import { InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptResponse, Voucher, VoucherRequest } from "../models/api-models/recipt";
 import { VoucherTypeEnum } from "../models/api-models/Sales";
 import { RECEIPT_API } from "./apiurls/receipt.api";
 import { CustomTemplateResponse } from "../models/api-models/Invoice";
@@ -17,6 +17,7 @@ import { VouchersUtilityService } from "../vouchers/utility/vouchers.utility.ser
 import { SALES_API_V2, SALES_API_V4 } from "./apiurls/sales.api";
 import { PURCHASE_ORDER_API } from "./apiurls/purchase-order.api";
 import { PAGINATION_LIMIT } from "../app.constant";
+import { ADVANCE_RECEIPTS_API } from "./apiurls/advance-receipt-adjustment.api";
 
 
 @Injectable()
@@ -88,12 +89,12 @@ export class VoucherService {
         this.companyUniqueName = this.generalService.companyUniqueName;
         const requestPayload = body;
         const requestParameter = {
-            page: body?.page, 
-            count: body?.count, 
-            from: body?.from, 
-            to: body?.to, 
-            q: ((body?.q) ? encodeURIComponent(body?.q) : body?.q), 
-            sort: body?.sort, 
+            page: body?.page,
+            count: body?.count,
+            from: body?.from,
+            to: body?.to,
+            q: ((body?.q) ? encodeURIComponent(body?.q) : body?.q),
+            sort: body?.sort,
             sortBy: body?.sortBy
         };
 
@@ -327,7 +328,7 @@ export class VoucherService {
         url = url?.replace(':count', model.count ?? '');
         url = url?.replace(':sort', model.sort ?? '');
         url = url?.replace(':sortBy', model.sortBy ?? 'purchaseDate');
-        
+
         const { vendorName, type, purchaseOrderNumber, grandTotal, grandTotalOperation, statuses, dueFrom, dueTo } = model;
 
         return this.http.post(url, { vendorName, type, purchaseOrderNumber, grandTotal, grandTotalOperation, statuses, dueFrom, dueTo }).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
@@ -383,7 +384,7 @@ export class VoucherService {
         let accountUniqueName = model.account?.uniqueName;
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + SALES_API_V4.UPDATE_VOUCHER?.replace(':companyUniqueName', this.companyUniqueName)?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
-        
+
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         return this.http.put(url, model)
             .pipe(
@@ -529,5 +530,165 @@ export class VoucherService {
         url = url?.replace(':companyUniqueName', this.companyUniqueName);
         url = url?.replace(':action', actionType);
         return this.http.patch(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, actionType)));
+    }
+
+    /**
+     * API call to adjust an invoice with advance receipts
+     *
+     * @param {*} model Adjust advance receipts request model
+     * @param {string} invoiceUniqueName Invoice unique name which need to adjust
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public adjustAnInvoiceWithAdvanceReceipts(model: any, invoiceUniqueName: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url;
+
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.config.apiUrl + ADVANCE_RECEIPTS_API.VOUCHER_ADJUSTMENT_WITH_ADVANCE_RECEIPT?.replace(':companyUniqueName', this.companyUniqueName)?.replace(':voucherUniqueName', invoiceUniqueName);
+        } else {
+            url = this.config.apiUrl + ADVANCE_RECEIPTS_API.INVOICE_ADJUSTMENT_WITH_ADVANCE_RECEIPT?.replace(':companyUniqueName', this.companyUniqueName)?.replace(':invoiceUniqueName', invoiceUniqueName);
+        }
+
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+
+        return this.http.post(url, model).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    /**
+     * Update Action for Proforma 
+     *
+     * @param {ProformaUpdateActionRequest} request
+     * @param {string} voucherType
+     * @return {*}  {Observable<BaseResponse<string, ProformaUpdateActionRequest>>}
+     * @memberof VoucherService
+     */
+    public updateAction(request: ProformaUpdateActionRequest, voucherType: string): Observable<BaseResponse<string, ProformaUpdateActionRequest>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.put(this.config.apiUrl + PROFORMA_API.updateAction
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':vouchers', voucherType)
+            ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
+            request
+        ).pipe(
+            map((res) => {
+                let data: BaseResponse<string, ProformaUpdateActionRequest> = res;
+                data.queryString = voucherType;
+                data.request = request;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, ProformaUpdateActionRequest>(e, request)));
+    }
+
+    /**
+     * Generate Invoice for Estimate and Proforma 
+     *
+     * @param {ProformaGetRequest} request
+     * @param {string} voucherType
+     * @return {*}  {Observable<BaseResponse<string, ProformaGetRequest>>}
+     * @memberof VoucherService
+     */
+    public generateInvoice(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + (voucherType === 'proformas' ? PROFORMA_API.generateInvoice : ESTIMATES_API.generateInvoice)
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
+            request
+        ).pipe(
+            map((res) => {
+                let data: BaseResponse<string, ProformaGetRequest> = res;
+                data.queryString = voucherType;
+                data.request = request;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
+    }
+
+    /**
+     * Generate Proforma for Estimate
+     *
+     * @param {ProformaGetRequest} request
+     * @param {string} voucherType
+     * @return {*}  {Observable<BaseResponse<string, ProformaGetRequest>>}
+     * @memberof VoucherService
+     */
+    public generateProforma(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + ESTIMATES_API.generateProforma
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':vouchers', voucherType)
+            ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
+            request
+        ).pipe(
+            map((res) => {
+                let data: BaseResponse<string, ProformaGetRequest> = res;
+                data.queryString = voucherType;
+                data.request = request;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
+    }
+
+    /**
+     * Delete Estimste/Proforma Voucher
+     *
+     * @param {ProformaGetRequest} request
+     * @param {string} voucherType
+     * @return {*}  {Observable<BaseResponse<string, ProformaGetRequest>>}
+     * @memberof VoucherService
+     */
+    public deleteEstimsteProformaVoucher(request: ProformaGetRequest, voucherType: string): Observable<BaseResponse<string, ProformaGetRequest>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.deleteWithBody(this.config.apiUrl + PROFORMA_API.base
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':vouchers', voucherType)
+            ?.replace(':accountUniqueName', encodeURIComponent(request.accountUniqueName)),
+            request
+        ).pipe(
+            map((res) => {
+                let data: BaseResponse<string, ProformaGetRequest> = res;
+                data.queryString = voucherType;
+                data.request = request;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, ProformaGetRequest>(e, request)));
+    }
+
+    /**
+     *  Delete Receipt voucher
+     *
+     * @param {string} accountUniqueName
+     * @param {ReciptDeleteRequest} queryRequest
+     * @return {*}  {Observable<BaseResponse<string, ReciptDeleteRequest>>}
+     * @memberof VoucherService
+     */
+    public deleteReceipt(accountUniqueName: string, queryRequest: ReciptDeleteRequest): Observable<BaseResponse<string, ReciptDeleteRequest>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + RECEIPT_API.DELETE
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        }
+        return this.http.deleteWithBody(
+            url,
+            queryRequest
+        ).pipe(
+            map((res) => {
+                let data: BaseResponse<string, ReciptDeleteRequest> = res;
+                data.request = queryRequest;
+                data.queryString = { accountUniqueName };
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<string, ReciptDeleteRequest>(e, accountUniqueName))
+        )
     }
 }

@@ -20,21 +20,29 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** Holds Voucher Type */
     @Input() public type: 'invoice' | 'drcr' | 'receipt' | 'proforma' | 'purchase' | 'purchase-order';
+    /** Holds Advance Filter Values */
     @Input() public advanceFilters: any;
+    /** Emits Apply Filter Event */
     @Output() public applyFilterEvent: EventEmitter<InvoiceFilterClassForInvoicePreview> = new EventEmitter<InvoiceFilterClassForInvoicePreview>();
-    @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
+    /** Emits Close Dailog Event */
+    @Output() public closeDialogEvent: EventEmitter<boolean> = new EventEmitter(true);
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Form Group Instance */
     public searchForm: FormGroup;
+    /** Holds Filters For Entry Total list items */
     public filtersForEntryTotal: IOption[] = [];
+    /** Holds Filters for Amount */
     public filtersForAmount: IOption[] = [];
+    /** Holds date options list items */
     public dateOptions: IOption[] = [];
-    public dayjs = dayjs;
+    /** Holds Day js reference */
+    public dayjs: any = dayjs;
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
-    /** directive to get reference of element */
+    /** Directive to get reference of element */
     @ViewChild('filterDatepickerTemplate') public datepickerTemplate: TemplateRef<any>;
     /* This will store modal reference */
     public modalRef: BsModalRef;
@@ -65,6 +73,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         dateRange: '',
         amountFieldSelector: ''
     };
+    /** Holds true if API call is in progress */
     public isLoading: boolean = true;
 
     constructor(
@@ -74,6 +83,11 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
 
     }
 
+    /**
+     * Initializes the component
+     *
+     * @memberof AdvanceSearchComponent
+     */
     public ngOnInit(): void {
         this.filtersForEntryTotal = [
             { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'greaterThan' },
@@ -95,8 +109,8 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             { label: this.commonLocaleData?.app_date_options?.after, value: 'after' },
             { label: this.commonLocaleData?.app_date_options?.before, value: 'before' },
         ];
-       
-        
+
+
         this.searchForm = this.formBuilder.group({
             total: [this.advanceFilters?.total ?? ''],
             totalEqual: [this.advanceFilters?.totalEqual ?? ''],
@@ -166,12 +180,23 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Lifecycle hook for destroy
+     *
+     * @memberof AdvanceSearchComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
-    public invoiceTotalRangeChanged(item: IOption) {
+    /**
+     * Update search form value based on invoice total range changed value
+     *
+     * @param {IOption} item
+     * @memberof AdvanceSearchComponent
+     */
+    public invoiceTotalRangeChanged(item: IOption): void {
         this.searchForm.get('totalEqual')?.patchValue(false);
         this.searchForm.get('totalLessThan')?.patchValue(false);
         this.searchForm.get('totalMoreThan')?.patchValue(false);
@@ -197,7 +222,13 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         }
     }
 
-    public amountRangeChanged(item: IOption) {
+    /**
+     * Update search form value based on amount range changed value
+     *
+     * @param {IOption} item
+     * @memberof AdvanceSearchComponent
+     */
+    public amountRangeChanged(item: IOption): void {
         this.searchForm.get('amountEquals')?.patchValue(false);
         this.searchForm.get('amountExclude')?.patchValue(false);
         this.searchForm.get('amountGreaterThan')?.patchValue(false);
@@ -219,7 +250,13 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         }
     }
 
-    public dueTotalRangeChanged(item: IOption) {
+    /**
+     * Update search form value based on due total range changed value
+     *
+     * @param {IOption} item
+     * @memberof AdvanceSearchComponent
+     */
+    public dueTotalRangeChanged(item: IOption): void {
         this.searchForm.get('balanceEqual')?.patchValue(false);
         this.searchForm.get('balanceLessThan')?.patchValue(false);
         this.searchForm.get('balanceMoreThan')?.patchValue(false);
@@ -245,7 +282,13 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         }
     }
 
-    public dateChanged(item: IOption, type: string) {
+    /**
+     * Update search form value based on date changed value
+     *
+     * @param {IOption} item
+     * @memberof AdvanceSearchComponent
+     */
+    public dateChanged(item: IOption, type: string): void {
         if (type === 'invoice') {
             this.searchForm.get('voucherDateEqual')?.patchValue(false);
             this.searchForm.get('voucherDateAfter')?.patchValue(false);
@@ -281,7 +324,12 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         }
     }
 
-    public parseAllDateField() {
+    /**
+     * Parse All Date Field in to required format
+     *
+     * @memberof AdvanceSearchComponent
+     */
+    public parseAllDateField(): void {
         if (this.searchForm.get('voucherDate')?.value) {
             this.searchForm.get('voucherDate')?.patchValue((typeof this.searchForm.get('voucherDate')?.value === "object") ? dayjs(this.searchForm.get('voucherDate')?.value).format(GIDDH_DATE_FORMAT) : dayjs(this.searchForm.get('voucherDate')?.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
         }
@@ -307,18 +355,33 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Emits search event
+     *
+     * @memberof AdvanceSearchComponent
+     */
     public search(): void {
         this.parseAllDateField();
         this.applyFilterEvent.emit(this.searchForm?.value);
-        this.closeModelEvent.emit();
+        this.closeDialogEvent.emit();
     }
 
+    /**
+     * Emits close dialog event
+     *
+     * @memberof AdvanceSearchComponent
+     */
     public onCancel(): void {
-        this.closeModelEvent.emit(true);
+        this.closeDialogEvent.emit(true);
     }
 
+    /**
+     * Handle Expiry Date Changes
+     *
+     * @memberof AdvanceSearchComponent
+     */
     public expiryDateChanges(): void {
-            this.fromDate = dayjs(this.searchForm.get('expireFrom')?.value).format(GIDDH_DATE_FORMAT);
-            this.toDate = dayjs(this.searchForm.get('expireTo')?.value).format(GIDDH_DATE_FORMAT);
+        this.fromDate = dayjs(this.searchForm.get('expireFrom')?.value).format(GIDDH_DATE_FORMAT);
+        this.toDate = dayjs(this.searchForm.get('expireTo')?.value).format(GIDDH_DATE_FORMAT);
     }
 }

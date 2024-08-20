@@ -19,7 +19,7 @@
             <reactive-dropdown-field
                 *ngIf="bulkUpdateForm.get('selectedField')?.value === 'pdfTemplate'"
                 [name]="'template'"
-                [placeholder]="'Select'"
+                [placeholder]="commonLocaleData?.app_select"
                 class="w-100"
                 [options]="templatesList"
                 formControlName="templateUniqueName"
@@ -38,7 +38,7 @@
                     formControlName="message2"
                 ></textarea>
                 <ng-container *ngIf="bulkUpdateForm.get('message2')?.value && !showNotesAtLastPage">
-                    <span class="max-character-label">Characters left:&nbsp;</span>
+                    <span class="max-character-label">{{ commonLocaleData?.app_characters_left }}:&nbsp;</span>
                     <span class="max-character-value">{{ 200 - bulkUpdateForm.get("message2")?.value?.length }}</span>
                 </ng-container>
             </mat-form-field>
@@ -60,7 +60,7 @@
             <reactive-dropdown-field
                 *ngIf="bulkUpdateForm.get('selectedField')?.value === 'signature'"
                 [name]="'signature'"
-                [placeholder]="'Select'"
+                [placeholder]="commonLocaleData?.app_select"
                 class="w-100"
                 [options]="templateSignaturesOptions"
                 formControlName="signatureOption"

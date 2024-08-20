@@ -9,7 +9,7 @@
         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" [selectedIndex]="selectedTabIndex" (selectedIndexChange)="tabChanged($event)">
             
             <!-- estimate-content-start -->
-            <mat-tab label="Estimates (Beta)" *ngIf="activeTabGroup === 0">
+            <mat-tab [label]="localeData?.tabs?.estimates" *ngIf="activeTabGroup === 0">
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
@@ -160,7 +160,7 @@
                             </ng-container>
                             <ng-container matColumnDef="dueDate">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                                    Expiry Date
+                                    {{ localeData?.expiry_date }}
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
                                     {{ element.expiryDate }}
@@ -176,7 +176,7 @@
                             </ng-container>
                             <ng-container matColumnDef="action">
                                 <th mat-header-cell *matHeaderCellDef>
-                                    Action
+                                    {{ commonLocaleData?.app_action }}
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
@@ -220,7 +220,7 @@
             <!-- estimate-content-end -->
 
             <!-- proforma-content-start -->
-            <mat-tab label="Proformas" *ngIf="activeTabGroup === 0">
+            <mat-tab [label]="localeData?.tabs?.proformas" *ngIf="activeTabGroup === 0">
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
@@ -297,7 +297,7 @@
                                                     fieldName: 'proformaNumber',
                                                     voucherType: 'proforma',
                                                     formControl: voucherNumberInput,
-                                                    title: 'Proforma No.'
+                                                    title: localeData?.proforma_no
                                                 }
                                             "
                                         ></ng-container>
@@ -358,7 +358,6 @@
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element.grandTotalTooltipText"
                                 matTooltipPosition="above"> 
-                                    {{ grandTotal }}
                                     <amount-field
                                         [amount]="element.grandTotal"
                                         [currencySymbol]="element?.amount?.currencyForAccount?.symbol"
@@ -371,9 +370,8 @@
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
                                     {{ localeData?.expiry_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" matTooltip="In INR: 1.239 (Conversion Rate: 0.005)"
-                                matTooltipPosition="above"> 
-                                    {{element.expirydate}}
+                                <td mat-cell *matCellDef="let element"> 
+                                    {{element.expiryDate}}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="status">
@@ -429,7 +427,7 @@
             <!-- proforma-content-end -->
             
             <!-- invoice-content-start -->
-            <mat-tab label="Invoices" *ngIf="activeTabGroup === 0">
+            <mat-tab [label]="localeData?.tabs?.invoices" *ngIf="activeTabGroup === 0">
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15 flex-wrap row-gap1">
                         <div class="d-flex align-items-center column-gap1">
@@ -690,7 +688,7 @@
             <!-- invoice-content-end -->
 
             <!-- debit-note-content-start -->
-            <mat-tab label="Debit Note" *ngIf="activeTabGroup === 1">
+            <mat-tab [label]="localeData?.tabs?.debit_note" *ngIf="activeTabGroup === 1">
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
@@ -888,7 +886,7 @@
             <!-- debit-note-content-end -->
 
             <!-- credit-note-content-start -->
-            <mat-tab label="Credit Note" *ngIf="activeTabGroup === 1">
+            <mat-tab [label]="localeData?.tabs?.credit_note" *ngIf="activeTabGroup === 1">
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
@@ -1084,7 +1082,7 @@
             <!-- credit-note-content-end -->
 
             <!-- pending-content-start -->
-            <mat-tab label="Pending" *ngIf="activeTabGroup === 0 || activeTabGroup === 1">
+            <mat-tab [label]="localeData?.tabs?.pending" *ngIf="activeTabGroup === 0 || activeTabGroup === 1">
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
@@ -1213,7 +1211,7 @@
             <!-- pending-content-end -->
             
             <!-- purchase-order-start -->
-            <mat-tab label="Purchase Order" *ngIf="activeTabGroup === 2">
+            <mat-tab [label]="localeData?.po_number" *ngIf="activeTabGroup === 2">
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
@@ -1369,7 +1367,7 @@
                                         <p>{{ element?.status | titlecase }}</p>
                                         <div class="d-flex action-btn column-gap5">
                                             <button *ngIf="element?.status === 'open'" mat-stroked-button color="primary" class="mat-icon-sm-btn icon-font-11" [matTooltip]="localeData?.convert_to_bill"
-                                                [matTooltipPosition]="'above'" (click)="convertBillDialog(element, 'create_purchase_bill')">
+                                                [matTooltipPosition]="'above'" (click)="convertBillDialog(element)">
                                                 <i class="icon-tick"></i>
                                             </button>
                                             <button mat-stroked-button color="primary" class="mat-icon-sm-btn icon-font-11" [matTooltip]="commonLocaleData?.app_send_email"
@@ -1412,7 +1410,7 @@
             <!-- purchase-order-end -->
 
             <!-- bill-content-start -->
-            <mat-tab label="Bill" *ngIf="activeTabGroup === 2">
+            <mat-tab [label]="localeData?.bill" *ngIf="activeTabGroup === 2">
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
@@ -1632,8 +1630,8 @@
             </mat-tab>
             <!-- bill-content-end -->
 
-            <!-- setting-content-start -->
-            <mat-tab label="Settings" class="setting-svg">
+            <!-- setting-content-start --> <!-- ===== HIDE THIS TAB FOR NOW ===== -->
+            <mat-tab [label]="localeData?.tabs?.settings" class="setting-svg" *ngIf="false">
                 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="tabs-box-wrap pt-3 px-4">
                     <mat-tab *ngIf="activeTabGroup === 0">
                       <ng-template mat-tab-label>
@@ -2134,7 +2132,7 @@
             <!-- setting-content-end -->
 
             <!-- template-content-start -->
-            <mat-tab label="Templates" *ngIf="activeTabGroup === 0 || activeTabGroup === 1">
+            <mat-tab [label]="localeData?.tabs?.templates" *ngIf="activeTabGroup === 0 || activeTabGroup === 1">
                 <div class="vouchers-wrapper pt-3 px-4">
                     <dropdown-field
                         [name]="'design'"
@@ -2220,7 +2218,7 @@
         <div [hidden]="!show">
             <text-field
                 [type]="'text'"
-                [placeholder]="'Search'"
+                [placeholder]="commonLocaleData?.app_search"
                 [cssClass]="'form-control search-table mat-field-border'"
                 [autoFocus]="show"
                 [formControl]="formControl"
@@ -2273,7 +2271,7 @@
             [isEInvoiceEnabled]="isEInvoiceEnabled"
             [advanceFilters]="advanceFilters"
             (applyFilterEvent)="applyAdvanceSearch($event)"
-            (closeModelEvent)="closeAdvanceSearchDialog(true)"
+            (closeDialogEvent)="closeAdvanceSearchDialog(true)"
         ></app-advance-search>
     </ng-template>
         
@@ -2317,7 +2315,7 @@
     <!-- setting-tab-btn -->
     <ng-template #actionButtons>
         <div class="d-flex column-gap1 mt-4">
-            <button mat-stroked-button color="primary">Save</button>
+            <button mat-stroked-button color="primary">{{ commonLocaleData?.app_save }}</button>
             <button mat-stroked-button>{{ commonLocaleData?.app_payment_status?.paid }}</button>
         </div>
     </ng-template>
