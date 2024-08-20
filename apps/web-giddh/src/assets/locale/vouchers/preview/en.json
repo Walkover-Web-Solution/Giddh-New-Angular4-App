@@ -73,7 +73,7 @@
     "new_dr_note": "+ New Dr. Note",
     "bill_no": "Bill No.",
     "bill_date": "Bill Date",
-    "po_number": "Purchase Order #",
+    "po_number": "Purchase Order",
     "balance_due": "Balance Due",
     "due_date": "Due Date",
     "cr_note_no": "Cr Note No.",
@@ -250,5 +250,7 @@
     "po_warehouse_error": "Please select Warehouse",
     "po_bulkupdate_error": "Please choose a field to update",
     "purchase_bill_number": "Purchase Bill Number",
-    "convert_to_bill": "Convert to bill"
+    "convert_to_bill": "Convert to bill",
+    "new_order": "+ New Order",
+    "expected_delivery": "Expected Delivery"
 }

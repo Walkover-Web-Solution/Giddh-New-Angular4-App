@@ -238,5 +238,19 @@
             "message2": "उन्हें स्थायी रूप से हटा दिया जाएगा और अब किसी अन्य मॉड्यूल से एक्सेस नहीं किया जा सकेगा।"
         }
     ],
-    "proforma_generated": "प्रोफार्मा सफलतापूर्वक तैयार किया गया।"
+    "proforma_generated": "प्रोफार्मा सफलतापूर्वक तैयार किया गया।",
+    "status_updated": "स्थिति सफलतापूर्वक अपडेट की गई।",
+    "delayed_by_days": "[DAYS] दिनों की देरी से",
+    "delivery_in_day": "डिलीवरी [DAYS] दिन में",
+    "delivery_in_days": "[DAYS] दिनों में डिलीवरी",
+    "expected_delivery_date": "अनुमानित वितरण तिथि",
+    "order_date": "ऑर्डर तिथि",
+    "po_date_error": "कृपया खरीद तिथि चुनें",
+    "po_expirydate_error": "कृपया अपेक्षित वितरण तिथि चुनें",
+    "po_warehouse_error": "कृपया गोदाम चुनें",
+    "po_bulkupdate_error": "कृपया अपडेट करने के लिए एक फ़ील्ड चुनें",
+    "purchase_bill_number": "खरीद बिल संख्या",
+    "convert_to_bill": "बिल में बदलें",
+    "new_order": "+ नया ऑर्डर",
+    "expected_delivery": "अनुमानित वितरण"
 }
