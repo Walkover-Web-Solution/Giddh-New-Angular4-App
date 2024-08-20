@@ -14,8 +14,8 @@ export class ConvertBillDialogComponent implements OnInit {
   @Input() public commonLocaleData: any = {};
   /** Emits convert To Bill form value */
   @Output() public convertToBill = new EventEmitter<any>();
+  /** Hold Form group */
   public form: FormGroup;
-  public showForm: boolean = true;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public vouchers,
@@ -31,16 +31,11 @@ export class ConvertBillDialogComponent implements OnInit {
    * @memberof ConvertBillDialogComponent
    */
   public ngOnInit(): void {
-    if (this.vouchers) {
+    if (this.vouchers?.length) {
       let formArray = this.form.get('purchaseOrders') as FormArray;
-      if (this.vouchers?.length) {
-        this.vouchers.forEach(voucher => {
-          formArray.push(this.setPurchaseOrderValue(voucher));
-        });
-      } else {
-        let formAarry = this.form.get('purchaseOrders') as FormArray;
-        formAarry.push(this.setPurchaseOrderValue(this.vouchers));
-      }
+      this.vouchers.forEach(voucher => {
+        formArray.push(this.getPurchaseOrderValue(voucher));
+      });
     }
   }
 
@@ -64,7 +59,7 @@ export class ConvertBillDialogComponent implements OnInit {
    * @return {*}  {FormGroup}
    * @memberof ConvertBillDialogComponent
    */
-  private setPurchaseOrderValue(voucher): FormGroup {
+  private getPurchaseOrderValue(voucher?: any): FormGroup {
     return this.formBuilder.group({
       orderNumber: [voucher?.voucherNumber ?? ''],
       purchaseNumber: [voucher?.purchaseNumber ?? null]

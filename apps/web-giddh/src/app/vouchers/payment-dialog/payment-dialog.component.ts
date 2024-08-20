@@ -18,14 +18,19 @@ import { InvoicePaymentRequest } from '../../models/api-models/Invoice';
     providers: [VoucherComponentStore]
 })
 export class PaymentDialogComponent implements OnInit, OnDestroy {
+    /** Holds current voucher details */
     @Input() public voucherDetails: any;
     /* This will hold local JSON data */
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** Emits payment submit event */
     @Output() public paymentSubmitted: EventEmitter<InvoicePaymentRequest> = new EventEmitter();
+    /** Emits close event */
     @Output() public closeModelEvent: EventEmitter<void> = new EventEmitter();
-    public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Hold dayjs reference */
     public dayjs = dayjs;
     /** Holds company specific data */
     public company: any = {
@@ -34,19 +39,25 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
         inputMaskFormat: '',
         giddhBalanceDecimalPlaces: 0
     };
+    /** Hold tags list */
     public tags: any[] = [];
     /** Brief accounts Observable */
     public briefAccounts$: Observable<OptionInterface[]> = observableOf(null);
+    /** Holds Payment form */
     public paymentForm: FormGroup;
+    /** Holds Amount Currency*/
     public amountCurrency: string = "";
+    /** Holds true if Multicurrency Account*/
     public isMulticurrencyAccount = false;
     /** Selected payment mode */
     public selectedPaymentMode: any;
+    /** Holds true if Bank Selected */
     public isBankSelected: boolean = false;
     /** True if currency switched */
     private currencySwitched: boolean = false;
     /** True if we need to show exchange rate edit field */
     public showExchangeRateEditField: boolean = false;
+    /** Holds true if save is inprogress */
     public saveInProgress: boolean = false;
 
     constructor(
@@ -58,6 +69,11 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
 
     }
 
+    /**
+     * Lifecycle hook for destroy
+     *
+     * @memberof PaymentDialogComponent
+     */
     public ngOnInit(): void {
         this.paymentForm = this.formBuilder.group({
             action: ['paid'],
@@ -119,11 +135,22 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
         });
     }
 
+    /**
+     * Lifecycle hook for destroy
+     *
+     * @memberof PaymentDialogComponent
+     */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
 
+    /**
+     * Handle Select Payment Mode
+     *
+     * @param {*} event
+     * @memberof PaymentDialogComponent
+     */
     public onSelectPaymentMode(event: any): void {
         if (event && event.value) {
             if (!this.isMulticurrencyAccount || this.voucherDetails?.account?.currency?.code === event?.additional?.currency) {
@@ -161,6 +188,14 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Assign Amount
+     *
+     * @private
+     * @param {number} amount
+     * @param {string} currencySymbol
+     * @memberof PaymentDialogComponent
+     */
     private assignAmount(amount: number, currencySymbol: string): void {
         this.paymentForm.get('amount')?.patchValue(amount);
         this.amountCurrency = currencySymbol;
@@ -191,6 +226,11 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Emits Save Payment
+     *
+     * @memberof PaymentDialogComponent
+     */
     public savePayment(): void {
         let newFormObj = this.paymentForm?.value;
         newFormObj.date = dayjs(newFormObj.date).format(GIDDH_DATE_FORMAT);

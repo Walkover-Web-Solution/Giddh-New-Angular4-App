@@ -359,17 +359,12 @@ button {
         }
         .search-field {
             margin-right: 0;
-            .search-branch-box {
-                max-width: 180px;
-            }
             .clear-filter-btn {
-                width: 122px !important;
-                padding: 0 12px;
+                padding: 0 8px;
             }
         }
     }
     .input-group-date-range-picker {
-        width: 100%;
         .form-group {
             margin-bottom: 0;
         }

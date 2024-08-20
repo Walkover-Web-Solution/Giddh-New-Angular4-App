@@ -306,7 +306,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.setInitialAdvanceFilter();
         this.getInvoiceSettings();
 
-        
+
 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
@@ -1380,12 +1380,19 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @param {*} voucher
      * @memberof VoucherListComponent
      */
-    public convertToInvoice(voucher): void {
+    public convertToInvoice(voucher: any): void {
+        const model = {
+            accountUniqueName: voucher.customerUniqueName
+        };
+
+        if (voucher === VoucherTypeEnum.generateEstimate) {
+            model['estimateNumber'] = voucher.voucherNumber;
+        } else {
+            model['proformaNumber'] = voucher.voucherNumber;
+        }
+
         this.componentStore.convertToInvoice({
-            request: {
-                accountUniqueName: voucher.customerUniqueName,
-                estimateNumber: voucher.voucherNumber,
-            },
+            request: model,
             voucherType: voucher?.voucherType ?? this.voucherType
         });
     }
@@ -1396,7 +1403,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @param {*} voucher
      * @memberof VoucherListComponent
      */
-    public convertToProforma(voucher): void {
+    public convertToProforma(voucher: any): void {
         this.componentStore.convertToProforma({
             request: {
                 accountUniqueName: voucher.customerUniqueName,
@@ -1629,8 +1636,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @param {string} [action]
      * @memberof VoucherListComponent
      */
-    public convertBillDialog(voucher?: any, action?: string): void {
-        const vouchers = voucher ?? this.selectedVouchers;
+    public convertBillDialog(voucher?: any): void {
+        const vouchers = voucher ? [voucher] : this.selectedVouchers;
         this.dialog.open(this.convertBill, {
             data: vouchers,
             width: '600px',
@@ -1648,9 +1655,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public poBulkAction(actionType: string, event?: any): void {
         if (actionType === 'delete' || actionType === 'expire') {
             const purchaseNumbers = this.selectedVouchers.map(voucher => voucher?.voucherNumber);
-            this.componentStore.POBulkUpdateAction({ payload: { purchaseNumbers }, actionType: actionType });
+            this.componentStore.purchaseOrderBulkUpdateAction({ payload: { purchaseNumbers }, actionType: actionType });
         } else if (event?.purchaseOrders) {
-            this.componentStore.POBulkUpdateAction({ payload: event, actionType: actionType });
+            this.componentStore.purchaseOrderBulkUpdateAction({ payload: event, actionType: actionType });
         }
     }
 }

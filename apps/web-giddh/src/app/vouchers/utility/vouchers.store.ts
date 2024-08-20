@@ -20,9 +20,6 @@ import { AccountService } from "../../services/account.service";
 import { SearchService } from "../../services/search.service";
 import { InvoiceBulkUpdateService } from "../../services/invoice.bulkupdate.service";
 import { BulkVoucherExportService } from "../../services/bulkvoucherexport.service";
-import { SalesService } from "../../services/sales.service";
-import { ProformaService } from "../../services/proforma.service";
-import { ReceiptService } from "../../services/receipt.service";
 
 export interface VoucherState {
     isLoading: boolean;
@@ -127,10 +124,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         private accountService: AccountService,
         private searchService: SearchService,
         private bulkUpdateInvoiceService: InvoiceBulkUpdateService,
-        private bulkVoucherExportService: BulkVoucherExportService,
-        private salesService: SalesService,
-        private proformaService: ProformaService,
-        private receiptService: ReceiptService
+        private bulkVoucherExportService: BulkVoucherExportService
     ) {
         super(DEFAULT_STATE);
     }
@@ -1057,7 +1051,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                 this.patchState({
                     actionVoucherIsSuccess: false
                 });
-                return this.proformaService.updateAction(req.request, req.voucherType).pipe(
+                return this.voucherService.updateAction(req.request, req.voucherType).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
@@ -1090,7 +1084,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                 this.patchState({
                     convertToInvoice: false
                 });
-                return this.proformaService.generateInvoice(req.request, req.voucherType).pipe(
+                return this.voucherService.generateInvoice(req.request, req.voucherType).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
@@ -1123,7 +1117,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                 this.patchState({
                     convertToProforma: false
                 });
-                return this.proformaService.generateProforma(req.request, req.voucherType).pipe(
+                return this.voucherService.generateProforma(req.request, req.voucherType).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
@@ -1156,7 +1150,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                 this.patchState({
                     adjustVoucherIsSuccess: false
                 });
-                return this.salesService.adjustAnInvoiceWithAdvanceReceipts(req.adjustments, req.voucherUniqueName).pipe(
+                return this.voucherService.adjustAnInvoiceWithAdvanceReceipts(req.adjustments, req.voucherUniqueName).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
@@ -1258,7 +1252,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ deleteVoucherIsSuccess: false });
-                return this.receiptService.DeleteReceipt(req.accountUniqueName, req.model).pipe(
+                return this.voucherService.deleteReceipt(req.accountUniqueName, req.model).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success" && typeof res.body === "string") {
@@ -1287,7 +1281,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ deleteVoucherIsSuccess: false });
-                return this.proformaService.delete(req.payload, req.voucherType).pipe(
+                return this.voucherService.deleteEstimsteProformaVoucher(req.payload, req.voucherType).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success" && typeof res.body === "string") {
@@ -1381,7 +1375,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
-    readonly POBulkUpdateAction = this.effect((data: Observable<{ payload: any, actionType: string }>) => {
+    readonly purchaseOrderBulkUpdateAction = this.effect((data: Observable<{ payload: any, actionType: string }>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ bulkUpdateVoucherIsSuccess: false, bulkUpdateVoucherInProgress: true });

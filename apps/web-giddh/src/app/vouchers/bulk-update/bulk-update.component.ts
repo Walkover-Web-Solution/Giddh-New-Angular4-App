@@ -268,7 +268,7 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
      *
      * @memberof BulkUpdateComponent
      */
-    public clearImage() {
+    public clearImage(): void {
         this.signatureSrc = '';
         this.bulkUpdateForm.get("imageSignatureUniqueName")?.patchValue("");
     }
@@ -380,9 +380,16 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
         delete model.action;
 
         model.purchaseNumbers = this.inputData?.purchaseNumbers;
-        this.componentStore.POBulkUpdateAction({ payload: model, actionType: actionType})
+        this.componentStore.purchaseOrderBulkUpdateAction({ payload: model, actionType: actionType})
     }
 
+    /**
+     * Bulk Update Request API Call
+     *
+     * @param {*} payload
+     * @param {string} actionType
+     * @memberof BulkUpdateComponent
+     */
     public bulkUpdateRequest(payload: any, actionType: string): void {
         payload.voucherUniqueNames = this.inputData?.voucherUniqueNames;
         payload.voucherType = this.inputData?.voucherType;

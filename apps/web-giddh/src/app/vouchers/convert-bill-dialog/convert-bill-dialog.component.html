@@ -1,4 +1,4 @@
-<form [formGroup]="form" autocomplete="off" novalidate *ngIf="showForm" (ngSubmit)="onFormSubmit()">
+<form [formGroup]="form" autocomplete="off" novalidate (ngSubmit)="onFormSubmit()">
     <div class="dialog-header">
         <span mat-dialog-title class="font-16">{{ localeData?.convert_to_bill }}</span>
         <i mat-dialog-close class="icon-cross icon-font-16"></i>
@@ -6,7 +6,7 @@
     <mat-dialog-content class="dialog-body custom-height">
         <ng-container
             formArrayName="purchaseOrders"
-            *ngFor="let voucher of form.get('purchaseOrders').controls; let i = index"
+            *ngFor="let voucher of form?.get('purchaseOrders')?.controls; let i = index"
         >
             <div [formGroupName]="i">
                 <input-field
