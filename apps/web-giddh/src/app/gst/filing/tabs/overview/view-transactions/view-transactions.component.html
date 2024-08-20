@@ -45,6 +45,30 @@
                             </li>
                         </ul>
                     </div>
+                    </div>
+                    <div class="filter-row" *ngIf="selectedGst === GstReport.Gstr2 && filterParam.type === 'b2bur'">
+                        <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
+                    <div class="btn-group filter d-inline-block" dropdown>
+                        <button
+                            id="button-basic2"
+                            dropdownToggle
+                            type="button"
+                            class="btn btn-primary dropdown-toggle"
+                            aria-controls="dropdown-basic"
+                        >
+                            {{ selectedFilter?.entityType }} <span class="caret"></span>
+                        </button>
+                        <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic2">
+                            <li *ngFor="let entity of gstr2entityType">
+                                <a
+                                    class="dropdown-item"
+                                    href="javascript:void(0)"
+                                    (click)="viewFilteredTxn('entityType', entity?.value)"
+                                    >{{ entity.label }}</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

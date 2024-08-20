@@ -260,7 +260,7 @@
                                             activeCompany?.planVersion === 2
                                         "
                                         mat-menu-item
-                                        (click)="buyPlan(element)"
+                                        (click)="buyPlan(element, 'renew')"
                                     >
                                         {{ localeData?.renew }}
                                     </button>
@@ -303,7 +303,7 @@
                                         {{ commonLocaleData?.app_create + " " + commonLocaleData?.app_company }}
                                     </button>
                                     <button
-                                        *ngIf="element?.isOwner"
+                                        *ngIf="element?.isOwner && element?.companyCount < element?.totalCompanies"
                                         mat-menu-item
                                         (click)="addCompanyInSubscription(element)"
                                     >
@@ -319,6 +319,32 @@
                                         "
                                     >
                                         {{ localeData?.manage_payment }}
+                                    </button>
+                                    <button
+                                        *ngIf="
+                                            element?.isOwner &&
+                                            element?.companies &&
+                                            element?.companies?.length === 1 &&
+                                            element?.companyStatus === 'USER_ARCHIVED'
+                                        "
+                                        mat-menu-item
+                                        (click)="archiveCompany(element, 'UNARCHIVED')"
+                                        aria-label="details"
+                                    >
+                                        {{ commonLocaleData?.app_unarchive }}
+                                    </button>
+                                    <button
+                                        *ngIf="
+                                            element?.isOwner &&
+                                            element?.companies &&
+                                            element?.companies?.length === 1 &&
+                                            element?.companyStatus === 'UNARCHIVED'
+                                        "
+                                        mat-menu-item
+                                        (click)="archiveCompany(element, 'USER_ARCHIVED')"
+                                        aria-label="details"
+                                    >
+                                        {{ commonLocaleData?.app_archive }}
                                     </button>
                                 </div>
                             </mat-menu>
