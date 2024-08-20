@@ -293,8 +293,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.company.inputMaskFormat = response.balanceDisplayFormat?.toLowerCase() || '';
                 this.company.giddhBalanceDecimalPlaces = response.balanceDecimalPlaces;
             }
-            this.store.dispatch(this.settingsProfileActions.GetInventoryInfo());
         });
+        this.store.dispatch(this.settingsProfileActions.GetInventoryInfo());
     }
 
     /**

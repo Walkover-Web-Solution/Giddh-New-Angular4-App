@@ -1551,13 +1551,15 @@
                                                     fieldName: 'accountUniqueName',
                                                     voucherType: 'purchase',
                                                     formControl: accountUniqueNameInput,
-                                                    title: localeData?.po_number
+                                                    title: localeData?.po_number + ' #'
                                                 }
                                             "
                                         ></ng-container>
                                     </div>
                                 </th>
-                                <td mat-cell *matCellDef="let element"> </td>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.voucherNumber}}
+                                </td>
                             </ng-container>
                             <ng-container matColumnDef="grandTotal">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
