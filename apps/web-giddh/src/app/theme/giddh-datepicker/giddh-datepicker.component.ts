@@ -60,7 +60,7 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
     /** This is used to show default date */
     public calendarDate: any = '';
     /** This is used to show change date */
-    public inputChange: any ='';
+    public inputChange: any = '';
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Placeholders for the callbacks which are later provided by the Control Value Accessor */
