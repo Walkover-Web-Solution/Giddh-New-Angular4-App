@@ -14,7 +14,7 @@
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/estimates/create']">
-                                <span>+ New Estimate</span>
+                                <span>{{ localeData?.new_estimate }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
                                 <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
@@ -32,7 +32,7 @@
                         </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreEstimate" *ngIf="selectedVouchers?.length === 1">
-                                <span>More</span>
+                                <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
                             <mat-menu #moreEstimate="matMenu">
@@ -54,6 +54,7 @@
                                         <mat-checkbox
                                             color="primary"
                                             [value]="true"
+                                            [checked]="allVouchersSelected"
                                             (change)="selectAllVouchers($event)"
                                         ></mat-checkbox>
                                     </span>
@@ -85,7 +86,7 @@
                                                     fieldName: 'estimateNumber',
                                                     voucherType: 'estimate',
                                                     formControl: voucherNumberInput,
-                                                    title: 'Estimate No.'
+                                                    title: localeData?.estimate_no
                                                 }
                                             "
                                         ></ng-container>
@@ -111,14 +112,14 @@
                                                     fieldName: 'accountUniqueName',
                                                     voucherType: 'estimate',
                                                     formControl: accountUniqueNameInput,
-                                                    title: 'Customer'
+                                                    title: commonLocaleData?.app_customer
                                                 }
                                             "
                                         ></ng-container>
                                     </div>    
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">{{ element?.customerName | titlecase }}</div>
+                                    <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">{{ (element.account?.customerName || element?.account?.name) | titlecase }}</div>
                                     <mat-card class="outline-card account-detail-wrapper" *ngIf="element.showAccountDetails" (clickOutside)="element.showAccountDetails = false">
                                         <div class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                             <h3>{{ element?.customerName | titlecase }}</h3>
@@ -128,8 +129,8 @@
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
-                                                <li class="text-left"><a href="javascript:;" class="default-color" (click)="goToLedger(element)">Go to Ledger</a></li>
-                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color" (click)="generateVoucher(element)">Generate Invoice</a></li>
+                                                <li class="text-left"><a href="javascript:;" class="default-color" (click)="goToLedger(element)">{{ commonLocaleData?.app_goto_ledger }}</a></li>
+                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color" (click)="generateVoucher(element)">{{ commonLocaleData?.app_generate_invoice }}</a></li>
                                             </ul>
                                         </mat-card-content>
                                     </mat-card>
@@ -145,7 +146,7 @@
                             </ng-container>
                             <ng-container matColumnDef="grandTotal">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
-                                    Total Amt.
+                                    {{ localeData?.total_amt }}
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element.grandTotalTooltipText"
                                 matTooltipPosition="above"> 
@@ -224,7 +225,7 @@
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/proformas/create']">
-                                <span>+ New Proforma</span>
+                                <span>{{ localeData?.new_proforma }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
                                 <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
@@ -242,7 +243,7 @@
                         </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma" *ngIf="selectedVouchers?.length">
-                                <span>More</span>
+                                <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
                             <mat-menu #moreProforma="matMenu">
@@ -264,6 +265,7 @@
                                         <mat-checkbox
                                             color="primary"
                                             [value]="true"
+                                            [checked]="allVouchersSelected"
                                             (change)="selectAllVouchers($event)"
                                         ></mat-checkbox>
                                     </span>
@@ -287,7 +289,7 @@
                             <ng-container matColumnDef="proforma">
                                 <th mat-header-cell *matHeaderCellDef (clickOutside)="handleClickOutside($event, accountUniqueName, 'proformaNumber')">
                                     <div class="d-flex align-items-center column-gap5">
-                                    <ng-container
+                                        <ng-container
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
@@ -298,9 +300,9 @@
                                                     title: 'Proforma No.'
                                                 }
                                             "
-                                     ></ng-container>
+                                        ></ng-container>
                                     </div>
-                                    </th>
+                                 </th>
                                 <td mat-cell *matCellDef="let element">
                                     <a href="javascript:;" class="btn-link-2">
                                         {{ element.proformaNumber }}
@@ -311,45 +313,40 @@
                                 <th mat-header-cell *matHeaderCellDef (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')"> 
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
-                                        *ngTemplateOutlet="
-                                            searchTemplate;
-                                            context: {
-                                                $implicit: showCustomerSearch,
-                                                fieldName: 'accountUniqueName',
-                                                voucherType: 'proforma',
-                                                formControl: voucherNumberInput,
-                                                title: 'Customer'
-                                            }
-                                        "
-                                    ></ng-container>
+                                            *ngTemplateOutlet="
+                                                searchTemplate;
+                                                context: {
+                                                    $implicit: showCustomerSearch,
+                                                    fieldName: 'accountUniqueName',
+                                                    voucherType: 'proforma',
+                                                    formControl: accountUniqueNameInput,
+                                                    title: commonLocaleData?.app_customer
+                                                }
+                                            "
+                                        ></ng-container>
                                     </div>    
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cursor-pointer">{{ element.customerName | titlecase }}</div>
-                                    <!-- account-detail-double-click -->
-                                    <!-- <mat-card class="outline-card account-detail-wrapper">
-                                        <div class="p-3 border-bottom account-header">
-                                            <div class="d-flex align-items-center justify-content-between column-gap15 ">
-                                                <h3>00000000</h3>
-                                                <span class="cursor-pointer">
-                                                    <img src="./assets/images/path.svg" />
-                                                </span>
-                                            </div>
-                                            <p class="mt-2">919111525164</p>
-                                            <p>ravinder@walkover.in</p>
+                                    <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">{{ (element.account?.customerName || element?.account?.name) | titlecase }}</div>
+                                    <mat-card class="outline-card account-detail-wrapper" *ngIf="element.showAccountDetails" (clickOutside)="element.showAccountDetails = false">
+                                        <div class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
+                                            <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
+                                            <span class="cursor-pointer" (click)="editAccount(element)">
+                                                <img src="./assets/images/path.svg" />
+                                            </span>
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
-                                                <li class="text-left"><a href="javascript:;" class="default-color">Go to Ledger</a></li>
-                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color">Generate Invoice</a></li>
+                                                <li class="text-left"><a href="javascript:;" class="default-color" (click)="goToLedger(element)">{{ commonLocaleData?.app_goto_ledger }}</a></li>
+                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color" (click)="generateVoucher(element)">{{ commonLocaleData?.app_generate_invoice }}</a></li>
                                             </ul>
                                         </mat-card-content>
-                                    </mat-card> -->
+                                    </mat-card>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="proformaDate">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                                    Proforma Date
+                                    {{ localeData?.proforma_date }}
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
                                     {{ element.proformaDate }}
@@ -357,7 +354,7 @@
                             </ng-container>
                             <ng-container matColumnDef="grandTotal">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
-                                    Total Amt.
+                                    {{ localeData?.total_amt }}
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element.grandTotalTooltipText"
                                 matTooltipPosition="above"> 
@@ -372,7 +369,7 @@
                             </ng-container>
                             <ng-container matColumnDef="dueDate">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                                    Expiry Date
+                                    {{ localeData?.expiry_date }}
                                 </th>
                                 <td mat-cell *matCellDef="let element" matTooltip="In INR: 1.239 (Conversion Rate: 0.005)"
                                 matTooltipPosition="above"> 
@@ -384,14 +381,14 @@
                                     {{ commonLocaleData?.app_status }}
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <div [matTooltip]="'Credential are Invalid, please add valid credentials.'" [matTooltipPosition]="'above'">
+                                    <div [matTooltip]="element.eInvoiceStatusTooltip" [matTooltipPosition]="'above'">
                                         {{ element.status }}
                                     </div>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="action">
                                 <th mat-header-cell *matHeaderCellDef>
-                                    Action
+                                    {{ commonLocaleData?.app_action }}
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
@@ -402,7 +399,7 @@
                                         <mat-menu #menu="matMenu">
                                             <button mat-menu-item (click)="actionEstimateProforma(element, 'accepted')">{{ localeData?.accepted }}</button>
                                             <button mat-menu-item (click)="actionEstimateProforma(element, 'decline')">{{ localeData?.declined }}</button>
-                                            <button mat-menu-item (click)="null">{{ localeData?.convert_invoice }}</button>
+                                            <button mat-menu-item (click)="convertToInvoice(element)">{{ localeData?.convert_invoice }}</button>
                                             <button mat-menu-item (click)="actionEstimateProforma(element, 'expired')">{{ localeData?.expired }}</button>
                                         </mat-menu>
                                     </div>
@@ -437,12 +434,12 @@
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15 flex-wrap row-gap1">
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-raised-button color="primary" [matMenuTriggerFor]="createNewVoucher">
-                                <span>+ New Invoice</span>
+                                <span>{{ localeData?.new_invoice }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
                             <mat-menu #createNewVoucher="matMenu">
-                                <button mat-menu-item [routerLink]="['/pages/vouchers/cash/create']">Cash Invoice</button>
-                                <button mat-menu-item [routerLink]="['/pages/vouchers/sales/create']">Sales Invoice</button>
+                                <button mat-menu-item [routerLink]="['/pages/vouchers/cash/create']">{{ localeData?.cash_invoice }}</button>
+                                <button mat-menu-item [routerLink]="['/pages/vouchers/sales/create']">{{ localeData?.sales_invoice }}</button>
                             </mat-menu>
                             <div class="custom-datepicker-wrapper">
                                 <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
@@ -464,13 +461,13 @@
                                 <i class="icon-export-icon"></i>
                             </button>
                             <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreInvoice" *ngIf="selectedVouchers?.length">
-                                <span>More</span>
+                                <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
                             <mat-menu #moreInvoice="matMenu">
-                                <button mat-menu-item (click)="bulkUpdateDialog()">Bulk Update</button>
+                                <button mat-menu-item (click)="bulkUpdateDialog()">{{ localeData?.bulk_update }}</button>
                                 <button mat-menu-item *ngIf="selectedVouchers?.length === 1" (click)="showEwayBillDialog()">{{ localeData?.generate_eway_bill }}</button>
-                                <button mat-menu-item *ngIf="isEInvoiceEnabled && (voucherType === 'credit note' || voucherType === 'debit note' || voucherType === 'sales')" (click)="generateEInvoice()">Create E-invoice</button>
+                                <button mat-menu-item *ngIf="isEInvoiceEnabled && (voucherType === 'credit note' || voucherType === 'debit note' || voucherType === 'sales')" (click)="generateEInvoice()">{{ localeData?.create_e_invoice }}</button>
                                 <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
                             </mat-menu>
                             <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
@@ -482,7 +479,7 @@
                     </div>
                     <div class="total-wrapper d-flex column-gap5 w-100">
                         <div class="total-sale opening-box pd-1 w-50">
-                            <p class="font-12">Total Sale:</p>
+                            <p class="font-12">{{ localeData?.total_sale }}</p>
                             <span class="font-16">
                                 <amount-field
                                     [amount]="voucherBalances.grandTotal"
@@ -493,7 +490,7 @@
                             </span>
                         </div>
                         <div class="total-sale due-box pd-1 w-50">
-                            <p class="font-12">Total Due:</p>
+                            <p class="font-12">{{ commonLocaleData?.app_total_due }}:</p>
                             <span class="font-16">
                                 <amount-field
                                     [amount]="voucherBalances.totalDue"
@@ -514,6 +511,7 @@
                                         <mat-checkbox
                                             color="primary"
                                             [value]="true"
+                                            [checked]="allVouchersSelected"
                                             (change)="selectAllVouchers($event)"
                                         ></mat-checkbox>
                                     </span>
@@ -545,7 +543,7 @@
                                                     fieldName: 'invoiceNumber',
                                                     voucherType: 'sales',
                                                     formControl: voucherNumberInput,
-                                                    title: 'Invoice No.'
+                                                    title: 'commonLocaleData?.app_invoice_no'
                                                 }
                                             "
                                         ></ng-container>
@@ -569,14 +567,14 @@
                                                     fieldName: 'accountUniqueName',
                                                     voucherType: 'sales',
                                                     formControl: accountUniqueNameInput,
-                                                    title: 'Customer'
+                                                    title: commonLocaleData?.app_customer
                                                 }
                                             "
                                         ></ng-container>
                                     </div>    
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">{{ element.account?.customerName || element?.account?.name }}</div>
+                                    <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">{{ (element.account?.customerName || element?.account?.name) | titlecase }}</div>
                                     <mat-card class="outline-card account-detail-wrapper" *ngIf="element.showAccountDetails" (clickOutside)="element.showAccountDetails = false">
                                         <div class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                             <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
@@ -586,8 +584,8 @@
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
-                                                <li class="text-left"><a href="javascript:;" class="default-color" (click)="goToLedger(element)">Go to Ledger</a></li>
-                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color" (click)="generateVoucher(element)">Generate Invoice</a></li>
+                                                <li class="text-left"><a href="javascript:;" class="default-color" (click)="goToLedger(element)">{{ commonLocaleData?.app_goto_ledger }}</a></li>
+                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color" (click)="generateVoucher(element)">{{ commonLocaleData?.app_generate_invoice }}</a></li>
                                             </ul>
                                         </mat-card-content>
                                     </mat-card>
@@ -595,7 +593,7 @@
                             </ng-container>
                             <ng-container matColumnDef="voucherDate">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                                    Invoice Date
+                                    {{ commonLocaleData?.app_invoice_date }}
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
                                     {{ element.voucherDate }}
@@ -617,7 +615,7 @@
                             </ng-container>
                             <ng-container matColumnDef="balanceDue">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
-                                    Balance Due
+                                    {{ localeData?.balance_due }}
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element.balanceDueTooltipText"
                                 matTooltipPosition="above"> 
@@ -631,7 +629,7 @@
                             </ng-container>
                             <ng-container matColumnDef="dueDate">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                                    Due Date
+                                    {{ localeData?.due_date }}
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
                                     {{ element.dueDate }}
@@ -639,7 +637,7 @@
                             </ng-container>
                             <ng-container matColumnDef="einvoicestatus">
                                 <th mat-header-cell *matHeaderCellDef>
-                                    E-invoice Status
+                                    {{ localeData?.e_invoice_status }}
                                 </th>
                                 <td mat-cell *matCellDef="let element">
                                     <div [matTooltip]="element.eInvoiceStatusTooltip" [matTooltipPosition]="'above'">
@@ -658,12 +656,12 @@
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
-                                            <button mat-menu-item (click)="showPaymentDialog(element)">Paid</button>
-                                            <button mat-menu-item (click)="showAdjustmentDialog(element)">Adjust Amount</button>
-                                            <button mat-menu-item (click)="actionVoucher(element, 'unpaid')">Unpaid</button>
-                                            <button mat-menu-item (click)="actionVoucher(element, 'hold')">Hold</button>
-                                            <button mat-menu-item (click)="actionVoucher(element, 'cancel')">Cancel</button>
-                                            <button mat-menu-item (click)="showEwayBillDialog(element)">Generate E-way Bill</button>
+                                            <button mat-menu-item (click)="showPaymentDialog(element)">{{ commonLocaleData?.app_payment_status?.paid }}</button>
+                                            <button mat-menu-item (click)="showAdjustmentDialog(element)">{{ commonLocaleData?.app_payment_status?.adjust_amount }}</button>
+                                            <button mat-menu-item (click)="actionVoucher(element, 'unpaid')">{{ commonLocaleData?.app_payment_status?.unpaid }}</button>
+                                            <button mat-menu-item (click)="actionVoucher(element, 'hold')">{{ commonLocaleData?.app_payment_status?.hold }}</button>
+                                            <button mat-menu-item (click)="actionVoucher(element, 'cancel')">{{ commonLocaleData?.app_payment_status?.cancel }}</button>
+                                            <button mat-menu-item (click)="showEwayBillDialog(element)">{{ localeData?.generate_eway_bill }}</button>
                                         </mat-menu>
                                     </div>
                                 </td>
@@ -697,7 +695,7 @@
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/debit-note/create']">
-                                <span>+ New Dr. Note</span>
+                                <span>{{ localeData?.new_dr_note }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
                                 <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
@@ -720,7 +718,7 @@
                     </div>
                     <div class="total-wrapper d-flex column-gap5 w-100">
                         <div class="total-sale opening-box pd-1 w-100">
-                            <p class="font-12">Total Sale:</p>
+                            <p class="font-12">{{ localeData?.total_sale }}</p>
                             <span class="font-16">
                                 <amount-field
                                     [amount]="voucherBalances.grandTotal"
@@ -740,6 +738,7 @@
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
                                             color="primary"
+                                            [checked]="allVouchersSelected"
                                             [value]="true"
                                             (change)="selectAllVouchers($event)"
                                         ></mat-checkbox>
@@ -768,54 +767,53 @@
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
-                                                    $implicit: showCustomerSearch,
-                                                    fieldName: 'name',
-                                                    formControl: searchedName,
-                                                    title: name
+                                                    $implicit: showInvoiceNoSearch,
+                                                    fieldName: 'debitNoteNumber',
+                                                    voucherType: 'debit-note',
+                                                    formControl: voucherNumberInput,
+                                                    title: localeData?.dr_note_no
                                                 }
                                             "
                                         ></ng-container>
-                                        Dr Note No.
                                     </div>
-                                    </th>
+                                </th>
                                 <td mat-cell *matCellDef="let element">
                                     <a href="javascript:;" class="btn-link-2">{{ element?.voucherNumber }}</a>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="customer">
-                                <th mat-header-cell *matHeaderCellDef> 
+                                <th mat-header-cell *matHeaderCellDef>
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
                                                     $implicit: showCustomerSearch,
-                                                    fieldName: 'name',
-                                                    formControl: searchedName,
-                                                    title: name
+                                                    fieldName: 'accountUniqueName',
+                                                    voucherType: 'debit-note',
+                                                    formControl: accountUniqueNameInput,
+                                                    title: commonLocaleData?.app_customer
                                                 }
                                             "
                                         ></ng-container>
-                                        Customer
-                                    </div>    
+                                    </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cursor-pointer">{{ element?.account?.customerName | titlecase }}</div>
-                                    <!-- account-detail-double-click -->
-                                    <!-- <mat-card class="outline-card account-detail-wrapper">
+                                    <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">{{ (element.account?.customerName || element?.account?.name) | titlecase }}</div>
+                                    <mat-card class="outline-card account-detail-wrapper" *ngIf="element.showAccountDetails" (clickOutside)="element.showAccountDetails = false">
                                         <div class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
-                                            <h3>00000000</h3>
-                                            <span class="cursor-pointer">
+                                            <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
+                                            <span class="cursor-pointer" (click)="editAccount(element)">
                                                 <img src="./assets/images/path.svg" />
                                             </span>
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
-                                                <li class="text-left"><a href="javascript:;" class="default-color">Go to Ledger</a></li>
-                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color">Generate Invoice</a></li>
+                                                <li class="text-left"><a href="javascript:;" class="default-color" (click)="goToLedger(element)">{{ commonLocaleData?.app_goto_ledger }}</a></li>
+                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color" (click)="generateVoucher(element)">{{ commonLocaleData?.app_generate_invoice }}</a></li>
                                             </ul>
                                         </mat-card-content>
-                                    </mat-card> -->
+                                    </mat-card>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="voucherDate">
@@ -828,7 +826,7 @@
                             </ng-container>
                             <ng-container matColumnDef="linked">
                                 <th mat-header-cell *matHeaderCellDef>
-                                    Linked Invoice
+                                    {{ localeData?.linked_invoice }}
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
                                     {{ element?.referenceVoucher?.number ?? ''}}
@@ -859,8 +857,8 @@
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
-                                            <button mat-menu-item (click)="showPaymentDialog(element)">Paid</button>
-                                            <button mat-menu-item (click)="actionVoucher(element, 'cancel')">Cancel</button>
+                                            <button mat-menu-item (click)="showPaymentDialog(element)">{{ commonLocaleData?.app_payment_status?.paid }}</button>
+                                            <button mat-menu-item (click)="actionVoucher(element, 'cancel')">{{ commonLocaleData?.app_payment_status?.cancel }}</button>
                                         </mat-menu>
                                     </div>
                                 </td>
@@ -895,7 +893,7 @@
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-raised-button color="primary" class="w-100" [routerLink]="['/pages/vouchers/credit-note/create']">
-                                <span>+ New Cr. Note</span>
+                                <span>{{ localeData?.new_cr_note }}</span>
                             </button>
                             <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
                                 <input
@@ -916,7 +914,7 @@
                     </div>
                     <div class="total-wrapper d-flex column-gap5 w-100">
                         <div class="total-sale opening-box pd-1 w-100">
-                            <p class="font-12">Total Sale:</p>
+                            <p class="font-12">{{ localeData?.total_sale }}</p>
                             <span class="font-16">
                                 <amount-field
                                     [amount]="voucherBalances.grandTotal"
@@ -937,6 +935,7 @@
                                         <mat-checkbox
                                             color="primary"
                                             [value]="true"
+                                            [checked]="allVouchersSelected"
                                             (change)="selectAllVouchers($event)"
                                         ></mat-checkbox>
                                     </span>
@@ -964,16 +963,16 @@
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
-                                                    $implicit: showCustomerSearch,
-                                                    fieldName: 'name',
-                                                    formControl: searchedName,
-                                                    title: name
+                                                    $implicit: showInvoiceNoSearch,
+                                                    fieldName: 'creditNoteNumber',
+                                                    voucherType: 'credit-note',
+                                                    formControl: voucherNumberInput,
+                                                    title: localeData?.cr_note_no
                                                 }
                                             "
                                         ></ng-container>
-                                        Cr Note No.
                                     </div>
-                                    </th>
+                                </th>
                                 <td mat-cell *matCellDef="let element">
                                     <a href="javascript:;" class="btn-link-2">{{ element?.voucherNumber }}</a>
                                 </td>
@@ -986,32 +985,31 @@
                                                 searchTemplate;
                                                 context: {
                                                     $implicit: showCustomerSearch,
-                                                    fieldName: 'name',
-                                                    formControl: searchedName,
-                                                    title: name
+                                                    fieldName: 'accountUniqueName',
+                                                    voucherType: 'credit-note',
+                                                    formControl: accountUniqueNameInput,
+                                                    title: commonLocaleData?.app_customer
                                                 }
                                             "
                                         ></ng-container>
-                                        Customer
-                                    </div>    
+                                    </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <div class="cursor-pointer">{{ element?.account?.customerName | titlecase }}</div>
-                                    <!-- account-detail-double-click -->
-                                    <!-- <mat-card class="outline-card account-detail-wrapper">
+                                    <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">{{ (element.account?.customerName || element?.account?.name) | titlecase }}</div>
+                                    <mat-card class="outline-card account-detail-wrapper" *ngIf="element.showAccountDetails" (clickOutside)="element.showAccountDetails = false">
                                         <div class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
-                                            <h3>00000000</h3>
-                                            <span class="cursor-pointer">
+                                            <h3>{{ element?.customerName | titlecase }}</h3>
+                                            <span class="cursor-pointer" (click)="editAccount(element)">
                                                 <img src="./assets/images/path.svg" />
                                             </span>
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
-                                                <li class="text-left"><a href="javascript:;" class="default-color">Go to Ledger</a></li>
-                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color">Generate Invoice</a></li>
+                                                <li class="text-left"><a href="javascript:;" class="default-color" (click)="goToLedger(element)">{{ commonLocaleData?.app_goto_ledger }}</a></li>
+                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color" (click)="generateVoucher(element)">{{ commonLocaleData?.app_generate_invoice }}</a></li>
                                             </ul>
                                         </mat-card-content>
-                                    </mat-card> -->
+                                    </mat-card>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="voucherDate">
@@ -1024,7 +1022,7 @@
                             </ng-container>
                             <ng-container matColumnDef="linked">
                                 <th mat-header-cell *matHeaderCellDef>
-                                    Linked Invoice
+                                    {{ localeData?.linked_invoice }}
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
                                     {{ element?.referenceVoucher?.number ?? ''}}
@@ -1055,8 +1053,8 @@
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
-                                            <button mat-menu-item (click)="showPaymentDialog(element)">Paid</button>
-                                            <button mat-menu-item (click)="actionVoucher(element, 'cancel')">Cancel</button>
+                                            <button mat-menu-item (click)="showPaymentDialog(element)">{{ commonLocaleData?.app_payment_status?.paid }}</button>
+                                            <button mat-menu-item (click)="actionVoucher(element, 'cancel')">{{ commonLocaleData?.app_payment_status?.cancel }}</button>
                                         </mat-menu>
                                     </div>
                                 </td>
@@ -1168,8 +1166,8 @@
                                         </div>
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
-                                                <li class="text-left"><a href="javascript:;" class="default-color">Go to Ledger</a></li>
-                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color">Generate Invoice</a></li>
+                                                <li class="text-left"><a href="javascript:;" class="default-color">{{ commonLocaleData?.app_goto_ledger }}</a></li>
+                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color">{{ commonLocaleData?.app_generate_invoice }}</a></li>
                                             </ul>
                                         </mat-card-content>
                                     </mat-card> -->
@@ -1180,7 +1178,7 @@
                                     Total
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="text-right">
-                                    <div [matTooltip]="'In INR: 23.1 (Conversion Rate: 1)'" [matTooltipPosition]="'above'">
+                                    <div [matTooltip]="element.balanceDueTooltipText" [matTooltipPosition]="'above'">
                                         {{element.total}}
                                     </div>
                                 </td>
@@ -1220,7 +1218,7 @@
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/purchase-order/create']">
-                                <span>+ New Order</span>
+                                <span>{{ localeData?.new_order }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
                                 <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
@@ -1238,13 +1236,13 @@
                         </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase"  *ngIf="selectedVouchers?.length">
-                                <span>More</span>
+                                <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
                             <mat-menu #morepurchase="matMenu">
-                                <button mat-menu-item (click)="bulkUpdateDialog(true)">Bulk Update</button>
-                                <button mat-menu-item (click)="convertBillDialog()">Convert to bill</button>
-                                <button mat-menu-item (click)="poBulkAction('expire')">Expired</button>
+                                <button mat-menu-item (click)="bulkUpdateDialog(true)">{{ localeData?.bulk_update }}</button>
+                                <button mat-menu-item (click)="convertBillDialog()">{{ localeData?.convert_to_bill }}</button>
+                                <button mat-menu-item (click)="poBulkAction('expire')">{{ localeData?.expired }}</button>
                                 <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
                             </mat-menu>
                             <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
@@ -1262,6 +1260,7 @@
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
                                             color="primary"
+                                            [checked]="allVouchersSelected"
                                             [value]="true"
                                             (change)="selectAllVouchers($event)"
                                         ></mat-checkbox>
@@ -1299,10 +1298,10 @@
                                                 searchTemplate;
                                                 context: {
                                                     $implicit: showInvoiceNoSearch,
-                                                    fieldName: 'purchaseOrderNumber',
+                                                    fieldName: 'poNumber',
                                                     voucherType: 'purchase-order',
                                                     formControl: voucherNumberInput,
-                                                    title: 'Purchase Order'
+                                                    title: localeData?.po_number + ' #'
                                                 }
                                             "
                                         ></ng-container>
@@ -1323,7 +1322,7 @@
                                                     fieldName: 'accountUniqueName',
                                                     voucherType: 'purchase-order',
                                                     formControl: accountUniqueNameInput,
-                                                    title: 'Vendor Name'
+                                                    title: commonLocaleData?.app_vendor_name
                                                 }
                                             "
                                         ></ng-container>
@@ -1335,7 +1334,7 @@
                             </ng-container>
                             <ng-container matColumnDef="grandTotal">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
-                                    Total Amt.
+                                    {{ localeData?.total_amt }}
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element.grandTotalTooltipText"
                                 matTooltipPosition="above">
@@ -1349,7 +1348,7 @@
                             </ng-container>
                             <ng-container matColumnDef="dueDate">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                                    Expected Delivery
+                                    {{ localeData?.expected_delivery }}
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
                                     <span [ngClass]="{ 'ontime-delivery': element?.dueDays > 0, 'text-danger': element?.dueDays < 0 }"
@@ -1358,7 +1357,7 @@
                                     </span
                                 >
                                 <span *ngIf="element?.dueDays && element?.dueDays > 7">{{ element?.dueDate }}</span>
-                                <span class="ontime-delivery" *ngIf="element?.dueDays === 0">Today</span>
+                                <span class="ontime-delivery" *ngIf="element?.dueDays === 0">{{ commonLocaleData?.app_today }}</span>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="status">
@@ -1369,19 +1368,19 @@
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>{{ element?.status | titlecase }}</p>
                                         <div class="d-flex action-btn column-gap5">
-                                            <button *ngIf="element?.status === 'open'" mat-stroked-button color="primary" class="mat-icon-sm-btn icon-font-11" [matTooltip]="'Convert to bill'"
+                                            <button *ngIf="element?.status === 'open'" mat-stroked-button color="primary" class="mat-icon-sm-btn icon-font-11" [matTooltip]="localeData?.convert_to_bill"
                                                 [matTooltipPosition]="'above'" (click)="convertBillDialog(element, 'create_purchase_bill')">
                                                 <i class="icon-tick"></i>
                                             </button>
-                                            <button mat-stroked-button color="primary" class="mat-icon-sm-btn icon-font-11" [matTooltip]="'Send Email'"
+                                            <button mat-stroked-button color="primary" class="mat-icon-sm-btn icon-font-11" [matTooltip]="commonLocaleData?.app_send_email"
                                                 [matTooltipPosition]="'above'" (click)="openEmailSendDialog(element)">
                                                 <i class="icon-envelope"></i>
                                             </button>
-                                            <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Copy'" [matTooltipPosition]="'above'" 
+                                            <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="commonLocaleData?.app_copy" [matTooltipPosition]="'above'" 
                                                 [routerLink]="['/pages/purchase-management/purchase-order/new/' + element.uniqueName]">
                                                 <i class="icon-copy-small"></i>
                                             </button>
-                                            <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Delete'"
+                                            <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="commonLocaleData?.app_delete"
                                                 [matTooltipPosition]="'above'" (click)="deleteVoucherDialog(element)">
                                                 <i class="icon-trash"></i>
                                             </button>
@@ -1418,7 +1417,7 @@
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/purchase/create']">
-                                <span>+ New Bill</span>
+                                <span>{{ localeData?.new_bill }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
                                 <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
@@ -1441,7 +1440,7 @@
                     </div>
                     <div class="total-wrapper d-flex column-gap5 w-100">
                         <div class="total-sale opening-box pd-1 w-100">
-                            <p class="font-12">Total Purchases:</p>
+                            <p class="font-12">{{ localeData?.total_purchases }}</p>
                             <span class="font-16">
                                 <amount-field
                                     [amount]="voucherBalances.grandTotal"
@@ -1461,6 +1460,7 @@
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
                                             color="primary"
+                                            [checked]="allVouchersSelected"
                                             [value]="true"
                                             (change)="selectAllVouchers($event)"
                                         ></mat-checkbox>
@@ -1489,14 +1489,14 @@
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
-                                                    $implicit: showCustomerSearch,
-                                                    fieldName: 'name',
-                                                    formControl: searchedName,
-                                                    title: name
+                                                    $implicit: showInvoiceNoSearch,
+                                                    fieldName: 'billNumber',
+                                                    voucherType: 'purchase',
+                                                    formControl: voucherNumberInput,
+                                                    title: localeData?.bill_no
                                                 }
                                             "
                                         ></ng-container>
-                                        Bill No.
                                     </div>
                                     </th>
                                 <td mat-cell *matCellDef="let element">
@@ -1519,14 +1519,14 @@
                                                 searchTemplate;
                                                 context: {
                                                     $implicit: showCustomerSearch,
-                                                    fieldName: 'name',
-                                                    formControl: searchedName,
-                                                    title: name
+                                                    fieldName: 'accountUniqueName',
+                                                    voucherType: 'purchase',
+                                                    formControl: accountUniqueNameInput,
+                                                    title: commonLocaleData?.app_vendor
                                                 }
                                             "
                                         ></ng-container>
-                                        Vendor
-                                    </div>    
+                                    </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element">
                                    {{ element?.account?.customerName | titlecase }}
@@ -1534,7 +1534,7 @@
                             </ng-container>
                             <ng-container matColumnDef="voucherDate">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                                    Bill Date
+                                    {{ localeData?.bill_date }}
                                 </th>
                                 <td mat-cell *matCellDef="let element"> 
                                     {{ element?.voucherDate }}
@@ -1548,14 +1548,14 @@
                                                 searchTemplate;
                                                 context: {
                                                     $implicit: showCustomerSearch,
-                                                    fieldName: 'name',
-                                                    formControl: searchedName,
-                                                    title: name
+                                                    fieldName: 'accountUniqueName',
+                                                    voucherType: 'purchase',
+                                                    formControl: accountUniqueNameInput,
+                                                    title: localeData?.po_number
                                                 }
                                             "
                                         ></ng-container>
-                                        Purchase Order
-                                    </div> 
+                                    </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element"> </td>
                             </ng-container>
@@ -1575,7 +1575,7 @@
                             </ng-container>
                             <ng-container matColumnDef="dueDate">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                                    Due Date
+                                    {{ localeData?.due_date}}
                                 </th>
                                 <td mat-cell *matCellDef="let element">
                                    {{ element?.dueDate }}
@@ -1592,8 +1592,8 @@
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
-                                            <button mat-menu-item (click)="showPaymentDialog(element)">Paid</button>
-                                            <button mat-menu-item (click)="actionVoucher(element, 'cancel')">Send Email</button>
+                                            <button mat-menu-item (click)="showPaymentDialog(element)">{{ commonLocaleData?.app_payment_status?.paid }}</button>
+                                            <button mat-menu-item (click)="actionVoucher(element, 'cancel')">{{ commonLocaleData?.app_send_email }}</button>
                                             <button mat-menu-item 
                                                 aria-label="copy icon"
                                                 *ngIf="!isCompany"
@@ -2316,7 +2316,7 @@
     <ng-template #actionButtons>
         <div class="d-flex column-gap1 mt-4">
             <button mat-stroked-button color="primary">Save</button>
-            <button mat-stroked-button>Cancel</button>
+            <button mat-stroked-button>{{ commonLocaleData?.app_payment_status?.paid }}</button>
         </div>
     </ng-template>
 

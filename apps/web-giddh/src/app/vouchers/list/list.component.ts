@@ -31,6 +31,7 @@ import { UpdateAccountRequest } from "../../models/api-models/Account";
 import { SalesActions } from "../../actions/sales/sales.action";
 import { OrganizationType } from "../../models/user-login-state";
 import { BulkUpdateComponent } from "../bulk-update/bulk-update.component";
+import { SettingsProfileActions } from "../../actions/settings/profile/settings.profile.action";
 
 // invoice-table
 export interface PeriodicElement {
@@ -282,9 +283,18 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private invoiceReceiptActions: InvoiceReceiptActions,
         private invoiceService: InvoiceService,
         private adjustmentUtilityService: AdjustmentUtilityService,
-        private salesAction: SalesActions
+        private salesAction: SalesActions,
+        private settingsProfileActions: SettingsProfileActions
     ) {
-
+        this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (Object.keys(response)?.length) {
+                this.company.baseCurrency = response.baseCurrency;
+                this.company.baseCurrencySymbol = response.baseCurrencySymbol;
+                this.company.inputMaskFormat = response.balanceDisplayFormat?.toLowerCase() || '';
+                this.company.giddhBalanceDecimalPlaces = response.balanceDecimalPlaces;
+            }
+            this.store.dispatch(this.settingsProfileActions.GetInventoryInfo());
+        });
     }
 
     /**
@@ -296,14 +306,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.setInitialAdvanceFilter();
         this.getInvoiceSettings();
 
-        this.componentStore.companyProfile$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.company.baseCurrency = response.baseCurrency;
-                this.company.baseCurrencySymbol = response.baseCurrencySymbol;
-                this.company.inputMaskFormat = response.balanceDisplayFormat?.toLowerCase() || '';
-                this.company.giddhBalanceDecimalPlaces = response.balanceDecimalPlaces;
-            }
-        });
+        
 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
@@ -811,6 +814,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         } else {
             this.selectedVouchers = this.selectedVouchers?.filter(selectedVoucher => selectedVoucher?.uniqueName !== voucher?.uniqueName);
         }
+        this.allVouchersSelected = this.dataSource?.length === this.selectedVouchers?.length;
     }
 
     /**
