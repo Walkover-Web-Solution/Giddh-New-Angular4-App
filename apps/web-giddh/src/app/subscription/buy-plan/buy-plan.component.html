@@ -153,7 +153,13 @@
                                                                 }}</span>
                                                             </ng-container>
                                                             <ng-container
-                                                                *ngIf="plan?.yearlyAmount === 0 && plan?.yearlyDiscount"
+                                                                *ngIf="
+                                                                    (plan?.yearlyAmount === 0 &&
+                                                                        plan?.yearlyDiscount) ||
+                                                                    (plan?.yearlyAmount > 0 &&
+                                                                        plan?.yearlyDiscount &&
+                                                                        plan?.yearlyAmountAfterDiscount === 0)
+                                                                "
                                                             >
                                                                 <span class="font-24 strong">
                                                                     {{ localeData?.free_for }} <br />{{
@@ -165,7 +171,10 @@
                                                                 >
                                                             </ng-container>
                                                             <ng-container
-                                                                *ngIf="plan?.yearlyAmount > 0 || plan?.yearlyDiscount"
+                                                                *ngIf="
+                                                                    (plan?.yearlyAmount > 0 || plan?.yearlyDiscount) &&
+                                                                    plan?.yearlyAmountAfterDiscount > 0
+                                                                "
                                                             >
                                                                 <p
                                                                     *ngIf="plan?.yearlyDiscountAmount > 0"
@@ -202,7 +211,13 @@
                                                                     >
                                                                 </p>
                                                             </ng-container>
-                                                            <p class="mb-3" *ngIf="plan?.yearlyDiscountAmount > 0">
+                                                            <p
+                                                                class="mb-3"
+                                                                *ngIf="
+                                                                    plan?.yearlyDiscountAmount > 0 &&
+                                                                    plan?.yearlyAmountAfterDiscount > 0
+                                                                "
+                                                            >
                                                                 <span>
                                                                     {{ localeData?.save }}
                                                                     <amount-field
@@ -239,7 +254,11 @@
                                                             </ng-container>
                                                             <ng-container
                                                                 *ngIf="
-                                                                    plan?.monthlyAmount === 0 && plan?.monthlyDiscount
+                                                                    (plan?.monthlyAmount === 0 &&
+                                                                        plan?.monthlyAmount) ||
+                                                                    (plan?.monthlyAmount > 0 &&
+                                                                        plan?.monthlyAmount &&
+                                                                        plan?.monthlyAmountAfterDiscount === 0)
                                                                 "
                                                             >
                                                                 <span class="font-24 strong">
@@ -287,7 +306,12 @@
                                                                     </span>
                                                                 </p>
                                                             </ng-container>
-                                                            <p *ngIf="plan?.monthlyDiscountAmount > 0">
+                                                            <p
+                                                                *ngIf="
+                                                                    plan?.monthlyDiscountAmount > 0 &&
+                                                                    plan?.monthlyDiscountAmount > 0
+                                                                "
+                                                            >
                                                                 <span class="strong">
                                                                     {{ localeData?.save }}
                                                                     <amount-field
@@ -713,7 +737,7 @@
                                                         [placeholder]="commonLocaleData?.app_country"
                                                         class="mb-3 d-block"
                                                         [options]="commonCountrySource"
-                                                        (selectedOption)="selectCountry($event)"
+                                                        (selectedOption)="selectCountry($event); setFinalAmount()"
                                                         [defaultValue]="selectedCountry"
                                                         [showError]="
                                                             isFormSubmitted && !secondStepForm.get('country')?.value
@@ -994,7 +1018,7 @@
                                 aria-label="next"
                                 color="primary"
                                 class="w-100"
-                                (click)="nextStepForm(); setFinalAmount();"
+                                (click)="nextStepForm(); setFinalAmount()"
                                 *ngIf="selectedStep === 0"
                             >
                                 {{ localeData?.continue_billing_account }}
@@ -1004,7 +1028,7 @@
                                 aria-label="next-step"
                                 color="primary"
                                 class="w-100"
-                                (click)="nextStepForm(); setFinalAmount();"
+                                (click)="nextStepForm(); setFinalAmount()"
                                 *ngIf="selectedStep === 1"
                             >
                                 {{ localeData?.continue_review }}
