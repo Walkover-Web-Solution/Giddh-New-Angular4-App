@@ -89,11 +89,12 @@
                 </li>
 
                 <li>
-                    <div *ngIf="showTaxPro && isCompany && showGstFiling">
+                    <div *ngIf="isCompany && showGstFiling">
                         <button
                             class="btn btn-primary pull-right"
                             [disabled]="!gstAuthenticated"
                             (click)="pullFromGstIn($event)"
+                            *ngIf="showTaxPro"
                         >
                             {{ localeData?.filing?.pull_from_gstn }}
                         </button>
@@ -205,23 +206,23 @@
                     </li>
                 </ul>
             </div>
-
-            <button
-                class="btn btn-primary pull-right"
-                [ngClass]="{ 'btn-success': gstAuthenticated }"
-                (click)="!gstAuthenticated ? toggleSettingAsidePane($event, 'TAXPRO') : ''"
-                *ngIf="showTaxPro && isCompany && showGstFiling"
-            >
-                {{ gstAuthenticated ? localeData?.filing?.authenticated : localeData?.filing?.authenticate }}
-            </button>
-            <button
-                class="btn btn-primary pull-right"
-                [disabled]="!gstAuthenticated"
-                (click)="pullFromGstIn($event)"
-                *ngIf="showTaxPro && isCompany && showGstFiling"
-            >
-                {{ localeData?.filing?.pull_from_gstn }}
-            </button>
+            <div *ngIf="isCompany && showGstFiling" class="d-inline-flex">
+                <button
+                    class="btn btn-primary pull-right"
+                    [ngClass]="{ 'btn-success': gstAuthenticated }"
+                    (click)="!gstAuthenticated ? toggleSettingAsidePane($event, 'TAXPRO') : ''"               
+                >
+                    {{ gstAuthenticated ? localeData?.filing?.authenticated : localeData?.filing?.authenticate }}
+                </button>
+                <button
+                    class="btn btn-primary pull-right"
+                    [disabled]="!gstAuthenticated"
+                    (click)="pullFromGstIn($event)"
+                    *ngIf="showTaxPro"
+                >
+                    {{ localeData?.filing?.pull_from_gstn }}
+                </button>
+            </div>
         </div>
     </div>
     <!-- endregion -->
