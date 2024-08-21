@@ -544,16 +544,8 @@ export class VoucherService {
     public adjustAnInvoiceWithAdvanceReceipts(model: any, invoiceUniqueName: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url;
-
-        if (this.generalService.voucherApiVersion === 2) {
-            url = this.config.apiUrl + ADVANCE_RECEIPTS_API.VOUCHER_ADJUSTMENT_WITH_ADVANCE_RECEIPT?.replace(':companyUniqueName', this.companyUniqueName)?.replace(':voucherUniqueName', invoiceUniqueName);
-        } else {
-            url = this.config.apiUrl + ADVANCE_RECEIPTS_API.INVOICE_ADJUSTMENT_WITH_ADVANCE_RECEIPT?.replace(':companyUniqueName', this.companyUniqueName)?.replace(':invoiceUniqueName', invoiceUniqueName);
-        }
-
-        if (this.generalService.voucherApiVersion === 2) {
-            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
-        }
+        url = this.config.apiUrl + ADVANCE_RECEIPTS_API.VOUCHER_ADJUSTMENT_WITH_ADVANCE_RECEIPT?.replace(':companyUniqueName', this.companyUniqueName)?.replace(':voucherUniqueName', invoiceUniqueName);
+        url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
 
         return this.http.post(url, model).pipe(
             map((res) => {
@@ -676,9 +668,9 @@ export class VoucherService {
         let url = this.config.apiUrl + RECEIPT_API.DELETE
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
-        if (this.generalService.voucherApiVersion === 2) {
+
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
-        }
+
         return this.http.deleteWithBody(
             url,
             queryRequest
@@ -701,14 +693,11 @@ export class VoucherService {
      * @returns
      * @memberof VoucherService
      */
-    public bulkUpdateInvoice(model: any, actionType: string) {
+    public bulkUpdateInvoice(model: any, actionType: string): Observable<BaseResponse<any, any>> {
         let url;
         if (actionType) {
             url = this.config.apiUrl + BULK_UPDATE_VOUCHER.BULK_UPDATE_VOUCHER_ACTION?.replace(':companyUniqueName', this.generalService.companyUniqueName)?.replace(':actionType', actionType);
-
-            if (this.generalService.voucherApiVersion === 2) {
-                url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
-            }
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
         return this.http.post(url, model).pipe(
             map(res => {
@@ -736,11 +725,10 @@ export class VoucherService {
         url = url?.replace(':type', getRequest.type);
         url = url?.replace(':mail', getRequest.mail);
         url = url?.replace(':q', getRequest.q);
-        if (this.generalService.voucherApiVersion === 2) {
-            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
-            delete postRequest.from;
-            delete postRequest.to;
-        }
+        url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        delete postRequest.from;
+        delete postRequest.to;
+        
         return this.http.post(url, postRequest).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;

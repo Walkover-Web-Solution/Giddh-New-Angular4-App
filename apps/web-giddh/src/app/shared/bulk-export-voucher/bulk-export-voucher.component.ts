@@ -53,7 +53,6 @@ export class BulkExportVoucherComponent implements OnDestroy {
         private toaster: ToasterService,
         private store: Store<AppState>) {
 
-
     }
 
     /**

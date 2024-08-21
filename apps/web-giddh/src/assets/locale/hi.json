@@ -349,7 +349,11 @@
         "partially_paid": "आंशिक रूप से भुगतान किया",
         "unpaid": "अवैतनिक",
         "hold": "होल्ड",
-        "cancel": "रद्द करना"
+        "cancel": "रद्द करना",
+        "open": "खुला",
+        "expired": "समाप्त",
+        "converted": "परिवर्तित",
+        "partially_converted": "आंशिक रूप से परिवर्तित"
     },
     "app_date_options": {
         "on": "पर",

@@ -1,10 +1,5 @@
 <div *ngIf="!isPlanShow">
     <div class="main-content-subscription">
-        <div class="menu-one-button">
-            <button mat-stroked-button color="primary" (click)="goToBuyNow(selectedSubscription?.subscriptionId)" *ngIf="!showLoader">
-                {{ commonLocaleData?.app_buy_new_plan }}
-            </button>
-        </div>
         <mat-grid-list cols="16" rowHeight="40px" gutterSize="0px">
             <mat-grid-tile [colspan]="menuOneWidth" rowspan="1" class="ipad-responsive">
                 <div class="menu-two" [ngClass]="{ 'skeleton-common-class': showLoader }">
