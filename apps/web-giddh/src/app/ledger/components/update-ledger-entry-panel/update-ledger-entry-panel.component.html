@@ -537,6 +537,7 @@
                                                         [fixedValue]="txn.particular.name"
                                                         [showClear]="false"
                                                         [(ngModel)]="txn.particular.uniqueName"
+                                                        (blur)="txn.particular.uniqueName?.length && txn.particular.uniqueName = undefined"
                                                         [ItemHeight]="67"
                                                         [defaultValue]="txn.particular.name"
                                                         [placeholder]="localeData?.by_select_accounts"
