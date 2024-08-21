@@ -1,33 +1,29 @@
-<div class="dialog-header">
-  <span mat-dialog-title class="font-16">Bulk Export - Total 51</span>
-  <i mat-dialog-close class="icon-cross icon-font-16"></i>
-</div>
-<div mat-dialog-content class="dialog-body">
-  <div>
-    <div class="border-bottom pd-b15">
-      <mat-form-field appearance="outline" class="w-100 mr-b15">
-        <mat-label>Select Copy</mat-label>
-        <mat-select
-         multiple
-         [placeholder]="'Select Order'"
-        >
-          <mat-option value="option1">Original</mat-option>
-          <mat-option value="option2">Customer</mat-option>
-          <mat-option value="option3">Transport</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <button mat-stroked-button color="primary">Download</button>
+<ng-container appTranslate [file]="'bulk-export-voucher'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+    <div class="dialog-header">
+        <span mat-dialog-title class="font-16">{{ commonLocaleData?.app_bulk_export }} - {{ commonLocaleData?.app_total }} {{ inputData?.totalItems }}</span>
+        <i mat-dialog-close class="icon-cross icon-font-16"></i>
     </div>
-    <div class="pd-t15">
-      <mat-form-field appearance="outline" class="w-100 mr-b15">
-        <mat-label>You can add multiple id's comma separated</mat-label>
-        <textarea
-          matInput
-          rows="3"
-          [placeholder]="'Message'"
-        ></textarea>
-      </mat-form-field>
-      <button mat-stroked-button color="primary">Send Email</button>
+    <div mat-dialog-content class="dialog-body">
+        <giddh-page-loader *ngIf="bulkExportVoucherInProgress$ | async"></giddh-page-loader>
+        <div [formGroup]="exportForm" [hidden]="bulkExportVoucherInProgress$ | async">
+            <div class="border-bottom pd-b15 custom-mat-form-field" *ngIf="inputData?.voucherType === 'sales'">
+                <mat-form-field appearance="outline" class="w-100 mr-b15">
+                    <mat-label>{{ localeData?.select_copy }}</mat-label>
+                    <mat-select multiple [placeholder]="localeData?.select_copy" formControlName="copyTypes">
+                        <mat-option value="ORIGINAL">{{ localeData?.invoice_copy_options?.original }}</mat-option>
+                        <mat-option value="CUSTOMER">{{ localeData?.invoice_copy_options?.customer }}</mat-option>
+                        <mat-option value="TRANSPORT">{{ localeData?.invoice_copy_options?.transport }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <button mat-stroked-button color="primary" (click)="exportVouchers(false)">{{ commonLocaleData?.app_download }}</button>
+            </div>
+            <div class="pd-t15">
+                <mat-form-field appearance="outline" class="w-100 mr-b15">
+                    <mat-label>{{ localeData?.add_multiple_email }}</mat-label>
+                    <textarea matInput rows="3" [placeholder]="localeData?.recipients_email" formControlName="recipients"></textarea>
+                </mat-form-field>
+                <button mat-stroked-button color="primary" (click)="exportVouchers(true)">{{ commonLocaleData?.app_send_email }}</button>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
+</ng-container>

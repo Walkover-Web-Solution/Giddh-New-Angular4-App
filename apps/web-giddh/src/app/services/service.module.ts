@@ -147,8 +147,6 @@ export class ServiceModule {
                 PrinterFormatService,
                 ThermalService,
                 CustomFieldsService,
-                PrinterFormatService,
-                DownloadsService,
                 ImportsService,
                 PageLeaveUtilityService,
                 LedgerService,

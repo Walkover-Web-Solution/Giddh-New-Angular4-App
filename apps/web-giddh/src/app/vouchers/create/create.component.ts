@@ -384,7 +384,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Create new account */
     public createNewAccount: boolean = true;
     /** True if currency switched */
-    private currencySwitched: boolean = false;
+    public currencySwitched: boolean = false;
     /** Label for voucher date */
     public voucherDateLabel: string = '';
     /** Label for voucher due date */

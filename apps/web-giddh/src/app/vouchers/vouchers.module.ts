@@ -75,6 +75,10 @@ import { EntryOtherTaxModule } from "./utility/directives/entry-other-tax/entry-
 import { PurchaseOrderPreviewModule } from "../shared/purchase-order-preview/purchase-order-preview.module";
 import { DecimalDigitsModule } from "../shared/helpers/directives/decimalDigits/decimalDigits.module";
 import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
+import { GenerateEWayBillModule } from "../invoice/preview/models/generateEWayBill/generateEWayBill.module";
+import { DatepickerWrapperModule } from "../shared/datepicker-wrapper/datepicker.wrapper.module";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatNativeDateModule } from "@angular/material/core";
 
 @NgModule({
     declarations: [
@@ -156,7 +160,11 @@ import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
         ConfirmationModalModule,
         PurchaseOrderPreviewModule,
         DecimalDigitsModule,
-        NgxMaskModule
+        NgxMaskModule,
+        GenerateEWayBillModule,
+        DatepickerWrapperModule,
+        MatDatepickerModule,
+        MatNativeDateModule
     ],
     exports: [
 

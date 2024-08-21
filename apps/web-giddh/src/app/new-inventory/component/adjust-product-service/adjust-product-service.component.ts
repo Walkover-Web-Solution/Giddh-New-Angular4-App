@@ -25,16 +25,6 @@ export class AdjustProductServiceComponent implements OnInit {
 
     constructor(private dialog: MatDialog) { }
 
-    /**
-     *
-     *
-     * @param {*} event
-     * @memberof AdjustProductServiceComponent
-     */
-    public selectDate(event: any): void {
-        console.log('selectDate: ', event);
-    }
-
     public ngOnInit() {
         /* added image path */
         this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
