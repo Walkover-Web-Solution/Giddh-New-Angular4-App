@@ -802,7 +802,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {FormGroup} transaction
      * @memberof AccountAsVoucherComponent
      */
-    public updateTransactionActualAmount(transaction: FormGroup): void {
+    public updateTransactionActualAmount(): void {
         const totalCreditAndDebit = this.calculateTotalCreditAndDebit();
         this.totalCreditAmount = totalCreditAndDebit.totalCredit;
         this.totalDebitAmount = totalCreditAndDebit.totalDebit;
@@ -816,6 +816,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public updateValidNumber(transaction: FormGroup): void {
         if (transaction) {
+            const value = transaction.get('amount')?.value?.toString();
+            const removeSpaceValue = value?.replace(' ', '');
+            transaction.get('amount')?.patchValue(removeSpaceValue);
             if (+transaction.get('amount')?.value > 9 && transaction.get('amount')?.value?.startsWith('0')) {
                 transaction.get('amount')?.patchValue(+transaction.get('amount')?.value?.replace(/^0+/, ''));
             }
@@ -823,6 +826,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             transaction.get('amount')?.patchValue(amount);
             transaction.get('actualAmount')?.patchValue(amount);
             transaction.get('total')?.patchValue(amount);
+            this.updateTransactionActualAmount();
         }
     }
 
@@ -1391,7 +1395,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
-     * In case of sales ( i.e To ) row update manually then 
+     * In case of sales ( i.e To ) row update manually then
      * calculate and update cash ( i.e. By ) value
      *
      * @private
