@@ -23,11 +23,22 @@
     }
 
     .plan-content {
-        padding: 8px 8px 36px 8px;
+        padding: 8px 8px 10px 8px;
 
         .plan-title {
             min-height: 72px;
             font-weight: 400;
+            span {
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+            }
+
+            @media screen and (max-width: 1299px) {
+                font-size: 18px !important;
+                min-height: 30px;
+            }
         }
 
         h2,
@@ -39,6 +50,14 @@
         p {
             s {
                 color: var(--color-gray);
+            }
+
+            @media screen and (max-width: 1299px) {
+                margin-bottom: 6px !important;
+
+                .plan-price {
+                    font-size: 18px !important;
+                }
             }
         }
 

@@ -132,7 +132,9 @@
                                                         <h2
                                                             class="font-20 plan-title d-flex align-items-center justify-content-center"
                                                         >
-                                                            {{ plan?.name }}
+                                                            <span>
+                                                                {{ plan?.name }}
+                                                            </span>
                                                         </h2>
                                                         <p *ngIf="plan?.description" class="font-15 feature-txt">
                                                             <span>
@@ -160,7 +162,7 @@
                                                                 </s>
                                                             </p>
                                                             <p class="mb-3 mt-2">
-                                                                <span class="font-24">
+                                                                <span class="font-24 plan-price">
                                                                     <span class="strong">
                                                                         <amount-field
                                                                             [useGiddhCurrencyPipe]="false"
