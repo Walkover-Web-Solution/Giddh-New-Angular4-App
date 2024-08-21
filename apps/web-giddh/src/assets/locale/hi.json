@@ -741,5 +741,8 @@
     "app_tax_authority": "टैक्स प्राधिकरण",
     "app_select_year": "वर्ष चुनें",
     "app_select_month": "वर्ष निवडा",
-    "app_user_settings": "उपयोगकर्ता सेटिंग"
+    "app_user_settings": "उपयोगकर्ता सेटिंग",
+    "app_custom_email": "कस्टम ईमेल",
+    "app_custom_email_template": "कस्टम ईमेल टेम्पलेट",
+    "app_subscription": "सदस्यता"
 }

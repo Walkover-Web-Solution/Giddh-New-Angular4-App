@@ -13,27 +13,22 @@
         <div id="my-frame" class="modal-body move-company-modal-body clearfix">
             <p class="text-black mb-2" [innerHTML]="getMovePlanText()"></p>
             <div class="row mb-2">
-                <div class="col-md-6 move-wrapper">
-                    <label class="font-15" *ngIf="subscriptionMove"
-                        >{{
-                            localeData?.subscription?.select_plan
-                                ? localeData?.subscription?.select_plan
-                                : localeData?.select_plan
-                        }}<span class="text-danger">*</span></label
-                    >
+                <div class="move-wrapper" [ngClass]="subscriptionMove ? 'col-md-9' : 'col-md-6'">
                     <div *ngIf="subscriptionMove" class="select-caret position-relative move-select">
-                        <sh-select
+                        <reactive-dropdown-field
                             [placeholder]="
                                 localeData?.subscription?.select_plan
                                     ? localeData?.subscription?.select_plan
                                     : localeData?.select_plan
                             "
-                            name="availablePlans"
-                            [options]="availablePlansOption"
-                            [isFilterEnabled]="true"
-                            [(ngModel)]="selectedPlan"
-                            [isRequired]="true"
-                        ></sh-select>
+                            [options]="subscriptions$ | async"
+                            [enableDynamicSearch]="true"
+                            [isPaginationEnabled]="true"
+                            (scrollEnd)="handleSearchSubscriptionScrollEnd()"
+                            [required]="true"
+                            (selectedOption)="selectedPlan = $event?.value"
+                        >
+                        </reactive-dropdown-field>
                     </div>
                     <div *ngIf="!subscriptionMove" class="position-relative move-select">
                         <reactive-dropdown-field

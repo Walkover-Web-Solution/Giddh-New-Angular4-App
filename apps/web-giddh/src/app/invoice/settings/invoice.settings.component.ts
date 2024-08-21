@@ -19,6 +19,8 @@ import { OrganizationType } from '../../models/user-login-state';
 import { cloneDeep, concat, isEmpty, isEqual } from '../../lodash-optimized';
 import { BootstrapToggleSwitch } from '../../app.constant';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
+import { MatDialog } from '@angular/material/dialog';
+import { TemplateFroalaComponent } from '../../shared/template-froala/template-froala.component';
 
 @Component({
     selector: 'app-invoice-setting',
@@ -87,6 +89,7 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
 
     constructor(
         private commonActions: CommonActions,
+        private dialog: MatDialog,
         private cdr: ChangeDetectorRef,
         private store: Store<AppState>,
         private invoiceActions: InvoiceActions,
@@ -107,7 +110,6 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
         this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
         this.store.pipe(select(s => s.settings.isGmailIntegrated), takeUntil(this.destroyed$)).subscribe(result => {
@@ -597,5 +599,22 @@ export class InvoiceSettingComponent implements OnInit, OnDestroy {
      */
     public tabChanged(event: any): void {
         this.selectedTabIndex = event?.index;
+    }
+
+    /**
+    * Open custom email dialog
+    *
+    * @memberof InvoiceSettingComponent
+    */
+    public openCustomEmailDialog(invoiceType: string): void {
+        this.dialog.open(TemplateFroalaComponent, {
+            data: invoiceType,
+            width: 'var(--aside-pane-width)',
+            height: '70vh',
+            position: {
+                right: '15px',
+                bottom: '0'
+            }
+        });
     }
 }

@@ -46,6 +46,8 @@ export class PaymentMethodDialogComponent implements OnInit {
     private openedWindow: Window | null = null;
     /** Hold payment method list*/
     public paymentMethodList: any[] = [];
+    /** True if api is in progress */
+    public isLoading: boolean = false;
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
@@ -71,7 +73,7 @@ export class PaymentMethodDialogComponent implements OnInit {
         this.commonLocaleData = this.inputData?.commonLocaleData;
         this.paymentProviderList = [{ label: this.localeData?.gocardless, value: "GOCARDLESS" }]
         this.initForm();
-        this.paymentMethodForm.get('subscriptionId')?.patchValue(this.inputData.rowData?.subscriptionId);
+
         this.getPaymentMethods();
 
         this.saveProviderSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -95,8 +97,10 @@ export class PaymentMethodDialogComponent implements OnInit {
         if (this.router.url === '/pages/user-details/subscription') {
             window.addEventListener('message', event => {
                 if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
+                    this.isLoading = true;
                     this.resetForm();
                     this.getPaymentMethods();
+                    this.changeDetection.detectChanges();
                 }
             });
         }
@@ -104,10 +108,12 @@ export class PaymentMethodDialogComponent implements OnInit {
         this.paymentMethodList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.paymentMethodList = response;
+                setTimeout(() => {
+                    this.isLoading = false;
+                    this.changeDetection.detectChanges();
+                }, 1000);
             }
-            this.changeDetection.detectChanges();
         });
-
     }
 
     /**
@@ -119,7 +125,6 @@ export class PaymentMethodDialogComponent implements OnInit {
     public openWindow(url: string): void {
         const width = 700;
         const height = 900;
-
         this.openedWindow = this.generalService.openCenteredWindow(url, '', width, height);
     }
 
@@ -163,6 +168,7 @@ export class PaymentMethodDialogComponent implements OnInit {
      * @memberof PaymentMethodDialogComponent
      */
     public getPaymentMethods(): void {
+        this.isLoading = true;
         this.componentStore.getPaymentMethodListBySubscriptionId(this.inputData.rowData?.subscriptionId);
     }
 
@@ -186,6 +192,7 @@ export class PaymentMethodDialogComponent implements OnInit {
      */
     public savePaymentProvider(): void {
         this.isFormSubmitted = false;
+        this.paymentMethodForm.get('subscriptionId')?.patchValue(this.inputData.rowData?.subscriptionId);
         if (this.paymentMethodForm.invalid) {
             this.isFormSubmitted = true;
             return;

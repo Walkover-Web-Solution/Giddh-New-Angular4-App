@@ -80,7 +80,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }
 
         if (!(this._generalService.user && this._generalService.sessionId)) {
-            if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download') && !window.location.href.includes('verify-subscription-ownership')  && !window.location.href.includes('dns')) {
+            if (!window.location.href.includes('login') && !window.location.href.includes('token-verify') && !window.location.href.includes('download') && !window.location.href.includes('verify-subscription-ownership') && !window.location.href.includes('dns')) {
                 if (PRODUCTION_ENV && !isElectron) {
                     window.location.href = 'https://test.giddh.com/login/';
                 } else {
@@ -199,7 +199,26 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 document.body.appendChild(scriptTag);
             }
             /* RAZORPAY */
+
         }, 1000);
+
+        this._generalService.addLinkTag("./assets/css/code-mirror.css");
+
+        /* Codemirror */
+        let codeMirrorScriptTag = document.createElement('script');
+        codeMirrorScriptTag.src = './assets/js/codemirror.min.js';
+        codeMirrorScriptTag.type = 'text/javascript';
+        codeMirrorScriptTag.defer = true;
+        document.body.appendChild(codeMirrorScriptTag);
+        /* Codemirror */
+
+        /* Xml */
+        let xmlScriptTag = document.createElement('script');
+        xmlScriptTag.src = './assets/js/xml.min.js';
+        xmlScriptTag.type = 'text/javascript';
+        xmlScriptTag.defer = true;
+        document.body.appendChild(xmlScriptTag);
+        /* Xml */
 
         if (this._generalService.getUrlParameter("region") === "uk") {
             this._generalService.setParameterInLocalStorage("X-Tenant", "GB");
