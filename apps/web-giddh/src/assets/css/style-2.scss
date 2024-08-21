@@ -9531,11 +9531,11 @@ span#HW_badge_cont:nth-child(3) {
     }
 }
 
-// .on-setting-page .nav-left-bar.open,
-// .on-user-page .nav-left-bar.open on-user-page {
-//     left: 0 !important;
-//     display: block !important;
-// }
+.on-setting-page .nav-left-bar.open,
+.on-user-page .nav-left-bar.open on-user-page {
+    left: 0 !important;
+    display: block !important;
+}
 
 .setting-sidebar-open .nav-left-bar,
 .on-user-page .nav-left-bar,
