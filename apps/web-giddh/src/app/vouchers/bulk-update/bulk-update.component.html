@@ -45,7 +45,6 @@
             <!-- due-date-click -->
             <giddh-datepicker
                 *ngIf="bulkUpdateForm.get('selectedField')?.value === 'dueDate'"
-                type="text"
                 (keydown.enter)="$event.preventDefault()"
                 [label]="commonLocaleData?.app_select_date"
                 [placeholder]="commonLocaleData?.app_select_date"

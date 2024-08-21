@@ -6,7 +6,7 @@ import { IServiceConfigArgs, ServiceConfig } from "./service.config";
 import { Observable, map, catchError } from "rxjs";
 import { BaseResponse } from "../models/api-models/BaseResponse";
 import { InvoiceSetting } from "../models/interfaces/invoice.setting.interface";
-import { INVOICE_API, INVOICE_API_2 } from "./apiurls/invoice.api";
+import { BULK_UPDATE_VOUCHER, INVOICE_API, INVOICE_API_2 } from "./apiurls/invoice.api";
 import { ProformaFilter, ProformaGetRequest, ProformaResponse, ProformaUpdateActionRequest } from "../models/api-models/proforma";
 import { ESTIMATES_API, PROFORMA_API } from "./apiurls/proforma.api";
 import { InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptResponse, Voucher, VoucherRequest } from "../models/api-models/recipt";
@@ -18,6 +18,7 @@ import { SALES_API_V2, SALES_API_V4 } from "./apiurls/sales.api";
 import { PURCHASE_ORDER_API } from "./apiurls/purchase-order.api";
 import { PAGINATION_LIMIT } from "../app.constant";
 import { ADVANCE_RECEIPTS_API } from "./apiurls/advance-receipt-adjustment.api";
+import { BULK_VOUCHER_EXPORT_API } from "./apiurls/bulkvoucherexport.api";
 
 
 @Injectable()
@@ -690,5 +691,62 @@ export class VoucherService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<string, ReciptDeleteRequest>(e, accountUniqueName))
         )
+    }
+
+    /**
+     * API call for bulk update Invoice
+     *
+     * @param {*} model
+     * @param {string} actionType
+     * @returns
+     * @memberof VoucherService
+     */
+    public bulkUpdateInvoice(model: any, actionType: string) {
+        let url;
+        if (actionType) {
+            url = this.config.apiUrl + BULK_UPDATE_VOUCHER.BULK_UPDATE_VOUCHER_ACTION?.replace(':companyUniqueName', this.generalService.companyUniqueName)?.replace(':actionType', actionType);
+
+            if (this.generalService.voucherApiVersion === 2) {
+                url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+            }
+        }
+        return this.http.post(url, model).pipe(
+            map(res => {
+                let data: BaseResponse<any, any> = res;
+                data.request = model;
+                data.queryString = { model, actionType };
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    /**
+     * This will bulk export the vouchers
+     *
+     * @param {*} getRequest
+     * @param {*} postRequest
+     * @returns {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public bulkExport(getRequest: any, postRequest: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        let url = this.config.apiUrl + BULK_VOUCHER_EXPORT_API.BULK_EXPORT;
+        url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
+        url = url?.replace(':from', getRequest.from);
+        url = url?.replace(':to', getRequest.to);
+        url = url?.replace(':type', getRequest.type);
+        url = url?.replace(':mail', getRequest.mail);
+        url = url?.replace(':q', getRequest.q);
+        if (this.generalService.voucherApiVersion === 2) {
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+            delete postRequest.from;
+            delete postRequest.to;
+        }
+        return this.http.post(url, postRequest).pipe(
+            map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = postRequest;
+                return data;
+            }),
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, postRequest)));
     }
 }
