@@ -245,7 +245,7 @@
                                                             [showError]="taxNumberValidations['account']['billingDetails'] | async"
                                                             formControlName="taxNumber"></text-field>
                                                     </div>
-                                                    <div class="w-50 border-bottom">
+                                                    <div class="w-50 border-bottom zip-field-width">
                                                         <text-field [type]="'text'" [name]="'billingPinCode'"
                                                             (keyup)="copyAccountBillingAddressToShippingAddress()"
                                                             [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0 w-100'"
@@ -332,7 +332,7 @@
                                                             [showError]="taxNumberValidations['account']['shippingDetails'] | async"
                                                             formControlName="taxNumber"></text-field>
                                                     </div>
-                                                    <div class="w-50 border-bottom">
+                                                    <div class="w-50 border-bottom zip-field-width">
                                                         <text-field [type]="'text'" [name]="'shippingPinCode'"
                                                             [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0 w-100'"
                                                             formControlName="pincode"></text-field>
@@ -474,7 +474,7 @@
                                                         [showError]="taxNumberValidations['company']['billingDetails'] | async"
                                                         formControlName="taxNumber"></text-field>
                                                 </div>
-                                                <div class="w-50 border-bottom">
+                                                <div class="w-50 border-bottom zip-field-width">
                                                     <text-field [type]="'text'" [name]="'companyBillingPinCode'"
                                                         (keyup)="copyCompanyBillingAddressToShippingAddress()"
                                                         [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0 w-100'"
@@ -551,7 +551,7 @@
                                                         [showError]="taxNumberValidations['company']['shippingDetails'] | async"
                                                         formControlName="taxNumber"></text-field>
                                                 </div>
-                                                <div class="w-50 border-bottom">
+                                                <div class="w-50 border-bottom zip-field-width">
                                                     <text-field [type]="'text'" [name]="'companyShippingPinCode'"
                                                         [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code" [cssClass]="'border-0 w-100'"
                                                         formControlName="pincode"></text-field>
