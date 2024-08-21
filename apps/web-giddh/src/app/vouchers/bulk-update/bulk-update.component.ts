@@ -69,9 +69,7 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private warehouseActions: WarehouseActions,
         private settingsUtilityService: SettingsUtilityService
-    ) {
-
-    }
+    ) { }
 
     /**
      * Initializes the component
@@ -144,8 +142,6 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
             });
         }
 
-
-
         this.componentStore.bulkUpdateVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.onCancel(true);
@@ -161,7 +157,6 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
      */
     private getWarehouses(): void {
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
-
         this.componentStore.warehouseList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 let warehouseResults = response.results?.filter(warehouse => !warehouse.isArchived);
@@ -373,14 +368,14 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
      */
     public updateBulkPO(): void {
         if (!this.validateBulkUpdateFields()) {
-           return
+            return
         }
         const model = this.bulkUpdateForm.value;
         const actionType = model.action;
         delete model.action;
 
         model.purchaseNumbers = this.inputData?.purchaseNumbers;
-        this.componentStore.purchaseOrderBulkUpdateAction({ payload: model, actionType: actionType})
+        this.componentStore.purchaseOrderBulkUpdateAction({ payload: model, actionType: actionType })
     }
 
     /**
@@ -463,7 +458,7 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
             if (form.action === BULK_UPDATE_FIELDS.purchasedate) {
                 if (!form.purchaseDate) {
                     isValid = false;
-                    this.toasterService.showSnackBar('error',this.localeData?.po_date_error);
+                    this.toasterService.showSnackBar('error', this.localeData?.po_date_error);
                 } else {
                     let date = dayjs(form.purchaseDate).format(GIDDH_DATE_FORMAT);
                     this.bulkUpdateForm.get('purchaseDate').patchValue(date);
@@ -471,14 +466,14 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
             } else if (form.action === BULK_UPDATE_FIELDS.duedate) {
                 if (!form.dueDate) {
                     isValid = false;
-                    this.toasterService.showSnackBar('error',this.localeData?.po_expirydate_error);
+                    this.toasterService.showSnackBar('error', this.localeData?.po_expirydate_error);
                 } else {
                     this.bulkUpdateForm.get('dueDate').patchValue(dayjs(form.dueDate).format(GIDDH_DATE_FORMAT));
                 }
             } else if (form.action === BULK_UPDATE_FIELDS.warehouse) {
                 if (!form.warehouseUniqueName) {
                     isValid = false;
-                    this.toasterService.showSnackBar('error',this.localeData?.po_warehouse_error);
+                    this.toasterService.showSnackBar('error', this.localeData?.po_warehouse_error);
                 }
             }
         } else {

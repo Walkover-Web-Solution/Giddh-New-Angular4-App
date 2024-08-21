@@ -8,15 +8,13 @@ import { ReplaySubject } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { saveAs } from 'file-saver';
-import { VoucherComponentStore } from '../../vouchers/utility/vouchers.store';
 
 type bulkExportVoucherTypes = 'sales' | 'debit note' | 'credit note' | 'purchase' | 'payment' | 'receipt';
 
 @Component({
     selector: 'bulk-export-voucher',
     templateUrl: './bulk-export-voucher.component.html',
-    styleUrls: [`./bulk-export-voucher.component.scss`],
-    providers:[VoucherComponentStore]
+    styleUrls: [`./bulk-export-voucher.component.scss`]
 })
 
 export class BulkExportVoucherComponent implements OnDestroy {
@@ -55,7 +53,7 @@ export class BulkExportVoucherComponent implements OnDestroy {
         private toaster: ToasterService,
         private store: Store<AppState>) {
 
-            
+
     }
 
     /**

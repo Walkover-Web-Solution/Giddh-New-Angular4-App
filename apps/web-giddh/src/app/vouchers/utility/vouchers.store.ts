@@ -18,8 +18,6 @@ import { CommonService } from "../../services/common.service";
 import { LastVouchersResponse } from "../../models/api-models/Voucher";
 import { AccountService } from "../../services/account.service";
 import { SearchService } from "../../services/search.service";
-import { InvoiceBulkUpdateService } from "../../services/invoice.bulkupdate.service";
-import { BulkVoucherExportService } from "../../services/bulkvoucherexport.service";
 
 export interface VoucherState {
     isLoading: boolean;
@@ -123,8 +121,6 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         private commonService: CommonService,
         private accountService: AccountService,
         private searchService: SearchService,
-        private bulkUpdateInvoiceService: InvoiceBulkUpdateService,
-        private bulkVoucherExportService: BulkVoucherExportService
     ) {
         super(DEFAULT_STATE);
     }
@@ -908,7 +904,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     readonly generateEInvoice = this.effect((data: Observable<{ payload: any, actionType: string }>) => {
         return data.pipe(
             switchMap((req) => {
-                return this.bulkUpdateInvoiceService.bulkUpdateInvoice(req.payload, req.actionType).pipe(
+                return this.voucherService.bulkUpdateInvoice(req.payload, req.actionType).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
@@ -940,7 +936,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ bulkUpdateVoucherIsSuccess: false, bulkUpdateVoucherInProgress: true });
-                return this.bulkUpdateInvoiceService.bulkUpdateInvoice(req.payload, req.actionType).pipe(
+                return this.voucherService.bulkUpdateInvoice(req.payload, req.actionType).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
@@ -978,7 +974,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     bulkExportVoucherInProgress: true,
                     bulkExportVoucherResponse: null
                 });
-                return this.bulkVoucherExportService.bulkExport(req.getRequest, req.postRequest).pipe(
+                return this.voucherService.bulkExport(req.getRequest, req.postRequest).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
@@ -1350,13 +1346,13 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             if (res.status === "success") {
                                 res.body && this.toaster.showSnackBar("success", res.body);
                                 this.patchState({
-                                    sendEmailInProgress: true, 
+                                    sendEmailInProgress: true,
                                     sendEmailIsSuccess: null
                                 });
                             } else {
                                 res.message && this.toaster.showSnackBar("error", res.message);
                                 this.patchState({
-                                    sendEmailInProgress: false, 
+                                    sendEmailInProgress: false,
                                     sendEmailIsSuccess: null
                                 });
                             }
@@ -1364,7 +1360,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
                             this.patchState({
-                                sendEmailInProgress: false, 
+                                sendEmailInProgress: false,
                                 sendEmailIsSuccess: null
                             });
                         }
