@@ -136,10 +136,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
             this.change();
         }
 
-        if (changes) {
-            console.log("changes", changes);
-        }
-
         this.cdr.detectChanges();
     }
 
