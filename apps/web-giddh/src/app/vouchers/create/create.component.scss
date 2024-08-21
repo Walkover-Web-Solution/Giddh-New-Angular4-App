@@ -97,6 +97,12 @@
                     opacity: 0.7;
                     pointer-events: none;
                 }
+
+                &.without-taxnumber {
+                    .zip-field-width {
+                        width: 100% !important;
+                    }
+                }
             }
 
         }
