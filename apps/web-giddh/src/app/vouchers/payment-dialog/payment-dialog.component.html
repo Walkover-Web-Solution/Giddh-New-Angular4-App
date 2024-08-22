@@ -44,9 +44,9 @@
                     (click)="switchCurrency()" />
             </span>
             <span class="mx-1">
-                <img src="assets/images/edit-pencilicon.svg" class="cp mr-1" (click)="showExchangeRateEditField = true"
+                <img src="assets/images/edit-pencilicon.svg" class="cursor-pointer mr-1" (click)="showExchangeRateEditField = true"
                     *ngIf="!showExchangeRateEditField" />
-                <img src=" assets/images/autosave.svg" class="cp mr-1" (click)="showExchangeRateEditField = false"
+                <img src=" assets/images/autosave.svg" class="cursor-pointer mr-1" (click)="showExchangeRateEditField = false"
                     *ngIf="showExchangeRateEditField" />
             </span>
             <span class="mr-1" *ngIf="!showExchangeRateEditField">{{ paymentForm.get('exchangeRate')?.value |

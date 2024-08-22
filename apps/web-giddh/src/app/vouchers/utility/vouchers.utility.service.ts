@@ -364,6 +364,13 @@ export class VouchersUtilityService {
         return invoiceForm;
     }
 
+    /**
+     * Remove key from object whose value is null
+     *
+     * @param {*} object
+     * @return {*}  {*}
+     * @memberof VouchersUtilityService
+     */
     public cleanObject(object: any): any {
         return cleaner?.clean(object, {
             nullCleaner: true
