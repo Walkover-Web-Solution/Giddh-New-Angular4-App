@@ -690,9 +690,11 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
      * @memberof PaymentReportComponent
      */
     public previewVoucher(payment: any): void {
-        // if (this.voucherApiVersion === 2) {
-        //     this.router.navigate(['/pages/voucher/payment/preview/' + payment.uniqueName + '/' + payment.account?.uniqueName]);
-        // }
+        // NOTE - This code is only active for Test Environment - Start
+        if (this.voucherApiVersion === 2) {
+            this.router.navigate(['/pages/voucher/payment/preview/' + payment.uniqueName + '/' + payment.account?.uniqueName]);
+        }
+        // NOTE - This code is only active for Test Environment - End
     }
 
     /**
