@@ -7,6 +7,7 @@ import { ToasterService } from "../../../services/toaster.service";
 import { AppState } from "../../../store";
 import { Store } from "@ngrx/store";
 import { SettingsProfileService } from "../../../services/settings.profile.service";
+import { LocaleService } from "../../../services/locale.service";
 
 export interface BuyPlanState {
     planListInProgress: boolean;
@@ -58,7 +59,8 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
     constructor(private toasterService: ToasterService,
         private subscriptionService: SubscriptionsService,
         private settingsProfileService: SettingsProfileService,
-        private store: Store<AppState>) {
+        private store: Store<AppState>,
+        private localeService: LocaleService) {
         super(DEFAULT_BUY_PLAN_STATE);
     }
 
@@ -415,7 +417,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
+                            this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
                             return this.patchState({
                                 razorpaySuccess: false
                             });
