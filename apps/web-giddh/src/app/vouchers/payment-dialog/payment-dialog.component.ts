@@ -57,7 +57,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     private currencySwitched: boolean = false;
     /** True if we need to show exchange rate edit field */
     public showExchangeRateEditField: boolean = false;
-    /** Holds true if save is inprogress */
+    /** Holds true action voucher api call in progress */
     public saveInProgress: boolean = false;
 
     constructor(
@@ -70,7 +70,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Lifecycle hook for destroy
+     * Initializes the component
      *
      * @memberof PaymentDialogComponent
      */
@@ -87,11 +87,8 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
             exchangeRate: [1],
             uniqueName: [this.voucherDetails?.uniqueName]
         });
-
         this.isMulticurrencyAccount = this.voucherDetails?.accountCurrencySymbol !== this.voucherDetails?.companyCurrencySymbol;
-
         this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.accountCurrencySymbol);
-
         this.componentStore.getBriefAccounts({ currency: this.company.baseCurrency, group: BriedAccountsGroup });
 
         this.componentStore.briefAccounts$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -130,7 +127,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStore.actionVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.actionVoucherInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.saveInProgress = response;
         });
     }

@@ -26,7 +26,7 @@ export class ConvertBillDialogComponent implements OnInit {
     }
 
     /**
-     * Lifecycle hook for destroy
+     * Initializes the component
      *
      * @memberof ConvertBillDialogComponent
      */

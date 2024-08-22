@@ -93,9 +93,9 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <a href="javascript:;" class="btn-link-2">{{ element.voucherNumber ? element.voucherNumber : commonLocaleData?.app_not_available }}</a>
-                                    <span class="d-block" *ngIf="element.expiredDays !== null">
-                                        <small class="text-danger" *ngIf="element.expiredDays === 0">
+                                    <a href="javascript:;" class="btn-link-2">{{ element?.voucherNumber ? element?.voucherNumber : commonLocaleData?.app_not_available }}</a>
+                                    <span class="d-block" *ngIf="element?.expiredDays !== null">
+                                        <small class="text-danger" *ngIf="element?.expiredDays === 0">
                                             {{ localeData?.expired_by_today }}
                                         </small>
                                     </span>
@@ -120,7 +120,7 @@
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
                                     <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">{{ (element.account?.customerName || element?.account?.name) | titlecase }}</div>
-                                    <mat-card class="outline-card account-detail-wrapper" *ngIf="element.showAccountDetails" (clickOutside)="element.showAccountDetails = false">
+                                    <mat-card class="outline-card account-detail-wrapper" *ngIf="element?.showAccountDetails" (clickOutside)="element.showAccountDetails = false">
                                         <div class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                             <h3>{{ element?.customerName | titlecase }}</h3>
                                             <span class="cursor-pointer" (click)="editAccount(element)">
@@ -148,10 +148,10 @@
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
                                     {{ localeData?.total_amt }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element.grandTotalTooltipText"
+                                <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element?.grandTotalTooltipText"
                                 matTooltipPosition="above"> 
                                     <amount-field
-                                        [amount]="element.amount?.amountForAccount"
+                                        [amount]="element?.amount?.amountForAccount"
                                         [currencySymbol]="element?.amount?.currencyForAccount?.symbol"
                                         [currencyCode]="element?.amount?.currencyForAccount?.code"
                                     >
@@ -181,7 +181,7 @@
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>{{ element.action | titlecase  }}</p>
-                                        <ng-container *ngIf="element.action !== 'invoiced'">
+                                        <ng-container *ngIf="element?.action !== 'invoiced'">
                                             <span [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf="!isCompany">
                                                 <i class="icon-dots-three-vertical"></i>
                                             </span>
@@ -328,7 +328,7 @@
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
                                     <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">{{ (element.account?.customerName || element?.account?.name) | titlecase }}</div>
-                                    <mat-card class="outline-card account-detail-wrapper" *ngIf="element.showAccountDetails" (clickOutside)="element.showAccountDetails = false">
+                                    <mat-card class="outline-card account-detail-wrapper" *ngIf="element?.showAccountDetails" (clickOutside)="element.showAccountDetails = false">
                                         <div class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                             <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
                                             <span class="cursor-pointer" (click)="editAccount(element)">
@@ -356,10 +356,10 @@
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
                                     {{ localeData?.total_amt }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element.grandTotalTooltipText"
+                                <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element?.grandTotalTooltipText"
                                 matTooltipPosition="above"> 
                                     <amount-field
-                                        [amount]="element.grandTotal"
+                                        [amount]="element?.grandTotal"
                                         [currencySymbol]="element?.amount?.currencyForAccount?.symbol"
                                         [currencyCode]="element?.amount?.currencyForAccount?.code"
                                     >
@@ -379,7 +379,7 @@
                                     {{ commonLocaleData?.app_status }}
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <div [matTooltip]="element.eInvoiceStatusTooltip" [matTooltipPosition]="'above'">
+                                    <div [matTooltip]="element?.eInvoiceStatusTooltip" [matTooltipPosition]="'above'">
                                         {{ element.status }}
                                     </div>
                                 </td>
@@ -548,8 +548,8 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <a href="javascript:;" class="btn-link-2">{{ element.voucherNumber ? element.voucherNumber : commonLocaleData?.app_not_available }}</a>
-                                    <small class="text-danger d-block" *ngIf="element.overdueDays">
+                                    <a href="javascript:;" class="btn-link-2">{{ element?.voucherNumber ? element?.voucherNumber : commonLocaleData?.app_not_available }}</a>
+                                    <small class="text-danger d-block" *ngIf="element?.overdueDays">
                                         {{ element.overdueDays }}
                                     </small>
                                 </td>
@@ -573,7 +573,7 @@
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
                                     <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">{{ (element.account?.customerName || element?.account?.name) | titlecase }}</div>
-                                    <mat-card class="outline-card account-detail-wrapper" *ngIf="element.showAccountDetails" (clickOutside)="element.showAccountDetails = false">
+                                    <mat-card class="outline-card account-detail-wrapper" *ngIf="element?.showAccountDetails" (clickOutside)="element.showAccountDetails = false">
                                         <div class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                             <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
                                             <span class="cursor-pointer" (click)="editAccount(element)">
@@ -601,12 +601,12 @@
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
                                     {{ commonLocaleData?.app_amount }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element.grandTotalTooltipText"
+                                <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element?.grandTotalTooltipText"
                                 matTooltipPosition="above"> 
                                     <amount-field
-                                        [amount]="element.grandTotal?.amountForAccount"
-                                        [currencySymbol]="element.account?.currency?.symbol"
-                                        [currencyCode]="element.account?.currency?.code"
+                                        [amount]="element?.grandTotal?.amountForAccount"
+                                        [currencySymbol]="element?.account?.currency?.symbol"
+                                        [currencyCode]="element?.account?.currency?.code"
                                     >
                                     </amount-field>
                                 </td>
@@ -615,12 +615,12 @@
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
                                     {{ localeData?.balance_due }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element.balanceDueTooltipText"
+                                <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element?.balanceDueTooltipText"
                                 matTooltipPosition="above"> 
                                     <amount-field
-                                        [amount]="element.totalBalance?.amountForAccount"
-                                        [currencySymbol]="element.account?.currency?.symbol"
-                                        [currencyCode]="element.account?.currency?.code"
+                                        [amount]="element?.totalBalance?.amountForAccount"
+                                        [currencySymbol]="element?.account?.currency?.symbol"
+                                        [currencyCode]="element?.account?.currency?.code"
                                     >
                                     </amount-field>
                                 </td>
@@ -638,7 +638,7 @@
                                     {{ localeData?.e_invoice_status }}
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <div [matTooltip]="element.eInvoiceStatusTooltip" [matTooltipPosition]="'above'">
+                                    <div [matTooltip]="element?.eInvoiceStatusTooltip" [matTooltipPosition]="'above'">
                                         {{ element.status }}
                                     </div>
                                 </td>
@@ -650,7 +650,7 @@
                                 <td mat-cell *matCellDef="let element"> 
                                     <div class="d-flex justify-content-between align-items-center column-gap5">
                                         <p>{{ element.balanceStatus }}</p>
-                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf="element.balanceStatus !== 'cancel'">
+                                        <span [matMenuTriggerFor]="menu" class="cursor-pointer" *ngIf="element?.balanceStatus !== 'cancel'">
                                             <i class="icon-dots-three-vertical"></i>
                                         </span>
                                         <mat-menu #menu="matMenu">
@@ -668,7 +668,7 @@
                             <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="checkbox-show"></tr>
                         </table>
                         <mat-paginator
-                                *ngIf="!(getVouchersInProgress$ | async) && dataSource?.length && totalResults > pageSizeOptions[0]"
+                            *ngIf="!(getVouchersInProgress$ | async) && dataSource?.length && totalResults > pageSizeOptions[0]"
                             class="mt-3"
                             (page)="handlePageChange($event)"
                             [length]="totalResults"
@@ -798,7 +798,7 @@
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
                                     <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">{{ (element.account?.customerName || element?.account?.name) | titlecase }}</div>
-                                    <mat-card class="outline-card account-detail-wrapper" *ngIf="element.showAccountDetails" (clickOutside)="element.showAccountDetails = false">
+                                    <mat-card class="outline-card account-detail-wrapper" *ngIf="element?.showAccountDetails" (clickOutside)="element.showAccountDetails = false">
                                         <div class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                             <h3>{{ element?.account?.customerName || element?.account?.name }}</h3>
                                             <span class="cursor-pointer" (click)="editAccount(element)">
@@ -834,12 +834,12 @@
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
                                     {{ commonLocaleData?.app_total_amount }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element.balanceDueTooltipText"
+                                <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element?.balanceDueTooltipText"
                                 matTooltipPosition="above"> 
                                 <amount-field
-                                    [amount]="element.grandTotal?.amountForAccount"
-                                    [currencySymbol]="element.account?.currency?.symbol"
-                                    [currencyCode]="element.account?.currency?.code"
+                                    [amount]="element?.grandTotal?.amountForAccount"
+                                    [currencySymbol]="element?.account?.currency?.symbol"
+                                    [currencyCode]="element?.account?.currency?.code"
                                 >
                                 </amount-field>
                                 </td>
@@ -994,7 +994,7 @@
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
                                     <div class="cursor-pointer" (dblclick)="element.showAccountDetails = true">{{ (element.account?.customerName || element?.account?.name) | titlecase }}</div>
-                                    <mat-card class="outline-card account-detail-wrapper" *ngIf="element.showAccountDetails" (clickOutside)="element.showAccountDetails = false">
+                                    <mat-card class="outline-card account-detail-wrapper" *ngIf="element?.showAccountDetails" (clickOutside)="element.showAccountDetails = false">
                                         <div class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header">
                                             <h3>{{ element?.customerName | titlecase }}</h3>
                                             <span class="cursor-pointer" (click)="editAccount(element)">
@@ -1030,12 +1030,12 @@
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
                                     {{ commonLocaleData?.app_total_amount }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element.balanceDueTooltipText"
+                                <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element?.balanceDueTooltipText"
                                 matTooltipPosition="above"> 
                                 <amount-field
-                                    [amount]="element.grandTotal?.amountForAccount"
-                                    [currencySymbol]="element.account?.currency?.symbol"
-                                    [currencyCode]="element.account?.currency?.code"
+                                    [amount]="element?.grandTotal?.amountForAccount"
+                                    [currencySymbol]="element?.account?.currency?.symbol"
+                                    [currencyCode]="element?.account?.currency?.code"
                                 >
                                 </amount-field>
                                 </td>
@@ -1176,7 +1176,7 @@
                                     Total
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="text-right">
-                                    <div [matTooltip]="element.balanceDueTooltipText" [matTooltipPosition]="'above'">
+                                    <div [matTooltip]="element?.balanceDueTooltipText" [matTooltipPosition]="'above'">
                                         {{element.total}}
                                     </div>
                                 </td>
@@ -1306,7 +1306,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <a href="javascript:;" [routerLink]="['/pages/purchase-management/purchase-orders/preview/'+ element.uniqueName]" class="btn-link-2">{{element.voucherNumber}}</a>
+                                    <a href="javascript:;" [routerLink]="['/pages/purchase-management/purchase-orders/preview/'+ element.uniqueName]" class="btn-link-2">{{element?.voucherNumber}}</a>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="vendorname">
@@ -1334,7 +1334,7 @@
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
                                     {{ localeData?.total_amt }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element.grandTotalTooltipText"
+                                <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element?.grandTotalTooltipText"
                                 matTooltipPosition="above">
                                     <amount-field
                                         [amount]="element?.grandTotal?.amountForAccount"
@@ -1498,12 +1498,12 @@
                                     </div>
                                     </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <a href="javascript:;" class="btn-link-2">{{ element.voucherNumber ? element.voucherNumber : commonLocaleData?.app_not_available }}</a>
-                                    <div *ngIf="element.dueDays !== null">
-                                        <small class="text-danger" *ngIf="element.dueDays > 0">
+                                    <a href="javascript:;" class="btn-link-2">{{ element?.voucherNumber ? element?.voucherNumber : commonLocaleData?.app_not_available }}</a>
+                                    <div *ngIf="element?.dueDays !== null">
+                                        <small class="text-danger" *ngIf="element?.dueDays > 0">
                                             {{ getOverdueDaysText(element.dueDays) }}
                                         </small>
-                                        <small class="text-danger" *ngIf="element.dueDays === 0">
+                                        <small class="text-danger" *ngIf="element?.dueDays === 0">
                                             {{ localeData?.overdue_today }}
                                         </small>
                                     </div>
@@ -1556,19 +1556,19 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    {{element.voucherNumber}}
+                                    {{element?.voucherNumber}}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="grandTotal">
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="text-right">
                                     {{ commonLocaleData?.app_amount }}
                                 </th>
-                                <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element.balanceDueTooltipText"
+                                <td mat-cell *matCellDef="let element" class="text-right" [matTooltip]="element?.balanceDueTooltipText"
                                 matTooltipPosition="above"> 
                                     <amount-field
-                                        [amount]="element.grandTotal?.amountForAccount"
-                                        [currencySymbol]="element.account?.currency?.symbol"
-                                        [currencyCode]="element.account?.currency?.code"
+                                        [amount]="element?.grandTotal?.amountForAccount"
+                                        [currencySymbol]="element?.account?.currency?.symbol"
+                                        [currencyCode]="element?.account?.currency?.code"
                                     >
                                     </amount-field>
                                 </td>

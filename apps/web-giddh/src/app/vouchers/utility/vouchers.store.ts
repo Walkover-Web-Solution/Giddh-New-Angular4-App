@@ -56,6 +56,7 @@ export interface VoucherState {
     bulkUpdateVoucherIsSuccess: boolean;
     bulkExportVoucherInProgress: boolean;
     bulkExportVoucherResponse: any;
+    actionVoucherInProgress: boolean;
     actionVoucherIsSuccess: boolean;
     adjustVoucherIsSuccess: boolean;
     uploadImageBase64InProgress: boolean;
@@ -101,12 +102,13 @@ const DEFAULT_STATE: VoucherState = {
     bulkUpdateVoucherIsSuccess: null,
     bulkExportVoucherInProgress: null,
     bulkExportVoucherResponse: null,
+    actionVoucherInProgress: null,
     actionVoucherIsSuccess: null,
     adjustVoucherIsSuccess: null,
     uploadImageBase64InProgress: false,
     uploadImageBase64Response: null,
     convertToInvoice: null,
-    convertToProforma: null,
+    convertToProforma: null
 };
 
 @Injectable()
@@ -159,6 +161,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public bulkUpdateVoucherIsSuccess$ = this.select((state) => state.bulkUpdateVoucherIsSuccess);
     public bulkExportVoucherInProgress$ = this.select((state) => state.bulkExportVoucherInProgress);
     public bulkExportVoucherResponse$ = this.select((state) => state.bulkExportVoucherResponse);
+    public actionVoucherInProgress$ = this.select((state) => state.actionVoucherInProgress);
     public actionVoucherIsSuccess$ = this.select((state) => state.actionVoucherIsSuccess);
     public adjustVoucherIsSuccess$ = this.select((state) => state.adjustVoucherIsSuccess);
     public uploadImageBase64InProgress$ = this.select((state) => state.uploadImageBase64InProgress);
@@ -1012,6 +1015,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({
+                    actionVoucherInProgress: true,
                     actionVoucherIsSuccess: false
                 });
                 return this.voucherService.actionVoucher(req.voucherUniqueName, req.payload).pipe(
@@ -1019,11 +1023,13 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 this.patchState({
+                                    actionVoucherInProgress: false,
                                     actionVoucherIsSuccess: true
                                 });
                             } else {
                                 this.toaster.showSnackBar("error", res.message);
                                 this.patchState({
+                                    actionVoucherInProgress: null,
                                     actionVoucherIsSuccess: null
                                 });
                             }
@@ -1031,6 +1037,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
                             this.patchState({
+                                actionVoucherInProgress: null,
                                 actionVoucherIsSuccess: null
                             });
                         }
