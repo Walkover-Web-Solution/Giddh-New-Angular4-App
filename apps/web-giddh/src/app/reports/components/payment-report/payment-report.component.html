@@ -15,6 +15,7 @@
             >
                 <!-- Invoice filter section -->
                 <div class="mr-r1 d-flex flex-sm-row flex-column">
+                    <!-- NOTE - This code is only active for Test Environment - Start -->
                     <button
                         type="button"
                         class="btn btn-sky-blue dropdown-btn-new"
@@ -23,6 +24,7 @@
                     >
                         {{ localeData?.new_voucher }}
                     </button>
+                    <!-- NOTE - This code is only active for Test Environment - End -->
                     <div
                         class="input-group linked-entities mr-r15"
                         *ngIf="currentCompanyBranches?.length > 2 && currentOrganizationType === 'COMPANY'"

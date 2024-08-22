@@ -28,6 +28,9 @@
     table {
         tr {
             td {
+                amount-field {
+                    display: inline-block;
+                }
                 .action-btn {
                     visibility: hidden;
                 }
@@ -120,6 +123,10 @@ table {
     .template-content {
         width: 200px;
     }
+}
+
+.ontime-delivery {
+    color: var(--color-secondary-success);
 }
 
 @media screen and (max-width: 1199px) {

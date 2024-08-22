@@ -17,12 +17,8 @@ const routes: Routes = [
                 pathMatch: "full"
             },
             {
-                path: ":voucherType/list",
+                path: "preview/:voucherType/:module",
                 component: VoucherListComponent
-            },
-            {
-                path: ":voucherType/preview",
-                component: VouchersPreviewComponent
             },
             {
                 path: ":voucherType/create",

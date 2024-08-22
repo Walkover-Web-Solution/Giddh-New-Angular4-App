@@ -13,6 +13,7 @@ import { ITaxControlData } from '../interfaces/tax.interface';
 export enum VoucherTypeEnum {
     'sales' = 'sales',
     'purchase' = 'purchase',
+    'purchaseOrder' = 'purchase-order',
     'debitNote' = 'debit note',
     'creditNote' = 'credit note',
     'proforma' = 'proforma',
@@ -130,7 +131,7 @@ class CompanyDetailsClass {
 }
 
 export class GstDetailsClass {
-    public index?:number;
+    public index?: number;
     public gstNumber?: any;
     public address: string[];
     public state?: StateCode;
