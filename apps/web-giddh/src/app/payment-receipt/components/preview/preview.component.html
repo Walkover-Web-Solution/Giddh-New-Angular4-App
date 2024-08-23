@@ -21,7 +21,7 @@
                                 #searchElement
                             ></text-field>
                             <button
-                                *ngIf="!isCompany"
+                                *ngIf="!isCompany && !(voucherType === receiptVoucherType || voucherType === paymentVoucherType)"
                                 class="mr-l1"
                                 mat-stroked-button
                                 color="primary"
