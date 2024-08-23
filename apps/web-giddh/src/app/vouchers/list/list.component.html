@@ -1083,7 +1083,8 @@
 
             <!-- pending-content-start -->
             <mat-tab [label]="localeData?.tabs?.pending" *ngIf="activeTabGroup === 0 || activeTabGroup === 1">
-                <div class="vouchers-wrapper pt-3 px-4">
+                <app-invoice-generate [selectedVoucher]="voucherType"></app-invoice-generate>
+                <div class="vouchers-wrapper pt-3 px-4" *ngIf="false">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
                             <div class="custom-datepicker-wrapper">
@@ -1631,8 +1632,9 @@
             <!-- bill-content-end -->
 
             <!-- setting-content-start --> <!-- ===== HIDE THIS TAB FOR NOW ===== -->
-            <mat-tab [label]="localeData?.tabs?.settings" class="setting-svg" *ngIf="false">
-                <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="tabs-box-wrap pt-3 px-4">
+            <mat-tab [label]="localeData?.tabs?.settings" class="setting-svg" >
+                <app-invoice-setting [selectedVoucher]="voucherType"></app-invoice-setting>
+                <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="tabs-box-wrap pt-3 px-4" *ngIf="false">
                     <mat-tab *ngIf="activeTabGroup === 0">
                       <ng-template mat-tab-label>
                         <i class="icon-chat2"></i>
@@ -2133,7 +2135,8 @@
 
             <!-- template-content-start -->
             <mat-tab [label]="localeData?.tabs?.templates" *ngIf="activeTabGroup === 0 || activeTabGroup === 1">
-                <div class="vouchers-wrapper pt-3 px-4">
+                <edit-invoice></edit-invoice>
+                <div class="vouchers-wrapper pt-3 px-4" *ngIf="false">
                     <dropdown-field
                         [name]="'design'"
                         [label]="'Select Design for'"

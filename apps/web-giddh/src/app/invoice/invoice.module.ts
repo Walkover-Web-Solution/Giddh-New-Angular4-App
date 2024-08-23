@@ -172,7 +172,10 @@ import { GenerateEWayBillModule } from './preview/models/generateEWayBill/genera
         InvoiceRoutingModule,
         TooltipModule,
         DownloadOrSendInvoiceOnMailComponent,
-        InvoicePreviewComponent
+        InvoicePreviewComponent,
+        EditInvoiceComponent,
+        InvoiceSettingComponent,
+        InvoiceGenerateComponent
     ],
     providers: [
         InvoiceUiDataService

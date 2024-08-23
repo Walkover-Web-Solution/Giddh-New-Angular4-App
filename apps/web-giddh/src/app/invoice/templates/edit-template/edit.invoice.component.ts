@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs';
@@ -22,7 +22,8 @@ import { cloneDeep } from '../../../lodash-optimized';
 @Component({
     selector: 'edit-invoice',
     templateUrl: 'edit.invoice.component.html',
-    styleUrls: ['edit-template.component.scss']
+    styleUrls: ['edit-template.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 
 export class EditInvoiceComponent implements OnInit, OnChanges, OnDestroy {

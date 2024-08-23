@@ -79,6 +79,8 @@ import { GenerateEWayBillModule } from "../invoice/preview/models/generateEWayBi
 import { DatepickerWrapperModule } from "../shared/datepicker-wrapper/datepicker.wrapper.module";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
+import { InvoiceTemplatesModule } from "../invoice/templates/invoice.templates.module";
+import { InvoiceModule } from "../invoice/invoice.module";
 
 @NgModule({
     declarations: [
@@ -164,7 +166,8 @@ import { MatNativeDateModule } from "@angular/material/core";
         GenerateEWayBillModule,
         DatepickerWrapperModule,
         MatDatepickerModule,
-        MatNativeDateModule
+        MatNativeDateModule,
+        InvoiceModule
     ],
     exports: [
 
