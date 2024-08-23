@@ -99,6 +99,10 @@
         font-weight: 500;
         font-size: var(--font-size-15);
         border-left: 1px solid var(--color-iron);
+
+        @media screen and (max-width: 1299px) {
+            min-width: 210px;
+        }
     }
 
     .plan-table {
@@ -184,6 +188,11 @@
 
     .plan-summary-heading {
         height: 50px;
+        
+        @media screen and (max-width: 1299px) {
+            height: 25px;
+            margin-bottom: 10px !important;
+        }
     }
 
     .plan-summary {
@@ -215,6 +224,12 @@
     amount-field {
         display: inline-block;
         text-decoration: inherit;
+    }
+
+    @media screen and (max-width: 1299px) {
+        form {
+            margin-top: 10px !important;
+        }
     }
 }
 
