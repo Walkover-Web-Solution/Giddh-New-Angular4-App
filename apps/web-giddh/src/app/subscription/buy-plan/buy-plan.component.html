@@ -132,7 +132,10 @@
                                                         <h2
                                                             class="font-20 plan-title d-flex align-items-center justify-content-center"
                                                         >
-                                                            {{ plan?.name }}
+
+                                                            <span>
+                                                                {{ plan?.name }}
+                                                            </span>
                                                         </h2>
                                                         <p *ngIf="plan?.description" class="font-15 feature-txt">
                                                             <span>
@@ -194,7 +197,7 @@
                                                                     </s>
                                                                 </p>
                                                                 <p class="mb-3 mt-2" *ngIf="plan?.yearlyAmount !== 0">
-                                                                    <span class="font-24 strong">
+                                                                    <span class="font-24 strong plan-price">
                                                                         <amount-field
                                                                             [useGiddhCurrencyPipe]="false"
                                                                             [spaceAfterCurrencySymbol]="false"
@@ -900,7 +903,7 @@
                     name="firstStepForm"
                 >
                     <mat-card-content>
-                        <div class="d-flex justify-content-between border-bottom pb-3">
+                        <div class="d-flex justify-content-between border-bottom pb-3 column-gap1">
                             <span>{{ selectedPlan?.name }}</span>
                             <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">
                                 <amount-field
@@ -920,7 +923,7 @@
                             </span>
                         </div>
                         <div class="border-bottom">
-                            <div class="d-flex justify-content-between py-3">
+                            <div class="d-flex justify-content-between py-3 column-gap1">
                                 <span>
                                     <span *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'">{{
                                         commonLocaleData?.app_duration?.year
@@ -939,7 +942,7 @@
                             </div>
                         </div>
                         <div
-                            class="d-flex justify-content-between border-bottom py-3"
+                            class="d-flex justify-content-between border-bottom py-3 column-gap1"
                             *ngIf="
                                 selectedPlan?.yearlyDiscountAmount > 0 ||
                                 selectedPlan?.monthlyDiscountAmount > 0 ||
@@ -962,7 +965,7 @@
                             >
                             </amount-field>
                         </div>
-                        <div class="d-flex justify-content-between border-bottom py-3">
+                        <div class="d-flex justify-content-between border-bottom py-3 column-gap1">
                             <p>{{ commonLocaleData?.app_subtotal }}</p>
                             <amount-field
                                 [amount]="selectedPlan?.planAmountBeforeTax ?? 0"
@@ -972,7 +975,7 @@
                             </amount-field>
                         </div>
                         <div *ngIf="firstStepForm.get('planUniqueName').value">
-                            <div class="d-flex justify-content-between py-3">
+                            <div class="d-flex justify-content-between py-3 column-gap1">
                                 <p class="strong">{{ localeData?.final_amount }}</p>
                                 <span class="strong">
                                     <amount-field
