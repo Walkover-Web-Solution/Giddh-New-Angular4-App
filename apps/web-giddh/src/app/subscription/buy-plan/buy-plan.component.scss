@@ -37,7 +37,7 @@
             }
 
             @media screen and (max-width: 1299px) {
-                font-size: 18px !important;
+                font-size: var(--font-size-20) !important;
                 min-height: 30px;
             }
         }
@@ -57,7 +57,7 @@
                 margin-bottom: 6px !important;
 
                 .plan-price {
-                    font-size: 18px !important;
+                    font-size: var(--font-size-20) !important;
                 }
             }
         }
