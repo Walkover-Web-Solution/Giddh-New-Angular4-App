@@ -790,11 +790,9 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      * @memberof AdvanceReceiptReportComponent
      */
     public previewVoucher(receipt: any): void {
-        // NOTE - This code is only active for Test Environment - Start
         if (this.voucherApiVersion === 2) {
             this.router.navigate(['/pages/voucher/receipt/preview/' + receipt.uniqueName + '/' + receipt.account?.uniqueName]);
         }
-        // NOTE - This code is only active for Test Environment - End
     }
 
     /**
