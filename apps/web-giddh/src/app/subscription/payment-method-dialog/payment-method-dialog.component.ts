@@ -107,9 +107,9 @@ export class PaymentMethodDialogComponent implements OnInit {
 
         this.paymentMethodList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.paymentMethodList = response;
                 setTimeout(() => {
                     this.isLoading = false;
+                    this.paymentMethodList = response;
                     this.changeDetection.detectChanges();
                 }, 1000);
             }

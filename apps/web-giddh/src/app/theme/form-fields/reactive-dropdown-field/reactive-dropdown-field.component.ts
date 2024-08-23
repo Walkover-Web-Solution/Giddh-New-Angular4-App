@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef } from "@angular/core";
 import { IOption } from "../../ng-virtual-select/sh-options.interface";
 import { BehaviorSubject, Observable, ReplaySubject, Subject, debounceTime, of, skip, takeUntil } from "rxjs";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
@@ -99,7 +99,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public next$: Subject<void> = new Subject();
 
     constructor(
-
+        private changeDetection : ChangeDetectorRef
     ) {
 
     }
@@ -123,6 +123,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                     this.onClear.emit({ label: "", value: "" });
                 }
                 this.fieldFilteredOptions$ = this.filterOptions(String(search));
+                this.changeDetection.detectChanges();
             });
         }
     }

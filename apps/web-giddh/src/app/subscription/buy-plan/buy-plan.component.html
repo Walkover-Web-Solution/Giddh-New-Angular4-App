@@ -919,11 +919,7 @@
                         </div>
                         <div
                             class="d-flex justify-content-between border-bottom py-3"
-                            *ngIf="
-                                selectedPlan?.yearlyDiscountAmount > 0 ||
-                                selectedPlan?.monthlyDiscountAmount > 0 ||
-                                promoCodeResponse?.length
-                            "
+                            *ngIf="selectedPlan?.discount?.amount?.amountForAccount > 0 || promoCodeResponse?.length"
                         >
                             <p>
                                 <span class="strong">
@@ -934,7 +930,7 @@
                                 [amount]="
                                     promoCodeResponse?.length
                                         ? promoCodeResponse[0]?.discountValue
-                                        : selectedPlan?.discount?.discountValue
+                                        : selectedPlan?.discount?.amount?.amountForAccount
                                 "
                                 [currencySymbol]="selectedPlan?.currency?.symbol"
                                 [currencyCode]="selectedPlan?.currency?.code"
@@ -1013,7 +1009,7 @@
                         </div>
                         <div class="mt-3">
                             <button
-                                [disabled]="isChangePlan && !isUserManualChangePlan && !isRenewPlan"
+                                [disabled]="isChangePlan && !isUserManualChangePlan && !isRenewPlan && !isTrialPlan"
                                 mat-stroked-button
                                 aria-label="next"
                                 color="primary"

@@ -202,6 +202,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public isUserManualChangePlan: boolean = false;
     /** True if user renew  plan */
     public isRenewPlan: boolean = false;
+    /** True if user trial  plan */
+    public isTrialPlan: boolean = false;
 
     constructor(
         public dialog: MatDialog,
@@ -253,6 +255,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((queryParams: any) => {
             if (queryParams?.renew) {
                 this.isRenewPlan = true;
+            } else if (queryParams?.trial) {
+                this.isTrialPlan = true;
             }
         });
 
@@ -739,11 +743,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.promoCodeResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.promoCodeResponse[0] = response;
-                if (this.secondStepForm?.get('country')?.value?.value?.toLowerCase() === 'in' && this.promoCodeResponse?.length) {
-                    this.finalPlanAmount = response?.finalAmount + (response?.finalAmount * this.taxPercentage);
-                } else {
-                    this.finalPlanAmount = response?.finalAmount;
-                }
+                this.finalPlanAmount = response?.finalAmount;
+            } else {
+                this.promoCodeResponse[0] = [];
             }
         });
     }
@@ -1046,7 +1048,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public selectPlan(plan: any): void {
         this.firstStepForm.get('planUniqueName').setValue(plan?.uniqueName);
         if (this.firstStepForm?.get('promoCode')?.value) {
-            this.applyPromoCode('remove');
+            this.applyPromoCode('add');
         }
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (result) {
@@ -1184,7 +1186,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         }
         this.calculateData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.finalPlanAmount = response?.planAmountAfterTax;
+                this.finalPlanAmount = response?.planAmountAfterTax ? (response?.planAmountAfterTax ?? 0) : (response?.planAmountBeforeTax ?? 0);
                 this.selectedPlan = { ...this.selectedPlan, ...response };
             }
         });
@@ -1217,16 +1219,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public selectCountry(event: any): void {
         if (event?.value) {
-
-            if (this.selectedPlan?.currency?.code?.toLowerCase() === 'inr' && event?.value.toLowerCase() === 'in') {
-                this.finalPlanAmount = this.finalPlanAmount + this.finalPlanAmount * this.taxPercentage;
-            } else {
-                if (this.firstStepForm.get('duration').value === 'YEARLY') {
-                    this.finalPlanAmount = this.selectedPlan?.yearlyAmountAfterDiscount;
-                } else {
-                    this.finalPlanAmount = this.selectedPlan?.monthlyAmountAfterDiscount;
-                }
-            }
 
             this.selectedCountry = event.label;
             this.secondStepForm.controls['country'].setValue(event);
