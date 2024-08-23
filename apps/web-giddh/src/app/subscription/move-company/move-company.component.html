@@ -22,7 +22,6 @@
                                     : localeData?.select_plan
                             "
                             [options]="subscriptions$ | async"
-                            [enableDynamicSearch]="true"
                             [isPaginationEnabled]="true"
                             (scrollEnd)="handleSearchSubscriptionScrollEnd()"
                             [required]="true"
