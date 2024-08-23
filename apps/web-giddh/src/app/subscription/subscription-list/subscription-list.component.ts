@@ -616,6 +616,11 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
                 ['/pages/user-details/subscription/buy-plan/' + subscription?.subscriptionId],
                 { queryParams: { renew: 'true' } }
             );
+        } else if (type === 'trial') {
+            this.router.navigate(
+                ['/pages/user-details/subscription/buy-plan/' + subscription?.subscriptionId],
+                { queryParams: { trial: 'true' } }
+            );
         } else {
             this.router.navigate(['/pages/user-details/subscription/buy-plan/' + subscription?.subscriptionId]);
         }
