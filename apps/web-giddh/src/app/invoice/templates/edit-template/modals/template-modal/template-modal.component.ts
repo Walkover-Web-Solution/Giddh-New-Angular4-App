@@ -1,5 +1,5 @@
 import { take } from 'rxjs/operators';
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core';
 import { ISection } from '../../../../../models/api-models/Invoice';
 import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.service';
 import { Store, select } from '@ngrx/store';
@@ -9,8 +9,7 @@ import { EditFiltersContainersComponent } from '../../filters-container/edit.fil
 @Component({
     selector: 'invoice-template-modal',
     templateUrl: './template-modal.component.html',
-    styleUrls: ['./template-modal.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    styleUrls: ['./template-modal.component.scss']
 })
 
 export class InvoiceTemplateModalComponent implements OnChanges {
