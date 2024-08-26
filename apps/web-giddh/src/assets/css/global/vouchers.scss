@@ -211,3 +211,16 @@
 .mdc-tooltip__surface {
     white-space: pre-line;
 }
+
+// Handle Bootstrap Modal Z-index issue on Mat Tab
+body {
+    &.modal-open {
+        mat-tab-body {
+            &.mat-mdc-tab-body-active {
+                &:has(edit-invoice, app-invoice-setting, app-invoice-generate) {
+                    z-index: unset !important;
+                }
+            }
+        }
+    }
+}

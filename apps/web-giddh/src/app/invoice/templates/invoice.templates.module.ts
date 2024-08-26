@@ -26,7 +26,7 @@ import { ThermalTemplateComponent } from './edit-template/out-tempate/templates/
     ],
     exports: [
         OutTemplateComponent,
-        ContentFilterComponent,
+        ContentFilterComponent
     ]
 })
 export class InvoiceTemplatesModule {
