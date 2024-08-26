@@ -92,9 +92,25 @@
                 },
                 {
                     "label": "चालान सेटिंग",
+                    "link": "/pages/invoice/preview/settings/sales",
+                    "icon": "icon-settings-cog",
+                    "description": "चालान सेटिंग",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "चालान सेटिंग",
                     "link": "/pages/vouchers/preview/sales/settings",
                     "icon": "icon-settings-cog",
-                    "description": "चालान सेटिंग"
+                    "description": "चालान सेटिंग",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "रसीद",
@@ -178,9 +194,25 @@
                 },
                 {
                     "label": "बिल सेटिंग",
+                    "link": "/pages/purchase-management/purchase/settings",
+                    "icon": "icon-invoice-new",
+                    "description": "बिल सेटिंग",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "बिल सेटिंग",
                     "link": "/pages/vouchers/preview/purchase/settings",
                     "icon": "icon-invoice-new",
-                    "description": "बिल सेटिंग"
+                    "description": "बिल सेटिंग",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "डेबिट नोट",

@@ -92,9 +92,25 @@
                 },
                 {
                     "label": "बीजक सेटिंग्ज",
+                    "link": "/pages/invoice/preview/settings/sales",
+                    "icon": "icon-settings-cog",
+                    "description": "बीजक सेटिंग्ज",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "बीजक सेटिंग्ज",
                     "link": "/pages/vouchers/preview/sales/settings",
                     "icon": "icon-settings-cog",
-                    "description": "बीजक सेटिंग्ज"
+                    "description": "बीजक सेटिंग्ज",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "पावती",
@@ -178,9 +194,25 @@
                 },
                 {
                     "label": "बिल सेटिंग्ज",
+                    "link": "/pages/purchase-management/purchase/settings",
+                    "icon": "icon-invoice-new",
+                    "description": "बिल सेटिंग्ज",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "बिल सेटिंग्ज",
                     "link": "/pages/vouchers/preview/purchase/settings",
                     "icon": "icon-invoice-new",
-                    "description": "बिल सेटिंग्ज"
+                    "description": "बिल सेटिंग्ज",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "डेबिट नोट",
