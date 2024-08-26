@@ -4,7 +4,6 @@ import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digits
 import { EWayBillCreateComponent } from './eWayBill/create/eWayBill.create.component';
 import { EWayBillComponent } from './eWayBill/eWayBill/eWayBill.component';
 import { EWayBillCredentialsComponent } from './eWayBill/eWayBillcredentialsModal/eWayBillCredentials.component';
-import { InvoiceGenerateComponent } from './generate/invoice.generate.component';
 import { InvoiceComponent } from './invoice.component';
 import { InvoiceRendererComponent } from './invoice.renderer.component';
 import { InvoicePreviewComponent } from './preview/invoice.preview.component';
@@ -17,7 +16,6 @@ import { InvoicePreviewDetailsComponent } from './preview/models/invoice-preview
 import { InvoicePaymentModelComponent } from './preview/models/invoicePayment/invoice.payment.model.component';
 import { ProformaListComponent } from './proforma/proforma-list.component';
 import { RecurringComponent } from './recurring/recurring.component';
-import { InvoiceSettingComponent } from './settings/invoice.settings.component';
 import { EditInvoiceComponent } from './templates/edit-template/edit.invoice.component';
 import { DesignFiltersContainerComponent } from './templates/edit-template/filters-container/design-filters/design.filters.component';
 import { EditFiltersContainersComponent } from './templates/edit-template/filters-container/edit.filters.component';
@@ -80,16 +78,16 @@ import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-expo
 import { MatDividerModule } from '@angular/material/divider';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 import { GenerateEWayBillModule } from './preview/models/generateEWayBill/generateEWayBill.module';
+import { InvoiceSettingModule } from './settings/invoice-setting.module';
+import { InvoiceGenerateModule } from './generate/invoice-generate.module';
 
 @NgModule({
     declarations: [
         InvoiceComponent,
         InvoicePreviewComponent,
-        InvoiceGenerateComponent,
         EditInvoiceComponent,
         DesignFiltersContainerComponent,
         EditFiltersContainersComponent,
-        InvoiceSettingComponent,
         InvoicePaymentModelComponent,
         DownloadOrSendInvoiceOnMailComponent,
         InvoiceTemplateModalComponent,
@@ -170,16 +168,16 @@ import { GenerateEWayBillModule } from './preview/models/generateEWayBill/genera
         MatTabsModule,
         BulkExportVoucherModule,
         FroalaTemplateEditorModule,
-        GenerateEWayBillModule
+        GenerateEWayBillModule,
+        InvoiceSettingModule,
+        InvoiceGenerateModule
     ],
     exports: [
         InvoiceRoutingModule,
         TooltipModule,
         DownloadOrSendInvoiceOnMailComponent,
         InvoicePreviewComponent,
-        EditInvoiceComponent,
-        InvoiceSettingComponent,
-        InvoiceGenerateComponent
+        EditInvoiceComponent
     ],
     providers: [
         InvoiceUiDataService
