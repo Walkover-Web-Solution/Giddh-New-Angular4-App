@@ -1437,8 +1437,10 @@
                                                                 </mat-card-title>
                                                             </mat-card-header>
                                                             <mat-card-content>
-                                                                <div class="container px-0" formGroupName="deposit">
-                                                                    <div class="row align-items-center">
+                                                                <div class="container px-0 depositsContainer" formArrayName="deposits" [ngClass]="{inputcontainerhh: isScrollable}">
+                                                                    <ng-container
+                                                                    *ngFor="let entry of invoiceForm?.get('deposits')['controls']; let depositIndex = index">
+                                                                    <div class="row align-items-center mr-b15" [formGroupName]="depositIndex">
                                                                         <ng-container
                                                                           *ngIf="invoiceType.isCashInvoice || (currentVoucherFormDetails?.depositAllowed && !isUpdateMode)">
                                                                             <div class="col">
@@ -1457,41 +1459,52 @@
                                                                             </div>
                                                                             <div class="col"
                                                                                 *ngIf="!invoiceType.isCashInvoice">
-                                                                                <input-field [name]="'amountForAccount'"
+                                                                                <input-field 
+                                                                                    [name]="'amountForAccount_'+ depositIndex"
                                                                                     [label]="commonLocaleData?.app_amount"
                                                                                     [placeholder]="localeData?.enter_deposit_amount"
                                                                                     [type]="'number'"
-                                                                                    formControlName="amountForAccount">
+                                                                                    (input)="$event && calculateBalanceDue()"
+                                                                                    formControlName="amountForAccount"
+                                                                                >
                                                                                 </input-field>
                                                                             </div>
                                                                         </ng-container>
-                                                                        <div class="col"
-                                                                            *ngIf="(invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote || invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice) && (vouchersForAdjustment?.length || isAdjustAmount)">
-                                                                            <div
-                                                                                class="d-flex align-items-center column-gap1">
-                                                                                <span>{{ localeData?.adjust_amount
-                                                                                    }}</span>
-                                                                                <span class="text-gray">
-                                                                                    <amount-field [amount]="
-                                                                                            adjustPaymentData.totalAdjustedAmount
-                                                                                                | replace
-                                                                                                    : '-'
-                                                                                                    : ''
-                                                                                        " [currencySymbol]="
-                                                                                            isMulticurrencyAccount
-                                                                                                ? account?.baseCurrencySymbol
-                                                                                                : false
-                                                                                        " [currencyCode]="
-                                                                                            isMulticurrencyAccount
-                                                                                                ? account?.baseCurrency
-                                                                                                : false
-                                                                                        "></amount-field>
-                                                                                </span>
-                                                                                <i (click)="openAdjustmentDialog(true)"
-                                                                                    class="icon-edit text-blue font-12"></i>
+                                                                        <div class="col">
+                                                                            <div class="d-flex">
+                                                                                <div
+                                                                                    class="d-flex align-items-center column-gap1" *ngIf="(invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote || invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice) && (vouchersForAdjustment?.length || isAdjustAmount)">
+                                                                                    <span>{{ localeData?.adjust_amount
+                                                                                        }}</span>
+                                                                                    <span class="text-gray">
+                                                                                        <amount-field [amount]="
+                                                                                                adjustPaymentData.totalAdjustedAmount
+                                                                                                    | replace
+                                                                                                        : '-'
+                                                                                                        : ''
+                                                                                            " [currencySymbol]="
+                                                                                                isMulticurrencyAccount
+                                                                                                    ? account?.baseCurrencySymbol
+                                                                                                    : false
+                                                                                            " [currencyCode]="
+                                                                                                isMulticurrencyAccount
+                                                                                                    ? account?.baseCurrency
+                                                                                                    : false
+                                                                                            "></amount-field>
+                                                                                    </span>
+                                                                                    <i (click)="openAdjustmentDialog(true)"
+                                                                                        class="icon-edit text-blue font-12"></i>
+                                                                                </div>
+                                                                                    <i class="icon-trash text-blue font-16 delete-btn cursor-pointer mr-l1"
+                                                                                       (click)="deleteLineDeposit(depositIndex)"></i>
                                                                             </div>
                                                                         </div>
                                                                     </div>
+                                                                    </ng-container>
+                                                                </div>
+                                                                <div class="text-blue mt-2 px-0">
+                                                                    <span class="cursor-pointer" (click)="addNewLineEntryDeposit()">{{ localeData?.add_new_line
+                                                                    }}</span>
                                                                 </div>
                                                             </mat-card-content>
                                                         </mat-card>
