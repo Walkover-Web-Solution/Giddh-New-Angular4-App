@@ -82,7 +82,7 @@ import { MatNativeDateModule } from "@angular/material/core";
 import { PurchaseSettingModule } from "../purchase/purchase-setting/purchase-setting.module";
 import { InvoiceSettingModule } from "../invoice/settings/invoice-setting.module";
 import { InvoiceGenerateModule } from "../invoice/generate/invoice-generate.module";
-import { InvoiceModule } from "../invoice/invoice.module";
+import { InvoiceTemplatesModule } from "../invoice/templates/invoice.templates.module";
 
 @NgModule({
     declarations: [
@@ -172,7 +172,7 @@ import { InvoiceModule } from "../invoice/invoice.module";
         PurchaseSettingModule,
         InvoiceSettingModule,
         InvoiceGenerateModule,
-        InvoiceModule
+        InvoiceTemplatesModule
     ],
     exports: [
 

@@ -16,11 +16,6 @@ import { InvoicePreviewDetailsComponent } from './preview/models/invoice-preview
 import { InvoicePaymentModelComponent } from './preview/models/invoicePayment/invoice.payment.model.component';
 import { ProformaListComponent } from './proforma/proforma-list.component';
 import { RecurringComponent } from './recurring/recurring.component';
-import { EditInvoiceComponent } from './templates/edit-template/edit.invoice.component';
-import { DesignFiltersContainerComponent } from './templates/edit-template/filters-container/design-filters/design.filters.component';
-import { EditFiltersContainersComponent } from './templates/edit-template/filters-container/edit.filters.component';
-import { InvoiceTemplateModalComponent } from './templates/edit-template/modals/template-modal/template-modal.component';
-import { InvoiceTemplatePreviewModelComponent } from './templates/edit-template/modals/template-preview-modal/template-preview.modal.component';
 import { WebviewDirective } from './webview.directive';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -66,7 +61,6 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
-import { DeleteTemplateConfirmationModalModule } from './templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { VoucherModule } from '../voucher/voucher.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -85,13 +79,8 @@ import { InvoiceGenerateModule } from './generate/invoice-generate.module';
     declarations: [
         InvoiceComponent,
         InvoicePreviewComponent,
-        EditInvoiceComponent,
-        DesignFiltersContainerComponent,
-        EditFiltersContainersComponent,
         InvoicePaymentModelComponent,
         DownloadOrSendInvoiceOnMailComponent,
-        InvoiceTemplateModalComponent,
-        InvoiceTemplatePreviewModelComponent,
         EsignModalComponent,
         RecurringComponent,
         WebviewDirective,
@@ -162,7 +151,6 @@ import { InvoiceGenerateModule } from './generate/invoice-generate.module';
         BsDatepickerModule.forRoot(),
         GiddhPageLoaderModule,
         DatepickerWrapperModule,
-        DeleteTemplateConfirmationModalModule,
         MatDialogModule,
         WatchVideoModule,
         MatTabsModule,
@@ -176,8 +164,7 @@ import { InvoiceGenerateModule } from './generate/invoice-generate.module';
         InvoiceRoutingModule,
         TooltipModule,
         DownloadOrSendInvoiceOnMailComponent,
-        InvoicePreviewComponent,
-        EditInvoiceComponent
+        InvoicePreviewComponent
     ],
     providers: [
         InvoiceUiDataService

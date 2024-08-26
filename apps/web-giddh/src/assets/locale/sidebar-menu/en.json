@@ -92,9 +92,25 @@
                 },
                 {
                     "label": "Invoice Settings",
+                    "link": "/pages/invoice/preview/settings/sales",
+                    "icon": "icon-settings-cog",
+                    "description": "Invoice settings",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "Invoice Settings",
                     "link": "/pages/vouchers/preview/sales/settings",
                     "icon": "icon-settings-cog",
-                    "description": "Invoice settings"
+                    "description": "Invoice settings",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "Receipt",
@@ -178,9 +194,25 @@
                 },
                 {
                     "label": "Bill Settings",
+                    "link": "/pages/purchase-management/purchase/settings",
+                    "icon": "icon-settings-cog",
+                    "description": "Bill settings",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "Bill Settings",
                     "link": "/pages/vouchers/preview/purchase/settings",
                     "icon": "icon-settings-cog",
-                    "description": "Bill settings"
+                    "description": "Bill settings",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "Debit Note",
