@@ -72,6 +72,7 @@ import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-expo
 import { GenerateEWayBillModule } from './preview/models/generateEWayBill/generateEWayBill.module';
 import { InvoiceSettingModule } from './settings/invoice-setting.module';
 import { InvoiceGenerateModule } from './generate/invoice-generate.module';
+import { DeleteTemplateConfirmationModalModule } from './templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 
 @NgModule({
     declarations: [
@@ -154,7 +155,8 @@ import { InvoiceGenerateModule } from './generate/invoice-generate.module';
         BulkExportVoucherModule,
         GenerateEWayBillModule,
         InvoiceSettingModule,
-        InvoiceGenerateModule
+        InvoiceGenerateModule,
+        DeleteTemplateConfirmationModalModule
     ],
     exports: [
         InvoiceRoutingModule,

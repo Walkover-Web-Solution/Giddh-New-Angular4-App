@@ -49,8 +49,7 @@ import { DecimalDigitsModule } from '../../shared/helpers/directives/decimalDigi
     exports: [
         OutTemplateComponent,
         ContentFilterComponent,
-        EditInvoiceComponent,
-        DeleteTemplateConfirmationModalModule
+        EditInvoiceComponent
     ]
 })
 export class InvoiceTemplatesModule {
