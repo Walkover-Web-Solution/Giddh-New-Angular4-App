@@ -1421,7 +1421,7 @@
                                                                 </mat-card-title>
                                                             </mat-card-header>
                                                             <mat-card-content>
-                                                                <div class="container px-0 depositsContainer" formArrayName="deposits" [ngClass]="{inputcontainerhh: isScrollable}">
+                                                                <div class="container px-0 depositsContainer" formArrayName="deposits" [ngClass]="{depositsScroll: isScrollable}">
                                                                     <ng-container
                                                                     *ngFor="let entry of invoiceForm?.get('deposits')['controls']; let depositIndex = index">
                                                                     <div class="row align-items-center mr-b15" [formGroupName]="depositIndex">
@@ -1487,7 +1487,7 @@
                                                                     </ng-container>
                                                                 </div>
                                                                 <div class="text-blue mt-2 px-0">
-                                                                    <span class="cursor-pointer" (click)="addNewLineEntryDeposit()">{{ localeData?.add_new_line
+                                                                    <span class="cursor-pointer" (click)="addNewLineDeposit()">{{ localeData?.add_new_line
                                                                     }}</span>
                                                                 </div>
                                                             </mat-card-content>
