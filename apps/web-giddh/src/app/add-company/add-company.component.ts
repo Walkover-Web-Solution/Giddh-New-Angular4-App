@@ -1068,10 +1068,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.company.baseCurrency = this.firstStepForm.controls['currency'].value.value;
         this.company.uniqueName = this.getRandomString(this.company.name, this.company.country);
         this.generalService.createNewCompany = this.company;
-        if (PRODUCTION_ENV && this.companiesList?.length === 0) {
-            this.sendNewUserInfo();
-            this.fireSocketCompanyCreateRequest();
-        }
     }
 
 
@@ -1224,6 +1220,10 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         if (!this.isNewUserLoggedIn) {
             delete this.company.permission;
             delete this.company.creatorSuperAdmin;
+        }
+        if (PRODUCTION_ENV && this.companiesList?.length === 0) {
+            this.sendNewUserInfo();
+            this.fireSocketCompanyCreateRequest();
         }
         this.companyService.CreateNewCompany(this.company).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
