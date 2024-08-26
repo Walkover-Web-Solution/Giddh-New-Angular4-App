@@ -407,7 +407,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public depositAccountName: string = '';
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
-
+    /** True if Deposit Scroll */
+    public isScrollable: boolean = false
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
      * need to apply max characters limit on Notes/notes2/messsage2
@@ -517,7 +518,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private settingsTaxesAction: SettingsTaxesActions,
         private proformaService: ProformaService,
         private settingsProfileActions: SettingsProfileActions,
-        private titleCasePipe: TitleCasePipe
+        private titleCasePipe: TitleCasePipe,
+        private element :ElementRef
     ) {
 
     }
@@ -1000,13 +1002,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         /** Deposit amount change */
-        this.invoiceForm.controls['deposit'].get("amountForAccount")?.valueChanges.pipe(
+        this.invoiceForm.controls['deposits']?.valueChanges.pipe(
             debounceTime(100),
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(response => {
             this.calculateBalanceDue();
-        });
+            });
 
         this.invoiceForm.get("exchangeRate")?.valueChanges.pipe(debounceTime(100), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
             this.calculateVoucherTotals();
@@ -1047,7 +1049,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.lastVouchersList$ = observableOf([...lastVouchers]);
             }
         });
-
+    
         this.componentStore.briefAccounts$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.briefAccounts$ = observableOf(response);
@@ -2108,12 +2110,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             type: ['', Validators.required],
             updateAccountDetails: [false],
             subVoucher: [''],
-            deposit: this.formBuilder.group({
-                accountUniqueName: [''],
-                amountForAccount: [''],
-                currencySymbol: [''], //temp
-                type: ['DEBIT']
-            }),
+            deposits: this.formBuilder.array([this.getDepositFormGroup()]), 
             warehouse: this.formBuilder.group({
                 name: [''],
                 uniqueName: ['']
@@ -2152,7 +2149,21 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             salesPurchaseAsReceiptPayment: [null], //temp
         });
     }
-
+    /**
+     * Returns deposit form group
+     *
+     * @private
+     * @return {*}  {FormGroup}
+     * @memberof VoucherCreateComponent
+     */
+    private getDepositFormGroup(): FormGroup {
+        return this.formBuilder.group({
+            accountUniqueName: [''],
+            amountForAccount: [''],
+            currencySymbol: [''], //temp
+            type: ['DEBIT']
+        })
+    }
     /**
      * Returns address form group
      *
@@ -3065,6 +3076,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entry.get('hsnNumber')?.patchValue(this.currentHsnSac.hsnNumber);
         entry.get('sacNumber')?.patchValue(this.currentHsnSac.sacNumber);
     }
+    
+    /**
+     * Adds new line deposit
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public addNewLineEntryDeposit(setActiveIndex: boolean = true): void {
+        const deposits = this.invoiceForm.get('deposits') as FormArray;
+        deposits.push(this.getDepositFormGroup());
+    }
 
     /**
      * Adds new line entry
@@ -3080,7 +3101,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }, 10);
         }
     }
-
+    /**
+     * Removes line deposit
+     *
+     * @param {number} entryIndex
+     * @memberof VoucherCreateComponent
+     */
+    public deleteLineDeposit(entryIndex: number): void {
+        const deposits = this.invoiceForm.get('deposits') as FormArray;
+        deposits.removeAt(entryIndex);
+        if (!deposits?.length) {
+            this.addNewLineEntryDeposit();
+        }
+        this.getTotalDepositeValue();
+    }
     /**
      * Removes line entry
      *
@@ -3579,6 +3613,21 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
         return entries;
     }
+        /**
+     * Returns voucher entries
+     *
+     * @return {*}  {any[]}
+     * @memberof VoucherCreateComponent
+     */
+        public getDeposits(): any[] {
+            const deposit = [];
+             this.invoiceForm.get('deposits')['controls']?.forEach(control => {
+            if(control.get("accountUniqueName").value && control.get("amountForAccount").value)
+             deposit.push(control.value);
+        });
+        console.log("control",deposit);
+        return deposit;
+        }
 
     /**
      * Saves voucher
@@ -3588,11 +3637,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public saveVoucher(callback?: Function): void {
         this.startLoader(true);
-
+ 
         const entries = this.getEntries();
+        const deposits = this.getDeposits();
 
         let invoiceForm = cloneDeep(this.invoiceForm.value);
         invoiceForm.entries = entries;
+        invoiceForm.deposits = deposits; 
 
         if (this.currencySwitched) {
             invoiceForm.exchangeRate = 1 / invoiceForm.exchangeRate;
@@ -3605,7 +3656,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         invoiceForm = this.vouchersUtilityService.formatVoucherObject(invoiceForm);
         if (!this.currentVoucherFormDetails?.depositAllowed) {
-            delete invoiceForm.deposit;
+            delete invoiceForm.deposits;
         }
 
         if (this.hasStock && this.warehouses?.length === 1) {
@@ -3759,11 +3810,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
             }
 
-            if (invoiceForm.deposit?.amountForAccount) {
+            if (invoiceForm.deposits[0]?.amountForAccount) {
                 invoiceForm.paymentAction = {
                     action: 'paid',
-                    amount: Number(invoiceForm.deposit?.amountForAccount),
-                    depositAccountUniqueName: this.invoiceType.isCashInvoice ? invoiceForm.account?.uniqueName : invoiceForm.deposit?.accountUniqueName
+                    amount: this.getTotalDepositeValue(),
+                    depositAccountUniqueName: this.invoiceType.isCashInvoice ? invoiceForm.account?.uniqueName : invoiceForm.deposits[0]?.accountUniqueName
                 };
             }
 
@@ -3862,7 +3913,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             invoiceForm = this.vouchersUtilityService.cleanVoucherObject(invoiceForm);
 
-            let accountUniqueName = this.invoiceType.isCashInvoice ? (invoiceForm.deposit?.accountUniqueName ? invoiceForm.deposit?.accountUniqueName : 'cash') : invoiceForm.account?.uniqueName;
+            let accountUniqueName = this.invoiceType.isCashInvoice ? (invoiceForm.deposits[0]?.accountUniqueName ? invoiceForm.deposits[0]?.accountUniqueName : 'cash') : invoiceForm.account?.uniqueName;
             invoiceForm.account.uniqueName = accountUniqueName;
             if (this.isUpdateMode) {
                 this.voucherService.updateVoucher(invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -3946,6 +3997,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const exchangeRate = this.invoiceForm.get('exchangeRate')?.value;
         const entriesFormArray = this.invoiceForm.get('entries') as FormArray;
         entriesFormArray.clear();
+        const depositFormArray = this.invoiceForm.get('deposits') as FormArray;
+        depositFormArray.clear();
         this.invoiceForm.reset();
 
         this.copyAccountBillingInShippingAddress = this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice ? false : true;
@@ -3979,6 +4032,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.addNewLineEntry(false);
+        this.addNewLineEntryDeposit(false);
 
         this.voucherTotals = {
             totalAmount: 0,
@@ -4235,7 +4289,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment(): number {
-        return parseFloat(Number(this.voucherTotals.grandTotal + this.voucherTotals.tcsTotal - this.adjustPaymentData.totalAdjustedAmount - this.invoiceForm.get('deposit.amountForAccount')?.value - this.voucherTotals.tdsTotal).toFixed(this.company?.giddhBalanceDecimalPlaces));
+        return parseFloat(Number(this.voucherTotals.grandTotal + this.voucherTotals.tcsTotal - this.adjustPaymentData.totalAdjustedAmount - this.getTotalDepositeValue() - this.voucherTotals.tdsTotal).toFixed(this.company?.giddhBalanceDecimalPlaces));
     }
 
     /**
@@ -4244,7 +4298,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public calculateBalanceDue(): void {
-        let depositAmount = Number(this.invoiceForm.get('deposit.amountForAccount')?.value);
+        let depositAmount = this.getTotalDepositeValue();
         if (this.isMultiCurrencyVoucher) {
             if (this.invoiceForm.get("deposit.currencySymbol")?.value === this.account.baseCurrencySymbol) {
                 depositAmount = depositAmount * this.invoiceForm.get('exchangeRate')?.value;
@@ -4269,6 +4323,21 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.voucherTotals.balanceDue =
                 giddhRoundOff((((this.voucherTotals.grandTotal + this.voucherTotals.tcsTotal + this.voucherTotals.roundOff) - this.voucherTotals.tdsTotal) - Number(this.depositAmountBeforeUpdate) - this.totalAdvanceReceiptsAdjustedAmount), this.company?.giddhBalanceDecimalPlaces);
         }
+    }
+    ngAfterViewChecked() {
+        const container = this.element.nativeElement.querySelector('.depositsContainer');
+        if(container)
+        this.isScrollable = container.scrollHeight > 211;
+    }
+
+    private getTotalDepositeValue(): any {
+        let totalDeposit: any = 0;
+        this.invoiceForm.get('deposits')['controls']?.forEach((control: any) => {
+            if (control.get('amountForAccount').value) {
+                totalDeposit = totalDeposit + Number(control.get('amountForAccount').value);
+            }
+        });
+        return Number(totalDeposit);
     }
 
     /**
