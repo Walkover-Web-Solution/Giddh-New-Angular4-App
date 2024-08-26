@@ -275,6 +275,12 @@
                         }
                     }
                 }
+                .depositsScroll{
+                    overflow-y: auto; 
+                    overflow-x: hidden;
+                    max-height: 185px;
+                    padding-top:5px;
+                }
             }
 
             .vouchers-actions {
@@ -300,10 +306,4 @@
 
 .option-value, .option-value-stock {
     color: var(--color-gray);
-}
-.inputcontainerhh{
-    overflow-y: auto; 
-    overflow-x: hidden;
-    max-height: 185px;
-    padding-top:5px;
 }

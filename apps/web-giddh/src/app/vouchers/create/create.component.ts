@@ -408,7 +408,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** True if Deposit Scroll */
-    public isScrollable: boolean = false
+    public isScrollable: boolean = false;
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
      * need to apply max characters limit on Notes/notes2/messsage2
@@ -3082,7 +3082,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      *
      * @memberof VoucherCreateComponent
      */
-    public addNewLineEntryDeposit(setActiveIndex: boolean = true): void {
+    public addNewLineDeposit(setActiveIndex: boolean = true): void {
         const deposits = this.invoiceForm.get('deposits') as FormArray;
         deposits.push(this.getDepositFormGroup());
     }
@@ -3111,7 +3111,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const deposits = this.invoiceForm.get('deposits') as FormArray;
         deposits.removeAt(entryIndex);
         if (!deposits?.length) {
-            this.addNewLineEntryDeposit();
+            this.addNewLineDeposit();
         }
         this.getTotalDepositeValue();
     }
@@ -4032,7 +4032,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.addNewLineEntry(false);
-        this.addNewLineEntryDeposit(false);
+        this.addNewLineDeposit(false);
 
         this.voucherTotals = {
             totalAmount: 0,
