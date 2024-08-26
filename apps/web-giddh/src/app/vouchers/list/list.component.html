@@ -1083,7 +1083,9 @@
 
             <!-- pending-content-start -->
             <mat-tab [label]="localeData?.tabs?.pending" *ngIf="activeTabGroup === 0 || activeTabGroup === 1">
-                <app-invoice-generate [selectedVoucher]="voucherType"></app-invoice-generate>
+                <div class="pd-t15"> 
+                    <app-invoice-generate [selectedVoucher]="voucherType"></app-invoice-generate>
+                </div>
                 <div class="vouchers-wrapper pt-3 px-4" *ngIf="false">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
@@ -1633,7 +1635,10 @@
 
             <!-- setting-content-start --> <!-- ===== HIDE THIS TAB FOR NOW ===== -->
             <mat-tab [label]="localeData?.tabs?.settings" class="setting-svg" >
-                <app-invoice-setting [selectedVoucher]="voucherType"></app-invoice-setting>
+                <div class="pd-t15" *ngIf="voucherType  !== 'purchase'"> 
+                    <app-invoice-setting [selectedVoucher]="voucherType"></app-invoice-setting>
+                </div>
+                <purchase-setting *ngIf="voucherType === 'purchase'"></purchase-setting>
                 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" class="tabs-box-wrap pt-3 px-4" *ngIf="false">
                     <mat-tab *ngIf="activeTabGroup === 0">
                       <ng-template mat-tab-label>
@@ -2135,7 +2140,9 @@
 
             <!-- template-content-start -->
             <mat-tab [label]="localeData?.tabs?.templates" *ngIf="activeTabGroup === 0 || activeTabGroup === 1">
-                <edit-invoice></edit-invoice>
+                <div class="pd-t15"> 
+                    <edit-invoice></edit-invoice>
+                </div>
                 <div class="vouchers-wrapper pt-3 px-4" *ngIf="false">
                     <dropdown-field
                         [name]="'design'"
