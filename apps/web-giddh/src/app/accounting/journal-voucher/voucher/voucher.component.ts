@@ -833,7 +833,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
     }
 
-    /** 0.233
+    /**
      * This will be use for remove amount if account removed
      *
      * @param {FormGroup} transaction
