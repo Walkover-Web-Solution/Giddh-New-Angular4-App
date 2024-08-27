@@ -215,6 +215,7 @@
                     "link": "/pages/invoice/preview/templates/sales",
                     "icon": "icon-template",
                     "description": "टेम्पलेट का डिज़ाइन और सामग्री संपादित करें",
+                    "alwaysPresent": true,
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 1
@@ -226,6 +227,7 @@
                     "link": "/pages/vouchers/preview/sales/templates",
                     "icon": "icon-template",
                     "description": "टेम्पलेट का डिज़ाइन और सामग्री संपादित करें",
+                    "alwaysPresent": true,
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2

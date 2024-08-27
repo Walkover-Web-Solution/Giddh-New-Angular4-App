@@ -215,6 +215,7 @@
                     "link": "/pages/invoice/preview/templates/sales",
                     "icon": "icon-template",
                     "description": "Edit design & content of the template",
+                    "alwaysPresent": true,
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 1
@@ -226,6 +227,7 @@
                     "link": "/pages/vouchers/preview/sales/templates",
                     "icon": "icon-template",
                     "description": "Edit design & content of the template",
+                    "alwaysPresent": true,
                     "additional": {
                         "queryParams": {
                             "voucherVersion": 2
