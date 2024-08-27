@@ -220,25 +220,6 @@ export class SubscriptionsService {
     }
 
     /**
-     * Applies a promo code using the provided model in the SubscriptionsService.
-     *
-     * @param model - Data model for applying a promo code.
-     * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
-     * @memberof SubscriptionsService
-     */
-    public applyPromoCode(model: any): Observable<BaseResponse<any, any>> {
-        return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.APPLY_PROMOCODE, model)
-            .pipe(
-                map((res) => {
-                    let data: BaseResponse<any, any> = res;
-                    data.request = '';
-                    return data;
-                }),
-                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
-            );
-    }
-
-    /**
      * Retrieves subscription details by ID from the SubscriptionsService.
      *
      * @param id - ID of the subscription to retrieve.
