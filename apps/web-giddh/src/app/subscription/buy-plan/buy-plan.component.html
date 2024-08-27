@@ -212,7 +212,6 @@
                                                                     }}</span
                                                                 >
                                                             </ng-container>
-                                                            <!-- {{plan?.yearlyAmount > 0}} : {{plan?.yearlyDiscount}} : {{  plan?.yearlyAmountAfterDiscount > 0}} -->
                                                             <p
                                                                 class="mb-3"
                                                                 *ngIf="
@@ -860,24 +859,24 @@
                                 <div class="new-plan mt-4" *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY' && selectedPlan?.entityCode !== 'GBR'" >
                                     <mat-card class="outline-card">
                                         <mat-card-content>
-                                            <mat-radio-group 
-                                            class="d-flex flex-column" 
+                                            <mat-radio-group
+                                            class="d-flex flex-column"
                                             formControlName="razorpayAuthType"
                                         >
                                             <mat-radio-button
                                                 color="primary"
-                                                value="CARD"      
+                                                value="CARD"
                                                 >{{ localeData?.credit_debit_card }}</mat-radio-button
                                             >
                                             <mat-radio-button
-                                                color="primary"  
-                                                value="UPI" 
+                                                color="primary"
+                                                value="UPI"
                                                 >{{ localeData?.upi }}</mat-radio-button
                                             >
-                                            </mat-radio-group> 
+                                            </mat-radio-group>
                                         </mat-card-content>
                                     </mat-card>
-                                </div>    
+                                </div>
                             </div>
                             <ng-container *ngTemplateOutlet="planSummary"></ng-container>
                         </div>
