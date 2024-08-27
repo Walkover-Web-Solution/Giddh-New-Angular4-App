@@ -77,7 +77,23 @@
                     "label": "Invoices",
                     "link": "/pages/invoice/preview/sales",
                     "icon": "icon-invoice-new",
-                    "description": "Multicurrency, Recurring invoice, Cash invoice"
+                    "description": "Multicurrency, Recurring invoice, Cash invoice",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "Invoices",
+                    "link": "/pages/vouchers/preview/sales/list",
+                    "icon": "icon-invoice-new",
+                    "description": "Multicurrency, Recurring invoice, Cash invoice",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "Estimates (Beta)",
@@ -139,13 +155,45 @@
                     "label": "Credit Note",
                     "link": "/pages/invoice/preview/credit note",
                     "icon": "icon-credit-note-new",
-                    "description": "Generate credit note & update A/c"
+                    "description": "Generate credit note & update A/c",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "Credit Note",
+                    "link": "/pages/vouchers/preview/credit-note/list",
+                    "icon": "icon-credit-note-new",
+                    "description": "Generate credit note & update A/c",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "Invoice Settings",
                     "link": "/pages/invoice/preview/settings/sales",
                     "icon": "icon-settings-cog",
-                    "description": "Invoice settings"
+                    "description": "Invoice settings",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "Invoice Settings",
+                    "link": "/pages/vouchers/preview/sales/settings",
+                    "icon": "icon-settings-cog",
+                    "description": "Invoice settings",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "Receipt",
@@ -167,7 +215,22 @@
                     "link": "/pages/invoice/preview/templates/sales",
                     "icon": "icon-template",
                     "description": "Edit design & content of the template",
-                    "alwaysPresent": true
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "Template",
+                    "link": "/pages/vouchers/preview/sales/templates",
+                    "icon": "icon-template",
+                    "description": "Edit design & content of the template",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },
@@ -235,13 +298,45 @@
                     "label": "Bills",
                     "link": "/pages/purchase-management/purchase/bill",
                     "icon": "icon-purchase-management1",
-                    "description": "Purchase request, purchase bill, modify PO"
+                    "description": "Purchase request, purchase bill, modify PO",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "Bills",
+                    "link": "/pages/vouchers/preview/purchase/list",
+                    "icon": "icon-purchase-management1",
+                    "description": "Purchase request, purchase bill, modify PO",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "Bill Settings",
                     "link": "/pages/purchase-management/purchase/settings",
                     "icon": "icon-settings-cog",
-                    "description": "Bill settings"
+                    "description": "Bill settings",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "Bill Settings",
+                    "link": "/pages/vouchers/preview/purchase/settings",
+                    "icon": "icon-settings-cog",
+                    "description": "Bill settings",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "New Purchase Order",
@@ -303,7 +398,23 @@
                     "label": "Debit Note",
                     "link": "/pages/invoice/preview/debit note",
                     "icon": "icon-debit-note-new",
-                    "description": "Record debit note & update A/c"
+                    "description": "Record debit note & update A/c",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "Debit Note",
+                    "link": "/pages/vouchers/preview/debit-note/list",
+                    "icon": "icon-debit-note-new",
+                    "description": "Record debit note & update A/c",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "Payment",
