@@ -77,7 +77,23 @@
                     "label": "चालान",
                     "link": "/pages/invoice/preview/sales",
                     "icon": "icon-invoice-new",
-                    "description": "बहुमुद्रा, आवर्ती चालान, नकद चालान"
+                    "description": "बहुमुद्रा, आवर्ती चालान, नकद चालान",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "चालान",
+                    "link": "/pages/vouchers/preview/sales/list",
+                    "icon": "icon-invoice-new",
+                    "description": "बहुमुद्रा, आवर्ती चालान, नकद चालान",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "अनुमान (बीटा)",
@@ -139,13 +155,45 @@
                     "label": "क्रेडिट नोट",
                     "link": "/pages/invoice/preview/credit note",
                     "icon": "icon-credit-note-new",
-                    "description": "क्रेडिट नोट जेनरेट करें और खाता अपडेट करें"
+                    "description": "क्रेडिट नोट जेनरेट करें और खाता अपडेट करें",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "क्रेडिट नोट",
+                    "link": "/pages/vouchers/preview/credit-note/list",
+                    "icon": "icon-credit-note-new",
+                    "description": "क्रेडिट नोट जेनरेट करें और खाता अपडेट करें",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "चालान सेटिंग",
                     "link": "/pages/invoice/preview/settings/sales",
                     "icon": "icon-settings-cog",
-                    "description": "चालान सेटिंग"
+                    "description": "चालान सेटिंग",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "चालान सेटिंग",
+                    "link": "/pages/vouchers/preview/sales/settings",
+                    "icon": "icon-settings-cog",
+                    "description": "चालान सेटिंग",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "रसीद",
@@ -167,7 +215,22 @@
                     "link": "/pages/invoice/preview/templates/sales",
                     "icon": "icon-template",
                     "description": "टेम्पलेट का डिज़ाइन और सामग्री संपादित करें",
-                    "alwaysPresent": "True"
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "टेम्पलेट",
+                    "link": "/pages/vouchers/preview/sales/templates",
+                    "icon": "icon-template",
+                    "description": "टेम्पलेट का डिज़ाइन और सामग्री संपादित करें",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 }
             ]
         },
@@ -235,13 +298,45 @@
                     "label": "विधेयकों",
                     "link": "/pages/purchase-management/purchase/bill",
                     "icon": "icon-purchase-management1",
-                    "description": "खरीद अनुरोध, खरीद बिल, पीओ संशोधित करें"
+                    "description": "खरीद अनुरोध, खरीद बिल, पीओ संशोधित करें",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "विधेयकों",
+                    "link": "/pages/vouchers/preview/purchase/list",
+                    "icon": "icon-purchase-management1",
+                    "description": "खरीद अनुरोध, खरीद बिल, पीओ संशोधित करें",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "बिल सेटिंग",
                     "link": "/pages/purchase-management/purchase/settings",
                     "icon": "icon-settings-cog",
-                    "description": "बिल सेटिंग"
+                    "description": "बिल सेटिंग",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "बिल सेटिंग",
+                    "link": "/pages/vouchers/preview/purchase/settings",
+                    "icon": "icon-settings-cog",
+                    "description": "बिल सेटिंग",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "नया खरीद आदेश",
@@ -303,7 +398,23 @@
                     "label": "डेबिट नोट",
                     "link": "/pages/invoice/preview/debit note",
                     "icon": "icon-debit-note-new",
-                    "description": "डेबिट नोट रिकॉर्ड करें और खाता अपडेट करें"
+                    "description": "डेबिट नोट रिकॉर्ड करें और खाता अपडेट करें",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "डेबिट नोट",
+                    "link": "/pages/vouchers/preview/debit-note/list",
+                    "icon": "icon-debit-note-new",
+                    "description": "डेबिट नोट रिकॉर्ड करें और खाता अपडेट करें",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "भुगतान",
