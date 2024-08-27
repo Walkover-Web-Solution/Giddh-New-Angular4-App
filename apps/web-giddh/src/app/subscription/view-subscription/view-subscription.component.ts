@@ -197,8 +197,9 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Navigates to the page for purchasing a plan.
+     *  Navigates to the page for purchasing a plan.
      *
+     * @param {string} type
      * @memberof ViewSubscriptionComponent
      */
     public buyPlan(type: string): void {
