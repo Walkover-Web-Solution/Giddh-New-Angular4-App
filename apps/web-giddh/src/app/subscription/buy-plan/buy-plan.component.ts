@@ -1179,7 +1179,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         const reqObj = {
             planUniqueName: this.selectedPlan?.uniqueName,
             promoCode: this.firstStepForm?.get('promoCode')?.value,
-            duration: this.firstStepForm.get('duration').value
+            duration: this.firstStepForm.get('duration').value,
+            countryCode: this.isNewUserLoggedIn ? this.selectedPlan?.entityCode : this.subscriptionForm.value.secondStepForm.country?.value
         }
         if (this.selectedPlan?.uniqueName) {
             this.componentStore.getCalculationData(reqObj);

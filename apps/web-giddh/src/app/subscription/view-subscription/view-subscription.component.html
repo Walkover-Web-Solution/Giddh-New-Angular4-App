@@ -23,7 +23,7 @@
                                 aria-label="buy"
                                 mat-stroked-button
                                 color="primary"
-                                (click)="buyPlan()"
+                                (click)="buyPlan('trial')"
                                 *ngIf="
                                     viewSubscriptionData?.isOwner &&
                                     viewSubscriptionData?.status?.toLowerCase() === 'trial'
@@ -35,7 +35,7 @@
                                 aria-label="buy"
                                 mat-stroked-button
                                 color="primary"
-                                (click)="buyPlan(viewSubscriptionData)"
+                                (click)="buyPlan('renew')"
                                 *ngIf="
                                     viewSubscriptionData?.isOwner &&
                                     viewSubscriptionData?.status?.toLowerCase() === 'expired' &&
@@ -59,7 +59,7 @@
                             <button
                                 aria-label="plan"
                                 mat-menu-item
-                                (click)="buyPlan(viewSubscriptionData)"
+                                (click)="buyPlan('trial')"
                                 *ngIf="viewSubscriptionData?.status?.toLowerCase() === 'trial'"
                             >
                                 {{ commonLocaleData?.app_buy_plan }}
@@ -68,7 +68,7 @@
                             <button
                                 aria-label="plan"
                                 mat-menu-item
-                                (click)="buyPlan(viewSubscriptionData)"
+                                (click)="buyPlan('renew')"
                                 *ngIf="
                                     viewSubscriptionData?.status?.toLowerCase() === 'expired' &&
                                     viewSubscriptionData?.region?.code !== 'GBR' &&
