@@ -2148,7 +2148,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         return this.formBuilder.group({
             accountUniqueName: [''],
             amountForAccount: [''],
-            currencySymbol: [''], //temp
+            currencySymbol: [''], 
             type: ['DEBIT']
         })
     }
@@ -3097,11 +3097,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public deleteDepositRow(entryIndex: number): void {
         const deposits = this.invoiceForm.get('deposits') as FormArray;
-        deposits.removeAt(entryIndex);
-        if (!deposits?.length) {
-            this.addNewDepositRow();
+        if (deposits?.length === 1) {
+            deposits.reset();
+            this.calculateBalanceDue();
+            return;
         }
+        deposits.removeAt(entryIndex);
         this.calculateBalanceDue();
+        
     }
     /**
      * Removes line entry
@@ -3361,13 +3364,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {boolean} [isClear=false]
      * @memberof VoucherCreateComponent
      */
-    public selectedDepositAccount(event: any, isClear: boolean = false, index :any = 0): void {
+    public selectedDepositAccount(event: any, isClear: boolean = false, index :number = 0): void {
         let deposits = this.invoiceForm.get('deposits') as FormArray;
-        let depositCurrent = deposits.at(index) as FormGroup;
+        let currentDepositFormGroup = deposits.at(index) as FormGroup;
         if (isClear) {
-            depositCurrent.get("currencySymbol")?.patchValue("");
+            currentDepositFormGroup.get("currencySymbol")?.patchValue("");
         } else {
-            depositCurrent.get("currencySymbol")?.patchValue(event?.additional?.currency?.symbol);
+            currentDepositFormGroup.get("currencySymbol")?.patchValue(event?.additional?.currency?.symbol);
         }
     }
 
@@ -4284,7 +4287,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * Calculates balance due
-     *Ankit
+     *
      * @memberof VoucherCreateComponent
      */
     public calculateBalanceDue(): void {
@@ -4315,15 +4318,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 giddhRoundOff((((this.voucherTotals.grandTotal + this.voucherTotals.tcsTotal + this.voucherTotals.roundOff) - this.voucherTotals.tdsTotal) - Number(this.depositAmountBeforeUpdate) - this.totalAdvanceReceiptsAdjustedAmount), this.company?.giddhBalanceDecimalPlaces);
         }
     }
-
-    private getTotalDepositeValue(): any {
-        let totalDeposit: any = 0;
+    /**
+     * Gets vouchers list for credit/debit note
+     *
+     * @return {*} count all deposite value
+     * @memberof VoucherCreateComponent
+     */
+    private getTotalDepositeValue(): number {
+        let totalDeposit: number = 0;
         this.invoiceForm.get('deposits')['controls']?.forEach((control: any) => {
             if (control.get('amountForAccount').value) {
-                totalDeposit = totalDeposit + Number(control.get('amountForAccount').value);
+                totalDeposit += Number(control.get('amountForAccount').value);
             }
         });
-        return Number(totalDeposit);
+        return totalDeposit;
     }
 
     /**
