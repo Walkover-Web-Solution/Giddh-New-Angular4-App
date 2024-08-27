@@ -248,7 +248,7 @@
                                     <button
                                         *ngIf="element?.status?.toLowerCase() === 'trial' && element?.isOwner"
                                         mat-menu-item
-                                        (click)="buyPlan(element)"
+                                        (click)="buyPlan(element, 'trial')"
                                     >
                                         {{ commonLocaleData?.app_buy_plan }}
                                     </button>
@@ -325,7 +325,7 @@
                                             element?.isOwner &&
                                             element?.companies &&
                                             element?.companies?.length === 1 &&
-                                            element?.companyStatus === 'USER_ARCHIVED'
+                                            element?.archiveStatus === 'USER_ARCHIVED'
                                         "
                                         mat-menu-item
                                         (click)="archiveCompany(element, 'UNARCHIVED')"
@@ -338,7 +338,7 @@
                                             element?.isOwner &&
                                             element?.companies &&
                                             element?.companies?.length === 1 &&
-                                            element?.companyStatus === 'UNARCHIVED'
+                                            element?.archiveStatus === 'UNARCHIVED'
                                         "
                                         mat-menu-item
                                         (click)="archiveCompany(element, 'USER_ARCHIVED')"
