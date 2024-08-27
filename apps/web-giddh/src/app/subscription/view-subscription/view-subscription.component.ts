@@ -197,12 +197,25 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Navigates to the page for purchasing a plan.
+     *  Navigates to the page for purchasing a plan.
      *
+     * @param {string} type
      * @memberof ViewSubscriptionComponent
      */
-    public buyPlan(): void {
-        this.router.navigate([`/pages/user-details/subscription/buy-plan/` + this.subscriptionId]);
+    public buyPlan(type: string): void {
+        if (type === 'renew') {
+            this.router.navigate(
+                ['/pages/user-details/subscription/buy-plan/' + this.subscriptionId],
+                { queryParams: { renew: 'true' } }
+            );
+        } else if (type === 'trial') {
+            this.router.navigate(
+                ['/pages/user-details/subscription/buy-plan/' + this.subscriptionId],
+                { queryParams: { trial: 'true' } }
+            );
+        } else {
+            this.router.navigate(['/pages/user-details/subscription/buy-plan/' + this.subscriptionId]);
+        }
     }
 
     /**
@@ -211,7 +224,10 @@ export class ViewSubscriptionComponent implements OnInit, OnDestroy {
      * @memberof ViewSubscriptionComponent
      */
     public changePlan(): void {
-        this.router.navigate([`/pages/user-details/subscription/buy-plan/` + this.subscriptionId]);
+        this.router.navigate(
+            ['/pages/user-details/subscription/buy-plan/' + this.subscriptionId],
+            { queryParams: { renew: 'true' } }
+        );
     }
 
     /**

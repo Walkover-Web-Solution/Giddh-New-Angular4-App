@@ -147,37 +147,7 @@
                                                             *ngIf="firstStepForm.get('duration')?.value === 'YEARLY'"
                                                         >
                                                             <ng-container
-                                                                *ngIf="
-                                                                    plan?.yearlyAmount === 0 && !plan?.yearlyDiscount
-                                                                "
-                                                            >
-                                                                <span class="font-24 strong">{{
-                                                                    localeData?.free
-                                                                }}</span>
-                                                            </ng-container>
-                                                            <ng-container
-                                                                *ngIf="
-                                                                    (plan?.yearlyAmount === 0 &&
-                                                                        plan?.yearlyDiscount) ||
-                                                                    (plan?.yearlyAmount > 0 &&
-                                                                        plan?.yearlyDiscount &&
-                                                                        plan?.yearlyAmountAfterDiscount === 0)
-                                                                "
-                                                            >
-                                                                <span class="font-24 strong">
-                                                                    {{ localeData?.free_for }} <br />{{
-                                                                        plan?.yearlyDiscount?.duration
-                                                                    }}
-                                                                    {{
-                                                                        commonLocaleData?.app_duration?.year | lowercase
-                                                                    }}</span
-                                                                >
-                                                            </ng-container>
-                                                            <ng-container
-                                                                *ngIf="
-                                                                    (plan?.yearlyAmount > 0 || plan?.yearlyDiscount) &&
-                                                                    plan?.yearlyAmountAfterDiscount > 0
-                                                                "
+                                                                *ngIf="plan?.yearlyAmount > 0 || plan?.yearlyDiscount"
                                                             >
                                                                 <p
                                                                     *ngIf="plan?.yearlyDiscountAmount > 0"
@@ -213,6 +183,34 @@
                                                                         }}</span
                                                                     >
                                                                 </p>
+                                                            </ng-container>
+                                                            <ng-container
+                                                                *ngIf="
+                                                                    plan?.yearlyAmount === 0 && !plan?.yearlyDiscount
+                                                                "
+                                                            >
+                                                                <span class="font-24 strong">{{
+                                                                    localeData?.free
+                                                                }}</span>
+                                                            </ng-container>
+                                                            <ng-container
+                                                                *ngIf="
+                                                                    (plan?.yearlyAmount === 0 &&
+                                                                        plan?.yearlyDiscount) ||
+                                                                    (plan?.yearlyAmount > 0 &&
+                                                                        plan?.yearlyDiscount &&
+                                                                        plan?.yearlyAmountAfterDiscount === 0)
+                                                                "
+                                                            >
+                                                                <span class="font-24 strong">
+                                                                    {{ localeData?.free }}
+                                                                    {{ commonLocaleData?.app_to }} <br />{{
+                                                                        plan?.yearlyDiscount?.duration
+                                                                    }}
+                                                                    {{
+                                                                        commonLocaleData?.app_duration?.year | lowercase
+                                                                    }}</span
+                                                                >
                                                             </ng-container>
                                                             <p
                                                                 class="mb-3"
@@ -265,9 +263,8 @@
                                                                 "
                                                             >
                                                                 <span class="font-24 strong">
-                                                                    {{ localeData?.free_for }} <br />{{
-                                                                        plan?.monthlyDiscount?.duration
-                                                                    }}
+                                                                    {{ localeData?.free }} {{ commonLocaleData?.app_to
+                                                                    }}<br />{{ plan?.monthlyDiscount?.duration }}
                                                                     {{
                                                                         commonLocaleData?.app_duration?.month
                                                                             | lowercase
@@ -312,7 +309,7 @@
                                                             <p
                                                                 *ngIf="
                                                                     plan?.monthlyDiscountAmount > 0 &&
-                                                                    plan?.monthlyDiscountAmount > 0
+                                                                    plan?.monthlyAmountAfterDiscount > 0
                                                                 "
                                                             >
                                                                 <span class="strong">
@@ -862,24 +859,24 @@
                                 <div class="new-plan mt-4" *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY' && selectedPlan?.entityCode !== 'GBR'" >
                                     <mat-card class="outline-card">
                                         <mat-card-content>
-                                            <mat-radio-group 
-                                            class="d-flex flex-column" 
+                                            <mat-radio-group
+                                            class="d-flex flex-column"
                                             formControlName="razorpayAuthType"
                                         >
                                             <mat-radio-button
                                                 color="primary"
-                                                value="CARD"      
+                                                value="CARD"
                                                 >{{ localeData?.credit_debit_card }}</mat-radio-button
                                             >
                                             <mat-radio-button
-                                                color="primary"  
-                                                value="UPI" 
+                                                color="primary"
+                                                value="UPI"
                                                 >{{ localeData?.upi }}</mat-radio-button
                                             >
-                                            </mat-radio-group> 
+                                            </mat-radio-group>
                                         </mat-card-content>
                                     </mat-card>
-                                </div>    
+                                </div>
                             </div>
                             <ng-container *ngTemplateOutlet="planSummary"></ng-container>
                         </div>
@@ -943,7 +940,7 @@
                         </div>
                         <div
                             class="d-flex justify-content-between border-bottom py-3"
-                            *ngIf="selectedPlan?.discount?.amount?.amountForAccount > 0 || promoCodeResponse?.length"
+                            *ngIf="selectedPlan?.promoCode || selectedPlan?.discount?.amount?.amountForAccount > 0"
                         >
                             <p>
                                 <span class="strong">
@@ -951,11 +948,7 @@
                                 >
                             </p>
                             <amount-field
-                                [amount]="
-                                    promoCodeResponse?.length
-                                        ? promoCodeResponse[0]?.discountValue
-                                        : selectedPlan?.discount?.amount?.amountForAccount
-                                "
+                                [amount]="selectedPlan?.discount?.amount?.amountForAccount"
                                 [currencySymbol]="selectedPlan?.currency?.symbol"
                                 [currencyCode]="selectedPlan?.currency?.code"
                             >
@@ -982,16 +975,10 @@
                                     </amount-field>
                                 </span>
                             </div>
-                            <p
-                                class="text-right"
-                                *ngIf="selectedPlan?.taxTotal > 0 && !promoCodeResponse[0]?.discountValue"
-                            >
+                            <p class="text-right" *ngIf="selectedPlan?.taxTotal > 0 && !selectedPlan?.promoCode">
                                 {{ localeData?.including_tax }}
                             </p>
-                            <p
-                                class="text-right"
-                                *ngIf="selectedPlan?.taxTotal > 0 && promoCodeResponse[0]?.discountValue"
-                            >
+                            <p class="text-right" *ngIf="selectedPlan?.taxTotal > 0 && selectedPlan?.promoCode">
                                 {{ localeData?.including_tax }}
                             </p>
                         </div>
@@ -1008,9 +995,9 @@
                                         />
                                         <div matSuffix>
                                             <span
-                                                *ngIf="!promoCodeResponse[0]?.discountValue"
+                                                *ngIf="!selectedPlan?.promoCode"
                                                 [ngClass]="{
-                                                    'promocode-button': promoCodeResponse[0]?.discountValue
+                                                    'promocode-button': selectedPlan?.promoCode
                                                 }"
                                                 aria-label="promocode"
                                                 class="text-primary cursor-pointer d-block px-1 py-3"
@@ -1019,7 +1006,7 @@
                                                 {{ commonLocaleData?.app_apply }}
                                             </span>
                                             <span
-                                                *ngIf="promoCodeResponse[0]?.discountValue"
+                                                *ngIf="selectedPlan?.promoCode"
                                                 aria-label="Clear"
                                                 class="text-primary cursor-pointer d-block px-1 py-3"
                                                 (click)="applyPromoCode('remove')"

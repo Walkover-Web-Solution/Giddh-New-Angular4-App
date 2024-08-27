@@ -100,7 +100,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                 takeUntil(this.destroyed$)).subscribe(response => {
                     if (response) {
                         this.isLoading = false;
-                        let filteredData = response?.body?.results?.filter(result => (result?.status === 'ACTIVE' && result?.status === 'trial') && (result?.totalCompanies - result?.companyCount) > 0);
+                        let filteredData = response?.body?.results?.filter(result => (result?.status === 'ACTIVE' || result?.status === 'trial') && (result?.totalCompanies - result?.companyCount) > 0);
                         const mappedSubscriptionWise = filteredData?.map(subscription => ({
                             value: `${subscription.subscriptionId}`,
                             label: `${subscription.plan?.name} , ${subscription?.subscriptionId} (Left Companies : ${subscription?.totalCompanies - subscription?.companyCount})`,
@@ -302,7 +302,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                     this.isLoading = false;
                     this.searchSubscriptionRequest.loadMore = false;
                     if (response) {
-                        let filteredData = response?.body?.results?.filter(result => (result?.status === 'ACTIVE' && result?.status === 'trial') && (result?.totalCompanies - result?.companyCount) > 0);
+                        let filteredData = response?.body?.results?.filter(result => (result?.status === 'ACTIVE' || result?.status === 'trial') && (result?.totalCompanies - result?.companyCount) > 0);
                         if (loadMore) {
                             const nextPaginatedData = filteredData?.map(subscription => ({
                                 value: `${subscription.subscriptionId}`,
