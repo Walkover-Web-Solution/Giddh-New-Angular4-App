@@ -86,12 +86,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public createSubscriptionSuccess$ = this.componentStore.select(state => state.createSubscriptionSuccess);
     /** Holds Store Create Plan API succes state as observable*/
     public createSubscriptionResponse$ = this.componentStore.select(state => state.createSubscriptionResponse);
-    /** Holds Store Apply Promocode API in progress state as observable*/
-    public applyPromoCodeInProgress$ = this.componentStore.select(state => state.applyPromoCodeInProgress);
-    /** Holds Store Apply Promocode  API success state as observable*/
-    public applyPromoCodeSuccess$ = this.componentStore.select(state => state.applyPromoCodeSuccess);
-    /** Holds Store Apply Promocode API response state as observable*/
-    public promoCodeResponse$ = this.componentStore.select(state => state.promoCodeResponse);
     /** Holds Store Change plan API response state as observable*/
     public updatePlanSuccess$ = this.componentStore.select(state => state.updatePlanSuccess);
     /** Mobile number library instance */
@@ -435,12 +429,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             });
         }
 
-        this.applyPromoCodeSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.getPromoCodeData();
-            }
-        });
-
         this.firstStepForm?.get('promoCode').valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),
@@ -659,6 +647,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.firstStepForm.get('duration').setValue(event?.value);
             if (!this.subscriptionId) {
                 this.setPlans();
+            } else {
+                this.inputData = [];
+                const filteredPlans = this.firstStepForm.get('duration')?.value === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
+                filteredPlans?.forEach(plan => {
+                    this.inputData.push(plan);
+                });
             }
         }
     }
@@ -734,21 +728,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
     }
 
-    /**
-     * This will be use for get promocode data
-     *
-     * @memberof BuyPlanComponent
-     */
-    public getPromoCodeData(): void {
-        this.promoCodeResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.promoCodeResponse[0] = response;
-                this.finalPlanAmount = response?.finalAmount;
-            } else {
-                this.promoCodeResponse[0] = [];
-            }
-        });
-    }
 
     /**
      * This will be use for back to previous page
@@ -807,7 +786,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 }
                 this.firstStepForm.get('promoCode')?.setValue("");
             }
-            this.componentStore.applyPromocode(request);
+            this.setFinalAmount();
         }
     }
 
@@ -1187,8 +1166,16 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         }
         this.calculateData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                if (response?.promocode) {
+                    this.toasterService.showSnackBar('success', 'Apply Promo Code Successfully');
+                    this.promoCodeResponse[0] = response;
+                } else if (response?.promocode) {
+                    this.toasterService.showSnackBar('success', 'Remove Promo Code Successfully');
+                }
                 this.finalPlanAmount = response?.planAmountAfterTax ? (response?.planAmountAfterTax ?? 0) : (response?.planAmountBeforeTax ?? 0);
                 this.selectedPlan = { ...this.selectedPlan, ...response };
+            } else {
+                this.promoCodeResponse[0] = [];
             }
         });
         this.changeDetection.detectChanges();

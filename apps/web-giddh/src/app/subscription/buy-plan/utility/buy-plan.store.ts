@@ -18,9 +18,6 @@ export interface BuyPlanState {
     createSubscriptionInProgress: boolean;
     updatePlanSuccess: any;
     updatePlanInProgress: boolean;
-    applyPromoCodeSuccess: boolean;
-    applyPromoCodeInProgress: boolean;
-    promoCodeResponse: any;
     updateSubscriptionPaymentInProgress: boolean;
     updateSubscriptionPaymentIsSuccess: any;
     generateOrderBySubscriptionIdInProgress: boolean;
@@ -40,9 +37,6 @@ export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
     createSubscriptionSuccess: false,
     createSubscriptionResponse: null,
     createSubscriptionInProgress: false,
-    applyPromoCodeSuccess: false,
-    applyPromoCodeInProgress: false,
-    promoCodeResponse: null,
     updatePlanSuccess: null,
     updatePlanInProgress: false,
     updateSubscriptionPaymentInProgress: false,
@@ -189,51 +183,6 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
 
                             return this.patchState({
                                 updatePlanInProgress: false
-                            });
-                        }
-                    ),
-                    catchError((err) => EMPTY)
-                );
-            })
-        );
-    });
-
-
-    /**
-    * Apply Promocode
-    *
-    * @memberof BuyPlanComponentStore
-    */
-    readonly applyPromocode = this.effect((data: Observable<any>) => {
-        return data.pipe(
-            switchMap((req) => {
-                this.patchState({ applyPromoCodeInProgress: true });
-                return this.subscriptionService.applyPromoCode(req).pipe(
-                    tapResponse(
-                        (res: BaseResponse<any, any>) => {
-                            if (res?.status === 'success') {
-                                this.toasterService.showSnackBar('success', 'Apply Promo Code Successfully');
-                                return this.patchState({
-                                    applyPromoCodeInProgress: false,
-                                    promoCodeResponse: res?.body ?? null,
-                                    applyPromoCodeSuccess: true
-                                });
-                            } else {
-                                if (res.message) {
-                                    this.toasterService.showSnackBar('error', res.message);
-                                }
-                                return this.patchState({
-                                    applyPromoCodeInProgress: false,
-                                    applyPromoCodeSuccess: false,
-                                    promoCodeResponse: null,
-                                });
-                            }
-                        },
-                        (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
-
-                            return this.patchState({
-                                applyPromoCodeInProgress: false
                             });
                         }
                     ),

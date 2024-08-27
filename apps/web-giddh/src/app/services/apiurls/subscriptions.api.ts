@@ -10,7 +10,6 @@ export const SUBSCRIPTION_V2_API = {
     GET_COUNTRY_LIST: 'country/country-list',
     CREATE_SUBSCRIPTION: 'v2/subscription',
     UPDATE_SUBSCRIPTION: 'v2/subscription?company=:company',
-    APPLY_PROMOCODE: 'v2/subscription/promocode',
     GET_ALL_SUBSCRIPTIONS: 'v2/subscription/list?page=:page&count=:count',
     SUBSCRIPTION_BY_ID: 'v2/subscription/:subscriptionId',
     CANCEL_SUBSCRIPTION_BY_ID: 'v2/subscription/:subscriptionId/cancel',
