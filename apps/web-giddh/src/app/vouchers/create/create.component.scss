@@ -307,11 +307,8 @@
                         }
                     }
                 }
-                .depositsScroll{
-                    overflow-y: auto; 
-                    overflow-x: hidden;
-                    max-height: 185px;
-                    padding-top:5px;
+                .deposit-wrapper {
+                    max-height: 194px;
                 }
             }
 

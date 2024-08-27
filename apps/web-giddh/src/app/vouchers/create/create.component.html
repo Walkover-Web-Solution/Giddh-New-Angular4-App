@@ -1421,9 +1421,9 @@
                                                                 </mat-card-title>
                                                             </mat-card-header>
                                                             <mat-card-content>
-                                                                <div class="container px-0 depositsContainer" formArrayName="deposits" [ngClass]="{depositsScroll: isScrollable}">
+                                                                <div class="container px-0 pd-t05 deposit-wrapper overflow-x-hidden overflow-y-auto" formArrayName="deposits">
                                                                     <ng-container
-                                                                    *ngFor="let entry of invoiceForm?.get('deposits')['controls']; let depositIndex = index">
+                                                                    *ngFor="let deposit of invoiceForm?.get('deposits')['controls']; let depositIndex = index">
                                                                     <div class="row align-items-center mr-b15" [formGroupName]="depositIndex">
                                                                         <ng-container
                                                                           *ngIf="invoiceType.isCashInvoice || (currentVoucherFormDetails?.depositAllowed && !isUpdateMode)">
@@ -1433,7 +1433,7 @@
                                                                                     [placeholder]="commonLocaleData?.app_select_account"
                                                                                     [options]="briefAccounts$ | async"
                                                                                     (onClear)="selectedDepositAccount($event, true)"
-                                                                                    (selectedOption)="selectedDepositAccount($event)"
+                                                                                    (selectedOption)="selectedDepositAccount($event,false,depositIndex)"
                                                                                     [showCreateNew]="true"
                                                                                     [createNewText]="commonLocaleData?.app_create_new"
                                                                                     (createOption)="toggleAccountAsidePane(accountType.bank)"
@@ -1441,8 +1441,7 @@
                                                                                     formControlName="accountUniqueName">
                                                                                 </reactive-dropdown-field>
                                                                             </div>
-                                                                            <div class="col"
-                                                                                *ngIf="!invoiceType.isCashInvoice">
+                                                                            <div class="col">
                                                                                 <input-field 
                                                                                     [name]="'amountForAccount_'+ depositIndex"
                                                                                     [label]="commonLocaleData?.app_amount"
@@ -1454,8 +1453,8 @@
                                                                                 </input-field>
                                                                             </div>
                                                                         </ng-container>
-                                                                        <div class="col">
-                                                                            <div class="d-flex">
+                                                                        <div class="col px-0">
+                                                                            <div class="d-flex align-items-center">
                                                                                 <div
                                                                                     class="d-flex align-items-center column-gap1" *ngIf="(invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote || invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice) && (vouchersForAdjustment?.length || isAdjustAmount)">
                                                                                     <span>{{ localeData?.adjust_amount
@@ -1479,15 +1478,15 @@
                                                                                     <i (click)="openAdjustmentDialog(true)"
                                                                                         class="icon-edit text-blue font-12"></i>
                                                                                 </div>
-                                                                                    <i class="icon-trash text-blue font-16 delete-btn cursor-pointer mr-l1"
-                                                                                       (click)="deleteLineDeposit(depositIndex)"></i>
+                                                                                    <i class="icon-trash font-16 cursor-pointer mr-l1"
+                                                                                       (click)="deleteDepositRow(depositIndex)"></i>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                     </ng-container>
                                                                 </div>
                                                                 <div class="text-blue mt-2 px-0">
-                                                                    <span class="cursor-pointer" (click)="addNewLineDeposit()">{{ localeData?.add_new_line
+                                                                    <span class="cursor-pointer" (click)="addNewDepositRow()">{{ localeData?.add_new_line
                                                                     }}</span>
                                                                 </div>
                                                             </mat-card-content>
@@ -1725,7 +1724,7 @@
                                                     </td>
                                                 </tr>
                                                 <ng-container
-                                                    *ngIf="!invoiceType.isPurchaseOrder  && !invoiceType.isCashInvoice && !invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
+                                                    *ngIf="!invoiceType.isPurchaseOrder && !invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
                                                     <tr>
                                                         <td>
                                                             {{ invoiceType.isProformaInvoice ||
