@@ -407,8 +407,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public depositAccountName: string = '';
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
-    /** True if Deposit Scroll */
-    public isScrollable: boolean = false;
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
      * need to apply max characters limit on Notes/notes2/messsage2
@@ -518,8 +516,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private settingsTaxesAction: SettingsTaxesActions,
         private proformaService: ProformaService,
         private settingsProfileActions: SettingsProfileActions,
-        private titleCasePipe: TitleCasePipe,
-        private element :ElementRef
+        private titleCasePipe: TitleCasePipe
     ) {
 
     }
@@ -1000,15 +997,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.componentStore.resetAttachmentState();
             }
         });
-
-        /** Deposit amount change */
-        this.invoiceForm.controls['deposits']?.valueChanges.pipe(
-            debounceTime(100),
-            distinctUntilChanged(),
-            takeUntil(this.destroyed$),
-        ).subscribe(response => {
-            this.calculateBalanceDue();
-            });
 
         this.invoiceForm.get("exchangeRate")?.valueChanges.pipe(debounceTime(100), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(response => {
             this.calculateVoucherTotals();
@@ -3078,11 +3066,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
     
     /**
-     * Adds new line deposit
+     * Add new deposit row
      *
      * @memberof VoucherCreateComponent
      */
-    public addNewLineDeposit(setActiveIndex: boolean = true): void {
+    public addNewDepositRow(): void {
         const deposits = this.invoiceForm.get('deposits') as FormArray;
         deposits.push(this.getDepositFormGroup());
     }
@@ -3102,18 +3090,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
     }
     /**
-     * Removes line deposit
+     * Remove deposit row
      *
      * @param {number} entryIndex
      * @memberof VoucherCreateComponent
      */
-    public deleteLineDeposit(entryIndex: number): void {
+    public deleteDepositRow(entryIndex: number): void {
         const deposits = this.invoiceForm.get('deposits') as FormArray;
         deposits.removeAt(entryIndex);
         if (!deposits?.length) {
-            this.addNewLineDeposit();
+            this.addNewDepositRow();
         }
-        this.getTotalDepositeValue();
+        this.calculateBalanceDue();
     }
     /**
      * Removes line entry
@@ -3373,11 +3361,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {boolean} [isClear=false]
      * @memberof VoucherCreateComponent
      */
-    public selectedDepositAccount(event: any, isClear: boolean = false): void {
+    public selectedDepositAccount(event: any, isClear: boolean = false, index :any = 0): void {
+        let deposits = this.invoiceForm.get('deposits') as FormArray;
+        let depositCurrent = deposits.at(index) as FormGroup;
         if (isClear) {
-            this.invoiceForm.get("deposit.currencySymbol")?.patchValue("");
+            depositCurrent.get("currencySymbol")?.patchValue("");
         } else {
-            this.invoiceForm.get("deposit.currencySymbol")?.patchValue(event?.additional?.currency?.symbol);
+            depositCurrent.get("currencySymbol")?.patchValue(event?.additional?.currency?.symbol);
         }
     }
 
@@ -3613,20 +3603,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
         return entries;
     }
-        /**
-     * Returns voucher entries
+    /**
+     * Returns voucher deposits
      *
      * @return {*}  {any[]}
      * @memberof VoucherCreateComponent
      */
         public getDeposits(): any[] {
-            const deposit = [];
-             this.invoiceForm.get('deposits')['controls']?.forEach(control => {
-            if(control.get("accountUniqueName").value && control.get("amountForAccount").value)
-             deposit.push(control.value);
+            const deposits = [];
+            this.invoiceForm.get('deposits')['controls']?.forEach(control => {
+            if (control.get("accountUniqueName").value && control.get("amountForAccount").value) {
+                deposits.push(control.value);
+            }
         });
-        console.log("control",deposit);
-        return deposit;
+        return deposits;
         }
 
     /**
@@ -4032,7 +4022,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.addNewLineEntry(false);
-        this.addNewLineDeposit(false);
+        this.addNewDepositRow();
 
         this.voucherTotals = {
             totalAmount: 0,
@@ -4294,13 +4284,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * Calculates balance due
-     *
+     *Ankit
      * @memberof VoucherCreateComponent
      */
     public calculateBalanceDue(): void {
         let depositAmount = this.getTotalDepositeValue();
         if (this.isMultiCurrencyVoucher) {
-            if (this.invoiceForm.get("deposit.currencySymbol")?.value === this.account.baseCurrencySymbol) {
+            const deposits = this.invoiceForm.get('deposits') as FormArray;
+            if (deposits.at(0).get('currencySymbol')?.value === this.account.baseCurrencySymbol) {
                 depositAmount = depositAmount * this.invoiceForm.get('exchangeRate')?.value;
             }
             depositAmount = depositAmount / this.invoiceForm.get('exchangeRate')?.value || 0;
@@ -4323,11 +4314,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.voucherTotals.balanceDue =
                 giddhRoundOff((((this.voucherTotals.grandTotal + this.voucherTotals.tcsTotal + this.voucherTotals.roundOff) - this.voucherTotals.tdsTotal) - Number(this.depositAmountBeforeUpdate) - this.totalAdvanceReceiptsAdjustedAmount), this.company?.giddhBalanceDecimalPlaces);
         }
-    }
-    ngAfterViewChecked() {
-        const container = this.element.nativeElement.querySelector('.depositsContainer');
-        if(container)
-        this.isScrollable = container.scrollHeight > 211;
     }
 
     private getTotalDepositeValue(): any {
