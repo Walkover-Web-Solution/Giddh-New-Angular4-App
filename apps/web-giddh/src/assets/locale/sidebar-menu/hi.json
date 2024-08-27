@@ -47,7 +47,7 @@
                 },
                 {
                     "label": "क्रेडिट नोट",
-                    "link": "/pages/invoice/preview/credit note",
+                    "link": "/pages/vouchers/preview/credit-note/list",
                     "icon": "icon-credit-note-new",
                     "description": "क्रेडिट नोट जेनरेट करें और खाता अपडेट करें",
                     "additional": {
@@ -77,7 +77,7 @@
                 },
                 {
                     "label": "चालान",
-                    "link": "/pages/invoice/preview/sales",
+                    "link": "/pages/vouchers/preview/sales/list",
                     "icon": "icon-invoice-new",
                     "description": "बहुमुद्रा, आवर्ती चालान, नकद चालान",
                     "additional": {
@@ -94,7 +94,23 @@
                     "label": "चालान सेटिंग",
                     "link": "/pages/invoice/preview/settings/sales",
                     "icon": "icon-settings-cog",
-                    "description": "चालान सेटिंग"
+                    "description": "चालान सेटिंग",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "चालान सेटिंग",
+                    "link": "/pages/vouchers/preview/sales/settings",
+                    "icon": "icon-settings-cog",
+                    "description": "चालान सेटिंग",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "रसीद",
@@ -123,7 +139,22 @@
                     "link": "/pages/invoice/preview/templates/sales",
                     "icon": "icon-template",
                     "description": "टेम्पलेट का डिज़ाइन और सामग्री संपादित करें",
-                    "alwaysPresent": "True"
+                    "additional": {
+                            "queryParams": {
+                                "voucherVersion": 1
+                            }
+                        }
+                },
+                {
+                    "label": "टेम्पलेट",
+                    "link": "/pages/vouchers/preview/sales/templates",
+                    "icon": "icon-template",
+                    "description": "टेम्पलेट का डिज़ाइन और सामग्री संपादित करें",
+                    "additional": {
+                            "queryParams": {
+                                "voucherVersion": 2
+                            }
+                        }
                 }
             ]
         },
@@ -148,7 +179,7 @@
                 },
                 {
                     "label": "बिल",
-                    "link": "/pages/purchase-management/purchase/bill",
+                    "link": "/pages/vouchers/preview/purchase/list",
                     "icon": "icon-invoice-new",
                     "description": "खरीद अनुरोध, खरीद बिल, पीओ संशोधित करें",
                     "additional": {
@@ -165,7 +196,23 @@
                     "label": "बिल सेटिंग",
                     "link": "/pages/purchase-management/purchase/settings",
                     "icon": "icon-invoice-new",
-                    "description": "बिल सेटिंग"
+                    "description": "बिल सेटिंग",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 1
+                        }
+                    }
+                },
+                {
+                    "label": "बिल सेटिंग",
+                    "link": "/pages/vouchers/preview/purchase/settings",
+                    "icon": "icon-invoice-new",
+                    "description": "बिल सेटिंग",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2
+                        }
+                    }
                 },
                 {
                     "label": "डेबिट नोट",
@@ -184,7 +231,7 @@
                 },
                 {
                     "label": "डेबिट नोट",
-                    "link": "/pages/invoice/preview/debit note",
+                    "link": "/pages/vouchers/preview/debit-note/list",
                     "icon": "icon-debit-note-new",
                     "description": "डेबिट नोट रिकॉर्ड करें और खाता अपडेट करें",
                     "additional": {
@@ -229,7 +276,7 @@
                 },
                 {
                     "label": "खरीद आदेश",
-                    "link": "/pages/purchase-management/purchase/order",
+                    "link": "/pages/vouchers/preview/purchase-order/list",
                     "icon": "icon-purchase-order",
                     "description": "खरीद अनुरोध, खरीद बिल, पीओ संशोधित करें",
                     "additional": {

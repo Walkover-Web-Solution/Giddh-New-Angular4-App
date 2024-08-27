@@ -4,7 +4,6 @@ import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digits
 import { EWayBillCreateComponent } from './eWayBill/create/eWayBill.create.component';
 import { EWayBillComponent } from './eWayBill/eWayBill/eWayBill.component';
 import { EWayBillCredentialsComponent } from './eWayBill/eWayBillcredentialsModal/eWayBillCredentials.component';
-import { InvoiceGenerateComponent } from './generate/invoice.generate.component';
 import { InvoiceComponent } from './invoice.component';
 import { InvoiceRendererComponent } from './invoice.renderer.component';
 import { InvoicePreviewComponent } from './preview/invoice.preview.component';
@@ -17,12 +16,6 @@ import { InvoicePreviewDetailsComponent } from './preview/models/invoice-preview
 import { InvoicePaymentModelComponent } from './preview/models/invoicePayment/invoice.payment.model.component';
 import { ProformaListComponent } from './proforma/proforma-list.component';
 import { RecurringComponent } from './recurring/recurring.component';
-import { InvoiceSettingComponent } from './settings/invoice.settings.component';
-import { EditInvoiceComponent } from './templates/edit-template/edit.invoice.component';
-import { DesignFiltersContainerComponent } from './templates/edit-template/filters-container/design-filters/design.filters.component';
-import { EditFiltersContainersComponent } from './templates/edit-template/filters-container/edit.filters.component';
-import { InvoiceTemplateModalComponent } from './templates/edit-template/modals/template-modal/template-modal.component';
-import { InvoiceTemplatePreviewModelComponent } from './templates/edit-template/modals/template-preview-modal/template-preview.modal.component';
 import { WebviewDirective } from './webview.directive';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -68,7 +61,6 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { SalesShSelectModule } from '../theme/sales-ng-virtual-select/sh-select.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
-import { DeleteTemplateConfirmationModalModule } from './templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { VoucherModule } from '../voucher/voucher.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -80,20 +72,16 @@ import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-expo
 import { MatDividerModule } from '@angular/material/divider';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 import { GenerateEWayBillModule } from './preview/models/generateEWayBill/generateEWayBill.module';
+import { InvoiceSettingModule } from './settings/invoice-setting.module';
+import { InvoiceGenerateModule } from './generate/invoice-generate.module';
+import { DeleteTemplateConfirmationModalModule } from './templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
 
 @NgModule({
     declarations: [
         InvoiceComponent,
         InvoicePreviewComponent,
-        InvoiceGenerateComponent,
-        EditInvoiceComponent,
-        DesignFiltersContainerComponent,
-        EditFiltersContainersComponent,
-        InvoiceSettingComponent,
         InvoicePaymentModelComponent,
         DownloadOrSendInvoiceOnMailComponent,
-        InvoiceTemplateModalComponent,
-        InvoiceTemplatePreviewModelComponent,
         EsignModalComponent,
         RecurringComponent,
         WebviewDirective,
@@ -164,13 +152,15 @@ import { GenerateEWayBillModule } from './preview/models/generateEWayBill/genera
         BsDatepickerModule.forRoot(),
         GiddhPageLoaderModule,
         DatepickerWrapperModule,
-        DeleteTemplateConfirmationModalModule,
         MatDialogModule,
         WatchVideoModule,
         MatTabsModule,
         BulkExportVoucherModule,
         FroalaTemplateEditorModule,
-        GenerateEWayBillModule
+        GenerateEWayBillModule,
+        InvoiceSettingModule,
+        InvoiceGenerateModule,
+        DeleteTemplateConfirmationModalModule
     ],
     exports: [
         InvoiceRoutingModule,
