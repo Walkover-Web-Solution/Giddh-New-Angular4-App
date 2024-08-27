@@ -1440,65 +1440,65 @@
                                                                 <div class="container px-0 pd-t05 deposit-wrapper overflow-x-hidden overflow-y-auto" formArrayName="deposits">
                                                                     <ng-container
                                                                     *ngFor="let deposit of invoiceForm?.get('deposits')['controls']; let depositIndex = index">
-                                                                    <div class="row align-items-center mr-b15" [formGroupName]="depositIndex">
-                                                                        <ng-container
-                                                                          *ngIf="invoiceType.isCashInvoice || (currentVoucherFormDetails?.depositAllowed && !isUpdateMode)">
-                                                                            <div class="col">
-                                                                                <reactive-dropdown-field
-                                                                                    [label]="commonLocaleData?.app_account"
-                                                                                    [placeholder]="commonLocaleData?.app_select_account"
-                                                                                    [options]="briefAccounts$ | async"
-                                                                                    (onClear)="selectedDepositAccount($event, true)"
-                                                                                    (selectedOption)="selectedDepositAccount($event,false,depositIndex)"
-                                                                                    [showCreateNew]="true"
-                                                                                    [createNewText]="commonLocaleData?.app_create_new"
-                                                                                    (createOption)="toggleAccountAsidePane(accountType.bank)"
-                                                                                    [labelValue]="invoiceType.isCashInvoice ? depositAccountName : ''"
-                                                                                    formControlName="accountUniqueName">
-                                                                                </reactive-dropdown-field>
-                                                                            </div>
-                                                                            <div class="col">
-                                                                                <input-field 
-                                                                                    [name]="'amountForAccount_'+ depositIndex"
-                                                                                    [label]="commonLocaleData?.app_amount"
-                                                                                    [placeholder]="localeData?.enter_deposit_amount"
-                                                                                    [type]="'number'"
-                                                                                    (input)="$event && calculateBalanceDue()"
-                                                                                    formControlName="amountForAccount"
-                                                                                >
-                                                                                </input-field>
-                                                                            </div>
-                                                                        </ng-container>
-                                                                        <div class="col px-0">
-                                                                            <div class="d-flex align-items-center">
-                                                                                <div
-                                                                                    class="d-flex align-items-center column-gap1" *ngIf="(invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote || invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice) && (vouchersForAdjustment?.length || isAdjustAmount)">
-                                                                                    <span>{{ localeData?.adjust_amount
-                                                                                        }}</span>
-                                                                                    <span class="text-gray">
-                                                                                        <amount-field [amount]="
-                                                                                                adjustPaymentData.totalAdjustedAmount
-                                                                                                    | replace
-                                                                                                        : '-'
-                                                                                                        : ''
-                                                                                            " [currencySymbol]="
-                                                                                                isMulticurrencyAccount
-                                                                                                    ? account?.baseCurrencySymbol
-                                                                                                    : false
-                                                                                            " [currencyCode]="
-                                                                                                isMulticurrencyAccount
-                                                                                                    ? account?.baseCurrency
-                                                                                                    : false
-                                                                                            "></amount-field>
-                                                                                    </span>
-                                                                                    <i (click)="openAdjustmentDialog(true)"
-                                                                                        class="icon-edit text-blue font-12"></i>
+                                                                        <div class="row align-items-center mr-b15" [formGroupName]="depositIndex">
+                                                                            <ng-container
+                                                                            *ngIf="invoiceType.isCashInvoice || (currentVoucherFormDetails?.depositAllowed && !isUpdateMode)">
+                                                                                <div class="col">
+                                                                                    <reactive-dropdown-field
+                                                                                        [label]="commonLocaleData?.app_account"
+                                                                                        [placeholder]="commonLocaleData?.app_select_account"
+                                                                                        [options]="briefAccounts$ | async"
+                                                                                        (onClear)="selectedDepositAccount($event, true)"
+                                                                                        (selectedOption)="selectedDepositAccount($event,false,depositIndex)"
+                                                                                        [showCreateNew]="true"
+                                                                                        [createNewText]="commonLocaleData?.app_create_new"
+                                                                                        (createOption)="toggleAccountAsidePane(accountType.bank)"
+                                                                                        [labelValue]="invoiceType.isCashInvoice ? depositAccountName : ''"
+                                                                                        formControlName="accountUniqueName">
+                                                                                    </reactive-dropdown-field>
                                                                                 </div>
-                                                                                    <i class="icon-trash font-16 cursor-pointer mr-l1"
-                                                                                       (click)="deleteDepositRow(depositIndex)"></i>
+                                                                                <div class="col">
+                                                                                    <input-field 
+                                                                                        [name]="'amountForAccount_'+ depositIndex"
+                                                                                        [label]="commonLocaleData?.app_amount"
+                                                                                        [placeholder]="localeData?.enter_deposit_amount"
+                                                                                        [type]="'number'"
+                                                                                        (input)="$event && calculateBalanceDue()"
+                                                                                        formControlName="amountForAccount"
+                                                                                    >
+                                                                                    </input-field>
+                                                                                </div>
+                                                                            </ng-container>
+                                                                            <div class="col px-0">
+                                                                                <div class="d-flex align-items-center">
+                                                                                    <div
+                                                                                        class="d-flex align-items-center column-gap1" *ngIf="(invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote || invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice) && (vouchersForAdjustment?.length || isAdjustAmount)">
+                                                                                        <span>{{ localeData?.adjust_amount
+                                                                                            }}</span>
+                                                                                        <span class="text-gray">
+                                                                                            <amount-field [amount]="
+                                                                                                    adjustPaymentData.totalAdjustedAmount
+                                                                                                        | replace
+                                                                                                            : '-'
+                                                                                                            : ''
+                                                                                                " [currencySymbol]="
+                                                                                                    isMulticurrencyAccount
+                                                                                                        ? account?.baseCurrencySymbol
+                                                                                                        : false
+                                                                                                " [currencyCode]="
+                                                                                                    isMulticurrencyAccount
+                                                                                                        ? account?.baseCurrency
+                                                                                                        : false
+                                                                                                "></amount-field>
+                                                                                        </span>
+                                                                                        <i (click)="openAdjustmentDialog(true)"
+                                                                                            class="icon-edit text-blue font-12"></i>
+                                                                                    </div>
+                                                                                        <i class="icon-trash font-16 cursor-pointer mr-l1"
+                                                                                        (click)="deleteDepositRow(depositIndex)"></i>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
-                                                                    </div>
                                                                     </ng-container>
                                                                 </div>
                                                                 <div class="text-blue mt-2 px-0">
