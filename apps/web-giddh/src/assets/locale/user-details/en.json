@@ -48,7 +48,8 @@
         "signin_time": "Signin Time",
         "duration": "Duration (DD/HH/MM/SS)",
         "browser_agent": "Browser Agent",
-        "current": "Current"
+        "current": "Current",
+        "delete_all_session": "Are you sure you want to delete all the sessions,all the"
     },
     "subscription": {
         "tab_heading": "Subscription",
