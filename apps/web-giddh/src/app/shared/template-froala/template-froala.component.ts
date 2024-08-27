@@ -38,9 +38,9 @@ export class TemplateFroalaComponent implements OnInit {
     /* Instance of subject field tribute */
     public subjectTribute: any;
     /* True if show cc */
-    public showCc: boolean = false;
+    public showCc: boolean = true;
     /* True if show bcc */
-    public showBcc: boolean = false;
+    public showBcc: boolean = true;
     /* Hold froala editor options */
     public froalaOptions = {
         key: FROALA_EDITOR_KEY,
@@ -94,6 +94,15 @@ export class TemplateFroalaComponent implements OnInit {
                     true
                 );
             },
+            contentChanged: () => { // Handles regular content changes
+                this.updateFormControl();
+            },
+            blur: () => { // Handles changes made in the code view when focus is lost
+                this.updateFormControl();
+            },
+            'codeView.update': () => { // Handles updates while in code view
+                this.updateFormControl();
+            }
         }
     };
     /* Hold froala editor instance */
@@ -154,6 +163,12 @@ export class TemplateFroalaComponent implements OnInit {
 
         this.emailTemplates$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                if (response?.bcc?.length) {
+                    this.showBcc = true;
+                }
+                if (response?.cc?.length) {
+                    this.showCc = true;
+                }
                 this.selectedToEmails = response.to;
                 this.selectedBccEmails = response.bcc;
                 this.selectedCcEmails = response.cc;
@@ -166,6 +181,17 @@ export class TemplateFroalaComponent implements OnInit {
                 this.dialog.closeAll();
             }
         });
+    }
+
+    /**
+     * This will update the html form control with the froala html
+     *
+     * @private
+     * @memberof TemplateFroalaComponent
+     */
+    private updateFormControl(): void {
+        const htmlContent = this.froalaEditor.html.get();
+        this.emailForm.get('html')?.patchValue(htmlContent);
     }
 
     /**
@@ -191,14 +217,14 @@ export class TemplateFroalaComponent implements OnInit {
         this.froalaTribute = new Tribute({
             values: tributeSuggestions,
             selectTemplate: function (item) {
-                return `<span class="fr-deletable fr-froalaTribute">##${item.original.value}##</span>`;
+                return `<span class="fr-deletable fr-froalaTribute">@${item.original.value}@</span>`;
             }
         });
 
         this.subjectTribute = new Tribute({
             values: tributeSuggestions,
             selectTemplate: function (item) {
-                return `##${item.original.value}##`;
+                return `@${item.original.value}@`;
             }
         });
 

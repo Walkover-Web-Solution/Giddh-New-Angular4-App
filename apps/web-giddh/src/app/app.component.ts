@@ -205,19 +205,23 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this._generalService.addLinkTag("./assets/css/code-mirror.css");
 
         /* Codemirror */
-        let codeMirrorScriptTag = document.createElement('script');
-        codeMirrorScriptTag.src = './assets/js/codemirror.min.js';
-        codeMirrorScriptTag.type = 'text/javascript';
-        codeMirrorScriptTag.defer = true;
-        document.body.appendChild(codeMirrorScriptTag);
+        if (window['CodeMirror'] === undefined) {
+            let codeMirrorScriptTag = document.createElement('script');
+            codeMirrorScriptTag.src = './assets/js/codemirror.min.js';
+            codeMirrorScriptTag.type = 'text/javascript';
+            codeMirrorScriptTag.defer = true;
+            document.body.appendChild(codeMirrorScriptTag);
+        }
         /* Codemirror */
 
         /* Xml */
-        let xmlScriptTag = document.createElement('script');
-        xmlScriptTag.src = './assets/js/xml.min.js';
-        xmlScriptTag.type = 'text/javascript';
-        xmlScriptTag.defer = true;
-        document.body.appendChild(xmlScriptTag);
+        if (window['xmlScriptTag'] === undefined) {
+            let xmlScriptTag = document.createElement('script');
+            xmlScriptTag.src = './assets/js/xml.min.js';
+            xmlScriptTag.type = 'text/javascript';
+            xmlScriptTag.defer = true;
+            document.body.appendChild(xmlScriptTag);
+        }
         /* Xml */
 
         // if (this._generalService.getUrlParameter("region") === "uk") {
