@@ -200,6 +200,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public razorpaySuccess$ = this.componentStore.select((state) => state.razorpaySuccess);
     /** True if user trial  plan */
     public isTrialPlan: boolean = false;
+    /** Hold calculation amount response*/
+    public calculationResponse: any;
 
     constructor(
         public dialog: MatDialog,
@@ -1179,15 +1181,30 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.componentStore.getCalculationData(reqObj);
         }
         this.calculateData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                if (response?.promocode) {
-                    this.toasterService.showSnackBar('success', 'Apply Promo Code Successfully');
+            if (Object.keys(response)?.length) {
+                this.calculationResponse = response;
+                if (response?.promoCode) {
+                    this.toasterService.showSnackBar('success', this.localeData?.promoCode_message);
                     this.promoCodeResponse[0] = response;
+                    this.firstStepForm?.get('promoCode')?.patchValue(response?.promoCode);
+                } else {
+                    this.promoCodeResponse[0] = [];
+                    this.firstStepForm?.get('promoCode')?.patchValue(null);
                 }
                 this.finalPlanAmount = response?.planAmountAfterTax ? (response?.planAmountAfterTax ?? 0) : (response?.planAmountBeforeTax ?? 0);
-                this.selectedPlan = { ...this.selectedPlan, ...response };
+                this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                    if (result) {
+                        this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
+                        this.selectedPlan = { ...this.selectedPlan, ...response };
+                    }
+                });
             } else {
-                this.promoCodeResponse[0] = [];
+                this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                    if (result) {
+                        this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
+                        this.selectedPlan = { ...this.selectedPlan, ...this.calculationResponse };
+                    }
+                });
             }
         });
         this.changeDetection.detectChanges();

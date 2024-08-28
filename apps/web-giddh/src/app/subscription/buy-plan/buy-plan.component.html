@@ -856,23 +856,25 @@
                                         </mat-card-content>
                                     </mat-card>
                                 </div>
-                                <div class="new-plan mt-4" *ngIf="firstStepForm.get('duration')?.value === 'MONTHLY' && selectedPlan?.entityCode !== 'GBR'" >
+                                <div
+                                    class="new-plan mt-4"
+                                    *ngIf="
+                                        firstStepForm.get('duration')?.value === 'MONTHLY' &&
+                                        selectedPlan?.entityCode !== 'GBR'
+                                    "
+                                >
                                     <mat-card class="outline-card">
                                         <mat-card-content>
                                             <mat-radio-group
                                                 class="d-flex flex-column"
                                                 formControlName="razorpayAuthType"
                                             >
-                                            <mat-radio-button
-                                                color="primary"
-                                                value="CARD"
-                                                >{{ localeData?.credit_debit_card }}</mat-radio-button
-                                            >
-                                            <mat-radio-button
-                                                color="primary"
-                                                value="UPI"
-                                                >{{ localeData?.upi }}</mat-radio-button
-                                            >
+                                                <mat-radio-button color="primary" value="CARD">{{
+                                                    localeData?.credit_debit_card
+                                                }}</mat-radio-button>
+                                                <mat-radio-button color="primary" value="UPI">{{
+                                                    localeData?.upi
+                                                }}</mat-radio-button>
                                             </mat-radio-group>
                                         </mat-card-content>
                                     </mat-card>
@@ -975,10 +977,7 @@
                                     </amount-field>
                                 </span>
                             </div>
-                            <p class="text-right" *ngIf="selectedPlan?.taxTotal > 0 && !selectedPlan?.promoCode">
-                                {{ localeData?.including_tax }}
-                            </p>
-                            <p class="text-right" *ngIf="selectedPlan?.taxTotal > 0 && selectedPlan?.promoCode">
+                            <p class="text-right" *ngIf="selectedPlan?.taxTotal >= 0">
                                 {{ localeData?.including_tax }}
                             </p>
                         </div>
