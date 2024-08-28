@@ -49,6 +49,7 @@ export const ROUTES: Routes = [
     { path: 'reports', redirectTo: 'pages/reports', pathMatch: 'full' },
     { path: 'subscription', redirectTo: 'pages/subscription', pathMatch: 'full' },
     { path: 'mobile-home', redirectTo: 'pages/mobile-home', pathMatch: 'full' },
+    { path: 'group-name', redirectTo: 'pages/group-name', pathMatch: 'full' },
     { path: 'mobile-restricted', component: MobileRestrictedComponent },
     {
         path: 'pages', component: PageComponent,
@@ -100,7 +101,12 @@ export const ROUTES: Routes = [
             { path: 'subscription/buy-plan', loadChildren: () => import('./subscription/subscription.module').then(module => module.SubscriptionModule) },
             { path: 'auth-hmrc', loadChildren: () => import('./auth-hmrc/auth-hmrc.module').then(module => module.AuthHMRCModule), canActivate: [NeedsAuthorization] },
             { path: 'vouchers', loadChildren: () => import('./vouchers/vouchers.module').then(module => module.VouchersModule), canActivate: [NeedsAuthorization] },
-            { path: '**', redirectTo: 'home', pathMatch: 'full' }
+            {
+                path: 'group-name',
+                loadChildren: () => import('./group-name/group-name.module').then(module => module.GroupNameModule),
+                canActivate: [NeedsAuthorization]
+            },
+            { path: '**', redirectTo: 'home', pathMatch: 'full' },
         ]
     },
     { path: '**', pathMatch: 'full', redirectTo: 'pages/home' },

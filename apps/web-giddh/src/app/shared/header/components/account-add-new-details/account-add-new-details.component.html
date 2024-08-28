@@ -123,6 +123,9 @@
                                 {{ commonLocaleData?.app_cr?.toUpperCase() }}
                             </div>
                         </div>
+                        <div class="d-flex justify-content-end">
+                            <a href="javascript:;" (click)="openBulkAddDialog()" class="font-14">Bulk Add</a>
+                        </div>
                     </div>
                     <div
                         class="form-group col-xs-12 col-sm-4"
@@ -927,3 +930,126 @@
         </tabset>
     </form>
 </ng-container>
+
+<ng-template #bulkAddDialog>
+    <div class="modal-header d-flex align-items-center activity-header">
+        <h3 mat-dialog-title>Bulk Add</h3>
+        <button aria-hidden="true" class="close" mat-dialog-close>×</button>
+    </div>
+    <mat-dialog-content class="w-100 right-dialog-height">
+        <div class="p-3">
+            <form name="addAccountForm" class="create-acc-form" [formGroup]="addAccountForm" (ngSubmit)="submit()">
+                <div class="d-flex column-gap15 align-items-center mb-3">
+                    <p class="w-50">Branch Name</p>
+                    <div class="form-group m-0">
+                        <div [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }">
+                            <input
+                                type="number"
+                                id="numbertel"
+                                min="0"
+                                class="form-control text-right mr-1"
+                                digitsOnlyDirective
+                                formControlName="openingBalance"
+                                [placeholder]="
+                                    commonLocaleData?.app_numbers?.zero +
+                                    '' +
+                                    commonLocaleData?.app_numbers?.zero +
+                                    '.' +
+                                    commonLocaleData?.app_numbers?.zero +
+                                    '' +
+                                    commonLocaleData?.app_numbers?.zero
+                                "
+                            />
+                            <div
+                                class="input-group-addon"
+                                (click)="openingBalanceTypeChnaged('DEBIT')"
+                                [ngClass]="{
+                                    'active-toggle-btn':
+                                        addAccountForm.get('openingBalanceType')?.value === 'DEBIT' &&
+                                        addAccountForm.get('openingBalance')?.value > 0,
+                                    'cp': addAccountForm.get('openingBalance')?.value > 0
+                                }"
+                                *ngIf="addAccountForm.get('openingBalance')?.value > 0"
+                            >
+                                {{ commonLocaleData?.app_dr?.toUpperCase() }}
+                            </div>
+                            <div
+                                class="input-group-addon"
+                                (click)="openingBalanceTypeChnaged('CREDIT')"
+                                [ngClass]="{
+                                    'active-toggle-btn':
+                                        addAccountForm.get('openingBalanceType')?.value === 'CREDIT' &&
+                                        addAccountForm.get('openingBalance')?.value > 0,
+                                    'cp': addAccountForm.get('openingBalance')?.value > 0
+                                }"
+                                *ngIf="addAccountForm.get('openingBalance')?.value > 0"
+                            >
+                                {{ commonLocaleData?.app_cr?.toUpperCase() }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex column-gap15 align-items-center mb-3">
+                    <p class="w-50">Branch Name</p>
+                    <div class="form-group m-0">
+                        <div [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }">
+                            <input
+                                type="number"
+                                id="numbertel"
+                                min="0"
+                                class="form-control text-right mr-1"
+                                digitsOnlyDirective
+                                formControlName="openingBalance"
+                                [placeholder]="
+                                    commonLocaleData?.app_numbers?.zero +
+                                    '' +
+                                    commonLocaleData?.app_numbers?.zero +
+                                    '.' +
+                                    commonLocaleData?.app_numbers?.zero +
+                                    '' +
+                                    commonLocaleData?.app_numbers?.zero
+                                "
+                            />
+                            <div
+                                class="input-group-addon"
+                                (click)="openingBalanceTypeChnaged('DEBIT')"
+                                [ngClass]="{
+                                    'active-toggle-btn':
+                                        addAccountForm.get('openingBalanceType')?.value === 'DEBIT' &&
+                                        addAccountForm.get('openingBalance')?.value > 0,
+                                    'cp': addAccountForm.get('openingBalance')?.value > 0
+                                }"
+                                *ngIf="addAccountForm.get('openingBalance')?.value > 0"
+                            >
+                                {{ commonLocaleData?.app_dr?.toUpperCase() }}
+                            </div>
+                            <div
+                                class="input-group-addon"
+                                (click)="openingBalanceTypeChnaged('CREDIT')"
+                                [ngClass]="{
+                                    'active-toggle-btn':
+                                        addAccountForm.get('openingBalanceType')?.value === 'CREDIT' &&
+                                        addAccountForm.get('openingBalance')?.value > 0,
+                                    'cp': addAccountForm.get('openingBalance')?.value > 0
+                                }"
+                                *ngIf="addAccountForm.get('openingBalance')?.value > 0"
+                            >
+                                {{ commonLocaleData?.app_cr?.toUpperCase() }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button
+                    mat-stroked-button
+                    color="primary"
+                    aria-label="save"
+                    type="submit"
+                    [ladda]="createAccountInProcess$ | async"
+                >
+                    {{ commonLocaleData?.app_save }}
+                </button>
+            </form>
+        </div>
+    </mat-dialog-content>
+</ng-template>
+

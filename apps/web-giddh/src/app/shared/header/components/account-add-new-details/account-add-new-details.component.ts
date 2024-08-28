@@ -11,6 +11,7 @@ import {
     OnDestroy,
     OnInit,
     Output,
+    TemplateRef,
     ViewChild
 } from '@angular/core';
 import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
@@ -98,6 +99,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @ViewChild('autoFocus', { static: true }) public autoFocus: ElementRef;
     /** Tabs instance */
     @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
+    /** Instance of Mat Dialog for Advance Filter */
+    @ViewChild("bulkAddDialog") public bulkDialogContent: TemplateRef<any>;
 
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public showOtherDetails: boolean = false;
@@ -1652,6 +1655,18 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             });
         }
+    }
+
+    public openBulkAddDialog():void {
+        this.dialog.open(this.bulkDialogContent, {
+            position: {
+                right: '0'
+            },
+            disableClose: true,
+            width: '550px',
+            height: '100vh',
+            maxHeight: '100vh'
+        })
     }
 }
 

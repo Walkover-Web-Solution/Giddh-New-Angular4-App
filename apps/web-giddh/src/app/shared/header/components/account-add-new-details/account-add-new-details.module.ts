@@ -9,6 +9,8 @@ import { ShSelectModule } from 'apps/web-giddh/src/app/theme/ng-virtual-select/s
 import { TranslateDirectiveModule } from 'apps/web-giddh/src/app/theme/translate/translate.directive.module';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AccountAddNewDetailsComponent } from './account-add-new-details.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
     declarations: [AccountAddNewDetailsComponent],
@@ -25,7 +27,9 @@ import { AccountAddNewDetailsComponent } from './account-add-new-details.compone
         TabsModule.forRoot(),
         TranslateDirectiveModule,
         MatSlideToggleModule,
-        RouterModule
+        RouterModule,
+        MatDialogModule,
+        MatButtonModule
     ]
 })
 export class AccountAddNewDetailsModule { }

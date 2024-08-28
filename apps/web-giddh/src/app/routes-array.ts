@@ -46,6 +46,7 @@ export const ROUTES: Routes = [
     { path: 'proforma-invoice', redirectTo: 'pages/proforma-invoice' },
     { path: 'select-plan' },
     { path: 'mobile-restricted', redirectTo: 'mobile-restricted', pathMatch: 'full' },
+    { path: 'group-name', redirectTo: 'pages/group-name', pathMatch: 'full' },
     {
         path: 'pages',
         children: [
@@ -110,6 +111,7 @@ export const ROUTES: Routes = [
             { path: 'subscription', loadChildren: () => import('./subscription/subscription.module').then(module => module.SubscriptionModule) },
             { path: 'new-company/:subscriptionId', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
             { path: 'vouchers', loadChildren: () => import('./vouchers/vouchers.module').then(module => module.VouchersModule) },
+            { path: 'group-name', loadChildren: () => import('./group-name/group-name.module').then(module => module.GroupNameModule) },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]
     },
