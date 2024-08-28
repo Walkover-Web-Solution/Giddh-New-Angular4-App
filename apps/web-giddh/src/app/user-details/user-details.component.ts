@@ -349,7 +349,12 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
 
         dialogRef.afterClosed().pipe().subscribe(response => {
             if (response === this.commonLocaleData?.app_yes) {
+<<<<<<< HEAD
                 this.store.dispatch(this.sessionAction.deleteAllSession());
+=======
+              //  this.store.dispatch(this.sessionAction.deleteAllSession());
+              console.log("ok---------");
+>>>>>>> ba37eb9341 ( All Changes DONE)
             }
         });
     }
