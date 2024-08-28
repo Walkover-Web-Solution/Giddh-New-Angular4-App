@@ -322,7 +322,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         this.store.dispatch(this.sessionAction.deleteSession(requestPayload));
     }
 
-    public clearAllSession() {
+    public clearAllSession(): void {
         const buttons: Array<ConfirmationModalButton> = [{
             text: this.commonLocaleData?.app_yes,
             color: 'primary'
@@ -333,21 +333,20 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         const headerText: string =  this.commonLocaleData?.app_confirmation;
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mr-b1';
-        const messageText: String = this.localeData?.session?.delete_all_session;
-        let configuration = {buttons, headerText, headerCssClass, messageCssClass, messageText}
+        const messageText: string = this.localeData?.session?.delete_all_session;
+        const configuration = { buttons, headerText, headerCssClass, messageCssClass, messageText };
         
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            width: '630px',
+            panelClass: ['mat-dialog-md'],
             data: {
                 configuration: configuration
             }
         });
 
         dialogRef.afterClosed().pipe().subscribe(response => {
-            if (response === 'Yes') {
-                this.store.dispatch(this.sessionAction.deleteAllSession());
-            } else {
-                this.dialog.closeAll();
+            if (response === this.commonLocaleData?.app_yes) {
+              //  this.store.dispatch(this.sessionAction.deleteAllSession());
+              console.log("ok---------");
             }
         });
     }
