@@ -17,7 +17,7 @@
                 class="bg-transparent text-black"
             >
                 <mat-step [stepControl]="firstStepForm">
-                    <form name="firstStepForm" [formGroup]="firstStepForm" autocomplete="off" class="mt-5" novalidate>
+                    <form name="firstStepForm" [formGroup]="firstStepForm" autocomplete="off" class="mt-5 scroll-drag overflow-x-auto nowrap" #slider novalidate>
                         <div class="plan-summary d-flex justify-content-center">
                             <div class="plan-width">
                                 <ng-template matStepLabel>{{ localeData?.all_plans }}</ng-template>
