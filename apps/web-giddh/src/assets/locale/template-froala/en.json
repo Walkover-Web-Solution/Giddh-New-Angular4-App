@@ -4,6 +4,6 @@
     "select_cc": "Select Cc",
     "cc": "Cc",
     "bcc": "Bcc",
-    "email_content_suggestions": "Type '#' to see suggestions",
+    "email_content_suggestions": "Type '@' to see suggestions",
     "enter_subject_placeholder": "Enter subject here"
 }
