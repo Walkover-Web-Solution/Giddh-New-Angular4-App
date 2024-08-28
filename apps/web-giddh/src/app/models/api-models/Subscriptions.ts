@@ -89,7 +89,7 @@ export class SearchSubscriptionRequest {
     public totalPages?: number;
     public loadMore?: boolean;
     constructor() {
-        this.count = PAGINATION_LIMIT;
+        this.count = 200;
         this.page = 1;
     }
 }
