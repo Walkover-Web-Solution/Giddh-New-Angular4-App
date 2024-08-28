@@ -518,11 +518,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else {
                     this.advanceFilters.q = search;
                 }
-                this.isSearching = true
+                this.isSearching = true;
+                this.advanceFiltersApplied = search !== "";
+                this.isSearching = search !== "";
                 this.getVouchers(this.isUniversalDateApplicable);
-            }
-            if ((!this.voucherNumberInput.value && this.voucherNumberInput.value === "") || (!this.accountUniqueNameInput.value && this.accountUniqueNameInput.value === "")) {
-                this.isSearching = false;
             }
         });
 
@@ -533,11 +532,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else {
                     this.advanceFilters.q = search;
                 }
-                this.isSearching = true
+                this.isSearching = true;
+                this.advanceFiltersApplied = search !== "";
+                this.isSearching = search !== "";
                 this.getVouchers(this.isUniversalDateApplicable);
-            }
-            if ((!this.voucherNumberInput.value && this.voucherNumberInput.value === "") || (!this.accountUniqueNameInput.value && this.accountUniqueNameInput.value === "")) {
-                this.isSearching = false;
             }
         });
 
@@ -786,6 +784,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.advanceFilters.sort = event?.direction ? event?.direction : 'asc';
         this.advanceFilters.sortBy = event?.active;
         this.advanceFilters.page = 1;
+        this.advanceFiltersApplied = true;
         this.getVouchers(false);
     }
 
@@ -958,6 +957,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (window.localStorage) {
                 localStorage.setItem('invoiceSelectedDate', JSON.stringify(this.invoiceSelectedDate));
             }
+            this.advanceFiltersApplied = true;
             this.getVouchers(this.isUniversalDateApplicable);
             this.getVoucherBalances();
         }
@@ -1561,7 +1561,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             count: PAGINATION_LIMIT,
             q: ''
         };
+        this.voucherNumberInput.patchValue("");
+        this.accountUniqueNameInput.patchValue("");
         this.advanceFiltersApplied = false;
+        this.isSearching = false;
         this.getVouchers(false);
     }
 

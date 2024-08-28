@@ -53,10 +53,14 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
     public dayjs = dayjs;
     /** True if voucher type is Purchase order */
     public isPOVoucher: boolean = false;
-    /* This holds the fields which can be updated in bulk */
+    /** This holds the fields which can be updated in bulk */
     public bulkUpdateFields: IOption[] = [];
-    /* Stores warehouses for a company */
+    /** Stores warehouses for a company */
     public warehouses: Array<any>;
+    /** Holds Default Template Name as label value */
+    public templateName: string = '';
+    /** Holds Default Template Name as label value */
+    public signatureName: string = '';
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
@@ -299,6 +303,23 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
             this.bulkUpdateForm.get("customField1")?.patchValue("");
             this.bulkUpdateForm.get("customField2")?.patchValue("");
             this.bulkUpdateForm.get("customField3")?.patchValue("");
+        }
+    }
+
+    /**
+     * Handle SelectedField select PDF Template 
+     *
+     * @memberof BulkUpdateComponent
+     */
+    public handleSelectedFieldSelect(): void {
+        const seletedValue = this.bulkUpdateForm.get('selectedField')?.value;
+
+        if (seletedValue === 'pdfTemplate' && this.templatesList?.length) {
+            this.bulkUpdateForm.get("templateUniqueName")?.patchValue(this.templatesList[0].value);
+            this.templateName = this.templatesList[0].label;
+        } else if (seletedValue === 'signature' && this.templateSignaturesOptions?.length) {
+            this.bulkUpdateForm.get("signatureOption")?.patchValue(this.templateSignaturesOptions[0].value);
+            this.signatureName = this.templateSignaturesOptions[0].label;
         }
     }
 
