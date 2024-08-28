@@ -88,8 +88,10 @@ export class SearchSubscriptionRequest {
     public totalItems?: number;
     public totalPages?: number;
     public loadMore?: boolean;
+    public fromMoveCompany?: boolean;
     constructor() {
-        this.count = PAGINATION_LIMIT;
+        this.count = 200;
         this.page = 1;
+        this.fromMoveCompany = true;
     }
 }

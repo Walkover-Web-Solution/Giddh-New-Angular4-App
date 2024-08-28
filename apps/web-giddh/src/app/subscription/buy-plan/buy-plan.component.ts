@@ -1185,7 +1185,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     this.promoCodeResponse[0] = response;
                 }
                 this.finalPlanAmount = response?.planAmountAfterTax ? (response?.planAmountAfterTax ?? 0) : (response?.planAmountBeforeTax ?? 0);
-                this.selectedPlan = { ...this.selectedPlan, ...response };
+                this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+                    if (result) {
+                        this.selectedPlan = result.find(plan => plan?.uniqueName === this.firstStepForm.get('planUniqueName').value);
+                        this.selectedPlan = { ...this.selectedPlan, ...response };
+                    }
+                });
             } else {
                 this.promoCodeResponse[0] = [];
             }
