@@ -166,8 +166,14 @@
                                                                         </amount-field>
                                                                     </s>
                                                                 </p>
-                                                                <p class="mb-3 mt-2" *ngIf="plan?.yearlyAmount !== 0">
-                                                                    <span class="font-24 strong plan-price">
+                                                                <p
+                                                                    class="mb-3 mt-2"
+                                                                    *ngIf="
+                                                                        plan?.yearlyAmount !== 0 &&
+                                                                        plan?.yearlyAmountAfterDiscount !== 0
+                                                                    "
+                                                                >
+                                                                    <span class="font-24 strong">
                                                                         <amount-field
                                                                             [useGiddhCurrencyPipe]="false"
                                                                             [spaceAfterCurrencySymbol]="false"
@@ -202,15 +208,18 @@
                                                                         plan?.yearlyAmountAfterDiscount === 0)
                                                                 "
                                                             >
-                                                                <span class="font-24 strong">
-                                                                    {{ localeData?.free }}
-                                                                    {{ commonLocaleData?.app_to }} <br />{{
-                                                                        plan?.yearlyDiscount?.duration
-                                                                    }}
-                                                                    {{
-                                                                        commonLocaleData?.app_duration?.year | lowercase
-                                                                    }}</span
-                                                                >
+                                                                <p class="mb-3">
+                                                                    <span>
+                                                                        {{ localeData?.free }}
+                                                                        {{ commonLocaleData?.app_to }} <br />{{
+                                                                            plan?.yearlyDiscount?.duration
+                                                                        }}
+                                                                        {{
+                                                                            commonLocaleData?.app_duration?.year
+                                                                                | lowercase
+                                                                        }}</span
+                                                                    >
+                                                                </p>
                                                             </ng-container>
                                                             <p
                                                                 class="mb-3"
@@ -290,7 +299,13 @@
                                                                         </span>
                                                                     </s>
                                                                 </p>
-                                                                <p class="mb-3 mt-2" *ngIf="plan?.monthlyAmount !== 0">
+                                                                <p
+                                                                    class="mb-3 mt-2"
+                                                                    *ngIf="
+                                                                        plan?.monthlyAmount !== 0 &&
+                                                                        plan?.monthlyAmountAfterDiscount !== 0
+                                                                    "
+                                                                >
                                                                     <span class="font-24 strong">
                                                                         <amount-field
                                                                             [useGiddhCurrencyPipe]="false"
