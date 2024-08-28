@@ -974,10 +974,7 @@
                                     </amount-field>
                                 </span>
                             </div>
-                            <p class="text-right" *ngIf="selectedPlan?.taxTotal > 0 && !selectedPlan?.promoCode">
-                                {{ localeData?.including_tax }}
-                            </p>
-                            <p class="text-right" *ngIf="selectedPlan?.taxTotal > 0 && selectedPlan?.promoCode">
+                            <p class="text-right" *ngIf="selectedPlan?.taxTotal >= 0">
                                 {{ localeData?.including_tax }}
                             </p>
                         </div>
