@@ -106,7 +106,7 @@
             width: 97%;
 
             .warehouse-list {
-                min-width: 392px;
+                min-width: 290px;
                 left: 1px;
                 min-height: 56px;
                 &:nth-child(odd) {
@@ -117,19 +117,6 @@
 
                     .proper-spacing-list {
                         color: var(--color-primary-inventory-stock-balance-text);
-                        width: 350px;
-                        margin-left: 22px;
-                        .opening-bal-value {
-                            max-width: 155px;
-                            overflow: hidden;
-                            display: -webkit-box;
-                            -webkit-line-clamp: 1;
-                            line-clamp: 1;
-                            -webkit-box-orient: vertical;
-                            word-wrap: break-word;
-                            white-space: normal;
-                            line-height: 35px;
-                        }
                     }
                 }
             }
@@ -202,15 +189,10 @@
 
 .warehouse-list-head {
     height: 60px;
-    float: left;
-    width: 392px;
+    width: 290px;
 
     .warehouse-list-head-num {
         color: var(--color-giddh-blue);
-    }
-
-    .warehouse-list-head-options {
-        width: 88%;
     }
 }
 .stock-list-box {

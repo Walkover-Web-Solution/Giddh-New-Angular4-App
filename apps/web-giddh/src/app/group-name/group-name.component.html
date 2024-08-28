@@ -61,11 +61,6 @@
                       <ng-container>
                           <div class="warehouse-list-head odd-even-shade d-flex flex-column align-items-center justify-content-center">
                               <p class="warehouse-list-head-num font-15 fw-bold">Branch Name</p>
-                              <!-- <div class="warehouse-list-head-options">
-                                  <div class="d-flex">
-                                      <span class="font-15">Opening Balance</span>
-                                  </div>
-                              </div> -->
                           </div>
                       </ng-container>
                   </div>
@@ -86,11 +81,8 @@
                               <div class="warehouse-list warehouse-even">
                                   <div class="stock-list-body h-100">
                                       <div class="stock-list-box h-100">
-                                          <div class="stock-list-unexpanded h-100">
-                                              <div class="stock-list-box-heading proper-spacing-list d-flex align-items-center justify-content-between h-100">
-                                                    <span class="opening-bal-value bg-color-hover">
-                                                        Opening Balance
-                                                    </span>
+                                          <div class="stock-list-unexpanded h-100 w-100">
+                                              <div class="stock-list-box-heading proper-spacing-list h-100 w-100 d-flex justify-content-center align-items-center">
                                                     <form name="addAccountForm" class="create-acc-form" [formGroup]="addAccountForm" (ngSubmit)="submit()">
                                                         <div class="form-group m-0">
                                                             <!-- <div [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }"> -->
