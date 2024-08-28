@@ -1419,8 +1419,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             customer_id: request.razorpayCustomerId,
             recurring: "1",
             handler: (response: any) => {
-                console.log(response);
-                console.log(request.razorpayCustomerId);
                 that.updateSubscriptionPayment(response, false, request);
             },
             theme: {
