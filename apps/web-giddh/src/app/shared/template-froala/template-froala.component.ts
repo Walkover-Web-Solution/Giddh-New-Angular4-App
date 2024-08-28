@@ -94,14 +94,11 @@ export class TemplateFroalaComponent implements OnInit {
                     true
                 );
             },
-            contentChanged: () => { // Handles regular content changes
-                this.updateFormControl();
-            },
             blur: () => { // Handles changes made in the code view when focus is lost
-                this.updateFormControl();
-            },
-            'codeView.update': () => { // Handles updates while in code view
-                this.updateFormControl();
+                if (this.froalaEditor.codeView?.isActive()) {
+                    this.froalaEditor?.html?.set(this.froalaEditor?.codeView?.get());
+                    this.updateFormControl();
+                }
             }
         }
     };
