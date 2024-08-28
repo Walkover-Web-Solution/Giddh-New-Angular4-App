@@ -707,35 +707,35 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /**
      * This will use for dragging subscription table
      *
-     * @param {MouseEvent} e
+     * @param {MouseEvent} event
      * @return {*} 
      * @memberof BuyPlanComponent
      */
-    public move(e: MouseEvent) {
-        e.preventDefault();
+    public move(event: MouseEvent) {
+        event.preventDefault();
         if (!this.mouseDown) { return; }
-        const x = e.pageX - this.slider.nativeElement.offsetLeft;
-        const scroll = x -this.startX;
+        const x = event.pageX - this.slider.nativeElement?.offsetLeft;
+        const scroll = x - this.startX;
         this.slider.nativeElement.scrollLeft = this.scrollLeft - scroll;
     }
     /**
      * This will use for dragging subscription table
      *
-     * @param {MouseEvent} e
+     * @param {MouseEvent} event
      * @memberof BuyPlanComponent
      */
-    public startDragging(e: MouseEvent) {
+    public startDragging(event: MouseEvent) {
         this.mouseDown = true;
-        this.startX = e.pageX - this.slider.nativeElement.offsetLeft;
+        this.startX = event.pageX - this.slider.nativeElement?.offsetLeft;
         this.scrollLeft = this.slider.nativeElement.scrollLeft;
     }
     /**
      * This will use for dragging subscription table
      *
-     * @param {MouseEvent} e
+     * @param {MouseEvent} event
      * @memberof BuyPlanComponent
      */
-    public stopDragging(e: MouseEvent) {
+    public stopDragging(event: MouseEvent) {
         this.mouseDown = false;
     }
 
@@ -748,7 +748,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.stepperIcon._getIndicatorType = () => 'number';
 
         const sliderElement = this.slider.nativeElement;
-        console.log('Slider Element', sliderElement);
         sliderElement.addEventListener('mousemove', this.move.bind(this), false);
         sliderElement.addEventListener('mousedown', this.startDragging.bind(this), false);
         sliderElement.addEventListener('mouseup', this.stopDragging.bind(this), false);
