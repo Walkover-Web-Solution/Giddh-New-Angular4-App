@@ -541,7 +541,7 @@
                                                     fieldName: 'invoiceNumber',
                                                     voucherType: 'sales',
                                                     formControl: voucherNumberInput,
-                                                    title: 'commonLocaleData?.app_invoice_no'
+                                                    title: commonLocaleData?.app_invoice_no
                                                 }
                                             "
                                         ></ng-container>
@@ -706,7 +706,22 @@
                                 </div>
                             </div>
                         </div>
+                        <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied">
+                            <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                        </button>
                         <div class="d-flex align-items-center column-gap1">
+                            <button mat-stroked-button color="primary" [matTooltip]="commonLocaleData?.app_export"
+                            [matTooltipPosition]="'above'" *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length" [tooltip]="commonLocaleData?.app_export" (click)="exportCsvDownload()">
+                                <i class="icon-export-icon"></i>
+                            </button>
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase"  *ngIf="selectedVouchers?.length">
+                                <span>{{ commonLocaleData?.app_more }}</span>
+                                <i class="icon-arrow-down icon-font-11 ml-2"></i>
+                            </button>
+                            <mat-menu #morepurchase="matMenu">
+                                <button mat-menu-item (click)="bulkUpdateDialog()">{{ localeData?.bulk_update }}</button>
+                                <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
+                            </mat-menu>
                             <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
                                 {{ commonLocaleData?.app_filter }}
                                 <i class="icon-advance-filter"></i>
@@ -902,7 +917,22 @@
                                 />
                             </div>
                         </div>
+                        <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied">
+                            <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                        </button>
                         <div class="d-flex align-items-center column-gap1">
+                            <button mat-stroked-button color="primary" [matTooltip]="commonLocaleData?.app_export"
+                            [matTooltipPosition]="'above'" *ngIf="csvSupportVoucherType.includes(voucherType) && selectedVouchers?.length" [tooltip]="commonLocaleData?.app_export" (click)="exportCsvDownload()">
+                                <i class="icon-export-icon"></i>
+                            </button>
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase"  *ngIf="selectedVouchers?.length">
+                                <span>{{ commonLocaleData?.app_more }}</span>
+                                <i class="icon-arrow-down icon-font-11 ml-2"></i>
+                            </button>
+                            <mat-menu #morepurchase="matMenu">
+                                <button mat-menu-item (click)="bulkUpdateDialog()">{{ localeData?.bulk_update }}</button>
+                                <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
+                            </mat-menu>
                             <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
                                 {{ commonLocaleData?.app_filter }}
                                 <i class="icon-advance-filter"></i>

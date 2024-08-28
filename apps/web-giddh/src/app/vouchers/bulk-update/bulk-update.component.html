@@ -11,7 +11,7 @@
                 [placeholder]="commonLocaleData?.app_select"
                 [options]="fieldOptions"
                 formControlName="selectedField"
-                (selectedOption)="resetFormData()"
+                (selectedOption)="resetFormData(); handleSelectedFieldSelect();"
                 class="w-100"
             >
             </reactive-dropdown-field>
@@ -22,6 +22,7 @@
                 [placeholder]="commonLocaleData?.app_select"
                 class="w-100"
                 [options]="templatesList"
+                [labelValue]="templateName"
                 formControlName="templateUniqueName"
             >
             </reactive-dropdown-field>
@@ -62,6 +63,7 @@
                 [placeholder]="commonLocaleData?.app_select"
                 class="w-100"
                 [options]="templateSignaturesOptions"
+                [labelValue]="signatureName"
                 formControlName="signatureOption"
             ></reactive-dropdown-field>
         </div>
