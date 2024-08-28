@@ -307,17 +307,17 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle SelectedField select PDF Template 
+     * Handle SelectedField dropdown select and set defalut value other related fields 
      *
      * @memberof BulkUpdateComponent
      */
     public handleSelectedFieldSelect(): void {
-        const seletedValue = this.bulkUpdateForm.get('selectedField')?.value;
+        const selectedValue = this.bulkUpdateForm.get('selectedField')?.value;
 
-        if (seletedValue === 'pdfTemplate' && this.templatesList?.length) {
+        if (selectedValue === 'pdfTemplate' && this.templatesList?.length) {
             this.bulkUpdateForm.get("templateUniqueName")?.patchValue(this.templatesList[0].value);
             this.templateName = this.templatesList[0].label;
-        } else if (seletedValue === 'signature' && this.templateSignaturesOptions?.length) {
+        } else if (selectedValue === 'signature' && this.templateSignaturesOptions?.length) {
             this.bulkUpdateForm.get("signatureOption")?.patchValue(this.templateSignaturesOptions[0].value);
             this.signatureName = this.templateSignaturesOptions[0].label;
         }
