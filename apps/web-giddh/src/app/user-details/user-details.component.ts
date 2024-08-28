@@ -321,7 +321,11 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
         };
         this.store.dispatch(this.sessionAction.deleteSession(requestPayload));
     }
-
+    /**
+     * Deletes All session
+     *
+     * @memberof UserDetailsComponent
+     */
     public clearAllSession(): void {
         const buttons: Array<ConfirmationModalButton> = [{
             text: this.commonLocaleData?.app_yes,
@@ -345,8 +349,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy, AfterViewInit {
 
         dialogRef.afterClosed().pipe().subscribe(response => {
             if (response === this.commonLocaleData?.app_yes) {
-              //  this.store.dispatch(this.sessionAction.deleteAllSession());
-              console.log("ok---------");
+                this.store.dispatch(this.sessionAction.deleteAllSession());
             }
         });
     }
