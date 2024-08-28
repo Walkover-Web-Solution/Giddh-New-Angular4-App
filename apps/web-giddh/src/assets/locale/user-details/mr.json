@@ -48,7 +48,8 @@
 		"signin_time": "साइन इन वेळ",
 		"duration": "कालावधी (डीडी / एचएच / एमएम / एसएस)",
 		"browser_agent": "ब्राउझर एजंट",
-		"current": "करंट"
+		"current": "करंट",
+		"delete_all_session": "तुमची खात्री आहे की तुम्ही सर्व सत्रे हटवू इच्छिता?"
 	},
 	"subscription": {
 		"tab_heading": "सदस्यता",
