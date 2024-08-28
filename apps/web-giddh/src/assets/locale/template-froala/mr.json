@@ -4,5 +4,6 @@
     "select_cc": "सीसी निवडा",
     "cc": "सीसी",
     "bcc": "बीसीसी",
-    "email_content_suggestions": "सूचना पाहण्यासाठी '@' टाइप करा"
+    "email_content_suggestions": "सूचना पाहण्यासाठी '@' टाइप करा",
+    "enter_subject_placeholder": "येथे विषय प्रविष्ट करा"
 }
