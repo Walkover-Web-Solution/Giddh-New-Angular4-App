@@ -148,8 +148,8 @@
                                                     transaction?.get('isTaxApplied')?.value
                                                 "
                                                 [id]="'transactionAmount_' + i"
-                                                (keydown.Tab)="changeTab('tab', 'amount'); updateTransactionActualAmount(transaction)"
-                                                (keydown.Shift.Tab)="changeTab('shift', 'amount'); updateTransactionActualAmount(transaction)"
+                                                (keydown.Tab)="updateTransactionActualAmount(transaction); changeTab('tab', 'amount');"
+                                                (keydown.Shift.Tab)="updateTransactionActualAmount(transaction); changeTab('shift', 'amount');"
                                                 *ngIf="transaction.get('type')?.value?.toLowerCase() === 'by'"
                                                 [autoFocus]="activeRowIndex === i && activeRowType === 'amount'"
                                                 [autocomplete]="'off'"
@@ -160,9 +160,9 @@
                                                 formControlName="amount"
                                                 (input)="selectRow(true, i); updateTotalCreditDebit()"
                                                 (keydown.Enter)="
+                                                    updateTransactionActualAmount(transaction);
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
                                                     changeTab('enter', 'amount');
-                                                    updateTransactionActualAmount(transaction)
                                                 "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
@@ -192,12 +192,12 @@
                                                 formControlName="amount"
                                                 (input)="selectRow(true, i); updateTotalCreditDebit()"
                                                 (keydown.Enter)="
+                                                    updateTransactionActualAmount(transaction);
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
                                                     changeTab('enter', 'amount');
-                                                    updateTotalCreditDebit()
                                                 "
-                                                (keydown.Tab)="changeTab('tab', 'amount'); updateTransactionActualAmount(transaction)"
-                                                (keydown.Shift.Tab)="changeTab('shift', 'amount'); updateTransactionActualAmount(transaction)"
+                                                (keydown.Tab)="updateTransactionActualAmount(transaction); changeTab('tab', 'amount');"
+                                                (keydown.Shift.Tab)="updateTransactionActualAmount(transaction); changeTab('shift', 'amount');"
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                             ></text-field>
