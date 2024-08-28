@@ -57,7 +57,7 @@ export class SubscriptionsService {
      * @param paymentId
      * @returns
      */
-    public saveRazorpayToken(subscriptionId: string , paymentId: string): Observable<any> {
+    public saveRazorpayToken(subscriptionId: string, paymentId: string): Observable<any> {
         return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.SAVE_RAZORPAY_TOKEN
             ?.replace(':subscriptionId', subscriptionId)
             ?.replace(':paymentId', paymentId))
@@ -163,7 +163,7 @@ export class SubscriptionsService {
      * @memberof SubscriptionsService
      */
     public getAllSubscriptions(pagination: any, model: any): Observable<BaseResponse<any, any>> {
-        const reqObj = model?.region ? { region: model.region } : model;
+        const reqObj = model?.region ? { region: model.region, planName: model.planName } : model;
         return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_ALL_SUBSCRIPTIONS
             ?.replace(':page', encodeURIComponent(pagination?.page ?? ''))
             ?.replace(':count', encodeURIComponent(pagination?.count ?? ''))

@@ -325,7 +325,7 @@
                                             element?.isOwner &&
                                             element?.companies &&
                                             element?.companies?.length === 1 &&
-                                            element?.archiveStatus === 'USER_ARCHIVED'
+                                            element?.companyArchiveStatus === 'USER_ARCHIVED'
                                         "
                                         mat-menu-item
                                         (click)="archiveCompany(element, 'UNARCHIVED')"
@@ -338,7 +338,7 @@
                                             element?.isOwner &&
                                             element?.companies &&
                                             element?.companies?.length === 1 &&
-                                            element?.archiveStatus === 'UNARCHIVED'
+                                            element?.companyArchiveStatus === 'UNARCHIVED'
                                         "
                                         mat-menu-item
                                         (click)="archiveCompany(element, 'USER_ARCHIVED')"

@@ -94,16 +94,16 @@ export class PaymentMethodDialogComponent implements OnInit {
             }
         });
 
-        if (this.router.url === '/pages/user-details/subscription') {
-            window.addEventListener('message', event => {
+        window.addEventListener('message', event => {
+            if (this.router.url === '/pages/user-details/subscription') {
                 if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
                     this.isLoading = true;
                     this.resetForm();
                     this.getPaymentMethods();
                     this.changeDetection.detectChanges();
                 }
-            });
-        }
+            }
+        });
 
         this.paymentMethodList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
