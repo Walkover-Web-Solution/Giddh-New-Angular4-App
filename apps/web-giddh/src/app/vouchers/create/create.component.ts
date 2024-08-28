@@ -1037,7 +1037,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.lastVouchersList$ = observableOf([...lastVouchers]);
             }
         });
-    
+
         this.componentStore.briefAccounts$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.briefAccounts$ = observableOf(response);
@@ -2098,7 +2098,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             type: ['', Validators.required],
             updateAccountDetails: [false],
             subVoucher: [''],
-            deposits: this.formBuilder.array([this.getDepositFormGroup()]), 
+            deposits: this.formBuilder.array([this.getDepositFormGroup()]),
             warehouse: this.formBuilder.group({
                 name: [''],
                 uniqueName: ['']
@@ -2148,7 +2148,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         return this.formBuilder.group({
             accountUniqueName: [''],
             amountForAccount: [''],
-            currencySymbol: [''], 
+            currencySymbol: [''],
             type: ['DEBIT']
         })
     }
@@ -3064,7 +3064,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entry.get('hsnNumber')?.patchValue(this.currentHsnSac.hsnNumber);
         entry.get('sacNumber')?.patchValue(this.currentHsnSac.sacNumber);
     }
-    
+
     /**
      * Add new deposit row
      *
@@ -3104,7 +3104,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
         deposits.removeAt(entryIndex);
         this.calculateBalanceDue();
-        
+
     }
     /**
      * Removes line entry
@@ -3612,15 +3612,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @return {*}  {any[]}
      * @memberof VoucherCreateComponent
      */
-        public getDeposits(): any[] {
-            const deposits = [];
-            this.invoiceForm.get('deposits')['controls']?.forEach(control => {
+    public getDeposits(): any[] {
+        const deposits = [];
+        this.invoiceForm.get('deposits')['controls']?.forEach(control => {
             if (control.get("accountUniqueName").value && control.get("amountForAccount").value) {
                 deposits.push(control.value);
             }
         });
         return deposits;
-        }
+    }
 
     /**
      * Saves voucher
@@ -3630,13 +3630,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public saveVoucher(callback?: Function): void {
         this.startLoader(true);
- 
+
         const entries = this.getEntries();
         const deposits = this.getDeposits();
 
         let invoiceForm = cloneDeep(this.invoiceForm.value);
         invoiceForm.entries = entries;
-        invoiceForm.deposits = deposits; 
+        invoiceForm.deposits = deposits;
 
         if (this.currencySwitched) {
             invoiceForm.exchangeRate = 1 / invoiceForm.exchangeRate;
@@ -3806,7 +3806,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (invoiceForm.deposits[0]?.amountForAccount) {
                 invoiceForm.paymentAction = {
                     action: 'paid',
-                    amount: this.getTotalDepositeValue(),
+                    amount: this.getTotalDepositValue(),
                     depositAccountUniqueName: this.invoiceType.isCashInvoice ? invoiceForm.account?.uniqueName : invoiceForm.deposits[0]?.accountUniqueName
                 };
             }
@@ -3906,7 +3906,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             invoiceForm = this.vouchersUtilityService.cleanVoucherObject(invoiceForm);
 
-            let accountUniqueName = this.invoiceType.isCashInvoice ? (invoiceForm.deposits[0]?.accountUniqueName ? invoiceForm.deposits[0]?.accountUniqueName : 'cash') : invoiceForm.account?.uniqueName;
+            let accountUniqueName = this.invoiceType.isCashInvoice ? null : invoiceForm.account?.uniqueName;
             invoiceForm.account.uniqueName = accountUniqueName;
             if (this.isUpdateMode) {
                 this.voucherService.updateVoucher(invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -3923,7 +3923,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 });
             } else {
-                this.voucherService.generateVoucher(invoiceForm.account.uniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                delete invoiceForm.account.uniqueName
+                this.voucherService.generateVoucher(accountUniqueName, invoiceForm).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.startLoader(false);
                     if (response?.status === "success") {
                         const isCashSalesPurchaseInvoice = this.invoiceType.isCashInvoice && ((!this.invoiceType.isDebitNote && !this.invoiceType.isCreditNote) || this.invoiceType.isPurchaseInvoice);
@@ -4282,7 +4283,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public getCalculatedBalanceDueAfterAdvanceReceiptsAdjustment(): number {
-        return parseFloat(Number(this.voucherTotals.grandTotal + this.voucherTotals.tcsTotal - this.adjustPaymentData.totalAdjustedAmount - this.getTotalDepositeValue() - this.voucherTotals.tdsTotal).toFixed(this.company?.giddhBalanceDecimalPlaces));
+        return parseFloat(Number(this.voucherTotals.grandTotal + this.voucherTotals.tcsTotal - this.adjustPaymentData.totalAdjustedAmount - this.getTotalDepositValue() - this.voucherTotals.tdsTotal).toFixed(this.company?.giddhBalanceDecimalPlaces));
     }
 
     /**
@@ -4291,7 +4292,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public calculateBalanceDue(): void {
-        let depositAmount = this.getTotalDepositeValue();
+        let depositAmount = this.getTotalDepositValue();
         if (this.isMultiCurrencyVoucher) {
             const deposits = this.invoiceForm.get('deposits') as FormArray;
             if (deposits.at(0).get('currencySymbol')?.value === this.account.baseCurrencySymbol) {
@@ -4324,7 +4325,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @return {*} count all deposite value
      * @memberof VoucherCreateComponent
      */
-    private getTotalDepositeValue(): number {
+    private getTotalDepositValue(): number {
         let totalDeposit: number = 0;
         this.invoiceForm.get('deposits')['controls']?.forEach((control: any) => {
             if (control.get('amountForAccount').value) {
