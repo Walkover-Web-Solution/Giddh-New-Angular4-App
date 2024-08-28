@@ -52,10 +52,10 @@ export class SubscriptionsService {
 
     /**
      * Save Razorpay Token
-     * 
-     * @param subscriptionId 
-     * @param paymentId 
-     * @returns 
+     *
+     * @param subscriptionId
+     * @param paymentId
+     * @returns
      */
     public saveRazorpayToken(subscriptionId: string , paymentId: string): Observable<any> {
         return this.http.get(this.config.apiUrl + SUBSCRIPTION_V2_API.SAVE_RAZORPAY_TOKEN
@@ -167,6 +167,7 @@ export class SubscriptionsService {
         return this.http.post(this.config.apiUrl + SUBSCRIPTION_V2_API.GET_ALL_SUBSCRIPTIONS
             ?.replace(':page', encodeURIComponent(pagination?.page ?? ''))
             ?.replace(':count', encodeURIComponent(pagination?.count ?? ''))
+            ?.replace(':fromMoveCompany', encodeURIComponent(pagination?.fromMoveCompany ?? ''))
             , reqObj)
             .pipe(
                 map((res) => {
