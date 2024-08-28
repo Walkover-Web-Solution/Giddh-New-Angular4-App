@@ -21,6 +21,10 @@
                                     ? localeData?.subscription?.select_plan
                                     : localeData?.select_plan
                             "
+                            [enableDynamicSearch]="true"
+                            [isPaginationEnabled]="true"
+                            (scrollEnd)="handleSearchSubscriptionScrollEnd()"
+                            (dynamicSearchedQuery)="searchSubscription($event)"
                             [options]="subscriptions$ | async"
                             [required]="true"
                             (selectedOption)="selectedPlan = $event?.value"

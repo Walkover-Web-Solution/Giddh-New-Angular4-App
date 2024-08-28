@@ -90,7 +90,7 @@ export class SearchSubscriptionRequest {
     public loadMore?: boolean;
     public fromMoveCompany?: boolean;
     constructor() {
-        this.count = 200;
+        this.count = PAGINATION_LIMIT;
         this.page = 1;
         this.fromMoveCompany = true;
     }

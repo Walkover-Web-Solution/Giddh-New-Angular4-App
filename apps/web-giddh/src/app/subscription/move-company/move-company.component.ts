@@ -94,7 +94,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
         this.subscriptions$ = observableOf([]);
         if (this.subscriptionMove) {
             this.isLoading = true;
-            this.searchSubscription(false);
+            this.searchSubscription(this.searchSubscriptionRequest.q ,false);
             this.subscriptionList$.pipe(debounceTime(700),
                 distinctUntilChanged(),
                 takeUntil(this.destroyed$)).subscribe(response => {
@@ -275,21 +275,27 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
       * @param {boolean} [loadMore]
       * @memberof MoveCompanyComponent
       */
-    public searchSubscription(loadMore: boolean = false): void {
+    public searchSubscription(searchedText: any, loadMore: boolean = false): void {
         if (this.searchSubscriptionRequest.loadMore) {
             return;
+        }
+
+        if (typeof searchedText === 'string' && searchedText) {
+            this.searchSubscriptionRequest.q = searchedText;
         }
         if (loadMore) {
             this.searchSubscriptionRequest.page++;
         } else {
             this.searchSubscriptionRequest.page = 1;
         }
+
         if (this.searchSubscriptionRequest.page === 1 || (this.searchSubscriptionRequest.page <= this.searchSubscriptionRequest.totalPages)) {
             delete this.searchSubscriptionRequest.totalItems;
             delete this.searchSubscriptionRequest.totalPages;
             let reqObj = {
                 model: {
-                    region: this.moveSelectedCompany?.region?.code
+                    region: this.moveSelectedCompany?.region?.code,
+                    planName: this.searchSubscriptionRequest.q
                 },
                 pagination: this.searchSubscriptionRequest
             }
@@ -336,7 +342,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     * @memberof MoveCompanyComponent
     */
     public handleSearchSubscriptionScrollEnd(): void {
-        this.searchSubscription(true);
+        this.searchSubscription(this.searchSubscriptionRequest.q, true);
     }
 
 }

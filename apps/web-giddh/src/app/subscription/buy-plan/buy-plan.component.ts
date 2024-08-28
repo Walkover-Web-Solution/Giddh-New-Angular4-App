@@ -187,7 +187,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** Hold upgrade subscription id  */
     public upgradeSubscriptionId: any;
     /** Hold upgrade region  */
-    public upgraderRegion: any;
+    public upgradeRegion: any;
     /** Hold get subscription data */
     public viewSubscriptionData: any;
     /** Hold all plans */
@@ -417,11 +417,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 });
             }
         });
-
-        if (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan') {
-            window.addEventListener('message', event => {
+        window.addEventListener('message', event => {
+            console.log(this.router.url);
+            if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan'))) {
+                console.log(this.router.url, event);
                 if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
-                    if (this.upgradePlan && this.upgraderRegion === 'GBR') {
+                    if (this.upgradePlan && this.upgradeRegion === 'GBR') {
                         this.componentStore.activatePlan(this.upgradeSubscriptionId);
                         this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                             if (response) {
@@ -440,8 +441,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                         }
                     }
                 }
-            });
-        }
+            }
+        });
 
         this.firstStepForm?.get('promoCode').valueChanges.pipe(
             debounceTime(700),
@@ -459,7 +460,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             if (response?.upgrade) {
                 this.upgradePlan = response?.upgrade;
                 this.upgradeSubscriptionId = response?.subscriptionId;
-                this.upgraderRegion = response?.region?.code;
+                this.upgradeRegion = response?.region?.code;
             }
             if (response && response.dueAmount > 0) {
                 if (response?.region?.code === 'GBR') {
@@ -1180,7 +1181,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.componentStore.getCalculationData(reqObj);
         }
         this.calculateData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (Object.keys(response)?.length) {
+            if (response && Object.keys(response)?.length) {
                 this.calculationResponse = response;
                 if (response?.promoCode) {
                     this.toasterService.showSnackBar('success', this.localeData?.promoCode_message);
