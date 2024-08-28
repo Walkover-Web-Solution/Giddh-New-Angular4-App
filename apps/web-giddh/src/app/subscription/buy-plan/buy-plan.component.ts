@@ -1184,7 +1184,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             if (Object.keys(response)?.length) {
                 this.calculationResponse = response;
                 if (response?.promoCode) {
-                    this.toasterService.showSnackBar('success', 'Apply Promo Code Successfully');
+                    this.toasterService.showSnackBar('success', this.localeData?.promoCode_message);
                     this.promoCodeResponse[0] = response;
                     this.firstStepForm?.get('promoCode')?.patchValue(response?.promoCode);
                 } else {
