@@ -1449,7 +1449,7 @@
                                                                                         [placeholder]="commonLocaleData?.app_select_account"
                                                                                         [options]="briefAccounts$ | async"
                                                                                         (onClear)="selectedDepositAccount($event, true)"
-                                                                                        (selectedOption)="selectedDepositAccount($event,false,depositIndex)"
+                                                                                        (selectedOption)="selectedDepositAccount($event, false, depositIndex)"
                                                                                         [showCreateNew]="true"
                                                                                         [createNewText]="commonLocaleData?.app_create_new"
                                                                                         (createOption)="toggleAccountAsidePane(accountType.bank)"
@@ -1458,7 +1458,7 @@
                                                                                     </reactive-dropdown-field>
                                                                                 </div>
                                                                                 <div class="col">
-                                                                                    <input-field 
+                                                                                    <input-field
                                                                                         [name]="'amountForAccount_'+ depositIndex"
                                                                                         [label]="commonLocaleData?.app_amount"
                                                                                         [placeholder]="localeData?.enter_deposit_amount"
