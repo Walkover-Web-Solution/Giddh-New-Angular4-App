@@ -156,5 +156,6 @@
         "company_message": "कंपनी [TYPE] यशस्वीरित्या",
         "manage_payment": "भरणा पद्धतींचे व्यवस्थापन करा",
 		"upi": "यूपीआई",
-        "credit_debit_card": "क्रेडिट/डेबिट कार्ड"
+        "credit_debit_card": "क्रेडिट/डेबिट कार्ड",
+        "promoCode_message":"प्रोमो कोड यशस्वीरित्या लागू करा"
 	}
