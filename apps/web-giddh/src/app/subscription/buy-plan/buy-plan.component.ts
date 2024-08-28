@@ -202,6 +202,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public isTrialPlan: boolean = false;
     /** Hold calculation amount response*/
     public calculationResponse: any;
+    /** This will use for table content scroll for dragging */
+    @ViewChild('slider', { static: false }) slider: ElementRef;
+    /** Hold mouseDown value */
+    public mouseDown = false;
+    /** Hold scroll start number value */
+    public startX: number;
+    /** Hold scroll number value */
+    public scrollLeft: number;
 
     constructor(
         public dialog: MatDialog,
@@ -696,6 +704,40 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             this.openedWindow = null;
         }
     }
+    /**
+     * This will use for dragging subscription table
+     *
+     * @param {MouseEvent} event
+     * @return {*} 
+     * @memberof BuyPlanComponent
+     */
+    public move(event: MouseEvent): void {
+        event.preventDefault();
+        if (!this.mouseDown) { return; }
+        const x = event.pageX - this.slider.nativeElement?.offsetLeft;
+        const scroll = x - this.startX;
+        this.slider.nativeElement.scrollLeft = this.scrollLeft - scroll;
+    }
+    /**
+     * This will use for dragging subscription table
+     *
+     * @param {MouseEvent} event
+     * @memberof BuyPlanComponent
+     */
+    public startDragging(event: MouseEvent): void {
+        this.mouseDown = true;
+        this.startX = event.pageX - this.slider.nativeElement?.offsetLeft;
+        this.scrollLeft = this.slider.nativeElement.scrollLeft;
+    }
+    /**
+     * This will use for dragging subscription table
+     *
+     * @param {MouseEvent} event
+     * @memberof BuyPlanComponent
+     */
+    public stopDragging(event: MouseEvent): void {
+        this.mouseDown = false;
+    }
 
     /**
     * Hook cycle for after component initialization
@@ -704,6 +746,12 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     */
     public ngAfterViewInit(): void {
         this.stepperIcon._getIndicatorType = () => 'number';
+
+        const sliderElement = this.slider.nativeElement;
+        sliderElement.addEventListener('mousemove', this.move.bind(this), false);
+        sliderElement.addEventListener('mousedown', this.startDragging.bind(this), false);
+        sliderElement.addEventListener('mouseup', this.stopDragging.bind(this), false);
+        sliderElement.addEventListener('mouseleave', this.stopDragging.bind(this), false);
     }
 
     /**
@@ -1357,18 +1405,18 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     *
     * @memberof BuyPlanComponent
     */
-    public scrollRight(): void {
-        this.tableContent.nativeElement.scrollTo({ left: (this.tableContent.nativeElement?.scrollLeft + 150), behavior: 'smooth' });
-    }
+    // public scrollRight(): void {
+    //     this.tableContent.nativeElement.scrollTo({ left: (this.tableContent.nativeElement?.scrollLeft + 150), behavior: 'smooth' });
+    // }
 
     /**
      *This will scroll the left slide in mobile view for table
      *
      * @memberof BuyPlanComponent
      */
-    public scrollLeft(): void {
-        this.tableContent.nativeElement.scrollTo({ left: (this.tableContent.nativeElement?.scrollLeft - 150), behavior: 'smooth' });
-    }
+    // public scrollLeft(): void {
+    //     this.tableContent.nativeElement.scrollTo({ left: (this.tableContent.nativeElement?.scrollLeft - 150), behavior: 'smooth' });
+    // }
 
     /**
      * This will call on component destroy
