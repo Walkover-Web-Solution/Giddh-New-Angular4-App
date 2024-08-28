@@ -711,7 +711,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @return {*} 
      * @memberof BuyPlanComponent
      */
-    public move(event: MouseEvent) {
+    public move(event: MouseEvent): void {
         event.preventDefault();
         if (!this.mouseDown) { return; }
         const x = event.pageX - this.slider.nativeElement?.offsetLeft;
@@ -724,7 +724,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @param {MouseEvent} event
      * @memberof BuyPlanComponent
      */
-    public startDragging(event: MouseEvent) {
+    public startDragging(event: MouseEvent): void {
         this.mouseDown = true;
         this.startX = event.pageX - this.slider.nativeElement?.offsetLeft;
         this.scrollLeft = this.slider.nativeElement.scrollLeft;
@@ -735,7 +735,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @param {MouseEvent} event
      * @memberof BuyPlanComponent
      */
-    public stopDragging(event: MouseEvent) {
+    public stopDragging(event: MouseEvent): void {
         this.mouseDown = false;
     }
 
