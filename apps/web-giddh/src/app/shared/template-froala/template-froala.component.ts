@@ -15,7 +15,7 @@ import { GeneralService } from '../../services/general.service';
     providers: [CustomEmailComponentStore]
 })
 export class TemplateFroalaComponent implements OnInit {
-    /*** Instance of subject input field */
+    /** Instance of subject input field */
     @ViewChild('subjectInputField', { static: false }) subjectInputField: ElementRef;
     /** Aside pane state*/
     public asideMenuState: string = 'out';
@@ -25,11 +25,11 @@ export class TemplateFroalaComponent implements OnInit {
     public localeData: any = {};
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /*** Holds Store update email template API success state as observable*/
+    /** Holds Store update email template API success state as observable*/
     public updateCustomEmailIsSuccess$: Observable<any> = this.componentStore.select(state => state.updateCustomEmailIsSuccess);
-    /*** Holds Store get email template API success state as observable*/
+    /** Holds Store get email template API success state as observable*/
     public emailTemplates$: Observable<any> = this.componentStore.select(state => state.emailTemplates);
-    /*** Holds Store get email content suggestions API success state as observable*/
+    /** Holds Store get email content suggestions API success state as observable*/
     public emailContentSuggestions$: Observable<any> = this.componentStore.select(state => state.emailContentSuggestions);
     /** Instance of formgroup */
     public emailForm: FormGroup;
@@ -125,7 +125,7 @@ export class TemplateFroalaComponent implements OnInit {
         private generalService: GeneralService
     ) { }
 
-    /***
+    /**
      * Initializes the component and performs necessary operations.
      *
      * This function sets up the initial state of the component, fetches email content suggestions,
@@ -180,7 +180,7 @@ export class TemplateFroalaComponent implements OnInit {
         });
     }
 
-    /***
+    /**
      * This will update the html form control with the froala html
      *
      * @private
@@ -190,7 +190,7 @@ export class TemplateFroalaComponent implements OnInit {
         this.emailForm.get('html')?.patchValue(this.froalaEditor.html.get());
     }
 
-    /***
+    /**
      * Initializes the Froala editor with tribute suggestions.
      *
      * This function is responsible for setting up the tribute suggestions for the Froala editor and the subject input field.
@@ -228,7 +228,7 @@ export class TemplateFroalaComponent implements OnInit {
         }
     }
 
-    /***
+    /**
      * Maps email suggestions to a format suitable for the dropdown options.
      *
      * This function takes an array of email suggestions and transforms it into an array of objects,
@@ -248,7 +248,7 @@ export class TemplateFroalaComponent implements OnInit {
         })) || [];
     }
 
-    /***
+    /**
      * Fetches email conditions from the server and updates the store.
      *
      * This function triggers the `getEmailConditionSuggestion` action in the `CustomEmailComponentStore`
@@ -263,7 +263,7 @@ export class TemplateFroalaComponent implements OnInit {
         this.componentStore.getAllEmailTemplate(this.invoiceType);
     }
 
-    /***
+    /**
      * Fetches email content suggestions from the server and updates the store.
      *
      * This function triggers the `getEmailContentSuggestions` action in the `CustomEmailComponentStore`
@@ -278,7 +278,7 @@ export class TemplateFroalaComponent implements OnInit {
         this.componentStore.getEmailContentSuggestions(null);
     }
 
-    /***
+    /**
      * Initializes the email form with the provided template data.
      *
      * @param {*} [template]
@@ -295,7 +295,7 @@ export class TemplateFroalaComponent implements OnInit {
         });
     }
 
-    /***
+    /**
      * Handles the submission of the email form.
      *
      * This function is responsible for preparing the form data, validating it, and sending it to the server for updating the custom template.
@@ -321,7 +321,7 @@ export class TemplateFroalaComponent implements OnInit {
         this.componentStore.updateCustomTemplate(req);
     }
 
-    /***
+    /**
     * Show/Hide bcc/cc field
     *
     * @param {string} type
@@ -335,7 +335,7 @@ export class TemplateFroalaComponent implements OnInit {
         }
     }
 
-    /***
+    /**
     * Releases the memory
     *
     * @memberof TemplateFroalaComponent
