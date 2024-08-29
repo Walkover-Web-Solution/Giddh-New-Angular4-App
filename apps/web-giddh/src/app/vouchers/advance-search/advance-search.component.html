@@ -95,8 +95,8 @@
         </mat-form-field>
     </ng-container>
 
-    <ng-container *ngIf="type === 'receipt'">
-        <div class="d-flex d-flex column-gap1 mr-b15 w-100">
+    <ng-container *ngIf="type === 'receipt' || type === 'payment'">
+        <div class="d-flex d-flex column-gap1 mr-b15 w-100" *ngIf="type === 'receipt'">
             <reactive-dropdown-field [name]="'adjustment_voucher'" [label]="localeData?.adjustment_voucher_label" [placeholder]="commonLocaleData?.app_select"
                 [options]="adjustmentVoucherOptions" class="w-50" (selectedOption)="adjustmentVoucherChanged($event)" formControlName="dateRange" [labelValue]="fieldLabelValues.dateRange">
             </reactive-dropdown-field>
