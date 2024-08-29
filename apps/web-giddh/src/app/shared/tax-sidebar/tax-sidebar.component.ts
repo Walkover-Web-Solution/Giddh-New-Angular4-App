@@ -68,6 +68,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public imgPath: string = "";
     /** True if active country is UK */
     public isUKCompany: boolean;
+    /** True if active country is UAE */
+    public isUAECompany: boolean;
     /** True if active country is Zimbabwe */
     public isZimbabweCompany: boolean;
     /** True if active country is Kenya */
@@ -106,6 +108,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
                 this.isUKCompany = activeCompany?.country === "United Kingdom";
+                this.isUAECompany = activeCompany?.country === "United Arab Emirates";
                 this.isZimbabweCompany = activeCompany?.country === "Zimbabwe";
                 this.isKenyaCompany = activeCompany?.country === "Kenya";
                 this.isUSCompany = activeCompany.countryV2?.alpha2CountryCode === "US";
