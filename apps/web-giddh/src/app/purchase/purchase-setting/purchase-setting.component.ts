@@ -265,15 +265,15 @@ export class PurchaseSettingComponent implements OnInit, OnDestroy {
         return AppUrl + 'pages/purchase-management/purchase/settings';
     }
 
-
     /**
-    * Opens custom email dialog
-    *
-    * @memberof PurchaseSettingComponent
-    */
-    public openCustomEmailDialog(type: string): void {
+     * Opens custom email dialog
+     *
+     * @param {string} voucherType
+     * @memberof PurchaseSettingComponent
+     */
+    public openCustomEmailDialog(voucherType: string): void {
         this.dialog.open(TemplateFroalaComponent, {
-            data: type,
+            data: voucherType,
             width: 'var(--aside-pane-width)',
             height: '70vh',
             position: {

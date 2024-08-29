@@ -23,15 +23,15 @@
                             class="select-multiple-chiplist mb-3"
                         ></select-multiple-fields>
                         <div class="d-flex column-gap1 position-absolute chiplist-section">
-                            <a class="btn-link under" href="javascript:;" (click)="showHideBccCc('cc')">{{
+                            <a class="btn-link under" href="javascript:;" (click)="toggleBccCc('cc')">{{
                                 localeData?.cc
                             }}</a>
-                            <a class="btn-link" href="javascript:;" (click)="showHideBccCc('bcc')">{{
+                            <a class="btn-link" href="javascript:;" (click)="toggleBccCc('bcc')">{{
                                 localeData?.bcc
                             }}</a>
                         </div>
                     </div>
-                    <div class="form-group" *ngIf="!showCc">
+                    <div class="form-group" *ngIf="showCc">
                         <select-multiple-fields
                             [placeholder]="localeData?.select_cc"
                             [options]="ccEmails"
@@ -42,7 +42,7 @@
                             class="select-multiple-chiplist mb-3"
                         ></select-multiple-fields>
                     </div>
-                    <div class="form-group" *ngIf="!showBcc">
+                    <div class="form-group" *ngIf="showBcc">
                         <select-multiple-fields
                             [placeholder]="localeData?.select_bcc"
                             [options]="bccEmails"
