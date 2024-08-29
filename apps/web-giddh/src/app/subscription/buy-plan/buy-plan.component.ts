@@ -292,7 +292,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 // }
                 this.subscriptionId = response.subscriptionId;
                 if (response?.duration === 'MONTHLY' && response?.region?.code !== 'GBR') {
-                    if (response.razorpayCustomerId) {
+                    if (response.razorpayCustomerId && this.payType === 'buy') {
                         this.initializePayment(response);
                     } else {
                         this.router.navigate(['/pages/new-company/' + response.subscriptionId]);
