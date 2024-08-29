@@ -65,7 +65,7 @@
     </ng-container>
     <!-- invoice-search-end -->
 
-    <ng-container *ngIf="type === 'drcr' || type === 'receipt'">
+    <ng-container *ngIf="type === 'drcr'">
         <div class="d-flex d-flex column-gap1 mr-b15 w-100">
             <reactive-dropdown-field [name]="'app_date_range'" [label]="commonLocaleData?.app_date_range" [placeholder]="commonLocaleData?.app_select_action"
                 [options]="dateOptions" class="w-50" (selectedOption)="dateChanged($event, 'invoice')" formControlName="dateRange" [labelValue]="fieldLabelValues.dateRange">
@@ -93,6 +93,26 @@
                 <mat-option [value]="localeData?.e_invoice_statuses_label?.na">{{ localeData?.e_invoice_statuses_label?.na }}</mat-option>
             </mat-select>
         </mat-form-field>
+    </ng-container>
+
+    <ng-container *ngIf="type === 'receipt'">
+        <div class="d-flex d-flex column-gap1 mr-b15 w-100">
+            <reactive-dropdown-field [name]="'adjustment_voucher'" [label]="localeData?.adjustment_voucher_label" [placeholder]="commonLocaleData?.app_select"
+                [options]="adjustmentVoucherOptions" class="w-50" (selectedOption)="adjustmentVoucherChanged($event)" formControlName="dateRange" [labelValue]="fieldLabelValues.dateRange">
+            </reactive-dropdown-field>
+        </div>
+        <div class="d-flex d-flex column-gap1 mr-b15 w-100">
+            <reactive-dropdown-field [name]="'total_amt'" [label]="localeData?.total_amt" [placeholder]="commonLocaleData?.app_select_range"
+            [options]="filtersForAmount" class="w-50" (selectedOption)="amountRangeChanged($event)" formControlName="amountFieldSelector" [labelValue]="fieldLabelValues.amountFieldSelector">
+            </reactive-dropdown-field>
+            <input-field [type]="'tel'" [placeholder]="'00'" class="w-50" name="total" formControlName="total"></input-field>
+        </div>
+        <div class="d-flex d-flex column-gap1 mr-b15 w-100">
+            <reactive-dropdown-field [name]="'total_amt'" [label]="localeData?.total_amt" [placeholder]="commonLocaleData?.app_select_range"
+            [options]="filtersForAmount" class="w-50" (selectedOption)="amountRangeChanged($event)" formControlName="amountFieldSelector" [labelValue]="fieldLabelValues.amountFieldSelector">
+            </reactive-dropdown-field>
+            <input-field [type]="'tel'" [placeholder]="'00'" class="w-50" name="total" formControlName="total"></input-field>
+        </div>
     </ng-container>
 
     <ng-container *ngIf="type === 'proforma'">

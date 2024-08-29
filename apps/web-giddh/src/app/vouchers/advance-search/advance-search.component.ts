@@ -21,7 +21,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     /** Holds Voucher Type */
-    @Input() public type: 'invoice' | 'drcr' | 'receipt' | 'proforma' | 'purchase' | 'purchase-order';
+    @Input() public type: 'invoice' | 'drcr' | 'receipt' | 'proforma' | 'purchase' | 'purchase-order' | 'payment';
     /** Holds Advance Filter Values */
     @Input() public advanceFilters: any;
     /** Emits Apply Filter Event */
@@ -75,13 +75,13 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     };
     /** Holds true if API call is in progress */
     public isLoading: boolean = true;
+    /** Holds date adjustment Voucher list items */
+    public adjustmentVoucherOptions: IOption[] = [];
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
         private formBuilder: FormBuilder
-    ) {
-
-    }
+    ) { }
 
     /**
      * Initializes the component
@@ -89,6 +89,8 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
      * @memberof AdvanceSearchComponent
      */
     public ngOnInit(): void {
+        console.log("inputData", this.type);
+        
         this.filtersForEntryTotal = [
             { label: this.commonLocaleData?.app_comparision_filters?.greater_than, value: 'greaterThan' },
             { label: this.commonLocaleData?.app_comparision_filters?.less_than, value: 'lessThan' },
@@ -108,6 +110,11 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             { label: this.commonLocaleData?.app_date_options?.on, value: 'on' },
             { label: this.commonLocaleData?.app_date_options?.after, value: 'after' },
             { label: this.commonLocaleData?.app_date_options?.before, value: 'before' },
+        ];
+
+        this.adjustmentVoucherOptions = [
+            { label: this.localeData?.receipt_types?.normal_receipts, value: 'normal receipt' },
+            { label: this.localeData?.receipt_types?.advance_receipts, value: 'advance receipt' }
         ];
 
 
@@ -280,6 +287,40 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
                 this.searchForm.get('balanceEqual')?.patchValue(true);
                 break;
         }
+    }
+
+    /**
+     * Update search form value based on due total range changed value
+     *
+     * @param {IOption} item
+     * @memberof AdvanceSearchComponent
+     */
+    public adjustmentVoucherChanged(item: IOption): void {
+        console.log("adjustmentVoucherChanged", item);
+        
+        // this.searchForm.get('balanceEqual')?.patchValue(false);
+        // this.searchForm.get('balanceLessThan')?.patchValue(false);
+        // this.searchForm.get('balanceMoreThan')?.patchValue(false);
+
+        // switch (item?.value) {
+        //     case 'greaterThan':
+        //         this.searchForm.get('balanceMoreThan')?.patchValue(true);
+        //         break;
+        //     case 'lessThan':
+        //         this.searchForm.get('balanceLessThan')?.patchValue(true);
+        //         break;
+        //     case 'greaterThanOrEquals':
+        //         this.searchForm.get('balanceMoreThan')?.patchValue(true);
+        //         this.searchForm.get('balanceEqual')?.patchValue(true);
+        //         break;
+        //     case 'lessThanOrEquals':
+        //         this.searchForm.get('balanceEqual')?.patchValue(true);
+        //         this.searchForm.get('balanceLessThan')?.patchValue(true);
+        //         break;
+        //     case 'equals':
+        //         this.searchForm.get('balanceEqual')?.patchValue(true);
+        //         break;
+        // }
     }
 
     /**

@@ -524,6 +524,8 @@ export class VouchersUtilityService {
             case 'purchase': return isAllItemsSelected ? localeData?.all_purchases : localeData?.purchases;
             case 'credit note': return isAllItemsSelected ? localeData?.all_credit_notes : localeData?.credit_notes;
             case 'debit note': return isAllItemsSelected ? localeData?.all_debit_notes : localeData?.debit_notes;
+            case 'receipt': return isAllItemsSelected ? localeData?.all_receipts : localeData?.receipts;
+            case 'payment': return isAllItemsSelected ? localeData?.all_payments : localeData?.payments;
         }
     }
 

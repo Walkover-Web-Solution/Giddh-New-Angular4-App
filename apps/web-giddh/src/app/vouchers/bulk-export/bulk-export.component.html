@@ -23,6 +23,7 @@
                     <textarea matInput rows="3" [placeholder]="localeData?.recipients_email" formControlName="recipients"></textarea>
                 </mat-form-field>
                 <button mat-stroked-button color="primary" (click)="exportVouchers(true)">{{ commonLocaleData?.app_send_email }}</button>
+                <button *ngIf="inputData?.voucherType === 'receipt' || inputData?.voucherType === 'payment'" mat-stroked-button color="primary" class="mr-l15" (click)="exportVouchers(false)">{{ commonLocaleData?.app_download }}</button>
             </div>
         </div>
     </div>

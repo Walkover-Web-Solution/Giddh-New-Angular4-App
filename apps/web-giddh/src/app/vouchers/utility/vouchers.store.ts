@@ -980,6 +980,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                 return this.voucherService.bulkExport(req.getRequest, req.postRequest).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
+                            console.log("bulkExportVoucher",res );
+                            
                             if (res.status === "success") {
                                 if (res.body.type !== "base64") {
                                     this.toaster.showSnackBar("success", res.body.file);
