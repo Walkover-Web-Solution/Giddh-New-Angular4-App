@@ -126,5 +126,6 @@
         "manage_payment":"Manage Payment Methods",
         "upi": "UPI",
         "credit_debit_card": "Credit/Debit Card",
-        "promoCode_message":"Apply Promo Code Successfully"
+        "promocode_message":"Apply Promo Code Successfully",
+         "promocode_discount_message":"You already have a better discount than the current promo code offers."
     }
