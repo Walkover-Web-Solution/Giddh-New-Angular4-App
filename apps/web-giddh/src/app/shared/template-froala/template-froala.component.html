@@ -6,7 +6,7 @@
 >
     <div class="dialog-header d-flex align-items-center form-header">
         <h3>{{ commonLocaleData?.app_custom_email_template }}</h3>
-        <button id="closedialog" mat-dialog-close aria-label="close icon"><i class="icon-cross"></i></button>
+        <span mat-dialog-close aria-label="close icon"><i class="icon-cross"></i></span>
     </div>
     <mat-dialog-content class="dialog-body d-flex flex-column h-100">
         <div class="overflow-auto">
@@ -60,7 +60,7 @@
                             name="emailSubject"
                             matInput
                             formControlName="emailSubject"
-                            class="form-control border-bottom"
+                            class="form-control border-bottom border-left-0 border-right-0 border-top-0"
                             [placeholder]="localeData?.enter_subject_placeholder"
                         />
                     </div>
