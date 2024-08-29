@@ -124,7 +124,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Holds Table Display columns for Receipt Voucher */
     public displayedColumnReceipt: string[] = ['index', 'receipt', 'voucherDate', 'type', 'customer', 'paymentMode', 'invoiceNumber','grandTotal' , 'balanceDue'];
     /** Holds Table Display columns for Payment Voucher */
-    public displayedColumnPayment: string[] = ['index', 'payment', 'customer', 'proformaDate', 'grandTotal', 'dueDate', 'status', 'action'];
+    public displayedColumnPayment: string[] = ['index', 'payment', 'voucherDate', 'vendor', 'paymentMode', 'invoiceNumber','grandTotal' , 'balanceDue'];
 
     /** Template Reference for Generic aside menu account */
     @ViewChild("accountAsideMenu") public accountAsideMenu: TemplateRef<any>;

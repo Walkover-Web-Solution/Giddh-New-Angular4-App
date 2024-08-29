@@ -23,6 +23,12 @@
                     color: var(--color-danger);
                 }
             }
+
+            &.payment-receipt, &.closing-box {
+                span {
+                    color: var(--color-slate);
+                }
+            }
         }
     }
     table {

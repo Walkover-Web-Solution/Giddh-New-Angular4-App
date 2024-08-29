@@ -296,5 +296,12 @@
     "receipts": "Receipts",
     "all_receipts": "All-Receipts",
     "payments": "Payments",
-    "all_payments": "All-payments"
+    "all_payments": "All-payments",
+
+    "payment_no_label": "Payment #",
+    "payment_no_placeholder": "Search Payment",
+    "vendor_name_label": "Vendor Name",
+    "vendor_name_placeholder": "Search Vendor",
+    "total_payments": "Total Payments",
+    "unused_payments": "Unused Payments"
 }
