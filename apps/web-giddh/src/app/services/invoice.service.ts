@@ -810,10 +810,10 @@ export class InvoiceService {
      */
     public updateCustomEmailTemplate(templateReq: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let invoiceType = templateReq?.invoiceType;
-        delete templateReq?.invoiceType;
+        let voucherType = templateReq?.voucherType;
+        delete templateReq?.voucherType;
         let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.UPDATE_EMAIL_TEMPLATE?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':invoiceType', invoiceType);
+            ?.replace(':voucherType', voucherType);
         return this.http.put(url, templateReq.model).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
@@ -860,14 +860,14 @@ export class InvoiceService {
     /**
      * Get email template
      *
-     * @param {string} invoiceType
+     * @param {string} voucherType
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof InvoiceService
      */
-    public getEmailTemplate(invoiceType: string): Observable<BaseResponse<any, any>> {
+    public getEmailTemplate(voucherType: string): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + CUSTOM_EMAIL_TEMPLATE.GET_EMAIL_TEMPLATE;
         url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
-        url = url?.replace(':invoiceType', invoiceType);
+        url = url?.replace(':voucherType', voucherType);
         return this.http.get(url).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
