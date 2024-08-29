@@ -32,8 +32,6 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
         super(DEFAULT_CUSTOM_EMAIL_STATE);
     }
 
-    public updateCustomEmailIsSuccess$ = this.select((state) => state.updateCustomEmailIsSuccess);
-
     /**
      * Get email condition suggestions
      *
