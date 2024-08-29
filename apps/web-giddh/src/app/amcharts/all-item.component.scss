@@ -1,0 +1,8 @@
+.charts {
+    padding: 1rem;
+    height: calc(100vh - 85px);
+
+    & > div {
+        border: 2px dashed blue;
+    }
+}
