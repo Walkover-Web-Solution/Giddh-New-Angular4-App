@@ -85,7 +85,7 @@
         "file-saver": "^2.0.2",
         "froala-editor": "^4.2.1",
         "intl-tel-input": "17.0.16",
-        "jquery": "^3.5.1",
+        "jquery": "3.5.1",
         "json-tree-viewer": "0.0.2",
         "jsondiffpatch": "0.4.1",
         "jsrsasign": "^10.9.0",
