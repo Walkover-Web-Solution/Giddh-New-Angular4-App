@@ -320,32 +320,6 @@
                                     >
                                         {{ localeData?.manage_payment }}
                                     </button>
-                                    <button
-                                        *ngIf="
-                                            element?.isOwner &&
-                                            element?.companies &&
-                                            element?.companies?.length === 1 &&
-                                            element?.companyArchiveStatus === 'USER_ARCHIVED'
-                                        "
-                                        mat-menu-item
-                                        (click)="archiveCompany(element, 'UNARCHIVED')"
-                                        aria-label="details"
-                                    >
-                                        {{ commonLocaleData?.app_unarchive }}
-                                    </button>
-                                    <button
-                                        *ngIf="
-                                            element?.isOwner &&
-                                            element?.companies &&
-                                            element?.companies?.length === 1 &&
-                                            element?.companyArchiveStatus === 'UNARCHIVED'
-                                        "
-                                        mat-menu-item
-                                        (click)="archiveCompany(element, 'USER_ARCHIVED')"
-                                        aria-label="details"
-                                    >
-                                        {{ commonLocaleData?.app_archive }}
-                                    </button>
                                 </div>
                             </mat-menu>
                         </td>
