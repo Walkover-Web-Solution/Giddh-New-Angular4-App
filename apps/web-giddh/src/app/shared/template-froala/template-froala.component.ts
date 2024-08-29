@@ -38,9 +38,9 @@ export class TemplateFroalaComponent implements OnInit {
     /** Instance of subject field tribute */
     public subjectTribute: any;
     /** True if show cc */
-    public showCc: boolean = true;
+    public showCc: boolean = false;
     /** True if show bcc */
-    public showBcc: boolean = true;
+    public showBcc: boolean = false;
     /** Hold froala editor options */
     public froalaOptions: any = {
         key: FROALA_EDITOR_KEY,
@@ -118,7 +118,7 @@ export class TemplateFroalaComponent implements OnInit {
     public selectedBccEmails: any[] = [];
 
     constructor(
-        @Inject(MAT_DIALOG_DATA) public invoiceType,
+        @Inject(MAT_DIALOG_DATA) public voucherType,
         private formBuilder: FormBuilder,
         private componentStore: CustomEmailComponentStore,
         private dialog: MatDialog,
@@ -260,7 +260,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @memberof TemplateFroalaComponent
      */
     public getEmailTemplates(): void {
-        this.componentStore.getAllEmailTemplate(this.invoiceType);
+        this.componentStore.getAllEmailTemplate(this.voucherType);
     }
 
     /**
@@ -289,7 +289,7 @@ export class TemplateFroalaComponent implements OnInit {
             to: [template?.to ?? ''],
             cc: [template?.cc ?? '',],
             bcc: [template?.bcc ?? ''],
-            voucherTypes: [[this.invoiceType]],
+            voucherTypes: [[this.voucherType]],
             emailSubject: [template?.emailSubject ?? ''],
             html: [template?.html ?? '']
         });
@@ -315,7 +315,7 @@ export class TemplateFroalaComponent implements OnInit {
             return;
         }
         let req = {
-            invoiceType: this.invoiceType,
+            voucherType: this.voucherType,
             model: this.emailForm.value
         }
         this.componentStore.updateCustomTemplate(req);
@@ -327,7 +327,7 @@ export class TemplateFroalaComponent implements OnInit {
     * @param {string} type
     * @memberof TemplateFroalaComponent
     */
-    public showHideBccCc(type: string): void {
+    public toggleBccCc(type: string): void {
         if (type == "bcc") {
             this.showBcc = !this.showBcc;
         } else {

@@ -393,12 +393,10 @@
                                                     aria-label="auto mail"
                                                     [(ngModel)]="estimateSetting.autoMail"
                                                     name="estimateAutomail"
-                                                    class="hide-on-mobile"
                                                     color="primary"
                                                 >
                                                 </mat-slide-toggle>
                                                 <a
-                                                    *ngIf="voucherApiVersion === 2"
                                                     href="javascript:;"
                                                     class="cursor-pointer"
                                                     (click)="openCustomEmailDialog('estimate')"
@@ -552,12 +550,10 @@
                                                     aria-label="auto mail"
                                                     [(ngModel)]="proformaSetting.autoMail"
                                                     name="proformaAutomail"
-                                                    class="hide-on-mobile"
                                                     color="primary"
                                                 >
                                                 </mat-slide-toggle>
                                                 <a
-                                                    *ngIf="voucherApiVersion === 2"
                                                     href="javascript:;"
                                                     class="cursor-pointer"
                                                     (click)="openCustomEmailDialog('proforma')"
@@ -696,12 +692,10 @@
                                                     aria-label="invoice mail"
                                                     [(ngModel)]="invoiceSetting.autoMail"
                                                     name="invoiceAutomail"
-                                                    class="hide-on-mobile"
                                                     color="primary"
                                                 >
                                                 </mat-slide-toggle>
                                                 <a
-                                                    *ngIf="voucherApiVersion === 2"
                                                     href="javascript:;"
                                                     class="cursor-pointer"
                                                     (click)="openCustomEmailDialog('sales')"
@@ -1127,12 +1121,10 @@
                                                 aria-label="debit note"
                                                 [(ngModel)]="invoiceSetting.autoMailDebitNote"
                                                 name="autoMailDebitNote"
-                                                class="hide-on-mobile"
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
                                             <a
-                                                *ngIf="voucherApiVersion === 2"
                                                 href="javascript:;"
                                                 class="cursor-pointer"
                                                 (click)="openCustomEmailDialog('debit note')"
@@ -1249,12 +1241,10 @@
                                                 aria-label="credit note"
                                                 [(ngModel)]="invoiceSetting.autoMailCreditNote"
                                                 name="autoMailCreditNote"
-                                                class="hide-on-mobile"
                                                 color="primary"
                                             >
                                             </mat-slide-toggle>
                                             <a
-                                                *ngIf="voucherApiVersion === 2"
                                                 href="javascript:;"
                                                 class="cursor-pointer"
                                                 (click)="openCustomEmailDialog('credit note')"
