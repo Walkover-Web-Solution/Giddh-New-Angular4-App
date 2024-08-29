@@ -8,9 +8,9 @@
         <h3>{{ commonLocaleData?.app_custom_email_template }}</h3>
         <button id="closedialog" mat-dialog-close aria-label="close icon"><i class="icon-cross"></i></button>
     </div>
-    <mat-dialog-content class="dialog-body d-flex flex-column">
-        <div class="form-div">
-            <form [formGroup]="emailForm" class="d-flex flex-column" style="flex-grow: 1">
+    <mat-dialog-content class="dialog-body d-flex flex-column h-100">
+        <div class="overflow-auto">
+            <form [formGroup]="emailForm" class="d-flex flex-column flex-grow-1">
                 <div class="chip-gap">
                     <div class="form-group position-relative">
                         <select-multiple-fields
@@ -23,10 +23,10 @@
                             class="select-multiple-chiplist mb-3"
                         ></select-multiple-fields>
                         <div class="d-flex column-gap1 position-absolute chiplist-section">
-                            <a class="btn-link under" href="javascript:void(0);" (click)="showHideBccCc('cc')">{{
+                            <a class="btn-link under" href="javascript:;" (click)="showHideBccCc('cc')">{{
                                 localeData?.cc
                             }}</a>
-                            <a class="btn-link" href="javascript:void(0);" (click)="showHideBccCc('bcc')">{{
+                            <a class="btn-link" href="javascript:;" (click)="showHideBccCc('bcc')">{{
                                 localeData?.bcc
                             }}</a>
                         </div>

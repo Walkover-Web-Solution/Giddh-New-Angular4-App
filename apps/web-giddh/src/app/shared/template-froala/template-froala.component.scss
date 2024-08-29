@@ -1,13 +1,4 @@
-.dialog-body {
-    display: flex;
-    flex-direction: column;
-}
 
-form {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-}
 
 #closedialog {
     position: absolute;
@@ -25,10 +16,6 @@ form {
 
 .form-header {
     height: 40px !important;
-}
-
-.form-div {
-    overflow: scroll !important;
 }
 
 .chiplist-section {

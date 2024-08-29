@@ -26,8 +26,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
         MatButtonModule,
         MatDialogModule,
         ReactiveFormsModule,
-        FormsModule,
-        FormFieldsModule
+        FormsModule
     ],
     exports: [
         TemplateFroalaComponent

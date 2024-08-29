@@ -1,7 +1,7 @@
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import FroalaEditor from 'froala-editor';
-import { ReplaySubject, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import Tribute from 'tributejs';
 import { CustomEmailComponentStore } from './utility/template-froala.store';
 import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
@@ -15,34 +15,34 @@ import { GeneralService } from '../../services/general.service';
     providers: [CustomEmailComponentStore]
 })
 export class TemplateFroalaComponent implements OnInit {
-    /** Instance of subject input field */
+    /*** Instance of subject input field */
     @ViewChild('subjectInputField', { static: false }) subjectInputField: ElementRef;
-    /* Aside pane state*/
+    /** Aside pane state*/
     public asideMenuState: string = 'out';
-    /* This will hold common JSON data */
+    /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /* This will hold locale JSON data */
+    /** This will hold locale JSON data */
     public localeData: any = {};
-    /* Observable to unsubscribe all the store listeners to avoid memory leaks */
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /** Holds Store update email template API success state as observable*/
-    public updateCustomEmailIsSuccess$ = this.componentStore.select(state => state.updateCustomEmailIsSuccess);
-    /** Holds Store get email template API success state as observable*/
-    public emailTemplates$ = this.componentStore.select(state => state.emailTemplates);
-    /** Holds Store get email content suggestions API success state as observable*/
-    public emailContentSuggestions$ = this.componentStore.select(state => state.emailContentSuggestions);
-    /* Instance of formgroup */
+    /*** Holds Store update email template API success state as observable*/
+    public updateCustomEmailIsSuccess$: Observable<any> = this.componentStore.select(state => state.updateCustomEmailIsSuccess);
+    /*** Holds Store get email template API success state as observable*/
+    public emailTemplates$: Observable<any> = this.componentStore.select(state => state.emailTemplates);
+    /*** Holds Store get email content suggestions API success state as observable*/
+    public emailContentSuggestions$: Observable<any> = this.componentStore.select(state => state.emailContentSuggestions);
+    /** Instance of formgroup */
     public emailForm: FormGroup;
-    /* Instance of Froala Tribute */
+    /** Instance of Froala Tribute */
     public froalaTribute: any;
-    /* Instance of subject field tribute */
+    /** Instance of subject field tribute */
     public subjectTribute: any;
-    /* True if show cc */
+    /** True if show cc */
     public showCc: boolean = true;
-    /* True if show bcc */
+    /** True if show bcc */
     public showBcc: boolean = true;
-    /* Hold froala editor options */
-    public froalaOptions = {
+    /** Hold froala editor options */
+    public froalaOptions: any = {
         key: FROALA_EDITOR_KEY,
         attribution: false,
         heightMin: 300,
@@ -102,30 +102,30 @@ export class TemplateFroalaComponent implements OnInit {
             }
         }
     };
-    /* Hold froala editor instance */
+    /** Hold froala editor instance */
     public froalaEditor: any;
-    /* Hold to email options */
+    /** Hold to email options */
     public toEmails: any[] = [];
-    /* Hold selected to email options */
+    /** Hold selected to email options */
     public selectedToEmails: any[] = [];
-    /* Hold  cc email options */
+    /** Hold  cc email options */
     public ccEmails: any[] = [];
-    /* Hold selected cc email options */
+    /** Hold selected cc email options */
     public selectedCcEmails: any[] = [];
-    /* Hold bcc email options */
+    /** Hold bcc email options */
     public bccEmails: any[] = [];
-    /* Hold selected bcc email options */
+    /** Hold selected bcc email options */
     public selectedBccEmails: any[] = [];
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public invoiceType,
-        private fb: FormBuilder,
+        private formBuilder: FormBuilder,
         private componentStore: CustomEmailComponentStore,
         private dialog: MatDialog,
         private generalService: GeneralService
     ) { }
 
-    /**
+    /***
      * Initializes the component and performs necessary operations.
      *
      * This function sets up the initial state of the component, fetches email content suggestions,
@@ -174,24 +174,23 @@ export class TemplateFroalaComponent implements OnInit {
         });
 
         this.updateCustomEmailIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response !== undefined || response !== null) {
+            if (response) {
                 this.dialog.closeAll();
             }
         });
     }
 
-    /**
+    /***
      * This will update the html form control with the froala html
      *
      * @private
      * @memberof TemplateFroalaComponent
      */
     private updateFormControl(): void {
-        const htmlContent = this.froalaEditor.html.get();
-        this.emailForm.get('html')?.patchValue(htmlContent);
+        this.emailForm.get('html')?.patchValue(this.froalaEditor.html.get());
     }
 
-    /**
+    /***
      * Initializes the Froala editor with tribute suggestions.
      *
      * This function is responsible for setting up the tribute suggestions for the Froala editor and the subject input field.
@@ -213,16 +212,12 @@ export class TemplateFroalaComponent implements OnInit {
 
         this.froalaTribute = new Tribute({
             values: tributeSuggestions,
-            selectTemplate: function (item) {
-                return `<span class="fr-deletable fr-froalaTribute">@${item.original.value}@</span>`;
-            }
+            selectTemplate: (item) => `<span class="fr-deletable fr-froalaTribute">@${item.original.value}@</span>`
         });
 
         this.subjectTribute = new Tribute({
             values: tributeSuggestions,
-            selectTemplate: function (item) {
-                return `@${item.original.value}@`;
-            }
+            selectTemplate: (item) => `@${item.original.value}@`
         });
 
         if (this.froalaEditor) {
@@ -233,7 +228,7 @@ export class TemplateFroalaComponent implements OnInit {
         }
     }
 
-    /**
+    /***
      * Maps email suggestions to a format suitable for the dropdown options.
      *
      * This function takes an array of email suggestions and transforms it into an array of objects,
@@ -243,6 +238,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @param emailSuggestions - An array of email suggestions to be mapped.
      * @returns An array of objects, where each object has a `value` and `label` property set to the corresponding email suggestion.
      * If the `emailSuggestions` array is `null` or `undefined`, an empty array is returned.
+     *
      * @memberof TemplateFroalaComponent
      */
     private mapEmailSuggestions(emailSuggestions: any[]): any[] {
@@ -252,7 +248,7 @@ export class TemplateFroalaComponent implements OnInit {
         })) || [];
     }
 
-    /**
+    /***
      * Fetches email conditions from the server and updates the store.
      *
      * This function triggers the `getEmailConditionSuggestion` action in the `CustomEmailComponentStore`
@@ -267,7 +263,7 @@ export class TemplateFroalaComponent implements OnInit {
         this.componentStore.getAllEmailTemplate(this.invoiceType);
     }
 
-    /**
+    /***
      * Fetches email content suggestions from the server and updates the store.
      *
      * This function triggers the `getEmailContentSuggestions` action in the `CustomEmailComponentStore`
@@ -282,14 +278,14 @@ export class TemplateFroalaComponent implements OnInit {
         this.componentStore.getEmailContentSuggestions(null);
     }
 
-    /**
+    /***
      * Initializes the email form with the provided template data.
      *
      * @param {*} [template]
      * @memberof TemplateFroalaComponent
      */
     public initializeForm(template?: any): void {
-        this.emailForm = this.fb.group({
+        this.emailForm = this.formBuilder.group({
             to: [template?.to ?? ''],
             cc: [template?.cc ?? '',],
             bcc: [template?.bcc ?? ''],
@@ -299,7 +295,7 @@ export class TemplateFroalaComponent implements OnInit {
         });
     }
 
-    /**
+    /***
      * Handles the submission of the email form.
      *
      * This function is responsible for preparing the form data, validating it, and sending it to the server for updating the custom template.
@@ -325,7 +321,7 @@ export class TemplateFroalaComponent implements OnInit {
         this.componentStore.updateCustomTemplate(req);
     }
 
-    /**
+    /***
     * Show/Hide bcc/cc field
     *
     * @param {string} type
@@ -339,7 +335,7 @@ export class TemplateFroalaComponent implements OnInit {
         }
     }
 
-    /**
+    /***
     * Releases the memory
     *
     * @memberof TemplateFroalaComponent
