@@ -94,7 +94,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
         this.subscriptions$ = observableOf([]);
         if (this.subscriptionMove) {
             this.isLoading = true;
-            this.searchSubscription(this.searchSubscriptionRequest.q ,false);
+            this.searchSubscription(this.searchSubscriptionRequest.q, false);
             this.subscriptionList$.pipe(debounceTime(700),
                 distinctUntilChanged(),
                 takeUntil(this.destroyed$)).subscribe(response => {
@@ -136,11 +136,11 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     * @param {boolean} [loadMore]
     * @memberof MoveCompanyComponent
     */
-    public searchCompany(searchedText: any, loadMore: boolean = false): void {
+    public searchCompany(searchedText: string, loadMore: boolean = false): void {
         if (this.searchRequest.loadMore) {
             return;
         }
-        if (typeof searchedText === 'string' && searchedText) {
+        if (searchedText) {
             this.searchRequest.q = searchedText;
         }
 
@@ -275,12 +275,13 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
       * @param {boolean} [loadMore]
       * @memberof MoveCompanyComponent
       */
-    public searchSubscription(searchedText: any, loadMore: boolean = false): void {
+    public searchSubscription(searchedText: string, loadMore: boolean = false): void {
+        console.log(searchedText);
         if (this.searchSubscriptionRequest.loadMore) {
             return;
         }
 
-        if (typeof searchedText === 'string' && searchedText) {
+        if (searchedText) {
             this.searchSubscriptionRequest.q = searchedText;
         }
         if (loadMore) {

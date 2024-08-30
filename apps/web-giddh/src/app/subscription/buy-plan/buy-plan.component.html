@@ -268,14 +268,18 @@
                                                                         plan?.monthlyAmountAfterDiscount === 0)
                                                                 "
                                                             >
-                                                                <span class="font-24 strong">
-                                                                    {{ localeData?.free }} {{ commonLocaleData?.app_to
-                                                                    }}<br />{{ plan?.monthlyDiscount?.duration }}
-                                                                    {{
-                                                                        commonLocaleData?.app_duration?.month
-                                                                            | lowercase
-                                                                    }}</span
-                                                                >
+                                                                <p class="mb-3">
+                                                                    <span>
+                                                                        {{ localeData?.free }}
+                                                                        {{ commonLocaleData?.app_to }}<br />{{
+                                                                            plan?.monthlyDiscount?.duration
+                                                                        }}
+                                                                        {{
+                                                                            commonLocaleData?.app_duration?.month
+                                                                                | lowercase
+                                                                        }}
+                                                                    </span>
+                                                                </p>
                                                             </ng-container>
                                                             <ng-container
                                                                 *ngIf="plan?.monthlyAmount > 0 || plan?.monthlyDiscount"
