@@ -465,7 +465,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         this.dialog.open(TransferDialogComponent, {
             data: subscriptionId,
             panelClass: 'transfer-popup',
-            width: "630px",
+            width: 'var(--aside-pane-width)',
             role: 'alertdialog',
             ariaLabel: 'transferDialog'
         });
@@ -660,7 +660,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         this.subscriptionMove = false;
         this.selectedCompany = company;
         this.dialog.open(this.moveCompany, {
-            width: '40%',
+            width: 'var(--aside-pane-width)',
             role: 'alertdialog',
             ariaLabel: 'moveDialog'
         });
