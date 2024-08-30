@@ -122,9 +122,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Holds Table Display columns for Purchase Bill Voucher */
     public displayedColumnsBill: string[] = ['index', 'bill', 'vendor', 'voucherDate', 'order', 'grandTotal', 'dueDate', 'status'];
     /** Holds Table Display columns for Receipt Voucher */
-    public displayedColumnReceipt: string[] = ['index', 'receipt', 'voucherDate', 'type', 'customer', 'paymentMode', 'invoiceNumber','grandTotal' , 'balanceDue'];
+    public displayedColumnReceipt: string[] = ['index', 'receipt', 'voucherDate', 'type', 'customer', 'paymentMode', 'invoiceNumber', 'grandTotal', 'balanceDue'];
     /** Holds Table Display columns for Payment Voucher */
-    public displayedColumnPayment: string[] = ['index', 'payment', 'voucherDate', 'vendor', 'paymentMode', 'invoiceNumber','grandTotal' , 'balanceDue'];
+    public displayedColumnPayment: string[] = ['index', 'payment', 'voucherDate', 'vendor', 'paymentMode', 'invoiceNumber', 'grandTotal', 'balanceDue'];
 
     /** Template Reference for Generic aside menu account */
     @ViewChild("accountAsideMenu") public accountAsideMenu: TemplateRef<any>;
@@ -275,6 +275,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public sendEmailModalDialogRef: MatDialogRef<any>;
     /** Holds Currently used Voucher */
     private currentVoucher: any = null;
+    /** Holds Advance Search Filter Temp Keys to show label on filter dialog */
+    private advanceSearchTempKeyObj: any = {};
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -320,9 +322,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 this.activeModule = params.module;
                 this.advanceFilters.type = this.voucherType;
+                this.setInitialAdvanceFilter();
 
                 this.activeTabGroup = this.tabsGroups.findIndex(group => group.includes(this.voucherType));
-                console.log("activeTabGroup", this.activeTabGroup);
 
                 if (this.activeTabGroup === -1) {
                     this.activeTabGroup = 0; // default to the first group if not found
@@ -560,8 +562,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
 
         this.componentStore.bulkExportVoucherResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            console.log("bulkExportVoucherResponse", response);
-            
             if (response) {
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
@@ -1018,6 +1018,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public advanceSearchDialog(): void {
+        this.advanceFilters = { ...this.advanceFilters, ...this.advanceSearchTempKeyObj };
         this.advanceSearchDialogRef = this.dialog.open(this.advanceSearch, {
             panelClass: ['mat-dialog-md']
         });
@@ -1352,6 +1353,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
 
     public applyAdvanceSearch(event: any): void {
+        const tempKeysInAdvanceFiltersForm = ['dueAmount', 'dateRange', 'grandTotalOperation', 'invoiceTotalAmount', 'invoiceDateRange'];
         this.advanceSearchDialogRef?.close();
         this.advanceFiltersApplied = true;
 
@@ -1376,6 +1378,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.advanceFilters.count = advanceFilters.count;
         this.advanceFilters.q = advanceFilters.q;
 
+        tempKeysInAdvanceFiltersForm.forEach(keys => {
+            this.advanceSearchTempKeyObj = { ...this.advanceSearchTempKeyObj, [keys]: this.advanceFilters[keys] };
+            delete this.advanceFilters[keys];
+        });
         this.advanceFilters = this.vouchersUtilityService.cleanObject(this.advanceFilters);
 
         this.getVouchers(false);
@@ -1633,6 +1639,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.accountUniqueNameInput.patchValue("");
         this.advanceFiltersApplied = false;
         this.isSearching = false;
+        this.advanceSearchTempKeyObj = {};
         this.getVouchers(false);
     }
 
