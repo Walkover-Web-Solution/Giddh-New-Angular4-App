@@ -8,7 +8,6 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import * as dayjs from 'dayjs';
 import { InvoiceFilterClassForInvoicePreview } from '../../models/api-models/Invoice';
-import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'app-advance-search',
@@ -21,7 +20,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
     /** Holds Voucher Type */
-    @Input() public type: 'invoice' | 'drcr' | 'receipt' | 'proforma' | 'purchase' | 'purchase-order';
+    @Input() public type: 'invoice' | 'drcr' | 'receipt' | 'proforma' | 'purchase' | 'purchase-order' | 'payment';
     /** Holds Advance Filter Values */
     @Input() public advanceFilters: any;
     /** Emits Apply Filter Event */
@@ -71,17 +70,18 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         dueDateRange: '',
         dueAmount: '',
         dateRange: '',
-        amountFieldSelector: ''
+        amountFieldSelector: '',
+        adjustmentVoucherOptions: ''
     };
     /** Holds true if API call is in progress */
     public isLoading: boolean = true;
+    /** Holds date adjustment Voucher list items */
+    public adjustmentVoucherOptions: IOption[] = [];
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
         private formBuilder: FormBuilder
-    ) {
-
-    }
+    ) { }
 
     /**
      * Initializes the component
@@ -108,6 +108,11 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             { label: this.commonLocaleData?.app_date_options?.on, value: 'on' },
             { label: this.commonLocaleData?.app_date_options?.after, value: 'after' },
             { label: this.commonLocaleData?.app_date_options?.before, value: 'before' },
+        ];
+
+        this.adjustmentVoucherOptions = [
+            { label: this.localeData?.receipt_types?.normal_receipts, value: 'NORMAL_RECEIPT' },
+            { label: this.localeData?.receipt_types?.advance_receipts, value: 'ADVANCE_RECEIPT' }
         ];
 
 
@@ -148,7 +153,8 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             grandTotalOperation: [this.advanceFilters?.grandTotalOperation ?? ''],
             statuses: [this.advanceFilters?.statuses ?? []],
             dueFrom: [(this.advanceFilters?.dueFrom && dayjs(this.advanceFilters?.dueFrom, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD)) ?? dayjs(this.advanceFilters?.from, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD) ?? ''],
-            dueTo: [(this.advanceFilters?.dueTo && dayjs(this.advanceFilters?.dueTo, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD)) ?? dayjs(this.advanceFilters?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD) ?? '']
+            dueTo: [(this.advanceFilters?.dueTo && dayjs(this.advanceFilters?.dueTo, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD)) ?? dayjs(this.advanceFilters?.to, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT_YYYY_MM_DD) ?? ''],
+            receiptType: ['']
         });
 
         this.selectedDateRange = { startDate: this.advanceFilters.from, endDate: this.advanceFilters.to };
@@ -177,6 +183,10 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         const amountFieldSelector = this.dateOptions?.filter(option => option.value === this.advanceFilters?.amountFieldSelector);
         if (amountFieldSelector?.length) {
             this.fieldLabelValues.amountFieldSelector = amountFieldSelector[0]?.label;
+        }
+        const adjustmentVoucherOptions = this.adjustmentVoucherOptions?.filter(option => option.value === this.advanceFilters?.receiptType);
+        if (adjustmentVoucherOptions?.length) {
+            this.fieldLabelValues.adjustmentVoucherOptions = adjustmentVoucherOptions[0]?.label;
         }
     }
 
@@ -218,34 +228,6 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
                 break;
             case 'equals':
                 this.searchForm.get('totalEqual')?.patchValue(true);
-                break;
-        }
-    }
-
-    /**
-     * Update search form value based on amount range changed value
-     *
-     * @param {IOption} item
-     * @memberof AdvanceSearchComponent
-     */
-    public amountRangeChanged(item: IOption): void {
-        this.searchForm.get('amountEquals')?.patchValue(false);
-        this.searchForm.get('amountExclude')?.patchValue(false);
-        this.searchForm.get('amountGreaterThan')?.patchValue(false);
-        this.searchForm.get('amountLessThan')?.patchValue(false);
-
-        switch (item?.value) {
-            case 'greaterThan':
-                this.searchForm.get('amountGreaterThan')?.patchValue(true);
-                break;
-            case 'lessThan':
-                this.searchForm.get('amountLessThan')?.patchValue(true);
-                break;
-            case 'exclude':
-                this.searchForm.get('amountExclude')?.patchValue(true);
-                break;
-            case 'equals':
-                this.searchForm.get('amountEquals')?.patchValue(true);
                 break;
         }
     }
@@ -330,29 +312,66 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
      * @memberof AdvanceSearchComponent
      */
     public parseAllDateField(): void {
-        if (this.searchForm.get('voucherDate')?.value) {
-            this.searchForm.get('voucherDate')?.patchValue((typeof this.searchForm.get('voucherDate')?.value === "object") ? dayjs(this.searchForm.get('voucherDate')?.value).format(GIDDH_DATE_FORMAT) : dayjs(this.searchForm.get('voucherDate')?.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
-        }
+        const allDateControlName: string[] = ['voucherDate', 'dueDate', 'expireFrom', 'expireTo', 'dueFrom', 'dueTo'];
+        const dueVoucherDate: string[] = ['voucherDate', 'dueDate'];    // For Sales | CR | DR | Bill
+        const expiryDateRange: string[] = ['expireFrom', 'expireTo'];   // For Estimate | Proforma
+        const dueDateRange: string[] = ['dueFrom', 'dueTo'];            // For Purchase-order
 
-        if (this.searchForm.get('dueDate')?.value) {
-            this.searchForm.get('dueDate')?.patchValue((typeof this.searchForm.get('dueDate')?.value === "object") ? dayjs(this.searchForm.get('dueDate')?.value).format(GIDDH_DATE_FORMAT) : dayjs(this.searchForm.get('dueDate')?.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT));
-        }
+        // Helper function to format and patch date fields
+        const formatDateField = (fieldName: string): void => {
+            const fieldValue = this.searchForm.get(fieldName)?.value;
+            if (fieldValue) {
+                this.searchForm.get(fieldName)?.patchValue(
+                    typeof fieldValue === 'object'
+                        ? dayjs(fieldValue).format(GIDDH_DATE_FORMAT)
+                        : dayjs(fieldValue, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)
+                );
+            }
+        };
 
-        if (this.searchForm.get('expireFrom')?.value) {
-            this.searchForm.get('expireFrom')?.patchValue(dayjs(this.searchForm.get('expireFrom')?.value).format(GIDDH_DATE_FORMAT));
-        }
+        // Helper function to clear the date fields
+        const clearDateFields = (controlNames: string[]): void => {
+            controlNames.forEach(controlName => {
+                this.searchForm.get(controlName)?.patchValue(null);
+            });
+        };
 
-        if (this.searchForm.get('expireTo')?.value) {
-            this.searchForm.get('expireTo')?.patchValue(dayjs(this.searchForm.get('expireTo')?.value).format(GIDDH_DATE_FORMAT));
-        }
+        allDateControlName.forEach(controlName => {
+            switch (this.type) {
+                case 'drcr':
+                case 'invoice':
+                case 'purchase':
+                    if (dueVoucherDate.includes(controlName)) {
+                        formatDateField('voucherDate');
+                        formatDateField('dueDate');
+                    } else {
+                        this.searchForm.get(controlName)?.patchValue(null);
+                    }
+                    break;
 
-        if (this.searchForm.get('dueFrom')?.value) {
-            this.searchForm.get('dueFrom')?.patchValue(dayjs(this.searchForm.get('dueFrom')?.value).format(GIDDH_DATE_FORMAT));
-        }
+                case 'proforma':
+                    if (expiryDateRange.includes(controlName)) {
+                        formatDateField('expireFrom');
+                        formatDateField('expireTo');
+                    } else {
+                        this.searchForm.get(controlName)?.patchValue(null);
+                    }
+                    break;
 
-        if (this.searchForm.get('dueTo')?.value) {
-            this.searchForm.get('dueTo')?.patchValue(dayjs(this.searchForm.get('dueTo')?.value).format(GIDDH_DATE_FORMAT));
-        }
+                case 'purchase-order':
+                    if (dueDateRange.includes(controlName)) {
+                        formatDateField('dueFrom');
+                        formatDateField('dueTo');
+                    } else {
+                        this.searchForm.get(controlName)?.patchValue(null);
+                    }
+                    break;
+
+                default:
+                    clearDateFields(allDateControlName);
+                    break;
+            }
+        });
     }
 
     /**

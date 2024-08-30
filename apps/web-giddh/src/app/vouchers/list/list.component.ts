@@ -121,6 +121,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public displayedColumnPurchase: string[] = ['index', 'date', 'purchase', 'vendorname', 'grandTotal', 'dueDate', 'status'];
     /** Holds Table Display columns for Purchase Bill Voucher */
     public displayedColumnsBill: string[] = ['index', 'bill', 'vendor', 'voucherDate', 'order', 'grandTotal', 'dueDate', 'status'];
+    /** Holds Table Display columns for Receipt Voucher */
+    public displayedColumnReceipt: string[] = ['index', 'receipt', 'voucherDate', 'type', 'customer', 'paymentMode', 'invoiceNumber', 'grandTotal', 'balanceDue'];
+    /** Holds Table Display columns for Payment Voucher */
+    public displayedColumnPayment: string[] = ['index', 'payment', 'voucherDate', 'vendor', 'paymentMode', 'invoiceNumber', 'grandTotal', 'balanceDue'];
 
     /** Template Reference for Generic aside menu account */
     @ViewChild("accountAsideMenu") public accountAsideMenu: TemplateRef<any>;
@@ -173,7 +177,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public selectedDateRangeUi: any;
     /** This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /** Selected range label */
+    /* Selected range label */
     public selectedRangeLabel: any = "";
     /** This will store the x/y position of the field to show datepicker under it */
     public dateFieldPosition: any = { x: 0, y: 0 };
@@ -196,7 +200,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public tabsGroups: any[][] = [
         ["estimates", "proformas", "sales"],
         ["debit note", "credit note"],
-        ["purchase-order", "purchase"]
+        ["purchase-order", "purchase"],
+        ["receipt"],
+        ["payment"]
     ];
     /** Holds active selected Tab Index  */
     public selectedTabIndex: number = 2;
@@ -229,7 +235,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Holds Selected Vouchers */
     public selectedVouchers: any[] = [];
     /** Holds Voucher Name that suports csv file export */
-    public csvSupportVoucherType: string[] = ['sales', 'debit note', 'credit note', 'purchase'];
+    public csvSupportVoucherType: string[] = ['sales', 'debit note', 'credit note', 'purchase', 'receipt', 'payment'];
     /** Holds True if all Vouchers are Selected */
     public allVouchersSelected: boolean = false;
     /** Holds Eway Bill Dialog Ref */
@@ -269,6 +275,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public sendEmailModalDialogRef: MatDialogRef<any>;
     /** Holds Currently used Voucher */
     private currentVoucher: any = null;
+    /** Holds Advance Search Filter Temp Keys to show label on filter dialog */
+    private advanceSearchTempKeyObj: any = {};
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -314,8 +322,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 this.activeModule = params.module;
                 this.advanceFilters.type = this.voucherType;
+                this.setInitialAdvanceFilter();
 
                 this.activeTabGroup = this.tabsGroups.findIndex(group => group.includes(this.voucherType));
+
                 if (this.activeTabGroup === -1) {
                     this.activeTabGroup = 0; // default to the first group if not found
                 }
@@ -408,10 +418,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         this.componentStore.exportVouchersFile$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
+                const blob = this.generalService.base64ToBlob(response, 'application/xls', 512);
+                const fileName = `${this.vouchersUtilityService.getExportFileNameByVoucherType(this.voucherType, this.allVouchersSelected, this.localeData)}.xls`;
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
-                let blob = this.generalService.base64ToBlob(response, 'application/xls', 512);
-                const fileName = `${this.vouchersUtilityService.getExportFileNameByVoucherType(this.voucherType, this.allVouchersSelected, this.localeData)}.xls`
                 return saveAs(blob, fileName);
             }
         });
@@ -550,6 +560,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
             }
         });
+
+        this.componentStore.bulkExportVoucherResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.selectedVouchers = [];
+                this.allVouchersSelected = false;
+            }
+        });
     }
 
     /**
@@ -659,6 +676,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             } else if (this.voucherType === 'purchase' && this.activeModule === 'settings') {
                 this.selectedTabIndex = 2;
             }
+        } else if (this.activeTabGroup === 3) {
+            if (this.voucherType === 'receipt' && this.activeModule === 'list') {
+                this.selectedTabIndex = 0;
+            }
+        } else if (this.activeTabGroup === 4) {
+            if (this.voucherType === 'payment' && this.activeModule === 'list') {
+                this.selectedTabIndex = 0;
+            }
         }
     }
 
@@ -719,6 +744,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             } else if (selectedTabIndex === 2) {
                 voucherType = "purchase";
                 activeModule = "settings";
+            }
+        } else if (this.activeTabGroup === 3) {
+            if (selectedTabIndex === 0) {
+                voucherType = "receipt";
+                activeModule = "list";
+            }
+        } else if (this.activeTabGroup === 4) {
+            if (selectedTabIndex === 0) {
+                voucherType = "payment";
+                activeModule = "list";
             }
         }
 
@@ -983,6 +1018,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public advanceSearchDialog(): void {
+        this.advanceFilters = { ...this.advanceFilters, ...this.advanceSearchTempKeyObj };
         this.advanceSearchDialogRef = this.dialog.open(this.advanceSearch, {
             panelClass: ['mat-dialog-md']
         });
@@ -1190,13 +1226,31 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.showInvoiceNoSearch = true;
                 }
                 break;
+            case VoucherTypeEnum.receipt:
+                this.showCustomerSearch = false;
+                this.showInvoiceNoSearch = false;
+                if (fieldName === "accountUniqueName") {
+                    this.showCustomerSearch = true;
+                } else if (fieldName === "receiptNumber") {
+                    this.showInvoiceNoSearch = true;
+                }
+                break;
+            case VoucherTypeEnum.payment:
+                this.showCustomerSearch = false;
+                this.showInvoiceNoSearch = false;
+                if (fieldName === "accountUniqueName") {
+                    this.showCustomerSearch = true;
+                } else if (fieldName === "paymentNumber") {
+                    this.showInvoiceNoSearch = true;
+                }
+                break;
         }
 
         event.stopPropagation();
     }
 
     /**
-     *This will be use for click outsie for search field hidden
+     * This will be use for click outsie for search field hidden
      *
      * @param {*} event
      * @param {*} element
@@ -1205,7 +1259,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof ListBranchTransferComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
-        if (['invoiceNumber', 'estimateNumber', 'proformaNumber', 'purchaseOrderNumber'].includes(searchedFieldName)) {
+        const searchedFieldNameArray: string[] = ['invoiceNumber', 'estimateNumber', 'proformaNumber', 'purchaseOrderNumber', 'receiptNumber'];
+        if (searchedFieldNameArray.includes(searchedFieldName)) {
             if (this.voucherNumberInput.value !== null && this.voucherNumberInput.value !== '') {
                 return;
             }
@@ -1218,7 +1273,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         if (this.generalService.childOf(event?.target, element)) {
             return;
         } else {
-            if (['invoiceNumber', 'estimateNumber', 'proformaNumber', 'purchaseOrderNumber'].includes(searchedFieldName)) {
+            if (searchedFieldNameArray.includes(searchedFieldName)) {
                 this.showInvoiceNoSearch = false;
             } else if (searchedFieldName === 'accountUniqueName') {
                 this.showCustomerSearch = false;
@@ -1296,7 +1351,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof VoucherListComponent
      */
+
     public applyAdvanceSearch(event: any): void {
+        const tempKeysInAdvanceFiltersForm = ['dueAmount', 'dateRange', 'grandTotalOperation', 'invoiceTotalAmount', 'invoiceDateRange'];
         this.advanceSearchDialogRef?.close();
         this.advanceFiltersApplied = true;
 
@@ -1321,8 +1378,25 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.advanceFilters.count = advanceFilters.count;
         this.advanceFilters.q = advanceFilters.q;
 
+        tempKeysInAdvanceFiltersForm.forEach(keys => {
+            this.advanceSearchTempKeyObj = { ...this.advanceSearchTempKeyObj, [keys]: this.advanceFilters[keys] };
+            delete this.advanceFilters[keys];
+        });
         this.advanceFilters = this.vouchersUtilityService.cleanObject(this.advanceFilters);
 
+        this.getVouchers(false);
+        this.getVoucherBalances();
+    }
+
+    /**
+     * Apply Receipt type filter
+     *
+     * @param {boolean} isAdvanceReceipt
+     * @memberof VoucherListComponent
+     */
+    public applyReceiptTypeFilter(isAdvanceReceipt: boolean): void {
+        this.advanceFiltersApplied = true;
+        this.advanceFilters['receiptType'] = isAdvanceReceipt ? "ADVANCE_RECEIPT" : "NORMAL_RECEIPT";
         this.getVouchers(false);
         this.getVoucherBalances();
     }
@@ -1565,6 +1639,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.accountUniqueNameInput.patchValue("");
         this.advanceFiltersApplied = false;
         this.isSearching = false;
+        this.advanceSearchTempKeyObj = {};
         this.getVouchers(false);
     }
 
