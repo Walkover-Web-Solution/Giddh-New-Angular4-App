@@ -711,7 +711,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * This will use for dragging subscription table
      *
      * @param {MouseEvent} event
-     * @return {*} 
+     * @return {*}
      * @memberof BuyPlanComponent
      */
     public move(event: MouseEvent): void {
@@ -1238,7 +1238,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     this.toasterService.showSnackBar('success', this.localeData?.promocode_message);
                     this.promoCodeResponse[0] = response;
                     this.firstStepForm?.get('promoCode')?.patchValue(response?.promoCode);
-                } else if (this.firstStepForm?.get('promoCode')?.value)  {
+                } else if (this.firstStepForm?.get('promoCode')?.value) {
                     this.toasterService.showSnackBar('success', this.localeData?.promocode_discount_message);
                     this.promoCodeResponse[0] = [];
                     this.firstStepForm?.get('promoCode')?.patchValue(null);

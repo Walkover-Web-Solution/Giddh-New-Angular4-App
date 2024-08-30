@@ -43,7 +43,7 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
         private route: ActivatedRoute,
         public dialog: MatDialog,
         private componentStore: SubscriptionComponentStore,
-        private fb: FormBuilder
+        private formBuilder: FormBuilder
     ) { }
 
 
@@ -61,9 +61,8 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
             }
         });
 
-
         this.dialogOpen();
-        this.rejectForm = this.fb.group({
+        this.rejectForm = this.formBuilder.group({
             reason: ['']
         });
 

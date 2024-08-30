@@ -279,7 +279,6 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
         if (this.searchSubscriptionRequest.loadMore) {
             return;
         }
-
         if (loadMore) {
             this.searchSubscriptionRequest.page++;
         } else {
