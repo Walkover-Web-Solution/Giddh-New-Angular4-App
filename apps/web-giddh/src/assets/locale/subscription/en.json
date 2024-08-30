@@ -127,5 +127,6 @@
         "upi": "UPI",
         "credit_debit_card": "Credit/Debit Card",
         "promocode_message":"Apply Promo Code Successfully",
-         "promocode_discount_message":"You already have a better discount than the current promo code offers."
+         "promocode_discount_message":"You already have a better discount than the current promo code offers.",
+         "left_companies":"Left Companies"
     }

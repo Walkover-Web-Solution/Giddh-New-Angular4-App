@@ -13,7 +13,7 @@
         <div id="my-frame" class="modal-body move-company-modal-body clearfix">
             <p class="text-black mb-2" [innerHTML]="getMovePlanText()"></p>
             <div class="row mb-2">
-                <div class="move-wrapper" [ngClass]="subscriptionMove ? 'col-md-9' : 'col-md-6'">
+                <div class="move-wrapper" [ngClass]="subscriptionMove ? 'col-9' : 'col-6'">
                     <div *ngIf="subscriptionMove" class="position-relative move-select">
                         <reactive-dropdown-field
                             [placeholder]="
@@ -27,7 +27,7 @@
                             (dynamicSearchedQuery)="searchSubscription($event)"
                             [options]="subscriptions$ | async"
                             [required]="true"
-                            (selectedOption)="selectedPlan = $event?.value"
+                            (selectedOption)="$event && (selectedPlan = $event.value)"
                         >
                         </reactive-dropdown-field>
                     </div>

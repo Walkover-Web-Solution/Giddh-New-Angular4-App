@@ -30,9 +30,7 @@
                 + {{ commonLocaleData?.app_add }} {{ localeData?.tab_heading }}
             </button>
         </div>
-        <ng-container *ngIf="subscriptionListInProgress$ | async">
-            <giddh-page-loader></giddh-page-loader>
-        </ng-container>
+        <giddh-page-loader *ngIf="subscriptionListInProgress$ | async"></giddh-page-loader>
         <section *ngIf="showData && !(subscriptionListInProgress$ | async)" class="mt-4">
             <form
                 class="table-responsive"
@@ -379,7 +377,6 @@
         [moveSelectedCompany]="selectedCompany"
         [subscriptionMove]="subscriptionMove"
         (moveCompany)="addOrMoveCompanyCallback($event)"
-        [moveCompany]
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"
     >

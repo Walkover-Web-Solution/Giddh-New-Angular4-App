@@ -73,9 +73,7 @@ export class PaymentMethodDialogComponent implements OnInit {
         this.commonLocaleData = this.inputData?.commonLocaleData;
         this.paymentProviderList = [{ label: this.localeData?.gocardless, value: "GOCARDLESS" }]
         this.initForm();
-
         this.getPaymentMethods();
-
         this.saveProviderSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.redirectLink) {
                 this.openWindow(response.redirectLink);

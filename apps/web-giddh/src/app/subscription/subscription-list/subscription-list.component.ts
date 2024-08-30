@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { debounceTime, distinctUntilChanged, ReplaySubject, take, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -48,11 +48,11 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     /** True if translations loaded */
     public translationLoaded: boolean = false;
     /** Holds Store Subscription list observable*/
-    public subscriptionList$ = this.componentStore.select(state => state.subscriptionList);
+    public subscriptionList$: Observable<any> = this.componentStore.select(state => state.subscriptionList);
     /** Holds Store Subscription list in progress API success state as observable*/
-    public subscriptionListInProgress$ = this.componentStore.select(state => state.subscriptionListInProgress);
+    public subscriptionListInProgress$: Observable<any> = this.componentStore.select(state => state.subscriptionListInProgress);
     /** This will use for subscription pagination logs object */
-    public subscriptionRequestParams = {
+    public subscriptionRequestParams: any = {
         page: 1,
         totalPages: 0,
         totalItems: 0,
@@ -72,11 +72,11 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     public showClearFilter: boolean = false;
     /* True if billing account show */
     public showBillingAccount = false;
-    /* True if  subscriber show */
+    /* True if subscriber show */
     public showSubscriber = false;
-    /* True if  country show */
+    /* True if country show */
     public showCountry = false;
-    /* True if  name show */
+    /* True if name show */
     public showName = false;
     /* True if Plan Name show */
     public showPlanSubName = false;
@@ -141,11 +141,9 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public ngOnInit(): void {
-
         document.body?.classList?.add("subscription-page");
         this.initForm();
         this.getAllSubscriptions(false);
-
         /** Get Discount List */
         this.subscriptionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -402,23 +400,17 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     public toggleSearch(fieldName: string): void {
         if (fieldName === 'Company') {
             this.showName = true;
-        }
-        if (fieldName === 'Billing Account') {
+        } else if (fieldName === 'Billing Account') {
             this.showBillingAccount = true;
-        }
-        if (fieldName === 'Subscriber') {
+        } else if (fieldName === 'Subscriber') {
             this.showSubscriber = true;
-        }
-        if (fieldName === 'Country') {
+        } else if (fieldName === 'Country') {
             this.showCountry = true;
-        }
-        if (fieldName === 'Plan Name') {
+        } else if (fieldName === 'Plan Name') {
             this.showPlanSubName = true;
-        }
-        if (fieldName === 'Monthly/Yearly') {
+        } else if (fieldName === 'Monthly/Yearly') {
             this.showMonthlyYearly = true;
-        }
-        if (fieldName === 'Status') {
+        } else if (fieldName === 'Status') {
             this.showStatus = true;
         }
     }
@@ -463,17 +455,17 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * This function will use for transfer subscription
-    *
-    * @param {*} element
-    * @memberof SubscriptionComponent
-    */
+     * This function will use for transfer subscription
+     *
+     * @param {*} subscriptionId
+     * @memberof SubscriptionListComponent
+     */
     public transferSubscription(subscriptionId: any): void {
         this.menu.closeMenu();
         this.dialog.open(TransferDialogComponent, {
             data: subscriptionId,
             panelClass: 'transfer-popup',
-            width: "630px",
+            width: 'var(--aside-pane-width)',
             role: 'alertdialog',
             ariaLabel: 'transferDialog'
         });
@@ -504,7 +496,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         this.subscriptionMove = true;
         this.selectedCompany = company;
         this.dialog.open(this.moveCompany, {
-            width: '40%',
+            width: 'var(--aside-pane-width)',
             role: 'alertdialog',
             ariaLabel: 'moveDialog'
         });
@@ -571,7 +563,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
                 cancel: this.commonLocaleData?.app_cancel
             },
             panelClass: 'cancel-confirmation-modal',
-            width: '585px',
+            width: 'var(--aside-pane-width)',
             role: 'alertdialog',
             ariaLabel: 'confirmDialog'
         });
@@ -668,7 +660,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
         this.subscriptionMove = false;
         this.selectedCompany = company;
         this.dialog.open(this.moveCompany, {
-            width: '40%',
+            width: 'var(--aside-pane-width)',
             role: 'alertdialog',
             ariaLabel: 'moveDialog'
         });
