@@ -70,11 +70,11 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { MatTabsModule } from '@angular/material/tabs';
 import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
 import { MatDividerModule } from '@angular/material/divider';
-import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 import { GenerateEWayBillModule } from './preview/models/generateEWayBill/generateEWayBill.module';
 import { InvoiceSettingModule } from './settings/invoice-setting.module';
 import { InvoiceGenerateModule } from './generate/invoice-generate.module';
 import { DeleteTemplateConfirmationModalModule } from './templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
+import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 
 @NgModule({
     declarations: [
