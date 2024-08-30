@@ -266,42 +266,25 @@
     "convert_to_bill": "Convert to bill",
     "new_order": "+ New Order",
     "expected_delivery": "Expected Delivery",
-
-
-
     "receipt_no_label": "Receipt #",
-    "receipt_no_placeholder": "Search Receipt",
-    "customer_name_placeholder": "Search Customer",
     "payment_mode_label": "Payment Mode",
-    "payment_mode_placeholder": "Search Payment Mode",
     "invoice_no_label": "Invoice #",
-    "invoice_no_placeholder": "Search Invoice No.",
     "unused_amount": "Unused Amount",
     "normal_receipts": "Normal Receipts",
     "advanced_receipts": "Advance Receipts",
     "total_receipts": "Total Receipts",
     "unused_receipts": "Unused Receipts",
     "adjustment_voucher_label": "Adjustment Voucher",
-    "adjustment_voucher_placeholder": "Select Account",
     "receipt_types": {
         "normal_receipts": "Normal Receipts",
         "advance_receipts": "Advance Receipts"
     },
     "entry_date": "Entry Date",
-    "suppliers_name": "Supplier's Name",
-    "new_voucher": "+ New Receipt",
-    "preview_unavailable": "Preview is not available right now! Please try again...",
-    "delete_voucher_receipt": "Do you want to delete the receipt?",
-    "uploaded_bill": "Uploaded Bill",
     "receipts": "Receipts",
     "all_receipts": "All-Receipts",
     "payments": "Payments",
     "all_payments": "All-payments",
-
     "payment_no_label": "Payment #",
-    "payment_no_placeholder": "Search Payment",
-    "vendor_name_label": "Vendor Name",
-    "vendor_name_placeholder": "Search Vendor",
     "total_payments": "Total Payments",
     "unused_payments": "Unused Payments"
 }

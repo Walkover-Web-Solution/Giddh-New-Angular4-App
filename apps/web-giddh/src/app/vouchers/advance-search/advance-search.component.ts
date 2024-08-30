@@ -233,38 +233,6 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Update search form value based on receipt total range changed value
-     *
-     * @param {IOption} item
-     * @memberof AdvanceSearchComponent
-     */
-    public receiptTotalRangeChanged(item: IOption): void {
-        this.searchForm.get('totalEqual')?.patchValue(false);
-        this.searchForm.get('totalLessThan')?.patchValue(false);
-        this.searchForm.get('totalMoreThan')?.patchValue(false);
-
-        switch (item?.value) {
-            case 'greaterThan':
-                this.searchForm.get('totalMoreThan')?.patchValue(true);
-                break;
-            case 'lessThan':
-                this.searchForm.get('totalLessThan')?.patchValue(true);
-                break;
-            case 'greaterThanOrEquals':
-                this.searchForm.get('totalMoreThan')?.patchValue(true);
-                this.searchForm.get('totalEqual')?.patchValue(true);
-                break;
-            case 'lessThanOrEquals':
-                this.searchForm.get('totalEqual')?.patchValue(true);
-                this.searchForm.get('totalLessThan')?.patchValue(true);
-                break;
-            case 'equals':
-                this.searchForm.get('totalEqual')?.patchValue(true);
-                break;
-        }
-    }
-
-    /**
      * Update search form value based on due total range changed value
      *
      * @param {IOption} item
