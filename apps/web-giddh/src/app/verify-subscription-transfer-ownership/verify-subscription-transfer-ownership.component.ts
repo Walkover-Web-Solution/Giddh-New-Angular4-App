@@ -1,7 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest, ReplaySubject, take, takeUntil } from 'rxjs';
+import { combineLatest, Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { SubscriptionComponentStore } from '../subscription/utility/subscription.store';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
@@ -12,9 +12,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
     providers: [SubscriptionComponentStore]
 })
 export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
-    /** Template reference for subscription transfer ownership model */
+    /** Transfer confirmation reference */
     @ViewChild('transferConfirmation', { static: true }) public dialogBox: TemplateRef<any>;
-    /** Template reference for subscription transfer ownership model */
+    /** Reject Confirmation reference for subscription */
     @ViewChild('rejectConfirmation', { static: true }) public rejectDialog: TemplateRef<any>;
     /** This holds url to request id */
     public requestId: string = '';
@@ -31,12 +31,12 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
     /** Hold for accepted subscription*/
     public acceptedSubscription: boolean = false;
     /** HoldsVeirfy Ownership  API success state as observable*/
-    public verifyOwnershipSuccess$ = this.componentStore.select(state => state.verifyOwnershipSuccess);
+    public verifyOwnershipSuccess$: Observable<any> = this.componentStore.select(state => state.verifyOwnershipSuccess);
     /** Holds Veirfy Ownership In progress API success state as observable*/
-    public verifyOwnershipInProgress$ = this.componentStore.select(state => state.verifyOwnershipInProgress);
+    public verifyOwnershipInProgress$: Observable<any> = this.componentStore.select(state => state.verifyOwnershipInProgress);
     /** Reject reason API success state as observable*/
-    public rejectReason$ = this.componentStore.select(state => state.rejectReason);
-    /**Instance form group of reject */
+    public rejectReason$: Observable<any> = this.componentStore.select(state => state.rejectReason);
+    /** Instance form group of reject */
     public rejectForm: FormGroup;
 
     constructor(
@@ -72,11 +72,10 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
         ]).subscribe(([verified, reject]) => {
             if (verified && !reject?.reqId) {
                 this.acceptedSubscription = true;
-                this.dialog?.closeAll();
             } else if (verified && reject?.reqId) {
                 this.acceptedSubscription = false;
-                this.dialog?.closeAll();
             }
+            this.dialog?.closeAll();
         });
     }
 
@@ -93,7 +92,7 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
     }
 
     /**
-     * On close dialog success
+     * On submit verify ownership
      *
      * @param {*} event
      * @memberof VerifySubscriptionTransferOwnershipComponent
@@ -122,6 +121,11 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
         });
     }
 
+    /**
+     * Reject dialog close event
+     *
+     * @memberof VerifySubscriptionTransferOwnershipComponent
+     */
     public closeReject(): void {
         this.rejectModalDialogRef?.close();
     }

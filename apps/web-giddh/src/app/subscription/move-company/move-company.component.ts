@@ -54,7 +54,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     /** Holds Store Subscription list observable*/
     public subscriptionList$ = this.componentStore.select(state => state.subscriptionList);
     /** Holds Store Companies list observable*/
-    public companiesList$ = this.componentStore.select(state => state.companiesList);
+    public companiesList$: Observable<any> = this.componentStore.select(state => state.companiesList);
     /** Hold company name */
     public companyName: string;
     /** Company list Observable */
@@ -70,7 +70,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     /** Filtered options to show subscriptions in autocomplete list */
     public fieldSubscriptionFilteredOptions: any[] = [];
     /** Stores the company details */
-    public companyDetails: {
+    public companyDetails: any = {
         name: '',
         uniqueName: '',
         additional: ''
@@ -102,8 +102,8 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                         this.isLoading = false;
                         let filteredData = response?.body?.results?.filter(result => (result?.totalCompanies - result?.companyCount) > 0);
                         const mappedSubscriptionWise = filteredData?.map(subscription => ({
-                            value: `${subscription.subscriptionId}`,
-                            label: `${subscription.plan?.name} , ${subscription?.subscriptionId} (Left Companies : ${subscription?.totalCompanies - subscription?.companyCount})`,
+                            value: subscription.subscriptionId,
+                            label: `${subscription.plan?.name} , ${subscription?.subscriptionId} (${this.localeData?.left_companies} : ${subscription?.totalCompanies - subscription?.companyCount})`,
                             additional: subscription
                         }));
                         this.subscriptions$ = observableOf(mappedSubscriptionWise);
@@ -168,7 +168,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                                 label: item.name,
                                 additional: item
                             }));
-                            let concatData = [...initialData, ...nextPaginatedData]
+                            let concatData = [...initialData, ...nextPaginatedData];
                             this.fieldFilteredOptions = concatData;
                             this.companyList$ = observableOf(concatData);
                         } else {
@@ -270,11 +270,13 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     }
 
     /**
-      * Searches the subscriptions
-      *
-      * @param {boolean} [loadMore]
-      * @memberof MoveCompanyComponent
-      */
+     * Searches the subscriptions
+     *
+     * @param {string} searchedText
+     * @param {boolean} [loadMore=false]
+     * @return {*}  {void}
+     * @memberof MoveCompanyComponent
+     */
     public searchSubscription(searchedText: string, loadMore: boolean = false): void {
         if (this.searchSubscriptionRequest.loadMore) {
             return;
@@ -309,7 +311,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                         if (loadMore) {
                             const nextPaginatedData = filteredData?.map(subscription => ({
                                 value: `${subscription.subscriptionId}`,
-                                label: `${subscription.plan?.name} , ${subscription?.subscriptionId} (Left Companies : ${subscription?.totalCompanies - subscription?.companyCount})`,
+                                label: `${subscription.plan?.name} , ${subscription?.subscriptionId} (${this.localeData?.left_companies} : ${subscription?.totalCompanies - subscription?.companyCount})`,
                                 additional: subscription
                             }));
                             let concatData = [...initialData, ...nextPaginatedData]
@@ -318,7 +320,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                         } else {
                             this.fieldSubscriptionFilteredOptions = filteredData?.map(subscription => ({
                                 value: `${subscription.subscriptionId}`,
-                                label: `${subscription.plan?.name} , ${subscription?.subscriptionId} (Left Companies : ${subscription?.totalCompanies - subscription?.companyCount})`,
+                                label: `${subscription.plan?.name} , ${subscription?.subscriptionId} (${this.localeData?.left_companies} : ${subscription?.totalCompanies - subscription?.companyCount})`,
                                 additional: subscription
                             }));
                             this.subscriptions$ = observableOf(this.fieldSubscriptionFilteredOptions);

@@ -50,7 +50,7 @@ export class PaymentMethodDialogComponentStore extends ComponentStore<PaymentSta
                                     providerListInProgress: false
                                 });
                             } else {
-                                res?.message && this.toasterService.showSnackBar("error", res.message);
+                                res.message && this.toasterService.showSnackBar("error", res.message);
                                 return this.patchState({
                                     providerList: [],
                                     providerListInProgress: false
@@ -88,7 +88,7 @@ export class PaymentMethodDialogComponentStore extends ComponentStore<PaymentSta
                                 });
                             } else {
                                 if (res.message) {
-                                    res?.message && this.toasterService.showSnackBar('error', res.message);
+                                    this.toasterService.showSnackBar('error', res.message);
                                 }
                                 return this.patchState({
                                     saveProviderSuccess: []
@@ -185,9 +185,6 @@ export class PaymentMethodDialogComponentStore extends ComponentStore<PaymentSta
             })
         );
     });
-
-
-
 
     /**
      * Lifecycle hook for component destroy

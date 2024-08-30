@@ -14,7 +14,7 @@
                             [options]="paymentProviderList"
                             formControlName="paymentProvider"
                             [labelValue]="paymentProvideLabel ?? ''"
-                            (selectedOption)="paymentProvideLabel = $event?.label"
+                            (selectedOption)="$event?.label && (paymentProvideLabel = $event.label)"
                             [required]="true"
                             [showError]="isFormSubmitted && !paymentMethodForm.get('paymentProvider')?.value"
                         >
@@ -50,9 +50,7 @@
                     </div>
                 </div>
             </div>
-            <ng-container *ngIf="isLoading">
-                <giddh-page-loader></giddh-page-loader>
-            </ng-container>
+            <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
             <ng-container *ngIf="!isLoading">
                 <mat-card class="outline-card mt-3" *ngFor="let payment of paymentMethodList">
                     <mat-card-content>
