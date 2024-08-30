@@ -17,7 +17,6 @@
 	"convert_invoice": "चलन मध्ये रूपांतरित करा",
 	"expired": "कालबाह्य",
     "search_here": "येथे शोधा ...",
-    "search_invoice_no": "बीजक क्रमांक शोधा",
     "search_field": "[FIELD] शोधा",
     "invoice_date_range": "बीजक तारीख श्रेणी",
     "invoice_total_amount": "बीजक एकूण रक्कम",
@@ -163,7 +162,9 @@
 		"settings": "सेटिंग्ज",
 		"proformas": "प्रोफार्मा",
 		"invoices": "पावत्या",
-		"recurring": "आवर्ती"
+		"recurring": "आवर्ती",
+        "receipt": "पावती",
+        "payment": "भरणा"
 	},
 	"all_invoices": "सर्व-पावत्या",
 	"no_advance_receipt": "समायोजित करण्यासाठी प्रगत पावती नाही.",
@@ -236,6 +237,18 @@
             "title": "पुष्टीकरण",
             "message1": "आपण निवडलेल्या ऑर्डर हटवू इच्छिता?",
             "message2": "ते कायमस्वरुपी हटविले जातील आणि यापुढे अन्य कोणत्याही मॉड्यूलमधून प्रवेशयोग्य राहणार नाहीत."
+        },
+        {
+            "module": "receipt",
+            "title": "पुष्टी",
+            "message1": "आपण वाऊचर/पावती हटवू इच्छिता?",
+            "message2": "हे कायमचे हटवले जाईल आणि इतर कोणत्याही मॉड्यूलमधून प्रवेशयोग्य राहणार नाही."
+        },
+        {
+            "module": "payment",
+            "title": "पुष्टी",
+            "message1": "आपण वाऊचर/भरणा हटवू इच्छिता?",
+            "message2": "हे कायमचे हटवले जाईल आणि इतर कोणत्याही मॉड्यूलमधून प्रवेशयोग्य राहणार नाही."
         }
     ],
     "proforma_generated": "प्रोफॉर्मा यशस्वीरित्या व्युत्पन्न झाला",
@@ -252,5 +265,26 @@
     "purchase_bill_number": "खरेदी बिल क्रमांक",
     "convert_to_bill": "बिलमध्ये रूपांतरित करा",
     "new_order": "+ नवीन ऑर्डर",
-    "expected_delivery": "अपेक्षित वितरण"
+    "expected_delivery": "अपेक्षित वितरण",
+    "receipt_no_label": "पावती #",
+    "payment_mode_label": "भरणा पद्धत",
+    "invoice_no_label": "चलन #",
+    "unused_amount": "वापरलेली रक्कम",
+    "normal_receipts": "साधारण पावत्या",
+    "advanced_receipts": "अग्रिम पावत्या",
+    "total_receipts": "एकूण पावत्या",
+    "unused_receipts": "अविनीयोजित पावत्या",
+    "adjustment_voucher_label": "समायोजन व्हाउचर",
+    "receipt_types": {
+        "normal_receipts": "साधारण पावत्या",
+        "advance_receipts": "अग्रिम पावत्या"
+    },
+    "entry_date": "प्रवेश तारीख",
+    "receipts": "पावत्या",
+    "all_receipts": "सर्व पावत्या",
+    "payments": "भरणे",
+    "all_payments": "सर्व भरणे",
+    "payment_no_label": "भरणा #",
+    "total_payments": "एकूण भरणे",
+    "unused_payments": "अविनीयोजित भरणे"
 }

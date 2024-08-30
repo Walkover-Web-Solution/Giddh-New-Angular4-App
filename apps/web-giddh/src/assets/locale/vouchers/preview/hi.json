@@ -17,7 +17,6 @@
     "convert_invoice": "चालान में परिवर्तित करें",
     "expired": "समय सीमा समाप्त",
     "search_here": "यहां तलाश करो...",
-    "search_invoice_no": "चालान संख्या खोजें",
     "search_field": "[FIELD] खोजें",
     "invoice_date_range": "चालान तिथि सीमा",
     "invoice_total_amount": "चालान कुल राशि",
@@ -163,7 +162,9 @@
         "settings": "स्थापना",
         "proformas": "प्रोफार्मा",
         "invoices": "चालान",
-        "recurring": "आवर्ती"
+        "recurring": "आवर्ती",
+        "receipt": "रसीद",
+        "payment": "भुगतान"
     },
     "all_invoices": "सभी चालान",
     "no_advance_receipt": "समायोजन के लिए कोई अग्रिम रसीद नहीं है।",
@@ -236,6 +237,18 @@
             "title": "पुष्टीकरण",
             "message1": "क्या आप चयनित आदेशों को हटाना चाहते हैं?",
             "message2": "उन्हें स्थायी रूप से हटा दिया जाएगा और अब किसी अन्य मॉड्यूल से एक्सेस नहीं किया जा सकेगा।"
+        },
+        {
+            "module": "receipt",
+            "title": "पुष्टि",
+            "message1": "क्या आप वाउचर/रसीद को हटाना चाहते हैं?",
+            "message2": "यह स्थायी रूप से हटा दी जाएगी और किसी अन्य मॉड्यूल से एक्सेस नहीं की जा सकेगी।"
+        },
+        {
+            "module": "payment",
+            "title": "पुष्टि",
+            "message1": "क्या आप वाउचर/भुगतान को हटाना चाहते हैं?",
+            "message2": "यह स्थायी रूप से हटा दी जाएगी और किसी अन्य मॉड्यूल से एक्सेस नहीं की जा सकेगी।"
         }
     ],
     "proforma_generated": "प्रोफार्मा सफलतापूर्वक तैयार किया गया।",
@@ -252,5 +265,26 @@
     "purchase_bill_number": "खरीद बिल संख्या",
     "convert_to_bill": "बिल में बदलें",
     "new_order": "+ नया ऑर्डर",
-    "expected_delivery": "अनुमानित वितरण"
+    "expected_delivery": "अनुमानित वितरण",
+    "receipt_no_label": "रसीद #",
+    "payment_mode_label": "भुगतान मोड",
+    "invoice_no_label": "चालान #",
+    "unused_amount": "अविनियोजित राशि",
+    "normal_receipts": "सामान्य रसीदें",
+    "advanced_receipts": "अग्रिम रसीदें",
+    "total_receipts": "कुल रसीदें",
+    "unused_receipts": "अविनियोजित रसीदें",
+    "adjustment_voucher_label": "समायोजन वाउचर",
+    "receipt_types": {
+        "normal_receipts": "सामान्य रसीदें",
+        "advance_receipts": "अग्रिम रसीदें"
+    },
+    "entry_date": "प्रविष्टि तिथि",
+    "receipts": "रसीदें",
+    "all_receipts": "सभी रसीदें",
+    "payments": "भुगतान",
+    "all_payments": "सभी भुगतान",
+    "payment_no_label": "भुगतान #",
+    "total_payments": "कुल भुगतान",
+    "unused_payments": "अविनियोजित भुगतान"
 }
