@@ -124,7 +124,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     /**
      * Copy Authkey to Clipboard
      *
-     * @memberof UserDetailsComponent
+     * @memberof SubscriptionComponent
      */
     public toggleIsCopied(): void {
         this.isCopied = true;
@@ -237,7 +237,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
     /**
      * Lifecycle method that is triggered once all the view child are rendered
      *
-     * @memberof UserDetailsComponent
+     * @memberof SubscriptionComponent
      */
     public ngAfterViewInit(): void {
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
@@ -304,7 +304,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      *
      * @param {string} sessionId Session ID
      * @param {number} sessionIndex Index of session to be deleted required to delete the session from store
-     * @memberof UserDetailsComponent
+     * @memberof SubscriptionComponent
      */
     public deleteSession(sessionId: string, sessionIndex: number): void {
         const requestPayload = {
@@ -323,7 +323,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * which is used by header component, update menu panel and
      * change the route URL as per selected tab
      *
-     * @memberof UserDetailsComponent
+     * @memberof SubscriptionComponent
      */
     public onTabChanged(): void {
         this.store.dispatch(this.generalActions.setAppTitle(`pages/user-details/${this.tabName[this.activeTabIndex]}`));
@@ -334,7 +334,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * This will return page heading based on active tab
      *
      * @param {boolean} event
-     * @memberof UserDetailsComponent
+     * @memberof SubscriptionComponent
      */
     public getPageHeading(): string {
         let pageHeading = "";
@@ -364,7 +364,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @param {number} index Index of current session
      * @param {*} item Session ID instance
      * @return {*} {string} Session's ID for unique identification
-     * @memberof UserDetailsComponent
+     * @memberof SubscriptionComponent
      */
     public trackBySessionId(index: number, item: any): string {
         return item.sessionId;

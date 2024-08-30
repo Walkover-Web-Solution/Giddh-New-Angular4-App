@@ -136,11 +136,11 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
     * @param {boolean} [loadMore]
     * @memberof MoveCompanyComponent
     */
-    public searchCompany(searchedText: string, loadMore: boolean = false): void {
+    public searchCompany(searchedText: any, loadMore: boolean = false): void {
         if (this.searchRequest.loadMore) {
             return;
         }
-        if (searchedText) {
+        if (typeof searchedText === 'string' && searchedText) {
             this.searchRequest.q = searchedText;
         }
 
@@ -280,10 +280,6 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
         if (this.searchSubscriptionRequest.loadMore) {
             return;
         }
-
-        if (searchedText) {
-            this.searchSubscriptionRequest.q = searchedText;
-        }
         if (loadMore) {
             this.searchSubscriptionRequest.page++;
         } else {
@@ -296,7 +292,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
             let reqObj = {
                 model: {
                     region: this.moveSelectedCompany?.region?.code,
-                    planName: this.searchSubscriptionRequest.q
+                    planName: searchedText
                 },
                 pagination: this.searchSubscriptionRequest
             }
