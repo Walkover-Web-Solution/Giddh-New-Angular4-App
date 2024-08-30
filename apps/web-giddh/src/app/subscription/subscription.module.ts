@@ -135,7 +135,6 @@ import { PaymentMethodDialogComponent } from './payment-method-dialog/payment-me
         CompanyDetailsSidebarComponent,
         MoveCompanyComponent,
         AllFeaturesComponent,
-        SubscriptionComponent,
         AddOnsComponent,
         UserDetailsPipe
     ],

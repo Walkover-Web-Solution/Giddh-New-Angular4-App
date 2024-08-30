@@ -77,17 +77,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** This will hold disable State */
     public disabledState: boolean = false;
     /** Holds Store Plan list observable*/
-    public planList$ = this.componentStore.select(state => state.planList);
+    public planList$: Observable<any> = this.componentStore.select(state => state.planList);
     /** Holds Store Plan list API success state as observable*/
-    public planListInProgress$ = this.componentStore.select(state => state.planListInProgress);
+    public planListInProgress$: Observable<any> = this.componentStore.select(state => state.planListInProgress);
     /** Holds Store Create Plan API in progress state as observable*/
-    public createSubscriptionInProgress$ = this.componentStore.select(state => state.createSubscriptionInProgress);
+    public createSubscriptionInProgress$: Observable<any> = this.componentStore.select(state => state.createSubscriptionInProgress);
     /** Holds Store Create Plan API succes state as observable*/
-    public createSubscriptionSuccess$ = this.componentStore.select(state => state.createSubscriptionSuccess);
+    public createSubscriptionSuccess$: Observable<any> = this.componentStore.select(state => state.createSubscriptionSuccess);
     /** Holds Store Create Plan API succes state as observable*/
-    public createSubscriptionResponse$ = this.componentStore.select(state => state.createSubscriptionResponse);
+    public createSubscriptionResponse$: Observable<any> = this.componentStore.select(state => state.createSubscriptionResponse);
     /** Holds Store Change plan API response state as observable*/
-    public updatePlanSuccess$ = this.componentStore.select(state => state.updatePlanSuccess);
+    public updatePlanSuccess$: Observable<any> = this.componentStore.select(state => state.updatePlanSuccess);
     /** Mobile number library instance */
     public intlClass: any;
     /** This will hold onboarding api form request */
@@ -139,7 +139,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** Holds subscription response */
     private subscriptionResponse: any = {};
     /** Holds Store Apply Promocode API response state as observable*/
-    public updateSubscriptionPaymentIsSuccess$ = this.componentStore.select(state => state.updateSubscriptionPaymentIsSuccess);
+    public updateSubscriptionPaymentIsSuccess$: Observable<any> = this.componentStore.select(state => state.updateSubscriptionPaymentIsSuccess);
     /** Holds filtered monthly plans */
     public monthlyPlans: any[] = [];
     /** Holds filtered yearly plans */
@@ -155,27 +155,27 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** True if it is change plan */
     public isChangePlan: boolean = false;
     /** Holds Store Get Billing Details observable*/
-    public getBillingDetails$ = this.changeBillingComponentStore.select(state => state.getBillingDetails);
+    public getBillingDetails$: Observable<any> = this.changeBillingComponentStore.select(state => state.getBillingDetails);
     /** True if it have billing details */
     public getBillingData: boolean = false;
     /** Holds Store Get Billing Details observable*/
-    public changePlanDetails$ = this.componentStore.select(state => state.changePlanDetails);
+    public changePlanDetails$: Observable<any> = this.componentStore.select(state => state.changePlanDetails);
     /** Holds Store Get Country list observable*/
-    public getCountryList$ = this.componentStore.select(state => state.countryList);
+    public getCountryList$: Observable<any> = this.componentStore.select(state => state.countryList);
     /** Holds subscription request */
     public subscriptionRequest: any;
     /** Holds View Subscription list observable*/
-    public viewSubscriptionData$ = this.viewSubscriptionComponentStore.select(state => state.viewSubscription);
+    public viewSubscriptionData$: Observable<any> = this.viewSubscriptionComponentStore.select(state => state.viewSubscription);
     /** Hold pay type*/
     public payType: string = '';
     /** Holds Store Buy Plan Success observable*/
-    public buyPlanSuccess$ = this.subscriptionComponentStore.select(state => state.buyPlanSuccess);
+    public buyPlanSuccess$: Observable<any> = this.subscriptionComponentStore.select(state => state.buyPlanSuccess);
     /** This will use for open window */
     private openedWindow: Window | null = null;
     /** Holds Store Plan list API success state as observable*/
-    public subscriptionRazorpayOrderDetails$ = this.componentStore.select(state => state.subscriptionRazorpayOrderDetails);
+    public subscriptionRazorpayOrderDetails$: Observable<any> = this.componentStore.select(state => state.subscriptionRazorpayOrderDetails);
     /** Holds Store Plan Calculation Plan Data API success state as observable*/
-    public calculateData$ = this.componentStore.select(state => state.calculateData);
+    public calculateData$: Observable<any> = this.componentStore.select(state => state.calculateData);
     /** True if it is subscription region */
     public isSubscriptionRegion: boolean = false;
     /** Hold current time stamp  */
@@ -663,9 +663,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
             } else {
                 this.inputData = [];
                 const filteredPlans = this.firstStepForm.get('duration')?.value === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
-                filteredPlans?.forEach(plan => {
-                    this.inputData.push(plan);
-                });
+                this.inputData.push(...filteredPlans);
             }
         }
     }

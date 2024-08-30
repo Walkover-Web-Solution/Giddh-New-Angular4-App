@@ -54,8 +54,8 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
     }
 
     public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
-    public isUpdateCompanySuccess$ = this.select(this.store.select(state => state.settings.updateProfileSuccess), (response) => response);
-    public companyList$ = this.select((state) => state.companiesList);
+    public isUpdateCompanySuccess$: Observable<any> = this.select(this.store.select(state => state.settings.updateProfileSuccess), (response) => response);
+    public companyList$: Observable<any> = this.select((state) => state.companiesList);
 
     /**
      * Get All Subscriptions
@@ -323,7 +323,7 @@ export class SubscriptionComponentStore extends ComponentStore<SubscriptionState
                                     companiesListInProgress: false
                                 });
                             } else {
-                                this.toasterService.showSnackBar("error", res.message);
+                                res.message && this.toasterService.showSnackBar("error", res.message);
                                 return this.patchState({
                                     companiesList: [],
                                     companiesListInProgress: false

@@ -199,7 +199,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Hold selected role */
     public selectedRole: string = '';
     /** Holds Store permission roles API response state as observable*/
-    public permissionRoles$ = this.componentStore.select(state => state.permissionRoles);
+    public permissionRoles$: Observable<any> = this.componentStore.select(state => state.permissionRoles);
     /** List of permission  roles */
     public permissionRoles: any[] = [
         { label: 'View', value: 'view' },
@@ -226,7 +226,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         return !this.isCompanyCreated && this.firstStepForm?.dirty;
     }
     /** Holds Store Get Billing Details observable*/
-    public getBillingDetails$ = this.changeBillingComponentStore.select(state => state.getBillingDetails);
+    public getBillingDetails$: Observable<any> = this.changeBillingComponentStore.select(state => state.getBillingDetails);
 
     constructor(
         private formBuilder: UntypedFormBuilder,
@@ -279,8 +279,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             if (!this.isNewUserLoggedIn) {
                 this.getBillingDetails();
                 this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                    if (data && data?.uniqueName) {
-                        this.firstStepForm.get('name')?.patchValue(data?.companyName);
+                    if (data && data.uniqueName) {
+                        this.firstStepForm.get('name')?.patchValue(data.companyName);
                     }
                 });
             }
