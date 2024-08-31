@@ -226,6 +226,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
                 this.selectedMonth = "";
                 this.selectedYear = "";
                 this.year = null;
+                this.getVatReport();
             }
         });
         this.currentOrganizationType = this.generalService.currentOrganizationType;
@@ -283,7 +284,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     }
 
     /**
-     * Set tax type label 
+     * Set tax type label
      *
      * @private
      * @memberof VatReportFiltersComponent
@@ -306,7 +307,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     }
 
     /**
-     * Set Tax Authority dropdown lable value 
+     * Set Tax Authority dropdown lable value
      *
      * @private
      * @param {string} uniqueName
@@ -321,7 +322,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
     }
 
     /**
-     * Set Tax dropdown lable value 
+     * Set Tax dropdown lable value
      *
      * @private
      * @param {string} uniqueName
