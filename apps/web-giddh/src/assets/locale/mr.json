@@ -373,6 +373,7 @@
     },
     "app_please_select": "कृपया निवडा",
     "app_company": "कंपनी",
+    "app_companies": "कंपन्या",
     "app_branch": "शाखा",
     "app_tally": "टॅली",
     "app_month_wise": "महिना वार",
@@ -741,6 +742,8 @@
     "app_tax_authority": "कर प्राधिकरण",
     "app_select_year": "वर्ष निवडा",
     "app_select_month": "महिना निवडा",
+    "app_user_settings": "वापरकर्ता सेटिंग्ज",
+    "app_subscription": "वर्गणी",
     "app_custom_email": "कस्टम ईमेल",
     "app_custom_email_template": "कस्टम ईमेल टेम्पलेट"
 }

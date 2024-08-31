@@ -1,57 +1,98 @@
-<giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="verifyOwnershipInProgress$ | async"></giddh-page-loader>
-<div class="flex-col" *ngIf="!(verifyOwnershipInProgress$ | async)">
-    <div class="inner">
-        <img src="{{ imgPath }}giddh-big-logo.svg" />
-        <div class="flex-column d-flex justify-content-center align-items-center" *ngIf="acceptedSubscription">
-            <p>Request accepted successfully</p>
-            <a
-                class="btn btn-primary mr-0 min160 d-flex align-items-center justify-content-center"
-                [href]="loginUrl"
-                target="_blank"
-            >
-                Login to Giddh</a
-            >
+<ng-container
+    appTranslate
+    [file]="'subscription'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="verifyOwnershipInProgress$ | async"></giddh-page-loader>
+    <div class="flex-col" *ngIf="!(verifyOwnershipInProgress$ | async)">
+        <div class="inner">
+            <img src="{{ imgPath }}giddh-big-logo.svg" />
+            <div class="flex-column d-flex justify-content-center align-items-center" *ngIf="acceptedSubscription">
+                <p>{{ localeData?.request_accepted_successfully }}</p>
+                <a
+                    class="btn btn-primary mr-0 min160 d-flex align-items-center justify-content-center"
+                    [href]="loginUrl"
+                    target="_blank"
+                >
+                    {{ localeData?.login_to_giddh }}
+                </a>
+            </div>
+            <p *ngIf="!acceptedSubscription">{{ localeData?.request_declined_successfully }}</p>
         </div>
-        <p *ngIf="!acceptedSubscription">Request declined successfully</p>
     </div>
-</div>
 
-<!--Modal for Transfer Ownership -->
-<ng-template #transferConfirmation>
-    <div (click)="$event.stopPropagation()">
-        <div>
-            <div class="modal-header">
-                <h2 class="modal-title">Subscription Transfer</h2>
-                <button
-                    aria-label="cross"
-                    mat-icon-button
-                    class="close"
-                    data-dismiss="modal"
-                    (click)="closeAllDialogs($event)"
-                >
-                    ×
-                </button>
-            </div>
-            <div class="modal-body">
-                <p class="font-15 mr-t05 mb-1">You've been invited to become the subscriber.</p>
-                <p class="font-15 mr-t05">
-                    On accepting, you will become the subscriber and be the person Giddh has on record as responsible
-                    for the organisation.
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button
-                    aria-label="yes"
-                    mat-stroked-button
-                    color="primary"
-                    (click)="onSuccess($event)"
-                >
-                    Accept Subscription
-                </button>
-                <button aria-label="no" mat-stroked-button (click)="closeAllDialogs()" >
-                    Decline Subscription
-                </button>
+    <!--Modal for Transfer Ownership -->
+    <ng-template #transferConfirmation>
+        <div (click)="$event.stopPropagation()">
+            <div>
+                <div class="modal-header">
+                    <h2 class="modal-title">{{ localeData?.subscription_transfer }}</h2>
+                    <button
+                        aria-label="cross"
+                        mat-icon-button
+                        class="close"
+                        data-dismiss="modal"
+                        (click)="closeAllDialogs($event)"
+                    >
+                        ×
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p class="font-15 mr-t05 mb-1">{{ localeData?.invited_to_become_subscriber }}</p>
+                    <p class="font-15 mr-t05">{{ localeData?.accepting_will_make_you_subscriber }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button aria-label="yes" mat-stroked-button color="primary" (click)="onSubmit($event)">
+                        {{ localeData?.accept_subscription }}
+                    </button>
+                    <button aria-label="no" mat-stroked-button (click)="onReject($event)">
+                        {{ localeData?.decline_subscription }}
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-</ng-template>
+    </ng-template>
+
+    <!--Modal for Transfer Ownership -->
+    <ng-template #rejectConfirmation>
+        <div (click)="$event.stopPropagation()">
+            <div>
+                <div class="modal-header">
+                    <h2 class="modal-title">{{ localeData?.reject }}</h2>
+                    <button
+                        aria-label="cross"
+                        mat-icon-button
+                        class="close"
+                        data-dismiss="modal"
+                        (click)="closeReject($event)"
+                    >
+                        ×
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form [formGroup]="rejectForm">
+                        <div class="w-50">
+                            <input-field
+                                [name]="'reason'"
+                                [label]="localeData?.enter_reason"
+                                [placeholder]="localeData?.enter_reason"
+                                [type]="'text'"
+                                formControlName="reason"
+                            >
+                            </input-field>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button aria-label="yes" mat-stroked-button color="primary" (click)="onSubmit($event, true)">
+                        {{ localeData?.submit }}
+                    </button>
+                    <button aria-label="no" mat-stroked-button (click)="closeReject($event)">
+                        {{ localeData?.cancel }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</ng-container>
