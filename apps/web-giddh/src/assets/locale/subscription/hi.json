@@ -128,5 +128,19 @@
         "credit_debit_card": "क्रेडिट/डेबिट कार्ड",
         "promocode_message":"प्रोमो कोड सफलतापूर्वक लागू करें",
         "promocode_discount_message":"आपके पास मौजूदा प्रोमो कोड ऑफ़र की तुलना में पहले से ही बेहतर छूट है।",
-         "left_companies":"छोड़ी कंपनियाँ"
+         "left_companies":"छोड़ी कंपनियाँ",
+		"subscription_id": "सदस्यता पहचानपत्र",
+        "gst_tax":"जीएसटी कर कुल",
+        "request_accepted_successfully": "Request accepted successfully",
+        "login_to_giddh": "Login to Giddh",
+        "request_declined_successfully": "Request declined successfully",
+        "subscription_transfer": "Subscription Transfer",
+        "invited_to_become_subscriber": "You've been invited to become the subscriber.",
+        "accepting_will_make_you_subscriber": "On accepting, you will become the subscriber and be the person Giddh has on record as responsible for the organisation.",
+        "accept_subscription": "Accept Subscription",
+        "decline_subscription": "Decline Subscription",
+        "reject": "Reject",
+        "enter_reason": "Enter reason",
+        "submit": "Submit",
+        "cancel": "Cancel"
 	}

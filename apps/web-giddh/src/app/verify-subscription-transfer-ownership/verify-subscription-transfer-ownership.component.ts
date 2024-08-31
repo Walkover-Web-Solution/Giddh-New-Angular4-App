@@ -1,7 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest, Observable, ReplaySubject, take, takeUntil } from 'rxjs';
+import { combineLatest, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { SubscriptionComponentStore } from '../subscription/utility/subscription.store';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
@@ -38,6 +38,10 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
     public rejectReason$: Observable<any> = this.componentStore.select(state => state.rejectReason);
     /** Instance form group of reject */
     public rejectForm: FormGroup;
+    /** This will hold local JSON data */
+    public localeData: any = {};
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
 
     constructor(
         private route: ActivatedRoute,
@@ -72,10 +76,11 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
         ]).subscribe(([verified, reject]) => {
             if (verified && !reject?.reqId) {
                 this.acceptedSubscription = true;
+                this.dialog?.closeAll();
             } else if (verified && reject?.reqId) {
                 this.acceptedSubscription = false;
+                this.dialog?.closeAll();
             }
-            this.dialog?.closeAll();
         });
     }
 

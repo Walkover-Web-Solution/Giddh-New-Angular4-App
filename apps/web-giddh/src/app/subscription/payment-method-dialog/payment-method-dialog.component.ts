@@ -109,7 +109,7 @@ export class PaymentMethodDialogComponent implements OnInit {
                     this.isLoading = false;
                     this.paymentMethodList = response;
                     this.changeDetection.detectChanges();
-                }, 1000);
+                }, 700);
             }
         });
     }

@@ -191,7 +191,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     /** Hold get subscription data */
     public viewSubscriptionData: any;
     /** Hold all plans */
-    public isAllPlans: any[] = [];
+    public allPlans: any[] = [];
     /** True if user change manualy plan */
     public isUserManualChangePlan: boolean = false;
     /** True if user renew  plan */
@@ -1106,7 +1106,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public getAllPlans(): void {
         this.planList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.length) {
-                this.isAllPlans = response;
+                this.allPlans = response;
                 this.monthlyPlans = response?.filter(plan =>
                     plan.hasOwnProperty('monthlyAmount') && plan?.monthlyAmount !== null
                 );
@@ -1150,7 +1150,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.inputData.push(plan);
             });
         } else {
-            let subscriptionPlan = this.isAllPlans?.filter(plan => plan?.uniqueName === this.viewSubscriptionData?.planUniqueName);
+            let subscriptionPlan = this.allPlans?.filter(plan => plan?.uniqueName === this.viewSubscriptionData?.planUniqueName);
             this.selectedPlan = subscriptionPlan[0];
             const filteredPlans = this.viewSubscriptionData?.period === 'YEARLY' ? this.yearlyPlans : this.monthlyPlans;
             filteredPlans?.forEach(plan => {
