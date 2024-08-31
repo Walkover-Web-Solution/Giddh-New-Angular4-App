@@ -1,15 +1,17 @@
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
-import { Component, Input, TemplateRef, ViewChild } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { SendEmailInvoiceComponent } from "../../shared/send-email-invoice/send-email-invoice.component";
 import { RevisionHistoryComponent } from "../../shared/revision-history/revision-history.component";
+import { ActivatedRoute } from "@angular/router";
+import { delay, ReplaySubject, takeUntil } from "rxjs";
 
 @Component({
     selector: "preview",
     templateUrl: "./preview.component.html",
     styleUrls: ["./preview.component.scss"]
 })
-export class VouchersPreviewComponent {
+export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /** Instance of cdk scrollbar */
     @ViewChild(CdkVirtualScrollViewport) cdkScrollbar: CdkVirtualScrollViewport;
     // export dialog
@@ -24,12 +26,28 @@ export class VouchersPreviewComponent {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
-        public dialog: MatDialog
-    ) {
+        public dialog: MatDialog,
+        private activatedRoute: ActivatedRoute,
+    ) { }
 
-    }
+  
+     /**
+     * Initializes the component
+     *
+     * @memberof VoucherListComponent
+     */
+     public ngOnInit(): void {
+        this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
+            if (params) {
+                // console.log(params?.voucherType);
+            }
+        });
+     }
+
     // paid dialog
     public onPerformAction():void {
         this.dialog.open(this.paidDialog, {
@@ -59,5 +77,16 @@ export class VouchersPreviewComponent {
             height: '100vh',
             maxHeight: '100vh'
         });
+    }
+
+
+    /**
+     * Lifecycle hook for destroy
+     *
+     * @memberof VoucherListComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
     }
 }
