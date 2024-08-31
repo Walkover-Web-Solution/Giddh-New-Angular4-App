@@ -46,16 +46,14 @@
                             *matHeaderCellDef
                             class="td-search-box"
                             #searchNameContainer
-                            (clickOutside)="
-                                handleClickOutside($event, searchNameContainer, commonLocaleData?.app_company)
-                            "
+                            (clickOutside)="handleClickOutside($event, searchNameContainer, 'companyName')"
                         >
                             <ng-container
                                 *ngTemplateOutlet="
                                     searchTemplate;
                                     context: {
                                         $implicit: showName,
-                                        fieldName: commonLocaleData?.app_company,
+                                        fieldName: 'Company',
                                         formControl: subscriptionListForm.controls['companyName'],
                                         title: commonLocaleData?.app_company
                                     }
@@ -88,7 +86,7 @@
                             class="td-search-box"
                             #searchBillingAccountContainer
                             (clickOutside)="
-                                handleClickOutside($event, searchBillingAccountContainer, localeData?.billing_account)
+                                handleClickOutside($event, searchBillingAccountContainer, 'Billing Account')
                             "
                         >
                             <ng-container
@@ -96,7 +94,7 @@
                                     searchTemplate;
                                     context: {
                                         $implicit: showBillingAccount,
-                                        fieldName: localeData?.billing_account,
+                                        fieldName: 'Billing Account',
                                         formControl: subscriptionListForm.controls['billingAccountName'],
                                         title: localeData?.billing_account
                                     }
@@ -113,16 +111,14 @@
                             *matHeaderCellDef
                             class="td-search-box"
                             #searchSubscriberContainer
-                            (clickOutside)="
-                                handleClickOutside($event, searchSubscriberContainer, localeData?.subscriber)
-                            "
+                            (clickOutside)="handleClickOutside($event, searchSubscriberContainer, 'Subscriber')"
                         >
                             <ng-container
                                 *ngTemplateOutlet="
                                     searchTemplate;
                                     context: {
                                         $implicit: showSubscriber,
-                                        fieldName: localeData?.subscriber,
+                                        fieldName: 'Subscriber',
                                         formControl: subscriptionListForm.controls['subscriberName'],
                                         title: localeData?.subscriber
                                     }
@@ -139,16 +135,14 @@
                             *matHeaderCellDef
                             class="td-search-box"
                             #searchCountryContainer
-                            (clickOutside)="
-                                handleClickOutside($event, searchCountryContainer, commonLocaleData?.app_country)
-                            "
+                            (clickOutside)="handleClickOutside($event, searchCountryContainer, 'Country')"
                         >
                             <ng-container
                                 *ngTemplateOutlet="
                                     searchTemplate;
                                     context: {
                                         $implicit: showCountry,
-                                        fieldName: commonLocaleData?.app_country,
+                                        fieldName: 'Country',
                                         formControl: subscriptionListForm.controls['countryName'],
                                         title: commonLocaleData?.app_country
                                     }
@@ -165,16 +159,14 @@
                             *matHeaderCellDef
                             class="td-search-box"
                             #searchPlanSubNameContainer
-                            (clickOutside)="
-                                handleClickOutside($event, searchPlanSubNameContainer, localeData?.plan_sub_name)
-                            "
+                            (clickOutside)="handleClickOutside($event, searchPlanSubNameContainer, 'Plan Name')"
                         >
                             <ng-container
                                 *ngTemplateOutlet="
                                     searchTemplate;
                                     context: {
                                         $implicit: showPlanSubName,
-                                        fieldName: localeData?.plan_sub_name,
+                                        fieldName: 'Plan Name',
                                         formControl: subscriptionListForm.controls['planName'],
                                         title: localeData?.plan_sub_name
                                     }
@@ -198,16 +190,14 @@
                             *matHeaderCellDef
                             class="td-search-box"
                             #searchStatusContainer
-                            (clickOutside)="
-                                handleClickOutside($event, searchStatusContainer, commonLocaleData?.app_status)
-                            "
+                            (clickOutside)="handleClickOutside($event, searchStatusContainer, 'Status')"
                         >
                             <ng-container
                                 *ngTemplateOutlet="
                                     searchTemplate;
                                     context: {
                                         $implicit: showStatus,
-                                        fieldName: commonLocaleData?.app_status,
+                                        fieldName: 'Status',
                                         formControl: subscriptionListForm.controls['status'],
                                         title: commonLocaleData?.app_status
                                     }

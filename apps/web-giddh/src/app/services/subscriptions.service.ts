@@ -287,8 +287,8 @@ export class SubscriptionsService {
     /**
      * Verifies ownership using the provided ID in the SubscriptionsService.
      *
-     * @param id - ID for ownership verification.
-     * @returns Observable<BaseResponse<any, any>> - Observable emitting the response.
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof SubscriptionsService
      */
     public verifyOwnership(model: any): Observable<BaseResponse<any, any>> {
@@ -379,7 +379,7 @@ export class SubscriptionsService {
     /**
      * This will be use for generating order by subscription id
      *
-     * @param {*} subscriptionId
+     * @param {*} model
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof SubscriptionsService
      */
@@ -458,10 +458,11 @@ export class SubscriptionsService {
                 catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '', {}))
             );
     }
+
     /**
-     * This will be use for get all companies by subscription id
+     *  This will be use for get all companies by subscription id
      *
-     * @param {*} subscriptionId
+     * @param {*} model
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof SubscriptionsService
      */

@@ -35,12 +35,12 @@ const MONTHLY_DATA: MonthlyData[] = [
 ];
 
 @Component({
-    selector: 'old-subscription',
-    templateUrl: './old-subscription.component.html',
-    styleUrls: ['./old-subscription.component.scss'],
+    selector: 'subscription-v1',
+    templateUrl: './subscription-v1.component.html',
+    styleUrls: ['./subscription-v1.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class OldSubscriptionComponent implements OnInit, OnDestroy, OnChanges {
+export class SubscriptionV1Component implements OnInit, OnDestroy, OnChanges {
     /** This will hold local JSON data */
     @Input() public localeData: any = {};
     /** This will hold common JSON data */

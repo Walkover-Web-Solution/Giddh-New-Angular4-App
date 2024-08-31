@@ -128,5 +128,19 @@
         "credit_debit_card": "Credit/Debit Card",
         "promocode_message":"Apply Promo Code Successfully",
          "promocode_discount_message":"You already have a better discount than the current promo code offers.",
-         "left_companies":"Left Companies"
+         "left_companies":"Left Companies",
+         "subscription_id": "Subscription ID",
+         "gst_tax":"GST Tax Total",
+        "request_accepted_successfully": "Request accepted successfully",
+        "login_to_giddh": "Login to Giddh",
+        "request_declined_successfully": "Request declined successfully",
+        "subscription_transfer": "Subscription Transfer",
+        "invited_to_become_subscriber": "You've been invited to become the subscriber.",
+        "accepting_will_make_you_subscriber": "On accepting, you will become the subscriber and be the person Giddh has on record as responsible for the organisation.",
+        "accept_subscription": "Accept Subscription",
+        "decline_subscription": "Decline Subscription",
+        "reject": "Reject",
+        "enter_reason": "Enter reason",
+        "submit": "Submit",
+        "cancel": "Cancel"
     }
