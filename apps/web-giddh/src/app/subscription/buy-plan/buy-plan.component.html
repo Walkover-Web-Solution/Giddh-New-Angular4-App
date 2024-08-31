@@ -888,7 +888,7 @@
                                                 <mat-radio-button color="primary" value="CARD">{{
                                                     localeData?.credit_debit_card
                                                 }}</mat-radio-button>
-                                                <mat-radio-button color="primary" value="UPI">{{
+                                                <mat-radio-button color="primary" value="UPI" *ngIf="selectedPlan?.entityCode === 'IND'">{{
                                                     localeData?.upi
                                                 }}</mat-radio-button>
                                             </mat-radio-group>
