@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { RouterModule } from '@angular/router';
 import { LaddaModule } from 'angular2-ladda';
@@ -11,9 +11,10 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AccountAddNewDetailsComponent } from './account-add-new-details.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { BulkAddDialogComponent } from '../bulk-add-dialog/bulk-add-dialog.component';
 
 @NgModule({
-    declarations: [AccountAddNewDetailsComponent],
+    declarations: [AccountAddNewDetailsComponent, BulkAddDialogComponent],
     exports: [AccountAddNewDetailsComponent],
     imports: [
         CommonModule,
@@ -29,7 +30,8 @@ import { MatButtonModule } from '@angular/material/button';
         MatSlideToggleModule,
         RouterModule,
         MatDialogModule,
-        MatButtonModule
+        MatButtonModule,
+        FormsModule
     ]
 })
 export class AccountAddNewDetailsModule { }

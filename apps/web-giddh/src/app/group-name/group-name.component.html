@@ -10,15 +10,19 @@
     <div class="stock-balance-wrapper" *ngIf="!isLoading">
       <div>
         <div class="d-flex column-gap15">
+            {{currentBranchUniqueName}}
+            {{selectedBranch}}
             <mat-select
                 name="selectedBranch"
                 [multiple]="true"
+                [(ngModel)]="selectedBranch"
                 class="stock-mat-salect group-select"
                 [placeholder]="localeData?.header?.select_branch"
             >
                 <mat-option class="balance-options">
                     <ngx-mat-select-search
                         [noEntriesFoundLabel]="localeData?.header?.no_result_found"
+                        [formControl]="branchesDropdown"
                         [placeholderLabel]="localeData?.header?.select_branch"
                         class="mat-select-search-inventory"
                     >
@@ -26,10 +30,11 @@
                     </ngx-mat-select-search>
                 </mat-option>
 
-                <mat-option class="balance-options">Branch</mat-option>
+                <mat-option class="balance-options" *ngFor="let branch of branches" [value]="branch?.uniqueName">
+                    {{ branch?.alias }}
+                </mat-option>
             </mat-select>
-            <mat-select
-                name="selectedBranch"
+            <!-- <mat-select
                 [multiple]="true"
                 class="stock-mat-salect group-select"
                 [placeholder]="localeData?.header?.select_account_group"
@@ -45,7 +50,7 @@
                 </mat-option>
 
                 <mat-option class="balance-options">Account</mat-option>
-            </mat-select>
+            </mat-select> -->
         </div>
 
         <div class="searching-stocks mt-3 w-100 overflow-x-auto">
@@ -54,7 +59,7 @@
                 <h4>Account Name</h4>
               </div>
               <div class="unique-name-wrapper d-flex align-items-center justify-content-center">
-                  <h4 class="unique-name font-15">{{ commonLocaleData?.app_unique_name }}</h4>
+                  <!-- <h4 class="unique-name font-15">{{ commonLocaleData?.app_unique_name }}</h4> -->
               </div>
               <div class="wrapper-warehouse">
                   <div class="warehouse-list d-flex align-items-center position-relative font-15">
@@ -83,9 +88,9 @@
                                       <div class="stock-list-box h-100">
                                           <div class="stock-list-unexpanded h-100 w-100">
                                               <div class="stock-list-box-heading proper-spacing-list h-100 w-100 d-flex justify-content-center align-items-center">
-                                                    <form name="addAccountForm" class="create-acc-form" [formGroup]="addAccountForm" (ngSubmit)="submit()">
+                                                    <!-- <form name="addAccountForm" class="create-acc-form" [formGroup]="addAccountForm" (ngSubmit)="submit()">
                                                         <div class="form-group m-0">
-                                                            <!-- <div [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }"> -->
+                                                            <div [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }">
                                                                 <input
                                                                     type="number"
                                                                     id="numbertel"
@@ -102,7 +107,7 @@
                                                                         commonLocaleData?.app_numbers?.zero
                                                                     "
                                                                 />
-                                                                <!-- <div
+                                                                <div
                                                                     class="input-group-addon"
                                                                     (click)="openingBalanceTypeChnaged('DEBIT')"
                                                                     [ngClass]="{
@@ -127,10 +132,10 @@
                                                                     *ngIf="addAccountForm.get('openingBalance')?.value > 0"
                                                                 >
                                                                     {{ commonLocaleData?.app_cr?.toUpperCase() }}
-                                                                </div> -->
-                                                            <!-- </div> -->
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </form>
+                                                    </form> -->
                                                 </div>
                                           </div>
                                       </div>

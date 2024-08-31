@@ -18,7 +18,7 @@ import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup
 import { digitsOnly } from '../../../helpers';
 import { AppState } from '../../../../store';
 import { select, Store } from '@ngrx/store';
-import { AccountRequestV2, CustomFieldsData } from '../../../../models/api-models/Account';
+import { AccountOpeningBalance, AccountRequestV2, CustomFieldsData } from '../../../../models/api-models/Account';
 import { ToasterService } from '../../../../services/toaster.service';
 import { CompanyResponse, StateList, StatesRequest } from '../../../../models/api-models/Company';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
@@ -40,16 +40,21 @@ import { HttpClient } from '@angular/common/http';
 import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
+import { BulkAddDialogComponent } from '../bulk-add-dialog/bulk-add-dialog.component';
+import { AccountAddNewDetailsComponentStore } from './utility/account-add-new-details.store';
 
 @Component({
     selector: 'account-add-new-details',
     templateUrl: './account-add-new-details.component.html',
     styleUrls: ['./account-add-new-details.component.scss'],
+    providers: [AccountAddNewDetailsComponentStore]
 })
 
 export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     public addAccountForm: UntypedFormGroup;
+    // public bulkAddAccountForm: UntypedFormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public flatGroupsOptions: IOption[];
     @Input() public createAccountInProcess$: Observable<boolean>;
@@ -99,8 +104,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     @ViewChild('autoFocus', { static: true }) public autoFocus: ElementRef;
     /** Tabs instance */
     @ViewChild('staticTabs', { static: true }) public staticTabs: TabsetComponent;
-    /** Instance of Mat Dialog for Advance Filter */
-    @ViewChild("bulkAddDialog") public bulkDialogContent: TemplateRef<any>;
 
     public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     public showOtherDetails: boolean = false;
@@ -192,6 +195,20 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public activeIndex: number;
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
+    /** True if current organization is company */
+    public isCompanyMode: boolean;
+    /** Hold all warehouses */
+    public allBranches: any[] = [];
+    /** Holds company branches */
+    public branches: Array<any>;
+    /** Holds company specific data */
+    public company: any = {
+        branch: null,
+    };
+    /** Bulk dialog ref */
+    public openBulkAddDialogRef: MatDialogRef<any>;
+    /** Bulk stock dialog ref */
+    public bulkAddAsideMenuRef: MatDialogRef<any>;
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -208,7 +225,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private http: HttpClient,
         private accountsAction: AccountsAction,
         public dialog: MatDialog,
-        private commonService: CommonService) {
+        private commonService: CommonService,
+        private readonly componentStore: AccountAddNewDetailsComponentStore
+    ) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
     }
 
@@ -218,6 +237,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public ngOnInit(): void {
+        this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -533,12 +553,32 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             ]),
             closingBalanceTriggerAmount: ['', Validators.compose([digitsOnly])],
             closingBalanceTriggerAmountType: ['CREDIT'],
-            customFields: this._fb.array([])
+            customFields: this._fb.array([]),
+            accountOpeningBalance: this._fb.array([
+                this._fb.group({
+                    branch: [''],
+                    openingBalance: [''],
+                    foreignOpeningBalance: [''],
+                    openingBalanceType: ['']
+                }),
+            ])
         });
 
         this.addAccountForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
         });
+
+        // this.bulkAddAccountForm = this._fb.group({
+        //     openingBalanceType: ['CREDIT'],
+        //     openingBalance: [''],
+        //     closingBalanceTriggerAmount: ['', Validators.compose([digitsOnly])],
+        //     closingBalanceTriggerAmountType: ['CREDIT'],
+        //     customFields: this._fb.array([])
+        // });
+
+        // this.bulkAddAccountForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
+        //     this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.bulkAddAccountForm.dirty));
+        // });
 
         this.getInvoiceSettings();
     }
@@ -730,6 +770,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (Number(this.addAccountForm.get('openingBalance')?.value) > 0) {
             this.addAccountForm.get('openingBalanceType')?.patchValue(type);
         }
+        // else if (Number(this.bulkAddAccountForm.get('openingBalance')?.value) > 0) {
+        //     this.bulkAddAccountForm.get('openingBalanceType')?.patchValue(type);
+        // }
     }
 
     public showLessGst() {
@@ -835,6 +878,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             delete accountRequest['portalDomain'];
         }
 
+        accountRequest.accountOpeningBalance = this.addAccountForm.get('accountOpeningBalance')?.value;
 
         this.submitClicked.emit({
             activeGroupUniqueName: this.activeGroupUniqueName,
@@ -1657,16 +1701,36 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
-    public openBulkAddDialog():void {
-        this.dialog.open(this.bulkDialogContent, {
-            position: {
-                right: '0'
+    /**
+     * Open Dialog for Bulk Add
+     *
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public openBulkAddDialog(): void {
+        this.bulkAddAsideMenuRef = this.dialog.open(BulkAddDialogComponent, {
+            position: { 
+                right: '0' 
             },
             disableClose: true,
             width: '550px',
             height: '100vh',
             maxHeight: '100vh'
-        })
+        });
+
+        this.bulkAddAsideMenuRef.afterClosed().subscribe(result => {
+            if (result) {
+              this.bulkDialogData(result);
+            }
+          });
+    }
+
+    private bulkDialogData(dialogData: any): void {
+        const accountOpeningBalance: AccountOpeningBalance[] = dialogData.customFields.map(field => ({
+          branch: field.branch,
+          openingBalance: field.openingBalance,
+          foreignOpeningBalance: field.foreignOpeningBalance,
+          openingBalanceType: field.openingBalanceType
+        }));
     }
 }
 

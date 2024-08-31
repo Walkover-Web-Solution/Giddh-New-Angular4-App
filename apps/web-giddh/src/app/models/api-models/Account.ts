@@ -181,6 +181,13 @@ export class IAccountAddress {
     public countyCode?: string;
     public county?: CountyList;
 }
+
+export class AccountOpeningBalance {
+    public branch?: string;
+    public openingBalance?: any;
+    public foreignOpeningBalance?: any;
+    public openingBalanceType?: string;
+}
 export class AccountRequestV2 {
     public addresses: IAccountAddress[];
     public attentionTo?: string;
@@ -202,7 +209,8 @@ export class AccountRequestV2 {
     public applicableDiscounts?: any[];
     public inheritedDiscounts?: any[];
     public customFields?: CustomFieldsData[];
-    public portalDomain?: any
+    public portalDomain?: any;
+    public accountOpeningBalance?: AccountOpeningBalance[];
 }
 
 export class AccountResponseV2 {
