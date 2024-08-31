@@ -18,6 +18,9 @@ import { cloneDeep } from '../lodash-optimized';
 import { AuthenticationService } from '../services/authentication.service';
 import * as dayjs from 'dayjs';
 import * as duration from 'dayjs/plugin/duration';
+import { ConfirmationModalButton } from '../theme/confirmation-modal/confirmation-modal.interface';
+import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 dayjs.extend(duration)
 @Component({
     selector: 'app-subscription',
@@ -95,6 +98,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private breakPointObservar: BreakpointObserver,
         private generalActions: GeneralActions,
         private changeDetectionRef: ChangeDetectorRef,
+        public dialog: MatDialog,
         private clipboardService: ClipboardService) {
         this.contactNo$ = this.store.pipe(select(s => {
             if (s.session.user) {
@@ -314,10 +318,38 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.sessionAction.deleteSession(requestPayload));
     }
 
-    public clearAllSession() {
-        this.store.dispatch(this.sessionAction.deleteAllSession());
-    }
+    /**
+     * Deletes All session
+     *
+     * @memberof UserDetailsComponent
+     */
+    public clearAllSession(): void {
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: this.commonLocaleData?.app_yes,
+            color: 'primary'
+        },
+        {
+            text: this.commonLocaleData?.app_no
+        }];
+        const headerText: string = this.commonLocaleData?.app_confirmation;
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1';
+        const messageText: string = this.localeData?.session?.delete_all_session;
+        const configuration = { buttons, headerText, headerCssClass, messageCssClass, messageText };
 
+        let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: {
+                configuration: configuration
+            }
+        });
+
+        dialogRef.afterClosed().pipe().subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.store.dispatch(this.sessionAction.deleteAllSession());
+            }
+        });
+    }
     /**
      * Tab change handler, used to set the state for selected page
      * which is used by header component, update menu panel and
