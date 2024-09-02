@@ -549,4 +549,79 @@ export class SettingsIntegrationService {
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e)));
     }
+
+    /**
+     * This will be use for get all institutions
+     *
+     * @param {ant} model
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
+    public getAllInstitutions(model: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GOCARDLESS.GET_ALL_INSTITUTIONS
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':countryCode', encodeURIComponent(model?.countryCode ?? ''))
+            ?.replace(':page', encodeURIComponent(model?.page ?? ''))
+            ?.replace(':count', encodeURIComponent(model?.count ?? ''))
+        ).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * This will be use for create end user agreement by institution id
+     *
+     * @param {*} institutionId
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
+    public createEndUserAgreementByInstitutionId(institutionId: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.GOCARDLESS.CREATE_END_USER_AGREEMENT
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':institutionId', encodeURIComponent(institutionId ?? ''))
+            , '').pipe(map((res) => {
+                let data: BaseResponse<any, any> = res;
+                data.request = '';
+                return data;
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, '')));
+    }
+
+    /**
+     * This will be use for get all institutions
+     *
+     * @param {ant} requisitionId
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
+    public getRequistion(requisitionId: any): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GOCARDLESS.GET_REQUISTION
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':requisitionId', encodeURIComponent(requisitionId ?? ''))
+        ).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
+
+    /**
+     * This wil be use for delete end user agreement details
+     *
+     * @param {string} agreementId
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof SettingsIntegrationService
+     */
+    public deleteEndUserAgreementDetails(agreementId: string): Observable<BaseResponse<any, any>> {
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        return this.http.delete(this.config.apiUrl + SETTINGS_INTEGRATION_API.GOCARDLESS.DELETE_END_USER_AGREEMENT
+            ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+            ?.replace(':agreementId', encodeURIComponent(agreementId))
+        ).pipe(map((res) => {
+            let data: BaseResponse<any, any> = res;
+            return data;
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+    }
 }

@@ -144,5 +144,18 @@ export class IntegratedBankList {
     message?: any;
     bankUserId: string;
 }
+export class InsitutionsRequest {
+    public totalItems?: number;
+    public q?: any;
+    public totalPages?: number;
+    public count: number;
+    public page: number;
+    public countryCode: string;
+    constructor() {
+        this.count = 250;
+        this.page = 1;
+    }
+}
+
 
 
