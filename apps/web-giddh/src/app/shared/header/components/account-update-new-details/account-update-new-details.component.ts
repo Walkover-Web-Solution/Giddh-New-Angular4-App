@@ -11,7 +11,7 @@ import {
     Output,
     ViewChild,
 } from '@angular/core';
-import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { createSelector, select, Store } from '@ngrx/store';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 import { ApplyTaxRequest } from 'apps/web-giddh/src/app/models/api-models/ApplyTax';
@@ -56,6 +56,9 @@ import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/setting
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 import { HttpClient } from '@angular/common/http';
+import { BulkAddDialogComponent } from '../bulk-add-dialog/bulk-add-dialog.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 
 @Component({
     selector: 'account-update-new-details',
@@ -230,6 +233,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isPortalDefault: boolean;
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
+    /** True if current organization is company */
+    public isCompanyMode: boolean;
+    /** Bulk stock dialog ref */
+    public bulkAddAsideMenuRef: MatDialogRef<any>;
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -248,12 +255,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         private changeDetectorRef: ChangeDetectorRef,
         private settingsDiscountService: SettingsDiscountService,
         private customFieldsService: CustomFieldsService,
-        private http: HttpClient
+        private http: HttpClient,
+        public dialog: MatDialog
     ) {
 
     }
 
     public ngOnInit() {
+        this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -619,6 +628,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     default: [false],
                     uniqueName: ['']
                 })
+            ]),
+            accountOpeningBalance: this._fb.array([
+                this._fb.group({
+                    branch: [''],
+                    openingBalance: [''],
+                    openingBalanceType: ['']
+                }),
             ])
         });
 
@@ -882,6 +898,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         }
         let accountRequest: AccountRequestV2 = this.addAccountForm?.value as AccountRequestV2;
+        accountRequest.accountOpeningBalance = this.addAccountForm.get('accountOpeningBalance')?.value;
         if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
             if (selectedStateObj) {
@@ -2189,4 +2206,84 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             });
         }
     }
+
+    /**
+     * Open Dialog for Bulk Add
+     *
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+        public openBulkAddDialog(): void {
+            this.bulkAddAsideMenuRef = this.dialog.open(BulkAddDialogComponent, {
+                position: {
+                    right: '0'
+                },
+                disableClose: true,
+                width: '550px',
+                height: '100vh',
+                maxHeight: '100vh'
+            });
+    
+            this.bulkAddAsideMenuRef.afterClosed().subscribe(result => {
+                if (result) {
+                    this.bulkDialogData(result.customFields);
+                }
+            });
+        }
+
+        /**
+         * Get data dialog
+         *
+         * @private
+         * @param {*} dialogData
+         * @memberof AccountUpdateNewDetailsComponent
+         */
+        private bulkDialogData(dialogData: any): void {
+            const accountData = this.addAccountForm.get('accountOpeningBalance') as FormArray;
+            let credit = 0;
+            let debit = 0;
+            dialogData?.forEach(item => {
+                const openingBalance = item.openingBalance
+                if (item.openingBalanceType === 'CREDIT') {
+                    credit = credit + openingBalance;
+                } else if (item.openingBalanceType === 'DEBIT') {
+                    debit = debit + openingBalance;
+                }
+    
+                const data = this._fb.group({
+                    branch: [item.branch],
+                    openingBalance: [item.openingBalance],
+                    foreignOpeningBalance: [item.foreignOpeningBalance],
+                    openingBalanceType: [item.openingBalanceType]
+                });
+                accountData.push(data);
+            });
+            this.totalDebitCredit(credit, debit);
+        }
+        /**
+         * Total value of Debit and Credit
+         *
+         * @param {number} credit
+         * @param {number} debit
+         * @memberof AccountUpdateNewDetailsComponent
+         */
+        public totalDebitCredit(credit: number, debit: number): void {
+            let openingBalanceType = 'CREDIT';
+            let difference = 0;
+    
+            if (credit > debit) {
+                difference = credit - debit;
+                openingBalanceType = 'CREDIT';
+                this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
+            } else if (debit > credit) {
+                difference = debit - credit;
+                openingBalanceType = 'DEBIT';
+                this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
+            }
+            else {
+                console.log('Equal');
+            }
+    
+            this.addAccountForm.get('openingBalanceType')?.patchValue(openingBalanceType);
+            this.addAccountForm.get('openingBalance')?.patchValue(difference);
+        }
 }

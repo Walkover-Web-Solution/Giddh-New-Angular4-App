@@ -54,6 +54,11 @@ export class BulkAddDialogComponent implements OnInit {
     this.getCompanyBranches();
   }
 
+  /**
+   * form group
+   *
+   * @memberof BulkAddDialogComponent
+   */
   public initializeNewForm() {
     this.bulkAddAccountForm = this._fb.group({
       openingBalanceType: ['CREDIT'],
@@ -67,20 +72,21 @@ export class BulkAddDialogComponent implements OnInit {
       this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.bulkAddAccountForm.dirty));
     });
   }
-
-  private openingBulkGet(): FormGroup {
+  
+  /**
+   * getting data form
+   *
+   * @private
+   * @param {*} [item]
+   * @return {*}  {FormGroup}
+   * @memberof BulkAddDialogComponent
+   */
+  private openingBulkGet(item? : any): FormGroup {
     return this.formBuilder.group({
+        branch: [item ?? ''],
         openingBalance: [''],
         openingBalanceType: ['CREDIT']
     });
-  }
-
-
-  public onSubmit(): void {
-    if (this.bulkAddAccountForm.valid) {
-      // Use MatDialogRef to close the dialog and pass data
-      this.data.dialogRef.close(this.bulkAddAccountForm.value);
-    }
   }
 
   /**
@@ -94,11 +100,16 @@ export class BulkAddDialogComponent implements OnInit {
       if (response) {
         this.branches = response;
         const formArray = this.bulkAddAccountForm.get('customFields') as FormArray;
+        formArray.setValue([]);
         formArray.clear();
-        response.forEach(() => {
-          formArray.push(this.openingBulkGet());
-        })
-        console.log(this.bulkAddAccountForm.get('customFields').value);
+        response.forEach((item) => {
+          formArray.push(this.openingBulkGet(
+            {
+              name: item.alias,
+              uniqueName: item.uniqueName
+            }
+          ));
+        });
         this.company.isActive = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
         if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
           // Find the current checked out branch
@@ -107,31 +118,42 @@ export class BulkAddDialogComponent implements OnInit {
           // Find the HO branch
           this.company.branch = response.find(branch => !branch.parentBranch);
         }
-        console.log('Branche List', response);
       }
     });
   }
-
+  
+  /**
+   * Credit and Debit opening Balalnce Type change
+   *
+   * @param {string} type
+   * @param {number} index
+   * @memberof BulkAddDialogComponent
+   */
   public openingBalanceTypeChnaged(type: string, index: number) {
     const formArray = this.bulkAddAccountForm.get('customFields') as FormArray;
     const item = formArray.at(index) as FormGroup;
     if (Number(item.get('openingBalance')?.value) >= 0) {
       item.get('openingBalanceType')?.patchValue(type);
     }
-    // if (Number(this.bulkAddAccountForm.get('openingBalance')?.value) > 0) {
-    //   this.bulkAddAccountForm.get('openingBalanceType')?.patchValue(type);
-    // }
   }
-
+  /**
+   * save the opening balance value
+   *
+   * @memberof BulkAddDialogComponent
+   */
   public saveOpeningBalance():void {
-    // if(this.bulkAddAccountForm.valid) {
-    //   this.dialogRef.close({
-    //     customFields: this.bulkAddAccountForm.get('customFields')?.value
-    //   });
-    // }
-    this.dialogRef.close(this.bulkAddAccountForm.value);
+    if (this.bulkAddAccountForm.valid) {
+      const formArrayValues = this.bulkAddAccountForm.get('customFields')?.value;
+        this.dialogRef.close(this.bulkAddAccountForm.value);
+    } else {
+        console.log('Form is invalid');
+    }
   }
-
+  /**
+   * destroy
+   *
+   * @memberof BulkAddDialogComponent
+   */
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();

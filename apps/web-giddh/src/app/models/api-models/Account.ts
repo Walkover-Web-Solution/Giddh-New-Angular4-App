@@ -185,7 +185,6 @@ export class IAccountAddress {
 export class AccountOpeningBalance {
     public branch?: string;
     public openingBalance?: any;
-    public foreignOpeningBalance?: any;
     public openingBalanceType?: string;
 }
 export class AccountRequestV2 {
@@ -254,7 +253,8 @@ export class AccountResponseV2 {
     public customFields?: CustomFieldsData[];
     public category?: string;
     public otherApplicableTaxes?: any[];
-    public portalDomain?: any
+    public portalDomain?: any;
+    public accountOpeningBalance?: AccountOpeningBalance[];
 }
 
 /*

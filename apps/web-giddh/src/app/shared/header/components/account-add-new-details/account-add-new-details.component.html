@@ -78,7 +78,7 @@
 
                     <div class="form-group col-xs-12 col-sm-4">
                         <label for="numbertel">{{ localeData?.opening_balance }}</label>
-                        <div [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }">
+                        <div [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }" class="obj-gap">
                             <input
                                 type="number"
                                 id="numbertel"
@@ -95,10 +95,11 @@
                                     '' +
                                     commonLocaleData?.app_numbers?.zero
                                 "
+                                [readonly]="isCompanyMode"
                             />
                             <div
                                 class="input-group-addon"
-                                (click)="openingBalanceTypeChnaged('DEBIT')"
+                                (click)="isCompanyMode ? null : openingBalanceTypeChnaged('DEBIT')"
                                 [ngClass]="{
                                     'active-toggle-btn':
                                         addAccountForm.get('openingBalanceType')?.value === 'DEBIT' &&
@@ -111,7 +112,7 @@
                             </div>
                             <div
                                 class="input-group-addon"
-                                (click)="openingBalanceTypeChnaged('CREDIT')"
+                                (click)="isCompanyMode ? null : openingBalanceTypeChnaged('CREDIT')"
                                 [ngClass]="{
                                     'active-toggle-btn':
                                         addAccountForm.get('openingBalanceType')?.value === 'CREDIT' &&

@@ -5,18 +5,18 @@
 >
     <div class="modal-header d-flex align-items-center activity-header">
     <h3 mat-dialog-title>Bulk Add</h3>
-    <button aria-hidden="true" class="close" mat-dialog-close>×</button>
+    <button class="close" mat-dialog-close>×</button>
     </div>
     <mat-dialog-content class="w-100 right-dialog-height">
         <div class="p-3">
-            <form class="create-acc-form" [formGroup]="bulkAddAccountForm" (ngSubmit)="onSubmit()">
+            <form class="create-acc-form" [formGroup]="bulkAddAccountForm">
                 <ng-container formArrayName="customFields">
                     <ng-container *ngFor="let item of bulkAddAccountForm.get('customFields')['controls']; let bulkIndex = index" [formGroupName]="bulkIndex">
                         <!-- {{ branches[bulkIndex]?.name }} -->
                         <div class="d-flex column-gap15 align-items-center mb-3">
                             <p class="w-50">{{ branches[bulkIndex]?.alias }}</p>
                             <div class="form-group m-0">
-                                <div class="input-group">
+                                <div class="input-group obj-gap">
                                     <input
                                         type="number"
                                         id="numberteldr"
