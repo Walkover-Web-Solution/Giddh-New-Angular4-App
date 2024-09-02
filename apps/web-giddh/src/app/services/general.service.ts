@@ -1707,7 +1707,6 @@ export class GeneralService {
     */
     public checkCompanySupportGocardless(countryName: string): boolean {
         const gocardlessSupportedCountryList = ['UNITED KINGDOM'];
-
         return gocardlessSupportedCountryList.includes(countryName.toUpperCase());
     }
 

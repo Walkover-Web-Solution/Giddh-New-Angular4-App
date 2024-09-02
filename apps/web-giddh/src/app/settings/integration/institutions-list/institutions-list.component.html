@@ -4,36 +4,40 @@
 </div>
 <giddh-page-loader *ngIf="institutionsListInProgress$ | async"></giddh-page-loader>
 <mat-dialog-content class="institutions-dialog-body" *ngIf="!(institutionsListInProgress$ | async)">
-    <div class="w-100">
-        <div class="institution-list">
-            <form [formGroup]="searchForm">
-                <input-field
-                    [autocomplete]="'off'"
-                    [name]="'Institutions'"
-                    [placeholder]="localeData?.payment?.search_institutions"
-                    [type]="'text'"
-                    formControlName="search"
-                    [label]="localeData?.payment?.institutions"
-                    (keydown.enter)="$event.preventDefault()"
-                >
-                </input-field>
-            </form>
+    <div class="w-100 container pd-t15 pd-b15">
+        <div class="row">
+            <div class="col-12 col-md-8 institution-list">
+                <form [formGroup]="searchForm">
+                    <input-field
+                        [autocomplete]="'off'"
+                        [name]="'institutions'"
+                        [placeholder]="localeData?.payment?.search_institutions"
+                        [type]="'text'"
+                        formControlName="search"
+                        [label]="localeData?.payment?.institutions"
+                        (keydown.enter)="$event.preventDefault()"
+                    >
+                    </input-field>
+                </form>
 
-            <div class="list-wrapper mt-2">
-                <mat-list class="p-0" *ngIf="filteredItems?.length">
-                    <ng-container *ngFor="let item of filteredItems">
-                        <div class="list-item px-2">
-                            <ng-container *ngFor="let item of filteredItems">
-                                <mat-list-item (click)="openGocardlessDialog(item)" class="list-item pr-2 pl-4">{{
-                                    item.id
-                                }}</mat-list-item>
-                            </ng-container>
-                        </div>
-                    </ng-container>
-                </mat-list>
-                <mat-list class="p-0" *ngIf="!filteredItems?.length">
-                    <mat-list-item class="list-item pr-2 pl-4">{{ commonLocaleData?.app_no_data_found }}</mat-list-item>
-                </mat-list>
+                <div class="list-wrapper mt-2">
+                    <mat-list class="p-0" *ngIf="filteredBanks?.length">
+                        <ng-container *ngFor="let item of filteredBanks">
+                            <div class="list-item px-2">
+                                <mat-list-item
+                                    (click)="openGocardlessDialog(item)"
+                                    class="cursor-pointer list-item-underline-hover p-0"
+                                    >{{ item.id }}</mat-list-item
+                                >
+                            </div>
+                        </ng-container>
+                    </mat-list>
+                    <mat-list class="p-0" *ngIf="!filteredBanks?.length">
+                        <mat-list-item class="list-item pr-2 pl-4">{{
+                            commonLocaleData?.app_no_data_found
+                        }}</mat-list-item>
+                    </mat-list>
+                </div>
             </div>
         </div>
     </div>

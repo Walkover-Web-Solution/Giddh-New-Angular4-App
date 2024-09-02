@@ -144,10 +144,7 @@ export class IntegratedBankList {
     message?: any;
     bankUserId: string;
 }
-export class InsitutionsRequest {
-    public totalItems?: number;
-    public q?: any;
-    public totalPages?: number;
+export class InstitutionsRequest {
     public count: number;
     public page: number;
     public countryCode: string;

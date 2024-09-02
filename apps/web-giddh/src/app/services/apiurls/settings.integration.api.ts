@@ -28,7 +28,7 @@ export const SETTINGS_INTEGRATION_API = {
         GET_ALL_INSTITUTIONS: COMMON + 'gocardless/institutions?countryCode=:countryCode&page=:page&count=:count&refresh=true',
         CREATE_END_USER_AGREEMENT: COMMON + 'gocardless/agreement-requisitions?institutionId=:institutionId',
         DELETE_END_USER_AGREEMENT: COMMON + 'gocardless/agreement/:agreementId',
-        GET_REQUISTION: COMMON + 'gocardless/requisitions/:requisitionId'
+        GET_REQUISITION: COMMON + 'gocardless/requisitions/:requisitionId'
     }
 };
 

@@ -75,15 +75,15 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
     });
 
     /**
-     * Get Requistion bt ID
+     * Get Requisition by ID
      *
      * @memberof SettingIntegrationComponentStore
      */
-    readonly getRequistion = this.effect((data: Observable<any>) => {
+    readonly getRequisition = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ requistionListInProgress: true });
-                return this.settingsIntegrationService.getRequistion(req).pipe(
+                return this.settingsIntegrationService.getRequisition(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {

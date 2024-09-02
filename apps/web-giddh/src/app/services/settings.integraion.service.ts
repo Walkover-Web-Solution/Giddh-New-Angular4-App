@@ -596,9 +596,9 @@ export class SettingsIntegrationService {
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof SettingsIntegrationService
      */
-    public getRequistion(requisitionId: any): Observable<BaseResponse<any, any>> {
+    public getRequisition(requisitionId: any): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GOCARDLESS.GET_REQUISTION
+        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GOCARDLESS.GET_REQUISITION
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':requisitionId', encodeURIComponent(requisitionId ?? ''))
         ).pipe(map((res) => {

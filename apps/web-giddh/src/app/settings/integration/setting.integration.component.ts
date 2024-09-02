@@ -381,10 +381,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         window.addEventListener('message', event => {
             if (this.router.url !== '/pages/settings/integration/payment') {
-                if (event?.data && typeof event?.data === "string" && event?.data === "GOCARDLESS") {
+                if (event && event.data === "GOCARDLESS") {
                     this.createEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                         if (response?.reference) {
-                            this.componentStore.getRequistion(response?.reference);
+                            this.componentStore.getRequisition(response?.reference);
                         }
                     });
                 }
@@ -1185,7 +1185,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     /**
-    * This function will use for get insitutions details
+    * This function will use for get institutions details
     *
     * @param {*} element
     * @memberof SettingIntegrationComponent
@@ -1219,8 +1219,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             let accountForm = {
                 accountNumber: bank?.bankResource?.accountNumber,
                 accountUniqueName: event?.value,
-                paymentAlerts: [],
-                bankName: 'plaid'
+                paymentAlerts: []
             };
             this.settingsIntegrationService.updateAccount(accountForm, request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {

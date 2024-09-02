@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, Inject } from '@angular/core';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
-import { InsitutionsRequest } from '../../../models/api-models/SettingsIntegraion';
+import { InstitutionsRequest } from '../../../models/api-models/SettingsIntegraion';
 import { SettingIntegrationComponentStore } from '../utility/setting.integration.store';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { GeneralService } from '../../../services/general.service';
@@ -27,7 +27,7 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
     /** Holds Store Institutions list API success state as observable*/
     public institutionsList$: Observable<any> = this.componentStore.select(state => state.institutionList);
     /** This will hold institutions request api form request */
-    public institutionsRequest: InsitutionsRequest = new InsitutionsRequest();
+    public institutionsRequest: InstitutionsRequest = new InstitutionsRequest();
     /** This will use for open window */
     public openedWindow: Window | null = null;
     /** Holds Store Save payment provider company API success state as observable*/
@@ -37,7 +37,7 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
     /** Instance for form group*/
     public searchForm: FormGroup;
     /** Hold filetered item from bank list*/
-    public filteredItems: any[] = [];
+    public filteredBanks: any[] = [];
 
     constructor(
         private componentStore: SettingIntegrationComponentStore,
@@ -62,7 +62,7 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
         this.institutionsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.institutions = response.results;
-                this.filteredItems = response.results;
+                this.filteredBanks = response.results;
                 this.changeDetection.detectChanges();
             }
         });
@@ -102,17 +102,19 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for filter insitutions from list
+     * This will be use for filter institutions from list
      *
      * @param {string} searchText
      * @memberof InstitutionsListComponent
      */
     public filterInstitutions(searchText: string) {
-        const lowerCaseTerm = searchText.toLowerCase();
-        this.filteredItems = this.institutions.filter(item =>
-            item.id.toLowerCase().includes(lowerCaseTerm)
-        );
-        this.changeDetection.detectChanges();
+        if (searchText) {
+            const lowerCaseTerm = searchText.toLowerCase();
+            this.filteredBanks = this.institutions.filter(item =>
+                item.id.toLowerCase().includes(lowerCaseTerm)
+            );
+            this.changeDetection.detectChanges();
+        }
     }
 
     /**
@@ -122,8 +124,7 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
      * @memberof InstitutionsListComponent
      */
     public openGocardlessDialog(item: any): void {
-        //change krna h abh api se deployed nh hua h ----requisitionId----
-        this.componentStore.createEndUserAgreementByInstitutionId('SANDBOXFINANCE_SFIN0000');
+        this.componentStore.createEndUserAgreementByInstitutionId(item?.id);
     }
 
     /**
@@ -148,5 +149,4 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
-
 }
