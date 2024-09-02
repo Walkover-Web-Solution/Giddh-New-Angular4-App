@@ -305,6 +305,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
+                //This is not using no due to gocardless
                 // this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
                 this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGocardless(res.country);
             }
