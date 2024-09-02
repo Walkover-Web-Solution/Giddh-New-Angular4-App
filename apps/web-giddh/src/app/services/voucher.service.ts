@@ -10,7 +10,6 @@ import { BULK_UPDATE_VOUCHER, INVOICE_API, INVOICE_API_2 } from "./apiurls/invoi
 import { ProformaFilter, ProformaGetRequest, ProformaResponse, ProformaUpdateActionRequest } from "../models/api-models/proforma";
 import { ESTIMATES_API, PROFORMA_API } from "./apiurls/proforma.api";
 import { InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptResponse, Voucher, VoucherRequest } from "../models/api-models/recipt";
-import { VoucherTypeEnum } from "../models/api-models/Sales";
 import { RECEIPT_API } from "./apiurls/receipt.api";
 import { CustomTemplateResponse } from "../models/api-models/Invoice";
 import { VouchersUtilityService } from "../vouchers/utility/vouchers.utility.service";
@@ -32,7 +31,6 @@ export class VoucherService {
         private vouchersUtilityService: VouchersUtilityService,
         @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs
     ) {
-
     }
 
     /**

@@ -359,12 +359,10 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
                     let dueDate = "";
 
                     if (this.bulkUpdateForm.get("dueDate")?.value) {
-                        let dueDate = (typeof this.bulkUpdateForm.get("dueDate")?.value === "object") ? dayjs(this.bulkUpdateForm.get("dueDate")?.value).format(GIDDH_DATE_FORMAT) : dayjs(this.bulkUpdateForm.get("dueDate")?.value, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
-
+                        dueDate = (typeof this.bulkUpdateForm.get("dueDate")?.value === "object") ? dayjs(this.bulkUpdateForm.get("dueDate")?.value).format(GIDDH_DATE_FORMAT) : dayjs(this.bulkUpdateForm.get("dueDate")?.value).format(GIDDH_DATE_FORMAT);
                         this.bulkUpdateForm.get("dueDate")?.patchValue(dueDate);
                     }
                     this.bulkUpdateRequest({ dueDate: dueDate }, 'duedate');
-
                     break;
 
                 case 'shippingDetails':
