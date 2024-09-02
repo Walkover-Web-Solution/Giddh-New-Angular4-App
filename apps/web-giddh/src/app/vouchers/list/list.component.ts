@@ -152,10 +152,14 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public showCustomerSearch: boolean = false;
     /** Holds show Invoice No Search input visibility status */
     public showInvoiceNoSearch: boolean = false;
+    /** Holds show Purchase Order Number Search input visibility status */
+    public showPurchaseOrderNumberSearch: boolean = false;
     /** Holds voucher Number form control */
     public voucherNumberInput: FormControl = new FormControl();
     /** Holds account Unique Name form control */
     public accountUniqueNameInput: FormControl = new FormControl();
+    /** Holds Purchase Order Unique Name form control */
+    public purchaseOrderUniqueNameInput: FormControl = new FormControl();
     /** Holds searched Name form control */
     public searchedName: FormControl = new FormControl();
     /** Holds true if searching is in progress */
@@ -322,6 +326,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 this.activeModule = params.module;
                 this.advanceFilters.type = this.voucherType;
+                this.selectedVouchers = [];
+                this.allVouchersSelected = false;
                 this.setInitialAdvanceFilter();
 
                 this.activeTabGroup = this.tabsGroups.findIndex(group => group.includes(this.voucherType));
@@ -473,6 +479,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         this.componentStore.sendEmailIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.sendEmailModalDialogRef.close();
                 this.getVouchers(this.isUniversalDateApplicable);
             }
         });
@@ -549,6 +556,18 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.purchaseOrderUniqueNameInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
+            if (search !== null && search !== undefined) {
+                if (this.voucherType === VoucherTypeEnum.purchase) {
+                    this.advanceFilters.purchaseOrderNumber = search;
+                }
+                this.isSearching = true;
+                this.advanceFiltersApplied = search !== "";
+                this.isSearching = search !== "";
+                this.getVouchers(this.isUniversalDateApplicable);
+            }
+        });
+
         this.componentStore.updatedAccountDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.accountAsideMenuRef?.close();
@@ -577,7 +596,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     private handleGetAllVoucherResponse(response: any): void {
-        if (response) {
+        if (response && response?.voucherType === this.voucherType) {
             this.dataSource = [];
             this.totalResults = response?.totalItems;
             response.items?.forEach((item: any, index: number) => {
@@ -1244,6 +1263,36 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.showInvoiceNoSearch = true;
                 }
                 break;
+            case VoucherTypeEnum.creditNote:
+                this.showCustomerSearch = false;
+                this.showInvoiceNoSearch = false;
+                if (fieldName === "accountUniqueName") {
+                    this.showCustomerSearch = true;
+                } else if (fieldName === "creditNoteNumber") {
+                    this.showInvoiceNoSearch = true;
+                }
+                break;
+            case VoucherTypeEnum.debitNote:
+                this.showCustomerSearch = false;
+                this.showInvoiceNoSearch = false;
+                if (fieldName === "accountUniqueName") {
+                    this.showCustomerSearch = true;
+                } else if (fieldName === "debitNoteNumber") {
+                    this.showInvoiceNoSearch = true;
+                }
+                break;
+            case VoucherTypeEnum.purchase:
+                this.showCustomerSearch = false;
+                this.showInvoiceNoSearch = false;
+                this.showPurchaseOrderNumberSearch = false;
+                if (fieldName === "accountUniqueName") {
+                    this.showCustomerSearch = true;
+                } else if (fieldName === "billNumber") {
+                    this.showInvoiceNoSearch = true;
+                } else if (fieldName === "purchaseOrderNumbers") {
+                    this.showPurchaseOrderNumberSearch = true;
+                }
+                break;
         }
 
         event.stopPropagation();
@@ -1259,13 +1308,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof ListBranchTransferComponent
      */
     public handleClickOutside(event: any, element: any, searchedFieldName: string): void {
-        const searchedFieldNameArray: string[] = ['invoiceNumber', 'estimateNumber', 'proformaNumber', 'purchaseOrderNumber', 'receiptNumber'];
+        const searchedFieldNameArray: string[] = ['invoiceNumber', 'estimateNumber', 'proformaNumber', 'purchaseOrderNumber', 'receiptNumber', 'paymentNumber', 'creditNoteNumber', 'debitNoteNumber', 'billNumber'];
         if (searchedFieldNameArray.includes(searchedFieldName)) {
             if (this.voucherNumberInput.value !== null && this.voucherNumberInput.value !== '') {
                 return;
             }
         } else if (searchedFieldName === 'accountUniqueName') {
             if (this.accountUniqueNameInput.value !== null && this.accountUniqueNameInput.value !== '') {
+                return;
+            }
+        } else if (searchedFieldName === 'purchaseOrderNumbers') {
+            if (this.purchaseOrderUniqueNameInput.value !== null && this.purchaseOrderUniqueNameInput.value !== '') {
                 return;
             }
         }
@@ -1277,6 +1330,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.showInvoiceNoSearch = false;
             } else if (searchedFieldName === 'accountUniqueName') {
                 this.showCustomerSearch = false;
+            } else if (searchedFieldName === 'purchaseOrderNumbers') {
+                this.showPurchaseOrderNumberSearch = false;
             }
         }
     }
@@ -1637,6 +1692,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         };
         this.voucherNumberInput.patchValue("");
         this.accountUniqueNameInput.patchValue("");
+        this.purchaseOrderUniqueNameInput.patchValue("");
+        this.showCustomerSearch = false;
+        this.showInvoiceNoSearch = false;
+        this.showPurchaseOrderNumberSearch = false;
         this.advanceFiltersApplied = false;
         this.isSearching = false;
         this.advanceSearchTempKeyObj = {};
@@ -1699,11 +1758,26 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     public sendEmail(email: any): void {
         if (email && email.length) {
-            const request = {
-                accountUniqueName: this.currentVoucher?.vendor?.uniqueName,
-                uniqueName: this.currentVoucher?.uniqueName
-            };
-            this.componentStore.sendEmail({ request, model: { emailId: [email] } });
+            if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
+                const request = {
+                    accountUniqueName: this.currentVoucher?.vendor?.uniqueName,
+                    uniqueName: this.currentVoucher?.uniqueName,
+                    voucherType: this.voucherType
+                };
+                this.componentStore.sendEmail({ request, model: { emailId: [email] } });
+            } else if (this.voucherType === VoucherTypeEnum.purchase) {
+                this.componentStore.sendVoucherOnEmail({
+                    accountUniqueName: this.currentVoucher?.account?.uniqueName,
+                    payload: {
+                        copyTypes: [],
+                        email: {
+                            to: email?.split(',').map(email => email.trim())
+                        },
+                        voucherType: this.voucherType,
+                        uniqueName: this.currentVoucher?.uniqueName
+                    }
+                });
+            }
         }
     }
 

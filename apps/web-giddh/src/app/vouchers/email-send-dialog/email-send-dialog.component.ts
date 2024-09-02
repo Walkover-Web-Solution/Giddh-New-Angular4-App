@@ -108,12 +108,12 @@ export class EmailSendDialogComponent implements OnInit, OnDestroy {
             return;
         }
 
-        if (!this.copyTypes?.value?.length && this.voucherType !== VoucherTypeEnum.purchaseOrder) {
+        if (!this.copyTypes?.value?.length && this.voucherType !== VoucherTypeEnum.purchaseOrder && this.voucherType !== VoucherTypeEnum.purchase) {
             this.toasterService.showSnackBar("error", this.localeData?.select_invoice_copy);
             return;
         }
 
-        if ([VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma, VoucherTypeEnum.purchaseOrder].includes(this.selectedItem?.type ?? this.voucherType)) {
+        if ([VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.purchase].includes(this.selectedItem?.type ?? this.voucherType)) {
             this.successEvent.emit(this.sendEmailForm.get('email.to').value);
         } else {
             this.successEvent.emit({ email: this.sendEmailForm.get('email.to').value, invoiceType: this.copyTypes.value, uniqueName: this.selectedItem?.uniqueName });

@@ -15,14 +15,14 @@
                         <mat-option value="TRANSPORT">{{ localeData?.invoice_copy_options?.transport }}</mat-option>
                     </mat-select>
                 </mat-form-field>
-                <button mat-stroked-button color="primary" (click)="exportVouchers(false)">{{ commonLocaleData?.app_download }}</button>
+                <button mat-stroked-button color="primary" (click)="exportVouchers(false)" [disabled]="!exportForm.get('copyTypes').value">{{ commonLocaleData?.app_download }}</button>
             </div>
             <div class="pd-t15">
                 <mat-form-field appearance="outline" class="w-100 mr-b15">
                     <mat-label>{{ localeData?.add_multiple_email }}</mat-label>
                     <textarea matInput rows="3" [placeholder]="localeData?.recipients_email" formControlName="recipients"></textarea>
                 </mat-form-field>
-                <button mat-stroked-button color="primary" (click)="exportVouchers(true)">{{ commonLocaleData?.app_send_email }}</button>
+                <button mat-stroked-button color="primary" (click)="exportVouchers(true)" [disabled]="!exportForm.get('copyTypes').value && inputData?.voucherType === 'sales'">{{ commonLocaleData?.app_send_email }}</button>
                 <button *ngIf="inputData?.voucherType === 'receipt' || inputData?.voucherType === 'payment'" mat-stroked-button color="primary" class="mr-l15" (click)="exportVouchers(false)">{{ commonLocaleData?.app_download }}</button>
             </div>
         </div>
