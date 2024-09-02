@@ -1449,7 +1449,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response) {
-                this.componentStore.deleteEndUserAgreementByInstitutionId(bank?.itemId);
+                this.componentStore.deleteEndUserAgreementByInstitutionId(bank?.bankResource?.uniqueName);
             }
         });
     }
