@@ -385,7 +385,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 if (event && event.data === "GOCARDLESS") {
                     this.createEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                         if (response?.reference) {
-                            this.componentStore.getRequisition(response?.reference);
+                            this.componentStore.getRequisition(response.reference);
                         }
                     });
                 }
@@ -1204,8 +1204,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             ariaLabel: 'institutionsListDialog'
         });
     }
-
-
 
     /**
      * This will use for select bank account only for plaid integration

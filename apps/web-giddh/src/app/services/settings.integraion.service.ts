@@ -537,7 +537,7 @@ export class SettingsIntegrationService {
     }
 
     /**
-     * This wil be use for delete paypal details
+     * This will be use for delete paypal details
      *
      * @return {*}  {Observable<BaseResponse<string, string>>}
      * @memberof SettingsIntegrationService
@@ -577,7 +577,7 @@ export class SettingsIntegrationService {
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof SettingsIntegrationService
      */
-    public createEndUserAgreementByInstitutionId(institutionId: any): Observable<BaseResponse<any, any>> {
+    public createEndUserAgreementByInstitutionId(institutionId: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.GOCARDLESS.CREATE_END_USER_AGREEMENT
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -596,7 +596,7 @@ export class SettingsIntegrationService {
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof SettingsIntegrationService
      */
-    public getRequisition(requisitionId: any): Observable<BaseResponse<any, any>> {
+    public getRequisition(requisitionId: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GOCARDLESS.GET_REQUISITION
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -608,7 +608,7 @@ export class SettingsIntegrationService {
     }
 
     /**
-     * This wil be use for delete end user agreement details
+     * This will be use for delete end user agreement details
      *
      * @param {string} agreementId
      * @return {*}  {Observable<BaseResponse<any, any>>}
