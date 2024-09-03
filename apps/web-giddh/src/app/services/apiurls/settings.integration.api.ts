@@ -23,7 +23,13 @@ export const SETTINGS_INTEGRATION_API = {
     UPDATE_PAYOR_ACCOUNT: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor/:bankUserId',
     UPDATE_ACCOUNT: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName',
     GET_PAYOR_REGISTRATION_STATUS: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor/:bankUserId/status',
-    GET_BANK_ACCOUNT_PAYORS: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor?amount=:amount'
+    GET_BANK_ACCOUNT_PAYORS: 'v2/company/:companyUniqueName/bank/:bankAccountUniqueName/payor?amount=:amount',
+    GOCARDLESS: {
+        GET_ALL_INSTITUTIONS: COMMON + 'gocardless/institutions?countryCode=:countryCode&page=:page&count=:count&refresh=true',
+        CREATE_END_USER_AGREEMENT: COMMON + 'gocardless/agreement-requisitions?institutionId=:institutionId',
+        DELETE_END_USER_AGREEMENT: COMMON + 'gocardless/agreement/:agreementId',
+        GET_REQUISITION: COMMON + 'gocardless/requisitions/:requisitionId'
+    }
 };
 
 export const SETTINGS_INTEGRATION_COMMUNICATION_API = {

@@ -121,7 +121,13 @@
                                 ></input-field>
                             </div>
                             <div class="form-group col-md-2 col-lg-3 empty-label pd-l05">
-                                <button aria-label="save" mat-stroked-button color="primary" type="submit" [disabled]="emailform.invalid">
+                                <button
+                                    aria-label="save"
+                                    mat-stroked-button
+                                    color="primary"
+                                    type="submit"
+                                    [disabled]="emailform.invalid"
+                                >
                                     {{ commonLocaleData?.app_save }}
                                 </button>
                             </div>
@@ -178,11 +184,23 @@
                                                         (scrollEnd)="handleScrollEnd()"
                                                         (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
                                                         [allowValueReset]="true"
-                                                        (onClear)="razorPayObj.account.name = null; razorPayObj.account.uniqueName = null"
+                                                        (onClear)="
+                                                            razorPayObj.account.name = null;
+                                                            razorPayObj.account.uniqueName = null
+                                                        "
                                                     >
                                                     </dropdown-field>
-                                                    <div class="input-group-addon cursor-pointer" *ngIf="razorPayObj?.account?.uniqueName && razorPayObj?.account?.name">
-                                                        <span (click)="unlinkAccountFromRazorPay()" class="icon-trash"></span>
+                                                    <div
+                                                        class="input-group-addon cursor-pointer"
+                                                        *ngIf="
+                                                            razorPayObj?.account?.uniqueName &&
+                                                            razorPayObj?.account?.name
+                                                        "
+                                                    >
+                                                        <span
+                                                            (click)="unlinkAccountFromRazorPay()"
+                                                            class="icon-trash"
+                                                        ></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -272,10 +290,18 @@
                                                     (scrollEnd)="paypalHandleScrollEnd()"
                                                     (dynamicSearchedQuery)="paypalOnAccountSearchQueryChanged($event)"
                                                     [allowValueReset]="true"
-                                                    (onClear)="paypalObj.account.name = null; paypalObj.account.uniqueName = null"
+                                                    (onClear)="
+                                                        paypalObj.account.name = null;
+                                                        paypalObj.account.uniqueName = null
+                                                    "
                                                 >
                                                 </dropdown-field>
-                                                <button mat-stroked-button class="min-width-unset" (click)="unlinkAccountFromPaypal()"  *ngIf="paypalObj?.account?.uniqueName && paypalObj?.account?.name">
+                                                <button
+                                                    mat-stroked-button
+                                                    class="min-width-unset"
+                                                    (click)="unlinkAccountFromPaypal()"
+                                                    *ngIf="paypalObj?.account?.uniqueName && paypalObj?.account?.name"
+                                                >
                                                     <i class="icon-trash"></i>
                                                 </button>
                                             </div>
@@ -346,7 +372,14 @@
                 </div>
             </mat-tab>
 
-            <mat-tab [label]="localeData?.payment?.tab_heading" *ngIf="iciciAllowedCompanies.includes(activeCompany?.uniqueName) || isPlaidSupportedCountry">
+            <mat-tab
+                [label]="localeData?.payment?.tab_heading"
+                *ngIf="
+                    iciciAllowedCompanies.includes(activeCompany?.uniqueName) ||
+                    isPlaidSupportedCountry ||
+                    isGocardlessSupportedCountry
+                "
+            >
                 <div class="clearfix box mat-tab-bottom-spacing">
                     <ng-container *ngIf="isIciciBankSupportedCountry">
                         <ng-template>
@@ -390,9 +423,23 @@
                             </div>
                         </div>
                     </ng-container>
-                    <ng-container *ngIf="isPlaidSupportedCountry">
+                      <!-- This is not using no due to gocardless -->
+                    <!-- <ng-container *ngIf="isPlaidSupportedCountry">
                         <div class="form-group">
                             <button aria-label="connect bank" mat-stroked-button class="mr-r2" color="primary" (click)="getPlaidLinkToken()">
+                                {{ localeData?.payment?.connect_bank }}
+                            </button>
+                        </div>
+                    </ng-container> -->
+                    <ng-container *ngIf="isGocardlessSupportedCountry">
+                        <div class="form-group">
+                            <button
+                                aria-label="connect bank"
+                                mat-stroked-button
+                                class="mr-r2"
+                                color="primary"
+                                (click)="openInstitutionsDialog()"
+                            >
                                 {{ localeData?.payment?.connect_bank }}
                             </button>
                         </div>
@@ -446,8 +493,13 @@
                                             class="icon-edit-pencil"
                                             (click)="openEditAccountModal(bankAccount)"
                                         ></a>
+                                        <i
+                                            *ngIf="isGocardlessSupportedCountry"
+                                            (click)="deleteBankAccount(bankAccount)"
+                                            class="icon-trash ml-1 mr-r2 cursor-pointer"
+                                        ></i>
                                         <ng-container *ngIf="bankAccount.reLoginRequired">
-                                            <button 
+                                            <button
                                                 aria-label="dots"
                                                 mat-icon-button
                                                 [matMenuTriggerFor]="menu"
@@ -456,7 +508,11 @@
                                                 <span class="icon-dots-three-vertical"></span>
                                             </button>
                                             <mat-menu #menu="matMenu">
-                                                <button aria-label="renew bank connection" mat-menu-item (click)="getPlaidLinkToken(bankAccount?.itemId)">
+                                                <button
+                                                    aria-label="renew bank connection"
+                                                    mat-menu-item
+                                                    (click)="getPlaidLinkToken(bankAccount?.itemId)"
+                                                >
                                                     <span>{{ commonLocaleData?.app_renew_bank_connection }}</span>
                                                 </button>
                                             </mat-menu>
