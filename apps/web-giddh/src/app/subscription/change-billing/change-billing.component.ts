@@ -131,7 +131,7 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
 
         this.updateBillingDetailsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data) {
-                this.router.navigate(['/pages/subscription']);
+                this.router.navigate(['/pages/user-details/subscription']);
             }
         });
 

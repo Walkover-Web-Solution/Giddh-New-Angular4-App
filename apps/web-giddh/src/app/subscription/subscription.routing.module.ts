@@ -13,20 +13,22 @@ import { VerifyOwnershipDialogComponent } from './verify-ownership-dilaog/verify
                 path: '', component: SubscriptionComponent
             },
             {
-                path: 'change-billing/:billingAccountUnqiueName', component: ChangeBillingComponent
+                path: ':type', component: SubscriptionComponent
             },
-
             {
-                path: 'view-subscription/:id', component: ViewSubscriptionComponent
+                path: 'subscription/change-billing/:billingAccountUnqiueName', component: ChangeBillingComponent
+            },
+            {
+                path: 'subscription/view-subscription/:id', component: ViewSubscriptionComponent
             },
             {
                 path: 'verify-ownership/:requestId', component: VerifyOwnershipDialogComponent
             },
             {
-                path: 'buy-plan', component: BuyPlanComponent
+                path: 'subscription/buy-plan', component: BuyPlanComponent
             },
             {
-                path: 'buy-plan/:id', component: BuyPlanComponent
+                path: 'subscription/buy-plan/:id', component: BuyPlanComponent
             }
         ])
     ],

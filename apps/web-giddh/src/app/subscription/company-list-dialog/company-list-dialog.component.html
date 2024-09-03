@@ -87,7 +87,7 @@
                                 <div class="d-flex align-items-center">
                                     {{ element.status }}
                                     <button
-                                        *ngIf="inputData?.rowData?.isOwner && element?.status === 'UNARCHIVED'"
+                                        *ngIf="inputData?.rowData?.isOwner"
                                         mat-icon-button
                                         id="edit-model-basic"
                                         class="table-menu-first-td"
@@ -101,8 +101,16 @@
                                 <mat-menu #editModelBasic="matMenu">
                                     <div class="account-detail-custom-header">
                                         <button
+                                            *ngIf="element?.status === 'USER_ARCHIVED'"
                                             mat-menu-item
+                                            (click)="archiveCompany(element, 'UNARCHIVED')"
+                                            aria-label="details"
+                                        >
+                                            {{ commonLocaleData?.app_unarchive }}
+                                        </button>
+                                        <button
                                             *ngIf="element?.status === 'UNARCHIVED'"
+                                            mat-menu-item
                                             (click)="archiveCompany(element, 'USER_ARCHIVED')"
                                             aria-label="details"
                                         >

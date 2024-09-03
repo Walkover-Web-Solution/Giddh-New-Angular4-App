@@ -284,6 +284,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     };
     /** Hold selected index  */
     public selectedIndex: number = 0;
+    /** Holds active company decimal place 2 or 4 */
+    private companyDecimalPlaces: number = 2;
     /**Hold show discount sidebar state*/
     @Input() public showDiscount: boolean;
     /**Emits the discount sidebar event*/
@@ -412,6 +414,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
+                this.companyDecimalPlaces = activeCompany?.balanceDecimalPlaces;
                 this.currentCompanyUniqueName = activeCompany?.uniqueName;
             }
         });
@@ -802,7 +805,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {FormGroup} transaction
      * @memberof AccountAsVoucherComponent
      */
-    public updateTransactionActualAmount(transaction: FormGroup): void {
+    public updateTotalCreditDebit(): void {
         const totalCreditAndDebit = this.calculateTotalCreditAndDebit();
         this.totalCreditAmount = totalCreditAndDebit.totalCredit;
         this.totalDebitAmount = totalCreditAndDebit.totalDebit;
@@ -814,15 +817,19 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {FormGroup} transaction
      * @memberof AccountAsVoucherComponent
      */
-    public updateValidNumber(transaction: FormGroup): void {
+    public updateTransactionActualAmount(transaction: FormGroup): void {
         if (transaction) {
+            const value = transaction.get('amount')?.value?.toString();
+            const removeSpaceValue = value?.replace(' ', '');
+            transaction.get('amount')?.patchValue(removeSpaceValue);
             if (+transaction.get('amount')?.value > 9 && transaction.get('amount')?.value?.startsWith('0')) {
                 transaction.get('amount')?.patchValue(+transaction.get('amount')?.value?.replace(/^0+/, ''));
             }
-            const amount = parseFloat(transaction.get('amount')?.value);
+            const amount = this.roundOffValueByCompanyDecimalPlace(transaction.get('amount')?.value);
             transaction.get('amount')?.patchValue(amount);
             transaction.get('actualAmount')?.patchValue(amount);
             transaction.get('total')?.patchValue(amount);
+            this.updateTotalCreditDebit();
         }
     }
 
@@ -868,16 +875,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
 
             if (byEntryControl) {
-                byEntryControl?.get('amount')?.patchValue(this.roundOffValueByTwoDecimalPlace(discountFixedValue !== null && !isSalesChanged ? newCash - newDiscount : newCash));
+                byEntryControl?.get('amount')?.patchValue(this.roundOffValueByCompanyDecimalPlace(discountFixedValue !== null && !isSalesChanged ? newCash - newDiscount : newCash));
             }
             if (toEntryControl) {
-                toEntryControl?.get('amount')?.patchValue(this.roundOffValueByTwoDecimalPlace(newSales));
+                toEntryControl?.get('amount')?.patchValue(this.roundOffValueByCompanyDecimalPlace(newSales));
             }
             if (discountEntryControl) {
-                discountEntryControl?.get('amount')?.patchValue(this.roundOffValueByTwoDecimalPlace(newDiscount));
+                discountEntryControl?.get('amount')?.patchValue(this.roundOffValueByCompanyDecimalPlace(newDiscount));
             }
             if (taxEntryControl) {
-                taxEntryControl?.get('amount')?.patchValue(this.roundOffValueByTwoDecimalPlace(newTax));
+                taxEntryControl?.get('amount')?.patchValue(this.roundOffValueByCompanyDecimalPlace(newTax));
             }
             const totalCreditAndDebit = this.calculateTotalCreditAndDebit();
             this.totalCreditAmount = totalCreditAndDebit.totalCredit;
@@ -886,15 +893,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
-     * Round a Number to 2 Decimal Places
+     * Round a Number to Company Decimal Places
      *
      * @private
      * @param {*} value
      * @returns {number}
      * @memberof AccountAsVoucherComponent
      */
-    private roundOffValueByTwoDecimalPlace(value: number): number {
-        return Math.round(value * 100) / 100;
+    private roundOffValueByCompanyDecimalPlace(value: number): number {
+        const decimalPlaces = this.companyDecimalPlaces === 4 ? 10000 : 100;
+        return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
     }
 
     /**
@@ -1322,9 +1330,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             let { toAmount, byAmount, toEntryControl, byEntryControl, taxEntryControl, discountEntryControl } = this.getUniqueAccountDetail();
 
             if (toAmount >= 0 && byAmount >= 0) {
-                const { totalCredit, totalDebit } = this.calculateTotalCreditAndDebit();
-                this.totalCreditAmount = totalCredit;
-                this.totalDebitAmount = totalDebit;
+                this.updateTotalCreditDebit();
 
                 if (!taxEntryControl && discountEntryControl && (this.totalCreditAmount !== this.totalDebitAmount)) {
                     if ((transactionsFormArray.at(currentIndex) as FormGroup).value.type === 'by') {
@@ -1358,9 +1364,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         }
 
         if (!this.isSalesEntry) {
-            const totalCreditAndDebit = this.calculateTotalCreditAndDebit();
-            this.totalCreditAmount = totalCreditAndDebit.totalCredit;
-            this.totalDebitAmount = totalCreditAndDebit.totalDebit;
+            this.updateTotalCreditDebit();
         }
 
         if (this.journalVoucherForm.get('description').value?.length === 1) {
@@ -1491,8 +1495,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
         });
 
-        totalCredit = this.roundOffValueByTwoDecimalPlace(totalCredit);
-        totalDebit = this.roundOffValueByTwoDecimalPlace(totalDebit);
+        totalCredit = this.roundOffValueByCompanyDecimalPlace(totalCredit);
+        totalDebit = this.roundOffValueByCompanyDecimalPlace(totalDebit);
 
         return { totalCredit, totalDebit };
     }
