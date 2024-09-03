@@ -1731,9 +1731,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     */
     private bulkDialogData(dialogData: any): void {
         const accountData = this.addAccountForm.get('accountOpeningBalance') as FormArray;
+        accountData.clear();
+
         let credit = 0;
         let debit = 0;
-        dialogData?.forEach(item => {
+
+        const filterBranchDialogData = dialogData.filter(item => item.openingBalance > 0);
+
+        filterBranchDialogData?.forEach(item => {
             const openingBalance = item.openingBalance
             if (item.openingBalanceType === 'CREDIT') {
                 credit = credit + openingBalance;
@@ -1751,6 +1756,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         });
         this.totalDebitCredit(credit, debit);
     }
+    
     /**
      * Total value of Debit and Credit
      *

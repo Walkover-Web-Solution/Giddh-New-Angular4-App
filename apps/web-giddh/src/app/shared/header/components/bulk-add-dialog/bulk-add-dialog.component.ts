@@ -19,10 +19,11 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 })
 export class BulkAddDialogComponent implements OnInit {
 
-  /* This will hold local JSON data */
+  /** This will hold local JSON data */
   public localeData: any = {};
-  /* This will hold common JSON data */
+  /** This will hold common JSON data */
   public commonLocaleData: any = {};
+  /** Observable to unsubscribe all the store listeners to avoid memory leaks */
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   /** Holds company branches */
   public branches: Array<any>;
@@ -50,8 +51,20 @@ export class BulkAddDialogComponent implements OnInit {
    * @memberof BulkAddDialogComponent
    */
   ngOnInit(): void {
+    console.log('Data Value', this.data);
     this.initializeNewForm();
     this.getCompanyBranches();
+    if (this.data.initialValues) {
+      this.existingFormData(this.data);
+    }
+  }
+
+  private existingFormData(values: any): void {
+    const formArray = this.bulkAddAccountForm.get('customFields') as FormArray;
+    formArray.clear();
+    values.forEach((item: any) => {
+        formArray.push(this.openingBulkGet(item));
+    });
   }
 
   /**
@@ -72,7 +85,7 @@ export class BulkAddDialogComponent implements OnInit {
       this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.bulkAddAccountForm.dirty));
     });
   }
-  
+
   /**
    * getting data form
    *
@@ -81,11 +94,11 @@ export class BulkAddDialogComponent implements OnInit {
    * @return {*}  {FormGroup}
    * @memberof BulkAddDialogComponent
    */
-  private openingBulkGet(item? : any): FormGroup {
+  private openingBulkGet(item?: any): FormGroup {
     return this.formBuilder.group({
-        branch: [item ?? ''],
-        openingBalance: [''],
-        openingBalanceType: ['CREDIT']
+      branch: [item ?? ''],
+      openingBalance: [''],
+      openingBalanceType: ['CREDIT']
     });
   }
 
@@ -121,7 +134,7 @@ export class BulkAddDialogComponent implements OnInit {
       }
     });
   }
-  
+
   /**
    * Credit and Debit opening Balalnce Type change
    *
@@ -136,19 +149,21 @@ export class BulkAddDialogComponent implements OnInit {
       item.get('openingBalanceType')?.patchValue(type);
     }
   }
+
   /**
    * save the opening balance value
    *
    * @memberof BulkAddDialogComponent
    */
-  public saveOpeningBalance():void {
+  public saveOpeningBalance(): void {
     if (this.bulkAddAccountForm.valid) {
       const formArrayValues = this.bulkAddAccountForm.get('customFields')?.value;
-        this.dialogRef.close(this.bulkAddAccountForm.value);
+      this.dialogRef.close(this.bulkAddAccountForm.value);
     } else {
-        console.log('Form is invalid');
+      console.log('Form is invalid');
     }
   }
+
   /**
    * destroy
    *

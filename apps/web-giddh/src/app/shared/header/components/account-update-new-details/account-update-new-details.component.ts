@@ -2212,78 +2212,86 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      *
      * @memberof AccountUpdateNewDetailsComponent
      */
-        public openBulkAddDialog(): void {
-            this.bulkAddAsideMenuRef = this.dialog.open(BulkAddDialogComponent, {
-                position: {
-                    right: '0'
-                },
-                disableClose: true,
-                width: '550px',
-                height: '100vh',
-                maxHeight: '100vh'
+    public openBulkAddDialog(): void {
+        const currentFormValues = this.addAccountForm.get('accountOpeningBalance')?.value;
+        this.bulkAddAsideMenuRef = this.dialog.open(BulkAddDialogComponent, {
+            position: {
+                right: '0'
+            },
+            disableClose: true,
+            width: '550px',
+            height: '100vh',
+            maxHeight: '100vh',
+            data: currentFormValues
+        });
+
+        this.bulkAddAsideMenuRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.bulkDialogData(result.customFields);
+            }
+        });
+    }
+
+    /**
+     * Get data dialog
+     *
+     * @private
+     * @param {*} dialogData
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private bulkDialogData(dialogData: any): void {
+        const accountData = this.addAccountForm.get('accountOpeningBalance') as FormArray;
+        accountData.clear();
+
+        let credit = 0;
+        let debit = 0;
+
+        const filterBranchDialogData = dialogData.filter(item => item.openingBalance > 0);
+
+        filterBranchDialogData?.forEach(item => {
+            const openingBalance = item.openingBalance
+            if (item.openingBalanceType === 'CREDIT') {
+                credit = credit + openingBalance;
+            } else if (item.openingBalanceType === 'DEBIT') {
+                debit = debit + openingBalance;
+            }
+
+            const data = this._fb.group({
+                branch: [item.branch],
+                openingBalance: [item.openingBalance],
+                foreignOpeningBalance: [item.foreignOpeningBalance],
+                openingBalanceType: [item.openingBalanceType]
             });
-    
-            this.bulkAddAsideMenuRef.afterClosed().subscribe(result => {
-                if (result) {
-                    this.bulkDialogData(result.customFields);
-                }
-            });
+            accountData.push(data);
+        });
+        this.totalDebitCredit(credit, debit);
+    }
+
+    /**
+     * Total value of Debit and Credit
+     *
+     * @param {number} credit
+     * @param {number} debit
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public totalDebitCredit(credit: number, debit: number): void {
+        let openingBalanceType = 'CREDIT';
+        let difference = 0;
+
+        if (credit > debit) {
+            difference = credit - debit;
+            openingBalanceType = 'CREDIT';
+            this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
+        } else if (debit > credit) {
+            difference = debit - credit;
+            openingBalanceType = 'DEBIT';
+            this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
+        }
+        else {
+            console.log('Equal');
         }
 
-        /**
-         * Get data dialog
-         *
-         * @private
-         * @param {*} dialogData
-         * @memberof AccountUpdateNewDetailsComponent
-         */
-        private bulkDialogData(dialogData: any): void {
-            const accountData = this.addAccountForm.get('accountOpeningBalance') as FormArray;
-            let credit = 0;
-            let debit = 0;
-            dialogData?.forEach(item => {
-                const openingBalance = item.openingBalance
-                if (item.openingBalanceType === 'CREDIT') {
-                    credit = credit + openingBalance;
-                } else if (item.openingBalanceType === 'DEBIT') {
-                    debit = debit + openingBalance;
-                }
-    
-                const data = this._fb.group({
-                    branch: [item.branch],
-                    openingBalance: [item.openingBalance],
-                    foreignOpeningBalance: [item.foreignOpeningBalance],
-                    openingBalanceType: [item.openingBalanceType]
-                });
-                accountData.push(data);
-            });
-            this.totalDebitCredit(credit, debit);
-        }
-        /**
-         * Total value of Debit and Credit
-         *
-         * @param {number} credit
-         * @param {number} debit
-         * @memberof AccountUpdateNewDetailsComponent
-         */
-        public totalDebitCredit(credit: number, debit: number): void {
-            let openingBalanceType = 'CREDIT';
-            let difference = 0;
-    
-            if (credit > debit) {
-                difference = credit - debit;
-                openingBalanceType = 'CREDIT';
-                this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
-            } else if (debit > credit) {
-                difference = debit - credit;
-                openingBalanceType = 'DEBIT';
-                this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
-            }
-            else {
-                console.log('Equal');
-            }
-    
-            this.addAccountForm.get('openingBalanceType')?.patchValue(openingBalanceType);
-            this.addAccountForm.get('openingBalance')?.patchValue(difference);
-        }
+        this.addAccountForm.get('openingBalanceType')?.patchValue(openingBalanceType);
+        this.addAccountForm.get('openingBalance')?.patchValue(difference);
+    }
 }
