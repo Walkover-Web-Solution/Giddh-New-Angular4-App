@@ -86,7 +86,7 @@
                             "link": "/pages/vouchers/sales/create"
                         },
                         "queryParams": {
-                            "voucherVersion": 1
+                            "voucherVersion": 2
                         }
                     }
                 },

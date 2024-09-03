@@ -76,7 +76,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="estimate">
-                                <th mat-header-cell *matHeaderCellDef #estimateNo (clickOutside)="handleClickOutside($event, estimateNo, 'estimateNumber')">
+                                <th mat-header-cell *matHeaderCellDef #estimateNo (clickOutside)="handleClickOutside($event, estimateNo, 'estimateNumber')" width="15%">
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -102,7 +102,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="customer">
-                                <th mat-header-cell *matHeaderCellDef #accountUniqueName (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')"> 
+                                <th mat-header-cell *matHeaderCellDef #accountUniqueName (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')" width="15%"> 
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -242,7 +242,7 @@
                             <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
                         </button>
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma" *ngIf="selectedVouchers?.length">
+                            <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma" *ngIf="selectedVouchers?.length === 1">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
@@ -287,7 +287,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="proforma">
-                                <th mat-header-cell *matHeaderCellDef #proformaNo  (clickOutside)="handleClickOutside($event, proformaNo, 'proformaNumber')">
+                                <th mat-header-cell *matHeaderCellDef #proformaNo  (clickOutside)="handleClickOutside($event, proformaNo, 'proformaNumber')" width="15%">
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -310,7 +310,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="customer">
-                                <th mat-header-cell *matHeaderCellDef #accountUniqueName (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')"> 
+                                <th mat-header-cell *matHeaderCellDef #accountUniqueName (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')" width="15%"> 
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -531,7 +531,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="invoice">
-                                <th mat-header-cell *matHeaderCellDef #invoiceNo (clickOutside)="handleClickOutside($event, invoiceNo, 'invoiceNumber')">
+                                <th mat-header-cell *matHeaderCellDef #invoiceNo (clickOutside)="handleClickOutside($event, invoiceNo, 'invoiceNumber')" width="15%">
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -555,7 +555,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="customer">
-                                <th mat-header-cell *matHeaderCellDef #accountUniqueName (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')"> 
+                                <th mat-header-cell *matHeaderCellDef #accountUniqueName (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')" width="15%"> 
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -774,7 +774,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="credit">
-                                <th mat-header-cell *matHeaderCellDef>
+                                <th mat-header-cell *matHeaderCellDef #invoiceNo (clickOutside)="handleClickOutside($event, invoiceNo, 'debitNoteNumber')" width="15%">
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -782,7 +782,7 @@
                                                 context: {
                                                     $implicit: showInvoiceNoSearch,
                                                     fieldName: 'debitNoteNumber',
-                                                    voucherType: 'debit-note',
+                                                    voucherType: 'debit note',
                                                     formControl: voucherNumberInput,
                                                     title: localeData?.dr_note_no
                                                 }
@@ -795,7 +795,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="customer">
-                                <th mat-header-cell *matHeaderCellDef>
+                                <th mat-header-cell *matHeaderCellDef #accountUniqueName (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')" width="15%">
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -803,7 +803,7 @@
                                                 context: {
                                                     $implicit: showCustomerSearch,
                                                     fieldName: 'accountUniqueName',
-                                                    voucherType: 'debit-note',
+                                                    voucherType: 'debit note',
                                                     formControl: accountUniqueNameInput,
                                                     title: commonLocaleData?.app_customer
                                                 }
@@ -985,7 +985,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="credit">
-                                <th mat-header-cell *matHeaderCellDef>
+                                <th mat-header-cell *matHeaderCellDef #invoiceNo (clickOutside)="handleClickOutside($event, invoiceNo, 'creditNoteNumber')" width="15%">
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -993,7 +993,7 @@
                                                 context: {
                                                     $implicit: showInvoiceNoSearch,
                                                     fieldName: 'creditNoteNumber',
-                                                    voucherType: 'credit-note',
+                                                    voucherType: 'credit note',
                                                     formControl: voucherNumberInput,
                                                     title: localeData?.cr_note_no
                                                 }
@@ -1006,7 +1006,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="customer">
-                                <th mat-header-cell *matHeaderCellDef> 
+                                <th mat-header-cell *matHeaderCellDef #accountUniqueName (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')" width="15%"> 
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -1014,7 +1014,7 @@
                                                 context: {
                                                     $implicit: showCustomerSearch,
                                                     fieldName: 'accountUniqueName',
-                                                    voucherType: 'credit-note',
+                                                    voucherType: 'credit note',
                                                     formControl: accountUniqueNameInput,
                                                     title: commonLocaleData?.app_customer
                                                 }
@@ -1322,7 +1322,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="purchase">
-                                <th mat-header-cell *matHeaderCellDef #purchaseOrderNo (clickOutside)="handleClickOutside($event, purchaseOrderNo, 'purchaseOrderNumber')">
+                                <th mat-header-cell *matHeaderCellDef #purchaseOrderNo (clickOutside)="handleClickOutside($event, purchaseOrderNo, 'purchaseOrderNumber')" width="15%">
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -1343,7 +1343,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="vendorname">
-                                <th mat-header-cell *matHeaderCellDef #accountUniqueName (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')"> 
+                                <th mat-header-cell *matHeaderCellDef #accountUniqueName (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')" width="15%"> 
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -1484,7 +1484,7 @@
                     </div>
                     <div class="table-responsive">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
-                        <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort class="w-100">
+                        <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100">
                             <ng-container matColumnDef="index">
                                 <th mat-header-cell *matHeaderCellDef width="50px"> 
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
@@ -1514,7 +1514,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="bill">
-                                <th mat-header-cell *matHeaderCellDef>
+                                <th mat-header-cell *matHeaderCellDef #invoiceNo (clickOutside)="handleClickOutside($event, invoiceNo, 'billNumber')" width="15%">
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -1543,7 +1543,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="vendor">
-                                <th mat-header-cell *matHeaderCellDef> 
+                                <th mat-header-cell *matHeaderCellDef #accountUniqueName (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')" width="15%"> 
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -1572,16 +1572,16 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="order">
-                                <th mat-header-cell *matHeaderCellDef>
+                                <th mat-header-cell *matHeaderCellDef #purchaseOrderNumbers (clickOutside)="handleClickOutside($event, purchaseOrderNumbers, 'purchaseOrderNumbers')" width="15%">
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
                                                 searchTemplate;
                                                 context: {
-                                                    $implicit: showCustomerSearch,
-                                                    fieldName: 'accountUniqueName',
+                                                    $implicit: showPurchaseOrderNumberSearch,
+                                                    fieldName: 'purchaseOrderNumbers',
                                                     voucherType: 'purchase',
-                                                    formControl: accountUniqueNameInput,
+                                                    formControl: purchaseOrderUniqueNameInput,
                                                     title: localeData?.po_number + ' #'
                                                 }
                                             "
@@ -1589,7 +1589,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    {{element?.voucherNumber}}
+                                    {{element?.purchaseOrderNumbers}}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="grandTotal">
@@ -1626,7 +1626,7 @@
                                         </span>
                                         <mat-menu #menu="matMenu">
                                             <button mat-menu-item (click)="showPaymentDialog(element)">{{ commonLocaleData?.app_payment_status?.paid }}</button>
-                                            <button mat-menu-item (click)="actionVoucher(element, 'cancel')">{{ commonLocaleData?.app_send_email }}</button>
+                                            <button mat-menu-item (click)="openEmailSendDialog(element)">{{ commonLocaleData?.app_send_email }}</button>
                                             <button mat-menu-item 
                                                 aria-label="copy icon"
                                                 *ngIf="!isCompany"
@@ -2358,7 +2358,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="receipt">
-                                <th mat-header-cell *matHeaderCellDef #receiptNo (clickOutside)="handleClickOutside($event, receiptNo, 'receiptNumber')">
+                                <th mat-header-cell *matHeaderCellDef #receiptNo (clickOutside)="handleClickOutside($event, receiptNo, 'receiptNumber')" width="15%">
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -2392,7 +2392,7 @@
                                         <span>{{ commonLocaleData?.app_type }}</span>
                                         <i class="icon-dots-three-vertical cursor-pointer" [matMenuTriggerFor]="receiptTypeMenu"></i>
                                     </div>
-                                    <mat-menu #receiptTypeMenu="matMenu">
+                                    <mat-menu #receiptTypeMenu="matMenu" xPosition="before">
                                         <button mat-menu-item (click)="applyReceiptTypeFilter(false)">{{ localeData?.normal_receipts }}</button>
                                         <button mat-menu-item (click)="applyReceiptTypeFilter(true)">{{ localeData?.advanced_receipts }}</button>
                                     </mat-menu>
@@ -2402,7 +2402,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="customer">
-                                <th mat-header-cell *matHeaderCellDef #accountUniqueName (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')"> 
+                                <th mat-header-cell *matHeaderCellDef #accountUniqueName (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')" width="15%"> 
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -2590,7 +2590,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="payment">
-                                <th mat-header-cell *matHeaderCellDef #paymentNo (clickOutside)="handleClickOutside($event, paymentNo, 'paymentNumber')">
+                                <th mat-header-cell *matHeaderCellDef #paymentNo (clickOutside)="handleClickOutside($event, paymentNo, 'paymentNumber')" width="15%">
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -2602,8 +2602,8 @@
                                                     formControl: voucherNumberInput,
                                                     title: localeData?.payment_no_label
                                                 }
-                                            "
-                                        ></ng-container>
+                                            ">
+                                        </ng-container>
                                     </div>
                                  </th>
                                 <td mat-cell *matCellDef="let element">
@@ -2619,7 +2619,7 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="vendor">
-                                <th mat-header-cell *matHeaderCellDef #accountUniqueName (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')"> 
+                                <th mat-header-cell *matHeaderCellDef #accountUniqueName (clickOutside)="handleClickOutside($event, accountUniqueName, 'accountUniqueName')" width="15%"> 
                                     <div class="d-flex align-items-center column-gap5">
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -2875,7 +2875,7 @@
 
 <ng-template #sendEmailModal>
     <app-email-send-dialog 
-        [voucherType]="'purchase-order'" 
+        [voucherType]="voucherType" 
         (cancelEvent)="sendEmailModalDialogRef.close()"
         (successEvent)="sendEmail($event)"
     >

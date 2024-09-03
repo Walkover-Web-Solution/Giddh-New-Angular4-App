@@ -243,6 +243,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             if (res.status === "error" && res.message) {
                                 this.toaster.showSnackBar("error", res.message);
                             }
+                            res.body['voucherType'] = req.type;
                             return this.patchState({
                                 getLastVouchersInProgress: false,
                                 lastVouchers: res?.body ?? {}
@@ -272,6 +273,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             if (res.status === "error" && res.message) {
                                 this.toaster.showSnackBar("error", res.message);
                             }
+                            res.body['voucherType'] = req.type;
                             return this.patchState({
                                 getLastVouchersInProgress: false,
                                 lastVouchers: res?.body ?? {}
@@ -793,6 +795,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                 return this.voucherService.getPurchaseOrderList(req.request).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
+                            res.body['voucherType'] = 'purchase-order';
                             return this.patchState({
                                 purchaseOrdersList: res.body,
                                 getLastVouchersInProgress: false
