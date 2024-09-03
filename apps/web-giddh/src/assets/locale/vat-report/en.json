@@ -40,5 +40,8 @@
     "amountOfOutputTax": "Amount of Output Tax",
     "amountOfInputTax": "Amount of Input Tax",
     "inclusive": "Inclusive",
-    "exclusive": "Exclusive"
+    "exclusive": "Exclusive",
+    "received_date":"Received Date",
+    "original_amount":"Original Amount",
+    "outstanding_amount":"Outstanding Amount"
 }

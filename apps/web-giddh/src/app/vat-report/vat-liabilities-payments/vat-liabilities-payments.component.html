@@ -1,0 +1,166 @@
+<ng-container
+    appTranslate
+    [file]="'vat-report'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu></hamburger-menu>
+    <div class="relative w-100">
+        <div
+            class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+            *ngIf="asideGstSidebarMenuState === 'in'"
+        >
+            <tax-sidebar
+                (navigateEvent)="handleNavigation()"
+                (clickOutside)="isMobileScreen ? (asideGstSidebarMenuState = 'out') : ''"
+                [exclude]="'#primary-new-header'"
+                class="gst-sidebar"
+            ></tax-sidebar>
+        </div>
+    </div>
+    <div class="liabilities-payments pd-15">
+        <div class="container-fluid section-center ml-0">
+            <div class="row align-items-center row-gap">
+                <div class="col flex-grow-0">
+                    <div class="custom-datepicker" (click)="showGiddhDatepicker($event)">
+                        <input
+                            type="text"
+                            name="selectedDateRange"
+                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker"
+                        />
+                    </div>
+                </div>
+                <div class="col flex-grow-0" *ngIf="taxesList?.length > 1">
+                    <dropdown-field
+                        [label]="commonLocaleData?.app_vat"
+                        [options]="taxesList"
+                        (selectedOption)="taxNumberSelected($event)"
+                        [placeholder]="commonLocaleData?.app_enter_vat"
+                    >
+                    </dropdown-field>
+                </div>
+                <div class="col flex-grow-0" *ngIf="isCompanyMode && isMultipleBranch">
+                    <dropdown-field
+                        [label]="commonLocaleData?.app_branch"
+                        [options]="branchList"
+                        (selectedOption)="branchSelected($event)"
+                        [placeholder]="commonLocaleData?.app_select_branch"
+                    ></dropdown-field>
+                </div>
+                <div class="col flex-grow-0">
+                    <button mat-stroked-button color="primary" (click)="getLiabilitiesPayment()">
+                        {{ commonLocaleData?.app_search }}
+                    </button>
+                </div>
+            </div>
+            <div class="mt-5" *ngIf="isLoading">
+                <giddh-page-loader></giddh-page-loader>
+            </div>
+            <div class="row mt-5" *ngIf="!isLoading">
+                <div class="table-responsive">
+                    <table mat-table [dataSource]="tableDataSource" class="w-100">
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef>#</th>
+                            <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}.</td>
+                        </ng-container>
+                        <ng-container matColumnDef="amount" *ngIf="isPaymentMode">
+                            <th mat-header-cell *matHeaderCellDef class="text-right">
+                                {{ commonLocaleData.app_amount }}
+                            </th>
+                            <td mat-cell *matCellDef="let element" class="text-right">
+                                <amount-field
+                                    class="d-inline-block"
+                                    [amount]="element?.amount"
+                                    [currencySymbol]="baseCurrencySymbol"
+                                    [currencyCode]="false"
+                                ></amount-field>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="received" *ngIf="isPaymentMode">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ localeData.received_date }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.received ?? "-" }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="from" *ngIf="!isPaymentMode">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ commonLocaleData.app_from }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.taxPeriod?.from ?? "-" }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="to" *ngIf="!isPaymentMode">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ commonLocaleData.app_to }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.taxPeriod?.to ?? "-" }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="originalAmount" *ngIf="!isPaymentMode">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ localeData.original_amount }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.originalAmount ?? "-" }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="outstandingAmount" *ngIf="!isPaymentMode">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ localeData.outstanding_amount }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.outstandingAmount ?? "-" }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="due" *ngIf="!isPaymentMode">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{ commonLocaleData.app_due }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element?.due ?? "-" }}
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayColumns"></tr>
+                    </table>
+                    <section *ngIf="noDataFound">
+                        <div class="no-data">
+                            <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-container>
+
+<!-- Universal Date Picker  -->
+<ng-template #datepickerTemplate>
+    <div class="datepicker-modal">
+        <div class="modal-body">
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOption"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+                [dateFieldPosition]="dateFieldPosition"
+            >
+            </app-datepicker-wrapper>
+        </div>
+    </div>
+</ng-template>

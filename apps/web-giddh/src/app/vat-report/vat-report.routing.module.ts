@@ -7,6 +7,7 @@ import { ObligationsComponent } from './obligations/obligations.component';
 import { WithHeldSettingComponent } from './with-held-setting/with-held-setting.component';
 import { LiabilityReportComponent } from './liability-report/liability-report.component';
 import { LiabilityDetailedReportComponent } from './liability-detailed-report/liability-detailed-report.component';
+import { VatLiabilitiesPayments } from './vat-liabilities-payments/vat-liabilities-payments.component';
 
 @NgModule({
     imports: [
@@ -45,6 +46,16 @@ import { LiabilityDetailedReportComponent } from './liability-detailed-report/li
                 component: LiabilityDetailedReportComponent,
                 canActivate: [NeedsAuthentication]
             },
+            {
+                path: 'liabilities',
+                component: VatLiabilitiesPayments,
+                canActivate: [NeedsAuthentication]
+            },
+            {
+                path: 'payments',
+                component: VatLiabilitiesPayments,
+                canActivate: [NeedsAuthentication]
+            }
         ])
     ],
     exports: [RouterModule]
