@@ -76,7 +76,7 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
         ]).subscribe(([verified, reject]) => {
             if (verified && !reject?.reqId) {
                 this.acceptedSubscription = true;
-                this.dialog?.closeAll();
+                this.modalDialogRef.close();
             } else if (verified && reject?.reqId) {
                 this.acceptedSubscription = false;
                 this.dialog?.closeAll();
