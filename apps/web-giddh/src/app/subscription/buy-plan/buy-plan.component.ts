@@ -299,7 +299,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     }
                     return;
                 }
-
                 if (this.subscriptionId && this.isChangePlan) {
                     this.router.navigate(['/pages/user-details/subscription']);
                 } else {

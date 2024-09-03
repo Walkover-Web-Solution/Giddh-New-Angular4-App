@@ -288,7 +288,6 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
         }
 
         if (this.searchSubscriptionRequest.page === 1 || (this.searchSubscriptionRequest.page <= this.searchSubscriptionRequest.totalPages)) {
-
             delete this.searchSubscriptionRequest.totalItems;
             delete this.searchSubscriptionRequest.totalPages;
             let reqObj = {

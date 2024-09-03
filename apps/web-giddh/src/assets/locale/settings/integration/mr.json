@@ -128,7 +128,11 @@
         "get_instant_overdraft": "इन्स्टंट ओव्हरड्राफ्ट मिळवा",
         "duration_error": "कृपया दिलेल्या रकमेचा कालावधी निवडा",
         "required_field_error": "कृपया सर्व आवश्यक फील्ड भरा",
-        "connect_bank": "बँक कनेक्ट करा"
+        "connect_bank": "बँक कनेक्ट करा",
+        "confirm_bank_delete_message": "आपल्याला खात्री आहे की आपण बँक खाते हटवू इच्छिता?",
+        "search_institutions": "संस्थेचा शोध घ्या",
+        "institutions": "संस्था",
+        "bank_list": "बँक यादी"
 	},
     "communication": {
         "tab_heading": "संवाद"

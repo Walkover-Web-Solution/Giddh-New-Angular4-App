@@ -27,11 +27,15 @@ import { TabDirective } from 'ngx-bootstrap/tabs';
 import { MatTabGroup } from '@angular/material/tabs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CommonActions } from '../../actions/common.actions';
+import { SettingIntegrationComponentStore } from './utility/setting.integration.store';
+import { InstitutionsListComponent } from './institutions-list/institutions-list.component';
+import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 
 @Component({
     selector: 'setting-integration',
     templateUrl: './setting.integration.component.html',
-    styleUrls: ['./setting.integration.component.scss']
+    styleUrls: ['./setting.integration.component.scss'],
+    providers: [SettingIntegrationComponentStore]
 })
 export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public auth2: any;
@@ -185,9 +189,15 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     /** Holds Create New Account User Dialog Ref */
     public createNewAccountUserModalRef: MatDialogRef<any>;
     /** Holds Linked account label for selected value */
-    public linkedAccountLabel: string = ''; 
+    public linkedAccountLabel: string = '';
     /**  Holds Mat Dialog reference */
     public removeGmailIntegrationDialogRef: MatDialogRef<any>;
+    /** Holds Store Delete end user agreement  API success state as observable*/
+    public deleteEndUseAgreementSuccess$: Observable<any> = this.componentStore.select(state => state.deleteAccountSuccess);
+    /** Holds Store create end user API success state as observable*/
+    public createEndUserAgreementSuccess$: Observable<any> = this.componentStore.select(state => state.createEndUserAgreementSuccess);
+    /** Holds true if current company country is gocardless supported country */
+    public isGocardlessSupportedCountry: boolean;
 
     constructor(
         private router: Router,
@@ -206,7 +216,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         public dialog: MatDialog,
         private activateRoute: ActivatedRoute,
         private commonAction: CommonActions,
-        private changeDetectionRef: ChangeDetectorRef
+        private changeDetectionRef: ChangeDetectorRef,
+        private componentStore: SettingIntegrationComponentStore
 
     ) {
         this.gmailAuthCodeStaticUrl = this.gmailAuthCodeStaticUrl?.replace(':redirect_url', this.getRedirectUrl(AppUrl))?.replace(':client_id', GOOGLE_CLIENT_ID);
@@ -247,7 +258,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                         this.razorPayObj.account = { name: null, uniqueName: null };
                         this.forceClearLinkAccount$ = observableOf({ status: true });
                     }
-                    this.razorPayObj.password = o?.razorPayForm?.userName ? 'YOU_ARE_NOT_ALLOWED' : '';  
+                    this.razorPayObj.password = o?.razorPayForm?.userName ? 'YOU_ARE_NOT_ALLOWED' : '';
                 }
                 this.updateRazor = true;
             } else {
@@ -294,7 +305,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
-                this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
+                //This is not using no due to gocardless
+                // this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
+                this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGocardless(res.country);
             }
         });
 
@@ -366,6 +379,24 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.loadPaymentData();
             }
         };
+
+        window.addEventListener('message', event => {
+            if (this.router.url !== '/pages/settings/integration/payment') {
+                if (event && event.data === "GOCARDLESS") {
+                    this.createEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                        if (response?.reference) {
+                            this.componentStore.getRequisition(response.reference);
+                        }
+                    });
+                }
+            }
+        });
+
+        this.deleteEndUseAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.reference) {
+                this.loadPaymentData();
+            }
+        });
     }
 
     /**
@@ -479,7 +510,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
             data.message = this.localeData?.collection?.unlinked_account_successfully;
             this.store.dispatch(this.settingsIntegrationActions.updatePaypalDetails(data));
-            this.linkedAccountLabel= ''; 
+            this.linkedAccountLabel = '';
         } else {
             this.toasty.warningToast(this.localeData?.collection?.unlink_paypal_message);
         }
@@ -492,7 +523,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      */
     public deletePaypalDetails(): void {
         this.store.dispatch(this.settingsIntegrationActions.deletePaypalDetails());
-        this.linkedAccountLabel= ''; 
+        this.linkedAccountLabel = '';
     }
 
 
@@ -653,7 +684,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public openRemoveGmailIntegrationDialog(): void {
-        this.removeGmailIntegrationDialogRef = this.dialog.open( this.removegmailintegration, {
+        this.removeGmailIntegrationDialogRef = this.dialog.open(this.removegmailintegration, {
             width: '630px'
         });
     }
@@ -1155,6 +1186,26 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     }
 
     /**
+    * This function will use for get institutions details
+    *
+    * @param {*} element
+    * @memberof SettingIntegrationComponent
+    */
+    public openInstitutionsDialog(): void {
+        let data = {
+            localeData: this.localeData,
+            commonLocaleData: this.commonLocaleData,
+        }
+        this.dialog.open(InstitutionsListComponent, {
+            data: data,
+            width: 'var(--aside-pane-width)',
+            panelClass: 'subscription-sidebar',
+            role: 'alertdialog',
+            ariaLabel: 'institutionsListDialog'
+        });
+    }
+
+    /**
      * This will use for select bank account only for plaid integration
      *
      * @param {*} event
@@ -1167,8 +1218,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             let accountForm = {
                 accountNumber: bank?.bankResource?.accountNumber,
                 accountUniqueName: event?.value,
-                paymentAlerts: [],
-                bankName: 'plaid'
+                paymentAlerts: []
             };
             this.settingsIntegrationService.updateAccount(accountForm, request).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
@@ -1376,6 +1426,30 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         setTimeout(() => {
             this.isCopied = false;
         }, 3000);
+    }
+
+    /**
+     * This will be use for delete bank account
+     *
+     * @param {*} bank
+     * @memberof SettingIntegrationComponent
+     */
+    public deleteBankAccount(bank: any): void {
+        let dialogRef = this.dialog.open(ConfirmModalComponent, {
+            width: '540px',
+            data: {
+                title: this.commonLocaleData?.app_confirmation,
+                body: this.localeData?.payment?.confirm_bank_delete_message,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.componentStore.deleteEndUserAgreementByInstitutionId(bank?.bankResource?.uniqueName);
+            }
+        });
     }
 }
 
