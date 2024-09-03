@@ -40,5 +40,8 @@
     "amountOfOutputTax": "आउटपुट टैक्स की राशि",
     "amountOfInputTax": "इनपुट टैक्स की राशि",
     "inclusive": "सहित",
-    "exclusive": "अनन्य"
+    "exclusive": "अनन्य",
+     "received_date":"प्राप्त तारीख",
+    "original_amount":"मूल राशि",
+    "outstanding_amount":"बकाया राशि"
 }
