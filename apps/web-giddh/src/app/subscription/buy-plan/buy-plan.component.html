@@ -160,7 +160,7 @@
                                                                             [spaceAfterCurrencySymbol]="false"
                                                                             [amount]="plan?.yearlyAmount"
                                                                             [currencySymbol]="plan?.currency?.symbol"
-                                                                            [currencyCode]="false"
+                                                                            [currencyCode]="plan?.currency?.code"
                                                                         >
                                                                         </amount-field>
                                                                     </s>
@@ -178,7 +178,7 @@
                                                                             [spaceAfterCurrencySymbol]="false"
                                                                             [amount]="plan?.yearlyAmountAfterDiscount"
                                                                             [currencySymbol]="plan?.currency?.symbol"
-                                                                            [currencyCode]="false"
+                                                                            [currencyCode]="plan?.currency?.code"
                                                                         >
                                                                         </amount-field>
                                                                     </span>
@@ -234,7 +234,7 @@
                                                                         [spaceAfterCurrencySymbol]="false"
                                                                         [amount]="plan?.yearlyDiscountAmount"
                                                                         [currencySymbol]="plan?.currency?.symbol"
-                                                                        [currencyCode]="false"
+                                                                        [currencyCode]="plan?.currency?.code"
                                                                     >
                                                                     </amount-field>
                                                                     {{ localeData?.for }}
@@ -267,7 +267,7 @@
                                                                             [spaceAfterCurrencySymbol]="false"
                                                                             [amount]="plan?.monthlyAmount"
                                                                             [currencySymbol]="plan?.currency?.symbol"
-                                                                            [currencyCode]="true"
+                                                                            [currencyCode]="plan?.currency?.code"
                                                                         >
                                                                         </amount-field>
                                                                     </s>
@@ -285,7 +285,7 @@
                                                                             [spaceAfterCurrencySymbol]="false"
                                                                             [amount]="plan?.monthlyAmountAfterDiscount"
                                                                             [currencySymbol]="plan?.currency?.symbol"
-                                                                            [currencyCode]="true"
+                                                                            [currencyCode]="plan?.currency?.code"
                                                                         >
                                                                         </amount-field>
                                                                     </span>
@@ -340,7 +340,7 @@
                                                                         [spaceAfterCurrencySymbol]="false"
                                                                         [amount]="plan?.monthlyDiscountAmount"
                                                                         [currencySymbol]="plan?.currency?.symbol"
-                                                                        [currencyCode]="false"
+                                                                        [currencyCode]="plan?.currency?.code"
                                                                     >
                                                                     </amount-field>
                                                                     {{ localeData?.for }}
@@ -933,7 +933,7 @@
                                 <amount-field
                                     [amount]="selectedPlan?.yearlyAmount"
                                     [currencySymbol]="selectedPlan?.currency?.symbol"
-                                    [currencyCode]="false"
+                                    [currencyCode]="selectedPlan?.currency?.code"
                                 >
                                 </amount-field>
                             </span>
