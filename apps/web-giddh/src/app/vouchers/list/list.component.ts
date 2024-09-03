@@ -479,7 +479,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         this.componentStore.sendEmailIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.sendEmailModalDialogRef.close();
+                this.sendEmailModalDialogRef?.close();
                 this.getVouchers(this.isUniversalDateApplicable);
             }
         });
