@@ -128,5 +128,19 @@
         "credit_debit_card": "क्रेडिट/डेबिट कार्ड",
         "promocode_message":"प्रोमो कोड यशस्वीरित्या लागू करा",
         "promocode_discount_message":"सध्याच्या प्रोमो कोड ऑफरपेक्षा तुमच्याकडे आधीपासूनच चांगली सूट आहे.",
-         "left_companies":"डाव्या कंपन्या"
+         "left_companies":"डाव्या कंपन्या",
+		"subscription_id": "सदस्यता आयडी",
+        "gst_tax":"GST कर एकूण",
+        "request_accepted_successfully": "Request accepted successfully",
+        "login_to_giddh": "Login to Giddh",
+        "request_declined_successfully": "Request declined successfully",
+        "subscription_transfer": "Subscription Transfer",
+        "invited_to_become_subscriber": "You've been invited to become the subscriber.",
+        "accepting_will_make_you_subscriber": "On accepting, you will become the subscriber and be the person Giddh has on record as responsible for the organisation.",
+        "accept_subscription": "Accept Subscription",
+        "decline_subscription": "Decline Subscription",
+        "reject": "Reject",
+        "enter_reason": "Enter reason",
+        "submit": "Submit",
+        "cancel": "Cancel"
 	}

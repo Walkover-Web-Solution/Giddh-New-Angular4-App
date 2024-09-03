@@ -62,12 +62,12 @@
                                 </div>
                                 <div>
                                     <i
-                                        (click)="setPaymentDefault(payment); $event.stopPropagation()"
+                                        (click)="setPaymentDefault(payment)"
                                         class="fa fa-star mr-r2 default-status cursor-pointer"
                                         [ngClass]="{ 'color-primary': payment?.isDefault }"
                                     ></i>
                                     <i
-                                        (click)="deletePaymentMethod(payment); $event.stopPropagation()"
+                                        (click)="deletePaymentMethod(payment)"
                                         class="icon-trash ml-1 mr-r2 cursor-pointer"
                                     ></i>
                                 </div>
@@ -84,10 +84,6 @@
                                 <div>
                                     <p class="light-gray mb-1 font-12">{{ commonLocaleData?.app_currency }}</p>
                                     <p class="mb-1 font-16">{{ payment?.currency }}</p>
-                                </div>
-                                <div>
-                                    <p class="light-gray mb-1 font-12">{{ commonLocaleData?.app_action }}</p>
-                                    <p class="mb-1 font-16">{{ payment?.accountNumber }}</p>
                                 </div>
                             </div>
                         </div>

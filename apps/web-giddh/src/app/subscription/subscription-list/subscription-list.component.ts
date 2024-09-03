@@ -187,11 +187,11 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
+            if (this.isNotNullOrUndefined(searchedText)) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
-            if (searchedText === null || searchedText === "") {
+            if (this.isNullOrEmpty(searchedText)) {
                 this.showClearFilter = false;
                 this.showName = false;
             }
@@ -201,11 +201,11 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
+            if (this.isNotNullOrUndefined(searchedText)) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
-            if (searchedText === null || searchedText === "") {
+            if (this.isNullOrEmpty(searchedText)) {
                 this.showClearFilter = false;
                 this.showBillingAccount = false;
             }
@@ -215,11 +215,11 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
+            if (this.isNotNullOrUndefined(searchedText)) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
-            if (searchedText === null || searchedText === "") {
+            if (this.isNullOrEmpty(searchedText)) {
                 this.showClearFilter = false;
                 this.showSubscriber = false;
             }
@@ -229,11 +229,11 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
+            if (this.isNotNullOrUndefined(searchedText)) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
-            if (searchedText === null || searchedText === "") {
+            if (this.isNullOrEmpty(searchedText)) {
                 this.showClearFilter = false;
                 this.showCountry = false;
             }
@@ -243,11 +243,11 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
+            if (this.isNotNullOrUndefined(searchedText)) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
-            if (searchedText === null || searchedText === "") {
+            if (this.isNullOrEmpty(searchedText)) {
                 this.showClearFilter = false;
                 this.showPlanSubName = false;
             }
@@ -258,11 +258,11 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
+            if (this.isNotNullOrUndefined(searchedText)) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
-            if (searchedText === null || searchedText === "") {
+            if (this.isNullOrEmpty(searchedText)) {
                 this.showClearFilter = false;
                 this.showStatus = false;
             }
@@ -273,11 +273,11 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             distinctUntilChanged(),
             takeUntil(this.destroyed$),
         ).subscribe(searchedText => {
-            if (searchedText !== null && searchedText !== undefined) {
+            if (this.isNotNullOrUndefined(searchedText)) {
                 this.showClearFilter = true;
                 this.getAllSubscriptions(true);
             }
-            if (searchedText === null || searchedText === "") {
+            if (this.isNullOrEmpty(searchedText)) {
                 this.showClearFilter = false;
                 this.showMonthlyYearly = false;
             }
@@ -298,6 +298,27 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
             }
         });
 
+    }
+    /**
+     * This will be use for check null or undefined values
+     *
+     * @param {*} value
+     * @return {*}  {boolean}
+     * @memberof SubscriptionListComponent
+     */
+    public isNotNullOrUndefined(value: any): boolean {
+        return value !== null && value !== undefined;
+    }
+
+    /**
+     * This will be use for check null or space values
+     *
+     * @param {*} value
+     * @return {*}  {boolean}
+     * @memberof SubscriptionListComponent
+     */
+    public isNullOrEmpty(value: any): boolean {
+        return value === null || value === "";
     }
 
     /**
@@ -325,9 +346,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
    * @memberof SubscriptionComponent
    */
     public getSearchFieldText(title: any): string {
-        let searchField = this.localeData?.search_field;
-        searchField = searchField?.replace("[FIELD]", title);
-        return searchField;
+        return this.localeData?.search_field?.replace("[FIELD]", title);
     }
 
     /**
@@ -631,9 +650,10 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     /**
      * Navigates to the page for creating a new company.
      *
-     * @memberof SubscriptionComponent
+     * @param {string} subscriptionId
+     * @memberof SubscriptionListComponent
      */
-    public createCompanyInSubscription(subscriptionId): void {
+    public createCompanyInSubscription(subscriptionId: string): void {
         this.router.navigate(['/pages/new-company/' + subscriptionId]);
     }
 
@@ -692,7 +712,7 @@ export class SubscriptionListComponent implements OnInit, OnDestroy {
     }
 
     /**
-    * This function will refresh the subscribed companies if move company was succesful and will close the popup
+    *  This will be use for get all subscriptions for add company and move company
     *
     * @param {*} event
     * @memberof SubscriptionListComponent

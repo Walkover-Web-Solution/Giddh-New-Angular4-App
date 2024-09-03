@@ -279,7 +279,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             if (!this.isNewUserLoggedIn) {
                 this.getBillingDetails();
                 this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
-                    if (data && data.uniqueName) {
+                    if (data?.companyName) {
                         this.firstStepForm.get('name')?.patchValue(data.companyName);
                     }
                 });

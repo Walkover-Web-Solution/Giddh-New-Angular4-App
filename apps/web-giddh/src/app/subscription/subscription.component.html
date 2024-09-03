@@ -357,12 +357,12 @@
             </mat-tab>
             <mat-tab [label]="localeData?.subscription?.tab_heading">
                 <ng-container class="wrap-tab-content-pd-15" *ngIf="selectedCompany?.planVersion === 1">
-                    <old-subscription
+                    <subscription-v1
                         [localeData]="localeData"
                         [commonLocaleData]="commonLocaleData"
                         (isSubscriptionLoading)="isSubscriptionLoading = $event"
                         (subscriptionId)="subscriptionId = $event"
-                    ></old-subscription>
+                    ></subscription-v1>
                 </ng-container>
                 <ng-container *ngIf="selectedCompany?.planVersion === 2">
                     <subscription-list></subscription-list>

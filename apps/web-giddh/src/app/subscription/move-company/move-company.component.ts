@@ -95,8 +95,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
         if (this.subscriptionMove) {
             this.isLoading = true;
             this.searchSubscription(this.searchSubscriptionRequest.q, false);
-            this.subscriptionList$.pipe(debounceTime(700),
-                distinctUntilChanged(),
+            this.subscriptionList$.pipe(
                 takeUntil(this.destroyed$)).subscribe(response => {
                     if (response) {
                         this.isLoading = false;
@@ -107,14 +106,13 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                             additional: subscription
                         }));
                         this.subscriptions$ = observableOf(mappedSubscriptionWise);
+                        this.changeDetection.detectChanges();
                     }
-                    this.changeDetection.detectChanges();
                 });
         } else {
             this.isLoading = true;
             this.searchCompany(false);
-            this.componentStore.companyList$.pipe(debounceTime(700),
-                distinctUntilChanged(),
+            this.componentStore.companyList$.pipe(
                 takeUntil(this.destroyed$)).subscribe(data => {
                     if (data) {
                         this.isLoading = false;
@@ -124,18 +122,20 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                             additional: item
                         }));
                         this.companyList$ = observableOf(mappedCompanyWise);
+                        this.changeDetection.detectChanges();
                     }
-                    this.changeDetection.detectChanges();
                 });
         }
     }
 
     /**
-    * Searches the companies
-    *
-    * @param {boolean} [loadMore]
-    * @memberof MoveCompanyComponent
-    */
+     *  Searches the companies
+     *
+     * @param {*} searchedText
+     * @param {boolean} [loadMore=false]
+     * @return {*}  {void}
+     * @memberof MoveCompanyComponent
+     */
     public searchCompany(searchedText: any, loadMore: boolean = false): void {
         if (this.searchRequest.loadMore) {
             return;
