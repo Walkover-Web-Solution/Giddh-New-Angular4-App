@@ -129,10 +129,10 @@
         "duration_error": "कृपया दी गई राशि के लिए अवधि चुनें",
         "required_field_error": "कृपया सभी आवश्यक फ़ील्ड भरें",
         "connect_bank": "बैंक कनेक्ट करें",
-        "confirm_bank_delete_message": "Are you sure you want to delete the bank account?",
-        "search_institutions":"Search Institutions",
-        "institutions":"Institutions",
-        "bank_list":"Bank List"
+        "confirm_bank_delete_message": "क्या आप वाकई बैंक खाता हटाना चाहते हैं?",
+        "search_institutions": "संस्थान खोजें",
+        "institutions": "संस्थान",
+        "bank_list": "बैंक सूची"
 	},
         "communication": {
         "tab_heading": "संचार"
