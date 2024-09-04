@@ -177,17 +177,17 @@ export class VatService {
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
-    /**
- * This will get VAT Liabilities Payment records
- *
- * @param {string} companyUniqueName
- * @param {*} model
- * @param {boolean} paymentMode   { Hold true if user in vat-payment  }
- * @returns
- * @memberof VatService
- */
-    public getLiabilitiesPaymentList(companyUniqueName: string, model: any , isPaymentMode: boolean): Observable<BaseResponse<any, any>> {
-        let url = this.config.apiUrl + (isPaymentMode ? VAT_API.PAYMENT_LIST : VAT_API.LIABILITIES);
+        /**
+     * This will get VAT Liabilities Payment records
+     *
+     * @param {string} companyUniqueName
+     * @param {*} model
+     * @param {boolean} paymentMode   { Hold true if user in vat-payment  }
+     * @returns
+     * @memberof VatService
+     */
+    public getPaymentLiabilityList(companyUniqueName: string, model: any , isPaymentMode: boolean): Observable<BaseResponse<any, any>> {
+        let url = this.config.apiUrl + (isPaymentMode ? VAT_API.PAYMENTS : VAT_API.LIABILITIES);
         url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
         url = url?.replace(':taxNumber', encodeURIComponent(model?.taxNumber));
         url = url?.replace(':from', encodeURIComponent(model?.from));

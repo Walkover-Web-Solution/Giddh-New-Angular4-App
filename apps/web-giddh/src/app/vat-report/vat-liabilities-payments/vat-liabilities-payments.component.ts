@@ -9,15 +9,11 @@ import { OrganizationType } from '../../models/user-login-state';
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { GstReconcileService } from '../../services/gst-reconcile.service';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { VatService } from '../../services/vat.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
-export interface ObligationsStatus {
-    label: string;
-    value: '' | 'F' | 'O';
-}
 @Component({
     selector: 'vat-liabilities-payments',
     templateUrl: './vat-liabilities-payments.component.html',
@@ -58,9 +54,9 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     /** Holds true if multiple branches in the company */
     public isMultipleBranch: boolean;
     /** Holds Liabilities-Payment Fromgroup  */
-    public searchForm: UntypedFormGroup
-    /** Holds Liabilities-Payment table data */
-    public tableDataSource: any[] = [];
+    public searchForm: FormGroup;
+    /** Holds table data source */
+    public dataSource: any[] = [];
     /** Holds Payment table columns */
     public paymentColumns: string[] = ["index", "received", "amount"];
     /** Holds Liability table columns */
@@ -72,22 +68,22 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     /** True if API Call is in progress */
     public isLoading: boolean;
     /** Holds true if user in vat-payment */
-    public isPaymentMode: boolean = true;
-    /** selected base currency symbol */
+    public isPaymentMode: boolean;
+    /** Company base currency symbol */
     public baseCurrencySymbol: string = "";
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
+
     constructor(
         private activatedRoute: ActivatedRoute,
         private gstReconcileService: GstReconcileService,
-        private formBuilder: UntypedFormBuilder,
+        private formBuilder: FormBuilder,
         private store: Store<AppState>,
         private generalService: GeneralService,
         private vatService: VatService,
         private toaster: ToasterService,
         private modalService: BsModalService,
-        private router: Router,
-        private route: Router
+        private router: Router
     ) {
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -151,15 +147,15 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     */
     public getLiabilitiesPayment(): void {
         this.isLoading = true;
-        this.vatService.getLiabilitiesPaymentList(this.companyUniqueName, this.searchForm.value, this.isPaymentMode ).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.vatService.getPaymentLiabilityList(this.companyUniqueName, this.searchForm.value, this.isPaymentMode ).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response?.status === "success" && (this.isPaymentMode && response?.body?.payments || (!this.isPaymentMode) && response?.body?.liabilities)) {
-                this.tableDataSource = this.isPaymentMode ? response?.body?.payments : response?.body?.liabilities;
+                this.dataSource = this.isPaymentMode ? response.body.payments : response.body.liabilities;
                 this.noDataFound = false;
             } else if (response?.body?.message) {
-                this.toaster.showSnackBar('error', response?.body?.message);
+                this.toaster.showSnackBar('error', response.body.message);
             } else if (response?.message) {
-                this.toaster.showSnackBar('error', response?.message);
+                this.toaster.showSnackBar('error', response.message);
             }
         });
     }
@@ -187,7 +183,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     */
     public taxNumberSelected(event: any): void {
         if (event?.value) {
-            this.getFormControl('taxNumber').setValue(event.value);
+            this.getFormControl('taxNumber').patchValue(event.value);
         }
     }
 
@@ -199,7 +195,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     */
     public branchSelected(event: any): void {
         if (event?.value) {
-            this.getFormControl('branchUniqueName').setValue(event.value);
+            this.getFormControl('branchUniqueName').patchValue(event.value);
         }
     }
 
@@ -303,15 +299,6 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     */
     public getFormControl(control: string): any {
         return this.searchForm.get(control)
-    }
-
-    /**
-  * Handles GST Sidebar Navigation
-  *
-  * @memberof VatLiabilitiesPayments
-  */
-    public handleNavigation(): void {
-        this.route.navigate(['pages', 'gstfiling']);
     }
 
     /**
