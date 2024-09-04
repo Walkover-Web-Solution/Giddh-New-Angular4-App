@@ -113,8 +113,10 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
             this.filteredBanks = this.institutions.filter(item =>
                 item.id.toLowerCase().includes(lowerCaseTerm)
             );
-            this.changeDetection.detectChanges();
+        } else {
+            this.filteredBanks = this.institutions;
         }
+        this.changeDetection.detectChanges();
     }
 
     /**

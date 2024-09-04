@@ -598,13 +598,14 @@ export class SettingsIntegrationService {
      */
     public getRequisition(requisitionId: string): Observable<BaseResponse<any, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
-        return this.http.get(this.config.apiUrl + SETTINGS_INTEGRATION_API.GOCARDLESS.GET_REQUISITION
+        return this.http.post(this.config.apiUrl + SETTINGS_INTEGRATION_API.GOCARDLESS.GET_REQUISITION
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-            ?.replace(':requisitionId', encodeURIComponent(requisitionId ?? ''))
+            ?.replace(':requisitionId', encodeURIComponent(requisitionId ?? '')),''
         ).pipe(map((res) => {
             let data: BaseResponse<any, any> = res;
+            data.request = '';
             return data;
-        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+        }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e,'')));
     }
 
     /**
