@@ -5,33 +5,39 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div class="modal-header d-flex align-items-center activity-header">
-    <h3 mat-dialog-title>{{ localeData?.bulk_add }}</h3>
-    <button class="close" mat-dialog-close>×</button>
+        <h3 mat-dialog-title>{{ localeData?.bulk_add }}</h3>
+        <button class="close" mat-dialog-close>×</button>
     </div>
     <mat-dialog-content class="w-100 right-dialog-height bulk-dialog">
         <div class="p-3">
             <form class="create-acc-form" [formGroup]="bulkAddAccountForm">
                 <ng-container formArrayName="customFields">
                     <div class="d-flex align-items-center column-gap15 mb-3">
-                        <h4 class="fw-bold w-25">{{ commonLocaleData?.app_branch_name}}</h4>
+                        <h4 class="fw-bold w-25">{{ commonLocaleData?.app_branch_name }}</h4>
                         <div class="d-flex align-items-center obj-gap">
-                            <h4 class="fw-bold balance-width">{{ localeData?.foreign_opening_balance }}</h4>
+                            <h4 class="fw-bold balance-width" *ngIf="data?.foreignCurrency">
+                                {{ localeData?.foreign_opening_balance }}
+                            </h4>
                             <h4 class="fw-bold balance-width">{{ localeData?.opening_balance }}</h4>
                             <h4 class="fw-bold">{{ localeData?.opening_balance_type }}</h4>
                         </div>
                     </div>
-                    <ng-container *ngFor="let item of bulkAddAccountForm.get('customFields')['controls']; let bulkIndex = index" [formGroupName]="bulkIndex">
+                    <ng-container
+                        *ngFor="let item of bulkAddAccountForm.get('customFields')['controls']; let bulkIndex = index"
+                        [formGroupName]="bulkIndex"
+                    >
                         <div class="d-flex column-gap15 align-items-start mb-3">
                             <p class="w-25">{{ branches[bulkIndex]?.alias }}</p>
                             <div class="form-group m-0">
                                 <div class="input-group obj-gap">
                                     <input
+                                        *ngIf="data?.foreignCurrency"
                                         type="number"
                                         id="numberteldr"
                                         min="0"
                                         class="form-control text-right mr-1"
                                         digitsOnlyDirective
-                                        formControlName="openingBalance"
+                                        formControlName="foreignOpeningBalance"
                                         [placeholder]="
                                             commonLocaleData?.app_numbers?.zero +
                                             '' +
@@ -61,7 +67,7 @@
                                     />
                                     <div
                                         class="input-group-addon"
-                                        (click)="openingBalanceTypeChnaged('DEBIT', bulkIndex)"
+                                        (click)="openingBalanceTypeChanged('DEBIT', bulkIndex)"
                                         [ngClass]="{
                                             'active-toggle-btn':
                                                 item.get('openingBalanceType')?.value === 'DEBIT' &&
@@ -73,7 +79,7 @@
                                     </div>
                                     <div
                                         class="input-group-addon"
-                                        (click)="openingBalanceTypeChnaged('CREDIT', bulkIndex)"
+                                        (click)="openingBalanceTypeChanged('CREDIT', bulkIndex)"
                                         [ngClass]="{
                                             'active-toggle-btn':
                                                 item.get('openingBalanceType')?.value === 'CREDIT' &&
@@ -87,7 +93,7 @@
                             </div>
                         </div>
                     </ng-container>
-                </ng-container>            
+                </ng-container>
                 <button
                     mat-stroked-button
                     color="primary"

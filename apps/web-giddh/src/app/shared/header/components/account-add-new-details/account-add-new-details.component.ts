@@ -209,6 +209,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public openBulkAddDialogRef: MatDialogRef<any>;
     /** Bulk stock dialog ref */
     public bulkAddAsideMenuRef: MatDialogRef<any>;
+    /** True if current currency is not company currency */
+    public isForeignCurrecny: boolean = false;
+    /** Hold all temporary save bulk balance data */
+    public tempSaveBulkData: any[] = [];
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -878,7 +882,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (!accountRequest['portalDomain'][0]?.name && !accountRequest['portalDomain'][0]?.email && !accountRequest['portalDomain'][0]?.contactNo) {
             delete accountRequest['portalDomain'];
         }
-
+        console.log(accountRequest, 'accountRequest');
         this.submitClicked.emit({
             activeGroupUniqueName: this.activeGroupUniqueName,
             accountRequest
@@ -1706,66 +1710,73 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public openBulkAddDialog(): void {
+        if (this.addAccountForm.get('currency')?.value !== this.companyCurrency) {
+            this.isForeignCurrecny = true;
+        } else {
+            this.isForeignCurrecny = false;
+        }
+        let data = {
+            foreignCurrency: this.isForeignCurrecny,
+            formValue: this.addAccountForm.value,
+            saveBulkData: this.tempSaveBulkData?.length ? this.tempSaveBulkData : []
+        }
         this.bulkAddAsideMenuRef = this.dialog.open(BulkAddDialogComponent, {
             position: {
                 right: '0'
             },
             disableClose: true,
-            width: '865px',
+            width: '800px',
             height: '100vh',
-            maxHeight: '100vh'
+            maxHeight: '100vh',
+            data: data
         });
 
         this.bulkAddAsideMenuRef.afterClosed().subscribe(result => {
             if (result) {
                 this.bulkDialogData(result.customFields);
+                this.tempSaveBulkData = result.customFields;
             }
         });
     }
-    
-    /**
-     * Get data dialog
-     *
-     * @private
-     * @param {*} dialogData
-     * @memberof AccountAddNewDetailsComponent
-    */
+
     private bulkDialogData(dialogData: any): void {
         const accountData = this.addAccountForm.get('accountOpeningBalance') as FormArray;
         accountData.clear();
 
-        let credit = 0;
-        let debit = 0;
+        let openingBalanceCredit = 0;
+        let openingBalanceDebit = 0;
+        let foreignOpeningBalanceCredit = 0;
+        let foreignOpeningBalanceDebit = 0;
 
-        const filterBranchDialogData = dialogData.filter(item => item.openingBalance > 0);
+        dialogData.filter(item => item.foreignOpeningBalance > 0 || item.openingBalance > 0)
+            .forEach(item => {
+                const { foreignOpeningBalance, openingBalance, openingBalanceType, branch } = item;
 
-        filterBranchDialogData?.forEach(item => {
-            const openingBalance = item.openingBalance
-            if (item.openingBalanceType === 'CREDIT') {
-                credit = credit + openingBalance;
-            } else if (item.openingBalanceType === 'DEBIT') {
-                debit = debit + openingBalance;
-            }
+                if (openingBalanceType === 'CREDIT') {
+                    foreignOpeningBalanceCredit += foreignOpeningBalance;
+                    openingBalanceCredit += openingBalance;
+                } else if (openingBalanceType === 'DEBIT') {
+                    foreignOpeningBalanceDebit += foreignOpeningBalance;
+                    openingBalanceDebit += openingBalance;
+                }
 
-            const data = this._fb.group({
-                branch: [item.branch],
-                openingBalance: [item.openingBalance],
-                foreignOpeningBalance: [item.foreignOpeningBalance],
-                openingBalanceType: [item.openingBalanceType]
+                const data = this._fb.group({
+                    branch: [branch],
+                    openingBalance: [openingBalance],
+                    foreignOpeningBalance: [foreignOpeningBalance],
+                    openingBalanceType: [openingBalanceType]
+                });
+                accountData.push(data);
             });
-            accountData.push(data);
-        });
-        this.totalDebitCredit(credit, debit);
+
+        this.totalOpeningBalanceDebitCredit(openingBalanceCredit, openingBalanceDebit);
+
+        if (this.addAccountForm.get('currency')?.value !== this.companyCurrency) {
+            this.totalForeignOpeningBalanceDebitCredit(foreignOpeningBalanceCredit, foreignOpeningBalanceDebit);
+        }
     }
-    
-    /**
-     * Total value of Debit and Credit
-     *
-     * @param {number} credit
-     * @param {number} debit
-     * @memberof AccountAddNewDetailsComponent
-     */
-    public totalDebitCredit(credit: number, debit: number): void {
+
+    public totalOpeningBalanceDebitCredit(credit: number, debit: number): void {
         let openingBalanceType = 'CREDIT';
         let difference = 0;
 
@@ -1785,4 +1796,25 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.addAccountForm.get('openingBalanceType')?.patchValue(openingBalanceType);
         this.addAccountForm.get('openingBalance')?.patchValue(difference);
     }
+
+    public totalForeignOpeningBalanceDebitCredit(credit: number, debit: number): void {
+        let openingBalanceType = 'CREDIT';
+        let difference = 0;
+
+        if (credit > debit) {
+            difference = credit - debit;
+        } else if (debit > credit) {
+            difference = debit - credit;
+        }
+        else {
+            console.log('Equal');
+        }
+        this.addAccountForm.get('foreignOpeningBalance')?.patchValue(difference);
+    }
+
+
+    // foreign : 30 cr 90 dr
+    //     openin: 60 cr 80 dr
 }
+
+

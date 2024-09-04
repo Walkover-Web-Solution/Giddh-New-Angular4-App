@@ -78,7 +78,10 @@
 
                     <div class="form-group col-xs-12 col-sm-4">
                         <label for="numbertel">{{ localeData?.opening_balance }}</label>
-                        <div [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }" class="obj-gap">
+                        <div
+                            [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }"
+                            class="obj-gap"
+                        >
                             <input
                                 type="number"
                                 id="numbertel"
@@ -95,37 +98,49 @@
                                     '' +
                                     commonLocaleData?.app_numbers?.zero
                                 "
-                                [readonly]="isCompanyMode"
+                                [readonly]="true"
                             />
                             <div
                                 class="input-group-addon"
-                                (click)="isCompanyMode ? null : openingBalanceTypeChnaged('DEBIT')"
+                                (click)="openingBalanceTypeChnaged('DEBIT')"
                                 [ngClass]="{
                                     'active-toggle-btn':
                                         addAccountForm.get('openingBalanceType')?.value === 'DEBIT' &&
-                                        addAccountForm.get('openingBalance')?.value > 0,
+                                        (addAccountForm.get('openingBalance')?.value > 0 ||
+                                            addAccountForm.get('foreignOpeningBalance')?.value > 0),
                                     'cp': addAccountForm.get('openingBalance')?.value > 0
                                 }"
-                                *ngIf="addAccountForm.get('openingBalance')?.value > 0"
+                                *ngIf="
+                                    addAccountForm.get('openingBalance')?.value > 0 ||
+                                    addAccountForm.get('foreignOpeningBalance')?.value > 0
+                                "
                             >
                                 {{ commonLocaleData?.app_dr?.toUpperCase() }}
                             </div>
                             <div
                                 class="input-group-addon"
-                                (click)="isCompanyMode ? null : openingBalanceTypeChnaged('CREDIT')"
+                                (click)="openingBalanceTypeChnaged('CREDIT')"
                                 [ngClass]="{
                                     'active-toggle-btn':
                                         addAccountForm.get('openingBalanceType')?.value === 'CREDIT' &&
-                                        addAccountForm.get('openingBalance')?.value > 0,
-                                    'cp': addAccountForm.get('openingBalance')?.value > 0
+                                        (addAccountForm.get('openingBalance')?.value > 0 ||
+                                            addAccountForm.get('foreignOpeningBalance')?.value > 0),
+                                    'cp':
+                                        addAccountForm.get('openingBalance')?.value > 0 ||
+                                        addAccountForm.get('foreignOpeningBalance')?.value > 0
                                 }"
-                                *ngIf="addAccountForm.get('openingBalance')?.value > 0"
+                                *ngIf="
+                                    addAccountForm.get('openingBalance')?.value > 0 ||
+                                    addAccountForm.get('foreignOpeningBalance')?.value > 0
+                                "
                             >
                                 {{ commonLocaleData?.app_cr?.toUpperCase() }}
                             </div>
                         </div>
                         <div class="d-flex justify-content-end">
-                            <a href="javascript:;" (click)="openBulkAddDialog()" class="font-14" *ngIf="isCompanyMode">{{ localeData?.bulk_add }}</a>
+                            <a href="javascript:;" (click)="openBulkAddDialog()" class="font-14">{{
+                                localeData?.bulk_add
+                            }}</a>
                         </div>
                     </div>
                     <div
@@ -151,6 +166,7 @@
                                         commonLocaleData?.app_numbers?.zero
                                     "
                                     decimalDigitsDirective
+                                    [readonly]="true"
                                 />
                                 <div
                                     class="input-group-addon"
@@ -158,7 +174,9 @@
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
-                                        'cp': addAccountForm.get('openingBalance')?.value > 0
+                                        'cp':
+                                            addAccountForm.get('openingBalance')?.value > 0 ||
+                                            addAccountForm.get('foreignOpeningBalance')?.value > 0
                                     }"
                                     *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
                                 >
@@ -170,12 +188,19 @@
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
-                                        'cp': addAccountForm.get('openingBalance')?.value > 0
+                                        'cp':
+                                            addAccountForm.get('openingBalance')?.value > 0 ||
+                                            addAccountForm.get('foreignOpeningBalance')?.value > 0
                                     }"
                                     *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
                                 >
                                     {{ commonLocaleData?.app_cr?.toUpperCase() }}
                                 </div>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <a href="javascript:;" (click)="openBulkAddDialog()" class="font-14">{{
+                                    localeData?.bulk_add
+                                }}</a>
                             </div>
                         </div>
                     </div>
@@ -369,11 +394,15 @@
                                             />
                                         </div>
                                     </div>
-                                    <!-- static code added for the pincode --> 
+                                    <!-- static code added for the pincode -->
                                     <div class="col-sm-4">
                                         <div class="form-group mr-b05">
                                             <label for="pinCodeNum" class="d-block">{{
-                                                zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code 
+                                                zipCodeSupportedCountryList.includes(
+                                                    activeCompany.countryV2.alpha2CountryCode
+                                                )
+                                                    ? commonLocaleData?.app_zip_code
+                                                    : commonLocaleData?.app_pin_code
                                             }}</label>
                                             <input
                                                 type="number"
@@ -382,7 +411,13 @@
                                                 formControlName="pincode"
                                                 autocomplete="false"
                                                 name="pinCodeNum"
-                                                [placeholder]="zipCodeSupportedCountryList.includes(activeCompany.countryV2.alpha2CountryCode) ? commonLocaleData?.app_enter_zip_code : commonLocaleData?.app_enter_pin_code"
+                                                [placeholder]="
+                                                    zipCodeSupportedCountryList.includes(
+                                                        activeCompany.countryV2.alpha2CountryCode
+                                                    )
+                                                        ? commonLocaleData?.app_enter_zip_code
+                                                        : commonLocaleData?.app_enter_pin_code
+                                                "
                                                 decimalDigitsDirective
                                                 [preventDecimal]="true"
                                             />
@@ -992,7 +1027,7 @@
                         </div>
                     </div>
                 </ng-container>
-                
+
                 <button
                     mat-stroked-button
                     color="primary"
@@ -1006,4 +1041,3 @@
         </div>
     </mat-dialog-content>
 </ng-template> -->
-
