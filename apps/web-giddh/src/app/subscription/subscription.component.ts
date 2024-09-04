@@ -309,15 +309,37 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             sessionId,
             sessionIndex
         };
-        this.store.dispatch(this.sessionAction.deleteSession(requestPayload));
+        const dialogRef = this.deleteConfirmationDialog(false);
+        dialogRef.afterClosed().pipe().subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.store.dispatch(this.sessionAction.deleteSession(requestPayload));
+            }
+        });
     }
 
     /**
-     * Deletes All session
+     * Deletes All sessions
      *
-     * @memberof UserDetailsComponent
+     * @memberof SubscriptionComponent
      */
     public clearAllSession(): void {
+
+        const dialogRef = this.deleteConfirmationDialog(true);
+        dialogRef.afterClosed().pipe().subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.store.dispatch(this.sessionAction.deleteAllSession());
+            }
+        });
+    }
+
+    /**
+     *
+     *
+     * @param {boolean} allDeletes
+     * @return {*}  {*}
+     * @memberof SubscriptionComponent
+     */
+    public deleteConfirmationDialog(allDeletes: boolean): any {
         const buttons: Array<ConfirmationModalButton> = [{
             text: this.commonLocaleData?.app_yes,
             color: 'primary'
@@ -328,7 +350,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         const headerText: string = this.commonLocaleData?.app_confirmation;
         const headerCssClass: string = 'd-inline-block mr-1';
         const messageCssClass: string = 'mr-b1';
-        const messageText: string = this.localeData?.session?.delete_all_session;
+        const messageText: string = allDeletes ? this.localeData?.session?.delete_all_sessions : this.localeData?.session?.delete_single_session;
         const configuration = { buttons, headerText, headerCssClass, messageCssClass, messageText };
 
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
@@ -337,13 +359,9 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                 configuration: configuration
             }
         });
-
-        dialogRef.afterClosed().pipe().subscribe(response => {
-            if (response === this.commonLocaleData?.app_yes) {
-                this.store.dispatch(this.sessionAction.deleteAllSession());
-            }
-        });
+        return dialogRef;
     }
+
     /**
      * Tab change handler, used to set the state for selected page
      * which is used by header component, update menu panel and
