@@ -16,14 +16,12 @@
                     formControlName="purchaseNumber"
                 >
                 </input-field>
-                <span class="ml-1">{{ form?.get("purchaseOrders")?.value[i]?.orderNumber }}</span>
+                <p class="ml-1 mr-b1">{{ convertToBillForm?.get("purchaseOrders")?.value[i]?.orderNumber }}</p>
             </div>
         </ng-container>
-    </mat-dialog-content>
-    <mat-dialog-actions>
-        <div class="d-flex column-gap1 justify-content-end mt-4">
+        <div class="d-flex column-gap1 justify-content-end">
             <button mat-stroked-button color="primary" type="submit">{{ commonLocaleData?.app_save }}</button>
             <button mat-stroked-button mat-dialog-close type="button">{{ commonLocaleData?.app_cancel }}</button>
         </div>
-    </mat-dialog-actions>
+    </mat-dialog-content>
 </form>

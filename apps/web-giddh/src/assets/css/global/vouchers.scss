@@ -2,7 +2,6 @@
     background-color: var(--color-common-quinary-background-for-all-components);
 
     .vouchers-address-form {
-
         input,
         textarea {
             background: var(--color-transparent-background);
@@ -37,9 +36,7 @@
     input,
     textarea,
     mat-select {
-
         &.form-control {
-
             &:hover,
             &:focus {
                 border-color: var(--color-common-tertiary-text) !important;
@@ -49,17 +46,16 @@
 
     .vouchers-large-container {
         table {
-            tr{
+            tr {
                 td {
                     reactive-dropdown-field {
                         mat-form-field {
-                            .mat-mdc-text-field-wrapper{
+                            .mat-mdc-text-field-wrapper {
                                 padding-left: 0;
                                 padding-right: 0;
                             }
                         }
                     }
-
                 }
             }
         }
@@ -83,6 +79,19 @@
             .caret {
                 transform: rotate(180deg);
             }
+        }
+    }
+}
+
+.invoice-list {
+    .sortable-header-justify-center {
+        .mat-sort-header-container {
+            justify-content: center;
+        }
+    }
+    purchase-setting {
+        #invoice-setting {
+            margin-top: 15px !important;
         }
     }
 }
@@ -181,7 +190,6 @@
     .mat-option-text {
         line-height: 1.8 !important;
     }
-
 }
 
 .options-line-value {
@@ -195,7 +203,6 @@
     }
 
     .item-unique {
-
         .option-value {
             color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
             font-size: var(--font-size-15);

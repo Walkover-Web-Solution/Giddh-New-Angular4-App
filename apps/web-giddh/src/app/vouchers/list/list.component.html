@@ -13,7 +13,7 @@
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/estimates/create']">
+                            <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/estimates/create']" *ngIf="!isCompany">
                                 <span>{{ localeData?.new_estimate }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
@@ -28,19 +28,24 @@
                             </div>
                         </div>
                         <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)">
-                            <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                            <span class="d-inline-flex align-items-center column-gap5">
+                                <span class="icon-cross icon-font-14"></span>
+                                <span>{{ commonLocaleData?.app_clear_filter }}</span>
+                            </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreEstimate" *ngIf="selectedVouchers?.length === 1">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
-                            <mat-menu #moreEstimate="matMenu">
+                            <mat-menu #moreEstimate="matMenu" class="mr-t05">
                                 <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
                             </mat-menu>
                             <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
-                                {{ commonLocaleData?.app_filter }}
-                                <i class="icon-advance-filter"></i>
+                                <span class="d-inline-flex align-items-center column-gap5">
+                                    {{ commonLocaleData?.app_filter }}
+                                    <i class="icon-advance-filter"></i>
+                                </span>
                             </button>
                         </div>
                     </div>
@@ -130,18 +135,18 @@
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
                                                 <li class="text-left"><a href="javascript:;" class="default-color" (click)="goToLedger(element)">{{ commonLocaleData?.app_goto_ledger }}</a></li>
-                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color" (click)="generateVoucher(element)">{{ commonLocaleData?.app_generate_invoice }}</a></li>
+                                                <li class="text-left mr-t1"><a href="javascript:;" class="default-color" (click)="generateVoucher(element)">{{ commonLocaleData?.app_generate_invoice }}</a></li>
                                             </ul>
                                         </mat-card-content>
                                     </mat-card>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="proformaDate">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="sortable-header-justify-center">
                                     Estimate Date
                                 </th>
-                                <td mat-cell *matCellDef="let element"> 
-                                    {{ element.voucherDate }}
+                                <td mat-cell *matCellDef="let element" class="text-center"> 
+                                    {{ element.voucherDate ?? '-' }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="grandTotal">
@@ -159,11 +164,11 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="dueDate">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="sortable-header-justify-center">
                                     {{ localeData?.expiry_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element"> 
-                                    {{ element.expiryDate }}
+                                <td mat-cell *matCellDef="let element" class="text-center"> 
+                                    {{ element.expiryDate ?? '-' }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="status">
@@ -224,7 +229,7 @@
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/proformas/create']">
+                            <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/proformas/create']" *ngIf="!isCompany">
                                 <span>{{ localeData?.new_proforma }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
@@ -239,19 +244,24 @@
                             </div>
                         </div>
                         <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)">
-                            <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                            <span class="d-inline-flex align-items-center column-gap5">
+                                <span class="icon-cross icon-font-14"></span> 
+                                <span>{{ commonLocaleData?.app_clear_filter }}</span>
+                            </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-stroked-button color="primary" [matMenuTriggerFor]="moreProforma" *ngIf="selectedVouchers?.length === 1">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
-                            <mat-menu #moreProforma="matMenu">
+                            <mat-menu #moreProforma="matMenu" class="mr-t05">
                                 <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
                             </mat-menu>
                             <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">
-                                {{ commonLocaleData?.app_filter }}
-                                <i class="icon-advance-filter"></i>
+                                <span class="d-inline-flex align-items-center column-gap5">
+                                    {{ commonLocaleData?.app_filter }}
+                                    <i class="icon-advance-filter"></i>
+                                </span>
                             </button>
                         </div>
                     </div>
@@ -338,18 +348,18 @@
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
                                                 <li class="text-left"><a href="javascript:;" class="default-color" (click)="goToLedger(element)">{{ commonLocaleData?.app_goto_ledger }}</a></li>
-                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color" (click)="generateVoucher(element)">{{ commonLocaleData?.app_generate_invoice }}</a></li>
+                                                <li class="text-left mr-t1"><a href="javascript:;" class="default-color" (click)="generateVoucher(element)">{{ commonLocaleData?.app_generate_invoice }}</a></li>
                                             </ul>
                                         </mat-card-content>
                                     </mat-card>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="proformaDate">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="sortable-header-justify-center">
                                     {{ localeData?.proforma_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element"> 
-                                    {{ element.proformaDate }}
+                                <td mat-cell *matCellDef="let element" class="text-center"> 
+                                    {{ element.proformaDate ?? '-' }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="grandTotal">
@@ -367,11 +377,11 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="dueDate">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="sortable-header-justify-center">
                                     {{ localeData?.expiry_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element"> 
-                                    {{element.expiryDate}}
+                                <td mat-cell *matCellDef="let element" class="text-center"> 
+                                    {{element.expiryDate ?? '-'}}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="status">
@@ -431,11 +441,11 @@
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15 flex-wrap row-gap1">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-raised-button color="primary" [matMenuTriggerFor]="createNewVoucher">
+                            <button mat-raised-button color="primary" [matMenuTriggerFor]="createNewVoucher" *ngIf="!isCompany" class="width-150">
                                 <span>{{ localeData?.new_invoice }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
-                            <mat-menu #createNewVoucher="matMenu">
+                            <mat-menu #createNewVoucher="matMenu" class="width-150">
                                 <button mat-menu-item [routerLink]="['/pages/vouchers/cash/create']">{{ localeData?.cash_invoice }}</button>
                                 <button mat-menu-item [routerLink]="['/pages/vouchers/sales/create']">{{ localeData?.sales_invoice }}</button>
                             </mat-menu>
@@ -451,7 +461,10 @@
                             </div>
                         </div>
                         <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)">
-                            <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                            <span class="d-inline-flex align-items-center column-gap5">
+                                <span class="icon-cross icon-font-14"></span> 
+                                <span>{{ commonLocaleData?.app_clear_filter }}</span>
+                            </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-stroked-button color="primary" [matTooltip]="commonLocaleData?.app_export"
@@ -462,15 +475,17 @@
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
-                            <mat-menu #moreInvoice="matMenu">
+                            <mat-menu #moreInvoice="matMenu" class="mr-t05">
                                 <button mat-menu-item (click)="bulkUpdateDialog()">{{ localeData?.bulk_update }}</button>
                                 <button mat-menu-item *ngIf="selectedVouchers?.length === 1" (click)="showEwayBillDialog()">{{ localeData?.generate_eway_bill }}</button>
                                 <button mat-menu-item *ngIf="isEInvoiceEnabled && (voucherType === 'credit note' || voucherType === 'debit note' || voucherType === 'sales')" (click)="generateEInvoice()">{{ localeData?.create_e_invoice }}</button>
                                 <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
                             </mat-menu>
                             <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
-                                {{ commonLocaleData?.app_filter }}
-                                <i class="icon-advance-filter"></i>
+                                <span class="d-inline-flex align-items-center column-gap5">
+                                    {{ commonLocaleData?.app_filter }}
+                                    <i class="icon-advance-filter"></i>
+                                </span>
                             </button>
                             <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">{{ commonLocaleData?.app_export }}</button>
                         </div>
@@ -583,18 +598,18 @@
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
                                                 <li class="text-left"><a href="javascript:;" class="default-color" (click)="goToLedger(element)">{{ commonLocaleData?.app_goto_ledger }}</a></li>
-                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color" (click)="generateVoucher(element)">{{ commonLocaleData?.app_generate_invoice }}</a></li>
+                                                <li class="text-left mr-t1"><a href="javascript:;" class="default-color" (click)="generateVoucher(element)">{{ commonLocaleData?.app_generate_invoice }}</a></li>
                                             </ul>
                                         </mat-card-content>
                                     </mat-card>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="voucherDate">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="sortable-header-justify-center">
                                     {{ commonLocaleData?.app_invoice_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element"> 
-                                    {{ element.voucherDate }}
+                                <td mat-cell *matCellDef="let element" class="text-center"> 
+                                    {{ element.voucherDate ?? '-' }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="grandTotal">
@@ -626,11 +641,11 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="dueDate">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="sortable-header-justify-center">
                                     {{ localeData?.due_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element"> 
-                                    {{ element.dueDate }}
+                                <td mat-cell *matCellDef="let element" class="text-center"> 
+                                    {{ element.dueDate ?? '-' }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="einvoicestatus">
@@ -692,7 +707,7 @@
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/debit-note/create']">
+                            <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/debit-note/create']" *ngIf="!isCompany">
                                 <span>{{ localeData?.new_dr_note }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
@@ -707,7 +722,10 @@
                             </div>
                         </div>
                         <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)">
-                            <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                            <span class="d-inline-flex align-items-center column-gap5">
+                                <span class="icon-cross icon-font-14"></span> 
+                                <span>{{ commonLocaleData?.app_clear_filter }}</span>
+                            </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-stroked-button color="primary" [matTooltip]="commonLocaleData?.app_export"
@@ -718,13 +736,15 @@
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
-                            <mat-menu #morepurchase="matMenu">
+                            <mat-menu #morepurchase="matMenu" class="mr-t05">
                                 <button mat-menu-item (click)="bulkUpdateDialog()">{{ localeData?.bulk_update }}</button>
                                 <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
                             </mat-menu>
                             <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
-                                {{ commonLocaleData?.app_filter }}
-                                <i class="icon-advance-filter"></i>
+                                <span class="d-inline-flex align-items-center column-gap5">
+                                    {{ commonLocaleData?.app_filter }}
+                                    <i class="icon-advance-filter"></i>
+                                </span>
                             </button>
                             <button *ngIf="dataSource?.length" mat-stroked-button color="primary" (click)="showBulkExportDialog()">{{ commonLocaleData?.app_export }}</button>
                         </div>
@@ -823,18 +843,18 @@
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
                                                 <li class="text-left"><a href="javascript:;" class="default-color" (click)="goToLedger(element)">{{ commonLocaleData?.app_goto_ledger }}</a></li>
-                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color" (click)="generateVoucher(element)">{{ commonLocaleData?.app_generate_invoice }}</a></li>
+                                                <li class="text-left mr-t1"><a href="javascript:;" class="default-color" (click)="generateVoucher(element)">{{ commonLocaleData?.app_generate_invoice }}</a></li>
                                             </ul>
                                         </mat-card-content>
                                     </mat-card>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="voucherDate">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="sortable-header-justify-center">
                                     {{ commonLocaleData?.app_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element"> 
-                                    {{ element?.voucherDate }}
+                                <td mat-cell *matCellDef="let element" class="text-center"> 
+                                    {{ element?.voucherDate ?? '-' }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="linked">
@@ -905,7 +925,7 @@
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-raised-button color="primary" class="w-100" [routerLink]="['/pages/vouchers/credit-note/create']">
+                            <button mat-raised-button color="primary" class="w-100" [routerLink]="['/pages/vouchers/credit-note/create']" *ngIf="!isCompany">
                                 <span>{{ localeData?.new_cr_note }}</span>
                             </button>
                             <div class="input-group custom-datepicker" (click)="showGiddhDatepicker($event)">
@@ -918,7 +938,10 @@
                             </div>
                         </div>
                         <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)">
-                            <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                            <span class="d-inline-flex align-items-center column-gap5">
+                                <span class="icon-cross icon-font-14"></span> 
+                                <span>{{ commonLocaleData?.app_clear_filter }}</span>
+                            </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-stroked-button color="primary" [matTooltip]="commonLocaleData?.app_export"
@@ -929,13 +952,15 @@
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
-                            <mat-menu #morepurchase="matMenu">
+                            <mat-menu #morepurchase="matMenu" class="mr-t05">
                                 <button mat-menu-item (click)="bulkUpdateDialog()">{{ localeData?.bulk_update }}</button>
                                 <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
                             </mat-menu>
                             <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
-                                {{ commonLocaleData?.app_filter }}
-                                <i class="icon-advance-filter"></i>
+                                <span class="d-inline-flex align-items-center column-gap5">
+                                    {{ commonLocaleData?.app_filter }}
+                                    <i class="icon-advance-filter"></i>
+                                </span>
                             </button>
                             <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">{{ commonLocaleData?.app_export }}</button>
                         </div>
@@ -1034,18 +1059,18 @@
                                         <mat-card-content class="pt-3">
                                             <ul class="list-unstyled">
                                                 <li class="text-left"><a href="javascript:;" class="default-color" (click)="goToLedger(element)">{{ commonLocaleData?.app_goto_ledger }}</a></li>
-                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color" (click)="generateVoucher(element)">{{ commonLocaleData?.app_generate_invoice }}</a></li>
+                                                <li class="text-left mr-t1"><a href="javascript:;" class="default-color" (click)="generateVoucher(element)">{{ commonLocaleData?.app_generate_invoice }}</a></li>
                                             </ul>
                                         </mat-card-content>
                                     </mat-card>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="voucherDate">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="sortable-header-justify-center">
                                     {{ commonLocaleData?.app_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element"> 
-                                    {{ element?.voucherDate }}
+                                <td mat-cell *matCellDef="let element" class="text-center"> 
+                                    {{ element?.voucherDate ?? '-' }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="linked">
@@ -1185,23 +1210,6 @@
                                     <div class="cursor-pointer">
                                         {{element.account}}
                                     </div>
-                                    <!-- account-detail-double-click -->
-                                    <!-- <mat-card class="outline-card account-detail-wrapper">
-                                        <div class="p-3 border-bottom account-header">
-                                            <div class="d-flex align-items-center justify-content-between column-gap15 ">
-                                                <h3>USA debtor</h3>
-                                                <span class="cursor-pointer">
-                                                    <img src="./assets/images/path.svg" />
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <mat-card-content class="pt-3">
-                                            <ul class="list-unstyled">
-                                                <li class="text-left"><a href="javascript:;" class="default-color">{{ commonLocaleData?.app_goto_ledger }}</a></li>
-                                                <li class="text-left mr-t05"><a href="javascript:;" class="default-color">{{ commonLocaleData?.app_generate_invoice }}</a></li>
-                                            </ul>
-                                        </mat-card-content>
-                                    </mat-card> -->
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="total">
@@ -1248,7 +1256,7 @@
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/purchase-order/create']">
+                            <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/purchase-order/create']" *ngIf="!isCompany">
                                 <span>{{ localeData?.new_order }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
@@ -1263,26 +1271,31 @@
                             </div>
                         </div>
                         <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)">
-                            <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                            <span class="d-inline-flex align-items-center column-gap5">
+                                <span class="icon-cross icon-font-14"></span> 
+                                <span>{{ commonLocaleData?.app_clear_filter }}</span>
+                            </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-stroked-button color="primary" [matMenuTriggerFor]="morepurchase"  *ngIf="selectedVouchers?.length">
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
-                            <mat-menu #morepurchase="matMenu">
+                            <mat-menu #morepurchase="matMenu" class="mr-t05">
                                 <button mat-menu-item (click)="bulkUpdateDialog(true)">{{ localeData?.bulk_update }}</button>
                                 <button mat-menu-item (click)="convertBillDialog()">{{ localeData?.convert_to_bill }}</button>
                                 <button mat-menu-item (click)="poBulkAction('expire')">{{ localeData?.expired }}</button>
                                 <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
                             </mat-menu>
                             <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
-                                {{ commonLocaleData?.app_filter }}
-                                <i class="icon-advance-filter"></i>
+                                <span class="d-inline-flex align-items-center column-gap5">
+                                    {{ commonLocaleData?.app_filter }}
+                                    <i class="icon-advance-filter"></i>
+                                </span>
                             </button>
                         </div>
                     </div>
-                    <div class="table-responsive"> 
+                    <div class="table-responsive">
                         <giddh-page-loader *ngIf="getVouchersInProgress$ | async"></giddh-page-loader>
                         <table mat-table [hidden]="(getVouchersInProgress$ | async) || !(dataSource?.length || isSearching)" [dataSource]="dataSource" matSort (matSortChange)="sortChange($event)" class="w-100 purchase-table">
                             <ng-container matColumnDef="index">
@@ -1318,7 +1331,7 @@
                                     {{ commonLocaleData?.app_date }}
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    {{ element?.voucherDate }}
+                                    {{ element?.voucherDate ?? '-' }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="purchase">
@@ -1372,16 +1385,16 @@
                                     <amount-field
                                         [amount]="element?.grandTotal?.amountForAccount"
                                         [currencySymbol]="element?.grandTotal?.currencyForAccount?.symbol"
-                                        [currencyCode]="false"
+                                        [currencyCode]="element?.grandTotal?.currencyForAccount?.code"
                                     >
                                     </amount-field>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="dueDate">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="sortable-header-justify-center">
                                     {{ localeData?.expected_delivery }}
                                 </th>
-                                <td mat-cell *matCellDef="let element"> 
+                                <td mat-cell *matCellDef="let element" class="text-center"> 
                                     <span [ngClass]="{ 'ontime-delivery': element?.dueDays > 0, 'text-danger': element?.dueDays < 0 }"
                                         *ngIf="element?.dueDays && element?.dueDays <= 7">
                                         {{ getDeliveryDaysText(element.dueDays) }}
@@ -1447,7 +1460,7 @@
                 <div class="vouchers-wrapper pt-3 px-4">
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
                         <div class="d-flex align-items-center column-gap1">
-                            <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/purchase/create']">
+                            <button mat-raised-button color="primary" [routerLink]="['/pages/vouchers/purchase/create']" *ngIf="!isCompany">
                                 <span>{{ localeData?.new_bill }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
@@ -1463,8 +1476,10 @@
                         </div>
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-stroked-button color="primary" (click)="advanceSearchDialog()">
-                                {{ commonLocaleData?.app_filter }}
-                                <i class="icon-advance-filter"></i>
+                                <span class="d-inline-flex align-items-center column-gap5">
+                                    {{ commonLocaleData?.app_filter }}
+                                    <i class="icon-advance-filter"></i>
+                                </span>
                             </button>
                             <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">{{ commonLocaleData?.app_export }}</button>
                         </div>
@@ -1564,11 +1579,11 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="voucherDate">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="sortable-header-justify-center">
                                     {{ localeData?.bill_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element"> 
-                                    {{ element?.voucherDate }}
+                                <td mat-cell *matCellDef="let element" class="text-center"> 
+                                    {{ element?.voucherDate ?? '-' }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="order">
@@ -1607,11 +1622,11 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="dueDate">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="sortable-header-justify-center">
                                     {{ localeData?.due_date}}
                                 </th>
-                                <td mat-cell *matCellDef="let element">
-                                   {{ element?.dueDate }}
+                                <td mat-cell *matCellDef="let element" class="text-center">
+                                   {{ element?.dueDate ?? '-' }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="status">
@@ -2259,7 +2274,10 @@
                             </div>
                         </div>
                         <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)">
-                            <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                            <span class="d-inline-flex align-items-center column-gap5">
+                                <span class="icon-cross icon-font-14"></span> 
+                                <span>{{ commonLocaleData?.app_clear_filter }}</span>
+                            </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-stroked-button color="primary" [matTooltip]="commonLocaleData?.app_export"
@@ -2270,12 +2288,14 @@
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
-                            <mat-menu #moreProforma="matMenu">
+                            <mat-menu #moreProforma="matMenu" class="mr-t05">
                                 <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
                             </mat-menu>
                             <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">
-                                {{ commonLocaleData?.app_filter }}
-                                <i class="icon-advance-filter"></i>
+                                <span class="d-inline-flex align-items-center column-gap5">
+                                    {{ commonLocaleData?.app_filter }}
+                                    <i class="icon-advance-filter"></i>
+                                </span>
                             </button>
                             <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">{{ commonLocaleData?.app_export }}</button>
                         </div>
@@ -2379,11 +2399,11 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="voucherDate">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header> 
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="sortable-header-justify-center"> 
                                     {{ commonLocaleData?.app_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element">
-                                    {{ element?.voucherDate }}
+                                <td mat-cell *matCellDef="let element" class="text-center">
+                                    {{ element?.voucherDate ?? '-' }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="type">
@@ -2454,7 +2474,7 @@
                                     <amount-field
                                         [amount]="element?.grandTotal?.amountForAccount"
                                         [currencySymbol]="element?.account?.currency?.symbol"
-                                        [currencyCode]="false"
+                                        [currencyCode]="element?.account?.currency?.code"
                                     >
                                     </amount-field>
                                 </td>
@@ -2468,7 +2488,7 @@
                                     <amount-field
                                         [amount]="element?.balanceDue?.amountForAccount"
                                         [currencySymbol]="element?.account?.currency?.symbol"
-                                        [currencyCode]="false"
+                                        [currencyCode]="element?.account?.currency?.code"
                                     >
                                     </amount-field>
                                 </td>
@@ -2513,7 +2533,10 @@
                             </div>
                         </div>
                         <button mat-stroked-button (click)="setInitialAdvanceFilter()" class="mx-auto" *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)">
-                            <span class="icon-cross icon-font-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                            <span class="d-inline-flex align-items-center column-gap5">
+                                <span class="icon-cross icon-font-14"></span> 
+                                <span>{{ commonLocaleData?.app_clear_filter }}</span>
+                            </span>
                         </button>
                         <div class="d-flex align-items-center column-gap1">
                             <button mat-stroked-button color="primary" [matTooltip]="commonLocaleData?.app_export"
@@ -2524,12 +2547,14 @@
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
-                            <mat-menu #moreProforma="matMenu">
+                            <mat-menu #moreProforma="matMenu" class="mr-t05">
                                 <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
                             </mat-menu>
                             <button mat-stroked-button colo="primary" (click)="advanceSearchDialog()">
-                                {{ commonLocaleData?.app_filter }}
-                                <i class="icon-advance-filter"></i>
+                                <span class="d-inline-flex align-items-center column-gap5">
+                                    {{ commonLocaleData?.app_filter }}
+                                    <i class="icon-advance-filter"></i>
+                                </span>
                             </button>
                             <button mat-stroked-button color="primary" (click)="showBulkExportDialog()">{{ commonLocaleData?.app_export }}</button>
                         </div>
@@ -2611,11 +2636,11 @@
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="voucherDate">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header> 
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header class="sortable-header-justify-center"> 
                                     {{ commonLocaleData?.app_date }}
                                 </th>
-                                <td mat-cell *matCellDef="let element">
-                                    {{ element?.voucherDate }}
+                                <td mat-cell *matCellDef="let element" class="text-center">
+                                    {{ element?.voucherDate ?? '-' }}
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="vendor">
@@ -2671,7 +2696,7 @@
                                     <amount-field
                                         [amount]="element?.grandTotal?.amountForAccount"
                                         [currencySymbol]="element?.account?.currency?.symbol"
-                                        [currencyCode]="false"
+                                        [currencyCode]="element?.account?.currency?.code"
                                     >
                                     </amount-field>
                                 </td>
@@ -2685,7 +2710,7 @@
                                     <amount-field
                                         [amount]="element?.balanceDue?.amountForAccount"
                                         [currencySymbol]="element?.account?.currency?.symbol"
-                                        [currencyCode]="false"
+                                        [currencyCode]="element?.account?.currency?.code"
                                     >
                                     </amount-field>
                                 </td>
@@ -2720,13 +2745,15 @@
     <!-- table-search -->
     <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-voucherType="voucherType" let-formControl="formControl">
         <div class="d-flex align-items-center column-gap1" [hidden]="show">
-            <span class="cursor-pointer" (click)="toggleSearch($event, fieldName, voucherType)">
+            <span class="cursor-pointer" (click)="toggleSearch($event, fieldName, voucherType); activeSearchField = 'search'+fieldName">
                 <i class="icon-search icon-font-16"></i>
             </span>
             <span>{{ title }}</span>
         </div>
         <div [hidden]="!show">
             <text-field
+                (click)="activeSearchField = 'search'+fieldName; $event.stopPropagation()"
+                [id]="'search'+fieldName"
                 [type]="'text'"
                 [placeholder]="commonLocaleData?.app_search"
                 [cssClass]="'form-control search-table mat-field-border'"
