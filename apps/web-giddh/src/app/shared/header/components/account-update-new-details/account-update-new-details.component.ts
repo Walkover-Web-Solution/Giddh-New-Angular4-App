@@ -2219,7 +2219,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 right: '0'
             },
             disableClose: true,
-            width: '550px',
+            width: '865px',
             height: '100vh',
             maxHeight: '100vh',
             data: currentFormValues

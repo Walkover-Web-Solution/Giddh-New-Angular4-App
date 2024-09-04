@@ -54,7 +54,7 @@ export class BulkAddDialogComponent implements OnInit {
     console.log('Data Value', this.data);
     this.initializeNewForm();
     this.getCompanyBranches();
-    if (this.data.initialValues) {
+    if (this.data) {
       this.existingFormData(this.data);
     }
   }
@@ -147,6 +147,8 @@ export class BulkAddDialogComponent implements OnInit {
     const item = formArray.at(index) as FormGroup;
     if (Number(item.get('openingBalance')?.value) >= 0) {
       item.get('openingBalanceType')?.patchValue(type);
+    } else if (Number(item.get('foreignOpeningBalance')?.value)){
+      item.get('foreignOpeningBalance')?.patchValue(type);
     }
   }
 
