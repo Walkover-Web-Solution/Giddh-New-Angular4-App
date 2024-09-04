@@ -18,7 +18,7 @@
             <reactive-dropdown-field [name]="'invoice_total_amount'" [label]="localeData?.invoice_total_amount" [placeholder]="commonLocaleData?.app_select"
                 [options]="filtersForEntryTotal" class="w-50" (selectedOption)="invoiceTotalRangeChanged($event)" formControlName="invoiceTotalAmount" [labelValue]="fieldLabelValues.invoiceTotalAmount">
             </reactive-dropdown-field>
-            <input-field [type]="'tel'" [placeholder]="'00'" class="w-50" name="total" formControlName="total"></input-field>
+            <input-field [type]="'tel'" [label]="commonLocaleData?.app_amount" [placeholder]="'00'" class="w-50" name="total" formControlName="total"></input-field>
         </div>
         <div class="d-flex column-gap1 mr-b15 w-100">
             <reactive-dropdown-field [name]="'due_date_range'" [label]="localeData?.due_date_range" [placeholder]="commonLocaleData?.app_select_action"
@@ -79,7 +79,7 @@
             <reactive-dropdown-field [name]="'invoice_total_amount'" [label]="localeData?.invoice_total_amount" [placeholder]="commonLocaleData?.app_select"
                 [options]="filtersForEntryTotal" class="w-50" (selectedOption)="invoiceTotalRangeChanged($event)" formControlName="invoiceTotalAmount" [labelValue]="fieldLabelValues.invoiceTotalAmount">
             </reactive-dropdown-field>
-            <input-field [type]="'tel'" [placeholder]="'00'" class="w-50" name="total" formControlName="total"></input-field>
+            <input-field [type]="'tel'" [label]="commonLocaleData?.app_amount" [placeholder]="'00'" class="w-50" name="total" formControlName="total"></input-field>
         </div>
         <mat-form-field appearance="outline" class="w-100 mr-b15" *ngIf="isEInvoiceEnabled">
             <mat-label>{{ localeData?.e_invoice_status }}</mat-label>
@@ -168,7 +168,7 @@
             <reactive-dropdown-field [name]="'invoice_total_amount'" [label]="localeData?.invoice_total_amount" [placeholder]="commonLocaleData?.app_select"
                 [options]="filtersForEntryTotal" class="w-50" (selectedOption)="invoiceTotalRangeChanged($event)" formControlName="invoiceTotalAmount" [labelValue]="fieldLabelValues.invoiceTotalAmount">
             </reactive-dropdown-field>
-            <input-field [type]="'tel'" [placeholder]="'00'" class="w-50" name="total" formControlName="total"></input-field>
+            <input-field [type]="'tel'" [label]="commonLocaleData?.app_amount" [placeholder]="'00'" class="w-50" name="total" formControlName="total"></input-field>
         </div>
         <div class="d-flex column-gap1 mr-b15 w-100">
             <reactive-dropdown-field [name]="'due_date_range'" [label]="localeData?.due_date_range" [placeholder]="commonLocaleData?.app_select_action"
