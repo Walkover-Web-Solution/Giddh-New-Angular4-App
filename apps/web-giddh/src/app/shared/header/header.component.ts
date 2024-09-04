@@ -309,11 +309,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // SETTING CURRENT PAGE ON ROUTE CHANGE
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
             if (event instanceof NavigationStart) {
-                if ((event.url.includes("/pages/settings") || event.url.includes("/gstfiling") || event.url.includes("/pages/user-details") || event.url.includes("/billing-detail")) && !this.generalService.getSessionStorage("previousPage")) {
+                if ((event.url.includes("/pages/settings") || event.url.includes("/gstfiling") || event.url.includes("/billing-detail")) && !this.generalService.getSessionStorage("previousPage")) {
                     this.generalService.setSessionStorage("previousPage", this.currentPageUrl);
                 }
 
-                if (!event.url.includes("/pages/settings") && !event.url.includes("/gstfiling") && !event.url.includes("/pages/user-details") && !event.url.includes("/billing-detail") && this.generalService.getSessionStorage("previousPage")) {
+                if (!event.url.includes("/pages/settings") && !event.url.includes("/gstfiling") && !event.url.includes("/billing-detail") && this.generalService.getSessionStorage("previousPage")) {
                     this.generalService.removeSessionStorage("previousPage");
                 }
                 if (this.subBranchDropdown) {
@@ -322,12 +322,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.addClassInBodyIfPageHasTabs();
             }
             if (event instanceof NavigationEnd) {
-                if (!this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details") && !this.router.url.includes("/billing-detail")) {
+                if (!this.router.url.includes("/pages/settings") && !this.router.url.includes("/billing-detail")) {
                     this.currentPageUrl = this.router.url;
                 }
 
-                this.isSubscriptionModule = this.router.url.includes("/pages/subscription");
-                this.isSubscriptionPage = this.router.url.includes("/pages/subscription/buy-plan") || this.router.url.includes("/pages/subscription/view-subscription");
+                this.isSubscriptionModule = this.router.url.includes("/pages/user-details");
+                this.isSubscriptionPage =
+                    this.router.url.includes("/pages/user-details/subscription/buy-plan") ||
+                    this.router.url.includes("/pages/user-details/subscription/view-subscription") ||
+                    this.router.url.includes("/pages/user-details/mobile-number") ||
+                    this.router.url.includes("/pages/user-details/auth-key") ||
+                    this.router.url.includes("/pages/user-details/session");
 
                 this.setCurrentPage();
                 this.addClassInBodyIfPageHasTabs();
@@ -794,9 +799,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                         tap(response => {
                             const hasSubscriptionPermission = response?.user?.hasSubscriptionPermission;
                             if (hasSubscriptionPermission) {
-                                this.router.navigate(['/pages/subscription']);
+                                this.router.navigate(['/pages/user-details/subscription']);
                             } else {
-                                this.router.navigate(['/pages/subscription/buy-plan']);
+                                this.router.navigate(['/pages/user-details/subscription/buy-plan']);
                             }
                         })
                     ).subscribe();
@@ -1107,7 +1112,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.menuStateChange.emit(false);
         }
 
-        if (validElement && !this.isMobileSite && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details") || document.getElementsByClassName("voucher-preview-edit")?.length > 0)) {
+        if (validElement && !this.isMobileSite && (this.router.url.includes("/pages/settings")  || document.getElementsByClassName("voucher-preview-edit")?.length > 0)) {
             this.collapseSidebar(true);
         }
     }
@@ -1240,7 +1245,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
         document.querySelector('body').classList.remove('modal-open');
         if (this.planVersion === 2 || this.subscribedPlan?.status === 'expired') {
-            this.router.navigate(['/pages/subscription/view-subscription/' + this.subscribedPlan?.subscriptionId]);
+            this.router.navigate(['/pages/user-details/subscription/view-subscription/' + this.subscribedPlan?.subscriptionId]);
         } else {
             this.router.navigate(['/pages', 'user-details'], {
                 queryParams: {
@@ -1357,9 +1362,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         switch (url) {
             case 'SETTINGS?TAB=PERMISSION&TABINDEX=5':
                 name = this.localeData?.settings_permission;
-                break;
-            case 'user-details/profile':
-                name = this.localeData?.user_details;
                 break;
             case 'inventory-in-out':
                 name = this.localeData?.inventory_inout;
@@ -1527,7 +1529,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     */
     public collapseSidebar(forceCollapse: boolean = false, closeOnHover: boolean = false): void {
         this.isGoToBranch = false;
-        if (closeOnHover && this.sidebarForcelyExpanded && (this.router.url.includes("/pages/settings") || this.router.url.includes("/pages/user-details"))) {
+        if (closeOnHover && this.sidebarForcelyExpanded && (this.router.url.includes("/pages/settings") )) {
             return;
         }
 
@@ -1886,7 +1888,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = decodeURI(lastState);
-        if (lastState !== '/pages/subscription/buy-plan') {
+        if (lastState !== '/pages/user-details/subscription/buy-plan') {
             this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
         }
     }
@@ -2123,6 +2125,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public backToSubscription(): void {
-        this.router.navigate(['/pages/subscription']);
+        this.router.navigate(['/pages/user-details/subscription']);
     }
 }

@@ -36,7 +36,7 @@
                             <p *ngIf="!isLoading" class="mr-r3">
                                 {{ localeData?.total_inventory_count }} : <span>{{ totalInventoryCount }}</span>
                             </p>
-                            <div class="menu-btn-control" [matTooltip]="localeData?.customize_column" *ngIf="!noDataFound">
+                            <div class="menu-btn-control" [matTooltip]="localeData?.customize_column">
                                 <select-table-column
                                     [moduleName]="inventoryType"
                                     [moduleType]="moduleName"
@@ -58,7 +58,6 @@
                                 (click)="openAdvanceFilter()"
                                 [matTooltip]="commonLocaleData?.app_advanced_filter"
                                 aria-label="filter"
-                                *ngIf="!noDataFound"
                             >
                                 <i class="icon-advance-filter font-16"></i>
                             </button>

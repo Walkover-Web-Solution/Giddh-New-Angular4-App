@@ -22,9 +22,9 @@
                         {{ commonLocaleData?.app_back }}
                     </a>
                 </div>
-                <div class="filter-row">
+                <div class="filter-row" *ngIf="selectedGst === GstReport.Gstr1 && (filterParam.type === 'nil' || filterParam.type === 'b2cs')">
                     <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
-                    <div class="btn-group filter d-inline-block" dropdown *ngIf="selectedGst === GstReport.Gstr1">
+                    <div class="btn-group filter d-inline-block" dropdown>
                         <button
                             id="button-basic"
                             dropdownToggle
@@ -45,7 +45,10 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="btn-group filter d-inline-block" dropdown *ngIf="selectedGst === GstReport.Gstr2">
+                    </div>
+                    <div class="filter-row" *ngIf="selectedGst === GstReport.Gstr2 && filterParam.type === 'b2bur'">
+                        <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
+                    <div class="btn-group filter d-inline-block" dropdown>
                         <button
                             id="button-basic2"
                             dropdownToggle
@@ -62,92 +65,6 @@
                                     href="javascript:void(0)"
                                     (click)="viewFilteredTxn('entityType', entity?.value)"
                                     >{{ entity.label }}</a
-                                >
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div
-                    class="filter-row"
-                    *ngIf="
-                        filterParam.entityType !== 'invoices' &&
-                        filterParam.entityType !== 'advance-receipt' &&
-                        selectedGst === GstReport.Gstr1
-                    "
-                >
-                    <div class="name">{{ getFilterTypeText() }}:</div>
-                    <div class="btn-group filter d-inline-block" dropdown>
-                        <button
-                            id="button-basic3"
-                            dropdownToggle
-                            type="button"
-                            class="btn btn-primary dropdown-toggle"
-                            aria-controls="dropdown-basic"
-                        >
-                            {{ selectedFilter?.type }} <span class="caret"></span>
-                        </button>
-                        <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic3">
-                            <li *ngFor="let type of otherEntityType">
-                                <a
-                                    class="dropdown-item"
-                                    href="javascript:void(0)"
-                                    (click)="viewFilteredTxn('type', type?.value)"
-                                    >{{ type.label }}</a
-                                >
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div
-                    class="filter-row"
-                    *ngIf="filterParam.entityType === 'invoices' && selectedGst === GstReport.Gstr1"
-                >
-                    <div class="name">{{ getFilterTypeText() }}:</div>
-                    <div class="btn-group filter d-inline-block" dropdown>
-                        <button
-                            id="button-basic4"
-                            dropdownToggle
-                            type="button"
-                            class="btn btn-primary dropdown-toggle"
-                            aria-controls="dropdown-basic"
-                        >
-                            {{ selectedFilter?.type }} <span class="caret"></span>
-                        </button>
-                        <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic4">
-                            <li *ngFor="let type of invoiceType">
-                                <a
-                                    class="dropdown-item"
-                                    href="javascript:void(0)"
-                                    (click)="viewFilteredTxn('type', type?.value)"
-                                    >{{ type.label }}</a
-                                >
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                <div
-                    class="filter-row"
-                    *ngIf="filterParam.entityType === 'billsAndExpenses' && selectedGst == GstReport.Gstr2"
-                >
-                    <div class="name">{{ getFilterTypeText() }}:</div>
-
-                    <div class="btn-group filter d-inline-block" dropdown>
-                        <button
-                            id="button-basic5"
-                            dropdownToggle
-                            type="button"
-                            class="btn btn-primary dropdown-toggle"
-                            aria-controls="dropdown-basic"
-                        >
-                            {{ selectedFilter?.type }} <span class="caret"></span>
-                        </button>
-                        <ul *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic5">
-                            <li *ngFor="let type of gstr2InvoiceType">
-                                <a
-                                    class="dropdown-item"
-                                    href="javascript:void(0)"
-                                    (click)="viewFilteredTxn('type', type?.value)"
-                                    >{{ type.label }}</a
                                 >
                             </li>
                         </ul>

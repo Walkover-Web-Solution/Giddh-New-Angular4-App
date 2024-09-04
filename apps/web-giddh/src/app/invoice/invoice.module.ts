@@ -73,6 +73,9 @@ import { GenerateEWayBillModule } from './preview/models/generateEWayBill/genera
 import { InvoiceSettingModule } from './settings/invoice-setting.module';
 import { InvoiceGenerateModule } from './generate/invoice-generate.module';
 import { DeleteTemplateConfirmationModalModule } from './templates/edit-template/modals/confirmation-modal/confirmation.modal.module';
+import { MatDividerModule } from '@angular/material/divider';
+import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
+
 
 @NgModule({
     declarations: [
@@ -99,6 +102,7 @@ import { DeleteTemplateConfirmationModalModule } from './templates/edit-template
         DigitsOnlyModule,
         FormsModule,
         CommonModule,
+        MatDividerModule,
         TabsModule.forRoot(),
         ReactiveFormsModule,
         ModalModule.forRoot(),
@@ -156,7 +160,8 @@ import { DeleteTemplateConfirmationModalModule } from './templates/edit-template
         GenerateEWayBillModule,
         InvoiceSettingModule,
         InvoiceGenerateModule,
-        DeleteTemplateConfirmationModalModule
+        DeleteTemplateConfirmationModalModule,
+        FroalaTemplateEditorModule
     ],
     exports: [
         InvoiceRoutingModule,

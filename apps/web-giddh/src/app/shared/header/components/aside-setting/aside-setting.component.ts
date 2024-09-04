@@ -119,7 +119,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public closeAsidePaneIfMobile(event?: any): void {
         if (this.isMobileScreen && event && event.target.className !== "icon-bar") {
             this.closeAsideEvent.emit(event);
-        } else if (!this.isMobileScreen && event && event.target.className !== "icon-settings-cog" && !this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/user-details") && !this.router.url.includes("/pages/invoice/preview/settings/sales")) {
+        } else if (!this.isMobileScreen && event && event.target.className !== "icon-settings-cog" && !this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/invoice/preview/settings/sales")) {
             this.closeAsideEvent.emit(event);
         }
     }
@@ -155,13 +155,6 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
                         }
                     }
                     Object.keys(settingsPageTabs[organizationIndex]).forEach(key => {
-                        settingsPageTabs[organizationIndex][key] = settingsPageTabs[organizationIndex][key]?.map(value => {
-                            if (value?.link === '/pages/user-details/subscription' && (this.selectedCompany?.planVersion === 2 || this.selectedCompany?.subscription?.status === "expired")) {
-                                value.link = "/pages/subscription";
-                            }
-                            return value;
-                        });
-
                         this.settingsPageTabs[loop] = [];
                         this.settingsPageTabs[loop] = [...settingsPageTabs[organizationIndex][key]];
                         loop++;
@@ -179,7 +172,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @memberof AsideSettingComponent
      */
     public showHideSettingsHeading(url: string): void {
-        if (!url.includes("/pages/settings") && !url.includes("/pages/user-details")) {
+        if (!url.includes("/pages/settings")) {
             this.showSettingHeading = true;
         } else {
             this.showSettingHeading = false;

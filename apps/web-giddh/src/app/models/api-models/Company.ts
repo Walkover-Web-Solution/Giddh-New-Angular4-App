@@ -1,6 +1,7 @@
 import { ITax, ITaxAuthority, ITaxDetail } from '../interfaces/tax.interface';
 import { INameUniqueName } from './Inventory';
 import { OrganizationType } from '../user-login-state';
+import { API_COUNT_LIMIT } from '../../app.constant';
 
 export class CompanyRequest {
     public name: string;
@@ -87,6 +88,19 @@ export interface ParentBranch {
     uniqueName: string;
 }
 
+export class SearchCompanyRequest {
+    public q: any;
+    public count: number;
+    public page: number;
+    public totalItems?: number;
+    public totalPages?: number;
+    public loadMore?: boolean;
+    public subscriptionId: string;
+    constructor() {
+        this.count = API_COUNT_LIMIT;
+        this.page = 1;
+    }
+}
 export class CompanyResponse {
     public canUserSwitch: boolean;
     public companyIdentity: any[];
