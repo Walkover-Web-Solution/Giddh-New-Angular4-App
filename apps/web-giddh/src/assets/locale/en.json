@@ -373,6 +373,7 @@
     },
     "app_please_select": "Please Select",
     "app_company": "Company",
+    "app_companies": "Companies",
     "app_branch": "Branch",
     "app_tally": "Tally",
     "app_month_wise": "Month Wise",
@@ -743,6 +744,8 @@
     "app_tax_authority": "Tax Authority",
     "app_select_year": "Select Year",
     "app_select_month": "Select Month",
+    "app_user_settings": "User Settings",
+    "app_subscription": "Subscription",
     "app_custom_email": "Custom Email",
     "app_custom_email_template":"Custom Email Template"
 }
