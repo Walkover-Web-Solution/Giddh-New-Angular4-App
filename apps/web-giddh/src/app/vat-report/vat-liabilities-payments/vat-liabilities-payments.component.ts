@@ -53,7 +53,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public currentCompanyBranches$: Observable<any>;
     /** Holds true if multiple branches in the company */
     public isMultipleBranch: boolean;
-    /** Holds Liabilities-Payment Fromgroup  */
+    /** Holds Liabilities Payment Formgroup  */
     public searchForm: FormGroup;
     /** Holds table data source */
     public dataSource: any[] = [];
@@ -85,7 +85,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         private modalService: BsModalService,
         private router: Router
     ) {
-        this.initSearchForm();
+        this.initVatLiabilityPaymentForm();
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && !this.companyUniqueName) {
@@ -149,7 +149,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public getLiabilitiesPayment(): void {
         this.isLoading = true;
         let payload = this.generalService.getUserAgentData();
-        payload["Gov-Test-Scenario"] = "MULTIPLE_PAYMENTS_2018_19"
+        payload["Gov-Test-Scenario"] = "MULTIPLE_PAYMENTS_2018_19";
         this.vatService.getPaymentLiabilityList(payload, this.searchForm.value, this.isPaymentMode ).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response?.status === "success" && (this.isPaymentMode && response?.body?.payments || (!this.isPaymentMode) && response?.body?.liabilities)) {
@@ -169,7 +169,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     * @private
     * @memberof VatLiabilitiesPayments
     */
-    private initSearchForm(): void {
+    private initVatLiabilityPaymentForm(): void {
         this.searchForm = this.formBuilder.group({
             companyUniqueName: [""],
             branchUniqueName: [''],
@@ -302,7 +302,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     * @memberof VatLiabilitiesPayments
     */
     public getFormControl(control: string): any {
-        return this.searchForm.get(control)
+        return this.searchForm.get(control);
     }
 
     /**
@@ -314,6 +314,6 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.asideGstSidebarMenuState === 'out'
+        this.asideGstSidebarMenuState === 'out';
     }
 }
