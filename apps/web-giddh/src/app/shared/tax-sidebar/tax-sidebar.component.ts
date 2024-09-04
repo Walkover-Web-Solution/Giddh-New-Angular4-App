@@ -279,7 +279,6 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 label = this.localeData?.add_address;
             }
             this.taxTypeSidebarLabel = label;
-            console.log('Add Data', this.taxTypeSidebarLabel)
         }
     }
 }
