@@ -1946,7 +1946,6 @@ export class GeneralService {
         args["Gov-Client-Timezone"] = 'UTC' + this.getUserTimeZone();
         args["Gov-client-screens"] = this.getClientScreens();
         args["Gov-client-window-size"] = this.getClientWindowSize();
-        args["Gov-Test-Scenario"] = "MULTIPLE_PAYMENTS_2018_19"
         return args;
     }
 
