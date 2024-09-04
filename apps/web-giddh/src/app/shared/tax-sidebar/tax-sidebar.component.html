@@ -164,34 +164,49 @@
                             <span>{{ localeData?.liability_report }}</span>
                         </a>
                     </li>
-                    <li *ngIf="isUKCompany">
-                        <a
-                            href="javascript:;"
-                            class="d-block clearfix"
-                            routerLinkActive
-                            #vatReport="routerLinkActive"
-                            [class.active]="vatReport.isActive"
-                            [routerLink]="['/pages/vat-report/liabilities']"
-                            [routerLinkActiveOptions]="{ exact: false }"
-                        >
-                            <span><i class="icon-vat1"></i></span>
-                            <span>{{ localeData.vat_liabilities }}</span>
-                        </a>
-                    </li>
-                     <li *ngIf="isUKCompany">
-                        <a
-                            href="javascript:;"
-                            class="d-block clearfix"
-                            routerLinkActive
-                            #vatReport="routerLinkActive"
-                            [class.active]="vatReport.isActive"
-                            [routerLink]="['/pages/vat-report/payments']"
-                            [routerLinkActiveOptions]="{ exact: false }"
-                        >
-                            <span><i class="icon-vat1"></i></span>
-                            <span>{{ localeData.vat_payments }}</span>
-                        </a>
-                    </li>
+                    <ng-container *ngIf="showTaxMenus && isUKCompany">
+                        <li>
+                            <a
+                                href="javascript:;"
+                                class="d-block clearfix"
+                                routerLinkActive
+                                #vatLiability="routerLinkActive"
+                                [class.active]="vatLiability.isActive"
+                                [routerLink]="['/pages/vat-report/liabilities']"
+                                [routerLinkActiveOptions]="{ exact: true }"
+                            >
+                                <span><i class="icon-vat1"></i></span>
+                                <span>{{ localeData.vat_liabilities }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                href="javascript:;"
+                                class="d-block clearfix"
+                                routerLinkActive
+                                #vatPayment="routerLinkActive"
+                                [class.active]="vatPayment.isActive"
+                                [routerLink]="['/pages/vat-report/payments']"
+                                [routerLinkActiveOptions]="{ exact: true }"
+                            >
+                                <span><i class="icon-vat1"></i></span>
+                                <span>{{ localeData.vat_payments }}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a
+                                href="javascript:;"
+                                class="d-block clearfix"
+                                routerLinkActive
+                                #vatObligations="routerLinkActive"
+                                [class.active]="vatObligations.isActive"
+                                [routerLink]="['/pages/vat-report/obligations']"
+                            >
+                                <span><i class="icon-vat1"></i></span>
+                                <span>{{ localeData?.vat_obligations }}</span>
+                            </a>
+                        </li>
+                    </ng-container>
                     <li>
                         <a
                             href="javascript:;"
@@ -203,19 +218,6 @@
                         >
                             <span><i class="icon-warehouse1"></i></span>
                             <span>{{ taxTypeSidebarLabel }}</span>
-                        </a>
-                    </li>
-                    <li *ngIf="showTaxMenus && isUKCompany">
-                        <a
-                            href="javascript:;"
-                            class="d-block clearfix"
-                            routerLinkActive
-                            #vatObligations="routerLinkActive"
-                            [class.active]="vatObligations.isActive"
-                            [routerLink]="['/pages/vat-report/obligations']"
-                        >
-                            <span><i class="icon-vat1"></i></span>
-                            <span>{{ localeData?.vat_obligations }}</span>
                         </a>
                     </li>
                     <li *ngIf="showTaxMenus && (isZimbabweCompany || isKenyaCompany)">
