@@ -49,7 +49,8 @@
         "duration": "Duration (DD/HH/MM/SS)",
         "browser_agent": "Browser Agent",
         "current": "Current",
-        "delete_all_session": "Are you sure you want to delete all the sessions?"
+        "delete_all_sessions": "Are you sure you want to delete all the sessions?",
+        "delete_single_session": "Are you sure you want to delete this session?"
     },
     "subscription": {
         "tab_heading": "Subscription",
