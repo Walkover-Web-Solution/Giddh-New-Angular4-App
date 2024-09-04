@@ -120,6 +120,9 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 } else if (this.salesTaxSupportedCountries.includes(activeCompany.countryV2?.alpha2CountryCode)) {
                     this.showSalesTaxMenus = true;
                 }
+                if( this.localeData) {
+                    this.translationComplete(true);
+                }
             }
             this.changeDetectionRef.detectChanges();
         });
@@ -276,6 +279,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 label = this.localeData?.add_address;
             }
             this.taxTypeSidebarLabel = label;
+            console.log('Add Data', this.taxTypeSidebarLabel)
         }
     }
 }
