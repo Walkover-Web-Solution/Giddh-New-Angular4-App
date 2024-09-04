@@ -379,13 +379,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 this.loadPaymentData();
             }
         };
-
         window.addEventListener('message', event => {
             if (this.router.url !== '/pages/settings/integration/payment') {
                 if (event && event.data === "GOCARDLESS") {
                     this.createEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                         if (response?.reference) {
                             this.componentStore.getRequisition(response.reference);
+                            this.loadPaymentData();
                         }
                     });
                 }
@@ -393,7 +393,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
 
         this.deleteEndUseAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.reference) {
+            if (response) {
                 this.loadPaymentData();
             }
         });
