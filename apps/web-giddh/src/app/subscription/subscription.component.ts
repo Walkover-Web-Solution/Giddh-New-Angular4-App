@@ -323,7 +323,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public clearAllSession(): void {
-
         const dialogRef = this.deleteConfirmationDialog(true);
         dialogRef.afterClosed().pipe().subscribe(response => {
             if (response === this.commonLocaleData?.app_yes) {
