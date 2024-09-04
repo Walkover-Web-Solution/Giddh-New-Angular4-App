@@ -23,5 +23,6 @@
     "gmail_account_added": "Gmail account added successfully.",
     "enable_voucher_download": "Enable Voucher Download",
     "apply_purchase_round_off": "Apply round off on purchase voucher",
-    "generate_auto_purchase_number":"Allow system generated number for Bill and Debit note"
+    "generate_auto_purchase_number":"Allow system generated number for Bill and Debit note",
+    "auto_email_generate": "Auto mail when generated"
 }

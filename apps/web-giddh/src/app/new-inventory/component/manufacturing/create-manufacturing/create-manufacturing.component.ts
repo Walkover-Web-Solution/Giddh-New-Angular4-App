@@ -210,7 +210,8 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.warehouse.warehouses), takeUntil(this.destroyed$)).subscribe((warehouses: any) => {
             if (warehouses?.results?.length) {
                 this.warehouses = [];
-                warehouses?.results?.forEach(warehouse => {
+                const warehouseResults = warehouses?.results?.filter(warehouse => !warehouse.isArchived);
+                warehouseResults?.forEach(warehouse => {
                     this.warehouses.push({ label: warehouse?.name, value: warehouse?.uniqueName });
                 });
                 this.selectedWarehouseName = this.warehouses[0].label;

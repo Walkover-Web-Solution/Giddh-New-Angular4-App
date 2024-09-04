@@ -12,7 +12,7 @@ import { Store } from "@ngrx/store";
 export interface CompanyListState {
     companyListInProgress: boolean;
     companyList: any
-    archiveCompanySuccess: boolean;
+    archiveCompanySuccess: any;
 }
 
 export const DEFAULT_COMPANY_LIST_STATE: CompanyListState = {
@@ -81,35 +81,38 @@ export class CompanyListDialogComponentStore extends ComponentStore<CompanyListS
    *
    * @memberof CompanyListDialogComponentStore
    */
-    readonly archiveCompany = this.effect((data: Observable<any>) => {
-        return data.pipe(
-            switchMap((req) => {
-                return this.settingsProfile.PatchProfile('', req.companyUniqueName, req.status).pipe(
-                    tapResponse(
-                        (res: BaseResponse<any, any>) => {
-                            if (res?.status === 'success') {
-                                this.toasterService.showSnackBar('success', 'Company ' + res?.body?.archiveStatus + ' successfully');
-                                return this.patchState({
-                                    archiveCompanySuccess: true
-                                });
-                            } else {
-                                if (res.message) {
-                                    this.toasterService.showSnackBar('error', res.message);
+        readonly archiveCompany = this.effect((data: Observable<any>) => {
+            return data.pipe(
+                switchMap((req) => {
+                    this.patchState({ archiveCompanySuccess: null });
+                    return this.subscriptionService.setArchiveUnarchiveCompany(req).pipe(
+                        tapResponse(
+                            (res: BaseResponse<any, any>) => {
+                                if (res?.status === 'success') {
+                                    return this.patchState({
+                                        archiveCompanySuccess: res?.body ?? []
+                                    });
+                                } else {
+                                    if (res.message) {
+                                        this.toasterService.showSnackBar('error', res.message);
+                                    }
+                                    return this.patchState({
+                                        archiveCompanySuccess: null
+                                    });
                                 }
+                            },
+                            (error: any) => {
+                                this.toasterService.showSnackBar("error", error);
                                 return this.patchState({
-                                    archiveCompanySuccess: false
+                                    archiveCompanySuccess: null
                                 });
                             }
-                        },
-                        (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
-                        }
-                    ),
-                    catchError((err) => EMPTY)
-                );
-            })
-        );
-    });
+                        ),
+                        catchError((err) => EMPTY)
+                    );
+                })
+            );
+        });
 
 
     /**
