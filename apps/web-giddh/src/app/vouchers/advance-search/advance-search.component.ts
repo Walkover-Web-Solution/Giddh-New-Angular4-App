@@ -337,8 +337,8 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
         };
 
         // Take one control from range date i.e from and to
-        const allDateFromControlName: string[] = ['voucherDate', 'dueDate', 'expireFrom', 'dueFrom'];
-        allDateFromControlName.forEach(controlName => {
+        const allDateFormControlName: string[] = ['voucherDate', 'dueDate', 'expireFrom', 'dueFrom'];
+        allDateFormControlName.forEach(controlName => {
             switch (this.type) {
                 case 'drcr':
                 case 'invoice':

@@ -279,7 +279,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private currentVoucher: any = null;
     /** Holds Advance Search Filter Temp Keys to show label on filter dialog */
     private advanceSearchTempKeyObj: any = {};
-    /** Holds Currently used Voucher */
+    /** Holds Id of active search input field */
     public activeSearchField: any = null;
 
     constructor(
@@ -522,7 +522,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
 
         this.voucherNumberInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
-
             if (search !== null && search !== undefined) {
                 if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                     if (this.voucherType === VoucherTypeEnum.generateProforma) {
