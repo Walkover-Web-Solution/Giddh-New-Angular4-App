@@ -177,7 +177,7 @@ export class VatService {
             }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
-        /**
+    /**
      * This will get VAT Liabilities Payment records
      *
      * @param {string} companyUniqueName
@@ -186,18 +186,17 @@ export class VatService {
      * @returns
      * @memberof VatService
      */
-    public getPaymentLiabilityList(companyUniqueName: string, model: any , isPaymentMode: boolean): Observable<BaseResponse<any, any>> {
+    public getPaymentLiabilityList(payload: any, model: any , isPaymentMode: boolean): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + (isPaymentMode ? VAT_API.PAYMENTS : VAT_API.LIABILITIES);
-        url = url?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName));
+        url = url?.replace(':companyUniqueName', encodeURIComponent(model?.companyUniqueName));
         url = url?.replace(':taxNumber', encodeURIComponent(model?.taxNumber));
         url = url?.replace(':from', encodeURIComponent(model?.from));
         url = url?.replace(':to', encodeURIComponent(model?.to));
-        let payload = this.generalService.getUserAgentData();
         return this.http.post(url, payload).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
                 return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, companyUniqueName)));
+            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
     }
 
 

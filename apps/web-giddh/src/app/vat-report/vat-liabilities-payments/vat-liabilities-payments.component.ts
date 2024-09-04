@@ -85,14 +85,15 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         private modalService: BsModalService,
         private router: Router
     ) {
+        this.initSearchForm();
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && !this.companyUniqueName) {
                 this.companyUniqueName = activeCompany.uniqueName;
                 this.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
+                this.getFormControl('companyUniqueName').patchValue(activeCompany.uniqueName);
             }
         });
-        this.vatSearchForm();
     }
 
     /**
@@ -130,13 +131,13 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
                     } else {
                         this.isMultipleBranch = false;
                         if (response.uniqueName) {
-                            this.getFormControl('branchUniqueName').setValue(response.uniqueName);
+                            this.getFormControl('branchUniqueName').patchValue(response.uniqueName);
                         }
                     }
                 }
             });
         } else {
-            this.getFormControl('branchUniqueName').setValue(this.generalService.currentBranchUniqueName);
+            this.getFormControl('branchUniqueName').patchValue(this.generalService.currentBranchUniqueName);
         }
     }
 
@@ -147,7 +148,9 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     */
     public getLiabilitiesPayment(): void {
         this.isLoading = true;
-        this.vatService.getPaymentLiabilityList(this.companyUniqueName, this.searchForm.value, this.isPaymentMode ).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        let payload = this.generalService.getUserAgentData();
+        payload["Gov-Test-Scenario"] = "MULTIPLE_PAYMENTS_2018_19"
+        this.vatService.getPaymentLiabilityList(payload, this.searchForm.value, this.isPaymentMode ).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;
             if (response?.status === "success" && (this.isPaymentMode && response?.body?.payments || (!this.isPaymentMode) && response?.body?.liabilities)) {
                 this.dataSource = this.isPaymentMode ? response.body.payments : response.body.liabilities;
@@ -166,8 +169,9 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     * @private
     * @memberof VatLiabilitiesPayments
     */
-    private vatSearchForm(): void {
+    private initSearchForm(): void {
         this.searchForm = this.formBuilder.group({
+            companyUniqueName: [""],
             branchUniqueName: [''],
             taxNumber: [''],
             from: [''],
@@ -210,8 +214,8 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
             if (dateObj) {
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
-                this.getFormControl('from').setValue(dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT));
-                this.getFormControl('to').setValue(dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT));
+                this.getFormControl('from').patchValue(dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT));
+                this.getFormControl('to').patchValue(dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT));
                 if (this.getFormControl('taxNumber').value) {
                     this.getLiabilitiesPayment();
                 }
@@ -285,8 +289,8 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         if (value && value.startDate && value.endDate) {
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
-            this.getFormControl('from').setValue(dayjs(value.startDate).format(GIDDH_DATE_FORMAT));
-            this.getFormControl('to').setValue(dayjs(value.endDate).format(GIDDH_DATE_FORMAT));
+            this.getFormControl('from').patchValue(dayjs(value.startDate).format(GIDDH_DATE_FORMAT));
+            this.getFormControl('to').patchValue(dayjs(value.endDate).format(GIDDH_DATE_FORMAT));
         }
     }
 
