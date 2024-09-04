@@ -35,7 +35,7 @@ export class ConvertBillDialogComponent implements OnInit {
             let formArray = this.convertToBillForm.get('purchaseOrders') as FormArray;
             this.vouchers.forEach(voucher => {
                 formArray.push(this.getPurchaseOrderFormGroup(voucher));
-            });
+            });  
         }
     }
 
@@ -62,7 +62,7 @@ export class ConvertBillDialogComponent implements OnInit {
     private getPurchaseOrderFormGroup(voucher?: any): FormGroup {
         return this.formBuilder.group({
             orderNumber: [voucher?.voucherNumber ?? ''],
-            purchaseNumber: [voucher?.purchaseNumber ?? null]
+            purchaseNumber: ['']
         });
     }
 

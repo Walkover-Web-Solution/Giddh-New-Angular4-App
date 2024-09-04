@@ -324,7 +324,7 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
                 this.searchForm.get(fieldName)?.patchValue(
                     typeof fieldValue === 'object'
                         ? dayjs(fieldValue).format(GIDDH_DATE_FORMAT)
-                        : dayjs(fieldValue, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT)
+                        : this.advanceFilters[(fieldName?.indexOf('From') > -1 ? 'from' : 'to')]
                 );
             }
         };
@@ -336,7 +336,9 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
             });
         };
 
-        allDateControlName.forEach(controlName => {
+        // Take one control from range date i.e from and to
+        const allDateFormControlName: string[] = ['voucherDate', 'dueDate', 'expireFrom', 'dueFrom'];
+        allDateFormControlName.forEach(controlName => {
             switch (this.type) {
                 case 'drcr':
                 case 'invoice':

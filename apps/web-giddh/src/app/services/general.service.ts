@@ -2075,8 +2075,8 @@ export class GeneralService {
             text: commonLocaleData?.app_no
         }];
         const headerCssClass: string = 'd-inline-block mr-1';
-        const messageCssClass: string = 'mr-b1 text-light';
-        const footerCssClass: string = 'mr-b1';
+        const messageCssClass: string = 'mr-b1';
+        const footerCssClass: string = 'mr-b1 text-light';
         return {
             headerText,
             headerCssClass,

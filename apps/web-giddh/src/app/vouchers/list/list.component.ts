@@ -155,13 +155,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     /** Holds show Purchase Order Number Search input visibility status */
     public showPurchaseOrderNumberSearch: boolean = false;
     /** Holds voucher Number form control */
-    public voucherNumberInput: FormControl = new FormControl();
+    public voucherNumberInput: FormControl = new FormControl(null);
     /** Holds account Unique Name form control */
-    public accountUniqueNameInput: FormControl = new FormControl();
+    public accountUniqueNameInput: FormControl = new FormControl(null);
     /** Holds Purchase Order Unique Name form control */
-    public purchaseOrderUniqueNameInput: FormControl = new FormControl();
-    /** Holds searched Name form control */
-    public searchedName: FormControl = new FormControl();
+    public purchaseOrderUniqueNameInput: FormControl = new FormControl(null);
     /** Holds true if searching is in progress */
     public isSearching: boolean = false;
     /** This will hold local JSON data */
@@ -281,6 +279,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private currentVoucher: any = null;
     /** Holds Advance Search Filter Temp Keys to show label on filter dialog */
     private advanceSearchTempKeyObj: any = {};
+    /** Holds Id of active search input field */
+    public activeSearchField: any = null;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -315,20 +315,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public ngOnInit(): void {
-        this.setInitialAdvanceFilter();
+        this.setInitialAdvanceFilter(true);
         this.getInvoiceSettings();
-
-
 
         this.activatedRoute.params.pipe(delay(0), takeUntil(this.destroyed$)).subscribe(params => {
             if (params) {
                 this.urlVoucherType = params?.voucherType;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 this.activeModule = params.module;
-                this.advanceFilters.type = this.voucherType;
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
-                this.setInitialAdvanceFilter();
+                this.setInitialAdvanceFilter(true);
 
                 this.activeTabGroup = this.tabsGroups.findIndex(group => group.includes(this.voucherType));
 
@@ -344,6 +341,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             }
         });
+
+        this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
 
         /** Universal date */
         this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -536,8 +535,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.advanceFilters.q = search;
                 }
                 this.isSearching = true;
-                this.advanceFiltersApplied = search !== "";
-                this.isSearching = search !== "";
+                this.checkSearchingIsEmpty();
                 this.getVouchers(this.isUniversalDateApplicable);
             }
         });
@@ -550,8 +548,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.advanceFilters.q = search;
                 }
                 this.isSearching = true;
-                this.advanceFiltersApplied = search !== "";
-                this.isSearching = search !== "";
+                this.checkSearchingIsEmpty();
                 this.getVouchers(this.isUniversalDateApplicable);
             }
         });
@@ -562,8 +559,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     this.advanceFilters.purchaseOrderNumber = search;
                 }
                 this.isSearching = true;
-                this.advanceFiltersApplied = search !== "";
-                this.isSearching = search !== "";
+                this.checkSearchingIsEmpty();
                 this.getVouchers(this.isUniversalDateApplicable);
             }
         });
@@ -589,6 +585,25 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Check Searching is empty in all search fields
+     *
+     * @private
+     * @memberof VoucherListComponent
+     */
+    private checkSearchingIsEmpty(): void {
+        let seachingFieldIsEmpty: boolean = false;
+
+        if (this.voucherType === VoucherTypeEnum.purchase) {
+            seachingFieldIsEmpty = this.purchaseOrderUniqueNameInput.value === "" && this.accountUniqueNameInput.value === "" && this.voucherNumberInput.value === "";
+        } else {
+            seachingFieldIsEmpty = this.accountUniqueNameInput.value === "" && this.voucherNumberInput.value === "";
+        }
+
+        this.advanceFiltersApplied = !seachingFieldIsEmpty;
+        this.isSearching = !seachingFieldIsEmpty;
+    }
+
+    /**
      * Handle Get All Voucher Response
      * 
      * @private
@@ -596,7 +611,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     private handleGetAllVoucherResponse(response: any): void {
-        if (response && response?.voucherType === this.voucherType) {
+        if (response && response.voucherType === this.voucherType) {
             this.dataSource = [];
             this.totalResults = response?.totalItems;
             response.items?.forEach((item: any, index: number) => {
@@ -651,6 +666,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
                 this.dataSource.push(item);
             });
+            // When user search in table header then after api call focus on respective search field
+            if (this.activeSearchField) {
+                setTimeout(() => {
+                    document.getElementById(this.activeSearchField).focus();
+                }, 200);
+            }
         }
     }
 
@@ -1210,8 +1231,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public toggleSearch(event: any, fieldName: string, voucherType: string): void {
         switch (voucherType) {
             case VoucherTypeEnum.sales:
-                this.showCustomerSearch = false;
-                this.showInvoiceNoSearch = false;
                 if (fieldName === "accountUniqueName") {
                     this.showCustomerSearch = true;
                 } else if (fieldName === "invoiceNumber") {
@@ -1219,8 +1238,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
                 break;
             case VoucherTypeEnum.estimate:
-                this.showCustomerSearch = false;
-                this.showInvoiceNoSearch = false;
                 if (fieldName === "accountUniqueName") {
                     this.showCustomerSearch = true;
                 } else if (fieldName === "estimateNumber") {
@@ -1228,8 +1245,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
                 break;
             case VoucherTypeEnum.proforma:
-                this.showCustomerSearch = false;
-                this.showInvoiceNoSearch = false;
                 if (fieldName === "accountUniqueName") {
                     this.showCustomerSearch = true;
                 } else if (fieldName === "proformaNumber") {
@@ -1237,8 +1252,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
                 break;
             case VoucherTypeEnum.purchaseOrder:
-                this.showCustomerSearch = false;
-                this.showInvoiceNoSearch = false;
                 if (fieldName === "accountUniqueName") {
                     this.showCustomerSearch = true;
                 } else if (fieldName === "purchaseOrderNumber") {
@@ -1246,8 +1259,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
                 break;
             case VoucherTypeEnum.receipt:
-                this.showCustomerSearch = false;
-                this.showInvoiceNoSearch = false;
                 if (fieldName === "accountUniqueName") {
                     this.showCustomerSearch = true;
                 } else if (fieldName === "receiptNumber") {
@@ -1255,8 +1266,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
                 break;
             case VoucherTypeEnum.payment:
-                this.showCustomerSearch = false;
-                this.showInvoiceNoSearch = false;
                 if (fieldName === "accountUniqueName") {
                     this.showCustomerSearch = true;
                 } else if (fieldName === "paymentNumber") {
@@ -1264,8 +1273,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
                 break;
             case VoucherTypeEnum.creditNote:
-                this.showCustomerSearch = false;
-                this.showInvoiceNoSearch = false;
                 if (fieldName === "accountUniqueName") {
                     this.showCustomerSearch = true;
                 } else if (fieldName === "creditNoteNumber") {
@@ -1273,8 +1280,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
                 break;
             case VoucherTypeEnum.debitNote:
-                this.showCustomerSearch = false;
-                this.showInvoiceNoSearch = false;
                 if (fieldName === "accountUniqueName") {
                     this.showCustomerSearch = true;
                 } else if (fieldName === "debitNoteNumber") {
@@ -1282,9 +1287,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
                 break;
             case VoucherTypeEnum.purchase:
-                this.showCustomerSearch = false;
-                this.showInvoiceNoSearch = false;
-                this.showPurchaseOrderNumberSearch = false;
                 if (fieldName === "accountUniqueName") {
                     this.showCustomerSearch = true;
                 } else if (fieldName === "billNumber") {
@@ -1415,7 +1417,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         let advanceFilters = {
             sortBy: this.advanceFilters.sortBy,
             sort: this.advanceFilters.sort,
-            type: this.advanceFilters.type,
             from: this.advanceFilters.from,
             to: this.advanceFilters.to,
             page: 1,
@@ -1426,7 +1427,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.advanceFilters = event;
         this.advanceFilters.sortBy = advanceFilters.sortBy;
         this.advanceFilters.sort = advanceFilters.sort;
-        this.advanceFilters.type = advanceFilters.type;
         this.advanceFilters.from = advanceFilters.from;
         this.advanceFilters.to = advanceFilters.to;
         this.advanceFilters.page = advanceFilters.page;
@@ -1438,7 +1438,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             delete this.advanceFilters[keys];
         });
         this.advanceFilters = this.vouchersUtilityService.cleanObject(this.advanceFilters);
-
         this.getVouchers(false);
         this.getVoucherBalances();
     }
@@ -1679,27 +1678,29 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      *
      * @memberof VoucherListComponent
      */
-    public setInitialAdvanceFilter(): void {
+    public setInitialAdvanceFilter(onlyResetValue: boolean = false): void {
         this.advanceFilters = {
-            sortBy: '', // need to set voucherDate
-            sort: 'desc',
-            type: 'sales',
+            sortBy: '',
+            sort: '',
             from: dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT) ?? '',
             to: dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT) ?? '',
             page: 1,
             count: PAGINATION_LIMIT,
             q: ''
         };
-        this.voucherNumberInput.patchValue("");
-        this.accountUniqueNameInput.patchValue("");
-        this.purchaseOrderUniqueNameInput.patchValue("");
+        this.voucherNumberInput.patchValue(null, { emitEvent: false });
+        this.accountUniqueNameInput.patchValue(null, { emitEvent: false });
+        this.purchaseOrderUniqueNameInput.patchValue(null, { emitEvent: false });
         this.showCustomerSearch = false;
         this.showInvoiceNoSearch = false;
         this.showPurchaseOrderNumberSearch = false;
         this.advanceFiltersApplied = false;
         this.isSearching = false;
         this.advanceSearchTempKeyObj = {};
-        this.getVouchers(false);
+        this.activeSearchField = null;
+        if (!onlyResetValue) {
+            this.getVouchers(false);
+        }
     }
 
     /**
