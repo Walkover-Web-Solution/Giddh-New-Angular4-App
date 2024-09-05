@@ -2044,16 +2044,13 @@ export class GeneralService {
     }
 
     /**
-     * This will use for confirmation delete vocher
+     *  Delete sessions confirmation dialog
      *
-     * @param {string} headerText
-     * @param {string} messageText
-     * @param {string} footerText
-     * @param {*} commonLocaleData
-     * @return {*}  {ConfirmationModalConfiguration}
-     * @memberof GeneralService
+     * @param confirmationMessage
+     * @param commonLocaleData
+     * @returns
      */
-    public getVoucherDeleteConfiguration(headerText: string, messageText: string, footerText: string, commonLocaleData: any): ConfirmationModalConfiguration {
+    public deleteConfirmation(confirmationMessage: any, commonLocaleData: any): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [{
             text: commonLocaleData?.app_yes,
             color: 'primary'
@@ -2061,17 +2058,17 @@ export class GeneralService {
         {
             text: commonLocaleData?.app_no
         }];
+        const headerText: string = commonLocaleData?.app_confirmation;
         const headerCssClass: string = 'd-inline-block mr-1';
-        const messageCssClass: string = 'mr-b1 text-light';
-        const footerCssClass: string = 'mr-b1';
+        const messageCssClass: string = 'mr-b1';
+        const messageText: string = confirmationMessage;
         return {
+            buttons,
             headerText,
             headerCssClass,
-            messageText: messageText,
             messageCssClass,
-            footerText: footerText,
-            footerCssClass,
-            buttons
+            messageText
         };
     }
 }
+
