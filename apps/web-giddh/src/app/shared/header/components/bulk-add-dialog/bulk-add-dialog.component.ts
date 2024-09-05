@@ -50,14 +50,10 @@ export class BulkAddDialogComponent implements OnInit {
      *
      * @memberof BulkAddDialogComponent
      */
-    ngOnInit(): void {
+    public ngOnInit(): void {
         console.log('Data Value', this.data);
         this.initializeNewForm();
         this.getCompanyBranches();
-        // if (this.data) {
-        //     this.existingFormData(this.data);
-        // }
-
         this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response;
@@ -72,6 +68,10 @@ export class BulkAddDialogComponent implements OnInit {
                         }
                     ));
                 });
+                if (this.data?.saveBulkData?.length) {
+                    // Then, merge the data by matching uniqueName
+                    this.mergeFormArrayWithData(this.data?.saveBulkData);
+                }
                 this.company.isActive = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
                 if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
                     // Find the current checked out branch
@@ -84,11 +84,25 @@ export class BulkAddDialogComponent implements OnInit {
         });
     }
 
-    private existingFormData(values: any): void {
-        const formArray = this.bulkAddAccountForm.get('customFields') as FormArray;
-        formArray.clear();
-        values.forEach((item: any) => {
-            formArray.push(this.openingBulkGet(item));
+    /**
+     * This will be use for merge form array data with temporary save bulk data
+     *
+     * @param {any[]} branchData
+     * @memberof BulkAddDialogComponent
+     */
+    public mergeFormArrayWithData(branchData: any[]) {
+        const branchFormArray = this.bulkAddAccountForm.get('customFields') as FormArray;
+        branchFormArray.controls.forEach((formGroup) => {
+            const formArrayBranch = formGroup.get('branch')?.value;
+            const matchingBranch = branchData.find(branch => branch.branch.uniqueName === formArrayBranch.uniqueName);
+
+            if (matchingBranch) {
+                formGroup.patchValue({
+                    openingBalance: matchingBranch.openingBalance,
+                    foreignOpeningBalance: matchingBranch.foreignOpeningBalance,
+                    openingBalanceType: matchingBranch.openingBalanceType
+                });
+            }
         });
     }
 
