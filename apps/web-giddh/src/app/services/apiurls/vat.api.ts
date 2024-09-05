@@ -13,5 +13,7 @@ export const VAT_API = {
     SAVE_AUTHORIZATION_CODE: 'company/:companyUniqueName/save-authorization-code',
     VAT_OBLIGATIONS: 'company/:companyUniqueName/uk/vat-obligations?branchUniqueName=:branchUniqueName&taxNumber=:taxNumber&status=:status&from=:from&to=:to',
     VIEW_VAT_RETURN: 'company/:companyUniqueName/uk/view-vat-return?taxNumber=:taxNumber&periodKey=:periodKey&from=:from&to=:to',
-    SUBMIT_VAT_RETURN: 'company/:companyUniqueName/uk/submit-vat-return?taxNumber=:taxNumber&periodKey=:periodKey&from=:from&to=:to&branchUniqueName=:branchUniqueName'
+    SUBMIT_VAT_RETURN: 'company/:companyUniqueName/uk/submit-vat-return?taxNumber=:taxNumber&periodKey=:periodKey&from=:from&to=:to&branchUniqueName=:branchUniqueName',
+    PAYMENTS: 'company/:companyUniqueName/uk/retrieve-vat-payments?&from=:from&to=:to&taxNumber=:taxNumber',
+    LIABILITIES:'company/:companyUniqueName/uk/retrieve-vat-liabilities?taxNumber=:taxNumber&from=:from&to=:to'
 };
