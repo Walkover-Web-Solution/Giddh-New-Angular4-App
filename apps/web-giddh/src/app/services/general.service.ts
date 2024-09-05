@@ -2049,7 +2049,7 @@ export class GeneralService {
      * @param commonLocaleData
      * @returns
      */
-    public deleteConfirmation(confirmationMessage: any, commonLocaleData: any): ConfirmationModalConfiguration {
+    public deleteConfiguration(confirmationMessage: any, commonLocaleData: any): ConfirmationModalConfiguration {
         const buttons: Array<ConfirmationModalButton> = [{
             text: commonLocaleData?.app_yes,
             color: 'primary'

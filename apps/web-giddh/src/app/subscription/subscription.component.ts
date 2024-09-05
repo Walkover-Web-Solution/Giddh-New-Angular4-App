@@ -320,7 +320,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             panelClass: ['mat-dialog-md'],
             data: {
-                configuration: this.generalService.deleteConfirmation(this.localeData?.session?.delete_single_session, this.commonLocaleData)
+                configuration: this.generalService.deleteConfiguration(this.localeData?.session?.delete_single_session, this.commonLocaleData)
             }
         });
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
@@ -339,7 +339,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             panelClass: ['mat-dialog-md'],
             data: {
-                configuration: this.generalService.deleteConfirmation(this.localeData?.session?.delete_all_sessions, this.commonLocaleData)
+                configuration: this.generalService.deleteConfiguration(this.localeData?.session?.delete_all_sessions, this.commonLocaleData)
             }
         });
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
