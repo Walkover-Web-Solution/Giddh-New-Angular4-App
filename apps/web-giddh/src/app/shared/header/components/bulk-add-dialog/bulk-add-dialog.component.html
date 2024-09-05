@@ -71,8 +71,11 @@
                                         [ngClass]="{
                                             'active-toggle-btn':
                                                 item.get('openingBalanceType')?.value === 'DEBIT' &&
-                                                item.get('openingBalance')?.value > 0,
-                                            'cp': item.get('openingBalance')?.value > 0
+                                                (item.get('openingBalance')?.value > 0 ||
+                                                    item.get('foreignOpeningBalance')?.value > 0),
+                                            'cp':
+                                                item.get('openingBalance')?.value > 0 ||
+                                                item.get('foreignOpeningBalance')?.value > 0
                                         }"
                                     >
                                         {{ commonLocaleData?.app_dr?.toUpperCase() }}
@@ -83,8 +86,11 @@
                                         [ngClass]="{
                                             'active-toggle-btn':
                                                 item.get('openingBalanceType')?.value === 'CREDIT' &&
-                                                item.get('openingBalance')?.value > 0,
-                                            'cp': item.get('openingBalance')?.value > 0
+                                                (item.get('openingBalance')?.value > 0 ||
+                                                    item.get('foreignOpeningBalance')?.value > 0),
+                                            'cp':
+                                                item.get('openingBalance')?.value > 0 ||
+                                                item.get('foreignOpeningBalance')?.value > 0
                                         }"
                                     >
                                         {{ commonLocaleData?.app_cr?.toUpperCase() }}
