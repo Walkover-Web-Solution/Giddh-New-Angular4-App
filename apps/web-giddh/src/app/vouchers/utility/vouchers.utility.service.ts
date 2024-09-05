@@ -11,6 +11,7 @@ import { ReceiptItem } from "../../models/api-models/recipt";
 @Injectable()
 export class VouchersUtilityService {
     public voucherTypes: any[] = [VoucherTypeEnum.cashCreditNote, VoucherTypeEnum.cash, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.cashBill];
+    public lastVouchers: any[] = [];
 
     public showTaxTypeByCountry(countryCode: string, companyCountryCode: string): TaxType {
         if (companyCountryCode === countryCode) {

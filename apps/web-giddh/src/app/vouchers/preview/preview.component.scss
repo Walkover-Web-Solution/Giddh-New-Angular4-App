@@ -1,6 +1,4 @@
 .search-field {
-    width: 70%;
-
     i {
         top: 10px;
         left: 10px;
@@ -13,30 +11,29 @@
 
 .invoice-preview-wrapper {
     display: flex;
+    height: calc(100vh - (var(--header-height) + 30px));
 
     .preview-list {
         width: 35%;
-        box-shadow: 3px 3px 6px var(--color-primary-common-box-shadow);
+      .list-viewport {
+            height: calc(100vh - 185px);
+        }
 
         .single-invoice-detail {
-            &:hover {
-                background-color: var(--color-primary-invoice-preview-details-left-sidebar-list-background-active-hover);
-            }
-
+            cursor: pointer;
+            &:hover,
             &.active {
                 background-color: var(--color-primary-invoice-preview-details-left-sidebar-list-background-active-hover);
             }
-        }
-
-        .invoice-btn {
-            width: 30%;
         }
     }
 
     .preview-content {
         width: 65%;
+        overflow-y: auto;
 
         .preview-header {
+            background-color: var(--color-primary-invoice-preview-details-background);
             .action-btn {
                 column-gap: 3px;
             }
@@ -61,32 +58,18 @@
     }
 }
 
-// responsive
-@media screen and (max-width: 1440px) {
-    .search-field {
-        width: 60%;
-    }
-
-    .invoice-preview-wrapper {
-        .preview-list {
-            .invoice-btn {
-                width: 44%;
-            }
-        }
-    }
-}
 @media screen and (max-width: 1199px) {
     .list-responsive {
         flex-wrap: wrap;
     }
-    .search-field {
-        width: 100%;
-    }
-    .invoice-preview-wrapper {
-        .preview-list {
-            .invoice-btn {
-                width: auto;
-            }
-        }
-    }
+    // .search-field {
+    //     width: 100%;
+    // }
+    // .invoice-preview-wrapper {
+    //     .preview-list {
+    //         .invoice-btn {
+    //             width: auto;
+    //         }
+    //     }
+    // }
 }

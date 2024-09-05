@@ -663,7 +663,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         item.dueDays = null;
                     }
                 }
-
                 this.dataSource.push(item);
             });
             // When user search in table header then after api call focus on respective search field
@@ -673,6 +672,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }, 200);
             }
         }
+    }
+
+    /**
+     * Set all invoice to service varibale and redirect to view page
+     *
+     * @memberof VoucherListComponent
+     */
+    public showVoucherPreview(voucherUniqueName: string): void {
+        this.vouchersUtilityService.lastVouchers = this.dataSource;
+        this.router.navigate([`/pages/vouchers/view/${this.voucherType}/${voucherUniqueName}`]);
     }
 
     /**

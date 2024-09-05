@@ -1,177 +1,226 @@
-<ng-container>
+<ng-container 
+    appTranslate
+    [file]="'vouchers/preview'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <div class="invoice-preview-wrapper">
         <div class="preview-list h-100 pd-b15">
-            <div class="d-flex align-items-center column-gap5 justify-content-between pd-15 w-100 list-responsive row-gap1">
-                <div class="position-relative search-field">
-                    <text-field class="width-inherit" [type]="'text'" [cssClass]="'form-control pl-3'"
-                        [placeholder]="'Search'">
+            <div class="d-flex align-items-center column-gap5 pd-15 w-100 list-responsive row-gap1">
+                <div class="position-relative search-field flex-grow-1">
+                    <text-field
+                        class="width-inherit"
+                        [type]="'text'"
+                        [cssClass]="'form-control pl-3'"
+                        [placeholder]="'Search'"
+                        [formControl]="search"
+                    >
                     </text-field>
                     <i class="icon-search position-absolute"></i>
                 </div>
-                <button mat-stroked-button color="primary" [matMenuTriggerFor]="newInvoice" class="invoice-btn">
-                    <span>+ New Invoice</span>
+                <button
+                    mat-stroked-button
+                    color="primary"
+                    [matMenuTriggerFor]="newInvoice"
+                    class="invoice-btn width-150"
+                >
+                    <span>{{ localeData?.new_invoice }}</span>
                     <i class="icon-arrow-down icon-font-11 ml-2"></i>
                 </button>
-                <mat-menu #newInvoice="matMenu">
-                    <button mat-menu-item>Cash Invoice</button>
-                    <button mat-menu-item>Sales Invoice</button>
+                <mat-menu #newInvoice="matMenu" class="width-150">
+                    <button mat-menu-item>{{ localeData?.cash_invoice }}</button>
+                    <button mat-menu-item>{{ localeData?.sales_invoice }}</button>
                 </mat-menu>
             </div>
             <div class="mat-grid-wrapper">
                 <div class="mat-list-wrap">
                     <mat-list>
-                        <!-- <cdk-virtual-scroll-viewport [itemSize]="62"> -->
-                            <mat-list-item class="single-invoice-detail cp border-bottom">
-                                <div class="d-flex justify-content-between align-items-center column-gap5">
-                                    <div>
-                                        <span class="font-12 text-blue"> 240122-1 </span>
-                                        <span class="font-12 light-gray"> | 22-01-2024 </span>
-                                        <p class="black-color">00000000</p>
+                        <cdk-virtual-scroll-viewport [itemSize]="62" class="list-viewport">
+                            <ng-container *cdkVirtualFor="let item of filteredInvoiceList$ | async; let i = index; let lastItem = last">
+                                <mat-list-item
+                                    class="single-invoice-detail cursor-pointer"
+                                    [ngClass]="{ 'active': item?.uniqueName === selectedInvoice?.uniqueName, 'border-bottom': !lastItem }"
+                                    (click)="setSelectedInvoice(item?.uniqueName)"
+                                >
+                                    <div class="d-flex justify-content-between align-items-center column-gap5">
+                                        <div>
+                                            <span class="font-12 text-blue">
+                                                {{
+                                                    item.voucherNumber
+                                                        ? item.voucherNumber
+                                                        : commonLocaleData?.app_not_available
+                                                }}
+                                            </span>
+                                            <span class="font-12 light-gray"> | {{ item?.voucherDate }} </span>
+                                            <p class="black-color">
+                                                {{ item?.account?.customerName || item?.account?.name }}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <span class="black-color">
+                                                <amount-field
+                                                    [amount]="item?.grandTotal?.amountForAccount"
+                                                    [currencySymbol]="item?.account?.currency?.symbol"
+                                                    [currencyCode]="item?.account?.currency?.code"
+                                                >
+                                                </amount-field>
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <span class="black-color">233.00 </span>
-                                    </div>
-                                </div>
-                            </mat-list-item>
-                            <mat-list-item class="single-invoice-detail cp border-bottom">
-                                <div class="d-flex justify-content-between align-items-center column-gap5">
-                                    <div>
-                                        <span class="font-12 text-blue"> 240122-1 </span>
-                                        <span class="font-12 light-gray"> | 22-01-2024 </span>
-                                        <p class="black-color">00000000</p>
-                                    </div>
-                                    <div>
-                                        <span class="black-color">233.00 </span>
-                                    </div>
-                                </div>
-                            </mat-list-item>
-                            <mat-list-item class="single-invoice-detail cp border-bottom">
-                                <div class="d-flex justify-content-between align-items-center column-gap5">
-                                    <div>
-                                        <span class="font-12 text-blue"> 240122-1 </span>
-                                        <span class="font-12 light-gray"> | 22-01-2024 </span>
-                                        <p class="black-color">00000000</p>
-                                    </div>
-                                    <div>
-                                        <span class="black-color">233.00 </span>
-                                    </div>
-                                </div>
-                            </mat-list-item>
-                            <mat-list-item class="single-invoice-detail cp border-bottom">
-                                <div class="d-flex justify-content-between align-items-center column-gap5">
-                                    <div>
-                                        <span class="font-12 text-blue"> 240122-1 </span>
-                                        <span class="font-12 light-gray"> | 22-01-2024 </span>
-                                        <p class="black-color">00000000</p>
-                                    </div>
-                                    <div>
-                                        <span class="black-color">233.00 </span>
-                                    </div>
-                                </div>
-                            </mat-list-item>
-                            <mat-list-item class="single-invoice-detail cp border-bottom">
-                                <div class="d-flex justify-content-between align-items-center column-gap5">
-                                    <div>
-                                        <span class="font-12 text-blue"> 240122-1 </span>
-                                        <span class="font-12 light-gray"> | 22-01-2024 </span>
-                                        <p class="black-color">00000000</p>
-                                    </div>
-                                    <div>
-                                        <span class="black-color">233.00 </span>
-                                    </div>
-                                </div>
-                            </mat-list-item>
-                            <mat-list-item class="single-invoice-detail cp border-bottom">
-                                <div class="d-flex justify-content-between align-items-center column-gap5">
-                                    <div>
-                                        <span class="font-12 text-blue"> 240122-1 </span>
-                                        <span class="font-12 light-gray"> | 22-01-2024 </span>
-                                        <p class="black-color">00000000</p>
-                                    </div>
-                                    <div>
-                                        <span class="black-color">233.00 </span>
-                                    </div>
-                                </div>
-                            </mat-list-item>
-                        <!-- </cdk-virtual-scroll-viewport> -->
+                                </mat-list-item>
+                            </ng-container>
+                            <!-- </cdk-virtual-scroll-viewport> -->
+                        </cdk-virtual-scroll-viewport>
                     </mat-list>
                 </div>
             </div>
         </div>
-        <div class="preview-content pd-15">
-            <div class="preview-header d-flex justify-content-between pd-t15 mr-b4 flex-wrap row-gap1">
-                <div>
-                    <h3 class="font-16 fw-bold"> 240122-1 </h3>
-                    <p>00000000</p>
-                </div>
-                <div class="d-flex column-gap1 flex-wrap row-gap1">
-                    <button mat-stroked-button color="primary" (click)="toggleActivityHistoryAsidePane()">
-                        <i class="icon-history-icon mr-1"></i>
-                        History
-                    </button>
-                    <div class="d-flex action-btn">
-                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Edit'"
-                            [matTooltipPosition]="'above'"><i class="icon-edit-pencil"></i></button>
-                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Send Email'"
-                            [matTooltipPosition]="'above'" (click)="openEmailSendDialog()"><i class="icon-envelope"></i></button>
-                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Print'"
-                            [matTooltipPosition]="'above'"><i class="fa fa-print"></i></button>
-                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Print Receipt'"
-                            [matTooltipPosition]="'above'"><i class="fa fa-print"></i></button>
-                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Download PDF'"
-                            [matTooltipPosition]="'above'"><i class="icon-download-circle"></i></button>
-                        <button mat-stroked-button color="primary" class="mat-icon-sm-btn" [matTooltip]="'Delete'"
-                            [matTooltipPosition]="'above'"><i class="icon-trash"></i></button>
-                    </div>
-                    <button mat-stroked-button color="primary" [matMenuTriggerFor]="changeStatus">
-                        <span>Change Status</span>
-                        <i class="icon-arrow-down icon-font-11 ml-2"></i>
-                    </button>
-                    <mat-menu #changeStatus="matMenu">
-                        <button mat-menu-item (click)="onPerformAction()">Paid</button>
-                        <button mat-menu-item (click)="adjustPayment()">Adjust Amount</button>
-                        <button mat-menu-item>Unpaid</button>
-                        <button mat-menu-item>Hold</button>
-                        <button mat-menu-item>Cancel</button>
-                    </mat-menu>
-                    <button mat-stroked-button>
-                        Cancel
-                    </button>
-                    <button mat-stroked-button class="mat-icon-sm-btn">
-                        <i class="icon-cross"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="preview-box d-flex">
-                <div>
-                    <span class="d-flex justify-content-center align-items-center border-r">
-                        <img src="assets/images/dollar-icon.svg" alt="img">
-                    </span>
-                    <p class="my-1">Receive payments in cash/check and record <br> payments manually.</p>
-                    <a href="javascript:;" (click)="onPerformAction()">Receive Payment</a>
-                </div>
-                <div>
-                    <span class="d-flex justify-content-center align-items-center border-r">
-                        <img src="assets/images/send-icon.svg" alt="img">
-                    </span>
-                    <p class="my-1">You can now email this invoice to your customer or <br> mark it as sent.</p>
-                    <a href="javascript:;" (click)="openEmailSendDialog()">Send Invoice</a>
-                </div>
-            </div>
-            <div>
-                <no-data
-                    class="mr-t2 d-block text-center"
-                    [primaryMessage]="commonLocaleData?.app_attachment_not_allowed"
-                    [primaryMessageClass]="'bold'"
-                    [secondaryMessage]="' '"
-                ></no-data>
-            </div>
-            <div class="pdf-preview">
+        <div class="preview-content">
+           <section class="preview-header pd-15">
+               <div class="d-flex justify-content-between pd-t15 mr-b4 flex-wrap row-gap1">
+                   <div>
+                       <h3 class="font-16 fw-bold">{{ selectedInvoice?.voucherNumber }}</h3>
+                       <p>{{ selectedInvoice?.account?.customerName || selectedInvoice?.account?.name }}</p>
+                   </div>
+                   <div class="d-flex column-gap1 flex-wrap row-gap1">
+                       <button mat-stroked-button color="primary" (click)="toggleActivityHistoryAsidePane()">
+                           <i class="icon-history-icon mr-1"></i>
+                           {{ commonLocaleData?.app_history }}
+                       </button>
+                       <div class="d-flex action-btn">
+                           <button
+                               mat-stroked-button
+                               color="primary"
+                               class="mat-icon-sm-btn"
+                               [matTooltip]="commonLocaleData?.app_edit"
+                               [matTooltipPosition]="'above'"
+                           >
+                               <i class="icon-edit-pencil"></i>
+                           </button>
+                           <button
+                               mat-stroked-button
+                               color="primary"
+                               class="mat-icon-sm-btn"
+                               [matTooltip]="commonLocaleData?.app_send_email"
+                               [matTooltipPosition]="'above'"
+                               (click)="openEmailSendDialog()"
+                           >
+                               <i class="icon-envelope"></i>
+                           </button>
+                           <button
+                               mat-stroked-button
+                               color="primary"
+                               class="mat-icon-sm-btn"
+                               [matTooltip]="commonLocaleData?.app_print"
+                               [matTooltipPosition]="'above'"
+                           >
+                               <i class="fa fa-print"></i>
+                           </button>
+                           <button
+                               mat-stroked-button
+                               color="primary"
+                               class="mat-icon-sm-btn"
+                               [matTooltip]="commonLocaleData?.app_print_thermal"
+                               [matTooltipPosition]="'above'"
+                           >
+                               <i class="fa fa-print"></i>
+                           </button>
+                           <button
+                               mat-stroked-button
+                               color="primary"
+                               class="mat-icon-sm-btn"
+                               [matTooltip]="commonLocaleData?.app_download_pdf"
+                               [matTooltipPosition]="'above'"
+                           >
+                               <i class="icon-download-circle"></i>
+                           </button>
+                           <button
+                               mat-stroked-button
+                               color="primary"
+                               class="mat-icon-sm-btn"
+                               [matTooltip]="commonLocaleData?.app_delete"
+                               [matTooltipPosition]="'above'"
+                           >
+                               <i class="icon-trash"></i>
+                           </button>
+                       </div>
+                       <button mat-stroked-button color="primary" [matMenuTriggerFor]="changeStatus">
+                           <span>Change Status</span>
+                           <i class="icon-arrow-down icon-font-11 ml-2"></i>
+                       </button>
+                       <mat-menu #changeStatus="matMenu">
+                           <button mat-menu-item (click)="onPerformAction()">{{ commonLocaleData?.app_payment_status?.paid }}</button>
+                           <button mat-menu-item (click)="adjustPayment()">commonLocaleData?.app_payment_status?.adjust_amount</button>
+                           <button mat-menu-item>{{ commonLocaleData?.app_payment_status?.unpaid }}</button>
+                           <button mat-menu-item>{{ commonLocaleData?.app_payment_status?.hold }}</button>
+                           <button mat-menu-item>{{ commonLocaleData?.app_payment_status?.cancel }}</button>
+                       </mat-menu>
+                       <button mat-stroked-button>{{ commonLocaleData?.app_cancel }}</button>
+                       <button mat-stroked-button class="mat-icon-sm-btn">
+                           <i class="icon-cross"></i>
+                       </button>
+                   </div>
+               </div>
+               <div class="preview-box d-flex" *ngIf="showPaymentDetails">
+                   <div
+                       *ngIf="
+                           !isCompany &&
+                           voucherType !== 'credit-note' &&
+                           voucherType !== 'debit-note' &&
+                           selectedInvoice?.balanceStatus !== 'PAID' &&
+                           selectedInvoice?.balanceStatus !== 'CANCEL'
+                       "
+                   >
+                       <span class="d-flex justify-content-center align-items-center border-r">
+                           <img src="assets/images/dollar-icon.svg" alt="img" />
+                       </span>
+                       <p class="my-1">
+                           {{ localeData?.record_payment }}
+                       </p>
+                       <a href="javascript:;" (click)="onPerformAction()"> {{ localeData?.receipt_payment }}</a>
+                   </div>
+                   <div>
+                       <span class="d-flex justify-content-center align-items-center border-r">
+                           <img src="assets/images/send-icon.svg" alt="img" />
+                       </span>
+                       <p class="my-1">
+                           {{ localeData?.email_invoice }}
+                       </p>
+                       <a href="javascript:;" (click)="openEmailSendDialog()">{{ localeData?.send_invoice }}</a>
+                   </div>
+               </div>
+                   <!-- <no-data
+                       *ngIf="
+                       shouldShowUploadAttachment &&
+                       isCompany &&
+                       !isPdfAvailable &&
+                       !attachedPdfFileUrl &&
+                       !imagePreviewSource
+                   "
+                       class="mr-t2 d-block text-center"
+                       [primaryMessage]="commonLocaleData?.app_attachment_not_allowed"
+                       [primaryMessageClass]="'bold'"
+                       [secondaryMessage]="' '"
+                   ></no-data> -->
+           </section>
+            
+            
+                <div class="pdf-preview mr-t5 h-100">
                 <h5 class="pd-l15 pd-t1 pd-b1">
-                    <strong class="text-blue">Giddh Auto Generated Bill</strong>
+                    <strong class="text-blue">{{ localeData?.auto_generated_purchase_bill }}</strong>
                 </h5>
-                <iframe src="" frameborder="0"></iframe>
+                <!-- <iframe src="" frameborder="0"></iframe> -->
+                <!-- <iframe #pdfContainer width="100%" height="100%" [src]="attachedPdfFileUrl" title="PDF"></iframe> -->
+                <iframe #pdfContainer width="100%" height="100%" [src]="sanitizedPdfFileUrl" title="PDF"></iframe>
+                <giddh-page-loader
+                *ngIf="
+                    isPdfAvailable &&
+                    !sanitizedPdfFileUrl &&
+                    selectedInvoice?.voucherType === 'purchase'
+                "
+                [cssClass]="'mb-0 mt-0'"
+            ></giddh-page-loader>
             </div>
         </div>
     </div>
@@ -179,7 +228,12 @@
 
 <!-- paid-dialog -->
 <ng-template #paidDialog>
-    <app-payment-dialog></app-payment-dialog>
+    <app-payment-dialog
+        [voucherDetails]="voucherDetails"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        (paymentSubmitted)="paymentSubmitted($event)"
+    ></app-payment-dialog>
 </ng-template>
 <!-- adjust-payment-dialog -->
 <ng-template #adjustPaymentDialog>

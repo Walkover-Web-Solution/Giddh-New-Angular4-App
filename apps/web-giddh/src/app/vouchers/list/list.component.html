@@ -563,7 +563,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <a href="javascript:;" class="btn-link-2">{{ element?.voucherNumber ? element?.voucherNumber : commonLocaleData?.app_not_available }}</a>
+                                    <a href="javascript:;" class="btn-link-2" (click)="showVoucherPreview(element?.uniqueName)">{{ element?.voucherNumber ? element?.voucherNumber : commonLocaleData?.app_not_available }}</a>
                                     <small class="text-danger d-block" *ngIf="element?.overdueDays">
                                         {{ element.overdueDays }}
                                     </small>
