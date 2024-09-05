@@ -15,7 +15,6 @@
                 matInput
                 type="text"
                 id="update-ledger-tax"
-                readonly
                 [mask]="maskInput"
                 [rawInputValue]="formattedTotal"
                 [prefix]="prefixInput"
@@ -25,6 +24,7 @@
                 [(ngModel)]="formattedTotal"
                 [ngClass]="{ 'field-disabled': readonly }"
                 (focus)="!readonly ? handleInputFocus() : ''"
+                autocomplete="off"
             />
             <span class="caret"></span>
         </div>
