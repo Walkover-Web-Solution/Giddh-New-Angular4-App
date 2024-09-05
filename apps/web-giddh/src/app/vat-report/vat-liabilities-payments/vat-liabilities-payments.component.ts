@@ -55,7 +55,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public currentCompanyBranches$: Observable<any>;
     /** Observable to store the data source of Liability Payment */
     public liabilityPaymentList$: Observable<any> = this.componentStore.select(state => state.liabilityPaymentList);
-    /** Observable to store the taxNumber */
+    /** Observable to store the Tax Number */
     public taxNumber$: Observable<any> = this.componentStore.select(state => state.taxNumber);
     /** Holds true if multiple branches in the company */
     public isMultipleBranch: boolean;
@@ -69,10 +69,8 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public liabilityColumns: string[] = ["index", "from", "to", "originalAmount", "outstandingAmount", "due"];
     /** Holds current table columns */
     public displayColumns: string[] = [];
-    /** Hold true if no data found */
-    public noDataFound: boolean = true;
     /** Observable to store true if API Call is in progress */
-    public isLoading$ = this.componentStore.isLoading$;;
+    public liabilityPaymentListInProgress$ = this.componentStore.select(state => state.liabilityPaymentListInProgress);
     /** Holds true if user in vat-payment */
     public isPaymentMode: boolean;
     /** Company base currency symbol */
@@ -114,7 +112,6 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.isPaymentMode = this.router.routerState.snapshot.url.includes('payments');
             this.displayColumns = this.isPaymentMode ? this.paymentColumns : this.liabilityColumns;
-            this.noDataFound = true;
         });
         this.loadTaxDetails();
         this.taxNumber$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -130,9 +127,8 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
             }
         });
         this.liabilityPaymentList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (this.isPaymentMode && response?.body?.payments || (!this.isPaymentMode) && response?.body?.liabilities) {
+            if ((this.isPaymentMode && response?.body?.payments) || ((!this.isPaymentMode) && response?.body?.liabilities)) {
                 this.dataSource = this.isPaymentMode ? response.body.payments : response.body.liabilities;
-                this.noDataFound = false;
             } else if (response?.body?.message) {
                 this.toaster.showSnackBar('error', response.body.message);
             } else if (response?.message) {
