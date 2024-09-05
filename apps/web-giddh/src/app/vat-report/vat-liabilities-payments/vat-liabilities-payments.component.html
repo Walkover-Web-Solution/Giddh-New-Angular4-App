@@ -52,10 +52,10 @@
                     </button>
                 </div>
             </div>
-            <div class="mt-5" *ngIf="isLoading$ | async">
+            <div class="mt-5" *ngIf="liabilityPaymentListInProgress$ | async">
                 <giddh-page-loader></giddh-page-loader>
             </div>
-            <div class="row mt-5" *ngIf="!(isLoading$ | async)">
+            <div class="row mt-5" *ngIf="!(liabilityPaymentListInProgress$ | async)">
                 <div class="table-responsive">
                     <table mat-table [dataSource]="dataSource" class="w-100">
                         <ng-container matColumnDef="index">
@@ -126,7 +126,7 @@
                         <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayColumns"></tr>
                     </table>
-                        <div class="no-data" *ngIf="noDataFound">
+                        <div class="no-data" *ngIf="!dataSource.length">
                             <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
                         </div>
                 </div>
