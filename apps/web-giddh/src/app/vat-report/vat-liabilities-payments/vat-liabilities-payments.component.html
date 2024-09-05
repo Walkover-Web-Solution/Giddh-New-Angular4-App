@@ -52,10 +52,10 @@
                     </button>
                 </div>
             </div>
-            <div class="mt-5" *ngIf="isLoading">
+            <div class="mt-5" *ngIf="isLoading$ | async">
                 <giddh-page-loader></giddh-page-loader>
             </div>
-            <div class="row mt-5" *ngIf="!isLoading">
+            <div class="row mt-5" *ngIf="!(isLoading$ | async)">
                 <div class="table-responsive">
                     <table mat-table [dataSource]="dataSource" class="w-100">
                         <ng-container matColumnDef="index">

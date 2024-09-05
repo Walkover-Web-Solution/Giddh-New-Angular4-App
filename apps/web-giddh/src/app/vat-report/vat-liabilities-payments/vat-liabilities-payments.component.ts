@@ -13,11 +13,13 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { VatService } from '../../services/vat.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { VatReportComponentStore } from '../utility/vat.report.store';
 
 @Component({
     selector: 'vat-liabilities-payments',
     templateUrl: './vat-liabilities-payments.component.html',
-    styleUrls: ['./vat-liabilities-payments.component.scss']
+    styleUrls: ['./vat-liabilities-payments.component.scss'],
+    providers: [VatReportComponentStore]
 })
 
 export class VatLiabilitiesPayments implements OnInit, OnDestroy {
@@ -51,6 +53,10 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public modalRef: BsModalRef;
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
+    /** Observable to store the data source of Liability Payment */
+    public liabilityPaymentList$: Observable<any> = this.componentStore.select(state => state.liabilityPaymentList);
+    /** Observable to store the taxNumber */
+    public taxNumber$: Observable<any> = this.componentStore.select(state => state.taxNumber);
     /** Holds true if multiple branches in the company */
     public isMultipleBranch: boolean;
     /** Holds Liabilities Payment Formgroup  */
@@ -65,8 +71,8 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public displayColumns: string[] = [];
     /** Hold true if no data found */
     public noDataFound: boolean = true;
-    /** True if API Call is in progress */
-    public isLoading: boolean;
+    /** Observable to store true if API Call is in progress */
+    public isLoading$ = this.componentStore.isLoading$;;
     /** Holds true if user in vat-payment */
     public isPaymentMode: boolean;
     /** Company base currency symbol */
@@ -83,7 +89,8 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         private vatService: VatService,
         private toaster: ToasterService,
         private modalService: BsModalService,
-        private router: Router
+        private router: Router,
+        private componentStore: VatReportComponentStore
     ) {
         this.initVatLiabilityPaymentForm();
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
@@ -108,13 +115,32 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
             this.isPaymentMode = this.router.routerState.snapshot.url.includes('payments');
             this.displayColumns = this.isPaymentMode ? this.paymentColumns : this.liabilityColumns;
             this.noDataFound = true;
-            if (this.getFormControl('taxNumber').value) {
+        });
+        this.loadTaxDetails();
+        this.taxNumber$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body?.length) {
+                this.taxesList = response.body.map(tax => ({
+                    label: tax,
+                    value: tax
+                }));
+                if (this.taxesList.length === 1) {
+                    this.getFormControl('taxNumber').patchValue(this.taxesList[0].value);
+                }
                 this.getLiabilitiesPayment();
             }
-        })
-        this.loadTaxDetails();
-        this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
+        });
+        this.liabilityPaymentList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (this.isPaymentMode && response?.body?.payments || (!this.isPaymentMode) && response?.body?.liabilities) {
+                this.dataSource = this.isPaymentMode ? response.body.payments : response.body.liabilities;
+                this.noDataFound = false;
+            } else if (response?.body?.message) {
+                this.toaster.showSnackBar('error', response.body.message);
+            } else if (response?.message) {
+                this.toaster.showSnackBar('error', response.message);
+            }
+        });
 
+        this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
         if (this.isCompanyMode) {
             this.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response) {
@@ -147,20 +173,9 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     * @memberof VatLiabilitiesPayments
     */
     public getLiabilitiesPayment(): void {
-        this.isLoading = true;
         let payload = this.generalService.getUserAgentData();
         payload["Gov-Test-Scenario"] = "MULTIPLE_PAYMENTS_2018_19";
-        this.vatService.getPaymentLiabilityList(payload, this.searchForm.value, this.isPaymentMode ).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.isLoading = false;
-            if (response?.status === "success" && (this.isPaymentMode && response?.body?.payments || (!this.isPaymentMode) && response?.body?.liabilities)) {
-                this.dataSource = this.isPaymentMode ? response.body.payments : response.body.liabilities;
-                this.noDataFound = false;
-            } else if (response?.body?.message) {
-                this.toaster.showSnackBar('error', response.body.message);
-            } else if (response?.message) {
-                this.toaster.showSnackBar('error', response.message);
-            }
-        });
+        this.componentStore.getLiabilityPaymentList({ payload: payload, searchForm: this.searchForm.value, isPaymentMode: this.isPaymentMode });
     }
 
     /**
@@ -230,18 +245,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     * @memberof VatLiabilitiesPayments
     */
     private loadTaxDetails(): void {
-        this.gstReconcileService.getTaxDetails().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.body?.length) {
-                this.taxesList = response.body.map(tax => ({
-                    label: tax,
-                    value: tax
-                }));
-                if (this.taxesList.length === 1) {
-                    this.getFormControl('taxNumber').patchValue(this.taxesList[0].value);
-                }
-                this.getLiabilitiesPayment();
-            }
-        });
+        this.componentStore.getTaxNumber();
     }
 
     /**
