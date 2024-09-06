@@ -11,7 +11,7 @@ import {
     Output,
     ViewChild,
 } from '@angular/core';
-import { AbstractControl, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { createSelector, select, Store } from '@ngrx/store';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 import { ApplyTaxRequest } from 'apps/web-giddh/src/app/models/api-models/ApplyTax';
@@ -20,7 +20,7 @@ import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/Settings
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, of as observableOf, ReplaySubject, timer } from 'rxjs';
-import { take, takeUntil, debounceTime, distinctUntilChanged, pairwise } from 'rxjs/operators';
+import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { CommonActions } from '../../../../actions/common.actions';
 import { CompanyActions } from '../../../../actions/company.actions';
@@ -56,11 +56,17 @@ import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/setting
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 import { HttpClient } from '@angular/common/http';
+import { BulkAddDialogComponent } from '../bulk-add-dialog/bulk-add-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
+import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
+import { AccountAddNewDetailsComponentStore } from '../account-add-new-details/utility/account-add-new-details.store';
 
 @Component({
     selector: 'account-update-new-details',
     templateUrl: './account-update-new-details.component.html',
-    styleUrls: ['./account-update-new-details.component.scss']
+    styleUrls: ['./account-update-new-details.component.scss'],
+    providers: [AccountAddNewDetailsComponentStore]
 })
 
 export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
@@ -230,6 +236,20 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isPortalDefault: boolean;
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
+    /** True if current currency is not company currency */
+    public isForeignCurrecny: boolean = false;
+    /** Hold all temporary save bulk balance data */
+    public tempSaveBulkData: any[] = [];
+    /** Account Opening Balance list */
+    public accountOpeningBalance: any[] = [];
+    /** Holds company branches */
+    public branches: Array<any>;
+    /** Holds company specific data */
+    public company: any = {
+        branch: null,
+    };
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -248,12 +268,16 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         private changeDetectorRef: ChangeDetectorRef,
         private settingsDiscountService: SettingsDiscountService,
         private customFieldsService: CustomFieldsService,
-        private http: HttpClient
+        private http: HttpClient,
+        public dialog: MatDialog,
+        private settingsBranchAction: SettingsBranchActions,
+        private readonly componentStore: AccountAddNewDetailsComponentStore
     ) {
 
     }
 
     public ngOnInit() {
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -276,6 +300,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.getPartyTypes();
         this.prepareTaxDropdown();
         this.getDiscountList();
+        this.getCompanyBranches();
+
         if (this.activeGroupUniqueName === 'discount') {
             this.isDiscount = true;
         }
@@ -441,6 +467,20 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (response) {
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
                 this.addAccountForm?.markAsPristine();
+            }
+        });
+
+        this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.branches = response;
+                this.company.isActive = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
+                if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    // Find the current checked out branch
+                    this.company.branch = response.find(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
+                } else {
+                    // Find the HO branch
+                    this.company.branch = response.find(branch => !branch.parentBranch);
+                }
             }
         });
     }
@@ -619,6 +659,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     default: [false],
                     uniqueName: ['']
                 })
+            ]),
+            accountOpeningBalance: this._fb.array([
+                this._fb.group({
+                    branch: [''],
+                    openingBalance: [''],
+                    openingBalanceType: ['']
+                }),
             ])
         });
 
@@ -846,7 +893,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.moreGstDetailsVisible = true;
     }
 
-    public openingBalanceTypeChnaged(type: string) {
+    public openingBalanceTypeChanged(type: string) {
         if (Number(this.addAccountForm.get('openingBalance')?.value) > 0) {
             this.addAccountForm.get('openingBalanceType')?.patchValue(type);
         }
@@ -882,6 +929,18 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         }
         let accountRequest: AccountRequestV2 = this.addAccountForm?.value as AccountRequestV2;
+        let branchModeOpeningBalance = [
+            {
+                branch: {
+                    name: this.company?.branch?.name,
+                    uniqueName: this.company?.branch?.uniqueName
+                },
+                openingBalance: this.addAccountForm.get('openingBalance')?.value,
+                foreignOpeningBalance: this.addAccountForm.get('foreignOpeningBalance')?.value,
+                openingBalanceType: this.addAccountForm.get('openingBalanceType')?.value
+            }
+        ];
+        accountRequest.accountOpeningBalance = (this.currentOrganizationType === 'COMPANY' && this.branches?.length > 1) ? this.addAccountForm.get('accountOpeningBalance')?.value : branchModeOpeningBalance;
         if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
             if (selectedStateObj) {
@@ -1376,7 +1435,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * This function is used to check if company country is India and Group is sundrydebtors or sundrycreditors
      *
      * @returns {void}
-     * @memberof AccountAddNewDetailsComponent
+     * @memberof AccountUpdateNewDetailsComponent
      */
     public checkActiveGroupCountry(): boolean {
         if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode')?.value && (this.activeGroupUniqueName === 'sundrycreditors' || this.activeParentGroup === 'sundrycreditors' || this.activeGroupUniqueName === 'sundrydebtors' || this.activeParentGroup === 'sundrydebtors')) {
@@ -1390,7 +1449,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * This functions is used to add/remove required validation to state field
      *
      * @returns {void}
-     * @memberof AccountAddNewDetailsComponent
+     * @memberof AccountUpdateNewDetailsComponent
      */
     public toggleStateRequired(): void {
         this.isStateRequired = this.checkActiveGroupCountry();
@@ -1641,7 +1700,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @param {number} [page=1] Page to request
      * @param {boolean} withStocks True, if search should include stocks in results
      * @param {Function} successCallback Callback to carry out further operation
-     * @memberof AccountAddNewDetailsComponent
+     * @memberof AccountUpdateNewDetailsComponent
      */
     public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.groupsSearchResultsPaginationData.query = query;
@@ -1715,7 +1774,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * Scroll end handler for group dropdown
      *
      * @returns null
-     * @memberof AccountAddNewDetailsComponent
+     * @memberof AccountUpdateNewDetailsComponent
      */
     public handleGroupScrollEnd(): void {
         if (this.groupsSearchResultsPaginationData.page < this.groupsSearchResultsPaginationData.totalPages) {
@@ -1743,7 +1802,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * Loads the default group list for advance search
      *
      * @private
-     * @memberof AccountAddNewDetailsComponent
+     * @memberof AccountUpdateNewDetailsComponent
      */
     private loadDefaultGroupsSuggestions(): void {
         this.onGroupSearchQueryChanged('', 1, (response) => {
@@ -1929,6 +1988,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 let acc = results[0];
                 this.resetBankDetailsForm();
                 if (acc && acc.parentGroups[0]?.uniqueName) {
+                    this.accountOpeningBalance = acc.accountOpeningBalance;
                     let col = acc.parentGroups[0]?.uniqueName;
                     this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                     this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
@@ -2061,7 +2121,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 } else if (acc.sacNumber) {
                     this.addAccountForm.get('hsnOrSac')?.patchValue('sac');
                 }
-                this.openingBalanceTypeChnaged(accountDetails.openingBalanceType);
+                this.openingBalanceTypeChanged(accountDetails.openingBalanceType);
                 if (accountDetails.mobileNo) {
 
                     if (accountDetails.mobileNo.indexOf('-') > -1) {
@@ -2188,5 +2248,131 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             });
         }
+    }
+
+    /**
+    * Get company branches
+    *
+    * @memberof AccountAddNewDetailsComponent
+    */
+    public getCompanyBranches(): void {
+        this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+    }
+
+    /**
+      * Open Bulk Add Dialog
+      *
+      * @memberof AccountUpdateNewDetailsComponent
+      */
+    public openBulkAddDialog(): void {
+        this.isForeignCurrecny = this.addAccountForm.get('currency')?.value !== this.companyCurrency;
+        let data = {
+            foreignCurrency: this.isForeignCurrecny,
+            saveBulkData: this.tempSaveBulkData?.length ? this.tempSaveBulkData : this.accountOpeningBalance
+        }
+        const bulkAddAsideMenuRef = this.dialog.open(BulkAddDialogComponent, {
+            position: {
+                right: '0',
+                top: '0'
+            },
+            disableClose: true,
+            width: 'var(--aside-pane-width)',
+            height: '100vh',
+            maxHeight: '100vh',
+            data: data
+        });
+        bulkAddAsideMenuRef.afterClosed().pipe(take(1)).subscribe(result => {
+            if (result) {
+                this.bulkDialogData(result.customFields);
+                this.tempSaveBulkData = result.customFields;
+            }
+        });
+    }
+
+    /**
+     * This will be use for get bulk opening balance data
+     *
+     * @private
+     * @param {*} dialogData
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private bulkDialogData(dialogData: any): void {
+        const accountData = this.addAccountForm.get('accountOpeningBalance') as FormArray;
+        accountData.clear();
+
+        let openingBalanceCredit = 0;
+        let openingBalanceDebit = 0;
+        let foreignOpeningBalanceCredit = 0;
+        let foreignOpeningBalanceDebit = 0;
+
+        dialogData.filter(item => item.foreignOpeningBalance > 0 || item.openingBalance > 0)
+            .forEach(item => {
+                const { foreignOpeningBalance, openingBalance, openingBalanceType, branch } = item;
+
+                if (openingBalanceType === 'CREDIT') {
+                    foreignOpeningBalanceCredit += foreignOpeningBalance;
+                    openingBalanceCredit += openingBalance;
+                } else if (openingBalanceType === 'DEBIT') {
+                    foreignOpeningBalanceDebit += foreignOpeningBalance;
+                    openingBalanceDebit += openingBalance;
+                }
+
+                const data = this._fb.group({
+                    branch: [branch],
+                    openingBalance: [openingBalance],
+                    foreignOpeningBalance: [foreignOpeningBalance],
+                    openingBalanceType: [openingBalanceType]
+                });
+                accountData.push(data);
+            });
+
+        this.totalOpeningBalanceDebitCredit(openingBalanceCredit, openingBalanceDebit);
+
+        if (this.addAccountForm.get('currency')?.value !== this.companyCurrency) {
+            this.totalForeignOpeningBalanceDebitCredit(foreignOpeningBalanceCredit, foreignOpeningBalanceDebit);
+        }
+    }
+    /**
+     * This will be calculate total Opening Balance Credit Debit
+     *
+     * @param {number} credit
+     * @param {number} debit
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public totalOpeningBalanceDebitCredit(credit: number, debit: number): void {
+        let openingBalanceType = 'CREDIT';
+        let calculateTotal = 0;
+
+        if (credit > debit) {
+            calculateTotal = credit - debit;
+            openingBalanceType = 'CREDIT';
+            this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
+        } else if (debit > credit) {
+            calculateTotal = debit - credit;
+            openingBalanceType = 'DEBIT';
+            this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
+        } else {
+            calculateTotal = null;
+        }
+        this.addAccountForm.get('openingBalanceType')?.patchValue(openingBalanceType);
+        this.addAccountForm.get('openingBalance')?.patchValue(calculateTotal);
+    }
+    /**
+     * This will be use for calculating total foreign credit debit balance
+     *
+     * @param {number} credit
+     * @param {number} debit
+     * @memberof AccountUpdateNewDetailsComponent
+     */    public totalForeignOpeningBalanceDebitCredit(credit: number, debit: number): void {
+        let calculateTotal = 0;
+
+        if (credit > debit) {
+            calculateTotal = credit - debit;
+        } else if (debit > credit) {
+            calculateTotal = debit - credit;
+        } else {
+            calculateTotal = null;
+        }
+        this.addAccountForm.get('foreignOpeningBalance')?.patchValue(calculateTotal);
     }
 }
