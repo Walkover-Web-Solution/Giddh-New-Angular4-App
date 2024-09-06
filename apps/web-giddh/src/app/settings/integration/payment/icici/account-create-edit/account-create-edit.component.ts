@@ -95,7 +95,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
             });
         }
 
-        this.accountForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {    
+        this.accountForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
             if (this.accountForm.dirty) {
                 this.pageLeaveUtilityService.addBrowserConfirmationDialog();
             }
@@ -301,8 +301,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                 accountFormObj = {
                     accountNumber: this.accountForm.get('accountNumber')?.value,
                     accountUniqueName: this.accountForm.get('accountUniqueName')?.value,
-                    paymentAlerts: [],
-                    bankName: 'plaid'
+                    paymentAlerts: []
                 };
             }
             this.settingsIntegrationService.updateAccount(!this.isIciciBankSupportedCountry ? accountFormObj :this.accountForm.value, request).pipe(take(1)).subscribe(response => {
