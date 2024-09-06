@@ -19,15 +19,15 @@ export interface BuyPlanState {
     createSubscriptionInProgress: boolean;
     updatePlanSuccess: any;
     updatePlanInProgress: boolean;
-    applyPromoCodeSuccess: boolean;
-    applyPromoCodeInProgress: boolean;
-    promoCodeResponse: any;
     updateSubscriptionPaymentInProgress: boolean;
     updateSubscriptionPaymentIsSuccess: any;
     generateOrderBySubscriptionIdInProgress: boolean;
     subscriptionRazorpayOrderDetails: any;
     getChangePlanDetailsInProgress: boolean;
     changePlanDetails: any;
+    activatePlanSuccess: boolean;
+    calculateDataInProgress: boolean;
+    calculateData: any;
     razorpaySuccess: boolean;
 }
 
@@ -39,9 +39,6 @@ export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
     createSubscriptionSuccess: false,
     createSubscriptionResponse: null,
     createSubscriptionInProgress: false,
-    applyPromoCodeSuccess: false,
-    applyPromoCodeInProgress: false,
-    promoCodeResponse: null,
     updatePlanSuccess: null,
     updatePlanInProgress: false,
     updateSubscriptionPaymentInProgress: false,
@@ -50,6 +47,9 @@ export const DEFAULT_BUY_PLAN_STATE: BuyPlanState = {
     subscriptionRazorpayOrderDetails: null,
     getChangePlanDetailsInProgress: null,
     changePlanDetails: null,
+    activatePlanSuccess: false,
+    calculateDataInProgress: false,
+    calculateData: null,
     razorpaySuccess: false
 };
 
@@ -196,51 +196,6 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
         );
     });
 
-
-    /**
-    * Apply Promocode
-    *
-    * @memberof BuyPlanComponentStore
-    */
-    readonly applyPromocode = this.effect((data: Observable<any>) => {
-        return data.pipe(
-            switchMap((req) => {
-                this.patchState({ applyPromoCodeInProgress: true });
-                return this.subscriptionService.applyPromoCode(req).pipe(
-                    tapResponse(
-                        (res: BaseResponse<any, any>) => {
-                            if (res?.status === 'success') {
-                                this.toasterService.showSnackBar('success', 'Apply Promo Code Successfully');
-                                return this.patchState({
-                                    applyPromoCodeInProgress: false,
-                                    promoCodeResponse: res?.body ?? null,
-                                    applyPromoCodeSuccess: true
-                                });
-                            } else {
-                                if (res.message) {
-                                    this.toasterService.showSnackBar('error', res.message);
-                                }
-                                return this.patchState({
-                                    applyPromoCodeInProgress: false,
-                                    applyPromoCodeSuccess: false,
-                                    promoCodeResponse: null,
-                                });
-                            }
-                        },
-                        (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
-
-                            return this.patchState({
-                                applyPromoCodeInProgress: false
-                            });
-                        }
-                    ),
-                    catchError((err) => EMPTY)
-                );
-            })
-        );
-    });
-
     readonly updateSubscriptionPayment = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
@@ -317,7 +272,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
         );
     });
 
-    readonly generateOrderBySubscriptionId = this.effect((data: Observable<string>) => {
+    readonly generateOrderBySubscriptionId = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ generateOrderBySubscriptionIdInProgress: true });
@@ -390,17 +345,17 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
             })
         );
     });
-    
-   /**
-   * Save Razorpay Token
-   *
-   * @memberof BuyPlanComponentStore
-   */
-    readonly saveRazorpayToken  = this.effect((data: Observable<any>) => {
+
+    /**
+    * Save Razorpay Token
+    *
+    * @memberof BuyPlanComponentStore
+    */
+    readonly saveRazorpayToken = this.effect((data: Observable<any>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ razorpaySuccess: null });
-                return this.subscriptionService.saveRazorpayToken(req.subscriptionId,req.paymentId).pipe(
+                return this.subscriptionService.saveRazorpayToken(req.subscriptionId, req.paymentId).pipe(
                     tapResponse(
                         (res: any) => {
                             if (res?.status === 'success') {
@@ -452,7 +407,7 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
+                            this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
 
                             return this.patchState({
                                 updateSubscriptionPaymentInProgress: false,
@@ -494,10 +449,88 @@ export class BuyPlanComponentStore extends ComponentStore<BuyPlanState> implemen
                             }
                         },
                         (error: any) => {
-                            this.toasterService.showSnackBar('error', 'Something went wrong! Please try again.');
+                            this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
                             return this.patchState({
                                 countryList: [],
                                 countryListInProgress: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     * Activate plan
+     *
+     * @memberof BuyPlanComponentStore
+     */
+    readonly activatePlan = this.effect((data: Observable<string>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ activatePlanSuccess: false });
+                return this.subscriptionService.activatePlan(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                return this.patchState({
+                                    activatePlanSuccess: true
+                                });
+                            } else {
+                                if (res.message) {
+                                    res.message && this.toasterService.showSnackBar("error", res.message);
+                                }
+                                return this.patchState({
+                                    activatePlanSuccess: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
+
+                            return this.patchState({
+                                activatePlanSuccess: false
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
+    /**
+     * Get plan calculation details
+     *
+     * @memberof BuyPlanComponentStore
+     */
+    readonly getCalculationData = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ calculateDataInProgress: true });
+                return this.subscriptionService.getPlanAmountCalculation(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                return this.patchState({
+                                    calculateData: res?.body ?? [],
+                                    calculateDataInProgress: false
+                                });
+                            } else {
+                                res.message && this.toasterService.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    calculateData: [],
+                                    calculateDataInProgress: false
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
+                            return this.patchState({
+                                calculateData: [],
+                                calculateDataInProgress: false
                             });
                         }
                     ),
