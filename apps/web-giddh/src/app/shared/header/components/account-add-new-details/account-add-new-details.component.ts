@@ -43,6 +43,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { BulkAddDialogComponent } from '../bulk-add-dialog/bulk-add-dialog.component';
 import { AccountAddNewDetailsComponentStore } from './utility/account-add-new-details.store';
+import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 
 @Component({
     selector: 'account-add-new-details',
@@ -193,16 +194,18 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public activeIndex: number;
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
-    /** True if current organization is company */
-    public isCompanyMode: boolean;
-    /** Hold all warehouses */
-    public allBranches: any[] = [];
-    /** Holds company branches */
-    public branches: Array<any>;
     /** True if current currency is not company currency */
     public isForeignCurrecny: boolean = false;
     /** Hold all temporary save bulk balance data */
     public tempSaveBulkData: any[] = [];
+    /** Holds company branches */
+    public branches: Array<any>;
+    /** Holds company specific data */
+    public company: any = {
+        branch: null,
+    };
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -220,7 +223,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private accountsAction: AccountsAction,
         public dialog: MatDialog,
         private commonService: CommonService,
-        private readonly componentStore: AccountAddNewDetailsComponentStore
+        private readonly componentStore: AccountAddNewDetailsComponentStore,
+        private settingsBranchAction: SettingsBranchActions
     ) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
     }
@@ -231,7 +235,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public ngOnInit(): void {
-        this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -248,6 +252,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.getCountry();
         this.getCallingCodes();
         this.getPartyTypes();
+        this.getCompanyBranches();
 
         if (this.flatGroupsOptions === undefined) {
             this.getAccount();
@@ -454,6 +459,20 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             let addresses = this.addAccountForm.get('addresses') as UntypedFormArray;
             addresses.controls[0].get('isDefault')?.patchValue(true);
         }, 500);
+
+        this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.branches = response;
+                this.company.isActive = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
+                if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    // Find the current checked out branch
+                    this.company.branch = response.find(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
+                } else {
+                    // Find the HO branch
+                    this.company.branch = response.find(branch => !branch.parentBranch);
+                }
+            }
+        });
     }
 
     public ngAfterViewInit() {
@@ -789,7 +808,19 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         }
         let accountRequest: AccountRequestV2 = this.addAccountForm?.value as AccountRequestV2;
-        accountRequest.accountOpeningBalance = this.addAccountForm.get('accountOpeningBalance')?.value;
+        let branchModeOpeningBalance = [
+            {
+                branch: {
+                    name: this.company?.branch?.name,
+                    uniqueName: this.company?.branch?.uniqueName
+                },
+                openingBalance: this.addAccountForm.get('openingBalance')?.value,
+                foreignOpeningBalance: this.addAccountForm.get('foreignOpeningBalance')?.value,
+                openingBalanceType: this.addAccountForm.get('openingBalanceType')?.value
+            }
+        ];
+        accountRequest.accountOpeningBalance =( this.currentOrganizationType ==='COMPANY' && this.branches?.length >1) ? this.addAccountForm.get('accountOpeningBalance')?.value : branchModeOpeningBalance;
+
         if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
             if (selectedStateObj) {
@@ -1713,6 +1744,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 this.tempSaveBulkData = result.customFields;
             }
         });
+    }
+
+    /**
+  * Get company branches
+  *
+  * @memberof AccountAddNewDetailsComponent
+*/
+    public getCompanyBranches(): void {
+        this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
     }
 
     /**

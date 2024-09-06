@@ -59,11 +59,14 @@ import { HttpClient } from '@angular/common/http';
 import { BulkAddDialogComponent } from '../bulk-add-dialog/bulk-add-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
+import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
+import { AccountAddNewDetailsComponentStore } from '../account-add-new-details/utility/account-add-new-details.store';
 
 @Component({
     selector: 'account-update-new-details',
     templateUrl: './account-update-new-details.component.html',
-    styleUrls: ['./account-update-new-details.component.scss']
+    styleUrls: ['./account-update-new-details.component.scss'],
+    providers: [AccountAddNewDetailsComponentStore]
 })
 
 export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
@@ -233,14 +236,20 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isPortalDefault: boolean;
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
-    /** True if current organization is company */
-    public isCompanyMode: boolean;
     /** True if current currency is not company currency */
     public isForeignCurrecny: boolean = false;
     /** Hold all temporary save bulk balance data */
     public tempSaveBulkData: any[] = [];
     /** Account Opening Balance list */
     public accountOpeningBalance: any[] = [];
+    /** Holds company branches */
+    public branches: Array<any>;
+    /** Holds company specific data */
+    public company: any = {
+        branch: null,
+    };
+    /** Stores the current organization type */
+    public currentOrganizationType: OrganizationType;
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -260,13 +269,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         private settingsDiscountService: SettingsDiscountService,
         private customFieldsService: CustomFieldsService,
         private http: HttpClient,
-        public dialog: MatDialog
+        public dialog: MatDialog,
+        private settingsBranchAction: SettingsBranchActions,
+        private readonly componentStore: AccountAddNewDetailsComponentStore
     ) {
 
     }
 
     public ngOnInit() {
-        this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
+        this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -289,6 +300,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.getPartyTypes();
         this.prepareTaxDropdown();
         this.getDiscountList();
+        this.getCompanyBranches();
+
         if (this.activeGroupUniqueName === 'discount') {
             this.isDiscount = true;
         }
@@ -454,6 +467,20 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (response) {
                 this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
                 this.addAccountForm?.markAsPristine();
+            }
+        });
+
+        this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.branches = response;
+                this.company.isActive = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
+                if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    // Find the current checked out branch
+                    this.company.branch = response.find(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
+                } else {
+                    // Find the HO branch
+                    this.company.branch = response.find(branch => !branch.parentBranch);
+                }
             }
         });
     }
@@ -902,7 +929,18 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         }
         let accountRequest: AccountRequestV2 = this.addAccountForm?.value as AccountRequestV2;
-        accountRequest.accountOpeningBalance = this.addAccountForm.get('accountOpeningBalance')?.value;
+        let branchModeOpeningBalance = [
+            {
+                branch: {
+                    name: this.company?.branch?.name,
+                    uniqueName: this.company?.branch?.uniqueName
+                },
+                openingBalance: this.addAccountForm.get('openingBalance')?.value,
+                foreignOpeningBalance: this.addAccountForm.get('foreignOpeningBalance')?.value,
+                openingBalanceType: this.addAccountForm.get('openingBalanceType')?.value
+            }
+        ];
+        accountRequest.accountOpeningBalance = (this.currentOrganizationType === 'COMPANY' && this.branches?.length > 1) ? this.addAccountForm.get('accountOpeningBalance')?.value : branchModeOpeningBalance;
         if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
             if (selectedStateObj) {
@@ -2210,6 +2248,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             });
         }
+    }
+
+    /**
+    * Get company branches
+    *
+    * @memberof AccountAddNewDetailsComponent
+    */
+    public getCompanyBranches(): void {
+        this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
     }
 
     /**

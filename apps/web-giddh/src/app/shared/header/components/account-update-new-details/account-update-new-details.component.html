@@ -85,7 +85,7 @@
                                     digitsOnlyDirective
                                     formControlName="openingBalance"
                                     [placeholder]="'0.00'"
-                                    [readonly]="isCompanyMode"
+                                    [readonly]="branches?.length > 1 && currentOrganizationType === 'COMPANY'"
                                 />
                                 <div
                                     class="input-group-addon"
@@ -116,10 +116,16 @@
                                     {{ commonLocaleData?.app_cr?.toUpperCase() }}
                                 </div>
                             </div>
-                            <div *ngIf="isCompanyMode" class="d-flex justify-content-end">
-                                <span href="javascript:;" (click)="openBulkAddDialog()" class="font-14 cursor-pointer text-primary">{{
-                                    localeData?.bulk_add
-                                }}</span>
+                            <div
+                                *ngIf="branches?.length > 1 && currentOrganizationType === 'COMPANY'"
+                                class="d-flex justify-content-end"
+                            >
+                                <span
+                                    href="javascript:;"
+                                    (click)="openBulkAddDialog()"
+                                    class="font-14 cursor-pointer text-primary"
+                                    >{{ localeData?.bulk_add }}</span
+                                >
                             </div>
                         </div>
                     </div>
@@ -164,9 +170,12 @@
                             </div>
                         </div>
                         <div *ngIf="isCompanyMode" class="d-flex justify-content-end">
-                            <span href="javascript:;" (click)="openBulkAddDialog()" class="font-14 cursor-pointer text-primary">{{
-                                localeData?.bulk_add
-                            }}</span>
+                            <span
+                                href="javascript:;"
+                                (click)="openBulkAddDialog()"
+                                class="font-14 cursor-pointer text-primary"
+                                >{{ localeData?.bulk_add }}</span
+                            >
                         </div>
                     </div>
                 </div>
