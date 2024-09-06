@@ -194,11 +194,9 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public removeGmailIntegrationDialogRef: MatDialogRef<any>;
     /** Holds Store Delete end user agreement  API success state as observable*/
     public deleteEndUseAgreementSuccess$: Observable<any> = this.componentStore.select(state => state.deleteAccountSuccess);
-    /** Holds Store create end user API success state as observable*/
-    public createEndUserAgreementSuccess$: Observable<any> = this.componentStore.select(state => state.createEndUserAgreementSuccess);
     /** Holds true if current company country is gocardless supported country */
     public isGocardlessSupportedCountry: boolean;
-    /** Hold refrence number */
+    /** Hold reference number */
     public referenceNumber: string = '';
 
     constructor(
