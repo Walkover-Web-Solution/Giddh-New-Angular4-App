@@ -1205,7 +1205,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
-            console.log(response);
             if (response) {
                 this.referenceNumber = response;
             }
