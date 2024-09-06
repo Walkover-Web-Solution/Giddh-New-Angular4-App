@@ -109,7 +109,7 @@
                                                                 />
                                                                 <div
                                                                     class="input-group-addon"
-                                                                    (click)="openingBalanceTypeChnaged('DEBIT')"
+                                                                    (click)="openingBalanceTypeChanged('DEBIT')"
                                                                     [ngClass]="{
                                                                         'active-toggle-btn':
                                                                             addAccountForm.get('openingBalanceType')?.value === 'DEBIT' &&
@@ -122,7 +122,7 @@
                                                                 </div>
                                                                 <div
                                                                     class="input-group-addon"
-                                                                    (click)="openingBalanceTypeChnaged('CREDIT')"
+                                                                    (click)="openingBalanceTypeChanged('CREDIT')"
                                                                     [ngClass]="{
                                                                         'active-toggle-btn':
                                                                             addAccountForm.get('openingBalanceType')?.value === 'CREDIT' &&

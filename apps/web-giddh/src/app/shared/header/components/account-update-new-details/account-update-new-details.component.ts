@@ -237,6 +237,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isCompanyMode: boolean;
     /** Bulk stock dialog ref */
     public bulkAddAsideMenuRef: MatDialogRef<any>;
+    /** True if current currency is not company currency */
+    public isForeignCurrecny: boolean = false;
+    /** Hold all temporary save bulk balance data */
+    public tempSaveBulkData: any[] = [];
+    /** Account Opening Balance list */
+    public accountOpeningBalance: any[] = [];
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -862,7 +868,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.moreGstDetailsVisible = true;
     }
 
-    public openingBalanceTypeChnaged(type: string) {
+    public openingBalanceTypeChanged(type: string) {
         if (Number(this.addAccountForm.get('openingBalance')?.value) > 0) {
             this.addAccountForm.get('openingBalanceType')?.patchValue(type);
         }
@@ -1941,11 +1947,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         // fill form with active account
         combineLatest([this.activeAccount$, this.customFieldsService.list(this.customFieldsRequest)]).pipe(takeUntil(this.destroyed$)).subscribe(results => {
             if (results && results[0] && results[1]) {
+                console.log(results);
                 this.companyCustomFields = [];
                 this.addAccountForm.setControl('customFields', this._fb.array([]));
                 let acc = results[0];
                 this.resetBankDetailsForm();
                 if (acc && acc.parentGroups[0]?.uniqueName) {
+                    this.accountOpeningBalance = acc.accountOpeningBalance;
                     let col = acc.parentGroups[0]?.uniqueName;
                     this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
                     this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
@@ -2078,7 +2086,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 } else if (acc.sacNumber) {
                     this.addAccountForm.get('hsnOrSac')?.patchValue('sac');
                 }
-                this.openingBalanceTypeChnaged(accountDetails.openingBalanceType);
+                this.openingBalanceTypeChanged(accountDetails.openingBalanceType);
                 if (accountDetails.mobileNo) {
 
                     if (accountDetails.mobileNo.indexOf('-') > -1) {
@@ -2208,90 +2216,105 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     /**
-     * Open Dialog for Bulk Add
-     *
-     * @memberof AccountUpdateNewDetailsComponent
-     */
+      * Open Dialog for Bulk Add
+      *
+      * @memberof AccountAddNewDetailsComponent
+      */
     public openBulkAddDialog(): void {
-        const currentFormValues = this.addAccountForm.get('accountOpeningBalance')?.value;
+        if (this.addAccountForm.get('currency')?.value !== this.companyCurrency) {
+            this.isForeignCurrecny = true;
+        } else {
+            this.isForeignCurrecny = false;
+        }
+        let data = {
+            foreignCurrency: this.isForeignCurrecny,
+            saveBulkData: this.tempSaveBulkData?.length ? this.tempSaveBulkData : this.accountOpeningBalance
+        }
         this.bulkAddAsideMenuRef = this.dialog.open(BulkAddDialogComponent, {
             position: {
                 right: '0'
             },
             disableClose: true,
-            width: '865px',
+            width: '800px',
             height: '100vh',
             maxHeight: '100vh',
-            data: currentFormValues
+            data: data
         });
 
         this.bulkAddAsideMenuRef.afterClosed().subscribe(result => {
             if (result) {
                 this.bulkDialogData(result.customFields);
+                this.tempSaveBulkData = result.customFields;
             }
         });
     }
 
-    /**
-     * Get data dialog
-     *
-     * @private
-     * @param {*} dialogData
-     * @memberof AccountUpdateNewDetailsComponent
-     */
     private bulkDialogData(dialogData: any): void {
         const accountData = this.addAccountForm.get('accountOpeningBalance') as FormArray;
         accountData.clear();
 
-        let credit = 0;
-        let debit = 0;
+        let openingBalanceCredit = 0;
+        let openingBalanceDebit = 0;
+        let foreignOpeningBalanceCredit = 0;
+        let foreignOpeningBalanceDebit = 0;
 
-        const filterBranchDialogData = dialogData.filter(item => item.openingBalance > 0);
+        dialogData.filter(item => item.foreignOpeningBalance > 0 || item.openingBalance > 0)
+            .forEach(item => {
+                const { foreignOpeningBalance, openingBalance, openingBalanceType, branch } = item;
 
-        filterBranchDialogData?.forEach(item => {
-            const openingBalance = item.openingBalance
-            if (item.openingBalanceType === 'CREDIT') {
-                credit = credit + openingBalance;
-            } else if (item.openingBalanceType === 'DEBIT') {
-                debit = debit + openingBalance;
-            }
+                if (openingBalanceType === 'CREDIT') {
+                    foreignOpeningBalanceCredit += foreignOpeningBalance;
+                    openingBalanceCredit += openingBalance;
+                } else if (openingBalanceType === 'DEBIT') {
+                    foreignOpeningBalanceDebit += foreignOpeningBalance;
+                    openingBalanceDebit += openingBalance;
+                }
 
-            const data = this._fb.group({
-                branch: [item.branch],
-                openingBalance: [item.openingBalance],
-                foreignOpeningBalance: [item.foreignOpeningBalance],
-                openingBalanceType: [item.openingBalanceType]
+                const data = this._fb.group({
+                    branch: [branch],
+                    openingBalance: [openingBalance],
+                    foreignOpeningBalance: [foreignOpeningBalance],
+                    openingBalanceType: [openingBalanceType]
+                });
+                accountData.push(data);
             });
-            accountData.push(data);
-        });
-        this.totalDebitCredit(credit, debit);
+
+        this.totalOpeningBalanceDebitCredit(openingBalanceCredit, openingBalanceDebit);
+
+        if (this.addAccountForm.get('currency')?.value !== this.companyCurrency) {
+            this.totalForeignOpeningBalanceDebitCredit(foreignOpeningBalanceCredit, foreignOpeningBalanceDebit);
+        }
     }
 
-    /**
-     * Total value of Debit and Credit
-     *
-     * @param {number} credit
-     * @param {number} debit
-     * @memberof AccountUpdateNewDetailsComponent
-     */
-    public totalDebitCredit(credit: number, debit: number): void {
+    public totalOpeningBalanceDebitCredit(credit: number, debit: number): void {
         let openingBalanceType = 'CREDIT';
-        let difference = 0;
+        let calculateTotal = 0;
 
         if (credit > debit) {
-            difference = credit - debit;
+            calculateTotal = credit - debit;
             openingBalanceType = 'CREDIT';
             this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
         } else if (debit > credit) {
-            difference = debit - credit;
+            calculateTotal = debit - credit;
             openingBalanceType = 'DEBIT';
             this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
+        } else {
+            calculateTotal = null;
         }
-        else {
-            console.log('Equal');
-        }
-
         this.addAccountForm.get('openingBalanceType')?.patchValue(openingBalanceType);
-        this.addAccountForm.get('openingBalance')?.patchValue(difference);
+        this.addAccountForm.get('openingBalance')?.patchValue(calculateTotal);
+    }
+
+    public totalForeignOpeningBalanceDebitCredit(credit: number, debit: number): void {
+        let calculateTotal = 0;
+
+        if (credit > debit) {
+            calculateTotal = credit - debit;
+        } else if (debit > credit) {
+            calculateTotal = debit - credit;
+        } else {
+            calculateTotal = null;
+        }
+        this.addAccountForm.get('foreignOpeningBalance')?.patchValue(calculateTotal);
     }
 }

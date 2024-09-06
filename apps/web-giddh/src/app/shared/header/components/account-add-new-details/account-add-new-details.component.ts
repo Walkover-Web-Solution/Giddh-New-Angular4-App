@@ -44,6 +44,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { BulkAddDialogComponent } from '../bulk-add-dialog/bulk-add-dialog.component';
 import { AccountAddNewDetailsComponentStore } from './utility/account-add-new-details.store';
+import { giddhRoundOff } from '../../../helpers/helperFunctions';
 
 @Component({
     selector: 'account-add-new-details',
@@ -205,9 +206,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public company: any = {
         branch: null,
     };
-    /** Bulk dialog ref */
+    /** Bulk Opening balance dialog ref */
     public openBulkAddDialogRef: MatDialogRef<any>;
-    /** Bulk stock dialog ref */
+    /** Bulk balance dialog ref */
     public bulkAddAsideMenuRef: MatDialogRef<any>;
     /** True if current currency is not company currency */
     public isForeignCurrecny: boolean = false;
@@ -565,7 +566,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     openingBalanceType: [''],
                     foreignOpeningBalance: ['']
                 }),
-            ])
+            ]),
         });
 
         this.addAccountForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
@@ -770,7 +771,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.moreGstDetailsVisible = true;
     }
 
-    public openingBalanceTypeChnaged(type: string) {
+    public openingBalanceTypeChanged(type: string) {
         if (Number(this.addAccountForm.get('openingBalance')?.value) > 0) {
             this.addAccountForm.get('openingBalanceType')?.patchValue(type);
         }
@@ -882,7 +883,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (!accountRequest['portalDomain'][0]?.name && !accountRequest['portalDomain'][0]?.email && !accountRequest['portalDomain'][0]?.contactNo) {
             delete accountRequest['portalDomain'];
         }
-        console.log(accountRequest, 'accountRequest');
         this.submitClicked.emit({
             activeGroupUniqueName: this.activeGroupUniqueName,
             accountRequest
@@ -1717,7 +1717,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
         let data = {
             foreignCurrency: this.isForeignCurrecny,
-            formValue: this.addAccountForm.value,
             saveBulkData: this.tempSaveBulkData?.length ? this.tempSaveBulkData : []
         }
         this.bulkAddAsideMenuRef = this.dialog.open(BulkAddDialogComponent, {
@@ -1778,43 +1777,36 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     public totalOpeningBalanceDebitCredit(credit: number, debit: number): void {
         let openingBalanceType = 'CREDIT';
-        let difference = 0;
+        let calculateTotal = 0;
 
         if (credit > debit) {
-            difference = credit - debit;
+            calculateTotal = credit - debit;
             openingBalanceType = 'CREDIT';
             this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
         } else if (debit > credit) {
-            difference = debit - credit;
+            calculateTotal = debit - credit;
             openingBalanceType = 'DEBIT';
             this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
+        } else {
+            calculateTotal = null;
         }
-        else {
-            console.log('Equal');
-        }
-
         this.addAccountForm.get('openingBalanceType')?.patchValue(openingBalanceType);
-        this.addAccountForm.get('openingBalance')?.patchValue(difference);
+        this.addAccountForm.get('openingBalance')?.patchValue(calculateTotal);
     }
 
     public totalForeignOpeningBalanceDebitCredit(credit: number, debit: number): void {
-        let openingBalanceType = 'CREDIT';
-        let difference = 0;
+        let calculateTotal = 0;
 
         if (credit > debit) {
-            difference = credit - debit;
+            calculateTotal = credit - debit;
         } else if (debit > credit) {
-            difference = debit - credit;
+            calculateTotal = debit - credit;
+        } else {
+            calculateTotal = null;
         }
-        else {
-            console.log('Equal');
-        }
-        this.addAccountForm.get('foreignOpeningBalance')?.patchValue(difference);
+        this.addAccountForm.get('foreignOpeningBalance')?.patchValue(calculateTotal);
     }
 
-
-    // foreign : 30 cr 90 dr
-    //     openin: 60 cr 80 dr
 }
 
 

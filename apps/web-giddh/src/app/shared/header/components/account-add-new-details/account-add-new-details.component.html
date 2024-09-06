@@ -98,11 +98,11 @@
                                     '' +
                                     commonLocaleData?.app_numbers?.zero
                                 "
-                                [readonly]="true"
+                                [readonly]="isCompanyMode"
                             />
                             <div
                                 class="input-group-addon"
-                                (click)="openingBalanceTypeChnaged('DEBIT')"
+                                (click)="openingBalanceTypeChanged('DEBIT')"
                                 [ngClass]="{
                                     'active-toggle-btn':
                                         addAccountForm.get('openingBalanceType')?.value === 'DEBIT' &&
@@ -119,7 +119,7 @@
                             </div>
                             <div
                                 class="input-group-addon"
-                                (click)="openingBalanceTypeChnaged('CREDIT')"
+                                (click)="openingBalanceTypeChanged('CREDIT')"
                                 [ngClass]="{
                                     'active-toggle-btn':
                                         addAccountForm.get('openingBalanceType')?.value === 'CREDIT' &&
@@ -137,7 +137,7 @@
                                 {{ commonLocaleData?.app_cr?.toUpperCase() }}
                             </div>
                         </div>
-                        <div class="d-flex justify-content-end">
+                        <div *ngIf="isCompanyMode" class="d-flex justify-content-end">
                             <a href="javascript:;" (click)="openBulkAddDialog()" class="font-14">{{
                                 localeData?.bulk_add
                             }}</a>
@@ -166,11 +166,11 @@
                                         commonLocaleData?.app_numbers?.zero
                                     "
                                     decimalDigitsDirective
-                                    [readonly]="true"
+                                    [readonly]="isCompanyMode"
                                 />
                                 <div
                                     class="input-group-addon"
-                                    (click)="openingBalanceTypeChnaged('DEBIT')"
+                                    (click)="openingBalanceTypeChanged('DEBIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
@@ -184,7 +184,7 @@
                                 </div>
                                 <div
                                     class="input-group-addon"
-                                    (click)="openingBalanceTypeChnaged('CREDIT')"
+                                    (click)="openingBalanceTypeChanged('CREDIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
@@ -197,7 +197,7 @@
                                     {{ commonLocaleData?.app_cr?.toUpperCase() }}
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-end">
+                            <div *ngIf="isCompanyMode" class="d-flex justify-content-end">
                                 <a href="javascript:;" (click)="openBulkAddDialog()" class="font-14">{{
                                     localeData?.bulk_add
                                 }}</a>
@@ -999,7 +999,7 @@
                                 />
                                 <div
                                     class="input-group-addon"
-                                    (click)="openingBalanceTypeChnaged('DEBIT', bulkAddAccountForm)"
+                                    (click)="openingBalanceTypeChanged('DEBIT', bulkAddAccountForm)"
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             bulkAddAccountForm.get('openingBalanceType')?.value === 'DEBIT' &&
@@ -1012,7 +1012,7 @@
                                 </div>
                                 <div
                                     class="input-group-addon"
-                                    (click)="openingBalanceTypeChnaged('CREDIT', bulkAddAccountForm)"
+                                    (click)="openingBalanceTypeChanged('CREDIT', bulkAddAccountForm)"
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             bulkAddAccountForm.get('openingBalanceType')?.value === 'CREDIT' &&
