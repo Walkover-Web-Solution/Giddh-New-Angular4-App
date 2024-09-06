@@ -174,7 +174,7 @@
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
-                                        'cp':
+                                        'cursor-pointer':
                                             addAccountForm.get('openingBalance')?.value > 0 ||
                                             addAccountForm.get('foreignOpeningBalance')?.value > 0
                                     }"
@@ -188,7 +188,7 @@
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
-                                        'cp':
+                                        'cursor-pointer':
                                             addAccountForm.get('openingBalance')?.value > 0 ||
                                             addAccountForm.get('foreignOpeningBalance')?.value > 0
                                     }"
