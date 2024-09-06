@@ -380,7 +380,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         };
         window.addEventListener('message', event => {
-            if (this.router.url !== '/pages/settings/integration/payment') {
+            if (this.router.url === '/pages/settings/integration/payment') {
+                console.log(event);
                 if (event && event.data === "GOCARDLESS") {
                     this.createEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                         if (response?.reference) {
