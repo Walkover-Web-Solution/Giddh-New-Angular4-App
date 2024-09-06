@@ -16,6 +16,7 @@
                 [ngClass]="{ 'field-disabled': readonly }"
                 (focus)="discountMenu = true; hideOtherPopups.emit(true)"
                 autocomplete="off"
+                [readonly]="readonly"
             />
             <span class="caret"></span>
         </div>
