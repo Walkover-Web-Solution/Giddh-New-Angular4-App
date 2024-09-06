@@ -12,6 +12,7 @@
                 class="form-control cursor-pointer text-right mat-field-border"
                 (focus)="discountMenu = true; hideOtherPopups.emit(true)"
                 [(ngModel)]="discountTotal"
+                [readonly]="readonly"
             />
             <span class="caret"></span>
         </div>
