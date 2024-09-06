@@ -89,15 +89,7 @@
                                 class="form-control text-right mr-1"
                                 digitsOnlyDirective
                                 formControlName="openingBalance"
-                                [placeholder]="
-                                    commonLocaleData?.app_numbers?.zero +
-                                    '' +
-                                    commonLocaleData?.app_numbers?.zero +
-                                    '.' +
-                                    commonLocaleData?.app_numbers?.zero +
-                                    '' +
-                                    commonLocaleData?.app_numbers?.zero
-                                "
+                                [placeholder]="'0.00'"
                                 [readonly]="isCompanyMode"
                             />
                             <div
@@ -105,14 +97,11 @@
                                 (click)="openingBalanceTypeChanged('DEBIT')"
                                 [ngClass]="{
                                     'active-toggle-btn':
-                                        addAccountForm.get('openingBalanceType')?.value === 'DEBIT' &&
-                                        (addAccountForm.get('openingBalance')?.value > 0 ||
-                                            addAccountForm.get('foreignOpeningBalance')?.value > 0),
-                                    'cp': addAccountForm.get('openingBalance')?.value > 0
+                                        addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
+                                    'cursor-pointer': addAccountForm.get('openingBalance')?.value > 0
                                 }"
                                 *ngIf="
-                                    addAccountForm.get('openingBalance')?.value > 0 ||
-                                    addAccountForm.get('foreignOpeningBalance')?.value > 0
+                                    addAccountForm.get('openingBalance')?.value > 0
                                 "
                             >
                                 {{ commonLocaleData?.app_dr?.toUpperCase() }}
@@ -122,25 +111,22 @@
                                 (click)="openingBalanceTypeChanged('CREDIT')"
                                 [ngClass]="{
                                     'active-toggle-btn':
-                                        addAccountForm.get('openingBalanceType')?.value === 'CREDIT' &&
-                                        (addAccountForm.get('openingBalance')?.value > 0 ||
-                                            addAccountForm.get('foreignOpeningBalance')?.value > 0),
-                                    'cp':
+                                        addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
+                                    'cursor-pointer':
                                         addAccountForm.get('openingBalance')?.value > 0 ||
                                         addAccountForm.get('foreignOpeningBalance')?.value > 0
                                 }"
                                 *ngIf="
-                                    addAccountForm.get('openingBalance')?.value > 0 ||
-                                    addAccountForm.get('foreignOpeningBalance')?.value > 0
+                                    addAccountForm.get('openingBalance')?.value > 0
                                 "
                             >
                                 {{ commonLocaleData?.app_cr?.toUpperCase() }}
                             </div>
                         </div>
                         <div *ngIf="isCompanyMode" class="d-flex justify-content-end">
-                            <a href="javascript:;" (click)="openBulkAddDialog()" class="font-14">{{
+                            <span (click)="openBulkAddDialog()" class="font-14 cursor-pointer text-primary">{{
                                 localeData?.bulk_add
-                            }}</a>
+                            }}</span>
                         </div>
                     </div>
                     <div
@@ -156,15 +142,7 @@
                                     min="0"
                                     class="form-control text-right mr-1"
                                     formControlName="foreignOpeningBalance"
-                                    [placeholder]="
-                                        commonLocaleData?.app_numbers?.zero +
-                                        '' +
-                                        commonLocaleData?.app_numbers?.zero +
-                                        '.' +
-                                        commonLocaleData?.app_numbers?.zero +
-                                        '' +
-                                        commonLocaleData?.app_numbers?.zero
-                                    "
+                                    [placeholder]="'0.00'"
                                     decimalDigitsDirective
                                     [readonly]="isCompanyMode"
                                 />
@@ -175,7 +153,6 @@
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
                                         'cursor-pointer':
-                                            addAccountForm.get('openingBalance')?.value > 0 ||
                                             addAccountForm.get('foreignOpeningBalance')?.value > 0
                                     }"
                                     *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
@@ -189,7 +166,6 @@
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
                                         'cursor-pointer':
-                                            addAccountForm.get('openingBalance')?.value > 0 ||
                                             addAccountForm.get('foreignOpeningBalance')?.value > 0
                                     }"
                                     *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
@@ -198,9 +174,9 @@
                                 </div>
                             </div>
                             <div *ngIf="isCompanyMode" class="d-flex justify-content-end">
-                                <a href="javascript:;" (click)="openBulkAddDialog()" class="font-14">{{
+                                <span href="javascript:;" (click)="openBulkAddDialog()" class="font-14 cursor-pointer text-primary">{{
                                     localeData?.bulk_add
-                                }}</a>
+                                }}</span>
                             </div>
                         </div>
                     </div>

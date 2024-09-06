@@ -158,7 +158,7 @@ export let DEFAULT_MENUS_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Settings', uniqueName: '/pages/settings', isRemoved: false, pIndex: 12, hasTabs: true },
     { type: 'MENU', name: 'Settings > Warehouse', uniqueName: '/pages/settings/warehouse', additional: { tab: 'warehouse', tabIndex: 10 }, isRemoved: false, pIndex: 13, hasTabs: true },
     { type: 'MENU', name: 'Daybook', uniqueName: '/pages/daybook', isRemoved: false, pIndex: 14, hasTabs: false },
-    { type: 'MENU', name: 'Group Name', uniqueName: '/pages/group-name', isRemoved: false, pIndex: 14, hasTabs: false },
+    { type: 'MENU', name: 'Group Name', uniqueName: '/pages/group-name', isRemoved: false, pIndex: 17, hasTabs: false },
     { type: 'MENU', name: 'Purchase Management', uniqueName: '/pages/purchase-management/purchase', isRemoved: false, pIndex: 15, hasTabs: true },
     { type: 'MENU', name: 'User-Details > Profile', uniqueName: '/pages/user-details/mobile-number', additional: { tab: 'profile', tabIndex: 1 }, isRemoved: false, pIndex: 16, hasTabs: true },
     { type: 'MENU', name: 'Invoice > Generate', uniqueName: '/pages/invoice/preview/sales', additional: { tab: 'pending', tabIndex: 2 }, hasTabs: true },

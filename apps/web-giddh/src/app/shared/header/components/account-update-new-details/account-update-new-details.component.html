@@ -84,15 +84,7 @@
                                     class="form-control text-right"
                                     digitsOnlyDirective
                                     formControlName="openingBalance"
-                                    [placeholder]="
-                                        commonLocaleData?.app_numbers?.zero +
-                                        '' +
-                                        commonLocaleData?.app_numbers?.zero +
-                                        '.' +
-                                        commonLocaleData?.app_numbers?.zero +
-                                        '' +
-                                        commonLocaleData?.app_numbers?.zero
-                                    "
+                                    [placeholder]="'0.00'"
                                     [readonly]="isCompanyMode"
                                 />
                                 <div
@@ -125,9 +117,9 @@
                                 </div>
                             </div>
                             <div *ngIf="isCompanyMode" class="d-flex justify-content-end">
-                                <a href="javascript:;" (click)="openBulkAddDialog()" class="font-14">{{
+                                <span href="javascript:;" (click)="openBulkAddDialog()" class="font-14 cursor-pointer text-primary">{{
                                     localeData?.bulk_add
-                                }}</a>
+                                }}</span>
                             </div>
                         </div>
                     </div>
@@ -144,15 +136,7 @@
                                 min="0"
                                 class="form-control text-right"
                                 formControlName="foreignOpeningBalance"
-                                [placeholder]="
-                                    commonLocaleData?.app_numbers?.zero +
-                                    '' +
-                                    commonLocaleData?.app_numbers?.zero +
-                                    '.' +
-                                    commonLocaleData?.app_numbers?.zero +
-                                    '' +
-                                    commonLocaleData?.app_numbers?.zero
-                                "
+                                [placeholder]="'0.00'"
                                 decimalDigitsDirective
                                 [readonly]="isCompanyMode"
                             />
@@ -180,9 +164,9 @@
                             </div>
                         </div>
                         <div *ngIf="isCompanyMode" class="d-flex justify-content-end">
-                            <a href="javascript:;" (click)="openBulkAddDialog()" class="font-14">{{
+                            <span href="javascript:;" (click)="openBulkAddDialog()" class="font-14 cursor-pointer text-primary">{{
                                 localeData?.bulk_add
-                            }}</a>
+                            }}</span>
                         </div>
                     </div>
                 </div>

@@ -8,7 +8,7 @@
         <h3 mat-dialog-title>{{ localeData?.bulk_add }}</h3>
         <button class="close" mat-dialog-close>×</button>
     </div>
-    <mat-dialog-content class="w-100 right-dialog-height bulk-dialog">
+    <mat-dialog-content class="w-100 aside-dialog-overflow bulk-dialog">
         <div class="p-3">
             <form class="create-acc-form" [formGroup]="bulkAddAccountForm">
                 <ng-container formArrayName="customFields">
@@ -33,39 +33,21 @@
                                     <input
                                         *ngIf="data?.foreignCurrency"
                                         type="number"
-                                        id="numberteldr"
                                         min="0"
                                         class="form-control text-right mr-1"
                                         digitsOnlyDirective
                                         formControlName="foreignOpeningBalance"
-                                        [placeholder]="
-                                            commonLocaleData?.app_numbers?.zero +
-                                            '' +
-                                            commonLocaleData?.app_numbers?.zero +
-                                            '.' +
-                                            commonLocaleData?.app_numbers?.zero +
-                                            '' +
-                                            commonLocaleData?.app_numbers?.zero
-                                        "
+                                        [placeholder]="'0.00'"
                                     />
                                     <input
                                         type="number"
-                                        id="numberteldr"
                                         min="0"
                                         class="form-control text-right mr-1"
                                         digitsOnlyDirective
                                         formControlName="openingBalance"
-                                        [placeholder]="
-                                            commonLocaleData?.app_numbers?.zero +
-                                            '' +
-                                            commonLocaleData?.app_numbers?.zero +
-                                            '.' +
-                                            commonLocaleData?.app_numbers?.zero +
-                                            '' +
-                                            commonLocaleData?.app_numbers?.zero
-                                        "
+                                        [placeholder]="'0.00'"
                                     />
-                                    <div class="d-flex column-gap5" style="width: 150px;">
+                                    <div class="d-flex column-gap5 width-150">
                                         <div
                                             class="input-group-addon"
                                             (click)="openingBalanceTypeChanged('DEBIT', bulkIndex)"

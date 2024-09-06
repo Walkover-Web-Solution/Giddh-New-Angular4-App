@@ -2215,7 +2215,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     /**
-      * Open Dialog for Bulk Add
+      * Open Bulk Add Dialog
       *
       * @memberof AccountUpdateNewDetailsComponent
       */
@@ -2231,10 +2231,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
         this.bulkAddAsideMenuRef = this.dialog.open(BulkAddDialogComponent, {
             position: {
-                right: '0'
+                right: '0',
+                top: '0'
             },
             disableClose: true,
-            width: '800px',
+            width: 'var(--aside-pane-width)',
             height: '100vh',
             maxHeight: '100vh',
             data: data

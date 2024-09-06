@@ -50,13 +50,12 @@ export class BulkAddDialogComponent implements OnInit {
      * @memberof BulkAddDialogComponent
      */
     public ngOnInit(): void {
-        this.initializeNewForm();
+        this.initNewForm();
         this.getCompanyBranches();
         this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response;
                 const formArray = this.bulkAddAccountForm.get('customFields') as FormArray;
-                console.log(formArray);
                 formArray?.clear();
                 response.forEach((item) => {
                     formArray?.push(this.openingBulkGet(
@@ -105,11 +104,11 @@ export class BulkAddDialogComponent implements OnInit {
     }
 
     /**
-     * Form Group
+     * Initialise Form Group
      *
      * @memberof BulkAddDialogComponent
      */
-    public initializeNewForm(): void {
+    public initNewForm(): void {
         this.bulkAddAccountForm = this._fb.group({
             openingBalanceType: ['CREDIT'],
             openingBalance: [''],
@@ -141,7 +140,7 @@ export class BulkAddDialogComponent implements OnInit {
     }
 
     /**
-      * Gets company branches
+      * Get company branches
       *
       * @memberof BulkAddDialogComponent
     */
@@ -167,7 +166,7 @@ export class BulkAddDialogComponent implements OnInit {
     }
 
     /**
-     * Save the opening balance value
+     * Save opening balance value
      *
      * @memberof BulkAddDialogComponent
      */

@@ -49,8 +49,8 @@
     }
 }
 
-// right dialog height
-.right-dialog-height {
+// aside dialog height
+.aside-dialog-overflow {
     &.mat-mdc-dialog-content {
         max-height: calc(100vh - 65px) !important;
     }

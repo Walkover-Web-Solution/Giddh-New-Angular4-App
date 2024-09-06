@@ -661,6 +661,12 @@
                     "icon": "icon-tally-import1"
                 }
             ]
+        },
+        {
+            "label": "समूह नाम",
+            "link": "/pages/group-name",
+            "icon": "icon-daybook-new",
+            "description": "प्रतिदिन की प्रविष्टियाँ जिन्हें निर्यात किया जा सकता है"
         }
     ],
     "switch_branch": "स्विच शाखा",
