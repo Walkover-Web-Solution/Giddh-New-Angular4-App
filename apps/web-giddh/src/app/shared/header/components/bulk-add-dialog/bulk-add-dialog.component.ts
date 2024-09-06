@@ -112,8 +112,6 @@ export class BulkAddDialogComponent implements OnInit {
         this.bulkAddAccountForm = this._fb.group({
             openingBalanceType: ['CREDIT'],
             openingBalance: [''],
-            closingBalanceTriggerAmount: ['', Validators.compose([digitsOnly])],
-            closingBalanceTriggerAmountType: ['CREDIT'],
             customFields: this._fb.array([])
         });
 

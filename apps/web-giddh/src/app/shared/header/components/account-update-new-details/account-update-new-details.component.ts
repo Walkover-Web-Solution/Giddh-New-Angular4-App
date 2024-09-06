@@ -57,7 +57,7 @@ import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fiel
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 import { HttpClient } from '@angular/common/http';
 import { BulkAddDialogComponent } from '../bulk-add-dialog/bulk-add-dialog.component';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 
 @Component({
@@ -235,8 +235,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
     /** True if current organization is company */
     public isCompanyMode: boolean;
-    /** Bulk stock dialog ref */
-    public bulkAddAsideMenuRef: MatDialogRef<any>;
     /** True if current currency is not company currency */
     public isForeignCurrecny: boolean = false;
     /** Hold all temporary save bulk balance data */
@@ -2220,16 +2218,12 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
       * @memberof AccountUpdateNewDetailsComponent
       */
     public openBulkAddDialog(): void {
-        if (this.addAccountForm.get('currency')?.value !== this.companyCurrency) {
-            this.isForeignCurrecny = true;
-        } else {
-            this.isForeignCurrecny = false;
-        }
+        this.isForeignCurrecny = this.addAccountForm.get('currency')?.value !== this.companyCurrency;
         let data = {
             foreignCurrency: this.isForeignCurrecny,
             saveBulkData: this.tempSaveBulkData?.length ? this.tempSaveBulkData : this.accountOpeningBalance
         }
-        this.bulkAddAsideMenuRef = this.dialog.open(BulkAddDialogComponent, {
+        const bulkAddAsideMenuRef = this.dialog.open(BulkAddDialogComponent, {
             position: {
                 right: '0',
                 top: '0'
@@ -2240,7 +2234,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             maxHeight: '100vh',
             data: data
         });
-        this.bulkAddAsideMenuRef.afterClosed().pipe(take(1)).subscribe(result => {
+        bulkAddAsideMenuRef.afterClosed().pipe(take(1)).subscribe(result => {
             if (result) {
                 this.bulkDialogData(result.customFields);
                 this.tempSaveBulkData = result.customFields;

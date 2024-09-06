@@ -11,14 +11,13 @@ import {
     OnDestroy,
     OnInit,
     Output,
-    TemplateRef,
     ViewChild
 } from '@angular/core';
 import { AbstractControl, FormArray, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../helpers';
 import { AppState } from '../../../../store';
 import { select, Store } from '@ngrx/store';
-import { AccountOpeningBalance, AccountRequestV2, CustomFieldsData } from '../../../../models/api-models/Account';
+import { AccountRequestV2, CustomFieldsData } from '../../../../models/api-models/Account';
 import { ToasterService } from '../../../../services/toaster.service';
 import { CompanyResponse, StateList, StatesRequest } from '../../../../models/api-models/Company';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
@@ -40,7 +39,7 @@ import { HttpClient } from '@angular/common/http';
 import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { BulkAddDialogComponent } from '../bulk-add-dialog/bulk-add-dialog.component';
 import { AccountAddNewDetailsComponentStore } from './utility/account-add-new-details.store';
@@ -200,8 +199,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public allBranches: any[] = [];
     /** Holds company branches */
     public branches: Array<any>;
-    /** Bulk Opening balance dialog ref */
-    public bulkAddAsideMenuRef: MatDialogRef<any>;
     /** True if current currency is not company currency */
     public isForeignCurrecny: boolean = false;
     /** Hold all temporary save bulk balance data */
@@ -1693,16 +1690,12 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public openBulkAddDialog(): void {
-        if (this.addAccountForm.get('currency')?.value !== this.companyCurrency) {
-            this.isForeignCurrecny = true;
-        } else {
-            this.isForeignCurrecny = false;
-        }
+        this.isForeignCurrecny = this.addAccountForm.get('currency')?.value !== this.companyCurrency;
         let data = {
             foreignCurrency: this.isForeignCurrecny,
             saveBulkData: this.tempSaveBulkData?.length ? this.tempSaveBulkData : []
         }
-        this.bulkAddAsideMenuRef = this.dialog.open(BulkAddDialogComponent, {
+        const bulkAddAsideMenuRef = this.dialog.open(BulkAddDialogComponent, {
             position: {
                 right: '0',
                 top: '0'
@@ -1714,7 +1707,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             data: data
         });
 
-        this.bulkAddAsideMenuRef.afterClosed().pipe(take(1)).subscribe(result => {
+        bulkAddAsideMenuRef.afterClosed().pipe(take(1)).subscribe(result => {
             if (result) {
                 this.bulkDialogData(result.customFields);
                 this.tempSaveBulkData = result.customFields;
