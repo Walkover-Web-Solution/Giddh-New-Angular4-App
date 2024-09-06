@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { ReplaySubject, takeUntil } from 'rxjs';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -12,13 +12,12 @@ import { AccountAddNewDetailsComponentStore } from '../account-add-new-details/u
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-    selector: 'app-bulk-add-dialog',
+    selector: 'bulk-add-dialog',
     templateUrl: './bulk-add-dialog.component.html',
     styleUrls: ['./bulk-add-dialog.component.scss'],
     providers: [AccountAddNewDetailsComponentStore]
 })
 export class BulkAddDialogComponent implements OnInit {
-
     /** This will hold local JSON data */
     public localeData: any = {};
     /** This will hold common JSON data */
@@ -46,12 +45,11 @@ export class BulkAddDialogComponent implements OnInit {
     ) { }
 
     /**
-     * OninIt
+     * This hook will be use for component initialization
      *
      * @memberof BulkAddDialogComponent
      */
     public ngOnInit(): void {
-        console.log('Data Value', this.data);
         this.initializeNewForm();
         this.getCompanyBranches();
         this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -90,7 +88,7 @@ export class BulkAddDialogComponent implements OnInit {
      * @param {any[]} branchData
      * @memberof BulkAddDialogComponent
      */
-    public mergeFormArrayWithData(branchData: any[]) {
+    public mergeFormArrayWithData(branchData: any[]): void {
         const branchFormArray = this.bulkAddAccountForm.get('customFields') as FormArray;
         branchFormArray.controls.forEach((formGroup) => {
             const formArrayBranch = formGroup.get('branch')?.value;
@@ -107,11 +105,11 @@ export class BulkAddDialogComponent implements OnInit {
     }
 
     /**
-     * form group
+     * Form Group
      *
      * @memberof BulkAddDialogComponent
      */
-    public initializeNewForm() {
+    public initializeNewForm(): void {
         this.bulkAddAccountForm = this._fb.group({
             openingBalanceType: ['CREDIT'],
             openingBalance: [''],
@@ -126,7 +124,7 @@ export class BulkAddDialogComponent implements OnInit {
     }
 
     /**
-     * getting data form
+     * Get bulk data balance
      *
      * @private
      * @param {*} [item]
@@ -158,7 +156,7 @@ export class BulkAddDialogComponent implements OnInit {
      * @param {number} index
      * @memberof BulkAddDialogComponent
      */
-    public openingBalanceTypeChanged(type: string, index: number) {
+    public openingBalanceTypeChanged(type: string, index: number): void {
         const formArray = this.bulkAddAccountForm.get('customFields') as FormArray;
         const item = formArray.at(index) as FormGroup;
         if (Number(item.get('openingBalance')?.value) >= 0) {
@@ -169,21 +167,18 @@ export class BulkAddDialogComponent implements OnInit {
     }
 
     /**
-     * save the opening balance value
+     * Save the opening balance value
      *
      * @memberof BulkAddDialogComponent
      */
     public saveOpeningBalance(): void {
         if (this.bulkAddAccountForm.valid) {
-            console.log(this.bulkAddAccountForm.value);
             this.dialogRef.close(this.bulkAddAccountForm.value);
-        } else {
-            console.log('Form is invalid');
         }
     }
 
     /**
-     * destroy
+     * This will be use for component destroy
      *
      * @memberof BulkAddDialogComponent
      */

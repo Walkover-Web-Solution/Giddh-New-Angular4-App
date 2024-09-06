@@ -20,7 +20,7 @@ import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/Settings
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { combineLatest, Observable, of as observableOf, ReplaySubject, timer } from 'rxjs';
-import { take, takeUntil, debounceTime, distinctUntilChanged, pairwise } from 'rxjs/operators';
+import { take, takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { CommonActions } from '../../../../actions/common.actions';
 import { CompanyActions } from '../../../../actions/company.actions';
@@ -1399,7 +1399,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * This function is used to check if company country is India and Group is sundrydebtors or sundrycreditors
      *
      * @returns {void}
-     * @memberof AccountAddNewDetailsComponent
+     * @memberof AccountUpdateNewDetailsComponent
      */
     public checkActiveGroupCountry(): boolean {
         if (this.activeCompany && this.activeCompany.countryV2 && this.activeCompany.countryV2.alpha2CountryCode === this.addAccountForm.get('country').get('countryCode')?.value && (this.activeGroupUniqueName === 'sundrycreditors' || this.activeParentGroup === 'sundrycreditors' || this.activeGroupUniqueName === 'sundrydebtors' || this.activeParentGroup === 'sundrydebtors')) {
@@ -1413,7 +1413,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * This functions is used to add/remove required validation to state field
      *
      * @returns {void}
-     * @memberof AccountAddNewDetailsComponent
+     * @memberof AccountUpdateNewDetailsComponent
      */
     public toggleStateRequired(): void {
         this.isStateRequired = this.checkActiveGroupCountry();
@@ -1664,7 +1664,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @param {number} [page=1] Page to request
      * @param {boolean} withStocks True, if search should include stocks in results
      * @param {Function} successCallback Callback to carry out further operation
-     * @memberof AccountAddNewDetailsComponent
+     * @memberof AccountUpdateNewDetailsComponent
      */
     public onGroupSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.groupsSearchResultsPaginationData.query = query;
@@ -1738,7 +1738,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * Scroll end handler for group dropdown
      *
      * @returns null
-     * @memberof AccountAddNewDetailsComponent
+     * @memberof AccountUpdateNewDetailsComponent
      */
     public handleGroupScrollEnd(): void {
         if (this.groupsSearchResultsPaginationData.page < this.groupsSearchResultsPaginationData.totalPages) {
@@ -1766,7 +1766,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * Loads the default group list for advance search
      *
      * @private
-     * @memberof AccountAddNewDetailsComponent
+     * @memberof AccountUpdateNewDetailsComponent
      */
     private loadDefaultGroupsSuggestions(): void {
         this.onGroupSearchQueryChanged('', 1, (response) => {
@@ -1947,7 +1947,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         // fill form with active account
         combineLatest([this.activeAccount$, this.customFieldsService.list(this.customFieldsRequest)]).pipe(takeUntil(this.destroyed$)).subscribe(results => {
             if (results && results[0] && results[1]) {
-                console.log(results);
                 this.companyCustomFields = [];
                 this.addAccountForm.setControl('customFields', this._fb.array([]));
                 let acc = results[0];
@@ -2218,7 +2217,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /**
       * Open Dialog for Bulk Add
       *
-      * @memberof AccountAddNewDetailsComponent
+      * @memberof AccountUpdateNewDetailsComponent
       */
     public openBulkAddDialog(): void {
         if (this.addAccountForm.get('currency')?.value !== this.companyCurrency) {
@@ -2240,8 +2239,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             maxHeight: '100vh',
             data: data
         });
-
-        this.bulkAddAsideMenuRef.afterClosed().subscribe(result => {
+        this.bulkAddAsideMenuRef.afterClosed().pipe(take(1)).subscribe(result => {
             if (result) {
                 this.bulkDialogData(result.customFields);
                 this.tempSaveBulkData = result.customFields;
@@ -2249,6 +2247,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         });
     }
 
+    /**
+     * This will be use for get bulk opening balance data
+     *
+     * @private
+     * @param {*} dialogData
+     * @memberof AccountUpdateNewDetailsComponent
+     */
     private bulkDialogData(dialogData: any): void {
         const accountData = this.addAccountForm.get('accountOpeningBalance') as FormArray;
         accountData.clear();
@@ -2285,7 +2290,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             this.totalForeignOpeningBalanceDebitCredit(foreignOpeningBalanceCredit, foreignOpeningBalanceDebit);
         }
     }
-
+    /**
+     * This will be calculate total Opening Balance Credit Debit
+     *
+     * @param {number} credit
+     * @param {number} debit
+     * @memberof AccountUpdateNewDetailsComponent
+     */
     public totalOpeningBalanceDebitCredit(credit: number, debit: number): void {
         let openingBalanceType = 'CREDIT';
         let calculateTotal = 0;
@@ -2304,8 +2315,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.addAccountForm.get('openingBalanceType')?.patchValue(openingBalanceType);
         this.addAccountForm.get('openingBalance')?.patchValue(calculateTotal);
     }
-
-    public totalForeignOpeningBalanceDebitCredit(credit: number, debit: number): void {
+    /**
+     * This will be use for calculating total foreign credit debit balance
+     *
+     * @param {number} credit
+     * @param {number} debit
+     * @memberof AccountUpdateNewDetailsComponent
+     */    public totalForeignOpeningBalanceDebitCredit(credit: number, debit: number): void {
         let calculateTotal = 0;
 
         if (credit > debit) {

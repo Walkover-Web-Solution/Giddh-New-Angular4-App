@@ -6,11 +6,9 @@ import { Store } from "@ngrx/store";
 import { AppState } from "apps/web-giddh/src/app/store";
 
 export interface AddNewDetaileState {
-    isLoading: boolean;
 }
 
 const DEFAULT_STATE: AddNewDetaileState = {
-    isLoading: false
 };
 
 @Injectable()

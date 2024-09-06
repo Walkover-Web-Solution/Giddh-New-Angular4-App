@@ -65,12 +65,8 @@ export class GroupNameComponent implements OnInit {
        */
       public getBranches(): void {
         if (!this.allBranches) {
-          console.error('allBranches is undefined or null');
           return;
       }
-      console.log('branches', this.allBranches);
-      console.log('current branch', this.generalService.currentBranchUniqueName)
-
         this.allWarehouses = [];
         if (!this.isCompany) {
             let currentBranch = this.allBranches?.filter(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);

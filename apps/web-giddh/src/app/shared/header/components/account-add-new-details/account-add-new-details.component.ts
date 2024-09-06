@@ -44,7 +44,6 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { BulkAddDialogComponent } from '../bulk-add-dialog/bulk-add-dialog.component';
 import { AccountAddNewDetailsComponentStore } from './utility/account-add-new-details.store';
-import { giddhRoundOff } from '../../../helpers/helperFunctions';
 
 @Component({
     selector: 'account-add-new-details',
@@ -55,7 +54,6 @@ import { giddhRoundOff } from '../../../helpers/helperFunctions';
 
 export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     public addAccountForm: UntypedFormGroup;
-    // public bulkAddAccountForm: UntypedFormGroup;
     @Input() public activeGroupUniqueName: string;
     @Input() public flatGroupsOptions: IOption[];
     @Input() public createAccountInProcess$: Observable<boolean>;
@@ -202,13 +200,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public allBranches: any[] = [];
     /** Holds company branches */
     public branches: Array<any>;
-    /** Holds company specific data */
-    public company: any = {
-        branch: null,
-    };
     /** Bulk Opening balance dialog ref */
-    public openBulkAddDialogRef: MatDialogRef<any>;
-    /** Bulk balance dialog ref */
     public bulkAddAsideMenuRef: MatDialogRef<any>;
     /** True if current currency is not company currency */
     public isForeignCurrecny: boolean = false;
@@ -573,18 +565,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.addAccountForm.dirty));
         });
 
-        // this.bulkAddAccountForm = this._fb.group({
-        //     openingBalanceType: ['CREDIT'],
-        //     openingBalance: [''],
-        //     closingBalanceTriggerAmount: ['', Validators.compose([digitsOnly])],
-        //     closingBalanceTriggerAmountType: ['CREDIT'],
-        //     customFields: this._fb.array([])
-        // });
-
-        // this.bulkAddAccountForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
-        //     this.store.dispatch(this.accountsAction.hasUnsavedChanges(this.bulkAddAccountForm.dirty));
-        // });
-
         this.getInvoiceSettings();
     }
 
@@ -771,13 +751,16 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.moreGstDetailsVisible = true;
     }
 
+    /**
+     * This will be use for opening balance type value changes
+     *
+     * @param {string} type
+     * @memberof AccountAddNewDetailsComponent
+     */
     public openingBalanceTypeChanged(type: string) {
         if (Number(this.addAccountForm.get('openingBalance')?.value) > 0) {
             this.addAccountForm.get('openingBalanceType')?.patchValue(type);
         }
-        // else if (Number(this.bulkAddAccountForm.get('openingBalance')?.value) > 0) {
-        //     this.bulkAddAccountForm.get('openingBalanceType')?.patchValue(type);
-        // }
     }
 
     public showLessGst() {
@@ -1730,7 +1713,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             data: data
         });
 
-        this.bulkAddAsideMenuRef.afterClosed().subscribe(result => {
+        this.bulkAddAsideMenuRef.afterClosed().pipe(take(1)).subscribe(result => {
             if (result) {
                 this.bulkDialogData(result.customFields);
                 this.tempSaveBulkData = result.customFields;
@@ -1738,6 +1721,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         });
     }
 
+    /**
+     * This will be use for get bulk opening balance data
+     *
+     * @private
+     * @param {*} dialogData
+     * @memberof AccountAddNewDetailsComponent
+     */
     private bulkDialogData(dialogData: any): void {
         const accountData = this.addAccountForm.get('accountOpeningBalance') as FormArray;
         accountData.clear();
@@ -1747,7 +1737,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         let foreignOpeningBalanceCredit = 0;
         let foreignOpeningBalanceDebit = 0;
 
-        dialogData.filter(item => item.foreignOpeningBalance > 0 || item.openingBalance > 0)
+        dialogData?.filter(item => item.foreignOpeningBalance > 0 || item.openingBalance > 0)
             .forEach(item => {
                 const { foreignOpeningBalance, openingBalance, openingBalanceType, branch } = item;
 
@@ -1774,7 +1764,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.totalForeignOpeningBalanceDebitCredit(foreignOpeningBalanceCredit, foreignOpeningBalanceDebit);
         }
     }
-
+    /**
+     * This will be calculate total Opening Balance Credit Debit
+     *
+     * @param {number} credit
+     * @param {number} debit
+     * @memberof AccountAddNewDetailsComponent
+     */
     public totalOpeningBalanceDebitCredit(credit: number, debit: number): void {
         let openingBalanceType = 'CREDIT';
         let calculateTotal = 0;
@@ -1794,6 +1790,13 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.addAccountForm.get('openingBalance')?.patchValue(calculateTotal);
     }
 
+    /**
+     * This will be use for calculating total foreign credit debit balance
+     *
+     * @param {number} credit
+     * @param {number} debit
+     * @memberof AccountAddNewDetailsComponent
+     */
     public totalForeignOpeningBalanceDebitCredit(credit: number, debit: number): void {
         let calculateTotal = 0;
 
@@ -1806,7 +1809,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
         this.addAccountForm.get('foreignOpeningBalance')?.patchValue(calculateTotal);
     }
-
 }
 
 
