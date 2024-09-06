@@ -5,7 +5,7 @@ import { InstitutionsRequest } from '../../../models/api-models/SettingsIntegrai
 import { SettingIntegrationComponentStore } from '../utility/setting.integration.store';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { GeneralService } from '../../../services/general.service';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
     selector: 'institutions-list',
@@ -41,6 +41,7 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
 
     constructor(
         private componentStore: SettingIntegrationComponentStore,
+        public dialogRef: MatDialogRef<InstitutionsListComponent>,
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,
         private formBuilder: FormBuilder,
@@ -71,6 +72,7 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
             if (response) {
                 this.dialog?.closeAll();
                 this.openWindow(response.link);
+                this.dialogRef.close(response?.reference);
                 this.changeDetection.detectChanges();
             }
         });

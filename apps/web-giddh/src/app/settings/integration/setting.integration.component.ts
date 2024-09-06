@@ -1,4 +1,4 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, pipe, ReplaySubject } from 'rxjs';
 import { takeUntil, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { Component, Input, OnInit, ViewChild, AfterViewInit, ChangeDetectorRef, TemplateRef } from '@angular/core';
@@ -194,10 +194,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public removeGmailIntegrationDialogRef: MatDialogRef<any>;
     /** Holds Store Delete end user agreement  API success state as observable*/
     public deleteEndUseAgreementSuccess$: Observable<any> = this.componentStore.select(state => state.deleteAccountSuccess);
-    /** Holds Store create end user API success state as observable*/
-    public createEndUserAgreementSuccess$: Observable<any> = this.componentStore.select(state => state.createEndUserAgreementSuccess);
     /** Holds true if current company country is gocardless supported country */
     public isGocardlessSupportedCountry: boolean;
+    /** Hold reference number */
+    public referenceNumber: string = '';
 
     constructor(
         private router: Router,
@@ -382,12 +382,10 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         window.addEventListener('message', event => {
             if (this.router.url === '/pages/settings/integration/payment') {
                 if (event && event.data === "GOCARDLESS") {
-                    this.createEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                        if (response?.reference) {
-                            this.componentStore.getRequisition(response.reference);
-                            this.loadPaymentData();
-                        }
-                    });
+                    if (this.referenceNumber) {
+                        this.componentStore.getRequisition(this.referenceNumber);
+                        this.loadPaymentData();
+                    }
                 }
             }
         });
@@ -1196,12 +1194,18 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             localeData: this.localeData,
             commonLocaleData: this.commonLocaleData,
         }
-        this.dialog.open(InstitutionsListComponent, {
+        const dialogRef = this.dialog.open(InstitutionsListComponent, {
             data: data,
             width: 'var(--aside-pane-width)',
             panelClass: 'subscription-sidebar',
             role: 'alertdialog',
             ariaLabel: 'institutionsListDialog'
+        });
+
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+            if (response) {
+                this.referenceNumber = response;
+            }
         });
     }
 
