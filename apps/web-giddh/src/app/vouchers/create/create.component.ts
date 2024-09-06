@@ -855,7 +855,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     if (entry.transactions[0]?.stock) {
                         this.stockUnits[index] = observableOf(entry.transactions[0]?.stock.unitRates);
                     }
-                    this.invoiceForm.get('entries')['controls'].push(this.getEntriesFormGroup(entry, true));
+                    this.invoiceForm.get('entries')['controls'].push(this.getEntriesFormGroup(entry, !response.isCopyVoucher));
 
                     if (entry.discounts?.length) {
                         this.getSelectedDiscounts(index, entry.discounts);
