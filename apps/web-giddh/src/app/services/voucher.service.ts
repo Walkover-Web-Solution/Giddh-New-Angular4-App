@@ -17,9 +17,12 @@ import { VouchersUtilityService } from "../vouchers/utility/vouchers.utility.ser
 import { SALES_API_V2, SALES_API_V4 } from "./apiurls/sales.api";
 import { PURCHASE_ORDER_API } from "./apiurls/purchase-order.api";
 import { PAGINATION_LIMIT } from "../app.constant";
+<<<<<<< HEAD
 import { ADVANCE_RECEIPTS_API } from "./apiurls/advance-receipt-adjustment.api";
 import { BULK_VOUCHER_EXPORT_API } from "./apiurls/bulkvoucherexport.api";
 import { isNull } from "../lodash-optimized";
+=======
+>>>>>>> 61e5add195 (Ankit | Stage | Provide support of multiple deposit in single voucher in create/update flow)
 
 
 @Injectable()
@@ -177,9 +180,9 @@ export class VoucherService {
      * @return {*}  {Observable<BaseResponse<any, any>>}
      * @memberof VoucherService
      */
-    public generateVoucher(accountUniqueName: string | null, model: any): Observable<BaseResponse<any, any>> {
+    public generateVoucher(accountUniqueName: string, model: any): Observable<BaseResponse<any, any>> {
         const companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl + isNull(accountUniqueName) ? SALES_API_V4.GENERATE_CASH_GENERIC_ITEMS : SALES_API_V4.GENERATE_GENERIC_ITEMS;
+        let url = this.config.apiUrl + SALES_API_V4.GENERATE_GENERIC_ITEMS;
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
 
         return this.http.post(url
@@ -385,10 +388,7 @@ export class VoucherService {
     public updateVoucher(model: any): Observable<BaseResponse<any, any>> {
         let accountUniqueName = model.account?.uniqueName;
         this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = this.config.apiUrl +
-            isNull(accountUniqueName)
-            ? SALES_API_V4.UPDATE_CASH_VOUCHER?.replace(':companyUniqueName', this.companyUniqueName)
-            : SALES_API_V4.UPDATE_VOUCHER?.replace(':companyUniqueName', this.companyUniqueName)?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+        let url = this.config.apiUrl + SALES_API_V4.UPDATE_VOUCHER?.replace(':companyUniqueName', this.companyUniqueName)?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
 
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         return this.http.put(url, model)
