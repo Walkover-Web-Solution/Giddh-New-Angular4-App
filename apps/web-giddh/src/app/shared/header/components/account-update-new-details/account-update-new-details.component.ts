@@ -248,8 +248,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public company: any = {
         branch: null,
     };
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -277,7 +275,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public ngOnInit() {
-        this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -940,7 +937,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 openingBalanceType: this.addAccountForm.get('openingBalanceType')?.value
             }
         ];
-        accountRequest.accountOpeningBalance = (this.currentOrganizationType === 'COMPANY' && this.branches?.length > 1) ? this.addAccountForm.get('accountOpeningBalance')?.value : branchModeOpeningBalance;
+        accountRequest.accountOpeningBalance = this.company?.isActive ? this.addAccountForm.get('accountOpeningBalance')?.value : branchModeOpeningBalance;
         if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
             if (selectedStateObj) {

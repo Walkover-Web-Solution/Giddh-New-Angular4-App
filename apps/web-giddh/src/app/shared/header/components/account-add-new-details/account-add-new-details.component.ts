@@ -204,8 +204,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public company: any = {
         branch: null,
     };
-    /** Stores the current organization type */
-    public currentOrganizationType: OrganizationType;
 
     constructor(
         private _fb: UntypedFormBuilder,
@@ -235,7 +233,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public ngOnInit(): void {
-        this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -819,7 +816,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 openingBalanceType: this.addAccountForm.get('openingBalanceType')?.value
             }
         ];
-        accountRequest.accountOpeningBalance =( this.currentOrganizationType ==='COMPANY' && this.branches?.length >1) ? this.addAccountForm.get('accountOpeningBalance')?.value : branchModeOpeningBalance;
+        accountRequest.accountOpeningBalance = this.company.isActive ? this.addAccountForm.get('accountOpeningBalance')?.value : branchModeOpeningBalance;
 
         if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);
@@ -1747,10 +1744,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     /**
-  * Get company branches
-  *
-  * @memberof AccountAddNewDetailsComponent
-*/
+   * Get company branches
+   *
+   * @memberof AccountAddNewDetailsComponent
+ */
     public getCompanyBranches(): void {
         this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
     }
