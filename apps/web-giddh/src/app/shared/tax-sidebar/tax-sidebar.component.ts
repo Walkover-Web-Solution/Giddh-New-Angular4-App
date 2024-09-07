@@ -78,7 +78,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public isUSCompany: boolean;
     /** Holds active company information */
     public activeCompany: any;
-    /** True of active country have at least one Tax Number */
+    /** True if active country have at least one Tax Number */
     public isTaxNumber: boolean=false;
 
     constructor(

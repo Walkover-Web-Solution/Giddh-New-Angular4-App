@@ -106,7 +106,7 @@
                             <td mat-cell *matCellDef="let element">
                                  <amount-field
                                     class="d-inline-block"
-                                    [amount]="element?.originalAmount ?? '-'"
+                                    [amount]="element?.originalAmount"
                                     [currencySymbol]="baseCurrencySymbol"
                                     [currencyCode]="baseCurrencyCode"
                                 ></amount-field>
@@ -119,7 +119,7 @@
                             <td mat-cell *matCellDef="let element">
                                 <amount-field
                                     class="d-inline-block"
-                                    [amount]="element?.outstandingAmount ?? '-'"
+                                    [amount]="element?.outstandingAmount"
                                     [currencySymbol]="baseCurrencySymbol"
                                     [currencyCode]="baseCurrencyCode"
                                 ></amount-field>
