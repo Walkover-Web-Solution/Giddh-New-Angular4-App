@@ -165,7 +165,7 @@
                         </a>
                     </li>
                     <ng-container *ngIf="showTaxMenus && isUKCompany">
-                        <li>
+                        <li *ngIf="isTaxNumber">
                             <a
                                 href="javascript:;"
                                 class="d-block clearfix"
@@ -179,7 +179,7 @@
                                 <span>{{ localeData.vat_liabilities }}</span>
                             </a>
                         </li>
-                        <li>
+                        <li *ngIf="isTaxNumber">
                             <a
                                 href="javascript:;"
                                 class="d-block clearfix"
