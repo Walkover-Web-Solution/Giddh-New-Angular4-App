@@ -57,6 +57,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ExportMasterDialogComponent } from './header/components/export-master-dialog/export-master-dialog.component';
 import { MasterExportOptionComponent } from './header/components/master-export-option/master-export-option.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { AmChartComponentModule } from './amchart-template/amchart-template.module';
 
 const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
     {
@@ -120,6 +121,7 @@ export function provideConfig() {
         CurrencyModule,
         TranslateDirectiveModule,
         AmountFieldComponentModule,
+        AmChartComponentModule,
         AccountAddNewDetailsModule,
         LedgerDiscountModule,
         ConfirmationModalModule,

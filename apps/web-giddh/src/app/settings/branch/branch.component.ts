@@ -112,6 +112,60 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Holds Close Address MatDailog Reference */
     public addressAsidePaneRef: any;
 
+    public   data = [{
+        name: "Shubhendra",
+        children: [{
+            name: "Ravinder",
+            action: "button2",
+            children: [{
+                name: "Dilpreet",
+                value: 23,
+                action: "button6"
+            }, {
+                name: "Divyanshu",
+                value: 25,
+            }]
+        }, {
+            name: "Leena",
+            action: "button3",
+            children: [{
+                name: "Aashish",
+                value: 62,
+            }, {
+                name: "Anshika",
+                value: 4
+
+            }]
+        }, {
+            name: "Kriti",
+            action: "button4",
+            children: [{
+                name: "Ankit",
+                value: 11,
+            }, {
+                name: "Pradeep",
+                value: 92
+            }, {
+                name: "Nisha",
+                value: 17
+            }]
+        }, {
+            name: "Rishi",
+            action: "button5",
+            children: [{
+                name: "Ragini",
+                value: 420
+            }, {
+                name: "Raj",
+                value: 84
+            }, {
+                name: "Shruti",
+                value: 75
+            }]
+        }]
+    }];
+
+
     constructor(
         private router: Router,
         private store: Store<AppState>,
@@ -239,7 +293,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     /**
-     * Open Create company dialog 
+     * Open Create company dialog
      *
      * @memberof BranchComponent
      */

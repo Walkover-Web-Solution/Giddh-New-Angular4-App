@@ -65,6 +65,7 @@ import { CreateAddressModule } from '../shared/create-address/create-address.mod
 import { CommonModule } from '@angular/common';
 import { TagsModule } from './tags/tags.module';
 import { TaxAuthorityModule } from '../theme/tax-authority/tax-authority.module';
+import { AmChartComponentModule } from '../shared/amchart-template/amchart-template.module';
 
 @NgModule({
     declarations: [
@@ -137,7 +138,8 @@ import { TaxAuthorityModule } from '../theme/tax-authority/tax-authority.module'
         WatchVideoModule,
         CreateAddressModule,
         TagsModule,
-        TaxAuthorityModule
+        TaxAuthorityModule,
+        AmChartComponentModule
     ],
 })
 
