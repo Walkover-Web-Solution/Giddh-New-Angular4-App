@@ -66,7 +66,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     /** Holds Payment table columns */
     public paymentColumns: string[] = ["index", "received", "amount"];
     /** Holds Liability table columns */
-    public liabilityColumns: string[] = ["index", "from", "to", "originalAmount", "outstandingAmount", "due"];
+    public liabilityColumns: string[] = ["index", "from", "to", "originalAmount", "outstandingAmount", "type", "due"];
     /** Holds current table columns */
     public displayColumns: string[] = [];
     /** Observable to store true if API Call is in progress */

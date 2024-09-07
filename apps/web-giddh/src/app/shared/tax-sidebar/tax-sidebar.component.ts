@@ -78,6 +78,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public isUSCompany: boolean;
     /** Holds active company information */
     public activeCompany: any;
+    /** True of active country have at least one Tax Number */
+    public isTaxNumber: boolean=false;
 
     constructor(
         private router: Router,
@@ -207,6 +209,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 if (!this.activeCompanyGstNumber && taxes?.length === 1) {
                     this.activeCompanyGstNumber = taxes[0];
                 }
+                this.isTaxNumber = true;
             }
 
             this.changeDetectionRef.detectChanges();

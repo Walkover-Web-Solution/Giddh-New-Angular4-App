@@ -189,6 +189,7 @@ export class VatService {
     public getPaymentLiabilityList(payload: any, model: any , isPaymentMode: boolean): Observable<BaseResponse<any, any>> {
         let url = this.config.apiUrl + (isPaymentMode ? VAT_API.PAYMENTS : VAT_API.LIABILITIES);
         url = url?.replace(':companyUniqueName', encodeURIComponent(model?.companyUniqueName));
+        url = url?.replace(':branchUniqueName', encodeURIComponent(model?.branchUniqueName));
         url = url?.replace(':taxNumber', encodeURIComponent(model?.taxNumber));
         url = url?.replace(':from', encodeURIComponent(model?.from));
         url = url?.replace(':to', encodeURIComponent(model?.to));
