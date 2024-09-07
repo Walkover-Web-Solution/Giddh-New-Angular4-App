@@ -85,7 +85,7 @@
                                     digitsOnlyDirective
                                     formControlName="openingBalance"
                                     [placeholder]="'0.00'"
-                                    [readonly]="this.company?.isActive"
+                                    [readonly]="company?.isActive"
                                 />
                                 <div
                                     class="input-group-addon"
@@ -118,7 +118,7 @@
                             </div>
                         </div>
                         <div
-                            *ngIf="this.company?.isActive"
+                            *ngIf="company?.isActive"
                             class="d-flex justify-content-end"
                         >
                             <span
@@ -144,7 +144,7 @@
                                 formControlName="foreignOpeningBalance"
                                 [placeholder]="'0.00'"
                                 decimalDigitsDirective
-                                [readonly]="this.company?.isActive"
+                                [readonly]="company?.isActive"
                             />
                             <div
                                 class="input-group-addon"
@@ -170,7 +170,7 @@
                             </div>
                         </div>
                         <div
-                            *ngIf="this.company?.isActive"
+                            *ngIf="company?.isActive"
                             class="d-flex justify-content-end"
                         >
                             <span
