@@ -108,7 +108,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
             this.activeCompanyGstNumber = response;
         });
         if (!this.isCompany) {
-        this.getCurrentCompanyBranchTaxNumber();
+            this.getCurrentCompanyBranchTaxNumber();
         }
         this.loadTaxDetails();
 
@@ -227,6 +227,9 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 let taxes = response.body;
                 if (!this.activeCompanyGstNumber && taxes?.length === 1) {
                     this.activeCompanyGstNumber = taxes[0];
+                }
+                if (this.isCompany) {
+                    this.hasTaxNumber = true;
                 }
             }
 
