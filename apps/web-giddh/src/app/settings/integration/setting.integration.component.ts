@@ -198,6 +198,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isGocardlessSupportedCountry: boolean;
     /** Hold reference number */
     public referenceNumber: string = '';
+    /** Holds Store Requistion API success state as observable*/
+    public requistionList$: Observable<any> = this.componentStore.select(state => state.requistionList);
 
     constructor(
         private router: Router,
@@ -384,9 +386,13 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 if (event && event.data === "GOCARDLESS") {
                     if (this.referenceNumber) {
                         this.componentStore.getRequisition(this.referenceNumber);
-                        this.loadPaymentData();
                     }
                 }
+            }
+        });
+        this.requistionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.loadPaymentData();
             }
         });
 
@@ -1217,7 +1223,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
      * @memberof SettingIntegrationComponent
      */
     public selectBankAccount(event: any, bank: any): void {
-        if (event) {
+        if (event?.value) {
             let request = { bankAccountUniqueName: bank?.bankResource?.uniqueName };
             let accountForm = {
                 accountNumber: bank?.bankResource?.accountNumber,
