@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, ReplaySubject, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AppState } from '../store';
 import { select, Store } from '@ngrx/store';
@@ -21,6 +21,7 @@ import * as duration from 'dayjs/plugin/duration';
 import { ConfirmationModalButton } from '../theme/confirmation-modal/confirmation-modal.interface';
 import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { GeneralService } from '../services/general.service';
 dayjs.extend(duration)
 @Component({
     selector: 'app-subscription',
@@ -97,7 +98,8 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private breakPointObservar: BreakpointObserver,
         private generalActions: GeneralActions,
         private changeDetectionRef: ChangeDetectorRef,
-        public dialog: MatDialog,
+        private dialog: MatDialog,
+        private generalService: GeneralService,
         private clipboardService: ClipboardService) {
         this.contactNo$ = this.store.pipe(select(appState => {
             if (appState.session.user) {
@@ -309,8 +311,13 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
             sessionId,
             sessionIndex
         };
-        const dialogRef = this.deleteConfirmationDialog(false);
-        dialogRef.afterClosed().pipe().subscribe(response => {
+        let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.session?.delete_single_session, this.commonLocaleData)
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response === this.commonLocaleData?.app_yes) {
                 this.store.dispatch(this.sessionAction.deleteSession(requestPayload));
             }
@@ -323,42 +330,17 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
      * @memberof SubscriptionComponent
      */
     public clearAllSession(): void {
-        const dialogRef = this.deleteConfirmationDialog(true);
-        dialogRef.afterClosed().pipe().subscribe(response => {
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.session?.delete_all_sessions, this.commonLocaleData)
+            }
+        });
+        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response === this.commonLocaleData?.app_yes) {
                 this.store.dispatch(this.sessionAction.deleteAllSession());
             }
         });
-    }
-
-    /**
-     *
-     *
-     * @param {boolean} allDeletes
-     * @return {*}  {*}
-     * @memberof SubscriptionComponent
-     */
-    public deleteConfirmationDialog(allDeletes: boolean): any {
-        const buttons: Array<ConfirmationModalButton> = [{
-            text: this.commonLocaleData?.app_yes,
-            color: 'primary'
-        },
-        {
-            text: this.commonLocaleData?.app_no
-        }];
-        const headerText: string = this.commonLocaleData?.app_confirmation;
-        const headerCssClass: string = 'd-inline-block mr-1';
-        const messageCssClass: string = 'mr-b1';
-        const messageText: string = allDeletes ? this.localeData?.session?.delete_all_sessions : this.localeData?.session?.delete_single_session;
-        const configuration = { buttons, headerText, headerCssClass, messageCssClass, messageText };
-
-        let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            panelClass: ['mat-dialog-md'],
-            data: {
-                configuration: configuration
-            }
-        });
-        return dialogRef;
     }
 
     /**
