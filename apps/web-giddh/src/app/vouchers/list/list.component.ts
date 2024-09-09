@@ -665,6 +665,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
                 this.dataSource.push(item);
             });
+            console.log("this.dataSource", this.dataSource);
+            
             // When user search in table header then after api call focus on respective search field
             if (this.activeSearchField) {
                 setTimeout(() => {
@@ -680,6 +682,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public showVoucherPreview(voucherUniqueName: string): void {
+        console.log("showVoucherPreview", voucherUniqueName);
+        
         this.vouchersUtilityService.lastVouchers = this.dataSource;
         this.router.navigate([`/pages/vouchers/view/${this.voucherType}/${voucherUniqueName}`]);
     }
@@ -1098,7 +1102,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     public showPaymentDialog(voucher: any): void {
         this.voucherDetails = voucher;
-
         this.dialog.open(this.paymentDialog, {
             panelClass: ['mat-dialog-md']
         });
@@ -1823,3 +1826,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
     }
 }
+
+// https://apitest.giddh.com/company/multipin168414461208805dao0/accounts/cred/vouchers/download?fileType=base64&voucherVersion=2&branchUniqueName=multiplevarianttesting1&lang=en
+// https://apitest.giddh.com/company/multipin168414461208805dao0/accounts/cred/purchase-order/54y1724757167102/download?fileType=base64&branchUniqueName=multiplevarianttesting1&lang=en

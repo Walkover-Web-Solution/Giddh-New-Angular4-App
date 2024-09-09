@@ -1,23 +1,27 @@
 import { Injectable } from "@angular/core";
-import { ComponentStore } from "@ngrx/component-store";
+import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { Store } from "@ngrx/store";
 import { ToasterService } from "../../services/toaster.service";
 import { VoucherService } from "../../services/voucher.service";
 import { AppState } from "../../store";
+import { catchError, EMPTY, Observable, switchMap } from "rxjs";
+import { BaseResponse } from "../../models/api-models/BaseResponse";
 
 export interface VoucherPreviewState {
-    isLoading: boolean;
-    createUpdateInProgress: boolean;
+    isVoucherDownloading: boolean;
+    isVoucherDownloadError: boolean;
+    downloadVoucherResponse: any;
 }
 
 const DEFAULT_STATE: VoucherPreviewState = {
-    isLoading: false,
-    createUpdateInProgress: null,
+    isVoucherDownloading: null,
+    isVoucherDownloadError: null,
+    downloadVoucherResponse: null
 };
 
 @Injectable()
 export class VoucherPreviewComponentStore extends ComponentStore<VoucherPreviewState> {
-    public isLoading$ = this.select((state) => state.isLoading);
+    public downloadVoucherResponse$ = this.select((state) => state.downloadVoucherResponse);
 
     constructor(
         private store: Store<AppState>,
@@ -35,7 +39,41 @@ export class VoucherPreviewComponentStore extends ComponentStore<VoucherPreviewS
     // public branchList$: Observable<any> = this.select(this.store.select(state => state.settings.branches), (response) => response);;
     // public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
 
-
+    readonly downloadVoucherPdf = this.effect((data: Observable<{ model: any, type: string, voucherType: string }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ isVoucherDownloading: true , isVoucherDownloadError: false});
+                return this.voucherService.downloadPdfFile(req.model, req.type, "base64", req.voucherType).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                return this.patchState({
+                                    isVoucherDownloading: false,
+                                    downloadVoucherResponse: res?.body ?? {}
+                                });
+                            } else {
+                                res.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    isVoucherDownloadError: true,
+                                    isVoucherDownloading: false,
+                                    downloadVoucherResponse: {}
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                isVoucherDownloadError: true,
+                                isVoucherDownloading: false,
+                                downloadVoucherResponse: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
 
 
 }

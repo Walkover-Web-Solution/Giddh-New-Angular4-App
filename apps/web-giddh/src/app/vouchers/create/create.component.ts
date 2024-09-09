@@ -3759,6 +3759,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
             }
 
+            console.log("this.invoiceType.isEstimateInvoice",this.invoiceType.isEstimateInvoice);
+            console.log("this.invoiceType.isProformaInvoice",this.invoiceType.isProformaInvoice);
+            console.log("invoiceForm.deposit?.amountForAccount", invoiceForm.deposit?.amountForAccount);
+            
             if (invoiceForm.deposit?.amountForAccount) {
                 invoiceForm.paymentAction = {
                     action: 'paid',

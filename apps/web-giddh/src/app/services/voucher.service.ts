@@ -18,6 +18,8 @@ import { PURCHASE_ORDER_API } from "./apiurls/purchase-order.api";
 import { PAGINATION_LIMIT } from "../app.constant";
 import { ADVANCE_RECEIPTS_API } from "./apiurls/advance-receipt-adjustment.api";
 import { BULK_VOUCHER_EXPORT_API } from "./apiurls/bulkvoucherexport.api";
+import { COMMON_API } from "./apiurls/common.api";
+import { VoucherTypeEnum } from "../vouchers/utility/vouchers.const";
 
 
 @Injectable()
@@ -667,7 +669,7 @@ export class VoucherService {
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
 
-            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
 
         return this.http.deleteWithBody(
             url,
@@ -726,7 +728,7 @@ export class VoucherService {
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         delete postRequest.from;
         delete postRequest.to;
-        
+
         return this.http.post(url, postRequest).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
@@ -734,5 +736,43 @@ export class VoucherService {
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, postRequest)));
+    }
+
+    /**
+     * Download PDF Base64 URL
+     *
+     * @param {*} model
+     * @param {string} downloadOption
+     * @param {string} [fileType="base64"]
+     * @returns {Observable<any>}
+     * @memberof VoucherService
+     */
+    public downloadPdfFile(model: any, downloadOption: string, fileType: string = "base64", voucherType: any): Observable<any> {
+        let apiUrl = '';
+        let httpMethod: 'post' | 'get' = 'post';
+        let apiParams = model;
+        let responseType = (fileType === 'base64') ? {} : { responseType: 'blob' };
+
+        if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(voucherType)) {
+            apiUrl = this.config.apiUrl + COMMON_API.DOWNLOAD_FILE
+                ?.replace(':fileType', fileType)
+                ?.replace(':downloadOption', downloadOption)
+                ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        } else if ([VoucherTypeEnum.generateProforma, VoucherTypeEnum.generateEstimate].includes(voucherType)) {
+            apiUrl = this.config.apiUrl + PROFORMA_API.download
+                ?.replace(':vouchers', voucherType)
+                ?.replace(':fileType', fileType)
+                ?.replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
+                ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        } else if (voucherType === VoucherTypeEnum.purchaseOrder) {
+            httpMethod = 'get';
+            apiUrl = this.config.apiUrl + PURCHASE_ORDER_API.GET_PDF
+                ?.replace(':companyUniqueName', this.generalService.companyUniqueName)
+                ?.replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
+                ?.replace(':poUniqueName', model.poUniqueName);
+            apiParams = undefined;
+        }
+
+        return this.http[httpMethod](apiUrl, apiParams, responseType).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
 }
