@@ -476,6 +476,7 @@
                                         >
                                         <dropdown-field
                                             [label]="localeData?.payment?.linked_account"
+                                            [defaultValue]="bankAccount?.account?.name"
                                             *ngIf="!isIciciBankSupportedCountry"
                                             [cssClass]="'input-background'"
                                             [name]="'bankAccountUniqueName'"
@@ -489,6 +490,7 @@
                                     </div>
                                     <span class="mr-l1 action-div" *ngIf="!isIciciBankSupportedCountry">
                                         <a
+                                            *ngIf="!isGocardlessSupportedCountry"
                                             href="javascript:;"
                                             class="icon-edit-pencil"
                                             (click)="openEditAccountModal(bankAccount)"

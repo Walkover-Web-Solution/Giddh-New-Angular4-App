@@ -236,7 +236,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                 if (isSelectedValueAlreadyChecked?.length > 0) {
                     this.paymentAlerts = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser !== event?.value);
                 } else {
-                    this.paymentAlerts.push(event?.value);
+                    this.paymentAlerts?.push(event?.value);
                 }
 
                 let isAllOptionsChecked = this.paymentAlerts?.filter(paymentAlertUser => paymentAlertUser !== this.selectAllRecords);

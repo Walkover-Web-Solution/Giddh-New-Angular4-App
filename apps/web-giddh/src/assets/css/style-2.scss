@@ -154,7 +154,6 @@ textarea {
 
 .mobile-number-wrapper {
     z-index: 9;
-    
     input.error {
         border: 1px solid var(--color-danger);
     }
@@ -1092,7 +1091,11 @@ textarea {
         margin-left: 20px !important;
     }
 }
-
+.institutions-dialog-body {
+    .mdc-list-item__primary-text {
+        color: var(--color-common-primary-text) !important;
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -1290,7 +1293,7 @@ aside-create-group {
                         overflow-y: auto;
                     }
                 }
-                
+
             // Units are not displaying after creation once the scroll comes on the page
                 &:first-child {
                     mat-list {
