@@ -70,7 +70,6 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
 
         this.createEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                // this.dialog?.closeAll();
                 this.openWindow(response.link);
                 this.dialogRef.close(response?.reference);
                 this.changeDetection.detectChanges();
