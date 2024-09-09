@@ -48,7 +48,7 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
         public dialog: MatDialog,
         @Inject(MAT_DIALOG_DATA) public inputData
     ) {
-        this.initialForm();
+        this.initializeForm();
     }
 
     /**
@@ -70,7 +70,6 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
 
         this.createEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.dialog?.closeAll();
                 this.openWindow(response.link);
                 this.dialogRef.close(response?.reference);
                 this.changeDetection.detectChanges();
@@ -83,11 +82,11 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for intialization form
+     * This will be use for initialization form
      *
      * @memberof InstitutionsListComponent
      */
-    public initialForm(): void {
+    public initializeForm(): void {
         this.searchForm = this.formBuilder.group({
             search: ['']
         });
@@ -109,7 +108,7 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
      * @param {string} searchText
      * @memberof InstitutionsListComponent
      */
-    public filterInstitutions(searchText: string) {
+    public filterInstitutions(searchText: string): void {
         if (searchText) {
             const lowerCaseTerm = searchText.toLowerCase();
             this.filteredBanks = this.institutions.filter(item =>
