@@ -33,8 +33,6 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if current organization is company */
     public isCompanyMode: boolean;
-    /** Holds Company Uniquename */
-    private companyUniqueName: string;
     /** Holds Branch List */
     public branchList: any;
     /** Holds Tax Number List */
@@ -73,18 +71,16 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public liabilityPaymentListInProgress$ = this.componentStore.select(state => state.liabilityPaymentListInProgress);
     /** Holds true if user in vat-payment */
     public isPaymentMode: boolean;
-    /** Company base currency symbol */
-    public baseCurrencySymbol: string = "";
+    /** Stores the current company */
+    public activeCompany: any={};
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private gstReconcileService: GstReconcileService,
         private formBuilder: FormBuilder,
         private store: Store<AppState>,
         private generalService: GeneralService,
-        private vatService: VatService,
         private toaster: ToasterService,
         private modalService: BsModalService,
         private router: Router,
@@ -93,9 +89,8 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         this.initVatLiabilityPaymentForm();
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany && !this.companyUniqueName) {
-                this.companyUniqueName = activeCompany.uniqueName;
-                this.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
+            if (activeCompany) {
+                this.activeCompany = activeCompany;
                 this.getFormControl('companyUniqueName').patchValue(activeCompany.uniqueName);
             }
         });

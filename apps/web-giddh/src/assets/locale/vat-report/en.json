@@ -43,6 +43,5 @@
     "exclusive": "Exclusive",
     "received_date":"Received Date",
     "original_amount":"Original Amount",
-    "outstanding_amount":"Outstanding Amount",
-    "type":"Type"
+    "outstanding_amount":"Outstanding Amount"
 }

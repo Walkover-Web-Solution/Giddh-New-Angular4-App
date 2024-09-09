@@ -10,10 +10,7 @@
             class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
             *ngIf="asideGstSidebarMenuState === 'in'"
         >
-            <tax-sidebar
-                [exclude]="'#primary-new-header'"
-                class="gst-sidebar"
-            ></tax-sidebar>
+            <tax-sidebar [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
     </div>
     <div class="liabilities-payments pd-15">
@@ -55,8 +52,8 @@
             <div class="mt-5" *ngIf="liabilityPaymentListInProgress$ | async">
                 <giddh-page-loader></giddh-page-loader>
             </div>
-            <div class="row mt-5" *ngIf="(!(liabilityPaymentListInProgress$ | async)) && dataSource.length">
-                <div class="table-responsive">
+            <div class="row mt-5" *ngIf="!(liabilityPaymentListInProgress$ | async)">
+                <div class="table-responsive" *ngIf="dataSource.length">
                     <table mat-table [dataSource]="dataSource" class="w-100">
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef>#</th>
@@ -67,12 +64,14 @@
                                 {{ commonLocaleData?.app_amount }}
                             </th>
                             <td mat-cell *matCellDef="let element" class="text-right">
-                                <amount-field
+                               <amount-field
                                     class="d-inline-block"
+                                    *ngIf="element?.amount"
                                     [amount]="element?.amount"
-                                    [currencySymbol]="baseCurrencySymbol"
-                                    [currencyCode]="baseCurrencyCode"
+                                    [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                    [currencyCode]="activeCompany?.baseCurrency"
                                 ></amount-field>
+                                <span *ngIf="!element?.amount">-</span>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="received" *ngIf="isPaymentMode">
@@ -93,7 +92,7 @@
                         </ng-container>
                         <ng-container matColumnDef="to" *ngIf="!isPaymentMode">
                             <th mat-header-cell *matHeaderCellDef>
-                                {{ commonLocaleData?.app_to | titlecase}}
+                                {{ commonLocaleData?.app_to | titlecase }}
                             </th>
                             <td mat-cell *matCellDef="let element">
                                 {{ element?.taxPeriod?.to ?? "-" }}
@@ -104,12 +103,14 @@
                                 {{ localeData?.original_amount }}
                             </th>
                             <td mat-cell *matCellDef="let element">
-                                 <amount-field
+                                <amount-field
                                     class="d-inline-block"
+                                    *ngIf="element?.originalAmount"
                                     [amount]="element?.originalAmount"
-                                    [currencySymbol]="baseCurrencySymbol"
-                                    [currencyCode]="baseCurrencyCode"
+                                    [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                    [currencyCode]="activeCompany?.baseCurrency"
                                 ></amount-field>
+                                <span *ngIf="!element?.originalAmount">-</span>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="outstandingAmount" *ngIf="!isPaymentMode">
@@ -117,17 +118,19 @@
                                 {{ localeData?.outstanding_amount }}
                             </th>
                             <td mat-cell *matCellDef="let element">
-                                <amount-field
+                               <amount-field
                                     class="d-inline-block"
+                                    *ngIf="element?.outstandingAmount"
                                     [amount]="element?.outstandingAmount"
-                                    [currencySymbol]="baseCurrencySymbol"
-                                    [currencyCode]="baseCurrencyCode"
+                                    [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                    [currencyCode]="activeCompany?.baseCurrency"
                                 ></amount-field>
+                                <span *ngIf="!element?.outstandingAmount">-</span>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="type" *ngIf="!isPaymentMode">
                             <th mat-header-cell *matHeaderCellDef>
-                                {{ localeData?.type }}
+                                {{ commonLocaleData?.app_type }}
                             </th>
                             <td mat-cell *matCellDef="let element">
                                 {{ element?.type ?? "-" }}
@@ -144,6 +147,9 @@
                         <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayColumns"></tr>
                     </table>
+                </div>
+                <div class="no-data" *ngIf="!dataSource.length">
+                    <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
                 </div>
             </div>
         </div>
