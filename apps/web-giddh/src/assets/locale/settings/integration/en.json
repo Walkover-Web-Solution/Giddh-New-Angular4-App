@@ -128,7 +128,11 @@
         "get_instant_overdraft": "Get Instant Overdraft",
         "duration_error": "Please select duration for given amount",
         "required_field_error": "Please fill all required fields",
-        "connect_bank": "Connect Bank"
+        "connect_bank": "Connect Bank",
+        "confirm_bank_delete_message": "Are you sure you want to delete the bank account?",
+        "search_institutions":"Search Institution",
+        "institutions":"Institutions",
+        "bank_list":"Bank List"
     },
     "communication": {
         "tab_heading": "Communication"
