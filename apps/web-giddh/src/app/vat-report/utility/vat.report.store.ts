@@ -4,6 +4,8 @@ import { Observable, switchMap, catchError, EMPTY, of, mergeMap } from "rxjs";
 import { ToasterService } from "../../services/toaster.service";
 import { VatService } from "../../services/vat.service";
 import { GstReconcileService } from "../../services/gst-reconcile.service";
+import { Store } from "@ngrx/store";
+import { AppState } from "../../store";
 
 export interface VatReportState {
     liabilityPaymentListInProgress: boolean;
@@ -23,10 +25,13 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
     constructor(
         private toaster: ToasterService,
         private vatService: VatService,
-        private gstReconcileService: GstReconcileService
+        private gstReconcileService: GstReconcileService,
+        private store: Store<AppState>
     ) {
         super(DEFAULT_STATE);
     }
+
+    public currentCompanyBranches$: Observable<any> = this.select(this.store.select(state => state.settings.branches), (response) => response);
 
     /**
     *   Save list of Payment Liability

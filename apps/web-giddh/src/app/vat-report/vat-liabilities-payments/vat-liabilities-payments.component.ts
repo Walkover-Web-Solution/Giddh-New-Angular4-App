@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../app.constant';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
@@ -8,9 +8,7 @@ import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
-import { GstReconcileService } from '../../services/gst-reconcile.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { VatService } from '../../services/vat.service';
 import { ToasterService } from '../../services/toaster.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VatReportComponentStore } from '../utility/vat.report.store';
@@ -33,8 +31,6 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if current organization is company */
     public isCompanyMode: boolean;
-    /** Holds Company Uniquename */
-    private companyUniqueName: string;
     /** Holds Branch List */
     public branchList: any;
     /** Holds Tax Number List */
@@ -66,25 +62,23 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     /** Holds Payment table columns */
     public paymentColumns: string[] = ["index", "received", "amount"];
     /** Holds Liability table columns */
-    public liabilityColumns: string[] = ["index", "from", "to", "originalAmount", "outstandingAmount", "due"];
+    public liabilityColumns: string[] = ["index", "from", "to", "originalAmount", "outstandingAmount", "type", "due"];
     /** Holds current table columns */
     public displayColumns: string[] = [];
     /** Observable to store true if API Call is in progress */
     public liabilityPaymentListInProgress$ = this.componentStore.select(state => state.liabilityPaymentListInProgress);
     /** Holds true if user in vat-payment */
     public isPaymentMode: boolean;
-    /** Company base currency symbol */
-    public baseCurrencySymbol: string = "";
+    /** Stores the current company */
+    public activeCompany: any = {};
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
 
     constructor(
         private activatedRoute: ActivatedRoute,
-        private gstReconcileService: GstReconcileService,
         private formBuilder: FormBuilder,
         private store: Store<AppState>,
         private generalService: GeneralService,
-        private vatService: VatService,
         private toaster: ToasterService,
         private modalService: BsModalService,
         private router: Router,
@@ -93,9 +87,8 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         this.initVatLiabilityPaymentForm();
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
-            if (activeCompany && !this.companyUniqueName) {
-                this.companyUniqueName = activeCompany.uniqueName;
-                this.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
+            if (activeCompany) {
+                this.activeCompany = activeCompany;
                 this.getFormControl('companyUniqueName').patchValue(activeCompany.uniqueName);
             }
         });
