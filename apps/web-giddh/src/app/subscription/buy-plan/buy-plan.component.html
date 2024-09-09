@@ -338,7 +338,7 @@
                                                                                 [currencySymbol]="
                                                                                     plan?.currency?.symbol
                                                                                 "
-                                                                                [currencyCode]="false"
+                                                                                [currencyCode]="plan?.currency?.code"
                                                                             >
                                                                             </amount-field>
                                                                         </span>
@@ -357,7 +357,7 @@
                                                                             [spaceAfterCurrencySymbol]="false"
                                                                             [amount]="plan?.monthlyAmount"
                                                                             [currencySymbol]="plan?.currency?.symbol"
-                                                                            [currencyCode]="false"
+                                                                            [currencyCode]="plan?.currency?.code"
                                                                         >
                                                                         </amount-field>
                                                                     </span>
@@ -932,9 +932,12 @@
                                                 <mat-radio-button color="primary" value="CARD">{{
                                                     localeData?.credit_debit_card
                                                 }}</mat-radio-button>
-                                                <mat-radio-button color="primary" value="UPI" *ngIf="selectedPlan?.entityCode === 'IND'">{{
-                                                    localeData?.upi
-                                                }}</mat-radio-button>
+                                                <mat-radio-button
+                                                    color="primary"
+                                                    value="UPI"
+                                                    *ngIf="selectedPlan?.entityCode === 'IND'"
+                                                    >{{ localeData?.upi }}</mat-radio-button
+                                                >
                                             </mat-radio-group>
                                         </mat-card-content>
                                     </mat-card>

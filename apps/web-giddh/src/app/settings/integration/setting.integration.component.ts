@@ -198,8 +198,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public isGocardlessSupportedCountry: boolean;
     /** Hold reference number */
     public referenceNumber: string = '';
-    /** Holds Store Requistion API success state as observable*/
-    public requistionList$: Observable<any> = this.componentStore.select(state => state.requistionList);
+    /** Holds Store Requisition API success state as observable*/
+    public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
 
     constructor(
         private router: Router,
@@ -390,7 +390,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 }
             }
         });
-        this.requistionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+
+        this.requisitionList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.loadPaymentData();
             }
@@ -1208,7 +1209,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             ariaLabel: 'institutionsListDialog'
         });
 
-        dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
+        dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.referenceNumber = response;
             }

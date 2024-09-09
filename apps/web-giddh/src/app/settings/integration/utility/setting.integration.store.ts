@@ -9,7 +9,7 @@ import { SettingsIntegrationService } from "../../../services/settings.integraio
 
 export interface SettingIntegrationState {
     institutionList: any;
-    requistionList: any;
+    requisitionList: any;
     institutionsListInProgress: boolean;
     requistionListInProgress: boolean;
     createEndUserAgreementSuccess: any;
@@ -18,7 +18,7 @@ export interface SettingIntegrationState {
 
 export const DEFAULT_SETTING_INTEGRATION_STATE: SettingIntegrationState = {
     institutionList: null,
-    requistionList: null,
+    requisitionList: null,
     institutionsListInProgress: null,
     requistionListInProgress: null,
     createEndUserAgreementSuccess: null,
@@ -88,13 +88,13 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 return this.patchState({
-                                    requistionList: res?.body ?? [],
+                                    requisitionList: res?.body ?? [],
                                     requistionListInProgress: false
                                 });
                             } else {
                                 res.message && this.toasterService.showSnackBar("error", res.message);
                                 return this.patchState({
-                                    requistionList: [],
+                                    requisitionList: [],
                                     requistionListInProgress: false
                                 });
                             }
@@ -102,7 +102,7 @@ export class SettingIntegrationComponentStore extends ComponentStore<SettingInte
                         (error: any) => {
                             this.toasterService.showSnackBar("error", error);
                             return this.patchState({
-                                requistionList: [],
+                                requisitionList: [],
                                 requistionListInProgress: false
                             });
                         }
