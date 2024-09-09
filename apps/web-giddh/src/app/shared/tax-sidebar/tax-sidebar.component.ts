@@ -12,6 +12,7 @@ import { OrganizationType } from '../../models/user-login-state';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { GstReconcileActions } from '../../actions/gst-reconcile/gst-reconcile.actions';
+import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
     selector: 'tax-sidebar',
@@ -76,8 +77,13 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public isUSCompany: boolean;
     /** Holds active company information */
     public activeCompany: any;
-    /** True if active country have at least one Tax Number */
-    public isTaxNumber: boolean=false;
+    /** True if Current branch has Tax Number */
+    public hasTaxNumber: boolean = true;
+    /** Stores the current branch */
+    private currentBranch: any = { name: '', uniqueName: '' };
+    /** Observable to store the branches of current company */
+    public currentCompanyBranches$: Observable<any>;
+
 
     constructor(
         private router: Router,
@@ -101,7 +107,9 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.gstR?.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(response => {
             this.activeCompanyGstNumber = response;
         });
-
+        if (!this.isCompany) {
+        this.getCurrentCompanyBranchTaxNumber();
+        }
         this.loadTaxDetails();
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
@@ -152,6 +160,21 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
         this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
     }
 
+    /**
+     * Get Current company branches information
+     *
+     * @private
+     * @memberof TaxSidebarComponent
+     */
+    private getCurrentCompanyBranchTaxNumber(): void {
+        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
+        this.currentCompanyBranches$.subscribe(response => {
+            let currentBranchUniqueName
+            currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+            this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
+            this.hasTaxNumber = this.currentBranch?.addresses?.filter(address => address?.taxNumber?.length > 0)?.length > 0;
+        });
+    }
     /**
      * This function will destroy the subscribers
      *
@@ -205,7 +228,6 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 if (!this.activeCompanyGstNumber && taxes?.length === 1) {
                     this.activeCompanyGstNumber = taxes[0];
                 }
-                this.isTaxNumber = true;
             }
 
             this.changeDetectionRef.detectChanges();
