@@ -234,7 +234,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
                 .data(this.data)
                 .svgWidth(300)
                 .initialZoom(0.7)
-                .nodeHeight((d) => 175)
+                .nodeHeight((d) => 100)
                 .childrenMargin((d) => 40)
                 .compactMarginBetween((d) => 15)
                 .compactMarginPair((d) => 80)
@@ -253,17 +253,13 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
                     }, 0);
 
                     return `
-            <div id="${nodeId}" style="padding-top:30px;background-color:none;margin-left:1px;height:${d.height}px;border-radius:2px;overflow:visible">
+            <div id="${nodeId}" style="padding-top:30px;background-color:none;margin-left:1px;height:80px;border-radius:2px;overflow:visible">
               <div style="height:${d.height - 32}px;padding-top:0px;background-color:white;border:1px solid lightgray;">
                <div style="margin-right:10px;margin-top:15px;float:right">${d.data.nodeId}</div>
                <div style="margin-top:-30px;background-color:#3AB6E3;height:10px;width:${d.width - 2}px;border-radius:1px"></div>
                <div style="padding:20px; padding-top:35px;text-align:center">
                    <div style="color:#111672;font-size:16px;font-weight:bold"> ${d.data.name} </div>
-                   <div style="color:#404040;font-size:16px;margin-top:4px"> ${d.data.positionName} </div>
-               </div>
-               <div style="display:flex;justify-content:space-between;padding-left:15px;padding-right:15px;">
-                 <div > Manages:  ${d.data._directSubordinates} 👤</div>
-                 <div > Oversees: ${d.data._totalSubordinates} 👤</div>
+                   <div style="color:#404040;font-size:16px;margin-top:4px"> ${d.data.alias} </div>
                </div>
               </div>
             </div>
@@ -300,22 +296,108 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
             {
                 "nodeId": "1",
                 "parentNodeId": null,
-                "expanded": false
+                "expanded": false,
+                "businessType": "Registered",
+                "businessNature": "Service",
+                "addresses": [
+                    {
+                        "name": "Ravinder Singh",
+                        "address": "Testing 3",
+                        "stateCode": "MP",
+                        "pincode": "452001",
+                        "isDefault": true,
+                        "stateName": "Madhya Pradesh",
+                        "taxNumber": "23MKJNH3434A2Z1",
+                        "taxType": "GSTIN",
+                        "uniqueName": "bf61663585984145"
+                    }
+                ],
+                "isArchived": false,
+                "name": "AAAA (E-invoice)",
+                "consolidatedBranch": false,
+                "alias": "xyz",
+                "uniqueName": "aaaaeinvoice1",
+                "taxType": "GSTIN",
+                "defaultBranch": false
             },
             {
                 "nodeId": "2",
                 "parentNodeId": "1",
-                "expanded": true
+                "expanded": true,
+                "businessType": "Registered",
+                "businessNature": "Service",
+                "addresses": [
+                    {
+                        "name": "Ravinder Singh",
+                        "address": "Testing 3",
+                        "stateCode": "MP",
+                        "pincode": "452001",
+                        "isDefault": true,
+                        "stateName": "Madhya Pradesh",
+                        "taxNumber": "23MKJNH3434A2Z1",
+                        "taxType": "GSTIN",
+                        "uniqueName": "bf61663585984145"
+                    }
+                ],
+                "isArchived": false,
+                "name": "AAAA (E-invoice)",
+                "consolidatedBranch": false,
+                "alias": "Sales/purchase register",
+                "uniqueName": "aaaaeinvoice9",
+                "taxType": "GSTIN",
+                "defaultBranch": false
             },
             {
                 "nodeId": "3",
                 "parentNodeId": "1",
-                "expanded": true
+                "expanded": true,
+                "businessType": "Registered",
+                "businessNature": "Service",
+                "addresses": [
+                    {
+                        "name": "Ravinder Singh",
+                        "address": "Testing 3",
+                        "stateCode": "MP",
+                        "pincode": "452001",
+                        "isDefault": true,
+                        "stateName": "Madhya Pradesh",
+                        "taxNumber": "23MKJNH3434A2Z1",
+                        "taxType": "GSTIN",
+                        "uniqueName": "bf61663585984145"
+                    }
+                ],
+                "isArchived": false,
+                "name": "AAAA (E-invoice)",
+                "consolidatedBranch": false,
+                "alias": "sumit",
+                "uniqueName": "aaaaeinvoice2",
+                "taxType": "GSTIN",
+                "defaultBranch": false
             },
             {
                 "nodeId": "4",
                 "parentNodeId": "2",
-                "expanded": true
+                "expanded": true,
+                "businessType": "Registered",
+                "businessNature": "Service",
+                "addresses": [
+                    {
+                        "name": "Divyanshu",
+                        "address": "dsds d",
+                        "pincode": "123456",
+                        "isDefault": true,
+                        "taxNumber": "",
+                        "taxType": "GSTIN",
+                        "uniqueName": "sa71718178651612"
+                    }
+                ],
+                "isArchived": false,
+                "name": "AAAA (E-invoice)",
+                "consolidatedBranch": false,
+                "alias": "ashiash -23453123",
+                "uniqueName": "aaaaeinvoice15",
+                "taxType": "GSTIN",
+                "defaultBranch": false
             }
         ]
         this.updateChart();
@@ -423,6 +505,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
         let branchFilterRequest = new BranchFilterRequest();
         branchFilterRequest.from = this.filters['from'];
         branchFilterRequest.to = this.filters['to'];
+        branchFilterRequest.hierarchyType = 'tree';
 
         if (branchFilterRequest.from && branchFilterRequest.to) {
             this.showLoader = true;
