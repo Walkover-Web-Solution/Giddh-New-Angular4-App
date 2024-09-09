@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -26,7 +26,8 @@ import { AppState } from '../../store/roots';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/settings.constant';
 import { SettingsUtilityService } from '../services/settings-utility.service';
 import { FormControl } from '@angular/forms';
-
+import * as d3 from 'd3';
+import { OrgChart } from 'd3-org-chart';
 @Component({
     selector: 'setting-branch',
     templateUrl: './branch.component.html',
@@ -45,7 +46,10 @@ import { FormControl } from '@angular/forms';
         ]),
     ]
 })
-export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
+export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+    @ViewChild("chartContainer") chartContainer: ElementRef;
+    public data: any[] = [];
+    public chart: any;
     /** Change status modal instance */
     @ViewChild('branchModal', { static: false }) public branchModal: ModalDirective;
     @ViewChild('companyadd', { static: false }) public companyadd: ElementViewContainerRef;
@@ -132,9 +136,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public ngOnInit() {
         this.getOnboardingForm();
-        this.searchBranchQuery.valueChanges.pipe(debounceTime(700),distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe( query => {
-            if(query !== undefined && query !== null) {
-                if(query) {
+        this.searchBranchQuery.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(query => {
+            if (query !== undefined && query !== null) {
+                if (query) {
                     this.handleBranchSearch(query);
                 } else {
                     this.resetFilter();
@@ -212,6 +216,64 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
 
+    public ngOnChanges(changes: SimpleChanges): void {
+        this.updateChart();
+    }
+
+    updateChart() {
+        if (!this.data || !this.chartContainer) {
+            return;
+        }
+        if (!this.chart) {
+            this.chart = new OrgChart();
+        }
+        console.log(this.chart);
+        d3.csv('https://raw.githubusercontent.com/bumbeishvili/sample-data/main/org.csv').then((dataFlattened) => {
+            this.chart
+                .container(this.chartContainer.nativeElement)
+                .data(this.data)
+                .svgWidth(300)
+                .initialZoom(0.7)
+                .nodeHeight((d) => 175)
+                .childrenMargin((d) => 40)
+                .compactMarginBetween((d) => 15)
+                .compactMarginPair((d) => 80)
+                .nodeContent((d, i, arr, state) => {
+                    // Unique ID for each node
+                    const nodeId = `node-${d.id}`;
+
+                    setTimeout(() => {
+                        // Add the click event listener after rendering
+                        const nodeElement = document.getElementById(nodeId);
+                        if (nodeElement) {
+                            nodeElement.addEventListener('click', () => {
+                                this.updateBranch(d);  // Calls Angular method
+                            });
+                        }
+                    }, 0);
+
+                    return `
+            <div id="${nodeId}" style="padding-top:30px;background-color:none;margin-left:1px;height:${d.height}px;border-radius:2px;overflow:visible">
+              <div style="height:${d.height - 32}px;padding-top:0px;background-color:white;border:1px solid lightgray;">
+               <div style="margin-right:10px;margin-top:15px;float:right">${d.data.nodeId}</div>
+               <div style="margin-top:-30px;background-color:#3AB6E3;height:10px;width:${d.width - 2}px;border-radius:1px"></div>
+               <div style="padding:20px; padding-top:35px;text-align:center">
+                   <div style="color:#111672;font-size:16px;font-weight:bold"> ${d.data.name} </div>
+                   <div style="color:#404040;font-size:16px;margin-top:4px"> ${d.data.positionName} </div>
+               </div>
+               <div style="display:flex;justify-content:space-between;padding-left:15px;padding-right:15px;">
+                 <div > Manages:  ${d.data._directSubordinates} 👤</div>
+                 <div > Oversees: ${d.data._totalSubordinates} 👤</div>
+               </div>
+              </div>
+            </div>
+          `;
+                })
+                .render();
+        });
+    }
+
+
     /**
      * Performs local search among branches
      *
@@ -233,13 +295,38 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof BranchComponent
      */
     public ngAfterViewInit(): void {
+
+        this.data = [
+            {
+                "nodeId": "1",
+                "parentNodeId": null,
+                "expanded": false
+            },
+            {
+                "nodeId": "2",
+                "parentNodeId": "1",
+                "expanded": true
+            },
+            {
+                "nodeId": "3",
+                "parentNodeId": "1",
+                "expanded": true
+            },
+            {
+                "nodeId": "4",
+                "parentNodeId": "2",
+                "expanded": true
+            }
+        ]
+        this.updateChart();
+
         if (this.isBranch) {
             this.openCreateCompanyDialog();
         }
     }
 
     /**
-     * Open Create company dialog 
+     * Open Create company dialog
      *
      * @memberof BranchComponent
      */
@@ -257,6 +344,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof BranchComponent
      */
     public updateBranch(branch: any): void {
+        console.log(branch);
         this.branchDetails = branch;
 
         this.loadAddresses('GET', () => {

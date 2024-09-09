@@ -6,6 +6,12 @@
     (translationComplete)="translationComplete($event)"
 >
     <div class="clearfix">
+        <!-- <div #chartContainer id="chartContainer"></div> -->
+         <div
+      class="chart-container"
+      #chartContainer id="chartContainer"
+      style="height: 500px; background-color: #f6f6f6"
+    ></div>
         <div class="date-advance-search row mt-4">
             <div class="col-sm-12 mr-b15 branch-header d-flex justify-content-between">
                 <form class="form-inline input-group-date-range-picker pr d-flex flex-row mr-0">
@@ -29,7 +35,7 @@
                                 aria-label="cross icon"
                                 [matTooltip]="localeData?.reset_search"
                             >
-                                <i aria-hidden="true"  class="icon-cross d-inline-block font-12 mr-1"></i> 
+                                <i aria-hidden="true"  class="icon-cross d-inline-block font-12 mr-1"></i>
                                 <span>{{ commonLocaleData?.app_clear_filter }}</span>
                             </button>
                         </div>
