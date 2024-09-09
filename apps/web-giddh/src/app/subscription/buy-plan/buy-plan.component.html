@@ -762,7 +762,7 @@
                                                         [placeholder]="commonLocaleData?.app_country"
                                                         class="mb-3 d-block"
                                                         [options]="commonCountrySource"
-                                                        (selectedOption)="selectCountry($event); setFinalAmount()"
+                                                        (selectedOption)="selectCountry($event)"
                                                         [defaultValue]="selectedCountry"
                                                         [showError]="
                                                             isFormSubmitted && !secondStepForm.get('country')?.value
