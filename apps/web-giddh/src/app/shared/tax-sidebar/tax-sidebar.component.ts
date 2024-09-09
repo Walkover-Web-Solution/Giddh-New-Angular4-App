@@ -13,12 +13,14 @@ import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { GstReconcileActions } from '../../actions/gst-reconcile/gst-reconcile.actions';
 import { cloneDeep } from '../../lodash-optimized';
+import { VatReportComponentStore } from '../../vat-report/utility/vat.report.store';
 
 @Component({
     selector: 'tax-sidebar',
     templateUrl: './tax-sidebar.component.html',
     styleUrls: ['tax-sidebar.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [VatReportComponentStore]
 })
 
 export class TaxSidebarComponent implements OnInit, OnDestroy {
@@ -82,9 +84,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     /** True if Current branch has Tax Number */
     public hasTaxNumber: boolean = true;
     /** Stores the current branch */
-    private currentBranch: any = { name: '', uniqueName: '' };
-    /** Observable to store the branches of current company */
-    public currentCompanyBranches$: Observable<any>;
+    private currentBranch: any = {};
 
 
     constructor(
@@ -93,7 +93,8 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private gstReconcileService: GstReconcileService,
         private changeDetectionRef: ChangeDetectorRef,
-        private gstAction: GstReconcileActions
+        private gstAction: GstReconcileActions,
+        private componentStore: VatReportComponentStore
     ) { }
 
     /**
@@ -171,12 +172,12 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
      * @memberof TaxSidebarComponent
      */
     private getCurrentCompanyBranchTaxNumber(): void {
-        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-        this.currentCompanyBranches$.subscribe(response => {
-            let currentBranchUniqueName
-            currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-            this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
-            this.hasTaxNumber = this.currentBranch?.addresses?.filter(address => address?.taxNumber?.length > 0)?.length > 0;
+        this.componentStore.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                const currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
+                this.hasTaxNumber = this.currentBranch?.addresses?.filter(address => address?.taxNumber?.length > 0)?.length > 0;
+            }
         });
     }
     /**

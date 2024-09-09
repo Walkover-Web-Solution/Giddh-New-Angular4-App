@@ -72,7 +72,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     /** Holds true if user in vat-payment */
     public isPaymentMode: boolean;
     /** Stores the current company */
-    public activeCompany: any={};
+    public activeCompany: any = {};
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
 
