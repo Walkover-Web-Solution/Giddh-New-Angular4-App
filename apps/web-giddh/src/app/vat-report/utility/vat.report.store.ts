@@ -26,7 +26,7 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
         private toaster: ToasterService,
         private vatService: VatService,
         private gstReconcileService: GstReconcileService,
-        private store: Store<AppState>,
+        private store: Store<AppState>
     ) {
         super(DEFAULT_STATE);
     }
