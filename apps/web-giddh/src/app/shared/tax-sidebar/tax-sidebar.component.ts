@@ -80,7 +80,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     /** Holds active company information */
     public activeCompany: any;
     /** True if Current branch has Tax Number */
-    public hasTaxNumber: boolean = true;
+    public hasTaxNumber: boolean = false;
     /** Stores the current branch */
     private currentBranch: any = {};
 
