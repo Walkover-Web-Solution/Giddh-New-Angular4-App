@@ -87,11 +87,7 @@
                                 {{ commonLocaleData?.app_from }}
                             </th>
                             <td mat-cell *matCellDef="let element">
-                                {{
-                                    element?.taxPeriod?.from
-                                        ? dayjs(element.taxPeriod.from).format(giddhDateFormat)
-                                        : "-"
-                                }}
+                                {{ element?.taxPeriod?.from ?? "-" }}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="to" *ngIf="!isPaymentMode">
@@ -99,7 +95,7 @@
                                 {{ commonLocaleData?.app_to | titlecase }}
                             </th>
                             <td mat-cell *matCellDef="let element">
-                                {{ element?.taxPeriod?.to ? dayjs(element.taxPeriod.to).format(giddhDateFormat) : "-" }}
+                                {{ element?.taxPeriod?.to ?? "-" }}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="originalAmount" *ngIf="!isPaymentMode">

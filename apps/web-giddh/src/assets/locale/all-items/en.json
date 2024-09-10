@@ -561,6 +561,7 @@
                     "hide": "sidebar",
                     "additional": {
                         "queryParams": {
+                            "voucherVersion": 2,
                             "countrySpecific": [
                                 "GB"
                             ]
@@ -575,6 +576,7 @@
                     "hide": "sidebar",
                     "additional": {
                         "queryParams": {
+                            "voucherVersion": 2,
                             "countrySpecific": [
                                 "GB"
                             ]
