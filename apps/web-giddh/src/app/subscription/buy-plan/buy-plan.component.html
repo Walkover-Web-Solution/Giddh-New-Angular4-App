@@ -653,7 +653,10 @@
                                                 </div>
                                             </ng-container>
                                         </div>
-                                        <div class="grid-list-div list-grid">
+                                        <div
+                                            class="grid-list-div list-grid"
+                                            *ngIf="newUserSelectedCountry === 'IND - India'"
+                                        >
                                             <div class="grid-title-left">
                                                 <span class="inner-name mat-table-sticky">
                                                     {{ localeData?.gst_direct }}
