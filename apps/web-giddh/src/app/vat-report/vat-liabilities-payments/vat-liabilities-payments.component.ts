@@ -188,7 +188,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     */
     public getLiabilitiesPayment(): void {
         let payload = this.generalService.getUserAgentData();
-        if (this.isProdMode) {
+        if (!this.isProdMode) {
             payload["Gov-Test-Scenario"] = "MULTIPLE_PAYMENTS_2018_19";
         }
         this.componentStore.getLiabilityPaymentList({ payload: payload, searchForm: this.searchForm.value, isPaymentMode: this.isPaymentMode });
