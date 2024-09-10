@@ -53,7 +53,7 @@
                 <giddh-page-loader></giddh-page-loader>
             </div>
             <div class="row mt-5" *ngIf="!(liabilityPaymentListInProgress$ | async)">
-                <div class="table-responsive">
+                <div class="table-responsive" *ngIf="hasTaxNumber">
                     <table mat-table [dataSource]="dataSource" class="w-100" *ngIf="dataSource.length">
                         <ng-container matColumnDef="index">
                             <th mat-header-cell *matHeaderCellDef>#</th>
@@ -64,7 +64,7 @@
                                 {{ commonLocaleData?.app_amount }}
                             </th>
                             <td mat-cell *matCellDef="let element" class="text-right">
-                               <amount-field
+                                <amount-field
                                     class="d-inline-block"
                                     *ngIf="element?.amount"
                                     [amount]="element?.amount"
@@ -87,7 +87,11 @@
                                 {{ commonLocaleData?.app_from }}
                             </th>
                             <td mat-cell *matCellDef="let element">
-                                {{ element?.taxPeriod?.from ?? "-" }}
+                                {{
+                                    element?.taxPeriod?.from
+                                        ? dayjs(element.taxPeriod.from).format(giddhDateFormat)
+                                        : "-"
+                                }}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="to" *ngIf="!isPaymentMode">
@@ -95,7 +99,7 @@
                                 {{ commonLocaleData?.app_to | titlecase }}
                             </th>
                             <td mat-cell *matCellDef="let element">
-                                {{ element?.taxPeriod?.to ?? "-" }}
+                                {{ element?.taxPeriod?.to ? dayjs(element.taxPeriod.to).format(giddhDateFormat) : "-" }}
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="originalAmount" *ngIf="!isPaymentMode">
@@ -118,7 +122,7 @@
                                 {{ localeData?.outstanding_amount }}
                             </th>
                             <td mat-cell *matCellDef="let element">
-                               <amount-field
+                                <amount-field
                                     class="d-inline-block"
                                     *ngIf="element?.outstandingAmount"
                                     [amount]="element?.outstandingAmount"
@@ -151,7 +155,9 @@
                         <h1>{{ commonLocaleData?.app_no_data_found }}</h1>
                     </div>
                 </div>
-
+                <div *ngIf="!hasTaxNumber" class="no-data no-report">
+                    <h1>{{ localeData?.no_vrn_available }}</h1>
+                </div>
             </div>
         </div>
     </div>
