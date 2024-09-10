@@ -12,6 +12,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ToasterService } from '../../services/toaster.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { VatReportComponentStore } from '../utility/vat.report.store';
+import { cloneDeep } from '../../lodash-optimized';
 
 @Component({
     selector: 'vat-liabilities-payments',
@@ -39,6 +40,10 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public selectedDateRange: any;
     /** This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /** dayjs object */
+    public dayjs = dayjs;
+    /** This holds giddh date format */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Selected range label */
     public selectedRangeLabel: any = "";
     /** This will store the x/y position of the field to show datepicker under it */
@@ -73,6 +78,10 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public activeCompany: any = {};
     /** This will hold the value out/in to open/close setting sidebar popup */
     public asideGstSidebarMenuState: string = 'in';
+    /** True if current company or branch has tax number */
+    public hasTaxNumber: boolean = false;
+    /** Holds current branch information */
+    private currentBranch: any = {};
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -106,19 +115,6 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
             this.isPaymentMode = this.router.routerState.snapshot.url.includes('payments');
             this.displayColumns = this.isPaymentMode ? this.paymentColumns : this.liabilityColumns;
         });
-        this.loadTaxDetails();
-        this.taxNumber$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.body?.length) {
-                this.taxesList = response.body.map(tax => ({
-                    label: tax,
-                    value: tax
-                }));
-                if (this.taxesList.length === 1) {
-                    this.getFormControl('taxNumber').patchValue(this.taxesList[0].value);
-                }
-                this.getLiabilitiesPayment();
-            }
-        });
         this.liabilityPaymentList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if ((this.isPaymentMode && response?.body?.payments) || ((!this.isPaymentMode) && response?.body?.liabilities)) {
                 this.dataSource = this.isPaymentMode ? response.body.payments : response.body.liabilities;
@@ -131,6 +127,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
 
         this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
         if (this.isCompanyMode) {
+            this.loadTaxDetails();
             this.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response) {
                     if (response?.length > 1) {
@@ -153,7 +150,41 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
             });
         } else {
             this.getFormControl('branchUniqueName').patchValue(this.generalService.currentBranchUniqueName);
+            this.getCurrentCompanyBranchTaxNumber();
         }
+        this.taxNumber$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.body?.length) {
+                this.taxesList = response.body.map(tax => ({
+                    label: tax,
+                    value: tax
+                }));
+                if (this.taxesList.length === 1) {
+                    this.getFormControl('taxNumber').patchValue(this.taxesList[0].value);
+                }
+                if (this.isCompanyMode) {
+                    this.hasTaxNumber = true;
+                }
+                this.getLiabilitiesPayment();
+            }
+        });
+    }
+        /**
+     * Get Current company branches information
+     *
+     * @private
+     * @memberof VatLiabilitiesPayments
+     */
+    private getCurrentCompanyBranchTaxNumber(): void {
+            this.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                const currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
+                this.hasTaxNumber = this.currentBranch?.addresses?.filter(address => address?.taxNumber?.length > 0)?.length > 0;
+                if (this.hasTaxNumber) {
+                    this.loadTaxDetails();
+                }
+            }
+        });
     }
 
     /**

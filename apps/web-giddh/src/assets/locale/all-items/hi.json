@@ -549,6 +549,34 @@
                             ]
                         }
                     }
+                },
+                {
+                    "label": "वैट देनदारियाँ",
+                    "link": "/pages/vat-report/liabilities",
+                    "icon": "icon-vat1",
+                    "description": "वैट देनदारियाँ",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "countrySpecific": [
+                                "GB"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "वैट भुगतान",
+                    "link": "/pages/vat-report/payments",
+                    "icon": "icon-vat1",
+                    "description": "वैट भुगतान",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "countrySpecific": [
+                                "GB"
+                            ]
+                        }
+                    }
                 }
             ]
         },

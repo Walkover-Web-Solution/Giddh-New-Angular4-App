@@ -552,6 +552,34 @@
                             ]
                         }
                     }
+                },
+                {
+                    "label": "VAT Liabilities",
+                    "link": "/pages/vat-report/liabilities",
+                    "icon": "icon-vat1",
+                    "description": "VAT Liabilities",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "countrySpecific": [
+                                "GB"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "VAT Payments",
+                    "link": "/pages/vat-report/payments",
+                    "icon": "icon-vat1",
+                    "description": "VAT Payments",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "countrySpecific": [
+                                "GB"
+                            ]
+                        }
+                    }
                 }
             ],
             "link": "/pages/settings/taxes"
