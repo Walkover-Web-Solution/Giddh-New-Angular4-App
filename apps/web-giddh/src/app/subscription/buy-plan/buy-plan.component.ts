@@ -202,6 +202,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public isTrialPlan: boolean = false;
     /** Hold calculation amount response*/
     public calculationResponse: any;
+    /** Hold new user selected country value */
+    public newUserSelectedCountryValue: string = '';
 
     constructor(
         public dialog: MatDialog,
@@ -1221,6 +1223,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (event?.value) {
             this.componentStore.getAllPlans({ params: { regionCode: event?.value } });
             this.newUserSelectedCountry = event.label;
+            this.newUserSelectedCountryValue = event.value;
             setTimeout(() => {
                 if (this.isSubscriptionRegion) {
                     this.currentCountry.patchValue(this.countrySource.find(country => country.label === this.newUserSelectedCountry));

@@ -6,8 +6,6 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helper
 import * as dayjs from 'dayjs';
 import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
-import { AppState } from '../../store';
-import { Store, select } from '@ngrx/store';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ToasterService } from '../../services/toaster.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -82,7 +80,6 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     constructor(
         private activatedRoute: ActivatedRoute,
         private formBuilder: FormBuilder,
-        private store: Store<AppState>,
         private generalService: GeneralService,
         private toaster: ToasterService,
         private modalService: BsModalService,
@@ -90,8 +87,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         private componentStore: VatReportComponentStore
     ) {
         this.initVatLiabilityPaymentForm();
-        this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
-        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+        this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
                 this.getFormControl('companyUniqueName').patchValue(activeCompany.uniqueName);
@@ -124,7 +120,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         this.isCompanyMode = this.generalService.currentOrganizationType === OrganizationType.Company;
         if (this.isCompanyMode) {
             this.loadTaxDetails();
-            this.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.componentStore.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response) {
                     if (response?.length > 1) {
                         this.isMultipleBranch = true;
@@ -164,14 +160,14 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
             }
         });
     }
-     /**
-     * Get Current company branches information
-     *
-     * @private
-     * @memberof VatLiabilitiesPayments
-     */
+    /**
+    * Get Current company branches information
+    *
+    * @private
+    * @memberof VatLiabilitiesPayments
+    */
     private getCurrentCompanyBranchTaxNumber(): void {
-            this.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.currentCompanyBranches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 const currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                 this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
@@ -241,7 +237,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     * @memberof VatLiabilitiesPayments
     */
     private getUniversalDatePickerDate(): void {
-        this.store.pipe(select(stateStore => stateStore.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
+        this.componentStore.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
