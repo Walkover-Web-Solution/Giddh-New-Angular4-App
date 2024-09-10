@@ -255,7 +255,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
                     return `
             <div id="${nodeId}" style="padding-top:30px;background-color:none;margin-left:1px;height:80px;border-radius:2px;overflow:visible">
               <div style="height:${d.height - 32}px;padding-top:0px;background-color:white;border:1px solid lightgray;">
-               <div style="margin-right:10px;margin-top:15px;float:right">${d.data.nodeId}</div>
                <div style="margin-top:-30px;background-color:#3AB6E3;height:10px;width:${d.width - 2}px;border-radius:1px"></div>
                <div style="padding:20px; padding-top:35px;text-align:center">
                    <div style="color:#111672;font-size:16px;font-weight:bold"> ${d.data.name} </div>
@@ -292,111 +291,249 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
      */
     public ngAfterViewInit(): void {
 
+        // this.data = [
+        //     {
+        //         "nodeId": "aaaaeinvoice1",
+        //         "businessType": "Registered",
+        //         "businessNature": "Service",
+        //         "addresses": [
+        //             {
+        //                 "name": "Ravinder Singh",
+        //                 "address": "Testing 3",
+        //                 "stateCode": "MP",
+        //                 "pincode": "452001",
+        //                 "isDefault": true,
+        //                 "stateName": "Madhya Pradesh",
+        //                 "taxNumber": "23MKJNH3434A2Z1",
+        //                 "taxType": "GSTIN",
+        //                 "uniqueName": "bf61663585984145"
+        //             }
+        //         ],
+        //         "isArchived": false,
+        //         "name": "AAAA (E-invoice)",
+        //         "consolidatedBranch": false,
+        //         "alias": "xyz",
+        //         "uniqueName": "aaaaeinvoice1",
+        //         "taxType": "GSTIN",
+        //         "defaultBranch": false
+        //     },
+        //     {
+        //         "nodeId": "aaaaeinvoice9",
+        //         "parentNodeId": "aaaaeinvoice1",
+        //         "businessType": "Registered",
+        //         "businessNature": "Service",
+        //         "addresses": [
+        //             {
+        //                 "name": "Ravinder Singh",
+        //                 "address": "Testing 3",
+        //                 "stateCode": "MP",
+        //                 "pincode": "452001",
+        //                 "isDefault": true,
+        //                 "stateName": "Madhya Pradesh",
+        //                 "taxNumber": "23MKJNH3434A2Z1",
+        //                 "taxType": "GSTIN",
+        //                 "uniqueName": "bf61663585984145"
+        //             }
+        //         ],
+        //         "isArchived": false,
+        //         "name": "AAAA (E-invoice)",
+        //         "consolidatedBranch": false,
+        //         "alias": "Sales/purchase register",
+        //         "uniqueName": "aaaaeinvoice9",
+        //         "taxType": "GSTIN",
+        //         "defaultBranch": false
+        //     },
+        //     {
+        //         "nodeId": "aaaaeinvoice2",
+        //         "parentNodeId": "aaaaeinvoice1",
+        //         "businessType": "Registered",
+        //         "businessNature": "Service",
+        //         "addresses": [
+        //             {
+        //                 "name": "Ravinder Singh",
+        //                 "address": "Testing 3",
+        //                 "stateCode": "MP",
+        //                 "pincode": "452001",
+        //                 "isDefault": true,
+        //                 "stateName": "Madhya Pradesh",
+        //                 "taxNumber": "23MKJNH3434A2Z1",
+        //                 "taxType": "GSTIN",
+        //                 "uniqueName": "bf61663585984145"
+        //             }
+        //         ],
+        //         "isArchived": false,
+        //         "name": "AAAA (E-invoice)",
+        //         "consolidatedBranch": false,
+        //         "alias": "sumit",
+        //         "uniqueName": "aaaaeinvoice2",
+        //         "taxType": "GSTIN",
+        //         "defaultBranch": false
+        //     },
+        //     {
+        //         "nodeId": "aaaaeinvoice15",
+        //         "parentNodeId": "aaaaeinvoice2",
+        //         "businessType": "Registered",
+        //         "businessNature": "Service",
+        //         "addresses": [
+        //             {
+        //                 "name": "Divyanshu",
+        //                 "address": "dsds d",
+        //                 "pincode": "123456",
+        //                 "isDefault": true,
+        //                 "taxNumber": "",
+        //                 "taxType": "GSTIN",
+        //                 "uniqueName": "sa71718178651612"
+        //             }
+        //         ],
+        //         "isArchived": false,
+        //         "name": "AAAA (E-invoice)",
+        //         "consolidatedBranch": false,
+        //         "alias": "ashiash -23453123",
+        //         "uniqueName": "aaaaeinvoice15",
+        //         "taxType": "GSTIN",
+        //         "defaultBranch": false
+        //     }
+        // ]
         this.data = [
             {
-                "nodeId": "1",
-                "parentNodeId": null,
-                "expanded": false,
-                "businessType": "Registered",
+                "businessType": "Unregistered",
                 "businessNature": "Service",
-                "addresses": [
-                    {
-                        "name": "Ravinder Singh",
-                        "address": "Testing 3",
-                        "stateCode": "MP",
-                        "pincode": "452001",
-                        "isDefault": true,
-                        "stateName": "Madhya Pradesh",
-                        "taxNumber": "23MKJNH3434A2Z1",
-                        "taxType": "GSTIN",
-                        "uniqueName": "bf61663585984145"
-                    }
-                ],
                 "isArchived": false,
-                "name": "AAAA (E-invoice)",
-                "consolidatedBranch": false,
-                "alias": "xyz",
-                "uniqueName": "aaaaeinvoice1",
+                "nodeId": "b07baapngmgt8al6f538",
+                "name": "Aashi-Anshi",
+                "uniqueName": "b07baapngmgt8al6f538",
+                "consolidatedBranch": true,
                 "taxType": "GSTIN",
+                "alias": "Aash1(C)",
                 "defaultBranch": false
             },
             {
-                "nodeId": "2",
-                "parentNodeId": "1",
-                "expanded": true,
                 "businessType": "Registered",
                 "businessNature": "Service",
                 "addresses": [
                     {
-                        "name": "Ravinder Singh",
-                        "address": "Testing 3",
-                        "stateCode": "MP",
-                        "pincode": "452001",
-                        "isDefault": true,
-                        "stateName": "Madhya Pradesh",
-                        "taxNumber": "23MKJNH3434A2Z1",
-                        "taxType": "GSTIN",
-                        "uniqueName": "bf61663585984145"
-                    }
-                ],
-                "isArchived": false,
-                "name": "AAAA (E-invoice)",
-                "consolidatedBranch": false,
-                "alias": "Sales/purchase register",
-                "uniqueName": "aaaaeinvoice9",
-                "taxType": "GSTIN",
-                "defaultBranch": false
-            },
-            {
-                "nodeId": "3",
-                "parentNodeId": "1",
-                "expanded": true,
-                "businessType": "Registered",
-                "businessNature": "Service",
-                "addresses": [
-                    {
-                        "name": "Ravinder Singh",
-                        "address": "Testing 3",
-                        "stateCode": "MP",
-                        "pincode": "452001",
-                        "isDefault": true,
-                        "stateName": "Madhya Pradesh",
-                        "taxNumber": "23MKJNH3434A2Z1",
-                        "taxType": "GSTIN",
-                        "uniqueName": "bf61663585984145"
-                    }
-                ],
-                "isArchived": false,
-                "name": "AAAA (E-invoice)",
-                "consolidatedBranch": false,
-                "alias": "sumit",
-                "uniqueName": "aaaaeinvoice2",
-                "taxType": "GSTIN",
-                "defaultBranch": false
-            },
-            {
-                "nodeId": "4",
-                "parentNodeId": "2",
-                "expanded": true,
-                "businessType": "Registered",
-                "businessNature": "Service",
-                "addresses": [
-                    {
-                        "name": "Divyanshu",
-                        "address": "dsds d",
-                        "pincode": "123456",
+                        "name": "Default Address",
+                        "address": "",
                         "isDefault": true,
                         "taxNumber": "",
+                        "uniqueName": "k831718023971750",
                         "taxType": "GSTIN",
-                        "uniqueName": "sa71718178651612"
+                        "pincode": ""
                     }
                 ],
+                "parentBranch": {
+                    "businessType": "Unregistered",
+                    "businessNature": "Service",
+                    "isArchived": false,
+                    "name": "Aashi-Anshi",
+                    "uniqueName": "b07baapngmgt8al6f538",
+                    "consolidatedBranch": true,
+                    "taxType": "GSTIN",
+                    "alias": "Aash1(C)",
+                    "defaultBranch": false
+                },
                 "isArchived": false,
-                "name": "AAAA (E-invoice)",
+                "nodeId": "aashianshi1",
+                "parentNodeId": "b07baapngmgt8al6f538",
+                "name": "Aashi-Anshi",
+                "uniqueName": "aashianshi1",
                 "consolidatedBranch": false,
-                "alias": "ashiash -23453123",
-                "uniqueName": "aaaaeinvoice15",
                 "taxType": "GSTIN",
+                "alias": "Second Branch",
+                "defaultBranch": false
+            },
+            {
+                "businessType": "Unregistered",
+                "businessNature": "Service",
+                "parentBranch": {
+                    "businessType": "Unregistered",
+                    "businessNature": "Service",
+                    "isArchived": false,
+                    "name": "Aashi-Anshi",
+                    "uniqueName": "b07baapngmgt8al6f538",
+                    "consolidatedBranch": true,
+                    "taxType": "GSTIN",
+                    "alias": "Aash1(C)",
+                    "defaultBranch": false
+                },
+                "isArchived": false,
+                "nodeId": "e2hk1t0wfz1xtxrsb3by",
+                "parentNodeId": "b07baapngmgt8al6f538",
+                "name": "Aashi-Anshi",
+                "uniqueName": "e2hk1t0wfz1xtxrsb3by",
+                "consolidatedBranch": true,
+                "taxType": "GSTIN",
+                "alias": "Aash2(C)",
+                "defaultBranch": false
+            },
+            {
+                "businessType": "Unregistered",
+                "businessNature": "Service",
+                "addresses": [
+                    {
+                        "name": "Default Address",
+                        "address": "",
+                        "isDefault": true,
+                        "taxNumber": "",
+                        "uniqueName": "k831718023971750",
+                        "taxType": "GSTIN",
+                        "pincode": ""
+                    }
+                ],
+                "parentBranch": {
+                    "businessType": "Unregistered",
+                    "businessNature": "Service",
+                    "isArchived": false,
+                    "name": "Aashi-Anshi",
+                    "uniqueName": "e2hk1t0wfz1xtxrsb3by",
+                    "consolidatedBranch": true,
+                    "taxType": "GSTIN",
+                    "alias": "Aash2(C)",
+                    "defaultBranch": false
+                },
+                "isArchived": false,
+                "nodeId": "aashianshi",
+                "parentNodeId": "e2hk1t0wfz1xtxrsb3by",
+                "name": "Aashi-Anshi",
+                "uniqueName": "aashianshi",
+                "consolidatedBranch": false,
+                "taxType": "GSTIN",
+                "alias": "Aash",
+                "defaultBranch": true
+            },
+            {
+                "businessType": "Registered",
+                "businessNature": "Service",
+                "addresses": [
+                    {
+                        "name": "Default Address",
+                        "address": "",
+                        "isDefault": true,
+                        "taxNumber": "",
+                        "uniqueName": "k831718023971750",
+                        "taxType": "GSTIN",
+                        "pincode": ""
+                    }
+                ],
+                "parentBranch": {
+                    "businessType": "Unregistered",
+                    "businessNature": "Service",
+                    "isArchived": false,
+                    "name": "Aashi-Anshi",
+                    "uniqueName": "e2hk1t0wfz1xtxrsb3by",
+                    "consolidatedBranch": true,
+                    "taxType": "GSTIN",
+                    "alias": "Aash2(C)",
+                    "defaultBranch": false
+                },
+                "isArchived": false,
+                "nodeId": "aashianshi2",
+                "parentNodeId": "e2hk1t0wfz1xtxrsb3by",
+                "name": "Aashi-Anshi",
+                "uniqueName": "aashianshi2",
+                "consolidatedBranch": false,
+                "taxType": "GSTIN",
+                "alias": "Second Branch1",
                 "defaultBranch": false
             }
         ]
