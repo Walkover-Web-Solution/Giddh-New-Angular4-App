@@ -10,7 +10,6 @@ import { IFinancialYearResponse } from '../../services/settings.financial-year.s
 import { ActiveFinancialYear } from '../../models/api-models/Company';
 import { createSelector } from 'reselect';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { IForceClear } from '../../models/api-models/Sales';
 import { cloneDeep, isNull, range } from '../../lodash-optimized';
 
 export interface IGstObj {
@@ -43,13 +42,12 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
         allowClear: true
     };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    public forceClear$: Observable<IForceClear> = observableOf({ status: false });
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Holds Table Display Columns */
-    public displayedColumns: string[] = ['number', 'from', 'to', 'status'];
+    public displayedColumns: string[] = ['number', 'from', 'to'];
     /** Holds Table Data to display */
     public dataSource: any[];
 
@@ -101,28 +99,28 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
                     }
                 });
                 this.yearOptions = cloneDeep(yearOptions);
-                this.forceClear$ = observableOf({ status: true });
             } else if (isNull(o)) {
                 this.store.dispatch(this.settingsFinancialYearActions.GetAllFinancialYears());
             }
         })), takeUntil(this.destroyed$)).subscribe();
     }
 
-    public lockUnlockFinancialYear(financialYear: ActiveFinancialYear) {
-        if(financialYear) {
-            let year = cloneDeep(financialYear);
-            let dataToSend = {
-                lockAll: true,
-                uniqueName: year?.uniqueName
-            };
-            financialYear.isLocked = !financialYear.isLocked;
-            if (financialYear.isLocked) {
-                this.store.dispatch(this.settingsFinancialYearActions.LockFinancialYear(dataToSend));
-            } else {
-                this.store.dispatch(this.settingsFinancialYearActions.UnlockFinancialYear(dataToSend));
-            }
-        }
-    }
+    // comment code because we need to remove the lock and unlock feature of financial year because with large number of accounts something went wrong error is coming. 
+    // public lockUnlockFinancialYear(financialYear: ActiveFinancialYear) {
+    //     if(financialYear) {
+    //         let year = cloneDeep(financialYear);
+    //         let dataToSend = {
+    //             lockAll: true,
+    //             uniqueName: year?.uniqueName
+    //         };
+    //         financialYear.isLocked = !financialYear.isLocked;
+    //         if (financialYear.isLocked) {
+    //             this.store.dispatch(this.settingsFinancialYearActions.LockFinancialYear(dataToSend));
+    //         } else {
+    //             this.store.dispatch(this.settingsFinancialYearActions.UnlockFinancialYear(dataToSend));
+    //         }
+    //     }
+    // }
 
     public selectYear(data) {
         this.selectedYear = data?.value;
