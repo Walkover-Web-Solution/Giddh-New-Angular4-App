@@ -40,6 +40,8 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
     @Input() public giddhBalanceDecimalPlaces: number = 2;
     /* Amount should have precision up to 16 digits for better calculation */
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
+    /** True if field is readonly */
+    @Input() public readonly: boolean = false;
 
     public onFocusLastDiv(el) {
         el.stopPropagation();
