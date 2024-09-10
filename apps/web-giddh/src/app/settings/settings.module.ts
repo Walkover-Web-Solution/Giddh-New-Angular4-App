@@ -65,6 +65,8 @@ import { CreateAddressModule } from '../shared/create-address/create-address.mod
 import { CommonModule } from '@angular/common';
 import { TagsModule } from './tags/tags.module';
 import { TaxAuthorityModule } from '../theme/tax-authority/tax-authority.module';
+import { InstitutionsListComponent } from './integration/institutions-list/institutions-list.component';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
     declarations: [
@@ -89,11 +91,13 @@ import { TaxAuthorityModule } from '../theme/tax-authority/tax-authority.module'
         AddressSettingsComponent,
         OtherSettingsComponent,
         CreateBranchComponent,
-        SettingCampaignComponent
+        SettingCampaignComponent,
+        InstitutionsListComponent
     ],
     imports: [
         CommonModule,
         SharedModule,
+        MatListModule,
         SettingRountingModule,
         AsideMenuCreateTaxModule,
         ContactModule,
