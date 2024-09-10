@@ -40,8 +40,6 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public selectedDateRange: any;
     /** This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /** This holds giddh date format */
-    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Selected range label */
     public selectedRangeLabel: any = "";
     /** This will store the x/y position of the field to show datepicker under it */
