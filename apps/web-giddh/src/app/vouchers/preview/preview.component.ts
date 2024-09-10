@@ -1,6 +1,6 @@
 import { CdkVirtualScrollViewport } from "@angular/cdk/scrolling";
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { ActivatedRoute, Router } from "@angular/router";
 import { debounceTime, delay, distinctUntilChanged, Observable, ReplaySubject, Subject, takeUntil } from "rxjs";
 import { VoucherComponentStore } from "../utility/vouchers.store";
@@ -13,7 +13,7 @@ import { cloneDeep } from "../../lodash-optimized";
 import { FormControl } from "@angular/forms";
 import { GeneralService } from "../../services/general.service";
 import { OrganizationType } from "../../models/user-login-state";
-import { ProformaDownloadRequest, ProformaVersionItem } from "../../models/api-models/proforma";
+import { ProformaDownloadRequest, ProformaGetRequest, ProformaVersionItem } from "../../models/api-models/proforma";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { CommonService } from "../../services/common.service";
 import { ThermalService } from "../../services/thermal.service";
@@ -38,14 +38,16 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
     /** Instance of cdk scrollbar */
     @ViewChild(CdkVirtualScrollViewport) cdkScrollbar: CdkVirtualScrollViewport;
-    /**  */
-    @ViewChild('paidDialog', { static: true }) public paidDialog: TemplateRef<any>;
+    // /**  */
+    // @ViewChild('paidDialog', { static: true }) public paidDialog: TemplateRef<any>;
     /**  */
     @ViewChild('adjustPaymentDialog', { static: true }) public adjustPaymentDialog: TemplateRef<any>;
     /**  */
     @ViewChild('historyAsideDialog', { static: true }) public historyAsideDialog: TemplateRef<any>;
-    /**  */
-    @ViewChild('emailSendDialog', { static: true }) public emailSendDialog: TemplateRef<any>;
+    /** Holds send email dailog template reference send email */
+    @ViewChild('sendEmailModal', { static: true }) public sendEmailModal: any;
+    /** Holds Payment template reference */
+    @ViewChild('paymentDialog', { static: true }) public paymentDialog: TemplateRef<any>;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** */
@@ -88,6 +90,21 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         text: '',
         link: ''
     };
+    /** Holds invoice type */
+    public invoiceType: any = {
+        isSalesInvoice: true,
+        isCashInvoice: false,
+        isCreditNote: false,
+        isDebitNote: false,
+        isPurchaseInvoice: false,
+        isProformaInvoice: false,
+        isEstimateInvoice: false,
+        isPurchaseOrder: false,
+        isReceiptInvoice: false,
+        isPaymentInvoice: false
+    };
+    /** Send Email Dialog Ref */
+    public sendEmailModalDialogRef: MatDialogRef<any>;
 
     //============================
     /**  */
@@ -209,6 +226,9 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 console.log(params?.voucherType, params?.voucherUniqueName);
                 this.params = params;
                 this.voucherType = params?.voucherType;
+                this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
+                console.log("invoiceType", this.invoiceType);
+
                 this.showPaymentDetails = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote].includes(this.voucherType);
                 const lastVouchers = this.vouchersUtilityService?.lastVouchers;
                 if (lastVouchers) {
@@ -339,6 +359,19 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 this.isVoucherDownloading = response;
             }
         });
+
+        this.componentStoreVoucher.sendEmailIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.sendEmailModalDialogRef?.close();
+            }
+        });
+
+        this.componentStoreVoucher.actionVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.dialog.closeAll();
+                this.toaster.showSnackBar("success", (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) ? this.localeData?.status_updated : this.commonLocaleData?.app_messages?.invoice_updated);
+            }
+        });
     }
 
     /**
@@ -371,7 +404,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 }
                 /** Creating voucher pdf finish */
                 console.log("response", response);
-                
+
                 if (response.attachments?.length > 0) {
                     /** Creating attachment start */
                     if (this.selectedInvoice) {
@@ -471,6 +504,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             let getRequest: any;
             this.sanitizedPdfFileUrl = null;
             this.selectedInvoice.hasAttachment = false;
+            const fileType = "base64";
 
             if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(this.voucherType)) {
                 getRequest = {
@@ -493,15 +527,32 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     poUniqueName: this.selectedInvoice?.uniqueName
                 };
             }
-            this.componentStorePreview.downloadVoucherPdf({ model: getRequest, type: "ALL", voucherType: this.voucherType });
+            this.componentStorePreview.downloadVoucherPdf({ model: getRequest, type: "ALL", fileType: fileType, voucherType: this.voucherType });
         }
     }
 
-    // paid dialog
-    public onPerformAction(): void {
-        this.dialog.open(this.paidDialog, {
-            panelClass: ['mat-dialog-md']
-        });
+
+    private getVoucherVersions(): void {
+        const model = {
+            getRequestObject: {
+                page: 1,
+                count: PAGINATION_LIMIT,
+                accountUniqueName: this.selectedInvoice.account?.uniqueName ?? this.selectedInvoice?.vendor?.uniqueName,
+                voucherUniqueName: this.selectedInvoice.uniqueName
+            },
+            postRequestObject: {},
+            voucherType: this.voucherType
+        }
+        if (this.invoiceType.isPurchaseOrder) {
+            model.postRequestObject = {
+                purchaseNumber: '',
+                uniqueName: ''
+            }
+        } else if (this.voucherType === VoucherTypeEnum.generateProforma || this.voucherType === VoucherTypeEnum.generateEstimate) {
+            model.postRequestObject[this.voucherType === VoucherTypeEnum.generateProforma ? 'proformaNumber' : 'estimateNumber'] = this.selectedInvoice?.voucherNumber;
+        }
+
+        this.componentStorePreview.getVoucherVersions({ ...model });
     }
 
     // adjust payment dialog
@@ -511,24 +562,89 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         });
     }
 
-    // email send dialog
-    public openEmailSendDialog(): void {
-        this.dialog.open(this.emailSendDialog, {
-            panelClass: ['mat-dialog-md']
-        });
-    }
     // history dialog
     public toggleActivityHistoryAsidePane(): void {
+        this.getVoucherVersions();
         this.dialog.open(this.historyAsideDialog, {
             position: {
                 top: '0',
                 right: '0'
             },
-            maxWidth: '760px',
+            maxWidth: 'var(--aside-pane-width)',
             width: '100%',
             height: '100vh',
             maxHeight: '100vh'
         });
+    }
+
+    /**
+    * Open Payment Dialog
+    *
+    * @param {*} voucher
+    * @memberof VoucherListComponent
+    */
+    public showPaymentDialog(): void {
+        // this.voucherDetails = voucher;
+        this.dialog.open(this.paymentDialog, {
+            panelClass: ['mat-dialog-md']
+        });
+    }
+
+    /**
+    * Open Send Email Dialog
+    *
+    * @param {*} voucher
+    * @memberof VoucherListComponent
+    */
+    public openEmailSendDialog(): void {
+        this.sendEmailModalDialogRef = this.dialog.open(this.sendEmailModal, {
+            panelClass: ['mat-dialog-sm']
+        });
+    }
+
+    /**
+     * Send Email API Call
+     *
+     * @param {*} email
+     * @memberof VoucherListComponent
+     */
+    public sendEmail(email: any): void {
+        if (email && email.length) {
+            if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
+                const request = {
+                    accountUniqueName: this.selectedInvoice?.vendor?.uniqueName,
+                    uniqueName: this.selectedInvoice?.uniqueName,
+                    voucherType: this.voucherType
+                };
+                this.componentStoreVoucher.sendEmail({ request, model: { emailId: [email] } });
+            } else if ([VoucherTypeEnum.purchase, VoucherTypeEnum.sales].includes(this.voucherType)) {
+                this.componentStoreVoucher.sendVoucherOnEmail({
+                    accountUniqueName: this.selectedInvoice?.account?.uniqueName,
+                    payload: {
+                        copyTypes: [],
+                        email: {
+                            to: email?.split(',').map(email => email.trim())
+                        },
+                        voucherType: this.voucherType,
+                        uniqueName: this.selectedInvoice?.uniqueName
+                    }
+                });
+            } else if ([VoucherTypeEnum.generateProforma, VoucherTypeEnum.generateEstimate].includes(this.voucherType)) {
+                console.log("this.selectedInvoice", this.selectedInvoice);
+
+                let req: ProformaGetRequest = new ProformaGetRequest();
+                req.accountUniqueName = this.selectedInvoice?.account?.uniqueName;
+
+                if (this.voucherType === VoucherTypeEnum.generateProforma) {
+                    req.proformaNumber = this.selectedInvoice?.proformaNumber;
+                } else {
+                    req.estimateNumber = this.selectedInvoice?.estimateNumber;
+                }
+                req.emailId = email?.split(',').map(email => email.trim())
+                this.componentStoreVoucher.sendProformaEstimateOnEmail({ request: req, voucherType: this.voucherType });
+
+            }
+        }
     }
 
     /**
@@ -583,6 +699,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     public paymentSubmitted(event: any): void {
+        console.log("paymentSubmitted", event);
+
         this.componentStoreVoucher.actionVoucher({ voucherUniqueName: event?.uniqueName, payload: event });
     }
 
@@ -596,7 +714,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
 
                 this.commonService.uploadFile({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.isFileUploading = false;
-                    if (response?.status === 'success') {           
+                    if (response?.status === 'success') {
                         const requestObject = {
                             uniqueName: this.selectedInvoice?.uniqueName,
                             attachedFiles: [response?.body?.uniqueName]
@@ -606,10 +724,10 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                             if (res.status === "error") {
                                 this.toaster.showSnackBar('error', res?.message);
                             }
-                            
+
                             this.downloadVoucherPdf('base64');
                         }, () => this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong));
-                        
+
 
                         this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
                     } else {

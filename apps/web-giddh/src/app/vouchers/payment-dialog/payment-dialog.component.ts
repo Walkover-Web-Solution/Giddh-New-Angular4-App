@@ -75,6 +75,8 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof PaymentDialogComponent
      */
     public ngOnInit(): void {
+        console.log("voucherDetails", this.voucherDetails);
+        
         this.paymentForm = this.formBuilder.group({
             action: ['paid'],
             date: [''],
@@ -245,7 +247,8 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
 
         delete newFormObj.amount;
         delete newFormObj.tagUniqueName;
-
+        console.log("savePayment paymentSubmitted");
+        
         this.paymentSubmitted.emit(newFormObj);
     }
 }

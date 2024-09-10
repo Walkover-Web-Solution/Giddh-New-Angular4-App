@@ -775,4 +775,56 @@ export class VoucherService {
 
         return this.http[httpMethod](apiUrl, apiParams, responseType).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
     }
+
+    /**
+     * This will get voucher versions
+     *
+     * @param {*} getRequestObject
+     * @param {*} postRequestObject
+     * @param {string} voucherType
+     * @return {*}  {Observable<BaseResponse<any, string>>}
+     * @memberof VoucherService
+     */
+    public getVoucherVersions(getRequestObject: any, postRequestObject: any, voucherType: string): Observable<BaseResponse<any, string>> {
+        if (voucherType === VoucherTypeEnum.purchaseOrder) {
+            let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_ALL_VERSIONS;
+            url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
+            url = url?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
+            url = url?.replace(':page', getRequestObject.page);
+            url = url?.replace(':count', getRequestObject.count);
+    
+            return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+        } else if(voucherType === VoucherTypeEnum.generateEstimate || voucherType === VoucherTypeEnum.generateProforma){
+            let url = this.generalService.createQueryString(this.config.apiUrl + ESTIMATES_API.getVersions, {
+                page: getRequestObject.page, count: getRequestObject.count
+            });
+            return this.http.post(url
+                ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+                ?.replace(':vouchers', voucherType)
+                ?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName)),
+                postRequestObject
+            ).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.queryString = voucherType;
+                    data.request = postRequestObject;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, postRequestObject)));
+        } else {
+            let url = this.config.apiUrl + INVOICE_API.GET_ALL_VERSIONS;
+            url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
+            url = url?.replace(':voucherUniqueName', getRequestObject?.voucherUniqueName);
+            url = url?.replace(':page', getRequestObject.page);
+            url = url?.replace(':count', getRequestObject.count);
+            url = this.generalService.addVoucherVersion(url, 2);
+           
+            return this.http.get(url).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, string> = res;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+        }
+    }
 }

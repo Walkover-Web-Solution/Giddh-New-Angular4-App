@@ -212,7 +212,7 @@
                         <p class="my-1">
                             {{ localeData?.record_payment }}
                         </p>
-                        <a href="javascript:;" (click)="onPerformAction()"> {{ localeData?.receipt_payment }}</a>
+                        <a href="javascript:;" (click)="showPaymentDialog()"> {{ localeData?.receipt_payment }}</a>
                     </div>
                     <div>
                         <span class="d-flex justify-content-center align-items-center border-r">
@@ -309,7 +309,7 @@
     </div>
 </ng-container>
 
-<!-- paid-dialog -->
+<!-- paid-dialog
 <ng-template #paidDialog>
     <app-payment-dialog
         [voucherDetails]="voucherDetails"
@@ -317,16 +317,35 @@
         [commonLocaleData]="commonLocaleData"
         (paymentSubmitted)="paymentSubmitted($event)"
     ></app-payment-dialog>
-</ng-template>
+</ng-template> -->
+
 <!-- adjust-payment-dialog -->
 <ng-template #adjustPaymentDialog>
     <app-adjust-payment-dialog></app-adjust-payment-dialog>
 </ng-template>
+
 <!-- history dialog -->
 <ng-template #historyAsideDialog>
     <app-history-dialog></app-history-dialog>
 </ng-template>
-<!-- email-dialog -->
-<ng-template #emailSendDialog>
-    <app-email-send-dialog></app-email-send-dialog>
+
+<!-- Send Email Template -->
+<ng-template #sendEmailModal>
+    <app-email-send-dialog 
+        [voucherType]="voucherType"
+        [invoiceType]="invoiceType"
+        (cancelEvent)="sendEmailModalDialogRef.close()"
+        (successEvent)="sendEmail($event)"
+    >
+    </app-email-send-dialog>
 </ng-template>
+
+    <!-- payment-dialog -->
+    <ng-template #paymentDialog>
+        <app-payment-dialog
+            [voucherDetails]="selectedInvoice"
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+            (paymentSubmitted)="paymentSubmitted($event)"
+        ></app-payment-dialog>
+    </ng-template>

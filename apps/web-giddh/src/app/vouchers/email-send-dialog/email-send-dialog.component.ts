@@ -115,7 +115,9 @@ export class EmailSendDialogComponent implements OnInit, OnDestroy {
 
         if ([VoucherTypeEnum.estimate, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.proforma, VoucherTypeEnum.generateProforma, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.purchase].includes(this.selectedItem?.type ?? this.voucherType)) {
             this.successEvent.emit(this.sendEmailForm.get('email.to').value);
+            console.log("if",this.sendEmailForm);
         } else {
+            console.log("else",this.sendEmailForm);
             this.successEvent.emit({ email: this.sendEmailForm.get('email.to').value, invoiceType: this.copyTypes.value, uniqueName: this.selectedItem?.uniqueName });
         }
     }

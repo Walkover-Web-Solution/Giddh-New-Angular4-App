@@ -2889,7 +2889,7 @@
     </ng-template>
 </ng-container>
 
-<!-- No Date Found Message Template  START-->
+<!-- No Date Found Message Template -->
 <ng-template #noDataFoundMessage let-show>
     <no-data 
         *ngIf="!(getVouchersInProgress$ | async) && !dataSource?.length" 
@@ -2898,11 +2898,12 @@
         [secondaryMessage]="' '"
     ></no-data>
 </ng-template>
-<!-- No Date Found Message Template  END-->
 
+<!-- Send Email Template -->
 <ng-template #sendEmailModal>
     <app-email-send-dialog 
-        [voucherType]="voucherType" 
+        [invoiceType]="invoiceType" 
+        [voucherType]="voucherType"
         (cancelEvent)="sendEmailModalDialogRef.close()"
         (successEvent)="sendEmail($event)"
     >
