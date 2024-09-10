@@ -40,8 +40,6 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public selectedDateRange: any;
     /** This will store available date ranges */
     public datePickerOption: any = GIDDH_DATE_RANGE_PICKER_RANGES;
-    /** dayjs object */
-    public dayjs = dayjs;
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Selected range label */
@@ -168,7 +166,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
             }
         });
     }
-        /**
+     /**
      * Get Current company branches information
      *
      * @private
