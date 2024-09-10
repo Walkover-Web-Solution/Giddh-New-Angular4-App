@@ -27,6 +27,7 @@ import { HttpClient } from "@angular/common/http";
 import { AddCompanyComponentStore } from "./utility/add-company.store";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { CommonService } from "../services/common.service";
+import { ChangeBillingComponentStore } from "../subscription/change-billing/utility/change-billing.store";
 
 declare var initSendOTP: any;
 declare var window: any;
@@ -36,7 +37,7 @@ declare var window: any;
     templateUrl: './add-company.component.html',
     styleUrls: ['./add-company.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [AddCompanyComponentStore]
+    providers: [AddCompanyComponentStore, ChangeBillingComponentStore]
 })
 
 export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -198,7 +199,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Hold selected role */
     public selectedRole: string = '';
     /** Holds Store permission roles API response state as observable*/
-    public permissionRoles$ = this.componentStore.select(state => state.permissionRoles);
+    public permissionRoles$: Observable<any> = this.componentStore.select(state => state.permissionRoles);
     /** List of permission  roles */
     public permissionRoles: any[] = [
         { label: 'View', value: 'view' },
@@ -224,6 +225,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public get showPageLeaveConfirmation(): boolean {
         return !this.isCompanyCreated && this.firstStepForm?.dirty;
     }
+    /** Holds Store Get Billing Details observable*/
+    public getBillingDetails$: Observable<any> = this.changeBillingComponentStore.select(state => state.getBillingDetails);
 
     constructor(
         private formBuilder: UntypedFormBuilder,
@@ -245,7 +248,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         private socialAuthService: AuthService,
         private activateRoute: ActivatedRoute,
         public router: Router,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private readonly changeBillingComponentStore: ChangeBillingComponentStore
     ) {
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
         this.session$ = this.store.pipe(select(state => state.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
@@ -272,6 +276,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
 
         this.session$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
+            if (!this.isNewUserLoggedIn) {
+                this.getBillingDetails();
+                this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                    if (data?.companyName) {
+                        this.firstStepForm.get('name')?.patchValue(data.companyName);
+                    }
+                });
+            }
         });
 
         /** Library to separate phone number and calling code */
@@ -347,6 +359,16 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         this.changeDetection.detectChanges();
+    }
+
+    /**
+     * This will be use for get billing details
+     *
+     *
+     * @memberof AddCompanyComponent
+     */
+    public getBillingDetails(): void {
+        this.changeBillingComponentStore.getBillingDetails(null);
     }
 
     /**
@@ -1512,7 +1534,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public back(): void {
-        this.router.navigate(['/pages/subscription']);
+        this.router.navigate(['/pages/user-details/subscription']);
     }
 
     /**

@@ -218,7 +218,7 @@
                                                         >
                                                             <i [ngClass]="item.icon"></i>
                                                             {{ item?.label }}
-                                                            <ng-container *ngIf="currentOrganizationType === 'BRANCH'">
+                                                            <ng-container *ngIf="currentOrganizationType === 'BRANCH' || isCompanyWithoutBranch">
                                                                 <ng-container *ngIf="!(item?.additional?.createNew?.queryParams?.addVendor || item?.additional?.createNew?.queryParams?.addCustomer)">
                                                                     <strong 
                                                                         class="ml-auto" 

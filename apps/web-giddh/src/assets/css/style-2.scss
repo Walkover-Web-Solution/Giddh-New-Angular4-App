@@ -153,6 +153,8 @@ textarea {
 }
 
 .mobile-number-wrapper {
+    z-index: 9;
+    
     input.error {
         border: 1px solid var(--color-danger);
     }
@@ -2599,7 +2601,7 @@ modal-container.modal {
 }
 
 .color-primary {
-    color: var(--color-blue);
+    color: var(--color-blue) !important;
 }
 
 .justify-content-between {

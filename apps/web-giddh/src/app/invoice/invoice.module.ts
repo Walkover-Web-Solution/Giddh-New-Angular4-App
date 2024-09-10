@@ -78,6 +78,9 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { MatTabsModule } from '@angular/material/tabs';
 import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
+import { MatDividerModule } from '@angular/material/divider';
+import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
+
 
 @NgModule({
     declarations: [
@@ -112,6 +115,7 @@ import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-expo
         DigitsOnlyModule,
         FormsModule,
         CommonModule,
+        MatDividerModule,
         TabsModule.forRoot(),
         ReactiveFormsModule,
         ModalModule.forRoot(),
@@ -166,7 +170,8 @@ import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-expo
         MatDialogModule,
         WatchVideoModule,
         MatTabsModule,
-        BulkExportVoucherModule
+        BulkExportVoucherModule,
+        FroalaTemplateEditorModule
     ],
     exports: [
         InvoiceRoutingModule,

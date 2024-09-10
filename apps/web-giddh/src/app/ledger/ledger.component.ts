@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { LoginActions } from 'apps/web-giddh/src/app/actions/login.action';
 import { SearchResultText, GIDDH_DATE_RANGE_PICKER_RANGES, RATE_FIELD_PRECISION, ACCOUNT_SEARCH_RESULTS_PAGINATION_LIMIT, PAGINATION_LIMIT, RESTRICTED_VOUCHERS_FOR_DOWNLOAD, AdjustedVoucherType, BROADCAST_CHANNELS } from 'apps/web-giddh/src/app/app.constant';
@@ -331,7 +331,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         private adjustmentUtilityService: AdjustmentUtilityService,
         private invoiceAction: InvoiceActions,
         private commonAction: CommonActions,
-        private pageLeaveUtilityService: PageLeaveUtilityService
+        private pageLeaveUtilityService: PageLeaveUtilityService,
+        private router: Router
     ) {
         this.lc = new LedgerVM();
         this.advanceSearchRequest = new AdvanceSearchRequest();
@@ -1187,7 +1188,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Save bulk bank transaction 
+     * Save bulk bank transaction
      *
      * @returns {void}
      * @memberof LedgerComponent
@@ -1392,15 +1393,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public showUpdateLedgerModal(txn: ITransactionItem, type: string) {
-        let transactions: TransactionsResponse = null;
-        this.store.pipe(select(t => t?.ledger?.transactionsResponse), take(1)).subscribe(trx => transactions = trx);
-        if (transactions) {
-            this.store.dispatch(this.ledgerActions.setAccountForEdit(this.lc.accountUnq));
+        if (txn?.adjustmentEntry) {
+            this.router.navigate([`/pages/inventory/v2/product/adjust/${txn?.description}`]);
+        } else {
+            let transactions: TransactionsResponse = null;
+            this.store.pipe(select(t => t?.ledger?.transactionsResponse), take(1)).subscribe(trx => transactions = trx);
+            if (transactions) {
+                this.store.dispatch(this.ledgerActions.setAccountForEdit(this.lc.accountUnq));
+            }
+            this.store.dispatch(this.ledgerActions.setTxnForEdit(txn.entryUniqueName));
+            this.lc.selectedTxnUniqueName = txn.entryUniqueName;
+            this.entrySide = type;
+            this.loadUpdateLedgerComponent();
         }
-        this.store.dispatch(this.ledgerActions.setTxnForEdit(txn.entryUniqueName));
-        this.lc.selectedTxnUniqueName = txn.entryUniqueName;
-        this.entrySide = type;
-        this.loadUpdateLedgerComponent();
     }
 
     public hideUpdateLedgerModal() {
@@ -2829,7 +2834,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      *
      * @memberof LedgerComponent
      */
-    public getPurchaseSettings(): void {        
+    public getPurchaseSettings(): void {
         this.store.pipe(select(state => state.invoice.settings), takeUntil(this.destroyed$)).subscribe(response => {
 
             this.autoGenerateVoucherFromEntryStatus = response?.invoiceSettings?.autoGenerateVoucherFromEntry;
