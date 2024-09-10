@@ -76,6 +76,8 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     public hasTaxNumber: boolean = false;
     /** Holds current branch information */
     private currentBranch: any = {};
+    /** Hold true in production environment */
+    public isProdMode: boolean = false;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -86,6 +88,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         private router: Router,
         private componentStore: VatReportComponentStore
     ) {
+        this.isProdMode = PRODUCTION_ENV;
         this.initVatLiabilityPaymentForm();
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
@@ -186,7 +189,9 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     */
     public getLiabilitiesPayment(): void {
         let payload = this.generalService.getUserAgentData();
-        payload["Gov-Test-Scenario"] = "MULTIPLE_PAYMENTS_2018_19";
+        if (this.isProdMode) {
+            payload["Gov-Test-Scenario"] = "MULTIPLE_PAYMENTS_2018_19";
+        }
         this.componentStore.getLiabilityPaymentList({ payload: payload, searchForm: this.searchForm.value, isPaymentMode: this.isPaymentMode });
     }
 
