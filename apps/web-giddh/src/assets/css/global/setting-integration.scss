@@ -4,35 +4,50 @@
         min-height: calc(100vh - 118px);
     }
 }
+
 .input-background {
     background-color: var(--color-white) !important;
     border-radius: 0.5rem;
 }
 
 /*--- select-chip ---*/
-select-multiple-fields{
-    .mat-mdc-standard-chip.mdc-evolution-chip--with-trailing-action .mdc-evolution-chip__action--trailing i{
+select-multiple-fields {
+    .mat-mdc-standard-chip.mdc-evolution-chip--with-trailing-action .mdc-evolution-chip__action--trailing i {
         font-size: 12px;
     }
 }
 
+.list-item-underline-hover {
+    &:hover {
+        span {
+            span {
+                color: var(--color-giddh-blue) !important;
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
 @media screen and (max-width: 1440px) {
+
     /*--- subscription ---*/
     .menu-two-list {
         .menu-two-list-items {
-            .mat-body-1{
+            .mat-body-1 {
                 font-size: 13px;
             }
         }
     }
-    .main-content-subscription{
-        .mat-mdc-text-field-wrapper{
+
+    .main-content-subscription {
+        .mat-mdc-text-field-wrapper {
             padding: 0 5px 0 5px;
         }
     }
-    .main-content{
+
+    .main-content {
         .expand-button {
             left: 75% !important;
         }
-    } 
+    }
 }

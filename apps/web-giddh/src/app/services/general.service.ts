@@ -1698,6 +1698,19 @@ export class GeneralService {
     }
 
     /**
+    * Check if a given country name is included in the array of supported countries for Gocardless, and return a boolean value
+    * indicating whether the country is supported or not.
+    *
+    * @param {string} countryName
+    * @returns {boolean}
+    * @memberof GeneralService
+    */
+    public checkCompanySupportGocardless(countryName: string): boolean {
+        const gocardlessSupportedCountryList = ['UNITED KINGDOM'];
+        return gocardlessSupportedCountryList.includes(countryName.toUpperCase());
+    }
+
+    /**
      * This will return the system current user time zone
      *
      * @return {*}
