@@ -631,7 +631,10 @@
                                                 </div>
                                             </ng-container>
                                         </div>
-                                        <div class="grid-list-div list-grid">
+                                        <div
+                                            class="grid-list-div list-grid"
+                                            *ngIf="newUserSelectedCountryValue === 'IND'"
+                                        >
                                             <div class="grid-title-left">
                                                 <span class="inner-name mat-table-sticky">
                                                     {{ localeData?.e_invoice }}
@@ -653,7 +656,10 @@
                                                 </div>
                                             </ng-container>
                                         </div>
-                                        <div class="grid-list-div list-grid">
+                                        <div
+                                            class="grid-list-div list-grid"
+                                            *ngIf="newUserSelectedCountryValue === 'IND'"
+                                        >
                                             <div class="grid-title-left">
                                                 <span class="inner-name mat-table-sticky">
                                                     {{ localeData?.gst_direct }}

@@ -436,6 +436,36 @@
                             ]
                         }
                     }
+                },
+                {
+                    "label": "व्हॅट दायित्वे",
+                    "link": "/pages/vat-report/liabilities",
+                    "icon": "icon-vat1",
+                    "description": "व्हॅट दायित्वे",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "countrySpecific": [
+                                "GB"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "label": "व्हॅट देयके",
+                    "link": "/pages/vat-report/payments",
+                    "icon": "icon-vat1",
+                    "description": "व्हॅट देयके",
+                    "hide": "sidebar",
+                    "additional": {
+                        "queryParams": {
+                            "voucherVersion": 2,
+                            "countrySpecific": [
+                                "GB"
+                            ]
+                        }
+                    }
                 }
             ]
         },
