@@ -77,7 +77,7 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
     /** Holds current branch information */
     private currentBranch: any = {};
     /** Hold true in production environment */
-    public isProdMode: boolean = false;
+    public isProdMode: boolean = PRODUCTION_ENV;
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -88,7 +88,6 @@ export class VatLiabilitiesPayments implements OnInit, OnDestroy {
         private router: Router,
         private componentStore: VatReportComponentStore
     ) {
-        this.isProdMode = PRODUCTION_ENV;
         this.initVatLiabilityPaymentForm();
         this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
