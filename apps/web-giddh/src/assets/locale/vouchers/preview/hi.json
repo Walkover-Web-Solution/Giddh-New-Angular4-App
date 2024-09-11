@@ -286,5 +286,9 @@
     "all_payments": "सभी भुगतान",
     "payment_no_label": "भुगतान #",
     "total_payments": "कुल भुगतान",
-    "unused_payments": "अविनियोजित भुगतान"
+    "unused_payments": "अविनियोजित भुगतान",
+    "by_user": "[USER] द्वारा",
+    "po_created": "[VALUE] के लिए खरीद आदेश",
+    "value_changed": "[FIELD] को अपडेट किया गया [VALUE]",
+    "voucher_created": "[VALUE] के लिए बनाया गया वाउचर"
 }

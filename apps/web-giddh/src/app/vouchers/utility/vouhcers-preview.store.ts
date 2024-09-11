@@ -40,7 +40,7 @@ export class VoucherPreviewComponentStore extends ComponentStore<VoucherPreviewS
         super(DEFAULT_STATE);
     }
 
-
+    public voucherDetails$: Observable<any> = this.select(this.store.select(state => state.receipt.voucher), (response) => response);
     // public companyProfile$: Observable<any> = this.select(this.store.select(state => state.settings.profile), (response) => response);
     // public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
     // public company$: Observable<any> = this.select(this.store.select(state => state.company), (response) => response);

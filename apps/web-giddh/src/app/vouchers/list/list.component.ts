@@ -679,7 +679,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
                 this.dataSource.push(item);
             });
-            console.log("this.dataSource", this.dataSource);
 
             // When user search in table header then after api call focus on respective search field
             if (this.activeSearchField) {
@@ -696,8 +695,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public showVoucherPreview(voucherUniqueName: string): void {
-        console.log("showVoucherPreview", voucherUniqueName);
-
         this.vouchersUtilityService.lastVouchers = this.dataSource;
         this.router.navigate([`/pages/vouchers/view/${this.voucherType}/${voucherUniqueName}`]);
     }

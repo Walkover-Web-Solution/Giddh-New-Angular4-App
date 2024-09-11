@@ -3758,10 +3758,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     invoiceForm.account.shippingDetails.stateName = invoiceForm.account.shippingDetails.state?.name;
                 }
             }
-
-            console.log("this.invoiceType.isEstimateInvoice",this.invoiceType.isEstimateInvoice);
-            console.log("this.invoiceType.isProformaInvoice",this.invoiceType.isProformaInvoice);
-            console.log("invoiceForm.deposit?.amountForAccount", invoiceForm.deposit?.amountForAccount);
             
             if (invoiceForm.deposit?.amountForAccount) {
                 invoiceForm.paymentAction = {

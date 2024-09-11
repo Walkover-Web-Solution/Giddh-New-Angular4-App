@@ -120,11 +120,13 @@
                         </button>
                         <div class="d-flex action-btn">
                             <button
+                                *ngIf="!isCompany"
                                 mat-stroked-button
                                 color="primary"
                                 class="mat-icon-sm-btn"
                                 [matTooltip]="commonLocaleData?.app_edit"
                                 [matTooltipPosition]="'above'"
+                                (click)="editVoucher()"
                             >
                                 <i class="icon-edit-pencil"></i>
                             </button>
@@ -144,15 +146,18 @@
                                 class="mat-icon-sm-btn"
                                 [matTooltip]="commonLocaleData?.app_print"
                                 [matTooltipPosition]="'above'"
+                                (click)="printInvoice()"
                             >
                                 <i class="fa fa-print"></i>
                             </button>
                             <button
+                                *ngIf="thermalTemplate?.templateType === 'thermal_template' && !invoiceType.isPurchaseOrder"
                                 mat-stroked-button
                                 color="primary"
                                 class="mat-icon-sm-btn"
                                 [matTooltip]="commonLocaleData?.app_print_thermal"
                                 [matTooltipPosition]="'above'"
+                                (click)="printThermal()"
                             >
                                 <i class="fa fa-print"></i>
                             </button>
@@ -166,6 +171,7 @@
                                 <i class="icon-download-circle"></i>
                             </button>
                             <button
+                                *ngIf="!isCompany"
                                 mat-stroked-button
                                 color="primary"
                                 class="mat-icon-sm-btn"
@@ -175,7 +181,7 @@
                                 <i class="icon-trash"></i>
                             </button>
                         </div>
-                        <button mat-stroked-button color="primary" [matMenuTriggerFor]="changeStatus">
+                        <button mat-stroked-button color="primary" [matMenuTriggerFor]="changeStatus"  *ngIf="!isCompany">
                             <span>Change Status</span>
                             <i class="icon-arrow-down icon-font-11 ml-2"></i>
                         </button>
@@ -190,7 +196,7 @@
                             <button mat-menu-item>{{ commonLocaleData?.app_payment_status?.hold }}</button>
                             <button mat-menu-item>{{ commonLocaleData?.app_payment_status?.cancel }}</button>
                         </mat-menu>
-                        <button mat-stroked-button>{{ commonLocaleData?.app_cancel }}</button>
+                        <button mat-stroked-button  *ngIf="!isCompany">{{ commonLocaleData?.app_cancel }}</button>
                         <button mat-stroked-button>
                             <!-- <i class="icon-cross"></i> -->
                             {{ commonLocaleData?.app_back }}
@@ -246,7 +252,9 @@
                             <strong class="text-blue">{{ localeData?.uploaded_purchase_bill }}</strong>
                         </h5>
                         <giddh-page-loader *ngIf="isFileUploading"></giddh-page-loader>
-                        <iframe #pdfContainer *ngIf="attachedPdfFileUrl" width="100%" height="100%" [src]="attachedPdfFileUrl" title="PDF"></iframe>
+                        <div #attachedDocumentPreview>
+                            <iframe #pdfContainer *ngIf="attachedPdfFileUrl" width="100%" height="100%" [src]="attachedPdfFileUrl" title="PDF"></iframe>
+                        </div>
                         <div
                             *ngIf="!shouldShowUploadAttachment && voucherType === 'purchase' && attachedDocumentType?.type === 'image'"
                             class="img-expand-collapse"
