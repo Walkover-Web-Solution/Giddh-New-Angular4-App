@@ -1356,8 +1356,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             if (res.status === "success") {
                                 res.body && this.toaster.showSnackBar("success", res.body);
                                 this.patchState({
-                                    sendEmailInProgress: true,
-                                    sendEmailIsSuccess: null
+                                    sendEmailInProgress: false,
+                                    sendEmailIsSuccess: true
                                 });
                             } else {
                                 res.message && this.toaster.showSnackBar("error", res.message);

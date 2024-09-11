@@ -18,6 +18,8 @@ import { PURCHASE_ORDER_API } from "./apiurls/purchase-order.api";
 import { PAGINATION_LIMIT } from "../app.constant";
 import { ADVANCE_RECEIPTS_API } from "./apiurls/advance-receipt-adjustment.api";
 import { BULK_VOUCHER_EXPORT_API } from "./apiurls/bulkvoucherexport.api";
+import { COMMON_API } from "./apiurls/common.api";
+import { VoucherTypeEnum } from "../vouchers/utility/vouchers.const";
 
 
 @Injectable()
@@ -667,7 +669,7 @@ export class VoucherService {
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
 
-            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
 
         return this.http.deleteWithBody(
             url,
@@ -726,7 +728,7 @@ export class VoucherService {
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         delete postRequest.from;
         delete postRequest.to;
-        
+
         return this.http.post(url, postRequest).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
@@ -734,5 +736,95 @@ export class VoucherService {
                 return data;
             }),
             catchError((e) => this.errorHandler.HandleCatch<any, any>(e, postRequest)));
+    }
+
+    /**
+     * Download PDF Base64 URL
+     *
+     * @param {*} model
+     * @param {string} downloadOption
+     * @param {string} [fileType="base64"]
+     * @returns {Observable<any>}
+     * @memberof VoucherService
+     */
+    public downloadPdfFile(model: any, downloadOption: string, fileType: string = "base64", voucherType: any): Observable<any> {
+        let apiUrl = '';
+        let httpMethod: 'post' | 'get' = 'post';
+        let apiParams = model;
+        let responseType = (fileType === 'base64') ? {} : { responseType: 'blob' };
+
+        if ([VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.purchase].includes(voucherType)) {
+            apiUrl = this.config.apiUrl + COMMON_API.DOWNLOAD_FILE
+                ?.replace(':fileType', fileType)
+                ?.replace(':downloadOption', downloadOption)
+                ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        } else if ([VoucherTypeEnum.generateProforma, VoucherTypeEnum.generateEstimate].includes(voucherType)) {
+            apiUrl = this.config.apiUrl + PROFORMA_API.download
+                ?.replace(':vouchers', voucherType)
+                ?.replace(':fileType', fileType)
+                ?.replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
+                ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName));
+        } else if (voucherType === VoucherTypeEnum.purchaseOrder) {
+            httpMethod = 'get';
+            apiUrl = this.config.apiUrl + PURCHASE_ORDER_API.GET_PDF
+                ?.replace(':companyUniqueName', this.generalService.companyUniqueName)
+                ?.replace(':accountUniqueName', encodeURIComponent(model.accountUniqueName))
+                ?.replace(':poUniqueName', model.poUniqueName);
+            apiParams = undefined;
+        }
+
+        return this.http[httpMethod](apiUrl, apiParams, responseType).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, model)));
+    }
+
+    /**
+     * This will get voucher versions
+     *
+     * @param {*} getRequestObject
+     * @param {*} postRequestObject
+     * @param {string} voucherType
+     * @return {*}  {Observable<BaseResponse<any, string>>}
+     * @memberof VoucherService
+     */
+    public getVoucherVersions(getRequestObject: any, postRequestObject: any, voucherType: string): Observable<BaseResponse<any, string>> {
+        if (voucherType === VoucherTypeEnum.purchaseOrder) {
+            let url: string = this.config.apiUrl + PURCHASE_ORDER_API.GET_ALL_VERSIONS;
+            url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
+            url = url?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName));
+            url = url?.replace(':page', getRequestObject.page);
+            url = url?.replace(':count', getRequestObject.count);
+    
+            return this.http.post(url, postRequestObject).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e, getRequestObject)));
+        } else if(voucherType === VoucherTypeEnum.generateEstimate || voucherType === VoucherTypeEnum.generateProforma){
+            let url = this.generalService.createQueryString(this.config.apiUrl + ESTIMATES_API.getVersions, {
+                page: getRequestObject.page, count: getRequestObject.count
+            });
+            return this.http.post(url
+                ?.replace(':companyUniqueName', encodeURIComponent(this.generalService.companyUniqueName))
+                ?.replace(':vouchers', voucherType)
+                ?.replace(':accountUniqueName', encodeURIComponent(getRequestObject.accountUniqueName)),
+                postRequestObject
+            ).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, any> = res;
+                    data.queryString = voucherType;
+                    data.request = postRequestObject;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, any>(e, postRequestObject)));
+        } else {
+            let url = this.config.apiUrl + INVOICE_API.GET_ALL_VERSIONS;
+            url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
+            url = url?.replace(':voucherUniqueName', getRequestObject?.voucherUniqueName);
+            url = url?.replace(':page', getRequestObject.page);
+            url = url?.replace(':count', getRequestObject.count);
+            url = this.generalService.addVoucherVersion(url, 2);
+           
+            return this.http.get(url).pipe(
+                map((res) => {
+                    let data: BaseResponse<any, string> = res;
+                    return data;
+                }),
+                catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+        }
     }
 }

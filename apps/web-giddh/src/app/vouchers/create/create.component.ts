@@ -3758,7 +3758,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     invoiceForm.account.shippingDetails.stateName = invoiceForm.account.shippingDetails.state?.name;
                 }
             }
-
+            
             if (invoiceForm.deposit?.amountForAccount) {
                 invoiceForm.paymentAction = {
                     action: 'paid',

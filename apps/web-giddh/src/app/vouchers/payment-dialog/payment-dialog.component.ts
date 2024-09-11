@@ -201,7 +201,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
     /**
      * Switches currency
      *
-     * @memberof VoucherCreateComponent
+     * @memberof PaymentDialogComponent
      */
     public switchCurrency(): void {
         this.currencySwitched = !this.currencySwitched;
@@ -214,7 +214,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      * @param {string} fromCurrency
      * @param {string} toCurrency
      * @param {*} voucherDate
-     * @memberof VoucherCreateComponent
+     * @memberof PaymentDialogComponent
      */
     public getExchangeRate(fromCurrency: string, toCurrency: string): void {
         if (fromCurrency && toCurrency) {
@@ -242,10 +242,9 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
         }
 
         newFormObj.tagNames = (newFormObj.tagUniqueName) ? [newFormObj.tagUniqueName] : [];
-
         delete newFormObj.amount;
         delete newFormObj.tagUniqueName;
-
+        
         this.paymentSubmitted.emit(newFormObj);
     }
 }

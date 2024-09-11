@@ -281,6 +281,19 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private advanceSearchTempKeyObj: any = {};
     /** Holds Id of active search input field */
     public activeSearchField: any = null;
+    /** Holds invoice type */
+    public invoiceType: any = {
+        isSalesInvoice: true,
+        isCashInvoice: false,
+        isCreditNote: false,
+        isDebitNote: false,
+        isPurchaseInvoice: false,
+        isProformaInvoice: false,
+        isEstimateInvoice: false,
+        isPurchaseOrder: false,
+        isReceiptInvoice: false,
+        isPaymentInvoice: false
+    };
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -322,6 +335,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (params) {
                 this.urlVoucherType = params?.voucherType;
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
+                this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
                 this.activeModule = params.module;
                 this.selectedVouchers = [];
                 this.allVouchersSelected = false;
@@ -663,7 +677,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         item.dueDays = null;
                     }
                 }
-
                 this.dataSource.push(item);
             });
             // When user search in table header then after api call focus on respective search field
@@ -673,6 +686,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }, 200);
             }
         }
+    }
+
+    /**
+     * Set all invoice to service varibale and redirect to view page
+     *
+     * @memberof VoucherListComponent
+     */
+    public showVoucherPreview(voucherUniqueName: string): void {
+        this.vouchersUtilityService.lastVouchers = this.dataSource;
+        this.router.navigate([`/pages/vouchers/view/${this.voucherType}/${voucherUniqueName}`]);
     }
 
     /**
@@ -1089,7 +1112,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     public showPaymentDialog(voucher: any): void {
         this.voucherDetails = voucher;
-
         this.dialog.open(this.paymentDialog, {
             panelClass: ['mat-dialog-md']
         });

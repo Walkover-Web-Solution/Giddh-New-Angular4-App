@@ -98,7 +98,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <a href="javascript:;" class="btn-link-2">{{ element?.voucherNumber ? element?.voucherNumber : commonLocaleData?.app_not_available }}</a>
+                                    <a href="javascript:;" class="btn-link-2" (click)="showVoucherPreview(element?.uniqueName)">{{ element?.voucherNumber ? element?.voucherNumber : commonLocaleData?.app_not_available }}</a>
                                     <span class="d-block" *ngIf="element?.expiredDays !== null">
                                         <small class="text-danger" *ngIf="element?.expiredDays === 0">
                                             {{ localeData?.expired_by_today }}
@@ -314,7 +314,7 @@
                                     </div>
                                  </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <a href="javascript:;" class="btn-link-2">
+                                    <a href="javascript:;" class="btn-link-2" (click)="showVoucherPreview(element?.uniqueName)">
                                         {{ element.proformaNumber }}
                                     </a>
                                 </td>
@@ -563,7 +563,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <a href="javascript:;" class="btn-link-2">{{ element?.voucherNumber ? element?.voucherNumber : commonLocaleData?.app_not_available }}</a>
+                                    <a href="javascript:;" class="btn-link-2" (click)="showVoucherPreview(element?.uniqueName)">{{ element?.voucherNumber ? element?.voucherNumber : commonLocaleData?.app_not_available }}</a>
                                     <small class="text-danger d-block" *ngIf="element?.overdueDays">
                                         {{ element.overdueDays }}
                                     </small>
@@ -811,7 +811,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <a href="javascript:;" class="btn-link-2">{{ element?.voucherNumber }}</a>
+                                    <a href="javascript:;" class="btn-link-2" (click)="showVoucherPreview(element?.uniqueName)">{{ element?.voucherNumber }}</a>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="customer">
@@ -1027,7 +1027,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <a href="javascript:;" class="btn-link-2">{{ element?.voucherNumber }}</a>
+                                    <a href="javascript:;" class="btn-link-2" (click)="showVoucherPreview(element?.uniqueName)">{{ element?.voucherNumber }}</a>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="customer">
@@ -1352,7 +1352,7 @@
                                     </div>
                                 </th>
                                 <td mat-cell *matCellDef="let element" class="no-dbl-click-select">
-                                    <a href="javascript:;" [routerLink]="['/pages/purchase-management/purchase-orders/preview/'+ element.uniqueName]" class="btn-link-2">{{element?.voucherNumber}}</a>
+                                    <a href="javascript:;" class="btn-link-2" (click)="showVoucherPreview(element?.uniqueName)">{{ element?.voucherNumber ? element?.voucherNumber : commonLocaleData?.app_not_available }}</a>
                                 </td>
                             </ng-container>
                             <ng-container matColumnDef="vendorname">
@@ -1546,7 +1546,7 @@
                                     </div>
                                     </th>
                                 <td mat-cell *matCellDef="let element">
-                                    <a href="javascript:;" class="btn-link-2">{{ element?.voucherNumber ? element?.voucherNumber : commonLocaleData?.app_not_available }}</a>
+                                    <a href="javascript:;" class="btn-link-2" (click)="showVoucherPreview(element?.uniqueName)">{{ element?.voucherNumber ? element?.voucherNumber : commonLocaleData?.app_not_available }}</a>
                                     <div *ngIf="element?.dueDays !== null">
                                         <small class="text-danger" *ngIf="element?.dueDays > 0">
                                             {{ getOverdueDaysText(element.dueDays) }}
@@ -2889,7 +2889,7 @@
     </ng-template>
 </ng-container>
 
-<!-- No Date Found Message Template  START-->
+<!-- No Date Found Message Template -->
 <ng-template #noDataFoundMessage let-show>
     <no-data 
         *ngIf="!(getVouchersInProgress$ | async) && !dataSource?.length" 
@@ -2898,11 +2898,12 @@
         [secondaryMessage]="' '"
     ></no-data>
 </ng-template>
-<!-- No Date Found Message Template  END-->
 
+<!-- Send Email Template -->
 <ng-template #sendEmailModal>
     <app-email-send-dialog 
-        [voucherType]="voucherType" 
+        [invoiceType]="invoiceType" 
+        [voucherType]="voucherType"
         (cancelEvent)="sendEmailModalDialogRef.close()"
         (successEvent)="sendEmail($event)"
     >

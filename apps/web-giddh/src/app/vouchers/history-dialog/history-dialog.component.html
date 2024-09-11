@@ -1,14 +1,43 @@
 <div class="dialog-asidepan">
-  <div class="dialog-header">
-    <span mat-dialog-title class="font-16">Revision History</span>
-    <i mat-dialog-close class="icon-cross icon-font-16"></i>
-  </div>
-  <div mat-dialog-content class="create-discount-aside dialog-body">
-    <div class="aside-pane-form position-relative p-3 h-100">
-      <div class="border-bottom py-2">
-        <p class="text-gray">22/01/2024, 02:06 PM</p>
-        <p>Voucher created for 33 <span class="text-gray">by Ravinder Singh Dang</span></p>
-      </div>
+    <div class="dialog-header">
+        <span mat-dialog-title class="font-16">Revision History</span>
+        <i mat-dialog-close class="icon-cross icon-font-16"></i>
     </div>
-  </div>
+    <div mat-dialog-content class="create-discount-aside dialog-body">
+        <div class="aside-pane-form position-relative p-3 h-100 overflow-auto">
+            <giddh-page-loader
+                [cssClass]="'mt-0 mb-0'"
+                *ngIf="isVoucherVersionsInProgress$ | async"
+            ></giddh-page-loader>
+            <ng-container *ngIf="!(isVoucherVersionsInProgress$ | async)">
+                <ng-container *ngFor="let item of versionHistory?.items; let lastItem = last">
+                    <div class="py-2" [ngClass]="{ 'border-bottom': lastItem }" *ngFor="let change of item?.changes">
+                        <p class="text-gray">{{ item.versionTime | date : "dd/MM/yyyy, hh:mm aa" }}</p>
+                        <p>
+                            {{ change.message }} <span class="text-gray">{{ getByUserText(item.user?.name) }}</span>
+                        </p>
+                    </div>
+                </ng-container>
+            </ng-container>
+            <div
+                class="mt-5 text-center font-24"
+                *ngIf="!(isVoucherVersionsInProgress$ | async) && versionHistory?.items?.length === 0"
+            >
+                {{ inputData?.commonLocaleData?.app_no_result_found }}
+            </div>
+            <mat-paginator
+                *ngIf="
+                    (!(isVoucherVersionsInProgress$ | async) && versionHistory?.totalItems > pageSizeOptions[0])
+                "
+                class="mt-3"
+                (page)="handlePageChange($event)"
+                [length]="versionHistory?.totalItems"
+                [pageSize]="pagination.count"
+                [showFirstLastButtons]="true"
+                [pageSizeOptions]="pageSizeOptions"
+                [hidePageSize]="false"
+                [pageIndex]="pagination.page - 1"
+            ></mat-paginator>
+        </div>
+    </div>
 </div>
