@@ -19,7 +19,6 @@ import { PURCHASE_ORDER_API } from "./apiurls/purchase-order.api";
 import { PAGINATION_LIMIT } from "../app.constant";
 import { ADVANCE_RECEIPTS_API } from "./apiurls/advance-receipt-adjustment.api";
 import { BULK_VOUCHER_EXPORT_API } from "./apiurls/bulkvoucherexport.api";
-import { isNull } from "../lodash-optimized";
 
 
 @Injectable()
