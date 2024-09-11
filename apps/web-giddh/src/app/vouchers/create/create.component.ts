@@ -1182,10 +1182,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
     }
-    fun() {
-        console.log(this.invoiceType);
-        return false;
-    }
 
     /**
      * Credit/Debit note voucher selection callback
@@ -3623,7 +3619,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public getDeposits(): any[] {
         const deposits = [];
         this.invoiceForm.get('deposits')['controls']?.forEach(control => {
-            if (control.get("accountUniqueName").value && control.get("amountForAccount").value) {
+            if (!this.invoiceType.isCashInvoice && control.get("accountUniqueName").value && control.get("amountForAccount").value || this.invoiceType.isCashInvoice && control.get("accountUniqueName").value) {
                 deposits.push(control.value);
             }
         });
@@ -4342,7 +4338,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         });
     }
-    getEmptyDepositAccountError(index: number): boolean {
+    /**
+     * Deposit account error
+     *
+     * @param {number} index
+     * @return {*}  {boolean}
+     * @memberof VoucherCreateComponent
+     */
+    public getEmptyDepositAccountError(index: number): boolean {
         let deposits = this.invoiceForm?.get('deposits')['controls'] as FormArray;
         let currentDepositFormGroup = deposits.at(index) as FormGroup;
         if ((!currentDepositFormGroup.get("accountUniqueName").value) && currentDepositFormGroup.get("amountForAccount").value) {
