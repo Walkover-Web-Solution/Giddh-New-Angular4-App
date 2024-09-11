@@ -1453,7 +1453,7 @@
                                                                                     </input-field>
                                                                                 </div>
                                                                             </ng-container>
-                                                                            <div class="col" *ngIf="invoiceType.isSalesInvoice || (invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote || invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice) && (vouchersForAdjustment?.length || isAdjustAmount)">
+                                                                            <div class="col" *ngIf="(currentVoucherFormDetails?.depositAllowed && !isUpdateMode && !invoiceType.isCashInvoice) || (invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote || invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice) && (vouchersForAdjustment?.length || isAdjustAmount)">
                                                                                 <div class="d-flex align-items-center">
                                                                                     <div
                                                                                         class="d-flex align-items-center column-gap1" *ngIf="(invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote || invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice) && (vouchersForAdjustment?.length || isAdjustAmount)">
@@ -1478,14 +1478,14 @@
                                                                                         <i (click)="openAdjustmentDialog(true)"
                                                                                             class="icon-edit text-blue font-12"></i>
                                                                                     </div>
-                                                                                        <i class="icon-trash font-16 cursor-pointer mr-l1" *ngIf="invoiceType.isSalesInvoice"
+                                                                                        <i class="icon-trash font-16 cursor-pointer mr-l1" *ngIf="currentVoucherFormDetails?.depositAllowed && !isUpdateMode && !invoiceType.isCashInvoice"
                                                                                         (click)="deleteDepositRow(depositIndex)"></i>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                     </ng-container>
                                                                 </div>
-                                                                <div class="text-blue mt-2 px-0" *ngIf="invoiceType.isSalesInvoice">
+                                                                <div class="text-blue mt-2 px-0" *ngIf="currentVoucherFormDetails?.depositAllowed && !isUpdateMode && !invoiceType.isCashInvoice">
                                                                     <span class="cursor-pointer" (click)="addNewDepositRow()">{{ localeData?.add_new_line
                                                                     }}</span>
                                                                 </div>
