@@ -404,6 +404,7 @@ export class BranchFilterRequest {
     to: string;
     query?: string;
     companyUniqueName?: string;
+    hierarchyType?: string;
 }
 
 export interface OrganizationDetails {

@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -9,7 +9,7 @@ import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
@@ -25,8 +25,8 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { AppState } from '../../store/roots';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/settings.constant';
 import { SettingsUtilityService } from '../services/settings-utility.service';
-import { FormControl } from '@angular/forms';
-
+import * as d3 from 'd3';
+import { OrgChart } from 'd3-org-chart';
 @Component({
     selector: 'setting-branch',
     templateUrl: './branch.component.html',
@@ -45,7 +45,10 @@ import { FormControl } from '@angular/forms';
         ]),
     ]
 })
-export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
+export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+    @ViewChild("chartContainer") chartContainer: ElementRef;
+    public data: any[] = [];
+    public chart: any;
     /** Change status modal instance */
     @ViewChild('branchModal', { static: false }) public branchModal: ModalDirective;
     @ViewChild('companyadd', { static: false }) public companyadd: ElementViewContainerRef;
@@ -83,8 +86,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public isBranchChangeInProgress: boolean = false;
     /** Stores all the branches */
     public unFilteredBranchList: Array<any>;
-    /** Stores the branch searcch query */
-    public searchBranchQuery: FormControl = new FormControl('');
     /** Branch search field instance */
     @ViewChild('branchSearch', { static: true }) public branchSearch: ElementRef;
     /** Stores the address configuration */
@@ -132,15 +133,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public ngOnInit() {
         this.getOnboardingForm();
-        this.searchBranchQuery.valueChanges.pipe(debounceTime(700),distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe( query => {
-            if(query !== undefined && query !== null) {
-                if(query) {
-                    this.handleBranchSearch(query);
-                } else {
-                    this.resetFilter();
-                }
-            }
-        });
 
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
 
@@ -212,20 +204,55 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
 
-    /**
-     * Performs local search among branches
-     *
-     * @param {string} query Searched query
-     * @memberof BranchComponent
-     */
-    public handleBranchSearch(query: string): void {
-        let branches = [...this.unFilteredBranchList];
-        if (query) {
-            const lowercaseQuery = query.toLowerCase();
-            branches = this.unFilteredBranchList?.filter(branch => (branch.name && branch.name?.toLowerCase().includes(lowercaseQuery)) || (branch.alias && branch.alias?.toLowerCase().includes(lowercaseQuery)));
-        }
-        this.branches$ = observableOf(branches);
+    public ngOnChanges(): void {
+        this.updateChart();
     }
+
+    public updateChart(): void {
+        if (!this.data || !this.chartContainer) {
+            return;
+        }
+        if (!this.chart) {
+            this.chart = new OrgChart();
+        }
+        console.log(this.chart);
+        d3.csv('https://raw.githubusercontent.com/bumbeishvili/sample-data/main/org.csv').then((dataFlattened) => {
+            this.chart
+                .container(this.chartContainer.nativeElement)
+                .data(this.data)
+                .svgWidth(700)
+                .initialZoom(0.7)
+                .nodeHeight((d) => 100)
+                .childrenMargin((d) => 40)
+                .compactMarginBetween((d) => 15)
+                .compactMarginPair((d) => 80)
+                .nodeContent((d, i, arr, state) => {
+                    const nodeId = `node-${d.id}`;
+                    setTimeout(() => {
+                        const nodeElement = document.getElementById(nodeId);
+                        if (nodeElement) {
+                            nodeElement.addEventListener('click', () => {
+                                this.updateBranch(d);
+                            });
+                        }
+                    }, 0);
+
+                    return `
+            <div id="${nodeId}" class="tree-wrapper pd-t2 overflow-visible" >
+              <div class="tree-content pt-0">
+               <div  class="tree-container " style="margin-top:-30px;background-color:#3AB6E3;height:10px;width:${d.width - 2}px;border-radius:1px"></div>
+               <div class="tree-container pd2 pd-t3 text-center">
+                   <div style="color:#111672;font-size:16px;font-weight:bold"> ${d.data.name} </div>
+                   <div style="color:#404040;font-size:16px;margin-top:4px"> ${d.data.alias} </div>
+               </div>
+              </div>
+            </div>
+          `;
+                })
+                .render();
+        });
+    }
+
 
     /**
      * This hook will be use for component after initialization
@@ -233,13 +260,163 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof BranchComponent
      */
     public ngAfterViewInit(): void {
+        setTimeout(() => {
+            this.data = this.unFilteredBranchList;
+            this.updateChart();
+            console.log(this.unFilteredBranchList);
+        },1000);
+
+        // this.data = [
+        //     {
+        //         "businessType": "Unregistered",
+        //         "businessNature": "Service",
+        //         "isArchived": false,
+        //         "nodeId": "b07baapngmgt8al6f538",
+        //         "name": "Aashi-Anshi",
+        //         "uniqueName": "b07baapngmgt8al6f538",
+        //         "consolidatedBranch": true,
+        //         "taxType": "GSTIN",
+        //         "alias": "Aash1(C)",
+        //         "defaultBranch": false
+        //     },
+        //     {
+        //         "businessType": "Registered",
+        //         "businessNature": "Service",
+        //         "addresses": [
+        //             {
+        //                 "name": "Default Address",
+        //                 "address": "",
+        //                 "isDefault": true,
+        //                 "taxNumber": "",
+        //                 "uniqueName": "k831718023971750",
+        //                 "taxType": "GSTIN",
+        //                 "pincode": ""
+        //             }
+        //         ],
+        //         "parentBranch": {
+        //             "businessType": "Unregistered",
+        //             "businessNature": "Service",
+        //             "isArchived": false,
+        //             "name": "Aashi-Anshi",
+        //             "uniqueName": "b07baapngmgt8al6f538",
+        //             "consolidatedBranch": true,
+        //             "taxType": "GSTIN",
+        //             "alias": "Aash1(C)",
+        //             "defaultBranch": false
+        //         },
+        //         "isArchived": false,
+        //         "nodeId": "aashianshi1",
+        //         "parentNodeId": "b07baapngmgt8al6f538",
+        //         "name": "Aashi-Anshi",
+        //         "uniqueName": "aashianshi1",
+        //         "consolidatedBranch": false,
+        //         "taxType": "GSTIN",
+        //         "alias": "Second Branch",
+        //         "defaultBranch": false
+        //     },
+        //     {
+        //         "businessType": "Unregistered",
+        //         "businessNature": "Service",
+        //         "parentBranch": {
+        //             "businessType": "Unregistered",
+        //             "businessNature": "Service",
+        //             "isArchived": false,
+        //             "name": "Aashi-Anshi",
+        //             "uniqueName": "b07baapngmgt8al6f538",
+        //             "consolidatedBranch": true,
+        //             "taxType": "GSTIN",
+        //             "alias": "Aash1(C)",
+        //             "defaultBranch": false
+        //         },
+        //         "isArchived": false,
+        //         "nodeId": "e2hk1t0wfz1xtxrsb3by",
+        //         "parentNodeId": "b07baapngmgt8al6f538",
+        //         "name": "Aashi-Anshi",
+        //         "uniqueName": "e2hk1t0wfz1xtxrsb3by",
+        //         "consolidatedBranch": true,
+        //         "taxType": "GSTIN",
+        //         "alias": "Aash2(C)",
+        //         "defaultBranch": false
+        //     },
+        //     {
+        //         "businessType": "Unregistered",
+        //         "businessNature": "Service",
+        //         "addresses": [
+        //             {
+        //                 "name": "Default Address",
+        //                 "address": "",
+        //                 "isDefault": true,
+        //                 "taxNumber": "",
+        //                 "uniqueName": "k831718023971750",
+        //                 "taxType": "GSTIN",
+        //                 "pincode": ""
+        //             }
+        //         ],
+        //         "parentBranch": {
+        //             "businessType": "Unregistered",
+        //             "businessNature": "Service",
+        //             "isArchived": false,
+        //             "name": "Aashi-Anshi",
+        //             "uniqueName": "e2hk1t0wfz1xtxrsb3by",
+        //             "consolidatedBranch": true,
+        //             "taxType": "GSTIN",
+        //             "alias": "Aash2(C)",
+        //             "defaultBranch": false
+        //         },
+        //         "isArchived": false,
+        //         "nodeId": "aashianshi",
+        //         "parentNodeId": "e2hk1t0wfz1xtxrsb3by",
+        //         "name": "Aashi-Anshi",
+        //         "uniqueName": "aashianshi",
+        //         "consolidatedBranch": false,
+        //         "taxType": "GSTIN",
+        //         "alias": "Aash",
+        //         "defaultBranch": true
+        //     },
+        //     {
+        //         "businessType": "Registered",
+        //         "businessNature": "Service",
+        //         "addresses": [
+        //             {
+        //                 "name": "Default Address",
+        //                 "address": "",
+        //                 "isDefault": true,
+        //                 "taxNumber": "",
+        //                 "uniqueName": "k831718023971750",
+        //                 "taxType": "GSTIN",
+        //                 "pincode": ""
+        //             }
+        //         ],
+        //         "parentBranch": {
+        //             "businessType": "Unregistered",
+        //             "businessNature": "Service",
+        //             "isArchived": false,
+        //             "name": "Aashi-Anshi",
+        //             "uniqueName": "e2hk1t0wfz1xtxrsb3by",
+        //             "consolidatedBranch": true,
+        //             "taxType": "GSTIN",
+        //             "alias": "Aash2(C)",
+        //             "defaultBranch": false
+        //         },
+        //         "isArchived": false,
+        //         "nodeId": "aashianshi2",
+        //         "parentNodeId": "e2hk1t0wfz1xtxrsb3by",
+        //         "name": "Aashi-Anshi",
+        //         "uniqueName": "aashianshi2",
+        //         "consolidatedBranch": false,
+        //         "taxType": "GSTIN",
+        //         "alias": "Second Branch1",
+        //         "defaultBranch": false
+        //     }
+        // ]
+
         if (this.isBranch) {
             this.openCreateCompanyDialog();
         }
     }
 
     /**
-     * Open Create company dialog 
+     * Open Create company dialog
      *
      * @memberof BranchComponent
      */
@@ -335,6 +512,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         let branchFilterRequest = new BranchFilterRequest();
         branchFilterRequest.from = this.filters['from'];
         branchFilterRequest.to = this.filters['to'];
+        branchFilterRequest.hierarchyType = 'tree';
 
         if (branchFilterRequest.from && branchFilterRequest.to) {
             this.showLoader = true;
@@ -503,16 +681,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.settingsProfileService.updateBranchInfo(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '' }));
         });
-    }
-
-    /**
-     * Resets the branch filter
-     *
-     * @memberof BranchComponent
-     */
-    public resetFilter(): void {
-        this.searchBranchQuery.reset();
-        this.handleBranchSearch(this.searchBranchQuery.value);
     }
 
     /**

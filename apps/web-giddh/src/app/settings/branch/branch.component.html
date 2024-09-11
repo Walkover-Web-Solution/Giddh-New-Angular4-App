@@ -7,38 +7,16 @@
 >
     <div class="clearfix">
         <div class="date-advance-search row mt-4">
-            <div class="col-sm-12 mr-b15 branch-header d-flex justify-content-between">
-                <form class="form-inline input-group-date-range-picker pr d-flex flex-row mr-0">
-                    <div class="mr-1 branch-header-content w-100">
-                        <div class="search-field form-top-fields w-100">
-                            <div class="search-branch-box">
-                                <input-field
-                                    [type]="'text'"
-                                    [name]="'searchBranch'"
-                                    [formControl]="searchBranchQuery"
-                                    #branchSearch
-                                    [placeholder]="localeData?.search_branch"
-                                >
-                                </input-field>
-                            </div>
-                            <button
-                                *ngIf="searchBranchQuery.value"
-                                class="w-100 mr-l1"
-                                mat-stroked-button
-                                (click)="resetFilter()"
-                                aria-label="cross icon"
-                                [matTooltip]="localeData?.reset_search"
-                            >
-                                <i aria-hidden="true"  class="icon-cross d-inline-block font-12 mr-1"></i> 
-                                <span>{{ commonLocaleData?.app_clear_filter }}</span>
-                            </button>
-                        </div>
-                    </div>
-                </form>
+            <div class="col-sm-12 mr-b15 branch-header d-flex justify-content-end">
                 <button mat-stroked-button color="primary" class="mr-0" (click)="openAddBranchModal()">
                     {{ localeData?.create_branch }}
                 </button>
             </div>
+            <div
+                class="chart-container"
+                #chartContainer
+                id="chartContainer"
+            ></div>
         </div>
     </div>
     <div *ngIf="(branches$ | async)?.length === 0 && !showLoader" class="no-data mr-t2 loader-main">
@@ -114,7 +92,9 @@
                                 <div class="col-xl-3 col-lg-4 col-md-6">
                                     <div class="parent-branch pt-1 pb-1">{{ localeData?.linked_address }}:</div>
                                     <div>
-                                        <span class="text-gray" *ngIf="!branch?.addresses?.length">{{ localeData?.no_linked_address_present }}</span>
+                                        <span class="text-gray" *ngIf="!branch?.addresses?.length">{{
+                                            localeData?.no_linked_address_present
+                                        }}</span>
                                         <div *ngFor="let address of branch?.addresses" class="linked-add">
                                             <ng-container *ngIf="address">
                                                 <i
@@ -152,7 +132,9 @@
                                 <div class="col-xl-3 col-lg-4 col-md-6">
                                     <div class="parent-branch pt-1 pb-1">{{ localeData?.linked_warehouse }}:</div>
                                     <div>
-                                        <span class="text-gray" *ngIf="!branch?.warehouseResource?.length">{{ localeData?.no_linked_warehouse_present }}</span>
+                                        <span class="text-gray" *ngIf="!branch?.warehouseResource?.length">{{
+                                            localeData?.no_linked_warehouse_present
+                                        }}</span>
                                         <div *ngFor="let warehouse of branch?.warehouseResource" class="linked-add">
                                             <ng-container *ngIf="warehouse">
                                                 <i

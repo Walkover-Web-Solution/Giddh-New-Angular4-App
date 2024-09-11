@@ -26,11 +26,12 @@ export class SettingsBranchService {
 
         let from = (request.from) ? request.from : "";
         let to = (request.to) ? request.to : "";
-
+        let hierarchyType = (request.to) ? request.hierarchyType : "";
         let url = this.config.apiUrl + COMPANY_API.GET_ALL_BRANCHES;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         url = url?.replace(':from', from);
         url = url?.replace(':to', to);
+        url = url?.replace(':hierarchyType', hierarchyType);
 
         let delimiter = '?';
         if (request.query !== undefined) {
