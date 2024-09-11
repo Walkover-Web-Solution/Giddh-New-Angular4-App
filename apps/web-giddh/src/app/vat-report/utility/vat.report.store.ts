@@ -32,6 +32,8 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
     }
 
     public currentCompanyBranches$: Observable<any> = this.select(this.store.select(state => state.settings.branches), (response) => response);
+    public activeCompany$: Observable<any> = this.select(this.store.select(state => state.session.activeCompany), (response) => response);
+    public universalDate$: Observable<any> = this.select(this.store.select(state => state.session.applicationDate), (response) => response);
 
     /**
     *   Save list of Payment Liability
