@@ -407,7 +407,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public depositAccountName: string = '';
     /** Holds list of countries which use ZIP Code in address */
     public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
-    /** Total Deposite Amount  */
+    /** Total Deposit Amount  */
     private totalDepositAmount: number = 0;
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1180,7 +1180,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 });
             }
         });
-
     }
 
     /**
@@ -2153,7 +2152,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             amountForAccount: [''],
             currencySymbol: [''],
             type: ['DEBIT']
-        })
+        });
     }
     /**
      * Returns address form group
