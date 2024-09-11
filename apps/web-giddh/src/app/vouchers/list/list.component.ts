@@ -8,7 +8,7 @@ import { NewConfirmationModalComponent } from "../../theme/new-confirmation-moda
 import { GeneralService } from "../../services/general.service";
 import { TemplatePreviewDialogComponent } from "../template-preview-dialog/template-preview-dialog.component";
 import { TemplateEditDialogComponent } from "../template-edit-dialog/template-edit-dialog.component";
-import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, take, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, debounceTime, delay, distinctUntilChanged, merge, take, takeUntil } from "rxjs";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
@@ -427,13 +427,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStore.lastVouchers$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.handleGetAllVoucherResponse(response);
-        });
-
-        this.componentStore.purchaseOrdersList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.handleGetAllVoucherResponse(response);
-        });
+        merge(this.componentStore.lastVouchers$, this.componentStore.purchaseOrdersList$)
+            .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                this.handleGetAllVoucherResponse(response);
+            });
 
         this.componentStore.exportVouchersFile$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
@@ -461,24 +458,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStore.deleteVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response) {
-                this.dialog.closeAll();
-                this.getVouchers(this.isUniversalDateApplicable);
-            }
-        });
-
+        merge(this.componentStore.deleteVoucherIsSuccess$, this.componentStore.convertToInvoiceIsSuccess$)
+            .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                if (response) {
+                    this.getVouchers(this.isUniversalDateApplicable);
+                }
+            });
 
         this.componentStore.actionVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.dialog.closeAll();
                 this.toasterService.showSnackBar("success", (this.voucherType === 'estimates' || this.voucherType === 'proformas') ? this.localeData?.status_updated : this.commonLocaleData?.app_messages?.invoice_updated);
-                this.getVouchers(this.isUniversalDateApplicable);
-            }
-        });
-
-        this.componentStore.convertToInvoiceIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
                 this.getVouchers(this.isUniversalDateApplicable);
             }
         });
@@ -696,7 +686,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     public showVoucherPreview(voucherUniqueName: string): void {
         this.vouchersUtilityService.lastVouchers = this.dataSource;
-        this.router.navigate([`/pages/vouchers/view/${this.voucherType}/${voucherUniqueName}`]);
+        this.router.navigate([`/pages/vouchers/view/${this.voucherType}/${voucherUniqueName}`], {
+            queryParams: { page: this.advanceFilters.page, count: this.advanceFilters.count }
+        });
     }
 
     /**

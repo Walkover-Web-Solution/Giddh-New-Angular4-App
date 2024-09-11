@@ -6,7 +6,7 @@
     (translationComplete)="translationComplete($event)"
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
-    <giddh-page-loader *ngIf="getVouchersInProgress$ | async" [cssClass]="'no-data'"></giddh-page-loader>
+    <giddh-page-loader *ngIf="'getVouchersInProgress$' | async" [cssClass]="'no-data'"></giddh-page-loader>
     <div class="invoice-preview-wrapper" *ngIf="!(getVouchersInProgress$ | async)">
         <div class="preview-list h-100 pd-b15">
             <div class="d-flex align-items-center column-gap5 pd-15 w-100 list-responsive row-gap1">
@@ -167,6 +167,7 @@
                                 class="mat-icon-sm-btn"
                                 [matTooltip]="commonLocaleData?.app_download_pdf"
                                 [matTooltipPosition]="'above'"
+                                (click)="downloadPdf()"
                             >
                                 <i class="icon-download-circle"></i>
                             </button>
@@ -177,6 +178,7 @@
                                 class="mat-icon-sm-btn"
                                 [matTooltip]="commonLocaleData?.app_delete"
                                 [matTooltipPosition]="'above'"
+                                (click)="deleteVoucherDialog()"
                             >
                                 <i class="icon-trash"></i>
                             </button>
@@ -190,14 +192,14 @@
                                 {{ commonLocaleData?.app_payment_status?.paid }}
                             </button>
                             <button mat-menu-item (click)="adjustPayment()">
-                                commonLocaleData?.app_payment_status?.adjust_amount
+                                {{ commonLocaleData?.app_payment_status?.adjust_amount }}
                             </button>
                             <button mat-menu-item>{{ commonLocaleData?.app_payment_status?.unpaid }}</button>
                             <button mat-menu-item>{{ commonLocaleData?.app_payment_status?.hold }}</button>
                             <button mat-menu-item>{{ commonLocaleData?.app_payment_status?.cancel }}</button>
                         </mat-menu>
                         <button mat-stroked-button  *ngIf="!isCompany">{{ commonLocaleData?.app_cancel }}</button>
-                        <button mat-stroked-button>
+                        <button mat-stroked-button (click)="backToOldLocation()">
                             <!-- <i class="icon-cross"></i> -->
                             {{ commonLocaleData?.app_back }}
                         </button>
