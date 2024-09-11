@@ -55,13 +55,7 @@
                 background-color: var(--color-primary-invoice-preview-details-background);
             }
             .error {
-                // display: flex;
-                // justify-content: center;
-                // align-items: center;
-                // height: 100%;
                 font-size: var(--font-size-32);
-                // max-width: 60%;
-                // margin: 0 auto;
                 color: var(--color-danger);
             }
 
@@ -117,14 +111,4 @@
     .list-responsive {
         flex-wrap: wrap;
     }
-    // .search-field {
-    //     width: 100%;
-    // }
-    // .invoice-preview-wrapper {
-    //     .preview-list {
-    //         .invoice-btn {
-    //             width: auto;
-    //         }
-    //     }
-    // }
 }
