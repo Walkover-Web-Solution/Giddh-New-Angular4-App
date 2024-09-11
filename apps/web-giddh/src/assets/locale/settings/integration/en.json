@@ -130,9 +130,10 @@
         "required_field_error": "Please fill all required fields",
         "connect_bank": "Connect Bank",
         "confirm_bank_delete_message": "Are you sure you want to delete the bank account?",
-        "search_institutions":"Search Institution",
+        "search_bank":"Search Bank",
         "institutions":"Institutions",
-        "bank_list":"Bank List"
+        "bank_list":"Bank List",
+        "banks": "Banks"
     },
     "communication": {
         "tab_heading": "Communication"

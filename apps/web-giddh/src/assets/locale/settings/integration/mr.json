@@ -130,9 +130,10 @@
         "required_field_error": "कृपया सर्व आवश्यक फील्ड भरा",
         "connect_bank": "बँक कनेक्ट करा",
         "confirm_bank_delete_message": "आपल्याला खात्री आहे की आपण बँक खाते हटवू इच्छिता?",
-        "search_institutions": "संस्थेचा शोध घ्या",
+        "search_bank": "बँक शोधा",
         "institutions": "संस्था",
-        "bank_list": "बँक यादी"
+        "bank_list": "बँक यादी",
+		"banks": "बँका"
 	},
     "communication": {
         "tab_heading": "संवाद"

@@ -19,12 +19,8 @@ select-multiple-fields {
 
 .list-item-underline-hover {
     &:hover {
-        span {
-            span {
-                color: var(--color-giddh-blue) !important;
-                text-decoration: underline;
-            }
-        }
+        color: var(--color-giddh-blue) !important;
+        text-decoration: underline;
     }
 }
 
