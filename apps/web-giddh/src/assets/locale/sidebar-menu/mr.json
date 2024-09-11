@@ -102,10 +102,6 @@
                     "icon": "icon-reciept-new",
                     "description": "आगाऊ, सामान्य, एकूण आणि न वापरलेल्या पावत्या",
                     "additional": {
-                        "createNew": {
-                            "label": "+",
-                            "link": "/pages/vouchers/receipt/create"
-                        },
                         "queryParams": {
                             "voucherVersion": 2
                         }
@@ -203,10 +199,6 @@
                     "icon": "icon-reciept-new",
                     "description": "एकूण, आणि न वापरलेली देयके",
                     "additional": {
-                        "createNew": {
-                            "label": "+",
-                            "link": "/pages/vouchers/payment/create"
-                        },
                         "queryParams": {
                             "voucherVersion": 2
                         }
