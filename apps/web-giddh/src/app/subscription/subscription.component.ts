@@ -326,6 +326,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         dialogRef.afterClosed().pipe(take(1)).subscribe(response => {
             if (response === this.commonLocaleData?.app_yes) {
                 this.store.dispatch(this.sessionAction.deleteSession(requestPayload));
+                this.store.dispatch(this.sessionAction.getAllSession());
             }
         });
     }
