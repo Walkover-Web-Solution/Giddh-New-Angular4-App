@@ -555,7 +555,7 @@ export class VoucherService {
     }
 
     /**
-     * Update Action for Proforma 
+     * Update Action for Proforma
      *
      * @param {ProformaUpdateActionRequest} request
      * @param {string} voucherType
@@ -580,7 +580,7 @@ export class VoucherService {
     }
 
     /**
-     * Generate Invoice for Estimate and Proforma 
+     * Generate Invoice for Estimate and Proforma
      *
      * @param {ProformaGetRequest} request
      * @param {string} voucherType
@@ -726,7 +726,7 @@ export class VoucherService {
         url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         delete postRequest.from;
         delete postRequest.to;
-        
+
         return this.http.post(url, postRequest).pipe(
             map((res) => {
                 let data: BaseResponse<any, any> = res;
