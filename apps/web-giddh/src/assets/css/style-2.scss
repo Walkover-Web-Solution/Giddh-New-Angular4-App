@@ -154,7 +154,7 @@ textarea {
 
 .mobile-number-wrapper {
     z-index: 9;
-    
+
     input.error {
         border: 1px solid var(--color-danger);
     }
@@ -1088,6 +1088,44 @@ textarea {
     }
 }
 
+.branch-tree-wrapper {
+    padding-top: 30px;
+    background-color: none;
+    margin-left: 1px;
+    border-radius: 2px;
+    overflow: visible;
+
+    .tree-content {
+        padding-top: 0px;
+        background-color: white;
+        border: 1px solid lightgray;
+
+        .tree-inner-content {
+            margin-top: -30px;
+            background-color: var(--color-giddh-blue);
+            height: 10px;
+            border-radius: 1px
+        }
+
+        .tree-container {
+            padding: 20px;
+            padding-top: 35px;
+            text-align: center;
+
+            .tree-name {
+                color: #111672;
+                font-size: 16px;
+                font-weight: bold
+            }
+
+            .tree-alias {
+                color: #404040;
+                font-size: 16px;
+                margin-top: 4px
+            }
+        }
+    }
+}
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -1285,7 +1323,7 @@ aside-create-group {
                         overflow-y: auto;
                     }
                 }
-                
+
             // Units are not displaying after creation once the scroll comes on the page
                 &:first-child {
                     mat-list {

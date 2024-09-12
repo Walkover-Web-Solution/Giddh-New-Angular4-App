@@ -237,17 +237,19 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
                         }
                     }, 0);
 
-                    return `
-            <div id="${nodeId}" class="tree-wrapper pd-t2 overflow-visible" >
-              <div class="tree-content pt-0">
-               <div  class="tree-container " style="margin-top:-30px;background-color:#3AB6E3;height:10px;width:${d.width - 2}px;border-radius:1px"></div>
-               <div class="tree-container pd2 pd-t3 text-center">
-                   <div style="color:#111672;font-size:16px;font-weight:bold"> ${d.data.name} </div>
-                   <div style="color:#404040;font-size:16px;margin-top:4px"> ${d.data.alias} </div>
+                    return `   <div  id="${nodeId}"  class="branch-tree-wrapper" style="height:${d.height
+                        }px;">
+              <div class="tree-content" style="height:${d.height - 32
+                        }px">
+               <div class="tree-inner-content" style="width:${d.width - 2
+                        }px;"></div>
+               <div class="tree-container">
+                   <div class="tree-name" >  ${d.data.name}</div>
+                   <div class="tree-alias"> ${d.data.alias}</div>
                </div>
               </div>
-            </div>
-          `;
+      </div>`
+                        ;
                 })
                 .render();
         });
@@ -260,155 +262,15 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
      * @memberof BranchComponent
      */
     public ngAfterViewInit(): void {
-        setTimeout(() => {
-            this.data = this.unFilteredBranchList;
-            this.updateChart();
-            console.log(this.unFilteredBranchList);
-        },1000);
-
-        // this.data = [
-        //     {
-        //         "businessType": "Unregistered",
-        //         "businessNature": "Service",
-        //         "isArchived": false,
-        //         "nodeId": "b07baapngmgt8al6f538",
-        //         "name": "Aashi-Anshi",
-        //         "uniqueName": "b07baapngmgt8al6f538",
-        //         "consolidatedBranch": true,
-        //         "taxType": "GSTIN",
-        //         "alias": "Aash1(C)",
-        //         "defaultBranch": false
-        //     },
-        //     {
-        //         "businessType": "Registered",
-        //         "businessNature": "Service",
-        //         "addresses": [
-        //             {
-        //                 "name": "Default Address",
-        //                 "address": "",
-        //                 "isDefault": true,
-        //                 "taxNumber": "",
-        //                 "uniqueName": "k831718023971750",
-        //                 "taxType": "GSTIN",
-        //                 "pincode": ""
-        //             }
-        //         ],
-        //         "parentBranch": {
-        //             "businessType": "Unregistered",
-        //             "businessNature": "Service",
-        //             "isArchived": false,
-        //             "name": "Aashi-Anshi",
-        //             "uniqueName": "b07baapngmgt8al6f538",
-        //             "consolidatedBranch": true,
-        //             "taxType": "GSTIN",
-        //             "alias": "Aash1(C)",
-        //             "defaultBranch": false
-        //         },
-        //         "isArchived": false,
-        //         "nodeId": "aashianshi1",
-        //         "parentNodeId": "b07baapngmgt8al6f538",
-        //         "name": "Aashi-Anshi",
-        //         "uniqueName": "aashianshi1",
-        //         "consolidatedBranch": false,
-        //         "taxType": "GSTIN",
-        //         "alias": "Second Branch",
-        //         "defaultBranch": false
-        //     },
-        //     {
-        //         "businessType": "Unregistered",
-        //         "businessNature": "Service",
-        //         "parentBranch": {
-        //             "businessType": "Unregistered",
-        //             "businessNature": "Service",
-        //             "isArchived": false,
-        //             "name": "Aashi-Anshi",
-        //             "uniqueName": "b07baapngmgt8al6f538",
-        //             "consolidatedBranch": true,
-        //             "taxType": "GSTIN",
-        //             "alias": "Aash1(C)",
-        //             "defaultBranch": false
-        //         },
-        //         "isArchived": false,
-        //         "nodeId": "e2hk1t0wfz1xtxrsb3by",
-        //         "parentNodeId": "b07baapngmgt8al6f538",
-        //         "name": "Aashi-Anshi",
-        //         "uniqueName": "e2hk1t0wfz1xtxrsb3by",
-        //         "consolidatedBranch": true,
-        //         "taxType": "GSTIN",
-        //         "alias": "Aash2(C)",
-        //         "defaultBranch": false
-        //     },
-        //     {
-        //         "businessType": "Unregistered",
-        //         "businessNature": "Service",
-        //         "addresses": [
-        //             {
-        //                 "name": "Default Address",
-        //                 "address": "",
-        //                 "isDefault": true,
-        //                 "taxNumber": "",
-        //                 "uniqueName": "k831718023971750",
-        //                 "taxType": "GSTIN",
-        //                 "pincode": ""
-        //             }
-        //         ],
-        //         "parentBranch": {
-        //             "businessType": "Unregistered",
-        //             "businessNature": "Service",
-        //             "isArchived": false,
-        //             "name": "Aashi-Anshi",
-        //             "uniqueName": "e2hk1t0wfz1xtxrsb3by",
-        //             "consolidatedBranch": true,
-        //             "taxType": "GSTIN",
-        //             "alias": "Aash2(C)",
-        //             "defaultBranch": false
-        //         },
-        //         "isArchived": false,
-        //         "nodeId": "aashianshi",
-        //         "parentNodeId": "e2hk1t0wfz1xtxrsb3by",
-        //         "name": "Aashi-Anshi",
-        //         "uniqueName": "aashianshi",
-        //         "consolidatedBranch": false,
-        //         "taxType": "GSTIN",
-        //         "alias": "Aash",
-        //         "defaultBranch": true
-        //     },
-        //     {
-        //         "businessType": "Registered",
-        //         "businessNature": "Service",
-        //         "addresses": [
-        //             {
-        //                 "name": "Default Address",
-        //                 "address": "",
-        //                 "isDefault": true,
-        //                 "taxNumber": "",
-        //                 "uniqueName": "k831718023971750",
-        //                 "taxType": "GSTIN",
-        //                 "pincode": ""
-        //             }
-        //         ],
-        //         "parentBranch": {
-        //             "businessType": "Unregistered",
-        //             "businessNature": "Service",
-        //             "isArchived": false,
-        //             "name": "Aashi-Anshi",
-        //             "uniqueName": "e2hk1t0wfz1xtxrsb3by",
-        //             "consolidatedBranch": true,
-        //             "taxType": "GSTIN",
-        //             "alias": "Aash2(C)",
-        //             "defaultBranch": false
-        //         },
-        //         "isArchived": false,
-        //         "nodeId": "aashianshi2",
-        //         "parentNodeId": "e2hk1t0wfz1xtxrsb3by",
-        //         "name": "Aashi-Anshi",
-        //         "uniqueName": "aashianshi2",
-        //         "consolidatedBranch": false,
-        //         "taxType": "GSTIN",
-        //         "alias": "Second Branch1",
-        //         "defaultBranch": false
-        //     }
-        // ]
+        let interval = setInterval(() => {
+            if (this.unFilteredBranchList?.length) {
+                setTimeout(() => {
+                    this.data = this.unFilteredBranchList;
+                    this.updateChart();
+                }, 100);
+                clearInterval(interval);
+            }
+        }, 500);
 
         if (this.isBranch) {
             this.openCreateCompanyDialog();

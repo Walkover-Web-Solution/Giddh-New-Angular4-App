@@ -3,18 +3,6 @@
     width: 100vw;
 }
 
-.tree-wrapper {
-    background-color: none;
-    margin-left: 1px;
-    height: 80px;
-    border-radius: 2px;
-    .tree-content {
-        height: 32px;
-        border: 1px solid lightgray;
-        background-color: var(--white-color) !important;
-    }
-}
-
 .form-horizontal .control-label {
     text-align: left;
 }
