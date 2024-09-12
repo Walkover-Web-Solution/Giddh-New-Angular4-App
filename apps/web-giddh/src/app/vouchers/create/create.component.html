@@ -1421,7 +1421,7 @@
                                                                 </mat-card-title>
                                                             </mat-card-header>
                                                             <mat-card-content>
-                                                                <div class="container px-0 pd-t05 deposit-wrapper overflow-x-hidden overflow-y-auto" formArrayName="deposits">
+                                                                <div class="container px-0 pd-t05 pd-r1 deposit-wrapper overflow-x-hidden overflow-y-auto" formArrayName="deposits">
                                                                     <ng-container
                                                                     *ngFor="let deposit of invoiceForm?.get('deposits')['controls']; let depositIndex = index">
                                                                         <div class="row align-items-center mr-b15" [formGroupName]="depositIndex">
