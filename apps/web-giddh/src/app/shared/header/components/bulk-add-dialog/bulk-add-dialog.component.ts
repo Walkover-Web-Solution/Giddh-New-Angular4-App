@@ -55,8 +55,7 @@ export class BulkAddDialogComponent implements OnInit {
         this.getCompanyBranches();
         this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                let consolidatedBranches = response?.filter(branch => !branch.consolidatedBranch);
-                this.branches = consolidatedBranches;
+                this.branches = response?.filter(branch => !branch.consolidatedBranch);
                 const formArray = this.bulkAddAccountForm.get('customFields') as FormArray;
                 formArray?.clear();
                 response.forEach((item) => {

@@ -5,7 +5,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { combineLatest, ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OnboardingFormRequest } from '../../../models/api-models/Common';
@@ -130,23 +130,23 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         this.branchesDropdown = new FormControl('');
         this.branchForm = this.formBuilder.group({
             alias: ['', [Validators.required, Validators.maxLength(50)]],
-            parentBranchUniqueName:[''],
+            parentBranchUniqueName: [''],
             name: [''],
             address: ['']
         });
     }
 
-/**
-  *This will be used to get branch wise data
-  *
-  * @memberof CreateBranchComponent
-  */
+    /**
+    * This will be used to get branch wise data
+    *
+    * @memberof CreateBranchComponent
+    */
     public getBranchWiseData(): void {
         this.inventoryService.getLinkedStocks().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
-                this.allBranches = response.body.results?.filter(branch => branch?.isCompany !== true);
+                this.allBranches = response.body.results?.filter(branch => !branch?.isCompany);
                 this.branches = response.body.results?.filter(branch => branch?.isCompany !== true);
-                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
+                this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
             }
         });
     }
@@ -178,12 +178,16 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
             }
         });
         this.getBranchWiseData();
-        this.branchesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+        this.branchesDropdown?.valueChanges.pipe(
+            debounceTime(700),
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$),
+        ).subscribe(search => {
             let branchesClone = cloneDeep(this.allBranches);
-            if (search) {
-                branchesClone = this.allBranches?.filter(branch => (branch.alias?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1));
+            if (search || search === "") {
+                branchesClone = this.allBranches?.filter(branch => branch.alias?.toLowerCase()?.includes(search?.toLowerCase()));
+                this.branches = branchesClone;
             }
-            this.branches = branchesClone;
         });
 
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;

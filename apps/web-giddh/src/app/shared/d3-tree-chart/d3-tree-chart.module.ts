@@ -15,5 +15,4 @@ import { D3TreeChartComponent } from "./d3-tree-chart.component";
 })
 
 export class D3TreeChartModule {
-
 }
