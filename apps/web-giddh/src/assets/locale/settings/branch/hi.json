@@ -39,5 +39,7 @@
     "archive_notallowed": "अंतिम सक्रिय शाखा को संग्रहीत नहीं किया जा सकता है।",
     "archived_default_error": "संग्रहीत वेयरहाउस को डिफ़ॉल्ट के रूप में सेट नहीं किया जा सकता.",
     "no_linked_address_present" : "कोई लिंक किया हुआ पता मौजूद नहीं है",
-    "no_linked_warehouse_present" : "कोई लिंक किया हुआ गोदाम मौजूद नहीं है"
+    "no_linked_warehouse_present" : "कोई लिंक किया हुआ गोदाम मौजूद नहीं है",
+    "flat_view": "समतल दृश्य",
+    "hierarchy_view": "पदानुक्रम दृश्य"
 }

@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -25,8 +25,9 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { AppState } from '../../store/roots';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/settings.constant';
 import { SettingsUtilityService } from '../services/settings-utility.service';
+import { OrgChart } from 'd3-org-chart';
 import { FormControl } from '@angular/forms';
-
+import { BranchHierarchyType } from '../../app.constant';
 @Component({
     selector: 'setting-branch',
     templateUrl: './branch.component.html',
@@ -45,7 +46,7 @@ import { FormControl } from '@angular/forms';
         ]),
     ]
 })
-export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
+export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     /** Change status modal instance */
     @ViewChild('branchModal', { static: false }) public branchModal: ModalDirective;
     @ViewChild('companyadd', { static: false }) public companyadd: ElementViewContainerRef;
@@ -111,6 +112,16 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public statusDialogRef: any;
     /** Holds Close Address MatDailog Reference */
     public addressAsidePaneRef: any;
+    /** Index of selected tab */
+    public selectedTabIndex: number = 0;
+    /** Active tab name */
+    public activeTab: string;
+    /** Tree Chart Container instance */
+    @ViewChild("chartContainer") chartContainer: ElementRef;
+    /** This will hold tree response data */
+    public data: any[] = [];
+    /** This will hold tree chart instance */
+    public chart: any;
 
     constructor(
         private router: Router,
@@ -132,16 +143,15 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public ngOnInit() {
         this.getOnboardingForm();
-        this.searchBranchQuery.valueChanges.pipe(debounceTime(700),distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe( query => {
-            if(query !== undefined && query !== null) {
-                if(query) {
+        this.searchBranchQuery.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(query => {
+            if (query !== undefined && query !== null) {
+                if (query) {
                     this.handleBranchSearch(query);
                 } else {
                     this.resetFilter();
                 }
             }
         });
-
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
 
         this.store.pipe(select(state => state.settings && state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
@@ -213,11 +223,11 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     /**
-     * Performs local search among branches
-     *
-     * @param {string} query Searched query
-     * @memberof BranchComponent
-     */
+ * Performs local search among branches
+ *
+ * @param {string} query Searched query
+ * @memberof BranchComponent
+ */
     public handleBranchSearch(query: string): void {
         let branches = [...this.unFilteredBranchList];
         if (query) {
@@ -226,6 +236,65 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         this.branches$ = observableOf(branches);
     }
+    /**
+     * This hook will be called whenever the input bindings change.
+     * It updates the chart whenever the input bindings change.
+     *
+     * @memberof BranchComponent
+     */
+    public ngOnChanges(): void {
+        this.updateChart();
+    }
+
+    /**
+     * Updates the organization chart with the provided data.
+     *
+     * @return {*}  {void}
+     * @memberof BranchComponent
+     */
+    public updateChart(): void {
+        if (!this.data || !this.chartContainer) {
+            return;
+        }
+        if (!this.chart) {
+            this.chart = new OrgChart();
+        }
+        this.chart
+            .container(this.chartContainer.nativeElement)
+            .data(this.data)
+            .svgWidth(1500)
+            .initialZoom(1.1)
+            .nodeHeight((d) => 120)
+            .childrenMargin((d) => 40)
+            .compactMarginBetween((d) => 15)
+            .compactMarginPair((d) => 80)
+            .nodeContent((d, i, arr, state) => {
+                const nodeId = `node-${d.id}`;
+                setTimeout(() => {
+                    const nodeElement = document.getElementById(nodeId);
+                    if (nodeElement) {
+                        nodeElement.addEventListener('click', () => {
+                        });
+                    }
+                }, 0);
+
+                return `
+                     <div id="${nodeId}" class="branch-tree-wrapper">
+                        <div class="tree-content" >
+                            <div class="tree-inner-content" ></div>
+                            <div class="tree-container text-align-center">
+                                <span class="d-inline-flex align-items-center">
+                                    <i class="cursor-pointer icon-branch-icon mr-r05"></i>
+                                    <div class="tree-name">${d.data.alias}</div>
+                                </span>
+                                <div class="tree-alias">${this.localeData?.parent_entity}: ${d.data.name}</div>
+                            </div>
+                        </div>
+                    </div>`
+                    ;
+            })
+            .render();
+    }
 
     /**
      * This hook will be use for component after initialization
@@ -233,13 +302,23 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof BranchComponent
      */
     public ngAfterViewInit(): void {
+        let interval = setInterval(() => {
+            if (this.unFilteredBranchList?.length) {
+                setTimeout(() => {
+                    this.data = this.unFilteredBranchList;
+                    this.updateChart();
+                }, 100);
+                clearInterval(interval);
+            }
+        }, 500);
+
         if (this.isBranch) {
             this.openCreateCompanyDialog();
         }
     }
 
     /**
-     * Open Create company dialog 
+     * Open Create company dialog
      *
      * @memberof BranchComponent
      */
@@ -258,11 +337,11 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public updateBranch(branch: any): void {
         this.branchDetails = branch;
-
         this.loadAddresses('GET', () => {
             this.branchToUpdate = {
                 name: branch.name,
                 alias: branch.alias,
+                parentBranchName: branch.parentBranch?.name,
                 linkedEntities: branch.addresses || []
             };
             this.toggleAsidePane();
@@ -331,6 +410,11 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.destroyed$.complete();
     }
 
+    /**
+     * Get all branches
+     *
+     * @memberof BranchComponent
+     */
     public getAllBranches() {
         let branchFilterRequest = new BranchFilterRequest();
         branchFilterRequest.from = this.filters['from'];
@@ -338,6 +422,13 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (branchFilterRequest.from && branchFilterRequest.to) {
             this.showLoader = true;
+            // First request with hierarchyType as Tree
+            branchFilterRequest.hierarchyType = BranchHierarchyType.Tree;
+            this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
+            this.store.dispatch(this.settingsBranchActions.ResetBranchRemoveResponse());
+
+            // Second request with hierarchyType as Flatten
+            branchFilterRequest.hierarchyType = BranchHierarchyType.Flatten;
             this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
             this.store.dispatch(this.settingsBranchActions.ResetBranchRemoveResponse());
         }
@@ -444,7 +535,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         this.settingsProfileService.updateBranchInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 this.addressAsidePaneRef?.close();
-                this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '' }));
+                this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 this.toasterService.successToast(this.localeData?.branch_updated);
             } else {
                 this.toasterService.errorToast(response?.message);
@@ -501,9 +592,10 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
             };
         }
         this.settingsProfileService.updateBranchInfo(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(() => {
-            this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '' }));
+            this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
         });
     }
+
 
     /**
      * Resets the branch filter
@@ -589,6 +681,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
                 let branchFilterRequest = new BranchFilterRequest();
                 branchFilterRequest.from = this.filters['from'];
                 branchFilterRequest.to = this.filters['to'];
+                branchFilterRequest.hierarchyType = BranchHierarchyType.Flatten;
                 this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
                 this.toasterService.successToast((isArchived) ? this.localeData?.branch_archived : this.localeData?.branch_unarchived);
             } else {

@@ -30,6 +30,7 @@ import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { OrganizationType } from '../models/user-login-state';
 import { GeneralService } from '../services/general.service';
 import { cloneDeep, each, find, orderBy } from '../lodash-optimized';
+import { BranchHierarchyType } from '../app.constant';
 
 export const IsyncData = [
     { label: 'Debtors', value: 'debtors' },
@@ -406,6 +407,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         if (!this.getBranchesInitiated) {
             this.getBranchesInitiated = true;
             let branchFilterRequest = new BranchFilterRequest();
+            branchFilterRequest.hierarchyType = BranchHierarchyType.Flatten;
             this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
         }
     }

@@ -7,7 +7,7 @@ import { debounceTime, takeUntil, take } from 'rxjs/operators';
 import { GeneralActions } from '../../../actions/general/general.actions';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../../app.constant';
 import { cloneDeep, isArray } from '../../../lodash-optimized';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { PaymentSummaryRequest } from '../../../models/api-models/Reports';
@@ -253,7 +253,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 }
             }
         });
@@ -521,7 +521,7 @@ export class PaymentReportComponent implements AfterViewInit, OnDestroy, OnInit 
                 }
             }
             requestObject = { ...requestObject, ...optionalParams };
-        }   
+        }
         this.lastListingFilters = requestObject;
         return this.receiptService.GetAllReceipt(requestObject, 'payment');
     }

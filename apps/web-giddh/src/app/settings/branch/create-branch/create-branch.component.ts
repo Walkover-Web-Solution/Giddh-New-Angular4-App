@@ -21,6 +21,10 @@ import { SettingsUtilityService } from '../../services/settings-utility.service'
 import { WarehouseActions } from '../../warehouse/action/warehouse.action';
 import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
 import { MatSelect } from '@angular/material/select';
+import { OrganizationType } from '../../../models/user-login-state';
+import { cloneDeep } from '../../../lodash-optimized';
+import { InventoryService } from '../../../services/inventory.service';
+import { BranchHierarchyType } from '../../../app.constant';
 
 @Component({
     selector: 'create-branch',
@@ -95,6 +99,16 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     }
     /** Holds Create Address Dialog Reference */
     public asideAccountAsidePaneRef: MatDialogRef<any>;
+    /** True, if organization type is company and it has more than one branch (i.e. in addition to HO) */
+    public isCompany: boolean;
+    /** This will use for instance of branches Dropdown */
+    public branchesDropdown: FormControl;
+    /** This will use for instance of branches Dropdown */
+    public nativeSelectFormControl: FormControl;
+    /** Hold all branches */
+    public allBranches: any[] = [];
+    /** Hold branches */
+    public branches: any[] = [];
 
     constructor(
         private commonService: CommonService,
@@ -110,12 +124,30 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         private warehouseActions: WarehouseActions,
         private settingsBranchActions: SettingsBranchActions,
         public dialog: MatDialog,
-        private pageLeaveUtilityService: PageLeaveUtilityService
+        private pageLeaveUtilityService: PageLeaveUtilityService,
+        private inventoryService: InventoryService
     ) {
+        this.branchesDropdown = new FormControl('');
         this.branchForm = this.formBuilder.group({
             alias: ['', [Validators.required, Validators.maxLength(50)]],
+            parentBranchUniqueName:[''],
             name: [''],
             address: ['']
+        });
+    }
+
+/**
+  *This will be used to get branch wise data
+  *
+  * @memberof CreateBranchComponent
+  */
+    public getBranchWiseData(): void {
+        this.inventoryService.getLinkedStocks().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response && response.body) {
+                this.allBranches = response.body.results?.filter(branch => branch?.isCompany !== true);
+                this.branches = response.body.results?.filter(branch => branch?.isCompany !== true);
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
+            }
         });
     }
 
@@ -144,6 +176,14 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                     this.loadTaxDetails(this.companyDetails.country.countryCode.toUpperCase());
                 }
             }
+        });
+        this.getBranchWiseData();
+        this.branchesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
+            let branchesClone = cloneDeep(this.allBranches);
+            if (search) {
+                branchesClone = this.allBranches?.filter(branch => (branch.alias?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1));
+            }
+            this.branches = branchesClone;
         });
 
         this.currentOrganizationUniqueName = this.generalService.currentBranchUniqueName || this.generalService.companyUniqueName;
@@ -250,9 +290,9 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         const requestObj = {
             name: formValue.name,
             alias: formValue.alias,
+            parentBranchUniqueName: formValue.parentBranchUniqueName,
             linkAddresses: []
         };
-
         if (formValue.address?.length) {
             requestObj.linkAddresses = formValue.address.map(filteredAddress => ({
                 uniqueName: filteredAddress?.uniqueName,
@@ -476,6 +516,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         let branchFilterRequest = new BranchFilterRequest();
         branchFilterRequest.from = "";
         branchFilterRequest.to = "";
+        branchFilterRequest.hierarchyType = BranchHierarchyType.Flatten;
         this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
 
         this.hideLinkEntity = true;
@@ -494,7 +535,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle Remove Item from Mat Chip and 
+     * Handle Remove Item from Mat Chip and
      * remove item form linkedEntity
      *
      * @param {*} element

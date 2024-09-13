@@ -16,6 +16,11 @@ export enum BusinessTypes {
     Unregistered = 'Unregistered'
 };
 
+/** Branch hierarchyType type*/
+export enum BranchHierarchyType {
+    Flatten = 'flatten',
+    Tree = 'tree'
+};
 
 /** Regex for mobile number */
 export const PHONE_NUMBER_REGEX = /^[0-9-+()\/\\ ]+$/;

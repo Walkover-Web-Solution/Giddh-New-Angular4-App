@@ -10,6 +10,7 @@ import { digitsOnly } from '../../../helpers';
 import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
 import { AccountAddNewDetailsComponentStore } from '../account-add-new-details/utility/account-add-new-details.store';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { BranchHierarchyType } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     selector: 'bulk-add-dialog',
@@ -54,7 +55,8 @@ export class BulkAddDialogComponent implements OnInit {
         this.getCompanyBranches();
         this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.branches = response;
+                let consolidatedBranches = response?.filter(branch => !branch.consolidatedBranch);
+                this.branches = consolidatedBranches;
                 const formArray = this.bulkAddAccountForm.get('customFields') as FormArray;
                 formArray?.clear();
                 response.forEach((item) => {
@@ -143,7 +145,7 @@ export class BulkAddDialogComponent implements OnInit {
       * @memberof BulkAddDialogComponent
     */
     public getCompanyBranches(): void {
-        this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+        this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
     }
 
     /**
