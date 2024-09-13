@@ -66,6 +66,7 @@ import { CommonModule } from '@angular/common';
 import { TagsModule } from './tags/tags.module';
 import { TaxAuthorityModule } from '../theme/tax-authority/tax-authority.module';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { D3TreeChartModule } from '../shared/d3-tree-chart/d3-tree-chart.module';
 
 @NgModule({
     declarations: [
@@ -139,7 +140,8 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
         CreateAddressModule,
         TagsModule,
         TaxAuthorityModule,
-        NgxMatSelectSearchModule
+        NgxMatSelectSearchModule,
+        D3TreeChartModule
     ],
 })
 

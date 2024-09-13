@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnChanges, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -25,7 +25,6 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { AppState } from '../../store/roots';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/settings.constant';
 import { SettingsUtilityService } from '../services/settings-utility.service';
-import { OrgChart } from 'd3-org-chart';
 import { FormControl } from '@angular/forms';
 import { BranchHierarchyType } from '../../app.constant';
 @Component({
@@ -46,7 +45,7 @@ import { BranchHierarchyType } from '../../app.constant';
         ]),
     ]
 })
-export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Change status modal instance */
     @ViewChild('branchModal', { static: false }) public branchModal: ModalDirective;
     @ViewChild('companyadd', { static: false }) public companyadd: ElementViewContainerRef;
@@ -120,8 +119,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
     @ViewChild("chartContainer") chartContainer: ElementRef;
     /** This will hold tree response data */
     public data: any[] = [];
-    /** This will hold tree chart instance */
-    public chart: any;
 
     constructor(
         private router: Router,
@@ -183,6 +180,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
                     this.unFilteredBranchList = [];
                     this.branches$ = observableOf(null);
                 }
+                this.data = this.unFilteredBranchList;
                 this.showLoader = false;
             }
             if (companies && companies.length && branches) {
@@ -236,65 +234,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
         }
         this.branches$ = observableOf(branches);
     }
-    /**
-     * This hook will be called whenever the input bindings change.
-     * It updates the chart whenever the input bindings change.
-     *
-     * @memberof BranchComponent
-     */
-    public ngOnChanges(): void {
-        this.updateChart();
-    }
-
-    /**
-     * Updates the organization chart with the provided data.
-     *
-     * @return {*}  {void}
-     * @memberof BranchComponent
-     */
-    public updateChart(): void {
-        if (!this.data || !this.chartContainer) {
-            return;
-        }
-        if (!this.chart) {
-            this.chart = new OrgChart();
-        }
-        this.chart
-            .container(this.chartContainer.nativeElement)
-            .data(this.data)
-            .svgWidth(1500)
-            .initialZoom(1.1)
-            .nodeHeight((d) => 120)
-            .childrenMargin((d) => 40)
-            .compactMarginBetween((d) => 15)
-            .compactMarginPair((d) => 80)
-            .nodeContent((d, i, arr, state) => {
-                const nodeId = `node-${d.id}`;
-                setTimeout(() => {
-                    const nodeElement = document.getElementById(nodeId);
-                    if (nodeElement) {
-                        nodeElement.addEventListener('click', () => {
-                        });
-                    }
-                }, 0);
-
-                return `
-                     <div id="${nodeId}" class="branch-tree-wrapper">
-                        <div class="tree-content" >
-                            <div class="tree-inner-content" ></div>
-                            <div class="tree-container text-align-center">
-                                <span class="d-inline-flex align-items-center">
-                                    <i class="cursor-pointer icon-branch-icon mr-r05"></i>
-                                    <div class="tree-name">${d.data.alias}</div>
-                                </span>
-                                <div class="tree-alias">${this.localeData?.parent_entity}: ${d.data.name}</div>
-                            </div>
-                        </div>
-                    </div>`
-                    ;
-            })
-            .render();
-    }
 
     /**
      * This hook will be use for component after initialization
@@ -302,16 +241,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
      * @memberof BranchComponent
      */
     public ngAfterViewInit(): void {
-        let interval = setInterval(() => {
-            if (this.unFilteredBranchList?.length) {
-                setTimeout(() => {
-                    this.data = this.unFilteredBranchList;
-                    this.updateChart();
-                }, 100);
-                clearInterval(interval);
-            }
-        }, 500);
-
         if (this.isBranch) {
             this.openCreateCompanyDialog();
         }
