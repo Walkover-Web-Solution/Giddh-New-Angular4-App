@@ -634,3 +634,20 @@ app-cdk-scroll {
     bottom: 0px;
     background-color: var(--color-body-background);
 }
+
+// matIconPrefix input field
+input-field {
+    .prefix-icon-field {
+        i {
+            inset: 16px 0 0 0;
+        }
+        &.mat-mdc-form-field  {
+            .mat-mdc-text-field-wrapper .mat-mdc-form-field-infix {
+                padding-left: 20px !important;
+            }
+            .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading {
+                width: max(40px, var(--mdc-shape-small, 4px)) !important;
+            }
+        }
+    }
+}

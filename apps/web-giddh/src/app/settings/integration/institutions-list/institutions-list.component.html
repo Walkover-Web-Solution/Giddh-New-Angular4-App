@@ -6,29 +6,31 @@
 <mat-dialog-content class="institutions-dialog-body" *ngIf="!(institutionsListInProgress$ | async)">
     <div class="w-100 container pd-t15 pd-b15">
         <div class="row">
-            <div class="col-12 col-md-8 institution-list">
+            <div class="col-12 institution-list">
                 <form [formGroup]="searchForm">
                     <input-field
                         [autocomplete]="'off'"
                         [name]="'institutions'"
-                        [placeholder]="localeData?.payment?.search_institutions"
+                        [placeholder]="localeData?.payment?.search_bank"
                         [type]="'text'"
                         formControlName="search"
-                        [label]="localeData?.payment?.institutions"
+                        [label]="localeData?.payment?.banks"
                         (keydown.enter)="$event.preventDefault()"
+                        [matPrefixIcon]="'icon-search'"
                     >
                     </input-field>
                 </form>
-
                 <div class="list-wrapper mt-2">
                     <mat-list class="p-0" *ngIf="filteredBanks?.length">
                         <ng-container *ngFor="let item of filteredBanks">
                             <div class="list-item px-2">
                                 <mat-list-item
-                                    (click)="openGocardlessDialog(item)"
-                                    class="cursor-pointer list-item-underline-hover p-0"
-                                    >{{ item.id }}</mat-list-item
-                                >
+                                    class="p-0 border-bottom"
+                                    >
+                                    <span 
+                                        class="list-item-underline-hover cursor-pointer" 
+                                        (click)="openGocardlessDialog(item)">{{ item.name }}</span>
+                                </mat-list-item>
                             </div>
                         </ng-container>
                     </mat-list>
