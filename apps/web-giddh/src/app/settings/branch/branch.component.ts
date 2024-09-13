@@ -115,8 +115,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
     public selectedTabIndex: number = 0;
     /** Active tab name */
     public activeTab: string;
-    /** Tree Chart Container instance */
-    @ViewChild("chartContainer") chartContainer: ElementRef;
     /** This will hold tree response data */
     public data: any[] = [];
 
@@ -351,12 +349,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (branchFilterRequest.from && branchFilterRequest.to) {
             this.showLoader = true;
-            // First request with hierarchyType as Tree
-            branchFilterRequest.hierarchyType = BranchHierarchyType.Tree;
-            this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
-            this.store.dispatch(this.settingsBranchActions.ResetBranchRemoveResponse());
-
-            // Second request with hierarchyType as Flatten
             branchFilterRequest.hierarchyType = BranchHierarchyType.Flatten;
             this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
             this.store.dispatch(this.settingsBranchActions.ResetBranchRemoveResponse());

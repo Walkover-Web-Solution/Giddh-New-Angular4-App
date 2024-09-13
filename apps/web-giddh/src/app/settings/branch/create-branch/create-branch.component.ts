@@ -145,7 +145,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         this.inventoryService.getLinkedStocks().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
                 this.allBranches = response.body.results?.filter(branch => !branch?.isCompany);
-                this.branches = response.body.results?.filter(branch => branch?.isCompany !== true);
+                this.branches = response.body.results?.filter(branch => !branch?.isCompany);
                 this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
             }
         });
