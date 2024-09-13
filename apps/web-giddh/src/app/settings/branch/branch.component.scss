@@ -1,8 +1,3 @@
-#chartContainer {
-    height: 100vh;
-    width: 100vw;
-}
-
 .form-horizontal .control-label {
     text-align: left;
 }
@@ -365,108 +360,6 @@ button {
     }
 }
 
-@media (max-width: 375px) {
-    .grey-color button.btn.btn-default {
-        margin-left: 0;
-        margin-top: 5px;
-    }
-}
-
-@media (max-width: 768px) {
-    .content-view {
-        display: none;
-    }
-}
-
-@media (max-width: 767px) {
-    .branch-card {
-        min-height: auto;
-    }
-
-    .branch-header-content {
-        margin-right: 0 !important;
-        flex-direction: column;
-
-        .content-view {
-            margin-left: 0;
-        }
-
-        .input-group {
-            display: flex;
-            justify-content: space-between;
-
-            button {
-                margin-right: 0;
-            }
-        }
-
-        .search-field {
-            margin-right: 0;
-
-            .search-branch-box {
-                max-width: 180px;
-            }
-
-            .clear-filter-btn {
-                width: 122px !important;
-                padding: 0 12px;
-            }
-        }
-    }
-
-    .input-group-date-range-picker {
-        width: 100%;
-
-        .form-group {
-            margin-bottom: 0;
-        }
-    }
-
-    .btn-sky-blue.pull-right {
-        float: none;
-        margin-bottom: 15px;
-    }
-
-    .branch-vector {
-        img {
-            width: 150px;
-        }
-    }
-}
-
-@media (max-width: 370px) {
-    .date-advance-search {
-        display: block;
-
-        .input-group-date-range-picker {
-            .form-group {
-                margin-bottom: 0;
-            }
-        }
-
-        .btn {
-            float: left !important;
-        }
-    }
-
-    .branch-header-content {
-        margin-right: 0;
-
-        .search-field {
-            margin-right: 0;
-
-            .search-branch-box {
-                max-width: 160px;
-            }
-
-            .clear-filter-btn {
-                width: 122px !important;
-                padding: 0 6px;
-            }
-        }
-    }
-}
-
 @media (min-width: 992px) and (max-width: 1359px) {
     .branch-card-view {
         .col-lg-4 {
@@ -484,39 +377,8 @@ button {
     }
 }
 
-@media (min-width: 575px) and (max-width: 991px) {
-    .select-branch {
-        margin-top: -35px;
-    }
-}
-
 @media (max-width: 950px) {
     .modal-width {
         width: auto !important;
-    }
-}
-
-@media (max-width: 575px) {
-    .date-advance-search {
-        .input-group-date-range-picker {
-            width: 100%;
-        }
-    }
-
-    .branch-header {
-        flex-direction: column;
-
-        .search-branch-box {
-            max-width: 100%;
-            margin-bottom: 15px;
-        }
-    }
-
-    .search-field {
-        .clear-filter-btn {
-            padding: 0px 8px;
-            font-size: var(--font-size-12);
-            height: 36px;
-        }
     }
 }

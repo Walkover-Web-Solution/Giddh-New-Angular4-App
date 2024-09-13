@@ -25,7 +25,6 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { AppState } from '../../store/roots';
 import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/settings.constant';
 import { SettingsUtilityService } from '../services/settings-utility.service';
-import * as d3 from 'd3';
 import { OrgChart } from 'd3-org-chart';
 import { FormControl } from '@angular/forms';
 import { BranchHierarchyType } from '../../app.constant';
@@ -48,9 +47,6 @@ import { BranchHierarchyType } from '../../app.constant';
     ]
 })
 export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
-    @ViewChild("chartContainer") chartContainer: ElementRef;
-    public data: any[] = [];
-    public chart: any;
     /** Change status modal instance */
     @ViewChild('branchModal', { static: false }) public branchModal: ModalDirective;
     @ViewChild('companyadd', { static: false }) public companyadd: ElementViewContainerRef;
@@ -120,6 +116,12 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
     public selectedTabIndex: number = 0;
     /** Active tab name */
     public activeTab: string;
+    /** Tree Chart Container instance */
+    @ViewChild("chartContainer") chartContainer: ElementRef;
+    /** This will hold tree response data */
+    public data: any[] = [];
+    /** This will hold tree chart instance */
+    public chart: any;
 
     constructor(
         private router: Router,
@@ -268,7 +270,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
             .compactMarginPair((d) => 80)
             .nodeContent((d, i, arr, state) => {
                 const nodeId = `node-${d.id}`;
-                const branchStatusClass = d.isArchived ? 'branch-archived' : 'branch-active';
                 setTimeout(() => {
                     const nodeElement = document.getElementById(nodeId);
                     if (nodeElement) {
@@ -278,10 +279,9 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
                 }, 0);
 
                 return `
-                     <div id="${nodeId}" class="branch-tree-wrapper" style="height:${d.height}px;">
-                        <span class="branch-status ${branchStatusClass}"><span>
-                        <div class="tree-content" style="height:${d.height - 32}px">
-                            <div class="tree-inner-content" style="width:${d.width - 2}px;"></div>
+                     <div id="${nodeId}" class="branch-tree-wrapper">
+                        <div class="tree-content" >
+                            <div class="tree-inner-content" ></div>
                             <div class="tree-container text-align-center">
                                 <span class="d-inline-flex align-items-center">
                                     <i class="cursor-pointer icon-branch-icon mr-r05"></i>
@@ -295,7 +295,6 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
             })
             .render();
     }
-
 
     /**
      * This hook will be use for component after initialization

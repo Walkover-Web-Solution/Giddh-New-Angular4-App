@@ -78,23 +78,23 @@
                     <div class="filter-dropdown-branch" *ngIf="isCompany && allBranches?.length > 1">
                         <mat-select
                             name="branch"
-                            class="stock-mat-salect"
+                            class="branch-mat-salect"
                             [placeholder]="commonLocaleData?.app_select_branch"
                             formControlName="parentBranchUniqueName"
                         >
-                            <mat-option class="balance-options">
+                            <mat-option class="branch-options">
                                 <ngx-mat-select-search
                                     [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
                                     [formControl]="branchesDropdown ? branchesDropdown : null"
                                     [placeholderLabel]="commonLocaleData?.app_select_branch"
-                                    class="mat-select-search-inventory"
+                                    class="mat-select-search-branch"
                                 >
                                     <i class="icon-cross" ngxMatSelectSearchClear></i>
                                 </ngx-mat-select-search>
                             </mat-option>
 
                             <mat-option
-                                class="balance-options"
+                                class="branch-options"
                                 *ngFor="let branch of branches"
                                 [value]="branch?.uniqueName"
                             >

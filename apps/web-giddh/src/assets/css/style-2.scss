@@ -1087,6 +1087,11 @@ textarea {
     }
 }
 
+#chartContainer {
+    height: 100vh;
+    width: 100vw;
+}
+
 .branch-tree-wrapper {
     padding-top: 30px;
     background-color: none;
@@ -1107,17 +1112,15 @@ textarea {
 
         .tree-container {
             padding: 20px;
-            padding-top: 18px;
-            text-align: center;
 
             .tree-name {
-                color: #111672;
+                color: var(--color-giddh-blue);
                 font-size: 16px;
                 font-weight: bold
             }
 
             .tree-alias {
-                color: #404040;
+                color: var(--color-gray);
                 font-size: 16px;
                 margin-top: 4px
             }
@@ -1126,7 +1129,7 @@ textarea {
 }
 
 .create-branch-page {
-    .mat-select-search-inventory {
+    .mat-select-search-branch {
         .mat-select-search-input {
             padding: 0px 30px 0px 17px !important;
         }
@@ -1143,7 +1146,7 @@ textarea {
         margin-bottom: 15px;
     }
 
-    .stock-mat-salect {
+    .branch-mat-salect {
         border: 1px solid var(--color-secondary-input-bar-border);
         border-radius: 5px !important;
         padding: 12px;
@@ -1151,7 +1154,7 @@ textarea {
         min-width: 350px;
     }
 
-    .balance-options {
+    .branch-options {
         height: auto !important;
         padding-bottom: 5px !important;
 

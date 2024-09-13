@@ -24,6 +24,7 @@ import { MatSelect } from '@angular/material/select';
 import { OrganizationType } from '../../../models/user-login-state';
 import { cloneDeep } from '../../../lodash-optimized';
 import { InventoryService } from '../../../services/inventory.service';
+import { BranchHierarchyType } from '../../../app.constant';
 
 @Component({
     selector: 'create-branch',
@@ -106,7 +107,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
     public nativeSelectFormControl: FormControl;
     /** Hold all branches */
     public allBranches: any[] = [];
-    /**Hold branches */
+    /** Hold branches */
     public branches: any[] = [];
 
     constructor(
@@ -135,37 +136,18 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         });
     }
 
-    /**
- * This will be used to get branches
- *
- * @param {boolean} [apiCall=true]
- * @memberof ReportFiltersComponent
- */
-    public getBranches(apiCall: boolean = true): void {
-        if (!this.isCompany) {
-            let currentBranch = this.allBranches?.filter(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
-        }
-
-        this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-
-
-
-    }
-
-    /**
-  *This will be used to get branch wise warehouses
+/**
+  *This will be used to get branch wise data
   *
-  * @memberof ReportFiltersComponent
+  * @memberof CreateBranchComponent
   */
-    public getBranchWiseWarehouse(): void {
+    public getBranchWiseData(): void {
         this.inventoryService.getLinkedStocks().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.body) {
                 this.allBranches = response.body.results?.filter(branch => branch?.isCompany !== true);
                 this.branches = response.body.results?.filter(branch => branch?.isCompany !== true);
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
             }
-            this.getBranches(false);
-            // this.changeDetection.detectChanges();
         });
     }
 
@@ -195,7 +177,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
                 }
             }
         });
-        this.getBranchWiseWarehouse();
+        this.getBranchWiseData();
         this.branchesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             let branchesClone = cloneDeep(this.allBranches);
             if (search) {
@@ -311,7 +293,6 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
             parentBranchUniqueName: formValue.parentBranchUniqueName,
             linkAddresses: []
         };
-        console.log(requestObj);
         if (formValue.address?.length) {
             requestObj.linkAddresses = formValue.address.map(filteredAddress => ({
                 uniqueName: filteredAddress?.uniqueName,
@@ -535,6 +516,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         let branchFilterRequest = new BranchFilterRequest();
         branchFilterRequest.from = "";
         branchFilterRequest.to = "";
+        branchFilterRequest.hierarchyType = BranchHierarchyType.Flatten;
         this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
 
         this.hideLinkEntity = true;

@@ -22,7 +22,6 @@ export class SettingsBranchService {
     * Get all branches
     */
     public GetAllBranches(request: BranchFilterRequest): Observable<BaseResponse<any, any>> {
-        console.log(request);
         this.companyUniqueName = (request.companyUniqueName) ? request.companyUniqueName : this.generalService.companyUniqueName;
 
         let from = (request.from) ? request.from : "";
