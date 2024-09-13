@@ -6,7 +6,7 @@ import { SettingsTagService } from '../../services/settings.tag.service';
 import { orderBy } from '../../lodash-optimized';
 import { BriedAccountsGroup } from '../utility/vouchers.const';
 import { OptionInterface } from '../../models/api-models/Voucher';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SearchService } from '../../services/search.service';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoicePaymentRequest } from '../../models/api-models/Invoice';
@@ -78,8 +78,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
         this.paymentForm = this.formBuilder.group({
             action: ['paid'],
             date: [''],
-            amount: ['', Validators.required],
-            accountUniqueName: ['', Validators.required],
+            deposits: this.formBuilder.array([this.getDepositFormGroup()]),
             tagUniqueName: [''],
             chequeNumber: [''],
             chequeClearanceDate: [''],
@@ -131,6 +130,45 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
             this.saveInProgress = response;
         });
     }
+    /**
+     * Returns deposit form group
+     *
+     * @private
+     * @return {*}  {FormGroup}
+     * @memberof VoucherCreateComponent
+     */
+    private getDepositFormGroup(): FormGroup {
+        return this.formBuilder.group({
+            amount: [''],
+            accountUniqueName: [''],
+        });
+    }
+    /**
+     * Add new deposit row
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public addNewDepositRow(): void {
+        this.paymentForm.get('deposits')['controls'].push(this.getDepositFormGroup());
+        console.log(this.paymentForm.value);
+    }
+    /**
+ * Remove deposit row
+ *
+ * @param {number} entryIndex
+ * @memberof VoucherCreateComponent
+ */
+    public deleteDepositRow(entryIndex: number): void {
+        const deposits = this.paymentForm.get('deposits') as FormArray;
+        if (deposits?.length === 1) {
+            deposits.reset();
+         //   this.calculateBalanceDue();
+            return;
+        }
+        deposits.removeAt(entryIndex);
+      //  this.calculateBalanceDue();
+
+    }
 
     /**
      * Lifecycle hook for destroy
@@ -149,40 +187,40 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof PaymentDialogComponent
      */
     public onSelectPaymentMode(event: any): void {
-        if (event && event.value) {
-            if (!this.isMulticurrencyAccount || this.voucherDetails?.account?.currency?.code === event?.additional?.currency) {
-                this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.account?.currency?.symbol);
-            } else {
-                this.assignAmount(this.voucherDetails?.balanceDue?.amountForCompany, event?.additional?.currencySymbol);
-            }
-            this.selectedPaymentMode = event;
+        // if (event && event.value) {
+        //     if (!this.isMulticurrencyAccount || this.voucherDetails?.account?.currency?.code === event?.additional?.currency) {
+        //         this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.account?.currency?.symbol);
+        //     } else {
+        //         this.assignAmount(this.voucherDetails?.balanceDue?.amountForCompany, event?.additional?.currencySymbol);
+        //     }
+        //     this.selectedPaymentMode = event;
 
-            this.searchService.loadDetails(event.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response && response.body) {
-                    const parentGroups = response.body.parentGroups;
-                    if (parentGroups && parentGroups[1] === 'bankaccounts') {
-                        this.isBankSelected = true;
-                    } else {
-                        this.isBankSelected = false;
-                        this.paymentForm.get('chequeClearanceDate')?.patchValue('');
-                        this.paymentForm.get('chequeNumber')?.patchValue('');
-                    }
-                } else {
-                    this.isBankSelected = false;
-                    this.paymentForm.get('accountUniqueName')?.patchValue('');
-                    this.paymentForm.get('chequeClearanceDate')?.patchValue('');
-                    this.paymentForm.get('chequeNumber')?.patchValue('');
-                }
-            })
-            this.paymentForm.get('accountUniqueName')?.patchValue(event.value);
-        } else {
-            this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.account?.currency?.symbol);
-            this.selectedPaymentMode = null;
-            this.isBankSelected = false;
-            this.paymentForm.get('accountUniqueName')?.patchValue('');
-            this.paymentForm.get('chequeClearanceDate')?.patchValue('');
-            this.paymentForm.get('chequeNumber')?.patchValue('');
-        }
+        //     this.searchService.loadDetails(event.value).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        //         if (response && response.body) {
+        //             const parentGroups = response.body.parentGroups;
+        //             if (parentGroups && parentGroups[1] === 'bankaccounts') {
+        //                 this.isBankSelected = true;
+        //             } else {
+        //                 this.isBankSelected = false;
+        //                 this.paymentForm.get('chequeClearanceDate')?.patchValue('');
+        //                 this.paymentForm.get('chequeNumber')?.patchValue('');
+        //             }
+        //         } else {
+        //             this.isBankSelected = false;
+        //             this.paymentForm.get('accountUniqueName')?.patchValue('');
+        //             this.paymentForm.get('chequeClearanceDate')?.patchValue('');
+        //             this.paymentForm.get('chequeNumber')?.patchValue('');
+        //         }
+        //     })
+        //     this.paymentForm.get('accountUniqueName')?.patchValue(event.value);
+        // } else {
+        //     this.assignAmount(this.voucherDetails?.balanceDue?.amountForAccount, this.voucherDetails?.account?.currency?.symbol);
+        //     this.selectedPaymentMode = null;
+        //     this.isBankSelected = false;
+        //     this.paymentForm.get('accountUniqueName')?.patchValue('');
+        //     this.paymentForm.get('chequeClearanceDate')?.patchValue('');
+        //     this.paymentForm.get('chequeNumber')?.patchValue('');
+        // }
     }
 
     /**
@@ -236,15 +274,20 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
         }
 
         if (this.voucherDetails?.account?.currency?.code === this.selectedPaymentMode?.additional?.currency) {
-            newFormObj.amountForAccount = newFormObj.amount;
+            newFormObj.deposits.forEach((deposit) => {
+                deposit.amountForAccount = deposit.amount;
+                delete deposit.amount;
+            });
         } else {
-            newFormObj.amountForCompany = newFormObj.amount;
+            newFormObj.deposits.forEach((deposit) => {
+                deposit.amountForCompany = deposit.amount;
+                delete deposit.amount;
+            });
         }
 
         newFormObj.tagNames = (newFormObj.tagUniqueName) ? [newFormObj.tagUniqueName] : [];
-        delete newFormObj.amount;
         delete newFormObj.tagUniqueName;
-        
+
         this.paymentSubmitted.emit(newFormObj);
     }
 }
