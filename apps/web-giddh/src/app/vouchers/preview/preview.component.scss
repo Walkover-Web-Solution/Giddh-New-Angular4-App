@@ -37,6 +37,15 @@
             .action-btn {
                 column-gap: 3px;
             }
+            .invoice-status {
+                user-select: none;
+                max-height: 36px;
+                padding: 5px 10px;
+                color: var(--color-nero);
+                background-color: var(--color-iron);
+                border-radius: 3px;
+                border: 1px solid var(--color-iron);
+            }
         }
 
         .preview-box {

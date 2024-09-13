@@ -6,7 +6,7 @@
     (translationComplete)="translationComplete($event)"
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
-    <giddh-page-loader *ngIf="'getVouchersInProgress$' | async" [cssClass]="'no-data'"></giddh-page-loader>
+    <giddh-page-loader *ngIf="getVouchersInProgress$| async" [cssClass]="'no-data'"></giddh-page-loader>
     <div class="invoice-preview-wrapper" *ngIf="!(getVouchersInProgress$ | async)">
         <div class="preview-list h-100 pd-b15">
             <div class="d-flex align-items-center column-gap5 pd-15 w-100 list-responsive row-gap1">
@@ -188,21 +188,17 @@
                             <i class="icon-arrow-down icon-font-11 ml-2"></i>
                         </button>
                         <mat-menu #changeStatus="matMenu">
-                            <button mat-menu-item (click)="onPerformAction()">
-                                {{ commonLocaleData?.app_payment_status?.paid }}
-                            </button>
-                            <button mat-menu-item (click)="adjustPayment()">
-                                {{ commonLocaleData?.app_payment_status?.adjust_amount }}
-                            </button>
-                            <button mat-menu-item>{{ commonLocaleData?.app_payment_status?.unpaid }}</button>
-                            <button mat-menu-item>{{ commonLocaleData?.app_payment_status?.hold }}</button>
-                            <button mat-menu-item>{{ commonLocaleData?.app_payment_status?.cancel }}</button>
+                            <button mat-menu-item (click)="showPaymentDialog()" *ngIf="['sales', 'purchase', 'credit note', 'debit note'].includes(voucherType)">{{ commonLocaleData?.app_payment_status?.paid }}</button>
+                            <ng-container *ngIf="voucherType === 'sales'">
+                                <button mat-menu-item (click)="adjustPayment()" >{{ commonLocaleData?.app_payment_status?.adjust_amount }}</button>
+                                <button mat-menu-item (click)="actionVoucher('unpaid')">{{ commonLocaleData?.app_payment_status?.unpaid }}</button>
+                                <button mat-menu-item (click)="actionVoucher('hold')">{{ commonLocaleData?.app_payment_status?.hold }}</button>
+                            </ng-container>
+                            <button mat-menu-item (click)="actionVoucher('cancel')" *ngIf="['sales', 'purchase-order', 'credit note', 'debit note'].includes(voucherType)">{{ commonLocaleData?.app_payment_status?.cancel }}</button>
                         </mat-menu>
-                        <button mat-stroked-button  *ngIf="!isCompany">{{ commonLocaleData?.app_cancel }}</button>
-                        <button mat-stroked-button (click)="backToOldLocation()">
-                            <!-- <i class="icon-cross"></i> -->
-                            {{ commonLocaleData?.app_back }}
-                        </button>
+                        <span *ngIf="selectedInvoice?.action" class="invoice-status text-capitalize">{{ selectedInvoice.action }}</span>
+                        <button mat-menu-item *ngIf="['purchase', 'purchase-order'].includes(voucherType)" (click)="null">{{ commonLocaleData?.app_copy }}</button>
+                        <button mat-stroked-button (click)="backToOldLocation()">{{ commonLocaleData?.app_back }}</button>
                     </div>
                 </div>
                 <div class="preview-box d-flex" *ngIf="showPaymentDetails">
@@ -331,7 +327,19 @@
 
 <!-- adjust-payment-dialog -->
 <ng-template #adjustPaymentDialog>
-    <app-adjust-payment-dialog></app-adjust-payment-dialog>
+    <voucher-adjustments
+        [isUpdateMode]="isUpdateMode"
+        [depositAmount]="depositAmount"
+        [account]="voucherDetails?.account"
+        [voucherDetails]="voucherDetails"
+        [voucherTotals]="voucherTotals"
+        [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
+        (closeModelEvent)="closeAdvanceReceiptDialog()"
+        (submitClicked)="getAdvanceReceiptAdjustData($event)"
+        [voucherForAdjustment]="null"
+        [adjustedVoucherType]="voucherType"
+    >
+    </voucher-adjustments>
 </ng-template>
 
 <!-- history dialog -->
@@ -356,6 +364,6 @@
             [voucherDetails]="selectedInvoice"
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
-            (paymentSubmitted)="paymentSubmitted($event)"
+            (paymentSubmitted)="actionVoucher(null, $event)"
         ></app-payment-dialog>
     </ng-template>

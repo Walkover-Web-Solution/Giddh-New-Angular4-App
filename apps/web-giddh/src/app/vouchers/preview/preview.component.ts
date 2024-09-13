@@ -27,6 +27,8 @@ import { InvoiceReceiptActions } from "../../actions/invoice/receipt/receipt.act
 import { saveAs } from 'file-saver';
 import { Location } from "@angular/common";
 import { NewConfirmationModalComponent } from "../../theme/new-confirmation-modal/confirmation-modal.component";
+import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-models/AdvanceReceiptsAdjust";
+import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustment/services/adjustment-utility.service";
 
 @Component({
     selector: "preview",
@@ -113,6 +115,36 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     };
     /** Send Email Dialog Ref */
     public sendEmailModalDialogRef: MatDialogRef<any>;
+    /** Holds Voucher Details Dialog Ref */
+    public voucherDetails: any;
+    /** Holds voucher totals */
+    public voucherTotals: any = {
+        totalAmount: 0,
+        totalDiscount: 0,
+        totalTaxableValue: 0,
+        totalTaxWithoutCess: 0,
+        totalCess: 0,
+        grandTotal: 0,
+        roundOff: 0,
+        tcsTotal: 0,
+        tdsTotal: 0,
+        balanceDue: 0
+    };
+    /** Holds company specific data */
+    public company: any = {
+        baseCurrency: '',
+        baseCurrencySymbol: '',
+        inputMaskFormat: '',
+        giddhBalanceDecimalPlaces: 0
+    };
+    /** Deposit Amount */
+    public depositAmount: number = 0;
+    /** Stores the adjustment data */
+    public advanceReceiptAdjustmentData: VoucherAdjustments;
+    /** Holds true if update mode */
+    public isUpdateMode: boolean;
+    /** True if round off will be applicable */
+    public applyRoundOff: boolean = true;
 
     //============================
     /**  */
@@ -205,7 +237,8 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         private changeDetection: ChangeDetectorRef,
         private store: Store<AppState>,
         private invoiceReceiptActions: InvoiceReceiptActions,
-        private location: Location
+        private location: Location,
+        private adjustmentUtilityService: AdjustmentUtilityService
     ) { }
 
 
@@ -229,7 +262,9 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                         this.filteredInvoiceList$.next(lastVouchers);
                         this.changeDetection.detectChanges();
                     }
-
+                    if (this.invoiceList?.length) {
+                        this.setSelectedInvoice(params?.voucherUniqueName);
+                    }
                     this.getCreatedTemplates();
                     this.subscribeStoreObservable();
                 }
@@ -375,6 +410,12 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             }
         });
 
+        this.componentStoreVoucher.convertToProformaIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.toaster.showSnackBar("success", this.localeData?.proforma_generated);
+            }
+        });
+
         this.componentStoreVoucher.createdTemplates$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 const thermalTemplate = response?.filter(response => response.templateType === 'thermal_template');
@@ -390,6 +431,43 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     this.backToOldLocation();
                 }
             });
+
+        this.componentStoreVoucher.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.voucherDetails = response;
+
+                this.voucherTotals = this.vouchersUtilityService.getVoucherTotals(response?.entries, this.company.giddhBalanceDecimalPlaces, this.applyRoundOff, response?.exchangeRate);
+
+                let tcsSum: number = 0;
+                let tdsSum: number = 0;
+                response.body?.entries.forEach(entry => {
+                    entry.taxes?.forEach(tax => {
+                        if (['tcsrc', 'tcspay'].includes(tax?.taxType)) {
+                            tcsSum += tax.amount?.amountForAccount;
+                        } else if (['tdsrc', 'tdspay'].includes(tax?.taxType)) {
+                            tdsSum += tax.amount?.amountForAccount;
+                        }
+                    });
+                });
+                this.voucherTotals.tcsTotal = tcsSum;
+                this.voucherTotals.tdsTotal = tdsSum;
+
+                this.depositAmount = response.deposit?.amountForAccount ?? 0;
+
+                this.advanceReceiptAdjustmentData = { adjustments: this.adjustmentUtilityService.formatAdjustmentsObject(response.adjustments) };
+                this.isUpdateMode = (response?.body?.adjustments?.length) ? true : false;
+
+                this.dialog.open(this.adjustPaymentDialog, {
+                    panelClass: ['mat-dialog-md']
+                });
+            }
+        });
+
+        this.componentStoreVoucher.adjustVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.toaster.showSnackBar("success", this.localeData?.amount_adjusted);
+            }
+        });
     }
 
     /**
@@ -546,6 +624,39 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+    * Close Advance Receipt Dialog
+    *
+    * @memberof VouchersPreviewComponent
+    */
+    public closeAdvanceReceiptDialog(): void {
+        this.advanceReceiptAdjustmentData = null;
+        this.dialog.closeAll();
+    }
+
+    /**
+    * To get all advance adjusted data
+    *
+    * @param {{ adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }} advanceReceiptsAdjustEvent event that contains advance receipts adjusted data
+    * @memberof VouchersPreviewComponent
+    */
+    public getAdvanceReceiptAdjustData(advanceReceiptsAdjustEvent: { adjustVoucherData: VoucherAdjustments, adjustPaymentData: AdjustAdvancePaymentModal }) {
+        this.closeAdvanceReceiptDialog();
+        let advanceReceiptAdjustmentData = cloneDeep(advanceReceiptsAdjustEvent.adjustVoucherData);
+        if (advanceReceiptAdjustmentData && advanceReceiptAdjustmentData.adjustments && advanceReceiptAdjustmentData.adjustments.length > 0) {
+            advanceReceiptAdjustmentData.adjustments.map(item => {
+                item.voucherDate = (item.voucherDate?.toString()?.includes('/')) ? item.voucherDate?.trim()?.replace(/\//g, '-') : item.voucherDate;
+                item.voucherNumber = item.voucherNumber === '-' ? '' : item.voucherNumber;
+                item.amount = item.adjustmentAmount;
+                item.unadjustedAmount = item.balanceDue;
+
+                delete item.adjustmentAmount;
+                delete item.balanceDue;
+            });
+        }
+
+        this.componentStoreVoucher.adjustVoucherWithAdvanceReceipts({ adjustments: advanceReceiptAdjustmentData.adjustments, voucherUniqueName: this.voucherDetails?.uniqueName });
+    }
 
     /**
      * Open adjust payment dialog
@@ -603,6 +714,16 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         this.dialog.open(this.paymentDialog, {
             panelClass: ['mat-dialog-md']
         });
+    }
+
+    /**
+    * Open Adjust payment dialog
+    *
+    * @param {*} voucher
+    * @memberof VoucherListComponent
+    */
+    public showAdjustmentDialog(voucher: any): void {
+        this.componentStoreVoucher.getVoucherDetails({ isCopyVoucher: false, accountUniqueName: voucher?.account?.uniqueName, payload: { uniqueName: voucher?.uniqueName, voucherType: this.voucherType } });
     }
 
     /**
@@ -777,16 +898,6 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle Payment Submit
-     *
-     * @param {*} event
-     * @memberof VouchersPreviewComponent
-     */
-    public paymentSubmitted(event: any): void {
-        this.componentStoreVoucher.actionVoucher({ voucherUniqueName: event?.uniqueName, payload: event });
-    }
-
-    /**
      * Handle upload file
      *
      * @memberof VouchersPreviewComponent
@@ -936,6 +1047,21 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             this.router.navigate(['/pages/vouchers/proformas/' + this.selectedInvoice?.account?.uniqueName + '/' + this.selectedInvoice?.voucherNumber + '/edit']);
         } else {
             this.router.navigate(['/pages/vouchers/' + this.voucherType.toString().replace(/-/g, " ") + '/' + this.selectedInvoice?.account?.uniqueName + '/' + this.selectedInvoice?.uniqueName + '/edit']);
+        }
+    }
+
+    /**
+     * Handle Voucher Actions API Call
+     *
+     * @param {*} voucher
+     * @param {string} action
+     * @memberof VouchersPreviewComponent
+     */
+    public actionVoucher(action: string, event?: any): void {
+        if (action) {
+            this.componentStoreVoucher.actionVoucher({ voucherUniqueName: this.selectedInvoice?.uniqueName, payload: { action: action, voucherType: this.voucherType } });
+        } else {
+            this.componentStoreVoucher.actionVoucher({ voucherUniqueName: event?.uniqueName, payload: event });
         }
     }
 
