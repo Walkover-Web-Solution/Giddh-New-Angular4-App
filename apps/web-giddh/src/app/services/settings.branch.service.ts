@@ -22,11 +22,12 @@ export class SettingsBranchService {
     * Get all branches
     */
     public GetAllBranches(request: BranchFilterRequest): Observable<BaseResponse<any, any>> {
+        console.log(request);
         this.companyUniqueName = (request.companyUniqueName) ? request.companyUniqueName : this.generalService.companyUniqueName;
 
         let from = (request.from) ? request.from : "";
         let to = (request.to) ? request.to : "";
-        let hierarchyType = (request.to) ? request.hierarchyType : "";
+        let hierarchyType = (request.hierarchyType) ? request.hierarchyType : "";
         let url = this.config.apiUrl + COMPANY_API.GET_ALL_BRANCHES;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         url = url?.replace(':from', from);

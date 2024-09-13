@@ -19,6 +19,7 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 import { LedgerService } from '../../../services/ledger.service';
+import { BranchHierarchyType } from '../../../app.constant';
 
 @Component({
     selector: 'purchase-register-component',
@@ -132,7 +133,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
             } else {
                 if (this.generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 }
             }
         });
@@ -294,7 +295,7 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
                 }
                 this.currentBranch.uniqueName = this.generalService.currentBranchUniqueName;
             }
-            
+
             let request: ReportsRequestModel = {
                 to: endDate,
                 from: startDate,

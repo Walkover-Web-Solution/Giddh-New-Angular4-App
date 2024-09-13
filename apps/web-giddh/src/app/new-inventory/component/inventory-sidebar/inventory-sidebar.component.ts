@@ -12,6 +12,7 @@ import { GeneralService } from '../../../services/general.service';
 import { AppState } from '../../../store';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { Location } from '@angular/common';
+import { BranchHierarchyType } from '../../../app.constant';
 
 /**
  * Data with nested structure.
@@ -145,7 +146,7 @@ export class InventorySidebarComponent implements OnDestroy {
                 this.changeDetection.detectChanges();
             } else {
                 if (this.generalService.companyUniqueName) {
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 }
             }
         });

@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
+import { BranchHierarchyType } from 'apps/web-giddh/src/app/app.constant';
 import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { CreateManufacturing } from 'apps/web-giddh/src/app/models/api-models/Manufacturing';
@@ -183,7 +184,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
                 this.changeDetectionRef.detectChanges();
             } else {
                 if (this.generalService.companyUniqueName) {
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 }
             }
         });

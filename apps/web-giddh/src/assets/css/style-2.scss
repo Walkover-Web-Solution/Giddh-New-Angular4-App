@@ -270,9 +270,7 @@ textarea {
                 }
             }
 
-            .mat-form-field-wrapper
-                .mat-form-field-infix
-                .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
+            .mat-form-field-wrapper .mat-form-field-infix .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
                 position: absolute;
                 height: 23px !important;
                 margin-top: 0;
@@ -1083,6 +1081,7 @@ textarea {
             }
         }
     }
+
     .mat-expansion-indicator {
         margin-left: 20px !important;
     }
@@ -1101,7 +1100,6 @@ textarea {
         border: 1px solid lightgray;
 
         .tree-inner-content {
-            margin-top: -30px;
             background-color: var(--color-giddh-blue);
             height: 10px;
             border-radius: 1px
@@ -1109,7 +1107,7 @@ textarea {
 
         .tree-container {
             padding: 20px;
-            padding-top: 35px;
+            padding-top: 18px;
             text-align: center;
 
             .tree-name {
@@ -1126,6 +1124,59 @@ textarea {
         }
     }
 }
+
+.create-branch-page {
+    .mat-select-search-inventory {
+        .mat-select-search-input {
+            padding: 0px 30px 0px 17px !important;
+        }
+
+        .mat-select-search-clear {
+            right: 0 !important;
+            margin-right: 0 !important;
+            top: 0 !important;
+        }
+    }
+
+    .filter-dropdown-branch {
+        max-width: 350px;
+        margin-bottom: 15px;
+    }
+
+    .stock-mat-salect {
+        border: 1px solid var(--color-secondary-input-bar-border);
+        border-radius: 5px !important;
+        padding: 12px;
+        font-size: var(--font-size-15);
+        min-width: 350px;
+    }
+
+    .balance-options {
+        height: auto !important;
+        padding-bottom: 5px !important;
+
+        .mat-select-search-input {
+            padding: 16px 36px 16px 16px !important;
+            box-sizing: border-box !important;
+        }
+
+        .mat-select-search-inner {
+            position: absolute !important;
+            top: 0 !important;
+            border-bottom-width: 1px !important;
+            border-bottom-style: solid !important;
+            z-index: 100 !important;
+            font-size: inherit !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+        }
+
+        .mat-select-search-clear {
+            margin-right: 0 !important;
+        }
+    }
+}
+
 @media screen and (max-width: 1366px) and (orientation: portrait) {
     .subscription-form-select {
         float: left !important;
@@ -1324,7 +1375,7 @@ aside-create-group {
                     }
                 }
 
-            // Units are not displaying after creation once the scroll comes on the page
+                // Units are not displaying after creation once the scroll comes on the page
                 &:first-child {
                     mat-list {
                         .cdk-virtual-scroll-viewport {
@@ -1333,6 +1384,7 @@ aside-create-group {
                         }
                     }
                 }
+
                 &:nth-child(2) {
                     mat-list {
                         .cdk-virtual-scroll-viewport {
@@ -4458,9 +4510,11 @@ select.form-control {
     overflow: hidden;
 }
 
-.grp-list, .new-btn-u {
+.grp-list,
+.new-btn-u {
     li {
         list-style: none;
+
         a {
             padding: 4px 15px !important;
             display: block;
@@ -5713,6 +5767,7 @@ label {
 .form-control[readonly],
 fieldset[disabled] .form-control {
     color: var(--color-primary-input-bar-text) !important;
+
     &:not(.bg-transparent) {
         background-color: var(--color-primary-input-bar-background) !important;
     }
@@ -10497,7 +10552,9 @@ body {
 }
 
 .setting-sidebar-open {
-    &.on-setting-page, &.on-user-page {
+
+    &.on-setting-page,
+    &.on-user-page {
         &:not(.gst-sidebar-open) {
             .plan-wrapper {
                 padding-left: 60px !important;
@@ -11047,6 +11104,7 @@ body.update-scroll-hidden {
 
                         .mat-dialog-container {
                             .modal-body {
+
                                 input,
                                 textarea {
                                     border: 1px solid var(--color-secondary-input-bar-border);
@@ -12165,6 +12223,7 @@ body.prevent-body-scroll {
         }
     }
 }
+
 .custom-btn {
     &:disabled {
         .ladda-label {
@@ -12614,6 +12673,7 @@ input[type="checkbox"].cdk-visually-hidden::after {
             }
         }
     }
+
     .cdk-overlay-container {
         z-index: 99999;
     }
@@ -13385,6 +13445,7 @@ voucher-component {
 .custom-btn {
     color: var(--color-black);
 }
+
 .readonly-field {
     .dropdown-bg {
         display: none !important;
@@ -13460,7 +13521,8 @@ activity-compare-json {
 .mat-mdc-dialog-content {
     max-height: 70vh !important;
 }
-.aside-pane{
+
+.aside-pane {
     .mat-mdc-dialog-content {
         max-height: 100vh !important;
     }
@@ -13519,11 +13581,12 @@ activity-compare-json {
     z-index: 99999 !important;
 }
 
-.mat-select-btn{
-    .mdc-button__label{
+.mat-select-btn {
+    .mdc-button__label {
         width: 100%;
     }
 }
+
 /*---- aside-button ----*/
 aside-menu-product-service {
     .mat-mdc-outlined-button {
@@ -13535,18 +13598,19 @@ aside-menu-product-service {
     }
 }
 
-.on-setting-page{
-    .entity-details{
+.on-setting-page {
+    .entity-details {
         .item {
             color: var(--color-dropdown-list);
         }
-        .item-unique{
+
+        .item-unique {
             color: var(--color-primary-virtual-scroll-scrollable-content-item-a-item-stock);
         }
     }
 }
 
-.dialog-fixed-header{
+.dialog-fixed-header {
     position: sticky !important;
     top: 0;
     z-index: 1;
@@ -13684,6 +13748,7 @@ aside-menu-product-service {
         border-color: var(--color-field-hover) !important;
     }
 }
+
 // Ledger Create Panel text color
 .new-ledger-panel {
     color: var(--color-default-button) !important;
@@ -13701,6 +13766,7 @@ aside-menu-product-service {
         }
     }
 }
+
 // hsn description
 .tax-engine {
     .description-overlap {
@@ -13735,6 +13801,7 @@ aside-menu-product-service {
 .color-link {
     color: var(--color-link) !important;
 }
+
 .bg-transparent {
     background: var(--color-transparent-background) !important;
     background-color: var(--color-transparent-background) !important;
@@ -13751,6 +13818,7 @@ aside-menu-product-service {
     margin-left: auto !important;
     margin-right: auto !important;
 }
+
 // Dropdown data is not getting visible properly on import
 import-wizard {
     sh-select {

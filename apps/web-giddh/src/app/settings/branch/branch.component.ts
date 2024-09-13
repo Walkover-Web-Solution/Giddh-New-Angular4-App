@@ -9,7 +9,7 @@ import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 import { createSelector } from 'reselect';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { CommonActions } from '../../actions/common.actions';
 import { CompanyActions } from '../../actions/company.actions';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
@@ -27,6 +27,8 @@ import { SettingsAsideConfiguration, SettingsAsideFormType } from '../constants/
 import { SettingsUtilityService } from '../services/settings-utility.service';
 import * as d3 from 'd3';
 import { OrgChart } from 'd3-org-chart';
+import { FormControl } from '@angular/forms';
+import { BranchHierarchyType } from '../../app.constant';
 @Component({
     selector: 'setting-branch',
     templateUrl: './branch.component.html',
@@ -86,6 +88,8 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
     public isBranchChangeInProgress: boolean = false;
     /** Stores all the branches */
     public unFilteredBranchList: Array<any>;
+    /** Stores the branch searcch query */
+    public searchBranchQuery: FormControl = new FormControl('');
     /** Branch search field instance */
     @ViewChild('branchSearch', { static: true }) public branchSearch: ElementRef;
     /** Stores the address configuration */
@@ -112,6 +116,10 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
     public statusDialogRef: any;
     /** Holds Close Address MatDailog Reference */
     public addressAsidePaneRef: any;
+    /** Index of selected tab */
+    public selectedTabIndex: number = 0;
+    /** Active tab name */
+    public activeTab: string;
 
     constructor(
         private router: Router,
@@ -133,7 +141,15 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
 
     public ngOnInit() {
         this.getOnboardingForm();
-
+        this.searchBranchQuery.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(query => {
+            if (query !== undefined && query !== null) {
+                if (query) {
+                    this.handleBranchSearch(query);
+                } else {
+                    this.resetFilter();
+                }
+            }
+        });
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
 
         this.store.pipe(select(state => state.settings && state.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
@@ -204,10 +220,36 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
         this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : AppUrl + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
 
+    /**
+ * Performs local search among branches
+ *
+ * @param {string} query Searched query
+ * @memberof BranchComponent
+ */
+    public handleBranchSearch(query: string): void {
+        let branches = [...this.unFilteredBranchList];
+        if (query) {
+            const lowercaseQuery = query.toLowerCase();
+            branches = this.unFilteredBranchList?.filter(branch => (branch.name && branch.name?.toLowerCase().includes(lowercaseQuery)) || (branch.alias && branch.alias?.toLowerCase().includes(lowercaseQuery)));
+        }
+        this.branches$ = observableOf(branches);
+    }
+    /**
+     * This hook will be called whenever the input bindings change.
+     * It updates the chart whenever the input bindings change.
+     *
+     * @memberof BranchComponent
+     */
     public ngOnChanges(): void {
         this.updateChart();
     }
 
+    /**
+     * Updates the organization chart with the provided data.
+     *
+     * @return {*}  {void}
+     * @memberof BranchComponent
+     */
     public updateChart(): void {
         if (!this.data || !this.chartContainer) {
             return;
@@ -215,44 +257,43 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
         if (!this.chart) {
             this.chart = new OrgChart();
         }
-        console.log(this.chart);
-        d3.csv('https://raw.githubusercontent.com/bumbeishvili/sample-data/main/org.csv').then((dataFlattened) => {
-            this.chart
-                .container(this.chartContainer.nativeElement)
-                .data(this.data)
-                .svgWidth(700)
-                .initialZoom(0.7)
-                .nodeHeight((d) => 100)
-                .childrenMargin((d) => 40)
-                .compactMarginBetween((d) => 15)
-                .compactMarginPair((d) => 80)
-                .nodeContent((d, i, arr, state) => {
-                    const nodeId = `node-${d.id}`;
-                    setTimeout(() => {
-                        const nodeElement = document.getElementById(nodeId);
-                        if (nodeElement) {
-                            nodeElement.addEventListener('click', () => {
-                                this.updateBranch(d);
-                            });
-                        }
-                    }, 0);
+        this.chart
+            .container(this.chartContainer.nativeElement)
+            .data(this.data)
+            .svgWidth(1500)
+            .initialZoom(1.1)
+            .nodeHeight((d) => 120)
+            .childrenMargin((d) => 40)
+            .compactMarginBetween((d) => 15)
+            .compactMarginPair((d) => 80)
+            .nodeContent((d, i, arr, state) => {
+                const nodeId = `node-${d.id}`;
+                const branchStatusClass = d.isArchived ? 'branch-archived' : 'branch-active';
+                setTimeout(() => {
+                    const nodeElement = document.getElementById(nodeId);
+                    if (nodeElement) {
+                        nodeElement.addEventListener('click', () => {
+                        });
+                    }
+                }, 0);
 
-                    return `   <div  id="${nodeId}"  class="branch-tree-wrapper" style="height:${d.height
-                        }px;">
-              <div class="tree-content" style="height:${d.height - 32
-                        }px">
-               <div class="tree-inner-content" style="width:${d.width - 2
-                        }px;"></div>
-               <div class="tree-container">
-                   <div class="tree-name" >  ${d.data.name}</div>
-                   <div class="tree-alias"> ${d.data.alias}</div>
-               </div>
-              </div>
-      </div>`
-                        ;
-                })
-                .render();
-        });
+                return `
+                     <div id="${nodeId}" class="branch-tree-wrapper" style="height:${d.height}px;">
+                        <span class="branch-status ${branchStatusClass}"><span>
+                        <div class="tree-content" style="height:${d.height - 32}px">
+                            <div class="tree-inner-content" style="width:${d.width - 2}px;"></div>
+                            <div class="tree-container text-align-center">
+                                <span class="d-inline-flex align-items-center">
+                                    <i class="cursor-pointer icon-branch-icon mr-r05"></i>
+                                    <div class="tree-name">${d.data.alias}</div>
+                                </span>
+                                <div class="tree-alias">${this.localeData?.parent_entity}: ${d.data.name}</div>
+                            </div>
+                        </div>
+                    </div>`
+                    ;
+            })
+            .render();
     }
 
 
@@ -297,11 +338,11 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
      */
     public updateBranch(branch: any): void {
         this.branchDetails = branch;
-
         this.loadAddresses('GET', () => {
             this.branchToUpdate = {
                 name: branch.name,
                 alias: branch.alias,
+                parentBranchName: branch.parentBranch?.name,
                 linkedEntities: branch.addresses || []
             };
             this.toggleAsidePane();
@@ -370,14 +411,25 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
         this.destroyed$.complete();
     }
 
+    /**
+     * Get all branches
+     *
+     * @memberof BranchComponent
+     */
     public getAllBranches() {
         let branchFilterRequest = new BranchFilterRequest();
         branchFilterRequest.from = this.filters['from'];
         branchFilterRequest.to = this.filters['to'];
-        branchFilterRequest.hierarchyType = 'tree';
 
         if (branchFilterRequest.from && branchFilterRequest.to) {
             this.showLoader = true;
+            // First request with hierarchyType as Tree
+            branchFilterRequest.hierarchyType = BranchHierarchyType.Tree;
+            this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
+            this.store.dispatch(this.settingsBranchActions.ResetBranchRemoveResponse());
+
+            // Second request with hierarchyType as Flatten
+            branchFilterRequest.hierarchyType = BranchHierarchyType.Flatten;
             this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
             this.store.dispatch(this.settingsBranchActions.ResetBranchRemoveResponse());
         }
@@ -484,7 +536,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
         this.settingsProfileService.updateBranchInfo(requestObj).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 this.addressAsidePaneRef?.close();
-                this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '' }));
+                this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 this.toasterService.successToast(this.localeData?.branch_updated);
             } else {
                 this.toasterService.errorToast(response?.message);
@@ -541,8 +593,19 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
             };
         }
         this.settingsProfileService.updateBranchInfo(requestObject).pipe(takeUntil(this.destroyed$)).subscribe(() => {
-            this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '' }));
+            this.store.dispatch(this.settingsBranchActions.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
         });
+    }
+
+
+    /**
+     * Resets the branch filter
+     *
+     * @memberof BranchComponent
+     */
+    public resetFilter(): void {
+        this.searchBranchQuery.reset();
+        this.handleBranchSearch(this.searchBranchQuery.value);
     }
 
     /**
@@ -619,6 +682,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy, OnChan
                 let branchFilterRequest = new BranchFilterRequest();
                 branchFilterRequest.from = this.filters['from'];
                 branchFilterRequest.to = this.filters['to'];
+                branchFilterRequest.hierarchyType = BranchHierarchyType.Flatten;
                 this.store.dispatch(this.settingsBranchActions.GetALLBranches(branchFilterRequest));
                 this.toasterService.successToast((isArchived) ? this.localeData?.branch_archived : this.localeData?.branch_unarchived);
             } else {

@@ -26,7 +26,7 @@ import { ESCAPE } from '@angular/cdk/keycodes';
 import { BsDaterangepickerConfig } from 'ngx-bootstrap/datepicker';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
-import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { Router } from "@angular/router";
 
 @Component({
@@ -214,7 +214,7 @@ export class NewBranchTransferListComponent implements OnInit, OnDestroy {
             } else {
                 if (this._generalService.companyUniqueName) {
                     // Avoid API call if new user is onboarded
-                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '' }));
+                    this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 }
             }
         });
