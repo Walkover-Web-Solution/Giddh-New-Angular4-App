@@ -32,16 +32,11 @@ export class SettingsBranchService {
         url = url?.replace(':to', to);
         url = url?.replace(':hierarchyType', request.hierarchyType ?? '');
 
-        let delimiter = '?';
+        let delimiter = '&';
         if (request.query !== undefined) {
-            url = url.concat(`?q=${request.query}`);
-            delimiter = '&';
+            url = url.concat(`&q=${request.query}`);
         }
 
-        if (request.hierarchyType !== undefined) {
-            url = url.concat(`?hierarchyType=${request.hierarchyType}`);
-            delimiter = '&';
-        }
         url = url.concat(`${delimiter}branchUniqueName=`); // Empty branch unique name as we don't support sub-branch as of now
 
         return this.http.get(url).pipe(map((res) => {
