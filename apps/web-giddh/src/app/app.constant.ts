@@ -16,7 +16,7 @@ export enum BusinessTypes {
     Unregistered = 'Unregistered'
 };
 
-/** Branch hierarchyType type*/
+/** Branch Hierarchy Type */
 export enum BranchHierarchyType {
     Flatten = 'flatten',
     Tree = 'tree'

@@ -1,25 +1,22 @@
 import { ReplaySubject } from 'rxjs';
-import { AfterViewInit, Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
 import { OrgChart } from 'd3-org-chart';
 @Component({
     selector: 'd3-tree-chart',
     styleUrls: [`./d3-tree-chart.component.scss`],
     templateUrl: './d3-tree-chart.component.html'
 })
-export class D3TreeChartComponent implements AfterViewInit, OnDestroy {
+export class D3TreeChartComponent implements AfterViewInit, OnDestroy, OnChanges {
     /** Holds Chart Container Reference */
-    @ViewChild('chartContainer', { static: false }) chartContainer: ElementRef;
+    @ViewChild('chartContainer', { static: false }) public chartContainer: ElementRef;
     /** Holds branches data response */
-    @Input() data: any[];
+    @Input() public data: any[];
     /** Holds local data json */
-    @Input() localeData: any;
+    @Input() public localeData: any;
     /** Subject to unsubscribe from listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds tree chart instance */
     public chart: any;
-
-    constructor(
-    ) { }
 
     /**
      *  Lifecycle hook for load component after view initialization
@@ -27,6 +24,11 @@ export class D3TreeChartComponent implements AfterViewInit, OnDestroy {
      * @memberof D3TreeChartComponent
      */
     public ngAfterViewInit(): void {
+
+    }
+
+    public ngOnChanges(changes: SimpleChanges): void {
+        console.log(changes);
         let interval = setInterval(() => {
             if (this.data?.length) {
                 setTimeout(() => {
@@ -93,7 +95,7 @@ export class D3TreeChartComponent implements AfterViewInit, OnDestroy {
      *
      * @memberof D3TreeChartComponent
      */
-    public ngOnDestroy() {
+    public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

@@ -296,14 +296,12 @@
                                         <div class="row">
                                             <div class="col-sm-12 form-group" *ngIf="addressForm.get('parentBranchName')?.value">
                                                 <input-field
-                                                    [label]="localeData?.parent+' '+localeData?.branch_name "
+                                                    [label]="localeData?.parent + ' ' + localeData?.branch_name"
                                                     [type]="'text'"
                                                     formControlName="parentBranchName"
                                                     [readonly]="true"
                                                     [floatLabel]="'always'"
-                                                    [ngClass]="{
-                                                        'readonly-field': addressForm.get('parentBranchName')?.value
-                                                    }"
+                                                    [cssClass]="'readonly-field'"
                                                 ></input-field>
                                             </div>
                                             <div class="col-sm-12 form-group">

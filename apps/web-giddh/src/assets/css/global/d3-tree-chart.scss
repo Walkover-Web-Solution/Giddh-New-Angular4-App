@@ -1,0 +1,40 @@
+#chartContainer {
+    height: 100vh;
+    width: 100vw;
+}
+
+.branch-tree-wrapper {
+    padding-top: 30px;
+    background-color: none;
+    margin-left: 1px;
+    border-radius: 2px;
+    overflow: visible;
+
+    .tree-content {
+        padding-top: 0px;
+        background-color: white;
+        border: 1px solid lightgray;
+
+        .tree-inner-content {
+            background-color: var(--color-giddh-blue);
+            height: 10px;
+            border-radius: 1px
+        }
+
+        .tree-container {
+            padding: 20px;
+
+            .tree-name {
+                color: var(--color-giddh-blue);
+                font-size: 16px;
+                font-weight: bold
+            }
+
+            .tree-alias {
+                color: var(--color-gray);
+                font-size: 16px;
+                margin-top: 4px
+            }
+        }
+    }
+}
