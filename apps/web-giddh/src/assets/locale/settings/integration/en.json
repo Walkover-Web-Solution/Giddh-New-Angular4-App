@@ -133,7 +133,8 @@
         "search_bank":"Search Bank",
         "institutions":"Institutions",
         "bank_list":"Bank List",
-        "banks": "Banks"
+        "banks": "Banks",
+        "permission_message":"You do not have permission to access this module."
     },
     "communication": {
         "tab_heading": "Communication"

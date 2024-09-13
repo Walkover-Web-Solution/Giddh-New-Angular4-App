@@ -445,7 +445,7 @@
                         </div>
                     </ng-container>
                     <ng-container *ngIf="!hasIntegrationScope">
-                        <h3 class="mb-1">You do not have permission to access this module.</h3>
+                        <h3 class="mb-1">{{localeData?.payment?.permission_message}}</h3>
                     </ng-container>
                     <div class="connected-accounts">
                         <b class="font-15" *ngIf="!isLoading && connectedBankAccounts?.length > 0">{{

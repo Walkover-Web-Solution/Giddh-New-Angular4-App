@@ -133,7 +133,8 @@
         "search_bank": "बँक शोधा",
         "institutions": "संस्था",
         "bank_list": "बँक यादी",
-		"banks": "बँका"
+		"banks": "बँका",
+        "permission_message":"तुम्हाला या मॉड्यूलमध्ये प्रवेश करण्याची परवानगी नाही."
 	},
     "communication": {
         "tab_heading": "संवाद"

@@ -133,7 +133,8 @@
         "search_bank": "बैंक खोजें",
         "institutions": "संस्थान",
         "bank_list": "बैंक सूची",
-		"banks": "बैंकों"
+		"banks": "बैंकों",
+        "permission_message":"आपको इस मॉड्यूल तक पहुंचने की अनुमति नहीं है."
 	},
         "communication": {
         "tab_heading": "संचार"
