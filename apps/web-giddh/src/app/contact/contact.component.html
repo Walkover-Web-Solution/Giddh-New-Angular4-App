@@ -11,7 +11,7 @@
 
         <mat-tab-group
             #staticTabs
-            class="custom-mat-tabs customer-aging"
+            class="custom-mat-tabs customer-aging table-header-sticky"
             [ngClass]="{ 'hide-header': activeTab === 'vendor' }"
             (selectedTabChange)="tabChange($event)"
             [selectedIndex]="activeTab === 'customer' || activeTab === 'vendor' ? 0 : 1"
@@ -362,18 +362,18 @@
                             </div>
                         </div>
                     </div>
-                    <div
-                        class="text-center top-aging-table-top separate-top-aging pd-1 mr-t1"
-                        *ngIf="isMobileScreen && (sundryDebtorsAccounts?.length || sundryCreditorsAccounts?.length)"
-                    >
-                        <p (click)="showGiddhDatepicker($event)">
-                            <strong>{{ commonLocaleData?.app_due_as_on }} </strong>
-                            <span *ngIf="selectedDateRangeUi"> {{ selectedDateRangeUi }} </span>
-                        </p>
-                    </div>
-                    <div class="contact-main customer-page on-mobile-view">
-                        <div class="pd-b2 mr-b1">
-                            <div>
+                        <div
+                            class="text-center top-aging-table-top separate-top-aging pd-1 mr-t1"
+                            *ngIf="isMobileScreen && (sundryDebtorsAccounts?.length || sundryCreditorsAccounts?.length)"
+                        >
+                            <p (click)="showGiddhDatepicker($event)">
+                                <strong>{{ commonLocaleData?.app_due_as_on }} </strong>
+                                <span *ngIf="selectedDateRangeUi"> {{ selectedDateRangeUi }} </span>
+                            </p>
+                        </div>
+                    <div class="contact-main customer-page on-mobile-view overflow-visible">
+                        <div class="pd-b2 mr-b1 overflow-visible">
+                            <div class="overflow-visible">
                                 <div *ngIf="!isMobileScreen && !isGetAccountsInProcess">
                                     <ng-container *ngTemplateOutlet="mainTable"></ng-container>
                                 </div>
@@ -554,7 +554,7 @@
     </div>
 
     <ng-template #mainTable>
-        <div class="table-responsive vendor-page all-table">
+        <div class="table-responsive vendor-page all-table overflow-visible">
             <ng-container *ngIf="activeTab === 'customer'">
                 <table
                     *ngIf="searchStr || sundryDebtorsAccounts?.length"

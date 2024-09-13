@@ -61,3 +61,20 @@ aging-report {
         min-width: 100px;
     }
 }
+
+.table-header-sticky {
+    .mat-mdc-tab-group {
+        overflow: visible !important;
+    }
+    .mat-mdc-tab-body-wrapper {
+        overflow: visible !important;
+        .mat-mdc-tab-body {
+            // overflow-y: visible !important;
+            // overflow-x: auto !important;
+            overflow: visible !important;
+            .mat-mdc-tab-body-content {
+                overflow: visible !important;
+            }
+        }
+    }
+}
