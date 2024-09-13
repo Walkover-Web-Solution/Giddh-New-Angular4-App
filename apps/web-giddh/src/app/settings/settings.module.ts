@@ -68,6 +68,7 @@ import { TaxAuthorityModule } from '../theme/tax-authority/tax-authority.module'
 import { InstitutionsListComponent } from './integration/institutions-list/institutions-list.component';
 import { MatListModule } from '@angular/material/list';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { D3TreeChartModule } from '../shared/d3-tree-chart/d3-tree-chart.module';
 
 @NgModule({
     declarations: [
@@ -143,7 +144,8 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
         CreateAddressModule,
         TagsModule,
         TaxAuthorityModule,
-        NgxMatSelectSearchModule
+        NgxMatSelectSearchModule,
+        D3TreeChartModule
     ],
 })
 

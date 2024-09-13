@@ -287,7 +287,13 @@
                     </ng-container>
                 </mat-tab>
                 <mat-tab [label]="localeData?.hierarchy_view">
-                    <div class="chart-container" #chartContainer id="chartContainer"></div>
+                    <div  id="chartContainer">
+                    <d3-tree-chart
+                        [data]="data"
+                        [localeData]="localeData"
+                    >
+                    </d3-tree-chart>
+                    </div>
                 </mat-tab>
             </mat-tab-group>
         </div>
