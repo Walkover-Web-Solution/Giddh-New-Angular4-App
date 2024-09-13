@@ -1563,6 +1563,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public paymentSubmitted(event: any): void {
+        console.log("event", event);
         this.componentStore.actionVoucher({ voucherUniqueName: event?.uniqueName, payload: event });
     }
 

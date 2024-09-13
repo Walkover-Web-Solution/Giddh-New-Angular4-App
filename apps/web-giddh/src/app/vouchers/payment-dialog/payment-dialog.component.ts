@@ -135,36 +135,39 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      *
      * @private
      * @return {*}  {FormGroup}
-     * @memberof PaymentDialogComponent
+     * @memberof VoucherCreateComponent
      */
     private getDepositFormGroup(): FormGroup {
         return this.formBuilder.group({
-            amount: ['', Validators.required],
-            accountUniqueName: ['', Validators.required],
+            amount: [''],
+            accountUniqueName: [''],
         });
     }
     /**
      * Add new deposit row
      *
-     * @memberof PaymentDialogComponent
+     * @memberof VoucherCreateComponent
      */
     public addNewDepositRow(): void {
-        const deposits = this.paymentForm.get('deposits') as FormArray;
-        deposits.push(this.getDepositFormGroup());
+        this.paymentForm.get('deposits')['controls'].push(this.getDepositFormGroup());
+        console.log(this.paymentForm.value);
     }
     /**
-     * Remove deposit row
-     *
-     * @param {number} entryIndex
-     * @memberof PaymentDialogComponent
-     */
+ * Remove deposit row
+ *
+ * @param {number} entryIndex
+ * @memberof VoucherCreateComponent
+ */
     public deleteDepositRow(entryIndex: number): void {
         const deposits = this.paymentForm.get('deposits') as FormArray;
         if (deposits?.length === 1) {
             deposits.reset();
+         //   this.calculateBalanceDue();
             return;
         }
         deposits.removeAt(entryIndex);
+      //  this.calculateBalanceDue();
+
     }
 
     /**
