@@ -200,6 +200,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
     public referenceNumber: string = '';
     /** Holds Store Requisition API success state as observable*/
     public requisitionList$: Observable<any> = this.componentStore.select(state => state.requisitionList);
+    /** True, if is integration module are in scope  */
+    public hasIntegrationScope: boolean = false;
 
     constructor(
         private router: Router,
@@ -334,6 +336,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
 
         this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && !isEmpty(res)) {
+                res.userEntityRoles.forEach(role => {
+                    const scopes = role.role.scopes;
+                    if (scopes && scopes.some(scope => scope.name === 'INTEGRATION')) {
+                        this.hasIntegrationScope = true;
+                    }
+                });
                 if (res && res.ecommerceDetails && res.ecommerceDetails.length > 0) {
                     res.ecommerceDetails.forEach(item => {
                         if (item && item.ecommerceType && item.ecommerceType.name && item.ecommerceType.name === "shopify") {
