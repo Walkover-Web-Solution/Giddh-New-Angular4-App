@@ -7,7 +7,7 @@
 >
     <div class="relative">
         <div class="clearfix">
-            <div class="col-sm-12 mt-2 branch-header text-right">
+            <div class="col-sm-12 mt-2  text-right">
                 <button mat-stroked-button color="primary" class="mr-0" (click)="openAddBranchModal()">
                     {{ localeData?.create_branch }}
                 </button>
@@ -22,7 +22,7 @@
                     <ng-container *ngIf="selectedTabIndex === 0">
                         <div class="clearfix">
                             <div class="date-advance-search row mt-4">
-                                <div class="col-sm-12 mr-b15 branch-header d-flex justify-content-between">
+                                <div class="col-sm-12 mr-b15 d-flex justify-content-between">
                                     <form class="form-inline input-group-date-range-picker pr d-flex flex-row mr-0">
                                         <div class="mr-1 branch-header-content w-100">
                                             <div class="search-field form-top-fields w-100">
@@ -288,11 +288,7 @@
                 </mat-tab>
                 <mat-tab [label]="localeData?.hierarchy_view">
                     <div id="chartContainer">
-                    <d3-tree-chart
-                        [data]="data"
-                        [localeData]="localeData"
-                    >
-                    </d3-tree-chart>
+                        <d3-tree-chart [data]="data" [localeData]="localeData"> </d3-tree-chart>
                     </div>
                 </mat-tab>
             </mat-tab-group>

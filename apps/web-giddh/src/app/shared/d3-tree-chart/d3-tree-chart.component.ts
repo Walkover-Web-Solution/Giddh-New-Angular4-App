@@ -18,6 +18,12 @@ export class D3TreeChartComponent implements OnDestroy, OnChanges {
     /** Holds tree chart instance */
     public chart: any;
 
+    /**
+     * This will be use for component on change
+     *
+     * @param {SimpleChanges} changes
+     * @memberof D3TreeChartComponent
+     */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.data?.currentValue?.length) {
             this.treeUpdateChart();
@@ -59,15 +65,15 @@ export class D3TreeChartComponent implements OnDestroy, OnChanges {
                 }, 0);
 
                 return `
-          <div id="${nodeId}" class="branch-tree-wrapper">
-            <div class="tree-content">
+          <div id="${nodeId}" class="branch-tree-wrapper pd-t3 overflow-visible">
+            <div class="tree-content pt-0">
               <div class="tree-inner-content"></div>
-              <div class="tree-container text-align-center">
+              <div class="tree-container pd-t2 text-align-center">
                 <span class="d-inline-flex align-items-center">
                   <i class="cursor-pointer icon-branch-icon mr-r05"></i>
-                  <div class="tree-name">${d.data.alias}</div>
+                  <div class="tree-name  font-16">${d.data.alias}</div>
                 </span>
-                <div class="tree-alias">${this.localeData?.parent_entity}: ${d.data.name}</div>
+                <div class="tree-alias font-16">${this.localeData?.parent_entity}: ${d.data.name}</div>
               </div>
             </div>
           </div>`;
