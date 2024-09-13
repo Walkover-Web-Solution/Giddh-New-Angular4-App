@@ -1,12 +1,12 @@
 import { ReplaySubject } from 'rxjs';
-import { AfterViewInit, Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
 import { OrgChart } from 'd3-org-chart';
 @Component({
     selector: 'd3-tree-chart',
     styleUrls: [`./d3-tree-chart.component.scss`],
     templateUrl: './d3-tree-chart.component.html'
 })
-export class D3TreeChartComponent implements AfterViewInit, OnDestroy, OnChanges {
+export class D3TreeChartComponent implements OnDestroy, OnChanges {
     /** Holds Chart Container Reference */
     @ViewChild('chartContainer', { static: false }) public chartContainer: ElementRef;
     /** Holds branches data response */
@@ -18,25 +18,10 @@ export class D3TreeChartComponent implements AfterViewInit, OnDestroy, OnChanges
     /** Holds tree chart instance */
     public chart: any;
 
-    /**
-     *  Lifecycle hook for load component after view initialization
-     *
-     * @memberof D3TreeChartComponent
-     */
-    public ngAfterViewInit(): void {
-
-    }
-
     public ngOnChanges(changes: SimpleChanges): void {
-        console.log(changes);
-        let interval = setInterval(() => {
-            if (this.data?.length) {
-                setTimeout(() => {
-                    this.treeUpdateChart();
-                }, 100);
-                clearInterval(interval);
-            }
-        }, 500);
+        if (changes?.data?.currentValue?.length) {
+            this.treeUpdateChart();
+        }
     }
 
     /**
