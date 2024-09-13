@@ -1403,6 +1403,7 @@ body {
     -webkit-font-smoothing: auto;
     padding: 0 !important;
     margin: 0 !important;
+    overflow: hidden;
 }
 
 /* table css need to removed at last (finish)*/
@@ -9403,10 +9404,10 @@ ngx-daterangepicker-material {
 #HW_badge_cont {
     visibility: visible !important;
     width: auto !important;
-    top: -5px;
+    top: 1px;
     width: 30px !important;
     display: flex !important;
-    right: -5px !important;
+    right: 2px !important;
     position: absolute !important;
 }
 
