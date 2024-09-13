@@ -152,8 +152,6 @@ export class LedgerVM {
         }
         if (requestObj.voucherType !== 'rcpt' && requestObj.invoicesToBePaid && requestObj.invoicesToBePaid.length) {
             requestObj.invoicesToBePaid = [];
-        } else if (requestObj.voucherType === 'rcpt' && requestObj.invoiceNumberAgainstVoucher) {
-            requestObj.invoiceNumberAgainstVoucher = '';
         }
         return requestObj;
     }
