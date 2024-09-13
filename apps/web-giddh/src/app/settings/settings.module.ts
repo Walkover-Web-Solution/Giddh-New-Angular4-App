@@ -67,6 +67,8 @@ import { TagsModule } from './tags/tags.module';
 import { TaxAuthorityModule } from '../theme/tax-authority/tax-authority.module';
 import { InstitutionsListComponent } from './integration/institutions-list/institutions-list.component';
 import { MatListModule } from '@angular/material/list';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { D3TreeChartModule } from '../shared/d3-tree-chart/d3-tree-chart.module';
 
 @NgModule({
     declarations: [
@@ -141,7 +143,9 @@ import { MatListModule } from '@angular/material/list';
         WatchVideoModule,
         CreateAddressModule,
         TagsModule,
-        TaxAuthorityModule
+        TaxAuthorityModule,
+        NgxMatSelectSearchModule,
+        D3TreeChartModule
     ],
 })
 

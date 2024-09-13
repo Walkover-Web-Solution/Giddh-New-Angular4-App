@@ -39,5 +39,7 @@
     "archive_notallowed": "Last active branch can't be archived.",
     "archived_default_error": "Archived warehouse can't be set as default.",
     "no_linked_address_present" : "No linked address present.",
-    "no_linked_warehouse_present" : "No linked warehouse present."
+    "no_linked_warehouse_present" : "No linked warehouse present.",
+    "flat_view": "Flat view",
+    "hierarchy_view": "Hierarchy view"
 }

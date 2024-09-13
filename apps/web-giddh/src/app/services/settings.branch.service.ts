@@ -26,17 +26,17 @@ export class SettingsBranchService {
 
         let from = (request.from) ? request.from : "";
         let to = (request.to) ? request.to : "";
-
         let url = this.config.apiUrl + COMPANY_API.GET_ALL_BRANCHES;
         url = url?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
         url = url?.replace(':from', from);
         url = url?.replace(':to', to);
+        url = url?.replace(':hierarchyType', request.hierarchyType ?? '');
 
-        let delimiter = '?';
+        let delimiter = '&';
         if (request.query !== undefined) {
-            url = url.concat(`?q=${request.query}`);
-            delimiter = '&';
+            url = url.concat(`&q=${request.query}`);
         }
+
         url = url.concat(`${delimiter}branchUniqueName=`); // Empty branch unique name as we don't support sub-branch as of now
 
         return this.http.get(url).pipe(map((res) => {

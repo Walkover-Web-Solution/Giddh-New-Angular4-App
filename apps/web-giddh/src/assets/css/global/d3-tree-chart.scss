@@ -1,0 +1,32 @@
+#chartContainer {
+    height: 100vh;
+    width: 100vw;
+}
+
+.branch-tree-wrapper {
+    background-color: none;
+    border-radius: 2px;
+
+    .tree-content {
+        background-color: var(--color-body-background);
+        border: 1px solid lightgray;
+
+        .tree-inner-content {
+            background-color: var(--color-giddh-blue);
+            height: 10px;
+            border-radius: 1px
+        }
+
+        .tree-container {
+            .tree-name {
+                color: var(--color-giddh-blue);
+                font-weight: bold
+            }
+
+            .tree-alias {
+                color: var(--color-gray);
+                margin-top: 4px
+            }
+        }
+    }
+}
