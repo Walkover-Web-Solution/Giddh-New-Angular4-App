@@ -1416,4 +1416,38 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
+    readonly poStatusUpdate = this.effect((data: Observable<{ accountUniqueName: string, payload: any }>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ actionVoucherInProgress: true, actionVoucherIsSuccess: false });
+                return this.voucherService.poStatusUpdate(req.accountUniqueName, req.payload).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res.status === "success") {
+                                return this.patchState({
+                                    actionVoucherInProgress: false,
+                                    actionVoucherIsSuccess: true
+                                });
+                            } else {
+                                res.message && this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({
+                                    actionVoucherInProgress: null,
+                                    actionVoucherIsSuccess: null
+                                });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                actionVoucherInProgress: null,
+                                actionVoucherIsSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
 }

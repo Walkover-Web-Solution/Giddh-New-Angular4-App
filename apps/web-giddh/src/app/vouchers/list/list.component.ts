@@ -526,7 +526,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
 
         this.voucherNumberInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
-            if (search !== null && search !== undefined) {
+            if (search && search === '') {
                 if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                     if (this.voucherType === VoucherTypeEnum.generateProforma) {
                         this.advanceFilters.proformaNumber = search;
@@ -545,7 +545,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
 
         this.accountUniqueNameInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
-            if (search !== null && search !== undefined) {
+            if (search && search === '') {
                 if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
                     this.advanceFilters.vendorName = search;
                 } else {
@@ -558,7 +558,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
 
         this.purchaseOrderUniqueNameInput.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
-            if (search !== null && search !== undefined) {
+            if (search && search === '') {
                 if (this.voucherType === VoucherTypeEnum.purchase) {
                     this.advanceFilters.purchaseOrderNumber = search;
                 }
@@ -1700,7 +1700,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             from: dayjs(this.selectedDateRange?.startDate).format(GIDDH_DATE_FORMAT) ?? '',
             to: dayjs(this.selectedDateRange?.endDate).format(GIDDH_DATE_FORMAT) ?? '',
             page: 1,
-            count: PAGINATION_LIMIT,
+            count: this.pageSizeOptions[0],
             q: ''
         };
         this.voucherNumberInput.patchValue(null, { emitEvent: false });

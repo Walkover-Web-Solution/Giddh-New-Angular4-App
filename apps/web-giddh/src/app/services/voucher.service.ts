@@ -469,6 +469,13 @@ export class VoucherService {
                 catchError((e) => this.errorHandler.HandleCatch<ReciptResponse, any>(e, payload)));
     }
 
+    /**
+     * Export Voucher API
+     *
+     * @param {*} model
+     * @return {*}  {Observable<BaseResponse<string, any>>}
+     * @memberof VoucherService
+     */
     public exportVouchers(model: any): Observable<BaseResponse<string, any>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + INVOICE_API.DOWNLOAD_INVOICE_EXPORT_CSV?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))?.replace(':from', encodeURIComponent(model.from))?.replace(':to', encodeURIComponent(model.to));
@@ -486,6 +493,14 @@ export class VoucherService {
             catchError((e) => this.errorHandler.HandleCatch<string, any>(model)));
     }
 
+    /**
+     * Voucher Action API (i.e unpaid, hold, cancle etc)
+     *
+     * @param {string} voucherUniqueName
+     * @param {{ action: string, amount?: number }} action
+     * @return {*}  {Observable<BaseResponse<string, string>>}
+     * @memberof VoucherService
+     */
     public actionVoucher(voucherUniqueName: string, action: { action: string, amount?: number }): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         let url = this.config.apiUrl + INVOICE_API.ACTION_ON_INVOICE?.replace(':companyUniqueName', this.companyUniqueName)?.replace(':invoiceUniqueName', voucherUniqueName);
@@ -827,4 +842,20 @@ export class VoucherService {
                 catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
         }
     }
+
+        /**
+         * This will bulk update the status of orders
+         *
+         * @param {string} accountUniqueName
+         * @param {*} payload
+         * @returns {Observable<BaseResponse<any, any>>}
+         * @memberof VoucherService
+         */
+        public poStatusUpdate(accountUniqueName: string, payload: any): Observable<BaseResponse<any, any>> {
+            let url: string = this.config.apiUrl + PURCHASE_ORDER_API.STATUS_UPDATE;
+            url = url?.replace(':companyUniqueName', this.generalService.companyUniqueName);
+            url = url?.replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+    
+            return this.http.patch(url, payload).pipe(catchError((e) => this.errorHandler.HandleCatch<any, any>(e)));
+        }
 }

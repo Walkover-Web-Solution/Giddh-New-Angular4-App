@@ -195,9 +195,21 @@
                                 <button mat-menu-item (click)="actionVoucher('hold')">{{ commonLocaleData?.app_payment_status?.hold }}</button>
                             </ng-container>
                             <button mat-menu-item (click)="actionVoucher('cancel')" *ngIf="['sales', 'purchase-order', 'credit note', 'debit note'].includes(voucherType)">{{ commonLocaleData?.app_payment_status?.cancel }}</button>
+                            <ng-container *ngIf="['purchase', 'purchase-order'].includes(voucherType)">
+                                <button mat-menu-item (click)="copyInvoice()">{{ commonLocaleData?.app_copy }}</button>
+                                <button mat-menu-item (click)="deleteVoucherDialog()">{{ commonLocaleData?.app_delete }}</button>
+                            </ng-container>
+                            <button mat-menu-item *ngIf="voucherType === 'purchase-order'" (click)="actionVoucher('open')">{{ commonLocaleData?.app_payment_status?.open }}</button>
+
+                            <ng-container *ngIf="['estimates', 'proformas'].includes(voucherType)">
+                                <button mat-menu-item (click)="actionEstimateProforma('accepted')">{{ localeData?.accepted }}</button>
+                                <button mat-menu-item (click)="actionEstimateProforma('decline')">{{ localeData?.declined }}</button>
+                                <button mat-menu-item (click)="convertToProforma()" *ngIf="voucherType === 'estimates'">{{ localeData?.convert_proforma }}</button>
+                                <button mat-menu-item (click)="convertToInvoice()">{{ localeData?.convert_invoice }}</button>
+                                <button mat-menu-item (click)="actionEstimateProforma('expired')">{{ localeData?.expired }}</button>
+                            </ng-container>
                         </mat-menu>
                         <span *ngIf="selectedInvoice?.action" class="invoice-status text-capitalize">{{ selectedInvoice.action }}</span>
-                        <button mat-menu-item *ngIf="['purchase', 'purchase-order'].includes(voucherType)" (click)="null">{{ commonLocaleData?.app_copy }}</button>
                         <button mat-stroked-button (click)="backToOldLocation()">{{ commonLocaleData?.app_back }}</button>
                     </div>
                 </div>

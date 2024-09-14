@@ -117,6 +117,4 @@ export class VoucherPreviewComponentStore extends ComponentStore<VoucherPreviewS
             })
         );
     });
-
-
 }

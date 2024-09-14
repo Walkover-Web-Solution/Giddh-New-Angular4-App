@@ -82,7 +82,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /** Holds search voucher form control */
     public search: FormControl = new FormControl('');
     /** Holds invoice list */
-    public invoiceList: any[];
+    public invoiceList: any[] = [];
     /** Holds Current selected invoice */
     public selectedInvoice: any;
     /** Hold invoice  type */
@@ -256,15 +256,15 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
                     this.showPaymentDetails = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote].includes(this.voucherType);
 
-                    const lastVouchers = this.vouchersUtilityService?.lastVouchers;
-                    if (lastVouchers) {
-                        this.invoiceList = lastVouchers;
-                        this.filteredInvoiceList$.next(lastVouchers);
-                        this.changeDetection.detectChanges();
-                    }
-                    if (this.invoiceList?.length) {
-                        this.setSelectedInvoice(params?.voucherUniqueName);
-                    }
+                    // const lastVouchers = this.vouchersUtilityService?.lastVouchers;
+                    // if (lastVouchers) {
+                        // this.invoiceList = lastVouchers;
+                        // this.filteredInvoiceList$.next(lastVouchers);
+                        // this.changeDetection.detectChanges();
+                    // }
+                    // if (this.invoiceList?.length) {
+                    //     this.setSelectedInvoice(params?.voucherUniqueName);
+                    // }
                     this.getCreatedTemplates();
                     this.subscribeStoreObservable();
                 }
@@ -272,19 +272,42 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     this.advanceFilters.page = params.page;
                     this.advanceFilters.count = params.count;
 
-                    if (!this.invoiceList?.length) {
+                    // if (!this.invoiceList?.length) {
                         this.getAllVouchers();
-                    } else {
-                        this.setSelectedInvoice(params?.voucherUniqueName);
-                    }
+                    // } else {
+                    //     this.setSelectedInvoice(params?.voucherUniqueName);
+                    // }
                 }
             }
         });
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
         this.search.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             if (search || search === '') {
-                const filterSearchResult = this.invoiceList.filter(item => item?.voucherNumber.toLowerCase().includes(search.toLowerCase()));
-                this.filteredInvoiceList$.next(filterSearchResult);
+                // const filterSearchResult = this.invoiceList.filter(item => item?.voucherNumber.toLowerCase().includes(search.toLowerCase()));
+
+                // Reset Filter
+                this.advanceFilters = {
+                    page: 1,
+                    count: this.advanceFilters.count,
+                    q: '',
+                    sort: '',
+                    sortBy: ''
+                };
+
+                if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
+                    if (this.voucherType === VoucherTypeEnum.generateProforma) {
+                        this.advanceFilters.proformaNumber = search;
+                    } else {
+                        this.advanceFilters.estimateNumber = search;
+                    }
+                } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
+                    this.advanceFilters.purchaseOrderNumber = search;
+                } else {
+                    this.advanceFilters.q = search;
+                }
+                this.getAllVouchers();
+
+                this.filteredInvoiceList$.next([]);
                 this.changeDetection.detectChanges();
             }
         })
@@ -371,6 +394,13 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         merge(this.componentStoreVoucher.lastVouchers$, this.componentStoreVoucher.purchaseOrdersList$)
             .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.handleGetAllVoucherResponse(response);
+            });
+
+        merge(this.componentStoreVoucher.deleteVoucherIsSuccess$, this.componentStoreVoucher.convertToInvoiceIsSuccess$)
+            .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+                if (response) {
+                    this.getAllVouchers();
+                }
             });
 
         this.componentStoreVoucher.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -789,9 +819,9 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      */
     private handleGetAllVoucherResponse(response: any): void {
         if (response && response.voucherType === this.voucherType) {
-            this.invoiceList = [];
-            this.filteredInvoiceList$.next([]);
-            this.changeDetection.detectChanges();
+            const currentInvoiceList = [];
+            // this.filteredInvoiceList$.next([]);
+            // this.changeDetection.detectChanges();
             this.totalResults = response?.totalItems;
             response.items?.forEach((item: any, index: number) => {
                 item.index = index + 1;
@@ -817,11 +847,18 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                         item.dueDays = null;
                     }
                 }
-                this.invoiceList.push(item);
+                currentInvoiceList.push(item);
             });
+            this.invoiceList = currentInvoiceList;
+            console.log(this.invoiceList);
+            
+            this.invoiceList = [...this.invoiceList, ...currentInvoiceList];
             this.filteredInvoiceList$.next(this.invoiceList);
             this.changeDetection.detectChanges();
-            this.setSelectedInvoice(this.params.voucherUniqueName);
+            
+            if (this.invoiceList?.length && !this.selectedInvoice) {
+                    this.setSelectedInvoice(this.params.voucherUniqueName);
+            }
         }
     }
 
@@ -1034,7 +1071,6 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         });
     }
 
-
     /**
      * Handle Edit voucher redirect to voucher edit page with respective voucher
      *
@@ -1059,10 +1095,88 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      */
     public actionVoucher(action: string, event?: any): void {
         if (action) {
-            this.componentStoreVoucher.actionVoucher({ voucherUniqueName: this.selectedInvoice?.uniqueName, payload: { action: action, voucherType: this.voucherType } });
+            if (action === 'open') {
+                console.log("Check", this.selectedInvoice?.vendor?.uniqueName);
+
+                this.componentStoreVoucher.poStatusUpdate({ accountUniqueName: this.selectedInvoice?.vendor?.uniqueName, payload: { action: action, purchaseNumber: this.selectedInvoice?.voucherNumber } });
+            } else {
+                this.componentStoreVoucher.actionVoucher({ voucherUniqueName: this.selectedInvoice?.uniqueName, payload: { action: action, voucherType: this.voucherType } });
+            }
         } else {
             this.componentStoreVoucher.actionVoucher({ voucherUniqueName: event?.uniqueName, payload: event });
         }
+    }
+
+    /**
+     * Copy Invoice and redirect to respective page
+     *
+     * @memberof VouchersPreviewComponent
+     */
+    public copyInvoice(): void {
+        if (this.voucherType === VoucherTypeEnum.purchase) {
+            this.router.navigate([`/pages/proforma-invoice/invoice/purchase/${this.selectedInvoice?.account?.uniqueName}/${this.selectedInvoice?.uniqueName}/copy`]);
+        } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
+            this.router.navigate([`/pages/purchase-management/purchase-order/new/${this.selectedInvoice?.uniqueName}`]);
+        }
+    }
+
+    /**
+     * Handle Estimate Proforma Actions API Call
+     *
+     * @param {string} action
+     * @memberof VoucherListComponent
+     */
+    public actionEstimateProforma(action: string): void {
+        const model = {
+            accountUniqueName: this.selectedInvoice.customerUniqueName,
+            action: action
+        };
+        if (this.voucherType === VoucherTypeEnum.generateEstimate) {
+            model['estimateNumber'] = this.selectedInvoice?.voucherNumber;
+        } else {
+            model['proformaNumber'] = this.selectedInvoice?.voucherNumber;
+        }
+        this.componentStoreVoucher.actionEstimateProforma({
+            request: model,
+            voucherType: this.selectedInvoice?.voucherType ?? this.voucherType
+        });
+    }
+
+    /**
+     * Convert To Invoice API Call
+     *
+     * @memberof VoucherListComponent
+     */
+    public convertToInvoice(): void {
+        const model = {
+            accountUniqueName: this.selectedInvoice?.customerUniqueName
+        };
+
+        if (this.voucherType === VoucherTypeEnum.generateEstimate) {
+            model['estimateNumber'] = this.selectedInvoice?.voucherNumber;
+        } else {
+            model['proformaNumber'] = this.selectedInvoice?.voucherNumber;
+        }
+
+        this.componentStoreVoucher.convertToInvoice({
+            request: model,
+            voucherType: this.voucherType
+        });
+    }
+
+    /**
+     * Convert To Proforma API Call
+     *
+     * @memberof VoucherListComponent
+     */
+    public convertToProforma(): void {
+        this.componentStoreVoucher.convertToProforma({
+            request: {
+                accountUniqueName: this.selectedInvoice?.customerUniqueName,
+                estimateNumber: this.selectedInvoice?.voucherNumber,
+            },
+            voucherType: this.voucherType
+        });
     }
 
     /**
