@@ -1452,7 +1452,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 subscriptionId: subscription?.subscriptionId,
                 planUniqueName: subscription?.planDetails?.uniqueName
             };
-            this.subscriptionId = subscription?.subscriptionId;
+            if (request.subscriptionId) {
+                this.subscriptionId = request.subscriptionId;
+            }
             let data = { ...request, ...this.subscriptionRequest };
             if (subscription?.duration === 'MONTHLY' && subscription?.region?.code !== 'GBR') {
                 this.componentStore.saveRazorpayToken({ subscriptionId: this.subscriptionId, paymentId: request.paymentId });
