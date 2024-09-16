@@ -325,47 +325,6 @@
                                                                     </span>
                                                                 </p>
                                                             </ng-container>
-                                                            <ng-container
-                                                                *ngIf="plan?.monthlyAmount > 0 || plan?.monthlyDiscount"
-                                                            >
-                                                                <p class="mb-2" *ngIf="plan?.monthlyDiscountAmount > 0">
-                                                                    <s>
-                                                                        <span class="strong">
-                                                                            <amount-field
-                                                                                [useGiddhCurrencyPipe]="false"
-                                                                                [spaceAfterCurrencySymbol]="false"
-                                                                                [amount]="plan?.monthlyDiscountAmount"
-                                                                                [currencySymbol]="
-                                                                                    plan?.currency?.symbol
-                                                                                "
-                                                                                [currencyCode]="plan?.currency?.code"
-                                                                            >
-                                                                            </amount-field>
-                                                                        </span>
-                                                                    </s>
-                                                                </p>
-                                                                <p
-                                                                    class="mb-3 mt-2"
-                                                                    *ngIf="
-                                                                        plan?.monthlyAmount !== 0 &&
-                                                                        plan?.monthlyAmountAfterDiscount !== 0
-                                                                    "
-                                                                >
-                                                                    <span class="font-24 strong">
-                                                                        <amount-field
-                                                                            [useGiddhCurrencyPipe]="false"
-                                                                            [spaceAfterCurrencySymbol]="false"
-                                                                            [amount]="plan?.monthlyAmount"
-                                                                            [currencySymbol]="plan?.currency?.symbol"
-                                                                            [currencyCode]="plan?.currency?.code"
-                                                                        >
-                                                                        </amount-field>
-                                                                    </span>
-                                                                    <span class="font-12">
-                                                                        /{{ commonLocaleData?.app_duration?.month }}
-                                                                    </span>
-                                                                </p>
-                                                            </ng-container>
                                                             <p
                                                                 *ngIf="
                                                                     plan?.monthlyDiscountAmount > 0 &&
