@@ -605,7 +605,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
     /**
      * Handle Get All Voucher Response
-     * 
+     *
      * @private
      * @param {*} response
      * @memberof VoucherListComponent
@@ -892,7 +892,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handle Select All Items 
+     * Handle Select All Items
      *
      * @param {*} event
      * @memberof VoucherListComponent
@@ -927,7 +927,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
     /**
      * Generate E-Invoice API Call
-     * 
+     *
      * @memberof VoucherListComponent
      */
     public generateEInvoice(): void {
