@@ -273,6 +273,22 @@
                                 </dropdown-field>
                             </div>
                             <ng-container
+                                *ngIf="secondStepForm.controls['businessNature']?.value === 'Other'"
+                            >
+                                <div class="col-lg-12">
+                                    <input-field
+                                        [name]="'other'"
+                                        [placeholder]='localeData?.enter_business_nature'
+                                        [type]="'text'"
+                                        formControlName="otherBusinessNature"
+                                        [showError]="isFormSubmitted && (!secondStepForm.get('otherBusinessNature')?.value)"
+                                        [label]="localeData?.other_business_nature"
+                                        [maxlength]="15"
+                                    >
+                                    </input-field>
+                                </div>
+                            </ng-container>
+                            <ng-container
                                 *ngIf="secondStepForm.controls['businessType']?.value === businessTypes.Registered"
                             >
                                 <div class="col-lg-12">
