@@ -5,21 +5,19 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { debounceTime, delay, distinctUntilChanged, merge, Observable, ReplaySubject, Subject, takeUntil } from "rxjs";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { VouchersUtilityService } from "../utility/vouchers.utility.service";
-import { PAGE_SIZE_OPTIONS, VoucherTypeEnum } from "../utility/vouchers.const";
+import { VoucherTypeEnum } from "../utility/vouchers.const";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
-import { FILE_ATTACHMENT_TYPE } from "../../app.constant";
+import { FILE_ATTACHMENT_TYPE, PAGINATION_LIMIT } from "../../app.constant";
 import { cloneDeep } from "../../lodash-optimized";
 import { FormControl } from "@angular/forms";
 import { GeneralService } from "../../services/general.service";
 import { OrganizationType } from "../../models/user-login-state";
-import { ProformaDownloadRequest, ProformaGetRequest, ProformaVersionItem } from "../../models/api-models/proforma";
+import { ProformaDownloadRequest, ProformaGetRequest } from "../../models/api-models/proforma";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { CommonService } from "../../services/common.service";
 import { ThermalService } from "../../services/thermal.service";
-import { InvoiceTemplatesService } from "../../services/invoice.templates.service";
 import { ToasterService } from "../../services/toaster.service";
-import { VoucherPreviewComponentStore } from "../utility/vouhcers-preview.store";
 import { SalesService } from "../../services/sales.service";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
@@ -34,15 +32,13 @@ import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustmen
     selector: "preview",
     templateUrl: "./preview.component.html",
     styleUrls: ["./preview.component.scss"],
-    providers: [VoucherComponentStore, VoucherPreviewComponentStore]
+    providers: [VoucherComponentStore]
 })
 export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /** Instance of PDF container iframe */
     @ViewChild('pdfContainer', { static: false }) pdfContainer: ElementRef;
     /** Instance of cdk scrollbar */
     @ViewChild(CdkVirtualScrollViewport) cdkScrollbar: CdkVirtualScrollViewport;
-    // /** Instance of Paid Dialog */
-    // @ViewChild('paidDialog', { static: true }) public paidDialog: TemplateRef<any>;
     /** Instance of Adjust Payment Dialog */
     @ViewChild('adjustPaymentDialog', { static: true }) public adjustPaymentDialog: TemplateRef<any>;
     /** Instance of Version History Dialog */
@@ -56,11 +52,11 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Voucher PDF for preview downloading is in progress Observable */
-    public isVoucherDownloading$: Observable<boolean> = this.componentStorePreview.select(state => state.isVoucherDownloading);
+    public isVoucherDownloading$: Observable<boolean> = this.componentStore.select(state => state.isVoucherDownloading);
     /** Voucher Download Error in PDF for preview downloading status Observable */
-    public isVoucherDownloadError$: Observable<boolean> = this.componentStorePreview.select(state => state.isVoucherDownloadError);
+    public isVoucherDownloadError$: Observable<boolean> = this.componentStore.select(state => state.isVoucherDownloadError);
     /** Get Vouchers is in progress Observable */
-    public getVouchersInProgress$: Observable<any> = this.componentStoreVoucher.getLastVouchersInProgress$;
+    public getVouchersInProgress$: Observable<any> = this.componentStore.getLastVouchersInProgress$;
     /** Holds Filtered Invoice List for invoice search */
     public filteredInvoiceList$: Subject<any[]> = new Subject<any[]>();
     /** This will hold local JSON data */
@@ -69,12 +65,10 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Hold day js reference */
     public dayjs = dayjs;
-    /** Holds page Size Options for pagination */
-    public pageSizeOptions: any[] = PAGE_SIZE_OPTIONS;
     /** Holds advance Filters keys */
     public advanceFilters: any = {
         page: 1,
-        count: this.pageSizeOptions[0],
+        count: PAGINATION_LIMIT,
         q: '',
         sort: '',
         sortBy: ''
@@ -88,7 +82,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     /** Hold invoice  type */
     public voucherType: any = '';
     /** Holds Total Results Count */
-    public totalResults: number = 0;
+    public totalPages: number = 0;
     /** Holds params value */
     public params: any = {};
     /** Holds true show Payment Details enable */
@@ -145,39 +139,13 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public isUpdateMode: boolean;
     /** True if round off will be applicable */
     public applyRoundOff: boolean = true;
-
-    //============================
-    /**  */
-    public showEditMode: boolean = false;
-    /**  */
-    public isSendSmsEnabled: boolean = false;
-    /**  */
+    /** Holds array of page numbers who date is present in list */
+    private pageNumberHistory: any[] = [];
+    /** Hold true when voucher is downloading */
     public isVoucherDownloading: boolean = false;
-    /**  */
-    public isVoucherDownloadError: boolean = false;
-    /**  */
-    public only4ProformaEstimates: boolean;
-    /**  */
-    public emailList: string = '';
-    /**  */
-    public moreLogsDisplayed: boolean = true;
-    /**  */
-    public voucherVersions: ProformaVersionItem[] = [];
-    /**  */
-    public filteredVoucherVersions: ProformaVersionItem[] = [];
-    /**  */
-    public invoiceDetailWrapperHeight: number;
-    /**  */
-    public invoiceDetailViewHeight: number;
-    /**  */
-    public invoiceImageSectionViewHeight: number;
-    /**  */
-    public isMobileView = false;
-    /**  */
-    public sessionKey$: Observable<string>;
-    /**  */
-    public companyName$: Observable<string>;
-    /**  */
+    /** Hold true when voucher is download failed */
+    public isVoucherDownloadError: boolean = false;;
+    /** Holds true when File Uploading is in progress */
     public isFileUploading: boolean = false;
     /** True, if attachment upload is to be displayed */
     public shouldShowUploadAttachment: boolean = false;
@@ -191,7 +159,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public sanitizedPdfFileUrl: SafeUrl = null;
     /** Attached PDF file url created with blob */
     public attachedPdfFileUrl: any = '';
-    /** PDF src */
+    /** Holds PDF src value  */
     public pdfFileURL: string = '';
     /** This will hold the attached file in Purchase Bill */
     private attachedAttachmentBlob: Blob;
@@ -199,31 +167,16 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public thermalTemplate: any;
     /** True if pdf is available */
     public isPdfAvailable: boolean = true;
-    /** False if template type is thermal */
-    public showDownloadButton: boolean = true;
-    /** To check is selected account/customer have advance receipts */
-    public isAccountHaveAdvanceReceipts: boolean = false;
-    /* This will hold revision history aside popup state */
-    public revisionHistoryAsideState: string = 'out';
-    /* This will hold company unique name */
-    public companyUniqueName: string = '';
-    /* This will hold PO numbers */
-    public purchaseOrderNumbers: any[] = [];
-    /* This will hold po unique name for preview */
-    public purchaseOrderPreviewUniqueName: string = '';
-    /* Send email request params object */
-    public sendEmailRequest: any = {};
     /* This will hold if pdf preview loaded */
     public pdfPreviewLoaded: boolean = false;
     /* This will hold if pdf preview has error */
     public pdfPreviewHasError: boolean = false;
-    // ============================
 
     constructor(
         private router: Router,
         public dialog: MatDialog,
-        private componentStoreVoucher: VoucherComponentStore,
-        private componentStorePreview: VoucherPreviewComponentStore,
+        private store: Store<AppState>,
+        private componentStore: VoucherComponentStore,
         private activatedRoute: ActivatedRoute,
         private vouchersUtilityService: VouchersUtilityService,
         private generalService: GeneralService,
@@ -231,11 +184,9 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         private domSanitizer: DomSanitizer,
         private commonService: CommonService,
         private thermalService: ThermalService,
-        private invoiceTemplatesService: InvoiceTemplatesService,
         private salesService: SalesService,
         private toaster: ToasterService,
         private changeDetection: ChangeDetectorRef,
-        private store: Store<AppState>,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private location: Location,
         private adjustmentUtilityService: AdjustmentUtilityService
@@ -255,37 +206,20 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     this.voucherType = params?.voucherType;
                     this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
                     this.showPaymentDetails = [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote].includes(this.voucherType);
-
-                    // const lastVouchers = this.vouchersUtilityService?.lastVouchers;
-                    // if (lastVouchers) {
-                        // this.invoiceList = lastVouchers;
-                        // this.filteredInvoiceList$.next(lastVouchers);
-                        // this.changeDetection.detectChanges();
-                    // }
-                    // if (this.invoiceList?.length) {
-                    //     this.setSelectedInvoice(params?.voucherUniqueName);
-                    // }
                     this.getCreatedTemplates();
                     this.subscribeStoreObservable();
                 }
                 if (params?.page) {
-                    this.advanceFilters.page = params.page;
-                    this.advanceFilters.count = params.count;
-
-                    // if (!this.invoiceList?.length) {
-                        this.getAllVouchers();
-                    // } else {
-                    //     this.setSelectedInvoice(params?.voucherUniqueName);
-                    // }
+                    this.advanceFilters.page = Number(params.page);
+                    this.getAllVouchers();
                 }
             }
         });
         this.isCompany = this.generalService.currentOrganizationType === OrganizationType.Company;
         this.search.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             if (search || search === '') {
-                // const filterSearchResult = this.invoiceList.filter(item => item?.voucherNumber.toLowerCase().includes(search.toLowerCase()));
-
                 // Reset Filter
+                this.pageNumberHistory = [1];
                 this.advanceFilters = {
                     page: 1,
                     count: this.advanceFilters.count,
@@ -334,7 +268,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     private getCreatedTemplates(): void {
-        this.componentStoreVoucher.getCreatedTemplates(this.invoiceType.isDebitNote || this.invoiceType.isCreditNote ? 'voucher' : 'invoice');
+        this.componentStore.getCreatedTemplates(this.invoiceType.isDebitNote || this.invoiceType.isCreditNote ? 'voucher' : 'invoice');
     }
 
     /**
@@ -391,25 +325,25 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VouchersPreviewComponent
      */
     private subscribeStoreObservable(): void {
-        merge(this.componentStoreVoucher.lastVouchers$, this.componentStoreVoucher.purchaseOrdersList$)
+        merge(this.componentStore.lastVouchers$, this.componentStore.purchaseOrdersList$)
             .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 this.handleGetAllVoucherResponse(response);
             });
 
-        merge(this.componentStoreVoucher.deleteVoucherIsSuccess$, this.componentStoreVoucher.convertToInvoiceIsSuccess$)
+        merge(this.componentStore.deleteVoucherIsSuccess$, this.componentStore.convertToInvoiceIsSuccess$)
             .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response) {
                     this.getAllVouchers();
                 }
             });
 
-        this.componentStoreVoucher.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
             }
         });
 
-        this.componentStorePreview.downloadVoucherResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.downloadVoucherResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.handleDownloadVoucherPdf(response);
             }
@@ -427,26 +361,26 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStoreVoucher.sendEmailIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.sendEmailIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.sendEmailModalDialogRef?.close();
             }
         });
 
-        this.componentStoreVoucher.actionVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.componentStore.actionVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.dialog.closeAll();
                 this.toaster.showSnackBar("success", (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) ? this.localeData?.status_updated : this.commonLocaleData?.app_messages?.invoice_updated);
             }
         });
 
-        this.componentStoreVoucher.convertToProformaIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.convertToProformaIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.toaster.showSnackBar("success", this.localeData?.proforma_generated);
             }
         });
 
-        this.componentStoreVoucher.createdTemplates$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.componentStore.createdTemplates$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 const thermalTemplate = response?.filter(response => response.templateType === 'thermal_template');
                 if (thermalTemplate?.length > 0) {
@@ -455,14 +389,14 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             }
         });
 
-        merge(this.componentStoreVoucher.deleteVoucherIsSuccess$, this.componentStoreVoucher.bulkUpdateVoucherIsSuccess$)
+        merge(this.componentStore.deleteVoucherIsSuccess$, this.componentStore.bulkUpdateVoucherIsSuccess$)
             .pipe(takeUntil(this.destroyed$)).subscribe((response) => {
                 if (response) {
                     this.backToOldLocation();
                 }
             });
 
-        this.componentStoreVoucher.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.componentStore.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.voucherDetails = response;
 
@@ -493,9 +427,30 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.componentStoreVoucher.adjustVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.componentStore.adjustVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.toaster.showSnackBar("success", this.localeData?.amount_adjusted);
+            }
+        });
+
+        this.componentStore.uploadFileIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isFileUploading = false;
+                if (response?.status === 'success') {
+                    const requestObject = {
+                        uniqueName: this.selectedInvoice?.uniqueName,
+                        attachedFiles: [response?.uniqueName]
+                    };
+                    // ======== move to component store ======= //
+                    // this.salesService.updateAttachmentInVoucher(requestObject).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                    //     if (res.status === "error") {
+                    //         this.toaster.showSnackBar('error', res?.message);
+                    //     }
+
+                    //     this.downloadVoucherPdf('base64');
+                    // }, () => this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong));
+                    this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
+                }
             }
         });
     }
@@ -599,14 +554,39 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     * @private
     * @memberof VouchersPreviewComponent
     */
-    private getAllVouchers(): void {
+    private getAllVouchers(isLoadMore: boolean = false, isScrollUp: boolean = false): void {
+        if (isLoadMore) {
+            if (this.totalPages >= this.advanceFilters.page) {
+                if (isScrollUp) {
+                    this.advanceFilters.page = this.pageNumberHistory[0] - 1;
+                } else {
+                    let lastIndex = this.pageNumberHistory.length - 1;
+                    if (this.pageNumberHistory[lastIndex] === this.advanceFilters.page) {
+                        this.advanceFilters.page = this.advanceFilters.page + 1;
+                    } else {
+                        this.advanceFilters.page = this.pageNumberHistory[lastIndex] + 1;
+                    }
+                }
+            } else {
+                return;
+            }
+            if (!isScrollUp && (this.totalPages < this.advanceFilters.page)) {
+                return
+            }
+
+            if (isScrollUp && this.advanceFilters.page === 0) {
+                this.advanceFilters.page = 1;
+                return
+            }
+        }
+
         if (this.voucherType?.length) {
             if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
-                this.componentStoreVoucher.getPreviousProformaEstimates({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
+                this.componentStore.getPreviousProformaEstimates({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
             } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
-                this.componentStoreVoucher.getPurchaseOrders({ request: cloneDeep(this.advanceFilters) });
+                this.componentStore.getPurchaseOrders({ request: cloneDeep(this.advanceFilters) });
             } else {
-                this.componentStoreVoucher.getPreviousVouchers({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
+                this.componentStore.getPreviousVouchers({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
             }
         }
     }
@@ -650,7 +630,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     poUniqueName: this.selectedInvoice?.uniqueName
                 };
             }
-            this.componentStorePreview.downloadVoucherPdf({ model: getRequest, type: "ALL", fileType: fileType, voucherType: this.voucherType });
+            this.componentStore.downloadVoucherPdf({ model: getRequest, type: "ALL", fileType: fileType, voucherType: this.voucherType });
         }
     }
 
@@ -685,7 +665,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             });
         }
 
-        this.componentStoreVoucher.adjustVoucherWithAdvanceReceipts({ adjustments: advanceReceiptAdjustmentData.adjustments, voucherUniqueName: this.voucherDetails?.uniqueName });
+        this.componentStore.adjustVoucherWithAdvanceReceipts({ adjustments: advanceReceiptAdjustmentData.adjustments, voucherUniqueName: this.voucherDetails?.uniqueName });
     }
 
     /**
@@ -753,7 +733,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     * @memberof VoucherListComponent
     */
     public showAdjustmentDialog(voucher: any): void {
-        this.componentStoreVoucher.getVoucherDetails({ isCopyVoucher: false, accountUniqueName: voucher?.account?.uniqueName, payload: { uniqueName: voucher?.uniqueName, voucherType: this.voucherType } });
+        this.componentStore.getVoucherDetails({ isCopyVoucher: false, accountUniqueName: voucher?.account?.uniqueName, payload: { uniqueName: voucher?.uniqueName, voucherType: this.voucherType } });
     }
 
     /**
@@ -782,9 +762,9 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     uniqueName: this.selectedInvoice?.uniqueName,
                     voucherType: this.voucherType
                 };
-                this.componentStoreVoucher.sendEmail({ request, model: { emailId: email } });
+                this.componentStore.sendEmail({ request, model: { emailId: email } });
             } else if ([VoucherTypeEnum.purchase, VoucherTypeEnum.sales].includes(this.voucherType)) {
-                this.componentStoreVoucher.sendVoucherOnEmail({
+                this.componentStore.sendVoucherOnEmail({
                     accountUniqueName: this.selectedInvoice?.account?.uniqueName,
                     payload: {
                         copyTypes: [],
@@ -805,7 +785,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     req.estimateNumber = this.selectedInvoice?.estimateNumber;
                 }
                 req.emailId = email
-                this.componentStoreVoucher.sendProformaEstimateOnEmail({ request: req, voucherType: this.voucherType });
+                this.componentStore.sendProformaEstimateOnEmail({ request: req, voucherType: this.voucherType });
             }
         }
     }
@@ -820,9 +800,18 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     private handleGetAllVoucherResponse(response: any): void {
         if (response && response.voucherType === this.voucherType) {
             const currentInvoiceList = [];
-            // this.filteredInvoiceList$.next([]);
-            // this.changeDetection.detectChanges();
-            this.totalResults = response?.totalItems;
+            if (this.pageNumberHistory[0] < response.page) {
+                this.pageNumberHistory.push(response.page);
+            } else {
+                this.pageNumberHistory.unshift(response.page);
+            }
+            this.totalPages = response?.totalPages;
+            // Handle page number is more than total pages in query params
+            if (this.totalPages < this.advanceFilters.page) {
+                this.advanceFilters.page = 1;
+                this.getAllVouchers()
+                return;
+            }
             response.items?.forEach((item: any, index: number) => {
                 item.index = index + 1;
 
@@ -849,15 +838,12 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 }
                 currentInvoiceList.push(item);
             });
-            this.invoiceList = currentInvoiceList;
-            console.log(this.invoiceList);
-            
-            this.invoiceList = [...this.invoiceList, ...currentInvoiceList];
-            this.filteredInvoiceList$.next(this.invoiceList);
+
+            this.invoiceList = this.advanceFilters.page === this.pageNumberHistory[this.pageNumberHistory.length - 1] ? [...this.invoiceList, ...currentInvoiceList] : [...currentInvoiceList, ...this.invoiceList];
             this.changeDetection.detectChanges();
-            
+
             if (this.invoiceList?.length && !this.selectedInvoice) {
-                    this.setSelectedInvoice(this.params.voucherUniqueName);
+                this.setSelectedInvoice(this.params.voucherUniqueName);
             }
         }
     }
@@ -885,7 +871,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         dialogRef.afterClosed().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response === this.commonLocaleData?.app_yes) {
                 if (this.voucherType === VoucherTypeEnum.purchase) {
-                    this.componentStoreVoucher.deleteVoucher({
+                    this.componentStore.deleteVoucher({
                         accountUniqueName: this.selectedInvoice?.account?.uniqueName, model: {
                             uniqueName: this.selectedInvoice?.uniqueName,
                             voucherType: this.voucherType
@@ -893,7 +879,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     });
                 } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
                     if (this.selectedInvoice?.uniqueName) {
-                        this.componentStoreVoucher.deleteSinglePOVoucher(this.selectedInvoice?.uniqueName);
+                        this.componentStore.deleteSinglePOVoucher(this.selectedInvoice?.uniqueName);
                     } else {
                         this.poBulkAction('delete');
                     }
@@ -906,13 +892,13 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     } else {
                         payload['proformaNumber'] = this.selectedInvoice?.proformaNumber;
                     }
-                    this.componentStoreVoucher.deleteEstimsteProformaVoucher({ payload: payload, voucherType: this.voucherType });
+                    this.componentStore.deleteEstimsteProformaVoucher({ payload: payload, voucherType: this.voucherType });
                 } else {
                     const payload = {
                         voucherUniqueNames: [this.selectedInvoice?.uniqueName],
                         voucherType: this.voucherType
                     };
-                    this.componentStoreVoucher.bulkUpdateInvoice({ payload: payload, actionType: 'delete' });
+                    this.componentStore.bulkUpdateInvoice({ payload: payload, actionType: 'delete' });
                 }
             }
         });
@@ -928,9 +914,9 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public poBulkAction(actionType: string, event?: any): void {
         if (actionType === 'delete' || actionType === 'expire') {
             const purchaseNumbers = [this.selectedInvoice?.voucherNumber];
-            this.componentStoreVoucher.purchaseOrderBulkUpdateAction({ payload: { purchaseNumbers }, actionType: actionType });
+            this.componentStore.purchaseOrderBulkUpdateAction({ payload: { purchaseNumbers }, actionType: actionType });
         } else if (event?.purchaseOrders) {
-            this.componentStoreVoucher.purchaseOrderBulkUpdateAction({ payload: event, actionType: actionType });
+            this.componentStore.purchaseOrderBulkUpdateAction({ payload: event, actionType: actionType });
         }
     }
 
@@ -948,27 +934,15 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 this.isFileUploading = true;
 
                 // =========== move in component store ========== //
-                this.commonService.uploadFile({ file: blob, fileName: file.name }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                    this.isFileUploading = false;
-                    if (response?.status === 'success') {
-                        const requestObject = {
-                            uniqueName: this.selectedInvoice?.uniqueName,
-                            attachedFiles: [response?.body?.uniqueName]
-                        };
-                        this.salesService.updateAttachmentInVoucher(requestObject).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                            if (res.status === "error") {
-                                this.toaster.showSnackBar('error', res?.message);
-                            }
+                this.componentStore.uploadFile({ postRequestObject: { file: blob, fileName: file.name } });
+                //         this.salesService.updateAttachmentInVoucher(requestObject).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                //             if (res.status === "error") {
+                //                 this.toaster.showSnackBar('error', res?.message);
+                //             }
 
-                            this.downloadVoucherPdf('base64');
-                        }, () => this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong));
+                //             this.downloadVoucherPdf('base64');
+                //         }, () => this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong));
 
-
-                        this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
-                    } else {
-                        this.toaster.showSnackBar("error", response.message);
-                    }
-                });
             });
         }
     }
@@ -1055,7 +1029,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      */
     public printThermal(): void {
         let hasPrinted = false;
-        this.componentStorePreview.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.componentStore.voucherDetails$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && this.selectedInvoice?.uniqueName === response.uniqueName) {
                 if (!hasPrinted) {
                     hasPrinted = true;
@@ -1096,14 +1070,12 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     public actionVoucher(action: string, event?: any): void {
         if (action) {
             if (action === 'open') {
-                console.log("Check", this.selectedInvoice?.vendor?.uniqueName);
-
-                this.componentStoreVoucher.poStatusUpdate({ accountUniqueName: this.selectedInvoice?.vendor?.uniqueName, payload: { action: action, purchaseNumber: this.selectedInvoice?.voucherNumber } });
+                this.componentStore.poStatusUpdate({ accountUniqueName: this.selectedInvoice?.vendor?.uniqueName, payload: { action: action, purchaseNumber: this.selectedInvoice?.voucherNumber } });
             } else {
-                this.componentStoreVoucher.actionVoucher({ voucherUniqueName: this.selectedInvoice?.uniqueName, payload: { action: action, voucherType: this.voucherType } });
+                this.componentStore.actionVoucher({ voucherUniqueName: this.selectedInvoice?.uniqueName, payload: { action: action, voucherType: this.voucherType } });
             }
         } else {
-            this.componentStoreVoucher.actionVoucher({ voucherUniqueName: event?.uniqueName, payload: event });
+            this.componentStore.actionVoucher({ voucherUniqueName: event?.uniqueName, payload: event });
         }
     }
 
@@ -1136,7 +1108,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         } else {
             model['proformaNumber'] = this.selectedInvoice?.voucherNumber;
         }
-        this.componentStoreVoucher.actionEstimateProforma({
+        this.componentStore.actionEstimateProforma({
             request: model,
             voucherType: this.selectedInvoice?.voucherType ?? this.voucherType
         });
@@ -1158,7 +1130,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             model['proformaNumber'] = this.selectedInvoice?.voucherNumber;
         }
 
-        this.componentStoreVoucher.convertToInvoice({
+        this.componentStore.convertToInvoice({
             request: model,
             voucherType: this.voucherType
         });
@@ -1170,7 +1142,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     public convertToProforma(): void {
-        this.componentStoreVoucher.convertToProforma({
+        this.componentStore.convertToProforma({
             request: {
                 accountUniqueName: this.selectedInvoice?.customerUniqueName,
                 estimateNumber: this.selectedInvoice?.voucherNumber,
