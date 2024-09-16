@@ -228,16 +228,16 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
      * @param {string} currencySymbol
      * @memberof PaymentDialogComponent
      */
-    private assignAmount(amount: number, currencySymbol: string, indexValue: number = 0): void {
+    private assignAmount(amount: number, currencySymbol: string, depositIndex: number = 0): void {
         this.paymentForm.get('deposits')['controls']?.forEach((control: any, index: number) => {
-            if (control.get('amount').value && indexValue !== index) {
+            if (control.get('amount').value && depositIndex !== index) {
                 amount -= Number(control.get('amount').value);
             }
         });
 
         amount = amount > 0 ? amount : 0;
         let deposits = this.paymentForm?.get('deposits')['controls'] as FormArray;
-        let currentDepositFormGroup = deposits.at(indexValue) as FormGroup;
+        let currentDepositFormGroup = deposits.at(depositIndex) as FormGroup;
         currentDepositFormGroup.get('amount')?.patchValue(amount);
         this.amountCurrency = currencySymbol;
     }
@@ -280,13 +280,13 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
         }
 
         if (this.voucherDetails?.account?.currency?.code === this.selectedPaymentMode?.additional?.currency) {
-            newFormObj.deposits.forEach((deposit) => {
-                deposit.amountForAccount = deposit.amount;
+            newFormObj?.deposits?.forEach((deposit: any) => {
+                deposit.amountForAccount = deposit?.amount;
                 delete deposit.amount;
             });
         } else {
-            newFormObj.deposits.forEach((deposit) => {
-                deposit.amountForCompany = deposit.amount;
+            newFormObj?.deposits.forEach((deposit: any) => {
+                deposit.amountForCompany = deposit?.amount;
                 delete deposit.amount;
             });
         }
