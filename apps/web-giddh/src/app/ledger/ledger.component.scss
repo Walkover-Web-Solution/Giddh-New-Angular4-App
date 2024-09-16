@@ -826,7 +826,7 @@ input#ledger-search {
 }
 .ledger-head {
     position: sticky;
-    top: 55px;
+    top: 0px;
     z-index: 1;
     background-color: var(--color-common-primary-background-for-all-components);
     border-bottom: 1px solid var(--color-table-primary-header-bar-border);
