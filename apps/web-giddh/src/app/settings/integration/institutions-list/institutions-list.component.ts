@@ -70,7 +70,7 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
 
         this.createEndUserAgreementSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.openWindow(response.link);
+                this.openWindow('http://localhost:3000/gocardless-callback');
                 this.dialogRef.close(response?.reference);
                 this.changeDetection.detectChanges();
             }

@@ -38,6 +38,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatButtonModule } from '@angular/material/button';
 import { FormFieldsModule } from './theme/form-fields/form-fields.module';
 import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.module';
+import { GocardlessCallBackModule } from './gocardless-callback /gocardless-callback.module';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -77,6 +78,7 @@ if (!environment.production) {
         ReactiveFormsModule,
         FormFieldsModule,
         VerifySubscriptionTransferOwnershipModule,
+        GocardlessCallBackModule,
         HttpClientModule,
         ModalModule.forRoot(),
         ServiceModule.forRoot(),
