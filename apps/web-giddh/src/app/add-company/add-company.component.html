@@ -271,15 +271,19 @@
                                     (selectedOption)="selectBusinessNature($event)"
                                 >
                                 </dropdown-field>
-                                <input-field
+                                <div
+                                    class="mr-t15"
                                     *ngIf="secondStepForm.controls['businessNature']?.value === 'Other'"
-                                    [name]="'other'"
-                                    [placeholder]="localeData?.enter_business_nature"
-                                    [type]="'text'"
-                                    formControlName="otherBusinessNature"
-                                    [label]="localeData?.other_business_nature"
                                 >
-                                </input-field>
+                                    <input-field
+                                        [name]="'other'"
+                                        [placeholder]="localeData?.enter_business_nature"
+                                        [type]="'text'"
+                                        formControlName="otherBusinessNature"
+                                        [label]="localeData?.other_business_nature"
+                                    >
+                                    </input-field>
+                                </div>
                             </div>
                             <ng-container
                                 *ngIf="secondStepForm.controls['businessType']?.value === businessTypes.Registered"
