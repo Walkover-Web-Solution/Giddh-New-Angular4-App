@@ -27,6 +27,7 @@ import { Location } from "@angular/common";
 import { NewConfirmationModalComponent } from "../../theme/new-confirmation-modal/confirmation-modal.component";
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-models/AdvanceReceiptsAdjust";
 import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustment/services/adjustment-utility.service";
+import { DownloadVoucherComponent } from "../download-voucher/download-voucher.component";
 
 @Component({
     selector: "preview",
@@ -422,7 +423,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 this.isUpdateMode = (response?.body?.adjustments?.length) ? true : false;
 
                 this.dialog.open(this.adjustPaymentDialog, {
-                    panelClass: ['mat-dialog-md']
+                    panelClass: "mat-dialog-md"
                 });
             }
         });
@@ -436,21 +437,17 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         this.componentStore.uploadFileIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isFileUploading = false;
-                if (response?.status === 'success') {
-                    const requestObject = {
-                        uniqueName: this.selectedInvoice?.uniqueName,
-                        attachedFiles: [response?.uniqueName]
-                    };
-                    // ======== move to component store ======= //
-                    // this.salesService.updateAttachmentInVoucher(requestObject).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                    //     if (res.status === "error") {
-                    //         this.toaster.showSnackBar('error', res?.message);
-                    //     }
+                const requestObject = {
+                    uniqueName: this.selectedInvoice?.uniqueName,
+                    attachedFiles: [response?.uniqueName]
+                };
+                this.componentStore.updateAttachmentInVoucher({ postRequestObject: requestObject });
+            }
+        });
 
-                    //     this.downloadVoucherPdf('base64');
-                    // }, () => this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong));
-                    this.toaster.showSnackBar("success", this.localeData?.file_uploaded);
-                }
+        this.componentStore.updateAttachmentInVoucherIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.downloadVoucherPdf('base64');
             }
         });
     }
@@ -630,7 +627,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                     poUniqueName: this.selectedInvoice?.uniqueName
                 };
             }
-            this.componentStore.downloadVoucherPdf({ model: getRequest, type: "ALL", fileType: fileType, voucherType: this.voucherType });
+            this.componentStore.downloadVoucherPdf({ model: getRequest, type: "ALL", fileType: fileType, voucherType: this.voucherType, isDownloadFromDialog: false });
         }
     }
 
@@ -675,7 +672,24 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
      */
     public adjustPayment(): void {
         this.dialog.open(this.adjustPaymentDialog, {
-            panelClass: ['mat-dialog-md']
+            panelClass: "mat-dialog-md"
+        });
+    }
+
+    /**
+     * Open Download Voucher Dailog
+     *
+     * @memberof VouchersPreviewComponent
+     */
+    public openDownloadVoucher(): void {
+        this.dialog.open(DownloadVoucherComponent, {
+            data: {
+                localeData: this.localeData,
+                commonLocaleData: this.commonLocaleData,
+                selectedItem: this.selectedInvoice,
+                voucherType: this.voucherType
+            },
+            panelClass: "mat-dialog-md"
         });
     }
 
@@ -722,7 +736,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
     */
     public showPaymentDialog(): void {
         this.dialog.open(this.paymentDialog, {
-            panelClass: ['mat-dialog-md']
+            panelClass: "mat-dialog-md"
         });
     }
 
@@ -862,7 +876,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         const configuration = this.generalService.getVoucherDeleteConfiguration(confirmationMessages[this.voucherType]?.title, confirmationMessages[this.voucherType]?.message1, confirmationMessages[this.voucherType]?.message2, this.commonLocaleData);
 
         const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            panelClass: ['mat-dialog-md'],
+            panelClass: "mat-dialog-md",
             data: {
                 configuration: configuration
             }
@@ -932,17 +946,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
 
             this.generalService.getSelectedFile(file, (blob, file) => {
                 this.isFileUploading = true;
-
-                // =========== move in component store ========== //
                 this.componentStore.uploadFile({ postRequestObject: { file: blob, fileName: file.name } });
-                //         this.salesService.updateAttachmentInVoucher(requestObject).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                //             if (res.status === "error") {
-                //                 this.toaster.showSnackBar('error', res?.message);
-                //             }
-
-                //             this.downloadVoucherPdf('base64');
-                //         }, () => this.toaster.errorToast(this.commonLocaleData?.app_something_went_wrong));
-
             });
         }
     }
@@ -966,8 +970,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
             }
         } else if (this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote) {
             if (this.selectedInvoice?.hasAttachment) {
-                // this.downloadVoucherModal?.show();
-                // "download-voucher" this componnent is missing in design
+                this.openDownloadVoucher();
             } else {
                 if (this.selectedInvoice) {
                     return saveAs(this.selectedInvoice.blob, `${this.selectedInvoice.voucherNumber}.pdf`);
@@ -981,12 +984,10 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
                 let voucherNumber = (this.selectedInvoice?.voucherNumber) ? this.selectedInvoice?.voucherNumber : this.commonLocaleData?.app_not_available;
                 saveAs(this.attachedDocumentBlob, voucherNumber + '.pdf');
             } else {
-                // this.downloadVoucherModal?.show();
-                // "download-voucher" this componnent is missing in design
+                this.openDownloadVoucher();
             }
         } else {
-            // this.downloadVoucherModal?.show();
-            // "download-voucher" this componnent is missing in design
+            this.openDownloadVoucher();
         }
     }
 

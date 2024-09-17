@@ -875,8 +875,7 @@ export class VoucherService {
         if (postRequest.entries) {
             formData.append('entries', postRequest.entries);
         }
-
-        if (addVoucherVersion && this.generalService.voucherApiVersion === 2) {
+        if (addVoucherVersion) {
             url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
         }
 
@@ -884,5 +883,19 @@ export class VoucherService {
             let data: BaseResponse<any, string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e)));
+    }
+
+    /**
+     * Updates attachment in voucher
+     *
+     * @param {*} postRequestObject
+     * @return {*}  {Observable<BaseResponse<any, any>>}
+     * @memberof VoucherService
+     */
+    public updateAttachmentInVoucher(postRequestObject: any): Observable<BaseResponse<any, any>> {
+        let url: string = `${this.config.apiUrl}${SALES_API_V4.UPDATE_ATTACHMENT?.replace(':companyUniqueName', this.generalService.companyUniqueName)}`;
+            url = this.generalService.addVoucherVersion(url, this.generalService.voucherApiVersion);
+        return this.http.patch(url, postRequestObject).pipe(
+            catchError((e) => this.errorHandler.HandleCatch<any, any>(e, postRequestObject)));
     }
 }

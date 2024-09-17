@@ -84,6 +84,7 @@ import { InvoiceSettingModule } from "../invoice/settings/invoice-setting.module
 import { InvoiceGenerateModule } from "../invoice/generate/invoice-generate.module";
 import { InvoiceTemplatesModule } from "../invoice/templates/invoice.templates.module";
 import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
+import { DownloadVoucherComponent } from "./download-voucher/download-voucher.component";
 
 @NgModule({
     declarations: [
@@ -106,7 +107,8 @@ import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.modu
         DesignFilterComponent,
         ContentFilterComponent,
         ConvertBillDialogComponent,
-        FullAddressComponent
+        FullAddressComponent,
+        DownloadVoucherComponent
     ],
     imports: [
         CommonModule,

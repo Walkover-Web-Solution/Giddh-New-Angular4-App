@@ -1643,6 +1643,14 @@ input {
     margin-bottom: 105px;
 }
 
+giddh-page-loader {
+    &.unset-loader-margin {
+        .loader-main {
+            margin: 0 !important;
+        }
+    }
+}
+
 .dropdown-arrow {
     position: relative;
 }
