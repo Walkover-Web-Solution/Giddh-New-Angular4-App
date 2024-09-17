@@ -189,6 +189,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public convertToInvoiceIsSuccess$ = this.select((state) => state.convertToInvoice);
     public convertToProformaIsSuccess$ = this.select((state) => state.convertToProforma);
     public isVoucherDownloading$ = this.select((state) => state.isVoucherDownloading);
+    public isVoucherDownloadError$ = this.select((state) => state.isVoucherDownloadError);
     public downloadVoucherResponse$ = this.select((state) => state.downloadVoucherResponse);
     public isVoucherFileDownloading$ = this.select((state) => state.isVoucherFileDownloading);
     public downloadVoucherFileResponse$ = this.select((state) => state.downloadVoucherFileResponse);
@@ -1445,11 +1446,11 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
-    readonly poStatusUpdate = this.effect((data: Observable<{ accountUniqueName: string, payload: any }>) => {
+    readonly purchaseOrderStatusUpdate = this.effect((data: Observable<{ accountUniqueName: string, payload: any }>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ actionVoucherInProgress: true, actionVoucherIsSuccess: false });
-                return this.voucherService.poStatusUpdate(req.accountUniqueName, req.payload).pipe(
+                return this.voucherService.purchaseOrderStatusUpdate(req.accountUniqueName, req.payload).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
