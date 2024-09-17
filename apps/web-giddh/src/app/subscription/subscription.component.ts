@@ -224,6 +224,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
                     session.sessionDuration = `${duration.days()}/${duration.hours()}/${duration.minutes()}/${duration.seconds()}`;
                     return session;
                 });
+                this.changeDetectionRef.detectChanges();
             }
         });
 

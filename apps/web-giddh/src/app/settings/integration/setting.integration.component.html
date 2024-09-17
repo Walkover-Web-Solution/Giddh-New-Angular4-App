@@ -431,7 +431,7 @@
                             </button>
                         </div>
                     </ng-container> -->
-                    <ng-container *ngIf="isGocardlessSupportedCountry">
+                    <ng-container *ngIf="isGocardlessSupportedCountry && hasIntegrationScope">
                         <div class="form-group">
                             <button
                                 aria-label="connect bank"
@@ -443,6 +443,9 @@
                                 {{ localeData?.payment?.connect_bank }}
                             </button>
                         </div>
+                    </ng-container>
+                    <ng-container *ngIf="!hasIntegrationScope">
+                        <h3 class="mb-1">{{localeData?.payment?.permission_message}}</h3>
                     </ng-container>
                     <div class="connected-accounts">
                         <b class="font-15" *ngIf="!isLoading && connectedBankAccounts?.length > 0">{{
@@ -475,6 +478,7 @@
                                             >{{ bankAccount?.account?.name }}</span
                                         >
                                         <dropdown-field
+                                            [readonly]="!hasIntegrationScope"
                                             [label]="localeData?.payment?.linked_account"
                                             [defaultValue]="bankAccount?.account?.name"
                                             *ngIf="!isIciciBankSupportedCountry"
@@ -490,13 +494,13 @@
                                     </div>
                                     <span class="mr-l1 action-div" *ngIf="!isIciciBankSupportedCountry">
                                         <a
-                                            *ngIf="!isGocardlessSupportedCountry"
+                                            *ngIf="!isGocardlessSupportedCountry && hasIntegrationScope"
                                             href="javascript:;"
                                             class="icon-edit-pencil"
                                             (click)="openEditAccountModal(bankAccount)"
                                         ></a>
                                         <i
-                                            *ngIf="isGocardlessSupportedCountry"
+                                            *ngIf="isGocardlessSupportedCountry && hasIntegrationScope"
                                             (click)="deleteBankAccount(bankAccount)"
                                             class="icon-trash ml-1 mr-r2 cursor-pointer"
                                         ></i>
