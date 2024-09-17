@@ -307,6 +307,12 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
 
+        this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
+            if (res) {
+                //This is not using no due to gocardless
+                // this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
+            }
+        });
 
         this.amazonSellerForm = this._fb.group({
             sellers: this._fb.array([
@@ -355,8 +361,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 }
             }
         });
-
-
 
         if (this.selectedCompanyUniqueName) {
             this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
