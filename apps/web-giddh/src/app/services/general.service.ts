@@ -1699,6 +1699,19 @@ export class GeneralService {
     }
 
     /**
+    * Check if a given country name is included in the array of supported countries for Gocardless, and return a boolean value
+    * indicating whether the country is supported or not.
+    *
+    * @param {string} countryName
+    * @returns {boolean}
+    * @memberof GeneralService
+    */
+    public checkCompanySupportGocardless(countryName: string): boolean {
+        const gocardlessSupportedCountryList = ['UNITED KINGDOM'];
+        return gocardlessSupportedCountryList.includes(countryName.toUpperCase());
+    }
+
+    /**
      * This will return the system current user time zone
      *
      * @return {*}
@@ -2044,6 +2057,34 @@ export class GeneralService {
     }
 
     /**
+     *  Delete sessions confirmation dialog
+     *
+     * @param confirmationMessage
+     * @param commonLocaleData
+     * @returns
+     */
+    public deleteConfiguration(confirmationMessage: any, commonLocaleData: any): ConfirmationModalConfiguration {
+        const buttons: Array<ConfirmationModalButton> = [{
+            text: commonLocaleData?.app_yes,
+            color: 'primary'
+        },
+        {
+            text: commonLocaleData?.app_no
+        }];
+        const headerText: string = commonLocaleData?.app_confirmation;
+        const headerCssClass: string = 'd-inline-block mr-1';
+        const messageCssClass: string = 'mr-b1';
+        const messageText: string = confirmationMessage;
+        return {
+            buttons,
+            headerText,
+            headerCssClass,
+            messageCssClass,
+            messageText
+        };
+    }
+
+    /**
      * This will use for confirmation delete vocher
      *
      * @param {string} headerText
@@ -2075,3 +2116,4 @@ export class GeneralService {
         };
     }
 }
+
