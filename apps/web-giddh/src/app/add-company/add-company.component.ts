@@ -610,7 +610,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             businessType: [''],
             businessNature: [''],
             gstin: [''],
-            otherBusinessNature:[''],
+            otherBusinessNature: [''],
             state: [''],
             county: [''],
             taxes: null,
@@ -1161,7 +1161,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.socketCompanyRequest.utm_campaign = this.generalService.getUtmParameter('utm_campaign');
         this.socketCompanyRequest.utm_term = this.generalService.getUtmParameter('utm_term');
         this.socketCompanyRequest.utm_content = this.generalService.getUtmParameter('utm_content');
-        this.socketCompanyRequest.BusinessNature = this.secondStepForm.controls['otherBusinessNature'].value;
+        if (this.secondStepForm.value.businessNature === "Other") {
+            this.socketCompanyRequest.BusinessNature = this.secondStepForm.controls['otherBusinessNature'].value;
+        }
         this.companyService.SocketCreateCompany(this.socketCompanyRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => { });
         this.generalService.removeUtmParameters();
     }
