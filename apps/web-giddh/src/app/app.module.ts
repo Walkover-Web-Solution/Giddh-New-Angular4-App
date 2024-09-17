@@ -110,7 +110,9 @@ if (!environment.production) {
         WindowRef,
         {
             provide: ServiceConfig,
-            useValue: { apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl, _ }
+            useValue: localStorage.getItem('Country-Region') === 'GB'
+                ? { apiUrl: Configuration.DevApiUrl, appUrl: Configuration.DevApiUrl, _ }
+                : { apiUrl: Configuration.ApiUrl, appUrl: Configuration.ApiUrl, _ }
         },
         {
             provide: HTTP_INTERCEPTORS,

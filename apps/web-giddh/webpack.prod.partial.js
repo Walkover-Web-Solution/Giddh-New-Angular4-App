@@ -11,6 +11,7 @@ module.exports = {
             'errlyticsKey': JSON.stringify('eTrTpSiedQC4tLUYVDup3RJpc_wFL2QhCaIc0vzpsQA'),
             'AppUrl': JSON.stringify('https://books.giddh.com/'),
             'ApiUrl': JSON.stringify('https://api.giddh.com/'),
+            'DevApiUrl': JSON.stringify('http://giddh-api-prod-g.eu-west-2.elasticbeanstalk.com/'),
             'PORTAL_URL': JSON.stringify('https://portal.giddh.com/'),
             'APP_FOLDER': JSON.stringify(''),
             'PRODUCTION_ENV': JSON.stringify(true),
@@ -38,6 +39,7 @@ module.exports = {
             'process.env.errlyticsKey': JSON.stringify('eTrTpSiedQC4tLUYVDup3RJpc_wFL2QhCaIc0vzpsQA'),
             'process.env.AppUrl': JSON.stringify('https://books.giddh.com/'),
             'process.env.ApiUrl': JSON.stringify('https://api.giddh.com/'),
+            'process.env.DevApiUrl': JSON.stringify('http://giddh-api-prod-g.eu-west-2.elasticbeanstalk.com/'),
             'process.PORTAL_URL': JSON.stringify('https://portal.giddh.com/'),
             'process.env.APP_FOLDER': JSON.stringify('')
         }),
