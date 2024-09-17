@@ -54,54 +54,60 @@
             <div class="mat-grid-wrapper">
                 <div class="mat-list-wrap">
                     <mat-list>
-                        <cdk-virtual-scroll-viewport [itemSize]="62" class="list-viewport">
-                            <ng-container
-                                *cdkVirtualFor="
-                                    let item of filteredInvoiceList$ | async;
-                                    let i = index;
-                                    let lastItem = last
-                                "
-                            >
-                                <mat-list-item
-                                    class="single-invoice-detail cursor-pointer"
-                                    [ngClass]="{
-                                        'active': item?.uniqueName === selectedInvoice?.uniqueName,
-                                        'border-bottom': !lastItem
-                                    }"
-                                    (click)="setSelectedInvoice(item?.uniqueName)"
+                        <app-cdk-scroll
+                            [scrollTriggerDistance]="30"
+                            (fetchPreviousPage)="getAllVouchers(true, true)"
+                            (fetchNextPage)="getAllVouchers(true)"
+                            [scrollableElementId]="'invoiceList'"
+                        >
+                            <cdk-virtual-scroll-viewport [itemSize]="62" class="list-viewport" [id]="'invoiceList'">
+                                <ng-container
+                                    *cdkVirtualFor="let item of invoiceList; let i = index; let lastItem = last"
                                 >
-                                    <div class="d-flex justify-content-between align-items-center column-gap5">
-                                        <div>
-                                            <span class="font-12 text-blue">
-                                                {{
-                                                    item.voucherNumber
-                                                        ? item.voucherNumber
-                                                        : commonLocaleData?.app_not_available
-                                                }}
-                                            </span>
-                                            <span class="font-12 light-gray"> | {{ item?.voucherDate }} </span>
-                                            <p class="black-color">
-                                                {{
-                                                    item?.account?.customerName ||
-                                                        item?.account?.name ||
-                                                        item?.vendor?.name
-                                                }}
-                                            </p>
+                                    <mat-list-item
+                                        class="single-invoice-detail cursor-pointer"
+                                        [ngClass]="{
+                                            'active': item?.uniqueName === selectedInvoice?.uniqueName,
+                                            'border-bottom': !lastItem
+                                        }"
+                                        (click)="setSelectedInvoice(item?.uniqueName)"
+                                    >
+                                        <div class="d-flex justify-content-between align-items-center column-gap5">
+                                            <div>
+                                                <span class="font-12 text-blue">
+                                                    {{
+                                                        item.voucherNumber
+                                                            ? item.voucherNumber
+                                                            : commonLocaleData?.app_not_available
+                                                    }}
+                                                </span>
+                                                <span class="font-12 light-gray"> | {{ item?.voucherDate }} </span>
+                                                <p class="black-color">
+                                                    {{
+                                                        item?.account?.customerName ||
+                                                            item?.account?.name ||
+                                                            item?.vendor?.name
+                                                    }}
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <span class="black-color">
+                                                    <amount-field
+                                                        [amount]="item?.grandTotal?.amountForAccount"
+                                                        [currencySymbol]="item?.account?.currency?.symbol"
+                                                        [currencyCode]="item?.account?.currency?.code"
+                                                    >
+                                                    </amount-field>
+                                                </span>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <span class="black-color">
-                                                <amount-field
-                                                    [amount]="item?.grandTotal?.amountForAccount"
-                                                    [currencySymbol]="item?.account?.currency?.symbol"
-                                                    [currencyCode]="item?.account?.currency?.code"
-                                                >
-                                                </amount-field>
-                                            </span>
-                                        </div>
-                                    </div>
+                                    </mat-list-item>
+                                </ng-container>
+                                <mat-list-item *ngIf="invoiceList?.length === 0">
+                                    <p class="text-center light-gray">{{ commonLocaleData?.app_no_data_found }}</p>
                                 </mat-list-item>
-                            </ng-container>
-                        </cdk-virtual-scroll-viewport>
+                            </cdk-virtual-scroll-viewport>
+                        </app-cdk-scroll>
                     </mat-list>
                 </div>
             </div>
@@ -151,7 +157,9 @@
                                 <i class="fa fa-print"></i>
                             </button>
                             <button
-                                *ngIf="thermalTemplate?.templateType === 'thermal_template' && !invoiceType.isPurchaseOrder"
+                                *ngIf="
+                                    thermalTemplate?.templateType === 'thermal_template' && !invoiceType.isPurchaseOrder
+                                "
                                 mat-stroked-button
                                 color="primary"
                                 class="mat-icon-sm-btn"
@@ -167,6 +175,7 @@
                                 class="mat-icon-sm-btn"
                                 [matTooltip]="commonLocaleData?.app_download_pdf"
                                 [matTooltipPosition]="'above'"
+                                (click)="downloadPdf()"
                             >
                                 <i class="icon-download-circle"></i>
                             </button>
@@ -177,28 +186,82 @@
                                 class="mat-icon-sm-btn"
                                 [matTooltip]="commonLocaleData?.app_delete"
                                 [matTooltipPosition]="'above'"
+                                (click)="deleteVoucherDialog()"
                             >
                                 <i class="icon-trash"></i>
                             </button>
                         </div>
-                        <button mat-stroked-button color="primary" [matMenuTriggerFor]="changeStatus"  *ngIf="!isCompany">
+                        <button
+                            mat-stroked-button
+                            color="primary"
+                            [matMenuTriggerFor]="changeStatus"
+                            *ngIf="!isCompany"
+                        >
                             <span>Change Status</span>
                             <i class="icon-arrow-down icon-font-11 ml-2"></i>
                         </button>
                         <mat-menu #changeStatus="matMenu">
-                            <button mat-menu-item (click)="onPerformAction()">
+                            <button
+                                mat-menu-item
+                                (click)="showPaymentDialog()"
+                                *ngIf="['sales', 'purchase', 'credit note', 'debit note'].includes(voucherType)"
+                            >
                                 {{ commonLocaleData?.app_payment_status?.paid }}
                             </button>
-                            <button mat-menu-item (click)="adjustPayment()">
-                                commonLocaleData?.app_payment_status?.adjust_amount
+                            <ng-container *ngIf="voucherType === 'sales'">
+                                <button mat-menu-item (click)="adjustPayment()">
+                                    {{ commonLocaleData?.app_payment_status?.adjust_amount }}
+                                </button>
+                                <button mat-menu-item (click)="actionVoucher('unpaid')">
+                                    {{ commonLocaleData?.app_payment_status?.unpaid }}
+                                </button>
+                                <button mat-menu-item (click)="actionVoucher('hold')">
+                                    {{ commonLocaleData?.app_payment_status?.hold }}
+                                </button>
+                            </ng-container>
+                            <button
+                                mat-menu-item
+                                (click)="actionVoucher('cancel')"
+                                *ngIf="['sales', 'purchase-order', 'credit note', 'debit note'].includes(voucherType)"
+                            >
+                                {{ commonLocaleData?.app_payment_status?.cancel }}
                             </button>
-                            <button mat-menu-item>{{ commonLocaleData?.app_payment_status?.unpaid }}</button>
-                            <button mat-menu-item>{{ commonLocaleData?.app_payment_status?.hold }}</button>
-                            <button mat-menu-item>{{ commonLocaleData?.app_payment_status?.cancel }}</button>
+                            <ng-container *ngIf="['purchase', 'purchase-order'].includes(voucherType)">
+                                <button mat-menu-item (click)="copyInvoice()">{{ commonLocaleData?.app_copy }}</button>
+                                <button mat-menu-item (click)="deleteVoucherDialog()">
+                                    {{ commonLocaleData?.app_delete }}
+                                </button>
+                            </ng-container>
+                            <button
+                                mat-menu-item
+                                *ngIf="voucherType === 'purchase-order'"
+                                (click)="actionVoucher('open')"
+                            >
+                                {{ commonLocaleData?.app_payment_status?.open }}
+                            </button>
+
+                            <ng-container *ngIf="['estimates', 'proformas'].includes(voucherType)">
+                                <button mat-menu-item (click)="actionEstimateProforma('accepted')">
+                                    {{ localeData?.accepted }}
+                                </button>
+                                <button mat-menu-item (click)="actionEstimateProforma('decline')">
+                                    {{ localeData?.declined }}
+                                </button>
+                                <button mat-menu-item (click)="convertToProforma()" *ngIf="voucherType === 'estimates'">
+                                    {{ localeData?.convert_proforma }}
+                                </button>
+                                <button mat-menu-item (click)="convertToInvoice()">
+                                    {{ localeData?.convert_invoice }}
+                                </button>
+                                <button mat-menu-item (click)="actionEstimateProforma('expired')">
+                                    {{ localeData?.expired }}
+                                </button>
+                            </ng-container>
                         </mat-menu>
-                        <button mat-stroked-button  *ngIf="!isCompany">{{ commonLocaleData?.app_cancel }}</button>
-                        <button mat-stroked-button>
-                            <!-- <i class="icon-cross"></i> -->
+                        <span *ngIf="selectedInvoice?.action" class="invoice-status text-capitalize">{{
+                            selectedInvoice.action
+                        }}</span>
+                        <button mat-stroked-button (click)="backToOldLocation()">
                             {{ commonLocaleData?.app_back }}
                         </button>
                     </div>
@@ -244,34 +307,55 @@
                        [secondaryMessage]="' '"
                    ></no-data> -->
             </section>
-            <giddh-page-loader *ngIf="isPdfAvailable && !sanitizedPdfFileUrl && (isVoucherDownloading$ | async)"></giddh-page-loader>
+            <giddh-page-loader
+                *ngIf="isPdfAvailable && !sanitizedPdfFileUrl && (isVoucherDownloading$ | async)"
+            ></giddh-page-loader>
             <ng-container *ngIf="!(isVoucherDownloading$ | async)">
                 <div class="pdf-preview" *ngIf="voucherType === 'purchase'">
                     <div class="position-relative">
-                        <h5 class="pd-l15 pd-t1 pd-b1">
+                        <h5 class="pd-l15 py-2">
                             <strong class="text-blue">{{ localeData?.uploaded_purchase_bill }}</strong>
                         </h5>
                         <giddh-page-loader *ngIf="isFileUploading"></giddh-page-loader>
                         <div #attachedDocumentPreview>
-                            <iframe #pdfContainer *ngIf="attachedPdfFileUrl" width="100%" height="100%" [src]="attachedPdfFileUrl" title="PDF"></iframe>
+                            <iframe
+                                #pdfContainer
+                                *ngIf="attachedPdfFileUrl"
+                                width="100%"
+                                height="100%"
+                                [src]="attachedPdfFileUrl"
+                                title="PDF"
+                            ></iframe>
                         </div>
                         <div
-                            *ngIf="!shouldShowUploadAttachment && voucherType === 'purchase' && attachedDocumentType?.type === 'image'"
+                            *ngIf="
+                                !shouldShowUploadAttachment &&
+                                voucherType === 'purchase' &&
+                                attachedDocumentType?.type === 'image'
+                            "
                             class="img-expand-collapse"
                         >
-                            <img class="image-preview img-expand w-100" [src]="imagePreviewSource" />
+                            <img class="image-preview w-100" [src]="imagePreviewSource" />
                         </div>
-    
-                        <div *ngIf="isVoucherDownloadError && (!(isVoucherDownloading$ | async) || !isFileUploading)" class="error" >
+
+                        <div
+                            *ngIf="isVoucherDownloadError && (!(isVoucherDownloading$ | async) || !isFileUploading)"
+                            class="error"
+                        >
                             <span>{{ localeData?.invoice_preview_unavailable }}</span>
                         </div>
-                        <div class="preview-not-supported-attachment" *ngIf="attachedDocumentType?.type === 'unsupported'">
+                        <div
+                            *ngIf="attachedDocumentType?.type === 'unsupported'"
+                        >
                             <p>{{ attachedDocumentType?.name }}</p>
                             <p>{{ commonLocaleData?.app_preview_formats }}</p>
                         </div>
-    
-                        <div *ngIf="shouldShowUploadAttachment && !isCompany && !(attachedPdfFileUrl || imagePreviewSource)"
-                            class="upload-excel max-width-500 center-block box dashed-border"
+
+                        <div
+                            *ngIf="
+                                shouldShowUploadAttachment && !isCompany && !(attachedPdfFileUrl || imagePreviewSource)
+                            "
+                            class="upload-excel max-width-500 dashed-border"
                         >
                             <input
                                 type="file"
@@ -329,7 +413,19 @@
 
 <!-- adjust-payment-dialog -->
 <ng-template #adjustPaymentDialog>
-    <app-adjust-payment-dialog></app-adjust-payment-dialog>
+    <voucher-adjustments
+        [isUpdateMode]="isUpdateMode"
+        [depositAmount]="depositAmount"
+        [account]="voucherDetails?.account"
+        [voucherDetails]="voucherDetails"
+        [voucherTotals]="voucherTotals"
+        [advanceReceiptAdjustmentUpdatedData]="advanceReceiptAdjustmentData"
+        (closeModelEvent)="closeAdvanceReceiptDialog()"
+        (submitClicked)="getAdvanceReceiptAdjustData($event)"
+        [voucherForAdjustment]="null"
+        [adjustedVoucherType]="voucherType"
+    >
+    </voucher-adjustments>
 </ng-template>
 
 <!-- history dialog -->
@@ -339,7 +435,7 @@
 
 <!-- Send Email Template -->
 <ng-template #sendEmailModal>
-    <app-email-send-dialog 
+    <app-email-send-dialog
         [voucherType]="voucherType"
         [invoiceType]="invoiceType"
         (cancelEvent)="sendEmailModalDialogRef.close()"
@@ -348,12 +444,12 @@
     </app-email-send-dialog>
 </ng-template>
 
-    <!-- payment-dialog -->
-    <ng-template #paymentDialog>
-        <app-payment-dialog
-            [voucherDetails]="selectedInvoice"
-            [localeData]="localeData"
-            [commonLocaleData]="commonLocaleData"
-            (paymentSubmitted)="paymentSubmitted($event)"
-        ></app-payment-dialog>
-    </ng-template>
+<!-- payment-dialog -->
+<ng-template #paymentDialog>
+    <app-payment-dialog
+        [voucherDetails]="selectedInvoice"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        (paymentSubmitted)="actionVoucher(null, $event)"
+    ></app-payment-dialog>
+</ng-template>
