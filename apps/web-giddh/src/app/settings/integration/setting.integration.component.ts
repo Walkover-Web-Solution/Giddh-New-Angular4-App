@@ -307,13 +307,6 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
             }
         });
 
-        this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res) {
-                //This is not using no due to gocardless
-                // this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
-                this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGocardless(res.country);
-            }
-        });
 
         this.amazonSellerForm = this._fb.group({
             sellers: this._fb.array([
@@ -354,6 +347,7 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
         this.store.pipe(select(prof => prof.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
             this.inputMaskFormat = profile.balanceDisplayFormat ? profile.balanceDisplayFormat.toLowerCase() : '';
             if (profile && profile.countryV2 && profile.countryV2.alpha2CountryCode) {
+                this.isGocardlessSupportedCountry = this.generalService.checkCompanySupportGocardless(profile.countryV2.alpha2CountryCode);
                 if (this.iciciBankSupportedCountryList.includes(profile.countryV2.alpha2CountryCode)) {
                     this.isIciciBankSupportedCountry = true;
                 } else {
@@ -361,6 +355,8 @@ export class SettingIntegrationComponent implements OnInit, AfterViewInit {
                 }
             }
         });
+
+
 
         if (this.selectedCompanyUniqueName) {
             this.store.dispatch(this.settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
